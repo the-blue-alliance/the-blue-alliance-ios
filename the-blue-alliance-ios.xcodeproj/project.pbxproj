@@ -15,13 +15,23 @@
 		50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E0A1918BB63003AC8A7 /* AppDelegate.m */; };
 		50832E0E1918BB63003AC8A7 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50832E0C1918BB63003AC8A7 /* Main_iPhone.storyboard */; };
 		50832E111918BB63003AC8A7 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50832E0F1918BB63003AC8A7 /* Main_iPad.storyboard */; };
-		50832E141918BB63003AC8A7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E131918BB63003AC8A7 /* ViewController.m */; };
 		50832E161918BB63003AC8A7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50832E151918BB63003AC8A7 /* Images.xcassets */; };
 		50832E1D1918BB63003AC8A7 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832E1C1918BB63003AC8A7 /* XCTest.framework */; };
 		50832E1E1918BB63003AC8A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFA1918BB63003AC8A7 /* Foundation.framework */; };
 		50832E1F1918BB63003AC8A7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFE1918BB63003AC8A7 /* UIKit.framework */; };
 		50832E271918BB63003AC8A7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50832E251918BB63003AC8A7 /* InfoPlist.strings */; };
 		50832E291918BB63003AC8A7 /* the_blue_alliance_iosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E281918BB63003AC8A7 /* the_blue_alliance_iosTests.m */; };
+		50832E341918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 50832E321918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld */; };
+		50832E391918BBBE003AC8A7 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E361918BBBE003AC8A7 /* Event.m */; };
+		50832E3A1918BBBE003AC8A7 /* Event+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E381918BBBE003AC8A7 /* Event+Create.m */; };
+		50832E3E1918BBEA003AC8A7 /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E3D1918BBEA003AC8A7 /* EventsViewController.m */; };
+		50832E4C1918BBFB003AC8A7 /* RECommonFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E411918BBFB003AC8A7 /* RECommonFunctions.m */; };
+		50832E4D1918BBFB003AC8A7 /* REFrostedContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E431918BBFB003AC8A7 /* REFrostedContainerViewController.m */; };
+		50832E4E1918BBFB003AC8A7 /* REFrostedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E451918BBFB003AC8A7 /* REFrostedViewController.m */; };
+		50832E4F1918BBFB003AC8A7 /* UIImage+REFrostedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E471918BBFB003AC8A7 /* UIImage+REFrostedViewController.m */; };
+		50832E501918BBFB003AC8A7 /* UIView+REFrostedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E491918BBFB003AC8A7 /* UIView+REFrostedViewController.m */; };
+		50832E511918BBFB003AC8A7 /* UIViewController+REFrostedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E4B1918BBFB003AC8A7 /* UIViewController+REFrostedViewController.m */; };
+		50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,14 +57,33 @@
 		50832E0A1918BB63003AC8A7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		50832E0D1918BB63003AC8A7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		50832E101918BB63003AC8A7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		50832E121918BB63003AC8A7 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		50832E131918BB63003AC8A7 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		50832E151918BB63003AC8A7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		50832E1B1918BB63003AC8A7 /* the-blue-alliance-iosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "the-blue-alliance-iosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		50832E1C1918BB63003AC8A7 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		50832E241918BB63003AC8A7 /* the-blue-alliance-iosTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "the-blue-alliance-iosTests-Info.plist"; sourceTree = "<group>"; };
 		50832E261918BB63003AC8A7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		50832E281918BB63003AC8A7 /* the_blue_alliance_iosTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = the_blue_alliance_iosTests.m; sourceTree = "<group>"; };
+		50832E331918BB8E003AC8A7 /* The Blue Alliance.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance.xcdatamodel"; sourceTree = "<group>"; };
+		50832E351918BBBE003AC8A7 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		50832E361918BBBE003AC8A7 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
+		50832E371918BBBE003AC8A7 /* Event+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Event+Create.h"; sourceTree = "<group>"; };
+		50832E381918BBBE003AC8A7 /* Event+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Event+Create.m"; sourceTree = "<group>"; };
+		50832E3C1918BBEA003AC8A7 /* EventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsViewController.h; sourceTree = "<group>"; };
+		50832E3D1918BBEA003AC8A7 /* EventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsViewController.m; sourceTree = "<group>"; };
+		50832E401918BBFB003AC8A7 /* RECommonFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RECommonFunctions.h; sourceTree = "<group>"; };
+		50832E411918BBFB003AC8A7 /* RECommonFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RECommonFunctions.m; sourceTree = "<group>"; };
+		50832E421918BBFB003AC8A7 /* REFrostedContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REFrostedContainerViewController.h; sourceTree = "<group>"; };
+		50832E431918BBFB003AC8A7 /* REFrostedContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REFrostedContainerViewController.m; sourceTree = "<group>"; };
+		50832E441918BBFB003AC8A7 /* REFrostedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REFrostedViewController.h; sourceTree = "<group>"; };
+		50832E451918BBFB003AC8A7 /* REFrostedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REFrostedViewController.m; sourceTree = "<group>"; };
+		50832E461918BBFB003AC8A7 /* UIImage+REFrostedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+REFrostedViewController.h"; sourceTree = "<group>"; };
+		50832E471918BBFB003AC8A7 /* UIImage+REFrostedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+REFrostedViewController.m"; sourceTree = "<group>"; };
+		50832E481918BBFB003AC8A7 /* UIView+REFrostedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+REFrostedViewController.h"; sourceTree = "<group>"; };
+		50832E491918BBFB003AC8A7 /* UIView+REFrostedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+REFrostedViewController.m"; sourceTree = "<group>"; };
+		50832E4A1918BBFB003AC8A7 /* UIViewController+REFrostedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+REFrostedViewController.h"; sourceTree = "<group>"; };
+		50832E4B1918BBFB003AC8A7 /* UIViewController+REFrostedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+REFrostedViewController.m"; sourceTree = "<group>"; };
+		50832E531918BBFF003AC8A7 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
+		50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +132,8 @@
 		50832DF91918BB63003AC8A7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				50832E521918BBFF003AC8A7 /* CoreDataTableViewController */,
+				50832E3F1918BBFB003AC8A7 /* REFrostedViewController */,
 				50832DFA1918BB63003AC8A7 /* Foundation.framework */,
 				50832DFC1918BB63003AC8A7 /* CoreGraphics.framework */,
 				50832DFE1918BB63003AC8A7 /* UIKit.framework */,
@@ -116,10 +147,9 @@
 			children = (
 				50832E091918BB63003AC8A7 /* AppDelegate.h */,
 				50832E0A1918BB63003AC8A7 /* AppDelegate.m */,
-				50832E0C1918BB63003AC8A7 /* Main_iPhone.storyboard */,
-				50832E0F1918BB63003AC8A7 /* Main_iPad.storyboard */,
-				50832E121918BB63003AC8A7 /* ViewController.h */,
-				50832E131918BB63003AC8A7 /* ViewController.m */,
+				50832E3C1918BBEA003AC8A7 /* EventsViewController.h */,
+				50832E3D1918BBEA003AC8A7 /* EventsViewController.m */,
+				50832E3B1918BBC1003AC8A7 /* Data Model */,
 				50832E151918BB63003AC8A7 /* Images.xcassets */,
 				50832E011918BB63003AC8A7 /* Supporting Files */,
 			);
@@ -129,6 +159,8 @@
 		50832E011918BB63003AC8A7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				50832E0C1918BB63003AC8A7 /* Main_iPhone.storyboard */,
+				50832E0F1918BB63003AC8A7 /* Main_iPad.storyboard */,
 				50832E021918BB63003AC8A7 /* the-blue-alliance-ios-Info.plist */,
 				50832E031918BB63003AC8A7 /* InfoPlist.strings */,
 				50832E061918BB63003AC8A7 /* main.m */,
@@ -153,6 +185,46 @@
 				50832E251918BB63003AC8A7 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		50832E3B1918BBC1003AC8A7 /* Data Model */ = {
+			isa = PBXGroup;
+			children = (
+				50832E321918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld */,
+				50832E351918BBBE003AC8A7 /* Event.h */,
+				50832E361918BBBE003AC8A7 /* Event.m */,
+				50832E371918BBBE003AC8A7 /* Event+Create.h */,
+				50832E381918BBBE003AC8A7 /* Event+Create.m */,
+			);
+			name = "Data Model";
+			sourceTree = "<group>";
+		};
+		50832E3F1918BBFB003AC8A7 /* REFrostedViewController */ = {
+			isa = PBXGroup;
+			children = (
+				50832E401918BBFB003AC8A7 /* RECommonFunctions.h */,
+				50832E411918BBFB003AC8A7 /* RECommonFunctions.m */,
+				50832E421918BBFB003AC8A7 /* REFrostedContainerViewController.h */,
+				50832E431918BBFB003AC8A7 /* REFrostedContainerViewController.m */,
+				50832E441918BBFB003AC8A7 /* REFrostedViewController.h */,
+				50832E451918BBFB003AC8A7 /* REFrostedViewController.m */,
+				50832E461918BBFB003AC8A7 /* UIImage+REFrostedViewController.h */,
+				50832E471918BBFB003AC8A7 /* UIImage+REFrostedViewController.m */,
+				50832E481918BBFB003AC8A7 /* UIView+REFrostedViewController.h */,
+				50832E491918BBFB003AC8A7 /* UIView+REFrostedViewController.m */,
+				50832E4A1918BBFB003AC8A7 /* UIViewController+REFrostedViewController.h */,
+				50832E4B1918BBFB003AC8A7 /* UIViewController+REFrostedViewController.m */,
+			);
+			path = REFrostedViewController;
+			sourceTree = "<group>";
+		};
+		50832E521918BBFF003AC8A7 /* CoreDataTableViewController */ = {
+			isa = PBXGroup;
+			children = (
+				50832E531918BBFF003AC8A7 /* CoreDataTableViewController.h */,
+				50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */,
+			);
+			path = CoreDataTableViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -253,9 +325,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				50832E141918BB63003AC8A7 /* ViewController.m in Sources */,
+				50832E3A1918BBBE003AC8A7 /* Event+Create.m in Sources */,
+				50832E4D1918BBFB003AC8A7 /* REFrostedContainerViewController.m in Sources */,
+				50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */,
+				50832E341918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld in Sources */,
+				50832E3E1918BBEA003AC8A7 /* EventsViewController.m in Sources */,
+				50832E511918BBFB003AC8A7 /* UIViewController+REFrostedViewController.m in Sources */,
+				50832E4F1918BBFB003AC8A7 /* UIImage+REFrostedViewController.m in Sources */,
+				50832E391918BBBE003AC8A7 /* Event.m in Sources */,
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,
+				50832E501918BBFB003AC8A7 /* UIView+REFrostedViewController.m in Sources */,
 				50832E071918BB63003AC8A7 /* main.m in Sources */,
+				50832E4C1918BBFB003AC8A7 /* RECommonFunctions.m in Sources */,
+				50832E4E1918BBFB003AC8A7 /* REFrostedViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,6 +475,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "the-blue-alliance-ios/the-blue-alliance-ios-Prefix.pch";
 				INFOPLIST_FILE = "the-blue-alliance-ios/the-blue-alliance-ios-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -406,6 +489,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "the-blue-alliance-ios/the-blue-alliance-ios-Prefix.pch";
 				INFOPLIST_FILE = "the-blue-alliance-ios/the-blue-alliance-ios-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -480,6 +564,19 @@
 			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		50832E321918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				50832E331918BB8E003AC8A7 /* The Blue Alliance.xcdatamodel */,
+			);
+			currentVersion = 50832E331918BB8E003AC8A7 /* The Blue Alliance.xcdatamodel */;
+			path = "The Blue Alliance.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 50832DEF1918BB63003AC8A7 /* Project object */;
 }
