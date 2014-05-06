@@ -1,1 +1,10 @@
+PODS:
+  - TWTSideMenuViewController (0.3)
+
+DEPENDENCIES:
+  - TWTSideMenuViewController
+
+SPEC CHECKSUMS:
+  TWTSideMenuViewController: 477575b12d58e7f40fd91b6e9bc14a8812b42e2d
+
 COCOAPODS: 0.32.1
