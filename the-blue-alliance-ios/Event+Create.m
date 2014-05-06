@@ -23,7 +23,7 @@
     NSError *error;
     NSArray *matches = [context executeFetchRequest:fetchRequest error:&error];
     if (error || !matches || matches.count > 1) {
-        NSLog(@"ERROR searching for existing event with key %@. %d matches found. Error: %@", key, matches.count, error);
+        NSLog(@"ERROR searching for existing event with key %@. %lu matches found. Error: %@", key, matches.count, error);
     } else if (matches.count) {
         event = [matches firstObject];
     } else {
@@ -46,9 +46,7 @@
 
         NSLog(@"Imported event %@ into the database", key);
     }
-    
-    
-    
+
     return event;
 }
 
