@@ -35,8 +35,16 @@
     if(self.document.documentState == UIDocumentStateNormal) {
         self.context = self.document.managedObjectContext;
         
+        // Register for save notifications: useful for debugging
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseSaved:) name:NSManagedObjectContextDidSaveNotification object:self.context];
+        
         [self downloadEventsIntoDatabase];
     }
+}
+
+- (void) databaseSaved:(NSNotification *)note
+{
+    NSLog(@"Database saved");
 }
 
 - (void) createOrOpenDatabase

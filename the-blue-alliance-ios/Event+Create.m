@@ -10,10 +10,26 @@
 
 @implementation Event (Create)
 
+// Validates the dictionary and makes it safe to pull data from 
++ (NSDictionary *) normalizeEventInfoDictionary:(NSDictionary *)info
+{
+    NSMutableDictionary *normInfo = [info mutableCopy];
+    
+    NSSet *nullSet = [normInfo keysOfEntriesPassingTest:^BOOL(id key, id obj, BOOL *stop) {
+        return obj == [NSNull null];
+    }];
+    [normInfo removeObjectsForKeys:[nullSet allObjects]];
+    
+    return normInfo;
+}
+
 + (Event *) createEventFromTBAInfo:(NSDictionary *)info
          usingManagedObjectContext:(NSManagedObjectContext *)context
 {
     Event *event = nil;
+    
+    // Validates the dictionary and makes it safe to pull data from
+    info = [Event normalizeEventInfoDictionary:info];
     
     NSString *key = info[@"key"];
     
