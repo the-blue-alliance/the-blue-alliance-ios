@@ -32,6 +32,17 @@
                                                                                                           cacheName:nil];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
+- (void) viewDidLoad
+{
+    [super viewDidLoad];
+    self.title = @"Events";
+}
+
 
 #pragma mark - UITableViewDataSource
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -72,9 +83,5 @@
     return nil;
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
-}
 
 @end
