@@ -8,9 +8,13 @@
 
 #import "AppDelegate.h"
 
-#import "EventsViewController.h"
 #import "MenuViewController.h"
 #import "UIColor+TBAColors.h"
+
+#import "EventsViewController.h"
+#import "TeamsViewController.h"
+#import "InsightsViewController.h"
+#import "SettingsViewController.h"
 
 #import "Event+Create.h"
 
@@ -24,12 +28,53 @@
 @property (nonatomic, strong) NSManagedObjectContext *context;
 
 @property (nonatomic, strong) TWTSideMenuViewController *sideMenuController;
+
+// Top level view controllers
+@property (nonatomic, strong) UINavigationController *topNavigationController;
 @property (nonatomic, strong) EventsViewController *eventsViewController;
+@property (nonatomic, strong) TeamsViewController *teamsViewController;
+@property (nonatomic, strong) InsightsViewController *insightsViewController;
+@property (nonatomic, strong) SettingsViewController *settingsViewController;
 @end
 
 @implementation AppDelegate
 
 #pragma mark - Custom getters / setters
+// Lazily instantiate the top level view controllers
+- (EventsViewController *) eventsViewController
+{
+    if (!_eventsViewController) {
+        _eventsViewController = [[EventsViewController alloc] initWithStyle:UITableViewStylePlain];
+        [_eventsViewController.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburger"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonPressed)]];
+    }
+    return _eventsViewController;
+}
+- (TeamsViewController *) teamsViewController
+{
+    if (!_teamsViewController) {
+        _teamsViewController = [[TeamsViewController alloc] initWithStyle:UITableViewStylePlain];
+        [_teamsViewController.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburger"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonPressed)]];
+    }
+    return _teamsViewController;
+}
+- (InsightsViewController *) insightsViewController
+{
+    if (!_insightsViewController) {
+        _insightsViewController = [[InsightsViewController alloc] init];
+        [_insightsViewController.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburger"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonPressed)]];
+    }
+    return _insightsViewController;
+}
+- (SettingsViewController *) settingsViewController
+{
+    if (!_settingsViewController) {
+        _settingsViewController = [[SettingsViewController alloc] init];
+        [_settingsViewController.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburger"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonPressed)]];
+    }
+    return _settingsViewController;
+}
+
+
 - (void) setContext:(NSManagedObjectContext *)context
 {
     _context = context;
@@ -119,24 +164,18 @@
     [self.sideMenuController openMenuAnimated:YES completion:nil];
 }
 
-- (void) menuViewControllerDidSelectEvents:(MenuViewController *)menu
+- (void) menuViewController:(MenuViewController *)menu didSelectMenuItem:(NSString *)menuItem
 {
-    
-}
-
-- (void) menuViewControllerDidSelectTeams:(MenuViewController *)menu
-{
-    
-}
-
-- (void) menuViewControllerDidSelectInsights:(MenuViewController *)menu
-{
-    
-}
-
-- (void) menuViewControllerDidSelectSettings:(MenuViewController *)menu
-{
-    
+    if([menuItem isEqualToString:@"Events"]) {
+        [self.topNavigationController setViewControllers:@[self.eventsViewController] animated:YES];
+    } else if([menuItem isEqualToString:@"Teams"]) {
+        [self.topNavigationController setViewControllers:@[self.teamsViewController] animated:YES];
+    } else if([menuItem isEqualToString:@"Insights"]) {
+        [self.topNavigationController setViewControllers:@[self.insightsViewController] animated:YES];
+    } else if([menuItem isEqualToString:@"Settings"]) {
+        [self.topNavigationController setViewControllers:@[self.settingsViewController] animated:YES];
+    }
+    [self.sideMenuController closeMenuAnimated:YES completion:nil];
 }
 
 #pragma mark - Main Entry Point
@@ -148,18 +187,18 @@
     self.window.tintColor = [UIColor TBATintColor];
     
     // Create content view controller, and put into a navigation controller
-    self.eventsViewController = [[EventsViewController alloc] initWithStyle:UITableViewStylePlain];
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.eventsViewController];
-    navigationController.navigationBar.translucent = NO;
+    self.topNavigationController = [[UINavigationController alloc] initWithRootViewController:self.eventsViewController];
+    self.topNavigationController.navigationBar.translucent = NO;
     
     MenuViewController *menuController = [[MenuViewController alloc] initWithMenuItems:@[@"Events", @"Teams", @"Insights", @"Settings"]];
+    menuController.delegate = self;
     
-    // Create frosted view controller
-    self.sideMenuController = [[TWTSideMenuViewController alloc] initWithMenuViewController:menuController mainViewController:navigationController];
-    
+    // Create side menu view controller
+    self.sideMenuController = [[TWTSideMenuViewController alloc] initWithMenuViewController:menuController mainViewController:self.topNavigationController];
     self.sideMenuController.shadowColor = [UIColor blackColor];
     self.sideMenuController.edgeOffset = UIOffsetMake(18.0f, 0.0f);
     self.sideMenuController.zoomScale = 0.5634f;
+    self.sideMenuController.animationDuration = 0.35;
     
     // set the side menu controller as the root view controller
     self.window.rootViewController = self.sideMenuController;
@@ -174,13 +213,8 @@
     [self.window.layer insertSublayer:gradient atIndex:0];
     
     
-    // Create a simple menu button
-    [self.eventsViewController.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburger"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonPressed)]];
-
-    
     // Initialize database
     [self createOrOpenDatabase]; // This will call documentIsReady when complete!
-    
     
     return YES;
 }

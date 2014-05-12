@@ -26,15 +26,12 @@
 		50832E391918BBBE003AC8A7 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E361918BBBE003AC8A7 /* Event.m */; };
 		50832E3A1918BBBE003AC8A7 /* Event+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E381918BBBE003AC8A7 /* Event+Create.m */; };
 		50832E3E1918BBEA003AC8A7 /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E3D1918BBEA003AC8A7 /* EventsViewController.m */; };
-		50832E4C1918BBFB003AC8A7 /* RECommonFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E411918BBFB003AC8A7 /* RECommonFunctions.m */; };
-		50832E4D1918BBFB003AC8A7 /* REFrostedContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E431918BBFB003AC8A7 /* REFrostedContainerViewController.m */; };
-		50832E4E1918BBFB003AC8A7 /* REFrostedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E451918BBFB003AC8A7 /* REFrostedViewController.m */; };
-		50832E4F1918BBFB003AC8A7 /* UIImage+REFrostedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E471918BBFB003AC8A7 /* UIImage+REFrostedViewController.m */; };
-		50832E501918BBFB003AC8A7 /* UIView+REFrostedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E491918BBFB003AC8A7 /* UIView+REFrostedViewController.m */; };
-		50832E511918BBFB003AC8A7 /* UIViewController+REFrostedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E4B1918BBFB003AC8A7 /* UIViewController+REFrostedViewController.m */; };
 		50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */; };
 		50DFD1F61920365E009B686E /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD1F51920365E009B686E /* MenuViewController.m */; };
 		50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD1FA19205F6D009B686E /* UIColor+TBAColors.m */; };
+		50DFD20119207DCA009B686E /* TeamsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD20019207DCA009B686E /* TeamsViewController.m */; };
+		50DFD20419207DD4009B686E /* InsightsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD20319207DD4009B686E /* InsightsViewController.m */; };
+		50DFD20719207DDC009B686E /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD20619207DDC009B686E /* SettingsViewController.m */; };
 		50E65EA719198E5200714328 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50E65EA619198E5200714328 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
@@ -76,24 +73,18 @@
 		50832E381918BBBE003AC8A7 /* Event+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Event+Create.m"; sourceTree = "<group>"; };
 		50832E3C1918BBEA003AC8A7 /* EventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsViewController.h; sourceTree = "<group>"; };
 		50832E3D1918BBEA003AC8A7 /* EventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsViewController.m; sourceTree = "<group>"; };
-		50832E401918BBFB003AC8A7 /* RECommonFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RECommonFunctions.h; sourceTree = "<group>"; };
-		50832E411918BBFB003AC8A7 /* RECommonFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RECommonFunctions.m; sourceTree = "<group>"; };
-		50832E421918BBFB003AC8A7 /* REFrostedContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REFrostedContainerViewController.h; sourceTree = "<group>"; };
-		50832E431918BBFB003AC8A7 /* REFrostedContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REFrostedContainerViewController.m; sourceTree = "<group>"; };
-		50832E441918BBFB003AC8A7 /* REFrostedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REFrostedViewController.h; sourceTree = "<group>"; };
-		50832E451918BBFB003AC8A7 /* REFrostedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REFrostedViewController.m; sourceTree = "<group>"; };
-		50832E461918BBFB003AC8A7 /* UIImage+REFrostedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+REFrostedViewController.h"; sourceTree = "<group>"; };
-		50832E471918BBFB003AC8A7 /* UIImage+REFrostedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+REFrostedViewController.m"; sourceTree = "<group>"; };
-		50832E481918BBFB003AC8A7 /* UIView+REFrostedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+REFrostedViewController.h"; sourceTree = "<group>"; };
-		50832E491918BBFB003AC8A7 /* UIView+REFrostedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+REFrostedViewController.m"; sourceTree = "<group>"; };
-		50832E4A1918BBFB003AC8A7 /* UIViewController+REFrostedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+REFrostedViewController.h"; sourceTree = "<group>"; };
-		50832E4B1918BBFB003AC8A7 /* UIViewController+REFrostedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+REFrostedViewController.m"; sourceTree = "<group>"; };
 		50832E531918BBFF003AC8A7 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
 		50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
 		50DFD1F41920365E009B686E /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
 		50DFD1F51920365E009B686E /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
 		50DFD1F919205F6D009B686E /* UIColor+TBAColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+TBAColors.h"; sourceTree = "<group>"; };
 		50DFD1FA19205F6D009B686E /* UIColor+TBAColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+TBAColors.m"; sourceTree = "<group>"; };
+		50DFD1FF19207DCA009B686E /* TeamsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamsViewController.h; sourceTree = "<group>"; };
+		50DFD20019207DCA009B686E /* TeamsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamsViewController.m; sourceTree = "<group>"; };
+		50DFD20219207DD4009B686E /* InsightsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InsightsViewController.h; sourceTree = "<group>"; };
+		50DFD20319207DD4009B686E /* InsightsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InsightsViewController.m; sourceTree = "<group>"; };
+		50DFD20519207DDC009B686E /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		50DFD20619207DDC009B686E /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		50E65EA619198E5200714328 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -148,7 +139,6 @@
 			children = (
 				50E65EA619198E5200714328 /* QuartzCore.framework */,
 				50832E521918BBFF003AC8A7 /* CoreDataTableViewController */,
-				50832E3F1918BBFB003AC8A7 /* REFrostedViewController */,
 				50832DFA1918BB63003AC8A7 /* Foundation.framework */,
 				50832DFC1918BB63003AC8A7 /* CoreGraphics.framework */,
 				50832DFE1918BB63003AC8A7 /* UIKit.framework */,
@@ -165,8 +155,7 @@
 				50832E0A1918BB63003AC8A7 /* AppDelegate.m */,
 				50DFD1F41920365E009B686E /* MenuViewController.h */,
 				50DFD1F51920365E009B686E /* MenuViewController.m */,
-				50832E3C1918BBEA003AC8A7 /* EventsViewController.h */,
-				50832E3D1918BBEA003AC8A7 /* EventsViewController.m */,
+				50DFD20819208524009B686E /* Top Level Controllers */,
 				50832E3B1918BBC1003AC8A7 /* Data Model */,
 				50832E151918BB63003AC8A7 /* Images.xcassets */,
 				50832E011918BB63003AC8A7 /* Supporting Files */,
@@ -219,25 +208,6 @@
 			name = "Data Model";
 			sourceTree = "<group>";
 		};
-		50832E3F1918BBFB003AC8A7 /* REFrostedViewController */ = {
-			isa = PBXGroup;
-			children = (
-				50832E401918BBFB003AC8A7 /* RECommonFunctions.h */,
-				50832E411918BBFB003AC8A7 /* RECommonFunctions.m */,
-				50832E421918BBFB003AC8A7 /* REFrostedContainerViewController.h */,
-				50832E431918BBFB003AC8A7 /* REFrostedContainerViewController.m */,
-				50832E441918BBFB003AC8A7 /* REFrostedViewController.h */,
-				50832E451918BBFB003AC8A7 /* REFrostedViewController.m */,
-				50832E461918BBFB003AC8A7 /* UIImage+REFrostedViewController.h */,
-				50832E471918BBFB003AC8A7 /* UIImage+REFrostedViewController.m */,
-				50832E481918BBFB003AC8A7 /* UIView+REFrostedViewController.h */,
-				50832E491918BBFB003AC8A7 /* UIView+REFrostedViewController.m */,
-				50832E4A1918BBFB003AC8A7 /* UIViewController+REFrostedViewController.h */,
-				50832E4B1918BBFB003AC8A7 /* UIViewController+REFrostedViewController.m */,
-			);
-			path = REFrostedViewController;
-			sourceTree = "<group>";
-		};
 		50832E521918BBFF003AC8A7 /* CoreDataTableViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -245,6 +215,21 @@
 				50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */,
 			);
 			path = CoreDataTableViewController;
+			sourceTree = "<group>";
+		};
+		50DFD20819208524009B686E /* Top Level Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				50832E3C1918BBEA003AC8A7 /* EventsViewController.h */,
+				50832E3D1918BBEA003AC8A7 /* EventsViewController.m */,
+				50DFD1FF19207DCA009B686E /* TeamsViewController.h */,
+				50DFD20019207DCA009B686E /* TeamsViewController.m */,
+				50DFD20219207DD4009B686E /* InsightsViewController.h */,
+				50DFD20319207DD4009B686E /* InsightsViewController.m */,
+				50DFD20519207DDC009B686E /* SettingsViewController.h */,
+				50DFD20619207DDC009B686E /* SettingsViewController.m */,
+			);
+			name = "Top Level Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -382,19 +367,16 @@
 			files = (
 				50832E3A1918BBBE003AC8A7 /* Event+Create.m in Sources */,
 				50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */,
-				50832E4D1918BBFB003AC8A7 /* REFrostedContainerViewController.m in Sources */,
+				50DFD20419207DD4009B686E /* InsightsViewController.m in Sources */,
+				50DFD20719207DDC009B686E /* SettingsViewController.m in Sources */,
 				50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */,
 				50832E341918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld in Sources */,
 				50832E3E1918BBEA003AC8A7 /* EventsViewController.m in Sources */,
-				50832E511918BBFB003AC8A7 /* UIViewController+REFrostedViewController.m in Sources */,
-				50832E4F1918BBFB003AC8A7 /* UIImage+REFrostedViewController.m in Sources */,
 				50832E391918BBBE003AC8A7 /* Event.m in Sources */,
+				50DFD20119207DCA009B686E /* TeamsViewController.m in Sources */,
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,
-				50832E501918BBFB003AC8A7 /* UIView+REFrostedViewController.m in Sources */,
 				50832E071918BB63003AC8A7 /* main.m in Sources */,
 				50DFD1F61920365E009B686E /* MenuViewController.m in Sources */,
-				50832E4C1918BBFB003AC8A7 /* RECommonFunctions.m in Sources */,
-				50832E4E1918BBFB003AC8A7 /* REFrostedViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

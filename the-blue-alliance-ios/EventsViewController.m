@@ -27,15 +27,11 @@
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"start_date" ascending:NO], [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                               managedObjectContext:context
-                                                                                                 sectionNameKeyPath:@"start_date"
-                                                                                                          cacheName:nil];
+                                                                        managedObjectContext:context
+                                                                          sectionNameKeyPath:@"start_date"
+                                                                                   cacheName:nil];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
-}
 
 - (void) viewDidLoad
 {

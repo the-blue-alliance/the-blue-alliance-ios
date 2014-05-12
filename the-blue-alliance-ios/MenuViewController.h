@@ -11,16 +11,13 @@
 @class MenuViewController;
 @protocol MenuViewControllerDelegate <NSObject>
 
-- (void) menuViewControllerDidSelectEvents:(MenuViewController *)menu;
-- (void) menuViewControllerDidSelectTeams:(MenuViewController *)menu;
-- (void) menuViewControllerDidSelectInsights:(MenuViewController *)menu;
-- (void) menuViewControllerDidSelectSettings:(MenuViewController *)menu;
-
+- (void) menuViewController:(MenuViewController *)menu didSelectMenuItem:(NSString *)menuItem;
 
 @end
 
 @interface MenuViewController : UIViewController
 
+@property (nonatomic, weak) id<MenuViewControllerDelegate> delegate;
 @property (nonatomic, copy) NSArray *menuItems;
 
 - (instancetype) initWithMenuItems:(NSArray *)items;

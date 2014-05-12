@@ -31,6 +31,14 @@
     return self;
 }
 
+#pragma mark - UI Actions
+- (void) menuButtonTapped:(UIButton *)button
+{
+    if(self.delegate) {
+        [self.delegate menuViewController:self didSelectMenuItem:button.currentTitle];
+    }
+}
+
 #pragma mark - View creation utility methods
 - (UIView *) createSeparatorView
 {
@@ -40,12 +48,13 @@
     return separator;
 }
 
-- (UILabel *) createLabelForTitle:(NSString *)title
+- (UIButton *) createButtonForTitle:(NSString *)title
 {
-    UILabel *label = [[UILabel alloc] initForAutoLayout];
-    label.text = title;
-    label.textColor = [UIColor whiteColor];
-    return label;
+    UIButton *button = [[UIButton alloc] initForAutoLayout];
+    [button setTitle:title forState:UIControlStateNormal];
+    button.tintColor = [UIColor whiteColor];
+    [button addTarget:self action:@selector(menuButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    return button;
 }
 
 #pragma mark - Main layout routine
@@ -58,10 +67,10 @@
     // Iterate through each menu item and pin each one to the left edge
     NSMutableArray *views = [[NSMutableArray alloc] init];
     for(NSUInteger i = 0; i < self.menuItems.count; i++) {
-        UILabel *itemLabel = [self createLabelForTitle:self.menuItems[i]];
-        [self.view addSubview:itemLabel];
-        [itemLabel autoPinEdgeToSuperviewEdge:ALEdgeLeft withInset:20];
-        [views addObject:itemLabel];
+        UIButton *itemButton = [self createButtonForTitle:self.menuItems[i]];
+        [self.view addSubview:itemButton];
+        [itemButton autoPinEdgeToSuperviewEdge:ALEdgeLeft withInset:20];
+        [views addObject:itemButton];
         
         if(i != self.menuItems.count - 1) {
             UIView *itemSeparator = [self createSeparatorView];
@@ -84,11 +93,6 @@
     }
 }
 
-
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
-}
 
 
 
