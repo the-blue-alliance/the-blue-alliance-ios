@@ -1,2 +1,3 @@
 platform :ios, '7.0'
-# pod 'TWTSideMenuViewController'
+pod 'TWTSideMenuViewController'
+pod 'UIView+AutoLayout'

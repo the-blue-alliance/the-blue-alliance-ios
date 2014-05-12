@@ -7,6 +7,9 @@
 //
 
 #import "EventsViewController.h"
+
+#import "UIColor+TBAColors.h"
+
 #import "Event.h"
 
 @interface EventsViewController ()
@@ -58,10 +61,23 @@
     return [friendlyFormatter stringFromDate:event.start_date];
 }
 
+- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    view.tintColor = [UIColor TBATableViewSeparatorColor];
+    
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    [header.textLabel setTextColor:[UIColor whiteColor]];
+}
+
 // Disable section indexing
 - (NSArray *) sectionIndexTitlesForTableView:(UITableView *)tableView
 {
     return nil;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 @end

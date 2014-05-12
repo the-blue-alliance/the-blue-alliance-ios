@@ -33,6 +33,8 @@
 		50832E501918BBFB003AC8A7 /* UIView+REFrostedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E491918BBFB003AC8A7 /* UIView+REFrostedViewController.m */; };
 		50832E511918BBFB003AC8A7 /* UIViewController+REFrostedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E4B1918BBFB003AC8A7 /* UIViewController+REFrostedViewController.m */; };
 		50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */; };
+		50DFD1F61920365E009B686E /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD1F51920365E009B686E /* MenuViewController.m */; };
+		50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD1FA19205F6D009B686E /* UIColor+TBAColors.m */; };
 		50E65EA719198E5200714328 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50E65EA619198E5200714328 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
@@ -88,6 +90,10 @@
 		50832E4B1918BBFB003AC8A7 /* UIViewController+REFrostedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+REFrostedViewController.m"; sourceTree = "<group>"; };
 		50832E531918BBFF003AC8A7 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
 		50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
+		50DFD1F41920365E009B686E /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
+		50DFD1F51920365E009B686E /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
+		50DFD1F919205F6D009B686E /* UIColor+TBAColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+TBAColors.h"; sourceTree = "<group>"; };
+		50DFD1FA19205F6D009B686E /* UIColor+TBAColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+TBAColors.m"; sourceTree = "<group>"; };
 		50E65EA619198E5200714328 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -157,11 +163,15 @@
 			children = (
 				50832E091918BB63003AC8A7 /* AppDelegate.h */,
 				50832E0A1918BB63003AC8A7 /* AppDelegate.m */,
+				50DFD1F41920365E009B686E /* MenuViewController.h */,
+				50DFD1F51920365E009B686E /* MenuViewController.m */,
 				50832E3C1918BBEA003AC8A7 /* EventsViewController.h */,
 				50832E3D1918BBEA003AC8A7 /* EventsViewController.m */,
 				50832E3B1918BBC1003AC8A7 /* Data Model */,
 				50832E151918BB63003AC8A7 /* Images.xcassets */,
 				50832E011918BB63003AC8A7 /* Supporting Files */,
+				50DFD1F919205F6D009B686E /* UIColor+TBAColors.h */,
+				50DFD1FA19205F6D009B686E /* UIColor+TBAColors.m */,
 			);
 			path = "the-blue-alliance-ios";
 			sourceTree = "<group>";
@@ -371,6 +381,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				50832E3A1918BBBE003AC8A7 /* Event+Create.m in Sources */,
+				50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */,
 				50832E4D1918BBFB003AC8A7 /* REFrostedContainerViewController.m in Sources */,
 				50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */,
 				50832E341918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld in Sources */,
@@ -381,6 +392,7 @@
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,
 				50832E501918BBFB003AC8A7 /* UIView+REFrostedViewController.m in Sources */,
 				50832E071918BB63003AC8A7 /* main.m in Sources */,
+				50DFD1F61920365E009B686E /* MenuViewController.m in Sources */,
 				50832E4C1918BBFB003AC8A7 /* RECommonFunctions.m in Sources */,
 				50832E4E1918BBFB003AC8A7 /* REFrostedViewController.m in Sources */,
 			);
@@ -518,6 +530,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "the-blue-alliance-ios/the-blue-alliance-ios-Prefix.pch";
 				INFOPLIST_FILE = "the-blue-alliance-ios/the-blue-alliance-ios-Info.plist";
@@ -533,6 +549,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "the-blue-alliance-ios/the-blue-alliance-ios-Prefix.pch";
 				INFOPLIST_FILE = "the-blue-alliance-ios/the-blue-alliance-ios-Info.plist";

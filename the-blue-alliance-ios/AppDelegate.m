@@ -7,16 +7,23 @@
 //
 
 #import "AppDelegate.h"
-#import "REFrostedViewController.h"
+
 #import "EventsViewController.h"
+#import "MenuViewController.h"
+#import "UIColor+TBAColors.h"
+
 #import "Event+Create.h"
 
-@interface AppDelegate () <NSURLConnectionDataDelegate>
+#import <TWTSideMenuViewController/TWTSideMenuViewController.h>
+
+
+@interface AppDelegate () <NSURLConnectionDataDelegate, MenuViewControllerDelegate>
 
 // Database variables
 @property (nonatomic, strong) UIManagedDocument *document;
 @property (nonatomic, strong) NSManagedObjectContext *context;
 
+@property (nonatomic, strong) TWTSideMenuViewController *sideMenuController;
 @property (nonatomic, strong) EventsViewController *eventsViewController;
 @end
 
@@ -105,7 +112,29 @@
     });
 }
 
-- (void) connectionDidFinishLoading:(NSURLConnection *)connection
+
+#pragma mark - Menu Actions
+- (void) menuButtonPressed
+{
+    [self.sideMenuController openMenuAnimated:YES completion:nil];
+}
+
+- (void) menuViewControllerDidSelectEvents:(MenuViewController *)menu
+{
+    
+}
+
+- (void) menuViewControllerDidSelectTeams:(MenuViewController *)menu
+{
+    
+}
+
+- (void) menuViewControllerDidSelectInsights:(MenuViewController *)menu
+{
+    
+}
+
+- (void) menuViewControllerDidSelectSettings:(MenuViewController *)menu
 {
     
 }
@@ -113,22 +142,41 @@
 #pragma mark - Main Entry Point
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // Setup UI appearance
+    [[UINavigationBar appearance] setBarTintColor:[UIColor TBANavigationBarColor]];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
+    self.window.tintColor = [UIColor TBATintColor];
+    
     // Create content view controller, and put into a navigation controller
     self.eventsViewController = [[EventsViewController alloc] initWithStyle:UITableViewStylePlain];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.eventsViewController];
+    navigationController.navigationBar.translucent = NO;
     
-    UITableViewController *menuController = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
+    MenuViewController *menuController = [[MenuViewController alloc] initWithMenuItems:@[@"Events", @"Teams", @"Insights", @"Settings"]];
     
     // Create frosted view controller
-    REFrostedViewController *frostedViewController = [[REFrostedViewController alloc] initWithContentViewController:navigationController menuViewController:menuController];
-    frostedViewController.direction = REFrostedViewControllerDirectionLeft;
+    self.sideMenuController = [[TWTSideMenuViewController alloc] initWithMenuViewController:menuController mainViewController:navigationController];
+    
+    self.sideMenuController.shadowColor = [UIColor blackColor];
+    self.sideMenuController.edgeOffset = UIOffsetMake(18.0f, 0.0f);
+    self.sideMenuController.zoomScale = 0.5634f;
+    
+    // set the side menu controller as the root view controller
+    self.window.rootViewController = self.sideMenuController;
+    
+    // Set a background gradient for the menu
+    UIColor *topColor = [UIColor colorWithRed:0.122 green:0.134 blue:0.293 alpha:1.000];
+    UIColor *bottomColor = [UIColor colorWithRed:0.173 green:0.178 blue:0.227 alpha:1.000];
+    
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = self.window.bounds;
+    gradient.colors = @[(id)[topColor CGColor], (id)[bottomColor CGColor]];
+    [self.window.layer insertSublayer:gradient atIndex:0];
+    
     
     // Create a simple menu button
-    [self.eventsViewController.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"Menu" style:UIBarButtonItemStyleBordered target:frostedViewController action:@selector(presentMenuViewController)]];
-    
-    // Make the side menu controller the root controller
-    self.window.rootViewController = frostedViewController;
-    
+    [self.eventsViewController.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburger"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonPressed)]];
+
     
     // Initialize database
     [self createOrOpenDatabase]; // This will call documentIsReady when complete!
