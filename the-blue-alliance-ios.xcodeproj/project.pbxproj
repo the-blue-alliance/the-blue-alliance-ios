@@ -170,8 +170,6 @@
 				50832E3B1918BBC1003AC8A7 /* Data Model */,
 				50832E151918BB63003AC8A7 /* Images.xcassets */,
 				50832E011918BB63003AC8A7 /* Supporting Files */,
-				50DFD1F919205F6D009B686E /* UIColor+TBAColors.h */,
-				50DFD1FA19205F6D009B686E /* UIColor+TBAColors.m */,
 			);
 			path = "the-blue-alliance-ios";
 			sourceTree = "<group>";
@@ -179,6 +177,8 @@
 		50832E011918BB63003AC8A7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				50DFD1F919205F6D009B686E /* UIColor+TBAColors.h */,
+				50DFD1FA19205F6D009B686E /* UIColor+TBAColors.m */,
 				50832E0C1918BB63003AC8A7 /* Main_iPhone.storyboard */,
 				50832E0F1918BB63003AC8A7 /* Main_iPad.storyboard */,
 				50832E021918BB63003AC8A7 /* the-blue-alliance-ios-Info.plist */,

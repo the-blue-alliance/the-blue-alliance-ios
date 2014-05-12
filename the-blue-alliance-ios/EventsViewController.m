@@ -32,22 +32,19 @@
                                                                                                           cacheName:nil];
 }
 
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-        
-    // TODO: Replace with some customized cell
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Event Cell"];
-}
 
 #pragma mark - UITableViewDataSource
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Event Cell" forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Event Cell"];
+    if(!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Event Cell"];
+    }
     
     Event *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    cell.textLabel.text = event.name;
+    cell.textLabel.text = event.short_name ? event.short_name : event.name;
+    cell.detailTextLabel.text = event.location;
     
     return cell;
 }
