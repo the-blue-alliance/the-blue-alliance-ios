@@ -129,6 +129,7 @@
     }
 }
 
+// What is this?
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted
 {
     NSLog(@"Handle this error - %@", [error localizedDescription]);

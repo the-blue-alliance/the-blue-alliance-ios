@@ -52,6 +52,8 @@
     
     self.searchBar = [[UISearchBar alloc] initWithFrame:self.searchHeader.frame];
     self.searchBar.delegate = self;
+    self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
+    
     [self.searchHeader addSubview:self.searchBar];
     
     self.tableView.tableHeaderView = self.searchHeader;
@@ -82,6 +84,10 @@
     if(scrollOffset == 0)
     {
         [self.searchBar becomeFirstResponder];
+    }
+    else if(scrollOffset > self.searchHeader.height && self.searchBar.text.length == 0)
+    {
+        [self.searchBar resignFirstResponder];
     }
 }
 
@@ -176,7 +182,7 @@
     searchBar.text = nil;
     [searchBar resignFirstResponder];
     
-    [self.fetchedResultsController.fetchRequest setPredicate:nil];
+    self.fetchedResultsController.fetchRequest.predicate = nil;
     NSError *error = nil;
     if (![[self fetchedResultsController] performFetch:&error]) {
         NSLog(@"An error happened and we should handle it - %@", error.localizedDescription);
@@ -203,9 +209,9 @@
     NSString *query = searchText;
     if (query && query.length) {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name contains[cd] %@", query];
-        [self.fetchedResultsController.fetchRequest setPredicate:predicate];
+        self.fetchedResultsController.fetchRequest.predicate = predicate;
     } else {
-        [self.fetchedResultsController.fetchRequest setPredicate:nil];
+        self.fetchedResultsController.fetchRequest.predicate = nil;
     }
     
     NSError *error = nil;
