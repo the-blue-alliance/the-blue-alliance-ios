@@ -16,14 +16,14 @@
 @implementation MenuViewController
 
 #pragma mark - Custom Setter
-- (void) setMenuItems:(NSArray *)menuItems
+- (void)setMenuItems:(NSArray *)menuItems
 {
     _menuItems = [menuItems copy];
     
     [self layoutMenu];
 }
 
-- (instancetype) initWithMenuItems:(NSArray *)items
+- (instancetype)initWithMenuItems:(NSArray *)items
 {
     if(self = [super init]) {
         self.menuItems = items;
@@ -32,7 +32,7 @@
 }
 
 #pragma mark - UI Actions
-- (void) menuButtonTapped:(UIButton *)button
+- (void)menuButtonTapped:(UIButton *)button
 {
     if(self.delegate) {
         [self.delegate menuViewController:self didSelectMenuItem:button.currentTitle];
@@ -40,7 +40,7 @@
 }
 
 #pragma mark - View creation utility methods
-- (UIView *) createSeparatorView
+- (UIView *)createSeparatorView
 {
     UIView *separator = [[UIView alloc] initForAutoLayout];
     separator.backgroundColor = [UIColor colorWithWhite:0.500 alpha:0.400];
@@ -48,7 +48,7 @@
     return separator;
 }
 
-- (UIButton *) createButtonForTitle:(NSString *)title
+- (UIButton *)createButtonForTitle:(NSString *)title
 {
     UIButton *button = [[UIButton alloc] initForAutoLayout];
     [button setTitle:title forState:UIControlStateNormal];
@@ -58,7 +58,7 @@
 }
 
 #pragma mark - Main layout routine
-- (void) layoutMenu
+- (void)layoutMenu
 {   
     if(!self.menuItems.count) {
         return;
@@ -92,8 +92,5 @@
         [view autoPinEdge:ALEdgeBottom toEdge:ALEdgeTop ofView:nextView withOffset:-16];
     }
 }
-
-
-
 
 @end

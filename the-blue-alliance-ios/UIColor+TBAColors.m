@@ -10,17 +10,17 @@
 
 @implementation UIColor (TBAColors)
 
-+ (UIColor *) TBANavigationBarColor
++ (UIColor *)TBANavigationBarColor
 {
     return [UIColor colorWithRed:0.000 green:0.000 blue:0.425 alpha:1.000];
 }
 
-+ (UIColor *) TBATableViewSeparatorColor
++ (UIColor *)TBATableViewSeparatorColor
 {
     return [UIColor colorWithRed:0.146 green:0.370 blue:0.741 alpha:1.000];
 }
 
-+ (UIColor *) TBATintColor
++ (UIColor *)TBATintColor
 {
     return [UIColor colorWithRed:0.146 green:0.370 blue:0.741 alpha:1.000];
 }

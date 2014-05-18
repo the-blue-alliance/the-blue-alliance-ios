@@ -11,7 +11,7 @@
 @implementation Event (Create)
 
 // Validates the dictionary and makes it safe to pull data from 
-+ (NSDictionary *) normalizeEventInfoDictionary:(NSDictionary *)info
++ (NSDictionary *)normalizeEventInfoDictionary:(NSDictionary *)info
 {
     NSMutableDictionary *normInfo = [info mutableCopy];
     
@@ -23,7 +23,7 @@
     return normInfo;
 }
 
-+ (Event *) createEventFromTBAInfo:(NSDictionary *)info
++ (Event *)createEventFromTBAInfo:(NSDictionary *)info
          usingManagedObjectContext:(NSManagedObjectContext *)context
 {
     Event *event = nil;
@@ -66,7 +66,7 @@
     return event;
 }
 
-+ (void) createEventsFromTBAInfoArray:(NSArray *)infoArray
++ (void)createEventsFromTBAInfoArray:(NSArray *)infoArray
             usingManagedObjectContext:(NSManagedObjectContext *)context
 {
     for (NSDictionary *info in infoArray) {

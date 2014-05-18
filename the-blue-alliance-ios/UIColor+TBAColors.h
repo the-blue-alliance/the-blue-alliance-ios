@@ -10,9 +10,9 @@
 
 @interface UIColor (TBAColors)
 
-+ (UIColor *) TBANavigationBarColor;
-+ (UIColor *) TBATableViewSeparatorColor;
-+ (UIColor *) TBATintColor;
++ (UIColor *)TBANavigationBarColor;
++ (UIColor *)TBATableViewSeparatorColor;
++ (UIColor *)TBATintColor;
 
 
 @end

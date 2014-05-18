@@ -10,9 +10,9 @@
 
 @interface Event (Create)
 
-+ (Event *) createEventFromTBAInfo:(NSDictionary *)info
++ (Event *)createEventFromTBAInfo:(NSDictionary *)info
          usingManagedObjectContext:(NSManagedObjectContext *)context;
-+ (void) createEventsFromTBAInfoArray:(NSArray *)infoArray
++ (void)createEventsFromTBAInfoArray:(NSArray *)infoArray
             usingManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end

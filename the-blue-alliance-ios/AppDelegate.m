@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 
 #import "MenuViewController.h"
-#import "UIColor+TBAColors.h"
 
 #import "EventsViewController.h"
 #import "TeamsViewController.h"
@@ -41,7 +40,7 @@
 
 #pragma mark - Custom getters / setters
 // Lazily instantiate the top level view controllers
-- (EventsViewController *) eventsViewController
+- (EventsViewController *)eventsViewController
 {
     if (!_eventsViewController) {
         _eventsViewController = [[EventsViewController alloc] initWithStyle:UITableViewStylePlain];
@@ -49,7 +48,7 @@
     }
     return _eventsViewController;
 }
-- (TeamsViewController *) teamsViewController
+- (TeamsViewController *)teamsViewController
 {
     if (!_teamsViewController) {
         _teamsViewController = [[TeamsViewController alloc] initWithStyle:UITableViewStylePlain];
@@ -57,7 +56,7 @@
     }
     return _teamsViewController;
 }
-- (InsightsViewController *) insightsViewController
+- (InsightsViewController *)insightsViewController
 {
     if (!_insightsViewController) {
         _insightsViewController = [[InsightsViewController alloc] init];
@@ -65,7 +64,7 @@
     }
     return _insightsViewController;
 }
-- (SettingsViewController *) settingsViewController
+- (SettingsViewController *)settingsViewController
 {
     if (!_settingsViewController) {
         _settingsViewController = [[SettingsViewController alloc] init];
@@ -75,14 +74,14 @@
 }
 
 
-- (void) setContext:(NSManagedObjectContext *)context
+- (void)setContext:(NSManagedObjectContext *)context
 {
     _context = context;
     self.eventsViewController.context = context;
 }
 
 #pragma mark - Core Data Setup
-- (void) documentIsReady
+- (void)documentIsReady
 {
     if(self.document.documentState == UIDocumentStateNormal) {
         self.context = self.document.managedObjectContext;
@@ -94,12 +93,12 @@
     }
 }
 
-- (void) databaseSaved:(NSNotification *)note
+- (void)databaseSaved:(NSNotification *)note
 {
     NSLog(@"Database saved");
 }
 
-- (void) createOrOpenDatabase
+- (void)createOrOpenDatabase
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSURL *documentsDirectory = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
@@ -130,8 +129,13 @@
     }
 }
 
+- (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted
+{
+    NSLog(@"Handle this error - %@", [error localizedDescription]);
+}
+
 #pragma mark - TBA Data downloading
-- (void) downloadEventsIntoDatabase
+- (void)downloadEventsIntoDatabase
 {
     NSURL *eventsListURL = [NSURL URLWithString:@"http://www.thebluealliance.com/api/v2/events/"];
     NSMutableURLRequest *eventsRequest = [NSMutableURLRequest requestWithURL:eventsListURL];
@@ -159,12 +163,12 @@
 
 
 #pragma mark - Menu Actions
-- (void) menuButtonPressed
+- (void)menuButtonPressed
 {
     [self.sideMenuController openMenuAnimated:YES completion:nil];
 }
 
-- (void) menuViewController:(MenuViewController *)menu didSelectMenuItem:(NSString *)menuItem
+- (void)menuViewController:(MenuViewController *)menu didSelectMenuItem:(NSString *)menuItem
 {
     if([menuItem isEqualToString:@"Events"]) {
         [self.topNavigationController setViewControllers:@[self.eventsViewController] animated:YES];
@@ -182,6 +186,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Setup UI appearance
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [[UINavigationBar appearance] setBarTintColor:[UIColor TBANavigationBarColor]];
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
     self.window.tintColor = [UIColor TBATintColor];
@@ -212,10 +217,9 @@
     gradient.colors = @[(id)[topColor CGColor], (id)[bottomColor CGColor]];
     [self.window.layer insertSublayer:gradient atIndex:0];
     
-    
     // Initialize database
     [self createOrOpenDatabase]; // This will call documentIsReady when complete!
-    
+
     return YES;
 }
 

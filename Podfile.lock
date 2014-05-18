@@ -1,13 +1,16 @@
 PODS:
   - TWTSideMenuViewController (0.3)
   - UIView+AutoLayout (1.3.0)
+  - UIView+Positioning (1.0.1)
 
 DEPENDENCIES:
   - TWTSideMenuViewController
   - UIView+AutoLayout
+  - UIView+Positioning
 
 SPEC CHECKSUMS:
   TWTSideMenuViewController: 477575b12d58e7f40fd91b6e9bc14a8812b42e2d
   UIView+AutoLayout: 43373a18797954fd8ee3b1423af364f1b80a2af8
+  UIView+Positioning: 635682ac4411a66bfe0d35588f0836c8a104408d
 
 COCOAPODS: 0.32.1

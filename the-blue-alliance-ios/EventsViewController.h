@@ -8,7 +8,7 @@
 
 #import "CoreDataTableViewController.h"
 
-@interface EventsViewController : CoreDataTableViewController
+@interface EventsViewController : CoreDataTableViewController <UISearchBarDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *context;
 
