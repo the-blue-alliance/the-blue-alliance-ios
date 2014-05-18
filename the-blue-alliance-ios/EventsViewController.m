@@ -169,23 +169,51 @@
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
 {
     self.searchBar.showsCancelButton = NO;
-    
-    // Hide the search box after canceling
-    [self.tableView setContentOffset:CGPointMake(0., self.searchHeader.height - [self.topLayoutGuide length]) animated:YES];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-    if (!searchBar || ![searchBar isKindOfClass:[UISearchBar class]])
-        searchBar = self.searchBar;
-    
     searchBar.text = nil;
+    [searchBar resignFirstResponder];
+    
+    [self.fetchedResultsController.fetchRequest setPredicate:nil];
+    NSError *error = nil;
+    if (![[self fetchedResultsController] performFetch:&error]) {
+        NSLog(@"An error happened and we should handle it - %@", error.localizedDescription);
+    }
+
+    // Hide the search bar
+    [self.tableView setContentOffset:CGPointMake(0., self.searchHeader.height - [self.topLayoutGuide length]) animated:YES];
+
+    [self.tableView reloadData];
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
     [searchBar resignFirstResponder];
 }
 
 -(void)searchBar:(UISearchBar*)searchBar textDidChange:(NSString*)text
 {
-    NSLog(@"New text: %@", text);
+    [self filterContentForSearchText:text];
+}
+
+- (void)filterContentForSearchText:(NSString*)searchText
+{
+    NSString *query = searchText;
+    if (query && query.length) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name contains[cd] %@", query];
+        [self.fetchedResultsController.fetchRequest setPredicate:predicate];
+    } else {
+        [self.fetchedResultsController.fetchRequest setPredicate:nil];
+    }
+    
+    NSError *error = nil;
+    if (![[self fetchedResultsController] performFetch:&error]) {
+        NSLog(@"An error happened and we should handle it - %@", error.localizedDescription);
+    }
+    
+    [self.tableView reloadData];
 }
 
 @end
