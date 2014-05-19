@@ -129,13 +129,8 @@
     }
 }
 
-// What is this?
-- (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted
-{
-    NSLog(@"Handle this error - %@", [error localizedDescription]);
-}
-
 #pragma mark - TBA Data downloading
+
 - (void)downloadEventsIntoDatabase
 {
     NSURL *eventsListURL = [NSURL URLWithString:@"http://www.thebluealliance.com/api/v2/events/"];

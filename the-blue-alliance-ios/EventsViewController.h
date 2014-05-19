@@ -8,7 +8,7 @@
 
 #import "SearchableCoreDataTableViewController.h"
 
-@interface EventsViewController : SearchableCoreDataTableViewController <UISearchBarDelegate>
+@interface EventsViewController : SearchableCoreDataTableViewController
 
 @property (nonatomic, strong) NSManagedObjectContext *context;
 
