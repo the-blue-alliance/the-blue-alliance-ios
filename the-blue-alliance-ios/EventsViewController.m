@@ -53,6 +53,7 @@
     self.searchBar = [[UISearchBar alloc] initWithFrame:self.searchHeader.frame];
     self.searchBar.delegate = self;
     self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
+    self.searchBar.placeholder = @"Search";
     
     [self.searchHeader addSubview:self.searchBar];
     
@@ -85,7 +86,7 @@
     {
         [self.searchBar becomeFirstResponder];
     }
-    else if(scrollOffset > self.searchHeader.height && self.searchBar.text.length == 0)
+    else if(scrollOffset >= self.searchHeader.height && self.searchBar.text.length == 0)
     {
         [self.searchBar resignFirstResponder];
     }

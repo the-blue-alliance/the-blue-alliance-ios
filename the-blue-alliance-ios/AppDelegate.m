@@ -166,20 +166,26 @@
 #pragma mark - Menu Actions
 - (void)menuButtonPressed
 {
+    // Make sure to dismiss keyboard when menu is opened
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+    
     [self.sideMenuController openMenuAnimated:YES completion:nil];
 }
 
 - (void)menuViewController:(MenuViewController *)menu didSelectMenuItem:(NSString *)menuItem
 {
+    UIViewController *chosenViewController = nil;
     if([menuItem isEqualToString:@"Events"]) {
-        [self.topNavigationController setViewControllers:@[self.eventsViewController] animated:YES];
+        chosenViewController = self.eventsViewController;
     } else if([menuItem isEqualToString:@"Teams"]) {
-        [self.topNavigationController setViewControllers:@[self.teamsViewController] animated:YES];
+        chosenViewController = self.eventsViewController;
     } else if([menuItem isEqualToString:@"Insights"]) {
-        [self.topNavigationController setViewControllers:@[self.insightsViewController] animated:YES];
+        chosenViewController = self.eventsViewController;
     } else if([menuItem isEqualToString:@"Settings"]) {
-        [self.topNavigationController setViewControllers:@[self.settingsViewController] animated:YES];
+        chosenViewController = self.eventsViewController;
     }
+    [self.topNavigationController setViewControllers:@[chosenViewController] animated:YES];
+    
     [self.sideMenuController closeMenuAnimated:YES completion:nil];
 }
 
