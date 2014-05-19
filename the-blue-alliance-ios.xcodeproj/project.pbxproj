@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		394BD129CFDF44B78FFF2C94 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDCC6CCFB1A4A199C72C12E /* libPods.a */; };
+		5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */; };
 		50832DFB1918BB63003AC8A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFA1918BB63003AC8A7 /* Foundation.framework */; };
 		50832DFD1918BB63003AC8A7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFC1918BB63003AC8A7 /* CoreGraphics.framework */; };
 		50832DFF1918BB63003AC8A7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFE1918BB63003AC8A7 /* UIKit.framework */; };
@@ -48,6 +49,8 @@
 /* Begin PBXFileReference section */
 		1A5DC50BBBAD4B709D38B690 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		4DDCC6CCFB1A4A199C72C12E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		5057CD1C1929987D00654304 /* SearchableCoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchableCoreDataTableViewController.h; sourceTree = "<group>"; };
+		5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchableCoreDataTableViewController.m; sourceTree = "<group>"; };
 		50832DF71918BB63003AC8A7 /* the-blue-alliance-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "the-blue-alliance-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		50832DFA1918BB63003AC8A7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		50832DFC1918BB63003AC8A7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -213,6 +216,8 @@
 			children = (
 				50832E531918BBFF003AC8A7 /* CoreDataTableViewController.h */,
 				50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */,
+				5057CD1C1929987D00654304 /* SearchableCoreDataTableViewController.h */,
+				5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */,
 			);
 			path = CoreDataTableViewController;
 			sourceTree = "<group>";
@@ -373,6 +378,7 @@
 				50832E341918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld in Sources */,
 				50832E3E1918BBEA003AC8A7 /* EventsViewController.m in Sources */,
 				50832E391918BBBE003AC8A7 /* Event.m in Sources */,
+				5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */,
 				50DFD20119207DCA009B686E /* TeamsViewController.m in Sources */,
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,
 				50832E071918BB63003AC8A7 /* main.m in Sources */,

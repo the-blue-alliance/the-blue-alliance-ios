@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 The Blue Alliance. All rights reserved.
 //
 
-#import "CoreDataTableViewController.h"
+#import "SearchableCoreDataTableViewController.h"
 
-@interface EventsViewController : CoreDataTableViewController <UISearchBarDelegate>
+@interface EventsViewController : SearchableCoreDataTableViewController <UISearchBarDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *context;
 
