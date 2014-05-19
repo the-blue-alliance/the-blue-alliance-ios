@@ -19,6 +19,9 @@
 
 #import <TWTSideMenuViewController/TWTSideMenuViewController.h>
 
+#import "FBTweakShakeWindow.h"
+#import "FBTweakInline.h"
+
 
 @interface AppDelegate () <NSURLConnectionDataDelegate, MenuViewControllerDelegate>
 
@@ -129,12 +132,6 @@
     }
 }
 
-// What is this?
-- (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted
-{
-    NSLog(@"Handle this error - %@", [error localizedDescription]);
-}
-
 #pragma mark - TBA Data downloading
 - (void)downloadEventsIntoDatabase
 {
@@ -178,11 +175,11 @@
     if([menuItem isEqualToString:@"Events"]) {
         chosenViewController = self.eventsViewController;
     } else if([menuItem isEqualToString:@"Teams"]) {
-        chosenViewController = self.eventsViewController;
+        chosenViewController = self.teamsViewController;
     } else if([menuItem isEqualToString:@"Insights"]) {
-        chosenViewController = self.eventsViewController;
+        chosenViewController = self.insightsViewController;
     } else if([menuItem isEqualToString:@"Settings"]) {
-        chosenViewController = self.eventsViewController;
+        chosenViewController = self.settingsViewController;
     }
     [self.topNavigationController setViewControllers:@[chosenViewController] animated:YES];
     
@@ -192,10 +189,17 @@
 #pragma mark - Main Entry Point
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+#if DEBUG
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTweaks:) name:@"FBTweakChanged" object:nil];
+#endif
+    
     // Setup UI appearance
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [[UINavigationBar appearance] setBarTintColor:[UIColor TBANavigationBarColor]];
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
+    
+    self.window = [[FBTweakShakeWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.tintColor = [UIColor TBATintColor];
     
     // Create content view controller, and put into a navigation controller
@@ -222,12 +226,21 @@
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = self.window.bounds;
     gradient.colors = @[(id)[topColor CGColor], (id)[bottomColor CGColor]];
-    [self.window.layer insertSublayer:gradient atIndex:0];
+    [self.sideMenuController.view.layer insertSublayer:gradient atIndex:0];
     
     // Initialize database
     [self createOrOpenDatabase]; // This will call documentIsReady when complete!
 
     return YES;
+}
+
+- (void) updateTweaks:(NSNotification *)note
+{
+    [[UINavigationBar appearance] setBarTintColor:[UIColor TBANavigationBarColor]];
+    self.window.tintColor = [UIColor TBATintColor];
+    if([self.topNavigationController.visibleViewController isKindOfClass:[UITableViewController class]]) {
+        [((UITableViewController *)self.topNavigationController.visibleViewController).tableView reloadData];
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

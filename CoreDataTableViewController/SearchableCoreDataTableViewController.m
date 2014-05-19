@@ -48,7 +48,7 @@
 }
 
 
-#pragma mark - Scroll view delegate methods
+/*#pragma mark - Scroll view delegate methods
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -89,7 +89,7 @@
         else
             targetContentOffset->y = searchBottom;
     }
-}
+}*/
 
 
 #pragma mark - UISearchBarDelegate Methods

@@ -68,9 +68,6 @@
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
     view.tintColor = [UIColor TBATableViewSeparatorColor];
-    
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:[UIColor whiteColor]];
 }
 
 // Disable section indexing
