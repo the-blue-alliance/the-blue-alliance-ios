@@ -6,14 +6,13 @@
 //  Copyright (c) 2014 The Blue Alliance. All rights reserved.
 //
 
-#import "EventsViewController.h"
-
-#import "UIColor+TBAColors.h"
-
 #import "Event.h"
+#import "EventsViewController.h"
+#import "UIColor+TBAColors.h"
+#import "YearSelectTableView.h"
 
 @interface EventsViewController ()
-
+@property (nonatomic, strong) YearSelectTableView *yearSelectView;
 @end
 
 @implementation EventsViewController
@@ -37,9 +36,19 @@
     [super viewDidLoad];
 
     self.title = @"Events";
+    
+    self.yearSelectView = [[YearSelectTableView alloc] init];
+    self.yearSelectView.center = [[[UIApplication sharedApplication] delegate] window].center;
+    [[[[UIApplication sharedApplication] delegate] window] addSubview:self.yearSelectView];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showSelectYearScreen)];
 }
 
-
+- (void)showSelectYearScreen
+{
+    self.yearSelectView.showing ? [self.yearSelectView hide] : [self.yearSelectView show];
+    
+}
 
 #pragma mark - UITableViewDataSource
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
