@@ -26,6 +26,7 @@ const int kNumberOfYears = 23;
         self.currentYear = 2014;
         self.backgroundColor = [UIColor whiteColor];
         self.showing = FALSE;
+        self.clipsToBounds = YES;
         [self initSubviews];
     }
     return self;
@@ -36,7 +37,18 @@ const int kNumberOfYears = 23;
     int topBarHeight = 44;
     
     // Top bar
-    UIView *topBar = [[UIView alloc] initForAutoLayout];
+    UINavigationBar *topBar = [[UINavigationBar alloc] initForAutoLayout];
+    [self addSubview:topBar];
+    [topBar autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self];
+    [topBar autoPinEdge:ALEdgeLeading toEdge:ALEdgeLeading ofView:self];
+    [topBar autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self];
+    [topBar autoSetDimension:ALDimensionHeight toSize:topBarHeight];
+    
+    UINavigationItem *navItem = [[UINavigationItem alloc] initWithTitle:@"Change Year"];
+    [topBar setItems:@[navItem] animated:NO];
+    [navItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(hide)]];
+
+    /*UIView *topBar = [[UIView alloc] initForAutoLayout];
     topBar.backgroundColor = [UIColor TBANavigationBarColor];
     [self addSubview:topBar];
     [topBar autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self];
@@ -55,7 +67,7 @@ const int kNumberOfYears = 23;
     [topBarLabel autoAlignAxisToSuperviewAxis:ALAxisHorizontal];
     [topBarLabel autoAlignAxisToSuperviewAxis:ALAxisVertical];
     [topBarLabel autoPinEdge:ALEdgeLeading toEdge:ALEdgeLeading ofView:topBar];
-    [topBarLabel autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:topBar];
+    [topBarLabel autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:topBar];*/
     
     // Table view for the years
     self.yearTableView = [[UITableView alloc] initForAutoLayout];
@@ -83,7 +95,7 @@ const int kNumberOfYears = 23;
 - (void)show
 {
     NSLog(@"Showing...");
-
+    
     POPSpringAnimation *springAnimation = [self pop_animationForKey:@"frame"];
     if (!springAnimation) {
         springAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewFrame];
