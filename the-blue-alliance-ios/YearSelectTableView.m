@@ -12,6 +12,8 @@
 
 @interface YearSelectTableView ()
 @property (nonatomic, strong) UIView *dimView;
+@property (nonatomic, strong) UIView *containerView;
+@property (nonatomic, strong) UITableView *yearTableView;
 @end
 
 @implementation YearSelectTableView
@@ -22,26 +24,58 @@ const int kNumberOfYears = 23;
 - (id)init {
     self = [super init];
     if (self) {
-        self.delegate = self;
-        self.dataSource = self;
+        self.backgroundColor = [UIColor whiteColor];
         self.showing = FALSE;
-        
-        self.dimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height)];
-        self.dimView.backgroundColor = [UIColor blackColor];
-        self.dimView.alpha = 0.;
-        [[[[UIApplication sharedApplication] delegate] window] addSubview:self.dimView];
-        
-        UITapGestureRecognizer *dimissTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hide)];
-        dimissTap.numberOfTapsRequired = 1;
-        [self.dimView addGestureRecognizer:dimissTap];
+        [self initSubviews];
     }
     return self;
+}
+
+- (void)initSubviews
+{
+    int topBarHeight = 44;
+    
+    self.containerView = [[UIView alloc] initForAutoLayout];
+    [self addSubview:self.containerView];
+    [self.containerView autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self];
+    [self.containerView autoPinEdge:ALEdgeLeading toEdge:ALEdgeLeading ofView:self];
+    [self.containerView autoMatchDimension:ALDimensionHeight toDimension:ALDimensionHeight ofView:self];
+    [self.containerView autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self];
+    
+    // Top bar with some text
+    UIView *topBar = [[UIView alloc] initForAutoLayout];
+    topBar.backgroundColor = [UIColor orangeColor];
+    [self.containerView addSubview:topBar];
+    [topBar autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self.containerView];
+    [topBar autoPinEdge:ALEdgeLeading toEdge:ALEdgeLeading ofView:self.containerView];
+    [topBar autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self.containerView];
+    [topBar autoSetDimension:ALDimensionHeight toSize:topBarHeight];
+    
+    // Table view for the years
+    self.yearTableView = [[UITableView alloc] initForAutoLayout];
+    self.yearTableView.delegate = self;
+    self.yearTableView.dataSource = self;
+    [self.containerView addSubview:self.yearTableView];
+    [self.yearTableView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:topBar];
+    [self.yearTableView autoMatchDimension:ALDimensionHeight toDimension:ALDimensionHeight ofView:self.containerView withOffset:0.];
+    [self.yearTableView autoPinEdge:ALEdgeLeading toEdge:ALEdgeLeading ofView:self.containerView];
+    [self.yearTableView autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self.containerView];
+    
+    // Set up dimmed background view
+    self.dimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height)];
+    self.dimView.backgroundColor = [UIColor blackColor];
+    self.dimView.alpha = 0.;
+    [[[[UIApplication sharedApplication] delegate] window] addSubview:self.dimView];
+    
+    UITapGestureRecognizer *dimissTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hide)];
+    dimissTap.numberOfTapsRequired = 1;
+    [self.dimView addGestureRecognizer:dimissTap];
 }
 
 - (void)show
 {
     NSLog(@"Showing...");
-    
+
     POPSpringAnimation *springAnimation = [self pop_animationForKey:@"bounds"];
     if (!springAnimation) {
         springAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewBounds];
@@ -58,7 +92,7 @@ const int kNumberOfYears = 23;
     
     [self pop_addAnimation:springAnimation forKey:@"bounds"];
     [self.dimView pop_addAnimation:dimShowAnimation forKey:@"alpha"];
-
+    
     self.showing = TRUE;
 }
 

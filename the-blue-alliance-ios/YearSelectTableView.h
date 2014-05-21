@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface YearSelectTableView : UITableView <UITableViewDataSource, UITableViewDelegate>
+@interface YearSelectTableView : UIView <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic) BOOL showing;
 
 - (void)show;
