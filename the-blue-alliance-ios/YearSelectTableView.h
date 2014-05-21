@@ -10,6 +10,7 @@
 
 @interface YearSelectTableView : UIView <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic) BOOL showing;
+@property (nonatomic) NSInteger currentYear;
 
 - (void)show;
 - (void)hide;

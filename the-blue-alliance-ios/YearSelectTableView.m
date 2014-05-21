@@ -12,7 +12,6 @@
 
 @interface YearSelectTableView ()
 @property (nonatomic, strong) UIView *dimView;
-@property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) UITableView *yearTableView;
 @end
 
@@ -24,6 +23,7 @@ const int kNumberOfYears = 23;
 - (id)init {
     self = [super init];
     if (self) {
+        self.currentYear = 2014;
         self.backgroundColor = [UIColor whiteColor];
         self.showing = FALSE;
         [self initSubviews];
@@ -35,31 +35,24 @@ const int kNumberOfYears = 23;
 {
     int topBarHeight = 44;
     
-    self.containerView = [[UIView alloc] initForAutoLayout];
-    [self addSubview:self.containerView];
-    [self.containerView autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self];
-    [self.containerView autoPinEdge:ALEdgeLeading toEdge:ALEdgeLeading ofView:self];
-    [self.containerView autoMatchDimension:ALDimensionHeight toDimension:ALDimensionHeight ofView:self];
-    [self.containerView autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self];
-    
     // Top bar with some text
     UIView *topBar = [[UIView alloc] initForAutoLayout];
     topBar.backgroundColor = [UIColor orangeColor];
-    [self.containerView addSubview:topBar];
-    [topBar autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self.containerView];
-    [topBar autoPinEdge:ALEdgeLeading toEdge:ALEdgeLeading ofView:self.containerView];
-    [topBar autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self.containerView];
+    [self addSubview:topBar];
+    [topBar autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self];
+    [topBar autoPinEdge:ALEdgeLeading toEdge:ALEdgeLeading ofView:self];
+    [topBar autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self];
     [topBar autoSetDimension:ALDimensionHeight toSize:topBarHeight];
     
     // Table view for the years
     self.yearTableView = [[UITableView alloc] initForAutoLayout];
     self.yearTableView.delegate = self;
     self.yearTableView.dataSource = self;
-    [self.containerView addSubview:self.yearTableView];
+    [self addSubview:self.yearTableView];
     [self.yearTableView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:topBar];
-    [self.yearTableView autoMatchDimension:ALDimensionHeight toDimension:ALDimensionHeight ofView:self.containerView withOffset:0.];
-    [self.yearTableView autoPinEdge:ALEdgeLeading toEdge:ALEdgeLeading ofView:self.containerView];
-    [self.yearTableView autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self.containerView];
+    [self.yearTableView autoMatchDimension:ALDimensionHeight toDimension:ALDimensionHeight ofView:self withOffset:-topBarHeight];
+    [self.yearTableView autoPinEdge:ALEdgeLeading toEdge:ALEdgeLeading ofView:self];
+    [self.yearTableView autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self];
     
     // Set up dimmed background view
     self.dimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height)];
@@ -76,12 +69,12 @@ const int kNumberOfYears = 23;
 {
     NSLog(@"Showing...");
 
-    POPSpringAnimation *springAnimation = [self pop_animationForKey:@"bounds"];
+    POPSpringAnimation *springAnimation = [self pop_animationForKey:@"frame"];
     if (!springAnimation) {
-        springAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewBounds];
+        springAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewFrame];
     }
     
-    springAnimation.toValue = [NSValue valueWithCGRect:CGRectMake(self.x, self.y, ([[UIApplication sharedApplication] keyWindow].width - (2 * kYearSelectEdgePadding)), ([[UIApplication sharedApplication] keyWindow].height - (2 * kYearSelectEdgePadding)))];
+    springAnimation.toValue = [NSValue valueWithCGRect:CGRectMake(kYearSelectEdgePadding, kYearSelectEdgePadding, ([[UIApplication sharedApplication] keyWindow].width - (2 * kYearSelectEdgePadding)), ([[UIApplication sharedApplication] keyWindow].height - (2 * kYearSelectEdgePadding)))];
 
     POPSpringAnimation *dimShowAnimation = [self.dimView pop_animationForKey:@"alpha"];
     if (!dimShowAnimation) {
@@ -90,7 +83,7 @@ const int kNumberOfYears = 23;
     
     dimShowAnimation.toValue = [NSNumber numberWithFloat:0.6];
     
-    [self pop_addAnimation:springAnimation forKey:@"bounds"];
+    [self pop_addAnimation:springAnimation forKey:@"frame"];
     [self.dimView pop_addAnimation:dimShowAnimation forKey:@"alpha"];
     
     self.showing = TRUE;
@@ -100,12 +93,12 @@ const int kNumberOfYears = 23;
 {
     NSLog(@"Hiding...");
     
-    POPSpringAnimation *springAnimation = [self pop_animationForKey:@"bounds"];
+    POPSpringAnimation *springAnimation = [self pop_animationForKey:@"frame"];
     if (!springAnimation) {
-        springAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewBounds];
+        springAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewFrame];
     }
 
-    springAnimation.toValue = [NSValue valueWithCGRect:CGRectMake(0, 0, 0, 0)];
+    springAnimation.toValue = [NSValue valueWithCGRect:CGRectMake(self.centerX, self.centerY, 0, 0)];
 
     POPSpringAnimation *dimShowAnimation = [self.dimView pop_animationForKey:@"alpha"];
     if (!dimShowAnimation) {
@@ -114,7 +107,7 @@ const int kNumberOfYears = 23;
     
     dimShowAnimation.toValue = [NSNumber numberWithFloat:0.0];
     
-    [self pop_addAnimation:springAnimation forKey:@"bounds"];
+    [self pop_addAnimation:springAnimation forKey:@"frame"];
     [self.dimView pop_addAnimation:dimShowAnimation forKey:@"alpha"];
 
     self.showing = FALSE;
@@ -137,7 +130,17 @@ const int kNumberOfYears = 23;
     if(!cell)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Year Cell"];
     
+    if ((2014 - indexPath.row) == self.currentYear)
+    {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
+    else
+    {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
+
     cell.textLabel.text = [NSString stringWithFormat:@"%ld", 2014 - indexPath.row];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
 }
@@ -145,8 +148,15 @@ const int kNumberOfYears = 23;
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self hide];
+    UITableViewCell *newYearCell = [tableView cellForRowAtIndexPath:indexPath];
+    self.currentYear = [newYearCell.textLabel.text integerValue];
+    
+    [tableView reloadData];
+    
+    dispatch_time_t dismissTime = dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC);
+    dispatch_after(dismissTime, dispatch_get_main_queue(), ^(void){
+        [self hide];
+    });
 }
 
 @end
