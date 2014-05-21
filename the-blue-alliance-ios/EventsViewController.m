@@ -41,6 +41,7 @@
     self.yearSelectView.center = [[[UIApplication sharedApplication] delegate] window].center;
     [[[[UIApplication sharedApplication] delegate] window] addSubview:self.yearSelectView];
     
+    // Lets make this a gear at some point in time? The action button implies share sheet or something - not changing the displayed data
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showSelectYearScreen)];
 }
 

@@ -35,14 +35,27 @@ const int kNumberOfYears = 23;
 {
     int topBarHeight = 44;
     
-    // Top bar with some text
+    // Top bar
     UIView *topBar = [[UIView alloc] initForAutoLayout];
-    topBar.backgroundColor = [UIColor orangeColor];
+    topBar.backgroundColor = [UIColor TBANavigationBarColor];
     [self addSubview:topBar];
     [topBar autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self];
     [topBar autoPinEdge:ALEdgeLeading toEdge:ALEdgeLeading ofView:self];
     [topBar autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self];
     [topBar autoSetDimension:ALDimensionHeight toSize:topBarHeight];
+    
+    // Title for the top bar
+    UILabel *topBarLabel = [[UILabel alloc] initForAutoLayout];
+    // Possibly change this?
+    topBarLabel.text = @"Change Year";
+    topBarLabel.textColor = [UIColor whiteColor];
+    topBarLabel.font = [UIFont boldSystemFontOfSize:18.];
+    topBarLabel.textAlignment = NSTextAlignmentCenter;
+    [topBar addSubview:topBarLabel];
+    [topBarLabel autoAlignAxisToSuperviewAxis:ALAxisHorizontal];
+    [topBarLabel autoAlignAxisToSuperviewAxis:ALAxisVertical];
+    [topBarLabel autoPinEdge:ALEdgeLeading toEdge:ALEdgeLeading ofView:topBar];
+    [topBarLabel autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:topBar];
     
     // Table view for the years
     self.yearTableView = [[UITableView alloc] initForAutoLayout];
@@ -81,7 +94,7 @@ const int kNumberOfYears = 23;
         dimShowAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewAlpha];
     }
     
-    dimShowAnimation.toValue = [NSNumber numberWithFloat:0.6];
+    dimShowAnimation.toValue = [NSNumber numberWithFloat:0.7];
     
     [self pop_addAnimation:springAnimation forKey:@"frame"];
     [self.dimView pop_addAnimation:dimShowAnimation forKey:@"alpha"];
@@ -99,7 +112,9 @@ const int kNumberOfYears = 23;
     }
 
     springAnimation.toValue = [NSValue valueWithCGRect:CGRectMake(self.centerX, self.centerY, 0, 0)];
-
+    springAnimation.springBounciness = 0.;
+    springAnimation.springSpeed = 25.;
+    
     POPSpringAnimation *dimShowAnimation = [self.dimView pop_animationForKey:@"alpha"];
     if (!dimShowAnimation) {
         dimShowAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewAlpha];
@@ -149,9 +164,17 @@ const int kNumberOfYears = 23;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *newYearCell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    if ([newYearCell.textLabel.text integerValue] == self.currentYear) {
+        [self hide];
+        return;
+    }
+    
     self.currentYear = [newYearCell.textLabel.text integerValue];
     
     [tableView reloadData];
+    
+    // call some method to reload the backing data here?
     
     dispatch_time_t dismissTime = dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC);
     dispatch_after(dismissTime, dispatch_get_main_queue(), ^(void){
