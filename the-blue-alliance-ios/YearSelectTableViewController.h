@@ -8,10 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface YearSelectTableView : UIView <UITableViewDataSource, UITableViewDelegate>
-@property (nonatomic) BOOL showing;
+@interface YearSelectTableViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic) NSInteger currentYear;
-
-- (void)show;
-- (void)hide;
 @end

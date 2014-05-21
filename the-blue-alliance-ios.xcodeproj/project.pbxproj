@@ -34,7 +34,7 @@
 		50DFD20419207DD4009B686E /* InsightsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD20319207DD4009B686E /* InsightsViewController.m */; };
 		50DFD20719207DDC009B686E /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD20619207DDC009B686E /* SettingsViewController.m */; };
 		50E65EA719198E5200714328 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50E65EA619198E5200714328 /* QuartzCore.framework */; };
-		92C5B870192C0BBC00AFDBCA /* YearSelectTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C5B86F192C0BBC00AFDBCA /* YearSelectTableView.m */; };
+		92C5B870192C0BBC00AFDBCA /* YearSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C5B86F192C0BBC00AFDBCA /* YearSelectTableViewController.m */; };
 		92C5B873192C129E00AFDBCA /* Reveal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92C5B872192C129E00AFDBCA /* Reveal.framework */; };
 /* End PBXBuildFile section */
 
@@ -91,8 +91,8 @@
 		50DFD20519207DDC009B686E /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		50DFD20619207DDC009B686E /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		50E65EA619198E5200714328 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		92C5B86E192C0BBC00AFDBCA /* YearSelectTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YearSelectTableView.h; sourceTree = "<group>"; };
-		92C5B86F192C0BBC00AFDBCA /* YearSelectTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YearSelectTableView.m; sourceTree = "<group>"; };
+		92C5B86E192C0BBC00AFDBCA /* YearSelectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YearSelectTableViewController.h; sourceTree = "<group>"; };
+		92C5B86F192C0BBC00AFDBCA /* YearSelectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YearSelectTableViewController.m; sourceTree = "<group>"; };
 		92C5B872192C129E00AFDBCA /* Reveal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Reveal.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -248,8 +248,8 @@
 			children = (
 				50832E3C1918BBEA003AC8A7 /* EventsViewController.h */,
 				50832E3D1918BBEA003AC8A7 /* EventsViewController.m */,
-				92C5B86E192C0BBC00AFDBCA /* YearSelectTableView.h */,
-				92C5B86F192C0BBC00AFDBCA /* YearSelectTableView.m */,
+				92C5B86E192C0BBC00AFDBCA /* YearSelectTableViewController.h */,
+				92C5B86F192C0BBC00AFDBCA /* YearSelectTableViewController.m */,
 			);
 			name = Events;
 			sourceTree = "<group>";
@@ -397,7 +397,7 @@
 				50832E391918BBBE003AC8A7 /* Event.m in Sources */,
 				5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */,
 				50DFD20119207DCA009B686E /* TeamsViewController.m in Sources */,
-				92C5B870192C0BBC00AFDBCA /* YearSelectTableView.m in Sources */,
+				92C5B870192C0BBC00AFDBCA /* YearSelectTableViewController.m in Sources */,
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,
 				50832E071918BB63003AC8A7 /* main.m in Sources */,
 				50DFD1F61920365E009B686E /* MenuViewController.m in Sources */,

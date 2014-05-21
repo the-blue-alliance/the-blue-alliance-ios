@@ -9,10 +9,11 @@
 #import "Event.h"
 #import "EventsViewController.h"
 #import "UIColor+TBAColors.h"
-#import "YearSelectTableView.h"
+#import "YearSelectTableViewController.h"
+#import <MZFormSheetController/MZFormSheetController.h>
 
 @interface EventsViewController ()
-@property (nonatomic, strong) YearSelectTableView *yearSelectView;
+
 @end
 
 @implementation EventsViewController
@@ -37,19 +38,21 @@
 
     self.title = @"Events";
     
-    self.yearSelectView = [[YearSelectTableView alloc] init];
-    self.yearSelectView.center = [[[UIApplication sharedApplication] delegate] window].center;
-    [[[[UIApplication sharedApplication] delegate] window] addSubview:self.yearSelectView];
     
     // Lets make this a gear at some point in time? The action button implies share sheet or something - not changing the displayed data
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showSelectYearScreen)];
 }
 
-- (void)showSelectYearScreen
+- (void) showSelectYearScreen
 {
-    self.yearSelectView.showing ? [self.yearSelectView hide] : [self.yearSelectView show];
+    YearSelectTableViewController *yearSelectController = [[YearSelectTableViewController alloc] init];
+    UINavigationController *formNavController = [[UINavigationController alloc] initWithRootViewController:yearSelectController];
     
+    [self mz_presentFormSheetWithViewController:formNavController animated:YES transitionStyle:MZFormSheetTransitionStyleBounce completionHandler:^(MZFormSheetController *formSheetController) {
+        
+    }];
 }
+
 
 #pragma mark - UITableViewDataSource
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

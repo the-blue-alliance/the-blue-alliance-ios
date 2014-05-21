@@ -1,4 +1,7 @@
 PODS:
+  - MZAppearance (1.1.3)
+  - MZFormSheetController (2.3.4):
+    - MZAppearance (~> 1.1.3)
   - pop (1.0.5)
   - Tweaks (1.1.0)
   - TWTSideMenuViewController (0.3)
@@ -6,6 +9,7 @@ PODS:
   - UIView+Positioning (1.0.1)
 
 DEPENDENCIES:
+  - MZFormSheetController
   - pop
   - Tweaks
   - TWTSideMenuViewController
@@ -13,6 +17,8 @@ DEPENDENCIES:
   - UIView+Positioning
 
 SPEC CHECKSUMS:
+  MZAppearance: c88502c0c2345120630c34e09d5ff09e2969ba30
+  MZFormSheetController: 8c453908080c338274e68908849029435d3e2736
   pop: 75fa2b33934200a8a68abb449ac1726fcf7e43b9
   Tweaks: 05b197d4a1247288f576587546bc1932189d8c98
   TWTSideMenuViewController: 18633fb4be397ed1e83352ed50ddd55d04d94de3
