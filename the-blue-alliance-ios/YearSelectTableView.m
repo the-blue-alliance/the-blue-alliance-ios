@@ -63,7 +63,9 @@ const int kNumberOfYears = 23;
     self.yearTableView.dataSource = self;
     [self addSubview:self.yearTableView];
     [self.yearTableView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:topBar];
-    [self.yearTableView autoMatchDimension:ALDimensionHeight toDimension:ALDimensionHeight ofView:self withOffset:-topBarHeight];
+    [UIView autoSetPriority:UILayoutPriorityDefaultHigh forConstraints:^{
+        [self.yearTableView autoPinEdge:ALEdgeBottom toEdge:ALEdgeBottom ofView:self];
+    }];
     [self.yearTableView autoPinEdge:ALEdgeLeading toEdge:ALEdgeLeading ofView:self];
     [self.yearTableView autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self];
     
