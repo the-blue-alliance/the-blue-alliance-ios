@@ -18,6 +18,7 @@
 #import "Event+Create.h"
 
 #import <TWTSideMenuViewController/TWTSideMenuViewController.h>
+#import <MZFormSheetController/MZFormSheetController.h>
 
 #import "FBTweakShakeWindow.h"
 #import "FBTweakInline.h"
@@ -198,6 +199,8 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [[UINavigationBar appearance] setBarTintColor:[UIColor TBANavigationBarColor]];
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
+    [[MZFormSheetBackgroundWindow appearance] setBackgroundBlurEffect:YES];
+    [[MZFormSheetBackgroundWindow appearance] setBlurRadius:5.0];
     
     self.window = [[FBTweakShakeWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.tintColor = [UIColor TBATintColor];
