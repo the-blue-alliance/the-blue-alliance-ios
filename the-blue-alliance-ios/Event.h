@@ -12,6 +12,17 @@
 
 @interface Event : NSManagedObject
 
+typedef enum EventType : NSInteger {
+    REGIONAL = 0,
+    DISTRICT = 1,
+    DISTRICT_CMP = 2,
+    CMP_DIVISION = 3,
+    CMP_FINALS = 4,
+    OFFSEASON = 99,
+    PRESEASON = 100,
+    UNLABLED = -1
+} EventType;
+
 @property (nonatomic, retain) NSString * key;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * event_type;
