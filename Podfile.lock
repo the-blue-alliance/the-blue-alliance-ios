@@ -2,6 +2,7 @@ PODS:
   - MZAppearance (1.1.3)
   - MZFormSheetController (2.3.4):
     - MZAppearance (~> 1.1.3)
+  - NSDate-Escort (1.3.1)
   - Tweaks (1.1.0)
   - TWTSideMenuViewController (0.3)
   - UIView+AutoLayout (1.3.0)
@@ -9,6 +10,7 @@ PODS:
 
 DEPENDENCIES:
   - MZFormSheetController
+  - NSDate-Escort
   - Tweaks
   - TWTSideMenuViewController
   - UIView+AutoLayout
@@ -17,6 +19,7 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   MZAppearance: c88502c0c2345120630c34e09d5ff09e2969ba30
   MZFormSheetController: 8c453908080c338274e68908849029435d3e2736
+  NSDate-Escort: 2c849d58b85ef76f00c2388870f915b5b4225cef
   Tweaks: 05b197d4a1247288f576587546bc1932189d8c98
   TWTSideMenuViewController: 18633fb4be397ed1e83352ed50ddd55d04d94de3
   UIView+AutoLayout: dc24ec6114498617510af759148a05b957af1b38
