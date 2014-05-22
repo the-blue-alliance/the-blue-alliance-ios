@@ -59,6 +59,7 @@
         event.start_date = [formatter dateFromString:info[@"start_date"]];
         event.end_date = [formatter dateFromString:info[@"end_date"]];
         event.event_type = info[@"event_type"];
+        // TODO: Finish / improve importing
 
         NSLog(@"Imported event %@ into the database", key);
     }

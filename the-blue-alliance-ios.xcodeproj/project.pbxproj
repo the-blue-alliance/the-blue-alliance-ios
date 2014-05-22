@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		394BD129CFDF44B78FFF2C94 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDCC6CCFB1A4A199C72C12E /* libPods.a */; };
 		5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */; };
+		5070EE69192E95FA0079D123 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 5070EE68192E95FA0079D123 /* Team.m */; };
+		5070EE6C192E965C0079D123 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 5070EE6B192E965C0079D123 /* Event.m */; };
 		50832DFB1918BB63003AC8A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFA1918BB63003AC8A7 /* Foundation.framework */; };
 		50832DFD1918BB63003AC8A7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFC1918BB63003AC8A7 /* CoreGraphics.framework */; };
 		50832DFF1918BB63003AC8A7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFE1918BB63003AC8A7 /* UIKit.framework */; };
@@ -24,7 +26,6 @@
 		50832E271918BB63003AC8A7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50832E251918BB63003AC8A7 /* InfoPlist.strings */; };
 		50832E291918BB63003AC8A7 /* the_blue_alliance_iosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E281918BB63003AC8A7 /* the_blue_alliance_iosTests.m */; };
 		50832E341918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 50832E321918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld */; };
-		50832E391918BBBE003AC8A7 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E361918BBBE003AC8A7 /* Event.m */; };
 		50832E3A1918BBBE003AC8A7 /* Event+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E381918BBBE003AC8A7 /* Event+Create.m */; };
 		50832E3E1918BBEA003AC8A7 /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E3D1918BBEA003AC8A7 /* EventsViewController.m */; };
 		50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */; };
@@ -53,6 +54,10 @@
 		4DDCC6CCFB1A4A199C72C12E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5057CD1C1929987D00654304 /* SearchableCoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchableCoreDataTableViewController.h; sourceTree = "<group>"; };
 		5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchableCoreDataTableViewController.m; sourceTree = "<group>"; };
+		5070EE67192E95FA0079D123 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
+		5070EE68192E95FA0079D123 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
+		5070EE6A192E965C0079D123 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = ../Event.h; sourceTree = "<group>"; };
+		5070EE6B192E965C0079D123 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Event.m; path = ../Event.m; sourceTree = "<group>"; };
 		50832DF71918BB63003AC8A7 /* the-blue-alliance-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "the-blue-alliance-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		50832DFA1918BB63003AC8A7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		50832DFC1918BB63003AC8A7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -72,8 +77,6 @@
 		50832E261918BB63003AC8A7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		50832E281918BB63003AC8A7 /* the_blue_alliance_iosTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = the_blue_alliance_iosTests.m; sourceTree = "<group>"; };
 		50832E331918BB8E003AC8A7 /* The Blue Alliance.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance.xcdatamodel"; sourceTree = "<group>"; };
-		50832E351918BBBE003AC8A7 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
-		50832E361918BBBE003AC8A7 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		50832E371918BBBE003AC8A7 /* Event+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Event+Create.h"; sourceTree = "<group>"; };
 		50832E381918BBBE003AC8A7 /* Event+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Event+Create.m"; sourceTree = "<group>"; };
 		50832E3C1918BBEA003AC8A7 /* EventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsViewController.h; sourceTree = "<group>"; };
@@ -123,6 +126,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5070EE6D192E966B0079D123 /* Team */ = {
+			isa = PBXGroup;
+			children = (
+				5070EE67192E95FA0079D123 /* Team.h */,
+				5070EE68192E95FA0079D123 /* Team.m */,
+			);
+			name = Team;
+			sourceTree = "<group>";
+		};
 		50832DEE1918BB63003AC8A7 = {
 			isa = PBXGroup;
 			children = (
@@ -210,7 +222,8 @@
 			isa = PBXGroup;
 			children = (
 				50832E321918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld */,
-				92B98A5A192DA964004A2513 /* Events */,
+				5070EE6D192E966B0079D123 /* Team */,
+				92B98A5A192DA964004A2513 /* Event */,
 			);
 			name = "Data Model";
 			sourceTree = "<group>";
@@ -240,15 +253,15 @@
 			name = "Top Level Controllers";
 			sourceTree = "<group>";
 		};
-		92B98A5A192DA964004A2513 /* Events */ = {
+		92B98A5A192DA964004A2513 /* Event */ = {
 			isa = PBXGroup;
 			children = (
-				50832E351918BBBE003AC8A7 /* Event.h */,
-				50832E361918BBBE003AC8A7 /* Event.m */,
+				5070EE6A192E965C0079D123 /* Event.h */,
+				5070EE6B192E965C0079D123 /* Event.m */,
 				50832E371918BBBE003AC8A7 /* Event+Create.h */,
 				50832E381918BBBE003AC8A7 /* Event+Create.m */,
 			);
-			name = Events;
+			name = Event;
 			sourceTree = "<group>";
 		};
 		92C5B871192C0BC400AFDBCA /* Events */ = {
@@ -370,7 +383,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\ncat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\nexit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		816437B6DC96402F891C1218 /* Copy Pods Resources */ = {
@@ -402,11 +415,12 @@
 				50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */,
 				50832E341918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld in Sources */,
 				50832E3E1918BBEA003AC8A7 /* EventsViewController.m in Sources */,
-				50832E391918BBBE003AC8A7 /* Event.m in Sources */,
+				5070EE69192E95FA0079D123 /* Team.m in Sources */,
 				5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */,
 				50DFD20119207DCA009B686E /* TeamsViewController.m in Sources */,
 				92C5B870192C0BBC00AFDBCA /* YearSelectView.m in Sources */,
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,
+				5070EE6C192E965C0079D123 /* Event.m in Sources */,
 				50832E071918BB63003AC8A7 /* main.m in Sources */,
 				50DFD1F61920365E009B686E /* MenuViewController.m in Sources */,
 			);
