@@ -7,8 +7,9 @@
 //
 
 #import "SearchableCoreDataTableViewController.h"
+#import "YearSelectTableViewController.h"
 
-@interface EventsViewController : SearchableCoreDataTableViewController
+@interface EventsViewController : SearchableCoreDataTableViewController <YearSelect>
 
 @property (nonatomic, strong) NSManagedObjectContext *context;
 

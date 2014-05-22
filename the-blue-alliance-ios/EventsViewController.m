@@ -9,11 +9,10 @@
 #import "Event.h"
 #import "EventsViewController.h"
 #import "UIColor+TBAColors.h"
-#import "YearSelectTableViewController.h"
 #import <MZFormSheetController/MZFormSheetController.h>
 
 @interface EventsViewController ()
-
+@property (nonatomic) NSInteger currentYear;
 @end
 
 @implementation EventsViewController
@@ -36,8 +35,9 @@
 {
     [super viewDidLoad];
 
-    self.title = @"Events";
+    self.currentYear = 2014;
     
+    self.title = @"Events";
     
     // Lets make this a gear at some point in time? The action button implies share sheet or something - not changing the displayed data
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showSelectYearScreen)];
@@ -45,12 +45,10 @@
 
 - (void) showSelectYearScreen
 {
-    YearSelectTableViewController *yearSelectController = [[YearSelectTableViewController alloc] init];
+    YearSelectTableViewController *yearSelectController = [[YearSelectTableViewController alloc] initWithDelegate:self currentYear:self.currentYear];
     UINavigationController *formNavController = [[UINavigationController alloc] initWithRootViewController:yearSelectController];
-    
-    [self mz_presentFormSheetWithViewController:formNavController animated:YES transitionStyle:MZFormSheetTransitionStyleBounce completionHandler:^(MZFormSheetController *formSheetController) {
-        
-    }];
+
+    [self mz_presentFormSheetWithViewController:formNavController animated:YES transitionStyle:MZFormSheetTransitionStyleBounce completionHandler:nil];
 }
 
 
@@ -97,10 +95,18 @@
 - (NSPredicate *) predicateForSearchText:(NSString *)searchText
 {
     if (searchText && searchText.length) {
-        return [NSPredicate predicateWithFormat:@"name contains[cd] %@", searchText];
+        return [NSPredicate predicateWithFormat:@"name contains[cd] %@ OR key contains[cd] %@", searchText, searchText];
     } else {
         return nil;
     }
+}
+
+#pragma mark - YearSelect protocol method
+
+- (void)didSelectNewYear:(NSInteger)year
+{
+    // Reload all the data for the new year
+    NSLog(@"Should reload for new year");
 }
 
 @end

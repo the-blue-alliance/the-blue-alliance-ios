@@ -12,35 +12,42 @@
 #import <MZFormSheetController/MZFormSheetController.h>
 
 @interface YearSelectTableViewController ()
-
+@property (nonatomic, strong) id delegate;
+@property (nonatomic) NSInteger currentYear;
+@property (nonatomic) NSInteger initYear;
 @end
 
 @implementation YearSelectTableViewController
 
 const int kNumberOfYears = 23;
 
-- (void) viewDidLoad
+- (id)initWithDelegate:(id)delegate currentYear:(NSInteger)year
+{
+    self = [super init];
+    if (self) {
+        self.delegate = delegate;
+        self.initYear = year;
+        self.currentYear = year;
+    }
+    return self;
+}
+
+- (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.currentYear = 2014;
     
     self.navigationItem.title = @"Change Year";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(hide)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor TBATintColor];
 }
 
-
-
-- (void) hide
+- (void)hide
 {
-    [self mz_dismissFormSheetControllerAnimated:YES completionHandler:^(MZFormSheetController *formSheetController) {
+    if (self.initYear != self.currentYear && [self.delegate respondsToSelector:@selector(didSelectNewYear:)])
+        [self.delegate didSelectNewYear:self.currentYear];
         
-    }];
+    [self mz_dismissFormSheetControllerAnimated:YES completionHandler:nil];
 }
-
-
-
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

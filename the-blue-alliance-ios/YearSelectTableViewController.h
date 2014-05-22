@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol YearSelect
+- (void)didSelectNewYear:(NSInteger)year;
+@end
+
 @interface YearSelectTableViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate>
-@property (nonatomic) NSInteger currentYear;
+
+- (id)initWithDelegate:(id)delegate currentYear:(NSInteger)year;
 @end
