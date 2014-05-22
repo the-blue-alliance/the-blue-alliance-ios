@@ -48,7 +48,10 @@
     YearSelectView *yearSelectController = [[YearSelectView alloc] initWithDelegate:self currentYear:self.currentYear];
     UINavigationController *formNavController = [[UINavigationController alloc] initWithRootViewController:yearSelectController];
 
-    [self mz_presentFormSheetWithViewController:formNavController animated:YES transitionStyle:MZFormSheetTransitionStyleBounce completionHandler:nil];
+    MZFormSheetController *formSheet = [[MZFormSheetController alloc] initWithViewController:formNavController];
+    formSheet.transitionStyle = MZFormSheetTransitionStyleBounce;
+    formSheet.shouldDismissOnBackgroundViewTap = YES;
+    [formSheet presentAnimated:YES completionHandler:nil];
 }
 
 

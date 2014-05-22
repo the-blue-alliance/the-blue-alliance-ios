@@ -87,7 +87,7 @@ const int kNumberOfYears = 23;
     UITableViewCell *newYearCell = [tableView cellForRowAtIndexPath:indexPath];
     
     if ([newYearCell.textLabel.text integerValue] == self.currentYear) {
-//        [self hide];
+        [self hide];
         return;
     }
     
@@ -100,7 +100,7 @@ const int kNumberOfYears = 23;
     
     dispatch_time_t dismissTime = dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC);
     dispatch_after(dismissTime, dispatch_get_main_queue(), ^(void){
-//        [self hide];
+        [self hide];
     });
 }
 
