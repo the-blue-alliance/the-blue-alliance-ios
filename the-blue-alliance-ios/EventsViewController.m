@@ -45,7 +45,7 @@
 
 - (void) showSelectYearScreen
 {
-    YearSelectTableViewController *yearSelectController = [[YearSelectTableViewController alloc] initWithDelegate:self currentYear:self.currentYear];
+    YearSelectView *yearSelectController = [[YearSelectView alloc] initWithDelegate:self currentYear:self.currentYear];
     UINavigationController *formNavController = [[UINavigationController alloc] initWithRootViewController:yearSelectController];
 
     [self mz_presentFormSheetWithViewController:formNavController animated:YES transitionStyle:MZFormSheetTransitionStyleBounce completionHandler:nil];

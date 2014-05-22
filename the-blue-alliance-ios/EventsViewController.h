@@ -7,7 +7,7 @@
 //
 
 #import "SearchableCoreDataTableViewController.h"
-#import "YearSelectTableViewController.h"
+#import "YearSelectView.h"
 
 @interface EventsViewController : SearchableCoreDataTableViewController <YearSelect>
 

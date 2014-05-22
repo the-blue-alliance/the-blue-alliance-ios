@@ -8,16 +8,16 @@
 
 #import <POP/POP.h>
 
-#import "YearSelectTableViewController.h"
+#import "YearSelectView.h"
 #import <MZFormSheetController/MZFormSheetController.h>
 
-@interface YearSelectTableViewController ()
+@interface YearSelectView ()
 @property (nonatomic, strong) id delegate;
 @property (nonatomic) NSInteger currentYear;
 @property (nonatomic) NSInteger initYear;
 @end
 
-@implementation YearSelectTableViewController
+@implementation YearSelectView
 
 const int kNumberOfYears = 23;
 

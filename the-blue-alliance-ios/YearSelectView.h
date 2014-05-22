@@ -12,7 +12,7 @@
 - (void)didSelectNewYear:(NSInteger)year;
 @end
 
-@interface YearSelectTableViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate>
+@interface YearSelectView : UITableViewController <UITableViewDataSource, UITableViewDelegate>
 
 - (id)initWithDelegate:(id)delegate currentYear:(NSInteger)year;
 @end
