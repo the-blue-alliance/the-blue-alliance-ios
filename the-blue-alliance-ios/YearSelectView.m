@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 The Blue Alliance. All rights reserved.
 //
 
-#import <POP/POP.h>
-
 #import "YearSelectView.h"
 #import <MZFormSheetController/MZFormSheetController.h>
 
