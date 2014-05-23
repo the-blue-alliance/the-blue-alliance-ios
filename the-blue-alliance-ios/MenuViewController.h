@@ -9,12 +9,12 @@
 #import <UIKit/UIKit.h>
 
 /** `MenuViewController`'s delegate methods—defined by the MenuViewControllerDelegate protocol
- *  call menuViewController:didSelectMenuItem: when a new menu item is selected
+ *  calls menuViewController:didSelectMenuItem: when a new menu item is selected
  */
 @class MenuViewController;
 @protocol MenuViewControllerDelegate <NSObject>
 
-/** Called when a a menu item is tapped
+/** Called when a menu item is tapped
  *
  * @param menu The menu object an item was selected on
  * @param menuItem The object selected
