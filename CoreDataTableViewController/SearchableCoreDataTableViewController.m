@@ -158,7 +158,7 @@
     [self.tableView reloadData];
 }
 
-- (NSPredicate *) predicateForSearchText:(NSString *)searchText
+- (NSPredicate *)predicateForSearchText:(NSString *)searchText
 {
     return nil;
 }
