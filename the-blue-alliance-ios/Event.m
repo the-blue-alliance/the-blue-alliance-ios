@@ -9,7 +9,6 @@
 #import "Event.h"
 #import "Team.h"
 
-
 @implementation Event
 
 @dynamic address;

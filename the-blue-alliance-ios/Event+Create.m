@@ -1,5 +1,5 @@
 //
-//  Event+TBA.m
+//  Event+Create.m
 //  The Blue Alliance
 //
 //  Created by Donald Pinckney on 5/5/14.
