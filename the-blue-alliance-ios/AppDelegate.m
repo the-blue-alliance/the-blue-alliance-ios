@@ -109,7 +109,10 @@
     NSString *documentName = @"database";
     NSURL *url = [documentsDirectory URLByAppendingPathComponent:documentName];
     
+    NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption: @YES,
+                              NSInferMappingModelAutomaticallyOption: @YES};
     self.document = [[UIManagedDocument alloc] initWithFileURL:url];
+    self.document.persistentStoreOptions = options;
     
     BOOL fileExists = [fileManager fileExistsAtPath:[url path]];
     if(fileExists) {
@@ -233,7 +236,7 @@
     
     // Initialize database
     [self createOrOpenDatabase]; // This will call documentIsReady when complete!
-
+    
     return YES;
 }
 
