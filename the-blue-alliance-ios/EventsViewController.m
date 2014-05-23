@@ -36,7 +36,7 @@
 }
 
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/helpers/event_helper.py#L29
-- (NSArray*)groupEventsByWeek
+- (NSArray *)groupEventsByWeek
 {
     NSMutableArray *toReturn = [[NSMutableArray alloc] init];
     
@@ -98,6 +98,36 @@
     
     return toReturn;
 }
+
+// Override the default insertion of new cells when the database changes
+// This disables the automatic animation of new items
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    
+}
+- (void)controller:(NSFetchedResultsController *)controller
+  didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+		   atIndex:(NSUInteger)sectionIndex
+	 forChangeType:(NSFetchedResultsChangeType)type
+{
+    
+}
+- (void)controller:(NSFetchedResultsController *)controller
+   didChangeObject:(id)anObject
+	   atIndexPath:(NSIndexPath *)indexPath
+	 forChangeType:(NSFetchedResultsChangeType)type
+	  newIndexPath:(NSIndexPath *)newIndexPath
+{
+    
+}
+
+// Ensures that when the database changes, we properly resort all the data
+- (void) controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    self.eventData = [self groupEventsByWeek];
+    [self.tableView reloadData];
+}
+
 
 - (void)viewDidLoad
 {

@@ -14,7 +14,7 @@
  *  by searching for an event name or an event code. Which year's data to display can be 
  *  changed using the YearSelect.
  */
-@interface EventsViewController : SearchableCoreDataTableViewController <YearSelectDelegate>
+@interface EventsViewController : SearchableCoreDataTableViewController <YearSelectDelegate, NSFetchedResultsControllerDelegate>
 
 /** The context to be used for accessing Core Data
  */
