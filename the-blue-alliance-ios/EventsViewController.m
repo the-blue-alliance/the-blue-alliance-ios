@@ -7,12 +7,14 @@
 //
 
 #import "Event.h"
+#import "EventGroup.h"
 #import "EventsViewController.h"
 #import "UIColor+TBAColors.h"
 #import <MZFormSheetController/MZFormSheetController.h>
 
 @interface EventsViewController ()
 @property (nonatomic) NSInteger currentYear;
+@property (nonatomic, strong) NSArray *eventData;
 @end
 
 @implementation EventsViewController
@@ -29,38 +31,31 @@
                                                                         managedObjectContext:context
                                                                           sectionNameKeyPath:@"start_date"
                                                                                    cacheName:nil];
+    self.eventData = [self groupEventsByWeek];
+    [self.tableView reloadData];
 }
 
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/helpers/event_helper.py#L29
-- (NSDictionary*)groupByWeek
+- (NSArray*)groupEventsByWeek
 {
-    NSString *championshipEventsLabel = @"Championship Event";
-    NSString *regionalEventsLabel = @"Week %d";
-    NSString *weeklessEventsLabel = @"Other Official Events";
-    NSString *offseasonEventsLabel = @"Offseason";
-    NSString *preseasonEventsLabel = @"Preseason";
-
-    NSMutableDictionary *toReturn = [[NSMutableDictionary alloc] init];
+    NSMutableArray *toReturn = [[NSMutableArray alloc] init];
     
     int currentWeek = 1;
     NSDate *weekStart;
     
-    NSMutableArray *weeklessEvents = [[NSMutableArray alloc] init];
-    NSMutableArray *offseasonEvents = [[NSMutableArray alloc] init];
-    NSMutableArray *preseasonEvents = [[NSMutableArray alloc] init];
+    EventGroup *weeklessEvents = [[EventGroup alloc] initWithName:@"Other Official Events"];
+    EventGroup *preseasonEvents = [[EventGroup alloc] initWithName:@"Preseason"];
+    EventGroup *offseasonEvents = [[EventGroup alloc] initWithName:@"Offseason"];
+    EventGroup *cmpEvents = [[EventGroup alloc] initWithName:@"Championship Event"];
+    EventGroup *currentWeekEvents;
     
     for (Event *event in self.fetchedResultsController.fetchedObjects) {
         if ([event.official intValue] == 1 && ([event.event_type integerValue] == CMP_DIVISION || [event.event_type integerValue] == CMP_FINALS))
-        {
-            if ([toReturn objectForKey:championshipEventsLabel])
-                toReturn[championshipEventsLabel] = [toReturn[championshipEventsLabel] arrayByAddingObject:event];
-            else
-                toReturn[championshipEventsLabel] = @[event];
-        }
+            [cmpEvents addEvent:event];
         else if ([event.official intValue] == 1 && ([event.event_type integerValue] == REGIONAL || [event.event_type integerValue] == DISTRICT || [event.event_type integerValue] == DISTRICT_CMP))
         {
             if (event.start_date == nil || (event.start_date.month == 12 && event.start_date.day == 31))
-                [weeklessEvents addObject:event];
+                [weeklessEvents addEvent:event];
             else
             {
                 if (weekStart == nil)
@@ -71,29 +66,35 @@
                 
                 if ([event.start_date isLaterThanOrEqualDate:[weekStart dateByAddingDays:7]])
                 {
+                    [toReturn addObject:currentWeekEvents];
+                    currentWeekEvents = nil;
                     currentWeek += 1;
                     weekStart = [weekStart dateByAddingDays:7];
                 }
 
-                NSString *label = [NSString stringWithFormat:regionalEventsLabel, currentWeek];
-                if ([toReturn objectForKey:label])
-                    toReturn[label] = [toReturn[label] arrayByAddingObject:event];
+                if (!currentWeekEvents)
+                {
+                    NSString *label = [NSString stringWithFormat:@"Week %d", currentWeek];
+                    currentWeekEvents = [[EventGroup alloc] initWithName:label];
+                }
                 else
-                    toReturn[label] = @[event];
+                    [currentWeekEvents addEvent:event];
             }
         }
         else if ([event.event_type integerValue] == PRESEASON)
-            [preseasonEvents addObject:event];
+            [preseasonEvents addEvent:event];
         else
-            [offseasonEvents addObject:event];
+            [offseasonEvents addEvent:event];
     }
     
-    if ([weeklessEvents count] > 0)
-        toReturn[weeklessEventsLabel] = weeklessEvents;
-    if ([preseasonEvents count] > 0)
-        toReturn[preseasonEventsLabel] = preseasonEvents;
-    if ([offseasonEvents count] > 0)
-        toReturn[offseasonEventsLabel] = offseasonEvents;
+    if ([cmpEvents.events count] > 0)
+        [toReturn addObject:cmpEvents];
+    if ([weeklessEvents.events count] > 0)
+        [toReturn addObject:weeklessEvents];
+    if ([preseasonEvents.events count] > 0)
+        [toReturn addObject:preseasonEvents];
+    if ([offseasonEvents.events count] > 0)
+        [toReturn addObject:offseasonEvents];
     
     return toReturn;
 }
@@ -110,7 +111,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showSelectYearScreen)];
 }
 
-- (void) showSelectYearScreen
+- (void)showSelectYearScreen
 {
     YearSelectView *yearSelectController = [[YearSelectView alloc] initWithDelegate:self currentYear:self.currentYear];
     UINavigationController *formNavController = [[UINavigationController alloc] initWithRootViewController:yearSelectController];
@@ -123,14 +124,27 @@
 
 
 #pragma mark - UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    NSInteger sections = [self.eventData count];
+    return sections;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    EventGroup *eventGroup = [self.eventData objectAtIndex:section];
+    return [eventGroup.events count];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Event Cell"];
     if(!cell)
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Event Cell"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Event Cell"];
     
-    Event *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
+    EventGroup *eventGroup = [self.eventData objectAtIndex:indexPath.section];
+    Event *event = [eventGroup.events objectAtIndex:indexPath.row];
+
     cell.textLabel.text = event.short_name ? event.short_name : event.name;
     cell.detailTextLabel.text = event.location;
     
@@ -139,11 +153,8 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    Event *event = [self.fetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section]];
-    
-    NSDateFormatter *friendlyFormatter = [[NSDateFormatter alloc] init];
-    friendlyFormatter.dateStyle = NSDateFormatterMediumStyle;
-    return [friendlyFormatter stringFromDate:event.start_date];
+    EventGroup *eventGroup = [self.eventData objectAtIndex:section];
+    return eventGroup.name;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
