@@ -36,7 +36,7 @@
  */
 @property (nonatomic, retain) NSString *address;
 
-/** The last time this model was updated from data on TBA
+/** The last time this object was updated from data on TBA
  */
 @property (nonatomic, retain) NSNumber *last_updated;
 
