@@ -1,5 +1,5 @@
 //
-//  YearSelectTableView.m
+//  YearSelectView.m
 //  the-blue-alliance-ios
 //
 //  Created by Zach Orr on 5/20/14.
@@ -10,7 +10,6 @@
 #import <MZFormSheetController/MZFormSheetController.h>
 
 @interface YearSelectView ()
-@property (nonatomic, strong) id delegate;
 @property (nonatomic) NSInteger currentYear;
 @property (nonatomic) NSInteger initYear;
 @end
@@ -92,9 +91,6 @@ const int kNumberOfYears = 23;
     self.currentYear = [newYearCell.textLabel.text integerValue];
     
     [tableView reloadData];
-    
-    // call some method to reload the backing data here?
-    // Maybe store year in NSUserDefaults, and perhaps use NSNotification to broadcast change?
     
     dispatch_time_t dismissTime = dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC);
     dispatch_after(dismissTime, dispatch_get_main_queue(), ^(void){
