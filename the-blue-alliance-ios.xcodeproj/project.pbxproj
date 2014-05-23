@@ -29,6 +29,7 @@
 		50832E3A1918BBBE003AC8A7 /* Event+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E381918BBBE003AC8A7 /* Event+Create.m */; };
 		50832E3E1918BBEA003AC8A7 /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E3D1918BBEA003AC8A7 /* EventsViewController.m */; };
 		50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */; };
+		50CDA22B19300C6300C8906D /* TBAImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 50CDA22A19300C6300C8906D /* TBAImporter.m */; };
 		50DFD1F61920365E009B686E /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD1F51920365E009B686E /* MenuViewController.m */; };
 		50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD1FA19205F6D009B686E /* UIColor+TBAColors.m */; };
 		50DFD20119207DCA009B686E /* TeamsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD20019207DCA009B686E /* TeamsViewController.m */; };
@@ -84,6 +85,8 @@
 		50832E3D1918BBEA003AC8A7 /* EventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsViewController.m; sourceTree = "<group>"; };
 		50832E531918BBFF003AC8A7 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
 		50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
+		50CDA22919300C6300C8906D /* TBAImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAImporter.h; sourceTree = "<group>"; };
+		50CDA22A19300C6300C8906D /* TBAImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAImporter.m; sourceTree = "<group>"; };
 		50DFD1F41920365E009B686E /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
 		50DFD1F51920365E009B686E /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
 		50DFD1F919205F6D009B686E /* UIColor+TBAColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+TBAColors.h"; sourceTree = "<group>"; };
@@ -227,6 +230,8 @@
 				50832E321918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld */,
 				5070EE6D192E966B0079D123 /* Team */,
 				92B98A5A192DA964004A2513 /* Event */,
+				50CDA22919300C6300C8906D /* TBAImporter.h */,
+				50CDA22A19300C6300C8906D /* TBAImporter.m */,
 			);
 			name = "Data Model";
 			sourceTree = "<group>";
@@ -417,6 +422,7 @@
 				50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */,
 				50DFD20419207DD4009B686E /* InsightsViewController.m in Sources */,
 				50DFD20719207DDC009B686E /* SettingsViewController.m in Sources */,
+				50CDA22B19300C6300C8906D /* TBAImporter.m in Sources */,
 				50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */,
 				9283A261192EEE5800B9068B /* EventGroup.m in Sources */,
 				50832E341918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld in Sources */,

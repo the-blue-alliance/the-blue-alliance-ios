@@ -22,6 +22,7 @@
 
 #import "FBTweakShakeWindow.h"
 #import "FBTweakInline.h"
+#import "TBAImporter.h"
 
 
 @interface AppDelegate () <NSURLConnectionDataDelegate, MenuViewControllerDelegate>
@@ -93,7 +94,7 @@
         // Register for save notifications: useful for debugging
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseSaved:) name:NSManagedObjectContextDidSaveNotification object:self.context];
         
-        [self downloadEventsIntoDatabase];
+        [TBAImporter importEventsUsingManagedObjectContext:self.context];
     }
 }
 
@@ -136,34 +137,6 @@
     }
 }
 
-#pragma mark - TBA Data downloading
-
-- (void)downloadEventsIntoDatabase
-{
-    NSURL *eventsListURL = [NSURL URLWithString:@"http://www.thebluealliance.com/api/v2/events/"];
-    NSMutableURLRequest *eventsRequest = [NSMutableURLRequest requestWithURL:eventsListURL];
-    [eventsRequest addValue:@"tba-ios:tba-ios-app:v0.1" forHTTPHeaderField:@"X-TBA-App-Id"];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSURLResponse *response;
-        NSError *error;
-        NSData *data = [NSURLConnection sendSynchronousRequest:eventsRequest returningResponse:&response error:&error];
-        if(error || !data) {
-            NSLog(@"ERROR downloading event list from TBA: %@", error);
-        } else {
-            NSArray *events = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-            if(error || !events) {
-                NSLog(@"ERROR: %@ parsing JSON of event list: %@", error, data);
-            } else {
-                // Import the events array into the database!
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [Event createEventsFromTBAInfoArray:events usingManagedObjectContext:self.context];
-                });
-            }
-        }
-    });
-}
-
 #pragma mark - Menu Actions
 - (void)menuButtonPressed
 {
@@ -182,7 +155,7 @@
         chosenViewController = self.teamsViewController;
     } else if([menuItem isEqualToString:@"Insights"]) {
         chosenViewController = self.insightsViewController;
-    } else if([menuItem isEqualToString:@"Settings"]) {
+    } else {
         chosenViewController = self.settingsViewController;
     }
     [self.topNavigationController setViewControllers:@[chosenViewController] animated:YES];

@@ -7,7 +7,6 @@
 //
 
 #import "MenuViewController.h"
-#import <UIView+AutoLayout/UIView+AutoLayout.h>
 
 @interface MenuViewController ()
 
