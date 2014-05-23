@@ -8,11 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+/** The color pallet for TBA
+ */
 @interface UIColor (TBAColors)
 
 + (UIColor *)TBANavigationBarColor;
 + (UIColor *)TBATableViewSeparatorColor;
 + (UIColor *)TBATintColor;
-
 
 @end
