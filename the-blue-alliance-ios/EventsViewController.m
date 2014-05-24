@@ -19,12 +19,20 @@
 
 @implementation EventsViewController
 
+- (NSInteger) currentYear
+{
+    if(_currentYear == 0) {
+        return 2014;
+    }
+    return _currentYear;
+}
+
 - (void)setContext:(NSManagedObjectContext *)context
 {
     _context = context;
     
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Event"];
-    fetchRequest.predicate = nil;
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"year == %d", self.currentYear];
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"start_date" ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
@@ -143,7 +151,7 @@
     self.title = @"Events";
     
     // Lets make this a gear at some point in time? The action button implies share sheet or something - not changing the displayed data
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showSelectYearScreen)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Years" style:UIBarButtonItemStyleBordered target:self action:@selector(showSelectYearScreen)];
 }
 
 - (void)showSelectYearScreen
@@ -206,7 +214,7 @@
 - (NSPredicate *) predicateForSearchText:(NSString *)searchText
 {
     if (searchText && searchText.length) {
-        return [NSPredicate predicateWithFormat:@"name contains[cd] %@ OR key contains[cd] %@", searchText, searchText];
+        return [NSPredicate predicateWithFormat:@"(name contains[cd] %@ OR key contains[cd] %@) && year == %d", searchText, searchText, self.currentYear];
     } else {
         return nil;
     }
@@ -216,8 +224,16 @@
 
 - (void)didSelectNewYear:(NSInteger)year
 {
-    // Reload all the data for the new year
-    NSLog(@"Should reload for new year");
+    self.currentYear = year;
+    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"year == %d", self.currentYear];
+    
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error]) {
+        NSLog(@"An error happened and we should handle it - %@", error.localizedDescription);
+    }
+    
+    [self.fetchedResultsController.delegate controllerDidChangeContent:self.fetchedResultsController];
+    [self.tableView reloadData];
 }
 
 @end
