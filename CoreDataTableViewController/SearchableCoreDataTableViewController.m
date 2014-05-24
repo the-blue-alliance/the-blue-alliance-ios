@@ -123,11 +123,7 @@
     searchBar.text = nil;
     [searchBar resignFirstResponder];
     
-    self.fetchedResultsController.fetchRequest.predicate = nil;
-    NSError *error = nil;
-    if (![[self fetchedResultsController] performFetch:&error]) {
-        NSLog(@"An error happened and we should handle it - %@", error.localizedDescription);
-    }
+    [self filterContentForSearchText:@""];
     
     // Hide the search bar
     [self.tableView setContentOffset:CGPointMake(0., self.searchHeader.height - [self.topLayoutGuide length]) animated:YES];
