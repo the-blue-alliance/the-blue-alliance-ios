@@ -35,6 +35,10 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"yyyy-MM-dd";
     
+    NSDateComponents *comp = [[NSDateComponents alloc] init];
+    comp.year = [info[@"year"] integerValue];
+    NSDate *defaultDate = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] dateFromComponents:comp];
+    
     event.key = info[@"key"];
     event.name = info[@"name"];
     event.short_name = info[@"short_name"];
@@ -42,10 +46,16 @@
     event.year = info[@"year"];
     event.location = info[@"location"];
     event.event_short = info[@"event_code"];
-    event.start_date = [formatter dateFromString:info[@"start_date"]];
+    event.start_date = [formatter dateFromString:info[@"start_date"]] ? [formatter dateFromString:info[@"start_date"]] : defaultDate;
     event.end_date = [formatter dateFromString:info[@"end_date"]];
     event.event_type = info[@"event_type"];
     event.last_updated = @([[NSDate date] timeIntervalSince1970]);
+    
+    if(!event.start_date) {
+        NSLog(@"Event inserted without a start date... INVALID!");
+        [context deleteObject:event];
+        [NSException raise:@"start_date is invalid" format:@"start_date of %@ is invalid for the event key %@", info[@"start_date"], info[@"key"]];
+    }
     // TODO: Finish / improve importing
     
     NSLog(@"Imported event %@ into the database", info[@"key"]);
