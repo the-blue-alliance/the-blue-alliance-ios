@@ -15,11 +15,12 @@
 @dynamic address;
 @dynamic key;
 @dynamic last_updated;
+@dynamic location;
 @dynamic name;
 @dynamic nickname;
 @dynamic team_number;
-@dynamic location;
 @dynamic website;
+@dynamic grouping_text;
 @dynamic events;
 
 @end

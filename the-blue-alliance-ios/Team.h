@@ -16,11 +16,12 @@
 @property (nonatomic, retain) NSString * address;
 @property (nonatomic, retain) NSString * key;
 @property (nonatomic, retain) NSNumber * last_updated;
+@property (nonatomic, retain) NSString * location;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * nickname;
 @property (nonatomic, retain) NSNumber * team_number;
-@property (nonatomic, retain) NSString * location;
 @property (nonatomic, retain) NSString * website;
+@property (nonatomic, retain) NSString * grouping_text;
 @property (nonatomic, retain) NSSet *events;
 @end
 

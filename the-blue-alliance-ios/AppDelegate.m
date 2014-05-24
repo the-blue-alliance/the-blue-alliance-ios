@@ -125,6 +125,7 @@
                 [self documentIsReady];
             } else {
                 NSLog(@"FAILED to open document at %@", url);
+                NSLog(@"Model is probably out of sync with the database: Just uninstall the app and run again...");
             }
         }];
     } else {
@@ -177,6 +178,9 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [[UINavigationBar appearance] setBarTintColor:[UIColor TBANavigationBarColor]];
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
+    [[UITableView appearance] setSectionIndexBackgroundColor:[UIColor clearColor]];
+    [[UITableView appearance] setSectionIndexTrackingBackgroundColor:[UIColor clearColor]];
+    [[UITableView appearance] setSectionIndexColor:[UIColor TBANavigationBarColor]];
     [[MZFormSheetBackgroundWindow appearance] setBackgroundBlurEffect:YES];
     [[MZFormSheetBackgroundWindow appearance] setBlurRadius:5.0];
     
@@ -184,7 +188,7 @@
     self.window.tintColor = [UIColor TBATintColor];
     
     // Create content view controller, and put into a navigation controller
-    self.topNavigationController = [[UINavigationController alloc] initWithRootViewController:self.eventsViewController];
+    self.topNavigationController = [[UINavigationController alloc] initWithRootViewController:self.teamsViewController];
     self.topNavigationController.navigationBar.translucent = NO;
     
     MenuViewController *menuController = [[MenuViewController alloc] initWithMenuItems:@[@"Events", @"Teams", @"Insights", @"Settings"]];

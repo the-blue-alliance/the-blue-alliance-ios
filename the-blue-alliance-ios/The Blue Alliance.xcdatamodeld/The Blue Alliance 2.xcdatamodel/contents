@@ -24,6 +24,7 @@
     </entity>
     <entity name="Team" representedClassName="Team" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="grouping_text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="last_updated" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
@@ -35,6 +36,6 @@
     </entity>
     <elements>
         <element name="Event" positionX="-1395" positionY="1895" width="128" height="343"/>
-        <element name="Team" positionX="-1100" positionY="1989" width="128" height="178"/>
+        <element name="Team" positionX="-1100" positionY="1989" width="128" height="193"/>
     </elements>
 </model>

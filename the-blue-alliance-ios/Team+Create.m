@@ -23,6 +23,15 @@
     return normInfo;
 }
 
++ (NSString *) groupingTextOfTeamNumber:(int)teamNumber
+{
+    if(teamNumber < 1000) {
+        return @"1-990";
+    } else {
+        return [NSString stringWithFormat:@"%d's", teamNumber / 1000 * 1000];
+    }
+}
+
 + (Team *)createTeamFromTBAInfo:(NSDictionary *)info
         usingManagedObjectContext:(NSManagedObjectContext *)context
 {
@@ -41,9 +50,10 @@
     team.website = info[@"website"];
     team.location = info[@"location"];
     team.last_updated = @([[NSDate date] timeIntervalSince1970]);
+    team.grouping_text = [Team groupingTextOfTeamNumber:[info[@"team_number"] intValue]];
     // TODO: Finish / improve importing
     
-    NSLog(@"Imported team %@ into the database", info[@"key"]);
+//    NSLog(@"Imported team %@ into the database", info[@"key"]);
     
     return team;
 }

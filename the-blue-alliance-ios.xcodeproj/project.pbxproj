@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		394BD129CFDF44B78FFF2C94 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDCC6CCFB1A4A199C72C12E /* libPods.a */; };
+		5028F478193076A500D9C4BB /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 5028F477193076A500D9C4BB /* Team.m */; };
 		5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */; };
 		5070EE6C192E965C0079D123 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 5070EE6B192E965C0079D123 /* Event.m */; };
 		50832DFB1918BB63003AC8A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFA1918BB63003AC8A7 /* Foundation.framework */; };
@@ -30,7 +31,6 @@
 		50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */; };
 		50CDA22B19300C6300C8906D /* TBAImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 50CDA22A19300C6300C8906D /* TBAImporter.m */; };
 		50CDA22E1930294200C8906D /* Team+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 50CDA22D1930294200C8906D /* Team+Create.m */; };
-		50CDA23219302D5A00C8906D /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 50CDA23119302D5A00C8906D /* Team.m */; };
 		50DFD1F61920365E009B686E /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD1F51920365E009B686E /* MenuViewController.m */; };
 		50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD1FA19205F6D009B686E /* UIColor+TBAColors.m */; };
 		50DFD20119207DCA009B686E /* TeamsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD20019207DCA009B686E /* TeamsViewController.m */; };
@@ -55,6 +55,8 @@
 /* Begin PBXFileReference section */
 		1A5DC50BBBAD4B709D38B690 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		4DDCC6CCFB1A4A199C72C12E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		5028F476193076A500D9C4BB /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
+		5028F477193076A500D9C4BB /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
 		5057CD1C1929987D00654304 /* SearchableCoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchableCoreDataTableViewController.h; sourceTree = "<group>"; };
 		5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchableCoreDataTableViewController.m; sourceTree = "<group>"; };
 		5070EE6A192E965C0079D123 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
@@ -89,8 +91,6 @@
 		50CDA22C1930294200C8906D /* Team+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Team+Create.h"; sourceTree = "<group>"; };
 		50CDA22D1930294200C8906D /* Team+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Team+Create.m"; sourceTree = "<group>"; };
 		50CDA22F19302C9100C8906D /* The Blue Alliance 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 2.xcdatamodel"; sourceTree = "<group>"; };
-		50CDA23019302D5A00C8906D /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
-		50CDA23119302D5A00C8906D /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
 		50DFD1F41920365E009B686E /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
 		50DFD1F51920365E009B686E /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
 		50DFD1F919205F6D009B686E /* UIColor+TBAColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+TBAColors.h"; sourceTree = "<group>"; };
@@ -139,8 +139,8 @@
 		5070EE6D192E966B0079D123 /* Team */ = {
 			isa = PBXGroup;
 			children = (
-				50CDA23019302D5A00C8906D /* Team.h */,
-				50CDA23119302D5A00C8906D /* Team.m */,
+				5028F476193076A500D9C4BB /* Team.h */,
+				5028F477193076A500D9C4BB /* Team.m */,
 				50CDA22C1930294200C8906D /* Team+Create.h */,
 				50CDA22D1930294200C8906D /* Team+Create.m */,
 			);
@@ -428,7 +428,7 @@
 				50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */,
 				50DFD20419207DD4009B686E /* InsightsViewController.m in Sources */,
 				50DFD20719207DDC009B686E /* SettingsViewController.m in Sources */,
-				50CDA23219302D5A00C8906D /* Team.m in Sources */,
+				5028F478193076A500D9C4BB /* Team.m in Sources */,
 				50CDA22B19300C6300C8906D /* TBAImporter.m in Sources */,
 				50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */,
 				9283A261192EEE5800B9068B /* EventGroup.m in Sources */,
