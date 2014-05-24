@@ -216,7 +216,7 @@
     if (searchText && searchText.length) {
         return [NSPredicate predicateWithFormat:@"(name contains[cd] %@ OR key contains[cd] %@) && year == %d", searchText, searchText, self.currentYear];
     } else {
-        return nil;
+        return [NSPredicate predicateWithFormat:@"year == %d", self.currentYear];;
     }
 }
 

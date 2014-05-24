@@ -14,42 +14,48 @@
 
 @implementation TBAImporter
 
-+ (void) executeTBAV2Request:(NSString *)request withCallback:(void(^)(id, NSError *))callback
++ (id) executeTBAV2Request:(NSString *)request
 {
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.thebluealliance.com/api/v2/%@/", request]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.thebluealliance.com/api/v2/%@", request]];
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
     [urlRequest addValue:@"tba-ios:tba-ios-app:v0.1" forHTTPHeaderField:@"X-TBA-App-Id"];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSURLResponse *response;
-        NSError *error;
-        NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse:&response error:&error];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if(error || !data) {
-                callback(nil, error);
-            } else {
-                NSError *jsonError;
-                id obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
-                if(jsonError || !obj) {
-                    callback(nil, jsonError);
-                } else {
-                    callback(obj, nil);
-                }
-            }
-        });
-    });
+    NSURLResponse *response;
+    NSError *error;
+    NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse:&response error:&error];
+    NSLog(@"Executed TBA API request: %@", request);
+    
+    if(error || !data) {
+        NSLog(@"Handle downloading error...");
+        return nil;
+    } else {
+        NSError *jsonError;
+        id obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+        if(jsonError || !obj) {
+            NSLog(@"Handle JSON error");
+            return nil;
+        } else {
+            return obj;
+        }
+    }
 }
 
 + (void) importEventsUsingManagedObjectContext:(NSManagedObjectContext *)context
 {
-    [TBAImporter executeTBAV2Request:@"events" withCallback:^(id data, NSError *error) {
-        NSArray *events = data;
-        if(error || !events) {
-            NSLog(@"Error importing list of events: %@", error);
-        } else {
-            [Event createEventsFromTBAInfoArray:events usingManagedObjectContext:context];
+    int startYear = 1992;
+    int endYear = [NSDate date].year + 1;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSMutableArray *downloadedEvents = [[NSMutableArray alloc] init];
+        for(int i = startYear; i <= endYear; i++) {
+            NSArray *events = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"events/%d", i]];
+            [downloadedEvents addObjectsFromArray:events];
         }
-    }];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [Event createEventsFromTBAInfoArray:downloadedEvents usingManagedObjectContext:context];
+        });
+    });
 }
 
 
