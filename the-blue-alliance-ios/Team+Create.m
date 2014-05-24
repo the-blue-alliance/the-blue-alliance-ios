@@ -26,38 +26,24 @@
 + (Team *)createTeamFromTBAInfo:(NSDictionary *)info
         usingManagedObjectContext:(NSManagedObjectContext *)context
 {
-    Team *team = nil;
-    
     // Validates the dictionary and makes it safe to pull data from
     info = [Team normalizeTeamInfoDictionary:info];
     
-    NSString *key = info[@"key"];
     
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Team"];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"key = %@", key];
+    Team *team = [NSEntityDescription insertNewObjectForEntityForName:@"Team"
+                                               inManagedObjectContext:context];
     
-    NSError *error;
-    NSArray *matches = [context executeFetchRequest:fetchRequest error:&error];
-    if (error || !matches || matches.count > 1) {
-        NSLog(@"ERROR searching for existing team with key %@. %lu matches found. Error: %@", key, (unsigned long)matches.count, error);
-    } else if (matches.count) {
-        team = [matches firstObject];
-    } else {
-        team = [NSEntityDescription insertNewObjectForEntityForName:@"Team"
-                                              inManagedObjectContext:context];
-        
-        team.key = key;
-        team.name = info[@"name"];
-        team.team_number = @([info[@"team_number"] intValue]);
-        team.address = info[@"address"];
-        team.nickname = info[@"nickname"];
-        team.website = info[@"website"];
-        team.location = info[@"location"];
-        team.last_updated = @([[NSDate date] timeIntervalSince1970]);
-        // TODO: Finish / improve importing
-        
-        NSLog(@"Imported team %@ into the database", key);
-    }
+    team.key = info[@"key"];
+    team.name = info[@"name"];
+    team.team_number = @([info[@"team_number"] intValue]);
+    team.address = info[@"address"];
+    team.nickname = info[@"nickname"];
+    team.website = info[@"website"];
+    team.location = info[@"location"];
+    team.last_updated = @([[NSDate date] timeIntervalSince1970]);
+    // TODO: Finish / improve importing
+    
+    NSLog(@"Imported team %@ into the database", info[@"key"]);
     
     return team;
 }

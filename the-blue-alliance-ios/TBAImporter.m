@@ -10,7 +10,6 @@
 #import "Event+Create.h"
 #import "Team+Create.h"
 
-#import "CSVParser.h"
 #import <CHCSVParser/CHCSVParser.h>
 
 @implementation TBAImporter
@@ -65,6 +64,8 @@
         NSURLResponse *response;
         NSError *error;
         NSData *data = [NSURLConnection sendSynchronousRequest:teamsRequest returningResponse:&response error:&error];
+        
+        NSTimeInterval startTime = CACurrentMediaTime();
         NSString *csvString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
         csvString = [csvString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
@@ -83,6 +84,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [Team createTeamsFromTBAInfoArray:teamInfoArray usingManagedObjectContext:context];
+            NSLog(@"Inserted teams in %g seconds", CACurrentMediaTime() - startTime);
         });
         
         
