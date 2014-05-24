@@ -151,10 +151,11 @@
     self.fetchedResultsController.fetchRequest.predicate = predicate;
     
     NSError *error = nil;
-    if (![[self fetchedResultsController] performFetch:&error]) {
+    if (![self.fetchedResultsController performFetch:&error]) {
         NSLog(@"An error happened and we should handle it - %@", error.localizedDescription);
     }
     
+    [self.fetchedResultsController.delegate controllerDidChangeContent:self.fetchedResultsController];
     [self.tableView reloadData];
 }
 

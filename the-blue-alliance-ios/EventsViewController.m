@@ -77,14 +77,19 @@
                     NSString *label = [NSString stringWithFormat:@"Week %d", currentWeek];
                     currentWeekEvents = [[EventGroup alloc] initWithName:label];
                 }
-                else
-                    [currentWeekEvents addEvent:event];
+                
+                [currentWeekEvents addEvent:event];
             }
         }
         else if ([event.event_type integerValue] == PRESEASON)
             [preseasonEvents addEvent:event];
         else
             [offseasonEvents addEvent:event];
+    }
+    
+    // Add last week that was not added in the loop
+    if(currentWeekEvents.events.count > 0) {
+        [toReturn addObject:currentWeekEvents];
     }
     
     if ([cmpEvents.events count] > 0)
