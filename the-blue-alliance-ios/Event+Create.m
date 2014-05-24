@@ -26,44 +26,29 @@
 + (Event *)createEventFromTBAInfo:(NSDictionary *)info
          usingManagedObjectContext:(NSManagedObjectContext *)context
 {
-    Event *event = nil;
-    
     // Validates the dictionary and makes it safe to pull data from
     info = [Event normalizeEventInfoDictionary:info];
-    
-    NSString *key = info[@"key"];
-    
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Event"];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"key = %@", key];
-    
-    NSError *error;
-    NSArray *matches = [context executeFetchRequest:fetchRequest error:&error];
-    if (error || !matches || matches.count > 1) {
-        NSLog(@"ERROR searching for existing event with key %@. %lu matches found. Error: %@", key, (unsigned long)matches.count, error);
-    } else if (matches.count) {
-        event = [matches firstObject];
-    } else {
-        event = [NSEntityDescription insertNewObjectForEntityForName:@"Event"
-                                              inManagedObjectContext:context];
-        
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        formatter.dateFormat = @"yyyy-MM-dd";
-        
-        event.key = key;
-        event.name = info[@"name"];
-        event.short_name = info[@"short_name"];
-        event.official = info[@"official"];
-        event.year = info[@"year"];
-        event.location = info[@"location"];
-        event.event_short = info[@"event_code"];
-        event.start_date = [formatter dateFromString:info[@"start_date"]];
-        event.end_date = [formatter dateFromString:info[@"end_date"]];
-        event.event_type = info[@"event_type"];
-        event.last_updated = @([[NSDate date] timeIntervalSince1970]);
-        // TODO: Finish / improve importing
 
-        NSLog(@"Imported event %@ into the database", key);
-    }
+    Event *event = [NSEntityDescription insertNewObjectForEntityForName:@"Event"
+                                                 inManagedObjectContext:context];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyy-MM-dd";
+    
+    event.key = info[@"key"];
+    event.name = info[@"name"];
+    event.short_name = info[@"short_name"];
+    event.official = info[@"official"];
+    event.year = info[@"year"];
+    event.location = info[@"location"];
+    event.event_short = info[@"event_code"];
+    event.start_date = [formatter dateFromString:info[@"start_date"]];
+    event.end_date = [formatter dateFromString:info[@"end_date"]];
+    event.event_type = info[@"event_type"];
+    event.last_updated = @([[NSDate date] timeIntervalSince1970]);
+    // TODO: Finish / improve importing
+    
+    NSLog(@"Imported event %@ into the database", info[@"key"]);
 
     return event;
 }
@@ -71,8 +56,34 @@
 + (void)createEventsFromTBAInfoArray:(NSArray *)infoArray
             usingManagedObjectContext:(NSManagedObjectContext *)context
 {
-    for (NSDictionary *info in infoArray) {
-        [Event createEventFromTBAInfo:info usingManagedObjectContext:context];
+    NSMutableArray *downloadedKeys = [[NSMutableArray alloc] init];
+    for (NSDictionary *eventInfo in infoArray) {
+        [downloadedKeys addObject:eventInfo[@"key"]];
+    }
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:context];
+    [fetchRequest setEntity:entity];
+    // Specify criteria for filtering which objects to fetch
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key IN %@", downloadedKeys];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSArray *existingEvents = [context executeFetchRequest:fetchRequest error:&error];
+    if (existingEvents == nil) {
+        NSLog(@"Core Data error: handle this error... :(");
+    }
+    
+    NSMutableSet *existingKeySet = [[NSMutableSet alloc] init];
+    for (Event *event in existingEvents) {
+        [existingKeySet addObject:event.key];
+    }
+    
+    
+    for (NSDictionary *eventDict in infoArray) {
+        if(![existingKeySet containsObject:eventDict[@"key"]]) {
+            [Event createEventFromTBAInfo:eventDict usingManagedObjectContext:context];
+        }
     }
 }
 
