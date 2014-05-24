@@ -8,8 +8,8 @@
 
 #import "Event.h"
 
-/** `Event+Create` encapsulates all the requests for
- *  Event data to the TBA API
+/** `Event+Create` encapsulates all creation of Event Core Data entities
+ *  from TBA API results
  */
 @interface Event (Create)
 

@@ -2,7 +2,7 @@
 //  Team.m
 //  the-blue-alliance-ios
 //
-//  Created by Donald Pinckney on 5/22/14.
+//  Created by Donald Pinckney on 5/23/14.
 //  Copyright (c) 2014 The Blue Alliance. All rights reserved.
 //
 
@@ -12,12 +12,14 @@
 
 @implementation Team
 
+@dynamic address;
 @dynamic key;
-@dynamic number;
+@dynamic last_updated;
 @dynamic name;
 @dynamic nickname;
-@dynamic address;
-@dynamic last_updated;
+@dynamic team_number;
+@dynamic location;
+@dynamic website;
 @dynamic events;
 
 @end
