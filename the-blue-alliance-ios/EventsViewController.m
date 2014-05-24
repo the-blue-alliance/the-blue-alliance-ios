@@ -192,11 +192,6 @@
     return eventGroup.name;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    view.tintColor = [UIColor TBATableViewSeparatorColor];
-}
-
 // Disable section indexing
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {

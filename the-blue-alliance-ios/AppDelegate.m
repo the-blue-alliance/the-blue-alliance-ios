@@ -83,6 +83,7 @@
 {
     _context = context;
     self.eventsViewController.context = context;
+    self.teamsViewController.context = context;
 }
 
 #pragma mark - Core Data Setup

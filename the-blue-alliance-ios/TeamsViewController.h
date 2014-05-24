@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SearchableCoreDataTableViewController.h"
 
-@interface TeamsViewController : UITableViewController
-
+@interface TeamsViewController : SearchableCoreDataTableViewController
+@property (nonatomic, strong) NSManagedObjectContext *context;
 @end

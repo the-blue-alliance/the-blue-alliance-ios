@@ -7,6 +7,7 @@
 //
 
 #import "TeamsViewController.h"
+#import "Team.h"
 
 @interface TeamsViewController ()
 
@@ -14,6 +15,34 @@
 
 @implementation TeamsViewController
 
-// TODO: Implement controller!
+- (void) setContext:(NSManagedObjectContext *)context
+{
+    _context = context;
+    
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Team"];
+    fetchRequest.predicate = nil;
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"team_number" ascending:YES]];
+    
+    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                        managedObjectContext:context
+                                                                          sectionNameKeyPath:nil
+                                                                                   cacheName:nil];
+
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Team Cell"];
+    if(!cell)
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Event Cell"];
+    
+    Team *team = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    cell.textLabel.text = [team.team_number description];
+    cell.detailTextLabel.text = team.nickname;
+    
+    return cell;
+}
+
 
 @end
