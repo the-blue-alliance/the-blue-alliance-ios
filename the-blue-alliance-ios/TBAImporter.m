@@ -40,7 +40,7 @@
     }
 }
 
-+ (void) importEventsUsingManagedObjectContext:(NSManagedObjectContext *)context
++ (void)importEventsUsingManagedObjectContext:(NSManagedObjectContext *)context
 {
     int startYear = 1992;
     int endYear = (int)[NSDate date].year + 1;
@@ -59,7 +59,7 @@
 }
 
 
-+ (void) importTeamsUsingManagedObjectContext:(NSManagedObjectContext *)context
++ (void)importTeamsUsingManagedObjectContext:(NSManagedObjectContext *)context
 {
     // Do stupid CSV import for now
     NSURL *teamsListURL = [NSURL URLWithString:@"http://www.thebluealliance.com/api/csv/teams/all"];
