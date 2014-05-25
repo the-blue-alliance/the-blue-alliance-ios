@@ -19,6 +19,7 @@
         <attribute name="venue" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="webcasts" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="week" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="year" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="events" inverseEntity="Team" syncable="YES"/>
     </entity>
@@ -35,7 +36,7 @@
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="teams" inverseEntity="Event" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Event" positionX="-1395" positionY="1895" width="128" height="343"/>
+        <element name="Event" positionX="-1395" positionY="1895" width="128" height="360"/>
         <element name="Team" positionX="-1100" positionY="1989" width="128" height="193"/>
     </elements>
 </model>

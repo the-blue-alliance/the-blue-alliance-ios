@@ -114,6 +114,10 @@ typedef enum EventType : NSInteger {
 /** List of team models that attended the event
  */
 @property (nonatomic, retain) NSSet *teams;
+
+/** The week number of the event - Events only have a week if they're official
+ */
+@property (nonatomic, retain) NSNumber *week;
 @end
 
 @interface Event (CoreDataGeneratedAccessors)

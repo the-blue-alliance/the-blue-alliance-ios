@@ -31,5 +31,6 @@
 @dynamic year;
 @dynamic rankings;
 @dynamic teams;
+@dynamic week;
 
 @end

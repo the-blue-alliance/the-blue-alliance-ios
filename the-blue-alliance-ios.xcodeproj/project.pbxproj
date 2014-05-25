@@ -105,6 +105,7 @@
 		50DFD20519207DDC009B686E /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		50DFD20619207DDC009B686E /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		50E65EA619198E5200714328 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		927547AD193181E800785260 /* The Blue Alliance 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 3.xcdatamodel"; sourceTree = "<group>"; };
 		9283A25F192EEE5800B9068B /* EventGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroup.h; sourceTree = "<group>"; };
 		9283A260192EEE5800B9068B /* EventGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroup.m; sourceTree = "<group>"; };
 		92C5B86E192C0BBC00AFDBCA /* YearSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YearSelectView.h; sourceTree = "<group>"; };
@@ -691,10 +692,11 @@
 		50832E321918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				927547AD193181E800785260 /* The Blue Alliance 3.xcdatamodel */,
 				50CDA22F19302C9100C8906D /* The Blue Alliance 2.xcdatamodel */,
 				50832E331918BB8E003AC8A7 /* The Blue Alliance.xcdatamodel */,
 			);
-			currentVersion = 50CDA22F19302C9100C8906D /* The Blue Alliance 2.xcdatamodel */;
+			currentVersion = 927547AD193181E800785260 /* The Blue Alliance 3.xcdatamodel */;
 			path = "The Blue Alliance.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
