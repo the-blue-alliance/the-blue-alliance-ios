@@ -269,8 +269,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    EventGroup *group = self.eventData[indexPath.section];
-    Event *event = group.events[indexPath.row];
+    id key = [self sortedEventGroupKeys][indexPath.section];
+    NSArray *eventList = self.eventData[key];
+    Event *event = eventList[indexPath.row];
     
     EventViewController *eventController = [[EventViewController alloc] initWithEvent:event];
     [self.navigationController pushViewController:eventController animated:YES];
