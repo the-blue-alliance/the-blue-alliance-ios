@@ -74,7 +74,7 @@
     return ([self.seasonStartDate distanceInDaysToDate:event.start_date] / 7) + 1;
 }
 
-- (NSDictionary*)groupEventsByWeek
+- (NSDictionary *)groupEventsByWeek
 {
     NSMutableDictionary *eventData = [[NSMutableDictionary alloc] init];
 
@@ -97,7 +97,7 @@
                 NSString *weekLabel = [NSString stringWithFormat:@"Week %@", week];
                 
                 [self event:event addToEventList:eventData forLabel:weekLabel];
-                event.week = week;
+//                event.week = week;
             }
         }
         else if ([event.event_type integerValue] == PRESEASON) {
