@@ -88,9 +88,9 @@ const int SPACES_TO_ADD = 3;
 {
     if(searchText.length > 0) {
         if(self.eventFilter) {
-            return [NSPredicate predicateWithFormat:@"key contains[cd] %@ OR nickname contains[cd] %@ AND %@ in events", searchText, searchText, searchText, self.eventFilter];
+            return [NSPredicate predicateWithFormat:@"(key contains[cd] %@ OR nickname contains[cd] %@) AND %@ in events", searchText, searchText, self.eventFilter];
         } else {
-            return [NSPredicate predicateWithFormat:@"key contains[cd] %@ OR nickname contains[cd] %@", searchText, searchText, searchText];
+            return [NSPredicate predicateWithFormat:@"key contains[cd] %@ OR nickname contains[cd] %@", searchText, searchText];
         }
     } else {
         return nil;

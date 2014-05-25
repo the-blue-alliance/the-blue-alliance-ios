@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Event.h"
 
-@interface EventViewController : UIPageViewController <UIPageViewControllerDataSource>
+@interface EventViewController : UIPageViewController
 
 - (instancetype) initWithEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context;
 
