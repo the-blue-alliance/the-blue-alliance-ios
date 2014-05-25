@@ -8,16 +8,16 @@
 
 #import "Event.h"
 #import "EventGroup.h"
-#import "EventsViewController.h"
+#import "EventsTableViewController.h"
 #import "UIColor+TBAColors.h"
 #import <MZFormSheetController/MZFormSheetController.h>
 
-@interface EventsViewController ()
+@interface EventsTableViewController ()
 @property (nonatomic) NSInteger currentYear;
 @property (nonatomic, strong) NSArray *eventData;
 @end
 
-@implementation EventsViewController
+@implementation EventsTableViewController
 
 - (NSInteger) currentYear
 {

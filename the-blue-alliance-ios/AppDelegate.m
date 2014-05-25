@@ -10,7 +10,7 @@
 
 #import "MenuViewController.h"
 
-#import "EventsViewController.h"
+#import "EventsTableViewController.h"
 #import "TeamsViewController.h"
 #import "InsightsViewController.h"
 #import "SettingsViewController.h"
@@ -35,7 +35,7 @@
 
 // Top level view controllers
 @property (nonatomic, strong) UINavigationController *topNavigationController;
-@property (nonatomic, strong) EventsViewController *eventsViewController;
+@property (nonatomic, strong) EventsTableViewController *eventsViewController;
 @property (nonatomic, strong) TeamsViewController *teamsViewController;
 @property (nonatomic, strong) InsightsViewController *insightsViewController;
 @property (nonatomic, strong) SettingsViewController *settingsViewController;
@@ -45,10 +45,10 @@
 
 #pragma mark - Custom getters / setters
 // Lazily instantiate the top level view controllers
-- (EventsViewController *)eventsViewController
+- (EventsTableViewController *)eventsViewController
 {
     if (!_eventsViewController) {
-        _eventsViewController = [[EventsViewController alloc] initWithStyle:UITableViewStylePlain];
+        _eventsViewController = [[EventsTableViewController alloc] initWithStyle:UITableViewStylePlain];
         [_eventsViewController.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburger"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonPressed)]];
     }
     return _eventsViewController;
