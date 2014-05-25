@@ -42,12 +42,21 @@
 
 + (void) importEventsUsingManagedObjectContext:(NSManagedObjectContext *)context
 {
+    NSInteger currentYear = [[NSUserDefaults standardUserDefaults] integerForKey:@"EventsViewController.currentYear"];
+
     int startYear = 1992;
     int endYear = (int)[NSDate date].year + 1;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSMutableArray *downloadedEvents = [[NSMutableArray alloc] init];
+        // Download the currently selected year first
+        if (currentYear != 0) {
+            NSArray *events = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"events/%d", currentYear]];
+            [downloadedEvents addObjectsFromArray:events];
+        }
         for(int i = endYear; i >= startYear; i--) {
+            if (i == currentYear)
+                continue;
             NSArray *events = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"events/%d", i]];
             [downloadedEvents addObjectsFromArray:events];
         }
