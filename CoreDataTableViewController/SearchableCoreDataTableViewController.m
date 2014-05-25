@@ -44,7 +44,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self.tableView setContentOffset:CGPointMake(0, self.searchHeader.height)];
+//    [self.tableView setContentOffset:CGPointMake(0, self.searchHeader.height)];
 }
 
 
