@@ -43,11 +43,11 @@
 + (void) importEventsUsingManagedObjectContext:(NSManagedObjectContext *)context
 {
     int startYear = 1992;
-    int endYear = [NSDate date].year + 1;
+    int endYear = (int)[NSDate date].year + 1;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSMutableArray *downloadedEvents = [[NSMutableArray alloc] init];
-        for(int i = startYear; i <= endYear; i++) {
+        for(int i = endYear; i >= startYear; i--) {
             NSArray *events = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"events/%d", i]];
             [downloadedEvents addObjectsFromArray:events];
         }
