@@ -14,25 +14,75 @@
 
 @interface EventsTableViewController ()
 @property (nonatomic) NSInteger currentYear;
-@property (nonatomic, strong) NSArray *eventData;
+@property (nonatomic, strong) NSDictionary *eventData;
+@property (nonatomic, strong) NSDate *seasonStartDate;
 @end
 
 @implementation EventsTableViewController
 
-- (NSInteger) currentYear
+- (NSInteger)currentYear
 {
-    int year = [[NSUserDefaults standardUserDefaults] integerForKey:@"EventsViewController.currentYear"];
-    if(year == 0) {
+    NSInteger year = [[NSUserDefaults standardUserDefaults] integerForKey:@"EventsViewController.currentYear"];
+    
+    if(year == 0)
         return 2014;
-    }
+
     return year;
 }
 
-- (void) setCurrentYear:(NSInteger)currentYear
+- (void)setCurrentYear:(NSInteger)currentYear
 {
     [[NSUserDefaults standardUserDefaults] setInteger:currentYear forKey:@"EventsViewController.currentYear"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    self.title = [NSString stringWithFormat:@"%d Events", currentYear];
+    self.title = [NSString stringWithFormat:@"%@ Events", @(currentYear)];
+    
+    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"year == %d", currentYear];
+    
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error]) {
+        NSLog(@"An error happened and we should handle it - %@", error.localizedDescription);
+    }
+    
+    self.seasonStartDate = [self getSeasonStartDate];
+    [self.fetchedResultsController.delegate controllerDidChangeContent:self.fetchedResultsController];
+    [self.tableView reloadData];
+}
+
+- (NSArray *) sortedEventGroupKeys
+{
+    NSArray *keys = [self.eventData allKeys];
+    
+    NSArray *keyOrder = @[@"Championship Event", @"Other Official Events", @"Preseason", @"Offseason"];
+    return [keys sortedArrayUsingComparator:^NSComparisonResult(NSString *key1, NSString *key2) {
+        BOOL key1IsWeek = [key1 rangeOfString:@"Week"].location != NSNotFound;
+        BOOL key2IsWeek = [key2 rangeOfString:@"Week"].location != NSNotFound;
+
+        if(key1IsWeek && !key2IsWeek) {
+            return NSOrderedAscending;
+        } else if(!key1IsWeek && key2IsWeek) {
+            return NSOrderedDescending;
+        } else if(!key1IsWeek && !key2IsWeek) {
+            NSInteger index1 = [keyOrder indexOfObject:key1];
+            NSInteger index2 = [keyOrder indexOfObject:key2];
+            if(index1 - index2 > 0) {
+                return NSOrderedDescending;
+            } else if(index1 - index2 < 0) {
+                return NSOrderedAscending;
+            } else {
+                return NSOrderedSame;
+            }
+        } else {
+            int week1 = [[key1 stringByReplacingOccurrencesOfString:@"Week " withString:@""] intValue];
+            int week2 = [[key2 stringByReplacingOccurrencesOfString:@"Week " withString:@""] intValue];
+            if(week1 - week2 > 0) {
+                return NSOrderedDescending;
+            } else if(week1 - week2 < 0) {
+                return NSOrderedAscending;
+            } else {
+                return NSOrderedSame;
+            }
+        }
+    }];
 }
 
 - (void)setContext:(NSManagedObjectContext *)context
@@ -47,77 +97,73 @@
                                                                         managedObjectContext:context
                                                                           sectionNameKeyPath:@"start_date"
                                                                                    cacheName:nil];
+    self.seasonStartDate = [self getSeasonStartDate];
     self.eventData = [self groupEventsByWeek];
     [self.tableView reloadData];
 }
 
-// https://github.com/the-blue-alliance/the-blue-alliance/blob/master/helpers/event_helper.py#L29
-- (NSArray *)groupEventsByWeek
+- (NSDate *)getSeasonStartDate
 {
-    NSMutableArray *toReturn = [[NSMutableArray alloc] init];
+    NSArray *inSeasonEvents = [self.fetchedResultsController.fetchedObjects filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"official == 1 && (event_type == %d || event_type == %d)", REGIONAL, DISTRICT]];
     
-    int currentWeek = 1;
-    NSDate *weekStart;
+    if ([inSeasonEvents count] == 0)
+        return nil;
     
-    EventGroup *weeklessEvents = [[EventGroup alloc] initWithName:@"Other Official Events"];
-    EventGroup *preseasonEvents = [[EventGroup alloc] initWithName:@"Preseason"];
-    EventGroup *offseasonEvents = [[EventGroup alloc] initWithName:@"Offseason"];
-    EventGroup *cmpEvents = [[EventGroup alloc] initWithName:@"Championship Event"];
-    EventGroup *currentWeekEvents;
+    Event *firstEvent = [inSeasonEvents firstObject];
+    int diffFromThurs = (firstEvent.start_date.weekday - 5) % 7; // Thursday is 5
     
-    for (Event *event in self.fetchedResultsController.fetchedObjects) {
-        if ([event.official intValue] == 1 && ([event.event_type integerValue] == CMP_DIVISION || [event.event_type integerValue] == CMP_FINALS))
-            [cmpEvents addEvent:event];
-        else if ([event.official intValue] == 1 && ([event.event_type integerValue] == REGIONAL || [event.event_type integerValue] == DISTRICT || [event.event_type integerValue] == DISTRICT_CMP))
-        {
-            if (event.start_date == nil || (event.start_date.month == 12 && event.start_date.day == 31))
-                [weeklessEvents addEvent:event];
-            else
-            {
-                if (weekStart == nil)
-                {
-                    int diffFromThurs = (event.start_date.weekday - 5) % 7; // Thursday is 5
-                    weekStart = [event.start_date dateBySubtractingDays:diffFromThurs];
-                }
-                
-                if ([event.start_date isLaterThanOrEqualDate:[weekStart dateByAddingDays:7]])
-                {
-                    [toReturn addObject:currentWeekEvents];
-                    currentWeekEvents = nil;
-                    currentWeek += 1;
-                    weekStart = [weekStart dateByAddingDays:7];
-                }
+    return [firstEvent.start_date dateBySubtractingDays:diffFromThurs];
+}
 
-                if (!currentWeekEvents)
-                {
-                    NSString *label = [NSString stringWithFormat:@"Week %d", currentWeek];
-                    currentWeekEvents = [[EventGroup alloc] initWithName:label];
-                }
+- (NSInteger)getWeekForEvent:(Event*)event
+{
+    if (!event.start_date)
+        return -1;
+    return ([self.seasonStartDate distanceInDaysToDate:event.start_date] / 7) + 1;
+}
+
+- (NSDictionary *)groupEventsByWeek
+{
+    NSMutableDictionary *eventData = [[NSMutableDictionary alloc] init];
+
+    for (Event *event in self.fetchedResultsController.fetchedObjects) {
+        
+        NSString *weeklessEventsLabel = @"Other Official Events";
+        NSString *preseasonEventsLabel = @"Preseason";
+        NSString *offseasonEventsLabel = @"Offseason";
+        NSString *cmpEventsLabel = @"Championship Event";
+        
+        if ([event.official intValue] == 1 && ([event.event_type integerValue] == CMP_DIVISION || [event.event_type integerValue] == CMP_FINALS)) {
+            [self event:event addToEventList:eventData forLabel:cmpEventsLabel];
+        }
+        else if ([event.official intValue] == 1 && ([event.event_type integerValue] == REGIONAL || [event.event_type integerValue] == DISTRICT || [event.event_type integerValue] == DISTRICT_CMP)) {
+            if (event.start_date == nil || (event.start_date.month == 12 && event.start_date.day == 31)) {
+                [self event:event addToEventList:eventData forLabel:weeklessEventsLabel];
+            }
+            else {
+                NSNumber *week = @([self getWeekForEvent:event]);
+                NSString *weekLabel = [NSString stringWithFormat:@"Week %@", week];
                 
-                [currentWeekEvents addEvent:event];
+                [self event:event addToEventList:eventData forLabel:weekLabel];
+//                event.week = week;
             }
         }
-        else if ([event.event_type integerValue] == PRESEASON)
-            [preseasonEvents addEvent:event];
-        else
-            [offseasonEvents addEvent:event];
+        else if ([event.event_type integerValue] == PRESEASON) {
+            [self event:event addToEventList:eventData forLabel:preseasonEventsLabel];
+        }
+        else {
+            [self event:event addToEventList:eventData forLabel:offseasonEventsLabel];
+        }
     }
-    
-    // Add last week that was not added in the loop
-    if(currentWeekEvents.events.count > 0) {
-        [toReturn addObject:currentWeekEvents];
-    }
-    
-    if ([cmpEvents.events count] > 0)
-        [toReturn addObject:cmpEvents];
-    if ([weeklessEvents.events count] > 0)
-        [toReturn addObject:weeklessEvents];
-    if ([preseasonEvents.events count] > 0)
-        [toReturn addObject:preseasonEvents];
-    if ([offseasonEvents.events count] > 0)
-        [toReturn addObject:offseasonEvents];
-    
-    return toReturn;
+    return eventData;
+}
+
+- (void)event:(Event*)event addToEventList:(NSMutableDictionary*)eventList forLabel:(NSString*)label
+{
+    if (![eventList objectForKey:label])
+        eventList[label] = [[NSMutableArray alloc] initWithObjects:event, nil];
+    else
+        [eventList[label] addObject:event];
 }
 
 // Override the default insertion of new cells when the database changes
@@ -143,8 +189,10 @@
 }
 
 // Ensures that when the database changes, we properly resort all the data
-- (void) controllerDidChangeContent:(NSFetchedResultsController *)controller
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
+    // The initial import kills the view's performance here
+    NSLog(@"Reloading");
     self.eventData = [self groupEventsByWeek];
     [self.tableView reloadData];
 }
@@ -154,8 +202,9 @@
 {
     [super viewDidLoad];
     
-    self.title = [NSString stringWithFormat:@"%d Events", self.currentYear];
+    self.title = [NSString stringWithFormat:@"%@ Events", @(self.currentYear)];
 
+    self.eventData = [[NSMutableDictionary alloc] init];
     
     // Lets make this a gear at some point in time? The action button implies share sheet or something - not changing the displayed data
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Years" style:UIBarButtonItemStyleBordered target:self action:@selector(showSelectYearScreen)];
@@ -176,24 +225,27 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    NSInteger sections = [self.eventData count];
+    NSInteger sections = [[self.eventData allKeys] count];
     return sections;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    EventGroup *eventGroup = [self.eventData objectAtIndex:section];
-    return [eventGroup.events count];
+    id key = [self sortedEventGroupKeys][section];
+    NSInteger numberOfEvents = [self.eventData[key] count];
+    return numberOfEvents;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Event Cell"];
-    if(!cell)
+    if(!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Event Cell"];
-    
-    EventGroup *eventGroup = [self.eventData objectAtIndex:indexPath.section];
-    Event *event = [eventGroup.events objectAtIndex:indexPath.row];
+    }
+        
+    id key = [self sortedEventGroupKeys][indexPath.section];
+    NSArray *eventList = self.eventData[key];
+    Event *event = eventList[indexPath.row];
 
     cell.textLabel.text = event.short_name ? event.short_name : event.name;
     cell.detailTextLabel.text = event.location;
@@ -203,8 +255,8 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    EventGroup *eventGroup = [self.eventData objectAtIndex:section];
-    return eventGroup.name;
+    id key = [self sortedEventGroupKeys][section];
+    return (NSString *)key;
 }
 
 // Disable section indexing
@@ -220,6 +272,7 @@
 
 - (NSPredicate *) predicateForSearchText:(NSString *)searchText
 {
+    NSLog(@"We're searching for - %@", searchText);
     if (searchText && searchText.length) {
         return [NSPredicate predicateWithFormat:@"(name contains[cd] %@ OR key contains[cd] %@) && year == %d", searchText, searchText, self.currentYear];
     } else {
@@ -232,18 +285,6 @@
 - (void)didSelectNewYear:(NSInteger)year
 {
     self.currentYear = year;
-    [[NSUserDefaults standardUserDefaults] setInteger:year forKey:@"EventsViewController.currentYear"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"year == %d", self.currentYear];
-    
-    NSError *error = nil;
-    if (![self.fetchedResultsController performFetch:&error]) {
-        NSLog(@"An error happened and we should handle it - %@", error.localizedDescription);
-    }
-    
-    [self.fetchedResultsController.delegate controllerDidChangeContent:self.fetchedResultsController];
-    [self.tableView reloadData];
 }
 
 @end

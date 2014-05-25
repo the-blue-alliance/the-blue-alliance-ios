@@ -40,7 +40,7 @@
     }
 }
 
-+ (void) importEventsUsingManagedObjectContext:(NSManagedObjectContext *)context
++ (void)importEventsUsingManagedObjectContext:(NSManagedObjectContext *)context
 {
     NSInteger currentYear = [[NSUserDefaults standardUserDefaults] integerForKey:@"EventsViewController.currentYear"];
 
@@ -68,7 +68,7 @@
 }
 
 
-+ (void) importTeamsUsingManagedObjectContext:(NSManagedObjectContext *)context
++ (void)importTeamsUsingManagedObjectContext:(NSManagedObjectContext *)context
 {
     // Do stupid CSV import for now
     NSURL *teamsListURL = [NSURL URLWithString:@"http://www.thebluealliance.com/api/csv/teams/all"];
