@@ -35,6 +35,54 @@
     [[NSUserDefaults standardUserDefaults] setInteger:currentYear forKey:@"EventsViewController.currentYear"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     self.title = [NSString stringWithFormat:@"%@ Events", @(currentYear)];
+    
+    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"year == %d", currentYear];
+    
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error]) {
+        NSLog(@"An error happened and we should handle it - %@", error.localizedDescription);
+    }
+    
+    self.seasonStartDate = [self getSeasonStartDate];
+    [self.fetchedResultsController.delegate controllerDidChangeContent:self.fetchedResultsController];
+    [self.tableView reloadData];
+}
+
+- (NSArray *) sortedEventGroupKeys
+{
+    NSArray *keys = [self.eventData allKeys];
+    
+    NSArray *keyOrder = @[@"Championship Event", @"Other Official Events", @"Preseason", @"Offseason"];
+    return [keys sortedArrayUsingComparator:^NSComparisonResult(NSString *key1, NSString *key2) {
+        BOOL key1IsWeek = [key1 rangeOfString:@"Week"].location != NSNotFound;
+        BOOL key2IsWeek = [key2 rangeOfString:@"Week"].location != NSNotFound;
+
+        if(key1IsWeek && !key2IsWeek) {
+            return NSOrderedAscending;
+        } else if(!key1IsWeek && key2IsWeek) {
+            return NSOrderedDescending;
+        } else if(!key1IsWeek && !key2IsWeek) {
+            NSInteger index1 = [keyOrder indexOfObject:key1];
+            NSInteger index2 = [keyOrder indexOfObject:key2];
+            if(index1 - index2 > 0) {
+                return NSOrderedDescending;
+            } else if(index1 - index2 < 0) {
+                return NSOrderedAscending;
+            } else {
+                return NSOrderedSame;
+            }
+        } else {
+            int week1 = [[key1 stringByReplacingOccurrencesOfString:@"Week " withString:@""] intValue];
+            int week2 = [[key2 stringByReplacingOccurrencesOfString:@"Week " withString:@""] intValue];
+            if(week1 - week2 > 0) {
+                return NSOrderedDescending;
+            } else if(week1 - week2 < 0) {
+                return NSOrderedAscending;
+            } else {
+                return NSOrderedSame;
+            }
+        }
+    }];
 }
 
 - (void)setContext:(NSManagedObjectContext *)context
@@ -54,7 +102,7 @@
     [self.tableView reloadData];
 }
 
-- (NSDate*)getSeasonStartDate
+- (NSDate *)getSeasonStartDate
 {
     NSArray *inSeasonEvents = [self.fetchedResultsController.fetchedObjects filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"official == 1 && (event_type == %d || event_type == %d)", REGIONAL, DISTRICT]];
     
@@ -183,8 +231,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    id key = [[self.eventData allKeys] objectAtIndex:section];
-    NSInteger numberOfEvents = [[self.eventData objectForKey:key] count];
+    id key = [self sortedEventGroupKeys][section];
+    NSInteger numberOfEvents = [self.eventData[key] count];
     return numberOfEvents;
 }
 
@@ -195,9 +243,9 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Event Cell"];
     }
         
-    id key = [[self.eventData allKeys] objectAtIndex:indexPath.section];
-    NSArray *eventList = [self.eventData objectForKey:key];
-    Event *event = [eventList objectAtIndex:indexPath.row];
+    id key = [self sortedEventGroupKeys][indexPath.section];
+    NSArray *eventList = self.eventData[key];
+    Event *event = eventList[indexPath.row];
 
     cell.textLabel.text = event.short_name ? event.short_name : event.name;
     cell.detailTextLabel.text = event.location;
@@ -207,8 +255,8 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    id key = [[self.eventData allKeys] objectAtIndex:section];
-    return (NSString*)key;
+    id key = [self sortedEventGroupKeys][section];
+    return (NSString *)key;
 }
 
 // Disable section indexing
@@ -237,18 +285,6 @@
 - (void)didSelectNewYear:(NSInteger)year
 {
     self.currentYear = year;
-    [[NSUserDefaults standardUserDefaults] setInteger:year forKey:@"EventsViewController.currentYear"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"year == %d", self.currentYear];
-    
-    NSError *error = nil;
-    if (![self.fetchedResultsController performFetch:&error]) {
-        NSLog(@"An error happened and we should handle it - %@", error.localizedDescription);
-    }
-    
-    [self.fetchedResultsController.delegate controllerDidChangeContent:self.fetchedResultsController];
-    [self.tableView reloadData];
 }
 
 @end

@@ -96,7 +96,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseSaved:) name:NSManagedObjectContextDidSaveNotification object:self.context];
         
         [TBAImporter importEventsUsingManagedObjectContext:self.context];
-//        [TBAImporter importTeamsUsingManagedObjectContext:self.context];
+        [TBAImporter importTeamsUsingManagedObjectContext:self.context];
     }
 }
 
