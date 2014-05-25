@@ -21,10 +21,18 @@
 
 - (NSInteger) currentYear
 {
-    if(_currentYear == 0) {
+    int year = [[NSUserDefaults standardUserDefaults] integerForKey:@"EventsViewController.currentYear"];
+    if(year == 0) {
         return 2014;
     }
-    return _currentYear;
+    return year;
+}
+
+- (void) setCurrentYear:(NSInteger)currentYear
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:currentYear forKey:@"EventsViewController.currentYear"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    self.title = [NSString stringWithFormat:@"%d Events", currentYear];
 }
 
 - (void)setContext:(NSManagedObjectContext *)context
@@ -145,10 +153,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    self.currentYear = 2014;
     
-    self.title = @"Events";
+    self.title = [NSString stringWithFormat:@"%d Events", self.currentYear];
+
     
     // Lets make this a gear at some point in time? The action button implies share sheet or something - not changing the displayed data
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Years" style:UIBarButtonItemStyleBordered target:self action:@selector(showSelectYearScreen)];
@@ -225,6 +232,9 @@
 - (void)didSelectNewYear:(NSInteger)year
 {
     self.currentYear = year;
+    [[NSUserDefaults standardUserDefaults] setInteger:year forKey:@"EventsViewController.currentYear"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"year == %d", self.currentYear];
     
     NSError *error = nil;
