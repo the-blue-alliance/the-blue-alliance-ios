@@ -12,6 +12,8 @@
 #import "UIColor+TBAColors.h"
 #import <MZFormSheetController/MZFormSheetController.h>
 
+#import "EventViewController.h"
+
 @interface EventsTableViewController ()
 @property (nonatomic) NSInteger currentYear;
 @property (nonatomic, strong) NSArray *eventData;
@@ -215,6 +217,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    EventGroup *group = self.eventData[indexPath.section];
+    Event *event = group.events[indexPath.row];
+    
+    EventViewController *eventController = [[EventViewController alloc] initWithEvent:event];
+    [self.navigationController pushViewController:eventController animated:YES];
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

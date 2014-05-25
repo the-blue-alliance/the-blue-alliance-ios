@@ -29,6 +29,7 @@
 		50832E3A1918BBBE003AC8A7 /* Event+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E381918BBBE003AC8A7 /* Event+Create.m */; };
 		50832E3E1918BBEA003AC8A7 /* EventsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E3D1918BBEA003AC8A7 /* EventsTableViewController.m */; };
 		50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */; };
+		50C0FC231931743700670A64 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C0FC221931743700670A64 /* EventViewController.m */; };
 		50CDA22B19300C6300C8906D /* TBAImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 50CDA22A19300C6300C8906D /* TBAImporter.m */; };
 		50CDA22E1930294200C8906D /* Team+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 50CDA22D1930294200C8906D /* Team+Create.m */; };
 		50DFD1F61920365E009B686E /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD1F51920365E009B686E /* MenuViewController.m */; };
@@ -86,6 +87,8 @@
 		50832E3D1918BBEA003AC8A7 /* EventsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsTableViewController.m; sourceTree = "<group>"; };
 		50832E531918BBFF003AC8A7 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
 		50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
+		50C0FC211931743700670A64 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
+		50C0FC221931743700670A64 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
 		50CDA22919300C6300C8906D /* TBAImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAImporter.h; sourceTree = "<group>"; };
 		50CDA22A19300C6300C8906D /* TBAImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAImporter.m; sourceTree = "<group>"; };
 		50CDA22C1930294200C8906D /* Team+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Team+Create.h"; sourceTree = "<group>"; };
@@ -189,6 +192,8 @@
 				50832E0A1918BB63003AC8A7 /* AppDelegate.m */,
 				50DFD1F41920365E009B686E /* MenuViewController.h */,
 				50DFD1F51920365E009B686E /* MenuViewController.m */,
+				50C0FC211931743700670A64 /* EventViewController.h */,
+				50C0FC221931743700670A64 /* EventViewController.m */,
 				50DFD20819208524009B686E /* Top Level Controllers */,
 				50832E3B1918BBC1003AC8A7 /* Data Model */,
 				50832E151918BB63003AC8A7 /* Images.xcassets */,
@@ -437,6 +442,7 @@
 				5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */,
 				50DFD20119207DCA009B686E /* TeamsViewController.m in Sources */,
 				92C5B870192C0BBC00AFDBCA /* YearSelectView.m in Sources */,
+				50C0FC231931743700670A64 /* EventViewController.m in Sources */,
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,
 				50CDA22E1930294200C8906D /* Team+Create.m in Sources */,
 				5070EE6C192E965C0079D123 /* Event.m in Sources */,
