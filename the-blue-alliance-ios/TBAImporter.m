@@ -105,4 +105,17 @@
     });
 }
 
++ (void) linkTeamsToEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context
+{
+    NSString *eventKey = event.key;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray *teamList = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"event/%@/teams", eventKey]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSArray *teams = [Team createTeamsFromTBAInfoArray:teamList usingManagedObjectContext:context];
+            [event setTeams:[NSSet setWithArray:teams]];
+        });
+    });
+    
+}
+
 @end

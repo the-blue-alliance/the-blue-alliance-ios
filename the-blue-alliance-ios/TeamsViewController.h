@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "SearchableCoreDataTableViewController.h"
+#import "Event.h"
 
 @interface TeamsViewController : SearchableCoreDataTableViewController
 @property (nonatomic, strong) NSManagedObjectContext *context;
+
+@property (nonatomic, strong) Event *eventFilter;
 @end

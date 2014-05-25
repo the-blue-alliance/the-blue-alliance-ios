@@ -58,9 +58,11 @@
     return team;
 }
 
-+ (void) createTeamsFromTBAInfoArray:(NSArray *)infoArray
++ (NSArray *) createTeamsFromTBAInfoArray:(NSArray *)infoArray
            usingManagedObjectContext:(NSManagedObjectContext *)context
 {
+    NSMutableArray *returnTeams = [[NSMutableArray alloc] init];
+    
     NSMutableArray *teamKeys = [[NSMutableArray alloc] init];
     for (NSDictionary *teamInfo in infoArray) {
         [teamKeys addObject:teamInfo[@"key"]];
@@ -81,15 +83,21 @@
     }
     
     NSMutableSet *existingKeySet = [[NSMutableSet alloc] init];
+    NSMutableDictionary *exisingTeamDict = [[NSMutableDictionary alloc] init];
     for (Team *team in existingTeams) {
         [existingKeySet addObject:team.key];
+        exisingTeamDict[team.key] = team;
     }
     
     
     for (NSDictionary *infoDict in infoArray) {
         if(![existingKeySet containsObject:infoDict[@"key"]]) {
-            [Team createTeamFromTBAInfo:infoDict usingManagedObjectContext:context];
+            [returnTeams addObject:[Team createTeamFromTBAInfo:infoDict usingManagedObjectContext:context]];
+        } else {
+            [returnTeams addObject:exisingTeamDict[infoDict[@"key"]]];
         }
     }
+    
+    return returnTeams;
 }
 @end

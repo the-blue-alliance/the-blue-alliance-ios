@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Event.h"
 
 /** `TBAImporter` is a utility class used to encapsulate the various downloading
  * logic for importing data from TBA API.
@@ -24,5 +25,8 @@
  * @param context The context of the database used for importing
  */
 + (void) importTeamsUsingManagedObjectContext:(NSManagedObjectContext *)context;
+
+
++ (void) linkTeamsToEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end

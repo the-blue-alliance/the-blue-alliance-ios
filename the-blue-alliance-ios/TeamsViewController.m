@@ -20,7 +20,11 @@
     _context = context;
     
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Team"];
-    fetchRequest.predicate = nil;
+    if(self.eventFilter) {
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%@ IN events", self.eventFilter];
+    } else {
+        fetchRequest.predicate = nil;
+    }
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"grouping_text" ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"team_number" ascending:YES]];
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
@@ -28,6 +32,16 @@
                                                                           sectionNameKeyPath:@"grouping_text"
                                                                                    cacheName:nil];
     
+}
+
+- (void) setEventFilter:(Event *)eventFilter
+{
+    _eventFilter = eventFilter;
+    if(_eventFilter) {
+        self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%@ IN events", _eventFilter];
+    } else {
+        self.fetchedResultsController.fetchRequest.predicate = nil;
+    }
 }
 
 
@@ -73,7 +87,11 @@ const int SPACES_TO_ADD = 3;
 - (NSPredicate *) predicateForSearchText:(NSString *)searchText
 {
     if(searchText.length > 0) {
-        return [NSPredicate predicateWithFormat:@"key contains[cd] %@ OR nickname contains[cd] %@", searchText, searchText, searchText];
+        if(self.eventFilter) {
+            return [NSPredicate predicateWithFormat:@"key contains[cd] %@ OR nickname contains[cd] %@ AND %@ in events", searchText, searchText, searchText, self.eventFilter];
+        } else {
+            return [NSPredicate predicateWithFormat:@"key contains[cd] %@ OR nickname contains[cd] %@", searchText, searchText, searchText];
+        }
     } else {
         return nil;
     }

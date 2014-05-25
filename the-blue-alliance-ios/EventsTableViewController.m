@@ -273,7 +273,7 @@
     NSArray *eventList = self.eventData[key];
     Event *event = eventList[indexPath.row];
     
-    EventViewController *eventController = [[EventViewController alloc] initWithEvent:event];
+    EventViewController *eventController = [[EventViewController alloc] initWithEvent:event usingManagedObjectContext:self.context];
     [self.navigationController pushViewController:eventController animated:YES];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

@@ -29,8 +29,9 @@
  * @param infoArray An array containing dictionaries containing keys that match properities
  *  for a team object, and values for the object
  * @param context The context for Core Datas
+ * @return An array of Team objects that have either been inserted into the database or fetched
  */
-+ (void)createTeamsFromTBAInfoArray:(NSArray *)infoArray
++ (NSArray *)createTeamsFromTBAInfoArray:(NSArray *)infoArray
            usingManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end

@@ -11,6 +11,6 @@
 
 @interface EventViewController : UIPageViewController <UIPageViewControllerDataSource>
 
-- (instancetype) initWithEvent:(Event *)event;
+- (instancetype) initWithEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end
