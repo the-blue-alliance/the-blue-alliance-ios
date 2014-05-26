@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/** `MatchResultsTableViewController` is a subview of `EventViewController`
+ *  This view shows the results of matches played at an event
+ */
 @interface MatchResultsTableViewController : UITableViewController
 
 @end

@@ -8,7 +8,7 @@
 
 #import "EventViewController.h"
 #import "TBAImporter.h"
-#import "TeamsViewController.h"
+#import "TeamsTableViewController.h"
 #import "EventInfoViewController.h"
 #import "MatchResultsTableViewController.h"
 #import "RankingsTableViewController.h"
@@ -23,7 +23,7 @@
 
 @implementation EventViewController
 
-- (instancetype) initWithEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context
+- (instancetype)initWithEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context
 {
     self = [super initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
     if(self) {
@@ -33,7 +33,7 @@
     return self;
 }
 
-- (void) viewDidLoad
+- (void)viewDidLoad
 {
     [super viewDidLoad];
     
@@ -61,7 +61,7 @@
     
     EventInfoViewController *eivc = [[EventInfoViewController alloc] init];
     
-    TeamsViewController *tvc = [[TeamsViewController alloc] initWithStyle:UITableViewStylePlain];
+    TeamsTableViewController *tvc = [[TeamsTableViewController alloc] initWithStyle:UITableViewStylePlain];
     tvc.eventFilter = self.event;
     tvc.context = self.context;
     tvc.tableView.contentInset = UIEdgeInsetsMake(44, 0, 0, 0);
@@ -81,7 +81,7 @@
     [TBAImporter linkTeamsToEvent:self.event usingManagedObjectContext:self.context];
 }
 
-- (void) segmentPressed:(UISegmentedControl *)segment
+- (void)segmentPressed:(UISegmentedControl *)segment
 {
     NSInteger oldIndex = [self.controllers indexOfObject:[self.viewControllers firstObject]];
     UIPageViewControllerNavigationDirection direction = UIPageViewControllerNavigationDirectionForward;
@@ -90,18 +90,15 @@
     }
     
     [self setViewControllers:@[self.controllers[segment.selectedSegmentIndex]] direction:direction animated:YES completion:nil];
-    
-
 }
 
 // bug fix for uipageview controller, see http://stackoverflow.com/a/13253884
-- (void) setViewControllers:(NSArray *)viewControllers direction:(UIPageViewControllerNavigationDirection)direction animated:(BOOL)animated completion:(void (^)(BOOL))completion
+- (void)setViewControllers:(NSArray *)viewControllers direction:(UIPageViewControllerNavigationDirection)direction animated:(BOOL)animated completion:(void (^)(BOOL))completion
 {
     if(self.transitionStyle == UIPageViewControllerTransitionStyleScroll && animated) {
         __weak EventViewController *weakSelf = self;
         [super setViewControllers:viewControllers direction:direction animated:animated completion:^(BOOL finished) {
-            if(finished)
-            {
+            if(finished) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:NULL];
                 });
@@ -115,7 +112,7 @@
     }
 }
 
-- (UIViewController *) pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
 {
     NSInteger index = [self.controllers indexOfObject:viewController];
     if(index == 0) {
@@ -125,7 +122,7 @@
     }
 }
 
-- (UIViewController *) pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
 {
     NSInteger index = [self.controllers indexOfObject:viewController];
     if(index == self.controllers.count - 1) {
@@ -135,19 +132,17 @@
     }
 }
 
-- (void) pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
+- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
 {
     UIViewController *controller = [pageViewController.viewControllers firstObject];
     NSInteger index = [self.controllers indexOfObject:controller];
     self.segment.selectedSegmentIndex = index;
 }
 
-- (UIBarPosition) positionForBar:(id<UIBarPositioning>)bar
+- (UIBarPosition)positionForBar:(id<UIBarPositioning>)bar
 {
     return UIBarPositionTopAttached;
 }
-
-
 
 @end
  

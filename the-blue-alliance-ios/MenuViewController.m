@@ -33,8 +33,9 @@
 #pragma mark - UI Actions
 - (void)menuButtonTapped:(UIButton *)button
 {
-    if(self.delegate && [self.delegate respondsToSelector:@selector(menuViewController:didSelectMenuItem:)])
+    if(self.delegate && [self.delegate respondsToSelector:@selector(menuViewController:didSelectMenuItem:)]) {
         [self.delegate menuViewController:self didSelectMenuItem:button.currentTitle];
+    }
 }
 
 #pragma mark - View creation utility methods

@@ -23,7 +23,7 @@
     return normInfo;
 }
 
-+ (NSString *) groupingTextOfTeamNumber:(int)teamNumber
++ (NSString *)groupingTextOfTeamNumber:(int)teamNumber
 {
     if(teamNumber < 1000) {
         return @"1-990";
