@@ -17,6 +17,6 @@ typedef enum EventType : NSInteger {
 /** `Event` is a data model for an event
  *  http://www.thebluealliance.com/apidocs#event-model
  */
-@interface Event : _Event {}
+@interface Event : _Event
 // Custom logic goes here.
 @end
