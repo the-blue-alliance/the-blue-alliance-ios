@@ -42,28 +42,18 @@
 {
     _controllers = controllers;
     
-    
-}
-
-
-- (void) viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-    
-    
     float width = self.view.width;
-    float height = self.pageView.height;
-    
+    float height = self.view.height - self.navigationController.navigationBar.height - (self.topToolbar.height ? self.topToolbar.height : 44) - 20;
     for (int i = 0; i < self.controllers.count; i++) {
         UIViewController *controller = self.controllers[i];
-        
         [self addChildViewController:controller];
         
         UIView *view = controller.view;
-        [self.pageView addSubview:view];
         view.width = width;
         view.height = height;
         view.origin = CGPointMake(i * width, 0);
+        
+        [self.pageView addSubview:view];
     }
     
     self.pageView.contentSize = CGSizeMake(self.controllers.count * width, height);
@@ -123,6 +113,7 @@
     self.controllers = @[eivc, tvc, mrvc, rvc];
     
     [TBAImporter linkTeamsToEvent:self.event usingManagedObjectContext:self.context];
+    
 }
 
 
