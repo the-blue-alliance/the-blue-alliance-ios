@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-/** `RankingsTableViewController` is a subview of `EventViewController`
+/** `RankingsTableView` is a subview of `EventViewController`
  *  This view shows the rankings of teams at an event
  */
 @interface RankingsTableViewController : UITableViewController

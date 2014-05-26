@@ -2,7 +2,7 @@
 //  EventInfoViewController.m
 //  the-blue-alliance-ios
 //
-//  Created by Donald Pinckney on 5/25/14.
+//  Created by Donald Pinckney on 5/26/14.
 //  Copyright (c) 2014 The Blue Alliance. All rights reserved.
 //
 
@@ -14,13 +14,13 @@
 
 @implementation EventInfoViewController
 
-// TODO: Implement controller
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    self.view.backgroundColor = [UIColor whiteColor];
+    
+    self.view.backgroundColor = [UIColor redColor];    
 }
+
 
 @end

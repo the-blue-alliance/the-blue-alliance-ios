@@ -11,7 +11,7 @@
 
 /** `EventViewController` is a detail view for event data.
  */
-@interface EventViewController : UIPageViewController
+@interface EventViewController : UIViewController
 
 /** Initilizes the EventViewController for a given event
  *
