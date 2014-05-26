@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Mogenerator.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>10</integer>
+		</dict>
 		<key>the-blue-alliance-ios.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -18,6 +23,11 @@
 			<true/>
 		</dict>
 		<key>50832E1A1918BB63003AC8A7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9226B1301932EC3A00B7EF43</key>
 		<dict>
 			<key>primary</key>
 			<true/>
