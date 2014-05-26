@@ -36,9 +36,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     self.title = self.event.short_name;
-    
+
     // Create segmented control top
     UIToolbar *toolbar = [[UIToolbar alloc] initForAutoLayout];
     [self.view addSubview:toolbar];

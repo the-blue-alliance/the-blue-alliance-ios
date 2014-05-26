@@ -18,5 +18,10 @@ typedef NS_ENUM(NSInteger, TBAEventType) {
  *  http://www.thebluealliance.com/apidocs#event-model
  */
 @interface Event : _Event
-// Custom logic goes here.
+
+/**
+ *   The unique key for the event, e.g. "2014casb"
+ */
+@property (nonatomic, strong) NSString* key;
+
 @end
