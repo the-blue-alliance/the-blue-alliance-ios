@@ -7,7 +7,6 @@
 //
 
 #import "Event.h"
-#import "EventGroup.h"
 #import "EventsTableViewController.h"
 #import "UIColor+TBAColors.h"
 #import <MZFormSheetController/MZFormSheetController.h>
@@ -26,8 +25,9 @@
 {
     NSInteger year = [[NSUserDefaults standardUserDefaults] integerForKey:@"EventsViewController.currentYear"];
     
-    if(year == 0)
+    if(year == 0) {
         return 2014;
+    }
 
     return year;
 }
@@ -50,7 +50,7 @@
     [self.tableView reloadData];
 }
 
-- (NSArray *) sortedEventGroupKeys
+- (NSArray *)sortedEventGroupKeys
 {
     NSArray *keys = [self.eventData allKeys];
     
@@ -106,10 +106,11 @@
 
 - (NSDate *)getSeasonStartDate
 {
-    NSArray *inSeasonEvents = [self.fetchedResultsController.fetchedObjects filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"official == 1 && (event_type == %d || event_type == %d)", REGIONAL, DISTRICT]];
+    NSArray *inSeasonEvents = [self.fetchedResultsController.fetchedObjects filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"official == 1 && (event_type == %d || event_type == %d)", TBAEventTypeRegional, TBAEventTypeDistrict]];
     
-    if ([inSeasonEvents count] == 0)
+    if ([inSeasonEvents count] == 0) {
         return nil;
+    }
     
     Event *firstEvent = [inSeasonEvents firstObject];
     int diffFromThurs = (firstEvent.start_date.weekday - 5) % 7; // Thursday is 5
@@ -119,8 +120,9 @@
 
 - (NSInteger)getWeekForEvent:(Event*)event
 {
-    if (!event.start_date)
+    if (!event.start_date) {
         return -1;
+    }
     return ([self.seasonStartDate distanceInDaysToDate:event.start_date] / 7) + 1;
 }
 
@@ -135,25 +137,20 @@
         NSString *offseasonEventsLabel = @"Offseason";
         NSString *cmpEventsLabel = @"Championship Event";
         
-        if ([event.official intValue] == 1 && ([event.event_type integerValue] == CMP_DIVISION || [event.event_type integerValue] == CMP_FINALS)) {
+        if ([event.official intValue] == 1 && ([event.event_type integerValue] == TBAEventTypeCMPDivision || [event.event_type integerValue] == TBAEventTypeCMPFinals)) {
             [self event:event addToEventList:eventData forLabel:cmpEventsLabel];
-        }
-        else if ([event.official intValue] == 1 && ([event.event_type integerValue] == REGIONAL || [event.event_type integerValue] == DISTRICT || [event.event_type integerValue] == DISTRICT_CMP)) {
+        } else if ([event.official intValue] == 1 && ([event.event_type integerValue] == TBAEventTypeRegional || [event.event_type integerValue] == TBAEventTypeDistrict || [event.event_type integerValue] == TBAEventTypeDistrictCMP)) {
             if (event.start_date == nil || (event.start_date.month == 12 && event.start_date.day == 31)) {
                 [self event:event addToEventList:eventData forLabel:weeklessEventsLabel];
-            }
-            else {
+            } else {
                 NSNumber *week = @([self getWeekForEvent:event]);
                 NSString *weekLabel = [NSString stringWithFormat:@"Week %@", week];
                 
                 [self event:event addToEventList:eventData forLabel:weekLabel];
-//                event.week = week;
             }
-        }
-        else if ([event.event_type integerValue] == PRESEASON) {
+        } else if ([event.event_type integerValue] == TBAEventTypePreseason) {
             [self event:event addToEventList:eventData forLabel:preseasonEventsLabel];
-        }
-        else {
+        } else {
             [self event:event addToEventList:eventData forLabel:offseasonEventsLabel];
         }
     }
@@ -162,10 +159,11 @@
 
 - (void)event:(Event*)event addToEventList:(NSMutableDictionary*)eventList forLabel:(NSString*)label
 {
-    if (![eventList objectForKey:label])
+    if (![eventList objectForKey:label]) {
         eventList[label] = [[NSMutableArray alloc] initWithObjects:event, nil];
-    else
+    } else {
         [eventList[label] addObject:event];
+    }
 }
 
 // Override the default insertion of new cells when the database changes
@@ -193,8 +191,6 @@
 // Ensures that when the database changes, we properly resort all the data
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
-    // The initial import kills the view's performance here
-    NSLog(@"Reloading");
     self.eventData = [self groupEventsByWeek];
     [self.tableView reloadData];
 }
@@ -279,7 +275,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (NSPredicate *) predicateForSearchText:(NSString *)searchText
+- (NSPredicate *)predicateForSearchText:(NSString *)searchText
 {
     NSLog(@"We're searching for - %@", searchText);
     if (searchText && searchText.length) {

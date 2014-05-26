@@ -19,7 +19,7 @@
  * @param menu The menu object an item was selected on
  * @param menuItem The object selected
  */
-- (void) menuViewController:(MenuViewController *)menu didSelectMenuItem:(NSString *)menuItem;
+- (void)menuViewController:(MenuViewController *)menu didSelectMenuItem:(NSString *)menuItem;
 
 @end
 

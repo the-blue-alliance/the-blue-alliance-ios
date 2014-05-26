@@ -18,15 +18,20 @@
  * 
  * @param context The context of the database used for importing
  */
-+ (void) importEventsUsingManagedObjectContext:(NSManagedObjectContext *)context;
++ (void)importEventsUsingManagedObjectContext:(NSManagedObjectContext *)context;
 
 /** Downloads a list of all the teams from TBA and saves to Core Data as necesasry
  *
  * @param context The context of the database used for importing
  */
-+ (void) importTeamsUsingManagedObjectContext:(NSManagedObjectContext *)context;
++ (void)importTeamsUsingManagedObjectContext:(NSManagedObjectContext *)context;
 
-
-+ (void) linkTeamsToEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context;
+/** Downloads a list of all the teams for a specific event and associate
+ *  them to the Event
+ *
+ * @param event The event to download teams for
+ * @param context The context of the database used for importing
+ */
++ (void)linkTeamsToEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end

@@ -9,8 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "Event.h"
 
+/** `EventViewController` is a detail view for event data.
+ */
 @interface EventViewController : UIPageViewController
 
-- (instancetype) initWithEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context;
-
+/** Initilizes the EventViewController for a given event
+ *
+ * @param event The event to show data for
+ * @param context The context for the Core Data calls
+ * @return An initilized EventViewController
+ */
+- (instancetype)initWithEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context;
 @end
