@@ -77,7 +77,8 @@
     [super viewDidLoad];
 
     self.title = self.event.short_name;
-
+    self.navigationController.navigationBar.topItem.title = @"";
+    
     // Create segmented control top
     self.topToolbar = [[UIToolbar alloc] initForAutoLayout];
     [self.view addSubview:self.topToolbar];
