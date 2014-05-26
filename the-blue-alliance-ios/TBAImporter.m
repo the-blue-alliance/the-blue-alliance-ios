@@ -42,7 +42,7 @@
 
 + (void)importEventsUsingManagedObjectContext:(NSManagedObjectContext *)context
 {
-    NSInteger currentYear = [[NSUserDefaults standardUserDefaults] integerForKey:@"EventsViewController.currentYear"];
+    int currentYear = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"EventsViewController.currentYear"];
 
     int startYear = 1992;
     int endYear = (int)[NSDate date].year + 1;
@@ -89,10 +89,15 @@
         NSMutableArray *teamInfoArray = [[NSMutableArray alloc] init];
         for (int i = 1; i < teamLines.count; i++) {
             NSArray *values = teamLines[i];
-            NSMutableDictionary *infoDict = [[NSMutableDictionary alloc] initWithObjects:values forKeys:keys];
-            if([infoDict[@"team_number"] intValue] > 0) {
-                infoDict[@"key"] = [NSString stringWithFormat:@"frc%@", infoDict[@"team_number"]];
-                [teamInfoArray addObject:infoDict];
+            if(values.count != keys.count) {
+                NSLog(@"Invalid CSV line: %@", teamLines[i]);
+                [NSException raise:@"Invalid CSV line: values count doesn't match key count" format:@"keys(%d) = %@, values(%d) = %@", (int)keys.count, keys, (int)values.count, values];
+            } else {
+                NSMutableDictionary *infoDict = [[NSMutableDictionary alloc] initWithObjects:values forKeys:keys];
+                if([infoDict[@"team_number"] intValue] > 0) {
+                    infoDict[@"key"] = [NSString stringWithFormat:@"frc%@", infoDict[@"team_number"]];
+                    [teamInfoArray addObject:infoDict];
+                }
             }
         }
         
