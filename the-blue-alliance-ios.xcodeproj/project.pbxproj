@@ -6,11 +6,23 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		9226B1301932EC3A00B7EF43 /* Mogenerator */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 9226B1331932EC3A00B7EF43 /* Build configuration list for PBXAggregateTarget "Mogenerator" */;
+			buildPhases = (
+				9226B1341932EC5C00B7EF43 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = Mogenerator;
+			productName = Mogenerator;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		394BD129CFDF44B78FFF2C94 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDCC6CCFB1A4A199C72C12E /* libPods.a */; };
-		5028F478193076A500D9C4BB /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 5028F477193076A500D9C4BB /* Team.m */; };
 		5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */; };
-		5070EE6C192E965C0079D123 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 5070EE6B192E965C0079D123 /* Event.m */; };
 		50832DFB1918BB63003AC8A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFA1918BB63003AC8A7 /* Foundation.framework */; };
 		50832DFD1918BB63003AC8A7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFC1918BB63003AC8A7 /* CoreGraphics.framework */; };
 		50832DFF1918BB63003AC8A7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFE1918BB63003AC8A7 /* UIKit.framework */; };
@@ -41,6 +53,10 @@
 		50FF380F1931E36100FD7330 /* EventInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50FF380E1931E36100FD7330 /* EventInfoViewController.m */; };
 		50FF38121931E38000FD7330 /* MatchResultsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50FF38111931E38000FD7330 /* MatchResultsTableViewController.m */; };
 		50FF38151931E38F00FD7330 /* RankingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50FF38141931E38F00FD7330 /* RankingsTableViewController.m */; };
+		9226B13E1932EFD900B7EF43 /* _Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9226B1371932EFD900B7EF43 /* _Event.m */; };
+		9226B13F1932EFD900B7EF43 /* _Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 9226B1391932EFD900B7EF43 /* _Team.m */; };
+		9226B1401932EFD900B7EF43 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9226B13B1932EFD900B7EF43 /* Event.m */; };
+		9226B1411932EFD900B7EF43 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 9226B13D1932EFD900B7EF43 /* Team.m */; };
 		9283A261192EEE5800B9068B /* EventGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9283A260192EEE5800B9068B /* EventGroup.m */; };
 		92C5B870192C0BBC00AFDBCA /* YearSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C5B86F192C0BBC00AFDBCA /* YearSelectView.m */; };
 		92C5B873192C129E00AFDBCA /* Reveal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92C5B872192C129E00AFDBCA /* Reveal.framework */; };
@@ -54,17 +70,20 @@
 			remoteGlobalIDString = 50832DF61918BB63003AC8A7;
 			remoteInfo = "the-blue-alliance-ios";
 		};
+		9226B1451932F3BC00B7EF43 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 50832DEF1918BB63003AC8A7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9226B1301932EC3A00B7EF43;
+			remoteInfo = Mogenerator;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1A5DC50BBBAD4B709D38B690 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		4DDCC6CCFB1A4A199C72C12E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		5028F476193076A500D9C4BB /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
-		5028F477193076A500D9C4BB /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
 		5057CD1C1929987D00654304 /* SearchableCoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchableCoreDataTableViewController.h; sourceTree = "<group>"; };
 		5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchableCoreDataTableViewController.m; sourceTree = "<group>"; };
-		5070EE6A192E965C0079D123 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
-		5070EE6B192E965C0079D123 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		50832DF71918BB63003AC8A7 /* the-blue-alliance-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "the-blue-alliance-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		50832DFA1918BB63003AC8A7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		50832DFC1918BB63003AC8A7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -84,18 +103,18 @@
 		50832E261918BB63003AC8A7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		50832E281918BB63003AC8A7 /* the_blue_alliance_iosTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = the_blue_alliance_iosTests.m; sourceTree = "<group>"; };
 		50832E331918BB8E003AC8A7 /* The Blue Alliance.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance.xcdatamodel"; sourceTree = "<group>"; };
-		50832E371918BBBE003AC8A7 /* Event+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Event+Create.h"; sourceTree = "<group>"; };
-		50832E381918BBBE003AC8A7 /* Event+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Event+Create.m"; sourceTree = "<group>"; };
+		50832E371918BBBE003AC8A7 /* Event+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Event+Create.h"; path = "../Event+Create.h"; sourceTree = "<group>"; };
+		50832E381918BBBE003AC8A7 /* Event+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Event+Create.m"; path = "../Event+Create.m"; sourceTree = "<group>"; };
 		50832E3C1918BBEA003AC8A7 /* EventsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsTableViewController.h; sourceTree = "<group>"; };
 		50832E3D1918BBEA003AC8A7 /* EventsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsTableViewController.m; sourceTree = "<group>"; };
 		50832E531918BBFF003AC8A7 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
 		50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
 		50C0FC211931743700670A64 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
 		50C0FC221931743700670A64 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
-		50CDA22919300C6300C8906D /* TBAImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAImporter.h; sourceTree = "<group>"; };
-		50CDA22A19300C6300C8906D /* TBAImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAImporter.m; sourceTree = "<group>"; };
-		50CDA22C1930294200C8906D /* Team+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Team+Create.h"; sourceTree = "<group>"; };
-		50CDA22D1930294200C8906D /* Team+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Team+Create.m"; sourceTree = "<group>"; };
+		50CDA22919300C6300C8906D /* TBAImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TBAImporter.h; path = ../TBAImporter.h; sourceTree = "<group>"; };
+		50CDA22A19300C6300C8906D /* TBAImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TBAImporter.m; path = ../TBAImporter.m; sourceTree = "<group>"; };
+		50CDA22C1930294200C8906D /* Team+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Team+Create.h"; path = "../Team+Create.h"; sourceTree = "<group>"; };
+		50CDA22D1930294200C8906D /* Team+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Team+Create.m"; path = "../Team+Create.m"; sourceTree = "<group>"; };
 		50CDA22F19302C9100C8906D /* The Blue Alliance 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 2.xcdatamodel"; sourceTree = "<group>"; };
 		50DFD1F41920365E009B686E /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
 		50DFD1F51920365E009B686E /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
@@ -114,6 +133,14 @@
 		50FF38111931E38000FD7330 /* MatchResultsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchResultsTableViewController.m; sourceTree = "<group>"; };
 		50FF38131931E38F00FD7330 /* RankingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingsTableViewController.h; sourceTree = "<group>"; };
 		50FF38141931E38F00FD7330 /* RankingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingsTableViewController.m; sourceTree = "<group>"; };
+		9226B1361932EFD900B7EF43 /* _Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Event.h; sourceTree = "<group>"; };
+		9226B1371932EFD900B7EF43 /* _Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Event.m; sourceTree = "<group>"; };
+		9226B1381932EFD900B7EF43 /* _Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Team.h; sourceTree = "<group>"; };
+		9226B1391932EFD900B7EF43 /* _Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Team.m; sourceTree = "<group>"; };
+		9226B13A1932EFD900B7EF43 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		9226B13B1932EFD900B7EF43 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
+		9226B13C1932EFD900B7EF43 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
+		9226B13D1932EFD900B7EF43 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
 		927547AD193181E800785260 /* The Blue Alliance 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 3.xcdatamodel"; sourceTree = "<group>"; };
 		9283A25F192EEE5800B9068B /* EventGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroup.h; sourceTree = "<group>"; };
 		9283A260192EEE5800B9068B /* EventGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroup.m; sourceTree = "<group>"; };
@@ -149,17 +176,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5070EE6D192E966B0079D123 /* Team */ = {
-			isa = PBXGroup;
-			children = (
-				5028F476193076A500D9C4BB /* Team.h */,
-				5028F477193076A500D9C4BB /* Team.m */,
-				50CDA22C1930294200C8906D /* Team+Create.h */,
-				50CDA22D1930294200C8906D /* Team+Create.m */,
-			);
-			name = Team;
-			sourceTree = "<group>";
-		};
 		50832DEE1918BB63003AC8A7 = {
 			isa = PBXGroup;
 			children = (
@@ -204,7 +220,7 @@
 				50DFD1F51920365E009B686E /* MenuViewController.m */,
 				50FF38161931E3A900FD7330 /* Event Detail Controler */,
 				50DFD20819208524009B686E /* Top Level Controllers */,
-				50832E3B1918BBC1003AC8A7 /* Data Model */,
+				9226B1351932EFD900B7EF43 /* Models */,
 				50832E151918BB63003AC8A7 /* Images.xcassets */,
 				50832E011918BB63003AC8A7 /* Supporting Files */,
 			);
@@ -242,18 +258,6 @@
 				50832E251918BB63003AC8A7 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		50832E3B1918BBC1003AC8A7 /* Data Model */ = {
-			isa = PBXGroup;
-			children = (
-				50832E321918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld */,
-				5070EE6D192E966B0079D123 /* Team */,
-				92B98A5A192DA964004A2513 /* Event */,
-				50CDA22919300C6300C8906D /* TBAImporter.h */,
-				50CDA22A19300C6300C8906D /* TBAImporter.m */,
-			);
-			name = "Data Model";
 			sourceTree = "<group>";
 		};
 		50832E521918BBFF003AC8A7 /* CoreDataTableViewController */ = {
@@ -296,15 +300,50 @@
 			name = "Event Detail Controler";
 			sourceTree = "<group>";
 		};
-		92B98A5A192DA964004A2513 /* Event */ = {
+		9226B1351932EFD900B7EF43 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				5070EE6A192E965C0079D123 /* Event.h */,
-				5070EE6B192E965C0079D123 /* Event.m */,
+				50832E321918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld */,
+				9226B1421932EFE200B7EF43 /* MOGenerated */,
+				9226B1431932EFEF00B7EF43 /* Event */,
+				9226B1441932EFF600B7EF43 /* Team */,
+				50CDA22919300C6300C8906D /* TBAImporter.h */,
+				50CDA22A19300C6300C8906D /* TBAImporter.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		9226B1421932EFE200B7EF43 /* MOGenerated */ = {
+			isa = PBXGroup;
+			children = (
+				9226B1361932EFD900B7EF43 /* _Event.h */,
+				9226B1371932EFD900B7EF43 /* _Event.m */,
+				9226B1381932EFD900B7EF43 /* _Team.h */,
+				9226B1391932EFD900B7EF43 /* _Team.m */,
+			);
+			name = MOGenerated;
+			sourceTree = "<group>";
+		};
+		9226B1431932EFEF00B7EF43 /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				9226B13A1932EFD900B7EF43 /* Event.h */,
+				9226B13B1932EFD900B7EF43 /* Event.m */,
 				50832E371918BBBE003AC8A7 /* Event+Create.h */,
 				50832E381918BBBE003AC8A7 /* Event+Create.m */,
 			);
 			name = Event;
+			sourceTree = "<group>";
+		};
+		9226B1441932EFF600B7EF43 /* Team */ = {
+			isa = PBXGroup;
+			children = (
+				9226B13C1932EFD900B7EF43 /* Team.h */,
+				9226B13D1932EFD900B7EF43 /* Team.m */,
+				50CDA22C1930294200C8906D /* Team+Create.h */,
+				50CDA22D1930294200C8906D /* Team+Create.m */,
+			);
+			name = Team;
 			sourceTree = "<group>";
 		};
 		92C5B871192C0BC400AFDBCA /* Events */ = {
@@ -336,6 +375,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				9226B1461932F3BC00B7EF43 /* PBXTargetDependency */,
 			);
 			name = "the-blue-alliance-ios";
 			productName = "the-blue-alliance-ios";
@@ -389,6 +429,7 @@
 			targets = (
 				50832DF61918BB63003AC8A7 /* the-blue-alliance-ios */,
 				50832E1A1918BB63003AC8A7 /* the-blue-alliance-iosTests */,
+				9226B1301932EC3A00B7EF43 /* Mogenerator */,
 			);
 		};
 /* End PBXProject section */
@@ -446,6 +487,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		9226B1341932EC5C00B7EF43 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/mogenerator -m the-blue-alliance-ios/The\\ Blue\\ Alliance.xcdatamodeld -O the-blue-alliance-ios/Models --template-var arc=true";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -453,12 +507,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9226B1411932EFD900B7EF43 /* Team.m in Sources */,
+				9226B13F1932EFD900B7EF43 /* _Team.m in Sources */,
 				50832E3A1918BBBE003AC8A7 /* Event+Create.m in Sources */,
 				50FF380F1931E36100FD7330 /* EventInfoViewController.m in Sources */,
 				50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */,
 				50DFD20419207DD4009B686E /* InsightsViewController.m in Sources */,
 				50DFD20719207DDC009B686E /* SettingsViewController.m in Sources */,
-				5028F478193076A500D9C4BB /* Team.m in Sources */,
+				9226B1401932EFD900B7EF43 /* Event.m in Sources */,
 				50CDA22B19300C6300C8906D /* TBAImporter.m in Sources */,
 				50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */,
 				9283A261192EEE5800B9068B /* EventGroup.m in Sources */,
@@ -472,7 +528,7 @@
 				50C0FC231931743700670A64 /* EventViewController.m in Sources */,
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,
 				50CDA22E1930294200C8906D /* Team+Create.m in Sources */,
-				5070EE6C192E965C0079D123 /* Event.m in Sources */,
+				9226B13E1932EFD900B7EF43 /* _Event.m in Sources */,
 				50832E071918BB63003AC8A7 /* main.m in Sources */,
 				50DFD1F61920365E009B686E /* MenuViewController.m in Sources */,
 			);
@@ -493,6 +549,11 @@
 			isa = PBXTargetDependency;
 			target = 50832DF61918BB63003AC8A7 /* the-blue-alliance-ios */;
 			targetProxy = 50832E201918BB63003AC8A7 /* PBXContainerItemProxy */;
+		};
+		9226B1461932F3BC00B7EF43 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9226B1301932EC3A00B7EF43 /* Mogenerator */;
+			targetProxy = 9226B1451932F3BC00B7EF43 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -682,6 +743,20 @@
 			};
 			name = Release;
 		};
+		9226B1311932EC3A00B7EF43 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		9226B1321932EC3A00B7EF43 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -712,6 +787,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		9226B1331932EC3A00B7EF43 /* Build configuration list for PBXAggregateTarget "Mogenerator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9226B1311932EC3A00B7EF43 /* Debug */,
+				9226B1321932EC3A00B7EF43 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
@@ -723,7 +807,8 @@
 				50832E331918BB8E003AC8A7 /* The Blue Alliance.xcdatamodel */,
 			);
 			currentVersion = 927547AD193181E800785260 /* The Blue Alliance 3.xcdatamodel */;
-			path = "The Blue Alliance.xcdatamodeld";
+			name = "The Blue Alliance.xcdatamodeld";
+			path = "../The Blue Alliance.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
