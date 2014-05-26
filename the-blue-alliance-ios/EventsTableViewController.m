@@ -106,7 +106,7 @@
 
 - (NSDate *)getSeasonStartDate
 {
-    NSArray *inSeasonEvents = [self.fetchedResultsController.fetchedObjects filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"official == 1 && (event_type == %d || event_type == %d)", REGIONAL, DISTRICT]];
+    NSArray *inSeasonEvents = [self.fetchedResultsController.fetchedObjects filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"official == 1 && (event_type == %d || event_type == %d)", TBAEventTypeRegional, TBAEventTypeDistrict]];
     
     if ([inSeasonEvents count] == 0)
         return nil;
@@ -135,10 +135,10 @@
         NSString *offseasonEventsLabel = @"Offseason";
         NSString *cmpEventsLabel = @"Championship Event";
         
-        if ([event.official intValue] == 1 && ([event.event_type integerValue] == CMP_DIVISION || [event.event_type integerValue] == CMP_FINALS)) {
+        if ([event.official intValue] == 1 && ([event.event_type integerValue] == TBAEventTypeCMPDivision || [event.event_type integerValue] == TBAEventTypeCMPFinals)) {
             [self event:event addToEventList:eventData forLabel:cmpEventsLabel];
         }
-        else if ([event.official intValue] == 1 && ([event.event_type integerValue] == REGIONAL || [event.event_type integerValue] == DISTRICT || [event.event_type integerValue] == DISTRICT_CMP)) {
+        else if ([event.official intValue] == 1 && ([event.event_type integerValue] == TBAEventTypeRegional || [event.event_type integerValue] == TBAEventTypeDistrict || [event.event_type integerValue] == TBAEventTypeDistrictCMP)) {
             if (event.start_date == nil || (event.start_date.month == 12 && event.start_date.day == 31)) {
                 [self event:event addToEventList:eventData forLabel:weeklessEventsLabel];
             }
@@ -147,10 +147,9 @@
                 NSString *weekLabel = [NSString stringWithFormat:@"Week %@", week];
                 
                 [self event:event addToEventList:eventData forLabel:weekLabel];
-//                event.week = week;
             }
         }
-        else if ([event.event_type integerValue] == PRESEASON) {
+        else if ([event.event_type integerValue] == TBAEventTypePreseason) {
             [self event:event addToEventList:eventData forLabel:preseasonEventsLabel];
         }
         else {
