@@ -7,7 +7,6 @@
 //
 
 #import "Event.h"
-#import "EventGroup.h"
 #import "EventsTableViewController.h"
 #import "UIColor+TBAColors.h"
 #import <MZFormSheetController/MZFormSheetController.h>
