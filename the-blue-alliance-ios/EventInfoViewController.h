@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+/** `EventInfoViewController` is a subview of `EventViewController`
+ *  This view shows information for a specific event, such as date,
+ *  location, top teams, etc
+ */
 @interface EventInfoViewController : UIViewController
 
 @end

@@ -11,7 +11,7 @@
 #import "MenuViewController.h"
 
 #import "EventsTableViewController.h"
-#import "TeamsViewController.h"
+#import "TeamsTableViewController.h"
 #import "InsightsViewController.h"
 #import "SettingsViewController.h"
 
@@ -36,7 +36,7 @@
 // Top level view controllers
 @property (nonatomic, strong) UINavigationController *topNavigationController;
 @property (nonatomic, strong) EventsTableViewController *eventsViewController;
-@property (nonatomic, strong) TeamsViewController *teamsViewController;
+@property (nonatomic, strong) TeamsTableViewController *teamsViewController;
 @property (nonatomic, strong) InsightsViewController *insightsViewController;
 @property (nonatomic, strong) SettingsViewController *settingsViewController;
 @end
@@ -53,10 +53,10 @@
     }
     return _eventsViewController;
 }
-- (TeamsViewController *)teamsViewController
+- (TeamsTableViewController *)teamsViewController
 {
     if (!_teamsViewController) {
-        _teamsViewController = [[TeamsViewController alloc] initWithStyle:UITableViewStylePlain];
+        _teamsViewController = [[TeamsTableViewController alloc] initWithStyle:UITableViewStylePlain];
         [_teamsViewController.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburger"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonPressed)]];
     }
     return _teamsViewController;

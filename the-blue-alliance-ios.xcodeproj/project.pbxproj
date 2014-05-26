@@ -46,7 +46,7 @@
 		50CDA22E1930294200C8906D /* Team+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 50CDA22D1930294200C8906D /* Team+Create.m */; };
 		50DFD1F61920365E009B686E /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD1F51920365E009B686E /* MenuViewController.m */; };
 		50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD1FA19205F6D009B686E /* UIColor+TBAColors.m */; };
-		50DFD20119207DCA009B686E /* TeamsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD20019207DCA009B686E /* TeamsViewController.m */; };
+		50DFD20119207DCA009B686E /* TeamsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD20019207DCA009B686E /* TeamsTableViewController.m */; };
 		50DFD20419207DD4009B686E /* InsightsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD20319207DD4009B686E /* InsightsViewController.m */; };
 		50DFD20719207DDC009B686E /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD20619207DDC009B686E /* SettingsViewController.m */; };
 		50E65EA719198E5200714328 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50E65EA619198E5200714328 /* QuartzCore.framework */; };
@@ -57,7 +57,6 @@
 		9226B13F1932EFD900B7EF43 /* _Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 9226B1391932EFD900B7EF43 /* _Team.m */; };
 		9226B1401932EFD900B7EF43 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9226B13B1932EFD900B7EF43 /* Event.m */; };
 		9226B1411932EFD900B7EF43 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 9226B13D1932EFD900B7EF43 /* Team.m */; };
-		9283A261192EEE5800B9068B /* EventGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 9283A260192EEE5800B9068B /* EventGroup.m */; };
 		92C5B870192C0BBC00AFDBCA /* YearSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C5B86F192C0BBC00AFDBCA /* YearSelectView.m */; };
 		92C5B873192C129E00AFDBCA /* Reveal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92C5B872192C129E00AFDBCA /* Reveal.framework */; };
 /* End PBXBuildFile section */
@@ -120,8 +119,8 @@
 		50DFD1F51920365E009B686E /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
 		50DFD1F919205F6D009B686E /* UIColor+TBAColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+TBAColors.h"; sourceTree = "<group>"; };
 		50DFD1FA19205F6D009B686E /* UIColor+TBAColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+TBAColors.m"; sourceTree = "<group>"; };
-		50DFD1FF19207DCA009B686E /* TeamsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamsViewController.h; sourceTree = "<group>"; };
-		50DFD20019207DCA009B686E /* TeamsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamsViewController.m; sourceTree = "<group>"; };
+		50DFD1FF19207DCA009B686E /* TeamsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamsTableViewController.h; sourceTree = "<group>"; };
+		50DFD20019207DCA009B686E /* TeamsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamsTableViewController.m; sourceTree = "<group>"; };
 		50DFD20219207DD4009B686E /* InsightsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InsightsViewController.h; sourceTree = "<group>"; };
 		50DFD20319207DD4009B686E /* InsightsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InsightsViewController.m; sourceTree = "<group>"; };
 		50DFD20519207DDC009B686E /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
@@ -142,8 +141,6 @@
 		9226B13C1932EFD900B7EF43 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
 		9226B13D1932EFD900B7EF43 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
 		927547AD193181E800785260 /* The Blue Alliance 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 3.xcdatamodel"; sourceTree = "<group>"; };
-		9283A25F192EEE5800B9068B /* EventGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventGroup.h; sourceTree = "<group>"; };
-		9283A260192EEE5800B9068B /* EventGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventGroup.m; sourceTree = "<group>"; };
 		92C5B86E192C0BBC00AFDBCA /* YearSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YearSelectView.h; sourceTree = "<group>"; };
 		92C5B86F192C0BBC00AFDBCA /* YearSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YearSelectView.m; sourceTree = "<group>"; };
 		92C5B872192C129E00AFDBCA /* Reveal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Reveal.framework; sourceTree = "<group>"; };
@@ -275,8 +272,8 @@
 			isa = PBXGroup;
 			children = (
 				92C5B871192C0BC400AFDBCA /* Events */,
-				50DFD1FF19207DCA009B686E /* TeamsViewController.h */,
-				50DFD20019207DCA009B686E /* TeamsViewController.m */,
+				50DFD1FF19207DCA009B686E /* TeamsTableViewController.h */,
+				50DFD20019207DCA009B686E /* TeamsTableViewController.m */,
 				50DFD20219207DD4009B686E /* InsightsViewController.h */,
 				50DFD20319207DD4009B686E /* InsightsViewController.m */,
 				50DFD20519207DDC009B686E /* SettingsViewController.h */,
@@ -349,8 +346,6 @@
 		92C5B871192C0BC400AFDBCA /* Events */ = {
 			isa = PBXGroup;
 			children = (
-				9283A25F192EEE5800B9068B /* EventGroup.h */,
-				9283A260192EEE5800B9068B /* EventGroup.m */,
 				50832E3C1918BBEA003AC8A7 /* EventsTableViewController.h */,
 				50832E3D1918BBEA003AC8A7 /* EventsTableViewController.m */,
 				92C5B86E192C0BBC00AFDBCA /* YearSelectView.h */,
@@ -517,13 +512,12 @@
 				9226B1401932EFD900B7EF43 /* Event.m in Sources */,
 				50CDA22B19300C6300C8906D /* TBAImporter.m in Sources */,
 				50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */,
-				9283A261192EEE5800B9068B /* EventGroup.m in Sources */,
 				50832E341918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld in Sources */,
 				50FF38151931E38F00FD7330 /* RankingsTableViewController.m in Sources */,
 				50FF38121931E38000FD7330 /* MatchResultsTableViewController.m in Sources */,
 				50832E3E1918BBEA003AC8A7 /* EventsTableViewController.m in Sources */,
 				5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */,
-				50DFD20119207DCA009B686E /* TeamsViewController.m in Sources */,
+				50DFD20119207DCA009B686E /* TeamsTableViewController.m in Sources */,
 				92C5B870192C0BBC00AFDBCA /* YearSelectView.m in Sources */,
 				50C0FC231931743700670A64 /* EventViewController.m in Sources */,
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,

@@ -6,16 +6,16 @@
 //  Copyright (c) 2014 The Blue Alliance. All rights reserved.
 //
 
-#import "TeamsViewController.h"
+#import "TeamsTableViewController.h"
 #import "Team.h"
 
-@interface TeamsViewController ()
+@interface TeamsTableViewController ()
 
 @end
 
-@implementation TeamsViewController
+@implementation TeamsTableViewController
 
-- (void) setContext:(NSManagedObjectContext *)context
+- (void)setContext:(NSManagedObjectContext *)context
 {
     _context = context;
     
@@ -34,7 +34,7 @@
     
 }
 
-- (void) setEventFilter:(Event *)eventFilter
+- (void)setEventFilter:(Event *)eventFilter
 {
     _eventFilter = eventFilter;
     if(_eventFilter) {
@@ -46,7 +46,7 @@
 
 
 
-- (NSString *) controller:(NSFetchedResultsController *)controller sectionIndexTitleForSectionName:(NSString *)sectionName
+- (NSString *)controller:(NSFetchedResultsController *)controller sectionIndexTitleForSectionName:(NSString *)sectionName
 {
     return sectionName;
 }
@@ -65,7 +65,7 @@ const int SPACES_TO_ADD = 3;
     return titles;
 }
 
-- (NSInteger) tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
     return index / (SPACES_TO_ADD + 1);
 }
@@ -74,8 +74,9 @@ const int SPACES_TO_ADD = 3;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Team Cell"];
-    if(!cell)
+    if(!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Team Cell"];
+    }
     
     Team *team = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = [team.team_number description];
@@ -84,7 +85,7 @@ const int SPACES_TO_ADD = 3;
     return cell;
 }
 
-- (NSPredicate *) predicateForSearchText:(NSString *)searchText
+- (NSPredicate *)predicateForSearchText:(NSString *)searchText
 {
     if(searchText.length > 0) {
         if(self.eventFilter) {

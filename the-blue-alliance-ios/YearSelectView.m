@@ -18,7 +18,7 @@
 
 const int kNumberOfYears = 23;
 
-- (id)initWithDelegate:(id)delegate currentYear:(NSInteger)year
+- (instancetype)initWithDelegate:(id)delegate currentYear:(NSInteger)year
 {
     self = [super init];
     if (self) {
@@ -40,9 +40,10 @@ const int kNumberOfYears = 23;
 
 - (void)hide
 {
-    if (self.initYear != self.currentYear && [self.delegate respondsToSelector:@selector(didSelectNewYear:)])
+    if (self.initYear != self.currentYear && [self.delegate respondsToSelector:@selector(didSelectNewYear:)]) {
         [self.delegate didSelectNewYear:self.currentYear];
-        
+    }
+
     [self mz_dismissFormSheetControllerAnimated:YES completionHandler:nil];
 }
 
@@ -60,15 +61,13 @@ const int kNumberOfYears = 23;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Year Cell"];
-    if(!cell)
+    if(!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Year Cell"];
-    
-    if ((2014 - indexPath.row) == self.currentYear)
-    {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
-    else
-    {
+    
+    if ((2014 - indexPath.row) == self.currentYear) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
 

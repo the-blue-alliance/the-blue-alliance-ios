@@ -35,5 +35,5 @@
  * @param year The current year the view is displaying data for
  * @return An initilized YearSelectView
  */
-- (id)initWithDelegate:(id)delegate currentYear:(NSInteger)year;
+- (instancetype)initWithDelegate:(id)delegate currentYear:(NSInteger)year;
 @end

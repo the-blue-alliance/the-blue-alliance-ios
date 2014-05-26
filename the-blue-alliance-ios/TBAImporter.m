@@ -14,7 +14,7 @@
 
 @implementation TBAImporter
 
-+ (id) executeTBAV2Request:(NSString *)request
++ (id)executeTBAV2Request:(NSString *)request
 {
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.thebluealliance.com/api/v2/%@", request]];
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
@@ -51,7 +51,7 @@
         NSMutableArray *downloadedEvents = [[NSMutableArray alloc] init];
         // Download the currently selected year first
         if (currentYear != 0) {
-            NSArray *events = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"events/%d", currentYear]];
+            NSArray *events = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"events/%@", @(currentYear)]];
             [downloadedEvents addObjectsFromArray:events];
         }
         for(int i = endYear; i >= startYear; i--) {
@@ -104,13 +104,10 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [Team createTeamsFromTBAInfoArray:teamInfoArray usingManagedObjectContext:context];
         });
-        
-        
-        
     });
 }
 
-+ (void) linkTeamsToEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context
++ (void)linkTeamsToEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context
 {
     NSString *eventKey = event.key;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
