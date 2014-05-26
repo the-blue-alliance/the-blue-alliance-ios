@@ -53,7 +53,7 @@
     team.grouping_text = [Team groupingTextOfTeamNumber:[info[@"team_number"] intValue]];
     // TODO: Finish / improve importing
     
-//    NSLog(@"Imported team %@ into the database", info[@"key"]);
+    NSLog(@"Imported team %@ into the database", info[@"key"]);
     
     return team;
 }

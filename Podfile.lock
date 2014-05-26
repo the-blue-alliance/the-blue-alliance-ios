@@ -10,7 +10,7 @@ PODS:
   - UIView+Positioning (1.0.1)
 
 DEPENDENCIES:
-  - CHCSVParser
+  - CHCSVParser (from `https://github.com/ZachOrr/CHCSVParser.git`)
   - MZFormSheetController
   - NSDate-Escort
   - Tweaks
@@ -18,8 +18,12 @@ DEPENDENCIES:
   - UIView+AutoLayout
   - UIView+Positioning
 
+EXTERNAL SOURCES:
+  CHCSVParser:
+    :git: https://github.com/ZachOrr/CHCSVParser.git
+
 SPEC CHECKSUMS:
-  CHCSVParser: 0c75a766de2eabc4ff03639945a7ad4a724344d4
+  CHCSVParser: 30ac034cc0d37d9c783e7af96926270524836d70
   MZAppearance: c88502c0c2345120630c34e09d5ff09e2969ba30
   MZFormSheetController: 8c453908080c338274e68908849029435d3e2736
   NSDate-Escort: 2c849d58b85ef76f00c2388870f915b5b4225cef
