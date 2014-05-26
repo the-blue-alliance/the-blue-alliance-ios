@@ -18,7 +18,6 @@
 
 @implementation SearchableCoreDataTableViewController
 
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -34,12 +33,12 @@
     self.searchBar.delegate = self;
     self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
     self.searchBar.placeholder = @"Search";
+    self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     
     [self.searchHeader addSubview:self.searchBar];
     
     self.tableView.tableHeaderView = self.searchHeader;
 }
-
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -47,6 +46,14 @@
 //    [self.tableView setContentOffset:CGPointMake(0, self.searchHeader.height)];
 }
 
+#pragma mark - Rotating
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    CGRect frame = self.tableView.tableHeaderView.frame;
+    frame.size.height = UIInterfaceOrientationIsLandscape(toInterfaceOrientation) ? 50 : 150;
+    self.tableView.tableHeaderView.frame = frame;
+}
 
 /*#pragma mark - Scroll view delegate methods
 
