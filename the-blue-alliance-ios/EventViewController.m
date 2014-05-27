@@ -63,7 +63,7 @@
 {
     [super viewDidLoad];
 
-    self.title = self.event.short_name;
+    self.title = self.event.friendlyName;
     self.navigationController.navigationBar.topItem.title = @"";
     
     // Create segmented control top

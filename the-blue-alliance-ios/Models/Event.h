@@ -24,4 +24,9 @@ typedef NS_ENUM(NSInteger, TBAEventType) {
  */
 @property (nonatomic, strong) NSString* key;
 
+/** 
+ *  A name that includes the short_name and the year and type.  Ex: 2014 Palmetto Regional
+ */
+@property (nonatomic, readonly) NSString *friendlyName;
+
 @end
