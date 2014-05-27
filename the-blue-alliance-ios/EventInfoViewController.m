@@ -53,15 +53,55 @@
     [location autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:calendar withOffset:4];
     [location autoSetDimensionsToSize:CGSizeMake(roundf(locationImage.size.width * 0.8), roundf(locationImage.size.height * 0.8))];
 
-    UIButton *locationLabel = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    locationLabel.tintColor = [UIColor TBANavigationBarColor];
-    locationLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    [locationLabel addTarget:self action:@selector(locationTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:locationLabel];
-    [locationLabel autoPinEdge:ALEdgeLeft toEdge:ALEdgeRight ofView:location withOffset:4];
-    [locationLabel autoAlignAxis:ALAxisHorizontal toSameAxisOfView:location];
+    UIButton *locationButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    locationButton.tintColor = [UIColor TBANavigationBarColor];
+    locationButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [locationButton addTarget:self action:@selector(locationTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:locationButton];
+    [locationButton autoPinEdge:ALEdgeLeft toEdge:ALEdgeRight ofView:location withOffset:4];
+    [locationButton autoAlignAxis:ALAxisHorizontal toSameAxisOfView:location];
 
-    [locationLabel setTitle:self.event.location forState:UIControlStateNormal];
+    [locationButton setTitle:self.event.location forState:UIControlStateNormal];
+    
+    
+    
+    // Create website button links row
+    UIButton *website = [[UIButton alloc] initForAutoLayout];
+    [website setImage:[UIImage imageNamed:@"website"] forState:UIControlStateNormal];
+    [self.view addSubview:website];
+    
+    UIButton *twitter = [[UIButton alloc] initForAutoLayout];
+    [twitter setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
+    [self.view addSubview:twitter];
+    
+    UIButton *youtube = [[UIButton alloc] initForAutoLayout];
+    [youtube setImage:[UIImage imageNamed:@"youtube"] forState:UIControlStateNormal];
+    [self.view addSubview:youtube];
+    
+    UIButton *chiefdelphi = [[UIButton alloc] initForAutoLayout];
+    [chiefdelphi setImage:[UIImage imageNamed:@"chiefdelphi"] forState:UIControlStateNormal];
+    [self.view addSubview:chiefdelphi];
+    
+    UIButton *usfirst = [[UIButton alloc] initForAutoLayout];
+    [usfirst setImage:[UIImage imageNamed:@"usfirst"] forState:UIControlStateNormal];
+    [self.view addSubview:usfirst];
+    
+    // Center youtube icon
+    [youtube autoAlignAxisToSuperviewAxis:ALAxisVertical];
+    [youtube autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:locationButton withOffset:0];
+    
+    // Center other icons vertically to youtube
+    [website autoAlignAxis:ALAxisHorizontal toSameAxisOfView:youtube];
+    [twitter autoAlignAxis:ALAxisHorizontal toSameAxisOfView:youtube];
+    [chiefdelphi autoAlignAxis:ALAxisHorizontal toSameAxisOfView:youtube];
+    [usfirst autoAlignAxis:ALAxisHorizontal toSameAxisOfView:youtube];
+
+    // Connect other icons end-to-end
+    const int iconHorizontalSpacing = 16;
+    [website autoPinEdge:ALEdgeRight toEdge:ALEdgeLeft ofView:twitter withOffset:-iconHorizontalSpacing];
+    [twitter autoPinEdge:ALEdgeRight toEdge:ALEdgeLeft ofView:youtube withOffset:-iconHorizontalSpacing];
+    [youtube autoPinEdge:ALEdgeRight toEdge:ALEdgeLeft ofView:chiefdelphi withOffset:-iconHorizontalSpacing];
+    [chiefdelphi autoPinEdge:ALEdgeRight toEdge:ALEdgeLeft ofView:usfirst withOffset:-iconHorizontalSpacing];
     
 
 }
