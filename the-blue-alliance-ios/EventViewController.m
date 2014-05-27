@@ -91,7 +91,6 @@
     [self.view addSubview:self.pageView];
     [self.pageView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
     [self.pageView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.topToolbar];
-    self.pageView.backgroundColor = [UIColor greenColor];
     self.pageView.pagingEnabled = YES;
     self.pageView.showsHorizontalScrollIndicator = NO;
     self.pageView.showsVerticalScrollIndicator = NO;

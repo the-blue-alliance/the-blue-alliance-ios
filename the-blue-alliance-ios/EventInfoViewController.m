@@ -20,7 +20,6 @@
     [super viewDidLoad];
     
     self.view = [[UIView alloc] init]; // For some reason this needs to be here, otherwhise autolayout freaks out and moves subviews...
-    self.view.backgroundColor = [UIColor redColor];
     
     UILabel *label = [[UILabel alloc] initForAutoLayout];
     [self.view addSubview:label];
