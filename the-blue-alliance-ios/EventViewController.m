@@ -130,7 +130,7 @@
 }
 
 
-- (void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     self.segment.selectedSegmentIndex = roundf(scrollView.contentOffset.x / scrollView.width);
 }

@@ -134,8 +134,6 @@
     
     // Hide the search bar
     [self.tableView setContentOffset:CGPointMake(0., self.searchHeader.height - [self.topLayoutGuide length]) animated:YES];
-    
-    [self.tableView reloadData];
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar

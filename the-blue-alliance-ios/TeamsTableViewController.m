@@ -118,7 +118,11 @@ const int SPACES_TO_ADD = 3;
             return [NSPredicate predicateWithFormat:@"key contains[cd] %@ OR nickname contains[cd] %@", searchText, searchText];
         }
     } else {
-        return nil;
+        if(self.eventFilter) {
+            return [NSPredicate predicateWithFormat:@"%@ in events", self.eventFilter];
+        } else {
+            return nil;
+        }
     }
 }
 
