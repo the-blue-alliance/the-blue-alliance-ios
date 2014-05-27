@@ -201,6 +201,8 @@
     [super viewDidLoad];
     
     self.title = [NSString stringWithFormat:@"%@ Events", @(self.currentYear)];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStyleBordered target:nil action:nil];
+    self.navigationItem.backBarButtonItem = backButton;
 
     self.eventData = [[NSMutableDictionary alloc] init];
     

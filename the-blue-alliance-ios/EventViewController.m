@@ -64,7 +64,12 @@
     [super viewDidLoad];
 
     self.title = self.event.friendlyName;
-    self.navigationController.navigationBar.topItem.title = @"";
+    
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    [navBar setBackgroundImage:[[UIImage alloc] init] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+    [navBar setShadowImage:[[UIImage alloc] init]];
+    
+
     
     // Create segmented control top
     self.topToolbar = [[UIToolbar alloc] initForAutoLayout];
@@ -75,8 +80,8 @@
     [self.topToolbar autoPinEdgeToSuperviewEdge:ALEdgeLeft withInset:0];
     [self.topToolbar autoPinEdgeToSuperviewEdge:ALEdgeRight withInset:0];
     self.topToolbar.delegate = self;
-    self.topToolbar.translucent = YES;
-    self.topToolbar.tintColor = [UIColor TBANavigationBarColor];
+    self.topToolbar.translucent = NO;
+    self.topToolbar.barTintColor = [UIColor TBANavigationBarColor];
     
     self.segment = [[UISegmentedControl alloc] initWithItems:@[@"Info", @"Teams", @"Results", @"Rankings"]];
     self.segment.selectedSegmentIndex = 0;
