@@ -9,6 +9,7 @@
 
 
 @implementation Event
+@dynamic key;
 
 // Custom logic goes here.
 

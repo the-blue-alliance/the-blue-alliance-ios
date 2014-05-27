@@ -13,7 +13,7 @@
 #import "MatchResultsTableViewController.h"
 #import "RankingsTableViewController.h"
 
-@interface EventViewController () <UIToolbarDelegate>
+@interface EventViewController () <UIToolbarDelegate, UIScrollViewDelegate>
 @property (nonatomic, strong) Event *event;
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) NSArray *controllers;
@@ -23,7 +23,6 @@
 @property (nonatomic, strong) UISegmentedControl *segment;
 @property (nonatomic, strong) UIScrollView *pageView;
 
-@property (nonatomic) int selectedIndex;
 @end
 
 @implementation EventViewController
@@ -58,9 +57,6 @@
     }
     
     self.pageView.contentSize = CGSizeMake(self.controllers.count * width, height);
-    self.pageView.pagingEnabled = YES;
-    self.pageView.showsHorizontalScrollIndicator = NO;
-    self.pageView.showsVerticalScrollIndicator = NO;
 }
 
 - (void)viewDidLoad
@@ -96,7 +92,10 @@
     [self.pageView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
     [self.pageView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.topToolbar];
     self.pageView.backgroundColor = [UIColor greenColor];
-    
+    self.pageView.pagingEnabled = YES;
+    self.pageView.showsHorizontalScrollIndicator = NO;
+    self.pageView.showsVerticalScrollIndicator = NO;
+    self.pageView.delegate = self;
     
     // Create the different view controllers for the pages
     EventInfoViewController *eivc = [[EventInfoViewController alloc] init];
@@ -126,10 +125,16 @@
 }
 
 
+- (void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    self.segment.selectedSegmentIndex = roundf(scrollView.contentOffset.x / scrollView.width);
+}
+
 
 - (void)segmentPressed:(UISegmentedControl *)segment
 {
-    self.selectedIndex = segment.selectedSegmentIndex;
+    float xOffset = self.pageView.width * segment.selectedSegmentIndex;
+    [self.pageView setContentOffset:CGPointMake(xOffset, 0) animated:YES];
 }
 
 
