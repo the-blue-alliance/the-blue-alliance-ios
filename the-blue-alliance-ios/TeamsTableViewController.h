@@ -10,7 +10,7 @@
 #import "SearchableCoreDataTableViewController.h"
 #import "Event.h"
 
-/** `TeamsViewController` is a table view of all teams registered in FRC
+/** TeamsViewController is a table view of all teams registered in FRC
  *  (past and current)
  */
 @interface TeamsTableViewController : SearchableCoreDataTableViewController
@@ -23,4 +23,9 @@
  *  If nil, will show all teams
  */
 @property (nonatomic, strong) Event *eventFilter;
+
+/**
+ *  Whether or not the TeamsTableViewController should disable sectioning of teams by the 1000's
+ */
+@property (nonatomic) BOOL disableSections;
 @end

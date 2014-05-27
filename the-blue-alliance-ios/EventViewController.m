@@ -108,7 +108,8 @@
     TeamsTableViewController *tvc = [[TeamsTableViewController alloc] initWithStyle:UITableViewStylePlain];
     tvc.eventFilter = self.event;
     tvc.context = self.context;
-    tvc.tableView.contentInset = UIEdgeInsetsMake(44, 0, 0, 0);
+    tvc.disableSections = YES;
+//    tvc.tableView.contentInset = UIEdgeInsetsMake(44, 0, 0, 0);
     
     MatchResultsTableViewController *mrvc = [[MatchResultsTableViewController alloc] initWithStyle:UITableViewStylePlain];
     

@@ -19,18 +19,34 @@
 {
     _context = context;
     
+    [self setupFetchedResultsControllerUsingContext:context];
+    
+}
+
+- (void)setupFetchedResultsControllerUsingContext:(NSManagedObjectContext *)context
+{
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Team"];
     if(self.eventFilter) {
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%@ IN events", self.eventFilter];
     } else {
         fetchRequest.predicate = nil;
     }
-    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"grouping_text" ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"team_number" ascending:YES]];
     
-    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                        managedObjectContext:context
-                                                                          sectionNameKeyPath:@"grouping_text"
-                                                                                   cacheName:nil];
+    if(self.disableSections) {
+        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"team_number" ascending:YES]];
+        
+        self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                            managedObjectContext:context
+                                                                              sectionNameKeyPath:nil
+                                                                                       cacheName:nil];
+    } else {
+        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"grouping_text" ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"team_number" ascending:YES]];
+        
+        self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                            managedObjectContext:context
+                                                                              sectionNameKeyPath:@"grouping_text"
+                                                                                       cacheName:nil];
+    }
     
 }
 
@@ -41,6 +57,14 @@
         self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%@ IN events", _eventFilter];
     } else {
         self.fetchedResultsController.fetchRequest.predicate = nil;
+    }
+}
+
+- (void)setDisableSections:(BOOL)disableSections
+{
+    _disableSections = disableSections;
+    if(self.context) {
+        [self setupFetchedResultsControllerUsingContext:self.context];
     }
 }
 
