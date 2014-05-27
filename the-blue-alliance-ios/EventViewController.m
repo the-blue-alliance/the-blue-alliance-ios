@@ -38,12 +38,13 @@
     return self;
 }
 
-- (void) setControllers:(NSArray *)controllers
+- (void)generatePages
 {
-    _controllers = controllers;
+    [self.pageView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [self.childViewControllers makeObjectsPerformSelector:@selector(removeFromParentViewController)];
     
     float width = self.view.width;
-    float height = self.view.height - self.navigationController.navigationBar.height - (self.topToolbar.height ? self.topToolbar.height : 44) - 20;
+    float height = self.view.height - (self.topToolbar.height ? self.topToolbar.height : 44);
     for (int i = 0; i < self.controllers.count; i++) {
         UIViewController *controller = self.controllers[i];
         [self addChildViewController:controller];
@@ -115,6 +116,13 @@
     
     [TBAImporter linkTeamsToEvent:self.event usingManagedObjectContext:self.context];
     
+}
+
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    
+    [self generatePages];
 }
 
 
