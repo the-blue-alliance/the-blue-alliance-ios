@@ -109,6 +109,11 @@ const int SPACES_TO_ADD = 3;
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
 - (NSPredicate *)predicateForSearchText:(NSString *)searchText
 {
     if(searchText.length > 0) {
