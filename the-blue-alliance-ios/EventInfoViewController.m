@@ -52,6 +52,23 @@
     }];
     
     
+    // Setup event title overlay over map
+    UIView *darkOverlay = [[UIView alloc] initForAutoLayout];
+    darkOverlay.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.600];
+    [mapView addSubview:darkOverlay];
+    [darkOverlay autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero];
+    
+    UILabel *eventTitle = [[UILabel alloc] initForAutoLayout];
+    eventTitle.text = self.event.friendlyName;
+    eventTitle.textColor = [UIColor whiteColor];
+    eventTitle.font = [UIFont boldSystemFontOfSize:24];
+    eventTitle.textAlignment = NSTextAlignmentLeft;
+    eventTitle.numberOfLines = 0;
+    eventTitle.lineBreakMode = NSLineBreakByWordWrapping;
+    [mapView addSubview:eventTitle];
+    [eventTitle autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsMake(8, 8, 8, 8) excludingEdge:ALEdgeTop];
+    
+    
     // Setup table view
     self.infoTable = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.infoTable.translatesAutoresizingMaskIntoConstraints = NO;
