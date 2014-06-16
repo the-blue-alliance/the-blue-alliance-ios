@@ -35,9 +35,8 @@
     // Setup map view
     MKMapView *mapView = [[MKMapView alloc] initForAutoLayout];
     [self.view addSubview:mapView];
-    [mapView autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:0];
-    [mapView autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:0];
-    [mapView autoSetDimension:ALDimensionHeight toSize:240];
+    [mapView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeBottom];
+    [mapView autoSetDimension:ALDimensionHeight toSize:120];
 
     // Geocode location of event (city, state)
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
@@ -54,19 +53,33 @@
     infoTableView.dataSource = self;
     [self.view addSubview:infoTableView];
     [infoTableView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:mapView];
-    [infoTableView autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:0];
-    [infoTableView autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:0];
+    [infoTableView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
 
+    [self setupEventInfoArray];
 }
 
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (void)setupEventInfoArray
+{
+    
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.infoArray.count;
 }
 
-- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return nil;
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Event Info Cell"];
+    if(!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Event Info Cell"];
+    }
+    
+    EventInfoDataDisplay *info = self.infoArray[indexPath.row];
+    cell.imageView.image = info.icon;
+    cell.textLabel.text = info.text;
+    
+    return cell;
 }
 
 - (void)dateTapped:(UIButton *)button
