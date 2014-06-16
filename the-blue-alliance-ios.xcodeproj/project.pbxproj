@@ -23,6 +23,7 @@
 /* Begin PBXBuildFile section */
 		394BD129CFDF44B78FFF2C94 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDCC6CCFB1A4A199C72C12E /* libPods.a */; };
 		5021450F1933EC7C00604567 /* EventInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5021450D1933EC7C00604567 /* EventInfoViewController.m */; };
+		5040543A194E69A900FFA07B /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50405439194E69A900FFA07B /* CoreLocation.framework */; };
 		5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */; };
 		50832DFB1918BB63003AC8A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFA1918BB63003AC8A7 /* Foundation.framework */; };
 		50832DFD1918BB63003AC8A7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFC1918BB63003AC8A7 /* CoreGraphics.framework */; };
@@ -51,6 +52,7 @@
 		50DFD20419207DD4009B686E /* InsightsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD20319207DD4009B686E /* InsightsViewController.m */; };
 		50DFD20719207DDC009B686E /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD20619207DDC009B686E /* SettingsViewController.m */; };
 		50E65EA719198E5200714328 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50E65EA619198E5200714328 /* QuartzCore.framework */; };
+		50F8ACDE194E655D002088EA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50F8ACDD194E655D002088EA /* MapKit.framework */; };
 		50FF38121931E38000FD7330 /* MatchResultsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50FF38111931E38000FD7330 /* MatchResultsTableViewController.m */; };
 		50FF38151931E38F00FD7330 /* RankingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50FF38141931E38F00FD7330 /* RankingsTableViewController.m */; };
 		9226B13E1932EFD900B7EF43 /* _Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9226B1371932EFD900B7EF43 /* _Event.m */; };
@@ -83,6 +85,7 @@
 		4DDCC6CCFB1A4A199C72C12E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5021450C1933EC7C00604567 /* EventInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventInfoViewController.h; sourceTree = "<group>"; };
 		5021450D1933EC7C00604567 /* EventInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventInfoViewController.m; sourceTree = "<group>"; };
+		50405439194E69A900FFA07B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		5057CD1C1929987D00654304 /* SearchableCoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchableCoreDataTableViewController.h; sourceTree = "<group>"; };
 		5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchableCoreDataTableViewController.m; sourceTree = "<group>"; };
 		50832DF71918BB63003AC8A7 /* the-blue-alliance-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "the-blue-alliance-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,6 +131,7 @@
 		50DFD20519207DDC009B686E /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		50DFD20619207DDC009B686E /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		50E65EA619198E5200714328 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		50F8ACDD194E655D002088EA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		50FF38101931E38000FD7330 /* MatchResultsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchResultsTableViewController.h; sourceTree = "<group>"; };
 		50FF38111931E38000FD7330 /* MatchResultsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchResultsTableViewController.m; sourceTree = "<group>"; };
 		50FF38131931E38F00FD7330 /* RankingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingsTableViewController.h; sourceTree = "<group>"; };
@@ -151,6 +155,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5040543A194E69A900FFA07B /* CoreLocation.framework in Frameworks */,
+				50F8ACDE194E655D002088EA /* MapKit.framework in Frameworks */,
 				50E65EA719198E5200714328 /* QuartzCore.framework in Frameworks */,
 				50832DFD1918BB63003AC8A7 /* CoreGraphics.framework in Frameworks */,
 				50832DFF1918BB63003AC8A7 /* UIKit.framework in Frameworks */,
@@ -196,6 +202,8 @@
 		50832DF91918BB63003AC8A7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				50405439194E69A900FFA07B /* CoreLocation.framework */,
+				50F8ACDD194E655D002088EA /* MapKit.framework */,
 				92C5B872192C129E00AFDBCA /* Reveal.framework */,
 				50E65EA619198E5200714328 /* QuartzCore.framework */,
 				50832E521918BBFF003AC8A7 /* CoreDataTableViewController */,
@@ -215,8 +223,8 @@
 				50832E0A1918BB63003AC8A7 /* AppDelegate.m */,
 				50DFD1F41920365E009B686E /* MenuViewController.h */,
 				50DFD1F51920365E009B686E /* MenuViewController.m */,
-				50FF38161931E3A900FD7330 /* Event Detail Controler */,
 				50DFD20819208524009B686E /* Top Level Controllers */,
+				50FF38161931E3A900FD7330 /* Event Detail Controler */,
 				9226B1351932EFD900B7EF43 /* Models */,
 				50832E151918BB63003AC8A7 /* Images.xcassets */,
 				50832E011918BB63003AC8A7 /* Supporting Files */,
