@@ -12,13 +12,15 @@
 
 #import <CHCSVParser/CHCSVParser.h>
 
+#define kIDHeader @"the-blue-alliance:ios:v0.1"
+
 @implementation TBAImporter
 
 + (id)executeTBAV2Request:(NSString *)request
 {
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.thebluealliance.com/api/v2/%@", request]];
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
-    [urlRequest addValue:@"tba-ios:tba-ios-app:v0.1" forHTTPHeaderField:@"X-TBA-App-Id"];
+    [urlRequest addValue:kIDHeader forHTTPHeaderField:@"X-TBA-App-Id"];
     
     NSURLResponse *response;
     NSError *error;
@@ -73,7 +75,7 @@
     // Do stupid CSV import for now
     NSURL *teamsListURL = [NSURL URLWithString:@"http://www.thebluealliance.com/api/csv/teams/all"];
     NSMutableURLRequest *teamsRequest = [NSMutableURLRequest requestWithURL:teamsListURL];
-    [teamsRequest addValue:@"tba-ios:tba-ios-app:v0.1" forHTTPHeaderField:@"X-TBA-App-Id"];
+    [teamsRequest addValue:kIDHeader forHTTPHeaderField:@"X-TBA-App-Id"];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSURLResponse *response;
