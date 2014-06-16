@@ -18,9 +18,14 @@
 @property (nonatomic, strong) UIImage *icon;
 @end
 
+@implementation EventInfoDataDisplay
+@end
+
 
 @interface EventInfoViewController ()
+@property (nonatomic, strong) UITableView *infoTable;
 @property (nonatomic, strong) NSArray *infoArray; // Array of EventInfoDataDisplay objects
+@property (nonatomic, strong) NSLayoutConstraint *tableHeightConstraint;
 @end
 
 @implementation EventInfoViewController
@@ -48,19 +53,45 @@
     
     
     // Setup table view
-    UITableView *infoTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-    infoTableView.translatesAutoresizingMaskIntoConstraints = NO;
-    infoTableView.dataSource = self;
-    [self.view addSubview:infoTableView];
-    [infoTableView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:mapView];
-    [infoTableView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
+    self.infoTable = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+    self.infoTable.translatesAutoresizingMaskIntoConstraints = NO;
+    self.infoTable.dataSource = self;
+    self.infoTable.delegate = self;
+    [self.view addSubview:self.infoTable];
+    [self.infoTable autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:mapView];
+    [self.infoTable autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:0];
+    [self.infoTable autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:0];
+    self.tableHeightConstraint = [self.infoTable autoSetDimension:ALDimensionHeight toSize:300];
 
     [self setupEventInfoArray];
 }
 
 - (void)setupEventInfoArray
 {
+    EventInfoDataDisplay *websiteInfo = [[EventInfoDataDisplay alloc] init];
+    websiteInfo.text = self.event.website ? self.event.website : @"No website";
+    websiteInfo.icon = [UIImage imageNamed:@"website"];
     
+    EventInfoDataDisplay *dateInfo = [[EventInfoDataDisplay alloc] init];
+    dateInfo.text = [self eventDateFriendlyText];
+    dateInfo.icon = [UIImage imageNamed:@"calendar"];
+    
+    EventInfoDataDisplay *locationInfo = [[EventInfoDataDisplay alloc] init];
+    locationInfo.text = self.event.location;
+    locationInfo.icon = [UIImage imageNamed:@"location"];
+    
+    self.infoArray = @[websiteInfo, dateInfo, locationInfo];
+    [self.infoTable reloadData];
+    
+    self.tableHeightConstraint.constant = self.infoArray.count * 44;
+}
+
+- (NSString *)eventDateFriendlyText
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateStyle = NSDateFormatterMediumStyle;
+    
+    return [NSString stringWithFormat:@"%@ to %@", [formatter stringFromDate:self.event.start_date], [formatter stringFromDate:self.event.end_date]];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -82,14 +113,9 @@
     return cell;
 }
 
-- (void)dateTapped:(UIButton *)button
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"Date tapped... save event to calendar?");
-}
-
-- (void)locationTapped:(UIButton *)button
-{
-    NSLog(@"Location tapped... open in maps?");
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 

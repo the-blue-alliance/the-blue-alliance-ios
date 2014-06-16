@@ -49,6 +49,7 @@
     event.start_date = [formatter dateFromString:info[@"start_date"]] ? [formatter dateFromString:info[@"start_date"]] : defaultDate;
     event.end_date = [formatter dateFromString:info[@"end_date"]];
     event.event_type = info[@"event_type"];
+    event.website = info[@"website"];
     event.last_updated = @([[NSDate date] timeIntervalSince1970]);
     
     if(!event.start_date) {
