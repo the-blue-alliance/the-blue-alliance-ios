@@ -13,7 +13,7 @@
  *  This view shows information for a specific event, such as date,
  *  location, top teams, etc
  */
-@interface EventInfoViewController : UIViewController
+@interface EventInfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) Event *event;
 
