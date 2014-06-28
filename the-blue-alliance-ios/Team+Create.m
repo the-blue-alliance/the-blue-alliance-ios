@@ -58,7 +58,7 @@
     return team;
 }
 
-+ (NSArray *) createTeamsFromTBAInfoArray:(NSArray *)infoArray
++ (NSArray *)createTeamsFromTBAInfoArray:(NSArray *)infoArray
            usingManagedObjectContext:(NSManagedObjectContext *)context
 {
     NSMutableArray *returnTeams = [[NSMutableArray alloc] init];

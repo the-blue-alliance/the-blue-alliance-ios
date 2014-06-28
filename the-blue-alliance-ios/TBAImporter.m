@@ -10,8 +10,6 @@
 #import "Event+Create.h"
 #import "Team+Create.h"
 
-#import <CHCSVParser/CHCSVParser.h>
-
 #define kIDHeader @"the-blue-alliance:ios:v0.1"
 
 @implementation TBAImporter
@@ -72,39 +70,20 @@
 
 + (void)importTeamsUsingManagedObjectContext:(NSManagedObjectContext *)context
 {
-    // Do stupid CSV import for now
-    NSURL *teamsListURL = [NSURL URLWithString:@"http://www.thebluealliance.com/api/csv/teams/all"];
-    NSMutableURLRequest *teamsRequest = [NSMutableURLRequest requestWithURL:teamsListURL];
-    [teamsRequest addValue:kIDHeader forHTTPHeaderField:@"X-TBA-App-Id"];
+    __block int page = 0;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSURLResponse *response;
-        NSError *error;
-        NSData *data = [NSURLConnection sendSynchronousRequest:teamsRequest returningResponse:&response error:&error];
-        
-        NSString *csvString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-        csvString = [csvString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        
-        NSArray *teamLines = [csvString CSVComponents];
-        NSArray *keys = [teamLines firstObject];
-        
-        NSMutableArray *teamInfoArray = [[NSMutableArray alloc] init];
-        for (int i = 1; i < teamLines.count; i++) {
-            NSArray *values = teamLines[i];
-            if(values.count != keys.count) {
-                NSLog(@"Invalid CSV line: %@", teamLines[i]);
-                [NSException raise:@"Invalid CSV line: values count doesn't match key count" format:@"keys(%d) = %@, values(%d) = %@", (int)keys.count, keys, (int)values.count, values];
-            } else {
-                NSMutableDictionary *infoDict = [[NSMutableDictionary alloc] initWithObjects:values forKeys:keys];
-                if([infoDict[@"team_number"] intValue] > 0) {
-                    infoDict[@"key"] = [NSString stringWithFormat:@"frc%@", infoDict[@"team_number"]];
-                    [teamInfoArray addObject:infoDict];
-                }
-            }
+        NSMutableArray *downloadedTeams = [[NSMutableArray alloc] init];
+        NSArray *teams = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"teams/%d", page]];
+
+        while (teams && [teams count] > 0) {
+            [downloadedTeams addObjectsFromArray:teams];
+            page++;
+            teams = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"teams/%d", page]];
         }
-        
+
         dispatch_async(dispatch_get_main_queue(), ^{
-            [Team createTeamsFromTBAInfoArray:teamInfoArray usingManagedObjectContext:context];
+            [Team createTeamsFromTBAInfoArray:downloadedTeams usingManagedObjectContext:context];
         });
     });
 }
