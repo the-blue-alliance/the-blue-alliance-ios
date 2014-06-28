@@ -101,4 +101,18 @@
     
 }
 
++ (void)importRankingsForEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context callback:(void (^)(NSString *rankingsString))callback;
+{
+    NSString *eventKey = event.key;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray *rankArray = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"event/%@/rankings", eventKey]];
+        NSString *rankingsString = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:rankArray options:0 error:nil] encoding:NSUTF8StringEncoding];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            event.rankings = rankingsString;
+            [context save:nil];
+            callback(rankingsString);
+        });
+    });
+}
+
 @end

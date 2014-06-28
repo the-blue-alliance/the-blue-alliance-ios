@@ -109,11 +109,12 @@
     tvc.eventFilter = self.event;
     tvc.context = self.context;
     tvc.disableSections = YES;
-//    tvc.tableView.contentInset = UIEdgeInsetsMake(44, 0, 0, 0);
     
     MatchResultsTableViewController *mrvc = [[MatchResultsTableViewController alloc] initWithStyle:UITableViewStylePlain];
     
     RankingsTableViewController *rvc = [[RankingsTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    rvc.context = self.context;
+    rvc.event = self.event;
     
     
     self.controllers = @[eivc, tvc, mrvc, rvc];

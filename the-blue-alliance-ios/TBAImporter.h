@@ -34,4 +34,12 @@
  */
 + (void)linkTeamsToEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context;
 
+/** Downloads a list of rankings at an event and saves it on the event object
+ *
+ * @param event The event to download rankings for
+ * @param context The context of the database used for importing
+ * @param callback A block invoked with the rankings string once it has been downloaded
+ */
++ (void)importRankingsForEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context callback:(void (^)(NSString *rankingsString))callback;
+
 @end
