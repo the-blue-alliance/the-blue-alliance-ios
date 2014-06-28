@@ -125,6 +125,8 @@
     
     EventInfoDataDisplay *info = self.infoArray[indexPath.row];
     cell.imageView.image = info.icon;
+    cell.textLabel.adjustsFontSizeToFitWidth = YES;
+    cell.textLabel.minimumScaleFactor = 0.5;
     cell.textLabel.text = info.text;
     
     return cell;
