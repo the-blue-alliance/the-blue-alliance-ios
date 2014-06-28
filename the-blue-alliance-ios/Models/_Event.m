@@ -27,6 +27,7 @@ const struct EventAttributes EventAttributes = {
 };
 
 const struct EventRelationships EventRelationships = {
+	.matches = @"matches",
 	.teams = @"teams",
 };
 
@@ -349,6 +350,19 @@ const struct EventFetchedProperties EventFetchedProperties = {
 
 
 
+
+@dynamic matches;
+
+	
+- (NSMutableSet*)matchesSet {
+	[self willAccessValueForKey:@"matches"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"matches"];
+  
+	[self didAccessValueForKey:@"matches"];
+	return result;
+}
+	
 
 @dynamic teams;
 

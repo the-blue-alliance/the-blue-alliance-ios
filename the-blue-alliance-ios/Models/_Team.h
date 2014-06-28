@@ -18,12 +18,14 @@ extern const struct TeamAttributes {
 
 extern const struct TeamRelationships {
 	__unsafe_unretained NSString *events;
+	__unsafe_unretained NSString *media;
 } TeamRelationships;
 
 extern const struct TeamFetchedProperties {
 } TeamFetchedProperties;
 
 @class Event;
+@class NSManagedObject;
 
 
 
@@ -153,6 +155,13 @@ extern const struct TeamFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *media;
+
+- (NSMutableSet*)mediaSet;
+
+
+
+
 
 @end
 
@@ -162,6 +171,11 @@ extern const struct TeamFetchedProperties {
 - (void)removeEvents:(NSSet*)value_;
 - (void)addEventsObject:(Event*)value_;
 - (void)removeEventsObject:(Event*)value_;
+
+- (void)addMedia:(NSSet*)value_;
+- (void)removeMedia:(NSSet*)value_;
+- (void)addMediaObject:(NSManagedObject*)value_;
+- (void)removeMediaObject:(NSManagedObject*)value_;
 
 @end
 
@@ -231,6 +245,11 @@ extern const struct TeamFetchedProperties {
 
 - (NSMutableSet*)primitiveEvents;
 - (void)setPrimitiveEvents:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveMedia;
+- (void)setPrimitiveMedia:(NSMutableSet*)value;
 
 
 @end

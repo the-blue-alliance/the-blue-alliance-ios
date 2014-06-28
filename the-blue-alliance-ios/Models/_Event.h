@@ -28,12 +28,14 @@ extern const struct EventAttributes {
 } EventAttributes;
 
 extern const struct EventRelationships {
+	__unsafe_unretained NSString *matches;
 	__unsafe_unretained NSString *teams;
 } EventRelationships;
 
 extern const struct EventFetchedProperties {
 } EventFetchedProperties;
 
+@class NSManagedObject;
 @class Team;
 
 
@@ -294,6 +296,13 @@ extern const struct EventFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *matches;
+
+- (NSMutableSet*)matchesSet;
+
+
+
+
 @property (nonatomic, strong) NSSet *teams;
 
 - (NSMutableSet*)teamsSet;
@@ -305,6 +314,11 @@ extern const struct EventFetchedProperties {
 @end
 
 @interface _Event (CoreDataGeneratedAccessors)
+
+- (void)addMatches:(NSSet*)value_;
+- (void)removeMatches:(NSSet*)value_;
+- (void)addMatchesObject:(NSManagedObject*)value_;
+- (void)removeMatchesObject:(NSManagedObject*)value_;
 
 - (void)addTeams:(NSSet*)value_;
 - (void)removeTeams:(NSSet*)value_;
@@ -452,6 +466,11 @@ extern const struct EventFetchedProperties {
 - (void)setPrimitiveYearValue:(int32_t)value_;
 
 
+
+
+
+- (NSMutableSet*)primitiveMatches;
+- (void)setPrimitiveMatches:(NSMutableSet*)value;
 
 
 

@@ -17,6 +17,7 @@ const struct TeamAttributes TeamAttributes = {
 
 const struct TeamRelationships TeamRelationships = {
 	.events = @"events",
+	.media = @"media",
 };
 
 const struct TeamFetchedProperties TeamFetchedProperties = {
@@ -175,6 +176,19 @@ const struct TeamFetchedProperties TeamFetchedProperties = {
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"events"];
   
 	[self didAccessValueForKey:@"events"];
+	return result;
+}
+	
+
+@dynamic media;
+
+	
+- (NSMutableSet*)mediaSet {
+	[self willAccessValueForKey:@"media"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"media"];
+  
+	[self didAccessValueForKey:@"media"];
 	return result;
 }
 	

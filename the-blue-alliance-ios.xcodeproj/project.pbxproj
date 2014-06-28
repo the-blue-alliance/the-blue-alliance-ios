@@ -113,6 +113,7 @@
 		50832E3D1918BBEA003AC8A7 /* EventsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsTableViewController.m; sourceTree = "<group>"; };
 		50832E531918BBFF003AC8A7 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
 		50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
+		50A88D70195F784E001F8A3D /* The Blue Alliance 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 4.xcdatamodel"; sourceTree = "<group>"; };
 		50C0FC211931743700670A64 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
 		50C0FC221931743700670A64 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
 		50CDA22919300C6300C8906D /* TBAImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TBAImporter.h; path = ../TBAImporter.h; sourceTree = "<group>"; };
@@ -628,6 +629,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				MOMC_NO_INVERSE_RELATIONSHIP_WARNINGS = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -661,6 +663,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				MOMC_NO_INVERSE_RELATIONSHIP_WARNINGS = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -681,6 +684,7 @@
 				GCC_PREFIX_HEADER = "the-blue-alliance-ios/the-blue-alliance-ios-Prefix.pch";
 				INFOPLIST_FILE = "the-blue-alliance-ios/the-blue-alliance-ios-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MOMC_NO_INVERSE_RELATIONSHIP_WARNINGS = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -700,6 +704,7 @@
 				GCC_PREFIX_HEADER = "the-blue-alliance-ios/the-blue-alliance-ios-Prefix.pch";
 				INFOPLIST_FILE = "the-blue-alliance-ios/the-blue-alliance-ios-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MOMC_NO_INVERSE_RELATIONSHIP_WARNINGS = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -805,10 +810,11 @@
 			isa = XCVersionGroup;
 			children = (
 				927547AD193181E800785260 /* The Blue Alliance 3.xcdatamodel */,
+				50A88D70195F784E001F8A3D /* The Blue Alliance 4.xcdatamodel */,
 				50CDA22F19302C9100C8906D /* The Blue Alliance 2.xcdatamodel */,
 				50832E331918BB8E003AC8A7 /* The Blue Alliance.xcdatamodel */,
 			);
-			currentVersion = 927547AD193181E800785260 /* The Blue Alliance 3.xcdatamodel */;
+			currentVersion = 50A88D70195F784E001F8A3D /* The Blue Alliance 4.xcdatamodel */;
 			name = "The Blue Alliance.xcdatamodeld";
 			path = "../The Blue Alliance.xcdatamodeld";
 			sourceTree = "<group>";
