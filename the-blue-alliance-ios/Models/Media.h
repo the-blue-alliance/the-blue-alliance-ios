@@ -14,6 +14,4 @@
 
 @interface Media : _Media <NSManagedObjectCreatable>
 
-
-
 @end

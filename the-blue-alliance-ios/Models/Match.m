@@ -35,6 +35,7 @@
     self.redAlliance = [[NSOrderedSet alloc] initWithArray:redTeams];
     
     // Create media for a match:
+    self.media = [NSSet setWithArray:[Media createManagedObjectsFromInfoArray:info[@"videos"] checkingPrexistanceUsingUniqueKey:@"key" usingManagedObjectContext:context]];
 }
 
 @end

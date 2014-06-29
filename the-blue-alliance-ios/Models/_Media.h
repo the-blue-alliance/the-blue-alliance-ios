@@ -6,6 +6,7 @@
 
 extern const struct MediaAttributes {
 	__unsafe_unretained NSString *cachedData;
+	__unsafe_unretained NSString *key;
 	__unsafe_unretained NSString *type;
 	__unsafe_unretained NSString *url;
 } MediaAttributes;
@@ -15,6 +16,7 @@ extern const struct MediaRelationships {
 
 extern const struct MediaFetchedProperties {
 } MediaFetchedProperties;
+
 
 
 
@@ -39,6 +41,16 @@ extern const struct MediaFetchedProperties {
 
 
 //- (BOOL)validateCachedData:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* key;
+
+
+
+//- (BOOL)validateKey:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -76,6 +88,12 @@ extern const struct MediaFetchedProperties {
 
 - (NSData*)primitiveCachedData;
 - (void)setPrimitiveCachedData:(NSData*)value;
+
+
+
+
+- (NSString*)primitiveKey;
+- (void)setPrimitiveKey:(NSString*)value;
 
 
 
