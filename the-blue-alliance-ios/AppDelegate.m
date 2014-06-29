@@ -15,8 +15,6 @@
 #import "InsightsViewController.h"
 #import "SettingsViewController.h"
 
-#import "Event+Create.h"
-
 #import <TWTSideMenuViewController/TWTSideMenuViewController.h>
 #import <MZFormSheetController/MZFormSheetController.h>
 

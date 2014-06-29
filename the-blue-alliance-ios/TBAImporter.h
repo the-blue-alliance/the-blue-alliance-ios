@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "Event.h"
+#import "Team.h"
+#import "Match.h"
 
 /** `TBAImporter` is a utility class used to encapsulate the various downloading
  * logic for importing data from TBA API.

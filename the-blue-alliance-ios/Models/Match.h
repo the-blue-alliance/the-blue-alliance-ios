@@ -9,11 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "_Match.h"
+#import "NSManagedObject+Create.h"
 
-@class Event, Media, Team;
-
-@interface Match : _Match
-
+@interface Match : _Match <NSManagedObjectCreatable>
 
 
 @end

@@ -1,13 +1,5 @@
 #import "Event.h"
 
-
-@interface Event ()
-
-// Private interface goes here.
-
-@end
-
-
 @implementation Event
 @dynamic key;
 
@@ -35,6 +27,37 @@
     }
     
     return [NSString stringWithFormat:@"%@ %@", withYear, typeSuffix];
+}
+
+
+- (void)configureSelfForInfo:(NSDictionary *)info usingManagedObjectContext:(NSManagedObjectContext *)context {
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyy-MM-dd";
+    
+    NSDateComponents *comp = [[NSDateComponents alloc] init];
+    comp.year = [info[@"year"] integerValue];
+    NSDate *defaultDate = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] dateFromComponents:comp];
+    
+    self.key = info[@"key"];
+    self.name = info[@"name"];
+    self.short_name = info[@"short_name"];
+    self.official = info[@"official"];
+    self.year = info[@"year"];
+    self.location = info[@"location"];
+    self.event_short = info[@"event_code"];
+    self.start_date = [formatter dateFromString:info[@"start_date"]] ? [formatter dateFromString:info[@"start_date"]] : defaultDate;
+    self.end_date = [formatter dateFromString:info[@"end_date"]];
+    self.event_type = info[@"event_type"];
+    self.website = info[@"website"];
+    self.last_updated = @([[NSDate date] timeIntervalSince1970]);
+    
+    if(!self.start_date) {
+        NSLog(@"Event inserted without a start date... INVALID!");
+        [NSException raise:@"start_date is invalid" format:@"start_date of %@ is invalid for the event key %@", info[@"start_date"], info[@"key"]];
+    }
+    
+    // TODO: Finish / improve importing
 }
 
 @end

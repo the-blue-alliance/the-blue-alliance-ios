@@ -7,9 +7,7 @@
 //
 
 #import "TBAImporter.h"
-#import "Event+Create.h"
-#import "Team+Create.h"
-#import "Match+Create.h"
+#import "NSManagedObject+Create.h"
 
 #define kIDHeader @"the-blue-alliance:ios:v0.1"
 
@@ -63,7 +61,9 @@
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [Event createEventsFromTBAInfoArray:downloadedEvents usingManagedObjectContext:context];
+            [Event createManagedObjectsFromInfoArray:downloadedEvents
+                   checkingPrexistanceUsingUniqueKey:@"key"
+                           usingManagedObjectContext:context];
         });
     });
 }
@@ -84,7 +84,9 @@
         }
 
         dispatch_async(dispatch_get_main_queue(), ^{
-            [Team createTeamsFromTBAInfoArray:downloadedTeams usingManagedObjectContext:context];
+            [Team createManagedObjectsFromInfoArray:downloadedTeams
+                  checkingPrexistanceUsingUniqueKey:@"key"
+                          usingManagedObjectContext:context];
         });
     });
 }
@@ -95,8 +97,10 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSArray *teamList = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"event/%@/teams", eventKey]];
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSArray *teams = [Team createTeamsFromTBAInfoArray:teamList usingManagedObjectContext:context];
-            [event setTeams:[NSSet setWithArray:teams]];
+            NSArray *teams = [Team createManagedObjectsFromInfoArray:teamList
+                                   checkingPrexistanceUsingUniqueKey:@"key"
+                                           usingManagedObjectContext:context];
+            event.teams = [NSSet setWithArray:teams];
         });
     });
     
@@ -117,12 +121,19 @@
 }
 
 
-+ (void)importMatchesForEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context callback:(void (^)(NSSet *matches))callback {
++ (void)importMatchesForEvent:(Event *)event
+    usingManagedObjectContext:(NSManagedObjectContext *)context
+                     callback:(void (^)(NSSet *matches))callback {
+    
     NSString *eventKey = event.key;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSArray *matchDicts = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"event/%@/matches", eventKey]];
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSSet *matches = [Match createMatchesFromTBAInfoArray:matchDicts usingManagedObjectContext:context];
+            NSArray *matchesArray = [Match createManagedObjectsFromInfoArray:matchDicts
+                                    checkingPrexistanceUsingUniqueKey:@"key"
+                                            usingManagedObjectContext:context];
+            NSSet *matches = [NSSet setWithArray:matchesArray];
+            
             event.matches = matches;
             
             [context save:nil];

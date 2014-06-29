@@ -11,7 +11,6 @@
 
 @implementation Media
 
-@dynamic type;
-@dynamic url;
+
 
 @end
