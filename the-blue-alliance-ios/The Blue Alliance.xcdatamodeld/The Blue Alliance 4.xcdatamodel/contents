@@ -38,6 +38,7 @@
         <relationship name="redAlliance" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Media" representedClassName="Media" syncable="YES">
+        <attribute name="cachedData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
@@ -57,7 +58,7 @@
     <elements>
         <element name="Event" positionX="-1485" positionY="1920" width="128" height="375"/>
         <element name="Match" positionX="-1242" positionY="1917" width="128" height="208"/>
-        <element name="Media" positionX="-965" positionY="2159" width="128" height="73"/>
+        <element name="Media" positionX="-965" positionY="2159" width="128" height="88"/>
         <element name="Team" positionX="-1242" positionY="2277" width="128" height="208"/>
     </elements>
 </model>

@@ -11,6 +11,10 @@
 
 @implementation Media
 
-
+- (void)configureSelfForInfo:(NSDictionary *)info
+   usingManagedObjectContext:(NSManagedObjectContext *)context {
+    
+    
+}
 
 @end

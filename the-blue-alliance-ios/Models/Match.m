@@ -33,6 +33,8 @@
     NSArray *redTeams = [Team fetchTeamsForKeys:redTeamKeys fromContext:context];
     self.blueAlliance = [[NSOrderedSet alloc] initWithArray:blueTeams];
     self.redAlliance = [[NSOrderedSet alloc] initWithArray:redTeams];
+    
+    // Create media for a match:
 }
 
 @end

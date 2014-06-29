@@ -31,10 +31,12 @@
 /** Creates and inserts an NSManagedObject into the database for a dictionary of information
  *
  * @param info A dictionary containing keys that specify properties for the object
+ * @param key A unique key used to check for pre-existance of the object, or nil to not check.
  * @param context The context for Core Data
  * @return A managed object created with the given data
  */
 + (instancetype)createManagedObjectFromInfo:(NSDictionary *)info
+          checkingPrexistanceUsingUniqueKey:(NSString *)key
       usingManagedObjectContext:(NSManagedObjectContext *)context;
 
 

@@ -4,6 +4,7 @@
 #import "_Media.h"
 
 const struct MediaAttributes MediaAttributes = {
+	.cachedData = @"cachedData",
 	.type = @"type",
 	.url = @"url",
 };
@@ -43,6 +44,13 @@ const struct MediaFetchedProperties MediaFetchedProperties = {
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic cachedData;
+
+
 
 
 

@@ -25,6 +25,7 @@
 }
 
 + (instancetype)createManagedObjectFromInfo:(NSDictionary *)info
+          checkingPrexistanceUsingUniqueKey:(NSString *)key
                   usingManagedObjectContext:(NSManagedObjectContext *)context {
     
     // Check for implementation of protocol
@@ -34,18 +35,41 @@
         return nil;
     }
     
+    // Check for pre-existing object
+    NSManagedObject<NSManagedObjectCreatable> *object = nil;
+    if(key) {
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription entityForName:className inManagedObjectContext:context];
+        [fetchRequest setEntity:entity];
+        
+        // Specify criteria for filtering which objects to fetch
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key = %@", key];
+        [fetchRequest setPredicate:predicate];
+        
+        NSError *error = nil;
+        NSArray *existingObjs = [context executeFetchRequest:fetchRequest error:&error];
+        if(existingObjs.count == 1) {
+            object = [existingObjs firstObject];
+        } else if(existingObjs.count > 1) {
+            [NSException raise:@"Corrup database!" format:@"There are multiple %@'s with unique key %@", className, key];
+            return nil;
+        }
+    }
+    
+    if(object == nil) {
+        object = [NSEntityDescription insertNewObjectForEntityForName:className
+                                               inManagedObjectContext:context];
+    }
+    
     // Validates the dictionary and makes it safe to pull data from
     info = [NSManagedObject normalizeTeamInfoDictionary:info];
     
     
-    id obj = [NSEntityDescription insertNewObjectForEntityForName:className
-                                               inManagedObjectContext:context];
+    [object configureSelfForInfo:info usingManagedObjectContext:context];
     
-    [obj configureSelfForInfo:info usingManagedObjectContext:context];
+    NSLog(@"Imported object %@ into the database", object);
     
-    NSLog(@"Imported object %@ into the database", obj);
-    
-    return obj;
+    return object;
 }
 
 
@@ -86,7 +110,9 @@
     
     for (NSDictionary *infoDict in infoArray) {
         if(![existingKeySet containsObject:infoDict[key]]) {
-            [returnObjs addObject:[self createManagedObjectFromInfo:infoDict usingManagedObjectContext:context]];
+            [returnObjs addObject:[self createManagedObjectFromInfo:infoDict
+                                  checkingPrexistanceUsingUniqueKey:nil
+                                          usingManagedObjectContext:context]];
         } else {
             [returnObjs addObject:existingObjsDict[infoDict[key]]];
         }

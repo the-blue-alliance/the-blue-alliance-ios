@@ -5,6 +5,7 @@
 
 
 extern const struct MediaAttributes {
+	__unsafe_unretained NSString *cachedData;
 	__unsafe_unretained NSString *type;
 	__unsafe_unretained NSString *url;
 } MediaAttributes;
@@ -19,6 +20,7 @@ extern const struct MediaFetchedProperties {
 
 
 
+
 @interface MediaID : NSManagedObjectID {}
 @end
 
@@ -27,6 +29,16 @@ extern const struct MediaFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (MediaID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSData* cachedData;
+
+
+
+//- (BOOL)validateCachedData:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -60,6 +72,12 @@ extern const struct MediaFetchedProperties {
 @end
 
 @interface _Media (CoreDataGeneratedPrimitiveAccessors)
+
+
+- (NSData*)primitiveCachedData;
+- (void)setPrimitiveCachedData:(NSData*)value;
+
+
 
 
 - (NSString*)primitiveType;

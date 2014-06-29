@@ -9,9 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "_Media.h"
+#import "NSManagedObject+Create.h"
 
 
-@interface Media : _Media
+@interface Media : _Media <NSManagedObjectCreatable>
 
 
 
