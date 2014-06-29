@@ -32,13 +32,57 @@
 - (void)setSections:(NSArray *)sections {
     _sections = sections;
     [self.tableView reloadData];
-    
-//    NSLog(@"Sections: %@", sections);
 }
 
 - (NSArray *)generateSectionsForMatches:(NSArray *)matches {
-    // TODO: Generate grouped table view for matches
-    return nil;
+    // Get the types of matches
+    NSArray *quals = [matches filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"comp_level = %@", @"qm"]];
+    NSArray *efs = [matches filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"comp_level = %@", @"ef"]];
+    NSArray *qfs = [matches filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"comp_level = %@", @"qf"]];
+    NSArray *sfs = [matches filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"comp_level = %@", @"sf"]];
+    NSArray *fs = [matches filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"comp_level = %@", @"f"]];
+    
+    // Sort the matches by match number
+    NSSortDescriptor *matchNumSort = [NSSortDescriptor sortDescriptorWithKey:@"match_number" ascending:NO];
+    NSSortDescriptor *setNumSort = [NSSortDescriptor sortDescriptorWithKey:@"set_number" ascending:NO];
+    NSArray *elimsSorter = @[setNumSort, matchNumSort];
+
+    quals = [quals sortedArrayUsingDescriptors:@[matchNumSort]];
+    efs = [efs sortedArrayUsingDescriptors:elimsSorter];
+    qfs = [qfs sortedArrayUsingDescriptors:elimsSorter];
+    sfs = [sfs sortedArrayUsingDescriptors:elimsSorter];
+    fs = [fs sortedArrayUsingDescriptors:elimsSorter];
+
+    // Create sections for the match types
+    NSDictionary *qualsSection = @{@"title": @"Qualification Matches",
+                                   @"objects": quals};
+    NSDictionary *efsSection = @{@"title": @"Eighthfinal Matches",
+                                   @"objects": efs};
+    NSDictionary *qfsSection = @{@"title": @"Quarterfinal Matches",
+                                   @"objects": qfs};
+    NSDictionary *sfsSection = @{@"title": @"Semifinal Matches",
+                                 @"objects": sfs};
+    NSDictionary *fsSection = @{@"title": @"Final Matches",
+                                 @"objects": fs};
+    
+    NSMutableArray *sections = [[NSMutableArray alloc] init];
+    if([fsSection[@"objects"] count]) {
+        [sections addObject:fsSection];
+    }
+    if([sfsSection[@"objects"] count]) {
+        [sections addObject:sfsSection];
+    }
+    if([qfsSection[@"objects"] count]) {
+        [sections addObject:qfsSection];
+    }
+    if([efsSection[@"objects"] count]) {
+        [sections addObject:efsSection];
+    }
+    if([qualsSection[@"objects"] count]) {
+        [sections addObject:qualsSection];
+    }
+    
+    return sections;
 }
 
 - (void)viewDidLoad
@@ -47,17 +91,31 @@
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Match Cell"];
 }
 
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    return self.matches.count;
-//}
-//
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Match Cell" forIndexPath:indexPath];
-//    
-//    Match *match = self.matches[indexPath.row];
-//    cell.textLabel.text = match.key;
-//    
-//    return cell;
-//}
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return self.sections.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.sections[section][@"objects"] count];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return self.sections[section][@"title"];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Match Cell" forIndexPath:indexPath];
+    
+    Match *match = self.sections[indexPath.section][@"objects"][indexPath.row];
+    cell.textLabel.text = match.key;
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    view.tintColor = [UIColor TBATableViewSeparatorColor];
+}
+
 
 @end
