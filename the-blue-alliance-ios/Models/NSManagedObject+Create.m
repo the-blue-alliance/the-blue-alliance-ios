@@ -67,7 +67,7 @@
     
     [object configureSelfForInfo:info usingManagedObjectContext:context];
     
-    NSLog(@"Imported object %@ into the database", object);
+//    NSLog(@"Imported object %@ into the database", object);
     
     return object;
 }

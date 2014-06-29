@@ -29,7 +29,7 @@
     // Put existingTeams into the order the keys were provided, and insert NSNull for a team that doesn't exist
     NSMutableArray *teams = [[NSMutableArray alloc] init];
     for (NSString *key in keys) {
-        int index = [existingTeams indexOfObjectPassingTest:^BOOL(Team *obj, NSUInteger idx, BOOL *stop) {
+        NSUInteger index = [existingTeams indexOfObjectPassingTest:^BOOL(Team *obj, NSUInteger idx, BOOL *stop) {
             return [obj.key isEqualToString:key];
         }];
         if(index == NSNotFound) {
