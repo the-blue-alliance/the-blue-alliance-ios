@@ -33,11 +33,12 @@
     _sections = sections;
     [self.tableView reloadData];
     
-    NSLog(@"Sections: %@", sections);
+//    NSLog(@"Sections: %@", sections);
 }
 
 - (NSArray *)generateSectionsForMatches:(NSArray *)matches {
-    return matches;
+    // TODO: Generate grouped table view for matches
+    return nil;
 }
 
 - (void)viewDidLoad

@@ -4,9 +4,11 @@
 #import "_Match.h"
 
 const struct MatchAttributes MatchAttributes = {
+	.blueScore = @"blueScore",
 	.comp_level = @"comp_level",
 	.key = @"key",
 	.match_number = @"match_number",
+	.redScore = @"redScore",
 	.set_number = @"set_number",
 	.time_string = @"time_string",
 };
@@ -47,8 +49,18 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"blueScoreValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"blueScore"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 	if ([key isEqualToString:@"match_numberValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"match_number"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"redScoreValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"redScore"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -60,6 +72,32 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic blueScore;
+
+
+
+- (int32_t)blueScoreValue {
+	NSNumber *result = [self blueScore];
+	return [result intValue];
+}
+
+- (void)setBlueScoreValue:(int32_t)value_ {
+	[self setBlueScore:[NSNumber numberWithInt:value_]];
+}
+
+- (int32_t)primitiveBlueScoreValue {
+	NSNumber *result = [self primitiveBlueScore];
+	return [result intValue];
+}
+
+- (void)setPrimitiveBlueScoreValue:(int32_t)value_ {
+	[self setPrimitiveBlueScore:[NSNumber numberWithInt:value_]];
+}
+
 
 
 
@@ -104,6 +142,32 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 
 
 
+@dynamic redScore;
+
+
+
+- (int32_t)redScoreValue {
+	NSNumber *result = [self redScore];
+	return [result intValue];
+}
+
+- (void)setRedScoreValue:(int32_t)value_ {
+	[self setRedScore:[NSNumber numberWithInt:value_]];
+}
+
+- (int32_t)primitiveRedScoreValue {
+	NSNumber *result = [self primitiveRedScore];
+	return [result intValue];
+}
+
+- (void)setPrimitiveRedScoreValue:(int32_t)value_ {
+	[self setPrimitiveRedScore:[NSNumber numberWithInt:value_]];
+}
+
+
+
+
+
 @dynamic set_number;
 
 
@@ -140,10 +204,10 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 @dynamic blueAlliance;
 
 	
-- (NSMutableSet*)blueAllianceSet {
+- (NSMutableOrderedSet*)blueAllianceSet {
 	[self willAccessValueForKey:@"blueAlliance"];
   
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"blueAlliance"];
+	NSMutableOrderedSet *result = (NSMutableOrderedSet*)[self mutableOrderedSetValueForKey:@"blueAlliance"];
   
 	[self didAccessValueForKey:@"blueAlliance"];
 	return result;
@@ -170,10 +234,10 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 @dynamic redAlliance;
 
 	
-- (NSMutableSet*)redAllianceSet {
+- (NSMutableOrderedSet*)redAllianceSet {
 	[self willAccessValueForKey:@"redAlliance"];
   
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"redAlliance"];
+	NSMutableOrderedSet *result = (NSMutableOrderedSet*)[self mutableOrderedSetValueForKey:@"redAlliance"];
   
 	[self didAccessValueForKey:@"redAlliance"];
 	return result;

@@ -9,6 +9,7 @@
 #import "TBAImporter.h"
 #import "Event+Create.h"
 #import "Team+Create.h"
+#import "Match+Create.h"
 
 #define kIDHeader @"the-blue-alliance:ios:v0.1"
 
@@ -121,9 +122,8 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSArray *matchDicts = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"event/%@/matches", eventKey]];
         dispatch_async(dispatch_get_main_queue(), ^{
-            // TODO: Parse matchDicts into Core Data
-            // event.matches =
-            NSSet *matches = nil;
+            NSSet *matches = [Match createMatchesFromTBAInfoArray:matchDicts usingManagedObjectContext:context];
+            event.matches = matches;
             
             [context save:nil];
             callback(matches);

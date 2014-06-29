@@ -25,6 +25,8 @@
 		5021450F1933EC7C00604567 /* EventInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5021450D1933EC7C00604567 /* EventInfoViewController.m */; };
 		5022C845195F8BDD008F0131 /* _Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 5022C842195F8BDD008F0131 /* _Match.m */; };
 		5022C846195F8BDD008F0131 /* _Media.m in Sources */ = {isa = PBXBuildFile; fileRef = 5022C844195F8BDD008F0131 /* _Media.m */; };
+		5022C84B195F943A008F0131 /* Event+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 5022C84A195F943A008F0131 /* Event+Create.m */; };
+		5022C84E195F9D31008F0131 /* Team+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 5022C84D195F9D31008F0131 /* Team+Fetch.m */; };
 		50293417195F8B26001DFB89 /* Media.m in Sources */ = {isa = PBXBuildFile; fileRef = 50293416195F8B26001DFB89 /* Media.m */; };
 		5029341A195F8B26001DFB89 /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 50293419195F8B26001DFB89 /* Match.m */; };
 		5040543A194E69A900FFA07B /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50405439194E69A900FFA07B /* CoreLocation.framework */; };
@@ -44,7 +46,7 @@
 		50832E271918BB63003AC8A7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50832E251918BB63003AC8A7 /* InfoPlist.strings */; };
 		50832E291918BB63003AC8A7 /* the_blue_alliance_iosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E281918BB63003AC8A7 /* the_blue_alliance_iosTests.m */; };
 		50832E341918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 50832E321918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld */; };
-		50832E3A1918BBBE003AC8A7 /* Event+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E381918BBBE003AC8A7 /* Event+Create.m */; };
+		50832E3A1918BBBE003AC8A7 /* Match+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E381918BBBE003AC8A7 /* Match+Create.m */; };
 		50832E3E1918BBEA003AC8A7 /* EventsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E3D1918BBEA003AC8A7 /* EventsTableViewController.m */; };
 		50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */; };
 		50C0FC231931743700670A64 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C0FC221931743700670A64 /* EventViewController.m */; };
@@ -93,6 +95,10 @@
 		5022C842195F8BDD008F0131 /* _Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Match.m; sourceTree = "<group>"; };
 		5022C843195F8BDD008F0131 /* _Media.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Media.h; sourceTree = "<group>"; };
 		5022C844195F8BDD008F0131 /* _Media.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Media.m; sourceTree = "<group>"; };
+		5022C849195F943A008F0131 /* Event+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Event+Create.h"; sourceTree = "<group>"; };
+		5022C84A195F943A008F0131 /* Event+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Event+Create.m"; sourceTree = "<group>"; };
+		5022C84C195F9D31008F0131 /* Team+Fetch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Team+Fetch.h"; sourceTree = "<group>"; };
+		5022C84D195F9D31008F0131 /* Team+Fetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Team+Fetch.m"; sourceTree = "<group>"; };
 		50293415195F8B26001DFB89 /* Media.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Media.h; sourceTree = "<group>"; };
 		50293416195F8B26001DFB89 /* Media.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Media.m; sourceTree = "<group>"; };
 		50293418195F8B26001DFB89 /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
@@ -119,8 +125,8 @@
 		50832E261918BB63003AC8A7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		50832E281918BB63003AC8A7 /* the_blue_alliance_iosTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = the_blue_alliance_iosTests.m; sourceTree = "<group>"; };
 		50832E331918BB8E003AC8A7 /* The Blue Alliance.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance.xcdatamodel"; sourceTree = "<group>"; };
-		50832E371918BBBE003AC8A7 /* Event+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Event+Create.h"; path = "../Event+Create.h"; sourceTree = "<group>"; };
-		50832E381918BBBE003AC8A7 /* Event+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Event+Create.m"; path = "../Event+Create.m"; sourceTree = "<group>"; };
+		50832E371918BBBE003AC8A7 /* Match+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Match+Create.h"; path = "../Match+Create.h"; sourceTree = "<group>"; };
+		50832E381918BBBE003AC8A7 /* Match+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Match+Create.m"; path = "../Match+Create.m"; sourceTree = "<group>"; };
 		50832E3C1918BBEA003AC8A7 /* EventsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsTableViewController.h; sourceTree = "<group>"; };
 		50832E3D1918BBEA003AC8A7 /* EventsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsTableViewController.m; sourceTree = "<group>"; };
 		50832E531918BBFF003AC8A7 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
@@ -192,6 +198,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5022C847195F9165008F0131 /* Match */ = {
+			isa = PBXGroup;
+			children = (
+				50293418195F8B26001DFB89 /* Match.h */,
+				50293419195F8B26001DFB89 /* Match.m */,
+				50832E371918BBBE003AC8A7 /* Match+Create.h */,
+				50832E381918BBBE003AC8A7 /* Match+Create.m */,
+			);
+			name = Match;
+			sourceTree = "<group>";
+		};
+		5022C848195F916B008F0131 /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				50293415195F8B26001DFB89 /* Media.h */,
+				50293416195F8B26001DFB89 /* Media.m */,
+			);
+			name = Media;
+			sourceTree = "<group>";
+		};
 		50832DEE1918BB63003AC8A7 = {
 			isa = PBXGroup;
 			children = (
@@ -322,13 +348,11 @@
 			isa = PBXGroup;
 			children = (
 				50832E321918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld */,
-				50293418195F8B26001DFB89 /* Match.h */,
-				50293419195F8B26001DFB89 /* Match.m */,
-				50293415195F8B26001DFB89 /* Media.h */,
-				50293416195F8B26001DFB89 /* Media.m */,
 				9226B1421932EFE200B7EF43 /* MOGenerated */,
+				5022C847195F9165008F0131 /* Match */,
 				9226B1431932EFEF00B7EF43 /* Event */,
 				9226B1441932EFF600B7EF43 /* Team */,
+				5022C848195F916B008F0131 /* Media */,
 				50CDA22919300C6300C8906D /* TBAImporter.h */,
 				50CDA22A19300C6300C8906D /* TBAImporter.m */,
 			);
@@ -353,10 +377,10 @@
 		9226B1431932EFEF00B7EF43 /* Event */ = {
 			isa = PBXGroup;
 			children = (
+				5022C849195F943A008F0131 /* Event+Create.h */,
+				5022C84A195F943A008F0131 /* Event+Create.m */,
 				9226B13A1932EFD900B7EF43 /* Event.h */,
 				9226B13B1932EFD900B7EF43 /* Event.m */,
-				50832E371918BBBE003AC8A7 /* Event+Create.h */,
-				50832E381918BBBE003AC8A7 /* Event+Create.m */,
 			);
 			name = Event;
 			sourceTree = "<group>";
@@ -368,6 +392,8 @@
 				9226B13D1932EFD900B7EF43 /* Team.m */,
 				50CDA22C1930294200C8906D /* Team+Create.h */,
 				50CDA22D1930294200C8906D /* Team+Create.m */,
+				5022C84C195F9D31008F0131 /* Team+Fetch.h */,
+				5022C84D195F9D31008F0131 /* Team+Fetch.m */,
 			);
 			name = Team;
 			sourceTree = "<group>";
@@ -533,7 +559,8 @@
 			files = (
 				9226B1411932EFD900B7EF43 /* Team.m in Sources */,
 				9226B13F1932EFD900B7EF43 /* _Team.m in Sources */,
-				50832E3A1918BBBE003AC8A7 /* Event+Create.m in Sources */,
+				50832E3A1918BBBE003AC8A7 /* Match+Create.m in Sources */,
+				5022C84E195F9D31008F0131 /* Team+Fetch.m in Sources */,
 				5029341A195F8B26001DFB89 /* Match.m in Sources */,
 				50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */,
 				50DFD20419207DD4009B686E /* InsightsViewController.m in Sources */,
@@ -545,6 +572,7 @@
 				5021450F1933EC7C00604567 /* EventInfoViewController.m in Sources */,
 				50832E341918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld in Sources */,
 				50FF38151931E38F00FD7330 /* RankingsTableViewController.m in Sources */,
+				5022C84B195F943A008F0131 /* Event+Create.m in Sources */,
 				50FF38121931E38000FD7330 /* MatchResultsTableViewController.m in Sources */,
 				50832E3E1918BBEA003AC8A7 /* EventsTableViewController.m in Sources */,
 				5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */,

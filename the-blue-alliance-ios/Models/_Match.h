@@ -5,9 +5,11 @@
 
 
 extern const struct MatchAttributes {
+	__unsafe_unretained NSString *blueScore;
 	__unsafe_unretained NSString *comp_level;
 	__unsafe_unretained NSString *key;
 	__unsafe_unretained NSString *match_number;
+	__unsafe_unretained NSString *redScore;
 	__unsafe_unretained NSString *set_number;
 	__unsafe_unretained NSString *time_string;
 } MatchAttributes;
@@ -33,6 +35,8 @@ extern const struct MatchFetchedProperties {
 
 
 
+
+
 @interface MatchID : NSManagedObjectID {}
 @end
 
@@ -41,6 +45,20 @@ extern const struct MatchFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (MatchID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* blueScore;
+
+
+
+@property int32_t blueScoreValue;
+- (int32_t)blueScoreValue;
+- (void)setBlueScoreValue:(int32_t)value_;
+
+//- (BOOL)validateBlueScore:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -80,6 +98,20 @@ extern const struct MatchFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSNumber* redScore;
+
+
+
+@property int32_t redScoreValue;
+- (int32_t)redScoreValue;
+- (void)setRedScoreValue:(int32_t)value_;
+
+//- (BOOL)validateRedScore:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
 @property (nonatomic, strong) NSNumber* set_number;
 
 
@@ -104,9 +136,9 @@ extern const struct MatchFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSSet *blueAlliance;
+@property (nonatomic, strong) NSOrderedSet *blueAlliance;
 
-- (NSMutableSet*)blueAllianceSet;
+- (NSMutableOrderedSet*)blueAllianceSet;
 
 
 
@@ -125,9 +157,9 @@ extern const struct MatchFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSSet *redAlliance;
+@property (nonatomic, strong) NSOrderedSet *redAlliance;
 
-- (NSMutableSet*)redAllianceSet;
+- (NSMutableOrderedSet*)redAllianceSet;
 
 
 
@@ -137,8 +169,8 @@ extern const struct MatchFetchedProperties {
 
 @interface _Match (CoreDataGeneratedAccessors)
 
-- (void)addBlueAlliance:(NSSet*)value_;
-- (void)removeBlueAlliance:(NSSet*)value_;
+- (void)addBlueAlliance:(NSOrderedSet*)value_;
+- (void)removeBlueAlliance:(NSOrderedSet*)value_;
 - (void)addBlueAllianceObject:(Team*)value_;
 - (void)removeBlueAllianceObject:(Team*)value_;
 
@@ -147,14 +179,23 @@ extern const struct MatchFetchedProperties {
 - (void)addMediaObject:(Media*)value_;
 - (void)removeMediaObject:(Media*)value_;
 
-- (void)addRedAlliance:(NSSet*)value_;
-- (void)removeRedAlliance:(NSSet*)value_;
+- (void)addRedAlliance:(NSOrderedSet*)value_;
+- (void)removeRedAlliance:(NSOrderedSet*)value_;
 - (void)addRedAllianceObject:(Team*)value_;
 - (void)removeRedAllianceObject:(Team*)value_;
 
 @end
 
 @interface _Match (CoreDataGeneratedPrimitiveAccessors)
+
+
+- (NSNumber*)primitiveBlueScore;
+- (void)setPrimitiveBlueScore:(NSNumber*)value;
+
+- (int32_t)primitiveBlueScoreValue;
+- (void)setPrimitiveBlueScoreValue:(int32_t)value_;
+
+
 
 
 - (NSString*)primitiveComp_level;
@@ -178,6 +219,15 @@ extern const struct MatchFetchedProperties {
 
 
 
+- (NSNumber*)primitiveRedScore;
+- (void)setPrimitiveRedScore:(NSNumber*)value;
+
+- (int32_t)primitiveRedScoreValue;
+- (void)setPrimitiveRedScoreValue:(int32_t)value_;
+
+
+
+
 - (NSNumber*)primitiveSet_number;
 - (void)setPrimitiveSet_number:(NSNumber*)value;
 
@@ -194,8 +244,8 @@ extern const struct MatchFetchedProperties {
 
 
 
-- (NSMutableSet*)primitiveBlueAlliance;
-- (void)setPrimitiveBlueAlliance:(NSMutableSet*)value;
+- (NSMutableOrderedSet*)primitiveBlueAlliance;
+- (void)setPrimitiveBlueAlliance:(NSMutableOrderedSet*)value;
 
 
 
@@ -209,8 +259,8 @@ extern const struct MatchFetchedProperties {
 
 
 
-- (NSMutableSet*)primitiveRedAlliance;
-- (void)setPrimitiveRedAlliance:(NSMutableSet*)value;
+- (NSMutableOrderedSet*)primitiveRedAlliance;
+- (void)setPrimitiveRedAlliance:(NSMutableOrderedSet*)value;
 
 
 @end
