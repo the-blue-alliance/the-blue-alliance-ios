@@ -115,4 +115,20 @@
     });
 }
 
+
++ (void)importMatchesForEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context callback:(void (^)(NSSet *matches))callback {
+    NSString *eventKey = event.key;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray *matchDicts = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"event/%@/matches", eventKey]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // TODO: Parse matchDicts into Core Data
+            // event.matches =
+            NSSet *matches = nil;
+            
+            [context save:nil];
+            callback(matches);
+        });
+    });
+}
+
 @end

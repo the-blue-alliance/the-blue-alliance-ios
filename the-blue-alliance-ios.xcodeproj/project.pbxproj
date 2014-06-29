@@ -23,6 +23,10 @@
 /* Begin PBXBuildFile section */
 		394BD129CFDF44B78FFF2C94 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDCC6CCFB1A4A199C72C12E /* libPods.a */; };
 		5021450F1933EC7C00604567 /* EventInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5021450D1933EC7C00604567 /* EventInfoViewController.m */; };
+		5022C845195F8BDD008F0131 /* _Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 5022C842195F8BDD008F0131 /* _Match.m */; };
+		5022C846195F8BDD008F0131 /* _Media.m in Sources */ = {isa = PBXBuildFile; fileRef = 5022C844195F8BDD008F0131 /* _Media.m */; };
+		50293417195F8B26001DFB89 /* Media.m in Sources */ = {isa = PBXBuildFile; fileRef = 50293416195F8B26001DFB89 /* Media.m */; };
+		5029341A195F8B26001DFB89 /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 50293419195F8B26001DFB89 /* Match.m */; };
 		5040543A194E69A900FFA07B /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50405439194E69A900FFA07B /* CoreLocation.framework */; };
 		5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */; };
 		50832DFB1918BB63003AC8A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFA1918BB63003AC8A7 /* Foundation.framework */; };
@@ -85,6 +89,14 @@
 		4DDCC6CCFB1A4A199C72C12E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5021450C1933EC7C00604567 /* EventInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventInfoViewController.h; sourceTree = "<group>"; };
 		5021450D1933EC7C00604567 /* EventInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventInfoViewController.m; sourceTree = "<group>"; };
+		5022C841195F8BDD008F0131 /* _Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Match.h; sourceTree = "<group>"; };
+		5022C842195F8BDD008F0131 /* _Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Match.m; sourceTree = "<group>"; };
+		5022C843195F8BDD008F0131 /* _Media.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Media.h; sourceTree = "<group>"; };
+		5022C844195F8BDD008F0131 /* _Media.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Media.m; sourceTree = "<group>"; };
+		50293415195F8B26001DFB89 /* Media.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Media.h; sourceTree = "<group>"; };
+		50293416195F8B26001DFB89 /* Media.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Media.m; sourceTree = "<group>"; };
+		50293418195F8B26001DFB89 /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
+		50293419195F8B26001DFB89 /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
 		50405439194E69A900FFA07B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		5057CD1C1929987D00654304 /* SearchableCoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchableCoreDataTableViewController.h; sourceTree = "<group>"; };
 		5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchableCoreDataTableViewController.m; sourceTree = "<group>"; };
@@ -310,6 +322,10 @@
 			isa = PBXGroup;
 			children = (
 				50832E321918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld */,
+				50293418195F8B26001DFB89 /* Match.h */,
+				50293419195F8B26001DFB89 /* Match.m */,
+				50293415195F8B26001DFB89 /* Media.h */,
+				50293416195F8B26001DFB89 /* Media.m */,
 				9226B1421932EFE200B7EF43 /* MOGenerated */,
 				9226B1431932EFEF00B7EF43 /* Event */,
 				9226B1441932EFF600B7EF43 /* Team */,
@@ -322,6 +338,10 @@
 		9226B1421932EFE200B7EF43 /* MOGenerated */ = {
 			isa = PBXGroup;
 			children = (
+				5022C841195F8BDD008F0131 /* _Match.h */,
+				5022C842195F8BDD008F0131 /* _Match.m */,
+				5022C843195F8BDD008F0131 /* _Media.h */,
+				5022C844195F8BDD008F0131 /* _Media.m */,
 				9226B1361932EFD900B7EF43 /* _Event.h */,
 				9226B1371932EFD900B7EF43 /* _Event.m */,
 				9226B1381932EFD900B7EF43 /* _Team.h */,
@@ -514,8 +534,10 @@
 				9226B1411932EFD900B7EF43 /* Team.m in Sources */,
 				9226B13F1932EFD900B7EF43 /* _Team.m in Sources */,
 				50832E3A1918BBBE003AC8A7 /* Event+Create.m in Sources */,
+				5029341A195F8B26001DFB89 /* Match.m in Sources */,
 				50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */,
 				50DFD20419207DD4009B686E /* InsightsViewController.m in Sources */,
+				5022C846195F8BDD008F0131 /* _Media.m in Sources */,
 				50DFD20719207DDC009B686E /* SettingsViewController.m in Sources */,
 				9226B1401932EFD900B7EF43 /* Event.m in Sources */,
 				50CDA22B19300C6300C8906D /* TBAImporter.m in Sources */,
@@ -527,8 +549,10 @@
 				50832E3E1918BBEA003AC8A7 /* EventsTableViewController.m in Sources */,
 				5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */,
 				50DFD20119207DCA009B686E /* TeamsTableViewController.m in Sources */,
+				5022C845195F8BDD008F0131 /* _Match.m in Sources */,
 				92C5B870192C0BBC00AFDBCA /* YearSelectView.m in Sources */,
 				50C0FC231931743700670A64 /* EventViewController.m in Sources */,
+				50293417195F8B26001DFB89 /* Media.m in Sources */,
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,
 				50CDA22E1930294200C8906D /* Team+Create.m in Sources */,
 				9226B13E1932EFD900B7EF43 /* _Event.m in Sources */,

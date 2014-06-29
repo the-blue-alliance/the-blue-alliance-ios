@@ -25,7 +25,7 @@ extern const struct TeamFetchedProperties {
 } TeamFetchedProperties;
 
 @class Event;
-@class NSManagedObject;
+@class Media;
 
 
 
@@ -174,8 +174,8 @@ extern const struct TeamFetchedProperties {
 
 - (void)addMedia:(NSSet*)value_;
 - (void)removeMedia:(NSSet*)value_;
-- (void)addMediaObject:(NSManagedObject*)value_;
-- (void)removeMediaObject:(NSManagedObject*)value_;
+- (void)addMediaObject:(Media*)value_;
+- (void)removeMediaObject:(Media*)value_;
 
 @end
 

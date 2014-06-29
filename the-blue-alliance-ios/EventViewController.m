@@ -106,11 +106,13 @@
     eivc.event = self.event;
     
     TeamsTableViewController *tvc = [[TeamsTableViewController alloc] initWithStyle:UITableViewStylePlain];
-    tvc.eventFilter = self.event;
     tvc.context = self.context;
+    tvc.eventFilter = self.event;
     tvc.disableSections = YES;
     
     MatchResultsTableViewController *mrvc = [[MatchResultsTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    mrvc.context = self.context;
+    mrvc.event = self.event;
     
     RankingsTableViewController *rvc = [[RankingsTableViewController alloc] initWithStyle:UITableViewStylePlain];
     rvc.context = self.context;

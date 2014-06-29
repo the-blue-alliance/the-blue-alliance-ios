@@ -35,7 +35,7 @@ extern const struct EventRelationships {
 extern const struct EventFetchedProperties {
 } EventFetchedProperties;
 
-@class NSManagedObject;
+@class Match;
 @class Team;
 
 
@@ -317,8 +317,8 @@ extern const struct EventFetchedProperties {
 
 - (void)addMatches:(NSSet*)value_;
 - (void)removeMatches:(NSSet*)value_;
-- (void)addMatchesObject:(NSManagedObject*)value_;
-- (void)removeMatchesObject:(NSManagedObject*)value_;
+- (void)addMatchesObject:(Match*)value_;
+- (void)removeMatchesObject:(Match*)value_;
 
 - (void)addTeams:(NSSet*)value_;
 - (void)removeTeams:(NSSet*)value_;

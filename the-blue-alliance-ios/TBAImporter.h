@@ -42,4 +42,12 @@
  */
 + (void)importRankingsForEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context callback:(void (^)(NSString *rankingsString))callback;
 
+/** Downloads a list of matches at an event and saves it on the event object
+ *
+ * @param event The event to download matches for
+ * @param context The context of the database used for importing
+ * @param callback A block invoked with the matches once it has been downloaded
+ */
++ (void)importMatchesForEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context callback:(void (^)(NSSet *matches))callback;
+
 @end
