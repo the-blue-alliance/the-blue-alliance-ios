@@ -5,7 +5,7 @@
 
 - (NSString *)friendlyName
 {
-    NSString *withYear = [NSString stringWithFormat:@"%@ %@", self.year, self.short_name];
+    NSString *withYear = [NSString stringWithFormat:@"%@ %@", self.year, self.short_name ? self.short_name : self.name];
     
     NSString *typeSuffix = @"";
     switch (self.event_typeValue) {
