@@ -31,7 +31,9 @@
 - (NSArray *)parseRankings:(NSString *)rankingsString {
     NSMutableArray *array = [[NSJSONSerialization JSONObjectWithData:[rankingsString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil] mutableCopy];
     NSArray *keys = [array firstObject];
-    [array removeObjectAtIndex:0];
+    if(keys) {
+        [array removeObjectAtIndex:0];
+    }
     
     NSMutableArray *rankings = [[NSMutableArray alloc] init];
     for (NSArray *team in array) {
