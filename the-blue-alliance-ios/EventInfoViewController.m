@@ -86,7 +86,7 @@
 - (void)setupEventInfoArray
 {
     EventInfoDataDisplay *websiteInfo = [[EventInfoDataDisplay alloc] init];
-    websiteInfo.text = self.event.website ? self.event.website : @"No website";
+    websiteInfo.text = self.event.website.length ? self.event.website : @"No website";
     websiteInfo.icon = [UIImage imageNamed:@"website"];
     
     EventInfoDataDisplay *dateInfo = [[EventInfoDataDisplay alloc] init];
