@@ -42,17 +42,27 @@
 + (void)importEventsUsingManagedObjectContext:(NSManagedObjectContext *)context
 {
     int currentYear = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"EventsViewController.currentYear"];
+    if(currentYear == 0) {
+        currentYear = [NSDate date].year;
+    }
 
     int startYear = 1992;
     int endYear = (int)[NSDate date].year + 1;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSMutableArray *downloadedEvents = [[NSMutableArray alloc] init];
+        
         // Download the currently selected year first
         if (currentYear != 0) {
             NSArray *events = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"events/%@", @(currentYear)]];
-            [downloadedEvents addObjectsFromArray:events];
+            
+            [context performBlock:^{
+                [Event createManagedObjectsFromInfoArray:events
+                       checkingPrexistanceUsingUniqueKey:@"key"
+                               usingManagedObjectContext:context];
+            }];
         }
+        
+        NSMutableArray *downloadedEvents = [[NSMutableArray alloc] init];
         for(int i = endYear; i >= startYear; i--) {
             if (i == currentYear)
                 continue;
@@ -60,11 +70,11 @@
             [downloadedEvents addObjectsFromArray:events];
         }
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        [context performBlock:^{
             [Event createManagedObjectsFromInfoArray:downloadedEvents
                    checkingPrexistanceUsingUniqueKey:@"key"
                            usingManagedObjectContext:context];
-        });
+        }];
     });
 }
 
