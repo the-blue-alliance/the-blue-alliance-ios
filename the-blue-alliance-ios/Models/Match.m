@@ -31,11 +31,24 @@
     
     NSArray *blueTeams = [Team fetchTeamsForKeys:blueTeamKeys fromContext:context];
     NSArray *redTeams = [Team fetchTeamsForKeys:redTeamKeys fromContext:context];
+    NSLog(@"%d", blueTeams.count);
+    NSLog(@"%d", redTeams.count);
+
     self.blueAlliance = [[NSOrderedSet alloc] initWithArray:blueTeams];
     self.redAlliance = [[NSOrderedSet alloc] initWithArray:redTeams];
     
     // Create media for a match:
     self.media = [NSSet setWithArray:[Media createManagedObjectsFromInfoArray:info[@"videos"] checkingPrexistanceUsingUniqueKey:@"key" usingManagedObjectContext:context]];
+    
+    [context save:nil];
+}
+
+- (NSString *)friendlyMatchName {
+    NSString *friendlyCompLevel = [self.comp_level.uppercaseString stringByReplacingOccurrencesOfString:@"QM" withString:@"Q"];
+    if([friendlyCompLevel isEqualToString:@"Q"]) {
+        return [NSString stringWithFormat:@"%@%d", friendlyCompLevel, self.match_numberValue];
+    }
+    return [NSString stringWithFormat:@"%@%d-%d", friendlyCompLevel, self.set_numberValue, self.match_numberValue];
 }
 
 @end

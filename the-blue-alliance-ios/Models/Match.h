@@ -13,5 +13,6 @@
 
 @interface Match : _Match <NSManagedObjectCreatable>
 
+@property (nonatomic, readonly) NSString *friendlyMatchName;
 
 @end

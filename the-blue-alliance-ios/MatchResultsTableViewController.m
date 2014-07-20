@@ -9,6 +9,7 @@
 #import "MatchResultsTableViewController.h"
 #import "Match.h"
 #import "TBAImporter.h"
+#import "MatchResultsTableViewCell.h"
 
 @interface MatchResultsTableViewController ()
 @property (nonatomic, strong) NSArray *sections;
@@ -88,7 +89,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Match Cell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"MatchResultsTableViewCell" bundle:nil] forCellReuseIdentifier:@"Match Cell"];
+    self.tableView.rowHeight = 80;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -104,10 +106,10 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Match Cell" forIndexPath:indexPath];
+    MatchResultsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Match Cell" forIndexPath:indexPath];
     
     Match *match = self.sections[indexPath.section][@"objects"][indexPath.row];
-    cell.textLabel.text = match.key;
+    cell.match = match;
     
     return cell;
 }

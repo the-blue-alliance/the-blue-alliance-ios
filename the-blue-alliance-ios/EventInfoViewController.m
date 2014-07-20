@@ -79,7 +79,7 @@
     [self.infoTable autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:0];
     [self.infoTable autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:0];
     self.tableHeightConstraint = [self.infoTable autoSetDimension:ALDimensionHeight toSize:300];
-
+    
     [self setupEventInfoArray];
 }
 

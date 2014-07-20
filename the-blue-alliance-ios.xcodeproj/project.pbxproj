@@ -56,6 +56,8 @@
 		50DFD20419207DD4009B686E /* InsightsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD20319207DD4009B686E /* InsightsViewController.m */; };
 		50DFD20719207DDC009B686E /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD20619207DDC009B686E /* SettingsViewController.m */; };
 		50E65EA719198E5200714328 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50E65EA619198E5200714328 /* QuartzCore.framework */; };
+		50F121F8197B368D00DE7837 /* MatchResultsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50F121F7197B368D00DE7837 /* MatchResultsTableViewCell.xib */; };
+		50F121FB197B371800DE7837 /* MatchResultsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F121FA197B371800DE7837 /* MatchResultsTableViewCell.m */; };
 		50F8ACDE194E655D002088EA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50F8ACDD194E655D002088EA /* MapKit.framework */; };
 		50FF38121931E38000FD7330 /* MatchResultsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50FF38111931E38000FD7330 /* MatchResultsTableViewController.m */; };
 		50FF38151931E38F00FD7330 /* RankingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50FF38141931E38F00FD7330 /* RankingsTableViewController.m */; };
@@ -144,6 +146,9 @@
 		50DFD20519207DDC009B686E /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		50DFD20619207DDC009B686E /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		50E65EA619198E5200714328 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		50F121F7197B368D00DE7837 /* MatchResultsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MatchResultsTableViewCell.xib; sourceTree = "<group>"; };
+		50F121F9197B371800DE7837 /* MatchResultsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchResultsTableViewCell.h; sourceTree = "<group>"; };
+		50F121FA197B371800DE7837 /* MatchResultsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchResultsTableViewCell.m; sourceTree = "<group>"; };
 		50F8ACDD194E655D002088EA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		50FF38101931E38000FD7330 /* MatchResultsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchResultsTableViewController.h; sourceTree = "<group>"; };
 		50FF38111931E38000FD7330 /* MatchResultsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchResultsTableViewController.m; sourceTree = "<group>"; };
@@ -250,6 +255,9 @@
 		50832E001918BB63003AC8A7 /* the-blue-alliance-ios */ = {
 			isa = PBXGroup;
 			children = (
+				50F121F7197B368D00DE7837 /* MatchResultsTableViewCell.xib */,
+				50F121F9197B371800DE7837 /* MatchResultsTableViewCell.h */,
+				50F121FA197B371800DE7837 /* MatchResultsTableViewCell.m */,
 				50832E091918BB63003AC8A7 /* AppDelegate.h */,
 				50832E0A1918BB63003AC8A7 /* AppDelegate.m */,
 				50DFD1F41920365E009B686E /* MenuViewController.h */,
@@ -479,6 +487,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50F121F8197B368D00DE7837 /* MatchResultsTableViewCell.xib in Resources */,
 				50832E111918BB63003AC8A7 /* Main_iPad.storyboard in Resources */,
 				50832E161918BB63003AC8A7 /* Images.xcassets in Resources */,
 				50832E0E1918BB63003AC8A7 /* Main_iPhone.storyboard in Resources */,
@@ -550,6 +559,7 @@
 				9226B1411932EFD900B7EF43 /* Team.m in Sources */,
 				9226B13F1932EFD900B7EF43 /* _Team.m in Sources */,
 				5022C84E195F9D31008F0131 /* Team+Fetch.m in Sources */,
+				50F121FB197B371800DE7837 /* MatchResultsTableViewCell.m in Sources */,
 				5029341A195F8B26001DFB89 /* Match.m in Sources */,
 				50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */,
 				50DFD20419207DD4009B686E /* InsightsViewController.m in Sources */,

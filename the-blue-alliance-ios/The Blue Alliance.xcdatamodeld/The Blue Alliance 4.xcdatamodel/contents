@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="14A261i" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="14A283o" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Event" representedClassName="Event" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="district_enum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -32,10 +32,10 @@
         <attribute name="redScore" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="set_number" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="time_string" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="blueAlliance" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" syncable="YES"/>
+        <relationship name="blueAlliance" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="matchesWhereBlue" inverseEntity="Team" syncable="YES"/>
         <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="matches" inverseEntity="Event" syncable="YES"/>
         <relationship name="media" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Media" syncable="YES"/>
-        <relationship name="redAlliance" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" syncable="YES"/>
+        <relationship name="redAlliance" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="matchesWhereRed" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Media" representedClassName="Media" syncable="YES">
         <attribute name="cachedData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
@@ -54,12 +54,14 @@
         <attribute name="team_number" optional="YES" attributeType="Integer 32" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="teams" inverseEntity="Event" syncable="YES"/>
+        <relationship name="matchesWhereBlue" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="blueAlliance" inverseEntity="Match" syncable="YES"/>
+        <relationship name="matchesWhereRed" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="redAlliance" inverseEntity="Match" syncable="YES"/>
         <relationship name="media" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Media" syncable="YES"/>
     </entity>
     <elements>
         <element name="Event" positionX="-1485" positionY="1920" width="128" height="375"/>
         <element name="Match" positionX="-1242" positionY="1917" width="128" height="208"/>
         <element name="Media" positionX="-965" positionY="2159" width="128" height="105"/>
-        <element name="Team" positionX="-1242" positionY="2277" width="128" height="208"/>
+        <element name="Team" positionX="-1242" positionY="2277" width="128" height="238"/>
     </elements>
 </model>

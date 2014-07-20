@@ -17,6 +17,8 @@ const struct TeamAttributes TeamAttributes = {
 
 const struct TeamRelationships TeamRelationships = {
 	.events = @"events",
+	.matchesWhereBlue = @"matchesWhereBlue",
+	.matchesWhereRed = @"matchesWhereRed",
 	.media = @"media",
 };
 
@@ -176,6 +178,32 @@ const struct TeamFetchedProperties TeamFetchedProperties = {
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"events"];
   
 	[self didAccessValueForKey:@"events"];
+	return result;
+}
+	
+
+@dynamic matchesWhereBlue;
+
+	
+- (NSMutableSet*)matchesWhereBlueSet {
+	[self willAccessValueForKey:@"matchesWhereBlue"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"matchesWhereBlue"];
+  
+	[self didAccessValueForKey:@"matchesWhereBlue"];
+	return result;
+}
+	
+
+@dynamic matchesWhereRed;
+
+	
+- (NSMutableSet*)matchesWhereRedSet {
+	[self willAccessValueForKey:@"matchesWhereRed"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"matchesWhereRed"];
+  
+	[self didAccessValueForKey:@"matchesWhereRed"];
 	return result;
 }
 	

@@ -18,6 +18,8 @@ extern const struct TeamAttributes {
 
 extern const struct TeamRelationships {
 	__unsafe_unretained NSString *events;
+	__unsafe_unretained NSString *matchesWhereBlue;
+	__unsafe_unretained NSString *matchesWhereRed;
 	__unsafe_unretained NSString *media;
 } TeamRelationships;
 
@@ -25,6 +27,8 @@ extern const struct TeamFetchedProperties {
 } TeamFetchedProperties;
 
 @class Event;
+@class Match;
+@class Match;
 @class Media;
 
 
@@ -155,6 +159,20 @@ extern const struct TeamFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *matchesWhereBlue;
+
+- (NSMutableSet*)matchesWhereBlueSet;
+
+
+
+
+@property (nonatomic, strong) NSSet *matchesWhereRed;
+
+- (NSMutableSet*)matchesWhereRedSet;
+
+
+
+
 @property (nonatomic, strong) NSSet *media;
 
 - (NSMutableSet*)mediaSet;
@@ -171,6 +189,16 @@ extern const struct TeamFetchedProperties {
 - (void)removeEvents:(NSSet*)value_;
 - (void)addEventsObject:(Event*)value_;
 - (void)removeEventsObject:(Event*)value_;
+
+- (void)addMatchesWhereBlue:(NSSet*)value_;
+- (void)removeMatchesWhereBlue:(NSSet*)value_;
+- (void)addMatchesWhereBlueObject:(Match*)value_;
+- (void)removeMatchesWhereBlueObject:(Match*)value_;
+
+- (void)addMatchesWhereRed:(NSSet*)value_;
+- (void)removeMatchesWhereRed:(NSSet*)value_;
+- (void)addMatchesWhereRedObject:(Match*)value_;
+- (void)removeMatchesWhereRedObject:(Match*)value_;
 
 - (void)addMedia:(NSSet*)value_;
 - (void)removeMedia:(NSSet*)value_;
@@ -245,6 +273,16 @@ extern const struct TeamFetchedProperties {
 
 - (NSMutableSet*)primitiveEvents;
 - (void)setPrimitiveEvents:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveMatchesWhereBlue;
+- (void)setPrimitiveMatchesWhereBlue:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveMatchesWhereRed;
+- (void)setPrimitiveMatchesWhereRed:(NSMutableSet*)value;
 
 
 
