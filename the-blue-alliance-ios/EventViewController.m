@@ -106,9 +106,9 @@
     eivc.event = self.event;
     
     TeamsTableViewController *tvc = [[TeamsTableViewController alloc] initWithStyle:UITableViewStylePlain];
-    tvc.context = self.context;
     tvc.eventFilter = self.event;
     tvc.disableSections = YES;
+    tvc.context = self.context;
     
     MatchResultsTableViewController *mrvc = [[MatchResultsTableViewController alloc] initWithStyle:UITableViewStylePlain];
     mrvc.context = self.context;

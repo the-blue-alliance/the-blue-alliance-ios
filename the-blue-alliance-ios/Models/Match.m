@@ -16,7 +16,9 @@
 @implementation Match
 
 - (void) configureSelfForInfo:(NSDictionary *)info
-    usingManagedObjectContext:(NSManagedObjectContext *)context {
+    usingManagedObjectContext:(NSManagedObjectContext *)context
+                     withUserInfo:(id)userInfo
+{
     self.key = info[@"key"];
     self.comp_level = info[@"comp_level"];
     self.set_number = info[@"set_number"];
@@ -29,18 +31,18 @@
     NSArray *blueTeamKeys = [info valueForKeyPath:@"alliances.blue.teams"];
     NSArray *redTeamKeys = [info valueForKeyPath:@"alliances.red.teams"];
     
-    NSArray *blueTeams = [Team fetchTeamsForKeys:blueTeamKeys fromContext:context];
-    NSArray *redTeams = [Team fetchTeamsForKeys:redTeamKeys fromContext:context];
-    NSLog(@"%d", blueTeams.count);
-    NSLog(@"%d", redTeams.count);
+    
+    NSArray *blueTeams = [userInfo filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%@ contains key", blueTeamKeys]];
+    NSArray *redTeams = [userInfo filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%@ contains key", redTeamKeys]];
 
-    self.blueAlliance = [[NSOrderedSet alloc] initWithArray:blueTeams];
-    self.redAlliance = [[NSOrderedSet alloc] initWithArray:redTeams];
+    NSOrderedSet *blueSet = [[NSOrderedSet alloc] initWithArray:blueTeams];
+    NSOrderedSet *redSet = [[NSOrderedSet alloc] initWithArray:redTeams];
+
+    self.blueAlliance = blueSet;
+    self.redAlliance = redSet;
     
     // Create media for a match:
     self.media = [NSSet setWithArray:[Media createManagedObjectsFromInfoArray:info[@"videos"] checkingPrexistanceUsingUniqueKey:@"key" usingManagedObjectContext:context]];
-    
-    [context save:nil];
 }
 
 - (NSString *)friendlyMatchName {

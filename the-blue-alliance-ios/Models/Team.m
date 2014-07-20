@@ -12,7 +12,10 @@
     }
 }
 
-- (void)configureSelfForInfo:(NSDictionary *)info usingManagedObjectContext:(NSManagedObjectContext *)context {
+- (void)configureSelfForInfo:(NSDictionary *)info
+   usingManagedObjectContext:(NSManagedObjectContext *)context
+                withUserInfo:(id)userInfo
+{
     self.key = info[@"key"];
     self.name = info[@"name"];
     self.team_number = @([info[@"team_number"] intValue]);

@@ -8,6 +8,7 @@
 
 #import "TBAImporter.h"
 #import "NSManagedObject+Create.h"
+#import "Team+Fetch.h"
 
 #define kIDHeader @"the-blue-alliance:ios:v0.1"
 
@@ -41,7 +42,7 @@
 
 + (void)importEventsUsingManagedObjectContext:(NSManagedObjectContext *)context
 {
-    int currentYear = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"EventsViewController.currentYear"];
+    NSInteger currentYear = [[NSUserDefaults standardUserDefaults] integerForKey:@"EventsViewController.currentYear"];
     if(currentYear == 0) {
         currentYear = [NSDate date].year;
     }
@@ -124,7 +125,7 @@
         NSString *rankingsString = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:rankArray options:0 error:nil] encoding:NSUTF8StringEncoding];
         dispatch_async(dispatch_get_main_queue(), ^{
             event.rankings = rankingsString;
-            [context save:nil];
+//            [context save:nil];
             callback(rankingsString);
         });
     });
@@ -138,15 +139,33 @@
     NSString *eventKey = event.key;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSArray *matchDicts = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"event/%@/matches", eventKey]];
+        NSMutableSet *commonTeamKeys = [[NSMutableSet alloc] init];
+        for (NSDictionary *match in matchDicts) {
+            [commonTeamKeys addObjectsFromArray:[match valueForKeyPath:@"alliances.red.teams"]];
+            [commonTeamKeys addObjectsFromArray:[match valueForKeyPath:@"alliances.blue.teams"]];
+        }
+        
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"Team" inManagedObjectContext:context];
+        [fetchRequest setEntity:entity];
+        // Specify criteria for filtering which objects to fetch
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key IN %@", commonTeamKeys];
+        [fetchRequest setPredicate:predicate];
+        
+        NSError *error = nil;
+        NSArray *teamsInMatches = [context executeFetchRequest:fetchRequest error:&error];
+        
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             NSArray *matchesArray = [Match createManagedObjectsFromInfoArray:matchDicts
-                                    checkingPrexistanceUsingUniqueKey:@"key"
-                                            usingManagedObjectContext:context];
+                                           checkingPrexistanceUsingUniqueKey:@"key"
+                                                   usingManagedObjectContext:context
+                                                                    userInfo:teamsInMatches];
             NSSet *matches = [NSSet setWithArray:matchesArray];
             
             event.matches = matches;
             
-            [context save:nil];
+//            [context save:nil];
             callback(matches);
         });
     });

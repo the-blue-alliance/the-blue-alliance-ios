@@ -16,7 +16,8 @@
  * @param context The NSManagedObjectContext for Core Data. Subclasses can use this context to do additional database fetches, for example to setup relationships.
  */
 - (void)configureSelfForInfo:(NSDictionary *)info
-   usingManagedObjectContext:(NSManagedObjectContext *)context;
+   usingManagedObjectContext:(NSManagedObjectContext *)context
+                withUserInfo:(id)userInfo;
 
 @end
 
@@ -50,5 +51,10 @@
 + (NSArray *)createManagedObjectsFromInfoArray:(NSArray *)infoArray
              checkingPrexistanceUsingUniqueKey:(NSString *)key
                usingManagedObjectContext:(NSManagedObjectContext *)context;
+
++ (NSArray *)createManagedObjectsFromInfoArray:(NSArray *)infoArray
+             checkingPrexistanceUsingUniqueKey:(NSString *)key
+                     usingManagedObjectContext:(NSManagedObjectContext *)context
+                                      userInfo:(id)info;
 
 @end

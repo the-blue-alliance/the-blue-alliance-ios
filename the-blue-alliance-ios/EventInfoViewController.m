@@ -37,6 +37,10 @@
     self.view = [[UIView alloc] init]; // For some reason this needs to be here, otherwise autolayout freaks out and moves subviews...
     self.view.backgroundColor = [UIColor whiteColor];
     
+
+#warning Maps are pretty slow... what can be done?
+#define ENABLE_MAP 0
+#if ENABLE_MAP
     // Setup map view
     MKMapView *mapView = [[MKMapView alloc] initForAutoLayout];
     [self.view addSubview:mapView];
@@ -50,6 +54,12 @@
         MKCoordinateRegion coordRegion = MKCoordinateRegionMakeWithDistance(region.center, 2*region.radius, 2*region.radius);
         mapView.region = coordRegion;
     }];
+#else
+    UIView *mapView = [[UIView alloc] initForAutoLayout];
+    [self.view addSubview:mapView];
+    [mapView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeBottom];
+    [mapView autoSetDimension:ALDimensionHeight toSize:120];
+#endif
     
     
     // Setup event title overlay over map

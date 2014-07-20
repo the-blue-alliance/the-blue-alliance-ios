@@ -48,7 +48,10 @@
 		50832E341918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 50832E321918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld */; };
 		50832E3E1918BBEA003AC8A7 /* EventsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E3D1918BBEA003AC8A7 /* EventsTableViewController.m */; };
 		50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */; };
+		50A71376197C7694009FBCAE /* ColumnView.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A71375197C7694009FBCAE /* ColumnView.m */; };
 		50C0FC231931743700670A64 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C0FC221931743700670A64 /* EventViewController.m */; };
+		50C88502197B7CC000F6D243 /* RankingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C88500197B7CC000F6D243 /* RankingsTableViewCell.m */; };
+		50C88503197B7CC000F6D243 /* RankingsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50C88501197B7CC000F6D243 /* RankingsTableViewCell.xib */; };
 		50CDA22B19300C6300C8906D /* TBAImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 50CDA22A19300C6300C8906D /* TBAImporter.m */; };
 		50DFD1F61920365E009B686E /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD1F51920365E009B686E /* MenuViewController.m */; };
 		50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD1FA19205F6D009B686E /* UIColor+TBAColors.m */; };
@@ -129,9 +132,14 @@
 		50832E3D1918BBEA003AC8A7 /* EventsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsTableViewController.m; sourceTree = "<group>"; };
 		50832E531918BBFF003AC8A7 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
 		50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
+		50A71374197C7694009FBCAE /* ColumnView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnView.h; sourceTree = "<group>"; };
+		50A71375197C7694009FBCAE /* ColumnView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnView.m; sourceTree = "<group>"; };
 		50A88D70195F784E001F8A3D /* The Blue Alliance 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 4.xcdatamodel"; sourceTree = "<group>"; };
 		50C0FC211931743700670A64 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
 		50C0FC221931743700670A64 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
+		50C884FF197B7CC000F6D243 /* RankingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingsTableViewCell.h; sourceTree = "<group>"; };
+		50C88500197B7CC000F6D243 /* RankingsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingsTableViewCell.m; sourceTree = "<group>"; };
+		50C88501197B7CC000F6D243 /* RankingsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingsTableViewCell.xib; sourceTree = "<group>"; };
 		50CDA22919300C6300C8906D /* TBAImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TBAImporter.h; path = ../TBAImporter.h; sourceTree = "<group>"; };
 		50CDA22A19300C6300C8906D /* TBAImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TBAImporter.m; path = ../TBAImporter.m; sourceTree = "<group>"; };
 		50CDA22F19302C9100C8906D /* The Blue Alliance 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 2.xcdatamodel"; sourceTree = "<group>"; };
@@ -255,9 +263,6 @@
 		50832E001918BB63003AC8A7 /* the-blue-alliance-ios */ = {
 			isa = PBXGroup;
 			children = (
-				50F121F7197B368D00DE7837 /* MatchResultsTableViewCell.xib */,
-				50F121F9197B371800DE7837 /* MatchResultsTableViewCell.h */,
-				50F121FA197B371800DE7837 /* MatchResultsTableViewCell.m */,
 				50832E091918BB63003AC8A7 /* AppDelegate.h */,
 				50832E0A1918BB63003AC8A7 /* AppDelegate.m */,
 				50DFD1F41920365E009B686E /* MenuViewController.h */,
@@ -338,8 +343,16 @@
 				5021450D1933EC7C00604567 /* EventInfoViewController.m */,
 				50FF38101931E38000FD7330 /* MatchResultsTableViewController.h */,
 				50FF38111931E38000FD7330 /* MatchResultsTableViewController.m */,
+				50F121F7197B368D00DE7837 /* MatchResultsTableViewCell.xib */,
+				50F121F9197B371800DE7837 /* MatchResultsTableViewCell.h */,
+				50F121FA197B371800DE7837 /* MatchResultsTableViewCell.m */,
 				50FF38131931E38F00FD7330 /* RankingsTableViewController.h */,
 				50FF38141931E38F00FD7330 /* RankingsTableViewController.m */,
+				50C88501197B7CC000F6D243 /* RankingsTableViewCell.xib */,
+				50C884FF197B7CC000F6D243 /* RankingsTableViewCell.h */,
+				50C88500197B7CC000F6D243 /* RankingsTableViewCell.m */,
+				50A71374197C7694009FBCAE /* ColumnView.h */,
+				50A71375197C7694009FBCAE /* ColumnView.m */,
 			);
 			name = "Event Detail Controler";
 			sourceTree = "<group>";
@@ -491,6 +504,7 @@
 				50832E111918BB63003AC8A7 /* Main_iPad.storyboard in Resources */,
 				50832E161918BB63003AC8A7 /* Images.xcassets in Resources */,
 				50832E0E1918BB63003AC8A7 /* Main_iPhone.storyboard in Resources */,
+				50C88503197B7CC000F6D243 /* RankingsTableViewCell.xib in Resources */,
 				50832E051918BB63003AC8A7 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -558,6 +572,7 @@
 			files = (
 				9226B1411932EFD900B7EF43 /* Team.m in Sources */,
 				9226B13F1932EFD900B7EF43 /* _Team.m in Sources */,
+				50A71376197C7694009FBCAE /* ColumnView.m in Sources */,
 				5022C84E195F9D31008F0131 /* Team+Fetch.m in Sources */,
 				50F121FB197B371800DE7837 /* MatchResultsTableViewCell.m in Sources */,
 				5029341A195F8B26001DFB89 /* Match.m in Sources */,
@@ -571,6 +586,7 @@
 				50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */,
 				5021450F1933EC7C00604567 /* EventInfoViewController.m in Sources */,
 				50832E341918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld in Sources */,
+				50C88502197B7CC000F6D243 /* RankingsTableViewCell.m in Sources */,
 				50FF38151931E38F00FD7330 /* RankingsTableViewController.m in Sources */,
 				50FF38121931E38000FD7330 /* MatchResultsTableViewController.m in Sources */,
 				50832E3E1918BBEA003AC8A7 /* EventsTableViewController.m in Sources */,

@@ -30,8 +30,10 @@
 }
 
 
-- (void)configureSelfForInfo:(NSDictionary *)info usingManagedObjectContext:(NSManagedObjectContext *)context {
-    
+- (void)configureSelfForInfo:(NSDictionary *)info
+   usingManagedObjectContext:(NSManagedObjectContext *)context
+                withUserInfo:(id)userInfo
+{
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"yyyy-MM-dd";
     

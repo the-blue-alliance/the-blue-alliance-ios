@@ -53,18 +53,18 @@
 - (void)setEventFilter:(Event *)eventFilter
 {
     _eventFilter = eventFilter;
-    if(_eventFilter) {
-        self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%@ IN events", _eventFilter];
-    } else {
-        self.fetchedResultsController.fetchRequest.predicate = nil;
-    }
+//    if(_eventFilter) {
+//        self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%@ IN events", _eventFilter];
+//    } else {
+//        self.fetchedResultsController.fetchRequest.predicate = nil;
+//    }
 }
 
 - (void)setDisableSections:(BOOL)disableSections
 {
     _disableSections = disableSections;
     if(self.context) {
-        [self setupFetchedResultsControllerUsingContext:self.context];
+//        [self setupFetchedResultsControllerUsingContext:self.context];
     }
 }
 

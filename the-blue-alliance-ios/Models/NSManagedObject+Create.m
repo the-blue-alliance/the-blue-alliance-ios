@@ -26,7 +26,15 @@
 
 + (instancetype)createManagedObjectFromInfo:(NSDictionary *)info
           checkingPrexistanceUsingUniqueKey:(NSString *)key
-                  usingManagedObjectContext:(NSManagedObjectContext *)context {
+                  usingManagedObjectContext:(NSManagedObjectContext *)context
+{
+    return [self createManagedObjectFromInfo:info checkingPrexistanceUsingUniqueKey:key usingManagedObjectContext:context userInfo:nil];
+}
+
++ (instancetype)createManagedObjectFromInfo:(NSDictionary *)info
+          checkingPrexistanceUsingUniqueKey:(NSString *)key
+                  usingManagedObjectContext:(NSManagedObjectContext *)context
+                                   userInfo:(id)userInfo {
     
     // Check for implementation of protocol
     NSString *className = NSStringFromClass([self class]);
@@ -65,7 +73,7 @@
     info = [NSManagedObject normalizeTeamInfoDictionary:info];
     
     
-    [object configureSelfForInfo:info usingManagedObjectContext:context];
+    [object configureSelfForInfo:info usingManagedObjectContext:context withUserInfo:userInfo];
     
 //    NSLog(@"Imported object %@ into the database", object);
     
@@ -74,10 +82,17 @@
 
 
 
-
 + (NSArray *)createManagedObjectsFromInfoArray:(NSArray *)infoArray
              checkingPrexistanceUsingUniqueKey:(NSString *)key
                      usingManagedObjectContext:(NSManagedObjectContext *)context {
+    return [self createManagedObjectsFromInfoArray:infoArray checkingPrexistanceUsingUniqueKey:key usingManagedObjectContext:context userInfo:nil];
+    
+}
+
++ (NSArray *)createManagedObjectsFromInfoArray:(NSArray *)infoArray
+             checkingPrexistanceUsingUniqueKey:(NSString *)key
+                     usingManagedObjectContext:(NSManagedObjectContext *)context
+                                      userInfo:(id)info {
     
     NSMutableArray *returnObjs = [[NSMutableArray alloc] init];
     
@@ -112,7 +127,8 @@
         if(![existingKeySet containsObject:infoDict[key]]) {
             [returnObjs addObject:[self createManagedObjectFromInfo:infoDict
                                   checkingPrexistanceUsingUniqueKey:nil
-                                          usingManagedObjectContext:context]];
+                                          usingManagedObjectContext:context
+                                                           userInfo:info]];
         } else {
             [returnObjs addObject:existingObjsDict[infoDict[key]]];
         }

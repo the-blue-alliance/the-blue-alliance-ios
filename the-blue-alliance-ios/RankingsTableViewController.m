@@ -8,9 +8,11 @@
 
 #import "RankingsTableViewController.h"
 #import "TBAImporter.h"
+#import "RankingsTableViewCell.h"
 
 @interface RankingsTableViewController ()
-@property (nonatomic, strong) NSArray *rankings;
+@property (nonatomic, strong) NSArray *teams;
+@property (nonatomic, strong) NSArray *headers;
 @end
 
 @implementation RankingsTableViewController
@@ -19,51 +21,59 @@
     _event = event;
     
     if(event.rankings.length) {
-        self.rankings = [self parseRankings:event.rankings];
+        // This would be a good place for Swift's tuples
+        NSArray *teams;
+        NSArray *headers;
+        [self parseRankings:event.rankings intoTeamsArray:&teams andHeadersArray:&headers];
+        self.teams = teams;
+        self.headers = headers;
+        [self.tableView reloadData];
     } else {
         [TBAImporter importRankingsForEvent:_event usingManagedObjectContext:self.context callback:^(NSString *rankingsString) {
-            self.rankings = [self parseRankings:rankingsString];
+            NSArray *teams;
+            NSArray *headers;
+            [self parseRankings:rankingsString intoTeamsArray:&teams andHeadersArray:&headers];
+            self.teams = teams;
+            self.headers = headers;
+            [self.tableView reloadData];
         }];
     }
    
 }
 
-- (NSArray *)parseRankings:(NSString *)rankingsString {
+- (void)parseRankings:(NSString *)rankingsString intoTeamsArray:(NSArray **)teams andHeadersArray:(NSArray **)headers {
     NSMutableArray *array = [[NSJSONSerialization JSONObjectWithData:[rankingsString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil] mutableCopy];
     NSArray *keys = [array firstObject];
     if(keys) {
         [array removeObjectAtIndex:0];
     }
+    *headers = [keys copy];
     
     NSMutableArray *rankings = [[NSMutableArray alloc] init];
     for (NSArray *team in array) {
         NSDictionary *teamDict = [NSDictionary dictionaryWithObjects:team forKeys:keys];
         [rankings addObject:teamDict];
     }
-    
-    return rankings;
-}
-- (void)setRankings:(NSArray *)rankings {
-    _rankings = rankings;
-    [self.tableView reloadData];
+    *teams = [rankings copy];
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Rankings Cell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"RankingsTableViewCell" bundle:nil] forCellReuseIdentifier:@"Rankings Cell"];
+    self.tableView.rowHeight = 80;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.rankings.count;
+    return self.teams.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Rankings Cell" forIndexPath:indexPath];
+    RankingsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Rankings Cell" forIndexPath:indexPath];
     
-    NSDictionary *rankedTeam = self.rankings[indexPath.row];
-    cell.textLabel.text = rankedTeam[@"Team"];
+    NSDictionary *rankedTeamData = self.teams[indexPath.row];
+    [cell setRankedTeamData:rankedTeamData forHeaderKeys:self.headers];
     
     return cell;
 }
