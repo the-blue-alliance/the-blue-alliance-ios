@@ -11,27 +11,39 @@
 
 @interface MatchResultsTableViewCell ()
 
-@property (weak, nonatomic) IBOutlet UILabel *matchTextLabel;
+@property (strong, nonatomic) IBOutlet UILabel *matchTextLabel;
 
-@property (weak, nonatomic) IBOutlet UILabel *red1Label;
-@property (weak, nonatomic) IBOutlet UILabel *red2Label;
-@property (weak, nonatomic) IBOutlet UILabel *red3Label;
+@property (strong, nonatomic) IBOutlet UILabel *red1Label;
+@property (strong, nonatomic) IBOutlet UILabel *red2Label;
+@property (strong, nonatomic) IBOutlet UILabel *red3Label;
 
-@property (weak, nonatomic) IBOutlet UILabel *blue1Label;
-@property (weak, nonatomic) IBOutlet UILabel *blue2Label;
-@property (weak, nonatomic) IBOutlet UILabel *blue3Label;
+@property (strong, nonatomic) IBOutlet UILabel *blue1Label;
+@property (strong, nonatomic) IBOutlet UILabel *blue2Label;
+@property (strong, nonatomic) IBOutlet UILabel *blue3Label;
 
-@property (weak, nonatomic) IBOutlet UILabel *redScoreLabel;
-@property (weak, nonatomic) IBOutlet UILabel *blueScoreLabel;
+@property (strong, nonatomic) IBOutlet UILabel *redScoreLabel;
+@property (strong, nonatomic) IBOutlet UILabel *blueScoreLabel;
 
 @end
 
 @implementation MatchResultsTableViewCell
 
+/*
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if(self) {
+        self.matchTextLabel = [[UILabel alloc] initForAutoLayout];
+        self.matchTextLabel.font = [UIFont boldSystemFontOfSize:17];
+        [self.contentView addSubview:self.matchTextLabel];
+        [self.matchTextLabel autoPinEdgeToSuperviewEdge:ALEdgeLeft withInset:18];
+        [self.matchTextLabel autoAlignAxisToSuperviewAxis:ALAxisHorizontal];
+    }
+    return self;
+}*/
+
 - (void)setMatch:(Match *)match {
     _match = match;
-    
-    
     
     NSArray *redAllianceArray = [match.redAlliance array];
     NSArray *blueAllianceArray = [match.blueAlliance array];

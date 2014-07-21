@@ -13,7 +13,6 @@
 
 @interface MatchResultsTableViewController ()
 @property (nonatomic, strong) NSArray *sections;
-
 @end
 
 @implementation MatchResultsTableViewController
@@ -90,6 +89,7 @@
 {
     [super viewDidLoad];
     [self.tableView registerNib:[UINib nibWithNibName:@"MatchResultsTableViewCell" bundle:nil] forCellReuseIdentifier:@"Match Cell"];
+//    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Match Cell"];
     self.tableView.rowHeight = 80;
 }
 
@@ -105,8 +105,14 @@
     return self.sections[section][@"title"];
 }
 
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MatchResultsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Match Cell" forIndexPath:indexPath];
+//
+//    if(!cell) {
+//        cell = [[MatchResultsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Match Cell"];
+//    }
+
     
     Match *match = self.sections[indexPath.section][@"objects"][indexPath.row];
     cell.match = match;

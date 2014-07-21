@@ -23,6 +23,7 @@
 @property (nonatomic, strong) UISegmentedControl *segment;
 @property (nonatomic, strong) UIScrollView *pageView;
 
+@property (nonatomic) BOOL didLayoutPages;
 @end
 
 @implementation EventViewController
@@ -39,22 +40,88 @@
 
 - (void)generatePages
 {
-    [self.pageView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    self.pageView = nil;
+    self.pageView = [[UIScrollView alloc] initForAutoLayout];
+    [self.view addSubview:self.pageView];
+    [self.pageView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
+    [self.pageView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.topToolbar];
+    self.pageView.pagingEnabled = YES;
+    self.pageView.showsHorizontalScrollIndicator = NO;
+    self.pageView.showsVerticalScrollIndicator = NO;
+    self.pageView.delegate = self;
+    
+    
+//    [self.pageView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self.childViewControllers makeObjectsPerformSelector:@selector(removeFromParentViewController)];
     
     float width = self.view.width;
     float height = self.view.height - (self.topToolbar.height ? self.topToolbar.height : 44);
-    for (int i = 0; i < self.controllers.count; i++) {
-        UIViewController *controller = self.controllers[i];
-        [self addChildViewController:controller];
-        
-        UIView *view = controller.view;
-        view.width = width;
-        view.height = height;
-        view.origin = CGPointMake(i * width, 0);
-        
-        [self.pageView addSubview:view];
-    }
+//    for (int i = 0; i < self.controllers.count; i++) {
+//        UIViewController *controller = self.controllers[i];
+//        [self addChildViewController:controller];
+//        
+//        UIView *view = controller.view;
+//        view.width = width;
+//        view.height = height;
+//        view.origin = CGPointMake(i * width, 0);
+//        
+//        [self.pageView addSubview:view];
+//    }
+    
+    
+    int i = 0;
+    
+    
+    UIViewController *controller = self.controllers[i];
+    [self addChildViewController:controller];
+    
+    UIView *view = controller.view;
+    view.width = width;
+    view.height = height;
+    view.origin = CGPointMake(i * width, 0);
+    
+    [self.pageView addSubview:view];
+    i++;
+    
+    
+    
+    controller = self.controllers[i];
+    [self addChildViewController:controller];
+    
+    view = controller.view;
+    view.width = width;
+    view.height = height;
+    view.origin = CGPointMake(i * width, 0);
+    
+    [self.pageView addSubview:view];
+    i++;
+    
+    
+    controller = self.controllers[i];
+    [self addChildViewController:controller];
+    
+    view = controller.view;
+    view.width = width;
+    view.height = height;
+    view.origin = CGPointMake(i * width, 0);
+    
+    [self.pageView addSubview:view];
+    i++;
+    
+    controller = self.controllers[i];
+    [self addChildViewController:controller];
+    
+    view = controller.view;
+    view.width = width;
+    view.height = height;
+    view.origin = CGPointMake(i * width, 0);
+    
+    [self.pageView addSubview:view];
+    i++;
+    
+    
+    
+    
     
     self.pageView.contentSize = CGSizeMake(self.controllers.count * width, height);
 }
@@ -92,14 +159,14 @@
                       [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]];
     
     
-    self.pageView = [[UIScrollView alloc] initForAutoLayout];
-    [self.view addSubview:self.pageView];
-    [self.pageView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
-    [self.pageView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.topToolbar];
-    self.pageView.pagingEnabled = YES;
-    self.pageView.showsHorizontalScrollIndicator = NO;
-    self.pageView.showsVerticalScrollIndicator = NO;
-    self.pageView.delegate = self;
+//    self.pageView = [[UIScrollView alloc] initForAutoLayout];
+//    [self.view addSubview:self.pageView];
+//    [self.pageView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
+//    [self.pageView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.topToolbar];
+//    self.pageView.pagingEnabled = YES;
+//    self.pageView.showsHorizontalScrollIndicator = NO;
+//    self.pageView.showsVerticalScrollIndicator = NO;
+//    self.pageView.delegate = self;
     
     // Create the different view controllers for the pages
     EventInfoViewController *eivc = [[EventInfoViewController alloc] init];
@@ -131,7 +198,6 @@
     
     [self generatePages];
 }
-
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
