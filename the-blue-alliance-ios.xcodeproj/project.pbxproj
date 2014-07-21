@@ -50,6 +50,7 @@
 		50832E341918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 50832E321918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld */; };
 		50832E3E1918BBEA003AC8A7 /* EventsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E3D1918BBEA003AC8A7 /* EventsTableViewController.m */; };
 		50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */; };
+		508FBFE7197CE7D2002A9D69 /* TBATopMapInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FBFE6197CE7D2002A9D69 /* TBATopMapInfoViewController.m */; };
 		50A71376197C7694009FBCAE /* ColumnView.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A71375197C7694009FBCAE /* ColumnView.m */; };
 		50C0FC231931743700670A64 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C0FC221931743700670A64 /* EventViewController.m */; };
 		50C88502197B7CC000F6D243 /* RankingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C88500197B7CC000F6D243 /* RankingsTableViewCell.m */; };
@@ -138,6 +139,8 @@
 		50832E3D1918BBEA003AC8A7 /* EventsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsTableViewController.m; sourceTree = "<group>"; };
 		50832E531918BBFF003AC8A7 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
 		50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
+		508FBFE5197CE7D2002A9D69 /* TBATopMapInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBATopMapInfoViewController.h; sourceTree = "<group>"; };
+		508FBFE6197CE7D2002A9D69 /* TBATopMapInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBATopMapInfoViewController.m; sourceTree = "<group>"; };
 		50A71374197C7694009FBCAE /* ColumnView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnView.h; sourceTree = "<group>"; };
 		50A71375197C7694009FBCAE /* ColumnView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnView.m; sourceTree = "<group>"; };
 		50A88D70195F784E001F8A3D /* The Blue Alliance 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 4.xcdatamodel"; sourceTree = "<group>"; };
@@ -278,13 +281,13 @@
 		50832E001918BB63003AC8A7 /* the-blue-alliance-ios */ = {
 			isa = PBXGroup;
 			children = (
-				504BC6C4197CDEB300752DB0 /* Team Detail View Controller */,
 				50832E091918BB63003AC8A7 /* AppDelegate.h */,
 				50832E0A1918BB63003AC8A7 /* AppDelegate.m */,
 				50DFD1F41920365E009B686E /* MenuViewController.h */,
 				50DFD1F51920365E009B686E /* MenuViewController.m */,
 				50DFD20819208524009B686E /* Top Level Controllers */,
 				50FF38161931E3A900FD7330 /* Event Detail Controler */,
+				504BC6C4197CDEB300752DB0 /* Team Detail View Controller */,
 				9226B1351932EFD900B7EF43 /* Models */,
 				50832E151918BB63003AC8A7 /* Images.xcassets */,
 				50832E011918BB63003AC8A7 /* Supporting Files */,
@@ -295,6 +298,8 @@
 		50832E011918BB63003AC8A7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				508FBFE5197CE7D2002A9D69 /* TBATopMapInfoViewController.h */,
+				508FBFE6197CE7D2002A9D69 /* TBATopMapInfoViewController.m */,
 				504BC6C8197CDEED00752DB0 /* TBAPaginatedViewController.h */,
 				504BC6C9197CDEED00752DB0 /* TBAPaginatedViewController.m */,
 				50DFD1F919205F6D009B686E /* UIColor+TBAColors.h */,
@@ -619,6 +624,7 @@
 				9226B13E1932EFD900B7EF43 /* _Event.m in Sources */,
 				50832E071918BB63003AC8A7 /* main.m in Sources */,
 				50DFD1F61920365E009B686E /* MenuViewController.m in Sources */,
+				508FBFE7197CE7D2002A9D69 /* TBATopMapInfoViewController.m in Sources */,
 				504BC6C7197CDEC800752DB0 /* TeamDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

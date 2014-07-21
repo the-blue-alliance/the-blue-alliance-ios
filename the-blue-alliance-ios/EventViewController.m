@@ -35,8 +35,6 @@
     [super viewDidLoad];
 
     self.title = self.event.friendlyName;
- 
-
     
     [TBAImporter linkTeamsToEvent:self.event usingManagedObjectContext:self.context];
     

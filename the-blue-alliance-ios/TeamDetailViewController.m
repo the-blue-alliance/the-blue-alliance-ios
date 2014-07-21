@@ -14,36 +14,28 @@
 
 @implementation TeamDetailViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
+//- (NSArray *)loadViewControllers
+//{
+//    // Create the different view controllers for the pages
+//    EventInfoViewController *eivc = [[EventInfoViewController alloc] init];
+//    eivc.event = self.event;
+//    
+//    TeamsTableViewController *tvc = [[TeamsTableViewController alloc] initWithStyle:UITableViewStylePlain];
+//    tvc.eventFilter = self.event;
+//    tvc.disableSections = YES;
+//    tvc.context = self.context;
+//    
+//    MatchResultsTableViewController *mrvc = [[MatchResultsTableViewController alloc] initWithStyle:UITableViewStylePlain];
+//    mrvc.context = self.context;
+//    mrvc.event = self.event;
+//    
+//    RankingsTableViewController *rvc = [[RankingsTableViewController alloc] initWithStyle:UITableViewStylePlain];
+//    rvc.context = self.context;
+//    rvc.event = self.event;
+//    
+//    return @[eivc, tvc, mrvc, rvc];
+//}
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
