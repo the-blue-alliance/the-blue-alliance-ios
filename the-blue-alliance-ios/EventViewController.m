@@ -13,7 +13,7 @@
 #import "MatchResultsTableViewController.h"
 #import "RankingsTableViewController.h"
 
-@interface EventViewController () <UIToolbarDelegate, UIScrollViewDelegate>
+@interface EventViewController () <UIToolbarDelegate, UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 @property (nonatomic, strong) Event *event;
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) NSArray *controllers;
@@ -21,9 +21,8 @@
 @property (nonatomic, strong) UIToolbar *topToolbar;
 
 @property (nonatomic, strong) UISegmentedControl *segment;
-@property (nonatomic, strong) UIScrollView *pageView;
 
-@property (nonatomic) BOOL didLayoutPages;
+@property (nonatomic, strong) UIPageViewController *pageController;
 @end
 
 @implementation EventViewController
@@ -36,94 +35,6 @@
         self.context = context;
     }
     return self;
-}
-
-- (void)generatePages
-{
-    self.pageView = nil;
-    self.pageView = [[UIScrollView alloc] initForAutoLayout];
-    [self.view addSubview:self.pageView];
-    [self.pageView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
-    [self.pageView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.topToolbar];
-    self.pageView.pagingEnabled = YES;
-    self.pageView.showsHorizontalScrollIndicator = NO;
-    self.pageView.showsVerticalScrollIndicator = NO;
-    self.pageView.delegate = self;
-    
-    
-//    [self.pageView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [self.childViewControllers makeObjectsPerformSelector:@selector(removeFromParentViewController)];
-    
-    float width = self.view.width;
-    float height = self.view.height - (self.topToolbar.height ? self.topToolbar.height : 44);
-//    for (int i = 0; i < self.controllers.count; i++) {
-//        UIViewController *controller = self.controllers[i];
-//        [self addChildViewController:controller];
-//        
-//        UIView *view = controller.view;
-//        view.width = width;
-//        view.height = height;
-//        view.origin = CGPointMake(i * width, 0);
-//        
-//        [self.pageView addSubview:view];
-//    }
-    
-    
-    int i = 0;
-    
-    
-    UIViewController *controller = self.controllers[i];
-    [self addChildViewController:controller];
-    
-    UIView *view = controller.view;
-    view.width = width;
-    view.height = height;
-    view.origin = CGPointMake(i * width, 0);
-    
-    [self.pageView addSubview:view];
-    i++;
-    
-    
-    
-    controller = self.controllers[i];
-    [self addChildViewController:controller];
-    
-    view = controller.view;
-    view.width = width;
-    view.height = height;
-    view.origin = CGPointMake(i * width, 0);
-    
-    [self.pageView addSubview:view];
-    i++;
-    
-    
-    controller = self.controllers[i];
-    [self addChildViewController:controller];
-    
-    view = controller.view;
-    view.width = width;
-    view.height = height;
-    view.origin = CGPointMake(i * width, 0);
-    
-    [self.pageView addSubview:view];
-    i++;
-    
-    controller = self.controllers[i];
-    [self addChildViewController:controller];
-    
-    view = controller.view;
-    view.width = width;
-    view.height = height;
-    view.origin = CGPointMake(i * width, 0);
-    
-    [self.pageView addSubview:view];
-    i++;
-    
-    
-    
-    
-    
-    self.pageView.contentSize = CGSizeMake(self.controllers.count * width, height);
 }
 
 - (void)viewDidLoad
@@ -159,15 +70,6 @@
                       [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]];
     
     
-//    self.pageView = [[UIScrollView alloc] initForAutoLayout];
-//    [self.view addSubview:self.pageView];
-//    [self.pageView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
-//    [self.pageView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.topToolbar];
-//    self.pageView.pagingEnabled = YES;
-//    self.pageView.showsHorizontalScrollIndicator = NO;
-//    self.pageView.showsVerticalScrollIndicator = NO;
-//    self.pageView.delegate = self;
-    
     // Create the different view controllers for the pages
     EventInfoViewController *eivc = [[EventInfoViewController alloc] init];
     eivc.event = self.event;
@@ -188,27 +90,95 @@
     
     self.controllers = @[eivc, tvc, mrvc, rvc];
     
+    
+    
+    self.pageController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
+    
+    self.pageController.dataSource = self;
+    self.pageController.delegate = self;
+    self.pageController.view.translatesAutoresizingMaskIntoConstraints = NO;
+    self.pageController.view.backgroundColor = [UIColor whiteColor];
+    [self.pageController.view.subviews[0] setScrollEnabled:NO];
+    
+    NSArray *viewControllers = [NSArray arrayWithObject:[self.controllers firstObject]];
+    
+    [self.pageController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+    
+    [self addChildViewController:self.pageController];
+    [self.view addSubview:[self.pageController view]];
+    [self.pageController didMoveToParentViewController:self];
+    [self.pageController.view autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
+    [self.pageController.view autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.topToolbar];
+    
+    
+    
+    
     [TBAImporter linkTeamsToEvent:self.event usingManagedObjectContext:self.context];
     
 }
 
-- (void)viewWillLayoutSubviews
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillLayoutSubviews];
-    
-    [self generatePages];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(orientationChanged:)
+                                                 name:UIDeviceOrientationDidChangeNotification
+                                               object:nil];
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+- (void)viewDidDisappear:(BOOL)animated
 {
-    self.segment.selectedSegmentIndex = roundf(scrollView.contentOffset.x / scrollView.width);
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 
+- (void)orientationChanged:(NSNotification *)notification
+{
+    // Set the page controller's view controller to what it already is
+    // This forces it to resize the view controller
+    UIViewController *currentController = [self.pageController.viewControllers firstObject];
+    [self.pageController setViewControllers:@[currentController] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+}
+
+
+
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
+    int index = [self.controllers indexOfObject:viewController];
+    if(index == self.controllers.count - 1) {
+        return nil;
+    } else {
+        return self.controllers[index + 1];
+    }
+}
+
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
+    int index = [self.controllers indexOfObject:viewController];
+    if(index == 0) {
+        return nil;
+    } else {
+        return self.controllers[index - 1];
+    }
+}
+
+- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
+{
+    UIViewController *controller = [self.pageController.viewControllers firstObject];
+    self.segment.selectedSegmentIndex = [self.controllers indexOfObject:controller];
+}
 - (void)segmentPressed:(UISegmentedControl *)segment
 {
-    float xOffset = self.pageView.width * segment.selectedSegmentIndex;
-    [self.pageView setContentOffset:CGPointMake(xOffset, 0) animated:YES];
+    int currentIndex = [self.controllers indexOfObject:[self.pageController.viewControllers firstObject]];
+    int newIndex = segment.selectedSegmentIndex;
+
+    UIPageViewControllerNavigationDirection direction = newIndex >= currentIndex ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse;
+    UIViewController *controller = self.controllers[newIndex];
+
+    @try {
+        [self.pageController setViewControllers:@[controller] direction:direction animated:YES completion:nil];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"COULD NOT CHANGE VIEW CONTROLLERS!");
+    }
+
 }
 
 

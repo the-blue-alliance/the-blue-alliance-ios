@@ -39,7 +39,7 @@
     
 
 #warning Maps are pretty slow... what can be done?
-#define ENABLE_MAP 0
+#define ENABLE_MAP 1
 #if ENABLE_MAP
     // Setup map view
     MKMapView *mapView = [[MKMapView alloc] initForAutoLayout];
@@ -47,13 +47,17 @@
     [mapView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeBottom];
     [mapView autoSetDimension:ALDimensionHeight toSize:120];
 
-    // Geocode location of event (city, state)
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-    [geocoder geocodeAddressString:self.event.location completionHandler:^(NSArray *placemarks, NSError *error) {
-        CLCircularRegion *region = (CLCircularRegion *)[(CLPlacemark *)[placemarks firstObject] region];
-        MKCoordinateRegion coordRegion = MKCoordinateRegionMakeWithDistance(region.center, 2*region.radius, 2*region.radius);
-        mapView.region = coordRegion;
-    }];
+    // Maybe this made it faster?
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // Geocode location of event (city, state)
+        CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+        [geocoder geocodeAddressString:self.event.location completionHandler:^(NSArray *placemarks, NSError *error) {
+            CLCircularRegion *region = (CLCircularRegion *)[(CLPlacemark *)[placemarks firstObject] region];
+            MKCoordinateRegion coordRegion = MKCoordinateRegionMakeWithDistance(region.center, 2*region.radius, 2*region.radius);
+            mapView.region = coordRegion;
+        }];
+    });
+    
 #else
     UIView *mapView = [[UIView alloc] initForAutoLayout];
     [self.view addSubview:mapView];
