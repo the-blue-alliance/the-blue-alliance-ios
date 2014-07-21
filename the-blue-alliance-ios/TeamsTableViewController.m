@@ -8,6 +8,7 @@
 
 #import "TeamsTableViewController.h"
 #import "Team.h"
+#import "TeamDetailViewController.h"
 
 @interface TeamsTableViewController ()
 
@@ -113,6 +114,10 @@ const int SPACES_TO_ADD = 3;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    Team *team = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    TeamDetailViewController *teamDetail = [[TeamDetailViewController alloc] initWithTeam:team];
+    [self.navigationController pushViewController:teamDetail animated:YES];
 }
 
 - (NSPredicate *)predicateForSearchText:(NSString *)searchText

@@ -187,7 +187,7 @@
     self.window.tintColor = [UIColor TBATintColor];
     
     // Create content view controller, and put into a navigation controller
-    self.topNavigationController = [[UINavigationController alloc] initWithRootViewController:self.eventsViewController];
+    self.topNavigationController = [[UINavigationController alloc] initWithRootViewController:self.teamsViewController];
     self.topNavigationController.navigationBar.translucent = NO;
     
     MenuViewController *menuController = [[MenuViewController alloc] initWithMenuItems:@[@"Events", @"Teams", @"Insights", @"Settings"]];

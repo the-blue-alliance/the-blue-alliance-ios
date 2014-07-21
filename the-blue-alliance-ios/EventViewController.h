@@ -20,5 +20,5 @@
  * @param context The context for the Core Data calls
  * @return An initilized EventViewController
  */
-- (instancetype)initWithEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context;
+- (instancetype)initWithEvent:(Event *)event;
 @end

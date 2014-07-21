@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Team.h"
+#import "TBAPaginatedViewController.h"
 
-@interface TeamDetailViewController : UIViewController
+@interface TeamDetailViewController : TBAPaginatedViewController
+
+- (instancetype)initWithTeam:(Team *)team;
 
 @end

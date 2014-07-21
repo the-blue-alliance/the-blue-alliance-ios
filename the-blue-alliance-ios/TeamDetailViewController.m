@@ -7,35 +7,37 @@
 //
 
 #import "TeamDetailViewController.h"
+#import "TeamInfoViewController.h"
 
 @interface TeamDetailViewController ()
-
+@property (nonatomic, strong) Team *team;
 @end
 
 @implementation TeamDetailViewController
 
+- (instancetype)initWithTeam:(Team *)team
+{
+    self = [super init];
+    if(self) {
+        self.team = team;
+    }
+    return self;
+}
 
-//- (NSArray *)loadViewControllers
-//{
-//    // Create the different view controllers for the pages
-//    EventInfoViewController *eivc = [[EventInfoViewController alloc] init];
-//    eivc.event = self.event;
-//    
-//    TeamsTableViewController *tvc = [[TeamsTableViewController alloc] initWithStyle:UITableViewStylePlain];
-//    tvc.eventFilter = self.event;
-//    tvc.disableSections = YES;
-//    tvc.context = self.context;
-//    
-//    MatchResultsTableViewController *mrvc = [[MatchResultsTableViewController alloc] initWithStyle:UITableViewStylePlain];
-//    mrvc.context = self.context;
-//    mrvc.event = self.event;
-//    
-//    RankingsTableViewController *rvc = [[RankingsTableViewController alloc] initWithStyle:UITableViewStylePlain];
-//    rvc.context = self.context;
-//    rvc.event = self.event;
-//    
-//    return @[eivc, tvc, mrvc, rvc];
-//}
+- (NSString *)title
+{
+    return [NSString stringWithFormat:@"FRC Team %d", self.team.team_numberValue];
+}
+
+- (NSArray *)loadViewControllers
+{
+    // Create the different view controllers for the pages
+    TeamInfoViewController *tivc = [[TeamInfoViewController alloc] init];
+    tivc.team = self.team;
+
+    
+    return @[tivc];
+}
 
 
 @end

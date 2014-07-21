@@ -15,17 +15,15 @@
 
 @interface EventViewController ()
 @property (nonatomic, strong) Event *event;
-@property (nonatomic, strong) NSManagedObjectContext *context;
 @end
 
 @implementation EventViewController
 
-- (instancetype)initWithEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context
+- (instancetype)initWithEvent:(Event *)event
 {
     self = [super init];
     if(self) {
         self.event = event;
-        self.context = context;
     }
     return self;
 }
@@ -36,8 +34,7 @@
 
     self.title = self.event.friendlyName;
     
-    [TBAImporter linkTeamsToEvent:self.event usingManagedObjectContext:self.context];
-    
+    [TBAImporter linkTeamsToEvent:self.event usingManagedObjectContext:self.event.managedObjectContext];
 }
 
 - (NSArray *)loadViewControllers
@@ -49,14 +46,14 @@
     TeamsTableViewController *tvc = [[TeamsTableViewController alloc] initWithStyle:UITableViewStylePlain];
     tvc.eventFilter = self.event;
     tvc.disableSections = YES;
-    tvc.context = self.context;
+    tvc.context = self.event.managedObjectContext;
     
     MatchResultsTableViewController *mrvc = [[MatchResultsTableViewController alloc] initWithStyle:UITableViewStylePlain];
-    mrvc.context = self.context;
+    mrvc.context = self.event.managedObjectContext;
     mrvc.event = self.event;
     
     RankingsTableViewController *rvc = [[RankingsTableViewController alloc] initWithStyle:UITableViewStylePlain];
-    rvc.context = self.context;
+    rvc.context = self.event.managedObjectContext;
     rvc.event = self.event;
     
     return @[eivc, tvc, mrvc, rvc];

@@ -10,17 +10,6 @@
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 
-/**
- *  Simple container class for wrapping the image and text to display for a single row of metadata about an event
- */
-@interface EventInfoDataDisplay : NSObject
-@property (nonatomic, copy) NSString *text;
-@property (nonatomic, strong) UIImage *icon;
-@end
-
-@implementation EventInfoDataDisplay
-@end
-
 
 @interface EventInfoViewController ()
 @property (nonatomic, strong) UITableView *infoTable;
@@ -49,15 +38,15 @@
 
 - (NSArray *)loadInfoObjects
 {
-    EventInfoDataDisplay *websiteInfo = [[EventInfoDataDisplay alloc] init];
+    TBATopMapInfoViewControllerInfoRowObject *websiteInfo = [[TBATopMapInfoViewControllerInfoRowObject alloc] init];
     websiteInfo.text = self.event.website.length ? self.event.website : @"No website";
     websiteInfo.icon = [UIImage imageNamed:@"website"];
     
-    EventInfoDataDisplay *dateInfo = [[EventInfoDataDisplay alloc] init];
+    TBATopMapInfoViewControllerInfoRowObject *dateInfo = [[TBATopMapInfoViewControllerInfoRowObject alloc] init];
     dateInfo.text = [self eventDateFriendlyText];
     dateInfo.icon = [UIImage imageNamed:@"calendar"];
     
-    EventInfoDataDisplay *locationInfo = [[EventInfoDataDisplay alloc] init];
+    TBATopMapInfoViewControllerInfoRowObject *locationInfo = [[TBATopMapInfoViewControllerInfoRowObject alloc] init];
     locationInfo.text = self.event.location;
     locationInfo.icon = [UIImage imageNamed:@"location"];
     
