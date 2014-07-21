@@ -85,9 +85,15 @@
     return sections;
 }
 
+
+- (NSString *)title {
+    return @"Results";
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [self.tableView registerNib:[UINib nibWithNibName:@"MatchResultsTableViewCell" bundle:nil] forCellReuseIdentifier:@"Match Cell"];
 //    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Match Cell"];
     self.tableView.rowHeight = 80;

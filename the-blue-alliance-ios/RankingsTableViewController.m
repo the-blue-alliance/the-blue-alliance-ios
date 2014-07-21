@@ -86,8 +86,14 @@
 }
 
 
+- (NSString *)title {
+    return @"Rankings";
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.title = @"Rankings";
     [self.tableView registerNib:[UINib nibWithNibName:@"RankingsTableViewCell" bundle:nil] forCellReuseIdentifier:@"Rankings Cell"];
     self.tableView.rowHeight = 80;
 }

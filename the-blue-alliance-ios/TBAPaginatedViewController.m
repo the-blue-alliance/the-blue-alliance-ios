@@ -51,7 +51,12 @@
     self.topToolbar.translucent = NO;
     self.topToolbar.barTintColor = [UIColor TBANavigationBarColor];
     
-    self.segment = [[UISegmentedControl alloc] initWithItems:[self.viewControllers valueForKeyPath:@"title.@description"]];
+    NSMutableArray *titles = [[NSMutableArray alloc] initWithCapacity:self.viewControllers.count];
+    for (UIViewController *controller in self.viewControllers) {
+        [titles addObject:controller.title ? controller.title : @"NO TITLE"];
+    }
+    
+    self.segment = [[UISegmentedControl alloc] initWithItems:titles];
     self.segment.selectedSegmentIndex = 0;
     [self.segment addTarget:self action:@selector(segmentPressed:) forControlEvents:UIControlEventValueChanged];
     UIBarButtonItem *segmentItem = [[UIBarButtonItem alloc] initWithCustomView:self.segment];

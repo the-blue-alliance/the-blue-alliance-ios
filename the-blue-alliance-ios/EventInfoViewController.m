@@ -30,6 +30,11 @@
 
 @implementation EventInfoViewController
 
+
+- (NSString *)title {
+    return @"Info";
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

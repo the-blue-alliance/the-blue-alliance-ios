@@ -58,6 +58,7 @@
 //    } else {
 //        self.fetchedResultsController.fetchRequest.predicate = nil;
 //    }
+    self.title = @"Teams";
 }
 
 - (void)setDisableSections:(BOOL)disableSections

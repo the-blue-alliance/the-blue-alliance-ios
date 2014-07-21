@@ -30,6 +30,8 @@
 		50293417195F8B26001DFB89 /* Media.m in Sources */ = {isa = PBXBuildFile; fileRef = 50293416195F8B26001DFB89 /* Media.m */; };
 		5029341A195F8B26001DFB89 /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 50293419195F8B26001DFB89 /* Match.m */; };
 		5040543A194E69A900FFA07B /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50405439194E69A900FFA07B /* CoreLocation.framework */; };
+		504BC6C7197CDEC800752DB0 /* TeamDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 504BC6C6197CDEC800752DB0 /* TeamDetailViewController.m */; };
+		504BC6CA197CDEED00752DB0 /* TBAPaginatedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 504BC6C9197CDEED00752DB0 /* TBAPaginatedViewController.m */; };
 		5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */; };
 		50832DFB1918BB63003AC8A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFA1918BB63003AC8A7 /* Foundation.framework */; };
 		50832DFD1918BB63003AC8A7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFC1918BB63003AC8A7 /* CoreGraphics.framework */; };
@@ -107,6 +109,10 @@
 		50293418195F8B26001DFB89 /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
 		50293419195F8B26001DFB89 /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
 		50405439194E69A900FFA07B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		504BC6C5197CDEC800752DB0 /* TeamDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamDetailViewController.h; sourceTree = "<group>"; };
+		504BC6C6197CDEC800752DB0 /* TeamDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamDetailViewController.m; sourceTree = "<group>"; };
+		504BC6C8197CDEED00752DB0 /* TBAPaginatedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAPaginatedViewController.h; sourceTree = "<group>"; };
+		504BC6C9197CDEED00752DB0 /* TBAPaginatedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAPaginatedViewController.m; sourceTree = "<group>"; };
 		5057CD1C1929987D00654304 /* SearchableCoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchableCoreDataTableViewController.h; sourceTree = "<group>"; };
 		5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchableCoreDataTableViewController.m; sourceTree = "<group>"; };
 		50832DF71918BB63003AC8A7 /* the-blue-alliance-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "the-blue-alliance-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -223,6 +229,15 @@
 			name = Media;
 			sourceTree = "<group>";
 		};
+		504BC6C4197CDEB300752DB0 /* Team Detail View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				504BC6C5197CDEC800752DB0 /* TeamDetailViewController.h */,
+				504BC6C6197CDEC800752DB0 /* TeamDetailViewController.m */,
+			);
+			name = "Team Detail View Controller";
+			sourceTree = "<group>";
+		};
 		50832DEE1918BB63003AC8A7 = {
 			isa = PBXGroup;
 			children = (
@@ -263,6 +278,7 @@
 		50832E001918BB63003AC8A7 /* the-blue-alliance-ios */ = {
 			isa = PBXGroup;
 			children = (
+				504BC6C4197CDEB300752DB0 /* Team Detail View Controller */,
 				50832E091918BB63003AC8A7 /* AppDelegate.h */,
 				50832E0A1918BB63003AC8A7 /* AppDelegate.m */,
 				50DFD1F41920365E009B686E /* MenuViewController.h */,
@@ -279,6 +295,8 @@
 		50832E011918BB63003AC8A7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				504BC6C8197CDEED00752DB0 /* TBAPaginatedViewController.h */,
+				504BC6C9197CDEED00752DB0 /* TBAPaginatedViewController.m */,
 				50DFD1F919205F6D009B686E /* UIColor+TBAColors.h */,
 				50DFD1FA19205F6D009B686E /* UIColor+TBAColors.m */,
 				50832E0C1918BB63003AC8A7 /* Main_iPhone.storyboard */,
@@ -596,10 +614,12 @@
 				92C5B870192C0BBC00AFDBCA /* YearSelectView.m in Sources */,
 				50C0FC231931743700670A64 /* EventViewController.m in Sources */,
 				50293417195F8B26001DFB89 /* Media.m in Sources */,
+				504BC6CA197CDEED00752DB0 /* TBAPaginatedViewController.m in Sources */,
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,
 				9226B13E1932EFD900B7EF43 /* _Event.m in Sources */,
 				50832E071918BB63003AC8A7 /* main.m in Sources */,
 				50DFD1F61920365E009B686E /* MenuViewController.m in Sources */,
+				504BC6C7197CDEC800752DB0 /* TeamDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
