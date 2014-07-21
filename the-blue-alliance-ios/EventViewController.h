@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "Event.h"
+#import "TBAPaginatedViewController.h"
 
 /** `EventViewController` is a detail view for event data.
  */
-@interface EventViewController : UIViewController
+@interface EventViewController : TBAPaginatedViewController
 
 /** Initilizes the EventViewController for a given event
  *
