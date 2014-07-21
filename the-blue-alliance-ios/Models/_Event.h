@@ -29,6 +29,7 @@ extern const struct EventAttributes {
 
 extern const struct EventRelationships {
 	__unsafe_unretained NSString *matches;
+	__unsafe_unretained NSString *media;
 	__unsafe_unretained NSString *teams;
 } EventRelationships;
 
@@ -36,6 +37,7 @@ extern const struct EventFetchedProperties {
 } EventFetchedProperties;
 
 @class Match;
+@class Media;
 @class Team;
 
 
@@ -303,6 +305,13 @@ extern const struct EventFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *media;
+
+- (NSMutableSet*)mediaSet;
+
+
+
+
 @property (nonatomic, strong) NSSet *teams;
 
 - (NSMutableSet*)teamsSet;
@@ -319,6 +328,11 @@ extern const struct EventFetchedProperties {
 - (void)removeMatches:(NSSet*)value_;
 - (void)addMatchesObject:(Match*)value_;
 - (void)removeMatchesObject:(Match*)value_;
+
+- (void)addMedia:(NSSet*)value_;
+- (void)removeMedia:(NSSet*)value_;
+- (void)addMediaObject:(Media*)value_;
+- (void)removeMediaObject:(Media*)value_;
 
 - (void)addTeams:(NSSet*)value_;
 - (void)removeTeams:(NSSet*)value_;
@@ -471,6 +485,11 @@ extern const struct EventFetchedProperties {
 
 - (NSMutableSet*)primitiveMatches;
 - (void)setPrimitiveMatches:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveMedia;
+- (void)setPrimitiveMedia:(NSMutableSet*)value;
 
 
 

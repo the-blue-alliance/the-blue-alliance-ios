@@ -22,6 +22,7 @@
         <attribute name="week" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="year" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="matches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="event" inverseEntity="Match" syncable="YES"/>
+        <relationship name="media" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Media" inverseName="events" inverseEntity="Media" syncable="YES"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="events" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Match" representedClassName="Match" syncable="YES">
@@ -39,9 +40,12 @@
     </entity>
     <entity name="Media" representedClassName="Media" syncable="YES">
         <attribute name="cachedData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="channel" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="media" inverseEntity="Event" syncable="YES"/>
         <relationship name="matches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="media" inverseEntity="Match" syncable="YES"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="media" inverseEntity="Team" syncable="YES"/>
     </entity>
@@ -62,9 +66,9 @@
         <relationship name="media" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Media" inverseName="teams" inverseEntity="Media" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Event" positionX="-1485" positionY="1920" width="128" height="375"/>
+        <element name="Event" positionX="-1485" positionY="1920" width="128" height="388"/>
         <element name="Match" positionX="-1242" positionY="1917" width="128" height="208"/>
-        <element name="Media" positionX="-965" positionY="2159" width="128" height="133"/>
+        <element name="Media" positionX="-965" positionY="2159" width="128" height="178"/>
         <element name="Team" positionX="-1242" positionY="2277" width="128" height="253"/>
     </elements>
 </model>

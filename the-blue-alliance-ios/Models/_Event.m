@@ -28,6 +28,7 @@ const struct EventAttributes EventAttributes = {
 
 const struct EventRelationships EventRelationships = {
 	.matches = @"matches",
+	.media = @"media",
 	.teams = @"teams",
 };
 
@@ -360,6 +361,19 @@ const struct EventFetchedProperties EventFetchedProperties = {
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"matches"];
   
 	[self didAccessValueForKey:@"matches"];
+	return result;
+}
+	
+
+@dynamic media;
+
+	
+- (NSMutableSet*)mediaSet {
+	[self willAccessValueForKey:@"media"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"media"];
+  
+	[self didAccessValueForKey:@"media"];
 	return result;
 }
 	

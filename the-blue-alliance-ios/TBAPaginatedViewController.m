@@ -59,6 +59,7 @@
     self.segment = [[UISegmentedControl alloc] initWithItems:titles];
     self.segment.selectedSegmentIndex = 0;
     [self.segment addTarget:self action:@selector(segmentPressed:) forControlEvents:UIControlEventValueChanged];
+    self.segment.apportionsSegmentWidthsByContent = YES;
     UIBarButtonItem *segmentItem = [[UIBarButtonItem alloc] initWithCustomView:self.segment];
     self.topToolbar.items = @[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
                               segmentItem,

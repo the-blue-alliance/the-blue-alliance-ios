@@ -5,12 +5,15 @@
 
 const struct MediaAttributes MediaAttributes = {
 	.cachedData = @"cachedData",
+	.channel = @"channel",
 	.key = @"key",
+	.title = @"title",
 	.type = @"type",
 	.url = @"url",
 };
 
 const struct MediaRelationships MediaRelationships = {
+	.events = @"events",
 	.matches = @"matches",
 	.teams = @"teams",
 };
@@ -58,7 +61,21 @@ const struct MediaFetchedProperties MediaFetchedProperties = {
 
 
 
+@dynamic channel;
+
+
+
+
+
+
 @dynamic key;
+
+
+
+
+
+
+@dynamic title;
 
 
 
@@ -78,6 +95,19 @@ const struct MediaFetchedProperties MediaFetchedProperties = {
 
 
 
+
+@dynamic events;
+
+	
+- (NSMutableSet*)eventsSet {
+	[self willAccessValueForKey:@"events"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"events"];
+  
+	[self didAccessValueForKey:@"events"];
+	return result;
+}
+	
 
 @dynamic matches;
 

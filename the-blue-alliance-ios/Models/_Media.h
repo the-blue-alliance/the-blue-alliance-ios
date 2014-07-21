@@ -6,12 +6,15 @@
 
 extern const struct MediaAttributes {
 	__unsafe_unretained NSString *cachedData;
+	__unsafe_unretained NSString *channel;
 	__unsafe_unretained NSString *key;
+	__unsafe_unretained NSString *title;
 	__unsafe_unretained NSString *type;
 	__unsafe_unretained NSString *url;
 } MediaAttributes;
 
 extern const struct MediaRelationships {
+	__unsafe_unretained NSString *events;
 	__unsafe_unretained NSString *matches;
 	__unsafe_unretained NSString *teams;
 } MediaRelationships;
@@ -19,8 +22,11 @@ extern const struct MediaRelationships {
 extern const struct MediaFetchedProperties {
 } MediaFetchedProperties;
 
+@class Event;
 @class Match;
 @class Team;
+
+
 
 
 
@@ -50,11 +56,31 @@ extern const struct MediaFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSString* channel;
+
+
+
+//- (BOOL)validateChannel:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
 @property (nonatomic, strong) NSString* key;
 
 
 
 //- (BOOL)validateKey:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* title;
+
+
+
+//- (BOOL)validateTitle:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -80,6 +106,13 @@ extern const struct MediaFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *events;
+
+- (NSMutableSet*)eventsSet;
+
+
+
+
 @property (nonatomic, strong) NSSet *matches;
 
 - (NSMutableSet*)matchesSet;
@@ -98,6 +131,11 @@ extern const struct MediaFetchedProperties {
 @end
 
 @interface _Media (CoreDataGeneratedAccessors)
+
+- (void)addEvents:(NSSet*)value_;
+- (void)removeEvents:(NSSet*)value_;
+- (void)addEventsObject:(Event*)value_;
+- (void)removeEventsObject:(Event*)value_;
 
 - (void)addMatches:(NSSet*)value_;
 - (void)removeMatches:(NSSet*)value_;
@@ -120,8 +158,20 @@ extern const struct MediaFetchedProperties {
 
 
 
+- (NSString*)primitiveChannel;
+- (void)setPrimitiveChannel:(NSString*)value;
+
+
+
+
 - (NSString*)primitiveKey;
 - (void)setPrimitiveKey:(NSString*)value;
+
+
+
+
+- (NSString*)primitiveTitle;
+- (void)setPrimitiveTitle:(NSString*)value;
 
 
 
@@ -136,6 +186,11 @@ extern const struct MediaFetchedProperties {
 - (void)setPrimitiveUrl:(NSString*)value;
 
 
+
+
+
+- (NSMutableSet*)primitiveEvents;
+- (void)setPrimitiveEvents:(NSMutableSet*)value;
 
 
 

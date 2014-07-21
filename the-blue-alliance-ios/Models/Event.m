@@ -1,4 +1,5 @@
 #import "Event.h"
+#import "Media.h"
 
 @implementation Event
 @dynamic key;
@@ -59,6 +60,17 @@
         [NSException raise:@"start_date is invalid" format:@"start_date of %@ is invalid for the event key %@", info[@"start_date"], info[@"key"]];
     }
     
+    NSArray *webcastServerInfo = info[@"webcast"];
+    NSMutableArray *webcastInfo = [[NSMutableArray alloc] initWithCapacity:webcastServerInfo.count];
+    for (NSDictionary *webcast in webcastServerInfo) {
+        NSMutableDictionary *mutWebcast = [webcast mutableCopy];
+        mutWebcast[@"key"] = [NSString stringWithFormat:@"%@.%@", webcast[@"type"], webcast[@"channel"]];
+        [webcastInfo addObject:mutWebcast];
+    }
+    NSArray *webcasts = [Media createManagedObjectsFromInfoArray:webcastInfo
+                                    checkingPrexistanceUsingUniqueKey:@"key"
+                                            usingManagedObjectContext:context];
+    self.media = [NSSet setWithArray:webcasts];
     // TODO: Finish / improve importing
 }
 

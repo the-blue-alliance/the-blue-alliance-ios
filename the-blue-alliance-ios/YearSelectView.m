@@ -12,11 +12,12 @@
 @interface YearSelectView ()
 @property (nonatomic) NSInteger currentYear;
 @property (nonatomic) NSInteger initYear;
+
+@property (nonatomic) NSInteger startYear;
+@property (nonatomic) NSInteger endYear;
 @end
 
 @implementation YearSelectView
-
-const int kNumberOfYears = 23;
 
 - (instancetype)initWithDelegate:(id)delegate currentYear:(NSInteger)year
 {
@@ -25,6 +26,9 @@ const int kNumberOfYears = 23;
         self.delegate = delegate;
         self.initYear = year;
         self.currentYear = year;
+        
+        self.startYear = 1992;
+        self.endYear = [NSDate date].year + 1;
     }
     return self;
 }
@@ -55,7 +59,7 @@ const int kNumberOfYears = 23;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return kNumberOfYears;
+    return self.endYear -  self.startYear + 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -65,13 +69,13 @@ const int kNumberOfYears = 23;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Year Cell"];
     }
     
-    if ((2014 - indexPath.row) == self.currentYear) {
+    if ((self.endYear - indexPath.row) == self.currentYear) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
 
-    cell.textLabel.text = [NSString stringWithFormat:@"%ld", 2014l - indexPath.row];
+    cell.textLabel.text = [NSString stringWithFormat:@"%d", self.endYear - indexPath.row];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;

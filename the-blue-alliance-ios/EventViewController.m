@@ -12,6 +12,7 @@
 #import "EventInfoViewController.h"
 #import "MatchResultsTableViewController.h"
 #import "RankingsTableViewController.h"
+#import "EventWebcastsViewController.h"
 
 @interface EventViewController ()
 @property (nonatomic, strong) Event *event;
@@ -56,7 +57,10 @@
     rvc.context = self.event.managedObjectContext;
     rvc.event = self.event;
     
-    return @[eivc, tvc, mrvc, rvc];
+    EventWebcastsViewController *wvc = [[EventWebcastsViewController alloc] init];
+    wvc.event = self.event;
+    
+    return @[eivc, tvc, mrvc, rvc, wvc];
 }
 
 
