@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
 
 
 /**
@@ -21,9 +22,8 @@
 @interface TBATopMapInfoViewController : UIViewController
 
 
-
+@property (nonatomic) MKCoordinateRegion mapRegion;
 // Override:
-- (NSString *)locationString;
 - (NSString *)mapTitle;
 - (NSArray *)loadInfoObjects;
 

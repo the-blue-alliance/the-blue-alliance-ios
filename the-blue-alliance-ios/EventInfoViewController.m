@@ -31,11 +31,6 @@
     return self.event.friendlyName;
 }
 
-- (NSString *)locationString
-{
-    return self.event.location;
-}
-
 - (NSArray *)loadInfoObjects
 {
     TBATopMapInfoViewControllerInfoRowObject *websiteInfo = [[TBATopMapInfoViewControllerInfoRowObject alloc] init];
@@ -62,6 +57,32 @@
     return [NSString stringWithFormat:@"%@ to %@", [formatter stringFromDate:self.event.start_date], [formatter stringFromDate:self.event.end_date]];
 }
 
+
+
+- (void) viewDidLoad
+{
+    [super viewDidLoad];
+    
+    
+    if(ABS(self.event.cachedLocationRadius.doubleValue) > DBL_EPSILON) {
+        self.mapRegion = MKCoordinateRegionMakeWithDistance(CLLocationCoordinate2DMake(self.event.cachedLocationLatValue, self.event.cachedLocationLonValue), 2*self.event.cachedLocationRadiusValue, 2*self.event.cachedLocationRadiusValue);
+    } else {
+        // Maybe this made it faster?
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            // Geocode location of event (city, state)
+            CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+            [geocoder geocodeAddressString:self.event.location completionHandler:^(NSArray *placemarks, NSError *error) {
+                CLCircularRegion *region = (CLCircularRegion *)[(CLPlacemark *)[placemarks firstObject] region];
+                MKCoordinateRegion coordRegion = MKCoordinateRegionMakeWithDistance(region.center, 2*region.radius, 2*region.radius);
+                self.event.cachedLocationLatValue = region.center.latitude;
+                self.event.cachedLocationLonValue = region.center.longitude;
+                self.event.cachedLocationRadiusValue = region.radius;
+
+                self.mapRegion = coordRegion;
+            }];
+        });
+    }
+}
 
 
 

@@ -18,15 +18,13 @@
 @property (nonatomic, strong) UITableView *infoTable;
 @property (nonatomic, strong) NSArray *infoArray; // Array of EventInfoDataDisplay objects
 @property (nonatomic, strong) NSLayoutConstraint *tableHeightConstraint;
+@property (nonatomic, strong) MKMapView *mapView;
 @end
 
 @implementation TBATopMapInfoViewController
 
 
-- (NSString *)locationString
-{
-    return @"";
-}
+
 
 - (NSString *)mapTitle
 {
@@ -39,6 +37,13 @@
 }
 
 
+- (void)setMapRegion:(MKCoordinateRegion)mapRegion
+{
+    _mapRegion = mapRegion;
+    self.mapView.region = mapRegion;
+    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -47,38 +52,18 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     
-#warning Maps are pretty slow... what can be done?
-#define ENABLE_MAP 1
-#if ENABLE_MAP
     // Setup map view
-    MKMapView *mapView = [[MKMapView alloc] initForAutoLayout];
-    [self.view addSubview:mapView];
-    [mapView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeBottom];
-    [mapView autoSetDimension:ALDimensionHeight toSize:120];
+    self.mapView = [[MKMapView alloc] initForAutoLayout];
+    [self.view addSubview:self.mapView];
+    [self.mapView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeBottom];
+    [self.mapView autoSetDimension:ALDimensionHeight toSize:120];
     
-    // Maybe this made it faster?
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // Geocode location of event (city, state)
-        CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-        [geocoder geocodeAddressString:[self locationString] completionHandler:^(NSArray *placemarks, NSError *error) {
-            CLCircularRegion *region = (CLCircularRegion *)[(CLPlacemark *)[placemarks firstObject] region];
-            MKCoordinateRegion coordRegion = MKCoordinateRegionMakeWithDistance(region.center, 2*region.radius, 2*region.radius);
-            mapView.region = coordRegion;
-        }];
-    });
-    
-#else
-    UIView *mapView = [[UIView alloc] initForAutoLayout];
-    [self.view addSubview:mapView];
-    [mapView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeBottom];
-    [mapView autoSetDimension:ALDimensionHeight toSize:120];
-#endif
     
     
     // Setup event title overlay over map
     UIView *darkOverlay = [[UIView alloc] initForAutoLayout];
     darkOverlay.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.600];
-    [mapView addSubview:darkOverlay];
+    [self.mapView addSubview:darkOverlay];
     [darkOverlay autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero];
     
     UILabel *eventTitle = [[UILabel alloc] initForAutoLayout];
@@ -88,7 +73,7 @@
     eventTitle.textAlignment = NSTextAlignmentLeft;
     eventTitle.numberOfLines = 0;
     eventTitle.lineBreakMode = NSLineBreakByWordWrapping;
-    [mapView addSubview:eventTitle];
+    [self.mapView addSubview:eventTitle];
     [eventTitle autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsMake(8, 8, 8, 8) excludingEdge:ALEdgeTop];
     
     
@@ -98,7 +83,7 @@
     self.infoTable.dataSource = self;
     self.infoTable.delegate = self;
     [self.view addSubview:self.infoTable];
-    [self.infoTable autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:mapView];
+    [self.infoTable autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.mapView];
     [self.infoTable autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:0];
     [self.infoTable autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:0];
     self.tableHeightConstraint = [self.infoTable autoSetDimension:ALDimensionHeight toSize:300];

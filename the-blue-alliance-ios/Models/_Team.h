@@ -6,6 +6,9 @@
 
 extern const struct TeamAttributes {
 	__unsafe_unretained NSString *address;
+	__unsafe_unretained NSString *cachedLocationLat;
+	__unsafe_unretained NSString *cachedLocationLon;
+	__unsafe_unretained NSString *cachedLocationRadius;
 	__unsafe_unretained NSString *grouping_text;
 	__unsafe_unretained NSString *key;
 	__unsafe_unretained NSString *last_updated;
@@ -43,6 +46,9 @@ extern const struct TeamFetchedProperties {
 
 
 
+
+
+
 @interface TeamID : NSManagedObjectID {}
 @end
 
@@ -61,6 +67,48 @@ extern const struct TeamFetchedProperties {
 
 
 //- (BOOL)validateAddress:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* cachedLocationLat;
+
+
+
+@property double cachedLocationLatValue;
+- (double)cachedLocationLatValue;
+- (void)setCachedLocationLatValue:(double)value_;
+
+//- (BOOL)validateCachedLocationLat:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* cachedLocationLon;
+
+
+
+@property double cachedLocationLonValue;
+- (double)cachedLocationLonValue;
+- (void)setCachedLocationLonValue:(double)value_;
+
+//- (BOOL)validateCachedLocationLon:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* cachedLocationRadius;
+
+
+
+@property double cachedLocationRadiusValue;
+- (double)cachedLocationRadiusValue;
+- (void)setCachedLocationRadiusValue:(double)value_;
+
+//- (BOOL)validateCachedLocationRadius:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -228,6 +276,33 @@ extern const struct TeamFetchedProperties {
 
 - (NSString*)primitiveAddress;
 - (void)setPrimitiveAddress:(NSString*)value;
+
+
+
+
+- (NSNumber*)primitiveCachedLocationLat;
+- (void)setPrimitiveCachedLocationLat:(NSNumber*)value;
+
+- (double)primitiveCachedLocationLatValue;
+- (void)setPrimitiveCachedLocationLatValue:(double)value_;
+
+
+
+
+- (NSNumber*)primitiveCachedLocationLon;
+- (void)setPrimitiveCachedLocationLon:(NSNumber*)value;
+
+- (double)primitiveCachedLocationLonValue;
+- (void)setPrimitiveCachedLocationLonValue:(double)value_;
+
+
+
+
+- (NSNumber*)primitiveCachedLocationRadius;
+- (void)setPrimitiveCachedLocationRadius:(NSNumber*)value;
+
+- (double)primitiveCachedLocationRadiusValue;
+- (void)setPrimitiveCachedLocationRadiusValue:(double)value_;
 
 
 

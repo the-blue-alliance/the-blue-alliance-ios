@@ -53,6 +53,7 @@
 		508FBFE7197CE7D2002A9D69 /* TBATopMapInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FBFE6197CE7D2002A9D69 /* TBATopMapInfoViewController.m */; };
 		508FBFEA197CEB7E002A9D69 /* TeamInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FBFE9197CEB7E002A9D69 /* TeamInfoViewController.m */; };
 		50A71376197C7694009FBCAE /* ColumnView.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A71375197C7694009FBCAE /* ColumnView.m */; };
+		50B7F0FC197CFAEF000A2368 /* EventWebcastsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50B7F0FB197CFAEF000A2368 /* EventWebcastsViewController.m */; };
 		50C0FC231931743700670A64 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C0FC221931743700670A64 /* EventViewController.m */; };
 		50C88502197B7CC000F6D243 /* RankingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C88500197B7CC000F6D243 /* RankingsTableViewCell.m */; };
 		50C88503197B7CC000F6D243 /* RankingsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50C88501197B7CC000F6D243 /* RankingsTableViewCell.xib */; };
@@ -148,6 +149,8 @@
 		50A71374197C7694009FBCAE /* ColumnView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnView.h; sourceTree = "<group>"; };
 		50A71375197C7694009FBCAE /* ColumnView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnView.m; sourceTree = "<group>"; };
 		50A88D70195F784E001F8A3D /* The Blue Alliance 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 4.xcdatamodel"; sourceTree = "<group>"; };
+		50B7F0FA197CFAEF000A2368 /* EventWebcastsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventWebcastsViewController.h; sourceTree = "<group>"; };
+		50B7F0FB197CFAEF000A2368 /* EventWebcastsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventWebcastsViewController.m; sourceTree = "<group>"; };
 		50C0FC211931743700670A64 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
 		50C0FC221931743700670A64 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
 		50C884FF197B7CC000F6D243 /* RankingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingsTableViewCell.h; sourceTree = "<group>"; };
@@ -382,6 +385,8 @@
 				50C88500197B7CC000F6D243 /* RankingsTableViewCell.m */,
 				50A71374197C7694009FBCAE /* ColumnView.h */,
 				50A71375197C7694009FBCAE /* ColumnView.m */,
+				50B7F0FA197CFAEF000A2368 /* EventWebcastsViewController.h */,
+				50B7F0FB197CFAEF000A2368 /* EventWebcastsViewController.m */,
 			);
 			name = "Event Detail Controler";
 			sourceTree = "<group>";
@@ -626,6 +631,7 @@
 				50C0FC231931743700670A64 /* EventViewController.m in Sources */,
 				50293417195F8B26001DFB89 /* Media.m in Sources */,
 				504BC6CA197CDEED00752DB0 /* TBAPaginatedViewController.m in Sources */,
+				50B7F0FC197CFAEF000A2368 /* EventWebcastsViewController.m in Sources */,
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,
 				9226B13E1932EFD900B7EF43 /* _Event.m in Sources */,
 				50832E071918BB63003AC8A7 /* main.m in Sources */,

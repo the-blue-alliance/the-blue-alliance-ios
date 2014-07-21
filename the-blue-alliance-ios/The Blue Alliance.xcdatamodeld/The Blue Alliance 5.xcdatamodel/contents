@@ -2,6 +2,9 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="14A283o" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Event" representedClassName="Event" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cachedLocationLat" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="cachedLocationLon" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="cachedLocationRadius" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="district_enum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="end_date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="event_short" optional="YES" attributeType="String" syncable="YES"/>
@@ -51,6 +54,9 @@
     </entity>
     <entity name="Team" representedClassName="Team" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cachedLocationLat" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="cachedLocationLon" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="cachedLocationRadius" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="grouping_text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="last_updated" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -66,9 +72,9 @@
         <relationship name="media" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Media" inverseName="teams" inverseEntity="Media" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Event" positionX="-1485" positionY="1920" width="128" height="388"/>
+        <element name="Event" positionX="-1485" positionY="1920" width="128" height="433"/>
         <element name="Match" positionX="-1242" positionY="1917" width="128" height="208"/>
         <element name="Media" positionX="-965" positionY="2159" width="128" height="178"/>
-        <element name="Team" positionX="-1242" positionY="2277" width="128" height="253"/>
+        <element name="Team" positionX="-1242" positionY="2277" width="128" height="298"/>
     </elements>
 </model>

@@ -5,6 +5,9 @@
 
 const struct EventAttributes EventAttributes = {
 	.address = @"address",
+	.cachedLocationLat = @"cachedLocationLat",
+	.cachedLocationLon = @"cachedLocationLon",
+	.cachedLocationRadius = @"cachedLocationRadius",
 	.district_enum = @"district_enum",
 	.end_date = @"end_date",
 	.event_short = @"event_short",
@@ -61,6 +64,21 @@ const struct EventFetchedProperties EventFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"cachedLocationLatValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"cachedLocationLat"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"cachedLocationLonValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"cachedLocationLon"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"cachedLocationRadiusValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"cachedLocationRadius"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 	if ([key isEqualToString:@"district_enumValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"district_enum"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -100,6 +118,84 @@ const struct EventFetchedProperties EventFetchedProperties = {
 
 @dynamic address;
 
+
+
+
+
+
+@dynamic cachedLocationLat;
+
+
+
+- (double)cachedLocationLatValue {
+	NSNumber *result = [self cachedLocationLat];
+	return [result doubleValue];
+}
+
+- (void)setCachedLocationLatValue:(double)value_ {
+	[self setCachedLocationLat:[NSNumber numberWithDouble:value_]];
+}
+
+- (double)primitiveCachedLocationLatValue {
+	NSNumber *result = [self primitiveCachedLocationLat];
+	return [result doubleValue];
+}
+
+- (void)setPrimitiveCachedLocationLatValue:(double)value_ {
+	[self setPrimitiveCachedLocationLat:[NSNumber numberWithDouble:value_]];
+}
+
+
+
+
+
+@dynamic cachedLocationLon;
+
+
+
+- (double)cachedLocationLonValue {
+	NSNumber *result = [self cachedLocationLon];
+	return [result doubleValue];
+}
+
+- (void)setCachedLocationLonValue:(double)value_ {
+	[self setCachedLocationLon:[NSNumber numberWithDouble:value_]];
+}
+
+- (double)primitiveCachedLocationLonValue {
+	NSNumber *result = [self primitiveCachedLocationLon];
+	return [result doubleValue];
+}
+
+- (void)setPrimitiveCachedLocationLonValue:(double)value_ {
+	[self setPrimitiveCachedLocationLon:[NSNumber numberWithDouble:value_]];
+}
+
+
+
+
+
+@dynamic cachedLocationRadius;
+
+
+
+- (double)cachedLocationRadiusValue {
+	NSNumber *result = [self cachedLocationRadius];
+	return [result doubleValue];
+}
+
+- (void)setCachedLocationRadiusValue:(double)value_ {
+	[self setCachedLocationRadius:[NSNumber numberWithDouble:value_]];
+}
+
+- (double)primitiveCachedLocationRadiusValue {
+	NSNumber *result = [self primitiveCachedLocationRadius];
+	return [result doubleValue];
+}
+
+- (void)setPrimitiveCachedLocationRadiusValue:(double)value_ {
+	[self setPrimitiveCachedLocationRadius:[NSNumber numberWithDouble:value_]];
+}
 
 
 
