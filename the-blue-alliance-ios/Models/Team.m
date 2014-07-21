@@ -25,6 +25,7 @@
     self.location = info[@"location"];
     self.last_updated = @([[NSDate date] timeIntervalSince1970]);
     self.grouping_text = [self groupingTextOfTeamNumber:[info[@"team_number"] intValue]];
+    self.rookieYear = info[@"rookie_year"];
 }
 
 @end

@@ -11,6 +11,7 @@ const struct TeamAttributes TeamAttributes = {
 	.location = @"location",
 	.name = @"name",
 	.nickname = @"nickname",
+	.rookieYear = @"rookieYear",
 	.team_number = @"team_number",
 	.website = @"website",
 };
@@ -53,6 +54,11 @@ const struct TeamFetchedProperties TeamFetchedProperties = {
 	
 	if ([key isEqualToString:@"last_updatedValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"last_updated"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"rookieYearValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"rookieYear"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -131,6 +137,32 @@ const struct TeamFetchedProperties TeamFetchedProperties = {
 
 @dynamic nickname;
 
+
+
+
+
+
+@dynamic rookieYear;
+
+
+
+- (int32_t)rookieYearValue {
+	NSNumber *result = [self rookieYear];
+	return [result intValue];
+}
+
+- (void)setRookieYearValue:(int32_t)value_ {
+	[self setRookieYear:[NSNumber numberWithInt:value_]];
+}
+
+- (int32_t)primitiveRookieYearValue {
+	NSNumber *result = [self primitiveRookieYear];
+	return [result intValue];
+}
+
+- (void)setPrimitiveRookieYearValue:(int32_t)value_ {
+	[self setPrimitiveRookieYear:[NSNumber numberWithInt:value_]];
+}
 
 
 

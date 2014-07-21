@@ -39,8 +39,7 @@
     websiteInfo.icon = [UIImage imageNamed:@"website"];
     
     TBATopMapInfoViewControllerInfoRowObject *rookieYearInfo = [[TBATopMapInfoViewControllerInfoRowObject alloc] init];
-#warning TODO: Implement rookie year
-    rookieYearInfo.text = @"ROOKIE YEAR";
+    rookieYearInfo.text = [NSString stringWithFormat:@"Rookie year: %@", self.team.rookieYear];
     rookieYearInfo.icon = [UIImage imageNamed:@"calendar"];
     
     TBATopMapInfoViewControllerInfoRowObject *locationInfo = [[TBATopMapInfoViewControllerInfoRowObject alloc] init];

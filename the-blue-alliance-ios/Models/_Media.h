@@ -12,11 +12,15 @@ extern const struct MediaAttributes {
 } MediaAttributes;
 
 extern const struct MediaRelationships {
+	__unsafe_unretained NSString *matches;
+	__unsafe_unretained NSString *teams;
 } MediaRelationships;
 
 extern const struct MediaFetchedProperties {
 } MediaFetchedProperties;
 
+@class Match;
+@class Team;
 
 
 
@@ -76,10 +80,34 @@ extern const struct MediaFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *matches;
+
+- (NSMutableSet*)matchesSet;
+
+
+
+
+@property (nonatomic, strong) NSSet *teams;
+
+- (NSMutableSet*)teamsSet;
+
+
+
+
 
 @end
 
 @interface _Media (CoreDataGeneratedAccessors)
+
+- (void)addMatches:(NSSet*)value_;
+- (void)removeMatches:(NSSet*)value_;
+- (void)addMatchesObject:(Match*)value_;
+- (void)removeMatchesObject:(Match*)value_;
+
+- (void)addTeams:(NSSet*)value_;
+- (void)removeTeams:(NSSet*)value_;
+- (void)addTeamsObject:(Team*)value_;
+- (void)removeTeamsObject:(Team*)value_;
 
 @end
 
@@ -108,6 +136,16 @@ extern const struct MediaFetchedProperties {
 - (void)setPrimitiveUrl:(NSString*)value;
 
 
+
+
+
+- (NSMutableSet*)primitiveMatches;
+- (void)setPrimitiveMatches:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveTeams;
+- (void)setPrimitiveTeams:(NSMutableSet*)value;
 
 
 @end

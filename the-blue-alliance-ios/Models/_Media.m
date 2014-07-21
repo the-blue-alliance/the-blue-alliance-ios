@@ -11,6 +11,8 @@ const struct MediaAttributes MediaAttributes = {
 };
 
 const struct MediaRelationships MediaRelationships = {
+	.matches = @"matches",
+	.teams = @"teams",
 };
 
 const struct MediaFetchedProperties MediaFetchedProperties = {
@@ -76,6 +78,32 @@ const struct MediaFetchedProperties MediaFetchedProperties = {
 
 
 
+
+@dynamic matches;
+
+	
+- (NSMutableSet*)matchesSet {
+	[self willAccessValueForKey:@"matches"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"matches"];
+  
+	[self didAccessValueForKey:@"matches"];
+	return result;
+}
+	
+
+@dynamic teams;
+
+	
+- (NSMutableSet*)teamsSet {
+	[self willAccessValueForKey:@"teams"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"teams"];
+  
+	[self didAccessValueForKey:@"teams"];
+	return result;
+}
+	
 
 
 

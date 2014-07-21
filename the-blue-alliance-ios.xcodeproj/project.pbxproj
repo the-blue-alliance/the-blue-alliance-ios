@@ -51,6 +51,7 @@
 		50832E3E1918BBEA003AC8A7 /* EventsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E3D1918BBEA003AC8A7 /* EventsTableViewController.m */; };
 		50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */; };
 		508FBFE7197CE7D2002A9D69 /* TBATopMapInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FBFE6197CE7D2002A9D69 /* TBATopMapInfoViewController.m */; };
+		508FBFEA197CEB7E002A9D69 /* TeamInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FBFE9197CEB7E002A9D69 /* TeamInfoViewController.m */; };
 		50A71376197C7694009FBCAE /* ColumnView.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A71375197C7694009FBCAE /* ColumnView.m */; };
 		50C0FC231931743700670A64 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C0FC221931743700670A64 /* EventViewController.m */; };
 		50C88502197B7CC000F6D243 /* RankingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C88500197B7CC000F6D243 /* RankingsTableViewCell.m */; };
@@ -141,6 +142,9 @@
 		50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
 		508FBFE5197CE7D2002A9D69 /* TBATopMapInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBATopMapInfoViewController.h; sourceTree = "<group>"; };
 		508FBFE6197CE7D2002A9D69 /* TBATopMapInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBATopMapInfoViewController.m; sourceTree = "<group>"; };
+		508FBFE8197CEB7E002A9D69 /* TeamInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamInfoViewController.h; sourceTree = "<group>"; };
+		508FBFE9197CEB7E002A9D69 /* TeamInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamInfoViewController.m; sourceTree = "<group>"; };
+		508FBFEB197CF266002A9D69 /* The Blue Alliance 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 5.xcdatamodel"; sourceTree = "<group>"; };
 		50A71374197C7694009FBCAE /* ColumnView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnView.h; sourceTree = "<group>"; };
 		50A71375197C7694009FBCAE /* ColumnView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnView.m; sourceTree = "<group>"; };
 		50A88D70195F784E001F8A3D /* The Blue Alliance 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 4.xcdatamodel"; sourceTree = "<group>"; };
@@ -237,6 +241,8 @@
 			children = (
 				504BC6C5197CDEC800752DB0 /* TeamDetailViewController.h */,
 				504BC6C6197CDEC800752DB0 /* TeamDetailViewController.m */,
+				508FBFE8197CEB7E002A9D69 /* TeamInfoViewController.h */,
+				508FBFE9197CEB7E002A9D69 /* TeamInfoViewController.m */,
 			);
 			name = "Team Detail View Controller";
 			sourceTree = "<group>";
@@ -626,6 +632,7 @@
 				50DFD1F61920365E009B686E /* MenuViewController.m in Sources */,
 				508FBFE7197CE7D2002A9D69 /* TBATopMapInfoViewController.m in Sources */,
 				504BC6C7197CDEC800752DB0 /* TeamDetailViewController.m in Sources */,
+				508FBFEA197CEB7E002A9D69 /* TeamInfoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -776,7 +783,6 @@
 				GCC_PREFIX_HEADER = "the-blue-alliance-ios/the-blue-alliance-ios-Prefix.pch";
 				INFOPLIST_FILE = "the-blue-alliance-ios/the-blue-alliance-ios-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				MOMC_NO_INVERSE_RELATIONSHIP_WARNINGS = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -796,7 +802,6 @@
 				GCC_PREFIX_HEADER = "the-blue-alliance-ios/the-blue-alliance-ios-Prefix.pch";
 				INFOPLIST_FILE = "the-blue-alliance-ios/the-blue-alliance-ios-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				MOMC_NO_INVERSE_RELATIONSHIP_WARNINGS = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -901,12 +906,13 @@
 		50832E321918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				508FBFEB197CF266002A9D69 /* The Blue Alliance 5.xcdatamodel */,
 				927547AD193181E800785260 /* The Blue Alliance 3.xcdatamodel */,
 				50A88D70195F784E001F8A3D /* The Blue Alliance 4.xcdatamodel */,
 				50CDA22F19302C9100C8906D /* The Blue Alliance 2.xcdatamodel */,
 				50832E331918BB8E003AC8A7 /* The Blue Alliance.xcdatamodel */,
 			);
-			currentVersion = 50A88D70195F784E001F8A3D /* The Blue Alliance 4.xcdatamodel */;
+			currentVersion = 508FBFEB197CF266002A9D69 /* The Blue Alliance 5.xcdatamodel */;
 			name = "The Blue Alliance.xcdatamodeld";
 			path = "../The Blue Alliance.xcdatamodeld";
 			sourceTree = "<group>";

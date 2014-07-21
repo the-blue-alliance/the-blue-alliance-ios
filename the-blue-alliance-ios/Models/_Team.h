@@ -12,6 +12,7 @@ extern const struct TeamAttributes {
 	__unsafe_unretained NSString *location;
 	__unsafe_unretained NSString *name;
 	__unsafe_unretained NSString *nickname;
+	__unsafe_unretained NSString *rookieYear;
 	__unsafe_unretained NSString *team_number;
 	__unsafe_unretained NSString *website;
 } TeamAttributes;
@@ -30,6 +31,7 @@ extern const struct TeamFetchedProperties {
 @class Match;
 @class Match;
 @class Media;
+
 
 
 
@@ -123,6 +125,20 @@ extern const struct TeamFetchedProperties {
 
 
 //- (BOOL)validateNickname:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* rookieYear;
+
+
+
+@property int32_t rookieYearValue;
+- (int32_t)rookieYearValue;
+- (void)setRookieYearValue:(int32_t)value_;
+
+//- (BOOL)validateRookieYear:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -251,6 +267,15 @@ extern const struct TeamFetchedProperties {
 
 - (NSString*)primitiveNickname;
 - (void)setPrimitiveNickname:(NSString*)value;
+
+
+
+
+- (NSNumber*)primitiveRookieYear;
+- (void)setPrimitiveRookieYear:(NSNumber*)value;
+
+- (int32_t)primitiveRookieYearValue;
+- (void)setPrimitiveRookieYearValue:(int32_t)value_;
 
 
 
