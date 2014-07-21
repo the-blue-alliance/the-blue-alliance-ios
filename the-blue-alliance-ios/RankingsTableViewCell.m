@@ -33,7 +33,7 @@
 
 @implementation RankingsTableViewCell
 
-- (void)setRankedTeamData:(NSDictionary *)team forHeaderKeys:(NSArray *)headersImmutable
+- (void)setRankedTeamData:(NSDictionary *)team forHeaderKeys:(NSArray *)headersImmutable withTeam:(Team *)teamObj
 {
     NSMutableArray *headers = [headersImmutable mutableCopy];
     [headers removeAllObjectsPassingTest:^BOOL(NSString *obj) {
@@ -78,6 +78,8 @@
     } else {
         self.recordLabel.text = [NSString stringWithFormat:@"(%@)", team[@"Record (W-L-T)"]];
     }
+    
+    self.teamNameLabel.text = teamObj.nickname;
 }
 
 @end

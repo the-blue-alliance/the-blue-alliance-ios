@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Team.h"
 
 @interface RankingsTableViewCell : UITableViewCell
 
-- (void)setRankedTeamData:(NSDictionary *)team forHeaderKeys:(NSArray *)headers;
+- (void)setRankedTeamData:(NSDictionary *)team forHeaderKeys:(NSArray *)headers withTeam:(Team *)team;
 
 @end
