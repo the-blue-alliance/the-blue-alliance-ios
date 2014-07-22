@@ -7,6 +7,7 @@ const struct MediaAttributes MediaAttributes = {
 	.cachedData = @"cachedData",
 	.channel = @"channel",
 	.key = @"key",
+	.threadUrl = @"threadUrl",
 	.title = @"title",
 	.type = @"type",
 	.url = @"url",
@@ -69,6 +70,13 @@ const struct MediaFetchedProperties MediaFetchedProperties = {
 
 
 @dynamic key;
+
+
+
+
+
+
+@dynamic threadUrl;
 
 
 

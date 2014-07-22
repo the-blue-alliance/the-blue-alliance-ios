@@ -31,7 +31,7 @@
 
 - (void)setFetchedResultsController:(NSFetchedResultsController *)newfrc
 {
-    self.debug = YES;
+//    self.debug = YES;
     
     NSFetchedResultsController *oldfrc = _fetchedResultsController;
     if (newfrc != oldfrc) {

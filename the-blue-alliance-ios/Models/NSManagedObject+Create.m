@@ -92,7 +92,7 @@
 + (NSArray *)createManagedObjectsFromInfoArray:(NSArray *)infoArray
              checkingPrexistanceUsingUniqueKey:(NSString *)key
                      usingManagedObjectContext:(NSManagedObjectContext *)context
-                                      userInfo:(id)info {
+                                      userInfo:(id)userInfo {
     
     NSMutableArray *returnObjs = [[NSMutableArray alloc] init];
     
@@ -128,7 +128,7 @@
             [returnObjs addObject:[self createManagedObjectFromInfo:infoDict
                                   checkingPrexistanceUsingUniqueKey:nil
                                           usingManagedObjectContext:context
-                                                           userInfo:info]];
+                                                           userInfo:userInfo]];
         } else {
             [returnObjs addObject:existingObjsDict[infoDict[key]]];
         }

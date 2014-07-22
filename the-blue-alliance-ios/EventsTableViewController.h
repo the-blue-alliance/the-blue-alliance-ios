@@ -8,6 +8,7 @@
 
 #import "SearchableCoreDataTableViewController.h"
 #import "YearSelectView.h"
+#import "Team.h"
 
 /** `EventsTableViewController` is the table view that lists all events for a season. Events are
  *  ordered by week/event type (Week %d, Offseason, Preseason, etc). The can be filtered down
@@ -19,5 +20,6 @@
 /** The context to be used for accessing Core Data
  */
 @property (nonatomic, strong) NSManagedObjectContext *context;
+@property (nonatomic, strong) Team *teamFilter;
 
 @end

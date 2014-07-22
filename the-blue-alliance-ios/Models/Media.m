@@ -73,6 +73,12 @@
         self.channel = info[@"channel"];
         self.url = info[@"channel"];
     }
+    else if([self.type isEqualToString:@"cdphotothread"])
+    {
+        self.title = @"Chief Delphi";
+        self.url = [NSString stringWithFormat:@"http://www.chiefdelphi.com/media/img/%@", info[@"details"][@"image_partial"]];
+        self.threadUrl = [NSString stringWithFormat:@"http://www.chiefdelphi.com/media/photos/%@", info[@"foreign_key"]];
+    }
     else
     {
         [NSException raise:@"Unimplemented media type!" format:@"Media type %@ has not be implemented yet! (implement me pl0x)", self.type];

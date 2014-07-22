@@ -9,6 +9,7 @@
 #import "TBAImporter.h"
 #import "NSManagedObject+Create.h"
 #import "Team+Fetch.h"
+#import "Media.h"
 
 #define kIDHeader @"the-blue-alliance:ios:v0.1"
 
@@ -116,6 +117,41 @@
     });
     
 }
+
++ (void)linkEventsToTeam:(Team *)team forYear:(NSInteger)year usingManagedObjectContext:(NSManagedObjectContext *)context
+{
+    NSString *teamKey = team.key;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray *eventList = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"team/%@/%d/events", teamKey, year]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSArray *events = [Event createManagedObjectsFromInfoArray:eventList
+                                     checkingPrexistanceUsingUniqueKey:@"key"
+                                             usingManagedObjectContext:context];
+            team.events = [NSSet setWithArray:events];
+        });
+    });
+}
+
++ (void)linkMediaToTeam:(Team *)team forYear:(NSInteger)year usingManagedObjectContext:(NSManagedObjectContext *)context
+{
+    NSString *teamKey = team.key;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray *mediaList = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"team/%@/%d/media", teamKey, year]];
+        NSMutableArray *fixedMediaList = [[NSMutableArray alloc] initWithCapacity:mediaList.count];
+        for (NSDictionary *mediaDict in mediaList) {
+            NSMutableDictionary *mutMediaDict = [mediaDict mutableCopy];
+            mutMediaDict[@"key"] = mediaDict[@"foreign_key"];
+            [fixedMediaList addObject:mutMediaDict];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSArray *medias = [Media createManagedObjectsFromInfoArray:fixedMediaList
+                                     checkingPrexistanceUsingUniqueKey:@"key"
+                                             usingManagedObjectContext:context];
+            team.media = [NSSet setWithArray:medias];
+        });
+    });
+}
+
 
 + (void)importRankingsForEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context callback:(void (^)(NSString *rankingsString))callback;
 {

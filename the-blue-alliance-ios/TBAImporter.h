@@ -28,13 +28,31 @@
  */
 + (void)importTeamsUsingManagedObjectContext:(NSManagedObjectContext *)context;
 
-/** Downloads a list of all the teams for a specific event and associate
+/** Downloads a list of all the teams for a specific event and associates
  *  them to the Event
  *
  * @param event The event to download teams for
  * @param context The context of the database used for importing
  */
 + (void)linkTeamsToEvent:(Event *)event usingManagedObjectContext:(NSManagedObjectContext *)context;
+
+/** Downloads a list of all the events for a specific team and associates
+ *  them to the Team
+ *
+ * @param team The team to download events for
+ * @param context The context of the database used for importing
+ */
++ (void)linkEventsToTeam:(Team *)team forYear:(NSInteger)year usingManagedObjectContext:(NSManagedObjectContext *)context;
+
+
+/** Downloads a list of all the medias for a specific team and associates
+ *  them to the Team
+ *
+ * @param team The team to download Media for
+ * @param context The context of the database used for importing
+ */
++ (void)linkMediaToTeam:(Team *)team forYear:(NSInteger)year usingManagedObjectContext:(NSManagedObjectContext *)context;
+
 
 /** Downloads a list of rankings at an event and saves it on the event object
  *

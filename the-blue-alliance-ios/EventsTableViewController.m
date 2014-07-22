@@ -92,8 +92,13 @@
     _context = context;
     
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Event"];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"year == %d", self.currentYear];
+    if(self.teamFilter) {
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"year == %d AND %@ in teams", self.currentYear, self.teamFilter];
+    } else {
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"year == %d", self.currentYear];
+    }
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"start_date" ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
+    fetchRequest.fetchBatchSize = 20;
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                         managedObjectContext:context

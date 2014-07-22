@@ -8,6 +8,7 @@ extern const struct MediaAttributes {
 	__unsafe_unretained NSString *cachedData;
 	__unsafe_unretained NSString *channel;
 	__unsafe_unretained NSString *key;
+	__unsafe_unretained NSString *threadUrl;
 	__unsafe_unretained NSString *title;
 	__unsafe_unretained NSString *type;
 	__unsafe_unretained NSString *url;
@@ -25,6 +26,7 @@ extern const struct MediaFetchedProperties {
 @class Event;
 @class Match;
 @class Team;
+
 
 
 
@@ -71,6 +73,16 @@ extern const struct MediaFetchedProperties {
 
 
 //- (BOOL)validateKey:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* threadUrl;
+
+
+
+//- (BOOL)validateThreadUrl:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -166,6 +178,12 @@ extern const struct MediaFetchedProperties {
 
 - (NSString*)primitiveKey;
 - (void)setPrimitiveKey:(NSString*)value;
+
+
+
+
+- (NSString*)primitiveThreadUrl;
+- (void)setPrimitiveThreadUrl:(NSString*)value;
 
 
 

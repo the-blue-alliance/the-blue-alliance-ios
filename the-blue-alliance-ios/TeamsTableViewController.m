@@ -32,6 +32,8 @@
     } else {
         fetchRequest.predicate = nil;
     }
+    fetchRequest.fetchBatchSize = 20;
+
     
     if(self.disableSections) {
         fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"team_number" ascending:YES]];

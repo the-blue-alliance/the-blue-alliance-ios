@@ -8,6 +8,9 @@
 
 #import "TeamDetailViewController.h"
 #import "TeamInfoViewController.h"
+#import "EventsTableViewController.h"
+#import "TeamMediaViewController.h"
+#import "TBAImporter.h"
 
 @interface TeamDetailViewController ()
 @property (nonatomic, strong) Team *team;
@@ -29,14 +32,30 @@
     return [NSString stringWithFormat:@"FRC Team %d", self.team.team_numberValue];
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+#warning TODO: Replace with dynamic year
+    [TBAImporter linkEventsToTeam:self.team forYear:2014 usingManagedObjectContext:self.team.managedObjectContext];
+    [TBAImporter linkMediaToTeam:self.team forYear:2014 usingManagedObjectContext:self.team.managedObjectContext];
+}
+
 - (NSArray *)loadViewControllers
 {
     // Create the different view controllers for the pages
     TeamInfoViewController *tivc = [[TeamInfoViewController alloc] init];
     tivc.team = self.team;
 
+    EventsTableViewController *etvc = [[EventsTableViewController alloc] init];
+    etvc.teamFilter = self.team;
+    etvc.context = self.team.managedObjectContext;
+    etvc.title = @"Events";
     
-    return @[tivc];
+    TeamMediaViewController *tmvc = [[TeamMediaViewController alloc] init];
+    tmvc.team = self.team;
+    
+    return @[tivc, etvc, tmvc];
 }
 
 
