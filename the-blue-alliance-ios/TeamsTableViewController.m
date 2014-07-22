@@ -110,6 +110,11 @@ const int SPACES_TO_ADD = 3;
     cell.textLabel.text = [team.team_number description];
     cell.detailTextLabel.text = team.nickname;
     
+    if(self.eventFilter) {
+        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
     return cell;
 }
 
@@ -120,6 +125,12 @@ const int SPACES_TO_ADD = 3;
     Team *team = [self.fetchedResultsController objectAtIndexPath:indexPath];
     TeamDetailViewController *teamDetail = [[TeamDetailViewController alloc] initWithTeam:team];
     [self.navigationController pushViewController:teamDetail animated:YES];
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    Team *team = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
 }
 
 - (NSPredicate *)predicateForSearchText:(NSString *)searchText

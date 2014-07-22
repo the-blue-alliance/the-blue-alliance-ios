@@ -254,7 +254,12 @@
 
     cell.textLabel.text = event.short_name ? event.short_name : event.name;
     cell.detailTextLabel.text = event.location;
-    
+    if(self.teamFilter) {
+        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+
     return cell;
 }
 
