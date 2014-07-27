@@ -30,7 +30,7 @@
         [textSizeValues addObject:[NSValue valueWithCGSize:size]];
     }
     
-    int numSpacers = self.topRow.count + 1;
+    NSInteger numSpacers = self.topRow.count + 1;
     int spacerWidth = (self.bounds.size.width - totalHorizontalTextWidth)/numSpacers; // Convert to int to avoid non-integer rects
     spacerWidth = MIN(spacerWidth, 40);
     

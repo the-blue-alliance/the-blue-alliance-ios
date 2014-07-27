@@ -35,6 +35,7 @@
 		504BC6CA197CDEED00752DB0 /* TBAPaginatedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 504BC6C9197CDEED00752DB0 /* TBAPaginatedViewController.m */; };
 		5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */; };
 		507D9CA119849C4500AACA6A /* TBATabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 507D9CA019849C4500AACA6A /* TBATabBarController.m */; };
+		507D9CA41984CEE800AACA6A /* EventsMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 507D9CA31984CEE800AACA6A /* EventsMapViewController.m */; };
 		50832DFB1918BB63003AC8A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFA1918BB63003AC8A7 /* Foundation.framework */; };
 		50832DFD1918BB63003AC8A7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFC1918BB63003AC8A7 /* CoreGraphics.framework */; };
 		50832DFF1918BB63003AC8A7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFE1918BB63003AC8A7 /* UIKit.framework */; };
@@ -123,6 +124,8 @@
 		5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchableCoreDataTableViewController.m; sourceTree = "<group>"; };
 		507D9C9F19849C4500AACA6A /* TBATabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBATabBarController.h; sourceTree = "<group>"; };
 		507D9CA019849C4500AACA6A /* TBATabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBATabBarController.m; sourceTree = "<group>"; };
+		507D9CA21984CEE800AACA6A /* EventsMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsMapViewController.h; sourceTree = "<group>"; };
+		507D9CA31984CEE800AACA6A /* EventsMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsMapViewController.m; sourceTree = "<group>"; };
 		50832DF71918BB63003AC8A7 /* the-blue-alliance-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "the-blue-alliance-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		50832DFA1918BB63003AC8A7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		50832DFC1918BB63003AC8A7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -295,6 +298,8 @@
 		50832E001918BB63003AC8A7 /* the-blue-alliance-ios */ = {
 			isa = PBXGroup;
 			children = (
+				50832E0C1918BB63003AC8A7 /* Main_iPhone.storyboard */,
+				50832E0F1918BB63003AC8A7 /* Main_iPad.storyboard */,
 				50832E091918BB63003AC8A7 /* AppDelegate.h */,
 				50832E0A1918BB63003AC8A7 /* AppDelegate.m */,
 				507D9C9F19849C4500AACA6A /* TBATabBarController.h */,
@@ -318,8 +323,6 @@
 				504BC6C9197CDEED00752DB0 /* TBAPaginatedViewController.m */,
 				50DFD1F919205F6D009B686E /* UIColor+TBAColors.h */,
 				50DFD1FA19205F6D009B686E /* UIColor+TBAColors.m */,
-				50832E0C1918BB63003AC8A7 /* Main_iPhone.storyboard */,
-				50832E0F1918BB63003AC8A7 /* Main_iPad.storyboard */,
 				50832E021918BB63003AC8A7 /* the-blue-alliance-ios-Info.plist */,
 				50832E031918BB63003AC8A7 /* InfoPlist.strings */,
 				50832E061918BB63003AC8A7 /* main.m */,
@@ -453,6 +456,8 @@
 			children = (
 				50832E3C1918BBEA003AC8A7 /* EventsTableViewController.h */,
 				50832E3D1918BBEA003AC8A7 /* EventsTableViewController.m */,
+				507D9CA21984CEE800AACA6A /* EventsMapViewController.h */,
+				507D9CA31984CEE800AACA6A /* EventsMapViewController.m */,
 				92C5B86E192C0BBC00AFDBCA /* YearSelectView.h */,
 				92C5B86F192C0BBC00AFDBCA /* YearSelectView.m */,
 			);
@@ -632,6 +637,7 @@
 				50832E3E1918BBEA003AC8A7 /* EventsTableViewController.m in Sources */,
 				5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */,
 				50DFD20119207DCA009B686E /* TeamsTableViewController.m in Sources */,
+				507D9CA41984CEE800AACA6A /* EventsMapViewController.m in Sources */,
 				5022C845195F8BDD008F0131 /* _Match.m in Sources */,
 				92C5B870192C0BBC00AFDBCA /* YearSelectView.m in Sources */,
 				50C0FC231931743700670A64 /* EventViewController.m in Sources */,

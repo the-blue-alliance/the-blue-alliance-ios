@@ -75,7 +75,7 @@
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
 
-    cell.textLabel.text = [NSString stringWithFormat:@"%d", self.endYear - indexPath.row];
+    cell.textLabel.text = [NSString stringWithFormat:@"%ld", (long)(self.endYear - indexPath.row)];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;

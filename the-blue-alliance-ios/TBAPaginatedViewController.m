@@ -115,7 +115,7 @@
 
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
-    int index = [self.viewControllers indexOfObject:viewController];
+    NSInteger index = [self.viewControllers indexOfObject:viewController];
     if(index == self.viewControllers.count - 1) {
         return nil;
     } else {
@@ -124,7 +124,7 @@
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
-    int index = [self.viewControllers indexOfObject:viewController];
+    NSInteger index = [self.viewControllers indexOfObject:viewController];
     if(index == 0) {
         return nil;
     } else {
@@ -139,8 +139,8 @@
 }
 - (void)segmentPressed:(UISegmentedControl *)segment
 {
-    int currentIndex = [self.viewControllers indexOfObject:[self.pageController.viewControllers firstObject]];
-    int newIndex = segment.selectedSegmentIndex;
+    NSInteger currentIndex = [self.viewControllers indexOfObject:[self.pageController.viewControllers firstObject]];
+    NSInteger newIndex = segment.selectedSegmentIndex;
     
     UIPageViewControllerNavigationDirection direction = newIndex >= currentIndex ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse;
     UIViewController *viewControllers = self.viewControllers[newIndex];

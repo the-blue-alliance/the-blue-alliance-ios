@@ -122,7 +122,7 @@
 {
     NSString *teamKey = team.key;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSArray *eventList = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"team/%@/%d/events", teamKey, year]];
+        NSArray *eventList = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"team/%@/%ld/events", teamKey, (long)year]];
         dispatch_async(dispatch_get_main_queue(), ^{
             NSArray *events = [Event createManagedObjectsFromInfoArray:eventList
                                      checkingPrexistanceUsingUniqueKey:@"key"
@@ -136,7 +136,7 @@
 {
     NSString *teamKey = team.key;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSArray *mediaList = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"team/%@/%d/media", teamKey, year]];
+        NSArray *mediaList = [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"team/%@/%ld/media", teamKey, (long)year]];
         NSMutableArray *fixedMediaList = [[NSMutableArray alloc] initWithCapacity:mediaList.count];
         for (NSDictionary *mediaDict in mediaList) {
             NSMutableDictionary *mutMediaDict = [mediaDict mutableCopy];

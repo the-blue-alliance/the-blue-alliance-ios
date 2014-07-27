@@ -10,6 +10,7 @@
 #import "EventsTableViewController.h"
 #import "UIColor+TBAColors.h"
 #import <MZFormSheetController/MZFormSheetController.h>
+#import <MapKit/MapKit.h>
 
 #import "EventViewController.h"
 
@@ -17,9 +18,22 @@
 @property (nonatomic) NSInteger currentYear;
 @property (nonatomic, strong) NSDictionary *eventData;
 @property (nonatomic, strong) NSDate *seasonStartDate;
+
+@property (nonatomic, strong) MKMapView *map;
 @end
 
 @implementation EventsTableViewController
+
+- (MKMapView *)map
+{
+    if (!_map) {
+        _map = [[MKMapView alloc] initForAutoLayout];
+        _map.alpha = 0;
+        [self.view addSubview:_map];
+        [_map autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero];
+    }
+    return _map;
+}
 
 - (NSInteger)currentYear
 {
@@ -330,6 +344,23 @@ const int EVENTS_TABLE_SPACES_TO_ADD = 2;
 - (void)didSelectNewYear:(NSInteger)year
 {
     self.currentYear = year;
+}
+
+#pragma mark - IBActions
+
+- (IBAction)mapButtonTapped:(UIBarButtonItem *)sender
+{
+    if([sender.title isEqualToString:@"Map"]) {
+        [UIView animateWithDuration:0.3 animations:^{
+            self.map.alpha = 1;
+        }];
+        sender.title = @"List";
+    } else {
+        [UIView animateWithDuration:0.3 animations:^{
+            self.map.alpha = 0;
+        }];
+        sender.title = @"Map";
+    }
 }
 
 @end
