@@ -211,7 +211,6 @@
 
     self.eventData = [[NSMutableDictionary alloc] init];
     
-    // Lets make this a gear at some point in time? The action button implies share sheet or something - not changing the displayed data
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Years" style:UIBarButtonItemStyleBordered target:self action:@selector(showSelectYearScreen)];
 }
 
@@ -243,10 +242,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Event Cell"];
-    if(!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Event Cell"];
-    }
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Event Cell" forIndexPath:indexPath];
         
     id key = [self sortedEventGroupKeys][indexPath.section];
     NSArray *eventList = self.eventData[key];
@@ -254,11 +250,6 @@
 
     cell.textLabel.text = event.short_name ? event.short_name : event.name;
     cell.detailTextLabel.text = event.location;
-    if(self.teamFilter) {
-        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-    } else {
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
 
     return cell;
 }

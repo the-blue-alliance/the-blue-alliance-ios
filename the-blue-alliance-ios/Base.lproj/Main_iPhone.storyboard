@@ -8,7 +8,7 @@
         <scene sceneID="YJv-tS-rY1">
             <objects>
                 <tabBarController definesPresentationContext="YES" id="A8N-Pn-Ipi" customClass="TBATabBarController" sceneMemberID="viewController">
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="Qa7-AC-hGZ">
                         <rect key="frame" x="129" y="330" width="163" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -25,21 +25,37 @@
             </objects>
             <point key="canvasLocation" x="72" y="0.0"/>
         </scene>
-        <!--Events Table View Controller-->
+        <!--Events Table View Controller - %d Events-->
         <scene sceneID="wNe-aH-e7x">
             <objects>
                 <tableViewController id="JRM-Y1-5YX" customClass="EventsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="f9r-HY-uQt">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="bAw-OH-bJ1">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bAw-OH-bJ1" id="neH-ju-hLJ">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                            <tableViewCell appearanceType="aqua" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Event Cell" textLabel="mAd-Rm-uuo" detailTextLabel="Ob6-dG-ORb" style="IBUITableViewCellStyleSubtitle" id="B2x-kp-7lp">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B2x-kp-7lp" id="ff1-Rh-GgU">
+                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Event Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mAd-Rm-uuo">
+                                            <rect key="frame" x="15" y="3" width="99" height="22"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Location" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ob6-dG-ORb">
+                                            <rect key="frame" x="15" y="25" width="49" height="15"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
@@ -48,27 +64,43 @@
                             <outlet property="delegate" destination="JRM-Y1-5YX" id="Uin-5T-W8N"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="Zhc-Ns-PaY"/>
+                    <navigationItem key="navigationItem" title="%d Events" id="Zhc-Ns-PaY"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="r6U-hO-Hrh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1155" y="-1042"/>
         </scene>
-        <!--Teams Table View Controller-->
+        <!--Teams Table View Controller - Teams-->
         <scene sceneID="hbH-dg-DJ7">
             <objects>
                 <tableViewController id="zi2-Ss-Qwo" customClass="TeamsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="7ST-t6-C3x">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="uGk-J8-VMH">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Team Cell" textLabel="oiz-9u-Ti4" detailTextLabel="Po5-jY-mRS" style="IBUITableViewCellStyleSubtitle" id="uGk-J8-VMH">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uGk-J8-VMH" id="XXH-hg-ud8">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Team Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oiz-9u-Ti4">
+                                            <rect key="frame" x="15" y="3" width="96" height="22"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Location" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Po5-jY-mRS">
+                                            <rect key="frame" x="15" y="25" width="49" height="15"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
@@ -77,7 +109,7 @@
                             <outlet property="delegate" destination="zi2-Ss-Qwo" id="JO3-vJ-QyY"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="URR-zx-3Fg"/>
+                    <navigationItem key="navigationItem" title="Teams" id="URR-zx-3Fg"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dQ7-iD-UIP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -108,9 +140,10 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="fSV-38-1aY" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Events" image="calendar" id="cOY-lk-E46"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="nfb-Ob-YDV">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="nfb-Ob-YDV">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.85098039215686272" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -127,9 +160,10 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="kKa-D8-mVb" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Teams" image="usfirst" id="EAc-Jc-8IB"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="eBW-Lg-AJS">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="eBW-Lg-AJS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>

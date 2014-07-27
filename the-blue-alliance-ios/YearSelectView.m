@@ -37,7 +37,7 @@
 {
     [super viewDidLoad];
     
-    self.navigationItem.title = @"Change Year";
+    self.title = @"Change Year";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(hide)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor TBATintColor];
 }

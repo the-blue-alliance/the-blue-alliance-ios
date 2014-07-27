@@ -101,20 +101,12 @@ const int SPACES_TO_ADD = 3;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Team Cell"];
-    if(!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Team Cell"];
-    }
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Team Cell" forIndexPath:indexPath];
     
     Team *team = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = [team.team_number description];
     cell.detailTextLabel.text = team.nickname;
     
-    if(self.eventFilter) {
-        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-    } else {
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
     return cell;
 }
 

@@ -96,13 +96,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self createOrOpenDatabase];
-    
-    for (UIViewController *controller in self.viewControllers) {
-        if([controller isKindOfClass:[UINavigationController class]]) {
-            UINavigationController *navController = (UINavigationController *)controller;
-            navController.navigationBar.translucent = NO;
-        }
-    }
 }
 
 
