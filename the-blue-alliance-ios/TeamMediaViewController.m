@@ -62,8 +62,6 @@
         
         if([media.type isEqualToString:@"cdphotothread"]) {
             previousMediaView = [[AsyncImageView alloc] initForAutoLayout];
-            
-            ((AsyncImageView *)previousMediaView).imageURL = [NSURL URLWithString:media.url];
             previousMediaView.contentMode = UIViewContentModeScaleAspectFit;
             
             __weak AsyncImageView *weakImageView = (AsyncImageView *)previousMediaView;
@@ -74,6 +72,7 @@
                                                    ofView:weakImageView
                                            withMultiplier:aspectRatio];
             };
+            ((AsyncImageView *)previousMediaView).imageURL = [NSURL URLWithString:media.url];
 
         } else {
             previousMediaView = [[UIWebView alloc] initForAutoLayout];
