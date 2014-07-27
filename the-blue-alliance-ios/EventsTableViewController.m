@@ -269,11 +269,47 @@
     return (NSString *)key;
 }
 
-// Disable section indexing
+- (NSArray *)sortedEventIndexTitles
+{
+    NSArray *keys = [self sortedEventGroupKeys];
+    NSMutableArray *titles = [[NSMutableArray alloc] initWithCapacity:keys.count];
+    for (NSString *key in keys) {
+        NSString *title = nil;
+        if([key rangeOfString:@"Week "].location != NSNotFound) {
+            title = [key stringByReplacingOccurrencesOfString:@"Week " withString:@"W"];
+        } else if([key isEqualToString:@"Championship Event"]) {
+            title = @"CMP";
+        } else if([key isEqualToString:@"Preseason"]) {
+            title = @"Pre";
+        } else if([key isEqualToString:@"Offseason"]) {
+            title = @"Off";
+        } else {
+            title = [key substringToIndex:3];
+        }
+        [titles addObject:title];
+    }
+    return titles;
+}
+
+// Sketchily add empty section index titles to create better spacing
+// See http://stackoverflow.com/questions/18923729/uitableview-section-index-spacing-on-ios-7
+const int EVENTS_TABLE_SPACES_TO_ADD = 2;
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
-    return nil;
+    NSMutableArray *titles = [[self sortedEventIndexTitles] mutableCopy];
+    for (int i = 0; i < titles.count; i += (EVENTS_TABLE_SPACES_TO_ADD + 1)) {
+        for (int j = 0; j < EVENTS_TABLE_SPACES_TO_ADD; j++) {
+            [titles insertObject:@"" atIndex:i+1];
+        }
+    }
+    return titles;
 }
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
+{
+    return index / (EVENTS_TABLE_SPACES_TO_ADD + 1);
+}
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
