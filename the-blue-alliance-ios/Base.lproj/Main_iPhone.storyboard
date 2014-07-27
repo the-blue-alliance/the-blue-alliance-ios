@@ -17,8 +17,6 @@
                     <connections>
                         <segue destination="fSV-38-1aY" kind="relationship" relationship="viewControllers" id="AoZ-wN-0Eu"/>
                         <segue destination="kKa-D8-mVb" kind="relationship" relationship="viewControllers" id="I8U-Eq-Foy"/>
-                        <segue destination="WYu-RO-ZsO" kind="relationship" relationship="viewControllers" id="VMZ-0B-PYz"/>
-                        <segue destination="aG7-mJ-uLl" kind="relationship" relationship="viewControllers" id="5DC-j9-TSb"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Mm-Tx-fFz" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -182,7 +180,7 @@
         <scene sceneID="6Ze-e0-g7L">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="fSV-38-1aY" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Events" image="calendar" id="cOY-lk-E46"/>
+                    <tabBarItem key="tabBarItem" title="Events" image="events_tab_icon" id="cOY-lk-E46"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="nfb-Ob-YDV">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -202,7 +200,7 @@
         <scene sceneID="koJ-8l-jmT">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="kKa-D8-mVb" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Teams" image="usfirst" id="EAc-Jc-8IB"/>
+                    <tabBarItem key="tabBarItem" title="Teams" image="teams_tab_icon" id="EAc-Jc-8IB"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="eBW-Lg-AJS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -239,8 +237,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="calendar" width="25" height="25"/>
-        <image name="usfirst" width="25" height="25"/>
+        <image name="events_tab_icon" width="25" height="25"/>
+        <image name="teams_tab_icon" width="25" height="25"/>
     </resources>
     <color key="tintColor" red="0.74901960784313726" green="0.85098039215686272" blue="1" alpha="1" colorSpace="calibratedRGB"/>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

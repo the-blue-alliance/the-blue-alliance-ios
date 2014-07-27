@@ -15,7 +15,21 @@
 
 @implementation AppDelegate
 
-#pragma mark - Custom getters / setters
+- (void)configureSelectedImages
+{
+    NSArray *selectedImages = @[@"events_tab_icon_selected", @"teams_tab_icon_selected"];
+    
+    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+    UITabBar *tabBar = tabBarController.tabBar;
+    
+    int i = 0;
+    for (UITabBarItem *tabBarItem in [tabBar items]) {
+        NSString *selectedImage = selectedImages[i++];
+        (void)[tabBarItem initWithTitle:[tabBarItem title] image:[tabBarItem image] selectedImage:[UIImage imageNamed:selectedImage]];
+
+    }
+}
+
 
 #pragma mark - Main Entry Point
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -28,6 +42,8 @@
     [[UITableView appearance] setSectionIndexBackgroundColor:[UIColor clearColor]];
     [[UITableView appearance] setSectionIndexTrackingBackgroundColor:[UIColor clearColor]];
     [[UITableView appearance] setSectionIndexColor:[UIColor TBANavigationBarColor]];
+    
+    [self configureSelectedImages];
     
     return YES;
 }
