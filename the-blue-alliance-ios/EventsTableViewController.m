@@ -302,16 +302,17 @@ const int EVENTS_TABLE_SPACES_TO_ADD = 2;
 }
 
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    id key = [self sortedEventGroupKeys][indexPath.section];
-    NSArray *eventList = self.eventData[key];
-    Event *event = eventList[indexPath.row];
-    
-    EventViewController *eventController = [[EventViewController alloc] initWithEvent:event];
-    [self.navigationController pushViewController:eventController animated:YES];
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if([segue.identifier isEqualToString:@"Show Event"]) {
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+        id key = [self sortedEventGroupKeys][indexPath.section];
+        NSArray *eventList = self.eventData[key];
+        Event *event = eventList[indexPath.row];
+
+        EventViewController *dest = segue.destinationViewController;
+        dest.event = event;
+    }
 }
 
 - (NSPredicate *)predicateForSearchText:(NSString *)searchText

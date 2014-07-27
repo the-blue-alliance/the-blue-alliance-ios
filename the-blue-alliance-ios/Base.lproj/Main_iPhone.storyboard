@@ -28,7 +28,7 @@
         <!--Events Table View Controller - %d Events-->
         <scene sceneID="wNe-aH-e7x">
             <objects>
-                <tableViewController id="JRM-Y1-5YX" customClass="EventsTableViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="EventsTableViewController" id="JRM-Y1-5YX" customClass="EventsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="f9r-HY-uQt">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -57,6 +57,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="Znj-6H-6lF" kind="push" identifier="Show Event" id="M0F-G8-tO6"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -68,12 +71,31 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="r6U-hO-Hrh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1155" y="-1042"/>
+            <point key="canvasLocation" x="1117" y="-1042"/>
+        </scene>
+        <!--Event View Controller-->
+        <scene sceneID="n5C-bP-Yon">
+            <objects>
+                <viewController id="Znj-6H-6lF" customClass="EventViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qUk-dH-cWC"/>
+                        <viewControllerLayoutGuide type="bottom" id="fYc-NT-g7c"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Oim-Wh-pxD">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="FBh-1m-hHf"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aB3-yb-7ja" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1568" y="-1042"/>
         </scene>
         <!--Teams Table View Controller - Teams-->
         <scene sceneID="hbH-dg-DJ7">
             <objects>
-                <tableViewController id="zi2-Ss-Qwo" customClass="TeamsTableViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="TeamsTableViewController" id="zi2-Ss-Qwo" customClass="TeamsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="7ST-t6-C3x">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -102,6 +124,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="gxN-KW-nGC" kind="push" identifier="Show Team" id="H6E-eM-yYq"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -113,7 +138,26 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dQ7-iD-UIP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1155" y="-316"/>
+            <point key="canvasLocation" x="1117" y="-316"/>
+        </scene>
+        <!--Team Detail View Controller-->
+        <scene sceneID="rxV-jF-SpV">
+            <objects>
+                <viewController id="gxN-KW-nGC" customClass="TeamDetailViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="xfG-6R-6eS"/>
+                        <viewControllerLayoutGuide type="bottom" id="Zvc-Iu-FyT"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="wIX-Fa-TVB">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="iYL-ci-c53"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rjY-jc-Zfm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1568" y="-316"/>
         </scene>
         <!--View Controller - Settings-->
         <scene sceneID="7xC-VT-v7R">

@@ -15,11 +15,6 @@
 
 @implementation EventWebcastsViewController
 
-- (NSString *)title
-{
-    return @"Webcasts";
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];

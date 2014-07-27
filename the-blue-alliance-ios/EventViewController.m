@@ -15,7 +15,6 @@
 #import "EventWebcastsViewController.h"
 
 @interface EventViewController ()
-@property (nonatomic, strong) Event *event;
 @end
 
 @implementation EventViewController
@@ -42,22 +41,26 @@
 {
     // Create the different view controllers for the pages
     EventInfoViewController *eivc = [[EventInfoViewController alloc] init];
+    eivc.title = @"Info";
     eivc.event = self.event;
     
-    TeamsTableViewController *tvc = [[TeamsTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    TeamsTableViewController *tvc = [self.storyboard instantiateViewControllerWithIdentifier:@"TeamsTableViewController"];
     tvc.eventFilter = self.event;
     tvc.disableSections = YES;
     tvc.context = self.event.managedObjectContext;
     
     MatchResultsTableViewController *mrvc = [[MatchResultsTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    mrvc.title = @"Results";
     mrvc.context = self.event.managedObjectContext;
     mrvc.event = self.event;
     
     RankingsTableViewController *rvc = [[RankingsTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    rvc.title = @"Rankings";
     rvc.context = self.event.managedObjectContext;
     rvc.event = self.event;
     
     EventWebcastsViewController *wvc = [[EventWebcastsViewController alloc] init];
+    wvc.title = @"Webcasts";
     wvc.event = self.event;
     
     return @[eivc, tvc, mrvc, rvc, wvc];

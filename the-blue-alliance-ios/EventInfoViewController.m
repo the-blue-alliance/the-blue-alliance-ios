@@ -20,11 +20,6 @@
 @implementation EventInfoViewController
 
 
-- (NSString *)title {
-    return @"Info";
-}
-
-
 #pragma mark - TBATopMapInfoViewController overrides
 - (NSString *)mapTitle
 {

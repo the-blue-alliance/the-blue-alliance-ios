@@ -16,10 +16,6 @@
 
 @implementation TeamMediaViewController
 
-- (NSString *)title
-{
-    return @"Media";
-}
 
 - (void)viewDidLoad
 {

@@ -12,6 +12,6 @@
 
 @interface TeamDetailViewController : TBAPaginatedViewController
 
-- (instancetype)initWithTeam:(Team *)team;
+@property (nonatomic, strong) Team *team;
 
 @end

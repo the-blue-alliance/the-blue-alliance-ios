@@ -14,11 +14,6 @@
  */
 @interface EventViewController : TBAPaginatedViewController
 
-/** Initilizes the EventViewController for a given event
- *
- * @param event The event to show data for
- * @param context The context for the Core Data calls
- * @return An initilized EventViewController
- */
-- (instancetype)initWithEvent:(Event *)event;
+@property (nonatomic, strong) Event *event;
+
 @end

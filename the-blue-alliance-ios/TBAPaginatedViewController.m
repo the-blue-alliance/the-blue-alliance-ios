@@ -53,7 +53,7 @@
     
     NSMutableArray *titles = [[NSMutableArray alloc] initWithCapacity:self.viewControllers.count];
     for (UIViewController *controller in self.viewControllers) {
-        [titles addObject:controller.title ? controller.title : @"NO TITLE"];
+        [titles addObject:controller.title.length ? controller.title : @"NO TITLE"];
     }
     
     self.segment = [[UISegmentedControl alloc] initWithItems:titles];

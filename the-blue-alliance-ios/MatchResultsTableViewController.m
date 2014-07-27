@@ -86,10 +86,6 @@
 }
 
 
-- (NSString *)title {
-    return @"Results";
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];

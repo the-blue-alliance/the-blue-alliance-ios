@@ -13,23 +13,15 @@
 #import "TBAImporter.h"
 
 @interface TeamDetailViewController ()
-@property (nonatomic, strong) Team *team;
 @end
 
 @implementation TeamDetailViewController
 
-- (instancetype)initWithTeam:(Team *)team
+- (void)setTeam:(Team *)team
 {
-    self = [super init];
-    if(self) {
-        self.team = team;
-    }
-    return self;
-}
-
-- (NSString *)title
-{
-    return [NSString stringWithFormat:@"FRC Team %d", self.team.team_numberValue];
+    _team = team;
+    
+    self.title = [NSString stringWithFormat:@"FRC Team %d", self.team.team_numberValue];
 }
 
 - (void)viewDidLoad
@@ -45,14 +37,16 @@
 {
     // Create the different view controllers for the pages
     TeamInfoViewController *tivc = [[TeamInfoViewController alloc] init];
+    tivc.title = @"Info";
     tivc.team = self.team;
 
-    EventsTableViewController *etvc = [[EventsTableViewController alloc] init];
+    EventsTableViewController *etvc = [self.storyboard instantiateViewControllerWithIdentifier:@"EventsTableViewController"];
     etvc.teamFilter = self.team;
     etvc.context = self.team.managedObjectContext;
     etvc.title = @"Events";
     
     TeamMediaViewController *tmvc = [[TeamMediaViewController alloc] init];
+    tmvc.title = @"Media";
     tmvc.team = self.team;
     
     return @[tivc, etvc, tmvc];

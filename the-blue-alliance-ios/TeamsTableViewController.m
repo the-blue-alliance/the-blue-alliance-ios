@@ -110,13 +110,16 @@ const int SPACES_TO_ADD = 3;
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    Team *team = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    TeamDetailViewController *teamDetail = [[TeamDetailViewController alloc] initWithTeam:team];
-    [self.navigationController pushViewController:teamDetail animated:YES];
+    if([segue.identifier isEqualToString:@"Show Team"]) {
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+        Team *team = [self.fetchedResultsController objectAtIndexPath:indexPath];
+
+        TeamDetailViewController *dest = segue.destinationViewController;
+        dest.team = team;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
