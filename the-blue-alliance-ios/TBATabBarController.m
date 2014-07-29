@@ -8,6 +8,7 @@
 
 #import "TBATabBarController.h"
 #import "TBAImporter.h"
+#import "ZipArchive.h"
 
 @interface TBATabBarController ()
 @property (nonatomic, strong) NSManagedObjectContext *context;
@@ -78,12 +79,19 @@
             }
         }];
     } else {
-        [self.document saveToURL:self.document.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
+        NSString *zipPath = [[NSBundle mainBundle] pathForResource:@"database" ofType:@"zip"];
+        ZipArchive *archive = [[ZipArchive alloc] init];
+        [archive UnzipOpenFile:zipPath];
+        [archive UnzipFileTo:documentsDirectory.path overWrite:YES];
+        
+        
+        [self.document openWithCompletionHandler:^(BOOL success) {
             if(success) {
-                NSLog(@"Saved document at %@", url);
+                NSLog(@"Opened document at %@", url);
                 [self documentIsReady];
             } else {
-                NSLog(@"Failed to save document at %@", url);
+                NSLog(@"FAILED to open document at %@", url);
+                NSLog(@"Model is probably out of sync with the database: Just uninstall the app and run again...");
             }
         }];
     }

@@ -34,6 +34,12 @@
 		504BC6C7197CDEC800752DB0 /* TeamDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 504BC6C6197CDEC800752DB0 /* TeamDetailViewController.m */; };
 		504BC6CA197CDEED00752DB0 /* TBAPaginatedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 504BC6C9197CDEED00752DB0 /* TBAPaginatedViewController.m */; };
 		5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */; };
+		5066E79E198781770004C576 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 5066E794198781770004C576 /* ioapi.c */; };
+		5066E79F198781770004C576 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 5066E796198781770004C576 /* mztools.c */; };
+		5066E7A0198781770004C576 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 5066E798198781770004C576 /* unzip.c */; };
+		5066E7A1198781770004C576 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 5066E79A198781770004C576 /* zip.c */; };
+		5066E7A2198781770004C576 /* ZipArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5066E79D198781770004C576 /* ZipArchive.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		5066E7A4198782510004C576 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5066E7A3198782510004C576 /* libz.dylib */; };
 		507D9CA119849C4500AACA6A /* TBATabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 507D9CA019849C4500AACA6A /* TBATabBarController.m */; };
 		507D9CA71984DBE100AACA6A /* EventsMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 507D9CA61984DBE100AACA6A /* EventsMapView.m */; };
 		507D9CAD1984E4D600AACA6A /* GeocodeQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 507D9CAC1984E4D600AACA6A /* GeocodeQueue.m */; };
@@ -57,6 +63,7 @@
 		508FBFE7197CE7D2002A9D69 /* TBATopMapInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FBFE6197CE7D2002A9D69 /* TBATopMapInfoViewController.m */; };
 		508FBFEA197CEB7E002A9D69 /* TeamInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FBFE9197CEB7E002A9D69 /* TeamInfoViewController.m */; };
 		50A71376197C7694009FBCAE /* ColumnView.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A71375197C7694009FBCAE /* ColumnView.m */; };
+		50B2A207198786F300C4B816 /* database.zip in Resources */ = {isa = PBXBuildFile; fileRef = 50B2A206198786F300C4B816 /* database.zip */; };
 		50B7F0FC197CFAEF000A2368 /* EventWebcastsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50B7F0FB197CFAEF000A2368 /* EventWebcastsViewController.m */; };
 		50C0FC231931743700670A64 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C0FC221931743700670A64 /* EventViewController.m */; };
 		50C88502197B7CC000F6D243 /* RankingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C88500197B7CC000F6D243 /* RankingsTableViewCell.m */; };
@@ -123,6 +130,18 @@
 		504BC6C9197CDEED00752DB0 /* TBAPaginatedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAPaginatedViewController.m; sourceTree = "<group>"; };
 		5057CD1C1929987D00654304 /* SearchableCoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchableCoreDataTableViewController.h; sourceTree = "<group>"; };
 		5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchableCoreDataTableViewController.m; sourceTree = "<group>"; };
+		5066E793198781770004C576 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		5066E794198781770004C576 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		5066E795198781770004C576 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		5066E796198781770004C576 /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
+		5066E797198781770004C576 /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
+		5066E798198781770004C576 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		5066E799198781770004C576 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		5066E79A198781770004C576 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		5066E79B198781770004C576 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		5066E79C198781770004C576 /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
+		5066E79D198781770004C576 /* ZipArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZipArchive.mm; sourceTree = "<group>"; };
+		5066E7A3198782510004C576 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		507D9C9F19849C4500AACA6A /* TBATabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBATabBarController.h; sourceTree = "<group>"; };
 		507D9CA019849C4500AACA6A /* TBATabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBATabBarController.m; sourceTree = "<group>"; };
 		507D9CA51984DBE100AACA6A /* EventsMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsMapView.h; sourceTree = "<group>"; };
@@ -160,6 +179,7 @@
 		50A71374197C7694009FBCAE /* ColumnView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnView.h; sourceTree = "<group>"; };
 		50A71375197C7694009FBCAE /* ColumnView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnView.m; sourceTree = "<group>"; };
 		50A88D70195F784E001F8A3D /* The Blue Alliance 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 4.xcdatamodel"; sourceTree = "<group>"; };
+		50B2A206198786F300C4B816 /* database.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = database.zip; sourceTree = "<group>"; };
 		50B7F0FA197CFAEF000A2368 /* EventWebcastsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventWebcastsViewController.h; sourceTree = "<group>"; };
 		50B7F0FB197CFAEF000A2368 /* EventWebcastsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventWebcastsViewController.m; sourceTree = "<group>"; };
 		50C0FC211931743700670A64 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
@@ -206,6 +226,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5066E7A4198782510004C576 /* libz.dylib in Frameworks */,
 				5040543A194E69A900FFA07B /* CoreLocation.framework in Frameworks */,
 				50F8ACDE194E655D002088EA /* MapKit.framework in Frameworks */,
 				50E65EA719198E5200714328 /* QuartzCore.framework in Frameworks */,
@@ -261,6 +282,32 @@
 			name = "Team Detail View Controller";
 			sourceTree = "<group>";
 		};
+		5066E791198781770004C576 /* ZipArchive */ = {
+			isa = PBXGroup;
+			children = (
+				5066E792198781770004C576 /* minizip */,
+				5066E79C198781770004C576 /* ZipArchive.h */,
+				5066E79D198781770004C576 /* ZipArchive.mm */,
+			);
+			path = ZipArchive;
+			sourceTree = "<group>";
+		};
+		5066E792198781770004C576 /* minizip */ = {
+			isa = PBXGroup;
+			children = (
+				5066E793198781770004C576 /* crypt.h */,
+				5066E794198781770004C576 /* ioapi.c */,
+				5066E795198781770004C576 /* ioapi.h */,
+				5066E796198781770004C576 /* mztools.c */,
+				5066E797198781770004C576 /* mztools.h */,
+				5066E798198781770004C576 /* unzip.c */,
+				5066E799198781770004C576 /* unzip.h */,
+				5066E79A198781770004C576 /* zip.c */,
+				5066E79B198781770004C576 /* zip.h */,
+			);
+			path = minizip;
+			sourceTree = "<group>";
+		};
 		50832DEE1918BB63003AC8A7 = {
 			isa = PBXGroup;
 			children = (
@@ -284,6 +331,8 @@
 		50832DF91918BB63003AC8A7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5066E7A3198782510004C576 /* libz.dylib */,
+				5066E791198781770004C576 /* ZipArchive */,
 				50405439194E69A900FFA07B /* CoreLocation.framework */,
 				50F8ACDD194E655D002088EA /* MapKit.framework */,
 				92C5B872192C129E00AFDBCA /* Reveal.framework */,
@@ -301,6 +350,7 @@
 		50832E001918BB63003AC8A7 /* the-blue-alliance-ios */ = {
 			isa = PBXGroup;
 			children = (
+				50B2A206198786F300C4B816 /* database.zip */,
 				50832E0C1918BB63003AC8A7 /* Main_iPhone.storyboard */,
 				50832E0F1918BB63003AC8A7 /* Main_iPad.storyboard */,
 				50832E091918BB63003AC8A7 /* AppDelegate.h */,
@@ -553,6 +603,7 @@
 				50832E111918BB63003AC8A7 /* Main_iPad.storyboard in Resources */,
 				50832E161918BB63003AC8A7 /* Images.xcassets in Resources */,
 				50832E0E1918BB63003AC8A7 /* Main_iPhone.storyboard in Resources */,
+				50B2A207198786F300C4B816 /* database.zip in Resources */,
 				50C88503197B7CC000F6D243 /* RankingsTableViewCell.xib in Resources */,
 				50832E051918BB63003AC8A7 /* InfoPlist.strings in Resources */,
 			);
@@ -625,6 +676,7 @@
 				5022C84E195F9D31008F0131 /* Team+Fetch.m in Sources */,
 				50F121FB197B371800DE7837 /* MatchResultsTableViewCell.m in Sources */,
 				5029341A195F8B26001DFB89 /* Match.m in Sources */,
+				5066E7A0198781770004C576 /* unzip.c in Sources */,
 				50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */,
 				50DFD20419207DD4009B686E /* InsightsViewController.m in Sources */,
 				5022C846195F8BDD008F0131 /* _Media.m in Sources */,
@@ -646,16 +698,20 @@
 				5022C845195F8BDD008F0131 /* _Match.m in Sources */,
 				92C5B870192C0BBC00AFDBCA /* YearSelectView.m in Sources */,
 				50C0FC231931743700670A64 /* EventViewController.m in Sources */,
+				5066E79E198781770004C576 /* ioapi.c in Sources */,
 				50293417195F8B26001DFB89 /* Media.m in Sources */,
 				507D9CAD1984E4D600AACA6A /* GeocodeQueue.m in Sources */,
 				504BC6CA197CDEED00752DB0 /* TBAPaginatedViewController.m in Sources */,
 				50B7F0FC197CFAEF000A2368 /* EventWebcastsViewController.m in Sources */,
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,
 				9226B13E1932EFD900B7EF43 /* _Event.m in Sources */,
+				5066E79F198781770004C576 /* mztools.c in Sources */,
 				50832E071918BB63003AC8A7 /* main.m in Sources */,
 				507D9CA119849C4500AACA6A /* TBATabBarController.m in Sources */,
 				508FBFE7197CE7D2002A9D69 /* TBATopMapInfoViewController.m in Sources */,
+				5066E7A1198781770004C576 /* zip.c in Sources */,
 				504BC6C7197CDEC800752DB0 /* TeamDetailViewController.m in Sources */,
+				5066E7A2198781770004C576 /* ZipArchive.mm in Sources */,
 				508FBFEA197CEB7E002A9D69 /* TeamInfoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
