@@ -12,4 +12,6 @@
 @property (nonatomic, strong) NSArray *sortedIndexTitles;
 @property (nonatomic, strong) NSDictionary *eventData;
 @property (nonatomic, strong) NSDate *seasonStartDate;
+
+@property (nonatomic, weak) UIViewController *controllerToSegueFrom;
 @end

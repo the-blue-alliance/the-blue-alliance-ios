@@ -46,6 +46,7 @@
     EventsMapView *map = [[EventsMapView alloc] initForAutoLayout];
     map.delegate = map;
     map.alpha = 0;
+    map.controllerToSegueFrom = self;
     [self.view addSubview:map];
     [map autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero];
     map.eventData = [self eventDataKeyedByShortIndices];
@@ -353,10 +354,15 @@ const int EVENTS_TABLE_SPACES_TO_ADD = 2;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if([segue.identifier isEqualToString:@"Show Event"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        id key = [self sortedEventGroupKeys][indexPath.section];
-        NSArray *eventList = self.eventData[key];
-        Event *event = eventList[indexPath.row];
+        Event *event = nil;
+        if([sender isKindOfClass:[UITableViewCell class]]) {
+            NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+            id key = [self sortedEventGroupKeys][indexPath.section];
+            NSArray *eventList = self.eventData[key];
+            event = eventList[indexPath.row];
+        } else if([sender isKindOfClass:[MKAnnotationView class]]) {
+            event = [sender annotation];
+        }
 
         EventViewController *dest = segue.destinationViewController;
         dest.event = event;

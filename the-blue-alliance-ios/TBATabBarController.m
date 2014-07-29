@@ -84,7 +84,6 @@
         [archive UnzipOpenFile:zipPath];
         [archive UnzipFileTo:documentsDirectory.path overWrite:YES];
         
-        
         [self.document openWithCompletionHandler:^(BOOL success) {
             if(success) {
                 NSLog(@"Opened document at %@", url);

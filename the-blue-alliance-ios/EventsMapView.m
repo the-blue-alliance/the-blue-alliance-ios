@@ -147,10 +147,19 @@
         note = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"Event Annotation"];
         note.enabled = YES;
         note.canShowCallout = YES;
+        
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        button.tintColor = [UIColor TBANavigationBarColor];
+        note.rightCalloutAccessoryView = button;
     }
     note.annotation = annotation;
     
     return note;
+}
+
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
+{
+    [self.controllerToSegueFrom performSegueWithIdentifier:@"Show Event" sender:view];
 }
 
 
