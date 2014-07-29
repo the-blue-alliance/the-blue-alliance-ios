@@ -35,7 +35,8 @@
 		504BC6CA197CDEED00752DB0 /* TBAPaginatedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 504BC6C9197CDEED00752DB0 /* TBAPaginatedViewController.m */; };
 		5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */; };
 		507D9CA119849C4500AACA6A /* TBATabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 507D9CA019849C4500AACA6A /* TBATabBarController.m */; };
-		507D9CA41984CEE800AACA6A /* EventsMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 507D9CA31984CEE800AACA6A /* EventsMapViewController.m */; };
+		507D9CA71984DBE100AACA6A /* EventsMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 507D9CA61984DBE100AACA6A /* EventsMapView.m */; };
+		507D9CAD1984E4D600AACA6A /* GeocodeQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 507D9CAC1984E4D600AACA6A /* GeocodeQueue.m */; };
 		50832DFB1918BB63003AC8A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFA1918BB63003AC8A7 /* Foundation.framework */; };
 		50832DFD1918BB63003AC8A7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFC1918BB63003AC8A7 /* CoreGraphics.framework */; };
 		50832DFF1918BB63003AC8A7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFE1918BB63003AC8A7 /* UIKit.framework */; };
@@ -124,8 +125,10 @@
 		5057CD1D1929987D00654304 /* SearchableCoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchableCoreDataTableViewController.m; sourceTree = "<group>"; };
 		507D9C9F19849C4500AACA6A /* TBATabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBATabBarController.h; sourceTree = "<group>"; };
 		507D9CA019849C4500AACA6A /* TBATabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBATabBarController.m; sourceTree = "<group>"; };
-		507D9CA21984CEE800AACA6A /* EventsMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsMapViewController.h; sourceTree = "<group>"; };
-		507D9CA31984CEE800AACA6A /* EventsMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsMapViewController.m; sourceTree = "<group>"; };
+		507D9CA51984DBE100AACA6A /* EventsMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsMapView.h; sourceTree = "<group>"; };
+		507D9CA61984DBE100AACA6A /* EventsMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsMapView.m; sourceTree = "<group>"; };
+		507D9CAB1984E4D600AACA6A /* GeocodeQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeocodeQueue.h; sourceTree = "<group>"; };
+		507D9CAC1984E4D600AACA6A /* GeocodeQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeocodeQueue.m; sourceTree = "<group>"; };
 		50832DF71918BB63003AC8A7 /* the-blue-alliance-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "the-blue-alliance-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		50832DFA1918BB63003AC8A7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		50832DFC1918BB63003AC8A7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -412,6 +415,8 @@
 				50CDA22A19300C6300C8906D /* TBAImporter.m */,
 				5022C84F195FC460008F0131 /* NSManagedObject+Create.h */,
 				5022C850195FC460008F0131 /* NSManagedObject+Create.m */,
+				507D9CAB1984E4D600AACA6A /* GeocodeQueue.h */,
+				507D9CAC1984E4D600AACA6A /* GeocodeQueue.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -456,8 +461,8 @@
 			children = (
 				50832E3C1918BBEA003AC8A7 /* EventsTableViewController.h */,
 				50832E3D1918BBEA003AC8A7 /* EventsTableViewController.m */,
-				507D9CA21984CEE800AACA6A /* EventsMapViewController.h */,
-				507D9CA31984CEE800AACA6A /* EventsMapViewController.m */,
+				507D9CA51984DBE100AACA6A /* EventsMapView.h */,
+				507D9CA61984DBE100AACA6A /* EventsMapView.m */,
 				92C5B86E192C0BBC00AFDBCA /* YearSelectView.h */,
 				92C5B86F192C0BBC00AFDBCA /* YearSelectView.m */,
 			);
@@ -626,6 +631,7 @@
 				50DFD20719207DDC009B686E /* SettingsViewController.m in Sources */,
 				5022C851195FC460008F0131 /* NSManagedObject+Create.m in Sources */,
 				9226B1401932EFD900B7EF43 /* Event.m in Sources */,
+				507D9CA71984DBE100AACA6A /* EventsMapView.m in Sources */,
 				50CDA22B19300C6300C8906D /* TBAImporter.m in Sources */,
 				50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */,
 				50035A2E197DFB1F00E80B1C /* TeamMediaViewController.m in Sources */,
@@ -637,11 +643,11 @@
 				50832E3E1918BBEA003AC8A7 /* EventsTableViewController.m in Sources */,
 				5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */,
 				50DFD20119207DCA009B686E /* TeamsTableViewController.m in Sources */,
-				507D9CA41984CEE800AACA6A /* EventsMapViewController.m in Sources */,
 				5022C845195F8BDD008F0131 /* _Match.m in Sources */,
 				92C5B870192C0BBC00AFDBCA /* YearSelectView.m in Sources */,
 				50C0FC231931743700670A64 /* EventViewController.m in Sources */,
 				50293417195F8B26001DFB89 /* Media.m in Sources */,
+				507D9CAD1984E4D600AACA6A /* GeocodeQueue.m in Sources */,
 				504BC6CA197CDEED00752DB0 /* TBAPaginatedViewController.m in Sources */,
 				50B7F0FC197CFAEF000A2368 /* EventWebcastsViewController.m in Sources */,
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,

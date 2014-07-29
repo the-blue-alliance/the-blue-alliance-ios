@@ -1,5 +1,6 @@
 #import "_Event.h"
 #import "NSManagedObject+Create.h"
+#import <MapKit/MapKit.h>
 
 /** The constants for events
  *  https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/event_type.py#L2
@@ -18,7 +19,7 @@ typedef NS_ENUM(NSInteger, TBAEventType) {
 /** `Event` is a data model for an event
  *  http://www.thebluealliance.com/apidocs#event-model
  */
-@interface Event : _Event <NSManagedObjectCreatable>
+@interface Event : _Event <NSManagedObjectCreatable, MKAnnotation>
 
 /**
  *   The unique key for the event, e.g. "2014casb"

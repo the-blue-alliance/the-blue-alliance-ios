@@ -8,15 +8,13 @@
 
 #import "UIColor+TBAColors.h"
 
-#import "FBTweakInline.h"
-
 @implementation UIColor (TBAColors)
 
 + (UIColor *)TBANavigationBarColor
 {
-    return [UIColor colorWithRed:FBTweakValue(@"Navigation Bar", @"Color", @"Red", 0.2, 0.0, 1.0)
-                           green:FBTweakValue(@"Navigation Bar", @"Color", @"Green", 0.2, 0.0, 1.0)
-                            blue:FBTweakValue(@"Navigation Bar", @"Color", @"Blue", 0.85, 0.0, 1.0)
+    return [UIColor colorWithRed:0.2
+                           green:0.2
+                            blue:0.85
                            alpha:1.0];
 }
 
@@ -32,9 +30,9 @@
 //    return [UIColor colorWithRed:0.146 green:0.370 blue:0.741 alpha:1.000];
     
     // New, lighter color
-    return [UIColor colorWithRed:FBTweakValue(@"Table Separators", @"Color", @"Red", 0.75, 0.0, 1.0)
-                           green:FBTweakValue(@"Table Separators", @"Color", @"Green", 0.85, 0.0, 1.0)
-                            blue:FBTweakValue(@"Table Separators", @"Color", @"Blue", 1.0, 0.0, 1.0)
+    return [UIColor colorWithRed:0.75
+                           green:0.85
+                            blue:1.0
                            alpha:1.0];
 }
 @end

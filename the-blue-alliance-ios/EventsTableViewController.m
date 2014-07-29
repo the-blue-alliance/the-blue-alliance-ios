@@ -11,6 +11,7 @@
 #import "UIColor+TBAColors.h"
 #import <MZFormSheetController/MZFormSheetController.h>
 #import <MapKit/MapKit.h>
+#import "EventsMapView.h"
 
 #import "EventViewController.h"
 
@@ -19,18 +20,45 @@
 @property (nonatomic, strong) NSDictionary *eventData;
 @property (nonatomic, strong) NSDate *seasonStartDate;
 
-@property (nonatomic, strong) MKMapView *map;
+@property (nonatomic) BOOL isMapVisible;
+@property (nonatomic, strong) EventsMapView *map;
 @end
 
 @implementation EventsTableViewController
 
-- (MKMapView *)map
+- (NSDictionary *)eventDataKeyedByShortIndices
+{
+    NSArray *normalKeys = [self sortedEventGroupKeys];
+    NSArray *indexKeys = [self sortedEventIndexTitles];
+    
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithCapacity:normalKeys.count];
+    for(int i = 0; i < normalKeys.count; i++) {
+        NSString *normalKey = normalKeys[i];
+        NSString *indexKey = indexKeys[i];
+        id value = self.eventData[normalKey];
+        result[indexKey] = value;
+    }
+    return result;
+}
+
+- (EventsMapView *)setupMap
+{
+    EventsMapView *map = [[EventsMapView alloc] initForAutoLayout];
+    map.delegate = map;
+    map.alpha = 0;
+    [self.view addSubview:map];
+    [map autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero];
+    map.eventData = [self eventDataKeyedByShortIndices];
+    map.sortedIndexTitles = [self sortedEventIndexTitles];
+    map.seasonStartDate = self.seasonStartDate;
+    
+    return map;
+}
+- (EventsMapView *)map
 {
     if (!_map) {
-        _map = [[MKMapView alloc] initForAutoLayout];
+        _map = [self setupMap];
         _map.alpha = 0;
-        [self.view addSubview:_map];
-        [_map autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero];
     }
     return _map;
 }
@@ -212,6 +240,12 @@
 {
     self.eventData = [self groupEventsByWeek];
     [self.tableView reloadData];
+    
+    if(self.isMapVisible) {
+        self.map.eventData = [self eventDataKeyedByShortIndices];
+        self.map.sortedIndexTitles = [self sortedEventIndexTitles];
+        self.map.seasonStartDate = self.seasonStartDate;
+    }
 }
 
 
@@ -350,16 +384,18 @@ const int EVENTS_TABLE_SPACES_TO_ADD = 2;
 
 - (IBAction)mapButtonTapped:(UIBarButtonItem *)sender
 {
-    if([sender.title isEqualToString:@"Map"]) {
+    if(!self.isMapVisible) {
         [UIView animateWithDuration:0.3 animations:^{
             self.map.alpha = 1;
         }];
         sender.title = @"List";
+        self.isMapVisible = YES;
     } else {
         [UIView animateWithDuration:0.3 animations:^{
             self.map.alpha = 0;
         }];
         sender.title = @"Map";
+        self.isMapVisible = NO;
     }
 }
 

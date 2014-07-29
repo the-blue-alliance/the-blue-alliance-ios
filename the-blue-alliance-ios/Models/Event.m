@@ -1,5 +1,7 @@
 #import "Event.h"
 #import "Media.h"
+#import <MapKit/MapKit.h>
+#import "GeocodeQueue.h"
 
 @implementation Event
 @dynamic key;
@@ -71,7 +73,52 @@
                                     checkingPrexistanceUsingUniqueKey:@"key"
                                             usingManagedObjectContext:context];
     self.media = [NSSet setWithArray:webcasts];
+    
+    
+    if([info[@"location"] length] && [info[@"location"] rangeOfString:@"Vegas"].location != NSNotFound) {
+        NSLog(@"VEGAS 1!");
+    }
+    
+    // Asynchronously geocode
+    
+    
+    NSString *textForGeocode = [info[@"venue_address"] length] ? info[@"venue_address"] : info[@"location"];
+    if([textForGeocode length] > 0) {
+        [[GeocodeQueue sharedGeocodeQueue] addTextToGeocodeQueue:textForGeocode withCallback:^(NSArray *placemarks, NSError *error) {
+            CLCircularRegion *region = (CLCircularRegion *)[(CLPlacemark *)[placemarks firstObject] region];
+            [context performBlock:^{
+                if(info[@"location"] && [info[@"location"] rangeOfString:@"Vegas"].location != NSNotFound) {
+                    NSLog(@"VEGAS 2!");
+                }
+                if(region) {
+                    self.cachedLocationLatValue = region.center.latitude;
+                    self.cachedLocationLonValue = region.center.longitude;
+                    self.cachedLocationRadiusValue = region.radius;
+//                    NSLog(@"Finished geocoding %@", info[@"location"]);
+                } else {
+                    NSLog(@"Error: %@  while trying to geocode: %@", error, textForGeocode);
+                }
+            }];
+        }];
+    }
+    
+    
     // TODO: Finish / improve importing
+}
+
+- (CLLocationCoordinate2D)coordinate
+{
+    return CLLocationCoordinate2DMake(self.cachedLocationLatValue, self.cachedLocationLonValue);
+}
+
+- (NSString *)title
+{
+    return self.short_name;
+}
+
+- (NSString *)subtitle
+{
+    return self.location;
 }
 
 @end
