@@ -26,7 +26,7 @@
         <!--Events Table View Controller - %d Events-->
         <scene sceneID="MxA-6s-K1h">
             <objects>
-                <viewController id="fSY-pS-Rmu" customClass="EventsTableViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventsTableViewController" id="fSY-pS-Rmu" customClass="EventsTableViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Dkd-he-XXj"/>
                         <viewControllerLayoutGuide type="bottom" id="cYd-7C-pcI"/>
@@ -153,6 +153,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Teams" id="URR-zx-3Fg"/>
+                    <connections>
+                        <outlet property="tableView" destination="7ST-t6-C3x" id="14n-Ae-U10"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dQ7-iD-UIP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

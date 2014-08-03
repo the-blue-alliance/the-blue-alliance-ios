@@ -60,15 +60,9 @@
             previousMediaView = [[AsyncImageView alloc] initForAutoLayout];
             previousMediaView.contentMode = UIViewContentModeScaleAspectFit;
             
-            __weak AsyncImageView *weakImageView = (AsyncImageView *)previousMediaView;
-            ((AsyncImageView *)previousMediaView).callback = ^{
-                CGFloat aspectRatio = weakImageView.image.size.width / weakImageView.image.size.height;
-                [weakImageView autoConstrainAttribute:ALDimensionWidth
-                                              toAttribute:ALDimensionHeight
-                                                   ofView:weakImageView
-                                           withMultiplier:aspectRatio];
-            };
-            ((AsyncImageView *)previousMediaView).imageURL = [NSURL URLWithString:media.url];
+            AsyncImageView *imageView = (AsyncImageView *)previousMediaView;
+            [imageView addObserver:self forKeyPath:@"image" options:0 context:NULL];
+            imageView.imageURL = [NSURL URLWithString:media.url];
 
         } else {
             previousMediaView = [[UIWebView alloc] initForAutoLayout];
@@ -93,6 +87,22 @@
     
     [previousMediaView autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:4];
     
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
+{
+    if([object isKindOfClass:[AsyncImageView class]] && [keyPath isEqualToString:@"image"]) {
+        AsyncImageView *imageView = object;
+        CGFloat aspectRatio = imageView.image.size.width / imageView.image.size.height;
+        [imageView autoConstrainAttribute:ALDimensionWidth
+                              toAttribute:ALDimensionHeight
+                                   ofView:imageView
+                           withMultiplier:aspectRatio];
+        [imageView removeObserver:self forKeyPath:@"image" context:NULL];
+    }
 }
 
 
