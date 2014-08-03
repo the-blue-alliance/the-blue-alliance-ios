@@ -8,10 +8,10 @@
 
 #import "EventsMapView.h"
 #import "Event.h"
-#import <JMMarkSlider.h>
+#import "AnnotatedJMMarkSlider.h"
 
 @interface EventsMapView () <UIToolbarDelegate>
-@property (nonatomic, strong) JMMarkSlider *slider;
+@property (nonatomic, strong) AnnotatedJMMarkSlider *slider;
 @property (nonatomic) int lastSliderIndex;
 @end
 
@@ -58,7 +58,7 @@
         topToolbar.backgroundColor = [UIColor TBANavigationBarColor];
         
         self.lastSliderIndex = -1;
-        self.slider = [[JMMarkSlider alloc] initForAutoLayout];
+        self.slider = [[AnnotatedJMMarkSlider alloc] initForAutoLayout];
         self.slider.contentMode = UIViewContentModeRedraw;
         self.slider.minimumValue = 0;
         self.slider.maximumValue = 1;

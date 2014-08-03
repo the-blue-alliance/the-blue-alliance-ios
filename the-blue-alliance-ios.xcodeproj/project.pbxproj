@@ -64,6 +64,7 @@
 		508FBFEA197CEB7E002A9D69 /* TeamInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FBFE9197CEB7E002A9D69 /* TeamInfoViewController.m */; };
 		50A71376197C7694009FBCAE /* ColumnView.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A71375197C7694009FBCAE /* ColumnView.m */; };
 		50B2A207198786F300C4B816 /* database.zip in Resources */ = {isa = PBXBuildFile; fileRef = 50B2A206198786F300C4B816 /* database.zip */; };
+		50B61F69198EEC6E00439926 /* AnnotatedJMMarkSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 50B61F68198EEC6E00439926 /* AnnotatedJMMarkSlider.m */; };
 		50B7F0FC197CFAEF000A2368 /* EventWebcastsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50B7F0FB197CFAEF000A2368 /* EventWebcastsViewController.m */; };
 		50C0FC231931743700670A64 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C0FC221931743700670A64 /* EventViewController.m */; };
 		50C88502197B7CC000F6D243 /* RankingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C88500197B7CC000F6D243 /* RankingsTableViewCell.m */; };
@@ -180,6 +181,8 @@
 		50A71375197C7694009FBCAE /* ColumnView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnView.m; sourceTree = "<group>"; };
 		50A88D70195F784E001F8A3D /* The Blue Alliance 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 4.xcdatamodel"; sourceTree = "<group>"; };
 		50B2A206198786F300C4B816 /* database.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = database.zip; sourceTree = "<group>"; };
+		50B61F67198EEC6E00439926 /* AnnotatedJMMarkSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnnotatedJMMarkSlider.h; sourceTree = "<group>"; };
+		50B61F68198EEC6E00439926 /* AnnotatedJMMarkSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnnotatedJMMarkSlider.m; sourceTree = "<group>"; };
 		50B7F0FA197CFAEF000A2368 /* EventWebcastsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventWebcastsViewController.h; sourceTree = "<group>"; };
 		50B7F0FB197CFAEF000A2368 /* EventWebcastsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventWebcastsViewController.m; sourceTree = "<group>"; };
 		50C0FC211931743700670A64 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
@@ -363,6 +366,8 @@
 				9226B1351932EFD900B7EF43 /* Models */,
 				50832E151918BB63003AC8A7 /* Images.xcassets */,
 				50832E011918BB63003AC8A7 /* Supporting Files */,
+				50B61F67198EEC6E00439926 /* AnnotatedJMMarkSlider.h */,
+				50B61F68198EEC6E00439926 /* AnnotatedJMMarkSlider.m */,
 			);
 			path = "the-blue-alliance-ios";
 			sourceTree = "<group>";
@@ -695,6 +700,7 @@
 				50832E3E1918BBEA003AC8A7 /* EventsTableViewController.m in Sources */,
 				5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */,
 				50DFD20119207DCA009B686E /* TeamsTableViewController.m in Sources */,
+				50B61F69198EEC6E00439926 /* AnnotatedJMMarkSlider.m in Sources */,
 				5022C845195F8BDD008F0131 /* _Match.m in Sources */,
 				92C5B870192C0BBC00AFDBCA /* YearSelectView.m in Sources */,
 				50C0FC231931743700670A64 /* EventViewController.m in Sources */,
