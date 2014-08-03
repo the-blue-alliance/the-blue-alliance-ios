@@ -69,8 +69,8 @@
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outlet property="dataSource" destination="fSY-pS-Rmu" id="vNt-wn-ASX"/>
-                                    <outlet property="delegate" destination="fSY-pS-Rmu" id="f98-nd-miW"/>
+                                    <outlet property="dataSource" destination="fSY-pS-Rmu" id="Rru-Ct-Srw"/>
+                                    <outlet property="delegate" destination="fSY-pS-Rmu" id="S5U-ls-eJH"/>
                                 </connections>
                             </tableView>
                         </subviews>
@@ -84,7 +84,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="tableView" destination="AX4-Zr-hcR" id="L6e-sU-OBf"/>
+                        <outlet property="tableView" destination="AX4-Zr-hcR" id="qMu-AM-CTQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XHA-Fm-mbG" userLabel="First Responder" sceneMemberID="firstResponder"/>
