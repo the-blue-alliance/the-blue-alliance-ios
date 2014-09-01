@@ -64,7 +64,8 @@
     
     NSMutableArray *values = [[NSMutableArray alloc] initWithCapacity:headers.count];
     for(NSString *header in headers) {
-        [values addObject:[team[header] stringByReplacingOccurrencesOfString:@".00" withString:@""]];
+        
+        [values addObject:[[team[header] description] stringByReplacingOccurrencesOfString:@".00" withString:@""]];
     }
     
     self.testColumnView.topRow = headers;
