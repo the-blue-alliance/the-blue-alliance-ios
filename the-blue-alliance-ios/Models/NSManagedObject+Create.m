@@ -12,7 +12,7 @@
 
 
 // Validates the dictionary and makes it safe to pull data from
-+ (NSDictionary *)normalizeTeamInfoDictionary:(NSDictionary *)info
++ (NSDictionary *)normalizeInfoDictionary:(NSDictionary *)info
 {
     NSMutableDictionary *normInfo = [info mutableCopy];
     
@@ -70,7 +70,7 @@
     }
     
     // Validates the dictionary and makes it safe to pull data from
-    info = [NSManagedObject normalizeTeamInfoDictionary:info];
+    info = [NSManagedObject normalizeInfoDictionary:info];
     
     
     [object configureSelfForInfo:info usingManagedObjectContext:context withUserInfo:userInfo];
@@ -130,6 +130,13 @@
                                           usingManagedObjectContext:context
                                                            userInfo:userInfo]];
         } else {
+            NSManagedObject *existingObject = existingObjsDict[infoDict[key]];
+            if([existingObject conformsToProtocol:@protocol(NSManagedObjectCreatable)]) {
+                NSManagedObject<NSManagedObjectCreatable> *creatable = (NSManagedObject<NSManagedObjectCreatable> *)existingObject;
+                
+                [creatable configureSelfForInfo:[NSManagedObject normalizeInfoDictionary:infoDict] usingManagedObjectContext:context withUserInfo:userInfo];
+            }
+            
             [returnObjs addObject:existingObjsDict[infoDict[key]]];
         }
     }

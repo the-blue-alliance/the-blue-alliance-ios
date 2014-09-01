@@ -74,31 +74,29 @@
                                             usingManagedObjectContext:context];
     self.media = [NSSet setWithArray:webcasts];
     
-    
-    if([info[@"location"] length] && [info[@"location"] rangeOfString:@"Vegas"].location != NSNotFound) {
-        NSLog(@"VEGAS 1!");
-    }
+
     
     // Asynchronously geocode
-    
-    NSString *textForGeocode = [info[@"venue_address"] length] ? info[@"venue_address"] : info[@"location"];
-    if([textForGeocode length] > 0) {
-        [[GeocodeQueue sharedGeocodeQueue] addTextToGeocodeQueue:textForGeocode withCallback:^(NSArray *placemarks, NSError *error) {
-            CLCircularRegion *region = (CLCircularRegion *)[(CLPlacemark *)[placemarks firstObject] region];
-            [context performBlock:^{
-                if(info[@"location"] && [info[@"location"] rangeOfString:@"Vegas"].location != NSNotFound) {
-                    NSLog(@"VEGAS 2!");
-                }
-                if(region) {
-                    self.cachedLocationLatValue = region.center.latitude;
-                    self.cachedLocationLonValue = region.center.longitude;
-                    self.cachedLocationRadiusValue = region.radius;
-//                    NSLog(@"Finished geocoding %@", info[@"location"]);
-                } else {
-                    NSLog(@"Error: %@  while trying to geocode: %@", error, textForGeocode);
-                }
+    if(self.cachedLocationLatValue == 0 && self.cachedLocationLonValue == 0) {
+        NSString *textForGeocode = [info[@"venue_address"] length] ? info[@"venue_address"] : info[@"location"];
+        if([textForGeocode length] > 0) {
+            [[GeocodeQueue sharedGeocodeQueue] addTextToGeocodeQueue:textForGeocode withCallback:^(NSArray *placemarks, NSError *error) {
+                CLCircularRegion *region = (CLCircularRegion *)[(CLPlacemark *)[placemarks firstObject] region];
+                [context performBlock:^{
+                    if(info[@"location"] && [info[@"location"] rangeOfString:@"Vegas"].location != NSNotFound) {
+                        NSLog(@"VEGAS 2!");
+                    }
+                    if(region) {
+                        self.cachedLocationLatValue = region.center.latitude;
+                        self.cachedLocationLonValue = region.center.longitude;
+                        self.cachedLocationRadiusValue = region.radius;
+    //                    NSLog(@"Finished geocoding %@", info[@"location"]);
+                    } else {
+                        NSLog(@"Error: %@  while trying to geocode: %@", error, textForGeocode);
+                    }
+                }];
             }];
-        }];
+        }
     }
     
     
