@@ -43,7 +43,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-//    [self.tableView setContentOffset:CGPointMake(0, self.searchHeader.height)];
 }
 
 #pragma mark - Rotating
@@ -101,19 +100,8 @@
 
 #pragma mark - UISearchBarDelegate Methods
 
-#define KeyboardHeight 216.
-#define TabBarHeight 50.
 
-- (CGFloat)searchBarStaticHeaderHeight
-{
-    return self.searchHeader.height;
-}
 
-- (CGFloat)searchBarTableResizeHeight
-{
-    // Subtract the tab bar height from the keyboard height because the keyboard covers the tab bar
-    return KeyboardHeight - TabBarHeight;
-}
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {

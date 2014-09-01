@@ -81,7 +81,6 @@
     
     // Asynchronously geocode
     
-    
     NSString *textForGeocode = [info[@"venue_address"] length] ? info[@"venue_address"] : info[@"location"];
     if([textForGeocode length] > 0) {
         [[GeocodeQueue sharedGeocodeQueue] addTextToGeocodeQueue:textForGeocode withCallback:^(NSArray *placemarks, NSError *error) {
