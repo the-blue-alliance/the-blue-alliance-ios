@@ -62,8 +62,8 @@
 		50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */; };
 		508FBFE7197CE7D2002A9D69 /* TBATopMapInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FBFE6197CE7D2002A9D69 /* TBATopMapInfoViewController.m */; };
 		508FBFEA197CEB7E002A9D69 /* TeamInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FBFE9197CEB7E002A9D69 /* TeamInfoViewController.m */; };
+		50A4097D19B5A32A0096DF65 /* database.zip in Resources */ = {isa = PBXBuildFile; fileRef = 50B2A206198786F300C4B816 /* database.zip */; };
 		50A71376197C7694009FBCAE /* ColumnView.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A71375197C7694009FBCAE /* ColumnView.m */; };
-		50B2A207198786F300C4B816 /* database.zip in Resources */ = {isa = PBXBuildFile; fileRef = 50B2A206198786F300C4B816 /* database.zip */; };
 		50B61F69198EEC6E00439926 /* AnnotatedJMMarkSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 50B61F68198EEC6E00439926 /* AnnotatedJMMarkSlider.m */; };
 		50B7F0FC197CFAEF000A2368 /* EventWebcastsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50B7F0FB197CFAEF000A2368 /* EventWebcastsViewController.m */; };
 		50C0FC231931743700670A64 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C0FC221931743700670A64 /* EventViewController.m */; };
@@ -604,11 +604,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50A4097D19B5A32A0096DF65 /* database.zip in Resources */,
 				50F121F8197B368D00DE7837 /* MatchResultsTableViewCell.xib in Resources */,
 				50832E111918BB63003AC8A7 /* Main_iPad.storyboard in Resources */,
 				50832E161918BB63003AC8A7 /* Images.xcassets in Resources */,
 				50832E0E1918BB63003AC8A7 /* Main_iPhone.storyboard in Resources */,
-				50B2A207198786F300C4B816 /* database.zip in Resources */,
 				50C88503197B7CC000F6D243 /* RankingsTableViewCell.xib in Resources */,
 				50832E051918BB63003AC8A7 /* InfoPlist.strings in Resources */,
 			);

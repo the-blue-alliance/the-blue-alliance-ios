@@ -24,7 +24,18 @@
 @property (nonatomic, strong) EventsMapView *map;
 @end
 
+
+#define INDEX_SPACING_PORTRAIT 15
+#define INDEX_SPACING_LANDSCAPE 3
+
 @implementation EventsTableViewController
+
+
+- (void)setEventData:(NSDictionary *)eventData
+{
+    _eventData = eventData;
+    [self.indexBar reload];
+}
 
 - (NSDictionary *)eventDataKeyedByShortIndices
 {
@@ -145,7 +156,7 @@
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                         managedObjectContext:context
-                                                                          sectionNameKeyPath:@"start_date"
+                                                                          sectionNameKeyPath:nil
                                                                                    cacheName:nil];
     self.seasonStartDate = [self getSeasonStartDate];
     self.eventData = [self groupEventsByWeek];
@@ -250,6 +261,8 @@
 }
 
 
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -261,6 +274,27 @@
 //    self.eventData = [[NSMutableDictionary alloc] init];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Years" style:UIBarButtonItemStyleBordered target:self action:@selector(showSelectYearScreen)];
+    
+    self.indexBar = [[GDIIndexBar alloc] initWithTableView:self.tableView];
+    self.indexBar.delegate = self;
+    [self.view addSubview:self.indexBar];
+    
+    
+    
+    if(UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+        self.indexBar.textSpacing = INDEX_SPACING_PORTRAIT;
+    } else {
+        self.indexBar.textSpacing = INDEX_SPACING_LANDSCAPE;
+    }    
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    if(UIInterfaceOrientationIsPortrait(toInterfaceOrientation)) {
+        self.indexBar.textSpacing = INDEX_SPACING_PORTRAIT;
+    } else {
+        self.indexBar.textSpacing = INDEX_SPACING_LANDSCAPE;
+    }
 }
 
 - (void)showSelectYearScreen
@@ -331,23 +365,30 @@
     return titles;
 }
 
-// Sketchily add empty section index titles to create better spacing
-// See http://stackoverflow.com/questions/18923729/uitableview-section-index-spacing-on-ios-7
-const int EVENTS_TABLE_SPACES_TO_ADD = 2;
-- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
+
+
+
+- (NSUInteger)numberOfIndexesForIndexBar:(GDIIndexBar *)indexBar
 {
-    NSMutableArray *titles = [[self sortedEventIndexTitles] mutableCopy];
-    for (int i = 0; i < titles.count; i += (EVENTS_TABLE_SPACES_TO_ADD + 1)) {
-        for (int j = 0; j < EVENTS_TABLE_SPACES_TO_ADD; j++) {
-            [titles insertObject:@"" atIndex:i+1];
-        }
-    }
-    return titles;
+	return [self sortedEventIndexTitles].count;
 }
+
+- (NSString *)stringForIndex:(NSUInteger)index
+{
+	return [self sortedEventIndexTitles][index];
+}
+
+- (void)indexBar:(GDIIndexBar *)indexBar didSelectIndex:(NSUInteger)index
+{
+	[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]
+                          atScrollPosition:UITableViewScrollPositionTop
+                                  animated:NO];
+}
+
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
-    return index / (EVENTS_TABLE_SPACES_TO_ADD + 1);
+    return index;
 }
 
 

@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <GDIIndexBar/GDIIndexBar.h>
 
 @interface AppDelegate () <NSURLConnectionDataDelegate>
 
@@ -34,6 +35,11 @@
 #pragma mark - Main Entry Point
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0
+                                                            diskCapacity:0
+                                                                diskPath:nil];
+    [NSURLCache setSharedURLCache:sharedCache];
+    
     // Setup UI appearance
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [[UINavigationBar appearance] setBarTintColor:[UIColor TBANavigationBarColor]];
@@ -42,6 +48,14 @@
     [[UITableView appearance] setSectionIndexBackgroundColor:[UIColor clearColor]];
     [[UITableView appearance] setSectionIndexTrackingBackgroundColor:[UIColor clearColor]];
     [[UITableView appearance] setSectionIndexColor:[UIColor TBANavigationBarColor]];
+    
+    [[GDIIndexBar appearance] setTextColor:[UIColor TBANavigationBarColor]];
+    [[GDIIndexBar appearance] setVerticalAlignment:GDIIndexBarAlignmentCenter];
+    [[GDIIndexBar appearance] setTextOffset:UIOffsetMake(8, 0)];
+    [[GDIIndexBar appearance] setBarWidth:40];
+    [[GDIIndexBar appearance] setBarBackgroundWidth:40];
+    [[GDIIndexBar appearance] setBarBackgroundColor:[UIColor colorWithWhite:0.95 alpha:0.55]];
+    [[GDIIndexBar appearance] setAlpha:0.6];
     
     [self configureSelectedImages];
     

@@ -11,8 +11,11 @@
 #import "TeamDetailViewController.h"
 
 @interface TeamsTableViewController ()
-
+@property (nonatomic, strong) NSArray *sections;
 @end
+
+#define INDEX_SPACING_PORTRAIT 30
+#define INDEX_SPACING_LANDSCAPE 8
 
 @implementation TeamsTableViewController
 
@@ -21,7 +24,15 @@
     _context = context;
     
     [self setupFetchedResultsControllerUsingContext:context];
-    
+    self.sections = [self calculateSectionsForTeams:self.fetchedResultsController.fetchedObjects];
+
+}
+
+- (void)setSections:(NSArray *)sections
+{
+    _sections = [sections copy];
+    [self.indexBar reload];
+    [self.tableView reloadData];
 }
 
 - (void)setupFetchedResultsControllerUsingContext:(NSManagedObjectContext *)context
@@ -47,7 +58,7 @@
         
         self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                             managedObjectContext:context
-                                                                              sectionNameKeyPath:@"grouping_text"
+                                                                              sectionNameKeyPath:nil
                                                                                        cacheName:nil];
     }
     
@@ -56,54 +67,61 @@
 - (void)setEventFilter:(Event *)eventFilter
 {
     _eventFilter = eventFilter;
-//    if(_eventFilter) {
-//        self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"%@ IN events", _eventFilter];
-//    } else {
-//        self.fetchedResultsController.fetchRequest.predicate = nil;
-//    }
+    
     self.title = @"Teams";
 }
 
-- (void)setDisableSections:(BOOL)disableSections
+- (void)viewDidLoad
 {
-    _disableSections = disableSections;
-    if(self.context) {
-//        [self setupFetchedResultsControllerUsingContext:self.context];
+    [super viewDidLoad];
+    
+    self.indexBar = [[GDIIndexBar alloc] initWithTableView:self.tableView];
+    self.indexBar.delegate = self;
+    [self.view addSubview:self.indexBar];
+    self.indexBar.textOffset = UIOffsetMake(7, 15);
+    self.indexBar.barWidth = 50;
+    self.indexBar.barBackgroundWidth = 50;
+    
+    if(UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+        self.indexBar.textSpacing = INDEX_SPACING_PORTRAIT;
+    } else {
+        self.indexBar.textSpacing = INDEX_SPACING_LANDSCAPE;
     }
 }
 
-
-
-- (NSString *)controller:(NSFetchedResultsController *)controller sectionIndexTitleForSectionName:(NSString *)sectionName
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    return sectionName;
-}
-
-// Sketchily add empty section index titles to create better spacing
-// See http://stackoverflow.com/questions/18923729/uitableview-section-index-spacing-on-ios-7
-const int SPACES_TO_ADD = 3;
-- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
-{
-    NSMutableArray *titles = [self.fetchedResultsController.sectionIndexTitles mutableCopy];
-    for (int i = 0; i < titles.count; i += (SPACES_TO_ADD + 1)) {
-        for (int j = 0; j < SPACES_TO_ADD; j++) {
-            [titles insertObject:@"" atIndex:i+1];
-        }
+    if(UIInterfaceOrientationIsPortrait(toInterfaceOrientation)) {
+        self.indexBar.textSpacing = INDEX_SPACING_PORTRAIT;
+    } else {
+        self.indexBar.textSpacing = INDEX_SPACING_LANDSCAPE;
     }
-    return titles;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
+- (NSUInteger)numberOfIndexesForIndexBar:(GDIIndexBar *)indexBar
 {
-    return index / (SPACES_TO_ADD + 1);
+    return self.sections.count;
 }
+
+- (NSString *)stringForIndex:(NSUInteger)index
+{
+    NSString *text = self.sections[index][@"title"];
+    return text;
+}
+
+- (void)indexBar:(GDIIndexBar *)indexBar didSelectIndex:(NSUInteger)index
+{
+    NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:index];
+    [self.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionTop animated:NO];
+}
+
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Team Cell" forIndexPath:indexPath];
     
-    Team *team = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    Team *team = self.sections[indexPath.section][@"objects"][indexPath.row];
     cell.textLabel.text = [team.team_number description];
     cell.detailTextLabel.text = team.nickname;
     
@@ -144,6 +162,55 @@ const int SPACES_TO_ADD = 3;
         }
     }
 }
+
+- (NSArray *)calculateSectionsForTeams:(NSArray *)teams
+{
+    NSArray *sectionTitles = [[[[NSSet alloc] initWithArray:[teams valueForKey:@"grouping_text"]] allObjects] sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSMutableArray *sections = [[NSMutableArray alloc] initWithCapacity:sectionTitles.count];
+    for (NSString *title in sectionTitles) {
+        NSArray *groupedTeams = [teams filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"grouping_text == %@", title]];
+        NSDictionary *section = @{@"objects": groupedTeams, @"title": title};
+        [sections addObject:section];
+    }
+    return sections;
+}
+
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return self.sections.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [self.sections[section][@"objects"] count];
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    self.sections = [self calculateSectionsForTeams:controller.fetchedObjects];
+}
+
+
+
+
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+	return self.sections[section][@"title"];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
+{
+	return 0;
+}
+
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
+{
+    return nil;
+}
+
 
 
 @end

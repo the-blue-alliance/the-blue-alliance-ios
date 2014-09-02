@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "SearchableCoreDataTableViewController.h"
 #import "Event.h"
+#import <GDIIndexBar/GDIIndexBar.h>
 
 /** TeamsViewController is a table view of all teams registered in FRC
  *  (past and current)
  */
-@interface TeamsTableViewController : SearchableCoreDataTableViewController
+@interface TeamsTableViewController : SearchableCoreDataTableViewController <GDIIndexBarDelegate, UITableViewDataSource>
 
 /** The context to be used for accessing Core Data
 */
@@ -28,4 +29,7 @@
  *  Whether or not the TeamsTableViewController should disable sectioning of teams by the 1000's
  */
 @property (nonatomic) BOOL disableSections;
+
+@property (nonatomic, strong) GDIIndexBar *indexBar;
+
 @end
