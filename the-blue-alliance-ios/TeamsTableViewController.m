@@ -135,7 +135,7 @@
 {
     if([segue.identifier isEqualToString:@"Show Team"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        Team *team = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        Team *team = self.sections[indexPath.section][@"objects"][indexPath.row];
 
         TeamDetailViewController *dest = segue.destinationViewController;
         dest.team = team;
@@ -191,10 +191,9 @@
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
+    [super controllerDidChangeContent:controller];
     self.sections = [self calculateSectionsForTeams:controller.fetchedObjects];
 }
-
-
 
 
 

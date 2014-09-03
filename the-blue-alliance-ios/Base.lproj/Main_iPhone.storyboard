@@ -157,7 +157,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="gxN-KW-nGC" kind="push" id="Ueh-Zg-G5s"/>
+                                            <segue destination="gxN-KW-nGC" kind="push" identifier="Show Team" id="SY4-OQ-Eo4"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

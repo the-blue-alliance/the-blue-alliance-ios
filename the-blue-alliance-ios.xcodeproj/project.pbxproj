@@ -62,6 +62,7 @@
 		50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */; };
 		508FBFE7197CE7D2002A9D69 /* TBATopMapInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FBFE6197CE7D2002A9D69 /* TBATopMapInfoViewController.m */; };
 		508FBFEA197CEB7E002A9D69 /* TeamInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FBFE9197CEB7E002A9D69 /* TeamInfoViewController.m */; };
+		509E892919B65B8A00F4E28F /* MovableAccessoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 509E892819B65B8A00F4E28F /* MovableAccessoryTableViewCell.m */; };
 		50A4097D19B5A32A0096DF65 /* database.zip in Resources */ = {isa = PBXBuildFile; fileRef = 50B2A206198786F300C4B816 /* database.zip */; };
 		50A71376197C7694009FBCAE /* ColumnView.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A71375197C7694009FBCAE /* ColumnView.m */; };
 		50B61F69198EEC6E00439926 /* AnnotatedJMMarkSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 50B61F68198EEC6E00439926 /* AnnotatedJMMarkSlider.m */; };
@@ -177,6 +178,8 @@
 		508FBFE8197CEB7E002A9D69 /* TeamInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamInfoViewController.h; sourceTree = "<group>"; };
 		508FBFE9197CEB7E002A9D69 /* TeamInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamInfoViewController.m; sourceTree = "<group>"; };
 		508FBFEB197CF266002A9D69 /* The Blue Alliance 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 5.xcdatamodel"; sourceTree = "<group>"; };
+		509E892719B65B8A00F4E28F /* MovableAccessoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovableAccessoryTableViewCell.h; sourceTree = "<group>"; };
+		509E892819B65B8A00F4E28F /* MovableAccessoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovableAccessoryTableViewCell.m; sourceTree = "<group>"; };
 		50A71374197C7694009FBCAE /* ColumnView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnView.h; sourceTree = "<group>"; };
 		50A71375197C7694009FBCAE /* ColumnView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnView.m; sourceTree = "<group>"; };
 		50A88D70195F784E001F8A3D /* The Blue Alliance 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 4.xcdatamodel"; sourceTree = "<group>"; };
@@ -385,6 +388,8 @@
 				50832E031918BB63003AC8A7 /* InfoPlist.strings */,
 				50832E061918BB63003AC8A7 /* main.m */,
 				50832E081918BB63003AC8A7 /* the-blue-alliance-ios-Prefix.pch */,
+				509E892719B65B8A00F4E28F /* MovableAccessoryTableViewCell.h */,
+				509E892819B65B8A00F4E28F /* MovableAccessoryTableViewCell.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -684,6 +689,7 @@
 				5066E7A0198781770004C576 /* unzip.c in Sources */,
 				50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */,
 				50DFD20419207DD4009B686E /* InsightsViewController.m in Sources */,
+				509E892919B65B8A00F4E28F /* MovableAccessoryTableViewCell.m in Sources */,
 				5022C846195F8BDD008F0131 /* _Media.m in Sources */,
 				50DFD20719207DDC009B686E /* SettingsViewController.m in Sources */,
 				5022C851195FC460008F0131 /* NSManagedObject+Create.m in Sources */,

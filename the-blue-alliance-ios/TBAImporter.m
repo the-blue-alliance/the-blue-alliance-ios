@@ -52,9 +52,10 @@
         NSLog(@"URL: %@\nIf: %@\nModified: %@\n\n", url, ifModifiedSince, lastMod);
         
         if(callback) {
-            callback(responseObject);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                callback(responseObject);
+            });
         }
-//        operation.request
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSString *lastMod = [operation.response allHeaderFields][@"Last-Modified"];
         if(operation.response.statusCode == 304) {
@@ -66,7 +67,9 @@
         }
         
         if(callback) {
-            callback(nil);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                callback(nil);
+            });
         }
     }];
 }
