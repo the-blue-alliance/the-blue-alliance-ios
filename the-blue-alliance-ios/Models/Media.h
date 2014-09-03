@@ -14,4 +14,5 @@
 
 @interface Media : _Media <NSManagedObjectCreatable>
 
+- (NSString *)youtubeVideoEmbedHTMLForSize:(CGSize)size;
 @end

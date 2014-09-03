@@ -8,12 +8,16 @@
 
 #import "TeamInfoViewController.h"
 #import "TBASocialButtonContainer.h"
+#import "MediaCollectionViewCell.h"
 
-@interface TeamInfoViewController () <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+@interface TeamInfoViewController () <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 //@property (nonatomic, strong) UITableView *infoTableView;
 //@property (nonatomic, strong) UIView *socialButtonRow;
 
 @property (nonatomic, strong) NSArray *infoObjects; // Array of `TBAInfoTableViewDataRow`s
+
+@property (nonatomic, strong) NSArray *sortedTeamMedia;
+@property (nonatomic, strong) UICollectionView *mediaCollectionView;
 
 @end
 
@@ -40,8 +44,15 @@
     return _infoObjects;
 }
 
+#pragma mark - UI Actions
+- (void)socialButtonTapped:(TBASocialButtonContainer *)socialContainer
+{
+    TBASocialButtonContainerButtonType type = socialContainer.selectedButtonType;
+    
+    // TODO: Implement navigation actions based on the `type`
+}
 
-
+#pragma mark - Setup UI
 - (void)setupUI
 {
     // Create views
@@ -53,15 +64,19 @@
     [self.view addSubview:infoTableView];
     
     TBASocialButtonContainer *socialButtonContainer = [[TBASocialButtonContainer alloc] initForAutoLayout];
+    [socialButtonContainer addTarget:self action:@selector(socialButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:socialButtonContainer];
-    socialButtonContainer.backgroundColor = [UIColor greenColor];
     
-    UICollectionView *mediaCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    UICollectionView *mediaCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
     mediaCollectionView.translatesAutoresizingMaskIntoConstraints = NO;
+    [mediaCollectionView registerClass:[MediaCollectionViewCell class] forCellWithReuseIdentifier:@"Team Media Cell"];
     mediaCollectionView.dataSource = self;
     mediaCollectionView.delegate = self;
     [self.view addSubview:mediaCollectionView];
-    mediaCollectionView.backgroundColor = [UIColor blueColor];
+    mediaCollectionView.backgroundColor = [UIColor whiteColor];
+    self.mediaCollectionView = mediaCollectionView;
     
     
     // Setup constraints
@@ -84,7 +99,53 @@
 {
     [super viewDidLoad];
     
+    self.sortedTeamMedia = [self sortedTeamMediaForTeam:self.team];
     [self setupUI];
+    
+    [self.team addObserver:self forKeyPath:@"media" options:0 context:NULL];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    @try {
+        [self.team removeObserver:self forKeyPath:@"media" context:NULL];
+    }
+    @catch (NSException *exception) {
+        
+    }
+}
+
+#pragma mark - Database Updates
+
+- (NSArray *)sortedTeamMediaForTeam:(Team *)team
+{
+    NSArray *typeOrder = @[@"cdphotothread", @"youtube"];
+    NSArray *medias = [[team.media allObjects] sortedArrayUsingComparator:^NSComparisonResult(Media *obj1, Media *obj2) {
+        NSInteger index1 = [typeOrder indexOfObject:obj1.type];
+        NSInteger index2 = [typeOrder indexOfObject:obj2.type];
+        if(index1 == index2) {
+            return NSOrderedSame;
+        } else if(index1 == NSNotFound) {
+            return NSOrderedDescending;
+        } else if(index2 == NSNotFound) {
+            return NSOrderedAscending;
+        } else if(index1 < index2) {
+            return NSOrderedAscending;
+        }
+        return NSOrderedDescending;
+    }];
+    
+    return medias;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if([keyPath isEqualToString:@"media"] && object == self.team) {
+        self.sortedTeamMedia = [self sortedTeamMediaForTeam:self.team];
+        [self.mediaCollectionView reloadData];
+    }
 }
 
 
@@ -96,7 +157,14 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Team Info Cell"];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Team Info Cell"];
+    }
+    
+    TBAInfoTableViewDataRow *info = self.infoObjects[indexPath.row];
+    cell.textLabel.text = info.text;
+    cell.imageView.image = info.icon;
     
     return cell;
 }
@@ -105,14 +173,29 @@
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    // TODO: Implement team media here
-    return 0;
+    return self.sortedTeamMedia.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionViewCell *cell = [[UICollectionViewCell alloc] init];
+    MediaCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Team Media Cell" forIndexPath:indexPath];
+    
+    cell.media = self.sortedTeamMedia[indexPath.row];
+    
     return cell;
 }
+
+#define MEDIA_CELL_WIDTH 150
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewFlowLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CGSizeMake(MEDIA_CELL_WIDTH, collectionView.bounds.size.height - collectionViewLayout.sectionInset.top - collectionViewLayout.sectionInset.bottom);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
+
 
 @end

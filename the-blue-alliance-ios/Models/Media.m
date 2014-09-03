@@ -85,4 +85,12 @@
     }
 }
 
+- (NSString *)youtubeVideoEmbedHTMLForSize:(CGSize)size;
+{
+	if(![self.type isEqualToString:@"youtube"]) {
+        return nil;
+    }
+    
+    return [NSString stringWithFormat:@"<html><body><iframe width=\"%d\" height=\"%d\" src=\"http://www.youtube.com/embed/%@?rel=0\" frameborder=\"0\" allowfullscreen></iframe></body></html>", (int)size.width, (int)size.height, self.key];
+}
 @end

@@ -65,6 +65,7 @@
 		509E892919B65B8A00F4E28F /* MovableAccessoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 509E892819B65B8A00F4E28F /* MovableAccessoryTableViewCell.m */; };
 		509E892C19B6DA6700F4E28F /* TBAInfoTableViewDataRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 509E892B19B6DA6700F4E28F /* TBAInfoTableViewDataRow.m */; };
 		509E892F19B6DE0300F4E28F /* TBASocialButtonContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 509E892E19B6DE0300F4E28F /* TBASocialButtonContainer.m */; };
+		509E893219B6E73200F4E28F /* MediaCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 509E893119B6E73200F4E28F /* MediaCollectionViewCell.m */; };
 		50A4097D19B5A32A0096DF65 /* database.zip in Resources */ = {isa = PBXBuildFile; fileRef = 50B2A206198786F300C4B816 /* database.zip */; };
 		50A71376197C7694009FBCAE /* ColumnView.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A71375197C7694009FBCAE /* ColumnView.m */; };
 		50B61F69198EEC6E00439926 /* AnnotatedJMMarkSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 50B61F68198EEC6E00439926 /* AnnotatedJMMarkSlider.m */; };
@@ -186,6 +187,8 @@
 		509E892B19B6DA6700F4E28F /* TBAInfoTableViewDataRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAInfoTableViewDataRow.m; sourceTree = "<group>"; };
 		509E892D19B6DE0300F4E28F /* TBASocialButtonContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBASocialButtonContainer.h; sourceTree = "<group>"; };
 		509E892E19B6DE0300F4E28F /* TBASocialButtonContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBASocialButtonContainer.m; sourceTree = "<group>"; };
+		509E893019B6E73200F4E28F /* MediaCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaCollectionViewCell.h; sourceTree = "<group>"; };
+		509E893119B6E73200F4E28F /* MediaCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaCollectionViewCell.m; sourceTree = "<group>"; };
 		50A71374197C7694009FBCAE /* ColumnView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnView.h; sourceTree = "<group>"; };
 		50A71375197C7694009FBCAE /* ColumnView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnView.m; sourceTree = "<group>"; };
 		50A88D70195F784E001F8A3D /* The Blue Alliance 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 4.xcdatamodel"; sourceTree = "<group>"; };
@@ -290,6 +293,8 @@
 				508FBFE9197CEB7E002A9D69 /* TeamInfoViewController.m */,
 				50035A2C197DFB1F00E80B1C /* TeamMediaViewController.h */,
 				50035A2D197DFB1F00E80B1C /* TeamMediaViewController.m */,
+				509E893019B6E73200F4E28F /* MediaCollectionViewCell.h */,
+				509E893119B6E73200F4E28F /* MediaCollectionViewCell.m */,
 			);
 			name = "Team Detail View Controller";
 			sourceTree = "<group>";
@@ -733,6 +738,7 @@
 				50832E071918BB63003AC8A7 /* main.m in Sources */,
 				507D9CA119849C4500AACA6A /* TBATabBarController.m in Sources */,
 				508FBFE7197CE7D2002A9D69 /* TBATopMapInfoViewController.m in Sources */,
+				509E893219B6E73200F4E28F /* MediaCollectionViewCell.m in Sources */,
 				5066E7A1198781770004C576 /* zip.c in Sources */,
 				504BC6C7197CDEC800752DB0 /* TeamDetailViewController.m in Sources */,
 				5066E7A2198781770004C576 /* ZipArchive.mm in Sources */,

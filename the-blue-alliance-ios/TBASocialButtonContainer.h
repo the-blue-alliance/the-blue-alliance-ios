@@ -8,6 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, TBASocialButtonContainerButtonType) {
+    TBASocialButtonContainerButtonTypeNone = 0,
+    TBASocialButtonContainerButtonTypeWebsite,
+    TBASocialButtonContainerButtonTypeTwitter,
+    TBASocialButtonContainerButtonTypeYoutube,
+    TBASocialButtonContainerButtonTypeChiefDelphi
+};
 @interface TBASocialButtonContainer : UIControl
+
+@property (nonatomic) TBASocialButtonContainerButtonType selectedButtonType;
 
 @end
