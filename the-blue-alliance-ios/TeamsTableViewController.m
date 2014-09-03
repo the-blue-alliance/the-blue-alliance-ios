@@ -189,11 +189,7 @@
     return [self.sections[section][@"objects"] count];
 }
 
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-    [super controllerDidChangeContent:controller];
-    self.sections = [self calculateSectionsForTeams:controller.fetchedObjects];
-}
+
 
 
 
@@ -212,6 +208,38 @@
     return nil;
 }
 
+
+
+
+
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+
+}
+
+- (void)controller:(NSFetchedResultsController *)controller
+  didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+		   atIndex:(NSUInteger)sectionIndex
+	 forChangeType:(NSFetchedResultsChangeType)type
+{
+    
+}
+
+
+- (void)controller:(NSFetchedResultsController *)controller
+   didChangeObject:(id)anObject
+	   atIndexPath:(NSIndexPath *)indexPath
+	 forChangeType:(NSFetchedResultsChangeType)type
+	  newIndexPath:(NSIndexPath *)newIndexPath
+{
+    
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    self.sections = [self calculateSectionsForTeams:controller.fetchedObjects];
+}
 
 
 @end

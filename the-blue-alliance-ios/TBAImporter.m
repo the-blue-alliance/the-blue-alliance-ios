@@ -151,7 +151,7 @@
         NSArray *events = [Event createManagedObjectsFromInfoArray:objects
                                  checkingPrexistanceUsingUniqueKey:@"key"
                                          usingManagedObjectContext:context];
-        team.events = [NSSet setWithArray:events];
+        [team addEvents:[NSSet setWithArray:events]];
     }];
 }
 
@@ -160,16 +160,19 @@
     NSString *teamKey = team.key;
     
     [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"team/%@/%ld/media", teamKey, (long)year] callback:^(id objects) {
-        NSMutableArray *fixedMediaList = [[NSMutableArray alloc] initWithCapacity:[objects count]];
-        for (NSDictionary *mediaDict in objects) {
-            NSMutableDictionary *mutMediaDict = [mediaDict mutableCopy];
-            mutMediaDict[@"key"] = mediaDict[@"foreign_key"];
-            [fixedMediaList addObject:mutMediaDict];
+        
+        if(objects) {
+            NSMutableArray *fixedMediaList = [[NSMutableArray alloc] initWithCapacity:[objects count]];
+            for (NSDictionary *mediaDict in objects) {
+                NSMutableDictionary *mutMediaDict = [mediaDict mutableCopy];
+                mutMediaDict[@"key"] = mediaDict[@"foreign_key"];
+                [fixedMediaList addObject:mutMediaDict];
+            }
+            NSArray *medias = [Media createManagedObjectsFromInfoArray:fixedMediaList
+                                     checkingPrexistanceUsingUniqueKey:@"key"
+                                             usingManagedObjectContext:context];
+            [team addMedia:[NSSet setWithArray:medias]];
         }
-        NSArray *medias = [Media createManagedObjectsFromInfoArray:fixedMediaList
-                                 checkingPrexistanceUsingUniqueKey:@"key"
-                                         usingManagedObjectContext:context];
-        team.media = [NSSet setWithArray:medias];
     }];
 }
 
