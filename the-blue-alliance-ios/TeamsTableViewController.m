@@ -9,6 +9,7 @@
 #import "TeamsTableViewController.h"
 #import "Team.h"
 #import "TeamDetailViewController.h"
+#import "MovableAccessoryTableViewCell.h"
 
 @interface TeamsTableViewController ()
 @property (nonatomic, strong) NSArray *sections;
@@ -119,7 +120,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Team Cell" forIndexPath:indexPath];
+    MovableAccessoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Team Cell" forIndexPath:indexPath];
+    cell.rightAccessoryInset = 24;
     
     Team *team = self.sections[indexPath.section][@"objects"][indexPath.row];
     cell.textLabel.text = [team.team_number description];

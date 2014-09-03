@@ -12,6 +12,7 @@
 #import <MZFormSheetController/MZFormSheetController.h>
 #import <MapKit/MapKit.h>
 #import "EventsMapView.h"
+#import "MovableAccessoryTableViewCell.h"
 
 #import "EventViewController.h"
 
@@ -325,8 +326,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Event Cell" forIndexPath:indexPath];
-        
+    MovableAccessoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Event Cell" forIndexPath:indexPath];
+    cell.rightAccessoryInset = 12;
+    
     id key = [self sortedEventGroupKeys][indexPath.section];
     NSArray *eventList = self.eventData[key];
     Event *event = eventList[indexPath.row];

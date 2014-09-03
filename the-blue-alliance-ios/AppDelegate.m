@@ -54,7 +54,7 @@
     [[GDIIndexBar appearance] setTextOffset:UIOffsetMake(8, 0)];
     [[GDIIndexBar appearance] setBarWidth:40];
     [[GDIIndexBar appearance] setBarBackgroundWidth:40];
-    [[GDIIndexBar appearance] setBarBackgroundColor:[UIColor colorWithWhite:0.95 alpha:0.55]];
+    [[GDIIndexBar appearance] setBarBackgroundColor:[UIColor clearColor]];
     [[GDIIndexBar appearance] setAlpha:0.6];
     
     [self configureSelectedImages];
