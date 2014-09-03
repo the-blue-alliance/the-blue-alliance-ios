@@ -9,6 +9,6 @@
 #import "TBATopMapInfoViewController.h"
 #import "Team.h"
 
-@interface TeamInfoViewController : TBATopMapInfoViewController
+@interface TeamInfoViewController : UIViewController
 @property (nonatomic, strong) Team *team;
 @end

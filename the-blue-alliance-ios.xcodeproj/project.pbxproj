@@ -63,6 +63,8 @@
 		508FBFE7197CE7D2002A9D69 /* TBATopMapInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FBFE6197CE7D2002A9D69 /* TBATopMapInfoViewController.m */; };
 		508FBFEA197CEB7E002A9D69 /* TeamInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FBFE9197CEB7E002A9D69 /* TeamInfoViewController.m */; };
 		509E892919B65B8A00F4E28F /* MovableAccessoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 509E892819B65B8A00F4E28F /* MovableAccessoryTableViewCell.m */; };
+		509E892C19B6DA6700F4E28F /* TBAInfoTableViewDataRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 509E892B19B6DA6700F4E28F /* TBAInfoTableViewDataRow.m */; };
+		509E892F19B6DE0300F4E28F /* TBASocialButtonContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 509E892E19B6DE0300F4E28F /* TBASocialButtonContainer.m */; };
 		50A4097D19B5A32A0096DF65 /* database.zip in Resources */ = {isa = PBXBuildFile; fileRef = 50B2A206198786F300C4B816 /* database.zip */; };
 		50A71376197C7694009FBCAE /* ColumnView.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A71375197C7694009FBCAE /* ColumnView.m */; };
 		50B61F69198EEC6E00439926 /* AnnotatedJMMarkSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 50B61F68198EEC6E00439926 /* AnnotatedJMMarkSlider.m */; };
@@ -180,6 +182,10 @@
 		508FBFEB197CF266002A9D69 /* The Blue Alliance 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 5.xcdatamodel"; sourceTree = "<group>"; };
 		509E892719B65B8A00F4E28F /* MovableAccessoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovableAccessoryTableViewCell.h; sourceTree = "<group>"; };
 		509E892819B65B8A00F4E28F /* MovableAccessoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovableAccessoryTableViewCell.m; sourceTree = "<group>"; };
+		509E892A19B6DA6700F4E28F /* TBAInfoTableViewDataRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAInfoTableViewDataRow.h; sourceTree = "<group>"; };
+		509E892B19B6DA6700F4E28F /* TBAInfoTableViewDataRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAInfoTableViewDataRow.m; sourceTree = "<group>"; };
+		509E892D19B6DE0300F4E28F /* TBASocialButtonContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBASocialButtonContainer.h; sourceTree = "<group>"; };
+		509E892E19B6DE0300F4E28F /* TBASocialButtonContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBASocialButtonContainer.m; sourceTree = "<group>"; };
 		50A71374197C7694009FBCAE /* ColumnView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnView.h; sourceTree = "<group>"; };
 		50A71375197C7694009FBCAE /* ColumnView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnView.m; sourceTree = "<group>"; };
 		50A88D70195F784E001F8A3D /* The Blue Alliance 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 4.xcdatamodel"; sourceTree = "<group>"; };
@@ -390,6 +396,10 @@
 				50832E081918BB63003AC8A7 /* the-blue-alliance-ios-Prefix.pch */,
 				509E892719B65B8A00F4E28F /* MovableAccessoryTableViewCell.h */,
 				509E892819B65B8A00F4E28F /* MovableAccessoryTableViewCell.m */,
+				509E892A19B6DA6700F4E28F /* TBAInfoTableViewDataRow.h */,
+				509E892B19B6DA6700F4E28F /* TBAInfoTableViewDataRow.m */,
+				509E892D19B6DE0300F4E28F /* TBASocialButtonContainer.h */,
+				509E892E19B6DE0300F4E28F /* TBASocialButtonContainer.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -706,7 +716,9 @@
 				50832E3E1918BBEA003AC8A7 /* EventsTableViewController.m in Sources */,
 				5057CD1E1929987D00654304 /* SearchableCoreDataTableViewController.m in Sources */,
 				50DFD20119207DCA009B686E /* TeamsTableViewController.m in Sources */,
+				509E892C19B6DA6700F4E28F /* TBAInfoTableViewDataRow.m in Sources */,
 				50B61F69198EEC6E00439926 /* AnnotatedJMMarkSlider.m in Sources */,
+				509E892F19B6DE0300F4E28F /* TBASocialButtonContainer.m in Sources */,
 				5022C845195F8BDD008F0131 /* _Match.m in Sources */,
 				92C5B870192C0BBC00AFDBCA /* YearSelectView.m in Sources */,
 				50C0FC231931743700670A64 /* EventViewController.m in Sources */,

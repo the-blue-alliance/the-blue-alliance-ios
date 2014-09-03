@@ -7,44 +7,112 @@
 //
 
 #import "TeamInfoViewController.h"
+#import "TBASocialButtonContainer.h"
 
-@interface TeamInfoViewController ()
+@interface TeamInfoViewController () <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+//@property (nonatomic, strong) UITableView *infoTableView;
+//@property (nonatomic, strong) UIView *socialButtonRow;
+
+@property (nonatomic, strong) NSArray *infoObjects; // Array of `TBAInfoTableViewDataRow`s
 
 @end
 
+
 @implementation TeamInfoViewController
 
-
-
-
-#pragma mark - TBATopMapInfoViewController overrides
-- (NSString *)mapTitle
+- (NSArray *)infoObjects
 {
-    return [NSString stringWithFormat:@"%@\nfrom %@", self.team.nickname, self.team.location];
+    if(!_infoObjects) {
+        TBAInfoTableViewDataRow *websiteInfo = [[TBAInfoTableViewDataRow alloc] init];
+        websiteInfo.text = self.team.website.length ? self.team.website : @"No website";
+        websiteInfo.icon = [UIImage imageNamed:@"website"];
+        
+        TBAInfoTableViewDataRow *rookieYearInfo = [[TBAInfoTableViewDataRow alloc] init];
+        rookieYearInfo.text = [NSString stringWithFormat:@"Rookie year: %@", self.team.rookieYear];
+        rookieYearInfo.icon = [UIImage imageNamed:@"calendar"];
+        
+        TBAInfoTableViewDataRow *locationInfo = [[TBAInfoTableViewDataRow alloc] init];
+        locationInfo.text = self.team.location;
+        locationInfo.icon = [UIImage imageNamed:@"location"];
+        
+        _infoObjects = @[websiteInfo, rookieYearInfo, locationInfo];
+    }
+    return _infoObjects;
 }
 
-- (NSArray *)loadInfoObjects
+
+
+- (void)setupUI
 {
-    TBATopMapInfoViewControllerInfoRowObject *websiteInfo = [[TBATopMapInfoViewControllerInfoRowObject alloc] init];
-    websiteInfo.text = self.team.website.length ? self.team.website : @"No website";
-    websiteInfo.icon = [UIImage imageNamed:@"website"];
+    // Create views
+    UITableView *infoTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+    infoTableView.translatesAutoresizingMaskIntoConstraints = NO;
+    infoTableView.dataSource = self;
+    infoTableView.delegate = self;
+    infoTableView.scrollEnabled = NO;
+    [self.view addSubview:infoTableView];
     
-    TBATopMapInfoViewControllerInfoRowObject *rookieYearInfo = [[TBATopMapInfoViewControllerInfoRowObject alloc] init];
-    rookieYearInfo.text = [NSString stringWithFormat:@"Rookie year: %@", self.team.rookieYear];
-    rookieYearInfo.icon = [UIImage imageNamed:@"calendar"];
+    TBASocialButtonContainer *socialButtonContainer = [[TBASocialButtonContainer alloc] initForAutoLayout];
+    [self.view addSubview:socialButtonContainer];
+    socialButtonContainer.backgroundColor = [UIColor greenColor];
     
-    TBATopMapInfoViewControllerInfoRowObject *locationInfo = [[TBATopMapInfoViewControllerInfoRowObject alloc] init];
-    locationInfo.text = self.team.location;
-    locationInfo.icon = [UIImage imageNamed:@"location"];
+    UICollectionView *mediaCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
+    mediaCollectionView.translatesAutoresizingMaskIntoConstraints = NO;
+    mediaCollectionView.dataSource = self;
+    mediaCollectionView.delegate = self;
+    [self.view addSubview:mediaCollectionView];
+    mediaCollectionView.backgroundColor = [UIColor blueColor];
     
-    return @[websiteInfo, rookieYearInfo, locationInfo];
+    
+    // Setup constraints
+    // Position table view near top
+    CGFloat infoTableViewHeight = self.infoObjects.count * infoTableView.rowHeight;
+    [infoTableView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeBottom];
+    [infoTableView autoSetDimension:ALDimensionHeight toSize:infoTableViewHeight];
+    
+    // Position social button container below table view
+    [socialButtonContainer autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:0];
+    [socialButtonContainer autoPinEdgeToSuperviewEdge:ALEdgeTrailing withInset:0];
+    [socialButtonContainer autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:infoTableView];
+    
+    // Position media collection view to fill the remaining space
+    [mediaCollectionView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
+    [mediaCollectionView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:socialButtonContainer];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+    [self setupUI];
+}
+
+
+#pragma mark - UITableViewDataSource
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.infoObjects.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     
+    return cell;
+}
+
+
+#pragma mark - UICollectionViewDataSource
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    // TODO: Implement team media here
+    return 0;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewCell *cell = [[UICollectionViewCell alloc] init];
+    return cell;
 }
 
 @end

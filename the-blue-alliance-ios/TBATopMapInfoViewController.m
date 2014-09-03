@@ -10,10 +10,6 @@
 #import <MapKit/MapKit.h>
 
 
-@implementation TBATopMapInfoViewControllerInfoRowObject
-@end
-
-
 @interface TBATopMapInfoViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *infoTable;
 @property (nonatomic, strong) NSArray *infoArray; // Array of EventInfoDataDisplay objects
@@ -112,7 +108,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Event Info Cell"];
     }
     
-    TBATopMapInfoViewControllerInfoRowObject *info = self.infoArray[indexPath.row];
+    TBAInfoTableViewDataRow *info = self.infoArray[indexPath.row];
     cell.imageView.image = info.icon;
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.minimumScaleFactor = 0.5;

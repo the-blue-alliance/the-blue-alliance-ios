@@ -10,7 +10,6 @@
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 
-
 @interface EventInfoViewController ()
 @property (nonatomic, strong) UITableView *infoTable;
 @property (nonatomic, strong) NSArray *infoArray; // Array of EventInfoDataDisplay objects
@@ -28,15 +27,15 @@
 
 - (NSArray *)loadInfoObjects
 {
-    TBATopMapInfoViewControllerInfoRowObject *websiteInfo = [[TBATopMapInfoViewControllerInfoRowObject alloc] init];
+    TBAInfoTableViewDataRow *websiteInfo = [[TBAInfoTableViewDataRow alloc] init];
     websiteInfo.text = self.event.website.length ? self.event.website : @"No website";
     websiteInfo.icon = [UIImage imageNamed:@"website"];
     
-    TBATopMapInfoViewControllerInfoRowObject *dateInfo = [[TBATopMapInfoViewControllerInfoRowObject alloc] init];
+    TBAInfoTableViewDataRow *dateInfo = [[TBAInfoTableViewDataRow alloc] init];
     dateInfo.text = [self eventDateFriendlyText];
     dateInfo.icon = [UIImage imageNamed:@"calendar"];
     
-    TBATopMapInfoViewControllerInfoRowObject *locationInfo = [[TBATopMapInfoViewControllerInfoRowObject alloc] init];
+    TBAInfoTableViewDataRow *locationInfo = [[TBAInfoTableViewDataRow alloc] init];
     locationInfo.text = self.event.location;
     locationInfo.icon = [UIImage imageNamed:@"location"];
     
