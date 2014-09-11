@@ -3,16 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "youtube.png"
+      "filename" : "ic_cd_light.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "youtube-1.png"
+      "filename" : "ic_cd_light_2x.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "ic_cd_light_3x.png"
     }
   ],
   "info" : {
