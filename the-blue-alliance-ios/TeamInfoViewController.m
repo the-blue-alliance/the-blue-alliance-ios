@@ -68,6 +68,7 @@
     infoTableView.dataSource = self;
     infoTableView.delegate = self;
     infoTableView.scrollEnabled = NO;
+    infoTableView.rowHeight = 44;
     [self.view addSubview:infoTableView];
     
     TBASocialButtonContainer *socialButtonContainer = [[TBASocialButtonContainer alloc] initForAutoLayout];
