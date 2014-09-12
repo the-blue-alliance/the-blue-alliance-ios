@@ -9,6 +9,7 @@
 #import "TeamInfoViewController.h"
 #import "TBASocialButtonContainer.h"
 #import "MediaCollectionViewCell.h"
+#import <JTSImageViewController/JTSImageViewController.h>
 #import "the_blue_alliance_ios-Swift.h"
 
 @interface TeamInfoViewController () <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
@@ -193,7 +194,7 @@
     return cell;
 }
 
-#define MEDIA_CELL_WIDTH 150
+#define MEDIA_CELL_WIDTH 200
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewFlowLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     return CGSizeMake(MEDIA_CELL_WIDTH, collectionView.bounds.size.height - collectionViewLayout.sectionInset.top - collectionViewLayout.sectionInset.bottom);
@@ -201,9 +202,22 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    MediaCollectionViewCell *cell = (MediaCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     
+    
+    JTSImageInfo *imageInfo = [[JTSImageInfo alloc] init];
+    imageInfo.image = cell.imageView.image;
+    imageInfo.referenceRect = cell.frame;
+    imageInfo.referenceView = cell.superview;
+    
+    // Setup view controller
+    JTSImageViewController *imageViewer = [[JTSImageViewController alloc] initWithImageInfo:imageInfo
+                                                                                       mode:JTSImageViewControllerMode_Image
+                                                                            backgroundStyle:JTSImageViewControllerBackgroundStyle_ScaledDimmedBlurred];
+    
+    // Present the view controller.
+    [imageViewer showFromViewController:self transition:JTSImageViewControllerTransition_FromOffscreen];
 }
-
 
 
 @end

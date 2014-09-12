@@ -12,5 +12,6 @@
 @interface MediaCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic, strong) Media *media;
+@property (nonatomic, readonly) UIImageView *imageView;
 
 @end

@@ -10,13 +10,13 @@
 #import <AsyncImageView/AsyncImageView.h>
 
 @interface MediaCollectionViewCell () <UIWebViewDelegate>
-@property (nonatomic, strong) AsyncImageView *imageView;
+@property (nonatomic, readwrite, strong) AsyncImageView *imageView;
 @property (nonatomic, strong) UIWebView *webView;
 @end
 
 @implementation MediaCollectionViewCell
 
-- (AsyncImageView *)imageView
+- (UIImageView *)imageView
 {
     if (!_imageView) {
         _imageView = [[AsyncImageView alloc] initForAutoLayout];
