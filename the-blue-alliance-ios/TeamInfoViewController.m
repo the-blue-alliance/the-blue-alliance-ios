@@ -9,10 +9,9 @@
 #import "TeamInfoViewController.h"
 #import "TBASocialButtonContainer.h"
 #import "MediaCollectionViewCell.h"
+#import "the_blue_alliance_ios-Swift.h"
 
 @interface TeamInfoViewController () <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
-//@property (nonatomic, strong) UITableView *infoTableView;
-//@property (nonatomic, strong) UIView *socialButtonRow;
 
 @property (nonatomic, strong) NSArray *infoObjects; // Array of `TBAInfoTableViewDataRow`s
 
@@ -49,7 +48,15 @@
 {
     TBASocialButtonContainerButtonType type = socialContainer.selectedButtonType;
     
-    // TODO: Implement navigation actions based on the `type`
+    if (type == TBASocialButtonContainerButtonTypeWebsite) {
+        [self.team navigateToWebsite];
+    } else if(type == TBASocialButtonContainerButtonTypeTwitter) {
+        [self.team navigateToTwitter];
+    } else if(type == TBASocialButtonContainerButtonTypeYoutube) {
+        [self.team navigateToYoutube];
+    } else if(type ==  TBASocialButtonContainerButtonTypeChiefDelphi) {
+        [self.team navigateToChief];
+    }
 }
 
 #pragma mark - Setup UI

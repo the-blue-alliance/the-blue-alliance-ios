@@ -62,6 +62,7 @@
 		50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50832E541918BBFF003AC8A7 /* CoreDataTableViewController.m */; };
 		508FBFE7197CE7D2002A9D69 /* TBATopMapInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FBFE6197CE7D2002A9D69 /* TBATopMapInfoViewController.m */; };
 		508FBFEA197CEB7E002A9D69 /* TeamInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 508FBFE9197CEB7E002A9D69 /* TeamInfoViewController.m */; };
+		50927AAF19C26E9C00D1591A /* Team+Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50927AAE19C26E9C00D1591A /* Team+Navigation.swift */; };
 		509E892919B65B8A00F4E28F /* MovableAccessoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 509E892819B65B8A00F4E28F /* MovableAccessoryTableViewCell.m */; };
 		509E892C19B6DA6700F4E28F /* TBAInfoTableViewDataRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 509E892B19B6DA6700F4E28F /* TBAInfoTableViewDataRow.m */; };
 		509E892F19B6DE0300F4E28F /* TBASocialButtonContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 509E892E19B6DE0300F4E28F /* TBASocialButtonContainer.m */; };
@@ -181,6 +182,8 @@
 		508FBFE8197CEB7E002A9D69 /* TeamInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamInfoViewController.h; sourceTree = "<group>"; };
 		508FBFE9197CEB7E002A9D69 /* TeamInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamInfoViewController.m; sourceTree = "<group>"; };
 		508FBFEB197CF266002A9D69 /* The Blue Alliance 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 5.xcdatamodel"; sourceTree = "<group>"; };
+		50927AAD19C26E9B00D1591A /* the-blue-alliance-ios-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "the-blue-alliance-ios-Bridging-Header.h"; path = "Models/the-blue-alliance-ios-Bridging-Header.h"; sourceTree = "<group>"; };
+		50927AAE19C26E9C00D1591A /* Team+Navigation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Team+Navigation.swift"; sourceTree = "<group>"; };
 		509E892719B65B8A00F4E28F /* MovableAccessoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovableAccessoryTableViewCell.h; sourceTree = "<group>"; };
 		509E892819B65B8A00F4E28F /* MovableAccessoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovableAccessoryTableViewCell.m; sourceTree = "<group>"; };
 		509E892A19B6DA6700F4E28F /* TBAInfoTableViewDataRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAInfoTableViewDataRow.h; sourceTree = "<group>"; };
@@ -389,6 +392,7 @@
 		50832E011918BB63003AC8A7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				50927AAD19C26E9B00D1591A /* the-blue-alliance-ios-Bridging-Header.h */,
 				508FBFE5197CE7D2002A9D69 /* TBATopMapInfoViewController.h */,
 				508FBFE6197CE7D2002A9D69 /* TBATopMapInfoViewController.m */,
 				504BC6C8197CDEED00752DB0 /* TBAPaginatedViewController.h */,
@@ -527,6 +531,7 @@
 				9226B13D1932EFD900B7EF43 /* Team.m */,
 				5022C84C195F9D31008F0131 /* Team+Fetch.h */,
 				5022C84D195F9D31008F0131 /* Team+Fetch.m */,
+				50927AAE19C26E9C00D1591A /* Team+Navigation.swift */,
 			);
 			name = Team;
 			sourceTree = "<group>";
@@ -707,6 +712,7 @@
 				509E892919B65B8A00F4E28F /* MovableAccessoryTableViewCell.m in Sources */,
 				5022C846195F8BDD008F0131 /* _Media.m in Sources */,
 				50DFD20719207DDC009B686E /* SettingsViewController.m in Sources */,
+				50927AAF19C26E9C00D1591A /* Team+Navigation.swift in Sources */,
 				5022C851195FC460008F0131 /* NSManagedObject+Create.m in Sources */,
 				9226B1401932EFD900B7EF43 /* Event.m in Sources */,
 				507D9CA71984DBE100AACA6A /* EventsMapView.m in Sources */,
@@ -885,6 +891,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -893,7 +900,10 @@
 				GCC_PREFIX_HEADER = "the-blue-alliance-ios/the-blue-alliance-ios-Prefix.pch";
 				INFOPLIST_FILE = "the-blue-alliance-ios/the-blue-alliance-ios-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "the-blue-alliance-ios/Models/the-blue-alliance-ios-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -904,6 +914,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -912,7 +923,9 @@
 				GCC_PREFIX_HEADER = "the-blue-alliance-ios/the-blue-alliance-ios-Prefix.pch";
 				INFOPLIST_FILE = "the-blue-alliance-ios/the-blue-alliance-ios-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "the-blue-alliance-ios/Models/the-blue-alliance-ios-Bridging-Header.h";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
