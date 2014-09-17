@@ -9,7 +9,6 @@
 #import "TeamDetailViewController.h"
 #import "TeamInfoViewController.h"
 #import "EventsTableViewController.h"
-#import "TeamMediaViewController.h"
 #import "TBAImporter.h"
 
 @interface TeamDetailViewController ()
@@ -45,11 +44,7 @@
     etvc.context = self.team.managedObjectContext;
     etvc.title = @"Events";
     
-    TeamMediaViewController *tmvc = [[TeamMediaViewController alloc] init];
-    tmvc.title = @"Media";
-    tmvc.team = self.team;
-    
-    return @[tivc, etvc, tmvc];
+    return @[tivc, etvc];
 }
 
 

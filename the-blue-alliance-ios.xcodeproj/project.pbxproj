@@ -22,7 +22,6 @@
 
 /* Begin PBXBuildFile section */
 		394BD129CFDF44B78FFF2C94 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDCC6CCFB1A4A199C72C12E /* libPods.a */; };
-		50035A2E197DFB1F00E80B1C /* TeamMediaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50035A2D197DFB1F00E80B1C /* TeamMediaViewController.m */; };
 		5021450F1933EC7C00604567 /* EventInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5021450D1933EC7C00604567 /* EventInfoViewController.m */; };
 		5022C845195F8BDD008F0131 /* _Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 5022C842195F8BDD008F0131 /* _Match.m */; };
 		5022C846195F8BDD008F0131 /* _Media.m in Sources */ = {isa = PBXBuildFile; fileRef = 5022C844195F8BDD008F0131 /* _Media.m */; };
@@ -113,8 +112,6 @@
 /* Begin PBXFileReference section */
 		1A5DC50BBBAD4B709D38B690 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		4DDCC6CCFB1A4A199C72C12E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		50035A2C197DFB1F00E80B1C /* TeamMediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamMediaViewController.h; sourceTree = "<group>"; };
-		50035A2D197DFB1F00E80B1C /* TeamMediaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamMediaViewController.m; sourceTree = "<group>"; };
 		5021450C1933EC7C00604567 /* EventInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventInfoViewController.h; sourceTree = "<group>"; };
 		5021450D1933EC7C00604567 /* EventInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventInfoViewController.m; sourceTree = "<group>"; };
 		5022C841195F8BDD008F0131 /* _Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Match.h; sourceTree = "<group>"; };
@@ -294,8 +291,6 @@
 				504BC6C6197CDEC800752DB0 /* TeamDetailViewController.m */,
 				508FBFE8197CEB7E002A9D69 /* TeamInfoViewController.h */,
 				508FBFE9197CEB7E002A9D69 /* TeamInfoViewController.m */,
-				50035A2C197DFB1F00E80B1C /* TeamMediaViewController.h */,
-				50035A2D197DFB1F00E80B1C /* TeamMediaViewController.m */,
 				509E893019B6E73200F4E28F /* MediaCollectionViewCell.h */,
 				509E893119B6E73200F4E28F /* MediaCollectionViewCell.m */,
 			);
@@ -718,7 +713,6 @@
 				507D9CA71984DBE100AACA6A /* EventsMapView.m in Sources */,
 				50CDA22B19300C6300C8906D /* TBAImporter.m in Sources */,
 				50832E551918BBFF003AC8A7 /* CoreDataTableViewController.m in Sources */,
-				50035A2E197DFB1F00E80B1C /* TeamMediaViewController.m in Sources */,
 				5021450F1933EC7C00604567 /* EventInfoViewController.m in Sources */,
 				50832E341918BB8E003AC8A7 /* The Blue Alliance.xcdatamodeld in Sources */,
 				50C88502197B7CC000F6D243 /* RankingsTableViewCell.m in Sources */,

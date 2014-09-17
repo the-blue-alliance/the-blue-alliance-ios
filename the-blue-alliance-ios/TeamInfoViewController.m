@@ -27,6 +27,10 @@
 - (NSArray *)infoObjects
 {
     if(!_infoObjects) {
+        TBAInfoTableViewDataRow *nicknameInfo = [[TBAInfoTableViewDataRow alloc] init];
+        nicknameInfo.text = self.team.nickname.length ? self.team.nickname : @"No nickname";
+        nicknameInfo.icon = [UIImage imageNamed:@"teams_tab_icon"];
+        
         TBAInfoTableViewDataRow *websiteInfo = [[TBAInfoTableViewDataRow alloc] init];
         websiteInfo.text = self.team.website.length ? self.team.website : @"No website";
         websiteInfo.icon = [UIImage imageNamed:@"website"];
@@ -39,7 +43,7 @@
         locationInfo.text = self.team.location;
         locationInfo.icon = [UIImage imageNamed:@"location"];
         
-        _infoObjects = @[websiteInfo, rookieYearInfo, locationInfo];
+        _infoObjects = @[nicknameInfo, websiteInfo, rookieYearInfo, locationInfo];
     }
     return _infoObjects;
 }
@@ -176,6 +180,11 @@
     cell.imageView.image = info.icon;
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
