@@ -137,10 +137,12 @@
 {
     NSString *eventKey = event.key;
     [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"event/%@/teams", eventKey] callback:^(id objects) {
-        NSArray *teams = [Team createManagedObjectsFromInfoArray:objects
+        if(objects) {
+            NSArray *teams = [Team createManagedObjectsFromInfoArray:objects
                                checkingPrexistanceUsingUniqueKey:@"key"
                                        usingManagedObjectContext:context];
-        event.teams = [NSSet setWithArray:teams];
+            event.teams = [NSSet setWithArray:teams];
+        }
     }];
 }
 
@@ -148,10 +150,12 @@
 {
     NSString *teamKey = team.key;
     [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"team/%@/%ld/events", teamKey, (long)year] callback:^(id objects) {
-        NSArray *events = [Event createManagedObjectsFromInfoArray:objects
+        if(objects) {
+            NSArray *events = [Event createManagedObjectsFromInfoArray:objects
                                  checkingPrexistanceUsingUniqueKey:@"key"
                                          usingManagedObjectContext:context];
-        [team addEvents:[NSSet setWithArray:events]];
+            [team addEvents:[NSSet setWithArray:events]];
+        }
     }];
 }
 
@@ -181,9 +185,14 @@
 {
     NSString *eventKey = event.key;
     [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"event/%@/rankings", eventKey] callback:^(id objects) {
-        NSString *rankingsString = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:objects options:0 error:nil] encoding:NSUTF8StringEncoding];
-        event.rankings = rankingsString;
-        callback(rankingsString);
+        if(objects) {
+            NSString *rankingsString = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:objects options:0 error:nil]
+                                                             encoding:NSUTF8StringEncoding];
+            event.rankings = rankingsString;
+            callback(rankingsString);
+        } else {
+            callback(event.rankings);
+        }
     }];
 }
 

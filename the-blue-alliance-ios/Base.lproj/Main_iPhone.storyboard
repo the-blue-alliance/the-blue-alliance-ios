@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="14A329f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="A8N-Pn-Ipi">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6246" systemVersion="14A361c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="A8N-Pn-Ipi">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6239"/>
     </dependencies>
     <scenes>
         <!--Tab Bar Controller-->
@@ -23,7 +24,7 @@
             </objects>
             <point key="canvasLocation" x="72" y="0.0"/>
         </scene>
-        <!--Events Table View Controller - %d Events-->
+        <!--%d Events-->
         <scene sceneID="MxA-6s-K1h">
             <objects>
                 <viewController storyboardIdentifier="EventsTableViewController" id="fSY-pS-Rmu" customClass="EventsTableViewController" sceneMemberID="viewController">
@@ -35,12 +36,11 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView appearanceType="aqua" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="AX4-Zr-hcR">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="AX4-Zr-hcR">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell appearanceType="aqua" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Event Cell" textLabel="puP-hC-IdJ" detailTextLabel="QfG-xG-La3" style="IBUITableViewCellStyleSubtitle" id="La2-Bo-4pp" customClass="MovableAccessoryTableViewCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Event Cell" textLabel="puP-hC-IdJ" detailTextLabel="QfG-xG-La3" style="IBUITableViewCellStyleSubtitle" id="La2-Bo-4pp" customClass="MovableAccessoryTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="La2-Bo-4pp" id="iwy-AZ-ngI">
@@ -116,7 +116,7 @@
             </objects>
             <point key="canvasLocation" x="1568" y="-1042"/>
         </scene>
-        <!--Teams Table View Controller - Teams-->
+        <!--Teams-->
         <scene sceneID="KLX-XO-glF">
             <objects>
                 <viewController storyboardIdentifier="TeamsTableViewController" id="D3N-Wu-Zs3" customClass="TeamsTableViewController" sceneMemberID="viewController">
@@ -128,9 +128,8 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView appearanceType="aqua" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="lYg-Kh-xPg">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="lYg-Kh-xPg">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Team Cell" textLabel="yX4-qC-4Ie" detailTextLabel="6rf-ec-6nv" style="IBUITableViewCellStyleSubtitle" id="Ez2-JV-dYZ" customClass="MovableAccessoryTableViewCell">
@@ -203,7 +202,7 @@
             </objects>
             <point key="canvasLocation" x="1568" y="-350"/>
         </scene>
-        <!--View Controller - Settings-->
+        <!--Settings-->
         <scene sceneID="7xC-VT-v7R">
             <objects>
                 <viewController id="aG7-mJ-uLl" sceneMemberID="viewController">
@@ -222,7 +221,7 @@
             </objects>
             <point key="canvasLocation" x="629" y="1032"/>
         </scene>
-        <!--Navigation Controller - Events-->
+        <!--Events-->
         <scene sceneID="6Ze-e0-g7L">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="fSV-38-1aY" sceneMemberID="viewController">
@@ -242,7 +241,7 @@
             </objects>
             <point key="canvasLocation" x="629" y="-1042"/>
         </scene>
-        <!--Navigation Controller - Teams-->
+        <!--Teams-->
         <scene sceneID="koJ-8l-jmT">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="kKa-D8-mVb" sceneMemberID="viewController">
@@ -262,7 +261,7 @@
             </objects>
             <point key="canvasLocation" x="629" y="-350"/>
         </scene>
-        <!--View Controller - Insights-->
+        <!--Insights-->
         <scene sceneID="bH9-gP-bc7">
             <objects>
                 <viewController id="WYu-RO-ZsO" sceneMemberID="viewController">
@@ -286,10 +285,10 @@
         <image name="events_tab_icon" width="25" height="25"/>
         <image name="teams_tab_icon" width="25" height="25"/>
     </resources>
-    <color key="tintColor" red="0.74901960784313726" green="0.85098039215686272" blue="1" alpha="1" colorSpace="calibratedRGB"/>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <color key="tintColor" red="0.74901960784313726" green="0.85098039215686272" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>
