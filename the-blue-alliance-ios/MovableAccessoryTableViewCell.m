@@ -28,7 +28,7 @@
                 subview != self.contentView &&
                 subview != self.selectedBackgroundView &&
                 subview != self.imageView &&
-                [subview isKindOfClass:[UIButton class]])
+                subview.frame.origin.x > self.bounds.size.width / 2)
             {
                 defaultAccessoryView = subview;
                 break;

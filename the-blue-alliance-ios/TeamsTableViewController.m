@@ -120,7 +120,12 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MovableAccessoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Team Cell" forIndexPath:indexPath];
+    MovableAccessoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Team Cell" forIndexPath:indexPath];\
+    if(self.eventFilter) {
+        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
     cell.rightAccessoryInset = 24;
     
     Team *team = self.sections[indexPath.section][@"objects"][indexPath.row];
@@ -144,8 +149,7 @@
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    Team *team = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
+    Team *team = self.sections[indexPath.section][@"objects"][indexPath.row];
 }
 
 - (NSPredicate *)predicateForSearchText:(NSString *)searchText

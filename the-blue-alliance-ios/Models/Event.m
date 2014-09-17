@@ -50,6 +50,7 @@
     self.official = info[@"official"];
     self.year = info[@"year"];
     self.location = info[@"location"];
+    self.venue = info[@"venue_address"];
     self.event_short = info[@"event_code"];
     self.start_date = [formatter dateFromString:info[@"start_date"]] ? [formatter dateFromString:info[@"start_date"]] : defaultDate;
     self.end_date = [formatter dateFromString:info[@"end_date"]];
@@ -110,12 +111,12 @@
 
 - (NSString *)title
 {
-    return self.short_name;
+    return self.short_name ? self.short_name : (self.name ? self.name : @"No Event Name");
 }
 
 - (NSString *)subtitle
 {
-    return self.location;
+    return self.venue ? self.venue : (self.location ? self.location : @"No Event Location");
 }
 
 @end

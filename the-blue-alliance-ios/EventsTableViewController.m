@@ -16,7 +16,7 @@
 
 #import "EventViewController.h"
 
-@interface EventsTableViewController ()
+@interface EventsTableViewController () <UITableViewDelegate>
 @property (nonatomic) NSInteger currentYear;
 @property (nonatomic, strong) NSDictionary *eventData;
 @property (nonatomic, strong) NSDate *seasonStartDate;
@@ -327,6 +327,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MovableAccessoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Event Cell" forIndexPath:indexPath];
+    if(self.teamFilter) {
+        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
     cell.rightAccessoryInset = 12;
     
     id key = [self sortedEventGroupKeys][indexPath.section];
@@ -420,6 +425,15 @@
     } else {
         return [NSPredicate predicateWithFormat:@"year == %d", self.currentYear];;
     }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    id key = [self sortedEventGroupKeys][indexPath.section];
+    NSArray *eventList = self.eventData[key];
+    Event *event = eventList[indexPath.row];
+    
+    
 }
 
 #pragma mark - YearSelect protocol method
