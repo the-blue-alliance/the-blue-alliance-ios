@@ -898,6 +898,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "the-blue-alliance-ios/Models/the-blue-alliance-ios-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TBAApiURL = "http://localhost:8080/api/v2/";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -920,6 +921,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "the-blue-alliance-ios/Models/the-blue-alliance-ios-Bridging-Header.h";
+				TBAApiURL = "http://www.thebluealliance.com/api/v2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

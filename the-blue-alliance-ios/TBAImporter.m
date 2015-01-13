@@ -34,10 +34,9 @@
 
 + (void)executeTBAV2Request:(NSString *)request callback:(void (^)(id objects))callback
 {
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.thebluealliance.com/api/v2/%@", request]];
-    NSString *ifModifiedSince = [self lastModifiedForURL:url];
-    
-    
+    NSURL *baseURL = [[NSURL alloc] initWithString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"TBAApiURL"]];
+    NSURL *requestURL = [[NSURL alloc] initWithString:request relativeToURL:baseURL];
+    NSString *ifModifiedSince = [self lastModifiedForURL:requestURL];
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.responseSerializer = manager.responseSerializer = [AFJSONResponseSerializer serializer];;
@@ -46,10 +45,10 @@
         [manager.requestSerializer setValue:ifModifiedSince forHTTPHeaderField:@"If-Modified-Since"];
     }
     
-    [manager GET:[url description] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:[requestURL absoluteString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSString *lastMod = [operation.response allHeaderFields][@"Last-Modified"];
-        [self setLastModified:lastMod forURL:url];
-        NSLog(@"URL: %@\nIf: %@\nModified: %@\n\n", url, ifModifiedSince, lastMod);
+        [self setLastModified:lastMod forURL:requestURL];
+        NSLog(@"URL: %@\nIf: %@\nModified: %@\n\n", requestURL, ifModifiedSince, lastMod);
         
         if(callback) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -59,7 +58,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSString *lastMod = [operation.response allHeaderFields][@"Last-Modified"];
         if(operation.response.statusCode == 304) {
-            NSLog(@"URL: %@\nIf: %@\nModified: %@\n\n", url, ifModifiedSince, lastMod);
+            NSLog(@"URL: %@\nIf: %@\nModified: %@\n\n", requestURL, ifModifiedSince, lastMod);
             
             NSLog(@"Not modified!");
         } else {
