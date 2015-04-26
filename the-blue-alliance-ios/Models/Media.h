@@ -1,4 +1,3 @@
-//
 //  Media.h
 //  the-blue-alliance-ios
 //

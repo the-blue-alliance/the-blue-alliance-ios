@@ -20,9 +20,6 @@ const struct MatchRelationships MatchRelationships = {
 	.redAlliance = @"redAlliance",
 };
 
-const struct MatchFetchedProperties MatchFetchedProperties = {
-};
-
 @implementation MatchID
 @end
 
@@ -48,7 +45,7 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"blueScoreValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"blueScore"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -73,12 +70,7 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic blueScore;
-
-
 
 - (int32_t)blueScoreValue {
 	NSNumber *result = [self blueScore];
@@ -98,27 +90,11 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 	[self setPrimitiveBlueScore:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic comp_level;
-
-
-
-
-
 
 @dynamic key;
 
-
-
-
-
-
 @dynamic match_number;
-
-
 
 - (int32_t)match_numberValue {
 	NSNumber *result = [self match_number];
@@ -138,13 +114,7 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 	[self setPrimitiveMatch_number:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic redScore;
-
-
 
 - (int32_t)redScoreValue {
 	NSNumber *result = [self redScore];
@@ -164,13 +134,7 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 	[self setPrimitiveRedScore:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic set_number;
-
-
 
 - (int32_t)set_numberValue {
 	NSNumber *result = [self set_number];
@@ -190,63 +154,162 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 	[self setPrimitiveSet_number:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic time_string;
-
-
-
-
-
 
 @dynamic blueAlliance;
 
-	
 - (NSMutableOrderedSet*)blueAllianceSet {
 	[self willAccessValueForKey:@"blueAlliance"];
-  
+
 	NSMutableOrderedSet *result = (NSMutableOrderedSet*)[self mutableOrderedSetValueForKey:@"blueAlliance"];
-  
+
 	[self didAccessValueForKey:@"blueAlliance"];
 	return result;
 }
-	
 
 @dynamic event;
 
-	
-
 @dynamic media;
 
-	
 - (NSMutableSet*)mediaSet {
 	[self willAccessValueForKey:@"media"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"media"];
-  
+
 	[self didAccessValueForKey:@"media"];
 	return result;
 }
-	
 
 @dynamic redAlliance;
 
-	
 - (NSMutableOrderedSet*)redAllianceSet {
 	[self willAccessValueForKey:@"redAlliance"];
-  
+
 	NSMutableOrderedSet *result = (NSMutableOrderedSet*)[self mutableOrderedSetValueForKey:@"redAlliance"];
-  
+
 	[self didAccessValueForKey:@"redAlliance"];
 	return result;
 }
-	
-
-
-
-
-
 
 @end
+
+@implementation _Match (BlueAllianceCoreDataGeneratedAccessors)
+- (void)addBlueAlliance:(NSOrderedSet*)value_ {
+	[self.blueAllianceSet unionOrderedSet:value_];
+}
+- (void)removeBlueAlliance:(NSOrderedSet*)value_ {
+	[self.blueAllianceSet minusOrderedSet:value_];
+}
+- (void)addBlueAllianceObject:(Team*)value_ {
+	[self.blueAllianceSet addObject:value_];
+}
+- (void)removeBlueAllianceObject:(Team*)value_ {
+	[self.blueAllianceSet removeObject:value_];
+}
+- (void)insertObject:(Team*)value inBlueAllianceAtIndex:(NSUInteger)idx {
+    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"blueAlliance"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self blueAlliance]];
+    [tmpOrderedSet insertObject:value atIndex:idx];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"blueAlliance"];
+    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"blueAlliance"];
+}
+- (void)removeObjectFromBlueAllianceAtIndex:(NSUInteger)idx {
+    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"blueAlliance"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self blueAlliance]];
+    [tmpOrderedSet removeObjectAtIndex:idx];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"blueAlliance"];
+    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"blueAlliance"];
+}
+- (void)insertBlueAlliance:(NSArray *)value atIndexes:(NSIndexSet *)indexes {
+    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"blueAlliance"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self blueAlliance]];
+    [tmpOrderedSet insertObjects:value atIndexes:indexes];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"blueAlliance"];
+    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"blueAlliance"];
+}
+- (void)removeBlueAllianceAtIndexes:(NSIndexSet *)indexes {
+    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"blueAlliance"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self blueAlliance]];
+    [tmpOrderedSet removeObjectsAtIndexes:indexes];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"blueAlliance"];
+    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"blueAlliance"];
+}
+- (void)replaceObjectInBlueAllianceAtIndex:(NSUInteger)idx withObject:(Team*)value {
+    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"blueAlliance"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self blueAlliance]];
+    [tmpOrderedSet replaceObjectAtIndex:idx withObject:value];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"blueAlliance"];
+    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"blueAlliance"];
+}
+- (void)replaceBlueAllianceAtIndexes:(NSIndexSet *)indexes withBlueAlliance:(NSArray *)value {
+    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"blueAlliance"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self blueAlliance]];
+    [tmpOrderedSet replaceObjectsAtIndexes:indexes withObjects:value];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"blueAlliance"];
+    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"blueAlliance"];
+}
+@end
+
+@implementation _Match (RedAllianceCoreDataGeneratedAccessors)
+- (void)addRedAlliance:(NSOrderedSet*)value_ {
+	[self.redAllianceSet unionOrderedSet:value_];
+}
+- (void)removeRedAlliance:(NSOrderedSet*)value_ {
+	[self.redAllianceSet minusOrderedSet:value_];
+}
+- (void)addRedAllianceObject:(Team*)value_ {
+	[self.redAllianceSet addObject:value_];
+}
+- (void)removeRedAllianceObject:(Team*)value_ {
+	[self.redAllianceSet removeObject:value_];
+}
+- (void)insertObject:(Team*)value inRedAllianceAtIndex:(NSUInteger)idx {
+    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"redAlliance"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self redAlliance]];
+    [tmpOrderedSet insertObject:value atIndex:idx];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"redAlliance"];
+    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"redAlliance"];
+}
+- (void)removeObjectFromRedAllianceAtIndex:(NSUInteger)idx {
+    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"redAlliance"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self redAlliance]];
+    [tmpOrderedSet removeObjectAtIndex:idx];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"redAlliance"];
+    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"redAlliance"];
+}
+- (void)insertRedAlliance:(NSArray *)value atIndexes:(NSIndexSet *)indexes {
+    [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"redAlliance"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self redAlliance]];
+    [tmpOrderedSet insertObjects:value atIndexes:indexes];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"redAlliance"];
+    [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:indexes forKey:@"redAlliance"];
+}
+- (void)removeRedAllianceAtIndexes:(NSIndexSet *)indexes {
+    [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"redAlliance"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self redAlliance]];
+    [tmpOrderedSet removeObjectsAtIndexes:indexes];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"redAlliance"];
+    [self didChange:NSKeyValueChangeRemoval valuesAtIndexes:indexes forKey:@"redAlliance"];
+}
+- (void)replaceObjectInRedAllianceAtIndex:(NSUInteger)idx withObject:(Team*)value {
+    NSIndexSet* indexes = [NSIndexSet indexSetWithIndex:idx];
+    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"redAlliance"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self redAlliance]];
+    [tmpOrderedSet replaceObjectAtIndex:idx withObject:value];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"redAlliance"];
+    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"redAlliance"];
+}
+- (void)replaceRedAllianceAtIndexes:(NSIndexSet *)indexes withRedAlliance:(NSArray *)value {
+    [self willChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"redAlliance"];
+    NSMutableOrderedSet *tmpOrderedSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self redAlliance]];
+    [tmpOrderedSet replaceObjectsAtIndexes:indexes withObjects:value];
+    [self setPrimitiveValue:tmpOrderedSet forKey:@"redAlliance"];
+    [self didChange:NSKeyValueChangeReplacement valuesAtIndexes:indexes forKey:@"redAlliance"];
+}
+@end
+

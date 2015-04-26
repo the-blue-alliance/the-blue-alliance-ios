@@ -87,7 +87,7 @@
 
 - (NSString *)youtubeVideoEmbedHTMLForSize:(CGSize)size;
 {
-	if(![self.type isEqualToString:@"youtube"]) {
+    if(![self.type isEqualToString:@"youtube"]) {
         return nil;
     }
     

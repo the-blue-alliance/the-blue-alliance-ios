@@ -8,93 +8,65 @@
 
 #import "TBAImporter.h"
 #import "NSManagedObject+Create.h"
-#import "Team+Fetch.h"
-#import "Media.h"
-#import <AFNetworking/AFNetworking.h>
-
-#define kIDHeader @"the-blue-alliance:ios:v0.1"
+#import "Event.h"
+#import "Team.h"
+#import "Match.h"
+#import "TBAApp.h"
 
 @implementation TBAImporter
 
-+ (NSString *)lastModifiedForURL:(NSURL *)url
-{
-    NSString *urlString = @"LAST_MODIFIED:";
-    urlString = [urlString stringByAppendingString:[url description]];
-    return [[NSUserDefaults standardUserDefaults] stringForKey:urlString];
++ (NSArray *)importObjects:(NSArray *)objects forClass:(Class)ModelClass {
+    NSArray *objectsArray = [ModelClass createManagedObjectsFromInfoArray:objects
+           checkingPrexistanceUsingUniqueKey:@"key"
+                   usingManagedObjectContext:[TBAApp managedObjectContext]];
+    [TBAApp saveContext];
+
+    return objectsArray;
 }
 
-+ (void)setLastModified:(NSString *)lastModified forURL:(NSURL *)url
-{
-    NSString *urlString = @"LAST_MODIFIED:";
-    urlString = [urlString stringByAppendingString:[url description]];
-    [[NSUserDefaults standardUserDefaults] setObject:lastModified forKey:urlString];
-    [[NSUserDefaults standardUserDefaults] synchronize];
++ (NSArray *)importEvents:(NSArray *)events {
+    return [self importObjects:events forClass:[Event class]];
 }
 
++ (NSArray *)importTeams:(NSArray *)teams {
+    NSMutableArray *importTeams = [teams mutableCopy];
+    NSMutableArray *teamsToRemove = [[NSMutableArray alloc] init];
 
-+ (void)executeTBAV2Request:(NSString *)request callback:(void (^)(id objects))callback
-{
-    NSURL *baseURL = [[NSURL alloc] initWithString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"TBAApiURL"]];
-    NSURL *requestURL = [[NSURL alloc] initWithString:request relativeToURL:baseURL];
-    NSString *ifModifiedSince = [self lastModifiedForURL:requestURL];
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    manager.responseSerializer = manager.responseSerializer = [AFJSONResponseSerializer serializer];;
-    [manager.requestSerializer setValue:kIDHeader forHTTPHeaderField:@"X-TBA-App-Id"];
-    if(ifModifiedSince) {
-        [manager.requestSerializer setValue:ifModifiedSince forHTTPHeaderField:@"If-Modified-Since"];
+    for (NSDictionary *teamDict in importTeams) {
+        if (![[teamDict allKeys] containsObject:@"nickname"] || !teamDict[@"nickname"] || teamDict[@"nickname"] == [NSNull null]) {
+            [teamsToRemove addObject:teamDict];
+        }
     }
+    [importTeams removeObjectsInArray:teamsToRemove];
     
-    [manager GET:[requestURL absoluteString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSString *lastMod = [operation.response allHeaderFields][@"Last-Modified"];
-        [self setLastModified:lastMod forURL:requestURL];
-        NSLog(@"URL: %@\nIf: %@\nModified: %@\n\n", requestURL, ifModifiedSince, lastMod);
-        
-        if(callback) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                callback(responseObject);
-            });
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSString *lastMod = [operation.response allHeaderFields][@"Last-Modified"];
-        if(operation.response.statusCode == 304) {
-            NSLog(@"URL: %@\nIf: %@\nModified: %@\n\n", requestURL, ifModifiedSince, lastMod);
-            
-            NSLog(@"Not modified!");
-        } else {
-            NSLog(@"Download error: %@", error);
-        }
-        
-        if(callback) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                callback(nil);
-            });
-        }
-    }];
+    return [self importObjects:importTeams forClass:[Team class]];
 }
 
+/*
 + (void)importEventsUsingManagedObjectContext:(NSManagedObjectContext *)context
 {
     NSInteger currentYear = [[NSUserDefaults standardUserDefaults] integerForKey:@"EventsViewController.currentYear"];
-    if(currentYear == 0) {
+    if (currentYear == 0) {
         currentYear = [NSDate date].year;
     }
 
     int startYear = 1992;
     int endYear = (int)[NSDate date].year + 1;
     
-    
     // Download the currently selected year first
     if (currentYear != 0) {
-        [TBAImporter executeTBAV2Request:[NSString stringWithFormat:@"events/%@", @(currentYear)] callback:^(id events) {
+        NSString *endpointString = NSString stringWithFormat:@"events/%@", @(currentYear)];
+        
+        [[TBAImporter sharedImporter] executeTBAV2Request:endpointString callback:^(id objects, NSError *error) {
+            if (error) {
+                NSLog(@"Error importing events!");
+            }
             [context performBlock:^{
                 [Event createManagedObjectsFromInfoArray:events
                        checkingPrexistanceUsingUniqueKey:@"key"
                                usingManagedObjectContext:context];
             }];
         }];
-        
-        
     }
     
     NSMutableArray *downloadedEvents = [[NSMutableArray alloc] init];
@@ -111,6 +83,7 @@
         }];
     }
 }
+
 
 
 + (void)importTeamsPage:(int)page collectedTeams:(NSMutableArray *)collectedTeams usingContext:(NSManagedObjectContext *)context
@@ -232,5 +205,6 @@
     }];
     
 }
+*/
 
 @end

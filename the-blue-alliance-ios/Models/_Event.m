@@ -5,11 +5,10 @@
 
 const struct EventAttributes EventAttributes = {
 	.address = @"address",
-	.cachedLocationLat = @"cachedLocationLat",
-	.cachedLocationLon = @"cachedLocationLon",
-	.cachedLocationRadius = @"cachedLocationRadius",
-	.district_enum = @"district_enum",
+	.alliances = @"alliances",
+	.district_points = @"district_points",
 	.end_date = @"end_date",
+	.event_district = @"event_district",
 	.event_short = @"event_short",
 	.event_type = @"event_type",
 	.key = @"key",
@@ -17,15 +16,10 @@ const struct EventAttributes EventAttributes = {
 	.location = @"location",
 	.name = @"name",
 	.official = @"official",
-	.rankings = @"rankings",
 	.short_name = @"short_name",
 	.start_date = @"start_date",
-	.stats = @"stats",
-	.timezone = @"timezone",
 	.venue = @"venue",
-	.webcasts = @"webcasts",
 	.website = @"website",
-	.week = @"week",
 	.year = @"year",
 };
 
@@ -33,9 +27,6 @@ const struct EventRelationships EventRelationships = {
 	.matches = @"matches",
 	.media = @"media",
 	.teams = @"teams",
-};
-
-const struct EventFetchedProperties EventFetchedProperties = {
 };
 
 @implementation EventID
@@ -63,24 +54,9 @@ const struct EventFetchedProperties EventFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
-	if ([key isEqualToString:@"cachedLocationLatValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"cachedLocationLat"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
-	if ([key isEqualToString:@"cachedLocationLonValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"cachedLocationLon"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
-	if ([key isEqualToString:@"cachedLocationRadiusValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"cachedLocationRadius"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
-	if ([key isEqualToString:@"district_enumValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"district_enum"];
+
+	if ([key isEqualToString:@"event_districtValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"event_district"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -99,11 +75,6 @@ const struct EventFetchedProperties EventFetchedProperties = {
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
-	if ([key isEqualToString:@"weekValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"week"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
 	if ([key isEqualToString:@"yearValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"year"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -113,137 +84,37 @@ const struct EventFetchedProperties EventFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic address;
 
+@dynamic alliances;
 
-
-
-
-
-@dynamic cachedLocationLat;
-
-
-
-- (double)cachedLocationLatValue {
-	NSNumber *result = [self cachedLocationLat];
-	return [result doubleValue];
-}
-
-- (void)setCachedLocationLatValue:(double)value_ {
-	[self setCachedLocationLat:[NSNumber numberWithDouble:value_]];
-}
-
-- (double)primitiveCachedLocationLatValue {
-	NSNumber *result = [self primitiveCachedLocationLat];
-	return [result doubleValue];
-}
-
-- (void)setPrimitiveCachedLocationLatValue:(double)value_ {
-	[self setPrimitiveCachedLocationLat:[NSNumber numberWithDouble:value_]];
-}
-
-
-
-
-
-@dynamic cachedLocationLon;
-
-
-
-- (double)cachedLocationLonValue {
-	NSNumber *result = [self cachedLocationLon];
-	return [result doubleValue];
-}
-
-- (void)setCachedLocationLonValue:(double)value_ {
-	[self setCachedLocationLon:[NSNumber numberWithDouble:value_]];
-}
-
-- (double)primitiveCachedLocationLonValue {
-	NSNumber *result = [self primitiveCachedLocationLon];
-	return [result doubleValue];
-}
-
-- (void)setPrimitiveCachedLocationLonValue:(double)value_ {
-	[self setPrimitiveCachedLocationLon:[NSNumber numberWithDouble:value_]];
-}
-
-
-
-
-
-@dynamic cachedLocationRadius;
-
-
-
-- (double)cachedLocationRadiusValue {
-	NSNumber *result = [self cachedLocationRadius];
-	return [result doubleValue];
-}
-
-- (void)setCachedLocationRadiusValue:(double)value_ {
-	[self setCachedLocationRadius:[NSNumber numberWithDouble:value_]];
-}
-
-- (double)primitiveCachedLocationRadiusValue {
-	NSNumber *result = [self primitiveCachedLocationRadius];
-	return [result doubleValue];
-}
-
-- (void)setPrimitiveCachedLocationRadiusValue:(double)value_ {
-	[self setPrimitiveCachedLocationRadius:[NSNumber numberWithDouble:value_]];
-}
-
-
-
-
-
-@dynamic district_enum;
-
-
-
-- (int32_t)district_enumValue {
-	NSNumber *result = [self district_enum];
-	return [result intValue];
-}
-
-- (void)setDistrict_enumValue:(int32_t)value_ {
-	[self setDistrict_enum:[NSNumber numberWithInt:value_]];
-}
-
-- (int32_t)primitiveDistrict_enumValue {
-	NSNumber *result = [self primitiveDistrict_enum];
-	return [result intValue];
-}
-
-- (void)setPrimitiveDistrict_enumValue:(int32_t)value_ {
-	[self setPrimitiveDistrict_enum:[NSNumber numberWithInt:value_]];
-}
-
-
-
-
+@dynamic district_points;
 
 @dynamic end_date;
 
+@dynamic event_district;
 
+- (int32_t)event_districtValue {
+	NSNumber *result = [self event_district];
+	return [result intValue];
+}
 
+- (void)setEvent_districtValue:(int32_t)value_ {
+	[self setEvent_district:[NSNumber numberWithInt:value_]];
+}
 
+- (int32_t)primitiveEvent_districtValue {
+	NSNumber *result = [self primitiveEvent_district];
+	return [result intValue];
+}
 
+- (void)setPrimitiveEvent_districtValue:(int32_t)value_ {
+	[self setPrimitiveEvent_district:[NSNumber numberWithInt:value_]];
+}
 
 @dynamic event_short;
 
-
-
-
-
-
 @dynamic event_type;
-
-
 
 - (int32_t)event_typeValue {
 	NSNumber *result = [self event_type];
@@ -263,20 +134,9 @@ const struct EventFetchedProperties EventFetchedProperties = {
 	[self setPrimitiveEvent_type:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic key;
 
-
-
-
-
-
 @dynamic last_updated;
-
-
 
 - (int64_t)last_updatedValue {
 	NSNumber *result = [self last_updated];
@@ -296,27 +156,11 @@ const struct EventFetchedProperties EventFetchedProperties = {
 	[self setPrimitiveLast_updated:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic location;
-
-
-
-
-
 
 @dynamic name;
 
-
-
-
-
-
 @dynamic official;
-
-
 
 - (BOOL)officialValue {
 	NSNumber *result = [self official];
@@ -336,95 +180,15 @@ const struct EventFetchedProperties EventFetchedProperties = {
 	[self setPrimitiveOfficial:[NSNumber numberWithBool:value_]];
 }
 
-
-
-
-
-@dynamic rankings;
-
-
-
-
-
-
 @dynamic short_name;
-
-
-
-
-
 
 @dynamic start_date;
 
-
-
-
-
-
-@dynamic stats;
-
-
-
-
-
-
-@dynamic timezone;
-
-
-
-
-
-
 @dynamic venue;
-
-
-
-
-
-
-@dynamic webcasts;
-
-
-
-
-
 
 @dynamic website;
 
-
-
-
-
-
-@dynamic week;
-
-
-
-- (int32_t)weekValue {
-	NSNumber *result = [self week];
-	return [result intValue];
-}
-
-- (void)setWeekValue:(int32_t)value_ {
-	[self setWeek:[NSNumber numberWithInt:value_]];
-}
-
-- (int32_t)primitiveWeekValue {
-	NSNumber *result = [self primitiveWeek];
-	return [result intValue];
-}
-
-- (void)setPrimitiveWeekValue:(int32_t)value_ {
-	[self setPrimitiveWeek:[NSNumber numberWithInt:value_]];
-}
-
-
-
-
-
 @dynamic year;
-
-
 
 - (int32_t)yearValue {
 	NSNumber *result = [self year];
@@ -444,52 +208,38 @@ const struct EventFetchedProperties EventFetchedProperties = {
 	[self setPrimitiveYear:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic matches;
 
-	
 - (NSMutableSet*)matchesSet {
 	[self willAccessValueForKey:@"matches"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"matches"];
-  
+
 	[self didAccessValueForKey:@"matches"];
 	return result;
 }
-	
 
 @dynamic media;
 
-	
 - (NSMutableSet*)mediaSet {
 	[self willAccessValueForKey:@"media"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"media"];
-  
+
 	[self didAccessValueForKey:@"media"];
 	return result;
 }
-	
 
 @dynamic teams;
 
-	
 - (NSMutableSet*)teamsSet {
 	[self willAccessValueForKey:@"teams"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"teams"];
-  
+
 	[self didAccessValueForKey:@"teams"];
 	return result;
 }
-	
-
-
-
-
-
 
 @end
+

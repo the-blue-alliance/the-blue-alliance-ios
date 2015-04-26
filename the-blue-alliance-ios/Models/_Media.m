@@ -19,9 +19,6 @@ const struct MediaRelationships MediaRelationships = {
 	.teams = @"teams",
 };
 
-const struct MediaFetchedProperties MediaFetchedProperties = {
-};
-
 @implementation MediaID
 @end
 
@@ -47,105 +44,56 @@ const struct MediaFetchedProperties MediaFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
 
 	return keyPaths;
 }
 
-
-
-
 @dynamic cachedData;
-
-
-
-
-
 
 @dynamic channel;
 
-
-
-
-
-
 @dynamic key;
-
-
-
-
-
 
 @dynamic threadUrl;
 
-
-
-
-
-
 @dynamic title;
-
-
-
-
-
 
 @dynamic type;
 
-
-
-
-
-
 @dynamic url;
-
-
-
-
-
 
 @dynamic events;
 
-	
 - (NSMutableSet*)eventsSet {
 	[self willAccessValueForKey:@"events"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"events"];
-  
+
 	[self didAccessValueForKey:@"events"];
 	return result;
 }
-	
 
 @dynamic matches;
 
-	
 - (NSMutableSet*)matchesSet {
 	[self willAccessValueForKey:@"matches"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"matches"];
-  
+
 	[self didAccessValueForKey:@"matches"];
 	return result;
 }
-	
 
 @dynamic teams;
 
-	
 - (NSMutableSet*)teamsSet {
 	[self willAccessValueForKey:@"teams"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"teams"];
-  
+
 	[self didAccessValueForKey:@"teams"];
 	return result;
 }
-	
-
-
-
-
-
 
 @end
+

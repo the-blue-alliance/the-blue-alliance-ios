@@ -1,14 +1,17 @@
 #import "Event.h"
 #import "Media.h"
 #import <MapKit/MapKit.h>
-#import "GeocodeQueue.h"
 
 @implementation Event
 @dynamic key;
 
-- (NSString *)friendlyName
-{
-    NSString *withYear = [NSString stringWithFormat:@"%@ %@", self.year, self.short_name ? self.short_name : self.name];
+- (NSString *)friendlyNameWithYear:(BOOL)withYear {
+    NSString *nameString;
+    if (withYear) {
+        nameString = [NSString stringWithFormat:@"%@ %@", [self.year stringValue], self.short_name ? self.short_name : self.name];
+    } else {
+        nameString = [NSString stringWithFormat:@"%@", self.short_name ? self.short_name : self.name];
+    }
     
     NSString *typeSuffix = @"";
     switch (self.event_typeValue) {
@@ -29,9 +32,8 @@
             break;
     }
     
-    return [NSString stringWithFormat:@"%@ %@", withYear, typeSuffix];
+    return [NSString stringWithFormat:@"%@ %@", nameString, typeSuffix];
 }
-
 
 - (void)configureSelfForInfo:(NSDictionary *)info
    usingManagedObjectContext:(NSManagedObjectContext *)context
@@ -55,6 +57,8 @@
     self.start_date = [formatter dateFromString:info[@"start_date"]] ? [formatter dateFromString:info[@"start_date"]] : defaultDate;
     self.end_date = [formatter dateFromString:info[@"end_date"]];
     self.event_type = info[@"event_type"];
+    
+    self.event_district = info[@"event_district"];
     self.website = info[@"website"];
     self.last_updated = @([[NSDate date] timeIntervalSince1970]);
     
@@ -74,39 +78,8 @@
                                     checkingPrexistanceUsingUniqueKey:@"key"
                                             usingManagedObjectContext:context];
     self.media = [NSSet setWithArray:webcasts];
-    
 
-    
-    // Asynchronously geocode
-    if(self.cachedLocationLatValue == 0 && self.cachedLocationLonValue == 0) {
-        NSString *textForGeocode = [info[@"venue_address"] length] ? info[@"venue_address"] : info[@"location"];
-        if([textForGeocode length] > 0) {
-            [[GeocodeQueue sharedGeocodeQueue] addTextToGeocodeQueue:textForGeocode withCallback:^(NSArray *placemarks, NSError *error) {
-                CLCircularRegion *region = (CLCircularRegion *)[(CLPlacemark *)[placemarks firstObject] region];
-                [context performBlock:^{
-                    if(info[@"location"] && [info[@"location"] rangeOfString:@"Vegas"].location != NSNotFound) {
-                        NSLog(@"VEGAS 2!");
-                    }
-                    if(region) {
-                        self.cachedLocationLatValue = region.center.latitude;
-                        self.cachedLocationLonValue = region.center.longitude;
-                        self.cachedLocationRadiusValue = region.radius;
-    //                    NSLog(@"Finished geocoding %@", info[@"location"]);
-                    } else {
-                        NSLog(@"Error: %@  while trying to geocode: %@", error, textForGeocode);
-                    }
-                }];
-            }];
-        }
-    }
-    
-    
     // TODO: Finish / improve importing
-}
-
-- (CLLocationCoordinate2D)coordinate
-{
-    return CLLocationCoordinate2DMake(self.cachedLocationLatValue, self.cachedLocationLonValue);
 }
 
 - (NSString *)title
@@ -117,6 +90,32 @@
 - (NSString *)subtitle
 {
     return self.venue ? self.venue : (self.location ? self.location : @"No Event Location");
+}
+
+
++ (NSArray *)eventTypes {
+    return @[@(TBAEventTypePreseason), @(TBAEventTypeRegional), @(TBAEventTypeDistrict), @(TBAEventTypeDistrictCMP), @(TBAEventTypeCMPDivision), @(TBAEventTypeCMPFinals), @(TBAEventTypeOffseason), @(TBAEventTypeUnlabeled)];
+}
+
++ (NSString *)nameForEventType:(TBAEventType)type {
+    switch (type) {
+        case TBAEventTypeRegional:
+            return @"Regional";
+        case TBAEventTypeDistrict:
+            return @"District";
+        case TBAEventTypeDistrictCMP:
+            return @"District Championship";
+        case TBAEventTypeCMPDivision:
+            return @"Championship Division";
+        case TBAEventTypeCMPFinals:
+            return @"Championship Finals";
+        case TBAEventTypeOffseason:
+            return @"Offseason";
+        case TBAEventTypePreseason:
+            return @"Preseason";
+        case TBAEventTypeUnlabeled:
+            return @"--";
+    }
 }
 
 @end

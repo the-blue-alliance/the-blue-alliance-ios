@@ -10,6 +10,23 @@
 
 @implementation Team (Fetch)
 
++ (NSArray *)fetchAllTeamsFromContext:(NSManagedObjectContext *)context {
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Team" inManagedObjectContext:context];
+    [fetchRequest setEntity:entity];
+    
+    [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"team_number" ascending:YES]]];
+    
+    NSError *error = nil;
+    NSArray *teams = [context executeFetchRequest:fetchRequest error:&error];
+    if (teams == nil) {
+        NSLog(@"Core Data error: handle this error... :(");
+        NSLog(@"%@", error);
+    }
+
+    return teams;
+}
+
 + (NSArray *)fetchTeamsForKeys:(NSArray *)keys fromContext:(NSManagedObjectContext *)context {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Team" inManagedObjectContext:context];

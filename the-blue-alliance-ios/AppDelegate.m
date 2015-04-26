@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import <GDIIndexBar/GDIIndexBar.h>
 
 @interface AppDelegate () <NSURLConnectionDataDelegate>
 
@@ -16,23 +15,8 @@
 
 @implementation AppDelegate
 
-- (void)configureSelectedImages
-{
-    NSArray *selectedImages = @[@"events_tab_icon_selected", @"teams_tab_icon_selected"];
-    
-    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-    UITabBar *tabBar = tabBarController.tabBar;
-    
-    int i = 0;
-    for (UITabBarItem *tabBarItem in [tabBar items]) {
-        NSString *selectedImage = selectedImages[i++];
-        (void)[tabBarItem initWithTitle:[tabBarItem title] image:[tabBarItem image] selectedImage:[UIImage imageNamed:selectedImage]];
-
-    }
-}
-
-
 #pragma mark - Main Entry Point
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0
@@ -42,22 +26,18 @@
     
     // Setup UI appearance
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
+    
     [[UINavigationBar appearance] setBarTintColor:[UIColor TBANavigationBarColor]];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
+    [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
+    
     [[UIToolbar appearance] setBarTintColor:[UIColor whiteColor]];
     [[UITableView appearance] setSectionIndexBackgroundColor:[UIColor clearColor]];
     [[UITableView appearance] setSectionIndexTrackingBackgroundColor:[UIColor clearColor]];
     [[UITableView appearance] setSectionIndexColor:[UIColor TBANavigationBarColor]];
-    
-    [[GDIIndexBar appearance] setTextColor:[UIColor TBANavigationBarColor]];
-    [[GDIIndexBar appearance] setVerticalAlignment:GDIIndexBarAlignmentCenter];
-    [[GDIIndexBar appearance] setTextOffset:UIOffsetMake(8, 0)];
-    [[GDIIndexBar appearance] setBarWidth:40];
-    [[GDIIndexBar appearance] setBarBackgroundWidth:40];
-    [[GDIIndexBar appearance] setBarBackgroundColor:[UIColor clearColor]];
-    [[GDIIndexBar appearance] setAlpha:0.6];
-    
-    [self configureSelectedImages];
     
     return YES;
 }
