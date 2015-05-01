@@ -17,20 +17,26 @@
 #import "Event+Fetch.h"
 #import "OrderedDictionary.h"
 #import "District.h"
-#import "EventsCollectionViewController.h"
-#import "EventsCollectionViewCell.h"
 #import "EventViewController.h"
 #import <PureLayout/PureLayout.h>
+#import "EventTableViewCell.h"
 
-#warning bring this to the current week like the Android app
+// TODO: Bring the events view to the current week, like the Android app
 
 static NSString *const WeeklessEventsLabel      = @"Other Official Events";
 static NSString *const PreseasonEventsLabel     = @"Preseason";
 static NSString *const OffseasonEventsLabel     = @"Offseason";
 static NSString *const CMPEventsLabel           = @"Championship Event";
 
+static NSString *const EventCellReuseIdentifier = @"Event Cell";
 
-@interface EventsViewController () <UICollectionViewDelegateFlowLayout>
+
+@interface EventsViewController () <UITableViewDataSource, UITableViewDelegate>
+
+@property (nonatomic, strong) IBOutlet UIView *segmentedControlView;
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *tableViewLeadingConstraint;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *tableViewTrailingConstraint;
 
 // Ordered dict of "Weeks" (Preseason, Week 1, Week 2, ...)
 // Week dicts have ordered dict of event types (Regional Events, MI District Events, ...)
@@ -38,7 +44,7 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
 @property (nonatomic, strong) OrderedDictionary *eventData;
 
 @property (nonatomic, strong) HMSegmentedControl *segmentedControl;
-@property (nonatomic, strong) EventsCollectionViewController *eventsCollectionViewController;
+@property (nonatomic, assign) NSInteger currentSegmentIndex;
 
 @property (nonatomic, strong) UISwipeGestureRecognizer *leftSwipeGestureRecognizer;
 @property (nonatomic, strong) UISwipeGestureRecognizer *rightSwipeGestureRecognizer;
@@ -84,18 +90,11 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
     [self styleInterface];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventTapped:) name:EventTapped object:nil];
-}
-
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
+
     [self cancelRefresh];
     [self updateRefreshBarButtonItem:NO];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:EventTapped object:nil];
 }
 
 
@@ -284,10 +283,47 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
     }];
 }
 
+- (OrderedDictionary *)weekDictionaryForIndex:(NSInteger)index {
+    NSArray *weekKeys = [self.eventData allKeys];
+    if (!weekKeys || index >= [weekKeys count]) {
+        return nil;
+    }
+    NSString *weekKey = [weekKeys objectAtIndex:index];
+    
+    return [self.eventData objectForKey:weekKey];
+}
+
+- (NSArray *)eventsForIndex:(NSInteger)index forWeekDictionary:(OrderedDictionary *)weekDictionary {
+    if (!weekDictionary || !weekDictionary.allKeys || index >= [weekDictionary.allKeys count]) {
+        return nil;
+    }
+    
+    NSString *eventTypeKey = [weekDictionary.allKeys objectAtIndex:index];
+    return [weekDictionary objectForKey:eventTypeKey];
+}
+
+- (Event *)eventForSegmentIndex:(NSInteger)sectionIndex forIndexPath:(NSIndexPath *)indexPath {
+    OrderedDictionary *weekDictionary = [self weekDictionaryForIndex:sectionIndex];
+    NSArray *eventsArray = [self eventsForIndex:indexPath.section forWeekDictionary:weekDictionary];
+    Event *event = [eventsArray objectAtIndex:indexPath.row];
+    
+    return event;
+}
+
 
 #pragma mark - Interface Methods
 
 - (void)styleInterface {
+    self.rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipedRight:)];
+    self.rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.tableView addGestureRecognizer:self.rightSwipeGestureRecognizer];
+    
+    self.leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipedLeft:)];
+    self.leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.tableView addGestureRecognizer:self.leftSwipeGestureRecognizer];
+    
+    
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
     self.navigationItem.title = [NSString stringWithFormat:@"%@ Events", @(self.currentYear)];
     [self updateInterface];
@@ -295,8 +331,15 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
 
 - (void)updateInterface {
     [self updateSegmentedControlForEventKeys:self.eventData.allKeys];
-    self.eventsCollectionViewController.eventData = self.eventData;
-    [self.eventsCollectionViewController.collectionView reloadData];
+    [self.tableView reloadData];
+}
+
+- (void)swipedRight:(UISwipeGestureRecognizer *)swipeGestureRecognizer {
+    [self animateToIndex:self.currentSegmentIndex - 1];
+}
+
+- (void)swipedLeft:(UISwipeGestureRecognizer *)swipeGestureRecognizer {
+    [self animateToIndex:self.currentSegmentIndex + 1];
 }
 
 - (void)updateSegmentedControlForEventKeys:(NSArray *)eventKeys {
@@ -334,41 +377,149 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
 }
 
 - (void)segmentedControlChangedValue:(HMSegmentedControl *)segmentedControl {
-    [self.eventsCollectionViewController.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:segmentedControl.selectedSegmentIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+    [self animateToIndex:segmentedControl.selectedSegmentIndex];
+}
+
+- (void)animateToIndex:(NSInteger)index {
+    if (index == self.currentSegmentIndex || index < 0 || index >= [self.eventData.allKeys count]) {
+        return;
+    }
+
+    ALAttribute firstAttr;
+    ALAttribute secondAttr;
+    if (index > self.currentSegmentIndex) {
+        firstAttr = ALAttributeLeading;
+        secondAttr = ALAttributeTrailing;
+    } else {
+        firstAttr = ALAttributeTrailing;
+        secondAttr = ALAttributeLeading;
+    }
+    
+    UIView *oldTableView = [self.tableView snapshotViewAfterScreenUpdates:NO];
+    oldTableView.frame = self.tableView.frame;
+    [self.view addSubview:oldTableView];
+    
+    self.currentSegmentIndex = index;
+    [self.tableView reloadData];
+    
+    NSLayoutConstraint *oldTableViewCenterVerticalConstraint = [oldTableView autoAlignAxis:ALAxisVertical toSameAxisOfView:self.view];
+    [oldTableView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.segmentedControlView];
+    [oldTableView autoSetDimension:ALDimensionHeight toSize:CGRectGetHeight(oldTableView.frame)];
+    [oldTableView autoSetDimension:ALDimensionWidth toSize:CGRectGetWidth(oldTableView.frame)];
+    
+    NSLayoutConstraint *tableViewWidthConstraint = [self.tableView autoSetDimension:ALDimensionWidth toSize:CGRectGetWidth(self.tableView.frame)];
+    [self.view removeConstraints:@[self.tableViewLeadingConstraint, self.tableViewTrailingConstraint]];
+    NSLayoutConstraint *tableViewCenterVerticalConstrait = [self.tableView autoConstrainAttribute:firstAttr toAttribute:secondAttr ofView:self.view];
+
+    [self.view layoutIfNeeded];
+    
+    [self.view removeConstraint:oldTableViewCenterVerticalConstraint];
+    [oldTableView autoConstrainAttribute:secondAttr toAttribute:firstAttr ofView:self.view];
+    
+    [self.view removeConstraint:tableViewCenterVerticalConstrait];
+    tableViewCenterVerticalConstrait = [self.tableView autoAlignAxis:ALAxisVertical toSameAxisOfView:self.view];
+
+    [self.segmentedControl setSelectedSegmentIndex:index animated:YES];
+    
+    // Same duration that our sliding tabs are moving
+    [UIView animateWithDuration:0.15f animations:^{
+        [self.view layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        [oldTableView removeFromSuperview];
+        [self.view removeConstraints:@[tableViewWidthConstraint, tableViewCenterVerticalConstrait]];
+        [self.view addConstraints:@[self.tableViewLeadingConstraint, self.tableViewTrailingConstraint]];
+    }];
 }
 
 
-#pragma mark - Collection View Delegate
+#pragma mark - Table View Data Source
 
-- (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout *)collectionViewLayout
-  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return self.eventsCollectionViewController.collectionView.frame.size;
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 28.0f;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    
+    header.backgroundView.backgroundColor = [UIColor TBANavigationBarColor];
+    header.textLabel.textColor = [UIColor whiteColor];
+    header.textLabel.font = [UIFont systemFontOfSize:12.0f];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    OrderedDictionary *weekDictionary = [self weekDictionaryForIndex:self.currentSegmentIndex];
+    return [weekDictionary.allKeys objectAtIndex:section];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if (!self.eventData) {
+        // TODO: Show no data screen
+        return 0;
+    }
+    OrderedDictionary *weekDictionary = [self weekDictionaryForIndex:self.currentSegmentIndex];
+    if (!weekDictionary) {
+        // TODO: Show no data screen
+        return 0;
+    }
+    return [weekDictionary.allKeys count];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    OrderedDictionary *weekDictionary = [self weekDictionaryForIndex:self.currentSegmentIndex];
+    NSArray *events = [self eventsForIndex:section forWeekDictionary:weekDictionary];
+    return [events count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    EventTableViewCell *cell = (EventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:EventCellReuseIdentifier forIndexPath:indexPath];
+    
+    Event *event = [self eventForSegmentIndex:self.currentSegmentIndex forIndexPath:indexPath];
+    
+    cell.nameLabel.text = [event friendlyNameWithYear:NO];
+    cell.locationLabel.text = event.location;
+    
+    NSString *dateText;
+    NSDateFormatter *endDateFormatter = [[NSDateFormatter alloc] init];
+    [endDateFormatter setDateFormat:@"MMM dd, y"];
+    
+    if (event.start_date.year == event.end_date.year) {
+        NSDateFormatter *startDateFormatter = [[NSDateFormatter alloc] init];
+        [startDateFormatter setDateFormat:@"MMM dd"];
+        
+        dateText = [NSString stringWithFormat:@"%@ to %@",
+                    [startDateFormatter stringFromDate:event.start_date],
+                    [endDateFormatter stringFromDate:event.end_date]];
+        
+    } else {
+        dateText = [NSString stringWithFormat:@"%@ to %@",
+                    [endDateFormatter stringFromDate:event.start_date],
+                    [endDateFormatter stringFromDate:event.end_date]];
+    }
+    cell.datesLabel.text = dateText;
+
+    
+    return cell;
 }
 
 
-#pragma mark - Scroll View Delegate
+#pragma mark - Table View Delegate
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGFloat pageWidth = self.eventsCollectionViewController.collectionView.frame.size.width;
-    int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-
-    [self.segmentedControl setSelectedSegmentIndex:page animated:YES];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    Event *event = [self eventForSegmentIndex:self.currentSegmentIndex forIndexPath:indexPath];
+    [self performSegueWithIdentifier:@"EventViewControllerSegue" sender:event];
 }
 
 
 #pragma mark - Navigation
 
-- (void)eventTapped:(NSNotification *)notification {
-    Event *event = notification.object;
-    [self performSegueWithIdentifier:@"EventViewControllerSegue" sender:event];
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"EventsCollectionViewControllerEmbedSegue"]) {
-        EventsCollectionViewController *eventsCollectionViewController = segue.destinationViewController;
-        eventsCollectionViewController.collectionView.delegate = self;
-        self.eventsCollectionViewController = eventsCollectionViewController;
+    if ([segue.identifier isEqualToString:@"EventViewControllerSegue"]) {
+        Event *event = (Event *)sender;
+        
+        EventViewController *eventViewController = segue.destinationViewController;
+        eventViewController.event = event;
     } else if ([segue.identifier isEqualToString:@"EventViewControllerSegue"]) {
         Event *event = (Event *)sender;
         
@@ -376,19 +527,6 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
         eventViewController.event = event;
     }
 }
-
-
-/*
-- (NSPredicate *)predicateForSearchText:(NSString *)searchText
-{
-    NSLog(@"We're searching for - %@", searchText);
-    if (searchText && searchText.length) {
-        return [NSPredicate predicateWithFormat:@"(name contains[cd] %@ OR key contains[cd] %@) && year == %d", searchText, searchText, self.currentYear];
-    } else {
-        return [NSPredicate predicateWithFormat:@"year == %d", self.currentYear];;
-    }
-}
-*/
 
 
 @end

@@ -54,16 +54,12 @@
 		925CD21E1AC247F200C9C3BF /* TBARefreshViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925CD21D1AC247F200C9C3BF /* TBARefreshViewController.m */; };
 		926C054C1AAF741E00E9215A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 926C054B1AAF741E00E9215A /* Images.xcassets */; };
 		927048221AC23BF8002E46CE /* TeamsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 927048211AC23BF8002E46CE /* TeamsViewController.m */; };
-		927048251AC23C0C002E46CE /* TeamsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 927048241AC23C0C002E46CE /* TeamsCollectionViewController.m */; };
-		927048281AC23C1C002E46CE /* TeamsCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 927048271AC23C1C002E46CE /* TeamsCollectionViewCell.m */; };
 		9270482B1AC23C4E002E46CE /* TeamTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9270482A1AC23C4E002E46CE /* TeamTableViewCell.m */; };
 		92BB8B981AC64DC800A041FA /* TBAYearSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B971AC64DC800A041FA /* TBAYearSelectViewController.m */; };
 		92BB8B9B1AC657A100A041FA /* District+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B9A1AC657A100A041FA /* District+Fetch.m */; };
 		92EAA4BC1ABF4CC600F7CF39 /* District.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EAA4BB1ABF4CC600F7CF39 /* District.m */; };
 		92EAA4C01ABF6AB100F7CF39 /* SelectYearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EAA4BF1ABF6AB100F7CF39 /* SelectYearViewController.m */; };
 		92EAA4C31ABF6EC500F7CF39 /* SelectYearTransitionAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EAA4C21ABF6EC500F7CF39 /* SelectYearTransitionAnimator.m */; };
-		92EAA4C61AC0DAE100F7CF39 /* EventsCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EAA4C51AC0DAE100F7CF39 /* EventsCollectionViewCell.m */; };
-		92EAA4C91AC0DCFC00F7CF39 /* EventsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EAA4C81AC0DCFC00F7CF39 /* EventsCollectionViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -142,10 +138,6 @@
 		926C054B1AAF741E00E9215A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		927048201AC23BF8002E46CE /* TeamsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamsViewController.h; sourceTree = "<group>"; };
 		927048211AC23BF8002E46CE /* TeamsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamsViewController.m; sourceTree = "<group>"; };
-		927048231AC23C0C002E46CE /* TeamsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamsCollectionViewController.h; sourceTree = "<group>"; };
-		927048241AC23C0C002E46CE /* TeamsCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamsCollectionViewController.m; sourceTree = "<group>"; };
-		927048261AC23C1C002E46CE /* TeamsCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamsCollectionViewCell.h; sourceTree = "<group>"; };
-		927048271AC23C1C002E46CE /* TeamsCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamsCollectionViewCell.m; sourceTree = "<group>"; };
 		927048291AC23C4E002E46CE /* TeamTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamTableViewCell.h; sourceTree = "<group>"; };
 		9270482A1AC23C4E002E46CE /* TeamTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamTableViewCell.m; sourceTree = "<group>"; };
 		927547AD193181E800785260 /* The Blue Alliance 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance 3.xcdatamodel"; sourceTree = "<group>"; };
@@ -162,10 +154,6 @@
 		92EAA4BF1ABF6AB100F7CF39 /* SelectYearViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectYearViewController.m; sourceTree = "<group>"; };
 		92EAA4C11ABF6EC500F7CF39 /* SelectYearTransitionAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectYearTransitionAnimator.h; sourceTree = "<group>"; };
 		92EAA4C21ABF6EC500F7CF39 /* SelectYearTransitionAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectYearTransitionAnimator.m; sourceTree = "<group>"; };
-		92EAA4C41AC0DAE100F7CF39 /* EventsCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsCollectionViewCell.h; sourceTree = "<group>"; };
-		92EAA4C51AC0DAE100F7CF39 /* EventsCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsCollectionViewCell.m; sourceTree = "<group>"; };
-		92EAA4C71AC0DCFC00F7CF39 /* EventsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsCollectionViewController.h; sourceTree = "<group>"; };
-		92EAA4C81AC0DCFC00F7CF39 /* EventsCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsCollectionViewController.m; sourceTree = "<group>"; };
 		F15BD1416BFF2143335792BA /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -388,10 +376,6 @@
 			children = (
 				927048201AC23BF8002E46CE /* TeamsViewController.h */,
 				927048211AC23BF8002E46CE /* TeamsViewController.m */,
-				927048231AC23C0C002E46CE /* TeamsCollectionViewController.h */,
-				927048241AC23C0C002E46CE /* TeamsCollectionViewController.m */,
-				927048261AC23C1C002E46CE /* TeamsCollectionViewCell.h */,
-				927048271AC23C1C002E46CE /* TeamsCollectionViewCell.m */,
 				927048291AC23C4E002E46CE /* TeamTableViewCell.h */,
 				9270482A1AC23C4E002E46CE /* TeamTableViewCell.m */,
 			);
@@ -403,10 +387,6 @@
 			children = (
 				50832E3C1918BBEA003AC8A7 /* EventsViewController.h */,
 				50832E3D1918BBEA003AC8A7 /* EventsViewController.m */,
-				92EAA4C71AC0DCFC00F7CF39 /* EventsCollectionViewController.h */,
-				92EAA4C81AC0DCFC00F7CF39 /* EventsCollectionViewController.m */,
-				92EAA4C41AC0DAE100F7CF39 /* EventsCollectionViewCell.h */,
-				92EAA4C51AC0DAE100F7CF39 /* EventsCollectionViewCell.m */,
 				9240CDFA1AB5DA0B00D859A0 /* EventTableViewCell.h */,
 				9240CDFB1AB5DA0B00D859A0 /* EventTableViewCell.m */,
 				9222F11A1AD6911300C0AEA0 /* Event */,
@@ -554,14 +534,12 @@
 			files = (
 				9226B1411932EFD900B7EF43 /* Team.m in Sources */,
 				9226B13F1932EFD900B7EF43 /* _Team.m in Sources */,
-				92EAA4C91AC0DCFC00F7CF39 /* EventsCollectionViewController.m in Sources */,
 				9240CDFF1AB5DEEE00D859A0 /* TBAApp.m in Sources */,
 				92EAA4BC1ABF4CC600F7CF39 /* District.m in Sources */,
 				5022C84E195F9D31008F0131 /* Team+Fetch.m in Sources */,
 				927048221AC23BF8002E46CE /* TeamsViewController.m in Sources */,
 				92BB8B981AC64DC800A041FA /* TBAYearSelectViewController.m in Sources */,
 				92BB8B9B1AC657A100A041FA /* District+Fetch.m in Sources */,
-				927048281AC23C1C002E46CE /* TeamsCollectionViewCell.m in Sources */,
 				5029341A195F8B26001DFB89 /* Match.m in Sources */,
 				50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */,
 				5022C846195F8BDD008F0131 /* _Media.m in Sources */,
@@ -582,11 +560,9 @@
 				9208AA8E1ABDF02500905224 /* Media.m in Sources */,
 				9226B13E1932EFD900B7EF43 /* _Event.m in Sources */,
 				9270482B1AC23C4E002E46CE /* TeamTableViewCell.m in Sources */,
-				92EAA4C61AC0DAE100F7CF39 /* EventsCollectionViewCell.m in Sources */,
 				92EAA4C31ABF6EC500F7CF39 /* SelectYearTransitionAnimator.m in Sources */,
 				50832E071918BB63003AC8A7 /* main.m in Sources */,
 				9208AA971ABF133D00905224 /* OrderedDictionary.m in Sources */,
-				927048251AC23C0C002E46CE /* TeamsCollectionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

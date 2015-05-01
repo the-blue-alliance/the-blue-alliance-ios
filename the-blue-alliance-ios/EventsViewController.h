@@ -9,12 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "TBAYearSelectViewController.h"
 
-
-static NSString *const EventTapped  = @"EventTapped";
-
-
 @interface EventsViewController : TBAYearSelectViewController
-
-@property (nonatomic, strong) IBOutlet UIView *segmentedControlView;
 
 @end

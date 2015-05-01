@@ -63,8 +63,6 @@
 #pragma mark - Interface Methods
 
 - (void)selectYearButtonTapped:(id)sender {
-    // SelectYearViewController
-    
     NSString *storyboardString;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         storyboardString = @"Main_iPad";

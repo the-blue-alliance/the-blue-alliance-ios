@@ -7,25 +7,37 @@
 //
 
 #import "TeamsViewController.h"
-#import "TeamsCollectionViewController.h"
 #import "OrderedDictionary.h"
 #import "TBAApp.h"
 #import "TBAKit.h"
 #import "TBAImporter.h"
 #import "HMSegmentedControl.h"
-#import "TeamsCollectionViewController.h"
 #import "Team.h"
 #import "Team+Fetch.h"
 #import "OrderedDictionary.h"
 #import <PureLayout/PureLayout.h>
+#import "TeamTableViewCell.h"
 
 
-@interface TeamsViewController () <UICollectionViewDelegateFlowLayout>
+static NSString *const TeamCellReuseIdentifier = @"Team Cell";
 
+
+@interface TeamsViewController ()
+
+@property (nonatomic, strong) IBOutlet UIView *segmentedControlView;
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *tableViewLeadingConstraint;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *tableViewTrailingConstraint;
+
+// Ordered dict of "Groupings" (1-999, 1000-1999, 2000-2999, ...)
+// Groupings have arrays of teams [1, 4, 5, 6, 7, ...]
 @property (nonatomic, strong) OrderedDictionary *teamData;
 
 @property (nonatomic, strong) HMSegmentedControl *segmentedControl;
-@property (nonatomic, strong) TeamsCollectionViewController *teamsCollectionViewController;
+@property (nonatomic, assign) NSInteger currentSegmentIndex;
+
+@property (nonatomic, strong) UISwipeGestureRecognizer *leftSwipeGestureRecognizer;
+@property (nonatomic, strong) UISwipeGestureRecognizer *rightSwipeGestureRecognizer;
 
 @end
 
@@ -74,7 +86,6 @@
             [mutableTeams setValue:arr forKey:team.grouping_text];
         }
     }
-
     return mutableTeams;
 }
 
@@ -126,13 +137,30 @@
 
 - (void)styleInterface {
     self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+
+    self.rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipedRight:)];
+    self.rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.tableView addGestureRecognizer:self.rightSwipeGestureRecognizer];
+    
+    self.leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipedLeft:)];
+    self.leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.tableView addGestureRecognizer:self.leftSwipeGestureRecognizer];
+
     [self updateInterface];
 }
 
 - (void)updateInterface {
     [self updateSegmentedControlForTeamKeys:self.teamData.allKeys];
-    self.teamsCollectionViewController.teams = self.teamData;
-    [self.teamsCollectionViewController.collectionView reloadData];
+    [self.tableView reloadData];
+}
+
+- (void)swipedRight:(UISwipeGestureRecognizer *)swipeGestureRecognizer {
+    [self animateToIndex:self.currentSegmentIndex - 1];
+}
+
+- (void)swipedLeft:(UISwipeGestureRecognizer *)swipeGestureRecognizer {
+    [self animateToIndex:self.currentSegmentIndex + 1];
 }
 
 - (void)updateSegmentedControlForTeamKeys:(NSArray *)teamKeys {
@@ -170,31 +198,126 @@
 }
 
 - (void)segmentedControlChangedValue:(HMSegmentedControl *)segmentedControl {
-    [self.teamsCollectionViewController.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:segmentedControl.selectedSegmentIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+    [self animateToIndex:segmentedControl.selectedSegmentIndex];
 }
 
-
-#pragma mark - Collection View Delegate
-
-- (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout *)collectionViewLayout
-  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return self.teamsCollectionViewController.collectionView.frame.size;
-}
-
-
-#pragma mark - Scroll View Delegate
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGFloat pageWidth = self.teamsCollectionViewController.collectionView.frame.size.width;
-    int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+- (void)animateToIndex:(NSInteger)index {
+    if (index == self.currentSegmentIndex || index < 0 || index >= [self.teamData.allKeys count]) {
+        return;
+    }
     
-    [self.segmentedControl setSelectedSegmentIndex:page animated:YES];
+    ALAttribute firstAttr;
+    ALAttribute secondAttr;
+    if (index > self.currentSegmentIndex) {
+        firstAttr = ALAttributeLeading;
+        secondAttr = ALAttributeTrailing;
+    } else {
+        firstAttr = ALAttributeTrailing;
+        secondAttr = ALAttributeLeading;
+    }
+    
+    UIView *oldTableView = [self.tableView snapshotViewAfterScreenUpdates:NO];
+    oldTableView.frame = self.tableView.frame;
+    [self.view addSubview:oldTableView];
+    
+    self.currentSegmentIndex = index;
+    [self.tableView reloadData];
+    
+    NSLayoutConstraint *oldTableViewCenterVerticalConstraint = [oldTableView autoAlignAxis:ALAxisVertical toSameAxisOfView:self.view];
+    [oldTableView autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.segmentedControlView];
+    [oldTableView autoSetDimension:ALDimensionHeight toSize:CGRectGetHeight(oldTableView.frame)];
+    [oldTableView autoSetDimension:ALDimensionWidth toSize:CGRectGetWidth(oldTableView.frame)];
+    
+    NSLayoutConstraint *tableViewWidthConstraint = [self.tableView autoSetDimension:ALDimensionWidth toSize:CGRectGetWidth(self.tableView.frame)];
+    [self.view removeConstraints:@[self.tableViewLeadingConstraint, self.tableViewTrailingConstraint]];
+    NSLayoutConstraint *tableViewCenterVerticalConstrait = [self.tableView autoConstrainAttribute:firstAttr toAttribute:secondAttr ofView:self.view];
+    
+    [self.view layoutIfNeeded];
+    
+    [self.view removeConstraint:oldTableViewCenterVerticalConstraint];
+    [oldTableView autoConstrainAttribute:secondAttr toAttribute:firstAttr ofView:self.view];
+    
+    [self.view removeConstraint:tableViewCenterVerticalConstrait];
+    tableViewCenterVerticalConstrait = [self.tableView autoAlignAxis:ALAxisVertical toSameAxisOfView:self.view];
+    
+    [self.segmentedControl setSelectedSegmentIndex:index animated:YES];
+    
+    // Same duration that our sliding tabs are moving
+    [UIView animateWithDuration:0.15f animations:^{
+        [self.view layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        [oldTableView removeFromSuperview];
+        [self.view removeConstraints:@[tableViewWidthConstraint, tableViewCenterVerticalConstrait]];
+        [self.view addConstraints:@[self.tableViewLeadingConstraint, self.tableViewTrailingConstraint]];
+    }];
+}
+
+
+#pragma mark - Data Methods
+
+- (NSArray *)teamArrayForIndex:(NSInteger)index {
+    NSArray *teamKeys = [self.teamData allKeys];
+    if (!teamKeys || index >= [teamKeys count]) {
+        return nil;
+    }
+    NSString *teamKey = [teamKeys objectAtIndex:index];
+    
+    return [self.teamData objectForKey:teamKey];
+}
+
+- (Team *)teamForSegmentIndex:(NSInteger)sectionIndex forIndexPath:(NSIndexPath *)indexPath {
+    NSArray *teamArray = [self teamArrayForIndex:sectionIndex];
+    Team *team = [teamArray objectAtIndex:indexPath.row];
+    
+    return team;
+}
+
+
+#pragma mark - Table View Data Source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (!self.teamData) {
+        // TODO: Show no data screen
+        return 0;
+    }
+    NSArray *teamArray = [self teamArrayForIndex:self.currentSegmentIndex];
+    if (!teamArray) {
+        // TODO: Show no data screen
+        return 0;
+    }
+    return [teamArray count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    TeamTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TeamCellReuseIdentifier forIndexPath:indexPath];
+    
+    Team *team = [self teamForSegmentIndex:self.currentSegmentIndex forIndexPath:indexPath];
+
+    cell.numberLabel.text = [team.team_number stringValue];
+    cell.nameLabel.text = team.nickname;
+    cell.locationLabel.text = team.location;
+    
+    return cell;
+}
+
+
+#pragma mark - Table View Delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    Team *team = [self teamForSegmentIndex:self.currentSegmentIndex forIndexPath:indexPath];
+    NSLog(@"Selected team: %@", team.team_number);
 }
 
 
 #pragma mark - Navigation
 
+/*
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"TeamsCollectionViewControllerEmbedSegue"]) {
         TeamsCollectionViewController *teamsCollectionViewController = segue.destinationViewController;
@@ -202,6 +325,6 @@
         self.teamsCollectionViewController = teamsCollectionViewController;
     }
 }
-
+*/
 
 @end

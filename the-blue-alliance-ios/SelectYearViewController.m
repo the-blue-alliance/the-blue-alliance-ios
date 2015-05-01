@@ -20,6 +20,7 @@ static NSString *const YearCellReuseIdentifier = @"Year Cell";
     [super viewDidLoad];
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:YearCellReuseIdentifier];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
 
@@ -28,7 +29,6 @@ static NSString *const YearCellReuseIdentifier = @"Year Cell";
 - (IBAction)cancelButtonTapped:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
 
 
 #pragma mark - Table View Data Source
@@ -50,6 +50,7 @@ static NSString *const YearCellReuseIdentifier = @"Year Cell";
 
     cell.textLabel.text = [NSString stringWithFormat:@"%ld", year];
     if (year == self.currentYear) {
+        cell.tintColor = [UIColor TBANavigationBarColor];
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;

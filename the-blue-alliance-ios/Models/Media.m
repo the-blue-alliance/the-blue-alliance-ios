@@ -81,7 +81,8 @@
     }
     else
     {
-        [NSException raise:@"Unimplemented media type!" format:@"Media type %@ has not be implemented yet! (implement me pl0x)", self.type];
+#warning hey zach do something here eventually I guess
+//        [NSException raise:@"Unimplemented media type!" format:@"Media type %@ has not be implemented yet! (implement me pl0x)", self.type];
     }
 }
 

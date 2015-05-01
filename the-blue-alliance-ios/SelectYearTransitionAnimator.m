@@ -41,15 +41,15 @@ static CGFloat const kAnimationDuration = 0.2f;
     // Round the corners
     toView.layer.cornerRadius = 5;
     toView.layer.masksToBounds = YES;
-    
+
     // Put below the view
     CGRect newToViewFrame = toView.frame;
     newToViewFrame.origin.y = CGRectGetMaxY(containerView.frame);
+    newToViewFrame.origin.x = CGRectGetWidth(containerView.frame) * 0.05f;
+    newToViewFrame.size.height = 300.0f;
+    newToViewFrame.size.width = CGRectGetWidth(containerView.frame) * 0.9f;
     toView.frame = newToViewFrame;
     [containerView addSubview:toView];
-    
-    // Scale to 90%
-    toView.transform = CGAffineTransformMakeScale(0.9f, 0.9f);
     
     // Animate up
     [UIView animateWithDuration:kAnimationDuration animations:^{

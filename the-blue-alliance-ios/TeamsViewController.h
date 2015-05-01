@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "TBARefreshViewController.h"
 
-@interface TeamsViewController : TBARefreshViewController
-
-@property (nonatomic, strong) IBOutlet UIView *segmentedControlView;
+@interface TeamsViewController : TBARefreshViewController <UITableViewDataSource, UITableViewDelegate>
 
 @end
