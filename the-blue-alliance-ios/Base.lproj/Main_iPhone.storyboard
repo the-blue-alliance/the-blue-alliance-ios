@@ -168,16 +168,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bPT-4I-eSj">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="35"/>
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.85098039219999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="rIS-xc-nEe"/>
-                                </constraints>
-                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="JfS-fG-9Ug">
-                                <rect key="frame" x="0.0" y="35" width="320" height="420"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <searchBar key="tableHeaderView" contentMode="redraw" id="kUP-mT-RFg">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
+                                    <connections>
+                                        <outlet property="delegate" destination="Peq-zf-h6z" id="Jyh-a3-iwq"/>
+                                    </connections>
+                                </searchBar>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Team Cell" rowHeight="54" id="VOQ-Lo-Jps" customClass="TeamTableViewCell">
                                         <rect key="frame" x="0.0" y="0.0" width="319.5" height="44"/>
@@ -232,21 +233,16 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="JfS-fG-9Ug" firstAttribute="top" secondItem="bPT-4I-eSj" secondAttribute="bottom" id="1EN-Na-cx4"/>
                             <constraint firstItem="JfS-fG-9Ug" firstAttribute="leading" secondItem="gkp-t2-hOX" secondAttribute="leading" id="XLl-lB-ZXq"/>
+                            <constraint firstItem="JfS-fG-9Ug" firstAttribute="top" secondItem="XFI-iB-gmU" secondAttribute="bottom" id="kiF-Oj-NkR"/>
                             <constraint firstAttribute="trailing" secondItem="JfS-fG-9Ug" secondAttribute="trailing" id="qCg-Ne-Unn"/>
-                            <constraint firstAttribute="trailing" secondItem="bPT-4I-eSj" secondAttribute="trailing" id="uu6-ij-nUS"/>
                             <constraint firstItem="jFk-2b-dOt" firstAttribute="top" secondItem="JfS-fG-9Ug" secondAttribute="bottom" id="zrE-b7-xlf"/>
-                            <constraint firstItem="bPT-4I-eSj" firstAttribute="leading" secondItem="gkp-t2-hOX" secondAttribute="leading" id="zv6-RM-BAw"/>
-                            <constraint firstItem="bPT-4I-eSj" firstAttribute="top" secondItem="XFI-iB-gmU" secondAttribute="bottom" id="zvF-L1-IF2"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Teams" id="sdW-HX-uqw"/>
                     <connections>
-                        <outlet property="segmentedControlView" destination="bPT-4I-eSj" id="kNJ-wk-fBG"/>
+                        <outlet property="searchBar" destination="kUP-mT-RFg" id="HGX-9b-qBk"/>
                         <outlet property="tableView" destination="JfS-fG-9Ug" id="GIm-VY-WyP"/>
-                        <outlet property="tableViewLeadingConstraint" destination="XLl-lB-ZXq" id="Xf8-ea-VvV"/>
-                        <outlet property="tableViewTrailingConstraint" destination="qCg-Ne-Unn" id="XgD-af-kT9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hpR-d7-fSr" userLabel="First Responder" sceneMemberID="firstResponder"/>

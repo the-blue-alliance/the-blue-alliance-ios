@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import "TeamsViewController.h"
+#import "TeamsTableViewController.h"
 #import "OrderedDictionary.h"
 #import "TBAApp.h"
 #import "TBAKit.h"
@@ -22,23 +22,56 @@
 static NSString *const TeamCellReuseIdentifier = @"Team Cell";
 
 
-@interface TeamsViewController () <UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface TeamsTableViewController () <UISearchResultsUpdating>
 
-@property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
-@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) UISearchController *searchController;
 
-@property (nonatomic, strong) NSArray *filteredTeams;
+@property (strong, nonatomic) NSFetchRequest *searchFetchRequest;
+@property (strong, nonatomic) NSMutableArray *filteredTeams;
+
+@property (nonatomic, assign) NSUInteger currentRequestIdentifier;
+
+// Ordered dict of "Groupings" (1-999, 1000-1999, 2000-2999, ...)
+// Groupings have arrays of teams [1, 4, 5, 6, 7, ...]
+@property (nonatomic, strong) OrderedDictionary *teamData;
 
 @end
 
 
-@implementation TeamsViewController
+@implementation TeamsTableViewController
+
+#pragma mark - Properities
+
+- (UISearchController *)searchController {
+    if (!_searchController) {
+        UINavigationController *searchResultsController = [self.storyboard instantiateViewControllerWithIdentifier:@"TeamsNavigationController"];
+        
+        _searchController = [[UISearchController alloc] initWithSearchResultsController:searchResultsController];
+        _searchController.searchResultsUpdater = self;
+        _searchController.dimsBackgroundDuringPresentation = NO;
+        
+        _searchController.searchBar.scopeButtonTitles = @[NSLocalizedString(@"ScopeButtonCountry",@"Country"),
+                                                          NSLocalizedString(@"ScopeButtonCapital",@"Capital")];
+
+//        _searchController.searchBar.delegate = self;
+    }
+    return _searchController;
+}
+
+- (NSMutableArray *)filteredTeams {
+    if (!_filteredTeams) {
+        _filteredTeams = [[NSMutableArray alloc] init];
+    }
+    return _filteredTeams;
+}
+
 
 #pragma mark - View Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    /*
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -47,9 +80,8 @@ static NSString *const TeamCellReuseIdentifier = @"Team Cell";
             [strongSelf refreshData];
         }
     };
-    
-    self.filteredTeams = [[NSMutableArray alloc] init];
-    
+    */
+     
     [self fetchTeams];
     [self styleInterface];
 }
@@ -57,21 +89,44 @@ static NSString *const TeamCellReuseIdentifier = @"Team Cell";
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
+    /*
     [self cancelRefresh];
     [self updateRefreshBarButtonItem:NO];
+    */
 }
 
 
 #pragma mark - Data Methods
 
+- (OrderedDictionary *)groupTeams:(NSArray *)teams {
+    MutableOrderedDictionary *mutableTeams = [[MutableOrderedDictionary alloc] init];
+
+    for (Team *team in teams) {
+        if ([[mutableTeams allKeys] containsObject:team.grouping_text]) {
+            NSMutableArray *arr = [mutableTeams objectForKey:team.grouping_text];
+            [arr addObject:team];
+            
+            [mutableTeams setValue:arr forKey:team.grouping_text];
+        } else {
+            NSMutableArray *arr = [[NSMutableArray alloc] initWithObjects:team, nil];
+            [mutableTeams setValue:arr forKey:team.grouping_text];
+        }
+    }
+    return mutableTeams;
+}
+
 - (void)fetchTeams {
+    self.teamData = nil;
+    
     NSArray *teams = [Team fetchAllTeamsFromContext:[TBAApp managedObjectContext]];
     if (!teams || [teams count] == 0) {
+        /*
         if (self.refresh) {
             self.refresh();
         }
+        */
     } else {
-        self.filteredTeams = teams;
+        self.teamData = [self groupTeams:teams];
     }
 }
 
@@ -89,7 +144,7 @@ static NSString *const TeamCellReuseIdentifier = @"Team Cell";
         if ([objects isKindOfClass:[NSArray class]]) {
             if ([objects count] == 0) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateRefreshBarButtonItem:NO];
+//                    [self updateRefreshBarButtonItem:NO];
 
                     [self fetchTeams];
                     [self updateInterface];
@@ -109,8 +164,12 @@ static NSString *const TeamCellReuseIdentifier = @"Team Cell";
 #pragma mark - Interface Methods
 
 - (void)styleInterface {
+    self.searchController.searchBar.frame = CGRectMake(self.searchController.searchBar.frame.origin.x, self.searchController.searchBar.frame.origin.y, self.searchController.searchBar.frame.size.width, 44.0);
+    self.tableView.tableHeaderView = self.searchController.searchBar;
+    self.definesPresentationContext = YES;
+
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    
+
     [self updateInterface];
 }
 
@@ -127,7 +186,6 @@ static NSString *const TeamCellReuseIdentifier = @"Team Cell";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (!self.filteredTeams) {
-        // TODO: Show no data screen
         return 0;
     }
     return [self.filteredTeams count];
@@ -155,39 +213,26 @@ static NSString *const TeamCellReuseIdentifier = @"Team Cell";
     NSLog(@"Selected team: %@", team.team_number);
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if ([self.searchBar isFirstResponder]) {
-        [self.searchBar resignFirstResponder];
-    }
-}
 
-#pragma mark - Search Bar Delegate
+#pragma mark - UISearchResultsUpdating
 
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    self.filteredTeams = [Team fetchTeamsWithPredicate:[self predicateForSearchText:searchText] fromContext:[TBAApp managedObjectContext]];
-
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+    NSString *searchString = searchController.searchBar.text;
+//    [self searchForText:searchString scope:searchController.searchBar.selectedScopeButtonIndex];
     [self.tableView reloadData];
 }
 
-- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
-    [self.searchBar resignFirstResponder];
-    return YES;
-}
 
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    [self.searchBar resignFirstResponder];
-}
+#pragma mark - Navigation
 
-
-#pragma mark - Searching
-
-- (NSPredicate *)predicateForSearchText:(NSString *)searchText {
-    NSPredicate *searchPredicate;
-    if (searchText && searchText.length) {
-        searchPredicate = [NSPredicate predicateWithFormat:@"(nickname contains[cd] %@ OR team_number beginswith[cd] %@)", searchText, searchText];
+/*
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"TeamsCollectionViewControllerEmbedSegue"]) {
+        TeamsCollectionViewController *teamsCollectionViewController = segue.destinationViewController;
+        teamsCollectionViewController.collectionView.delegate = self;
+        self.teamsCollectionViewController = teamsCollectionViewController;
     }
-    return searchPredicate;
 }
-
+*/
 
 @end

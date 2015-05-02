@@ -7,8 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TBARefreshViewController.h"
 
-@interface TeamsViewController : TBARefreshViewController
+@interface TeamsTableViewController : UITableViewController
 
 @end

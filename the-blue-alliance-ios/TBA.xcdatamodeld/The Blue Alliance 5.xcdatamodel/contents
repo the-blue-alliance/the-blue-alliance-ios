@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6751" systemVersion="14C109" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7549" systemVersion="14C109" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Event" representedClassName="Event" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="alliances" optional="YES" attributeType="Transformable" syncable="YES"/>
@@ -49,7 +49,6 @@
     </entity>
     <entity name="Team" representedClassName="Team" syncable="YES">
         <attribute name="country" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="grouping_text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="last_updated" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="locality" optional="YES" attributeType="String" syncable="YES"/>
@@ -69,6 +68,6 @@
         <element name="Event" positionX="-1485" positionY="1920" width="128" height="345"/>
         <element name="Match" positionX="-1242" positionY="1917" width="128" height="208"/>
         <element name="Media" positionX="-965" positionY="2159" width="128" height="195"/>
-        <element name="Team" positionX="-1242" positionY="2277" width="128" height="285"/>
+        <element name="Team" positionX="-1242" positionY="2277" width="128" height="270"/>
     </elements>
 </model>

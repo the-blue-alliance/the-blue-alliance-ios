@@ -5,7 +5,6 @@
 
 extern const struct TeamAttributes {
 	__unsafe_unretained NSString *country;
-	__unsafe_unretained NSString *grouping_text;
 	__unsafe_unretained NSString *key;
 	__unsafe_unretained NSString *last_updated;
 	__unsafe_unretained NSString *locality;
@@ -42,10 +41,6 @@ extern const struct TeamRelationships {
 @property (nonatomic, strong) NSString* country;
 
 //- (BOOL)validateCountry:(id*)value_ error:(NSError**)error_;
-
-@property (nonatomic, strong) NSString* grouping_text;
-
-//- (BOOL)validateGrouping_text:(id*)value_ error:(NSError**)error_;
 
 @property (nonatomic, strong) NSString* key;
 
@@ -153,9 +148,6 @@ extern const struct TeamRelationships {
 
 - (NSString*)primitiveCountry;
 - (void)setPrimitiveCountry:(NSString*)value;
-
-- (NSString*)primitiveGrouping_text;
-- (void)setPrimitiveGrouping_text:(NSString*)value;
 
 - (NSString*)primitiveKey;
 - (void)setPrimitiveKey:(NSString*)value;

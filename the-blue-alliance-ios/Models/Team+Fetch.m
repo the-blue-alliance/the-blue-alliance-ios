@@ -11,10 +11,15 @@
 @implementation Team (Fetch)
 
 + (NSArray *)fetchAllTeamsFromContext:(NSManagedObjectContext *)context {
+    return [self fetchTeamsWithPredicate:nil fromContext:context];
+}
+
++ (NSArray *)fetchTeamsWithPredicate:(NSPredicate *)predicate fromContext:(NSManagedObjectContext *)context {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Team" inManagedObjectContext:context];
     [fetchRequest setEntity:entity];
-    
+    [fetchRequest setPredicate:predicate];
+
     [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"team_number" ascending:YES]]];
     
     NSError *error = nil;
@@ -23,7 +28,7 @@
         NSLog(@"Core Data error: handle this error... :(");
         NSLog(@"%@", error);
     }
-
+    
     return teams;
 }
 

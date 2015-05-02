@@ -12,16 +12,6 @@
     return nickname;
 }
 
-- (NSString *)groupingTextOfTeamNumber:(int)teamNumber {
-    if (teamNumber < 1000) {
-        return @"1-999";
-    } else {
-        int bottomNumber = teamNumber / 1000 * 1000;
-        int topNumber = bottomNumber + 999;
-        return [NSString stringWithFormat:@"%d-%d", bottomNumber, topNumber];
-    }
-}
-
 - (void)configureSelfForInfo:(NSDictionary *)info
    usingManagedObjectContext:(NSManagedObjectContext *)context
                 withUserInfo:(id)userInfo
@@ -36,7 +26,6 @@
     self.country = info[@"country"];
     self.website = info[@"website"];
     self.last_updated = @([[NSDate date] timeIntervalSince1970]);
-    self.grouping_text = [self groupingTextOfTeamNumber:[info[@"team_number"] intValue]];
     self.rookie_year = info[@"rookie_year"];
 }
 

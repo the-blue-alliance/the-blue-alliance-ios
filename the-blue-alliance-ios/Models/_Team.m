@@ -5,7 +5,6 @@
 
 const struct TeamAttributes TeamAttributes = {
 	.country = @"country",
-	.grouping_text = @"grouping_text",
 	.key = @"key",
 	.last_updated = @"last_updated",
 	.locality = @"locality",
@@ -71,8 +70,6 @@ const struct TeamRelationships TeamRelationships = {
 }
 
 @dynamic country;
-
-@dynamic grouping_text;
 
 @dynamic key;
 

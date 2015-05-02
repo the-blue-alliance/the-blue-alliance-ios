@@ -11,6 +11,7 @@
 @interface Team (Fetch)
 
 + (NSArray *)fetchAllTeamsFromContext:(NSManagedObjectContext *)context;
++ (NSArray *)fetchTeamsWithPredicate:(NSPredicate *)predicate fromContext:(NSManagedObjectContext *)context;
 + (NSArray *)fetchTeamsForKeys:(NSArray *)keys fromContext:(NSManagedObjectContext *)context;
 
 @end
