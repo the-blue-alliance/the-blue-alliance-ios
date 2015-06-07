@@ -7,8 +7,13 @@
 //
 
 #import "AppDelegate.h"
+#import "TBAPersistenceController.h"
+#import "TBAKit.h"
+#import "TeamsViewController.h"
 
-@interface AppDelegate () <NSURLConnectionDataDelegate>
+@interface AppDelegate ()
+
+@property (strong, readwrite) TBAPersistenceController *persistenceController;
 
 @end
 
@@ -17,41 +22,55 @@
 
 #pragma mark - Main Entry Point
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [self setPersistenceController:[[TBAPersistenceController alloc] initWithCallback:^{
+        NSString *storyboardString;
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            storyboardString = @"Main_iPad";
+        } else {
+            storyboardString = @"Main_iPhone";
+        }
+        
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardString bundle:nil];
+        UITabBarController *rootTabBarController = [storyboard instantiateViewControllerWithIdentifier:@"RootTabBarController"];
+        rootTabBarController.selectedViewController = [rootTabBarController.viewControllers objectAtIndex:1];
+
+        for (UINavigationController *nav in rootTabBarController.viewControllers) {
+            TBAViewController *vc = (TBAViewController *)[nav.viewControllers firstObject];
+            vc.persistenceController = self.persistenceController;
+        }
+        
+        [UIView transitionWithView:self.window
+                          duration:0.5
+                           options:UIViewAnimationOptionTransitionFlipFromLeft
+                        animations:^{
+                            self.window.rootViewController = rootTabBarController;
+                        }
+                        completion:nil];
+    }]];
+
+#warning dynaically fetch version number here, also maybe add some user-specific string?
+    [[TBAKit sharedKit] setIdHeader:@"the-blue-alliance:ios:v0.1"];
+    
+#warning We should probably set some max's here or something
     NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0
                                                             diskCapacity:0
                                                                 diskPath:nil];
     [NSURLCache setSharedURLCache:sharedCache];
     
-    // Setup UI appearance
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
-    
-    [[UINavigationBar appearance] setBarTintColor:[UIColor TBANavigationBarColor]];
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
-    [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-    
-    [[UIToolbar appearance] setBarTintColor:[UIColor whiteColor]];
-    [[UITableView appearance] setSectionIndexBackgroundColor:[UIColor clearColor]];
-    [[UITableView appearance] setSectionIndexTrackingBackgroundColor:[UIColor clearColor]];
-    [[UITableView appearance] setSectionIndexColor:[UIColor TBANavigationBarColor]];
+    [self setupAppearance];
     
     return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    [[self persistenceController] save];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    [[self persistenceController] save];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -66,7 +85,26 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [[self persistenceController] save];
+}
+
+
+#pragma mark - Interface Methods
+
+- (void)setupAppearance {
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
+    
+    [[UINavigationBar appearance] setBarTintColor:[UIColor TBANavigationBarColor]];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
+    [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
+    
+    [[UIToolbar appearance] setBarTintColor:[UIColor whiteColor]];
+    [[UITableView appearance] setSectionIndexBackgroundColor:[UIColor clearColor]];
+    [[UITableView appearance] setSectionIndexTrackingBackgroundColor:[UIColor clearColor]];
+    [[UITableView appearance] setSectionIndexColor:[UIColor TBANavigationBarColor]];
 }
 
 @end

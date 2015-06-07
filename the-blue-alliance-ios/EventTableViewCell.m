@@ -8,6 +8,7 @@
 
 #import "EventTableViewCell.h"
 
+
 @implementation EventTableViewCell
 
 @end

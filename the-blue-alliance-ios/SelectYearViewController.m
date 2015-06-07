@@ -13,7 +13,7 @@ static NSString *const YearCellReuseIdentifier = @"Year Cell";
 
 
 @implementation SelectYearViewController
-
+/*
 #pragma mark - View Lifecycle
 
 - (void)viewDidLoad {
@@ -73,6 +73,6 @@ static NSString *const YearCellReuseIdentifier = @"Year Cell";
     }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
+*/
 
 @end

@@ -33,7 +33,8 @@
     NSUInteger year = [[NSUserDefaults standardUserDefaults] integerForKey:[self currentYearUserDefaultsString]];
     
     if (year == 0) {
-        year = [NSDate date].year;
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        year = [calendar component:NSCalendarUnitYear fromDate:[NSDate date]];
     }
     return year;
 }
@@ -45,7 +46,7 @@
 
 - (UIBarButtonItem *)selectYearBarButtonItem {
     if (!_selectYearBarButtonItem) {
-        _selectYearBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_sort_white"] style:UIBarButtonItemStylePlain target:self action:@selector(selectYearButtonTapped:)];
+        _selectYearBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_event_black"] style:UIBarButtonItemStylePlain target:self action:@selector(selectYearButtonTapped:)];
     }
     return _selectYearBarButtonItem;
 }

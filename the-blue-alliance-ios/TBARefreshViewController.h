@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TBAViewController.h"
 
-@interface TBARefreshViewController : UIViewController
+@interface TBARefreshViewController : TBAViewController
 
 @property (nonatomic, assign) NSUInteger currentRequestIdentifier;
 @property (nonatomic, copy) void (^refresh)();

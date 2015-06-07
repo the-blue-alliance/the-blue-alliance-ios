@@ -1,16 +1,16 @@
 PODS:
-  - HMSegmentedControl (1.5)
-  - NSDate-Escort (1.4.1)
-  - PureLayout (2.0.5)
+  - HMSegmentedControl (1.5.1)
+  - PureLayout (2.0.6)
+  - TBAKit (1.0.0)
 
 DEPENDENCIES:
   - HMSegmentedControl
-  - NSDate-Escort
   - PureLayout
+  - TBAKit
 
 SPEC CHECKSUMS:
-  HMSegmentedControl: 5bb76002ce529ad83855a06cbdb5c6e48732141b
-  NSDate-Escort: f86d1ca3b38c79d815311e89bd5c21b164fea541
-  PureLayout: 63a3257320223e8edddcd3afb407445f85a6bf74
+  HMSegmentedControl: 35460abdd15c3087368db2d3d956717f088b34d1
+  PureLayout: f25f0bb904d5ccfe6e31da3cb869185259f02e0d
+  TBAKit: a70e14841cc0b8e224ba8511744d8cede0324a3b
 
-COCOAPODS: 0.34.4
+COCOAPODS: 0.37.0

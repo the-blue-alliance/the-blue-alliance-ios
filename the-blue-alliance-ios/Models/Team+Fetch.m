@@ -2,52 +2,95 @@
 //  Team+Fetch.m
 //  the-blue-alliance-ios
 //
-//  Created by Donald Pinckney on 6/28/14.
-//  Copyright (c) 2014 The Blue Alliance. All rights reserved.
+//  Created by Zach Orr on 5/4/15.
+//  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
 #import "Team+Fetch.h"
 
 @implementation Team (Fetch)
 
-+ (NSArray *)fetchAllTeamsFromContext:(NSManagedObjectContext *)context {
-    return [self fetchTeamsWithPredicate:nil fromContext:context];
+# pragma mark - Upstream
+
++ (NSUInteger)fetchAllTeamsWithTaskIdChange:(void (^)(NSUInteger newTaskId, NSArray *bachTeam))taskIdChanged withCompletionBlock:(void(^)(NSArray *teams, NSInteger totalCount, NSError *error))completion {
+    return [self fetchAllTeamsWithTaskIdChange:taskIdChanged withExistingTeams:nil forPage:0 withCompletionBlock:completion];
 }
 
-+ (NSArray *)fetchTeamsWithPredicate:(NSPredicate *)predicate fromContext:(NSManagedObjectContext *)context {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Team" inManagedObjectContext:context];
-    [fetchRequest setEntity:entity];
-    [fetchRequest setPredicate:predicate];
++ (NSUInteger)fetchAllTeamsWithTaskIdChange:(void (^)(NSUInteger newTaskId, NSArray *batchTeams))taskIdChanged withExistingTeams:(NSArray *)existingTeams forPage:(NSInteger)page withCompletionBlock:(void(^)(NSArray *teams, NSInteger totalCount, NSError *error))completion {
+    __block NSArray *existingTeamsBlock = existingTeams;
 
-    [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"team_number" ascending:YES]]];
+    return [[TBAKit sharedKit] fetchTeamsForPage:page withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
+        if (error) {
+            completion(teams, totalCount, error);
+            return;
+        }
+        
+        if (!existingTeamsBlock) {
+            existingTeamsBlock = [NSArray arrayWithArray:teams];
+        } else {
+            existingTeamsBlock = [existingTeamsBlock arrayByAddingObjectsFromArray:teams];
+        }
+        
+        if (teams && [teams count] == 0) {
+            if (completion) {
+                completion(existingTeamsBlock, [existingTeamsBlock count], error);
+            }
+        } else {
+            NSUInteger newTaskId = [self fetchAllTeamsWithTaskIdChange:taskIdChanged withExistingTeams:existingTeamsBlock forPage:page + 1 withCompletionBlock:completion];
+            if (taskIdChanged) {
+                taskIdChanged(newTaskId, teams);
+            }
+        }
+    }];
+}
+
+
+#pragma mark - Local
+
++ (void)fetchAllTeamsFromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *teams, NSError *error))completion {
+    [self fetchTeamsWithPredicate:nil fromContext:context withCompletionBlock:completion];
+}
+
++ (void)fetchTeamsWithPredicate:(NSPredicate *)predicate fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *teams, NSError *error))completion {
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
+    [fetchRequest setPredicate:predicate];
+    
+    [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"teamNumber" ascending:YES]]];
     
     NSError *error = nil;
     NSArray *teams = [context executeFetchRequest:fetchRequest error:&error];
-    if (teams == nil) {
-        NSLog(@"Core Data error: handle this error... :(");
-        NSLog(@"%@", error);
-    }
     
-    return teams;
+    if (completion) {
+        completion(teams, error);
+    }
 }
 
-+ (NSArray *)fetchTeamsForKeys:(NSArray *)keys fromContext:(NSManagedObjectContext *)context {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Team" inManagedObjectContext:context];
-    [fetchRequest setEntity:entity];
-    // Specify criteria for filtering which objects to fetch
++ (void)fetchTeamForKey:(NSString *)key fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(Team *team, NSError *error))completion {
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", key];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSArray *teams = [context executeFetchRequest:fetchRequest error:&error];
+    
+    Team *team;
+    if (teams && [teams count] > 0) {
+        team = [teams firstObject];
+    }
+    
+    if (completion) {
+        completion(team, error);
+    }
+}
+
++ (void)fetchTeamsForKeys:(NSArray *)keys fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *teams, NSError *error))completion {
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key IN %@", keys];
     [fetchRequest setPredicate:predicate];
     
     NSError *error = nil;
     NSArray *existingTeams = [context executeFetchRequest:fetchRequest error:&error];
-    if (existingTeams == nil) {
-        NSLog(@"Core Data error: handle this error... :(");
-        NSLog(@"%@", error);
-    }
-    
-    
+
     // Put existingTeams into the order the keys were provided, and insert NSNull for a team that doesn't exist
     NSMutableArray *teams = [[NSMutableArray alloc] init];
     for (NSString *key in keys) {
@@ -60,8 +103,10 @@
             [teams addObject:existingTeams[index]];
         }
     }
-
-    return teams;
+    
+    if (completion) {
+        completion(teams, error);
+    }
 }
 
 @end

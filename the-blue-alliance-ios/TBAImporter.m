@@ -7,25 +7,42 @@
 //
 
 #import "TBAImporter.h"
+/*
 #import "NSManagedObject+Create.h"
 #import "Event.h"
 #import "Team.h"
 #import "Match.h"
+#import "DistrictRanking.h"
+#import "DistrictPoints.h"
 #import "TBAApp.h"
+*/
 
 @implementation TBAImporter
 
+/*
 + (NSArray *)importObjects:(NSArray *)objects forClass:(Class)ModelClass {
-    NSArray *objectsArray = [ModelClass createManagedObjectsFromInfoArray:objects
-           checkingPrexistanceUsingUniqueKey:@"key"
-                   usingManagedObjectContext:[TBAApp managedObjectContext]];
-    [TBAApp saveContext];
+    return [self importObjects:objects withUniqueKey:@"key" forClass:ModelClass];
+}
 
++ (NSArray *)importObjects:(NSArray *)objects withUniqueKey:(NSString *)key forClass:(Class)ModelClass {
+    NSArray *objectsArray = [ModelClass createManagedObjectsFromInfoArray:objects
+                                        checkingPrexistanceUsingUniqueKey:key
+                                                usingManagedObjectContext:[TBAApp managedObjectContext]];
+    [TBAApp saveContext];
+    
     return objectsArray;
 }
 
++ (Event *)importEvent:(NSDictionary *)event {
+    return [[self importEvents:@[event]] firstObject];
+}
+
 + (NSArray *)importEvents:(NSArray *)events {
-    return [self importObjects:events forClass:[Event class]];
+    return [self importObjects:events withUniqueKey:@"key" forClass:[Event class]];
+}
+
++ (Team *)importTeam:(NSDictionary *)team {
+    return [[self importTeams:@[team]] firstObject];
 }
 
 + (NSArray *)importTeams:(NSArray *)teams {
@@ -39,8 +56,17 @@
     }
     [importTeams removeObjectsInArray:teamsToRemove];
     
-    return [self importObjects:importTeams forClass:[Team class]];
+    return [self importObjects:importTeams withUniqueKey:@"key" forClass:[Team class]];
 }
+
++ (DistrictRanking *)importDistrictRanking:(NSDictionary *)districtRanking {
+    return [[self importObjects:@[districtRanking] forClass:[DistrictRanking class]] firstObject];
+}
+
++ (DistrictPoints *)importDistrictPoints:(NSDictionary *)districtPoints {
+    return [[self importObjects:@[districtPoints] forClass:[DistrictPoints class]] firstObject];
+}
+*/
 
 /*
 + (void)importEventsUsingManagedObjectContext:(NSManagedObjectContext *)context

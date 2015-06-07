@@ -8,10 +8,7 @@
 
 #import "TeamsViewController.h"
 #import "OrderedDictionary.h"
-#import "TBAApp.h"
-#import "TBAKit.h"
 #import "TBAImporter.h"
-#import "HMSegmentedControl.h"
 #import "Team.h"
 #import "Team+Fetch.h"
 #import "OrderedDictionary.h"
@@ -65,44 +62,55 @@ static NSString *const TeamCellReuseIdentifier = @"Team Cell";
 #pragma mark - Data Methods
 
 - (void)fetchTeams {
-    NSArray *teams = [Team fetchAllTeamsFromContext:[TBAApp managedObjectContext]];
-    if (!teams || [teams count] == 0) {
-        if (self.refresh) {
-            self.refresh();
-        }
-    } else {
-        self.filteredTeams = teams;
-    }
-}
-
-- (void)getTeamsForPage:(int)page {
-    self.currentRequestIdentifier = [[TBAKit sharedKit] executeTBAV2Request:[NSString stringWithFormat:@"teams/%@", @(page)] callback:^(id objects, NSError *error) {
-        self.currentRequestIdentifier = 0;
-        
+    self.filteredTeams = @[];
+    
+    __weak typeof(self) weakSelf = self;
+    [Team fetchAllTeamsFromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *teams, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         if (error) {
-            NSLog(@"Error loading teams: %@", error.localizedDescription);
+            [strongSelf showAlertWithTitle:@"Unable to fetch teams locally" andMessage:error.localizedDescription];
+            return;
         }
-        if (!error && [objects isKindOfClass:[NSArray class]] && [objects count] > 0) {
-            [TBAImporter importTeams:objects];
-        }
-
-        if ([objects isKindOfClass:[NSArray class]]) {
-            if ([objects count] == 0) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateRefreshBarButtonItem:NO];
-
-                    [self fetchTeams];
-                    [self updateInterface];
-                });
-            } else {
-                [self getTeamsForPage:page + 1];
+        
+        if (!teams || [teams count] == 0) {
+            if (strongSelf.refresh) {
+                strongSelf.refresh();
             }
+        } else {
+            strongSelf.filteredTeams = teams;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf.tableView reloadData];
+            });
         }
     }];
 }
 
 - (void)refreshData {
-    [self getTeamsForPage:0];
+    __weak typeof(self) weakSelf = self;
+    self.currentRequestIdentifier = [Team fetchAllTeamsWithTaskIdChange:^(NSUInteger newTaskId, NSArray *batchTeam) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strongSelf.currentRequestIdentifier = newTaskId;
+
+        NSManagedObjectContext *tmpContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [tmpContext setParentContext:strongSelf.persistenceController.managedObjectContext];
+        [tmpContext performBlock:^{
+            [Team insertTeamsWithModelTeams:batchTeam inManagedObjectContext:tmpContext];
+            [tmpContext save:nil];
+        }];
+    } withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strongSelf.currentRequestIdentifier = 0;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [strongSelf updateRefreshBarButtonItem:NO];
+        });
+        
+        if (error) {
+            [strongSelf showAlertWithTitle:@"Error fetching teams" andMessage:error.localizedDescription];
+        } else {
+            [strongSelf fetchTeams];
+            [strongSelf.persistenceController save];
+        }
+    }];
 }
 
 
@@ -110,14 +118,7 @@ static NSString *const TeamCellReuseIdentifier = @"Team Cell";
 
 - (void)styleInterface {
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    
-    [self updateInterface];
 }
-
-- (void)updateInterface {
-    [self.tableView reloadData];
-}
-
 
 #pragma mark - Table View Data Source
 
@@ -138,7 +139,7 @@ static NSString *const TeamCellReuseIdentifier = @"Team Cell";
     
     Team *team = [self.filteredTeams objectAtIndex:indexPath.row];
 
-    cell.numberLabel.text = [team.team_number stringValue];
+    cell.numberLabel.text = [NSString stringWithFormat:@"%lld", team.teamNumber];
     cell.nameLabel.text = team.nickname;
     cell.locationLabel.text = team.location;
     
@@ -152,7 +153,7 @@ static NSString *const TeamCellReuseIdentifier = @"Team Cell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     Team *team = [self.filteredTeams objectAtIndex:indexPath.row];
-    NSLog(@"Selected team: %@", team.team_number);
+    NSLog(@"Selected team: %lld", team.teamNumber);
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -164,11 +165,20 @@ static NSString *const TeamCellReuseIdentifier = @"Team Cell";
 #pragma mark - Search Bar Delegate
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    self.filteredTeams = [Team fetchTeamsWithPredicate:[self predicateForSearchText:searchText] fromContext:[TBAApp managedObjectContext]];
-
-    [self.tableView reloadData];
+    __weak typeof(self) weakSelf = self;
+    [Team fetchTeamsWithPredicate:[self predicateForSearchText:searchText] fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *teams, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (error) {
+            [strongSelf showAlertWithTitle:@"Unable to search teams" andMessage:error.localizedDescription];
+        } else {
+            strongSelf.filteredTeams = teams;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf.tableView reloadData];
+            });
+        }
+    }];
 }
-
+ 
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
     [self.searchBar resignFirstResponder];
     return YES;
@@ -184,7 +194,7 @@ static NSString *const TeamCellReuseIdentifier = @"Team Cell";
 - (NSPredicate *)predicateForSearchText:(NSString *)searchText {
     NSPredicate *searchPredicate;
     if (searchText && searchText.length) {
-        searchPredicate = [NSPredicate predicateWithFormat:@"(nickname contains[cd] %@ OR team_number beginswith[cd] %@)", searchText, searchText];
+        searchPredicate = [NSPredicate predicateWithFormat:@"(nickname contains[cd] %@ OR teamNumber beginswith[cd] %@)", searchText, searchText];
     }
     return searchPredicate;
 }

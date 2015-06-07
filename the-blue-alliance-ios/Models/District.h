@@ -2,25 +2,23 @@
 //  District.h
 //  the-blue-alliance-ios
 //
-//  Created by Zach Orr on 3/22/15.
+//  Created by Zach Orr on 5/16/15.
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-typedef NS_ENUM(NSInteger, TBADistrictType) {
-    TBADistrictTypeNoDistrict = 0,
-    TBADistrictTypeMichigan = 1,
-    TBADistrictTypeMidAtlantic = 2,
-    TBADistrictTypeNewEngland = 3,
-    TBADistrictTypePacificNorthwest = 4,
-    TBADistrictTypeIndiana = 5
-};
+@interface District : NSManagedObject
 
-@interface District : NSObject
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSString * key;
+@property (nonatomic) int64_t year;
+@property (nonatomic, retain) NSSet *events;
 
 + (NSArray *)districtTypes;
-+ (NSString *)nameForDistrictType:(TBADistrictType)type;
-+ (NSString *)abbrevForDistrictType:(TBADistrictType)type;
+
++ (instancetype)insertDistrictWithDistrictDict:(NSDictionary *)districtDict forYear:(NSInteger)year inManagedObjectContext:(NSManagedObjectContext *)context;
++ (NSArray *)insertDistrictsWithDistrictDicts:(NSArray *)districtDicts forYear:(NSInteger)year inManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end

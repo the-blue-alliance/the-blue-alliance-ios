@@ -7,21 +7,24 @@
 //
 
 #import "EventViewController.h"
+/*
 #import "HMSegmentedControl.h"
 #import <PureLayout/PureLayout.h>
 
 
 static NSString *const EventDetailCellIdentifier    = @"EventDetailCellIdentifier";
-
+*/
 
 @interface EventViewController () <UITableViewDataSource, UITableViewDelegate>
 
+/*
 @property (nonatomic, strong) HMSegmentedControl *segmentedControl;
-
+*/
+ 
 @end
 
 @implementation EventViewController
-
+/*
 #pragma mark - View Lifecycle
 
 - (void)viewDidLoad {
@@ -139,5 +142,5 @@ static NSString *const EventDetailCellIdentifier    = @"EventDetailCellIdentifie
     
     return cell;
 }
-
+*/
 @end

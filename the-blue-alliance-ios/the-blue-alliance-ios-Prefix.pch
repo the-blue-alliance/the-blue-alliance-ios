@@ -13,8 +13,8 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
-    #import "AppDelegate.h"
     #import "UIColor+TBAColors.h"
-    #import "NSDate+Escort.h"
     #import "Constants.h"
+    #import "TBAKit.h"
+    #import "TBAKit+AllMethods.h"
 #endif

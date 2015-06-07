@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-
+@class Event, Team, DistrictRanking, DistrictPoints;
 /** `TBAImporter` is a utility class used to encapsulate the various downloading
  * logic for importing data from TBA API.
  *
@@ -17,9 +17,17 @@
  *
  */
 @interface TBAImporter : NSObject
-
+/*
++ (Event *)importEvent:(NSDictionary *)event;
 + (NSArray *)importEvents:(NSArray *)events;
+
++ (Team *)importTeam:(NSDictionary *)team;
 + (NSArray *)importTeams:(NSArray *)teams;
+
++ (DistrictRanking *)importDistrictRanking:(NSDictionary *)districtRanking;
+
++ (DistrictPoints *)importDistrictPoints:(NSDictionary *)districtPoints;
+*/
 
 /*
 + (void)importTeamsUsingManagedObjectContext:(NSManagedObjectContext *)context;

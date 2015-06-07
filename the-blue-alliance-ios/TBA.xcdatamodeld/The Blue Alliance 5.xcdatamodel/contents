@@ -1,15 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7549" systemVersion="14C109" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="DistrictPoints" representedClassName="DistrictPoints" syncable="YES">
+        <attribute name="alliance_points" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="award_points" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="district_cmp" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="elim_points" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="qual_points" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="total" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="district_ranking" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DistrictRanking" inverseName="event_points" inverseEntity="DistrictRanking" syncable="YES"/>
+        <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="district_points" inverseEntity="Event" syncable="YES"/>
+        <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="district_points" inverseEntity="Team" syncable="YES"/>
+    </entity>
+    <entity name="DistrictRanking" representedClassName="DistrictRanking" syncable="YES">
+        <attribute name="event_district" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="point_total" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="rank" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="rookie_bonus" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="team_key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="year" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="event_points" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictPoints" inverseName="district_ranking" inverseEntity="DistrictPoints" syncable="YES"/>
+        <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="district_rankings" inverseEntity="Team" syncable="YES"/>
+    </entity>
     <entity name="Event" representedClassName="Event" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="alliances" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <attribute name="district_points" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="end_date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="event_district" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="event_short" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="event_type" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="last_updated" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="official" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -18,6 +37,7 @@
         <attribute name="venue" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="year" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="district_points" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictPoints" inverseName="event" inverseEntity="DistrictPoints" syncable="YES"/>
         <relationship name="matches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="event" inverseEntity="Match" syncable="YES"/>
         <relationship name="media" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Media" inverseName="events" inverseEntity="Media" syncable="YES"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="events" inverseEntity="Team" syncable="YES"/>
@@ -50,7 +70,6 @@
     <entity name="Team" representedClassName="Team" syncable="YES">
         <attribute name="country" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="last_updated" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="locality" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -59,15 +78,19 @@
         <attribute name="rookie_year" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="team_number" optional="YES" attributeType="Integer 32" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="district_points" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictPoints" inverseName="team" inverseEntity="DistrictPoints" syncable="YES"/>
+        <relationship name="district_rankings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictRanking" inverseName="team" inverseEntity="DistrictRanking" syncable="YES"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="teams" inverseEntity="Event" syncable="YES"/>
         <relationship name="matchesWhereBlue" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="blueAlliance" inverseEntity="Match" syncable="YES"/>
         <relationship name="matchesWhereRed" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="redAlliance" inverseEntity="Match" syncable="YES"/>
         <relationship name="media" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Media" inverseName="teams" inverseEntity="Media" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Event" positionX="-1485" positionY="1920" width="128" height="345"/>
+        <element name="DistrictRanking" positionX="-1287" positionY="2061" width="128" height="165"/>
+        <element name="Event" positionX="-1485" positionY="1920" width="128" height="330"/>
+        <element name="DistrictPoints" positionX="-1278" positionY="2070" width="128" height="180"/>
         <element name="Match" positionX="-1242" positionY="1917" width="128" height="208"/>
         <element name="Media" positionX="-965" positionY="2159" width="128" height="195"/>
-        <element name="Team" positionX="-1242" positionY="2277" width="128" height="270"/>
+        <element name="Team" positionX="-1242" positionY="2277" width="128" height="285"/>
     </elements>
 </model>

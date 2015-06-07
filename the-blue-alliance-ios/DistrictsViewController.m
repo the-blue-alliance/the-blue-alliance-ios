@@ -7,41 +7,35 @@
 //
 
 #import "DistrictsViewController.h"
+
 #import "OrderedDictionary.h"
-#import "Event.h"
+//#import "Event.h"
 #import "District.h"
 #import "District+Fetch.h"
-#import "TBAApp.h"
 #import "TBAKit.h"
-#import "TBAImporter.h"
+#import "DistrictViewController.h"
 
 
-static NSString *const DistrictsCellIdentifier  = @"Districts Cell";
+static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
+static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
 
+@interface DistrictsViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@interface DistrictsViewController ()
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
 
-@property (nonatomic, strong) OrderedDictionary *districtData;
-@property (nonatomic, strong) NSMutableArray *currentRequests;
+@property (nonatomic, strong) NSArray *districts;
 
 @end
 
 
 @implementation DistrictsViewController
 
-#pragma mark - Properities
-
-- (NSMutableArray *)currentRequests {
-    if (!_currentRequests) {
-        _currentRequests = [[NSMutableArray alloc] init];
-    }
-    return _currentRequests;
-}
-
 #pragma mark - View Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    self.startYear = 2009;
     
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
@@ -63,11 +57,8 @@ static NSString *const DistrictsCellIdentifier  = @"Districts Cell";
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [strongSelf fetchDistricts];
-            [strongSelf updateInterface];
         });
     };
-    
-    self.startYear = 2009;
     
     [self fetchDistricts];
     [self styleInterface];
@@ -80,49 +71,30 @@ static NSString *const DistrictsCellIdentifier  = @"Districts Cell";
     [self updateRefreshBarButtonItem:NO];
 }
 
-- (void)cancelRefresh {
-    if (self.currentRequestIdentifier) {
-        [super cancelRefresh];
-    } else {
-        for (NSNumber *request in self.currentRequests) {
-            NSUInteger requestIdentifier = [request unsignedIntegerValue];
-            [[TBAKit sharedKit] cancelRequestWithIdentifier:requestIdentifier];
-        }
-    }
-}
-
-
 #pragma mark - Data Methods
 
-- (OrderedDictionary *)groupDistrictsByType:(NSArray *)districts {
-    MutableOrderedDictionary *districtData = [[MutableOrderedDictionary alloc] init];
-
-    for (NSNumber *districtType in [District districtTypes]) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event_district = %@", districtType];
-        NSArray *arr = [districts filteredArrayUsingPredicate:predicate];
-        
-        if (!arr || [arr count] == 0) {
-            continue;
-        }
-        
-        NSString *keyName = [NSString stringWithFormat:@"%@ Districts", [District nameForDistrictType:[districtType integerValue]]];
-        [districtData setValue:arr forKey:keyName];
-    }
-    
-    return districtData;
-}
-
 - (void)fetchDistricts {
-    self.districtData = nil;
+    self.districts = nil;
     
-    NSArray *districts = [District fetchDistrictsForYear:self.currentYear fromContext:[TBAApp managedObjectContext]];
-    if (!districts || [districts count] == 0) {
-        if (self.refresh) {
-            self.refresh();
+    __weak typeof(self) weakSelf = self;
+    [District fetchDistrictsForYear:self.currentYear fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *districts, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (error) {
+            [strongSelf showAlertWithTitle:@"Error fetching districts locally" andMessage:error.localizedDescription];
+            return;
         }
-    } else {
-        self.districtData = [self groupDistrictsByType:districts];
-    }
+        
+        if (!districts || [districts count] == 0) {
+            if (strongSelf.refresh) {
+                strongSelf.refresh();
+            }
+        } else {
+            strongSelf.districts = districts;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf.tableView reloadData];
+            });
+        }
+    }];
 }
 
 - (void)refreshData {
@@ -132,50 +104,25 @@ static NSString *const DistrictsCellIdentifier  = @"Districts Cell";
 }
 
 - (void)fetchDistrictKeysForYear:(NSInteger)year {
-    self.currentRequestIdentifier = [[TBAKit sharedKit] executeTBAV2Request:[NSString stringWithFormat:@"districts/%@", @(year)] callback:^(id objects, NSError *error) {
-        self.currentRequestIdentifier = 0;
+    __weak typeof(self) weakSelf = self;
+    self.currentRequestIdentifier = [[TBAKit sharedKit] fetchDistrictsForYear:year withCompletionBlock:^(NSArray *districts, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+
+        strongSelf.currentRequestIdentifier = 0;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [strongSelf updateRefreshBarButtonItem:NO];
+        });
         
         if (error) {
-            NSLog(@"Error loading events: %@", error.localizedDescription);
-        }
-        if (objects && [objects isKindOfClass:[NSArray class]] && [objects count] != 0) {
-            [self fetchDistrictsForDistricts:objects forYear:year];
+            [strongSelf showAlertWithTitle:@"Error fetching districts" andMessage:error.localizedDescription];
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateRefreshBarButtonItem:NO];
-                self.districtData = nil;
-                
-                [self updateInterface];
+                [District insertDistrictsWithDistrictDicts:districts forYear:year inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
+                [strongSelf fetchDistricts];
+                [strongSelf.persistenceController save];
             });
         }
     }];
-}
-
-- (void)fetchDistrictsForDistricts:(NSArray *)districts forYear:(NSUInteger)year {
-    for (NSDictionary *districtDict in districts) {
-        NSString *districtShort = districtDict[@"key"];
-        
-        __block NSUInteger requestIdentifier;
-        requestIdentifier = [[TBAKit sharedKit] executeTBAV2Request:[NSString stringWithFormat:@"district/%@/%@/events", districtShort, @(year)] callback:^(id objects, NSError *error) {
-            [self.currentRequests removeObject:[NSNumber numberWithUnsignedInteger:requestIdentifier]];
-            
-            if (error) {
-                NSLog(@"Error loading events: %@", error.localizedDescription);
-            }
-            if (!error && [objects isKindOfClass:[NSArray class]]) {
-                [TBAImporter importEvents:objects];
-            }
-            if ([self.currentRequests count] == 0) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateRefreshBarButtonItem:NO];
-                    
-                    [self fetchDistricts];
-                    [self updateInterface];
-                });
-            }
-        }];
-        [self.currentRequests addObject:[NSNumber numberWithUnsignedInteger:requestIdentifier]];
-    }
 }
 
 
@@ -184,11 +131,6 @@ static NSString *const DistrictsCellIdentifier  = @"Districts Cell";
 - (void)styleInterface {
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.navigationItem.title = [NSString stringWithFormat:@"%@ Districts", @(self.currentYear)];
-    [self updateInterface];
-}
-
-- (void)updateInterface {
-    [self.tableView reloadData];
 }
 
 
@@ -199,8 +141,8 @@ static NSString *const DistrictsCellIdentifier  = @"Districts Cell";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.districtData) {
-        return [[self.districtData allKeys] count];
+    if (self.districts) {
+        return [self.districts count];
     }
     return 0;
 }
@@ -208,11 +150,8 @@ static NSString *const DistrictsCellIdentifier  = @"Districts Cell";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DistrictsCellIdentifier forIndexPath:indexPath];
     
-    NSString *key = [self.districtData keyAtIndex:indexPath.row];
-    NSArray *events = [self.districtData objectForKey:key];
-    
-    cell.textLabel.text = key;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld Events", [events count]];
+    District *district = [self.districts objectAtIndex:indexPath.row];    
+    cell.textLabel.text = district.name;
     
     return cell;
 }
@@ -220,13 +159,24 @@ static NSString *const DistrictsCellIdentifier  = @"Districts Cell";
 
 #pragma mark - Table View Delegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 54.0f;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    District *distrct = [self.districts objectAtIndex:indexPath.row];
+    [self performSegueWithIdentifier:DistrictsListSegue sender:distrct];
 }
 
+
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:DistrictsListSegue]) {
+        District *district = (District *)sender;
+        
+        DistrictViewController *districtViewController = (DistrictViewController *)segue.destinationViewController;
+        districtViewController.persistenceController = self.persistenceController;
+        districtViewController.district = district;
+    }
+}
 
 @end

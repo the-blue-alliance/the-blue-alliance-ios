@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "TBAYearSelectViewController.h"
 
-@interface DistrictsViewController : TBAYearSelectViewController <UITableViewDataSource, UITableViewDelegate>
-
-@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@interface DistrictsViewController : TBAYearSelectViewController
 
 @end
