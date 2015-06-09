@@ -15,7 +15,6 @@
 #import "TBAKit.h"
 #import "DistrictViewController.h"
 
-
 static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
 static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
 
