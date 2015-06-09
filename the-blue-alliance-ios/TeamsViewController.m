@@ -22,7 +22,6 @@ static NSString *const TeamsViewControllerSegue = @"TeamsViewControllerEmbed";
 @interface TeamsViewController ()
 
 @property (nonatomic, strong) TBATeamsViewController *teamsViewController;
-@property (nonatomic, weak) IBOutlet UIView *teamsView;
 
 @end
 

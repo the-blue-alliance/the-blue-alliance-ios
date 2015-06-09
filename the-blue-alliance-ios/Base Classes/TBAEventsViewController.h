@@ -7,10 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OrderedDictionary.h"
+
+@class OrderedDictionary, Event;
 
 @interface TBAEventsViewController : UIViewController
 
-@property (nonatomic, strong) OrderedDictionary *events;
+// Events should always have key "top level" label (Week 1 Events, Week 2 Events, etc)
+// or, something like (Regional Events, MI District Events, etc)
+// Value is an array of events
+@property (nonatomic, copy) OrderedDictionary *events;
+
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
+
+@property (nonatomic, copy) void (^eventSelected)(Event *event);
 
 @end

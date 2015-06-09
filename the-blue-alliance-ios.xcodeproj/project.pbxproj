@@ -30,7 +30,7 @@
 		923F3F201AF868E00099DA0C /* TBAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 923F3F1F1AF868E00099DA0C /* TBAViewController.m */; };
 		923F3F261AF869710099DA0C /* Team+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 923F3F251AF869710099DA0C /* Team+Fetch.m */; };
 		923F3F2C1AF86CEE0099DA0C /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 923F3F2B1AF86CEE0099DA0C /* Team.m */; };
-		9240CDFC1AB5DA0B00D859A0 /* EventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9240CDFB1AB5DA0B00D859A0 /* EventTableViewCell.m */; };
+		9240CDFC1AB5DA0B00D859A0 /* TBAEventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9240CDFB1AB5DA0B00D859A0 /* TBAEventTableViewCell.m */; };
 		925CD21E1AC247F200C9C3BF /* TBARefreshViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925CD21D1AC247F200C9C3BF /* TBARefreshViewController.m */; };
 		925DECE71AF5B2D9007A7E94 /* DistrictRankingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 925DECE61AF5B2D9007A7E94 /* DistrictRankingTableViewCell.m */; };
 		925DECEA1AF5B919007A7E94 /* DistrictEventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925DECE91AF5B919007A7E94 /* DistrictEventsViewController.m */; };
@@ -97,8 +97,8 @@
 		923F3F251AF869710099DA0C /* Team+Fetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Team+Fetch.m"; sourceTree = "<group>"; };
 		923F3F2A1AF86CEE0099DA0C /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
 		923F3F2B1AF86CEE0099DA0C /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
-		9240CDFA1AB5DA0B00D859A0 /* EventTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableViewCell.h; sourceTree = "<group>"; };
-		9240CDFB1AB5DA0B00D859A0 /* EventTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableViewCell.m; sourceTree = "<group>"; };
+		9240CDFA1AB5DA0B00D859A0 /* TBAEventTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAEventTableViewCell.h; sourceTree = "<group>"; };
+		9240CDFB1AB5DA0B00D859A0 /* TBAEventTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAEventTableViewCell.m; sourceTree = "<group>"; };
 		925CD21C1AC247F200C9C3BF /* TBARefreshViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBARefreshViewController.h; sourceTree = "<group>"; };
 		925CD21D1AC247F200C9C3BF /* TBARefreshViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBARefreshViewController.m; sourceTree = "<group>"; };
 		925DECE51AF5B2D9007A7E94 /* DistrictRankingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictRankingTableViewCell.h; sourceTree = "<group>"; };
@@ -388,6 +388,8 @@
 			children = (
 				927E8C451B2689EF00C93E6C /* TBAEventsViewController.h */,
 				927E8C461B2689EF00C93E6C /* TBAEventsViewController.m */,
+				9240CDFA1AB5DA0B00D859A0 /* TBAEventTableViewCell.h */,
+				9240CDFB1AB5DA0B00D859A0 /* TBAEventTableViewCell.m */,
 			);
 			name = Events;
 			sourceTree = "<group>";
@@ -408,8 +410,6 @@
 			children = (
 				50832E3C1918BBEA003AC8A7 /* EventsViewController.h */,
 				50832E3D1918BBEA003AC8A7 /* EventsViewController.m */,
-				9240CDFA1AB5DA0B00D859A0 /* EventTableViewCell.h */,
-				9240CDFB1AB5DA0B00D859A0 /* EventTableViewCell.m */,
 				9222F11A1AD6911300C0AEA0 /* Event */,
 			);
 			name = Events;
@@ -579,7 +579,7 @@
 				923F3F151AF856A90099DA0C /* TBAPersistenceController.m in Sources */,
 				50832E3E1918BBEA003AC8A7 /* EventsViewController.m in Sources */,
 				92FBF2F31B0029D8004FDC1F /* EventWebcast.m in Sources */,
-				9240CDFC1AB5DA0B00D859A0 /* EventTableViewCell.m in Sources */,
+				9240CDFC1AB5DA0B00D859A0 /* TBAEventTableViewCell.m in Sources */,
 				927E8C431B24BBC100C93E6C /* TeamViewController.m in Sources */,
 				925CD21E1AC247F200C9C3BF /* TBARefreshViewController.m in Sources */,
 				92FBF2F61B0029D8004FDC1F /* EventAlliance.m in Sources */,

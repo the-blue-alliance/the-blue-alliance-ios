@@ -8,7 +8,7 @@
 
 #import "DistrictEventsViewController.h"
 #import "OrderedDictionary.h"
-#import "EventTableViewCell.h"
+#import "TBAEventTableViewCell.h"
 #import "District.h"
 #import "District+Fetch.h"
 #import "Event.h"
@@ -134,13 +134,10 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    EventTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:EventCellReuseIdentifier forIndexPath:indexPath];
+    TBAEventTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:EventCellReuseIdentifier forIndexPath:indexPath];
     
     Event *event = [self districtForIndexPath:indexPath];
-    
-    cell.nameLabel.text = [event friendlyNameWithYear:NO];
-    cell.locationLabel.text = event.location;
-    cell.datesLabel.text = [event dateString];
+    cell.event = event;
     
     return cell;
 }

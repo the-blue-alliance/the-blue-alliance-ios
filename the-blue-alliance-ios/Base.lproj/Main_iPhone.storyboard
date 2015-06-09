@@ -194,9 +194,6 @@
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nd6-91-tor" userLabel="Events View">
                                 <rect key="frame" x="0.0" y="44" width="320" height="416"/>
-                                <connections>
-                                    <segue destination="1lZ-AS-o2Q" kind="embed" identifier="EventsViewControllerEmbed" id="Ekh-JD-tfQ"/>
-                                </connections>
                             </containerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UFw-DH-8f0">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -349,23 +346,23 @@
             </objects>
             <point key="canvasLocation" x="1864" y="692"/>
         </scene>
-        <!--District Events View Controller-->
+        <!--Events View Controller-->
         <scene sceneID="98O-ZE-Q13">
             <objects>
-                <viewController id="1lZ-AS-o2Q" customClass="DistrictEventsViewController" sceneMemberID="viewController">
+                <viewController id="1lZ-AS-o2Q" customClass="TBAEventsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="EZP-Xs-aNN"/>
                         <viewControllerLayoutGuide type="bottom" id="VdE-zl-Y7F"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="jjX-Si-lUt">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="420"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="vGS-KJ-HZ7">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="420"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="EventCell" id="tJQ-Mx-Het" customClass="EventTableViewCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="EventCell" id="tJQ-Mx-Het" customClass="TBAEventTableViewCell">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tJQ-Mx-Het" id="iXN-w4-VDN">
@@ -430,7 +427,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aAD-Vl-Fxc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1864" y="211"/>
+            <point key="canvasLocation" x="1864" y="-861"/>
         </scene>
         <!--Teams-->
         <scene sceneID="ar2-Ed-Abr">
@@ -455,7 +452,6 @@
                     </view>
                     <navigationItem key="navigationItem" title="Teams" id="sdW-HX-uqw"/>
                     <connections>
-                        <outlet property="teamsView" destination="Lhp-5d-sig" id="bmS-XQ-dIu"/>
                         <segue destination="2nM-IU-A97" kind="push" id="8Su-8L-Xjh"/>
                     </connections>
                 </viewController>
@@ -533,6 +529,9 @@
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sqK-kj-TgD">
                                 <rect key="frame" x="0.0" y="35" width="320" height="420"/>
+                                <connections>
+                                    <segue destination="1lZ-AS-o2Q" kind="embed" identifier="EventsViewControllerEmbed" id="WtZ-Y9-Ogt"/>
+                                </connections>
                             </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -548,6 +547,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Events" id="nwE-Me-WJo"/>
                     <connections>
+                        <outlet property="eventsView" destination="sqK-kj-TgD" id="EXw-Mc-GVX"/>
                         <outlet property="segmentedControlView" destination="xjg-oB-ggr" id="pfI-uj-GZV"/>
                         <segue destination="kyn-5W-zgu" kind="push" identifier="EventViewControllerSegue" id="82k-17-wmC"/>
                     </connections>

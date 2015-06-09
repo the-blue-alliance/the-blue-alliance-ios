@@ -33,6 +33,18 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
+#pragma mark - Data Methods
+
+- (Team *)teamForIndex:(NSUInteger)index {
+    Team *team;
+    if (self.filteredTeams) {
+        team = [self.filteredTeams objectAtIndex:index];
+    } else if (self.teams) {
+        team = [self.teams objectAtIndex:index];
+    }
+    return team;
+}
+
 #pragma mark - Table View Data Source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -108,18 +120,6 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
         searchPredicate = [NSPredicate predicateWithFormat:@"(nickname contains[cd] %@ OR teamNumber.stringValue beginswith[cd] %@)", searchText, searchText];
     }
     return searchPredicate;
-}
-
-#pragma mark - Private Methods
-
-- (Team *)teamForIndex:(NSUInteger)index {
-    Team *team;
-    if (self.filteredTeams) {
-        team = [self.filteredTeams objectAtIndex:index];
-    } else if (self.teams) {
-        team = [self.teams objectAtIndex:index];
-    }
-    return team;
 }
 
 @end

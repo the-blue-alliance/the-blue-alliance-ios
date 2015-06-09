@@ -7,8 +7,14 @@
 //
 
 #import "TBAEventsViewController.h"
+#import "TBAEventTableViewCell.h"
+#import "OrderedDictionary.h"
+#import "Event.h"
+#import "UIColor+TBAColors.h"
 
-@interface TBAEventsViewController ()
+static NSString *const EventCellReuseIdentifier = @"EventCell";
+
+@interface TBAEventsViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @end
 
@@ -16,22 +22,101 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    [self styleInterface];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+#pragma mark - Interface Methods
+
+- (void)styleInterface {
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
-/*
-#pragma mark - Navigation
+#pragma mark - Data Methods
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (NSArray *)eventsForIndex:(NSInteger)index forEventDictionary:(OrderedDictionary *)eventDictionary {
+    if (!eventDictionary || !eventDictionary.allKeys || index >= [eventDictionary.allKeys count]) {
+        return nil;
+    }
+    
+    NSString *eventTypeKey = [eventDictionary.allKeys objectAtIndex:index];
+    return [eventDictionary objectForKey:eventTypeKey];
 }
-*/
+
+- (Event *)eventForIndexPath:(NSIndexPath *)indexPath {
+    NSArray *eventsArray = [self eventsForIndex:indexPath.section forEventDictionary:self.events];
+    Event *event = [eventsArray objectAtIndex:indexPath.row];
+    
+    return event;
+}
+
+#pragma mark - Table View Data Source
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 28.0f;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    
+    header.backgroundView.backgroundColor = [UIColor TBANavigationBarColor];
+    header.textLabel.textColor = [UIColor whiteColor];
+    header.textLabel.font = [UIFont systemFontOfSize:12.0f];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    NSString *title;
+    if (!self.events) {
+        title = @"";
+    } else {
+        title = [self.events.allKeys objectAtIndex:section];
+    }
+    return title;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    NSUInteger count;
+    if (!self.events) {
+        // TODO: Show no data screen
+        count = 0;
+    } else {
+        count = [self.events.allKeys count];
+    }
+    return count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    NSUInteger count;
+    if (!self.events) {
+        count = 0;
+    } else {
+        NSArray *events = [self eventsForIndex:section forEventDictionary:self.events];
+        count = [events count];
+    }
+    return count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    TBAEventTableViewCell *cell = (TBAEventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:EventCellReuseIdentifier forIndexPath:indexPath];
+    
+    Event *event = [self eventForIndexPath:indexPath];
+    cell.event = event;
+    
+    return cell;
+}
+
+
+#pragma mark - Table View Delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (!self.eventSelected) {
+        return;
+    }
+    
+    Event *event = [self eventForIndexPath:indexPath];
+    self.eventSelected(event);
+}
 
 @end
