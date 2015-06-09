@@ -9,14 +9,15 @@
 #import "DistrictViewController.h"
 
 #import "District.h"
+#import "District+Fetch.h"
 #import "DistrictRanking.h"
 #import "EventPoints.h"
 
 #import "Event+Fetch.h"
-#import "DistrictEventsViewController.h"
 #import "DistrictRankingsViewController.h"
 #import "TBAKit.h"
 
+#import "TBAEventsViewController.h"
 
 #import "Team.h"
 #import "Team+Fetch.h"
@@ -34,7 +35,7 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 @property (nonatomic, strong) IBOutlet UIView *segmentedControlView;
 @property (nonatomic, strong) IBOutlet UISegmentedControl *segmentedControl;
 
-@property (nonatomic, strong) DistrictEventsViewController *eventsViewController;
+@property (nonatomic, strong) TBAEventsViewController *eventsViewController;
 @property (nonatomic, strong) DistrictRankingsViewController *rankingsViewController;
 
 @end
@@ -56,8 +57,6 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
             [strongSelf updateRefreshBarButtonItem:YES];
         }
     };
-    self.eventsViewController.refresh = self.refresh;
-    self.rankingsViewController.refresh = self.refresh;
     
     [self styleInterface];
 }
@@ -84,7 +83,7 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
         self.eventsView.hidden = NO;
         self.rankingsView.hidden = YES;
         
-        [self.eventsViewController fetchDistricts];
+        [self fetchDistricts];
         [self.eventsViewController.tableView reloadData];
     } else {
         self.eventsView.hidden = YES;
@@ -105,6 +104,29 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 
 #pragma mark - Data Methods
 
+- (void)fetchDistricts {
+    __weak typeof(self) weakSelf = self;
+    [District fetchEventsForDistrict:self.district fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *events, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (error) {
+            [strongSelf showAlertWithTitle:@"Unable to fetch district events locally" andMessage:error.localizedDescription];
+            return;
+        }
+        
+        if (!events || [events count] == 0) {
+            if (strongSelf.refresh) {
+                strongSelf.refresh();
+            }
+        } else {
+            strongSelf.eventsViewController.events = [Event groupEventsByWeek:events andGroupByType:NO];
+            NSLog(@"Events: %@", strongSelf.eventsViewController.events);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf.eventsViewController.tableView reloadData];
+            });
+        }
+    }];
+}
+
 - (void)refreshEvents {
     __weak typeof(self) weakSelf = self;
     self.currentRequestIdentifier = [[TBAKit sharedKit] fetchEventsForDistrictShort:self.district.key forYear:self.district.year withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
@@ -120,7 +142,7 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf.eventsViewController fetchDistricts];
+                [strongSelf fetchDistricts];
                 [strongSelf updateInterface];
                 [strongSelf.persistenceController save];
             });
@@ -149,100 +171,16 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
             });
         }
     }];
-/*
-    self.currentRequestIdentifier = [[TBAKit sharedKit] executeTBAV2Request:[NSString stringWithFormat:@"district/%@/%@/rankings", [District abbrevForDistrictType:self.districtType], @(self.year)] callback:^(id objects, NSError *error) {
-        self.currentRequestIdentifier = 0;
-        
-        if (error) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error loading district rankings" message:error.localizedDescription delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [alertView show];
-                [self updateRefreshBarButtonItem:NO];
-            });
-            return;
-        }
-        if (!error && [objects isKindOfClass:[NSArray class]]) {
-            for (NSDictionary *districtRanking in objects) {
-                NSLog(@"DR: %@", districtRanking);
-
-                DistrictRanking *dr = [TBAImporter importDistrictRanking:districtRanking];
-                dr.year = @(self.year);
-                
-                NSArray *teams = [Team fetchTeamsForKeys:@[dr.team_key] fromContext:[TBAApp managedObjectContext]];
-                if (!teams || [teams count] == 0) {
-                    self.currentRequestIdentifier = [[TBAKit sharedKit] executeTBAV2Request:[NSString stringWithFormat:@"team/%@", dr.team_key] callback:^(id objects, NSError *error) {
-                        self.currentRequestIdentifier = 0;
-                        
-                        if (error) {
-                            NSLog(@"Error fetching team %@: %@", dr.team_key, error.localizedDescription);
-                        }
-                        if (!error && [objects isKindOfClass:[NSDictionary class]]) {
-                            Team *team = [TBAImporter importTeam:objects];
-                            [self setDistrictPoints:districtRanking[@"event_points"] forDistrictRanking:dr forTeam:team];
-                        }
-                    }];
-                } else {
-                    Team *team = [teams firstObject];
-                    [self setDistrictPoints:districtRanking[@"event_points"] forDistrictRanking:dr forTeam:team];
-                }
-            }
-        }
-    }];
-*/
 }
-
-/*
-- (void)setDistrictPoints:(NSDictionary *)districtPoints forDistrictRanking:(DistrictRanking *)districtRanking forTeam:(Team *)team {
-    for (NSString *eventKey in districtPoints) {
-        NSDictionary *districtPointsDict = [districtPoints objectForKey:eventKey];
-        DistrictPoints *dp = [TBAImporter importDistrictPoints:districtPointsDict];
-        dp.district_ranking = districtRanking;
-        dp.team = team;
-        
-        // Make sure Event exists
-        Event *event = [Event fetchEventWithKey:eventKey fromContext:[TBAApp managedObjectContext]];
-        if (!event) {
-            self.currentRequestIdentifier = [[TBAKit sharedKit] executeTBAV2Request:[NSString stringWithFormat:@"event/%@", eventKey] callback:^(id objects, NSError *error) {
-                self.currentRequestIdentifier = 0;
-                
-                if (error) {
-                    NSLog(@"Error fetching event %@: %@", eventKey, error.localizedDescription);
-                }
-                if (!error && [objects isKindOfClass:[NSDictionary class]]) {
-                    Event *event = [TBAImporter importEvent:objects];
-                    [self setEvent:event forDistrictPoints:dp updateInterface:YES];
-                }
-            }];
-        } else {
-            [self setEvent:event forDistrictPoints:dp updateInterface:YES];
-        }
-    }
-}
-
-- (void)setEvent:(Event *)event forDistrictPoints:(DistrictPoints *)districtPoints updateInterface:(BOOL)update {
-    districtPoints.event = event;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [TBAApp saveContext];
-
-        if (update) {
-            [self updateRefreshBarButtonItem:NO];
-            
-            [self.rankingsTableViewController fetchDistrictRankings];
-            [self updateInterface];
-        }
-    });
-}
-*/
 
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"EventsViewControllerEmbed"]) {
-        self.eventsViewController = (DistrictEventsViewController *)segue.destinationViewController;
-
-        self.eventsViewController.persistenceController = self.persistenceController;
-        self.eventsViewController.district = self.district;
+        self.eventsViewController = (TBAEventsViewController *)segue.destinationViewController;
+        self.eventsViewController.eventSelected = ^(Event *event) {
+            NSLog(@"Selected event: %@", event.shortName);
+        };
     } else if ([segue.identifier isEqualToString:@"RankingsViewControllerEmbed"]) {
         self.rankingsViewController = (DistrictRankingsViewController *)segue.destinationViewController;
 

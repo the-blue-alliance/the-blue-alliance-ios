@@ -33,7 +33,6 @@
 		9240CDFC1AB5DA0B00D859A0 /* TBAEventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9240CDFB1AB5DA0B00D859A0 /* TBAEventTableViewCell.m */; };
 		925CD21E1AC247F200C9C3BF /* TBARefreshViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925CD21D1AC247F200C9C3BF /* TBARefreshViewController.m */; };
 		925DECE71AF5B2D9007A7E94 /* DistrictRankingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 925DECE61AF5B2D9007A7E94 /* DistrictRankingTableViewCell.m */; };
-		925DECEA1AF5B919007A7E94 /* DistrictEventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925DECE91AF5B919007A7E94 /* DistrictEventsViewController.m */; };
 		925DECEE1AF5B92C007A7E94 /* DistrictRankingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925DECED1AF5B92C007A7E94 /* DistrictRankingsViewController.m */; };
 		926C054C1AAF741E00E9215A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 926C054B1AAF741E00E9215A /* Images.xcassets */; };
 		927048221AC23BF8002E46CE /* TeamsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 927048211AC23BF8002E46CE /* TeamsViewController.m */; };
@@ -103,8 +102,6 @@
 		925CD21D1AC247F200C9C3BF /* TBARefreshViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBARefreshViewController.m; sourceTree = "<group>"; };
 		925DECE51AF5B2D9007A7E94 /* DistrictRankingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictRankingTableViewCell.h; sourceTree = "<group>"; };
 		925DECE61AF5B2D9007A7E94 /* DistrictRankingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictRankingTableViewCell.m; sourceTree = "<group>"; };
-		925DECE81AF5B919007A7E94 /* DistrictEventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictEventsViewController.h; sourceTree = "<group>"; };
-		925DECE91AF5B919007A7E94 /* DistrictEventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictEventsViewController.m; sourceTree = "<group>"; };
 		925DECEC1AF5B92C007A7E94 /* DistrictRankingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictRankingsViewController.h; sourceTree = "<group>"; };
 		925DECED1AF5B92C007A7E94 /* DistrictRankingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictRankingsViewController.m; sourceTree = "<group>"; };
 		926C054B1AAF741E00E9215A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -335,15 +332,6 @@
 			name = "View Elements";
 			sourceTree = "<group>";
 		};
-		925DECEB1AF5B91D007A7E94 /* District Events */ = {
-			isa = PBXGroup;
-			children = (
-				925DECE81AF5B919007A7E94 /* DistrictEventsViewController.h */,
-				925DECE91AF5B919007A7E94 /* DistrictEventsViewController.m */,
-			);
-			name = "District Events";
-			sourceTree = "<group>";
-		};
 		925DECEF1AF5B92F007A7E94 /* District Rankings */ = {
 			isa = PBXGroup;
 			children = (
@@ -431,7 +419,6 @@
 			children = (
 				92F1580A1AF55DB300884E8A /* DistrictViewController.h */,
 				92F1580B1AF55DB300884E8A /* DistrictViewController.m */,
-				925DECEB1AF5B91D007A7E94 /* District Events */,
 				925DECEF1AF5B92F007A7E94 /* District Rankings */,
 			);
 			name = District;
@@ -566,7 +553,6 @@
 				929AA76E1B0FBBA600C1A9C9 /* EventPoints.m in Sources */,
 				92011EBB1AC6175400C4F1EC /* DistrictsViewController.m in Sources */,
 				50CDA22B19300C6300C8906D /* TBAImporter.m in Sources */,
-				925DECEA1AF5B919007A7E94 /* DistrictEventsViewController.m in Sources */,
 				9234DC061B08199D0038E214 /* District.m in Sources */,
 				9222F1191AD6910F00C0AEA0 /* EventViewController.m in Sources */,
 				92EAA4C01ABF6AB100F7CF39 /* SelectYearViewController.m in Sources */,

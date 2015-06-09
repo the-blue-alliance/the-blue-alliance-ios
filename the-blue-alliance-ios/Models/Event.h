@@ -46,7 +46,7 @@ typedef NS_ENUM(NSInteger, EventType) {
 - (NSString *)friendlyNameWithYear:(BOOL)withYear;
 - (NSString *)dateString;
 
-+ (OrderedDictionary *)groupEventsByWeek:(NSArray *)events;
++ (OrderedDictionary *)groupEventsByWeek:(NSArray *)events andGroupByType:(BOOL)groupByType;
 
 + (instancetype)insertEventWithModelEvent:(TBAEvent *)modelEvent inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertEventsWithModelEvents:(NSArray *)modelEvents inManagedObjectContext:(NSManagedObjectContext *)context;

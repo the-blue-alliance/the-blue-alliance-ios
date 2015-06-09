@@ -12,7 +12,7 @@
 
 #pragma mark - Local
 
-+ (void)fetchEventForKey:(NSString *)eventKey fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(Event *event, NSError *error))completion {
++ (void)fetchEventForKey:(NSString *)eventKey fromContext:(NSManagedObjectContext *)context checkUpstream:(BOOL)upstream withCompletionBlock:(void(^)(Event *event, NSError *error))completion {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Event"];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", eventKey];
     [fetchRequest setPredicate:predicate];
@@ -25,8 +25,23 @@
         event = [events firstObject];
     }
     
-    if (completion) {
-        completion(event, error);
+    if (event) {
+        if (completion) {
+            completion(event, error);
+        }
+    } else if (upstream) {
+        [[TBAKit sharedKit] fetchEventForEventKey:eventKey withCompletionBlock:^(TBAEvent *upstreamEvent, NSError *error) {
+            if (error || !event) {
+                if (completion) {
+                    completion(nil, error);
+                }
+            } else {
+                Event *event = [Event insertEventWithModelEvent:upstreamEvent inManagedObjectContext:context];
+                if (completion) {
+                    completion(event,  nil);
+                }
+            }
+        }];
     }
 }
 

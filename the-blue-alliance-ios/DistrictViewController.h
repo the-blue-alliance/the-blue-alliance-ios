@@ -7,7 +7,8 @@
 //
 
 #import "TBARefreshViewController.h"
-#import "District.h"
+
+@class District;
 
 @interface DistrictViewController : TBARefreshViewController
 

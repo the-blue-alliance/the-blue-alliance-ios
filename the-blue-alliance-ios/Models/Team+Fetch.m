@@ -65,7 +65,7 @@
     }
 }
 
-+ (void)fetchTeamForKey:(NSString *)key fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(Team *team, NSError *error))completion {
++ (void)fetchTeamForKey:(NSString *)key fromContext:(NSManagedObjectContext *)context checkUpstream:(BOOL)upstream withCompletionBlock:(void(^)(Team *team, NSError *error))completion {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", key];
     [fetchRequest setPredicate:predicate];
@@ -78,8 +78,23 @@
         team = [teams firstObject];
     }
     
-    if (completion) {
-        completion(team, error);
+    if (team) {
+        if (completion) {
+            completion(team, error);
+        }
+    } else if (upstream) {
+        [[TBAKit sharedKit] fetchTeamForTeamKey:key withCompletionBlock:^(TBATeam *upstreamTeam, NSError *error) {
+            if (error || !upstreamTeam) {
+                if (completion) {
+                    completion(nil, error);
+                }
+            } else {
+                Team *team = [Team insertTeamWithModelTeam:upstreamTeam inManagedObjectContext:context];
+                if (completion) {
+                    completion(team, nil);
+                }
+            }
+        }];
     }
 }
 

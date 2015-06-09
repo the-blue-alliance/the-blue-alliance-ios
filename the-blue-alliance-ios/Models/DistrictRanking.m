@@ -34,17 +34,9 @@ typedef DistrictRanking* (^Something)(Team *);
     dispatch_semaphore_t teamSemaphore = dispatch_semaphore_create(0);
     __block Team *team;
     
-    [Team fetchTeamForKey:teamKey fromContext:context withCompletionBlock:^(Team *localTeam, NSError *error) {
+    [Team fetchTeamForKey:teamKey fromContext:context checkUpstream:YES withCompletionBlock:^(Team *localTeam, NSError *error) {
         if (error || !localTeam) {
-            [[TBAKit sharedKit] fetchTeamForTeamKey:teamKey withCompletionBlock:^(TBATeam *upstreamTeam, NSError *error) {
-                if (error || !upstreamTeam) {
-                    // I guess it was never meant to be.
-                    dispatch_semaphore_signal(teamSemaphore);
-                } else {
-                    team = [Team insertTeamWithModelTeam:upstreamTeam inManagedObjectContext:context];
-                    dispatch_semaphore_signal(teamSemaphore);
-                }
-            }];
+            dispatch_semaphore_signal(teamSemaphore);
         } else {
             team = localTeam;
             dispatch_semaphore_signal(teamSemaphore);
@@ -56,7 +48,6 @@ typedef DistrictRanking* (^Something)(Team *);
         return nil;
     }
     
-    // Specify criteria for filtering which objects to fetch
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"district == %@ AND team == %@", district, team];
     [fetchRequest setPredicate:predicate];
     
@@ -89,17 +80,18 @@ typedef DistrictRanking* (^Something)(Team *);
         
         dispatch_semaphore_t eventSemaphore = dispatch_semaphore_create(0);
         __block Event *event;
-        
-        [Event fetchEventForKey:eventKey fromContext:context withCompletionBlock:^(Event *localEvent, NSError *error) {
+
+        [Event fetchEventForKey:eventKey fromContext:context checkUpstream:YES withCompletionBlock:^(Event *localEvent, NSError *error) {
             if (error || !event) {
-                [[TBAKit sharedKit] fetchEventForEventKey:eventKey withCompletionBlock:^(TBAEvent *upstreamEvent, NSError *error) {
-                    if (error || !event) {
-                        dispatch_semaphore_signal(eventSemaphore);
-                    } else {
-                        event = [Event insertEventWithModelEvent:upstreamEvent inManagedObjectContext:context];
-                        dispatch_semaphore_signal(eventSemaphore);
-                    }
-                }];
+                // Maybe handle an error in here?
+            } else {
+                event = localEvent;
+            }
+        }];
+        
+        [Event fetchEventForKey:eventKey fromContext:context checkUpstream:YES withCompletionBlock:^(Event *localEvent, NSError *error) {
+            if (error || !event) {
+                dispatch_semaphore_signal(eventSemaphore);
             } else {
                 event = localEvent;
                 dispatch_semaphore_signal(eventSemaphore);

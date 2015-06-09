@@ -91,7 +91,7 @@
                 strongSelf.refresh();
             }
         } else {
-            strongSelf.events = [Event groupEventsByWeek:events];
+            strongSelf.events = [Event groupEventsByWeek:events andGroupByType:YES];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [strongSelf updateInterface];
             });

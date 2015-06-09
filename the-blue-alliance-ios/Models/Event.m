@@ -102,7 +102,7 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
 
 #pragma mark - Class Methods
 
-+ (OrderedDictionary *)groupEventsByWeek:(NSArray *)events {
++ (OrderedDictionary *)groupEventsByWeek:(NSArray *)events andGroupByType:(BOOL)groupByType {
     MutableOrderedDictionary *eventData = [[MutableOrderedDictionary alloc] init];
     
     int currentWeek = 1;
@@ -138,7 +138,11 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
                 if (dateCompare == NSOrderedDescending || dateCompare == NSOrderedSame) {
                     NSString *weekLabel = [NSString stringWithFormat:@"Week %@", @(currentWeek)];
                     NSArray *weekEvents = [eventData objectForKey:weekLabel];
-                    [eventData setValue:[self sortedEventDictionaryFromEvents:weekEvents] forKey:weekLabel];
+                    if (groupByType) {
+                        [eventData setValue:[self sortedEventDictionaryFromEvents:weekEvents] forKey:weekLabel];
+                    } else {
+                        [eventData setValue:weekEvents forKey:weekLabel];
+                    }
                     
                     currentWeek += 1;                    
                     weekStart = [calendar dateByAddingComponents:weekComponent toDate:weekStart options:0];
@@ -162,22 +166,42 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
     NSString *weekLabel = [NSString stringWithFormat:@"Week %@", @(currentWeek)];
     NSArray *weekEvents = [eventData objectForKey:weekLabel];
     if (weekEvents && [weekEvents count] > 0) {
-        [eventData setValue:[self sortedEventDictionaryFromEvents:weekEvents] forKey:weekLabel];
+        if (groupByType) {
+            [eventData setValue:[self sortedEventDictionaryFromEvents:weekEvents] forKey:weekLabel];
+        } else {
+            [eventData setValue:weekEvents forKey:weekLabel];
+        }
     }
     
     if ([preseasonEvents count] > 0) {
-        [eventData insertObject:[self sortedEventDictionaryFromEvents:preseasonEvents]
-                         forKey:PreseasonEventsLabel
-                        atIndex:0];
+        if (groupByType) {
+            [eventData insertObject:[self sortedEventDictionaryFromEvents:preseasonEvents]
+                             forKey:PreseasonEventsLabel
+                            atIndex:0];
+        } else {
+            [eventData insertObject:preseasonEvents forKey:PreseasonEventsLabel atIndex:0];
+        }
     }
     if ([championshipEvents count] > 0) {
-        [eventData setValue:[self sortedEventDictionaryFromEvents:championshipEvents] forKey:CMPEventsLabel];
+        if (groupByType) {
+            [eventData setValue:[self sortedEventDictionaryFromEvents:championshipEvents] forKey:CMPEventsLabel];
+        } else {
+            [eventData setValue:championshipEvents forKey:CMPEventsLabel];
+        }
     }
     if ([offseasonEvents count] > 0) {
-        [eventData setValue:[self sortedEventDictionaryFromEvents:offseasonEvents] forKey:OffseasonEventsLabel];
+        if (groupByType) {
+            [eventData setValue:[self sortedEventDictionaryFromEvents:offseasonEvents] forKey:OffseasonEventsLabel];
+        } else {
+            [eventData setValue:offseasonEvents forKey:OffseasonEventsLabel];
+        }
     }
     if ([weeklessEvents count] > 0) {
-        [eventData setValue:[self sortedEventDictionaryFromEvents:weeklessEvents] forKey:WeeklessEventsLabel];
+        if (groupByType) {
+            [eventData setValue:[self sortedEventDictionaryFromEvents:weeklessEvents] forKey:WeeklessEventsLabel];
+        } else {
+            [eventData setValue:weeklessEvents forKey:WeeklessEventsLabel];
+        }
     }
     
     
