@@ -41,7 +41,7 @@
         NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"http://www.chiefdelphi.com/media/img/%@", media.imagePartial]];
         request = [NSURLRequest requestWithURL:url];
     } else if (media.mediaTypeValue == TBAMediaTypeYouTube) {
-        NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"http://img.youtube.com/vi/%@/hqdefault.jpg", media.foreignKey]];
+        NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"http://img.youtube.com/vi/%@/maxresdefault.jpg", media.foreignKey]];
         request = [NSURLRequest requestWithURL:url];
     }
     
