@@ -8,6 +8,10 @@
 
 #import "TBAYearSelectViewController.h"
 
-@interface TeamViewController : TBAYearSelectViewController
+@class Team;
+
+@interface TeamViewController : TBAYearSelectViewController;
+
+@property (nonatomic, weak) Team *team;
 
 @end

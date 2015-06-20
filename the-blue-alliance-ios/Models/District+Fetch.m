@@ -30,7 +30,7 @@
 
 + (void)fetchEventsForDistrict:(District *)district fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *events, NSError *error))completion {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Event"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventDistrict == %@ AND year == %@", district.name, @(district.year)];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventDistrict == %@ AND year == %@", district.name, district.year];
     [fetchRequest setPredicate:predicate];
     
     NSSortDescriptor *startDateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:YES];

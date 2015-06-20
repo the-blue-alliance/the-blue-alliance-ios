@@ -97,9 +97,7 @@ static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
 }
 
 - (void)refreshData {
-    NSInteger year = self.currentYear;
-
-    [self fetchDistrictKeysForYear:year];
+    [self fetchDistrictKeysForYear:self.currentYear];
 }
 
 - (void)fetchDistrictKeysForYear:(NSInteger)year {

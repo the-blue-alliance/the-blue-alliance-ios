@@ -8,13 +8,10 @@
 #import "EventsViewController.h"
 #import "TBAEventsViewController.h"
 #import "EventViewController.h"
-#import "SelectYearViewController.h"
-#import "SelectYearTransitionAnimator.h"
 #import "HMSegmentedControl.h"
 #import "Event+Fetch.h"
 #import "OrderedDictionary.h"
 #import <PureLayout/PureLayout.h>
-
 
 // TODO: Bring the events view to the current week, like the Android app
 
@@ -100,10 +97,8 @@
 }
 
 - (void)refreshData {
-    NSInteger year = self.currentYear;
-    
     __weak typeof(self) weakSelf = self;
-    self.currentRequestIdentifier = [[TBAKit sharedKit] fetchEventsForYear:year withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
+    self.currentRequestIdentifier = [[TBAKit sharedKit] fetchEventsForYear:self.currentYear withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         strongSelf.currentRequestIdentifier = 0;
@@ -190,18 +185,17 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"EventsViewControllerEmbed"]) {
         self.eventsViewController = (TBAEventsViewController *)segue.destinationViewController;
+
+        __weak typeof(self) weakSelf = self;
         self.eventsViewController.eventSelected = ^(Event *event) {
-            NSLog(@"Selected event: %@", event.shortName);
+            [weakSelf performSegueWithIdentifier:@"EventViewControllerSegue" sender:event];
         };
-    }
-/*
-    else if ([segue.identifier isEqualToString:@"EventViewControllerSegue"]) {
+    } else if ([segue.identifier isEqualToString:@"EventViewControllerSegue"]) {
         Event *event = (Event *)sender;
         
         EventViewController *eventViewController = segue.destinationViewController;
         eventViewController.event = event;
     }
-*/
 }
 
 @end

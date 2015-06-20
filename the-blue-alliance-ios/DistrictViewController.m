@@ -73,7 +73,7 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 
 - (void)styleInterface {
     self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
-    self.navigationItem.title = [NSString stringWithFormat:@"%@ %@ Districts", @(self.district.year), self.district.name];
+    self.navigationItem.title = [NSString stringWithFormat:@"%@ %@ Districts", self.district.year, self.district.name];
 
     [self updateInterface];
 }
@@ -119,7 +119,6 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
             }
         } else {
             strongSelf.eventsViewController.events = [Event groupEventsByWeek:events andGroupByType:NO];
-            NSLog(@"Events: %@", strongSelf.eventsViewController.events);
             dispatch_async(dispatch_get_main_queue(), ^{
                 [strongSelf.eventsViewController.tableView reloadData];
             });
@@ -129,7 +128,7 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 
 - (void)refreshEvents {
     __weak typeof(self) weakSelf = self;
-    self.currentRequestIdentifier = [[TBAKit sharedKit] fetchEventsForDistrictShort:self.district.key forYear:self.district.year withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
+    self.currentRequestIdentifier = [[TBAKit sharedKit] fetchEventsForDistrictShort:self.district.key forYear:self.district.yearValue withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         strongSelf.currentRequestIdentifier = 0;
@@ -152,7 +151,7 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 
 - (void)refreshRankings {
     __weak typeof(self) weakSelf = self;
-    self.currentRequestIdentifier = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.district.key forYear:self.district.year withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
+    self.currentRequestIdentifier = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.district.key forYear:self.district.yearValue withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         strongSelf.currentRequestIdentifier = 0;

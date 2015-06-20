@@ -8,28 +8,28 @@
 
 #import "SelectYearViewController.h"
 
-
 static NSString *const YearCellReuseIdentifier = @"Year Cell";
 
-
 @implementation SelectYearViewController
-/*
+
 #pragma mark - View Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self styleInterface];
+}
+
+#pragma mark - Interface Methods
+
+- (void)styleInterface {
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:YearCellReuseIdentifier];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
-
-#pragma mark - Interface Methods
-
 - (IBAction)cancelButtonTapped:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
 
 #pragma mark - Table View Data Source
 
@@ -38,17 +38,15 @@ static NSString *const YearCellReuseIdentifier = @"Year Cell";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSDate *current = [NSDate date];
-    return (current.year - self.startYear) + 1;
+    return ([self year] - self.startYear) + 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:YearCellReuseIdentifier forIndexPath:indexPath];
     
-    NSDate *current = [NSDate date];
-    NSUInteger year = current.year - indexPath.row;
+    NSInteger year = [self year] - indexPath.row;
 
-    cell.textLabel.text = [NSString stringWithFormat:@"%ld", year];
+    cell.textLabel.text = [NSString stringWithFormat:@"%zd", year];
     if (year == self.currentYear) {
         cell.tintColor = [UIColor TBANavigationBarColor];
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -59,20 +57,23 @@ static NSString *const YearCellReuseIdentifier = @"Year Cell";
     return cell;
 }
 
-
 #pragma mark - Table View Delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    NSDate *current = [NSDate date];
-    NSUInteger year = current.year - indexPath.row;
+    NSUInteger year = [self year] - indexPath.row;
     
     if (self.yearSelectedCallback) {
         self.yearSelectedCallback(year);
     }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-*/
+
+#pragma mark - Private Methods
+
+- (NSInteger)year {
+    return [[NSCalendar currentCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]];
+}
 
 @end

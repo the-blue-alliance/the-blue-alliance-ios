@@ -23,15 +23,8 @@
 #pragma mark - Main Entry Point
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [self setPersistenceController:[[TBAPersistenceController alloc] initWithCallback:^{
-        NSString *storyboardString;
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            storyboardString = @"Main_iPad";
-        } else {
-            storyboardString = @"Main_iPhone";
-        }
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardString bundle:nil];
+    [self setPersistenceController:[[TBAPersistenceController alloc] initWithCallback:^{        
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UITabBarController *rootTabBarController = [storyboard instantiateViewControllerWithIdentifier:@"RootTabBarController"];
         rootTabBarController.selectedViewController = [rootTabBarController.viewControllers objectAtIndex:1];
 

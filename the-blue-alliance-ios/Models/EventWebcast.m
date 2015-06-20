@@ -1,21 +1,12 @@
-//
-//  EventWebcast.m
-//  the-blue-alliance-ios
-//
-//  Created by Zach Orr on 5/10/15.
-//  Copyright (c) 2015 The Blue Alliance. All rights reserved.
-//
-
 #import "EventWebcast.h"
-#import "Event.h"
 
+@interface EventWebcast ()
+
+// Private interface goes here.
+
+@end
 
 @implementation EventWebcast
-
-@dynamic type;
-@dynamic channel;
-@dynamic file;
-@dynamic event;
 
 + (instancetype)insertEventWebcastWithModelEventWebcast:(TBAEventWebcast *)modelEventWebcast forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
     // Check for pre-existing object
@@ -45,7 +36,7 @@
         eventWebcast = [NSEntityDescription insertNewObjectForEntityForName:@"EventWebcast" inManagedObjectContext:context];
     }
     
-    eventWebcast.type = modelEventWebcast.type;
+    eventWebcast.webcastTypeValue = modelEventWebcast.type;
     eventWebcast.channel = modelEventWebcast.channel;
     eventWebcast.file = modelEventWebcast.file;
     eventWebcast.event = event;

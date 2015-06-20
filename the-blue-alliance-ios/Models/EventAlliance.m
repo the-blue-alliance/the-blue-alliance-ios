@@ -1,20 +1,6 @@
-//
-//  EventAlliance.m
-//  the-blue-alliance-ios
-//
-//  Created by Zach Orr on 5/10/15.
-//  Copyright (c) 2015 The Blue Alliance. All rights reserved.
-//
-
 #import "EventAlliance.h"
-#import "Event.h"
-
 
 @implementation EventAlliance
-
-@dynamic declines;
-@dynamic picks;
-@dynamic event;
 
 + (instancetype)insertEventAllianceWithModelEventWebcast:(TBAEventAlliance *)modelEventAlliance forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
     // Check for pre-existing object

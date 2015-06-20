@@ -6,15 +6,15 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-/*
-#import "Event.h"
-*/
+#import "TBARefreshViewController.h"
 
-@interface EventViewController : UIViewController
-/*
+@class Event;
+
+@interface EventViewController : TBARefreshViewController
+
 @property (nonatomic, strong) Event *event;
 
+/*
 @property (nonatomic, strong) IBOutletCollection(UIButton) NSArray *socialButtons;
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 

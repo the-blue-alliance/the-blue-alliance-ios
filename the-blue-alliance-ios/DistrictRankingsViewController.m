@@ -81,9 +81,9 @@ static NSString *const DistrictRankCellReuseIdentifier  = @"DistrictRankCell";
     DistrictRanking *districtRanking = [self.rankings objectAtIndex:indexPath.row];
     
     cell.teamNameLabel.text = [districtRanking.team nickname];
-    cell.teamNumberLabel.text = [NSString stringWithFormat:@"%lld", districtRanking.team.teamNumber];
-    cell.rankLabel.text = [NSString stringWithFormat:@"Rank %d", districtRanking.rank];
-    cell.pointsLabel.text = [NSString stringWithFormat:@"%d Points", districtRanking.pointTotal];
+    cell.teamNumberLabel.text = [NSString stringWithFormat:@"%@", districtRanking.team.teamNumber];
+    cell.rankLabel.text = [NSString stringWithFormat:@"Rank %@", districtRanking.rank];
+    cell.pointsLabel.text = [NSString stringWithFormat:@"%@ Points", districtRanking.pointTotal];
     
     return cell;
 }

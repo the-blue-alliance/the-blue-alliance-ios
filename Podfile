@@ -4,3 +4,4 @@ platform :ios, '7.0'
 pod 'HMSegmentedControl'
 pod 'PureLayout'
 pod 'TBAKit'
+pod 'Reveal-iOS-SDK', :configurations => ['Debug']

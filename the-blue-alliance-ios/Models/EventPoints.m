@@ -1,25 +1,6 @@
-//
-//  EventPoints.m
-//  the-blue-alliance-ios
-//
-//  Created by Zach Orr on 5/22/15.
-//  Copyright (c) 2015 The Blue Alliance. All rights reserved.
-//
-
 #import "EventPoints.h"
-#import "Event.h"
 
 @implementation EventPoints
-
-@dynamic alliancePoints;
-@dynamic awardPoints;
-@dynamic elimPoints;
-@dynamic districtCMP;
-@dynamic total;
-@dynamic qualPoints;
-@dynamic districtRanking;
-@dynamic event;
-@dynamic team;
 
 + (instancetype)insertEventPointsWithEventPointsDict:(NSDictionary *)eventPointsDict forEvent:(Event *)event andTeam:(Team *)team inManagedObjectContext:(NSManagedObjectContext *)context {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -50,12 +31,12 @@
     
     eventPoints.team = team;
     eventPoints.event = event;
-    eventPoints.alliancePoints = [eventPointsDict[@"alliance_points"] intValue];
-    eventPoints.awardPoints = [eventPointsDict[@"award_points"] intValue];
-    eventPoints.elimPoints = [eventPointsDict[@"elim_points"] intValue];
-    eventPoints.districtCMP = [eventPointsDict[@"district_cmp"] boolValue];
-    eventPoints.total = [eventPointsDict[@"total"] intValue];
-    eventPoints.qualPoints = [eventPointsDict[@"qual_points"] intValue];
+    eventPoints.alliancePoints = eventPointsDict[@"alliance_points"];
+    eventPoints.awardPoints = eventPointsDict[@"award_points"];
+    eventPoints.elimPoints = eventPointsDict[@"elim_points"];
+    eventPoints.districtCMP = eventPointsDict[@"district_cmp"];
+    eventPoints.total = eventPointsDict[@"total"];
+    eventPoints.qualPoints = eventPointsDict[@"qual_points"];
     
     return eventPoints;
 }

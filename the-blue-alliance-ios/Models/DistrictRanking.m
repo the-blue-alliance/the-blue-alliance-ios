@@ -1,28 +1,15 @@
-//
-//  DistrictRanking.m
-//  the-blue-alliance-ios
-//
-//  Created by Zach Orr on 5/22/15.
-//  Copyright (c) 2015 The Blue Alliance. All rights reserved.
-//
-
 #import "DistrictRanking.h"
-#import "EventPoints.h"
-#import "Team.h"
 #import "Team+Fetch.h"
-#import "District.h"
 #import "Event+Fetch.h"
+#import "EventPoints.h"
+
+@interface DistrictRanking ()
+
+// Private interface goes here.
+
+@end
 
 @implementation DistrictRanking
-
-@dynamic pointTotal;
-@dynamic rank;
-@dynamic rookieBonus;
-@dynamic team;
-@dynamic district;
-@dynamic eventPoints;
-
-typedef DistrictRanking* (^Something)(Team *);
 
 + (instancetype)insertDistrictRankingWithDistrictRankingDict:(NSDictionary *)districtRankingDict forDistrict:(District *)district inManagedObjectContext:(NSManagedObjectContext *)context {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -30,7 +17,7 @@ typedef DistrictRanking* (^Something)(Team *);
     [fetchRequest setEntity:entity];
     
     NSString *teamKey = districtRankingDict[@"team_key"];
-
+    
     dispatch_semaphore_t teamSemaphore = dispatch_semaphore_create(0);
     __block Team *team;
     
@@ -43,7 +30,7 @@ typedef DistrictRanking* (^Something)(Team *);
         }
     }];
     dispatch_semaphore_wait(teamSemaphore, DISPATCH_TIME_FOREVER);
-
+    
     if (team == nil) {
         return nil;
     }
@@ -69,9 +56,9 @@ typedef DistrictRanking* (^Something)(Team *);
     }
     
     districtRanking.district = district;
-    districtRanking.pointTotal = [districtRankingDict[@"point_total"] intValue];
-    districtRanking.rank = [districtRankingDict[@"rank"] intValue];
-    districtRanking.rookieBonus = [districtRankingDict[@"rookie_bonus"] intValue];
+    districtRanking.pointTotal = districtRankingDict[@"point_total"];
+    districtRanking.rank = districtRankingDict[@"rank"];
+    districtRanking.rookieBonus = districtRankingDict[@"rookie_bonus"];
     districtRanking.team = team;
     
     NSDictionary *eventPointsDict = districtRankingDict[@"event_points"];
@@ -80,7 +67,7 @@ typedef DistrictRanking* (^Something)(Team *);
         
         dispatch_semaphore_t eventSemaphore = dispatch_semaphore_create(0);
         __block Event *event;
-
+        
         [Event fetchEventForKey:eventKey fromContext:context checkUpstream:YES withCompletionBlock:^(Event *localEvent, NSError *error) {
             if (error || !event) {
                 // Maybe handle an error in here?
@@ -102,10 +89,10 @@ typedef DistrictRanking* (^Something)(Team *);
         if (event == nil) {
             continue;
         }
-
+        
         [districtRanking addEventPointsObject:[EventPoints insertEventPointsWithEventPointsDict:eventPointDict forEvent:event andTeam:team inManagedObjectContext:context]];
     }
-
+    
     return districtRanking;
 }
 

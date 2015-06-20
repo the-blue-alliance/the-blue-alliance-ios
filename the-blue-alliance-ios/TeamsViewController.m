@@ -8,16 +8,16 @@
 
 #import "TeamsViewController.h"
 #import "OrderedDictionary.h"
-#import "TBAImporter.h"
 #import "Team.h"
 #import "Team+Fetch.h"
 #import "OrderedDictionary.h"
 #import <PureLayout/PureLayout.h>
 #import "TBATeamTableViewCell.h"
-
 #import "TBATeamsViewController.h"
+#import "TeamViewController.h"
 
-static NSString *const TeamsViewControllerSegue = @"TeamsViewControllerEmbed";
+static NSString *const TeamsViewControllerEmbed = @"TeamsViewControllerEmbed";
+static NSString *const TeamViewControllerSegue = @"TeamViewControllerSegue";
 
 @interface TeamsViewController ()
 
@@ -107,12 +107,21 @@ static NSString *const TeamsViewControllerSegue = @"TeamsViewControllerEmbed";
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:TeamsViewControllerSegue]) {
+    if ([segue.identifier isEqualToString:TeamsViewControllerEmbed]) {
         self.teamsViewController = (TBATeamsViewController *)segue.destinationViewController;
         self.teamsViewController.showSearch = YES;
+        
+        __weak typeof(self) weakSelf = self;
         self.teamsViewController.teamSelected = ^(Team *team) {
-            NSLog(@"Team selected: %lld", team.teamNumber);
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            [strongSelf performSegueWithIdentifier:TeamViewControllerSegue sender:team];
         };
+    } else if ([segue.identifier isEqualToString:TeamViewControllerSegue]) {
+        Team *team = (Team *)sender;
+    
+        TeamViewController *teamViewController = segue.destinationViewController;
+        teamViewController.team = team;
+        teamViewController.persistenceController = self.persistenceController;
     }
 }
 

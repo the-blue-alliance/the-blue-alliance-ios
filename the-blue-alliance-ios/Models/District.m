@@ -1,20 +1,12 @@
-//
-//  District.m
-//  the-blue-alliance-ios
-//
-//  Created by Zach Orr on 5/16/15.
-//  Copyright (c) 2015 The Blue Alliance. All rights reserved.
-//
-
 #import "District.h"
 
+@interface District ()
+
+// Private interface goes here.
+
+@end
 
 @implementation District
-
-@dynamic name;
-@dynamic key;
-@dynamic year;
-@dynamic events;
 
 + (NSArray *)districtTypes {
     return @[@"Michigan", @"Mid Atlantic", @"New England", @"Pacific Northwest", @"Indiana"];
@@ -25,7 +17,7 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"District" inManagedObjectContext:context];
     [fetchRequest setEntity:entity];
-        
+    
     // Specify criteria for filtering which objects to fetch
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key = %@ && year == %@", districtDict[@"key"], @(year)];
     [fetchRequest setPredicate:predicate];
@@ -46,10 +38,10 @@
     if (district == nil) {
         district = [NSEntityDescription insertNewObjectForEntityForName:@"District" inManagedObjectContext:context];
     }
-
+    
     district.key = districtDict[@"key"];
     district.name = districtDict[@"name"];
-    district.year = year;
+    district.yearValue = year;
     
     return district;
 }

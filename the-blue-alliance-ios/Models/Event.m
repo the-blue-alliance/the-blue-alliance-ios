@@ -1,61 +1,24 @@
-//
-//  Event.m
-//  the-blue-alliance-ios
-//
-//  Created by Zach Orr on 5/10/15.
-//  Copyright (c) 2015 The Blue Alliance. All rights reserved.
-//
-
 #import "Event.h"
-#import "District.h"
-#import "EventAlliance.h"
-#import "EventWebcast.h"
 #import "OrderedDictionary.h"
-
+#import "District.h"
 
 static NSString *const WeeklessEventsLabel      = @"Other Official Events";
 static NSString *const PreseasonEventsLabel     = @"Preseason";
 static NSString *const OffseasonEventsLabel     = @"Offseason";
 static NSString *const CMPEventsLabel           = @"Championship Event";
 
-
 @implementation Event
-
-@dynamic key;
-@dynamic name;
-@dynamic shortName;
-@dynamic eventCode;
-@dynamic eventType;
-@dynamic eventDistrict;
-@dynamic year;
-@dynamic location;
-@dynamic venueAddress;
-@dynamic website;
-@dynamic facebookEid;
-@dynamic official;
-@dynamic startDate;
-@dynamic endDate;
-@dynamic webcasts;
-@dynamic alliances;
-
-- (NSDate *)dateStart {
-    return [NSDate dateWithTimeIntervalSince1970:self.startDate];
-}
-
-- (NSDate *)dateEnd {
-    return [NSDate dateWithTimeIntervalSince1970:self.endDate];
-}
 
 - (NSString *)friendlyNameWithYear:(BOOL)withYear {
     NSString *nameString;
     if (withYear) {
-        nameString = [NSString stringWithFormat:@"%@ %@", [@(self.year) stringValue], self.shortName ? self.shortName : self.name];
+        nameString = [NSString stringWithFormat:@"%@ %@", [self.year stringValue], self.shortName ? self.shortName : self.name];
     } else {
         nameString = [NSString stringWithFormat:@"%@", self.shortName ? self.shortName : self.name];
     }
     
     NSString *typeSuffix = @"";
-    switch (self.eventType) {
+    switch (self.eventTypeValue) {
         case TBAEventTypeRegional:
             typeSuffix = @"Regional";
             break;
@@ -83,18 +46,18 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
     [endDateFormatter setDateFormat:@"MMM dd, y"];
     
     NSString *dateText;
-    if ([calendar component:NSCalendarUnitYear fromDate:[self dateStart]] == [calendar component:NSCalendarUnitYear fromDate:[self dateEnd]]) {
+    if ([calendar component:NSCalendarUnitYear fromDate:self.startDate] == [calendar component:NSCalendarUnitYear fromDate:self.endDate]) {
         NSDateFormatter *startDateFormatter = [[NSDateFormatter alloc] init];
         [startDateFormatter setDateFormat:@"MMM dd"];
         
         dateText = [NSString stringWithFormat:@"%@ to %@",
-                    [startDateFormatter stringFromDate:[self dateStart]],
-                    [endDateFormatter stringFromDate:[self dateEnd]]];
+                    [startDateFormatter stringFromDate:self.startDate],
+                    [endDateFormatter stringFromDate:self.endDate]];
         
     } else {
         dateText = [NSString stringWithFormat:@"%@ to %@",
-                    [endDateFormatter stringFromDate:[self dateStart]],
-                    [endDateFormatter stringFromDate:[self dateEnd]]];
+                    [endDateFormatter stringFromDate:self.startDate],
+                    [endDateFormatter stringFromDate:self.endDate]];
     }
     
     return dateText;
@@ -116,25 +79,25 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
     for (Event *event in events) {
-        if (event.official && (event.eventType == TBAEventTypeCMPDivision || event.eventType == TBAEventTypeCMPFinals)) {
+        if (event.official && (event.eventTypeValue == TBAEventTypeCMPDivision || event.eventTypeValue == TBAEventTypeCMPFinals)) {
             [championshipEvents addObject:event];
-        } else if (event.official && [@[@(EventTypeRegional), @(EventTypeDistrict), @(EventTypeDistrictCMP)] containsObject:@(event.eventType)]) {
-            if ([event dateStart] == nil ||
-                ([calendar component:NSCalendarUnitMonth fromDate:[event dateStart]] == 12 && [calendar component:NSCalendarUnitDay fromDate:[event dateStart]] == 31)) {
+        } else if (event.official && [@[@(EventTypeRegional), @(EventTypeDistrict), @(EventTypeDistrictCMP)] containsObject:@(event.eventTypeValue)]) {
+            if (event.startDate == nil ||
+                ([calendar component:NSCalendarUnitMonth fromDate:event.startDate] == 12 && [calendar component:NSCalendarUnitDay fromDate:event.startDate] == 31)) {
                 [weeklessEvents addObject:event];
             } else {
                 if (weekStart == nil) {
-                    int diffFromThurs = ([calendar component:NSCalendarUnitWeekday fromDate:[event dateStart]] - 4) % 7; // Wednesday is 4
+                    int diffFromThurs = ([calendar component:NSCalendarUnitWeekday fromDate:event.startDate] - 4) % 7; // Wednesday is 4
                     NSDateComponents *dayComponent = [[NSDateComponents alloc] init];
                     dayComponent.day = -diffFromThurs;
                     
-                    weekStart = [calendar dateByAddingComponents:dayComponent toDate:[event dateStart] options:0];
+                    weekStart = [calendar dateByAddingComponents:dayComponent toDate:event.startDate options:0];
                 }
                 
                 NSDateComponents *weekComponent = [[NSDateComponents alloc] init];
                 weekComponent.day = 7;
                 
-                NSComparisonResult dateCompare = [[event dateStart] compare:[calendar dateByAddingComponents:weekComponent toDate:weekStart options:0]];
+                NSComparisonResult dateCompare = [event.startDate compare:[calendar dateByAddingComponents:weekComponent toDate:weekStart options:0]];
                 if (dateCompare == NSOrderedDescending || dateCompare == NSOrderedSame) {
                     NSString *weekLabel = [NSString stringWithFormat:@"Week %@", @(currentWeek)];
                     NSArray *weekEvents = [eventData objectForKey:weekLabel];
@@ -144,7 +107,7 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
                         [eventData setValue:weekEvents forKey:weekLabel];
                     }
                     
-                    currentWeek += 1;                    
+                    currentWeek += 1;
                     weekStart = [calendar dateByAddingComponents:weekComponent toDate:weekStart options:0];
                 }
                 
@@ -156,7 +119,7 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
                     [eventData setValue:[[NSMutableArray alloc] initWithObjects:event, nil] forKey:weekLabel];
                 }
             }
-        } else if (event.eventType == TBAEventTypePreseason) {
+        } else if (event.eventTypeValue == TBAEventTypePreseason) {
             [preseasonEvents addObject:event];
         } else {
             [offseasonEvents addObject:event];
@@ -296,27 +259,27 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
     event.name = modelEvent.name;
     event.shortName = modelEvent.shortName;
     event.eventCode = modelEvent.eventCode;
-    event.eventType = modelEvent.eventType;
+    event.eventTypeValue = modelEvent.eventType;
     event.eventDistrict = modelEvent.eventDistrictString;
-    event.year = modelEvent.year;
+    event.yearValue = modelEvent.year;
     event.location = modelEvent.location;
     event.venueAddress = modelEvent.venueAddress;
     event.website = modelEvent.website;
     event.facebookEid = modelEvent.facebookEid;
-    event.official = modelEvent.official;
-    event.startDate = [modelEvent.startDate timeIntervalSince1970];
-    event.endDate = [modelEvent.endDate timeIntervalSince1970];
+    event.officialValue = modelEvent.official;
+    event.startDate = modelEvent.startDate;
+    event.endDate = modelEvent.endDate;
     
     /*
-    event.webcasts = [NSSet setWithArray:[EventWebcast insertEventWebcastsWithModelEventWebcasts:modelEvent.webcast
-                                                                                        forEvent:event
-                                                                          inManagedObjectContext:context]];
-
-    event.alliances = [NSSet setWithArray:[EventAlliance insertEventAlliancesWithModelEventAlliances:modelEvent.alliances
-                                                                                            forEvent:event
-                                                                              inManagedObjectContext:context]];
-    */
-
+     event.webcasts = [NSSet setWithArray:[EventWebcast insertEventWebcastsWithModelEventWebcasts:modelEvent.webcast
+     forEvent:event
+     inManagedObjectContext:context]];
+     
+     event.alliances = [NSSet setWithArray:[EventAlliance insertEventAlliancesWithModelEventAlliances:modelEvent.alliances
+     forEvent:event
+     inManagedObjectContext:context]];
+     */
+    
     return event;
 }
 

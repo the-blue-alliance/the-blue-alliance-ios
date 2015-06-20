@@ -7,16 +7,13 @@
 //
 
 #import "TBAYearSelectViewController.h"
-#import "SelectYearTransitionAnimator.h"
 #import "SelectYearViewController.h"
-
 
 @interface TBAYearSelectViewController ()
 
 @property (nonatomic, strong) UIBarButtonItem *selectYearBarButtonItem;
 
 @end
-
 
 @implementation TBAYearSelectViewController
 
@@ -51,31 +48,21 @@
     return _selectYearBarButtonItem;
 }
 
-
 #pragma mark - View Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.navigationItem setLeftBarButtonItem:self.selectYearBarButtonItem];
+//    [self.navigationItem setLeftBarButtonItem:self.selectYearBarButtonItem];
 }
-
 
 #pragma mark - Interface Methods
 
 - (void)selectYearButtonTapped:(id)sender {
-    NSString *storyboardString;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        storyboardString = @"Main_iPad";
-    } else {
-        storyboardString = @"Main_iPhone";
-    }
-
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardString bundle:nil];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 
     SelectYearViewController *selectYearViewController = (SelectYearViewController *)[storyboard instantiateViewControllerWithIdentifier:@"SelectYearViewController"];
-    selectYearViewController.transitioningDelegate = self;
-    selectYearViewController.modalPresentationStyle = UIModalPresentationCustom;
+    selectYearViewController.modalPresentationStyle = UIModalPresentationFormSheet;
     selectYearViewController.currentYear = self.currentYear;
     selectYearViewController.startYear = self.startYear;
     if (self.yearSelected) {
@@ -84,35 +71,6 @@
     
     [self presentViewController:selectYearViewController animated:YES completion:nil];
 }
-
-
-#pragma mark - UIViewControllerTransitioningDelegate
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
-                                                                  presentingController:(UIViewController *)presenting
-                                                                      sourceController:(UIViewController *)source
-{
-    id<UIViewControllerAnimatedTransitioning> animationController;
-    
-    if ([presented isKindOfClass:[SelectYearViewController class]]) {
-        SelectYearTransitionAnimator *animator = [[SelectYearTransitionAnimator alloc] init];
-        animator.presenting = YES;
-        animationController = animator;
-    }
-    return animationController;
-}
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
-{
-    id<UIViewControllerAnimatedTransitioning> animationController;
-    
-    if ([dismissed isKindOfClass:[SelectYearViewController class]]) {
-        SelectYearTransitionAnimator *animator = [[SelectYearTransitionAnimator alloc] init];
-        animationController = animator;
-    }
-    return animationController;
-}
-
 
 #pragma mark - Private Methods
 

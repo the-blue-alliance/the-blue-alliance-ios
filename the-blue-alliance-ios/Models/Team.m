@@ -1,26 +1,12 @@
-//
-//  Team.m
-//  the-blue-alliance-ios
-//
-//  Created by Zach Orr on 5/4/15.
-//  Copyright (c) 2015 The Blue Alliance. All rights reserved.
-//
-
 #import "Team.h"
-#import "TBATeam.h"
+
+@interface Team ()
+
+// Private interface goes here.
+
+@end
 
 @implementation Team
-
-@dynamic website;
-@dynamic name;
-@dynamic locality;
-@dynamic region;
-@dynamic countryName;
-@dynamic location;
-@dynamic teamNumber;
-@dynamic key;
-@dynamic nickname;
-@dynamic rookieYear;
 
 + (instancetype)insertTeamWithModelTeam:(TBATeam *)modelTeam inManagedObjectContext:(NSManagedObjectContext *)context {
     // Check for pre-existing object
@@ -33,7 +19,7 @@
     [fetchRequest setPredicate:predicate];
     
     Team *team;
-
+    
     NSError *error = nil;
     NSArray *existingObjs = [context executeFetchRequest:fetchRequest error:&error];
     
@@ -45,21 +31,21 @@
             [context deleteObject:t];
         }
     }
-
+    
     if (team == nil) {
         team = [NSEntityDescription insertNewObjectForEntityForName:@"Team" inManagedObjectContext:context];
     }
-
+    
     team.website = modelTeam.website;
     team.name = modelTeam.name;
     team.locality = modelTeam.locality;
     team.region = modelTeam.region;
     team.countryName = modelTeam.countryName;
     team.location = modelTeam.location;
-    team.teamNumber = modelTeam.teamNumber;
+    team.teamNumberValue = modelTeam.teamNumber;
     team.key = modelTeam.key;
     team.nickname = modelTeam.nickname;
-    team.rookieYear = modelTeam.rookieYear;
+    team.rookieYearValue = modelTeam.rookieYear;
     
     return team;
 }
@@ -80,7 +66,7 @@
     
     NSString *trimmedNickname = [nickname stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (!nickname || [trimmedNickname isEqualToString:@""]) {
-        nickname = [NSString stringWithFormat:@"Team %lld", self.teamNumber];
+        nickname = [NSString stringWithFormat:@"Team %@", self.teamNumber];
     }
     return nickname;
 }

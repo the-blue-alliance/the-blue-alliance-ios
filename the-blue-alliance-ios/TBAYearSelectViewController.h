@@ -8,10 +8,11 @@
 
 #import "TBARefreshViewController.h"
 
-@interface TBAYearSelectViewController : TBARefreshViewController <UIViewControllerTransitioningDelegate>
+@interface TBAYearSelectViewController : TBARefreshViewController
 
 @property (nonatomic, assign) NSInteger startYear;
 @property (nonatomic, assign) NSUInteger currentYear;
+
 @property (nonatomic, copy) void (^yearSelected)(NSUInteger year);
 
 @end
