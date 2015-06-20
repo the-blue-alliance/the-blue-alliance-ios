@@ -121,7 +121,7 @@
             </objects>
             <point key="canvasLocation" x="629" y="1633"/>
         </scene>
-        <!--2012 Districts-->
+        <!--Districts View Controller-->
         <scene sceneID="wX8-t8-fft">
             <objects>
                 <viewController id="afK-Fx-nRD" customClass="DistrictsViewController" sceneMemberID="viewController">
@@ -168,10 +168,39 @@
                         </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="2012 Districts" id="4pe-f2-zA2"/>
+                    <navigationItem key="navigationItem" id="4pe-f2-zA2">
+                        <nil key="title"/>
+                        <view key="titleView" contentMode="scaleToFill" id="c4L-OJ-CrB">
+                            <rect key="frame" x="96" y="6" width="128" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Districts" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g76-Fu-X7s">
+                                    <rect key="frame" x="31" y="0.0" width="66" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="▾ 2015" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cby-MJ-EES">
+                                    <rect key="frame" x="47" y="19" width="35" height="14"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="centerX" secondItem="Cby-MJ-EES" secondAttribute="centerX" id="3De-h7-vXP"/>
+                                <constraint firstItem="g76-Fu-X7s" firstAttribute="top" secondItem="c4L-OJ-CrB" secondAttribute="top" id="9f8-JV-i5E"/>
+                                <constraint firstAttribute="bottom" secondItem="Cby-MJ-EES" secondAttribute="bottom" id="lT3-xh-M0d"/>
+                                <constraint firstAttribute="centerX" secondItem="g76-Fu-X7s" secondAttribute="centerX" id="lUx-LI-2Kg"/>
+                            </constraints>
+                        </view>
+                    </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="tableView" destination="gCi-od-YaK" id="m5h-su-alR"/>
+                        <outlet property="titleLabel" destination="g76-Fu-X7s" id="Z29-S2-hm9"/>
+                        <outlet property="yearLabel" destination="Cby-MJ-EES" id="QOb-av-Wrv"/>
                         <segue destination="XIf-XA-N6t" kind="push" identifier="DistrictsListSegue" id="xl8-yS-bnB"/>
                     </connections>
                 </viewController>
@@ -357,11 +386,11 @@
                         <viewControllerLayoutGuide type="bottom" id="VdE-zl-Y7F"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="jjX-Si-lUt">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="420"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="vGS-KJ-HZ7">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="420"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="EventCell" id="tJQ-Mx-Het" customClass="TBAEventTableViewCell">
@@ -520,18 +549,47 @@
                             <constraint firstItem="s7h-Su-f9x" firstAttribute="top" secondItem="73d-FA-91s" secondAttribute="bottom" id="ziT-dO-ZAj"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="uzj-dD-tNd"/>
+                    <navigationItem key="navigationItem" id="uzj-dD-tNd">
+                        <nil key="title"/>
+                        <view key="titleView" contentMode="scaleToFill" id="mcY-gS-Ww7">
+                            <rect key="frame" x="96" y="6" width="128" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Team 2337" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PdT-FR-3pi">
+                                    <rect key="frame" x="22" y="0.0" width="85" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="▾ 2015" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RxN-3j-nJY">
+                                    <rect key="frame" x="47" y="19" width="35" height="14"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="bottom" secondItem="RxN-3j-nJY" secondAttribute="bottom" id="IjM-4o-Mtp"/>
+                                <constraint firstAttribute="centerX" secondItem="PdT-FR-3pi" secondAttribute="centerX" id="VLH-bE-mCV"/>
+                                <constraint firstAttribute="centerX" secondItem="RxN-3j-nJY" secondAttribute="centerX" id="qMR-6W-UYc"/>
+                                <constraint firstItem="PdT-FR-3pi" firstAttribute="top" secondItem="mcY-gS-Ww7" secondAttribute="top" id="wnd-w3-KjB"/>
+                            </constraints>
+                        </view>
+                    </navigationItem>
                     <connections>
                         <outlet property="eventsView" destination="73d-FA-91s" id="4V5-Sc-bJn"/>
                         <outlet property="infoView" destination="BH1-On-zFm" id="psS-aE-DNT"/>
                         <outlet property="segmentedControlView" destination="6kw-6H-cLj" id="m9t-PJ-1TY"/>
+                        <outlet property="titleLabel" destination="PdT-FR-3pi" id="OhJ-gS-0Q0"/>
+                        <outlet property="yearLabel" destination="RxN-3j-nJY" id="ft6-iG-A2x"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gaD-6e-Xdj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1440" y="-362"/>
         </scene>
-        <!--Events-->
+        <!--Events View Controller-->
         <scene sceneID="IzA-jJ-POL">
             <objects>
                 <viewController id="Vgn-1j-Di4" customClass="EventsViewController" sceneMemberID="viewController">
@@ -568,10 +626,39 @@
                             <constraint firstItem="sqK-kj-TgD" firstAttribute="leading" secondItem="o2G-Eb-jFL" secondAttribute="leading" id="tdb-DH-1op"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Events" id="nwE-Me-WJo"/>
+                    <navigationItem key="navigationItem" id="nwE-Me-WJo">
+                        <nil key="title"/>
+                        <view key="titleView" contentMode="scaleToFill" id="id9-ex-69K">
+                            <rect key="frame" x="96" y="6" width="128" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Events" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A1f-8v-Cv4">
+                                    <rect key="frame" x="37" y="0.0" width="54" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="▾ 2015" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hEB-8Z-hgQ">
+                                    <rect key="frame" x="47" y="19" width="35" height="14"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="A1f-8v-Cv4" firstAttribute="top" secondItem="id9-ex-69K" secondAttribute="top" id="FaT-1q-BRn"/>
+                                <constraint firstAttribute="centerX" secondItem="A1f-8v-Cv4" secondAttribute="centerX" id="M70-Bo-wX6"/>
+                                <constraint firstAttribute="centerX" secondItem="hEB-8Z-hgQ" secondAttribute="centerX" id="O0I-Dd-msh"/>
+                                <constraint firstAttribute="bottom" secondItem="hEB-8Z-hgQ" secondAttribute="bottom" id="tO5-3g-y4l"/>
+                            </constraints>
+                        </view>
+                    </navigationItem>
                     <connections>
                         <outlet property="eventsView" destination="sqK-kj-TgD" id="EXw-Mc-GVX"/>
                         <outlet property="segmentedControlView" destination="xjg-oB-ggr" id="pfI-uj-GZV"/>
+                        <outlet property="titleLabel" destination="A1f-8v-Cv4" id="5te-uc-ZJr"/>
+                        <outlet property="yearLabel" destination="hEB-8Z-hgQ" id="PRU-Sd-Zbl"/>
                         <segue destination="kyn-5W-zgu" kind="push" identifier="EventViewControllerSegue" id="82k-17-wmC"/>
                     </connections>
                 </viewController>
@@ -955,7 +1042,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="rJN-Cr-0zc"/>
-        <segue reference="Wo5-pO-4F3"/>
+        <segue reference="WtZ-Y9-Ogt"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

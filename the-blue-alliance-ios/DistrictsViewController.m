@@ -49,7 +49,6 @@ static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         strongSelf.currentYear = selectedYear;
-        strongSelf.navigationItem.title = [NSString stringWithFormat:@"%@ Districts", @(selectedYear)];
         
         [strongSelf cancelRefresh];
         [strongSelf updateRefreshBarButtonItem:NO];
@@ -127,7 +126,7 @@ static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
 
 - (void)styleInterface {
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.navigationItem.title = [NSString stringWithFormat:@"%@ Districts", @(self.currentYear)];
+    self.navigationItem.title = @"Districts";
 }
 
 

@@ -52,7 +52,6 @@
             strongSelf.segmentedControl.selectedSegmentIndex = 0;
         }
         strongSelf.currentYear = selectedYear;
-        strongSelf.navigationItem.title = [NSString stringWithFormat:@"%@ Events", @(selectedYear)];
         
         [strongSelf cancelRefresh];
         [strongSelf updateRefreshBarButtonItem:NO];
@@ -132,7 +131,7 @@
 
 - (void)styleInterface {
     self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
-    self.navigationItem.title = [NSString stringWithFormat:@"%@ Events", @(self.currentYear)];
+    self.navigationItem.title = @"Events";
     [self updateInterface];
 }
 

@@ -13,11 +13,19 @@
 
 @property (nonatomic, strong) UIBarButtonItem *selectYearBarButtonItem;
 
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (nonatomic, weak) IBOutlet UILabel *yearLabel;
+
 @end
 
 @implementation TBAYearSelectViewController
 
 #pragma mark - Properities
+
+//- (void)setTitle:(NSString *)title {
+//    _title = title;
+//    NSLog(@"Title is: %@", title);
+//}
 
 - (NSInteger)startYear {
     if (_startYear == 0) {
@@ -38,25 +46,32 @@
 
 - (void)setCurrentYear:(NSUInteger)currentYear {
     [[NSUserDefaults standardUserDefaults] setInteger:currentYear forKey:[self currentYearUserDefaultsString]];
-    [[NSUserDefaults standardUserDefaults] synchronize];    
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [self updateYearInterface];
 }
 
-- (UIBarButtonItem *)selectYearBarButtonItem {
-    if (!_selectYearBarButtonItem) {
-        _selectYearBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_event_black"] style:UIBarButtonItemStylePlain target:self action:@selector(selectYearButtonTapped:)];
-    }
-    return _selectYearBarButtonItem;
-}
 
 #pragma mark - View Lifecycle
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
-//    [self.navigationItem setLeftBarButtonItem:self.selectYearBarButtonItem];
+    [self setupTapGesture];
+    [self updateYearInterface];
 }
 
 #pragma mark - Interface Methods
+
+- (void)setupTapGesture {
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectYearButtonTapped:)];
+    [self.navigationItem.titleView addGestureRecognizer:tapGesture];
+}
+
+- (void)updateYearInterface {
+    self.titleLabel.text = self.navigationItem.title;
+    self.yearLabel.text = [NSString stringWithFormat:@"▾ %zd", self.currentYear];
+}
 
 - (void)selectYearButtonTapped:(id)sender {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
