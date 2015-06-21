@@ -11,6 +11,7 @@
 #import "TBAInfoViewController.h"
 #import "Team.h"
 #import "Team+Fetch.h"
+#import "Event+Fetch.h"
 #import "Media.h"
 
 typedef NS_ENUM(NSInteger, TBATeamDataType) {
@@ -20,7 +21,8 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 
 @interface TeamViewController ()
 
-@property (nonatomic, weak) IBOutlet UIView *segmentedControlView;
+@property (nonatomic, weak) IBOutlet UISegmentedControl *segmentedControl;
+@property (nonatomic, strong) IBOutlet UIView *segmentedControlView;
 
 @property (nonatomic, strong) TBAInfoViewController *infoViewController;
 @property (nonatomic, weak) IBOutlet UIView *infoView;
@@ -43,31 +45,81 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
+            if (strongSelf.segmentedControl.selectedSegmentIndex == TBATeamDataTypeInfo) {
+                [strongSelf refreshTeamInfo];
+            } else {
+                [strongSelf refreshEvents];
+            }
             [strongSelf updateRefreshBarButtonItem:YES];
-//            [strongSelf refreshData];
         }
     };
     
     self.yearSelected = ^void(NSUInteger selectedYear) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-//        strongSelf.currentYear = selectedYear;
+        strongSelf.currentYear = selectedYear;
         
         [strongSelf cancelRefresh];
         [strongSelf updateRefreshBarButtonItem:NO];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-//            [strongSelf fetchDistricts];
+            if (strongSelf.segmentedControl.selectedSegmentIndex == TBATeamDataTypeInfo) {
+                [strongSelf refreshTeamInfo];
+            } else {
+                [strongSelf refreshEvents];
+            }
         });
     };
     
-    [self refreshMedia];
     [self styleInterface];
 }
 
-#pragma mark - Data Methods
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self cancelRefresh];
+    [self updateRefreshBarButtonItem:NO];
+}
+
+#pragma mark - Interface Methods
+
+- (void)styleInterface {
+    self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
+    self.navigationItem.title = [NSString stringWithFormat:@"Team %@", self.team.teamNumber];
+    
+    [self updateInterface];
+}
+
+- (void)updateInterface {
+    if (self.segmentedControl.selectedSegmentIndex == TBATeamDataTypeInfo) {
+        self.infoView.hidden = NO;
+        self.eventsView.hidden = YES;
+        
+        [self fetchTeam];
+        [self fetchMedia];
+    } else {
+        self.eventsView.hidden = NO;
+        self.infoView.hidden = YES;
+        
+        [self fetchEvents];
+    }
+}
+
+- (IBAction)segmentedControlValueChanged:(id)sender {
+    [self cancelRefresh];
+    [self updateRefreshBarButtonItem:NO];
+    
+    [self updateInterface];
+}
+
+#pragma mark - Team Info Data Methods
 
 - (void)refreshTeamInfo {
+    [self refreshTeam];
+    [self refreshMedia];
+}
+
+- (void)refreshTeam {
     __weak typeof(self) weakSelf = self;
     self.currentRequestIdentifier = [[TBAKit sharedKit] fetchTeamForTeamKey:self.team.key withCompletionBlock:^(TBATeam *team, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -84,29 +136,6 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
                 [Team insertTeamWithModelTeam:team inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
                 [strongSelf fetchTeam];
                 [strongSelf.persistenceController save];
-            });
-        }
-    }];
-}
-
-- (void)fetchTeam {
-    __weak typeof(self) weakSelf = self;
-    [Team fetchTeamForKey:self.team.key fromContext:self.persistenceController.managedObjectContext checkUpstream:NO withCompletionBlock:^(Team *team, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (error) {
-            [strongSelf showAlertWithTitle:@"Unable to fetch team locally" andMessage:error.localizedDescription];
-            return;
-        }
-        
-        if (!team) {
-            if (strongSelf.refresh) {
-                strongSelf.refresh();
-            }
-        } else {
-            strongSelf.team = team;
-            strongSelf.infoViewController.team = team;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf updateInterface];
             });
         }
     }];
@@ -136,15 +165,71 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     }];
 }
 
-#pragma mark - Interface Methods
-
-- (void)styleInterface {
-    self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
-    self.navigationItem.title = [NSString stringWithFormat:@"Team %@", self.team.teamNumber];
+- (void)fetchTeam {
+    __weak typeof(self) weakSelf = self;
+    [Team fetchTeamForKey:self.team.key fromContext:self.persistenceController.managedObjectContext checkUpstream:NO withCompletionBlock:^(Team *team, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (error) {
+            [strongSelf showAlertWithTitle:@"Unable to fetch team locally" andMessage:error.localizedDescription];
+            return;
+        }
+        
+        if (!team) {
+            if (strongSelf.refresh) {
+                strongSelf.refresh();
+            }
+        } else {
+            strongSelf.team = team;
+            strongSelf.infoViewController.team = team;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf.infoViewController.tableView reloadData];
+            });
+        }
+    }];
 }
 
-- (void)updateInterface {
-    [self.infoViewController.tableView reloadData];
+- (void)fetchMedia {
+    NSArray *currentYearMedia = [[self.team.media allObjects] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"year == %@", @(self.currentYear)]];
+    
+    self.infoViewController.media = currentYearMedia;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.infoViewController.tableView reloadData];
+    });
+}
+
+#pragma mark - Events Data Methods
+
+- (void)fetchEvents {
+    NSSortDescriptor *startDateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:YES];
+    NSArray *sorted = [self.team.events sortedArrayUsingDescriptors:[NSArray arrayWithObject:startDateSortDescriptor]];
+
+    NSArray *currentYearEvents = [sorted filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"year == %@", @(self.currentYear)]];
+    
+    self.eventsViewController.events = [Event groupEventsByWeek:currentYearEvents andGroupByType:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.eventsViewController.tableView reloadData];
+    });
+}
+
+- (void)refreshEvents {
+    __weak typeof(self) weakSelf = self;
+    self.currentRequestIdentifier = [[TBAKit sharedKit] fetchEventsForTeamKey:self.team.key andYear:self.currentYear withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        strongSelf.currentRequestIdentifier = 0;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [strongSelf updateRefreshBarButtonItem:NO];
+        });
+        
+        if (error) {
+            [strongSelf showAlertWithTitle:@"Error fetching events for team" andMessage:error.localizedDescription];
+        } else {
+            NSArray *newEvents = [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
+            [strongSelf.team addEvents:[NSSet setWithArray:newEvents]];
+            [strongSelf updateInterface];
+            [strongSelf.persistenceController save];
+        }
+    }];
 }
 
 #pragma mark - Navigation
@@ -153,6 +238,15 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     if ([segue.identifier isEqualToString:@"InfoViewControllerEmbed"]) {
         self.infoViewController = segue.destinationViewController;
         self.infoViewController.team = self.team;
+        
+        
+        NSArray *currentYearMedia = [[self.team.media allObjects] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"year == %@", @(self.currentYear)]];
+        self.infoViewController.media = currentYearMedia;
+    } else if ([segue.identifier isEqualToString:@"EventsViewControllerEmbed"]) {
+        self.eventsViewController = segue.destinationViewController;
+        self.eventsViewController.eventSelected = ^(Event *event) {
+            NSLog(@"Selected event: %@", event.shortName);
+        };
     }
 }
 

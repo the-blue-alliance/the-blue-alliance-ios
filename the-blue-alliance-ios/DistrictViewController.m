@@ -7,21 +7,16 @@
 //
 
 #import "DistrictViewController.h"
-
 #import "District.h"
 #import "District+Fetch.h"
 #import "DistrictRanking.h"
 #import "EventPoints.h"
-
 #import "Event+Fetch.h"
 #import "DistrictRankingsViewController.h"
 #import "TBAKit.h"
-
 #import "TBAEventsViewController.h"
-
 #import "Team.h"
 #import "Team+Fetch.h"
-
 
 typedef NS_ENUM(NSInteger, TBADistrictDataType) {
     TBADistrictDataTypeEvents = 0,
@@ -68,7 +63,6 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
     [self updateRefreshBarButtonItem:NO];
 }
 
-
 #pragma mark - Interface Actions
 
 - (void)styleInterface {
@@ -84,7 +78,6 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
         self.rankingsView.hidden = YES;
         
         [self fetchDistricts];
-        [self.eventsViewController.tableView reloadData];
     } else {
         self.eventsView.hidden = YES;
         self.rankingsView.hidden = NO;
@@ -100,7 +93,6 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 
     [self updateInterface];
 }
-
 
 #pragma mark - Data Methods
 
@@ -141,7 +133,6 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf fetchDistricts];
                 [strongSelf updateInterface];
                 [strongSelf.persistenceController save];
             });

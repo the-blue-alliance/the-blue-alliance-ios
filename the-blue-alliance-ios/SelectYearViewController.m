@@ -10,6 +10,12 @@
 
 static NSString *const YearCellReuseIdentifier = @"Year Cell";
 
+@interface SelectYearViewController ()
+
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
+
+@end
+
 @implementation SelectYearViewController
 
 #pragma mark - View Lifecycle

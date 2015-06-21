@@ -13,6 +13,8 @@
 @interface TBAInfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, weak) Team *team;
+@property (nonatomic, copy) NSArray *media;
+
 @property (nonatomic, weak) Event *event;
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;

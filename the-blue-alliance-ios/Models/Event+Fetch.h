@@ -10,8 +10,8 @@
 
 @interface Event (Fetch)
 
-// Locally
-+ (void)fetchEventForYear:(NSUInteger)year fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *events, NSError *error))completion;
++ (void)fetchEventsForYear:(NSUInteger)year fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *events, NSError *error))completion;
+
 + (void)fetchEventForKey:(NSString *)eventKey fromContext:(NSManagedObjectContext *)context checkUpstream:(BOOL)upstream withCompletionBlock:(void(^)(Event *event, NSError *error))completion;
 
 @end

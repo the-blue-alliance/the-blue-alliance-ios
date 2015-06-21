@@ -19,11 +19,13 @@ extern const struct TeamAttributes {
 extern const struct TeamRelationships {
 	__unsafe_unretained NSString *districtRankings;
 	__unsafe_unretained NSString *eventPoints;
+	__unsafe_unretained NSString *events;
 	__unsafe_unretained NSString *media;
 } TeamRelationships;
 
 @class DistrictRanking;
 @class EventPoints;
+@class Event;
 @class Media;
 
 @interface TeamID : NSManagedObjectID {}
@@ -91,6 +93,10 @@ extern const struct TeamRelationships {
 
 - (NSMutableSet*)eventPointsSet;
 
+@property (nonatomic, strong) NSSet *events;
+
+- (NSMutableSet*)eventsSet;
+
 @property (nonatomic, strong) NSSet *media;
 
 - (NSMutableSet*)mediaSet;
@@ -110,6 +116,14 @@ extern const struct TeamRelationships {
 - (void)removeEventPoints:(NSSet*)value_;
 - (void)addEventPointsObject:(EventPoints*)value_;
 - (void)removeEventPointsObject:(EventPoints*)value_;
+
+@end
+
+@interface _Team (EventsCoreDataGeneratedAccessors)
+- (void)addEvents:(NSSet*)value_;
+- (void)removeEvents:(NSSet*)value_;
+- (void)addEventsObject:(Event*)value_;
+- (void)removeEventsObject:(Event*)value_;
 
 @end
 
@@ -164,6 +178,9 @@ extern const struct TeamRelationships {
 
 - (NSMutableSet*)primitiveEventPoints;
 - (void)setPrimitiveEventPoints:(NSMutableSet*)value;
+
+- (NSMutableSet*)primitiveEvents;
+- (void)setPrimitiveEvents:(NSMutableSet*)value;
 
 - (NSMutableSet*)primitiveMedia;
 - (void)setPrimitiveMedia:(NSMutableSet*)value;

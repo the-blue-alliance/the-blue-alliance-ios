@@ -45,7 +45,7 @@
     }
 }
 
-+ (void)fetchEventForYear:(NSUInteger)year fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *events, NSError *error))completion {
++ (void)fetchEventsForYear:(NSUInteger)year fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *events, NSError *error))completion {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Event"];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"year == %@", @(year)];
     [fetchRequest setPredicate:predicate];

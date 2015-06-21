@@ -23,11 +23,13 @@ extern const struct EventAttributes {
 extern const struct EventRelationships {
 	__unsafe_unretained NSString *alliances;
 	__unsafe_unretained NSString *points;
+	__unsafe_unretained NSString *teams;
 	__unsafe_unretained NSString *webcasts;
 } EventRelationships;
 
 @class EventAlliance;
 @class EventPoints;
+@class Team;
 @class EventWebcast;
 
 @interface EventID : NSManagedObjectID {}
@@ -115,6 +117,10 @@ extern const struct EventRelationships {
 
 - (NSMutableSet*)pointsSet;
 
+@property (nonatomic, strong) NSSet *teams;
+
+- (NSMutableSet*)teamsSet;
+
 @property (nonatomic, strong) NSSet *webcasts;
 
 - (NSMutableSet*)webcastsSet;
@@ -134,6 +140,14 @@ extern const struct EventRelationships {
 - (void)removePoints:(NSSet*)value_;
 - (void)addPointsObject:(EventPoints*)value_;
 - (void)removePointsObject:(EventPoints*)value_;
+
+@end
+
+@interface _Event (TeamsCoreDataGeneratedAccessors)
+- (void)addTeams:(NSSet*)value_;
+- (void)removeTeams:(NSSet*)value_;
+- (void)addTeamsObject:(Team*)value_;
+- (void)removeTeamsObject:(Team*)value_;
 
 @end
 
@@ -203,6 +217,9 @@ extern const struct EventRelationships {
 
 - (NSMutableSet*)primitivePoints;
 - (void)setPrimitivePoints:(NSMutableSet*)value;
+
+- (NSMutableSet*)primitiveTeams;
+- (void)setPrimitiveTeams:(NSMutableSet*)value;
 
 - (NSMutableSet*)primitiveWebcasts;
 - (void)setPrimitiveWebcasts:(NSMutableSet*)value;

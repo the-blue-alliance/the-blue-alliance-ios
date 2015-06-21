@@ -171,7 +171,7 @@
                     <navigationItem key="navigationItem" id="4pe-f2-zA2">
                         <nil key="title"/>
                         <view key="titleView" contentMode="scaleToFill" id="c4L-OJ-CrB">
-                            <rect key="frame" x="96" y="6" width="128" height="33"/>
+                            <rect key="frame" x="96" y="5.5" width="128" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Districts" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g76-Fu-X7s">
@@ -386,11 +386,11 @@
                         <viewControllerLayoutGuide type="bottom" id="VdE-zl-Y7F"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="jjX-Si-lUt">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="420"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="vGS-KJ-HZ7">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="420"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="411"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="EventCell" id="tJQ-Mx-Het" customClass="TBAEventTableViewCell">
@@ -513,6 +513,7 @@
                                         </segments>
                                         <connections>
                                             <action selector="segmentedControlValueChanged:" destination="XIf-XA-N6t" eventType="valueChanged" id="pVv-Do-h87"/>
+                                            <action selector="segmentedControlValueChanged:" destination="2nM-IU-A97" eventType="valueChanged" id="wtm-pG-1Z5"/>
                                         </connections>
                                     </segmentedControl>
                                 </subviews>
@@ -526,6 +527,9 @@
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="73d-FA-91s" userLabel="Events View">
                                 <rect key="frame" x="0.0" y="44" width="320" height="411"/>
+                                <connections>
+                                    <segue destination="1lZ-AS-o2Q" kind="embed" identifier="EventsViewControllerEmbed" id="bZE-4W-q8n"/>
+                                </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BH1-On-zFm" userLabel="Info View">
                                 <rect key="frame" x="0.0" y="44" width="320" height="411"/>
@@ -552,7 +556,7 @@
                     <navigationItem key="navigationItem" id="uzj-dD-tNd">
                         <nil key="title"/>
                         <view key="titleView" contentMode="scaleToFill" id="mcY-gS-Ww7">
-                            <rect key="frame" x="96" y="6" width="128" height="33"/>
+                            <rect key="frame" x="96" y="5.5" width="128" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Team 2337" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PdT-FR-3pi">
@@ -580,7 +584,8 @@
                     <connections>
                         <outlet property="eventsView" destination="73d-FA-91s" id="4V5-Sc-bJn"/>
                         <outlet property="infoView" destination="BH1-On-zFm" id="psS-aE-DNT"/>
-                        <outlet property="segmentedControlView" destination="6kw-6H-cLj" id="m9t-PJ-1TY"/>
+                        <outlet property="segmentedControl" destination="NYH-TL-Hq6" id="ZeW-Ua-W4U"/>
+                        <outlet property="segmentedControlView" destination="6kw-6H-cLj" id="NKQ-xl-v34"/>
                         <outlet property="titleLabel" destination="PdT-FR-3pi" id="OhJ-gS-0Q0"/>
                         <outlet property="yearLabel" destination="RxN-3j-nJY" id="ft6-iG-A2x"/>
                     </connections>
@@ -629,7 +634,7 @@
                     <navigationItem key="navigationItem" id="nwE-Me-WJo">
                         <nil key="title"/>
                         <view key="titleView" contentMode="scaleToFill" id="id9-ex-69K">
-                            <rect key="frame" x="96" y="6" width="128" height="33"/>
+                            <rect key="frame" x="96" y="5.5" width="128" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Events" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A1f-8v-Cv4">
@@ -923,7 +928,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="100" id="KX9-yE-gEN"/>
                                                     </constraints>
-                                                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="5" minimumInteritemSpacing="5" id="PWA-fr-GYt">
+                                                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="PWA-fr-GYt">
                                                         <size key="itemSize" width="50" height="50"/>
                                                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -1041,8 +1046,8 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="bZE-4W-q8n"/>
         <segue reference="rJN-Cr-0zc"/>
-        <segue reference="WtZ-Y9-Ogt"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

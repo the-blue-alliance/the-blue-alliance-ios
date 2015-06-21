@@ -31,6 +31,7 @@
         <attribute name="year" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventAlliance" inverseName="event" inverseEntity="EventAlliance" syncable="YES"/>
         <relationship name="points" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventPoints" inverseName="event" inverseEntity="EventPoints" syncable="YES"/>
+        <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="events" inverseEntity="Team" syncable="YES"/>
         <relationship name="webcasts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventWebcast" inverseName="event" inverseEntity="EventWebcast" syncable="YES"/>
     </entity>
     <entity name="EventAlliance" representedClassName="EventAlliance" syncable="YES">
@@ -76,16 +77,17 @@
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="districtRankings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictRanking" inverseName="team" inverseEntity="DistrictRanking" syncable="YES"/>
         <relationship name="eventPoints" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventPoints" inverseName="team" inverseEntity="EventPoints" syncable="YES"/>
+        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="teams" inverseEntity="Event" syncable="YES"/>
         <relationship name="media" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Media" inverseName="team" inverseEntity="Media" syncable="YES"/>
     </entity>
     <elements>
         <element name="District" positionX="-1278" positionY="2070" width="128" height="105"/>
         <element name="DistrictRanking" positionX="-1287" positionY="2061" width="128" height="135"/>
-        <element name="Event" positionX="-1485" positionY="1920" width="128" height="300"/>
+        <element name="Event" positionX="-1485" positionY="1920" width="128" height="315"/>
         <element name="EventAlliance" positionX="-1260" positionY="2088" width="128" height="90"/>
         <element name="EventPoints" positionX="-1269" positionY="2079" width="128" height="180"/>
         <element name="EventWebcast" positionX="-1251" positionY="2097" width="128" height="105"/>
         <element name="Media" positionX="-965" positionY="2159" width="128" height="135"/>
-        <element name="Team" positionX="-1242" positionY="2277" width="128" height="240"/>
+        <element name="Team" positionX="-1242" positionY="2277" width="128" height="255"/>
     </elements>
 </model>

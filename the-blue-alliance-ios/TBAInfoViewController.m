@@ -44,7 +44,7 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
 #pragma mark - Table View Data Source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return ([self.team.media count] != 0 ? 2 : 1);
+    return (self.media && [self.media count] != 0 ? 2 : 1);
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -121,13 +121,13 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [self.team.media count];
+    return [self.media count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     TBAMediaCollectionViewCell *cell = (TBAMediaCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:MediaCellReuseIdentifier forIndexPath:indexPath];
     
-    Media *media = [[self.team.media allObjects] objectAtIndex:indexPath.row];
+    Media *media = [self.media objectAtIndex:indexPath.row];
     cell.media = media;
     
     return cell;

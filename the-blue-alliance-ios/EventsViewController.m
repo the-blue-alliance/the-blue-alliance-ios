@@ -75,7 +75,7 @@
 
 - (void)fetchEvents {
     __weak typeof(self) weakSelf = self;
-    [Event fetchEventForYear:self.currentYear fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *events, NSError *error) {
+    [Event fetchEventsForYear:self.currentYear fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *events, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (error) {
             [strongSelf showAlertWithTitle:@"Unable to fetch events locally" andMessage:error.localizedDescription];

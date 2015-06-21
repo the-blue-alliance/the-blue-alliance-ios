@@ -12,7 +12,6 @@
 
 @property (nonatomic, assign) NSInteger startYear;
 @property (nonatomic, assign) NSUInteger currentYear;
-@property (nonatomic, weak) IBOutlet UITableView *tableView;
 
 @property (nonatomic, copy) void (^yearSelectedCallback)(NSUInteger selectedYear);
 
