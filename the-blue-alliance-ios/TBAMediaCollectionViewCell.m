@@ -12,7 +12,6 @@
 
 @interface TBAMediaCollectionViewCell ()
 
-@property (nonatomic, weak) IBOutlet UIImageView *imageView;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityView;
 
 @end
@@ -23,18 +22,17 @@
     self.imageView.hidden = YES;
 
     self.activityView.hidden = NO;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.activityView startAnimating];
-    });
 }
 
 - (void)setMedia:(Media *)media {
     _media = media;
-
+    [self.activityView startAnimating];
+    
     NSURLRequest *request;
     if (media.cachedData) {
         [self.imageView setImage:[UIImage imageWithData:media.cachedData]];
         
+        [self.activityView stopAnimating];
         self.activityView.hidden = YES;
         self.imageView.hidden = NO;
     } else if (media.mediaTypeValue == TBAMediaTypeCDPhotoThread) {
@@ -59,6 +57,7 @@
                                        self.imageLoadedFromWeb();
                                    }
                                    [self.imageView setImage:[UIImage imageWithData:data]];
+                                   [self.activityView stopAnimating];
                                    
                                    self.activityView.hidden = YES;
                                    self.imageView.hidden = NO;

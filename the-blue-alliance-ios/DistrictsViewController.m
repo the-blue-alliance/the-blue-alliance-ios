@@ -34,7 +34,7 @@ static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.startYear = 2009;
+//    self.startYear = 2009;
     
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
@@ -57,6 +57,8 @@ static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
             [strongSelf fetchDistricts];
         });
     };
+    
+#warning configure years for districts
     
     [self fetchDistricts];
     [self styleInterface];

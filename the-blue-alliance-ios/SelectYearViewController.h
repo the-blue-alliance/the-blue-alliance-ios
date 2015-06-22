@@ -10,8 +10,8 @@
 
 @interface SelectYearViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, assign) NSInteger startYear;
 @property (nonatomic, assign) NSUInteger currentYear;
+@property (nonatomic, copy) NSArray *years;
 
 @property (nonatomic, copy) void (^yearSelectedCallback)(NSUInteger selectedYear);
 

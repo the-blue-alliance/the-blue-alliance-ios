@@ -101,6 +101,7 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
         UITableViewHeaderFooterView *tableViewHeaderFooterView = (UITableViewHeaderFooterView *)view;
         tableViewHeaderFooterView.textLabel.text = [self titleString];
         tableViewHeaderFooterView.textLabel.font = [UIFont boldSystemFontOfSize:18.0f];
+        tableViewHeaderFooterView.textLabel.textColor = [UIColor blackColor];
     }
 }
 
@@ -126,6 +127,8 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     TBAMediaCollectionViewCell *cell = (TBAMediaCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:MediaCellReuseIdentifier forIndexPath:indexPath];
+    
+    cell.imageView.image = nil;
     
     Media *media = [self.media objectAtIndex:indexPath.row];
     cell.media = media;

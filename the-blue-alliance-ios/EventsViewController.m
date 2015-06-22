@@ -59,6 +59,9 @@
         [strongSelf fetchEvents];
     };
     
+    NSInteger year = [TBAYearSelectViewController currentYear];
+    self.years = [TBAYearSelectViewController yearsBetweenStartYear:1992 endYear:year];
+    
     [self fetchEvents];
     [self styleInterface];
 }

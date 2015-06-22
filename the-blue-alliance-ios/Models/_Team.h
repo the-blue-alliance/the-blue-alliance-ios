@@ -14,6 +14,7 @@ extern const struct TeamAttributes {
 	__unsafe_unretained NSString *rookieYear;
 	__unsafe_unretained NSString *teamNumber;
 	__unsafe_unretained NSString *website;
+	__unsafe_unretained NSString *yearsParticipated;
 } TeamAttributes;
 
 extern const struct TeamRelationships {
@@ -27,6 +28,8 @@ extern const struct TeamRelationships {
 @class EventPoints;
 @class Event;
 @class Media;
+
+@class NSObject;
 
 @interface TeamID : NSManagedObjectID {}
 @end
@@ -84,6 +87,10 @@ extern const struct TeamRelationships {
 @property (nonatomic, strong) NSString* website;
 
 //- (BOOL)validateWebsite:(id*)value_ error:(NSError**)error_;
+
+@property (nonatomic, strong) id yearsParticipated;
+
+//- (BOOL)validateYearsParticipated:(id*)value_ error:(NSError**)error_;
 
 @property (nonatomic, strong) NSSet *districtRankings;
 
@@ -172,6 +179,9 @@ extern const struct TeamRelationships {
 
 - (NSString*)primitiveWebsite;
 - (void)setPrimitiveWebsite:(NSString*)value;
+
+- (id)primitiveYearsParticipated;
+- (void)setPrimitiveYearsParticipated:(id)value;
 
 - (NSMutableSet*)primitiveDistrictRankings;
 - (void)setPrimitiveDistrictRankings:(NSMutableSet*)value;

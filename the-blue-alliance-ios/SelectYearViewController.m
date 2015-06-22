@@ -44,14 +44,14 @@ static NSString *const YearCellReuseIdentifier = @"Year Cell";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return ([self year] - self.startYear) + 1;
+// TODO: We need a no data screen here for no years
+    return [self.years count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:YearCellReuseIdentifier forIndexPath:indexPath];
     
-    NSInteger year = [self year] - indexPath.row;
-
+    NSInteger year = [(NSNumber *)[self.years objectAtIndex:indexPath.row] integerValue];
     cell.textLabel.text = [NSString stringWithFormat:@"%zd", year];
     if (year == self.currentYear) {
         cell.tintColor = [UIColor TBANavigationBarColor];
@@ -68,18 +68,11 @@ static NSString *const YearCellReuseIdentifier = @"Year Cell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    NSUInteger year = [self year] - indexPath.row;
-    
+    NSInteger year = [(NSNumber *)[self.years objectAtIndex:indexPath.row] integerValue];
     if (self.yearSelectedCallback) {
         self.yearSelectedCallback(year);
     }
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-#pragma mark - Private Methods
-
-- (NSInteger)year {
-    return [[NSCalendar currentCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]];
 }
 
 @end

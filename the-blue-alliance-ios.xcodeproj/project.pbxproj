@@ -68,6 +68,7 @@
 		927E8C471B2689EF00C93E6C /* TBAEventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 927E8C461B2689EF00C93E6C /* TBAEventsViewController.m */; };
 		927E8C4C1B268A3A00C93E6C /* TBATeamsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 927E8C4B1B268A3A00C93E6C /* TBATeamsViewController.m */; };
 		9299EAF11B2C6A88006AC641 /* TBAMediaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9299EAF01B2C6A88006AC641 /* TBAMediaTableViewCell.m */; };
+		92AB124B1B37C33F00965686 /* Media+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AB124A1B37C33F00965686 /* Media+Fetch.m */; };
 		92BB8B981AC64DC800A041FA /* TBAYearSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B971AC64DC800A041FA /* TBAYearSelectViewController.m */; };
 		92E749101B27B0EC00C46487 /* TBAInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E7490F1B27B0EC00C46487 /* TBAInfoViewController.m */; };
 		92EAA4C01ABF6AB100F7CF39 /* SelectYearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EAA4BF1ABF6AB100F7CF39 /* SelectYearViewController.m */; };
@@ -167,6 +168,8 @@
 		927E8C4B1B268A3A00C93E6C /* TBATeamsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBATeamsViewController.m; sourceTree = "<group>"; };
 		9299EAEF1B2C6A88006AC641 /* TBAMediaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAMediaTableViewCell.h; sourceTree = "<group>"; };
 		9299EAF01B2C6A88006AC641 /* TBAMediaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAMediaTableViewCell.m; sourceTree = "<group>"; };
+		92AB12491B37C33F00965686 /* Media+Fetch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Media+Fetch.h"; path = "Models/Media+Fetch.h"; sourceTree = "<group>"; };
+		92AB124A1B37C33F00965686 /* Media+Fetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Media+Fetch.m"; path = "Models/Media+Fetch.m"; sourceTree = "<group>"; };
 		92ACD1A81AAF6F46009283C1 /* libPods-PureLayout.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-PureLayout.a"; path = "Pods/build/Debug-iphoneos/libPods-PureLayout.a"; sourceTree = "<group>"; };
 		92ACD1AA1AAF6F51009283C1 /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
 		92ACD1AC1AAF6FE5009283C1 /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
@@ -332,6 +335,8 @@
 			children = (
 				9237F7671B2CA76100C89978 /* Media.h */,
 				9237F7681B2CA76100C89978 /* Media.m */,
+				92AB12491B37C33F00965686 /* Media+Fetch.h */,
+				92AB124A1B37C33F00965686 /* Media+Fetch.m */,
 			);
 			name = Media;
 			sourceTree = "<group>";
@@ -677,6 +682,7 @@
 				9237F74B1B2CA74D00C89978 /* TBAPersistenceController.m in Sources */,
 				9258CD401B2CAC35001069ED /* EventPoints.m in Sources */,
 				9258CD301B2CAC1B001069ED /* _EventWebcast.m in Sources */,
+				92AB124B1B37C33F00965686 /* Media+Fetch.m in Sources */,
 				9237F77E1B2CA7CB00C89978 /* TBA.xcdatamodeld in Sources */,
 				9258CD3E1B2CAC35001069ED /* Event+Fetch.m in Sources */,
 				92E749101B27B0EC00C46487 /* TBAInfoViewController.m in Sources */,

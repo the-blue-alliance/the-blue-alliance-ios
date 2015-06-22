@@ -71,4 +71,18 @@
     return nickname;
 }
 
+- (NSArray *)sortedEventsForYear:(NSInteger)year {
+    NSSortDescriptor *startDateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:YES];
+    NSArray *sorted = [self.events sortedArrayUsingDescriptors:[NSArray arrayWithObject:startDateSortDescriptor]];
+    
+    return [sorted filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"year == %@", @(year)]];
+}
+
+- (NSArray *)sortedYearsParticipated {
+    NSMutableArray *years = [self.yearsParticipated mutableCopy];
+
+    NSSortDescriptor *highestToLowest = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:NO];
+    return [years sortedArrayUsingDescriptors:@[highestToLowest]];
+}
+
 @end

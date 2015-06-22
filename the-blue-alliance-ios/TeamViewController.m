@@ -13,6 +13,7 @@
 #import "Team+Fetch.h"
 #import "Event+Fetch.h"
 #import "Media.h"
+#import "Media+Fetch.h"
 
 typedef NS_ENUM(NSInteger, TBATeamDataType) {
     TBATeamDataTypeInfo = 0,
@@ -20,6 +21,8 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 };
 
 @interface TeamViewController ()
+
+@property (nonatomic, assign) BOOL attemptedToFetchMedia;
 
 @property (nonatomic, weak) IBOutlet UISegmentedControl *segmentedControl;
 @property (nonatomic, strong) IBOutlet UIView *segmentedControlView;
@@ -34,13 +37,9 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 
 @implementation TeamViewController
 
-// Should also fetch years participated
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-//    self.startYear = 2009;
-    
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -71,6 +70,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         });
     };
     
+    [self configureYears];
     [self styleInterface];
 }
 
@@ -96,7 +96,10 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         self.eventsView.hidden = YES;
         
         [self fetchTeam];
-        [self fetchMedia];
+        [self fetchYearsParticipated];
+        if (self.currentYear != 0) {
+            [self fetchMedia];
+        }
     } else {
         self.eventsView.hidden = NO;
         self.infoView.hidden = YES;
@@ -112,14 +115,54 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     [self updateInterface];
 }
 
-#pragma mark - Team Info Data Methods
+#pragma mark - Data Methods
+
+- (void)configureYears {
+    NSArray *years = self.team.yearsParticipated;
+    if (!years || [years count] == 0) {
+        self.currentYear = 0;
+    } else {
+        self.years = years;
+    }
+}
+
+#pragma mark - Team Info Refresh (Upstream) Data Methods
 
 - (void)refreshTeamInfo {
+    [self refreshYearsParticipated];
     [self refreshTeam];
+
+    self.attemptedToFetchMedia = NO;
     [self refreshMedia];
 }
 
+- (void)refreshYearsParticipated {
+    [self updateRefreshBarButtonItem:YES];
+    
+    __weak typeof(self) weakSelf = self;
+    self.currentRequestIdentifier = [[TBAKit sharedKit] fetchYearsParticipatedForTeamKey:self.team.key withCompletionBlock:^(NSArray *years, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        strongSelf.currentRequestIdentifier = 0;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [strongSelf updateRefreshBarButtonItem:NO];
+        });
+        
+        if (error) {
+            [strongSelf showAlertWithTitle:@"Error fetching years participated" andMessage:error.localizedDescription];
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                strongSelf.team.yearsParticipated = years;
+                [strongSelf fetchYearsParticipated];
+                [strongSelf.persistenceController save];
+            });
+        }
+    }];
+}
+
 - (void)refreshTeam {
+    [self updateRefreshBarButtonItem:YES];
+    
     __weak typeof(self) weakSelf = self;
     self.currentRequestIdentifier = [[TBAKit sharedKit] fetchTeamForTeamKey:self.team.key withCompletionBlock:^(TBATeam *team, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -142,12 +185,19 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 }
 
 - (void)refreshMedia {
+    if (self.currentYear == 0) {
+        return;
+    }
+    
+    [self updateRefreshBarButtonItem:YES];
+
     __block NSInteger year = self.currentYear;
     
     __weak typeof(self) weakSelf = self;
     self.currentRequestIdentifier = [[TBAKit sharedKit] fetchMediaForTeamKey:self.team.key andYear:self.currentYear withCompletionBlock:^(NSArray *media, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        
+
+        strongSelf.attemptedToFetchMedia = YES;
         strongSelf.currentRequestIdentifier = 0;
         dispatch_async(dispatch_get_main_queue(), ^{
             [strongSelf updateRefreshBarButtonItem:NO];
@@ -158,11 +208,26 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [Media insertMediasWithModelMedias:media forTeam:self.team andYear:year inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf updateInterface];
+                [strongSelf fetchMedia];
                 [strongSelf.persistenceController save];
             });
         }
     }];
+}
+
+#pragma mark - Team Info Fetch (Local) Data Methods
+
+- (void)fetchYearsParticipated {
+    NSArray *years = [self.team sortedYearsParticipated];
+    if (!years || [years count] == 0) {
+        [self refreshYearsParticipated];
+    } else {
+        self.years = years;
+        if (self.currentYear == 0) {
+            self.currentYear = [(NSNumber *)[years firstObject] integerValue];
+            [self fetchMedia];
+        }
+    }
 }
 
 - (void)fetchTeam {
@@ -175,9 +240,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         }
         
         if (!team) {
-            if (strongSelf.refresh) {
-                strongSelf.refresh();
-            }
+            [self refreshTeam];
         } else {
             strongSelf.team = team;
             strongSelf.infoViewController.team = team;
@@ -189,29 +252,44 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 }
 
 - (void)fetchMedia {
-    NSArray *currentYearMedia = [[self.team.media allObjects] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"year == %@", @(self.currentYear)]];
-    
-    self.infoViewController.media = currentYearMedia;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.infoViewController.tableView reloadData];
-    });
+    __weak typeof(self) weakSelf = self;
+    [Media fetchMediaForYear:self.currentYear forTeam:self.team fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *media, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (error) {
+            [strongSelf showAlertWithTitle:@"Unable to fetch media locally" andMessage:error.localizedDescription];
+            return;
+        }
+        
+        if ((!media || [media count] == 0) && !self.attemptedToFetchMedia) {
+            [strongSelf refreshMedia];
+        } else {
+            strongSelf.infoViewController.media = media;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf.infoViewController.tableView reloadData];
+            });
+        }
+    }];
 }
 
 #pragma mark - Events Data Methods
 
 - (void)fetchEvents {
-    NSSortDescriptor *startDateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:YES];
-    NSArray *sorted = [self.team.events sortedArrayUsingDescriptors:[NSArray arrayWithObject:startDateSortDescriptor]];
-
-    NSArray *currentYearEvents = [sorted filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"year == %@", @(self.currentYear)]];
+    NSArray *events = [self.team sortedEventsForYear:self.currentYear];
     
-    self.eventsViewController.events = [Event groupEventsByWeek:currentYearEvents andGroupByType:NO];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.eventsViewController.tableView reloadData];
-    });
+    if (!events || [events count] == 0) {
+        [self refreshEvents];
+    } else {
+        self.eventsViewController.events = [Event groupEventsByWeek:events andGroupByType:NO];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.eventsViewController.tableView reloadData];
+        });
+    }
 }
 
 - (void)refreshEvents {
+    [self updateRefreshBarButtonItem:YES];
+    // TODO: Set events table view to no data and show a loading state?
+    
     __weak typeof(self) weakSelf = self;
     self.currentRequestIdentifier = [[TBAKit sharedKit] fetchEventsForTeamKey:self.team.key andYear:self.currentYear withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -238,10 +316,6 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     if ([segue.identifier isEqualToString:@"InfoViewControllerEmbed"]) {
         self.infoViewController = segue.destinationViewController;
         self.infoViewController.team = self.team;
-        
-        
-        NSArray *currentYearMedia = [[self.team.media allObjects] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"year == %@", @(self.currentYear)]];
-        self.infoViewController.media = currentYearMedia;
     } else if ([segue.identifier isEqualToString:@"EventsViewControllerEmbed"]) {
         self.eventsViewController = segue.destinationViewController;
         self.eventsViewController.eventSelected = ^(Event *event) {

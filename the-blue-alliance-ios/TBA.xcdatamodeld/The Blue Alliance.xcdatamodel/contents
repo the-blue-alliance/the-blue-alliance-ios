@@ -75,6 +75,7 @@
         <attribute name="rookieYear" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="teamNumber" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="yearsParticipated" optional="YES" attributeType="Transformable" syncable="YES"/>
         <relationship name="districtRankings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictRanking" inverseName="team" inverseEntity="DistrictRanking" syncable="YES"/>
         <relationship name="eventPoints" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventPoints" inverseName="team" inverseEntity="EventPoints" syncable="YES"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="teams" inverseEntity="Event" syncable="YES"/>
@@ -88,6 +89,6 @@
         <element name="EventPoints" positionX="-1269" positionY="2079" width="128" height="180"/>
         <element name="EventWebcast" positionX="-1251" positionY="2097" width="128" height="105"/>
         <element name="Media" positionX="-965" positionY="2159" width="128" height="135"/>
-        <element name="Team" positionX="-1242" positionY="2277" width="128" height="255"/>
+        <element name="Team" positionX="-1242" positionY="2277" width="128" height="270"/>
     </elements>
 </model>

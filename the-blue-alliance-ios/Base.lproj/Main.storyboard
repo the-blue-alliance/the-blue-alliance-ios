@@ -472,7 +472,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lhp-5d-sig">
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lhp-5d-sig">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
                                 <connections>
                                     <segue destination="L0M-yI-4ML" kind="embed" identifier="TeamsViewControllerEmbed" id="Sii-Xp-OpU"/>
@@ -480,6 +480,12 @@
                             </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="jFk-2b-dOt" firstAttribute="top" secondItem="Lhp-5d-sig" secondAttribute="bottom" id="bVh-LK-Gef"/>
+                            <constraint firstItem="Lhp-5d-sig" firstAttribute="top" secondItem="XFI-iB-gmU" secondAttribute="bottom" id="hnP-Vg-pdd"/>
+                            <constraint firstItem="Lhp-5d-sig" firstAttribute="leading" secondItem="gkp-t2-hOX" secondAttribute="leading" id="j68-Il-2rq"/>
+                            <constraint firstAttribute="trailing" secondItem="Lhp-5d-sig" secondAttribute="trailing" id="lVX-8l-2CD"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Teams" id="sdW-HX-uqw"/>
                     <connections>
@@ -560,13 +566,13 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Team 2337" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PdT-FR-3pi">
-                                    <rect key="frame" x="22" y="0.0" width="85" height="21"/>
+                                    <rect key="frame" x="22" y="0.0" width="85" height="20.5"/>
                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="▾ 2015" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RxN-3j-nJY">
-                                    <rect key="frame" x="47" y="19" width="35" height="14"/>
+                                    <rect key="frame" x="47" y="19.5" width="34.5" height="13.5"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>

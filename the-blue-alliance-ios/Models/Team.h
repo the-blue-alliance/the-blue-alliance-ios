@@ -5,4 +5,7 @@
 + (instancetype)insertTeamWithModelTeam:(TBATeam *)modelTeam inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertTeamsWithModelTeams:(NSArray *)modelTeams inManagedObjectContext:(NSManagedObjectContext *)context;
 
+- (NSArray *)sortedEventsForYear:(NSInteger)year;
+- (NSArray *)sortedYearsParticipated;
+
 @end

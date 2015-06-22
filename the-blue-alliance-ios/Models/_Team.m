@@ -14,6 +14,7 @@ const struct TeamAttributes TeamAttributes = {
 	.rookieYear = @"rookieYear",
 	.teamNumber = @"teamNumber",
 	.website = @"website",
+	.yearsParticipated = @"yearsParticipated",
 };
 
 const struct TeamRelationships TeamRelationships = {
@@ -118,6 +119,8 @@ const struct TeamRelationships TeamRelationships = {
 }
 
 @dynamic website;
+
+@dynamic yearsParticipated;
 
 @dynamic districtRankings;
 

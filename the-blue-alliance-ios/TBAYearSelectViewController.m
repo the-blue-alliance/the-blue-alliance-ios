@@ -20,28 +20,24 @@
 
 @implementation TBAYearSelectViewController
 
-#pragma mark - Properities
+#pragma mark - Class Methods
 
-//- (void)setTitle:(NSString *)title {
-//    _title = title;
-//    NSLog(@"Title is: %@", title);
-//}
-
-- (NSInteger)startYear {
-    if (_startYear == 0) {
-        _startYear = 1992;
-    }
-    return _startYear;
++ (NSInteger)currentYear {
+    return [[NSCalendar currentCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]];
 }
 
-- (NSUInteger)currentYear {
-    NSUInteger year = [[NSUserDefaults standardUserDefaults] integerForKey:[self currentYearUserDefaultsString]];
-    
-    if (year == 0) {
-        NSCalendar *calendar = [NSCalendar currentCalendar];
-        year = [calendar component:NSCalendarUnitYear fromDate:[NSDate date]];
++ (NSArray *)yearsBetweenStartYear:(NSInteger)startYear endYear:(NSInteger)endYear {
+    NSMutableArray *years = [[NSMutableArray alloc] init];
+    for (NSInteger i = startYear; i <= endYear; i++) {
+        [years addObject:[NSNumber numberWithInteger:i]];
     }
-    return year;
+    return years;
+}
+
+#pragma mark - Properities
+
+- (NSUInteger)currentYear {
+    return [[NSUserDefaults standardUserDefaults] integerForKey:[self currentYearUserDefaultsString]];
 }
 
 - (void)setCurrentYear:(NSUInteger)currentYear {
@@ -70,16 +66,24 @@
 
 - (void)updateYearInterface {
     self.titleLabel.text = self.navigationItem.title;
-    self.yearLabel.text = [NSString stringWithFormat:@"▾ %zd", self.currentYear];
+    if (self.currentYear == 0) {
+        self.yearLabel.text = @"---";
+    } else {
+        self.yearLabel.text = [NSString stringWithFormat:@"▾ %zd", self.currentYear];
+    }
 }
 
 - (void)selectYearButtonTapped:(id)sender {
+    if (self.currentYear == 0) {
+        return;
+    }
+
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 
     SelectYearViewController *selectYearViewController = (SelectYearViewController *)[storyboard instantiateViewControllerWithIdentifier:@"SelectYearViewController"];
     selectYearViewController.modalPresentationStyle = UIModalPresentationFormSheet;
     selectYearViewController.currentYear = self.currentYear;
-    selectYearViewController.startYear = self.startYear;
+    selectYearViewController.years = self.years;
     if (self.yearSelected) {
         selectYearViewController.yearSelectedCallback = self.yearSelected;
     }
