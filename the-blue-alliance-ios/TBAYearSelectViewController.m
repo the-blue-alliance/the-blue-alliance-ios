@@ -28,7 +28,7 @@
 
 + (NSArray *)yearsBetweenStartYear:(NSInteger)startYear endYear:(NSInteger)endYear {
     NSMutableArray *years = [[NSMutableArray alloc] init];
-    for (NSInteger i = startYear; i <= endYear; i++) {
+    for (NSInteger i = endYear; i >= startYear; i--) {
         [years addObject:[NSNumber numberWithInteger:i]];
     }
     return years;

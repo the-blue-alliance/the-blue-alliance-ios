@@ -26,7 +26,6 @@
     [self setPersistenceController:[[TBAPersistenceController alloc] initWithCallback:^{        
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UITabBarController *rootTabBarController = [storyboard instantiateViewControllerWithIdentifier:@"RootTabBarController"];
-        rootTabBarController.selectedViewController = [rootTabBarController.viewControllers objectAtIndex:1];
 
         for (UINavigationController *nav in rootTabBarController.viewControllers) {
             TBAViewController *vc = (TBAViewController *)[nav.viewControllers firstObject];

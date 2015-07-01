@@ -59,9 +59,7 @@
         [strongSelf fetchEvents];
     };
     
-    NSInteger year = [TBAYearSelectViewController currentYear];
-    self.years = [TBAYearSelectViewController yearsBetweenStartYear:1992 endYear:year];
-    
+    [self setupYears];
     [self fetchEvents];
     [self styleInterface];
 }
@@ -75,6 +73,15 @@
 
 
 #pragma mark - Data Methods
+
+- (void)setupYears {
+    NSInteger year = [TBAYearSelectViewController currentYear];
+    self.years = [TBAYearSelectViewController yearsBetweenStartYear:1992 endYear:year];
+    
+    if (self.currentYear == 0) {
+        self.currentYear = year;
+    }
+}
 
 - (void)fetchEvents {
     __weak typeof(self) weakSelf = self;
