@@ -11,6 +11,7 @@
 
 @interface TBARefreshViewController : TBAViewController
 
+@property (nonatomic, assign) BOOL refreshing;
 @property (nonatomic, assign) NSUInteger currentRequestIdentifier;
 @property (nonatomic, copy) void (^refresh)();
 

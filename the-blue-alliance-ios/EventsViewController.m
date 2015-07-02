@@ -40,6 +40,8 @@
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
+            strongSelf.refreshing = YES;
+            
             [strongSelf updateRefreshBarButtonItem:YES];
             [strongSelf refreshData];
         }
@@ -84,6 +86,11 @@
 }
 
 - (void)fetchEvents {
+    if (!self.refreshing) {
+        self.events = nil;
+        [self updateInterface];
+    }
+
     __weak typeof(self) weakSelf = self;
     [Event fetchEventsForYear:self.currentYear fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *events, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -92,7 +99,7 @@
             return;
         }
         
-        if (!events || [events count] == 0) {
+        if ([events count] == 0 && !self.refreshing) {
             if (strongSelf.refresh) {
                 strongSelf.refresh();
             }
@@ -102,6 +109,7 @@
                 [strongSelf updateInterface];
             });
         }
+        strongSelf.refreshing = NO;
     }];
 }
 
@@ -117,6 +125,7 @@
         
         if (error) {
             [strongSelf showAlertWithTitle:@"Error fetching events" andMessage:error.localizedDescription];
+            strongSelf.refreshing = NO;
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
@@ -185,7 +194,11 @@
 }
 
 - (void)segmentedControlChangedValue:(HMSegmentedControl *)segmentedControl {
-    self.eventsViewController.events = [self.events objectAtIndex:segmentedControl.selectedSegmentIndex];
+    if (self.events && segmentedControl.selectedSegmentIndex < [self.events.allKeys count]) {
+        self.eventsViewController.events = [self.events objectAtIndex:segmentedControl.selectedSegmentIndex];
+    } else {
+        self.eventsViewController.events = nil;
+    }
     [self.eventsViewController.tableView reloadData];
 }
 
