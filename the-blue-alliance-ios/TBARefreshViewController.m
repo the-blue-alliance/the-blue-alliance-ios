@@ -14,6 +14,8 @@
 @property (nonatomic, strong) UIBarButtonItem *activityBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *refreshBarButtonItem;
 
+@property (nonatomic, strong) NSMutableArray *requestsArray;
+
 @end
 
 @implementation TBARefreshViewController
@@ -39,6 +41,12 @@
     return _refreshBarButtonItem;
 }
 
+- (NSMutableArray *)requestsArray {
+    if (!_requestsArray) {
+        _requestsArray = [[NSMutableArray alloc] init];
+    }
+    return _requestsArray;
+}
 
 #pragma mark - View Lifecycle
 
@@ -48,24 +56,55 @@
     [self.navigationItem setRightBarButtonItem:self.refreshBarButtonItem];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self cancelRefresh];
+}
 
 #pragma mark - Public Methods
 
 - (void)updateRefreshBarButtonItem:(BOOL)refreshing {
-    if (refreshing) {
-        [self.navigationItem setRightBarButtonItem:self.activityBarButtonItem animated:YES];
-    } else {
-        [self.navigationItem setRightBarButtonItem:self.refreshBarButtonItem animated:YES];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (refreshing) {
+            [self.navigationItem setRightBarButtonItem:self.activityBarButtonItem animated:YES];
+        } else {
+            [self.navigationItem setRightBarButtonItem:self.refreshBarButtonItem animated:YES];
+        }
+    });
 }
 
 - (void)cancelRefresh {
-    if (self.currentRequestIdentifier != 0) {
-        [[TBAKit sharedKit] cancelRequestWithIdentifier:self.currentRequestIdentifier];
-        self.currentRequestIdentifier = 0;
+    self.refreshing = NO;
+
+    if ([self.requestsArray count] == 0) {
+        return;
+    }
+
+    for (NSNumber *request in self.requestsArray) {
+        NSUInteger requestIdentifier = [request unsignedIntegerValue];
+        [[TBAKit sharedKit] cancelRequestWithIdentifier:requestIdentifier];
+    }
+    [self.requestsArray removeAllObjects];
+
+    if (self.requestsFinished) {
+        self.requestsFinished();
     }
 }
 
+- (void)addRequestIdentifier:(NSUInteger)requestIdentifier {
+    [self.requestsArray addObject:@(requestIdentifier)];
+}
+
+- (void)removeRequestIdentifier:(NSUInteger)requestIdentifier {
+    if (![self.requestsArray containsObject:@(requestIdentifier)]) {
+        return;
+    }
+    [self.requestsArray removeObject:@(requestIdentifier)];
+    if ([self.requestsArray count] == 0 && self.requestsFinished) {
+        self.requestsFinished();
+    }
+}
 
 #pragma mark - Private Methods
 

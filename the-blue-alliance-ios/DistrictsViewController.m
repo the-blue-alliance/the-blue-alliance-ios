@@ -34,47 +34,54 @@ static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-//    self.startYear = 2009;
-    
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            [strongSelf updateRefreshBarButtonItem:YES];
-            [strongSelf refreshData];
-        }
+
+        [strongSelf updateRefreshBarButtonItem:YES];
+        [strongSelf refreshData];
+    };
+    
+    self.requestsFinished = ^void() {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+
+        [strongSelf updateRefreshBarButtonItem:NO];
     };
     
     self.yearSelected = ^void(NSUInteger selectedYear) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         strongSelf.currentYear = selectedYear;
-        
         [strongSelf cancelRefresh];
-        [strongSelf updateRefreshBarButtonItem:NO];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [strongSelf fetchDistricts];
         });
     };
     
-#warning configure years for districts
-    
+    [self configureYears];
     [self fetchDistricts];
     [self styleInterface];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+#pragma mark - Data Methods
+
+- (void)configureYears {
+    NSInteger year = [TBAYearSelectViewController currentYear];
+    self.years = [TBAYearSelectViewController yearsBetweenStartYear:2009 endYear:year];
     
-    [self cancelRefresh];
-    [self updateRefreshBarButtonItem:NO];
+    if (self.currentYear == 0) {
+        self.currentYear = year;
+    }
 }
 
 #pragma mark - Data Methods
 
 - (void)fetchDistricts {
-    self.districts = nil;
+    if (!self.refreshing) {
+        self.districts = nil;
+        [self.tableView reloadData];
+    }
     
     __weak typeof(self) weakSelf = self;
     [District fetchDistrictsForYear:self.currentYear fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *districts, NSError *error) {
@@ -84,7 +91,7 @@ static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
             return;
         }
         
-        if (!districts || [districts count] == 0) {
+        if ([districts count] == 0 && !self.refreshing) {
             if (strongSelf.refresh) {
                 strongSelf.refresh();
             }
@@ -94,6 +101,7 @@ static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
                 [strongSelf.tableView reloadData];
             });
         }
+        self.refreshing = NO;
     }];
 }
 
@@ -102,17 +110,17 @@ static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
 }
 
 - (void)fetchDistrictKeysForYear:(NSInteger)year {
+    self.refreshing = YES;
+    
     __weak typeof(self) weakSelf = self;
-    self.currentRequestIdentifier = [[TBAKit sharedKit] fetchDistrictsForYear:year withCompletionBlock:^(NSArray *districts, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchDistrictsForYear:year withCompletionBlock:^(NSArray *districts, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
 
-        strongSelf.currentRequestIdentifier = 0;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [strongSelf updateRefreshBarButtonItem:NO];
-        });
+        [strongSelf removeRequestIdentifier:request];
         
         if (error) {
             [strongSelf showAlertWithTitle:@"Error fetching districts" andMessage:error.localizedDescription];
+            self.refreshing = NO;
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [District insertDistrictsWithDistrictDicts:districts forYear:year inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
@@ -121,6 +129,7 @@ static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
             });
         }
     }];
+    [self addRequestIdentifier:request];
 }
 
 

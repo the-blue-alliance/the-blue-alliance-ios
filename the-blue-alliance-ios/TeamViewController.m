@@ -43,23 +43,26 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            if (strongSelf.segmentedControl.selectedSegmentIndex == TBATeamDataTypeInfo) {
-                [strongSelf refreshTeamInfo];
-            } else {
-                [strongSelf refreshEvents];
-            }
-            [strongSelf updateRefreshBarButtonItem:YES];
+        
+        if (strongSelf.segmentedControl.selectedSegmentIndex == TBATeamDataTypeInfo) {
+            [strongSelf refreshTeamInfo];
+        } else {
+            [strongSelf refreshEvents];
         }
+        [strongSelf updateRefreshBarButtonItem:YES];
+    };
+    
+    self.requestsFinished = ^void() {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+
+        [strongSelf updateRefreshBarButtonItem:NO];
     };
     
     self.yearSelected = ^void(NSUInteger selectedYear) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         strongSelf.currentYear = selectedYear;
-        
         [strongSelf cancelRefresh];
-        [strongSelf updateRefreshBarButtonItem:NO];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (strongSelf.segmentedControl.selectedSegmentIndex == TBATeamDataTypeInfo) {
@@ -72,13 +75,6 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     
     [self configureYears];
     [self styleInterface];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [self cancelRefresh];
-    [self updateRefreshBarButtonItem:NO];
 }
 
 #pragma mark - Interface Methods
@@ -110,8 +106,6 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 
 - (IBAction)segmentedControlValueChanged:(id)sender {
     [self cancelRefresh];
-    [self updateRefreshBarButtonItem:NO];
-    
     [self updateInterface];
 }
 
@@ -140,13 +134,10 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     [self updateRefreshBarButtonItem:YES];
     
     __weak typeof(self) weakSelf = self;
-    self.currentRequestIdentifier = [[TBAKit sharedKit] fetchYearsParticipatedForTeamKey:self.team.key withCompletionBlock:^(NSArray *years, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchYearsParticipatedForTeamKey:self.team.key withCompletionBlock:^(NSArray *years, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        strongSelf.currentRequestIdentifier = 0;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [strongSelf updateRefreshBarButtonItem:NO];
-        });
+        [strongSelf removeRequestIdentifier:request];
         
         if (error) {
             [strongSelf showAlertWithTitle:@"Error fetching years participated" andMessage:error.localizedDescription];
@@ -158,19 +149,17 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
             });
         }
     }];
+    [self addRequestIdentifier:request];
 }
 
 - (void)refreshTeam {
     [self updateRefreshBarButtonItem:YES];
     
     __weak typeof(self) weakSelf = self;
-    self.currentRequestIdentifier = [[TBAKit sharedKit] fetchTeamForTeamKey:self.team.key withCompletionBlock:^(TBATeam *team, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchTeamForTeamKey:self.team.key withCompletionBlock:^(TBATeam *team, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        strongSelf.currentRequestIdentifier = 0;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [strongSelf updateRefreshBarButtonItem:NO];
-        });
+        [strongSelf removeRequestIdentifier:request];
         
         if (error) {
             [strongSelf showAlertWithTitle:@"Error fetching team info" andMessage:error.localizedDescription];
@@ -182,6 +171,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
             });
         }
     }];
+    [self addRequestIdentifier:request];
 }
 
 - (void)refreshMedia {
@@ -194,14 +184,11 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     __block NSInteger year = self.currentYear;
     
     __weak typeof(self) weakSelf = self;
-    self.currentRequestIdentifier = [[TBAKit sharedKit] fetchMediaForTeamKey:self.team.key andYear:self.currentYear withCompletionBlock:^(NSArray *media, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchMediaForTeamKey:self.team.key andYear:self.currentYear withCompletionBlock:^(NSArray *media, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
 
         strongSelf.attemptedToFetchMedia = YES;
-        strongSelf.currentRequestIdentifier = 0;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [strongSelf updateRefreshBarButtonItem:NO];
-        });
+        [strongSelf removeRequestIdentifier:request];
         
         if (error) {
             [strongSelf showAlertWithTitle:@"Error fetching media" andMessage:error.localizedDescription];
@@ -213,6 +200,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
             });
         }
     }];
+    [self addRequestIdentifier:request];
 }
 
 #pragma mark - Team Info Fetch (Local) Data Methods
@@ -260,7 +248,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
             return;
         }
         
-        if ((!media || [media count] == 0) && !self.attemptedToFetchMedia) {
+        if ([media count] == 0 && !self.attemptedToFetchMedia) {
             [strongSelf refreshMedia];
         } else {
             strongSelf.infoViewController.media = media;
@@ -268,6 +256,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
                 [strongSelf.infoViewController.tableView reloadData];
             });
         }
+        strongSelf.attemptedToFetchMedia = NO;
     }];
 }
 
@@ -291,13 +280,10 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     // TODO: Set events table view to no data and show a loading state?
     
     __weak typeof(self) weakSelf = self;
-    self.currentRequestIdentifier = [[TBAKit sharedKit] fetchEventsForTeamKey:self.team.key andYear:self.currentYear withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForTeamKey:self.team.key andYear:self.currentYear withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        strongSelf.currentRequestIdentifier = 0;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [strongSelf updateRefreshBarButtonItem:NO];
-        });
+        [strongSelf removeRequestIdentifier:request];
         
         if (error) {
             [strongSelf showAlertWithTitle:@"Error fetching events for team" andMessage:error.localizedDescription];
@@ -308,6 +294,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
             [strongSelf.persistenceController save];
         }
     }];
+    [self addRequestIdentifier:request];
 }
 
 #pragma mark - Navigation

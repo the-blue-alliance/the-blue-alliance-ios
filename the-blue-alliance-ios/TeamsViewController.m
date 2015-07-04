@@ -36,20 +36,18 @@ static NSString *const TeamViewControllerSegue = @"TeamViewControllerSegue";
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            [strongSelf updateRefreshBarButtonItem:YES];
-            [strongSelf refreshData];
-        }
+
+        [strongSelf updateRefreshBarButtonItem:YES];
+        [strongSelf refreshData];
+    };
+    
+    self.requestsFinished = ^void() {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+
+        [strongSelf updateRefreshBarButtonItem:NO];
     };
     
     [self fetchTeams];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [self cancelRefresh];
-    [self updateRefreshBarButtonItem:NO];
 }
 
 #pragma mark - Data Methods
@@ -77,11 +75,16 @@ static NSString *const TeamViewControllerSegue = @"TeamViewControllerSegue";
 }
 
 - (void)refreshData {
+    __block NSUInteger currentRequest;
+    
     __weak typeof(self) weakSelf = self;
-    self.currentRequestIdentifier = [Team fetchAllTeamsWithTaskIdChange:^(NSUInteger newTaskId, NSArray *batchTeam) {
+    currentRequest = [Team fetchAllTeamsWithTaskIdChange:^(NSUInteger newTaskId, NSArray *batchTeam) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        strongSelf.currentRequestIdentifier = newTaskId;
-
+        
+        [strongSelf addRequestIdentifier:newTaskId];
+        [strongSelf removeRequestIdentifier:currentRequest];
+        currentRequest = newTaskId;
+        
         NSManagedObjectContext *tmpContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
         [tmpContext setParentContext:strongSelf.persistenceController.managedObjectContext];
         [tmpContext performBlock:^{
@@ -90,10 +93,8 @@ static NSString *const TeamViewControllerSegue = @"TeamViewControllerSegue";
         }];
     } withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        strongSelf.currentRequestIdentifier = 0;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [strongSelf updateRefreshBarButtonItem:NO];
-        });
+        
+        [strongSelf removeRequestIdentifier:currentRequest];
         
         if (error) {
             [strongSelf showAlertWithTitle:@"Error fetching teams" andMessage:error.localizedDescription];
@@ -102,6 +103,7 @@ static NSString *const TeamViewControllerSegue = @"TeamViewControllerSegue";
             [strongSelf.persistenceController save];
         }
     }];
+    [self addRequestIdentifier:currentRequest];
 }
 
 #pragma mark - Navigation

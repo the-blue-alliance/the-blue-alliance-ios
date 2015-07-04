@@ -39,12 +39,15 @@
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            strongSelf.refreshing = YES;
-            
-            [strongSelf updateRefreshBarButtonItem:YES];
-            [strongSelf refreshData];
-        }
+
+        [strongSelf updateRefreshBarButtonItem:YES];
+        [strongSelf refreshData];
+    };
+    
+    self.requestsFinished = ^void() {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf updateRefreshBarButtonItem:NO];
     };
     
     self.yearSelected = ^void(NSUInteger selectedYear) {
@@ -55,28 +58,18 @@
         }
         strongSelf.currentYear = selectedYear;
         
-        [strongSelf cancelRefresh];
-        [strongSelf updateRefreshBarButtonItem:NO];
-        
+        [strongSelf cancelRefresh];        
         [strongSelf fetchEvents];
     };
     
-    [self setupYears];
+    [self configureYears];
     [self fetchEvents];
     [self styleInterface];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-
-    [self cancelRefresh];
-    [self updateRefreshBarButtonItem:NO];
-}
-
-
 #pragma mark - Data Methods
 
-- (void)setupYears {
+- (void)configureYears {
     NSInteger year = [TBAYearSelectViewController currentYear];
     self.years = [TBAYearSelectViewController yearsBetweenStartYear:1992 endYear:year];
     
@@ -114,14 +107,13 @@
 }
 
 - (void)refreshData {
+    self.refreshing = YES;
+    
     __weak typeof(self) weakSelf = self;
-    self.currentRequestIdentifier = [[TBAKit sharedKit] fetchEventsForYear:self.currentYear withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForYear:self.currentYear withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        strongSelf.currentRequestIdentifier = 0;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [strongSelf updateRefreshBarButtonItem:NO];
-        });
+        [strongSelf removeRequestIdentifier:request];
         
         if (error) {
             [strongSelf showAlertWithTitle:@"Error fetching events" andMessage:error.localizedDescription];
@@ -134,6 +126,7 @@
             });
         }
     }];
+    [self addRequestIdentifier:request];
 }
 
 - (OrderedDictionary *)weekDictionaryForIndex:(NSInteger)index {

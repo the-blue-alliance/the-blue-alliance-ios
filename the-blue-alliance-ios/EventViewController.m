@@ -28,10 +28,9 @@
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            [strongSelf updateRefreshBarButtonItem:YES];
-            //            [strongSelf refreshData];
-        }
+
+        [strongSelf updateRefreshBarButtonItem:YES];
+//        [strongSelf refreshData];
     };
     /*
     self.yearSelected = ^void(NSUInteger selectedYear) {
@@ -40,7 +39,6 @@
         //        strongSelf.currentYear = selectedYear;
         
         [strongSelf cancelRefresh];
-        [strongSelf updateRefreshBarButtonItem:NO];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             //            [strongSelf fetchDistricts];

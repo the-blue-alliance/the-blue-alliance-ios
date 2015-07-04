@@ -12,8 +12,12 @@
 @interface TBARefreshViewController : TBAViewController
 
 @property (nonatomic, assign) BOOL refreshing;
-@property (nonatomic, assign) NSUInteger currentRequestIdentifier;
+@property (nonatomic, copy) void (^requestsFinished)();
+
 @property (nonatomic, copy) void (^refresh)();
+
+- (void)addRequestIdentifier:(NSUInteger)requestIdentifier;
+- (void)removeRequestIdentifier:(NSUInteger)requestIdentifier;
 
 - (void)updateRefreshBarButtonItem:(BOOL)refreshing;
 - (void)cancelRefresh;
