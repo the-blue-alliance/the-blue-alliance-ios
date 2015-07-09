@@ -268,7 +268,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     if (!events || [events count] == 0) {
         [self refreshEvents];
     } else {
-        self.eventsViewController.events = [Event groupEventsByWeek:events andGroupByType:NO];
+        self.eventsViewController.events = [Event sortedEventDictionaryFromEvents:events];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.eventsViewController.tableView reloadData];
         });

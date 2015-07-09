@@ -19,6 +19,7 @@ typedef NS_ENUM(NSInteger, EventType) {
 - (NSString *)dateString;
 
 + (OrderedDictionary *)groupEventsByWeek:(NSArray *)events andGroupByType:(BOOL)groupByType;
++ (OrderedDictionary *)sortedEventDictionaryFromEvents:(NSArray *)events;
 
 + (instancetype)insertEventWithModelEvent:(TBAEvent *)modelEvent inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertEventsWithModelEvents:(NSArray *)modelEvents inManagedObjectContext:(NSManagedObjectContext *)context;
