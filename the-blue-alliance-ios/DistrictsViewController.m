@@ -7,22 +7,18 @@
 //
 
 #import "DistrictsViewController.h"
-
-#import "OrderedDictionary.h"
-//#import "Event.h"
+#import "TBADistrictsViewController.h"
 #import "District.h"
 #import "District+Fetch.h"
 #import "TBAKit.h"
 #import "DistrictViewController.h"
 
-static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
-static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
+static NSString *const DistrictsViewControllerEmbed = @"DistrictsViewControllerEmbed";
+static NSString *const DistrictViewControllerSegue  = @"DistrictViewControllerSegue";
 
-@interface DistrictsViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface DistrictsViewController ()
 
-@property (nonatomic, strong) IBOutlet UITableView *tableView;
-
-@property (nonatomic, strong) NSArray *districts;
+@property (nonatomic, strong) TBADistrictsViewController *districtsViewController;
 
 @end
 
@@ -38,35 +34,38 @@ static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
 
-        [strongSelf updateRefreshBarButtonItem:YES];
-        [strongSelf refreshData];
-    };
-    
-    self.requestsFinished = ^void() {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-
-        [strongSelf updateRefreshBarButtonItem:NO];
+        [strongSelf.districtsViewController hideNoDataView];
+        [strongSelf refreshDistricts];
     };
     
     self.yearSelected = ^void(NSUInteger selectedYear) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        strongSelf.currentYear = selectedYear;
         [strongSelf cancelRefresh];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [strongSelf fetchDistricts];
-        });
+        [strongSelf.districtsViewController hideNoDataView];
+        [strongSelf removeDistricts];
+        
+        strongSelf.currentYear = selectedYear;
+        [strongSelf fetchDistrictsAndRefresh:YES];
     };
     
     [self configureYears];
-    [self fetchDistricts];
+    [self fetchDistrictsAndRefresh:YES];
     [self styleInterface];
+}
+
+#pragma mark - Interface Methods
+
+- (void)styleInterface {
+    self.navigationItem.title = @"Districts";
 }
 
 #pragma mark - Data Methods
 
 - (void)configureYears {
+    // TODO: Look for year + 1 as well
+    
     NSInteger year = [TBAYearSelectViewController currentYear];
     self.years = [TBAYearSelectViewController yearsBetweenStartYear:2009 endYear:year];
     
@@ -77,40 +76,58 @@ static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
 
 #pragma mark - Data Methods
 
-- (void)fetchDistricts {
-    if (!self.refreshing) {
-        self.districts = nil;
-        [self.tableView reloadData];
+- (void)removeDistricts {
+    self.districtsViewController.districts = nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.districtsViewController.tableView reloadData];
+    });
+}
+
+- (void)fetchDistrictsAndRefresh:(BOOL)refresh {
+    if (self.currentYear == 0) {
+        return;
     }
     
     __weak typeof(self) weakSelf = self;
     [District fetchDistrictsForYear:self.currentYear fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *districts, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (error) {
-            [strongSelf showAlertWithTitle:@"Error fetching districts locally" andMessage:error.localizedDescription];
+            NSString *errorMessage = @"Unable to fetch districts locally";
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (strongSelf.districtsViewController.districts) {
+                    [strongSelf showErrorAlertWithMessage:errorMessage];
+                } else {
+                    [strongSelf.districtsViewController showNoDataViewWithText:errorMessage];
+                }
+            });
             return;
         }
         
-        if ([districts count] == 0 && !self.refreshing) {
-            if (strongSelf.refresh) {
+        if ([districts count] == 0) {
+            if (refresh && strongSelf.refresh) {
                 strongSelf.refresh();
+            } else {
+                [self removeDistricts];
             }
         } else {
-            strongSelf.districts = districts;
+            strongSelf.districtsViewController.districts = districts;
             dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf.tableView reloadData];
+                [strongSelf.districtsViewController.tableView reloadData];
             });
         }
-        self.refreshing = NO;
     }];
 }
 
-- (void)refreshData {
-    [self fetchDistrictKeysForYear:self.currentYear];
-}
-
-- (void)fetchDistrictKeysForYear:(NSInteger)year {
-    self.refreshing = YES;
+- (void)refreshDistricts {
+    if (self.currentYear == 0) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.districtsViewController showNoDataViewWithText:@"No year selected"];
+        });
+        return;
+    }
+    __block NSUInteger year = self.currentYear;
+    
+    [self updateRefreshBarButtonItem:YES];
     
     __weak typeof(self) weakSelf = self;
     __block NSUInteger request = [[TBAKit sharedKit] fetchDistrictsForYear:year withCompletionBlock:^(NSArray *districts, NSInteger totalCount, NSError *error) {
@@ -119,12 +136,18 @@ static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
         [strongSelf removeRequestIdentifier:request];
         
         if (error) {
-            [strongSelf showAlertWithTitle:@"Error fetching districts" andMessage:error.localizedDescription];
-            self.refreshing = NO;
+            NSString *errorMessage = @"Unable to load districts";
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (strongSelf.districtsViewController.districts) {
+                    [strongSelf showErrorAlertWithMessage:errorMessage];
+                } else {
+                    [strongSelf.districtsViewController showNoDataViewWithText:errorMessage];
+                }
+            });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [District insertDistrictsWithDistrictDicts:districts forYear:year inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf fetchDistricts];
+                [strongSelf fetchDistrictsAndRefresh:NO];
                 [strongSelf.persistenceController save];
             });
         }
@@ -132,52 +155,17 @@ static NSString *const DistrictsListSegue       = @"DistrictsListSegue";
     [self addRequestIdentifier:request];
 }
 
-
-#pragma mark - Interface Methods
-
-- (void)styleInterface {
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.navigationItem.title = @"Districts";
-}
-
-
-#pragma mark - Table View Data Source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.districts) {
-        return [self.districts count];
-    }
-    return 0;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DistrictsCellIdentifier forIndexPath:indexPath];
-    
-    District *district = [self.districts objectAtIndex:indexPath.row];    
-    cell.textLabel.text = district.name;
-    
-    return cell;
-}
-
-
-#pragma mark - Table View Delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-    District *distrct = [self.districts objectAtIndex:indexPath.row];
-    [self performSegueWithIdentifier:DistrictsListSegue sender:distrct];
-}
-
-
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:DistrictsListSegue]) {
+    if ([segue.identifier isEqualToString:DistrictsViewControllerEmbed]) {
+        self.districtsViewController = (TBADistrictsViewController *)segue.destinationViewController;
+        
+        __weak typeof(self) weakSelf = self;
+        self.districtsViewController.districtSelected = ^(District *district) {
+            [weakSelf performSegueWithIdentifier:DistrictViewControllerSegue sender:district];
+        };
+    } else if ([segue.identifier isEqualToString:DistrictViewControllerSegue]) {
         District *district = (District *)sender;
         
         DistrictViewController *districtViewController = (DistrictViewController *)segue.destinationViewController;

@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "TBARefreshViewController.h"
 
 @interface TeamsViewController : TBARefreshViewController

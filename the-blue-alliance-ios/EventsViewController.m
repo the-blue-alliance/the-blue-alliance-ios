@@ -15,6 +15,9 @@
 
 // TODO: Bring the events view to the current week, like the Android app
 
+static NSString *const EventsViewControllerEmbed = @"EventsViewControllerEmbed";
+static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
+
 @interface EventsViewController ()
 
 @property (nonatomic, strong) TBAEventsViewController *eventsViewController;
@@ -40,36 +43,43 @@
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
 
+        [strongSelf.eventsViewController hideNoDataView];
         [strongSelf updateRefreshBarButtonItem:YES];
         [strongSelf refreshData];
-    };
-    
-    self.requestsFinished = ^void() {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf updateRefreshBarButtonItem:NO];
     };
     
     self.yearSelected = ^void(NSUInteger selectedYear) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
+        [strongSelf cancelRefresh];
+        
         if (strongSelf.segmentedControl) {
             strongSelf.segmentedControl.selectedSegmentIndex = 0;
         }
-        strongSelf.currentYear = selectedYear;
+        [strongSelf.eventsViewController hideNoDataView];
+        [strongSelf removeData];
         
-        [strongSelf cancelRefresh];        
-        [strongSelf fetchEvents];
+        strongSelf.currentYear = selectedYear;
+        [strongSelf fetchEventsAndRefresh:YES];
     };
     
     [self configureYears];
-    [self fetchEvents];
+    [self fetchEventsAndRefresh:YES];
     [self styleInterface];
 }
 
 #pragma mark - Data Methods
 
+- (void)removeData {
+    self.events = nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateInterface];
+    });
+}
+
 - (void)configureYears {
+    // TODO: Check if year + 1 exists (for next-season data trickling in)
+    
     NSInteger year = [TBAYearSelectViewController currentYear];
     self.years = [TBAYearSelectViewController yearsBetweenStartYear:1992 endYear:year];
     
@@ -78,23 +88,27 @@
     }
 }
 
-- (void)fetchEvents {
-    if (!self.refreshing) {
-        self.events = nil;
-        [self updateInterface];
-    }
-
+- (void)fetchEventsAndRefresh:(BOOL)refresh {
     __weak typeof(self) weakSelf = self;
     [Event fetchEventsForYear:self.currentYear fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *events, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (error) {
-            [strongSelf showAlertWithTitle:@"Unable to fetch events locally" andMessage:error.localizedDescription];
+            NSString *errorMessage = @"Unable to fetch events locally";
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (strongSelf.events) {
+                    [strongSelf showErrorAlertWithMessage:errorMessage];
+                } else {
+                    [strongSelf.eventsViewController showNoDataViewWithText:errorMessage];
+                }
+            });
             return;
         }
         
-        if ([events count] == 0 && !self.refreshing) {
-            if (strongSelf.refresh) {
+        if ([events count] == 0) {
+            if (refresh && strongSelf.refresh) {
                 strongSelf.refresh();
+            } else {
+                [strongSelf removeData];
             }
         } else {
             strongSelf.events = [Event groupEventsByWeek:events andGroupByType:YES];
@@ -102,13 +116,10 @@
                 [strongSelf updateInterface];
             });
         }
-        strongSelf.refreshing = NO;
     }];
 }
 
 - (void)refreshData {
-    self.refreshing = YES;
-    
     __weak typeof(self) weakSelf = self;
     __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForYear:self.currentYear withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -116,12 +127,18 @@
         [strongSelf removeRequestIdentifier:request];
         
         if (error) {
-            [strongSelf showAlertWithTitle:@"Error fetching events" andMessage:error.localizedDescription];
-            strongSelf.refreshing = NO;
+            NSString *errorMessage = @"Unable to load events";
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (strongSelf.events) {
+                    [strongSelf showErrorAlertWithMessage:errorMessage];
+                } else {
+                    [strongSelf.eventsViewController showNoDataViewWithText:errorMessage];
+                }
+            });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf fetchEvents];
+                [strongSelf fetchEventsAndRefresh:NO];
                 [strongSelf.persistenceController save];
             });
         }
@@ -144,6 +161,7 @@
 - (void)styleInterface {
     self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
     self.navigationItem.title = @"Events";
+
     [self updateInterface];
 }
 
@@ -198,14 +216,14 @@
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"EventsViewControllerEmbed"]) {
+    if ([segue.identifier isEqualToString:EventsViewControllerEmbed]) {
         self.eventsViewController = (TBAEventsViewController *)segue.destinationViewController;
 
         __weak typeof(self) weakSelf = self;
         self.eventsViewController.eventSelected = ^(Event *event) {
-            [weakSelf performSegueWithIdentifier:@"EventViewControllerSegue" sender:event];
+            [weakSelf performSegueWithIdentifier:EventViewControllerSegue sender:event];
         };
-    } else if ([segue.identifier isEqualToString:@"EventViewControllerSegue"]) {
+    } else if ([segue.identifier isEqualToString:EventViewControllerSegue]) {
         Event *event = (Event *)sender;
         
         EventViewController *eventViewController = segue.destinationViewController;

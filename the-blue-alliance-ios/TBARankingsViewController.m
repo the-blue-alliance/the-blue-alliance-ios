@@ -11,23 +11,7 @@
 
 static NSString *const DistrictRankCellReuseIdentifier  = @"DistrictRankCell";
 
-@interface TBARankingsViewController () <UITableViewDataSource, UITableViewDelegate>
-
-@end
-
 @implementation TBARankingsViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    [self styleInterface];
-}
-
-#pragma mark - Interface Methods
-
-- (void)styleInterface {
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-}
 
 #pragma mark - Table View Data Source
 

@@ -6,16 +6,15 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "TBATableViewController.h"
 
 @class Team;
 
-@interface TBATeamsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
+@interface TBATeamsViewController : TBATableViewController <UISearchBarDelegate>
 
 @property (nonatomic, copy) NSArray *teams;
 @property (nonatomic, assign) BOOL showSearch;
 
-@property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) IBOutlet UISearchBar *searchBar;
 
 @property (nonatomic, copy) void (^teamSelected)(Team *team);

@@ -14,23 +14,7 @@
 
 static NSString *const EventCellReuseIdentifier = @"EventCell";
 
-@interface TBAEventsViewController () <UITableViewDataSource, UITableViewDelegate>
-
-@end
-
 @implementation TBAEventsViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    [self styleInterface];
-}
-
-#pragma mark - Interface Methods
-
-- (void)styleInterface {
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-}
 
 #pragma mark - Data Methods
 
@@ -77,7 +61,7 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     NSUInteger count;
     if (!self.events) {
-        // TODO: Show no data screen
+        // TODO: Show a no data screen?
         count = 0;
     } else {
         count = [self.events.allKeys count];

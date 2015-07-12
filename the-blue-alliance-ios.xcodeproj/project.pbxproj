@@ -41,6 +41,7 @@
 		9237F7761B2CA76100C89978 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 9237F76A1B2CA76100C89978 /* Team.m */; };
 		9237F77E1B2CA7CB00C89978 /* TBA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9237F77C1B2CA7CB00C89978 /* TBA.xcdatamodeld */; };
 		9237F7811B2CAB6A00C89978 /* District+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9237F7801B2CAB6A00C89978 /* District+Fetch.m */; };
+		923E126F1B52B4230089D9F8 /* TBADistrictsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 923E126E1B52B4230089D9F8 /* TBADistrictsViewController.m */; };
 		923F3F1C1AF863C20099DA0C /* LaunchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 923F3F1B1AF863C20099DA0C /* LaunchViewController.m */; };
 		923F3F201AF868E00099DA0C /* TBAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 923F3F1F1AF868E00099DA0C /* TBAViewController.m */; };
 		9240CDFC1AB5DA0B00D859A0 /* TBAEventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9240CDFB1AB5DA0B00D859A0 /* TBAEventTableViewCell.m */; };
@@ -60,6 +61,8 @@
 		9258CD441B2CAC40001069ED /* Team+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9258CD431B2CAC40001069ED /* Team+Fetch.m */; };
 		925CD21E1AC247F200C9C3BF /* TBARefreshViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925CD21D1AC247F200C9C3BF /* TBARefreshViewController.m */; };
 		925DECE71AF5B2D9007A7E94 /* TBADistrictRankingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 925DECE61AF5B2D9007A7E94 /* TBADistrictRankingTableViewCell.m */; };
+		926001671B517DF40027FE95 /* TBANoDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926001661B517DF40027FE95 /* TBANoDataViewController.m */; };
+		9260016A1B519E050027FE95 /* TBATableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926001691B519E050027FE95 /* TBATableViewController.m */; };
 		926C054C1AAF741E00E9215A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 926C054B1AAF741E00E9215A /* Images.xcassets */; };
 		927048221AC23BF8002E46CE /* TeamsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 927048211AC23BF8002E46CE /* TeamsViewController.m */; };
 		9270482B1AC23C4E002E46CE /* TBATeamTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9270482A1AC23C4E002E46CE /* TBATeamTableViewCell.m */; };
@@ -115,6 +118,8 @@
 		9237F77D1B2CA7CB00C89978 /* The Blue Alliance.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance.xcdatamodel"; sourceTree = "<group>"; };
 		9237F77F1B2CAB6A00C89978 /* District+Fetch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "District+Fetch.h"; path = "Models/District+Fetch.h"; sourceTree = "<group>"; };
 		9237F7801B2CAB6A00C89978 /* District+Fetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "District+Fetch.m"; path = "Models/District+Fetch.m"; sourceTree = "<group>"; };
+		923E126D1B52B4230089D9F8 /* TBADistrictsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBADistrictsViewController.h; sourceTree = "<group>"; };
+		923E126E1B52B4230089D9F8 /* TBADistrictsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBADistrictsViewController.m; sourceTree = "<group>"; };
 		923F3F1A1AF863C20099DA0C /* LaunchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchViewController.h; sourceTree = "<group>"; };
 		923F3F1B1AF863C20099DA0C /* LaunchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchViewController.m; sourceTree = "<group>"; };
 		923F3F1E1AF868E00099DA0C /* TBAViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAViewController.h; sourceTree = "<group>"; };
@@ -153,6 +158,10 @@
 		925CD21D1AC247F200C9C3BF /* TBARefreshViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBARefreshViewController.m; sourceTree = "<group>"; };
 		925DECE51AF5B2D9007A7E94 /* TBADistrictRankingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBADistrictRankingTableViewCell.h; sourceTree = "<group>"; };
 		925DECE61AF5B2D9007A7E94 /* TBADistrictRankingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBADistrictRankingTableViewCell.m; sourceTree = "<group>"; };
+		926001651B517DF40027FE95 /* TBANoDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBANoDataViewController.h; sourceTree = "<group>"; };
+		926001661B517DF40027FE95 /* TBANoDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBANoDataViewController.m; sourceTree = "<group>"; };
+		926001681B519E050027FE95 /* TBATableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBATableViewController.h; sourceTree = "<group>"; };
+		926001691B519E050027FE95 /* TBATableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBATableViewController.m; sourceTree = "<group>"; };
 		926C054B1AAF741E00E9215A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		927048201AC23BF8002E46CE /* TeamsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamsViewController.h; sourceTree = "<group>"; };
 		927048211AC23BF8002E46CE /* TeamsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamsViewController.m; sourceTree = "<group>"; };
@@ -394,6 +403,15 @@
 			name = Event;
 			sourceTree = "<group>";
 		};
+		923E12701B52B4260089D9F8 /* Districts */ = {
+			isa = PBXGroup;
+			children = (
+				923E126D1B52B4230089D9F8 /* TBADistrictsViewController.h */,
+				923E126E1B52B4230089D9F8 /* TBADistrictsViewController.m */,
+			);
+			name = Districts;
+			sourceTree = "<group>";
+		};
 		923F3F1D1AF863C50099DA0C /* Launch View */ = {
 			isa = PBXGroup;
 			children = (
@@ -401,6 +419,40 @@
 				923F3F1B1AF863C20099DA0C /* LaunchViewController.m */,
 			);
 			name = "Launch View";
+			sourceTree = "<group>";
+		};
+		9260016B1B519E790027FE95 /* TBATVC */ = {
+			isa = PBXGroup;
+			children = (
+				926001681B519E050027FE95 /* TBATableViewController.h */,
+				926001691B519E050027FE95 /* TBATableViewController.m */,
+				926001651B517DF40027FE95 /* TBANoDataViewController.h */,
+				926001661B517DF40027FE95 /* TBANoDataViewController.m */,
+			);
+			name = TBATVC;
+			sourceTree = "<group>";
+		};
+		9260016C1B519F9A0027FE95 /* Data Views */ = {
+			isa = PBXGroup;
+			children = (
+				9260016B1B519E790027FE95 /* TBATVC */,
+				927E8C491B2689FB00C93E6C /* Events */,
+				92AC4FF71B471F36004A05E2 /* Rankings */,
+				927E8C4D1B268A3D00C93E6C /* Teams */,
+				92E749111B27B0EF00C46487 /* Info */,
+				923E12701B52B4260089D9F8 /* Districts */,
+			);
+			name = "Data Views";
+			sourceTree = "<group>";
+		};
+		9260016D1B519FA90027FE95 /* Container Views */ = {
+			isa = PBXGroup;
+			children = (
+				9275F2DE1B35BC7D00C74D7A /* TBAVC */,
+				9275F2DC1B35BC6200C74D7A /* Refresh */,
+				9275F2DD1B35BC6800C74D7A /* Select Year VC */,
+			);
+			name = "Container Views";
 			sourceTree = "<group>";
 		};
 		9270481F1AC23BE8002E46CE /* Teams */ = {
@@ -453,13 +505,8 @@
 		927E8C481B2689F400C93E6C /* Base Classes */ = {
 			isa = PBXGroup;
 			children = (
-				9275F2DE1B35BC7D00C74D7A /* TBAVC */,
-				9275F2DC1B35BC6200C74D7A /* Refresh */,
-				9275F2DD1B35BC6800C74D7A /* Select Year VC */,
-				927E8C491B2689FB00C93E6C /* Events */,
-				92AC4FF71B471F36004A05E2 /* Rankings */,
-				927E8C4D1B268A3D00C93E6C /* Teams */,
-				92E749111B27B0EF00C46487 /* Info */,
+				9260016D1B519FA90027FE95 /* Container Views */,
+				9260016C1B519F9A0027FE95 /* Data Views */,
 			);
 			name = "Base Classes";
 			sourceTree = "<group>";
@@ -663,6 +710,7 @@
 				9299EAF11B2C6A88006AC641 /* TBAMediaTableViewCell.m in Sources */,
 				923F3F1C1AF863C20099DA0C /* LaunchViewController.m in Sources */,
 				9237F7751B2CA76100C89978 /* Media.m in Sources */,
+				923E126F1B52B4230089D9F8 /* TBADistrictsViewController.m in Sources */,
 				9237F7731B2CA76100C89978 /* Event.m in Sources */,
 				9258CD2D1B2CAC1B001069ED /* _Event.m in Sources */,
 				9237F7811B2CAB6A00C89978 /* District+Fetch.m in Sources */,
@@ -673,6 +721,7 @@
 				9258CD2B1B2CAC1B001069ED /* _District.m in Sources */,
 				9222F1191AD6910F00C0AEA0 /* EventViewController.m in Sources */,
 				9237F7721B2CA76100C89978 /* DistrictRanking.m in Sources */,
+				926001671B517DF40027FE95 /* TBANoDataViewController.m in Sources */,
 				92FBF89D1B2DBC4100533CBE /* TBAMediaCollectionViewCell.m in Sources */,
 				92EAA4C01ABF6AB100F7CF39 /* SelectYearViewController.m in Sources */,
 				927E8C4C1B268A3A00C93E6C /* TBATeamsViewController.m in Sources */,
@@ -689,6 +738,7 @@
 				925CD21E1AC247F200C9C3BF /* TBARefreshViewController.m in Sources */,
 				92F1580C1AF55DB300884E8A /* DistrictViewController.m in Sources */,
 				9237F7761B2CA76100C89978 /* Team.m in Sources */,
+				9260016A1B519E050027FE95 /* TBATableViewController.m in Sources */,
 				9258CD441B2CAC40001069ED /* Team+Fetch.m in Sources */,
 				9258CD2F1B2CAC1B001069ED /* _EventPoints.m in Sources */,
 				9258CD2C1B2CAC1B001069ED /* _DistrictRanking.m in Sources */,

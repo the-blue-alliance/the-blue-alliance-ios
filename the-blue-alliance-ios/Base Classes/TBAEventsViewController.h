@@ -6,13 +6,11 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "TBATableViewController.h"
 
 @class OrderedDictionary, Event;
 
-@interface TBAEventsViewController : UIViewController
-
-@property (nonatomic, weak) IBOutlet UITableView *tableView;
+@interface TBAEventsViewController : TBATableViewController
 
 @property (nonatomic, copy) OrderedDictionary *events;
 @property (nonatomic, copy) void (^eventSelected)(Event *event);

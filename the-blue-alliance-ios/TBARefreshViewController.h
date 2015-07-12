@@ -6,13 +6,9 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "TBAViewController.h"
 
 @interface TBARefreshViewController : TBAViewController
-
-@property (nonatomic, assign) BOOL refreshing;
-@property (nonatomic, copy) void (^requestsFinished)();
 
 @property (nonatomic, copy) void (^refresh)();
 

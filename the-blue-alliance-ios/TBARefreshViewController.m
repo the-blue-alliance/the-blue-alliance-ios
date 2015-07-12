@@ -75,8 +75,6 @@
 }
 
 - (void)cancelRefresh {
-    self.refreshing = NO;
-
     if ([self.requestsArray count] == 0) {
         return;
     }
@@ -86,10 +84,8 @@
         [[TBAKit sharedKit] cancelRequestWithIdentifier:requestIdentifier];
     }
     [self.requestsArray removeAllObjects];
-
-    if (self.requestsFinished) {
-        self.requestsFinished();
-    }
+    
+    [self updateRefreshBarButtonItem:NO];
 }
 
 - (void)addRequestIdentifier:(NSUInteger)requestIdentifier {
@@ -101,8 +97,9 @@
         return;
     }
     [self.requestsArray removeObject:@(requestIdentifier)];
-    if ([self.requestsArray count] == 0 && self.requestsFinished) {
-        self.requestsFinished();
+
+    if ([self.requestsArray count] == 0) {
+        [self updateRefreshBarButtonItem:NO];
     }
 }
 

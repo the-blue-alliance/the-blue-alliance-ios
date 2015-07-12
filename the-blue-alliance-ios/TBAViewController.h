@@ -13,6 +13,6 @@
 
 @property (nonatomic, strong) TBAPersistenceController *persistenceController;
 
-- (void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message;
+- (void)showErrorAlertWithMessage:(NSString *)message;
 
 @end

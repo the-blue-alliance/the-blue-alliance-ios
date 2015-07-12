@@ -6,13 +6,11 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "TBATableViewController.h"
 
 @class District;
 
-@interface TBARankingsViewController : UIViewController
-
-@property (nonatomic, weak) IBOutlet UITableView *tableView;
+@interface TBARankingsViewController : TBATableViewController
 
 @property (nonatomic, strong) District *district;
 

@@ -21,18 +21,6 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
 
 @implementation TBATeamsViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    [self styleInterface];
-}
-
-#pragma mark - Interface Methods
-
-- (void)styleInterface {
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-}
-
 #pragma mark - Data Methods
 
 - (Team *)teamForIndex:(NSUInteger)index {
