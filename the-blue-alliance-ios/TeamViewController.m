@@ -9,6 +9,7 @@
 #import "TeamViewController.h"
 #import "TBAEventsViewController.h"
 #import "TBAInfoViewController.h"
+#import "TBAMediaCollectionViewController.h"
 #import "Team.h"
 #import "Team+Fetch.h"
 #import "Event+Fetch.h"
@@ -17,10 +18,12 @@
 
 static NSString *const EventsViewControllerEmbed    = @"EventsViewControllerEmbed";
 static NSString *const InfoViewControllerEmbed      = @"InfoViewControllerEmbed";
+static NSString *const MediaViewControllerEmbed     = @"MediaViewControllerEmbed";
 
 typedef NS_ENUM(NSInteger, TBATeamDataType) {
     TBATeamDataTypeInfo = 0,
-    TBATeamDataTypeEvents
+    TBATeamDataTypeEvents,
+    TBATeamDataTypeMedia
 };
 
 @interface TeamViewController ()
@@ -33,6 +36,9 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 
 @property (nonatomic, strong) TBAEventsViewController *eventsViewController;
 @property (nonatomic, weak) IBOutlet UIView *eventsView;
+
+@property (nonatomic, strong) TBAMediaCollectionViewController *mediaCollectionViewController;
+@property (nonatomic, weak) IBOutlet UIView *mediaView;
 
 @end
 
@@ -47,9 +53,12 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         
         if (strongSelf.segmentedControl.selectedSegmentIndex == TBATeamDataTypeInfo) {
             [strongSelf refreshTeamInfo];
-        } else {
+        } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBATeamDataTypeEvents) {
             [strongSelf.eventsViewController hideNoDataView];
             [strongSelf refreshEvents];
+        } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBATeamDataTypeMedia) {
+            [strongSelf.mediaCollectionViewController hideNoDataView];
+            [strongSelf refreshMedia];
         }
     };
     
@@ -60,13 +69,14 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 
         strongSelf.currentYear = selectedYear;
         
-        if (strongSelf.segmentedControl.selectedSegmentIndex == TBATeamDataTypeInfo) {
-            [strongSelf removeMedia];
-            [strongSelf fetchMediaAndRefresh:YES];
-        } else {
+        if (strongSelf.segmentedControl.selectedSegmentIndex == TBATeamDataTypeEvents) {
             [strongSelf.eventsViewController hideNoDataView];
             [strongSelf removeEvents];
             [strongSelf fetchEventsAndRefresh:YES];
+        } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBATeamDataTypeMedia) {
+            [strongSelf.mediaCollectionViewController hideNoDataView];
+            [strongSelf removeMedia];
+            [strongSelf fetchMediaAndRefresh:YES];
         }
     };
     
@@ -87,14 +97,21 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     if (self.segmentedControl.selectedSegmentIndex == TBATeamDataTypeInfo) {
         self.infoView.hidden = NO;
         self.eventsView.hidden = YES;
+        self.mediaView.hidden = YES;
         
         [self fetchTeamAndRefresh:NO];
-        [self fetchMediaAndRefresh:NO];
-    } else {
+    } else if (self.segmentedControl.selectedSegmentIndex == TBATeamDataTypeEvents) {
         self.eventsView.hidden = NO;
+        self.mediaView.hidden = YES;
         self.infoView.hidden = YES;
         
         [self fetchEventsAndRefresh:NO];
+    } else {
+        self.mediaView.hidden = NO;
+        self.eventsView.hidden = YES;
+        self.infoView.hidden = YES;
+        
+        [self fetchMediaAndRefresh:YES];
     }
 }
 
@@ -110,7 +127,6 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 
     [self refreshYearsParticipated];
     [self refreshTeam];
-    [self refreshMedia];
 }
 
 #pragma mark - Years Participated
@@ -201,9 +217,9 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 #pragma mark - Media
 
 - (void)removeMedia {
-    self.infoViewController.media = nil;
+    self.mediaCollectionViewController.media = nil;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.infoViewController.tableView reloadData];
+        [self.mediaCollectionViewController.collectionView reloadData];
     });
 }
 
@@ -227,9 +243,9 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
                 [strongSelf refreshMedia];
             }
         } else {
-            strongSelf.infoViewController.media = media;
+            strongSelf.mediaCollectionViewController.media = media;
             dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf.infoViewController.tableView reloadData];
+                [strongSelf.mediaCollectionViewController.collectionView reloadData];
             });
         }
     }];
@@ -333,6 +349,8 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         self.eventsViewController.eventSelected = ^(Event *event) {
             NSLog(@"Selected event: %@", event.shortName);
         };
+    } else if ([segue.identifier isEqualToString:MediaViewControllerEmbed]) {
+        self.mediaCollectionViewController = segue.destinationViewController;
     }
 }
 
