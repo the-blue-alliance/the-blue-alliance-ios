@@ -714,15 +714,35 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yqx-t0-75q">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="35"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yqx-t0-75q" userLabel="Segmented Control View">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <subviews>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="xcB-08-bJI">
+                                        <rect key="frame" x="106" y="8" width="107" height="29"/>
+                                        <segments>
+                                            <segment title="Info"/>
+                                            <segment title="Teams"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="segmentedControlValueChanged:" destination="kyn-5W-zgu" eventType="valueChanged" id="4pb-Of-gFD"/>
+                                        </connections>
+                                    </segmentedControl>
+                                </subviews>
                                 <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.85098039219999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="0Fu-zd-97V"/>
+                                    <constraint firstAttribute="height" constant="44" id="0Fu-zd-97V"/>
+                                    <constraint firstAttribute="centerX" secondItem="xcB-08-bJI" secondAttribute="centerX" id="Ax0-GO-3fj"/>
+                                    <constraint firstAttribute="centerY" secondItem="xcB-08-bJI" secondAttribute="centerY" id="YqN-6t-ReP"/>
                                 </constraints>
                             </view>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c83-bI-91p" userLabel="Teams View">
+                                <rect key="frame" x="0.0" y="44" width="320" height="411"/>
+                                <connections>
+                                    <segue destination="0ro-Yg-Pvq" kind="embed" identifier="TeamsViewControllerEmbed" id="eRd-Dy-LTL"/>
+                                </connections>
+                            </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UTP-aq-H6o" userLabel="Info View">
-                                <rect key="frame" x="0.0" y="35" width="320" height="420"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="411"/>
                                 <connections>
                                     <segue destination="gCv-Ul-GQQ" kind="embed" identifier="InfoViewControllerEmbed" id="ijh-4t-Dqv"/>
                                 </connections>
@@ -730,18 +750,25 @@
                         </subviews>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="c83-bI-91p" secondAttribute="trailing" id="21J-jN-urY"/>
                             <constraint firstItem="yqx-t0-75q" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="6H1-xb-VhA"/>
                             <constraint firstItem="68F-KG-6JN" firstAttribute="top" secondItem="UTP-aq-H6o" secondAttribute="bottom" id="COU-6s-GIb"/>
                             <constraint firstItem="yqx-t0-75q" firstAttribute="top" secondItem="7nG-7X-uOS" secondAttribute="bottom" id="FVp-Vs-KkE"/>
                             <constraint firstAttribute="trailing" secondItem="yqx-t0-75q" secondAttribute="trailing" id="L4N-xB-5qd"/>
                             <constraint firstItem="UTP-aq-H6o" firstAttribute="top" secondItem="yqx-t0-75q" secondAttribute="bottom" id="Wq7-c3-b4z"/>
                             <constraint firstAttribute="trailing" secondItem="UTP-aq-H6o" secondAttribute="trailing" id="bA3-bX-N2H"/>
+                            <constraint firstItem="c83-bI-91p" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="kyy-LT-eF7"/>
+                            <constraint firstItem="68F-KG-6JN" firstAttribute="top" secondItem="c83-bI-91p" secondAttribute="bottom" id="qF0-yv-tud"/>
+                            <constraint firstItem="c83-bI-91p" firstAttribute="top" secondItem="yqx-t0-75q" secondAttribute="bottom" id="thr-6z-zDd"/>
                             <constraint firstItem="UTP-aq-H6o" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="yBX-Pg-wVM"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="2015 Kettering University District" id="4ar-iU-waM"/>
                     <connections>
                         <outlet property="infoView" destination="UTP-aq-H6o" id="ihf-8I-e1X"/>
+                        <outlet property="segmentedControl" destination="xcB-08-bJI" id="zGY-mv-0sp"/>
+                        <outlet property="segmentedControlView" destination="yqx-t0-75q" id="bwJ-Zf-9hN"/>
+                        <outlet property="teamsView" destination="c83-bI-91p" id="C5v-cQ-knZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Uq-41-IcJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -753,7 +780,7 @@
             <objects>
                 <tableViewController id="0ro-Yg-Pvq" customClass="TBATeamsViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="6Vg-1f-Vmg">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" id="hMw-KA-wEv">
@@ -1033,8 +1060,9 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="oWq-M9-Pon"/>
         <segue reference="uwf-Zh-tyc"/>
+        <segue reference="ijh-4t-Dqv"/>
+        <segue reference="eRd-Dy-LTL"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

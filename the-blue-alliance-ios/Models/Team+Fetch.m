@@ -7,6 +7,7 @@
 //
 
 #import "Team+Fetch.h"
+#import "Event.h"
 
 @implementation Team (Fetch)
 

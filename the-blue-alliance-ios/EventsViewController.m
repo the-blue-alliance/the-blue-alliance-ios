@@ -228,6 +228,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
         
         EventViewController *eventViewController = segue.destinationViewController;
         eventViewController.event = event;
+        eventViewController.persistenceController = self.persistenceController;
     }
 }
 

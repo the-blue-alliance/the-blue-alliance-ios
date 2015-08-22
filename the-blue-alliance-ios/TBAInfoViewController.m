@@ -45,11 +45,18 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (self.team) {
+        return 3;
+    } else if (self.event) {
+        return 2;
+    }
     return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:InfoCellReuseIdentifier forIndexPath:indexPath];
+
+#warning this needs to change based on the data we do/don't have
     if (self.team.location && indexPath.row == 0) {
         cell.textLabel.text = [NSString stringWithFormat:@"from %@", self.team.location];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -60,10 +67,18 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
         
         cell.accessoryType = UITableViewCellAccessoryDetailButton;
         cell.tintColor = [UIColor colorWithRed:0.79 green:0.79 blue:0.81 alpha:1];
+    } else if (self.event.dateString && indexPath.row == 0) {
+        cell.textLabel.text = self.event.dateString;
+        
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     if (self.team.website && indexPath.row == 2) {
         cell.textLabel.text = self.team.website;
 
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    } else if (self.event.location && indexPath.row == 1) {
+        cell.textLabel.text = self.event.location;
+        
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     return cell;

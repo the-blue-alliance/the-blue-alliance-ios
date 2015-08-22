@@ -19,5 +19,6 @@
 + (void)fetchTeamsWithPredicate:(NSPredicate *)predicate fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *teams, NSError *error))completion;
 + (void)fetchTeamForKey:(NSString *)key fromContext:(NSManagedObjectContext *)context checkUpstream:(BOOL)upstream withCompletionBlock:(void(^)(Team *team, NSError *error))completion;
 + (void)fetchTeamsForKeys:(NSArray *)keys fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *teams, NSError *error))completion;
++ (void)fetchTeamsForEvent:(Event *)event fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *teams, NSError *error))completion;
 
 @end
