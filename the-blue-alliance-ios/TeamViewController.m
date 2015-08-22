@@ -254,7 +254,9 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 - (void)refreshMedia {
     if (self.currentYear == 0) {
         return;
-    }
+    }    
+    [self updateRefreshBarButtonItem:YES];
+
     __block NSInteger year = self.currentYear;
     
     __weak typeof(self) weakSelf = self;
