@@ -60,7 +60,7 @@
 		9258CD411B2CAC35001069ED /* EventWebcast.m in Sources */ = {isa = PBXBuildFile; fileRef = 9258CD3D1B2CAC35001069ED /* EventWebcast.m */; };
 		9258CD441B2CAC40001069ED /* Team+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9258CD431B2CAC40001069ED /* Team+Fetch.m */; };
 		925CD21E1AC247F200C9C3BF /* TBARefreshViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925CD21D1AC247F200C9C3BF /* TBARefreshViewController.m */; };
-		925DECE71AF5B2D9007A7E94 /* TBADistrictRankingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 925DECE61AF5B2D9007A7E94 /* TBADistrictRankingTableViewCell.m */; };
+		925DECE71AF5B2D9007A7E94 /* TBARankingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 925DECE61AF5B2D9007A7E94 /* TBARankingTableViewCell.m */; };
 		926001671B517DF40027FE95 /* TBANoDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926001661B517DF40027FE95 /* TBANoDataViewController.m */; };
 		9260016A1B519E050027FE95 /* TBATableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926001691B519E050027FE95 /* TBATableViewController.m */; };
 		926C054C1AAF741E00E9215A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 926C054B1AAF741E00E9215A /* Images.xcassets */; };
@@ -73,6 +73,8 @@
 		92AC4FF61B471F32004A05E2 /* TBARankingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AC4FF51B471F32004A05E2 /* TBARankingsViewController.m */; };
 		92AE675F1B81FFB000D7418F /* TBAMediaCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AE675E1B81FFB000D7418F /* TBAMediaCollectionViewController.m */; };
 		92BB8B981AC64DC800A041FA /* TBAYearSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B971AC64DC800A041FA /* TBAYearSelectViewController.m */; };
+		92BBBEF91B8A0EC500C9F127 /* EventRanking.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BBBEF81B8A0EC500C9F127 /* EventRanking.m */; };
+		92BBBEFF1B8A17DA00C9F127 /* _EventRanking.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BBBEFE1B8A17DA00C9F127 /* _EventRanking.m */; };
 		92CA3C5C1B88F2C30094DC7D /* TBACollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CA3C5B1B88F2C30094DC7D /* TBACollectionViewController.m */; };
 		92E749101B27B0EC00C46487 /* TBAInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E7490F1B27B0EC00C46487 /* TBAInfoViewController.m */; };
 		92EAA4C01ABF6AB100F7CF39 /* SelectYearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EAA4BF1ABF6AB100F7CF39 /* SelectYearViewController.m */; };
@@ -157,8 +159,8 @@
 		9258CD431B2CAC40001069ED /* Team+Fetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Team+Fetch.m"; path = "Models/Team+Fetch.m"; sourceTree = "<group>"; };
 		925CD21C1AC247F200C9C3BF /* TBARefreshViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBARefreshViewController.h; sourceTree = "<group>"; };
 		925CD21D1AC247F200C9C3BF /* TBARefreshViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBARefreshViewController.m; sourceTree = "<group>"; };
-		925DECE51AF5B2D9007A7E94 /* TBADistrictRankingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBADistrictRankingTableViewCell.h; sourceTree = "<group>"; };
-		925DECE61AF5B2D9007A7E94 /* TBADistrictRankingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBADistrictRankingTableViewCell.m; sourceTree = "<group>"; };
+		925DECE51AF5B2D9007A7E94 /* TBARankingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBARankingTableViewCell.h; sourceTree = "<group>"; };
+		925DECE61AF5B2D9007A7E94 /* TBARankingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBARankingTableViewCell.m; sourceTree = "<group>"; };
 		926001651B517DF40027FE95 /* TBANoDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBANoDataViewController.h; sourceTree = "<group>"; };
 		926001661B517DF40027FE95 /* TBANoDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBANoDataViewController.m; sourceTree = "<group>"; };
 		926001681B519E050027FE95 /* TBATableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBATableViewController.h; sourceTree = "<group>"; };
@@ -185,6 +187,11 @@
 		92AE675E1B81FFB000D7418F /* TBAMediaCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAMediaCollectionViewController.m; sourceTree = "<group>"; };
 		92BB8B961AC64DC800A041FA /* TBAYearSelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAYearSelectViewController.h; sourceTree = "<group>"; };
 		92BB8B971AC64DC800A041FA /* TBAYearSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAYearSelectViewController.m; sourceTree = "<group>"; };
+		92BBBEF61B8A0EA500C9F127 /* _EventWebcast.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = _EventWebcast.h; path = Models/_EventWebcast.h; sourceTree = "<group>"; };
+		92BBBEF71B8A0EC500C9F127 /* EventRanking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventRanking.h; path = Models/EventRanking.h; sourceTree = "<group>"; };
+		92BBBEF81B8A0EC500C9F127 /* EventRanking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventRanking.m; path = Models/EventRanking.m; sourceTree = "<group>"; };
+		92BBBEFD1B8A17DA00C9F127 /* _EventRanking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _EventRanking.h; path = Models/_EventRanking.h; sourceTree = "<group>"; };
+		92BBBEFE1B8A17DA00C9F127 /* _EventRanking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _EventRanking.m; path = Models/_EventRanking.m; sourceTree = "<group>"; };
 		92CA3C5A1B88F2C30094DC7D /* TBACollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBACollectionViewController.h; sourceTree = "<group>"; };
 		92CA3C5B1B88F2C30094DC7D /* TBACollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBACollectionViewController.m; sourceTree = "<group>"; };
 		92E7490E1B27B0EC00C46487 /* TBAInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAInfoViewController.h; sourceTree = "<group>"; };
@@ -366,6 +373,9 @@
 				9258CD221B2CAC1B001069ED /* _EventAlliance.m */,
 				9258CD231B2CAC1B001069ED /* _EventPoints.h */,
 				9258CD241B2CAC1B001069ED /* _EventPoints.m */,
+				92BBBEFD1B8A17DA00C9F127 /* _EventRanking.h */,
+				92BBBEFE1B8A17DA00C9F127 /* _EventRanking.m */,
+				92BBBEF61B8A0EA500C9F127 /* _EventWebcast.h */,
 				9258CD251B2CAC1B001069ED /* _EventWebcast.h */,
 				9258CD261B2CAC1B001069ED /* _EventWebcast.m */,
 				9258CD271B2CAC1B001069ED /* _Media.h */,
@@ -400,6 +410,8 @@
 				9258CD391B2CAC35001069ED /* EventAlliance.m */,
 				9258CD3A1B2CAC35001069ED /* EventPoints.h */,
 				9258CD3B1B2CAC35001069ED /* EventPoints.m */,
+				92BBBEF71B8A0EC500C9F127 /* EventRanking.h */,
+				92BBBEF81B8A0EC500C9F127 /* EventRanking.m */,
 				9258CD3C1B2CAC35001069ED /* EventWebcast.h */,
 				9258CD3D1B2CAC35001069ED /* EventWebcast.m */,
 			);
@@ -543,8 +555,8 @@
 			children = (
 				92AC4FF41B471F32004A05E2 /* TBARankingsViewController.h */,
 				92AC4FF51B471F32004A05E2 /* TBARankingsViewController.m */,
-				925DECE51AF5B2D9007A7E94 /* TBADistrictRankingTableViewCell.h */,
-				925DECE61AF5B2D9007A7E94 /* TBADistrictRankingTableViewCell.m */,
+				925DECE51AF5B2D9007A7E94 /* TBARankingTableViewCell.h */,
+				925DECE61AF5B2D9007A7E94 /* TBARankingTableViewCell.m */,
 			);
 			name = Rankings;
 			sourceTree = "<group>";
@@ -726,6 +738,7 @@
 				92011EBB1AC6175400C4F1EC /* DistrictsViewController.m in Sources */,
 				9258CD2B1B2CAC1B001069ED /* _District.m in Sources */,
 				9222F1191AD6910F00C0AEA0 /* EventViewController.m in Sources */,
+				92BBBEFF1B8A17DA00C9F127 /* _EventRanking.m in Sources */,
 				9237F7721B2CA76100C89978 /* DistrictRanking.m in Sources */,
 				926001671B517DF40027FE95 /* TBANoDataViewController.m in Sources */,
 				92FBF89D1B2DBC4100533CBE /* TBAMediaCollectionViewCell.m in Sources */,
@@ -733,6 +746,7 @@
 				927E8C4C1B268A3A00C93E6C /* TBATeamsViewController.m in Sources */,
 				50832E3E1918BBEA003AC8A7 /* EventsViewController.m in Sources */,
 				9240CDFC1AB5DA0B00D859A0 /* TBAEventTableViewCell.m in Sources */,
+				92BBBEF91B8A0EC500C9F127 /* EventRanking.m in Sources */,
 				9237F74B1B2CA74D00C89978 /* TBAPersistenceController.m in Sources */,
 				9258CD401B2CAC35001069ED /* EventPoints.m in Sources */,
 				9258CD301B2CAC1B001069ED /* _EventWebcast.m in Sources */,
@@ -752,7 +766,7 @@
 				9258CD3F1B2CAC35001069ED /* EventAlliance.m in Sources */,
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,
 				9258CD321B2CAC1B001069ED /* _Team.m in Sources */,
-				925DECE71AF5B2D9007A7E94 /* TBADistrictRankingTableViewCell.m in Sources */,
+				925DECE71AF5B2D9007A7E94 /* TBARankingTableViewCell.m in Sources */,
 				9258CD351B2CAC25001069ED /* District.m in Sources */,
 				9270482B1AC23C4E002E46CE /* TBATeamTableViewCell.m in Sources */,
 				50832E071918BB63003AC8A7 /* main.m in Sources */,

@@ -20,6 +20,7 @@ const struct TeamAttributes TeamAttributes = {
 const struct TeamRelationships TeamRelationships = {
 	.districtRankings = @"districtRankings",
 	.eventPoints = @"eventPoints",
+	.eventRankings = @"eventRankings",
 	.events = @"events",
 	.media = @"media",
 };
@@ -141,6 +142,17 @@ const struct TeamRelationships TeamRelationships = {
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"eventPoints"];
 
 	[self didAccessValueForKey:@"eventPoints"];
+	return result;
+}
+
+@dynamic eventRankings;
+
+- (NSMutableSet*)eventRankingsSet {
+	[self willAccessValueForKey:@"eventRankings"];
+
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"eventRankings"];
+
+	[self didAccessValueForKey:@"eventRankings"];
 	return result;
 }
 

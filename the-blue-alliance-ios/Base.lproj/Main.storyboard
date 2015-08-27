@@ -718,10 +718,11 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="xcB-08-bJI">
-                                        <rect key="frame" x="106" y="8" width="107" height="29"/>
+                                        <rect key="frame" x="54" y="8" width="212" height="29"/>
                                         <segments>
                                             <segment title="Info"/>
                                             <segment title="Teams"/>
+                                            <segment title="Rankings"/>
                                         </segments>
                                         <connections>
                                             <action selector="segmentedControlValueChanged:" destination="kyn-5W-zgu" eventType="valueChanged" id="4pb-Of-gFD"/>
@@ -735,6 +736,12 @@
                                     <constraint firstAttribute="centerY" secondItem="xcB-08-bJI" secondAttribute="centerY" id="YqN-6t-ReP"/>
                                 </constraints>
                             </view>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fLC-8k-2Ba" userLabel="Rankings View">
+                                <rect key="frame" x="0.0" y="44" width="320" height="411"/>
+                                <connections>
+                                    <segue destination="Zl5-IH-oHj" kind="embed" identifier="RankingsViewControllerEmbed" id="zon-7C-eSE"/>
+                                </connections>
+                            </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c83-bI-91p" userLabel="Teams View">
                                 <rect key="frame" x="0.0" y="44" width="320" height="411"/>
                                 <connections>
@@ -751,10 +758,14 @@
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="c83-bI-91p" secondAttribute="trailing" id="21J-jN-urY"/>
+                            <constraint firstItem="fLC-8k-2Ba" firstAttribute="top" secondItem="yqx-t0-75q" secondAttribute="bottom" id="637-zB-Axc"/>
                             <constraint firstItem="yqx-t0-75q" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="6H1-xb-VhA"/>
                             <constraint firstItem="68F-KG-6JN" firstAttribute="top" secondItem="UTP-aq-H6o" secondAttribute="bottom" id="COU-6s-GIb"/>
                             <constraint firstItem="yqx-t0-75q" firstAttribute="top" secondItem="7nG-7X-uOS" secondAttribute="bottom" id="FVp-Vs-KkE"/>
+                            <constraint firstItem="68F-KG-6JN" firstAttribute="top" secondItem="fLC-8k-2Ba" secondAttribute="bottom" id="G5H-Eg-VV6"/>
+                            <constraint firstAttribute="trailing" secondItem="fLC-8k-2Ba" secondAttribute="trailing" id="Jac-Hd-XHF"/>
                             <constraint firstAttribute="trailing" secondItem="yqx-t0-75q" secondAttribute="trailing" id="L4N-xB-5qd"/>
+                            <constraint firstItem="fLC-8k-2Ba" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="Rhz-4o-8OT"/>
                             <constraint firstItem="UTP-aq-H6o" firstAttribute="top" secondItem="yqx-t0-75q" secondAttribute="bottom" id="Wq7-c3-b4z"/>
                             <constraint firstAttribute="trailing" secondItem="UTP-aq-H6o" secondAttribute="trailing" id="bA3-bX-N2H"/>
                             <constraint firstItem="c83-bI-91p" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="kyy-LT-eF7"/>
@@ -766,6 +777,7 @@
                     <navigationItem key="navigationItem" title="2015 Kettering University District" id="4ar-iU-waM"/>
                     <connections>
                         <outlet property="infoView" destination="UTP-aq-H6o" id="ihf-8I-e1X"/>
+                        <outlet property="rankingsView" destination="fLC-8k-2Ba" id="h97-p2-JrH"/>
                         <outlet property="segmentedControl" destination="xcB-08-bJI" id="zGY-mv-0sp"/>
                         <outlet property="segmentedControlView" destination="yqx-t0-75q" id="bwJ-Zf-9hN"/>
                         <outlet property="teamsView" destination="c83-bI-91p" id="C5v-cQ-knZ"/>
@@ -954,11 +966,11 @@
             <objects>
                 <tableViewController id="Zl5-IH-oHj" customClass="TBARankingsViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="5h7-mt-vvf">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="411"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DistrictRankCell" id="7dh-Dl-yRC" customClass="TBADistrictRankingTableViewCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="RankCell" rowHeight="58" id="7dh-Dl-yRC" customClass="TBARankingTableViewCell">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7dh-Dl-yRC" id="lD7-Rq-b0b">
@@ -973,41 +985,57 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Rank 111" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Dr-iM-aot">
-                                            <rect key="frame" x="16" y="25" width="50" height="14"/>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="123 Points" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vfX-66-O1n">
+                                            <rect key="frame" x="82" y="25" width="222" height="28"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="123 Points" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vfX-66-O1n">
-                                            <rect key="frame" x="82" y="25" width="55" height="14"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Team Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pTP-2K-V7q">
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" verticalHuggingPriority="251" text="Team Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pTP-2K-V7q">
                                             <rect key="frame" x="82" y="5" width="87" height="20"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="(11-1-0)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Yl-Ry-YQR">
+                                            <rect key="frame" x="16" y="39" width="50" height="14"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Rank 111" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Dr-iM-aot">
+                                            <rect key="frame" x="16" y="25" width="50" height="14"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="14" id="ADD-0c-ksu"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="vfX-66-O1n" firstAttribute="leading" secondItem="pTP-2K-V7q" secondAttribute="leading" id="0ol-Vm-kCL"/>
                                         <constraint firstItem="3Dr-iM-aot" firstAttribute="leading" secondItem="D2C-gV-P4C" secondAttribute="leading" id="1hQ-Re-63T"/>
+                                        <constraint firstAttribute="bottom" secondItem="vfX-66-O1n" secondAttribute="bottom" constant="4" id="2ht-w4-mio"/>
                                         <constraint firstItem="D2C-gV-P4C" firstAttribute="leading" secondItem="lD7-Rq-b0b" secondAttribute="leading" constant="16" id="3cb-f1-LHg"/>
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="pTP-2K-V7q" secondAttribute="trailing" constant="8" id="8n2-vc-o28"/>
                                         <constraint firstItem="D2C-gV-P4C" firstAttribute="top" secondItem="lD7-Rq-b0b" secondAttribute="top" constant="5" id="AwH-rq-b4g"/>
                                         <constraint firstItem="3Dr-iM-aot" firstAttribute="top" secondItem="D2C-gV-P4C" secondAttribute="bottom" id="Buv-DX-xxm"/>
+                                        <constraint firstAttribute="trailing" secondItem="vfX-66-O1n" secondAttribute="trailing" constant="16" id="E8G-d7-b3m"/>
+                                        <constraint firstItem="3Dr-iM-aot" firstAttribute="trailing" secondItem="3Yl-Ry-YQR" secondAttribute="trailing" id="Gi0-ip-t11"/>
                                         <constraint firstItem="D2C-gV-P4C" firstAttribute="top" secondItem="pTP-2K-V7q" secondAttribute="top" id="XTY-CO-3yQ"/>
+                                        <constraint firstItem="3Dr-iM-aot" firstAttribute="leading" secondItem="3Yl-Ry-YQR" secondAttribute="leading" id="YXR-Rw-boL"/>
                                         <constraint firstItem="D2C-gV-P4C" firstAttribute="trailing" secondItem="3Dr-iM-aot" secondAttribute="trailing" id="ch8-SS-0yi"/>
+                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="3Yl-Ry-YQR" secondAttribute="bottom" constant="4" id="kfX-Nn-dA1"/>
+                                        <constraint firstItem="3Yl-Ry-YQR" firstAttribute="top" secondItem="3Dr-iM-aot" secondAttribute="bottom" id="mKL-fj-cMa"/>
                                         <constraint firstItem="vfX-66-O1n" firstAttribute="top" secondItem="pTP-2K-V7q" secondAttribute="bottom" id="o8c-xN-NPW"/>
                                         <constraint firstItem="pTP-2K-V7q" firstAttribute="leading" secondItem="D2C-gV-P4C" secondAttribute="trailing" constant="16" id="y3k-01-llI"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="pointsLabel" destination="vfX-66-O1n" id="awW-qf-pHc"/>
+                                    <outlet property="detailLabel" destination="vfX-66-O1n" id="ACM-AW-dDa"/>
                                     <outlet property="rankLabel" destination="3Dr-iM-aot" id="AsR-38-Z65"/>
+                                    <outlet property="recordLabel" destination="3Yl-Ry-YQR" id="IYG-bi-5n1"/>
                                     <outlet property="teamNameLabel" destination="pTP-2K-V7q" id="B3h-sM-PfA"/>
                                     <outlet property="teamNumberLabel" destination="D2C-gV-P4C" id="Ua4-2w-W0p"/>
                                 </connections>
@@ -1060,9 +1088,10 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="uwf-Zh-tyc"/>
-        <segue reference="ijh-4t-Dqv"/>
         <segue reference="eRd-Dy-LTL"/>
+        <segue reference="zon-7C-eSE"/>
+        <segue reference="ijh-4t-Dqv"/>
+        <segue reference="uwf-Zh-tyc"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

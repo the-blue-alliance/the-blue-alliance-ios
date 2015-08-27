@@ -9,7 +9,9 @@
 #import "EventViewController.h"
 #import "TBAInfoViewController.h"
 #import "TBATeamsViewController.h"
+#import "TBARankingsViewController.h"
 #import "Event.h"
+#import "EventRanking.h"
 #import "Event+Fetch.h"
 #import "Team.h"
 #import "Team+Fetch.h"
@@ -36,6 +38,9 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 @property (nonatomic, strong) TBATeamsViewController *teamsViewController;
 @property (nonatomic, weak) IBOutlet UIView *teamsView;
 
+@property (nonatomic, strong) TBARankingsViewController *rankingsViewController;
+@property (nonatomic, weak) IBOutlet UIView *rankingsView;
+
 @end
 
 @implementation EventViewController
@@ -54,6 +59,9 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
         } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBAEventDataTypeTeams) {
             [strongSelf.teamsViewController hideNoDataView];
             [strongSelf refreshTeams];
+        } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBAEventDataTypeRankings) {
+            [strongSelf.rankingsViewController hideNoDataView];
+            [strongSelf refreshRankings];
         }
         [strongSelf updateRefreshBarButtonItem:YES];
     };
@@ -63,6 +71,12 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 
 #pragma mark - Interface Methods
 
+- (void)showView:(UIView *)showView {
+    for (UIView *view in @[self.infoView, self.teamsView, self.rankingsView]) {
+        view.hidden = (showView == view ? NO : YES);
+    }
+}
+
 - (void)styleInterface {
     self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
     self.navigationItem.title = [self.event friendlyNameWithYear:YES];
@@ -70,17 +84,14 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 
 - (void)updateInterface {
     if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeInfo) {
-        self.infoView.hidden = NO;
-        self.teamsView.hidden = YES;
-        
+        [self showView:self.infoView];
         [self fetchEventAndRefresh:NO];
     } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeTeams) {
-        self.teamsView.hidden = NO;
-        self.infoView.hidden = YES;
-        
+        [self showView:self.teamsView];
         [self fetchTeamsAndRefresh:NO];
+    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeRankings) {
+        [self showView:self.rankingsView];
     }
-    // and the rest of our segmented control in here
 }
 
 - (IBAction)segmentedControlValueChanged:(id)sender {
@@ -180,6 +191,54 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
     [self addRequestIdentifier:request];
 }
 
+#pragma mark - Rankings
+
+- (void)fetchRankingsAndRefresh:(BOOL)refresh {
+    __weak typeof(self) weakSelf = self;
+    [Event fetchEventRankingsForEvent:self.event fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *rankings, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf showErrorAlertWithMessage:@"Unable to fetch event rankings locally"];
+            });
+            return;
+        }
+        
+        if (!rankings) {
+            if (refresh) {
+                [self refresh];
+            }
+        } else {
+            strongSelf.rankingsViewController.rankings = rankings;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf.rankingsViewController.tableView reloadData];
+            });
+        }
+    }];
+}
+
+- (void)refreshRankings {
+    __weak typeof(self) weakSelf = self;
+    __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForEventKey:self.event.key withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf removeRequestIdentifier:request];
+        
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf showErrorAlertWithMessage:@"Unable to reload event rankings"];
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:self.event inManagedObjectContext:self.persistenceController.managedObjectContext];
+                [strongSelf fetchRankingsAndRefresh:NO];
+                [strongSelf.persistenceController save];
+            });
+        }
+    }];
+    [self addRequestIdentifier:request];
+}
+
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -188,6 +247,9 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
         self.infoViewController.event = self.event;
     } else if ([segue.identifier isEqualToString:@"TeamsViewControllerEmbed"]) {
         self.teamsViewController = segue.destinationViewController;
+    } else if ([segue.identifier isEqualToString:@"RankingsViewControllerEmbed"]) {
+        self.rankingsViewController = segue.destinationViewController;
+        self.rankingsViewController.event = self.event;
     }
 }
 

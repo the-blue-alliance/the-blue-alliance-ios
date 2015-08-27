@@ -1,0 +1,172 @@
+#import "EventRanking.h"
+#import "Team+Fetch.h"
+
+@interface EventRanking ()
+
+// Private interface goes here.
+
+@end
+
+@implementation EventRanking
+
++ (instancetype)insertEventRankingWithEventRankingArray:(NSArray *)eventRankingArray withKeys:(NSArray *)keys forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"EventRanking" inManagedObjectContext:context];
+    [fetchRequest setEntity:entity];
+    
+    // Assume that the list of lists has rank first
+    // and team # second, always
+    //
+    NSUInteger teamKeyIndex = [keys indexOfObject:@"Team"];
+    NSString *teamKey = [NSString stringWithFormat:@"frc%@", [eventRankingArray objectAtIndex:teamKeyIndex]];
+    
+    dispatch_semaphore_t teamSemaphore = dispatch_semaphore_create(0);
+    __block Team *team;
+    
+    [Team fetchTeamForKey:teamKey fromContext:context checkUpstream:YES withCompletionBlock:^(Team *localTeam, NSError *error) {
+        if (error || !localTeam) {
+            dispatch_semaphore_signal(teamSemaphore);
+        } else {
+            team = localTeam;
+            dispatch_semaphore_signal(teamSemaphore);
+        }
+    }];
+    dispatch_semaphore_wait(teamSemaphore, DISPATCH_TIME_FOREVER);
+    
+    if (team == nil) {
+        return nil;
+    }
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@ AND team == %@", event, team];
+    [fetchRequest setPredicate:predicate];
+    
+    EventRanking *eventRanking;
+    
+    NSError *error = nil;
+    NSArray *existingObjs = [context executeFetchRequest:fetchRequest error:&error];
+    if(existingObjs.count == 1) {
+        eventRanking = [existingObjs firstObject];
+    } else if(existingObjs.count > 1) {
+        // Delete them all, create a new a single new one
+        for (EventRanking *er in existingObjs) {
+            [context deleteObject:er];
+        }
+    }
+    
+    if (eventRanking == nil) {
+        eventRanking = [NSEntityDescription insertNewObjectForEntityForName:@"EventRanking" inManagedObjectContext:context];
+    }
+    
+    NSUInteger rankKeyIndex = [keys indexOfObject:@"Rank"];
+    id rankUnsafe = [eventRankingArray objectAtIndex:rankKeyIndex];
+    NSNumber *rank;
+    if ([rankUnsafe isKindOfClass:[NSString class]]) {
+        rank = @([(NSString *)rankUnsafe integerValue]);
+    } else {
+        rank = rankUnsafe;
+    }
+    eventRanking.rank = rank;
+    
+    NSMutableDictionary *infoDictionary = [[NSMutableDictionary alloc] init];
+    // Remove rank and team, since we don't need to keep them
+    // Keep the rest, and we'll make that our info dictionary
+    for (int i = 0; i < [keys count]; i++) {
+        if (i == rankKeyIndex || i == teamKeyIndex) {
+            continue;
+        }
+        NSString *key = [keys objectAtIndex:i];
+        id value = [eventRankingArray objectAtIndex:i];
+        
+        [infoDictionary setObject:value forKey:key];
+    }
+    eventRanking.record = [self extractRecordString:&infoDictionary];
+    eventRanking.info = infoDictionary;
+    eventRanking.event = event;
+    eventRanking.team = team;
+    
+    return eventRanking;
+}
+
++ (NSString *)extractRecordString:(NSDictionary **)infoDictionary {
+    NSString *winsKey, *lossesKey, *tiesKey, *recordKey;
+    NSString *wins, *losses, *ties, *record;
+    for (NSString *key in ((NSDictionary *)*infoDictionary).allKeys) {
+        if ([[key lowercaseString] containsString:@"record"]) {
+            recordKey = key;
+            record = [*infoDictionary objectForKey:key];
+        } else if ([key caseInsensitiveCompare:@"wins"] == NSOrderedSame) {
+            winsKey = key;
+            wins = [*infoDictionary objectForKey:key];
+        } else if ([key caseInsensitiveCompare:@"losses"] == NSOrderedSame) {
+            lossesKey = key;
+            losses = [*infoDictionary objectForKey:key];
+        } else if ([key caseInsensitiveCompare:@"ties"] == NSOrderedSame) {
+            tiesKey = key;
+            ties = [*infoDictionary objectForKey:key];
+        }
+    }
+    
+    NSString *recordString;
+    NSMutableDictionary *mutableInfoDictionary = [*infoDictionary mutableCopy];
+    if (record) {
+        recordString = [NSString stringWithFormat:@"(%@)", [*infoDictionary objectForKey:recordKey]];
+
+        [mutableInfoDictionary removeObjectForKey:recordKey];
+    } else if (wins && losses && ties) {
+        recordString = [NSString stringWithFormat:@"(%@-%@-%@)", [*infoDictionary objectForKey:winsKey], [*infoDictionary objectForKey:lossesKey], [*infoDictionary objectForKey:tiesKey]];
+
+        [mutableInfoDictionary removeObjectForKey:winsKey];
+        [mutableInfoDictionary removeObjectForKey:lossesKey];
+        [mutableInfoDictionary removeObjectForKey:tiesKey];
+    }
+    *infoDictionary = [NSDictionary dictionaryWithDictionary:mutableInfoDictionary];
+
+    return recordString;
+}
+
++ (NSArray *)insertEventRankingsWithEventRankings:(NSArray *)eventRankings forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    NSArray *rankingKeys;
+    for (NSArray *eventRanking in eventRankings) {
+        if (!rankingKeys) {
+            rankingKeys = eventRanking;
+        } else {
+            [arr addObject:[self insertEventRankingWithEventRankingArray:eventRanking withKeys:rankingKeys forEvent:event inManagedObjectContext:context]];
+        }
+    }
+    return arr;
+}
+
+- (NSString *)infoString {
+    NSMutableString *infoString = [[NSMutableString alloc] init];
+    NSDictionary *infoDictionary = (NSDictionary *)self.info;
+
+    NSEnumerator *infoEnumerator = [infoDictionary.allKeys objectEnumerator];
+    NSString *key = [infoEnumerator nextObject];
+    while (key) {
+        id value = [infoDictionary objectForKey:key];
+        NSString *valueString;
+        if ([value isKindOfClass:[NSString class]]) {
+            valueString = [@([value integerValue]) stringValue];
+        } else if ([value isKindOfClass:[NSNumber class]]) {
+            valueString = [@([value integerValue]) stringValue];
+        }
+        
+        NSString *infoKey = key;
+        if (infoKey.length <= 3) {
+            infoKey = [infoKey uppercaseString];
+        } else {
+            infoKey = [infoKey capitalizedString];
+        }
+        [infoString appendString:[NSString stringWithFormat:@"%@: %@", infoKey, valueString]];
+        
+        key = [infoEnumerator nextObject];
+        if (key) {
+            [infoString appendString:@", "];
+        }
+    }
+    
+    return infoString;
+}
+
+@end

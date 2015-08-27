@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class DistrictRanking;
+@class EventRanking, DistrictRanking;
 
-@interface TBADistrictRankingTableViewCell : UITableViewCell
+@interface TBARankingTableViewCell : UITableViewCell
 
 @property (nonatomic, strong) DistrictRanking *districtRanking;
+@property (nonatomic, strong) EventRanking *eventRanking;
 
 @end

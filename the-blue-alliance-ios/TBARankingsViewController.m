@@ -7,9 +7,9 @@
 //
 
 #import "TBARankingsViewController.h"
-#import "TBADistrictRankingTableViewCell.h"
+#import "TBARankingTableViewCell.h"
 
-static NSString *const DistrictRankCellReuseIdentifier  = @"DistrictRankCell";
+static NSString *const RankCellReuseIdentifier  = @"RankCell";
 
 @implementation TBARankingsViewController
 
@@ -31,22 +31,28 @@ static NSString *const DistrictRankCellReuseIdentifier  = @"DistrictRankCell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell;
+    TBARankingTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:RankCellReuseIdentifier forIndexPath:indexPath];
     
     if (self.district) {
-        TBADistrictRankingTableViewCell *localCell = [tableView dequeueReusableCellWithIdentifier:DistrictRankCellReuseIdentifier
-                                                                                     forIndexPath:indexPath];
-
         DistrictRanking *ranking = [self.rankings objectAtIndex:indexPath.row];
-        localCell.districtRanking = ranking;
-        
-        cell = localCell;
+        cell.districtRanking = ranking;
+    } else if (self.event) {
+        EventRanking *ranking = [self.rankings objectAtIndex:indexPath.row];
+        cell.eventRanking = ranking;
     }
     
     return cell;
 }
 
 #pragma mark - Table View Delegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 44.0f;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

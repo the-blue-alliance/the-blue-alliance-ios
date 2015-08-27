@@ -193,6 +193,7 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 }
 
 - (void)refreshRankings {
+#warning Refreshing rankings for large districts (MI) is hanging our UI thread HARD
     __weak typeof(self) weakSelf = self;
     __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.district.key forYear:self.district.yearValue withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;

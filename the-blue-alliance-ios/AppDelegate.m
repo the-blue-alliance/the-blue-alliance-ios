@@ -10,6 +10,9 @@
 #import "TBAPersistenceController.h"
 #import "TBAKit.h"
 #import "TeamsViewController.h"
+#import "EventRanking.h"
+#import "Team.h"
+#import "Event.h"
 
 @interface AppDelegate ()
 

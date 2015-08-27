@@ -70,14 +70,6 @@
         
         [Event fetchEventForKey:eventKey fromContext:context checkUpstream:YES withCompletionBlock:^(Event *localEvent, NSError *error) {
             if (error || !event) {
-                // Maybe handle an error in here?
-            } else {
-                event = localEvent;
-            }
-        }];
-        
-        [Event fetchEventForKey:eventKey fromContext:context checkUpstream:YES withCompletionBlock:^(Event *localEvent, NSError *error) {
-            if (error || !event) {
                 dispatch_semaphore_signal(eventSemaphore);
             } else {
                 event = localEvent;

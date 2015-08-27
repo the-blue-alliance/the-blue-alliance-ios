@@ -8,11 +8,12 @@
 
 #import "TBATableViewController.h"
 
-@class District;
+@class District, Event;
 
 @interface TBARankingsViewController : TBATableViewController
 
 @property (nonatomic, strong) District *district;
+@property (nonatomic, strong) Event *event;
 
 @property (nonatomic, copy) NSArray *rankings;
 @property (nonatomic, copy) void (^rankingSelected)(id ranking);

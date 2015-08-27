@@ -20,12 +20,14 @@ extern const struct TeamAttributes {
 extern const struct TeamRelationships {
 	__unsafe_unretained NSString *districtRankings;
 	__unsafe_unretained NSString *eventPoints;
+	__unsafe_unretained NSString *eventRankings;
 	__unsafe_unretained NSString *events;
 	__unsafe_unretained NSString *media;
 } TeamRelationships;
 
 @class DistrictRanking;
 @class EventPoints;
+@class EventRanking;
 @class Event;
 @class Media;
 
@@ -100,6 +102,10 @@ extern const struct TeamRelationships {
 
 - (NSMutableSet*)eventPointsSet;
 
+@property (nonatomic, strong) NSSet *eventRankings;
+
+- (NSMutableSet*)eventRankingsSet;
+
 @property (nonatomic, strong) NSSet *events;
 
 - (NSMutableSet*)eventsSet;
@@ -123,6 +129,14 @@ extern const struct TeamRelationships {
 - (void)removeEventPoints:(NSSet*)value_;
 - (void)addEventPointsObject:(EventPoints*)value_;
 - (void)removeEventPointsObject:(EventPoints*)value_;
+
+@end
+
+@interface _Team (EventRankingsCoreDataGeneratedAccessors)
+- (void)addEventRankings:(NSSet*)value_;
+- (void)removeEventRankings:(NSSet*)value_;
+- (void)addEventRankingsObject:(EventRanking*)value_;
+- (void)removeEventRankingsObject:(EventRanking*)value_;
 
 @end
 
@@ -188,6 +202,9 @@ extern const struct TeamRelationships {
 
 - (NSMutableSet*)primitiveEventPoints;
 - (void)setPrimitiveEventPoints:(NSMutableSet*)value;
+
+- (NSMutableSet*)primitiveEventRankings;
+- (void)setPrimitiveEventRankings:(NSMutableSet*)value;
 
 - (NSMutableSet*)primitiveEvents;
 - (void)setPrimitiveEvents:(NSMutableSet*)value;
