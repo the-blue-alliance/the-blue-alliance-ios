@@ -12,6 +12,6 @@
 
 @interface TBATeamTableViewCell : UITableViewCell
 
-@property (nonatomic, weak) Team *team;
+@property (nonatomic, strong) Team *team;
 
 @end

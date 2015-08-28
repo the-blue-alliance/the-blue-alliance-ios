@@ -22,6 +22,7 @@ const struct EventAttributes EventAttributes = {
 
 const struct EventRelationships EventRelationships = {
 	.alliances = @"alliances",
+	.matches = @"matches",
 	.points = @"points",
 	.rankings = @"rankings",
 	.teams = @"teams",
@@ -163,6 +164,17 @@ const struct EventRelationships EventRelationships = {
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"alliances"];
 
 	[self didAccessValueForKey:@"alliances"];
+	return result;
+}
+
+@dynamic matches;
+
+- (NSMutableSet*)matchesSet {
+	[self willAccessValueForKey:@"matches"];
+
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"matches"];
+
+	[self didAccessValueForKey:@"matches"];
 	return result;
 }
 

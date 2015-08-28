@@ -14,5 +14,6 @@
 
 + (void)fetchEventForKey:(NSString *)eventKey fromContext:(NSManagedObjectContext *)context checkUpstream:(BOOL)upstream withCompletionBlock:(void(^)(Event *event, NSError *error))completion;
 + (void)fetchEventRankingsForEvent:(Event *)event fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *rankings, NSError *error))completion;
++ (void)fetchMatchesForEvent:(Event *)event fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *matches, NSError *error))completion;
 
 @end

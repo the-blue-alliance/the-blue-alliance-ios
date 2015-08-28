@@ -12,6 +12,6 @@
 
 @interface TBAEventTableViewCell : UITableViewCell
 
-@property (nonatomic, weak) Event *event;
+@property (nonatomic, strong) Event *event;
 
 @end

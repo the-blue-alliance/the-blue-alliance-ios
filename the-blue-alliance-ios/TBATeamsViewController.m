@@ -33,6 +33,16 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
     return team;
 }
 
+#pragma mark - View Lifecycle
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if (!self.showSearch) {
+        [self.tableView setContentOffset:CGPointMake(0, CGRectGetHeight(self.searchBar.frame))];
+    }
+}
+
 #pragma mark - Table View Data Source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

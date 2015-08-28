@@ -235,7 +235,7 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
     [fetchRequest setEntity:entity];
     
     // Specify criteria for filtering which objects to fetch
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@ AND year == %@", modelEvent.key, @(modelEvent.year)];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", modelEvent.key];
     [fetchRequest setPredicate:predicate];
     
     Event *event;

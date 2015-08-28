@@ -19,7 +19,8 @@
     }
     
     EventAlliance *eventAlliance = [NSEntityDescription insertNewObjectForEntityForName:@"EventAlliance" inManagedObjectContext:context];
-    
+ 
+#warning turn these in to team objects?
     eventAlliance.picks = modelEventAlliance.picks;
     eventAlliance.declines = modelEventAlliance.declines;
     eventAlliance.event = event;

@@ -11,10 +11,6 @@
 
 static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
 
-@interface TBADistrictsViewController ()
-
-@end
-
 @implementation TBADistrictsViewController
 
 - (void)viewDidLoad {
@@ -49,7 +45,6 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
     return cell;
 }
 
-
 #pragma mark - Table View Delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -62,15 +57,5 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
     District *distrct = [self.districts objectAtIndex:indexPath.row];
     self.districtSelected(distrct);
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

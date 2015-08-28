@@ -1,8 +1,8 @@
 PODS:
-  - HMSegmentedControl (1.5.1)
-  - PureLayout (2.0.6)
+  - HMSegmentedControl (1.5.2)
+  - PureLayout (3.0.0)
   - Reveal-iOS-SDK (1.5.1)
-  - TBAKit (1.0.0)
+  - TBAKit (1.1.1)
 
 DEPENDENCIES:
   - HMSegmentedControl
@@ -11,9 +11,9 @@ DEPENDENCIES:
   - TBAKit
 
 SPEC CHECKSUMS:
-  HMSegmentedControl: 35460abdd15c3087368db2d3d956717f088b34d1
-  PureLayout: f25f0bb904d5ccfe6e31da3cb869185259f02e0d
+  HMSegmentedControl: 83b9686022d2176fb6457d2bdb61e5d6393fed7d
+  PureLayout: 270dfee2236f697ab1d5e2771c2e5c248495fa0d
   Reveal-iOS-SDK: c9c55cad2729c85f6ced415f1b21857c9a2d8ef9
-  TBAKit: a70e14841cc0b8e224ba8511744d8cede0324a3b
+  TBAKit: 52fc3b8cd3dd9744964ce9bb99b1627f92cb0dbd
 
-COCOAPODS: 0.37.0
+COCOAPODS: 0.38.2

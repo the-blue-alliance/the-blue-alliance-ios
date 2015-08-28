@@ -14,7 +14,8 @@
 
 @property (nonatomic, weak) IBOutlet UIImageView *imageView;
 
-@property (nonatomic, weak) Media *media;
+@property (nonatomic, strong) Media *media;
+
 @property (nonatomic, copy) void (^imageLoadedFromWeb)();
 
 @end

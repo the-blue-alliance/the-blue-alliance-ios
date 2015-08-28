@@ -22,6 +22,7 @@ extern const struct EventAttributes {
 
 extern const struct EventRelationships {
 	__unsafe_unretained NSString *alliances;
+	__unsafe_unretained NSString *matches;
 	__unsafe_unretained NSString *points;
 	__unsafe_unretained NSString *rankings;
 	__unsafe_unretained NSString *teams;
@@ -29,6 +30,7 @@ extern const struct EventRelationships {
 } EventRelationships;
 
 @class EventAlliance;
+@class Match;
 @class EventPoints;
 @class EventRanking;
 @class Team;
@@ -115,6 +117,10 @@ extern const struct EventRelationships {
 
 - (NSMutableSet*)alliancesSet;
 
+@property (nonatomic, strong) NSSet *matches;
+
+- (NSMutableSet*)matchesSet;
+
 @property (nonatomic, strong) NSSet *points;
 
 - (NSMutableSet*)pointsSet;
@@ -138,6 +144,14 @@ extern const struct EventRelationships {
 - (void)removeAlliances:(NSSet*)value_;
 - (void)addAlliancesObject:(EventAlliance*)value_;
 - (void)removeAlliancesObject:(EventAlliance*)value_;
+
+@end
+
+@interface _Event (MatchesCoreDataGeneratedAccessors)
+- (void)addMatches:(NSSet*)value_;
+- (void)removeMatches:(NSSet*)value_;
+- (void)addMatchesObject:(Match*)value_;
+- (void)removeMatchesObject:(Match*)value_;
 
 @end
 
@@ -228,6 +242,9 @@ extern const struct EventRelationships {
 
 - (NSMutableSet*)primitiveAlliances;
 - (void)setPrimitiveAlliances:(NSMutableSet*)value;
+
+- (NSMutableSet*)primitiveMatches;
+- (void)setPrimitiveMatches:(NSMutableSet*)value;
 
 - (NSMutableSet*)primitivePoints;
 - (void)setPrimitivePoints:(NSMutableSet*)value;

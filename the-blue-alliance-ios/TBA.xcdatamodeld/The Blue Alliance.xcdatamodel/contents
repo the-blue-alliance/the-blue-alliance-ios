@@ -29,11 +29,12 @@
         <attribute name="venueAddress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="year" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventAlliance" inverseName="event" inverseEntity="EventAlliance" syncable="YES"/>
+        <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventAlliance" inverseName="event" inverseEntity="EventAlliance" syncable="YES"/>
+        <relationship name="matches" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Match" inverseName="event" inverseEntity="Match" syncable="YES"/>
         <relationship name="points" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventPoints" inverseName="event" inverseEntity="EventPoints" syncable="YES"/>
-        <relationship name="rankings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventRanking" inverseName="event" inverseEntity="EventRanking" syncable="YES"/>
+        <relationship name="rankings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventRanking" inverseName="event" inverseEntity="EventRanking" syncable="YES"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="events" inverseEntity="Team" syncable="YES"/>
-        <relationship name="webcasts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventWebcast" inverseName="event" inverseEntity="EventWebcast" syncable="YES"/>
+        <relationship name="webcasts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventWebcast" inverseName="event" inverseEntity="EventWebcast" syncable="YES"/>
     </entity>
     <entity name="EventAlliance" representedClassName="EventAlliance" syncable="YES">
         <attribute name="declines" optional="YES" attributeType="Transformable" syncable="YES"/>
@@ -64,6 +65,25 @@
         <attribute name="webcastType" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="webcasts" inverseEntity="Event" syncable="YES"/>
     </entity>
+    <entity name="Match" representedClassName="Match" syncable="YES">
+        <attribute name="blueAlliance" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="blueScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="compLevel" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="matchNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="redAlliance" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="redScore" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="scoreBreakdown" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="setNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="matches" inverseEntity="Event" syncable="YES"/>
+        <relationship name="vidoes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MatchVideo" inverseName="match" inverseEntity="MatchVideo" syncable="YES"/>
+    </entity>
+    <entity name="MatchVideo" representedClassName="MatchVideo" syncable="YES">
+        <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="videoType" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="match" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Match" inverseName="vidoes" inverseEntity="Match" syncable="YES"/>
+    </entity>
     <entity name="Media" representedClassName="Media" syncable="YES">
         <attribute name="cachedData" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="foreignKey" optional="YES" attributeType="String" syncable="YES"/>
@@ -93,12 +113,14 @@
     <elements>
         <element name="District" positionX="-1278" positionY="2070" width="128" height="105"/>
         <element name="DistrictRanking" positionX="-1287" positionY="2061" width="128" height="135"/>
-        <element name="Event" positionX="-1485" positionY="1920" width="128" height="330"/>
+        <element name="Event" positionX="-1485" positionY="1920" width="128" height="345"/>
         <element name="EventAlliance" positionX="-1260" positionY="2088" width="128" height="90"/>
         <element name="EventPoints" positionX="-1269" positionY="2079" width="128" height="180"/>
         <element name="EventRanking" positionX="-1287" positionY="2061" width="128" height="120"/>
         <element name="EventWebcast" positionX="-1251" positionY="2097" width="128" height="105"/>
         <element name="Media" positionX="-965" positionY="2159" width="128" height="135"/>
         <element name="Team" positionX="-1242" positionY="2277" width="128" height="285"/>
+        <element name="Match" positionX="-1287" positionY="2061" width="128" height="225"/>
+        <element name="MatchVideo" positionX="-1278" positionY="2070" width="128" height="90"/>
     </elements>
 </model>

@@ -133,7 +133,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 
 - (void)fetchYearsParticipatedAndRefresh:(BOOL)refresh {
     NSArray *years = [self.team sortedYearsParticipated];
-    if ([years count] == 0) {
+    if (!years || [years count] == 0) {
         self.currentYear = 0;
         if (refresh) {
             [self refreshYearsParticipated];
@@ -238,7 +238,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
             return;
         }
         
-        if ([media count] == 0) {
+        if (!media || [media count] == 0) {
             if (refresh) {
                 [strongSelf refreshMedia];
             }
@@ -296,7 +296,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     
     NSArray *events = [self.team sortedEventsForYear:self.currentYear];
     
-    if ([events count] == 0) {
+    if (!events || [events count] == 0) {
         if (refresh) {
             [self refreshEvents];
         } else {

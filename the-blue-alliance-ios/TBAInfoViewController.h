@@ -12,8 +12,7 @@
 
 @interface TBAInfoViewController : TBATableViewController
 
-@property (nonatomic, weak) Team *team;
-
-@property (nonatomic, weak) Event *event;
+@property (nonatomic, strong) Team *team;
+@property (nonatomic, strong) Event *event;
 
 @end

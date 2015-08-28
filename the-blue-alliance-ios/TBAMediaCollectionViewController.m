@@ -10,10 +10,6 @@
 #import "TBAMediaCollectionViewCell.h"
 #import "Media.h"
 
-@interface TBAMediaCollectionViewController ()
-
-@end
-
 @implementation TBAMediaCollectionViewController
 
 static NSString *const MediaCellReuseIdentifier = @"MediaCell";
@@ -41,14 +37,6 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     return CGSizeMake(150.0f, 150.0f);
-}
-
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
 }
 
 @end

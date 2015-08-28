@@ -13,11 +13,11 @@
 
 @interface TBARankingTableViewCell ()
 
-@property (nonatomic, strong) IBOutlet UILabel *teamNumberLabel;
-@property (nonatomic, strong) IBOutlet UILabel *rankLabel;
-@property (nonatomic, strong) IBOutlet UILabel *teamNameLabel;
-@property (nonatomic, strong) IBOutlet UILabel *recordLabel;
-@property (nonatomic, strong) IBOutlet UILabel *detailLabel;
+@property (nonatomic, weak) IBOutlet UILabel *teamNumberLabel;
+@property (nonatomic, weak) IBOutlet UILabel *rankLabel;
+@property (nonatomic, weak) IBOutlet UILabel *teamNameLabel;
+@property (nonatomic, weak) IBOutlet UILabel *recordLabel;
+@property (nonatomic, weak) IBOutlet UILabel *detailLabel;
 
 @end
 

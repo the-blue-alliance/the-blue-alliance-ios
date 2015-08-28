@@ -10,8 +10,10 @@
 #import "TBAInfoViewController.h"
 #import "TBATeamsViewController.h"
 #import "TBARankingsViewController.h"
+#import "TBAMatchesViewController.h"
 #import "Event.h"
 #import "EventRanking.h"
+#import "Match.h"
 #import "Event+Fetch.h"
 #import "Team.h"
 #import "Team+Fetch.h"
@@ -41,6 +43,9 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 @property (nonatomic, strong) TBARankingsViewController *rankingsViewController;
 @property (nonatomic, weak) IBOutlet UIView *rankingsView;
 
+@property (nonatomic, strong) TBAMatchesViewController *matchesViewController;
+@property (nonatomic, weak) IBOutlet UIView *matchesView;
+
 @end
 
 @implementation EventViewController
@@ -62,6 +67,9 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
         } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBAEventDataTypeRankings) {
             [strongSelf.rankingsViewController hideNoDataView];
             [strongSelf refreshRankings];
+        } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBAEventDataTypeMatches) {
+            [strongSelf.matchesViewController hideNoDataView];
+            [strongSelf refreshMatches];
         }
         [strongSelf updateRefreshBarButtonItem:YES];
     };
@@ -72,7 +80,7 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 #pragma mark - Interface Methods
 
 - (void)showView:(UIView *)showView {
-    for (UIView *view in @[self.infoView, self.teamsView, self.rankingsView]) {
+    for (UIView *view in @[self.infoView, self.teamsView, self.rankingsView, self.matchesView]) {
         view.hidden = (showView == view ? NO : YES);
     }
 }
@@ -91,6 +99,10 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
         [self fetchTeamsAndRefresh:NO];
     } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeRankings) {
         [self showView:self.rankingsView];
+        [self fetchRankingsAndRefresh:NO];
+    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeMatches) {
+        [self showView:self.matchesView];
+        [self fetchMatchesAndRefresh:NO];
     }
 }
 
@@ -151,7 +163,7 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 #pragma mark - Teams
 
 - (void)fetchTeamsAndRefresh:(BOOL)refresh {
-    if (!self.event.teams) {
+    if (!self.event.teams || [self.event.teams count] == 0) {
         if (refresh) {
             [self refresh];
         }
@@ -204,7 +216,7 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
             return;
         }
         
-        if (!rankings) {
+        if (!rankings || [rankings count] == 0) {
             if (refresh) {
                 [self refresh];
             }
@@ -239,6 +251,54 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
     [self addRequestIdentifier:request];
 }
 
+#pragma mark - Matches
+
+- (void)fetchMatchesAndRefresh:(BOOL)refresh {
+    __weak typeof(self) weakSelf = self;
+    [Event fetchMatchesForEvent:self.event fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *matches, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf showErrorAlertWithMessage:@"Unable to fetch event matches locally"];
+            });
+            return;
+        }
+        
+        if (!matches || [matches count] == 0) {
+            if (refresh) {
+                [self refresh];
+            }
+        } else {
+            strongSelf.matchesViewController.matches = matches;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf.matchesViewController.tableView reloadData];
+            });
+        }
+    }];
+}
+
+- (void)refreshMatches {
+    __weak typeof(self) weakSelf = self;
+    __block NSUInteger request = [[TBAKit sharedKit] fetchMatchesForEventKey:self.event.key withCompletionBlock:^(NSArray *matches, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf removeRequestIdentifier:request];
+        
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf showErrorAlertWithMessage:@"Unable to reload event matches"];
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [Match insertMatchesWithModelMatches:matches forEvent:self.event inManagedObjectContext:self.persistenceController.managedObjectContext];
+                [strongSelf fetchMatchesAndRefresh:NO];
+                [strongSelf.persistenceController save];
+            });
+        }
+    }];
+    [self addRequestIdentifier:request];
+}
+
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -247,9 +307,12 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
         self.infoViewController.event = self.event;
     } else if ([segue.identifier isEqualToString:@"TeamsViewControllerEmbed"]) {
         self.teamsViewController = segue.destinationViewController;
+        self.teamsViewController.showSearch = NO;
     } else if ([segue.identifier isEqualToString:@"RankingsViewControllerEmbed"]) {
         self.rankingsViewController = segue.destinationViewController;
         self.rankingsViewController.event = self.event;
+    } else if ([segue.identifier isEqualToString:@"MatchesViewControllerEmbed"]) {
+        self.matchesViewController = segue.destinationViewController;
     }
 }
 
