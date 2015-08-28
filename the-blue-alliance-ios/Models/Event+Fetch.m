@@ -77,21 +77,4 @@
     }
 }
 
-+ (void)fetchMatchesForEvent:(Event *)event fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *matches, NSError *error))completion {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Match"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@", event];
-    [fetchRequest setPredicate:predicate];
-    
-    NSSortDescriptor *compLevelSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"compLevel" ascending:YES];
-    NSSortDescriptor *setNumberSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"setNumber" ascending:YES];
-    NSSortDescriptor *matchNumberSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"matchNumber" ascending:YES];
-    [fetchRequest setSortDescriptors:@[compLevelSortDescriptor, setNumberSortDescriptor, matchNumberSortDescriptor]];
-    
-    NSError *error = nil;
-    NSArray *matches = [context executeFetchRequest:fetchRequest error:&error];
-    if (completion) {
-        completion(matches, error);
-    }
-}
-
 @end

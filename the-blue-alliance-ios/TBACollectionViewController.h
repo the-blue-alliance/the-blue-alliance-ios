@@ -7,8 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TBAPersistenceController.h"
 
-@interface TBACollectionViewController : UICollectionViewController
+@interface TBACollectionViewController : UICollectionViewController <NSFetchedResultsControllerDelegate>
+
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, strong) TBAPersistenceController *persistenceController;
 
 - (void)showNoDataViewWithText:(NSString *)text;
 - (void)hideNoDataView;

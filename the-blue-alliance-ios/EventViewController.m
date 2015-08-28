@@ -102,7 +102,6 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
         [self fetchRankingsAndRefresh:NO];
     } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeMatches) {
         [self showView:self.matchesView];
-        [self fetchMatchesAndRefresh:NO];
     }
 }
 
@@ -253,30 +252,6 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 
 #pragma mark - Matches
 
-- (void)fetchMatchesAndRefresh:(BOOL)refresh {
-    __weak typeof(self) weakSelf = self;
-    [Event fetchMatchesForEvent:self.event fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *matches, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to fetch event matches locally"];
-            });
-            return;
-        }
-        
-        if (!matches || [matches count] == 0) {
-            if (refresh) {
-                [self refresh];
-            }
-        } else {
-            strongSelf.matchesViewController.matches = matches;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf.matchesViewController.tableView reloadData];
-            });
-        }
-    }];
-}
-
 - (void)refreshMatches {
     __weak typeof(self) weakSelf = self;
     __block NSUInteger request = [[TBAKit sharedKit] fetchMatchesForEventKey:self.event.key withCompletionBlock:^(NSArray *matches, NSInteger totalCount, NSError *error) {
@@ -291,7 +266,6 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [Match insertMatchesWithModelMatches:matches forEvent:self.event inManagedObjectContext:self.persistenceController.managedObjectContext];
-                [strongSelf fetchMatchesAndRefresh:NO];
                 [strongSelf.persistenceController save];
             });
         }
@@ -313,6 +287,8 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
         self.rankingsViewController.event = self.event;
     } else if ([segue.identifier isEqualToString:@"MatchesViewControllerEmbed"]) {
         self.matchesViewController = segue.destinationViewController;
+        self.matchesViewController.persistenceController = self.persistenceController;
+        self.matchesViewController.event = self.event;
     }
 }
 

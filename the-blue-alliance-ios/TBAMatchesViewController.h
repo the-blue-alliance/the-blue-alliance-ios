@@ -8,12 +8,11 @@
 
 #import "TBATableViewController.h"
 
-@class Match;
+@class Event, Match;
 
 @interface TBAMatchesViewController : TBATableViewController
 
-@property (nonatomic, copy) NSArray *matches;
-
+@property (nonatomic, strong) Event *event;
 @property (nonatomic, copy) void (^matchSelected)(Match *match);
 
 @end

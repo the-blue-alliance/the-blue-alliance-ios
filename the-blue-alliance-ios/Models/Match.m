@@ -23,7 +23,7 @@
     NSError *error = nil;
     NSArray *existingObjs = [context executeFetchRequest:fetchRequest error:&error];
     if(existingObjs.count == 1) {
-        event = [existingObjs firstObject];
+        match = [existingObjs firstObject];
     } else if(existingObjs.count > 1) {
         // Delete them all, create a new a single new one
         for (Match *m in existingObjs) {
