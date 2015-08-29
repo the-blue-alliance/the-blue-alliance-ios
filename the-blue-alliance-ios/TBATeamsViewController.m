@@ -8,53 +8,84 @@
 
 #import "TBATeamsViewController.h"
 #import "TBATeamTableViewCell.h"
+#import "Event.h"
 #import "Team.h"
-#import "Team+Fetch.h"
 
 static NSString *const TeamCellReuseIdentifier = @"TeamCell";
 
-@interface TBATeamsViewController ()
-
-@property (nonatomic, strong) NSArray *filteredTeams;
-
-@end
-
 @implementation TBATeamsViewController
+@synthesize fetchedResultsController = _fetchedResultsController;
 
-#pragma mark - Data Methods
+#pragma mark - Properities
 
-- (Team *)teamForIndex:(NSUInteger)index {
-    Team *team;
-    if (self.filteredTeams) {
-        team = [self.filteredTeams objectAtIndex:index];
-    } else if (self.teams) {
-        team = [self.teams objectAtIndex:index];
+- (NSFetchedResultsController *)fetchedResultsController {
+    if (_fetchedResultsController != nil) {
+        return _fetchedResultsController;
     }
-    return team;
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
+    if (self.event) {
+        [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"ANY events = %@", self.event]];
+    }
+    [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"teamNumber" ascending:YES]]];
+    
+    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                      sectionNameKeyPath:nil
+                                                                               cacheName:nil];
+    _fetchedResultsController.delegate = self;
+    
+    NSError *error = nil;
+    if (![_fetchedResultsController performFetch:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
+    return _fetchedResultsController;
 }
 
 #pragma mark - View Lifecycle
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.tbaDelegate = self;
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     if (!self.showSearch) {
-        [self.tableView setContentOffset:CGPointMake(0, CGRectGetHeight(self.searchBar.frame))];
+        [self hideSearchBar];
     }
+}
+
+#pragma mark - Private Methods
+
+- (NSString *)cacheName {
+    NSString *cacheName;
+    if (self.event) {
+        cacheName = [NSString stringWithFormat:@"%@_teams", self.event.key];
+    } else {
+        cacheName = @"teams";
+    }
+    return cacheName;
 }
 
 #pragma mark - Table View Data Source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return [[self.fetchedResultsController sections] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSUInteger count = 0;
-    if (self.filteredTeams) {
-        count = [self.filteredTeams count];
-    } else if ([self.teams count]) {
-        count = [self.teams count];
+    NSUInteger count;
+    if ([[self.fetchedResultsController sections] count] > 0) {
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
+        count = [sectionInfo numberOfObjects];
+    } else {
+        // TODO: Show no data screen;
+        count = 0;
     }
     return count;
 }
@@ -62,9 +93,13 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TBATeamTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TeamCellReuseIdentifier forIndexPath:indexPath];
 
-    cell.team = [self teamForIndex:indexPath.row];
+    [self configureCell:cell atIndexPath:indexPath];
     
     return cell;
+}
+
+- (void)configureCell:(TBATeamTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    cell.team = [self.fetchedResultsController objectAtIndexPath:indexPath];
 }
 
 #pragma mark - Table View Delegate
@@ -76,7 +111,7 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
         return;
     }
     
-    Team *team = [self teamForIndex:indexPath.row];
+    Team *team = [self.fetchedResultsController objectAtIndexPath:indexPath];
     self.teamSelected(team);
 }
 
@@ -88,17 +123,27 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
 
 #pragma mark - Search Bar Delegate
 
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    NSPredicate *predicate = [self predicateForSearchText:searchText];
-    if (predicate) {
-        self.filteredTeams = [self.teams filteredArrayUsingPredicate:predicate];
-    } else {
-        self.filteredTeams = nil;
-    }
+- (void)hideSearchBar {
+    [self.tableView setContentOffset:CGPointMake(0, CGRectGetHeight(self.searchBar.frame) - [self.topLayoutGuide length]) animated:YES];
+}
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
-    });
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    self.searchBar.showsCancelButton = YES;
+}
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+    self.searchBar.showsCancelButton = NO;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    searchBar.text = nil;
+    [searchBar resignFirstResponder];
+    
+    [self filterContentForSearchText:@""];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    [self filterContentForSearchText:searchText];
 }
 
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar {
@@ -108,6 +153,20 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [self.searchBar resignFirstResponder];
+}
+
+- (void)filterContentForSearchText:(NSString *)searchText {
+    NSPredicate *predicate = [self predicateForSearchText:searchText];
+    self.fetchedResultsController.fetchRequest.predicate = predicate;
+    [NSFetchedResultsController deleteCacheWithName:[self cacheName]];
+    
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error]) {
+        NSLog(@"An error happened and we should handle it - %@", error.localizedDescription);
+    }
+    
+    [self.fetchedResultsController.delegate controllerDidChangeContent:self.fetchedResultsController];
+    [self.tableView reloadData];
 }
 
 #pragma mark - Searching

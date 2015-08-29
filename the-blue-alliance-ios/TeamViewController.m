@@ -14,7 +14,6 @@
 #import "Team+Fetch.h"
 #import "Event+Fetch.h"
 #import "Media.h"
-#import "Media+Fetch.h"
 
 static NSString *const EventsViewControllerEmbed    = @"EventsViewControllerEmbed";
 static NSString *const InfoViewControllerEmbed      = @"InfoViewControllerEmbed";
@@ -57,7 +56,6 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
             [strongSelf.eventsViewController hideNoDataView];
             [strongSelf refreshEvents];
         } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBATeamDataTypeMedia) {
-            [strongSelf.mediaCollectionViewController hideNoDataView];
             [strongSelf refreshMedia];
         }
     };
@@ -68,25 +66,26 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         [strongSelf cancelRefresh];
 
         strongSelf.currentYear = selectedYear;
+        strongSelf.mediaCollectionViewController.year = selectedYear;
         
         if (strongSelf.segmentedControl.selectedSegmentIndex == TBATeamDataTypeEvents) {
             [strongSelf.eventsViewController hideNoDataView];
             [strongSelf removeEvents];
             [strongSelf fetchEventsAndRefresh:YES];
-        } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBATeamDataTypeMedia) {
-            [strongSelf.mediaCollectionViewController hideNoDataView];
-            [strongSelf removeMedia];
-            [strongSelf fetchMediaAndRefresh:YES];
         }
     };
     
     [self fetchYearsParticipatedAndRefresh:YES];
-    [self fetchMediaAndRefresh:YES];
-
     [self styleInterface];
 }
 
 #pragma mark - Interface Methods
+
+- (void)showView:(UIView *)showView {
+    for (UIView *view in @[self.infoView, self.eventsView, self.mediaView]) {
+        view.hidden = (showView == view ? NO : YES);
+    }
+}
 
 - (void)styleInterface {
     self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
@@ -95,23 +94,13 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 
 - (void)updateInterface {
     if (self.segmentedControl.selectedSegmentIndex == TBATeamDataTypeInfo) {
-        self.infoView.hidden = NO;
-        self.eventsView.hidden = YES;
-        self.mediaView.hidden = YES;
-        
+        [self showView:self.infoView];
         [self fetchTeamAndRefresh:NO];
     } else if (self.segmentedControl.selectedSegmentIndex == TBATeamDataTypeEvents) {
-        self.eventsView.hidden = NO;
-        self.mediaView.hidden = YES;
-        self.infoView.hidden = YES;
-        
+        [self showView:self.eventsView];
         [self fetchEventsAndRefresh:NO];
     } else {
-        self.mediaView.hidden = NO;
-        self.eventsView.hidden = YES;
-        self.infoView.hidden = YES;
-        
-        [self fetchMediaAndRefresh:YES];
+        [self showView:self.mediaView];
     }
 }
 
@@ -141,8 +130,10 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     } else {
         self.years = years;
         if (self.currentYear == 0) {
-            self.currentYear = [(NSNumber *)[years firstObject] integerValue];
-            [self fetchMediaAndRefresh:YES];
+            NSUInteger year = [(NSNumber *)[years firstObject] unsignedIntegerValue];
+            
+            self.currentYear = year;
+            self.mediaCollectionViewController.year = year;
         }
     }
 }
@@ -216,41 +207,6 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 
 #pragma mark - Media
 
-- (void)removeMedia {
-    self.mediaCollectionViewController.media = nil;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.mediaCollectionViewController.collectionView reloadData];
-    });
-}
-
-- (void)fetchMediaAndRefresh:(BOOL)refresh {
-    if (self.currentYear == 0) {
-        return;
-    }
-
-    __weak typeof(self) weakSelf = self;
-    [Media fetchMediaForYear:self.currentYear forTeam:self.team fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *media, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to fetch team media locally"];
-            });
-            return;
-        }
-        
-        if (!media || [media count] == 0) {
-            if (refresh) {
-                [strongSelf refreshMedia];
-            }
-        } else {
-            strongSelf.mediaCollectionViewController.media = media;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf.mediaCollectionViewController.collectionView reloadData];
-            });
-        }
-    }];
-}
-
 - (void)refreshMedia {
     if (self.currentYear == 0) {
         return;
@@ -272,7 +228,6 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [Media insertMediasWithModelMedias:media forTeam:self.team andYear:year inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf fetchMediaAndRefresh:NO];
                 [strongSelf.persistenceController save];
             });
         }
@@ -353,6 +308,9 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         };
     } else if ([segue.identifier isEqualToString:MediaViewControllerEmbed]) {
         self.mediaCollectionViewController = segue.destinationViewController;
+        self.mediaCollectionViewController.persistenceController = self.persistenceController;
+        self.mediaCollectionViewController.team = self.team;
+        self.mediaCollectionViewController.year = self.currentYear;
     }
 }
 

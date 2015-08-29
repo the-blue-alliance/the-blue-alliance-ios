@@ -8,15 +8,14 @@
 
 #import "TBATableViewController.h"
 
-@class Team;
+@class Event, Team;
 
-@interface TBATeamsViewController : TBATableViewController <UISearchBarDelegate>
-
-@property (nonatomic, copy) NSArray *teams;
-@property (nonatomic, assign) BOOL showSearch;
+@interface TBATeamsViewController : TBATableViewController <TBATableViewControllerDelegate, UISearchBarDelegate>
 
 @property (nonatomic, weak) IBOutlet UISearchBar *searchBar;
 
+@property (nonatomic, strong) Event *event;
+@property (nonatomic, assign) BOOL showSearch;
 @property (nonatomic, copy) void (^teamSelected)(Team *team);
 
 @end

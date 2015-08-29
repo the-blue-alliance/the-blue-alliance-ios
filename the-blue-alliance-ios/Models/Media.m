@@ -38,6 +38,7 @@
     
     media.team = team;
     media.yearValue = year;
+    
     media.foreignKey = modelMedia.foreignKey;
     media.mediaTypeValue = modelMedia.type;
     media.imagePartial = modelMedia.details.imagePartial;

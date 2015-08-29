@@ -12,37 +12,89 @@
 static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
 
 @implementation TBADistrictsViewController
+@synthesize fetchedResultsController = _fetchedResultsController;
+
+#pragma mark - Properities
+
+- (void)setYear:(NSUInteger)year {
+    self.fetchedResultsController = nil;
+    [NSFetchedResultsController deleteCacheWithName:[self cacheName]];
+    
+    _year = year;
+    [self.tableView reloadData];
+}
+
+- (NSFetchedResultsController *)fetchedResultsController {
+    if (_fetchedResultsController != nil) {
+        return _fetchedResultsController;
+    }
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"District"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"year == %@", @(self.year)];
+    [fetchRequest setPredicate:predicate];
+    
+    NSSortDescriptor *nameSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+    [fetchRequest setSortDescriptors:@[nameSortDescriptor]];
+    
+    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                      sectionNameKeyPath:nil
+                                                                               cacheName:[self cacheName]];
+    _fetchedResultsController.delegate = self;
+    
+    NSError *error = nil;
+    if (![_fetchedResultsController performFetch:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
+    return _fetchedResultsController;
+}
+
+#pragma mark - View Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    self.tbaDelegate = self;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+#pragma mark - Private Method
+
+- (NSString *)cacheName {
+    return [NSString stringWithFormat:@"%zd_districts", self.year];
 }
 
 #pragma mark - Table View Data Source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return [[self.fetchedResultsController sections] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.districts) {
-        return [self.districts count];
+    NSUInteger count;
+    if ([[self.fetchedResultsController sections] count] > 0) {
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
+        count = [sectionInfo numberOfObjects];
+    } else {
+        // TODO: Show no data screen;
+        count = 0;
     }
-    return 0;
+    return count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DistrictsCellIdentifier forIndexPath:indexPath];
     
-    District *district = [self.districts objectAtIndex:indexPath.row];
-    cell.textLabel.text = district.name;
+    [self configureCell:cell atIndexPath:indexPath];
     
     return cell;
+}
+
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    District *district = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    cell.textLabel.text = district.name;
+
 }
 
 #pragma mark - Table View Delegate
@@ -54,8 +106,8 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
         return;
     }
     
-    District *distrct = [self.districts objectAtIndex:indexPath.row];
-    self.districtSelected(distrct);
+    District *district = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    self.districtSelected(district);
 }
 
 @end

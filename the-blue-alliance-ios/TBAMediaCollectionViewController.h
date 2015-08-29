@@ -8,8 +8,11 @@
 
 #import "TBACollectionViewController.h"
 
-@interface TBAMediaCollectionViewController : TBACollectionViewController
+@class Team;
 
-@property (nonatomic, copy) NSArray *media;
+@interface TBAMediaCollectionViewController : TBACollectionViewController <TBACollectionViewControllerDelegate>
+
+@property (nonatomic, strong) Team *team;
+@property (nonatomic, assign) NSUInteger year;
 
 @end

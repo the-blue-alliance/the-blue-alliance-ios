@@ -8,24 +8,76 @@
 
 #import "TBARankingsViewController.h"
 #import "TBARankingTableViewCell.h"
+#import "District.h"
+#import "Event.h"
 
 static NSString *const RankCellReuseIdentifier  = @"RankCell";
 
 @implementation TBARankingsViewController
+@synthesize fetchedResultsController = _fetchedResultsController;
+
+#pragma mark - Properities
+
+- (NSFetchedResultsController *)fetchedResultsController {
+    if (_fetchedResultsController != nil) {
+        return _fetchedResultsController;
+    }
+    
+    NSFetchRequest *fetchRequest;
+    NSPredicate *predicate;
+    NSString *cacheName;
+    if (self.event) {
+        fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventRanking"];
+        predicate = [NSPredicate predicateWithFormat:@"event == %@", self.event];
+        cacheName = [NSString stringWithFormat:@"%@_rankings", self.event.key];
+    } else if (self.district) {
+        fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"DistrictRanking"];
+        predicate = [NSPredicate predicateWithFormat:@"district == %@", self.district];
+        cacheName = [NSString stringWithFormat:@"%@_rankings", self.district.key];
+    }
+    [fetchRequest setPredicate:predicate];
+    
+    NSSortDescriptor *rankSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"rank" ascending:YES];
+    [fetchRequest setSortDescriptors:@[rankSortDescriptor]];
+    
+    // Need a cache name here
+    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                      sectionNameKeyPath:nil
+                                                                               cacheName:cacheName];
+    _fetchedResultsController.delegate = self;
+    
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
+    return _fetchedResultsController;
+}
+
+#pragma mark - View Lifecycle
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.tbaDelegate = self;
+}
 
 #pragma mark - Table View Data Source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return [[self.fetchedResultsController sections] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSUInteger count;
-    if (!self.rankings) {
-        // TODO: Show no data screen
-        count = 0;
+    if ([[self.fetchedResultsController sections] count] > 0) {
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
+        count = [sectionInfo numberOfObjects];
     } else {
-        count = [self.rankings count];
+        // TODO: Show no data screen;
+        count = 0;
     }
     return count;
 }
@@ -33,15 +85,19 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     TBARankingTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:RankCellReuseIdentifier forIndexPath:indexPath];
     
-    if (self.district) {
-        DistrictRanking *ranking = [self.rankings objectAtIndex:indexPath.row];
-        cell.districtRanking = ranking;
-    } else if (self.event) {
-        EventRanking *ranking = [self.rankings objectAtIndex:indexPath.row];
-        cell.eventRanking = ranking;
-    }
+    [self configureCell:cell atIndexPath:indexPath];
     
     return cell;
+}
+
+- (void)configureCell:(TBARankingTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    if (self.district) {
+        DistrictRanking *ranking = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        cell.districtRanking = ranking;
+    } else if (self.event) {
+        EventRanking *ranking = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        cell.eventRanking = ranking;
+    }
 }
 
 #pragma mark - Table View Delegate
@@ -58,7 +114,7 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (self.rankingSelected) {
-        id ranking = [self.rankings objectAtIndex:indexPath.row];
+        id ranking = [self.fetchedResultsController objectAtIndexPath:indexPath];
         self.rankingSelected(ranking);
     }
 }

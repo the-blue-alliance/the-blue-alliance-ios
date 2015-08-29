@@ -9,10 +9,19 @@
 #import <UIKit/UIKit.h>
 #import "TBAPersistenceController.h"
 
+@protocol TBATableViewControllerDelegate <NSObject>
+
+@required
+
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+
+@end
+
 @interface TBATableViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, strong) TBAPersistenceController *persistenceController;
+@property (nonatomic, weak) id<TBATableViewControllerDelegate> tbaDelegate;
 
 - (void)showNoDataViewWithText:(NSString *)text;
 - (void)hideNoDataView;

@@ -48,24 +48,6 @@
 
 #pragma mark - Local
 
-+ (void)fetchAllTeamsFromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *teams, NSError *error))completion {
-    [self fetchTeamsWithPredicate:nil fromContext:context withCompletionBlock:completion];
-}
-
-+ (void)fetchTeamsWithPredicate:(NSPredicate *)predicate fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *teams, NSError *error))completion {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
-    [fetchRequest setPredicate:predicate];
-    
-    [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"teamNumber" ascending:YES]]];
-    
-    NSError *error = nil;
-    NSArray *teams = [context executeFetchRequest:fetchRequest error:&error];
-    
-    if (completion) {
-        completion(teams, error);
-    }
-}
-
 + (void)fetchTeamForKey:(NSString *)key fromContext:(NSManagedObjectContext *)context checkUpstream:(BOOL)upstream withCompletionBlock:(void(^)(Team *team, NSError *error))completion {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", key];

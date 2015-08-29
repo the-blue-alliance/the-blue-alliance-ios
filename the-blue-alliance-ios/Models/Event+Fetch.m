@@ -62,19 +62,4 @@
     }
 }
 
-+ (void)fetchEventRankingsForEvent:(Event *)event fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *rankings, NSError *error))completion {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventRanking"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@", event];
-    [fetchRequest setPredicate:predicate];
-    
-    NSSortDescriptor *rankSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"rank" ascending:YES];
-    [fetchRequest setSortDescriptors:@[rankSortDescriptor]];
-    
-    NSError *error = nil;
-    NSArray *eventRankings = [context executeFetchRequest:fetchRequest error:&error];
-    if (completion) {
-        completion(eventRankings, error);
-    }
-}
-
 @end

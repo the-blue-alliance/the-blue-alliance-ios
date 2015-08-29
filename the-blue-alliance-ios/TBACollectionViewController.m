@@ -19,11 +19,6 @@
 
 static NSString * const reuseIdentifier = @"Cell";
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-}
-
 #pragma mark - No Data Views
 
 - (void)showNoDataViewWithText:(NSString *)text {
@@ -46,6 +41,45 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void)hideNoDataView {
     if (self.noDataViewController) {
         [self.collectionView setBackgroundView:nil];
+    }
+}
+
+#pragma mark - TBA Delegate Methods
+
+- (void)configureCell:(UICollectionViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    if([self.tbaDelegate respondsToSelector:@selector(configureCell:atIndexPath:)]) {
+        [self.tbaDelegate configureCell:cell atIndexPath:indexPath];
+    }
+}
+
+#pragma mark - Fetched Results Controller Delegate
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
+       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
+      newIndexPath:(NSIndexPath *)newIndexPath
+{
+    UICollectionView *collectionView = self.collectionView;
+    
+    switch(type) {
+            
+        case NSFetchedResultsChangeInsert:
+            [self.collectionView insertItemsAtIndexPaths:@[newIndexPath]];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
+            break;
+            
+        case NSFetchedResultsChangeUpdate: {
+            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+            [self.tbaDelegate configureCell:cell atIndexPath:indexPath];
+        }
+            break;
+            
+        case NSFetchedResultsChangeMove:
+            [collectionView deleteItemsAtIndexPaths:@[indexPath]];
+            [collectionView insertItemsAtIndexPaths:@[newIndexPath]];
+            break;
     }
 }
 

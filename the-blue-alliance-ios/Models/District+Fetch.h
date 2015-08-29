@@ -10,9 +10,6 @@
 
 @interface District (Fetch)
 
-// Fetch locally
-+ (void)fetchDistrictsForYear:(NSInteger)year fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *districts, NSError *error))completion;
 + (void)fetchEventsForDistrict:(District *)district fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *events, NSError *error))completion;
-+ (void)fetchDistrictRankingsForDistrict:(District *)district fromContext:(NSManagedObjectContext *)context withCompletionBlock:(void(^)(NSArray *rankings, NSError *error))completion;
 
 @end

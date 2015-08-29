@@ -10,7 +10,7 @@
 
 @class Event, Match;
 
-@interface TBAMatchesViewController : TBATableViewController
+@interface TBAMatchesViewController : TBATableViewController <TBATableViewControllerDelegate>
 
 @property (nonatomic, strong) Event *event;
 @property (nonatomic, copy) void (^matchSelected)(Match *match);

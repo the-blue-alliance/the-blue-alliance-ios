@@ -41,49 +41,9 @@ static NSString *const TeamViewControllerSegue  = @"TeamViewControllerSegue";
         [strongSelf updateRefreshBarButtonItem:YES];
         [strongSelf refreshData];
     };
-    
-    [self fetchTeamsAndRefresh:YES];
 }
 
 #pragma mark - Data Methods
-
-- (void)removeData {
-    self.teamsViewController.teams = nil;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.teamsViewController.tableView reloadData];
-    });
-}
-
-- (void)fetchTeamsAndRefresh:(BOOL)refresh {
-    __weak typeof(self) weakSelf = self;
-    [Team fetchAllTeamsFromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *teams, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (error) {
-            NSString *errorMessage = @"Unable to fetch teams locally";
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (strongSelf.teamsViewController.teams) {
-                    [strongSelf showErrorAlertWithMessage:errorMessage];
-                } else {
-                    [strongSelf.teamsViewController showNoDataViewWithText:errorMessage];
-                }
-            });
-            return;
-        }
-        
-        if ([teams count] == 0) {
-            if (refresh && strongSelf.refresh) {
-                strongSelf.refresh();
-            } else {
-                [strongSelf removeData];
-            }
-        } else {
-            strongSelf.teamsViewController.teams = teams;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf.teamsViewController.tableView reloadData];
-            });
-        }
-    }];
-}
 
 - (void)refreshData {
     __block NSUInteger currentRequest;
@@ -108,17 +68,11 @@ static NSString *const TeamViewControllerSegue  = @"TeamViewControllerSegue";
         [strongSelf removeRequestIdentifier:currentRequest];
         
         if (error) {
-            NSString *errorMessage = @"Unable to load teams";
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (strongSelf.teamsViewController.teams) {
-                    [strongSelf showErrorAlertWithMessage:errorMessage];
-                } else {
-                    [strongSelf.teamsViewController showNoDataViewWithText:errorMessage];
-                }
+                [strongSelf showErrorAlertWithMessage:@"Unable to load teams"];
             });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf fetchTeamsAndRefresh:NO];
                 [strongSelf.persistenceController save];
             });
         }
@@ -132,6 +86,7 @@ static NSString *const TeamViewControllerSegue  = @"TeamViewControllerSegue";
     if ([segue.identifier isEqualToString:TeamsViewControllerEmbed]) {
         self.teamsViewController = (TBATeamsViewController *)segue.destinationViewController;
         self.teamsViewController.showSearch = YES;
+        self.teamsViewController.persistenceController = self.persistenceController;
         
         __weak typeof(self) weakSelf = self;
         self.teamsViewController.teamSelected = ^(Team *team) {

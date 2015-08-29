@@ -10,10 +10,9 @@
 
 @class District;
 
-@interface TBADistrictsViewController : TBATableViewController
+@interface TBADistrictsViewController : TBATableViewController <TBATableViewControllerDelegate>
 
-@property (nonatomic, copy) NSArray *districts;
-
+@property (nonatomic, assign) NSUInteger year;
 @property (nonatomic, copy) void (^districtSelected)(District *district);
 
 @end
