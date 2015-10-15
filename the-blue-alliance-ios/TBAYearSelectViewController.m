@@ -47,7 +47,6 @@
     [self updateYearInterface];
 }
 
-
 #pragma mark - View Lifecycle
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -58,6 +57,11 @@
 }
 
 #pragma mark - Interface Methods
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    NSLog(@"Hit here");
+    return UIStatusBarStyleLightContent;
+}
 
 - (void)setupTapGesture {
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectYearButtonTapped:)];

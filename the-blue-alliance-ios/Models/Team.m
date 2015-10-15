@@ -1,10 +1,17 @@
+//
+//  Team.m
+//  the-blue-alliance-ios
+//
+//  Created by Zach Orr on 9/17/15.
+//  Copyright © 2015 The Blue Alliance. All rights reserved.
+//
+
 #import "Team.h"
-
-@interface Team ()
-
-// Private interface goes here.
-
-@end
+#import "DistrictRanking.h"
+#import "Event.h"
+#import "EventPoints.h"
+#import "EventRanking.h"
+#import "Media.h"
 
 @implementation Team
 
@@ -42,15 +49,15 @@
     team.region = modelTeam.region;
     team.countryName = modelTeam.countryName;
     team.location = modelTeam.location;
-    team.teamNumberValue = modelTeam.teamNumber;
+    team.teamNumber = @(modelTeam.teamNumber);
     team.key = modelTeam.key;
     team.nickname = modelTeam.nickname;
-    team.rookieYearValue = modelTeam.rookieYear;
+    team.rookieYear = @(modelTeam.rookieYear);
     
     return team;
 }
 
-+ (NSArray *)insertTeamsWithModelTeams:(NSArray *)modelTeams inManagedObjectContext:(NSManagedObjectContext *)context {
++ (NSArray *)insertTeamsWithModelTeams:(NSArray<TBATeam *> *)modelTeams inManagedObjectContext:(NSManagedObjectContext *)context {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (TBATeam *team in modelTeams) {
         [arr addObject:[self insertTeamWithModelTeam:team inManagedObjectContext:context]];
@@ -66,7 +73,7 @@
     
     NSString *trimmedNickname = [nickname stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (!nickname || [trimmedNickname isEqualToString:@""]) {
-        nickname = [NSString stringWithFormat:@"Team %@", self.teamNumber];
+        nickname = [NSString stringWithFormat:@"Team %zd", self.teamNumber];
     }
     return nickname;
 }
@@ -80,7 +87,7 @@
 
 - (NSArray *)sortedYearsParticipated {
     NSMutableArray *years = [self.yearsParticipated mutableCopy];
-
+    
     NSSortDescriptor *highestToLowest = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:NO];
     return [years sortedArrayUsingDescriptors:@[highestToLowest]];
 }

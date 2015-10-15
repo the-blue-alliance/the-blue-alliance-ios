@@ -89,7 +89,7 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 #pragma mark - District Event Methods
 
 - (void)removeDistrictEvents {
-    self.eventsViewController.events = nil;
+//    self.eventsViewController.events = nil;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.eventsViewController.tableView reloadData];
     });
@@ -102,11 +102,13 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
         if (error) {
             NSString *errorMessage = @"Unable to fetch district events locally";
             dispatch_async(dispatch_get_main_queue(), ^{
+/*
                 if (strongSelf.eventsViewController.events) {
                     [strongSelf showErrorAlertWithMessage:errorMessage];
                 } else {
                     [strongSelf.eventsViewController showNoDataViewWithText:errorMessage];
                 }
+*/
             });
             return;
         }
@@ -118,7 +120,7 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
                 [strongSelf removeDistrictEvents];
             }
         } else {
-            strongSelf.eventsViewController.events = [Event groupEventsByWeek:events andGroupByType:NO];
+//            strongSelf.eventsViewController.events = [Event groupEventsByWeek:events andGroupByType:NO];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [strongSelf.eventsViewController.tableView reloadData];
             });
@@ -128,7 +130,7 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 
 - (void)refreshDistrictEvents {
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForDistrictShort:self.district.key forYear:self.district.yearValue withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForDistrictShort:self.district.key forYear:[self.district.year unsignedIntegerValue] withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         [strongSelf removeRequestIdentifier:request];
@@ -136,11 +138,13 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
         if (error) {
             NSString *errorMessage = @"Unable to load district events";
             dispatch_async(dispatch_get_main_queue(), ^{
+/*
                 if (strongSelf.eventsViewController.events) {
                     [strongSelf showErrorAlertWithMessage:errorMessage];
                 } else {
                     [strongSelf.eventsViewController showNoDataViewWithText:errorMessage];
                 }
+*/
             });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -157,7 +161,7 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 
 - (void)refreshRankings {
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.district.key forYear:self.district.yearValue withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.district.key forYear:[self.district.year unsignedIntegerValue] withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         [strongSelf removeRequestIdentifier:request];

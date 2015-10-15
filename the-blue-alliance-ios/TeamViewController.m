@@ -238,7 +238,8 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 #pragma mark - Events Data Methods
 
 - (void)removeEvents {
-    self.eventsViewController.events = nil;
+#warning can we even do this?
+//    self.eventsViewController.week = 0;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.eventsViewController.tableView reloadData];
     });
@@ -258,7 +259,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
             [self removeEvents];
         }
     } else {
-        self.eventsViewController.events = [Event sortedEventDictionaryFromEvents:events];
+//        self.eventsViewController.events = [Event sortedEventDictionaryFromEvents:events];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.eventsViewController.tableView reloadData];
         });
@@ -303,6 +304,8 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         self.infoViewController.team = self.team;
     } else if ([segue.identifier isEqualToString:EventsViewControllerEmbed]) {
         self.eventsViewController = segue.destinationViewController;
+        self.eventsViewController.persistenceController = self.persistenceController;
+        self.eventsViewController.team = self.team;
         self.eventsViewController.eventSelected = ^(Event *event) {
             NSLog(@"Selected event: %@", event.shortName);
         };

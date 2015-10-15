@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14F27" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="8195" systemVersion="14F27" minimumToolsVersion="Xcode 4.3">
     <entity name="District" representedClassName="District" syncable="YES">
         <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -17,9 +17,12 @@
     <entity name="Event" representedClassName="Event" syncable="YES">
         <attribute name="endDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="eventCode" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="eventDistrict" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="eventType" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="eventDistrict" optional="YES" attributeType="Integer 32" syncable="YES"/>
+        <attribute name="eventDistrictString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eventType" optional="YES" attributeType="Integer 32" syncable="YES"/>
+        <attribute name="eventTypeString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="facebookEid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hybridType" optional="YES" transient="YES" attributeType="Integer 32" syncable="YES"/>
         <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -28,6 +31,7 @@
         <attribute name="startDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="venueAddress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="week" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="year" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventAlliance" inverseName="event" inverseEntity="EventAlliance" syncable="YES"/>
         <relationship name="matches" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Match" inverseName="event" inverseEntity="Match" syncable="YES"/>
@@ -113,14 +117,14 @@
     <elements>
         <element name="District" positionX="-1278" positionY="2070" width="128" height="105"/>
         <element name="DistrictRanking" positionX="-1287" positionY="2061" width="128" height="135"/>
-        <element name="Event" positionX="-1485" positionY="1920" width="128" height="345"/>
+        <element name="Event" positionX="-1485" positionY="1920" width="128" height="405"/>
         <element name="EventAlliance" positionX="-1260" positionY="2088" width="128" height="90"/>
         <element name="EventPoints" positionX="-1269" positionY="2079" width="128" height="180"/>
         <element name="EventRanking" positionX="-1287" positionY="2061" width="128" height="120"/>
         <element name="EventWebcast" positionX="-1251" positionY="2097" width="128" height="105"/>
-        <element name="Media" positionX="-965" positionY="2159" width="128" height="135"/>
-        <element name="Team" positionX="-1242" positionY="2277" width="128" height="285"/>
         <element name="Match" positionX="-1287" positionY="2061" width="128" height="225"/>
         <element name="MatchVideo" positionX="-1278" positionY="2070" width="128" height="90"/>
+        <element name="Media" positionX="-965" positionY="2159" width="128" height="135"/>
+        <element name="Team" positionX="-1242" positionY="2277" width="128" height="285"/>
     </elements>
 </model>

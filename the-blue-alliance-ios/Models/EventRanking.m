@@ -1,11 +1,15 @@
+//
+//  EventRanking.m
+//  the-blue-alliance-ios
+//
+//  Created by Zach Orr on 9/17/15.
+//  Copyright © 2015 The Blue Alliance. All rights reserved.
+//
+
 #import "EventRanking.h"
+#import "Event.h"
+#import "Team.h"
 #import "Team+Fetch.h"
-
-@interface EventRanking ()
-
-// Private interface goes here.
-
-@end
 
 @implementation EventRanking
 
@@ -58,13 +62,8 @@
     }
     
     NSUInteger rankKeyIndex = [keys indexOfObject:@"Rank"];
-    id rankUnsafe = [eventRankingArray objectAtIndex:rankKeyIndex];
-    NSNumber *rank;
-    if ([rankUnsafe isKindOfClass:[NSString class]]) {
-        rank = @([(NSString *)rankUnsafe integerValue]);
-    } else {
-        rank = rankUnsafe;
-    }
+    NSString *rankString = [eventRankingArray objectAtIndex:rankKeyIndex];
+    NSNumber *rank = @([rankString integerValue]);
     eventRanking.rank = rank;
     
     NSMutableDictionary *infoDictionary = [[NSMutableDictionary alloc] init];
@@ -110,17 +109,17 @@
     NSMutableDictionary *mutableInfoDictionary = [*infoDictionary mutableCopy];
     if (record) {
         recordString = [NSString stringWithFormat:@"(%@)", [*infoDictionary objectForKey:recordKey]];
-
+        
         [mutableInfoDictionary removeObjectForKey:recordKey];
     } else if (wins && losses && ties) {
         recordString = [NSString stringWithFormat:@"(%@-%@-%@)", [*infoDictionary objectForKey:winsKey], [*infoDictionary objectForKey:lossesKey], [*infoDictionary objectForKey:tiesKey]];
-
+        
         [mutableInfoDictionary removeObjectForKey:winsKey];
         [mutableInfoDictionary removeObjectForKey:lossesKey];
         [mutableInfoDictionary removeObjectForKey:tiesKey];
     }
     *infoDictionary = [NSDictionary dictionaryWithDictionary:mutableInfoDictionary];
-
+    
     return recordString;
 }
 
@@ -140,7 +139,7 @@
 - (NSString *)infoString {
     NSMutableString *infoString = [[NSMutableString alloc] init];
     NSDictionary *infoDictionary = (NSDictionary *)self.info;
-
+    
     NSEnumerator *infoEnumerator = [infoDictionary.allKeys objectEnumerator];
     NSString *key = [infoEnumerator nextObject];
     while (key) {

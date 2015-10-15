@@ -35,33 +35,32 @@
         [self.activityView stopAnimating];
         self.activityView.hidden = YES;
         self.imageView.hidden = NO;
-    } else if (media.mediaTypeValue == TBAMediaTypeCDPhotoThread) {
+    } else if ([media.mediaType integerValue] == TBAMediaTypeCDPhotoThread) {
         NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"http://www.chiefdelphi.com/media/img/%@", media.imagePartial]];
         request = [NSURLRequest requestWithURL:url];
-    } else if (media.mediaTypeValue == TBAMediaTypeYouTube) {
-        NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"http://img.youtube.com/vi/%@/maxresdefault.jpg", media.foreignKey]];
+    } else if (media.mediaType == TBAMediaTypeYouTube) {
+        NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"https://img.youtube.com/vi/%@/maxresdefault.jpg", media.foreignKey]];
         request = [NSURLRequest requestWithURL:url];
     }
     
     if (request) {
-        [NSURLConnection sendAsynchronousRequest:request
-                                           queue:[NSOperationQueue mainQueue]
-                               completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                                   if (connectionError) {
-                                       NSLog(@"Error loading photo");
-                                       // TODO: Show some temp photo in here
-                                       return;
-                                   }
-                                   media.cachedData = data;
-                                   if (self.imageLoadedFromWeb) {
-                                       self.imageLoadedFromWeb();
-                                   }
-                                   [self.imageView setImage:[UIImage imageWithData:data]];
-                                   [self.activityView stopAnimating];
-                                   
-                                   self.activityView.hidden = YES;
-                                   self.imageView.hidden = NO;
-                               }];
+        NSURLSession *session = [NSURLSession sharedSession];
+        [[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            if (error) {
+                NSLog(@"Error loading photo");
+                // TODO: Show some temp photo in here
+                return;
+            }
+            media.cachedData = data;
+            if (self.imageLoadedFromWeb) {
+                self.imageLoadedFromWeb();
+            }
+            [self.imageView setImage:[UIImage imageWithData:data]];
+            [self.activityView stopAnimating];
+            
+            self.activityView.hidden = YES;
+            self.imageView.hidden = NO;
+        }] resume];
     }
 }
 

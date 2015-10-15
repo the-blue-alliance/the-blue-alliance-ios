@@ -68,6 +68,7 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
 }
 
 #pragma mark - Collection View Data Source
+#warning this can have a similar pattern as the table view controller
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return [[self.fetchedResultsController sections] count];

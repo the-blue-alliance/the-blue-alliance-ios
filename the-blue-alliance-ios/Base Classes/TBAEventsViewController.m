@@ -8,30 +8,65 @@
 
 #import "TBAEventsViewController.h"
 #import "TBAEventTableViewCell.h"
-#import "OrderedDictionary.h"
+#import "District.h"
 #import "Event.h"
+#import "Team.h"
 #import "UIColor+TBAColors.h"
 
 static NSString *const EventCellReuseIdentifier = @"EventCell";
 
 @implementation TBAEventsViewController
+@synthesize fetchedResultsController = _fetchedResultsController;
 
-#pragma mark - Data Methods
+#pragma mark - Properities
 
-- (NSArray *)eventsForIndex:(NSInteger)index forEventDictionary:(OrderedDictionary *)eventDictionary {
-    if (!eventDictionary || !eventDictionary.allKeys || index >= [eventDictionary.allKeys count]) {
-        return nil;
-    }
+- (void)setPredicate:(NSPredicate *)predicate {
+    _predicate = predicate;
     
-    NSString *eventTypeKey = [eventDictionary.allKeys objectAtIndex:index];
-    return [eventDictionary objectForKey:eventTypeKey];
+    [self clearFRC];
 }
 
-- (Event *)eventForIndexPath:(NSIndexPath *)indexPath {
-    NSArray *eventsArray = [self eventsForIndex:indexPath.section forEventDictionary:self.events];
-    Event *event = [eventsArray objectAtIndex:indexPath.row];
+- (void)clearFRC {
+    // Clear cache as well if we cache
+    self.fetchedResultsController = nil;
+    [self.tableView reloadData];
+    [self.tableView setContentOffset:CGPointZero animated:NO];
+}
+
+- (NSFetchedResultsController *)fetchedResultsController {
+    if (_fetchedResultsController != nil) {
+        return _fetchedResultsController;
+    }
     
-    return event;
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Event"];
+    [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"hybridType" ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
+    
+    if (self.predicate) {
+        [fetchRequest setPredicate:self.predicate];
+    }
+    
+    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                      sectionNameKeyPath:@"hybridType"
+                                                                               cacheName:nil];
+    _fetchedResultsController.delegate = self;
+    
+    NSError *error = nil;
+    if (![_fetchedResultsController performFetch:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
+    return _fetchedResultsController;
+}
+
+#pragma mark - View Lifecycle
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.tbaDelegate = self;
+    self.cellIdentifier = EventCellReuseIdentifier;
 }
 
 #pragma mark - Table View Data Source
@@ -49,44 +84,15 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    NSString *title;
-    if (!self.events) {
-        title = @"";
-    } else {
-        title = [self.events.allKeys objectAtIndex:section];
-    }
-    return title;
+    Event *firstEvent = [[[self.fetchedResultsController sections][section] objects] firstObject];
+    return [firstEvent hybridString];
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    NSUInteger count;
-    if (!self.events) {
-        // TODO: Show a no data screen?
-        count = 0;
-    } else {
-        count = [self.events.allKeys count];
-    }
-    return count;
-}
+#pragma mark - TBA Table View Data Source
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSUInteger count;
-    if (!self.events) {
-        count = 0;
-    } else {
-        NSArray *events = [self eventsForIndex:section forEventDictionary:self.events];
-        count = [events count];
-    }
-    return count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TBAEventTableViewCell *cell = (TBAEventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:EventCellReuseIdentifier forIndexPath:indexPath];
-    
-    Event *event = [self eventForIndexPath:indexPath];
+- (void)configureCell:(TBAEventTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    Event *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.event = event;
-    
-    return cell;
 }
 
 #pragma mark - Table View Delegate
@@ -98,7 +104,7 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
         return;
     }
     
-    Event *event = [self eventForIndexPath:indexPath];
+    Event *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
     self.eventSelected(event);
 }
 

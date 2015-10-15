@@ -1,11 +1,14 @@
+//
+//  Media.m
+//  the-blue-alliance-ios
+//
+//  Created by Zach Orr on 9/17/15.
+//  Copyright © 2015 The Blue Alliance. All rights reserved.
+//
+
 #import "Media.h"
+#import "Team.h"
 #import "TBAMedia.h"
-
-@interface Media ()
-
-// Private interface goes here.
-
-@end
 
 @implementation Media
 
@@ -37,16 +40,16 @@
     }
     
     media.team = team;
-    media.yearValue = year;
+    media.year = @(year);
     
     media.foreignKey = modelMedia.foreignKey;
-    media.mediaTypeValue = modelMedia.type;
+    media.mediaType = @(modelMedia.type);
     media.imagePartial = modelMedia.details.imagePartial;
     
     return media;
 }
 
-+ (NSArray *)insertMediasWithModelMedias:(NSArray *)modelMedias forTeam:(Team *)team andYear:(NSInteger)year inManagedObjectContext:(NSManagedObjectContext *)context {
++ (NSArray *)insertMediasWithModelMedias:(NSArray<TBAMedia *> *)modelMedias forTeam:(Team *)team andYear:(NSInteger)year inManagedObjectContext:(NSManagedObjectContext *)context {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (TBAMedia *media in modelMedias) {
         [arr addObject:[self insertMediaWithModelMedia:media forTeam:team andYear:year inManagedObjectContext:context]];

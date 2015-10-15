@@ -1,10 +1,13 @@
+//
+//  District.m
+//  the-blue-alliance-ios
+//
+//  Created by Zach Orr on 9/17/15.
+//  Copyright © 2015 The Blue Alliance. All rights reserved.
+//
+
 #import "District.h"
-
-@interface District ()
-
-// Private interface goes here.
-
-@end
+#import "DistrictRanking.h"
 
 @implementation District
 
@@ -12,7 +15,7 @@
     return @[@"Michigan", @"Mid Atlantic", @"New England", @"Pacific Northwest", @"Indiana"];
 }
 
-+ (instancetype)insertDistrictWithDistrictDict:(NSDictionary *)districtDict forYear:(NSInteger)year inManagedObjectContext:(NSManagedObjectContext *)context {
++ (instancetype)insertDistrictWithDistrictDict:(NSDictionary<NSString *, NSString *> *)districtDict forYear:(NSInteger)year inManagedObjectContext:(NSManagedObjectContext *)context {
     // Check for pre-existing object
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"District" inManagedObjectContext:context];
@@ -41,12 +44,12 @@
     
     district.key = districtDict[@"key"];
     district.name = districtDict[@"name"];
-    district.yearValue = year;
+    district.year = @(year);
     
     return district;
 }
 
-+ (NSArray *)insertDistrictsWithDistrictDicts:(NSArray *)districtDicts forYear:(NSInteger)year inManagedObjectContext:(NSManagedObjectContext *)context {
++ (NSArray *)insertDistrictsWithDistrictDicts:(NSArray<NSDictionary<NSString *, NSString *> *> *)districtDicts forYear:(NSInteger)year inManagedObjectContext:(NSManagedObjectContext *)context {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (NSDictionary *district in districtDicts) {
         [arr addObject:[self insertDistrictWithDistrictDict:district forYear:year inManagedObjectContext:context]];

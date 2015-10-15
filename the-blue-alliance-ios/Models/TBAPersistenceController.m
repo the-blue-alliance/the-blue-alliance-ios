@@ -38,23 +38,24 @@
     
     NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"TBA" withExtension:@"momd"];
     NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    NSAssert(mom, @"%@:%@ No model to generate a store from", [self class], NSStringFromSelector(_cmd));
+    NSAssert(mom, @"%@:%@ No model to generate a store from", self.class, NSStringFromSelector(_cmd));
     
     NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
     NSAssert(coordinator, @"Failed to initialize coordinator");
     
-    [self setManagedObjectContext:[[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType]];
+    self.managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+    [self.managedObjectContext setMergePolicy:NSMergeByPropertyObjectTrumpMergePolicy];
     
-    [self setPrivateContext:[[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType]];
-    [[self privateContext] setPersistentStoreCoordinator:coordinator];
-    [[self managedObjectContext] setParentContext:[self privateContext]];
+    self.privateContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    self.privateContext.persistentStoreCoordinator = coordinator;
+    self.managedObjectContext.parentContext = self.privateContext;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSPersistentStoreCoordinator *psc = [[self privateContext] persistentStoreCoordinator];
-        NSMutableDictionary *options = [NSMutableDictionary dictionary];
+        NSPersistentStoreCoordinator *psc = self.privateContext.persistentStoreCoordinator;
+        NSMutableDictionary *options = [[NSMutableDictionary alloc] init];
         options[NSMigratePersistentStoresAutomaticallyOption] = @YES;
         options[NSInferMappingModelAutomaticallyOption] = @YES;
-        options[NSSQLitePragmasOption] = @{ @"journal_mode":@"DELETE" };
+        options[NSSQLitePragmasOption] = @{@"journal_mode": @"DELETE"};
         
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSURL *documentsURL = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
@@ -63,28 +64,26 @@
         NSError *error = nil;
         NSAssert([psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error], @"Error initializing PSC: %@\n%@", [error localizedDescription], [error userInfo]);
         
-        if (![self initCallback])
+        if (!self.initCallback)
             return;
         
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [self initCallback]();
+            self.initCallback();
         });
     });
 }
 
-- (void)save;
-{
-    if (![[self privateContext] hasChanges] && ![[self managedObjectContext] hasChanges])
+- (void)save {
+    if (!self.privateContext.hasChanges && !self.managedObjectContext.hasChanges)
         return;
     
-    [[self managedObjectContext] performBlockAndWait:^{
-        NSError *error = nil;
+    [self.managedObjectContext performBlockAndWait:^{
+        NSError *error;
+        NSAssert([self.managedObjectContext save:&error], @"Failed to save main context: %@\n%@", error.localizedDescription, error.userInfo);
         
-        NSAssert([[self managedObjectContext] save:&error], @"Failed to save main context: %@\n%@", [error localizedDescription], [error userInfo]);
-
-        [[self privateContext] performBlock:^{
-            NSError *privateError = nil;
-            NSAssert([[self privateContext] save:&privateError], @"Error saving private context: %@\n%@", [privateError localizedDescription], [privateError userInfo]);
+        [self.privateContext performBlock:^{
+            NSError *privateError;
+            NSAssert([self.privateContext save:&privateError], @"Error saving private context: %@\n%@", privateError.localizedDescription, privateError.userInfo);
         }];
     }];
 }

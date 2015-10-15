@@ -10,14 +10,12 @@
 #import "Team.h"
 #import "Event.h"
 #import "Media.h"
-#import "OrderedDictionary.h"
 
 static NSString *const InfoCellReuseIdentifier = @"InfoCell";
 
 @interface TBAInfoViewController ()
 
 @property (nonatomic, assign) BOOL expandSponsors;
-@property (nonatomic, strong) OrderedDictionary *infoDictionary;
 
 @end
 
@@ -104,11 +102,13 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    /*
     NSString *key = [self.infoDictionary keyAtIndex:indexPath.row];
     if ([key isEqualToString:@"sponsors"]) {
         self.expandSponsors = !self.expandSponsors;
         [self.tableView reloadData];
     }
+    */
 }
 
 #pragma mark - Private Methods

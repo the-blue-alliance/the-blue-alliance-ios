@@ -1,11 +1,14 @@
+//
+//  Match.m
+//  the-blue-alliance-ios
+//
+//  Created by Zach Orr on 9/17/15.
+//  Copyright © 2015 The Blue Alliance. All rights reserved.
+//
+
 #import "Match.h"
+#import "Event.h"
 #import "MatchVideo.h"
-
-@interface Match ()
-
-// Private interface goes here.
-
-@end
 
 @implementation Match
 
@@ -42,7 +45,7 @@
     match.scoreBreakdown = modelMatch.scoreBreakdown;
     match.time = modelMatch.time;
     match.event = event;
-
+    
     match.redAlliance = modelMatch.redAlliance.teams;
     match.redScore = @(modelMatch.redAlliance.score);
     
@@ -54,7 +57,7 @@
     return match;
 }
 
-+ (NSArray *)insertMatchesWithModelMatches:(NSArray *)modelMatches forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
++ (NSArray *)insertMatchesWithModelMatches:(NSArray<TBAMatch *> *)modelMatches forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (TBAMatch *match in modelMatches) {
         [arr addObject:[self insertMatchWithModelMatch:match forEvent:event inManagedObjectContext:context]];

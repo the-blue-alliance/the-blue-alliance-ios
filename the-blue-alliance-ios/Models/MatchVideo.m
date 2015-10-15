@@ -1,10 +1,13 @@
+//
+//  MatchVideo.m
+//  the-blue-alliance-ios
+//
+//  Created by Zach Orr on 9/17/15.
+//  Copyright © 2015 The Blue Alliance. All rights reserved.
+//
+
 #import "MatchVideo.h"
-
-@interface MatchVideo ()
-
-// Private interface goes here.
-
-@end
+#import "Match.h"
 
 @implementation MatchVideo
 
@@ -40,7 +43,7 @@
     return matchVideo;
 }
 
-+ (NSArray *)insertMatchVidoesWithModelMatchVidoes:(NSArray *)modelMatchVidoes inManagedObjectContext:(NSManagedObjectContext *)context {
++ (NSArray *)insertMatchVidoesWithModelMatchVidoes:(NSArray<TBAMatchVideo *> *)modelMatchVidoes inManagedObjectContext:(NSManagedObjectContext *)context {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (TBAMatchVideo *matchVideo in modelMatchVidoes) {
         [arr addObject:[self insertMatchVideoWithModelMatchVideo:matchVideo inManagedObjectContext:context]];
@@ -50,7 +53,7 @@
 
 - (NSURL *)videoUrl {
     NSString *url;
-    switch (self.videoTypeValue) {
+    switch ([self.videoType integerValue]) {
         case MatchVideoTypeYouTube:
             url = [NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", self.key];
             break;

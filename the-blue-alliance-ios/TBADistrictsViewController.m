@@ -57,6 +57,7 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
     [super viewDidLoad];
     
     self.tbaDelegate = self;
+    self.cellIdentifier = DistrictsCellIdentifier;
 }
 
 #pragma mark - Private Method
@@ -65,36 +66,11 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
     return [NSString stringWithFormat:@"%zd_districts", self.year];
 }
 
-#pragma mark - Table View Data Source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [[self.fetchedResultsController sections] count];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSUInteger count;
-    if ([[self.fetchedResultsController sections] count] > 0) {
-        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
-        count = [sectionInfo numberOfObjects];
-    } else {
-        // TODO: Show no data screen;
-        count = 0;
-    }
-    return count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DistrictsCellIdentifier forIndexPath:indexPath];
-    
-    [self configureCell:cell atIndexPath:indexPath];
-    
-    return cell;
-}
+#pragma mark - TBA Table View Data Source
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     District *district = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = district.name;
-
 }
 
 #pragma mark - Table View Delegate

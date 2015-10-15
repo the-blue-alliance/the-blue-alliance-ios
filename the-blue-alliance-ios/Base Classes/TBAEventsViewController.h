@@ -8,11 +8,15 @@
 
 #import "TBATableViewController.h"
 
-@class OrderedDictionary, Event;
+@class District, Event, Team;
 
-@interface TBAEventsViewController : TBATableViewController
+@interface TBAEventsViewController : TBATableViewController <TBATableViewControllerDelegate>
 
-@property (nonatomic, copy) OrderedDictionary *events;
+@property (nonatomic, strong) NSPredicate *predicate;
+
+@property (nonatomic, weak) Team *team;
+@property (nonatomic, weak) District *district;
+
 @property (nonatomic, copy) void (^eventSelected)(Event *event);
 
 @end

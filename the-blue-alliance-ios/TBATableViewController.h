@@ -13,17 +13,18 @@
 
 @required
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+- (void)configureCell:(nonnull UITableViewCell *)cell atIndexPath:(nonnull NSIndexPath *)indexPath;
 
 @end
 
 @interface TBATableViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, strong) TBAPersistenceController *persistenceController;
-@property (nonatomic, weak) id<TBATableViewControllerDelegate> tbaDelegate;
+@property (null_resettable, nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nonnull, nonatomic, strong) TBAPersistenceController *persistenceController;
+@property (nullable, nonatomic, weak) id<TBATableViewControllerDelegate> tbaDelegate;
+@property (nonnull, nonatomic, copy) NSString *cellIdentifier;
 
-- (void)showNoDataViewWithText:(NSString *)text;
+- (void)showNoDataViewWithText:(nonnull NSString *)text;
 - (void)hideNoDataView;
 
 @end

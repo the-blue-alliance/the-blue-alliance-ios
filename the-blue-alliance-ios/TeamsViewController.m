@@ -7,10 +7,8 @@
 //
 
 #import "TeamsViewController.h"
-#import "OrderedDictionary.h"
 #import "Team.h"
 #import "Team+Fetch.h"
-#import "OrderedDictionary.h"
 #import <PureLayout/PureLayout.h>
 #import "TBATeamTableViewCell.h"
 #import "TBATeamsViewController.h"
@@ -41,6 +39,13 @@ static NSString *const TeamViewControllerSegue  = @"TeamViewControllerSegue";
         [strongSelf updateRefreshBarButtonItem:YES];
         [strongSelf refreshData];
     };
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    if (self.teamsViewController.fetchedResultsController.fetchedObjects.count == 0) {
+        self.refresh();
+    }
 }
 
 #pragma mark - Data Methods

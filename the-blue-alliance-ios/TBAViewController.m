@@ -10,12 +10,22 @@
 
 @implementation TBAViewController
 
+#pragma mark - View Lifecycle
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+}
+
 #pragma mark - Alerts
 
 - (void)showErrorAlertWithMessage:(NSString *)message {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil]];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-        [alert show];
+        [self presentViewController:alert animated:YES completion:nil];
     });
 }
 

@@ -20,13 +20,12 @@
 
 @end
 
-
 @implementation AppDelegate
 
 #pragma mark - Main Entry Point
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [self setPersistenceController:[[TBAPersistenceController alloc] initWithCallback:^{        
+    [self setPersistenceController:[[TBAPersistenceController alloc] initWithCallback:^{
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UITabBarController *rootTabBarController = [storyboard instantiateViewControllerWithIdentifier:@"RootTabBarController"];
 
@@ -34,14 +33,16 @@
             TBAViewController *vc = (TBAViewController *)[nav.viewControllers firstObject];
             vc.persistenceController = self.persistenceController;
         }
+
+        UIView *overlayView = [[UIScreen mainScreen] snapshotViewAfterScreenUpdates:NO];
+        [rootTabBarController.view addSubview:overlayView];
+        self.window.rootViewController = rootTabBarController;
         
-        [UIView transitionWithView:self.window
-                          duration:0.5
-                           options:UIViewAnimationOptionTransitionFlipFromLeft
-                        animations:^{
-                            self.window.rootViewController = rootTabBarController;
-                        }
-                        completion:nil];
+        [UIView animateWithDuration:0.75f delay:0.0f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            overlayView.alpha = 0;
+        } completion:^(BOOL finished) {
+            [overlayView removeFromSuperview];
+        }];
     }]];
 
 #warning dynaically fetch version number here, also maybe add some user-specific string?
@@ -54,6 +55,7 @@
     [NSURLCache setSharedURLCache:sharedCache];
     
     [self setupAppearance];
+    [self.window makeKeyAndVisible];
     
     return YES;
 }
@@ -86,11 +88,7 @@
 
 #pragma mark - Interface Methods
 
-- (void)setupAppearance {
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
-    
+- (void)setupAppearance {    
     [[UINavigationBar appearance] setBarTintColor:[UIColor TBANavigationBarColor]];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];

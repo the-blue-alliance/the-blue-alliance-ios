@@ -1,13 +1,43 @@
+//
+//  Event.m
+//  the-blue-alliance-ios
+//
+//  Created by Zach Orr on 9/17/15.
+//  Copyright © 2015 The Blue Alliance. All rights reserved.
+//
+
 #import "Event.h"
-#import "OrderedDictionary.h"
+#import "EventAlliance.h"
+#import "EventPoints.h"
+#import "EventRanking.h"
+#import "EventWebcast.h"
+#import "Match.h"
+#import "Team.h"
 #import "District.h"
 
-static NSString *const WeeklessEventsLabel      = @"Other Official Events";
-static NSString *const PreseasonEventsLabel     = @"Preseason";
-static NSString *const OffseasonEventsLabel     = @"Offseason";
-static NSString *const CMPEventsLabel           = @"Championship Event";
-
 @implementation Event
+
++ (nonnull NSString *)stringForEventOrder:(EventOrder)order {
+    NSString *orderString;
+    switch (order) {
+        case EventOrderPreseason:
+            orderString = @"Preseason";
+            break;
+        case EventOrderChampionship:
+            orderString = @"Championship";
+            break;
+        case EventOrderOffseason:
+            orderString = @"Offseason";
+            break;
+        case EventOrderUnlabeled:
+            orderString = @"Other";
+            break;
+        default:
+            orderString = [NSString stringWithFormat:@"Week %zd", order];
+            break;
+    }
+    return orderString;
+}
 
 - (NSString *)friendlyNameWithYear:(BOOL)withYear {
     NSString *nameString;
@@ -18,7 +48,7 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
     }
     
     NSString *typeSuffix = @"";
-    switch (self.eventTypeValue) {
+    switch ([self.eventType integerValue]) {
         case TBAEventTypeRegional:
             typeSuffix = @"Regional";
             break;
@@ -65,26 +95,30 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
 
 #pragma mark - Class Methods
 
-+ (OrderedDictionary *)groupEventsByWeek:(NSArray *)events andGroupByType:(BOOL)groupByType {
-    MutableOrderedDictionary *eventData = [[MutableOrderedDictionary alloc] init];
++ (void)addEventOrder:(EventOrder)eventOrder toArray:(NSMutableArray<NSNumber *> *)arr {
+    if (![arr containsObject:@(eventOrder)]) {
+        [arr addObject:@(eventOrder)];
+    }
+}
+
++ (NSArray<NSNumber *> *)groupEventsByWeek:(NSArray<Event *> *)events {
+    NSMutableArray<NSNumber *> *eventTypeArray = [[NSMutableArray alloc] init];
     
     int currentWeek = 1;
     NSDate *weekStart;
-    
-    NSMutableArray *weeklessEvents = [[NSMutableArray alloc] init];
-    NSMutableArray *offseasonEvents = [[NSMutableArray alloc] init];
-    NSMutableArray *preseasonEvents = [[NSMutableArray alloc] init];
-    NSMutableArray *championshipEvents = [[NSMutableArray alloc] init];
-    
+
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
     for (Event *event in events) {
-        if (event.official && (event.eventTypeValue == TBAEventTypeCMPDivision || event.eventTypeValue == TBAEventTypeCMPFinals)) {
-            [championshipEvents addObject:event];
-        } else if (event.official && [@[@(EventTypeRegional), @(EventTypeDistrict), @(EventTypeDistrictCMP)] containsObject:@(event.eventTypeValue)]) {
+        if (event.official &&
+            ([event.eventType integerValue] == TBAEventTypeCMPDivision || [event.eventType integerValue] == TBAEventTypeCMPFinals)) {
+            [self addEventOrder:EventOrderChampionship toArray:eventTypeArray];
+            event.week = @(EventOrderChampionship);
+        } else if (event.official && [@[@(EventTypeRegional), @(EventTypeDistrict), @(EventTypeDistrictCMP)] containsObject:event.eventType]) {
             if (event.startDate == nil ||
                 ([calendar component:NSCalendarUnitMonth fromDate:event.startDate] == 12 && [calendar component:NSCalendarUnitDay fromDate:event.startDate] == 31)) {
-                [weeklessEvents addObject:event];
+                [self addEventOrder:EventOrderUnlabeled toArray:eventTypeArray];
+                event.week = @(EventOrderUnlabeled);
             } else {
                 if (weekStart == nil) {
                     int diffFromThurs = ([calendar component:NSCalendarUnitWeekday fromDate:event.startDate] - 4) % 7; // Wednesday is 4
@@ -99,133 +133,51 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
                 
                 NSComparisonResult dateCompare = [event.startDate compare:[calendar dateByAddingComponents:weekComponent toDate:weekStart options:0]];
                 if (dateCompare == NSOrderedDescending || dateCompare == NSOrderedSame) {
-                    NSString *weekLabel = [NSString stringWithFormat:@"Week %@", @(currentWeek)];
-                    NSArray *weekEvents = [eventData objectForKey:weekLabel];
-                    if (groupByType) {
-                        [eventData setValue:[self sortedEventDictionaryFromEvents:weekEvents] forKey:weekLabel];
-                    } else {
-                        [eventData setValue:weekEvents forKey:weekLabel];
-                    }
+                    [self addEventOrder:currentWeek toArray:eventTypeArray];
+                    event.week = @(currentWeek);
                     
                     currentWeek += 1;
                     weekStart = [calendar dateByAddingComponents:weekComponent toDate:weekStart options:0];
                 }
                 
-                NSString *weekLabel = [NSString stringWithFormat:@"Week %@", @(currentWeek)];
-                if ([eventData objectForKey:weekLabel]) {
-                    NSMutableArray *weekArray = [eventData objectForKey:weekLabel];
-                    [weekArray addObject:event];
-                } else {
-                    [eventData setValue:[[NSMutableArray alloc] initWithObjects:event, nil] forKey:weekLabel];
-                }
+                [self addEventOrder:currentWeek toArray:eventTypeArray];
+                event.week = @(currentWeek);
             }
-        } else if (event.eventTypeValue == TBAEventTypePreseason) {
-            [preseasonEvents addObject:event];
+        } else if ([event.eventType integerValue] == TBAEventTypePreseason) {
+            [self addEventOrder:EventOrderPreseason toArray:eventTypeArray];
+            event.week = @(EventOrderPreseason);
         } else {
-            [offseasonEvents addObject:event];
+            [self addEventOrder:EventOrderOffseason toArray:eventTypeArray];
+            event.week = @(EventOrderOffseason);
         }
     }
-    // Put the last week in
-    NSString *weekLabel = [NSString stringWithFormat:@"Week %@", @(currentWeek)];
-    NSArray *weekEvents = [eventData objectForKey:weekLabel];
-    if (weekEvents && [weekEvents count] > 0) {
-        if (groupByType) {
-            [eventData setValue:[self sortedEventDictionaryFromEvents:weekEvents] forKey:weekLabel];
-        } else {
-            [eventData setValue:weekEvents forKey:weekLabel];
-        }
-    }
-    
-    if ([preseasonEvents count] > 0) {
-        if (groupByType) {
-            [eventData insertObject:[self sortedEventDictionaryFromEvents:preseasonEvents]
-                             forKey:PreseasonEventsLabel
-                            atIndex:0];
-        } else {
-            [eventData insertObject:preseasonEvents forKey:PreseasonEventsLabel atIndex:0];
-        }
-    }
-    if ([championshipEvents count] > 0) {
-        if (groupByType) {
-            [eventData setValue:[self sortedEventDictionaryFromEvents:championshipEvents] forKey:CMPEventsLabel];
-        } else {
-            [eventData setValue:championshipEvents forKey:CMPEventsLabel];
-        }
-    }
-    if ([offseasonEvents count] > 0) {
-        if (groupByType) {
-            [eventData setValue:[self sortedEventDictionaryFromEvents:offseasonEvents] forKey:OffseasonEventsLabel];
-        } else {
-            [eventData setValue:offseasonEvents forKey:OffseasonEventsLabel];
-        }
-    }
-    if ([weeklessEvents count] > 0) {
-        if (groupByType) {
-            [eventData setValue:[self sortedEventDictionaryFromEvents:weeklessEvents] forKey:WeeklessEventsLabel];
-        } else {
-            [eventData setValue:weeklessEvents forKey:WeeklessEventsLabel];
-        }
-    }
-    
-    
-    return eventData;
+    return eventTypeArray;
 }
 
-+ (OrderedDictionary *)sortedEventDictionaryFromEvents:(NSArray *)events {
-    // Preseason < Regionals < Districts (MI, MAR, NE, PNW, IN), CMP Divisions, CMP Finals, Offseason, others
-    MutableOrderedDictionary *sortedDictionary = [[MutableOrderedDictionary alloc] init];
-    
-    for (NSNumber *eventType in @[@(EventTypePreseason), @(EventTypeRegional), @(EventTypeDistrict), @(EventTypeDistrictCMP), @(EventTypeCMPDivision), @(EventTypeCMPFinals), @(EventTypeOffseason), @(EventTypeUnlabeled)]) {
-        if ([eventType integerValue] == EventTypeDistrict) {
-            // Sort districts
-            for (NSString *districtString in [District districtTypes]) {
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventDistrict == %@ AND (NOT eventType == %@)", districtString, @(EventTypeDistrictCMP)];
-                NSArray *arr = [events filteredArrayUsingPredicate:predicate];
-                
-                if (arr && [arr count] > 0) {
-                    NSString *districtTypeLabel = [NSString stringWithFormat:@"%@ District Events", districtString];
-                    [sortedDictionary setValue:arr forKey:districtTypeLabel];
-                }
-            }
-        } else {
-            // Sort non-districts
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventType = %@", eventType];
-            NSArray *arr = [events filteredArrayUsingPredicate:predicate];
-            
-            if (arr && [arr count] > 0) {
-                NSString *eventTypeLabel;
-                switch ([eventType integerValue]) {
-                    case TBAEventTypeRegional:
-                        eventTypeLabel = @"Regional Events";
-                        break;
-                    case TBAEventTypeDistrictCMP:
-                        eventTypeLabel = @"District Championships";
-                        break;
-                    case TBAEventTypeCMPDivision:
-                        eventTypeLabel = @"Championship Divisions";
-                        break;
-                    case TBAEventTypeCMPFinals:
-                        eventTypeLabel = @"Championship Finals";
-                        break;
-                    case TBAEventTypeOffseason:
-                        eventTypeLabel = @"Offseason Events";
-                        break;
-                    case TBAEventTypePreseason:
-                        eventTypeLabel = @"Preseason Events";
-                        break;
-                    case TBAEventTypeUnlabeled:
-                        eventTypeLabel = @"Other Official Events";
-                        break;
-                    default:
-                        eventTypeLabel = @"";
-                        break;
-                }
-                [sortedDictionary setValue:arr forKey:eventTypeLabel];
-            }
-        }
+// Transient property we use to sort events for the event FRC
+// Will sort high level events in order
+// Preseason < Regionals < Districts (MI, MAR, NE, PNW, IN), CMP Divisions, CMP Finals, Offseason, others
+// Will then sub-divide districts in to floats
+// ex: Michigan Districts: 1.1, Indiana Districts: 1.5
+- (NSNumber *)hybridType {
+    if ([self.eventDistrict integerValue] != 0 && [self.eventType integerValue] != EventTypeDistrictCMP) {
+        return @([self.eventType unsignedIntegerValue] + ([self.eventDistrict floatValue] / 10.0f));
+    } else {
+        return self.eventType;
     }
+}
+
+// Takes hybridType and makes a string for it (used for section titles)
+- (nonnull NSString *)hybridString {
+    NSNumber *hybridType = [self hybridType];
+    NSString *hybridString = [hybridType stringValue];
     
-    return sortedDictionary;
+    NSArray *arr = [hybridString componentsSeparatedByString:@"."];
+    if (arr.count == 2) {
+        return [NSString stringWithFormat:@"%@ %@", self.eventDistrictString, self.eventTypeString];
+    } else {
+        return self.eventTypeString;
+    }
 }
 
 + (instancetype)insertEventWithModelEvent:(TBAEvent *)modelEvent inManagedObjectContext:(NSManagedObjectContext *)context {
@@ -259,14 +211,16 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
     event.name = modelEvent.name;
     event.shortName = modelEvent.shortName;
     event.eventCode = modelEvent.eventCode;
-    event.eventTypeValue = modelEvent.eventType;
-    event.eventDistrict = modelEvent.eventDistrictString;
-    event.yearValue = modelEvent.year;
+    event.eventType = @(modelEvent.eventType);
+    event.eventTypeString = modelEvent.eventTypeString;
+    event.eventDistrict = @(modelEvent.eventDistrict);
+    event.eventDistrictString = modelEvent.eventDistrictString;
+    event.year = @(modelEvent.year);
     event.location = modelEvent.location;
     event.venueAddress = modelEvent.venueAddress;
     event.website = modelEvent.website;
     event.facebookEid = modelEvent.facebookEid;
-    event.officialValue = modelEvent.official;
+    event.official = @(modelEvent.official);
     event.startDate = modelEvent.startDate;
     event.endDate = modelEvent.endDate;
     
@@ -283,7 +237,7 @@ static NSString *const CMPEventsLabel           = @"Championship Event";
     return event;
 }
 
-+ (NSArray *)insertEventsWithModelEvents:(NSArray *)modelEvents inManagedObjectContext:(NSManagedObjectContext *)context {
++ (NSArray<Event *> *)insertEventsWithModelEvents:(NSArray<TBAEvent *> *)modelEvents inManagedObjectContext:(NSManagedObjectContext *)context {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (TBAEvent *event in modelEvents) {
         [arr addObject:[self insertEventWithModelEvent:event inManagedObjectContext:context]];

@@ -50,6 +50,7 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
     [super viewDidLoad];
     
     self.tbaDelegate = self;
+    self.cellIdentifier = TeamCellReuseIdentifier;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -72,31 +73,7 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
     return cacheName;
 }
 
-#pragma mark - Table View Data Source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [[self.fetchedResultsController sections] count];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSUInteger count;
-    if ([[self.fetchedResultsController sections] count] > 0) {
-        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
-        count = [sectionInfo numberOfObjects];
-    } else {
-        // TODO: Show no data screen;
-        count = 0;
-    }
-    return count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TBATeamTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TeamCellReuseIdentifier forIndexPath:indexPath];
-
-    [self configureCell:cell atIndexPath:indexPath];
-    
-    return cell;
-}
+#pragma mark - TBA Table View Data Soruce
 
 - (void)configureCell:(TBATeamTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     cell.team = [self.fetchedResultsController objectAtIndexPath:indexPath];

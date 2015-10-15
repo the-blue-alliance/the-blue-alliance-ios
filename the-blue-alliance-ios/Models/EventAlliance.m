@@ -1,4 +1,13 @@
+//
+//  EventAlliance.m
+//  the-blue-alliance-ios
+//
+//  Created by Zach Orr on 9/17/15.
+//  Copyright © 2015 The Blue Alliance. All rights reserved.
+//
+
 #import "EventAlliance.h"
+#import "Event.h"
 
 @implementation EventAlliance
 
@@ -19,7 +28,7 @@
     }
     
     EventAlliance *eventAlliance = [NSEntityDescription insertNewObjectForEntityForName:@"EventAlliance" inManagedObjectContext:context];
- 
+    
 #warning turn these in to team objects?
     eventAlliance.picks = modelEventAlliance.picks;
     eventAlliance.declines = modelEventAlliance.declines;
@@ -28,7 +37,7 @@
     return eventAlliance;
 }
 
-+ (NSArray *)insertEventAlliancesWithModelEventAlliances:(NSArray *)modelEventAlliances forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
++ (NSArray *)insertEventAlliancesWithModelEventAlliances:(NSArray<TBAEventAlliance *> *)modelEventAlliances forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (TBAEventAlliance *eventAlliance in modelEventAlliances) {
         [arr addObject:[self insertEventAllianceWithModelEventWebcast:eventAlliance forEvent:event inManagedObjectContext:context]];

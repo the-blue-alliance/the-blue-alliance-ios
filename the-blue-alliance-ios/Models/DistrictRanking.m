@@ -1,17 +1,21 @@
+//
+//  DistrictRanking.m
+//  the-blue-alliance-ios
+//
+//  Created by Zach Orr on 9/17/15.
+//  Copyright © 2015 The Blue Alliance. All rights reserved.
+//
+
 #import "DistrictRanking.h"
+#import "District.h"
+#import "EventPoints.h"
+#import "Team.h"
 #import "Team+Fetch.h"
 #import "Event+Fetch.h"
-#import "EventPoints.h"
-
-@interface DistrictRanking ()
-
-// Private interface goes here.
-
-@end
 
 @implementation DistrictRanking
 
-+ (instancetype)insertDistrictRankingWithDistrictRankingDict:(NSDictionary *)districtRankingDict forDistrict:(District *)district inManagedObjectContext:(NSManagedObjectContext *)context {
++ (instancetype)insertDistrictRankingWithDistrictRankingDict:(NSDictionary<NSString *, id> *)districtRankingDict forDistrict:(District *)district inManagedObjectContext:(NSManagedObjectContext *)context {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"DistrictRanking" inManagedObjectContext:context];
     [fetchRequest setEntity:entity];
@@ -88,7 +92,7 @@
     return districtRanking;
 }
 
-+ (NSArray *)insertDistrictRankingsWithDistrictRankings:(NSArray *)districtRankings forDistrict:(District *)district inManagedObjectContext:(NSManagedObjectContext *)context {
++ (NSArray *)insertDistrictRankingsWithDistrictRankings:(NSArray<NSDictionary<NSString *, id> *> *)districtRankings forDistrict:(District *)district inManagedObjectContext:(NSManagedObjectContext *)context {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (NSDictionary *districtRanking in districtRankings) {
         [arr addObject:[self insertDistrictRankingWithDistrictRankingDict:districtRanking forDistrict:district inManagedObjectContext:context]];

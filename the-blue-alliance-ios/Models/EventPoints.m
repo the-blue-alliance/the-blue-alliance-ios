@@ -1,8 +1,19 @@
+//
+//  EventPoints.m
+//  the-blue-alliance-ios
+//
+//  Created by Zach Orr on 9/17/15.
+//  Copyright © 2015 The Blue Alliance. All rights reserved.
+//
+
 #import "EventPoints.h"
+#import "DistrictRanking.h"
+#import "Event.h"
+#import "Team.h"
 
 @implementation EventPoints
 
-+ (instancetype)insertEventPointsWithEventPointsDict:(NSDictionary *)eventPointsDict forEvent:(Event *)event andTeam:(Team *)team inManagedObjectContext:(NSManagedObjectContext *)context {
++ (instancetype)insertEventPointsWithEventPointsDict:(NSDictionary<NSString *, NSNumber *> *)eventPointsDict forEvent:(Event *)event andTeam:(Team *)team inManagedObjectContext:(NSManagedObjectContext *)context {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"EventPoints" inManagedObjectContext:context];
     [fetchRequest setEntity:entity];
