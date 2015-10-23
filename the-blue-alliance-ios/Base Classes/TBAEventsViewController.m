@@ -27,7 +27,6 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
 }
 
 - (void)clearFRC {
-    // Clear cache as well if we cache
     self.fetchedResultsController = nil;
     [self.tableView reloadData];
     [self.tableView setContentOffset:CGPointZero animated:NO];

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="8195" systemVersion="14F27" minimumToolsVersion="Xcode 4.3">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9057" systemVersion="15B42" minimumToolsVersion="Xcode 4.3">
     <entity name="District" representedClassName="District" syncable="YES">
         <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -22,7 +22,7 @@
         <attribute name="eventType" optional="YES" attributeType="Integer 32" syncable="YES"/>
         <attribute name="eventTypeString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="facebookEid" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="hybridType" optional="YES" transient="YES" attributeType="Integer 32" syncable="YES"/>
+        <attribute name="hybridType" optional="YES" attributeType="Integer 32" syncable="YES"/>
         <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>

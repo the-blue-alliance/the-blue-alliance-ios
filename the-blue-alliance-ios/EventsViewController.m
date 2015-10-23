@@ -103,7 +103,6 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
         } else {
             strongSelf.eventWeeks = [Event groupEventsByWeek:events];
             [strongSelf updateInterface];
-            [strongSelf updatePredicate];
         }
     }];
 }

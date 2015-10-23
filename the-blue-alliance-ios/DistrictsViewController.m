@@ -52,6 +52,24 @@ static NSString *const DistrictViewControllerSegue  = @"DistrictViewControllerSe
     [self styleInterface];
 }
 
+/*
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if ([self.districtsViewController.fetchedResultsController.fetchedObjects count] == 0) {
+        self.refresh();
+    }
+}
+*/
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    if ([self.districtsViewController.fetchedResultsController.fetchedObjects count] == 0) {
+        self.refresh();
+    }
+}
+
 #pragma mark - Interface Methods
 
 - (void)styleInterface {

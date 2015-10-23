@@ -18,7 +18,6 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
 
 - (void)setYear:(NSUInteger)year {
     self.fetchedResultsController = nil;
-    [NSFetchedResultsController deleteCacheWithName:[self cacheName]];
     
     _year = year;
     [self.tableView reloadData];
@@ -39,7 +38,7 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                     managedObjectContext:self.persistenceController.managedObjectContext
                                                                       sectionNameKeyPath:nil
-                                                                               cacheName:[self cacheName]];
+                                                                               cacheName:nil];
     _fetchedResultsController.delegate = self;
     
     NSError *error = nil;
@@ -58,12 +57,6 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
     
     self.tbaDelegate = self;
     self.cellIdentifier = DistrictsCellIdentifier;
-}
-
-#pragma mark - Private Method
-
-- (NSString *)cacheName {
-    return [NSString stringWithFormat:@"%zd_districts", self.year];
 }
 
 #pragma mark - TBA Table View Data Source
