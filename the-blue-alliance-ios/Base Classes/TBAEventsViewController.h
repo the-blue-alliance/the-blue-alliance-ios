@@ -14,9 +14,6 @@
 
 @property (nonatomic, strong) NSPredicate *predicate;
 
-@property (nonatomic, weak) Team *team;
-@property (nonatomic, weak) District *district;
-
 @property (nonatomic, copy) void (^eventSelected)(Event *event);
 
 @end

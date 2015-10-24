@@ -23,6 +23,7 @@
 #pragma mark - Class Methods
 
 + (NSInteger)currentYear {
+    // TODO: Look for year + 1 as well when data starts coming in
     return [[NSCalendar currentCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]];
 }
 

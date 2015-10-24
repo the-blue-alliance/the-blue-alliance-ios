@@ -199,7 +199,6 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     if ([segue.identifier isEqualToString:EventsViewControllerEmbed]) {
         self.eventsViewController = (TBAEventsViewController *)segue.destinationViewController;
         self.eventsViewController.persistenceController = self.persistenceController;
-        // Set an initial predicate in here?
         
         __weak typeof(self) weakSelf = self;
         self.eventsViewController.eventSelected = ^(Event *event) {

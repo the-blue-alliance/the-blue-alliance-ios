@@ -40,7 +40,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (nonnull NSString *)dateString;
 - (nonnull NSString *)hybridString;
 
-+ (nonnull NSString *)hybridStringForType:(nonnull NSNumber *)hybridType;
 + (nonnull NSString *)stringForEventOrder:(EventOrder)order;
 + (NSArray<NSNumber *> *)groupEventsByWeek:(NSArray<Event *> *)events;
 

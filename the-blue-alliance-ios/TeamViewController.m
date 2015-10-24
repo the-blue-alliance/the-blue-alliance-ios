@@ -305,7 +305,9 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     } else if ([segue.identifier isEqualToString:EventsViewControllerEmbed]) {
         self.eventsViewController = segue.destinationViewController;
         self.eventsViewController.persistenceController = self.persistenceController;
-        self.eventsViewController.team = self.team;
+        
+#warning set a predicate on the eventsViewController based on the team
+        
         self.eventsViewController.eventSelected = ^(Event *event) {
             NSLog(@"Selected event: %@", event.shortName);
         };

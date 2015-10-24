@@ -22,7 +22,7 @@
     [fetchRequest setEntity:entity];
     
     // Specify criteria for filtering which objects to fetch
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key = %@ && year == %@", districtDict[@"key"], @(year)];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@ && year == %@", districtDict[@"key"], @(year)];
     [fetchRequest setPredicate:predicate];
     
     District *district;

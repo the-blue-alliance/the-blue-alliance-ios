@@ -186,6 +186,10 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"EventsViewControllerEmbed"]) {
         self.eventsViewController = (TBAEventsViewController *)segue.destinationViewController;
+        self.eventsViewController.persistenceController = self.persistenceController;
+        self.eventsViewController.predicate = [NSPredicate predicateWithFormat:@"year == %@ AND eventDistrictString == %@", self.district.year, self.district.name];
+        
+        __weak typeof(self) weakSelf = self;
         self.eventsViewController.eventSelected = ^(Event *event) {
             NSLog(@"Selected event: %@", event.shortName);
         };
@@ -193,6 +197,7 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
         self.rankingsViewController = (TBARankingsViewController *)segue.destinationViewController;
         self.rankingsViewController.district = self.district;
         self.rankingsViewController.persistenceController = self.persistenceController;
+
         self.rankingsViewController.rankingSelected = ^(id ranking) {
             DistrictRanking *districtRanking = (DistrictRanking *)ranking;
             NSLog(@"Selected ranking: %@", districtRanking);
