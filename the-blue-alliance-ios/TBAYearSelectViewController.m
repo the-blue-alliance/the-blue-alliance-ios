@@ -59,7 +59,6 @@
 #pragma mark - Interface Methods
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-    NSLog(@"Hit here");
     return UIStatusBarStyleLightContent;
 }
 
