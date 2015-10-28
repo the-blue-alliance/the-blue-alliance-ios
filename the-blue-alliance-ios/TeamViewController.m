@@ -43,6 +43,8 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 
 @implementation TeamViewController
 
+#pragma mark - Properities
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -67,11 +69,9 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 
         strongSelf.currentYear = selectedYear;
         strongSelf.mediaCollectionViewController.year = selectedYear;
-        
-        if (strongSelf.segmentedControl.selectedSegmentIndex == TBATeamDataTypeEvents) {
-            [strongSelf.eventsViewController hideNoDataView];
-            [strongSelf removeEvents];
-            [strongSelf fetchEventsAndRefresh:YES];
+        strongSelf.eventsViewController.predicate = [NSPredicate predicateWithFormat:@"year == %@ AND ANY teams == %@", @(selectedYear), strongSelf.team];
+        if (strongSelf.eventsViewController.fetchedResultsController.fetchedObjects.count == 0) {
+            strongSelf.refresh();
         }
     };
     
@@ -95,10 +95,8 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 - (void)updateInterface {
     if (self.segmentedControl.selectedSegmentIndex == TBATeamDataTypeInfo) {
         [self showView:self.infoView];
-        [self fetchTeamAndRefresh:NO];
     } else if (self.segmentedControl.selectedSegmentIndex == TBATeamDataTypeEvents) {
         [self showView:self.eventsView];
-        [self fetchEventsAndRefresh:NO];
     } else {
         [self showView:self.mediaView];
     }
@@ -237,35 +235,6 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 
 #pragma mark - Events Data Methods
 
-- (void)removeEvents {
-#warning can we even do this?
-//    self.eventsViewController.week = 0;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.eventsViewController.tableView reloadData];
-    });
-}
-
-- (void)fetchEventsAndRefresh:(BOOL)refresh {
-    if (self.currentYear == 0) {
-        return;
-    }
-    
-    NSArray *events = [self.team sortedEventsForYear:self.currentYear];
-    
-    if (!events || [events count] == 0) {
-        if (refresh) {
-            [self refreshEvents];
-        } else {
-            [self removeEvents];
-        }
-    } else {
-//        self.eventsViewController.events = [Event sortedEventDictionaryFromEvents:events];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.eventsViewController.tableView reloadData];
-        });
-    }
-}
-
 - (void)refreshEvents {
     if (self.currentYear == 0) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -289,7 +258,6 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         } else {
             NSArray *newEvents = [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
             [strongSelf.team addEvents:[NSSet setWithArray:newEvents]];
-            [strongSelf updateInterface];
             [strongSelf.persistenceController save];
         }
     }];
@@ -305,8 +273,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     } else if ([segue.identifier isEqualToString:EventsViewControllerEmbed]) {
         self.eventsViewController = segue.destinationViewController;
         self.eventsViewController.persistenceController = self.persistenceController;
-        
-#warning set a predicate on the eventsViewController based on the team
+        self.eventsViewController.predicate = [NSPredicate predicateWithFormat:@"year == %@ AND ANY teams == %@", @(self.currentYear), self.team];
         
         self.eventsViewController.eventSelected = ^(Event *event) {
             NSLog(@"Selected event: %@", event.shortName);

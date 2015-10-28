@@ -54,8 +54,7 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
         }
         [strongSelf updateRefreshBarButtonItem:YES];
     };
-    
-    [self fetchDistrictEventsAndRefresh:YES];
+
     [self styleInterface];
 }
 
@@ -75,7 +74,6 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 - (void)updateInterface {
     if (self.segmentedControl.selectedSegmentIndex == TBADistrictDataTypeEvents) {
         [self showView:self.eventsView];
-        [self fetchDistrictEventsAndRefresh:NO];
     } else {
         [self showView:self.rankingsView];
     }
@@ -87,46 +85,6 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 }
 
 #pragma mark - District Event Methods
-
-- (void)removeDistrictEvents {
-//    self.eventsViewController.events = nil;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.eventsViewController.tableView reloadData];
-    });
-}
-
-- (void)fetchDistrictEventsAndRefresh:(BOOL)refresh {
-    __weak typeof(self) weakSelf = self;
-    [District fetchEventsForDistrict:self.district fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray *events, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (error) {
-            NSString *errorMessage = @"Unable to fetch district events locally";
-            dispatch_async(dispatch_get_main_queue(), ^{
-/*
-                if (strongSelf.eventsViewController.events) {
-                    [strongSelf showErrorAlertWithMessage:errorMessage];
-                } else {
-                    [strongSelf.eventsViewController showNoDataViewWithText:errorMessage];
-                }
-*/
-            });
-            return;
-        }
-        
-        if ([events count] == 0) {
-            if (refresh && strongSelf.refresh) {
-                strongSelf.refresh();
-            } else {
-                [strongSelf removeDistrictEvents];
-            }
-        } else {
-//            strongSelf.eventsViewController.events = [Event groupEventsByWeek:events andGroupByType:NO];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf.eventsViewController.tableView reloadData];
-            });
-        }
-    }];
-}
 
 - (void)refreshDistrictEvents {
     __weak typeof(self) weakSelf = self;
@@ -149,7 +107,6 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf updateInterface];
                 [strongSelf.persistenceController save];
             });
         }

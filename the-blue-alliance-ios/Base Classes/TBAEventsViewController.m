@@ -52,6 +52,8 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
     
     if (self.predicate) {
         [fetchRequest setPredicate:self.predicate];
+    } else {
+        // TODO: Abandon ship and show a no data view
     }
     
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
