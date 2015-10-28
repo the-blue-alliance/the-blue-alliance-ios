@@ -186,6 +186,7 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"EventsViewControllerEmbed"]) {
         self.eventsViewController = (TBAEventsViewController *)segue.destinationViewController;
+        self.eventsViewController.district = self.district;
         self.eventsViewController.persistenceController = self.persistenceController;
         self.eventsViewController.predicate = [NSPredicate predicateWithFormat:@"year == %@ AND eventDistrictString == %@", self.district.year, self.district.name];
         

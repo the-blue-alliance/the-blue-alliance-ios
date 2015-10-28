@@ -8,10 +8,11 @@
 
 #import "TBATableViewController.h"
 
-@class District, Event, Team;
+@class District, Event;
 
 @interface TBAEventsViewController : TBATableViewController <TBATableViewControllerDelegate>
 
+@property (nonatomic, strong) District *district;
 @property (nonatomic, strong) NSPredicate *predicate;
 
 @property (nonatomic, copy) void (^eventSelected)(Event *event);

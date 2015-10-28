@@ -38,7 +38,17 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
     }
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Event"];
-    [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"hybridType" ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
+    
+    NSSortDescriptor *firstSortDescriptor;
+    NSString *sectionNameKeyPath;
+    if (self.district) {
+        firstSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"week" ascending:YES];
+        sectionNameKeyPath = @"week";
+    } else {
+        firstSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"hybridType" ascending:YES];
+        sectionNameKeyPath = @"hybridType";
+    }
+    [fetchRequest setSortDescriptors:@[firstSortDescriptor, [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
     
     if (self.predicate) {
         [fetchRequest setPredicate:self.predicate];
@@ -46,7 +56,7 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
     
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                     managedObjectContext:self.persistenceController.managedObjectContext
-                                                                      sectionNameKeyPath:@"hybridType"
+                                                                      sectionNameKeyPath:sectionNameKeyPath
                                                                                cacheName:nil];
     _fetchedResultsController.delegate = self;
     
@@ -84,7 +94,14 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     Event *firstEvent = [[[self.fetchedResultsController sections][section] objects] firstObject];
-    return [firstEvent hybridString];
+
+    NSString *title;
+    if (self.district) {
+        title = [NSString stringWithFormat:@"Week %@ Events", firstEvent.week.stringValue];
+    } else {
+        title = [firstEvent hybridString];
+    }
+    return title;
 }
 
 #pragma mark - TBA Table View Data Source
