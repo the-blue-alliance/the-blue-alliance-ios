@@ -79,4 +79,48 @@
     return compLevel;
 }
 
+- (NSString *)timeString {
+    // TODO: Add a -timeString method using NSDate and local times to generate a string
+    return @"";
+}
+
+- (NSString *)compLevelString {
+    NSString *compLevelString;
+    switch (self.compLevel.integerValue) {
+        case CompLevelQualification:
+            compLevelString = @"Quals";
+            break;
+        case CompLevelQuarterFinal:
+            compLevelString = @"Quarters";
+            break;
+        case CompLevelSemiFinal:
+            compLevelString = @"Semis";
+            break;
+        case CompLevelFinal:
+            compLevelString = @"Finals";
+            break;
+        default:
+            compLevelString = @"";
+            break;
+    }
+    return compLevelString;
+}
+
+- (NSString *)friendlyMatchName {
+    NSString *matchName = [self compLevelString];
+    switch (self.compLevel.integerValue) {
+        case CompLevelQualification:
+            matchName = [NSString stringWithFormat:@"%@ %@", matchName, self.matchNumber.stringValue];
+            break;
+        case CompLevelQuarterFinal:
+        case CompLevelSemiFinal:
+        case CompLevelFinal:
+            matchName = [NSString stringWithFormat:@"%@ %@-%@", matchName, self.setNumber.stringValue, self.matchNumber.stringValue];
+            break;
+        default:
+            break;
+    }
+    return matchName;
+}
+
 @end

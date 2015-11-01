@@ -25,6 +25,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)insertMatchWithModelMatch:(TBAMatch *)modelMatch forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertMatchesWithModelMatches:(NSArray<TBAMatch *> *)modelMatches forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 
+- (NSString *)timeString;
+- (NSString *)compLevelString;
+- (NSString *)friendlyMatchName;
+
 @end
 
 NS_ASSUME_NONNULL_END

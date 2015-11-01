@@ -1,8 +1,8 @@
 //
 //  Match+CoreDataProperties.m
-//  the-blue-alliance-ios
+//  the-blue-alliance
 //
-//  Created by Zach Orr on 9/17/15.
+//  Created by Zach Orr on 11/1/15.
 //  Copyright © 2015 The Blue Alliance. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
