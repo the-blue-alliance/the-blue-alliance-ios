@@ -97,8 +97,14 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         [self showView:self.infoView];
     } else if (self.segmentedControl.selectedSegmentIndex == TBATeamDataTypeEvents) {
         [self showView:self.eventsView];
+        if (self.eventsViewController.fetchedResultsController.fetchedObjects.count == 0) {
+            self.refresh();
+        }
     } else {
         [self showView:self.mediaView];
+        if (self.mediaCollectionViewController.fetchedResultsController.fetchedObjects.count == 0) {
+            self.refresh();
+        }
     }
 }
 

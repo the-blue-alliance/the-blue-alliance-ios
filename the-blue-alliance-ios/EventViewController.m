@@ -96,10 +96,19 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
         [self fetchEventAndRefresh:NO];
     } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeTeams) {
         [self showView:self.teamsView];
+        if (self.teamsViewController.fetchedResultsController.fetchedObjects.count == 0) {
+            self.refresh();
+        }
     } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeRankings) {
         [self showView:self.rankingsView];
+        if (self.rankingsViewController.fetchedResultsController.fetchedObjects.count == 0) {
+            self.refresh();
+        }
     } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeMatches) {
         [self showView:self.matchesView];
+        if (self.matchesViewController.fetchedResultsController.fetchedObjects.count == 0) {
+            self.refresh();
+        }
     }
 }
 

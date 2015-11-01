@@ -24,30 +24,30 @@
 		923E126F1B52B4230089D9F8 /* TBADistrictsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 923E126E1B52B4230089D9F8 /* TBADistrictsViewController.m */; };
 		923F3F201AF868E00099DA0C /* TBAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 923F3F1F1AF868E00099DA0C /* TBAViewController.m */; };
 		9240CDFC1AB5DA0B00D859A0 /* TBAEventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9240CDFB1AB5DA0B00D859A0 /* TBAEventTableViewCell.m */; };
-		9243D3E51BABB70D00512D3B /* Team+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3BA1BABB70D00512D3B /* Team+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3E61BABB70D00512D3B /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3BC1BABB70D00512D3B /* Team.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3E71BABB70D00512D3B /* Event+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3BE1BABB70D00512D3B /* Event+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3E81BABB70D00512D3B /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3C01BABB70D00512D3B /* Event.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3E91BABB70D00512D3B /* EventRanking+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3C21BABB70D00512D3B /* EventRanking+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3EA1BABB70D00512D3B /* EventRanking.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3C41BABB70D00512D3B /* EventRanking.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3EB1BABB70D00512D3B /* EventWebcast+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3C61BABB70D00512D3B /* EventWebcast+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3EC1BABB70D00512D3B /* EventWebcast.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3C81BABB70D00512D3B /* EventWebcast.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3ED1BABB70D00512D3B /* District+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3CA1BABB70D00512D3B /* District+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3EE1BABB70D00512D3B /* District.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3CC1BABB70D00512D3B /* District.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3EF1BABB70D00512D3B /* DistrictRanking+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3CE1BABB70D00512D3B /* DistrictRanking+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3F01BABB70D00512D3B /* DistrictRanking.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3D01BABB70D00512D3B /* DistrictRanking.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3F11BABB70D00512D3B /* EventPoints+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3D21BABB70D00512D3B /* EventPoints+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3F21BABB70D00512D3B /* EventPoints.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3D41BABB70D00512D3B /* EventPoints.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3F31BABB70D00512D3B /* EventAlliance+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3D61BABB70D00512D3B /* EventAlliance+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3F41BABB70D00512D3B /* EventAlliance.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3D81BABB70D00512D3B /* EventAlliance.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3F51BABB70D00512D3B /* Match+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3DA1BABB70D00512D3B /* Match+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3F61BABB70D00512D3B /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3DC1BABB70D00512D3B /* Match.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3F71BABB70D00512D3B /* MatchVideo+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3DE1BABB70D00512D3B /* MatchVideo+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3F81BABB70D00512D3B /* MatchVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3E01BABB70D00512D3B /* MatchVideo.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3F91BABB70D00512D3B /* Media+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3E21BABB70D00512D3B /* Media+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
-		9243D3FA1BABB70D00512D3B /* Media.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3E41BABB70D00512D3B /* Media.m */; settings = {ASSET_TAGS = (); }; };
-		9243D4021BABB92E00512D3B /* Team+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D4011BABB92E00512D3B /* Team+Fetch.m */; settings = {ASSET_TAGS = (); }; };
-		9243D4051BABB94C00512D3B /* District+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D4041BABB94C00512D3B /* District+Fetch.m */; settings = {ASSET_TAGS = (); }; };
+		9243D3E51BABB70D00512D3B /* Team+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3BA1BABB70D00512D3B /* Team+CoreDataProperties.m */; };
+		9243D3E61BABB70D00512D3B /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3BC1BABB70D00512D3B /* Team.m */; };
+		9243D3E71BABB70D00512D3B /* Event+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3BE1BABB70D00512D3B /* Event+CoreDataProperties.m */; };
+		9243D3E81BABB70D00512D3B /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3C01BABB70D00512D3B /* Event.m */; };
+		9243D3E91BABB70D00512D3B /* EventRanking+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3C21BABB70D00512D3B /* EventRanking+CoreDataProperties.m */; };
+		9243D3EA1BABB70D00512D3B /* EventRanking.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3C41BABB70D00512D3B /* EventRanking.m */; };
+		9243D3EB1BABB70D00512D3B /* EventWebcast+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3C61BABB70D00512D3B /* EventWebcast+CoreDataProperties.m */; };
+		9243D3EC1BABB70D00512D3B /* EventWebcast.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3C81BABB70D00512D3B /* EventWebcast.m */; };
+		9243D3ED1BABB70D00512D3B /* District+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3CA1BABB70D00512D3B /* District+CoreDataProperties.m */; };
+		9243D3EE1BABB70D00512D3B /* District.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3CC1BABB70D00512D3B /* District.m */; };
+		9243D3EF1BABB70D00512D3B /* DistrictRanking+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3CE1BABB70D00512D3B /* DistrictRanking+CoreDataProperties.m */; };
+		9243D3F01BABB70D00512D3B /* DistrictRanking.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3D01BABB70D00512D3B /* DistrictRanking.m */; };
+		9243D3F11BABB70D00512D3B /* EventPoints+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3D21BABB70D00512D3B /* EventPoints+CoreDataProperties.m */; };
+		9243D3F21BABB70D00512D3B /* EventPoints.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3D41BABB70D00512D3B /* EventPoints.m */; };
+		9243D3F31BABB70D00512D3B /* EventAlliance+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3D61BABB70D00512D3B /* EventAlliance+CoreDataProperties.m */; };
+		9243D3F41BABB70D00512D3B /* EventAlliance.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3D81BABB70D00512D3B /* EventAlliance.m */; };
+		9243D3F51BABB70D00512D3B /* Match+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3DA1BABB70D00512D3B /* Match+CoreDataProperties.m */; };
+		9243D3F61BABB70D00512D3B /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3DC1BABB70D00512D3B /* Match.m */; };
+		9243D3F71BABB70D00512D3B /* MatchVideo+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3DE1BABB70D00512D3B /* MatchVideo+CoreDataProperties.m */; };
+		9243D3F81BABB70D00512D3B /* MatchVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3E01BABB70D00512D3B /* MatchVideo.m */; };
+		9243D3F91BABB70D00512D3B /* Media+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3E21BABB70D00512D3B /* Media+CoreDataProperties.m */; };
+		9243D3FA1BABB70D00512D3B /* Media.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3E41BABB70D00512D3B /* Media.m */; };
+		9243D4021BABB92E00512D3B /* Team+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D4011BABB92E00512D3B /* Team+Fetch.m */; };
+		9243D4051BABB94C00512D3B /* District+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D4041BABB94C00512D3B /* District+Fetch.m */; };
 		925CD21E1AC247F200C9C3BF /* TBARefreshViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925CD21D1AC247F200C9C3BF /* TBARefreshViewController.m */; };
 		925DECE71AF5B2D9007A7E94 /* TBARankingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 925DECE61AF5B2D9007A7E94 /* TBARankingTableViewCell.m */; };
 		926001671B517DF40027FE95 /* TBANoDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926001661B517DF40027FE95 /* TBANoDataViewController.m */; };
@@ -64,7 +64,7 @@
 		92CA3C5C1B88F2C30094DC7D /* TBACollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CA3C5B1B88F2C30094DC7D /* TBACollectionViewController.m */; };
 		92CB28331B8FEB3F00B41C89 /* TBAMatchesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CB28321B8FEB3F00B41C89 /* TBAMatchesViewController.m */; };
 		92CB28371B8FEB6B00B41C89 /* TBAMatchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CB28361B8FEB6B00B41C89 /* TBAMatchTableViewCell.m */; };
-		92CC57E61BABBC4000C10604 /* Event+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CC57E51BABBC4000C10604 /* Event+Fetch.m */; settings = {ASSET_TAGS = (); }; };
+		92CC57E61BABBC4000C10604 /* Event+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CC57E51BABBC4000C10604 /* Event+Fetch.m */; };
 		92E749101B27B0EC00C46487 /* TBAInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E7490F1B27B0EC00C46487 /* TBAInfoViewController.m */; };
 		92EAA4C01ABF6AB100F7CF39 /* SelectYearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EAA4BF1ABF6AB100F7CF39 /* SelectYearViewController.m */; };
 		92F1580C1AF55DB300884E8A /* DistrictViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F1580B1AF55DB300884E8A /* DistrictViewController.m */; };
@@ -605,6 +605,7 @@
 				50832DF41918BB63003AC8A7 /* Frameworks */,
 				50832DF51918BB63003AC8A7 /* Resources */,
 				816437B6DC96402F891C1218 /* Copy Pods Resources */,
+				09308C2930A2F420DF8F3C29 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -661,6 +662,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		09308C2930A2F420DF8F3C29 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		3204718683FC4524BBF4B191 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

@@ -1,6 +1,6 @@
 PODS:
   - HMSegmentedControl (1.5.2)
-  - PureLayout (3.0.0)
+  - PureLayout (3.0.1)
   - TBAKit (1.1.1)
 
 DEPENDENCIES:
@@ -10,7 +10,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   HMSegmentedControl: 83b9686022d2176fb6457d2bdb61e5d6393fed7d
-  PureLayout: 270dfee2236f697ab1d5e2771c2e5c248495fa0d
+  PureLayout: f35f5384c9c4e4479df041dbe33ad7577b71ddfb
   TBAKit: 52fc3b8cd3dd9744964ce9bb99b1627f92cb0dbd
 
-COCOAPODS: 0.38.2
+COCOAPODS: 0.39.0

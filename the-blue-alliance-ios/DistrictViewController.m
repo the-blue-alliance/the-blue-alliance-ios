@@ -74,8 +74,14 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 - (void)updateInterface {
     if (self.segmentedControl.selectedSegmentIndex == TBADistrictDataTypeEvents) {
         [self showView:self.eventsView];
+        if (self.eventsViewController.fetchedResultsController.fetchedObjects.count == 0) {
+            self.refresh();
+        }
     } else {
         [self showView:self.rankingsView];
+        if (self.rankingsViewController.fetchedResultsController.fetchedObjects.count == 0) {
+            self.refresh();
+        }
     }
 }
 
