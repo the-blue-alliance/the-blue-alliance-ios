@@ -26,7 +26,6 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 @property (nonatomic, strong) NSArray<NSNumber *> *eventWeeks;
 
 @property (nonatomic, strong) HMSegmentedControl *segmentedControl;
-@property (nonatomic, assign) NSInteger currentSegmentIndex;
 
 @end
 
@@ -145,7 +144,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 
 - (void)updateInterface {
     [self updateSegmentedControlForEventKeys:self.eventWeeks];
-    [self segmentedControlChangedValue:self.segmentedControl];
+    [self segmentedControlValueChanged:self.segmentedControl];
 }
 
 - (void)updateSegmentedControlForEventKeys:(NSArray<NSNumber *> *)weeks {
@@ -182,13 +181,13 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
         NSAttributedString *attString = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
         return attString;
     }];
-    [self.segmentedControl addTarget:self action:@selector(segmentedControlChangedValue:) forControlEvents:UIControlEventValueChanged];
+    [self.segmentedControl addTarget:self action:@selector(segmentedControlValueChanged:) forControlEvents:UIControlEventValueChanged];
     [self.segmentedControlView addSubview:self.segmentedControl];
     
     [self.segmentedControl autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero];
 }
 
-- (void)segmentedControlChangedValue:(HMSegmentedControl *)segmentedControl {
+- (void)segmentedControlValueChanged:(HMSegmentedControl *)segmentedControl {
     NSNumber *week = [self.eventWeeks objectAtIndex:segmentedControl.selectedSegmentIndex];
     [self updatePredicateForWeek:week];
 }

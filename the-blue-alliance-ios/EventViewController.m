@@ -11,6 +11,8 @@
 #import "TBATeamsViewController.h"
 #import "TBARankingsViewController.h"
 #import "TBAMatchesViewController.h"
+#import "HMSegmentedControl.h"
+#import <PureLayout/PureLayout.h>
 #import "Event.h"
 #import "EventRanking.h"
 #import "Match.h"
@@ -31,7 +33,7 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 
 @interface EventViewController ()
 
-@property (nonatomic, weak) IBOutlet UISegmentedControl *segmentedControl;
+@property (nonatomic, strong) HMSegmentedControl *segmentedControl;
 @property (nonatomic, strong) IBOutlet UIView *segmentedControlView;
 
 @property (nonatomic, strong) TBAInfoViewController *infoViewController;
@@ -45,6 +47,8 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 
 @property (nonatomic, strong) TBAMatchesViewController *matchesViewController;
 @property (nonatomic, weak) IBOutlet UIView *matchesView;
+
+@property (nonatomic, strong) NSArray<NSNumber *> *eventWeeks;
 
 @end
 
@@ -88,6 +92,7 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 - (void)styleInterface {
     self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
     self.navigationItem.title = [self.event friendlyNameWithYear:YES];
+    [self setupSegmentedControl];
 }
 
 - (void)updateInterface {
@@ -112,7 +117,30 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
     }
 }
 
-- (IBAction)segmentedControlValueChanged:(id)sender {
+- (void)setupSegmentedControl {
+    NSArray *titles = @[@"Info", @"Teams", @"Rankings", @"Matches", @"Alliances", @"District Points", @"Stats", @"Awards"];
+    self.segmentedControl = [[HMSegmentedControl alloc] initWithSectionTitles:titles];
+    
+    self.segmentedControl.frame = self.segmentedControlView.frame;
+    self.segmentedControl.segmentEdgeInset = UIEdgeInsetsMake(0, 10, 0, 10);
+    self.segmentedControl.selectionStyle = HMSegmentedControlSelectionStyleFullWidthStripe;
+    self.segmentedControl.selectionIndicatorLocation = HMSegmentedControlSelectionIndicatorLocationDown;
+    self.segmentedControl.backgroundColor = [UIColor TBANavigationBarColor];
+    self.segmentedControl.selectionIndicatorColor = [UIColor whiteColor];
+    self.segmentedControl.segmentWidthStyle = HMSegmentedControlSegmentWidthStyleDynamic;
+    self.segmentedControl.selectionIndicatorHeight = 3.0f;
+    
+    [self.segmentedControl setTitleFormatter:^NSAttributedString *(HMSegmentedControl *segmentedControl, NSString *title, NSUInteger index, BOOL selected) {
+        NSAttributedString *attString = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+        return attString;
+    }];
+    [self.segmentedControl addTarget:self action:@selector(segmentedControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+    [self.segmentedControlView addSubview:self.segmentedControl];
+    
+    [self.segmentedControl autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero];
+}
+
+- (void)segmentedControlValueChanged:(id)sender {
     [self cancelRefresh];
     [self updateInterface];
 }
