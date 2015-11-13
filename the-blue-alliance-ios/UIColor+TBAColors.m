@@ -12,10 +12,7 @@
 
 + (UIColor *)TBANavigationBarColor
 {
-    return [UIColor colorWithRed:0.2
-                           green:0.2
-                            blue:0.85
-                           alpha:1.0];
+    return [UIColor colorWithRed:0.2 green:0.2 blue:0.85 alpha:1];
 }
 
 + (UIColor *)TBATableViewSeparatorColor

@@ -2,55 +2,125 @@
 //  Match.m
 //  the-blue-alliance-ios
 //
-//  Created by Donald Pinckney on 6/28/14.
-//  Copyright (c) 2014 The Blue Alliance. All rights reserved.
+//  Created by Zach Orr on 9/17/15.
+//  Copyright © 2015 The Blue Alliance. All rights reserved.
 //
 
 #import "Match.h"
 #import "Event.h"
-#import "Media.h"
-#import "Team.h"
-#import "Team+Fetch.h"
-
+#import "MatchVideo.h"
 
 @implementation Match
 
-- (void) configureSelfForInfo:(NSDictionary *)info
-    usingManagedObjectContext:(NSManagedObjectContext *)context
-                     withUserInfo:(id)userInfo
-{
-    self.key = info[@"key"];
-    self.comp_level = info[@"comp_level"];
-    self.set_number = info[@"set_number"];
-    self.match_number = info[@"match_number"];
-    self.time_string = info[@"time_string"];
++ (instancetype)insertMatchWithModelMatch:(TBAMatch *)modelMatch forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Match" inManagedObjectContext:context];
+    [fetchRequest setEntity:entity];
     
-    self.blueScore = [info valueForKeyPath:@"alliances.blue.score"];
-    self.redScore = [info valueForKeyPath:@"alliances.red.score"];
+    // Specify criteria for filtering which objects to fetch
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", modelMatch.key];
+    [fetchRequest setPredicate:predicate];
     
-    NSArray *blueTeamKeys = [info valueForKeyPath:@"alliances.blue.teams"];
-    NSArray *redTeamKeys = [info valueForKeyPath:@"alliances.red.teams"];
+    Match *match;
     
+    NSError *error = nil;
+    NSArray *existingObjs = [context executeFetchRequest:fetchRequest error:&error];
+    if(existingObjs.count == 1) {
+        match = [existingObjs firstObject];
+    } else if(existingObjs.count > 1) {
+        // Delete them all, create a new a single new one
+        for (Match *m in existingObjs) {
+            [context deleteObject:m];
+        }
+    }
     
-    NSArray *blueTeams = [userInfo filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%@ contains key", blueTeamKeys]];
-    NSArray *redTeams = [userInfo filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%@ contains key", redTeamKeys]];
+    if (match == nil) {
+        match = [NSEntityDescription insertNewObjectForEntityForName:@"Match" inManagedObjectContext:context];
+    }
+    
+    match.key = modelMatch.key;
+    match.compLevel = @([self compLevelForString:modelMatch.compLevel]);
+    match.setNumber = @(modelMatch.setNumber);
+    match.matchNumber = @(modelMatch.matchNumber);
+    match.scoreBreakdown = modelMatch.scoreBreakdown;
+    match.time = modelMatch.time;
+    match.event = event;
+    
+    match.redAlliance = modelMatch.redAlliance.teams;
+    match.redScore = @(modelMatch.redAlliance.score);
+    
+    match.blueAlliance = modelMatch.blueAlliance.teams;
+    match.blueScore = @(modelMatch.blueAlliance.score);
+    
+    match.vidoes = [NSSet setWithArray:[MatchVideo insertMatchVidoesWithModelMatchVidoes:modelMatch.videos inManagedObjectContext:context]];
+    
+    return match;
+}
 
-    NSOrderedSet *blueSet = [[NSOrderedSet alloc] initWithArray:blueTeams];
-    NSOrderedSet *redSet = [[NSOrderedSet alloc] initWithArray:redTeams];
++ (NSArray *)insertMatchesWithModelMatches:(NSArray<TBAMatch *> *)modelMatches forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    for (TBAMatch *match in modelMatches) {
+        [arr addObject:[self insertMatchWithModelMatch:match forEvent:event inManagedObjectContext:context]];
+    }
+    return arr;
+}
 
-    self.blueAlliance = blueSet;
-    self.redAlliance = redSet;
-    
-    // Create media for a match:
-    self.media = [NSSet setWithArray:[Media createManagedObjectsFromInfoArray:info[@"videos"] checkingPrexistanceUsingUniqueKey:@"key" usingManagedObjectContext:context]];
++ (CompLevel)compLevelForString:(NSString *)compLevelString {
+    CompLevel compLevel;
+    if ([compLevelString isEqualToString:@"qm"]) {
+        compLevel = CompLevelQualification;
+    } else if ([compLevelString isEqualToString:@"ef"] || [compLevelString isEqualToString:@"qf"]) {
+        compLevel = CompLevelQuarterFinal;
+    } else if ([compLevelString isEqualToString:@"sf"]) {
+        compLevel = CompLevelSemiFinal;
+    } else if ([compLevelString isEqualToString:@"f"]) {
+        compLevel = CompLevelFinal;
+    }
+    return compLevel;
+}
+
+- (NSString *)timeString {
+    // TODO: Add a -timeString method using NSDate and local times to generate a string
+    return @"";
+}
+
+- (NSString *)compLevelString {
+    NSString *compLevelString;
+    switch (self.compLevel.integerValue) {
+        case CompLevelQualification:
+            compLevelString = @"Quals";
+            break;
+        case CompLevelQuarterFinal:
+            compLevelString = @"Quarters";
+            break;
+        case CompLevelSemiFinal:
+            compLevelString = @"Semis";
+            break;
+        case CompLevelFinal:
+            compLevelString = @"Finals";
+            break;
+        default:
+            compLevelString = @"";
+            break;
+    }
+    return compLevelString;
 }
 
 - (NSString *)friendlyMatchName {
-    NSString *friendlyCompLevel = [self.comp_level.uppercaseString stringByReplacingOccurrencesOfString:@"QM" withString:@"Q"];
-    if([friendlyCompLevel isEqualToString:@"Q"]) {
-        return [NSString stringWithFormat:@"%@%d", friendlyCompLevel, self.match_numberValue];
+    NSString *matchName = [self compLevelString];
+    switch (self.compLevel.integerValue) {
+        case CompLevelQualification:
+            matchName = [NSString stringWithFormat:@"%@ %@", matchName, self.matchNumber.stringValue];
+            break;
+        case CompLevelQuarterFinal:
+        case CompLevelSemiFinal:
+        case CompLevelFinal:
+            matchName = [NSString stringWithFormat:@"%@ %@-%@", matchName, self.setNumber.stringValue, self.matchNumber.stringValue];
+            break;
+        default:
+            break;
     }
-    return [NSString stringWithFormat:@"%@%d-%d", friendlyCompLevel, self.set_numberValue, self.match_numberValue];
+    return matchName;
 }
 
 @end

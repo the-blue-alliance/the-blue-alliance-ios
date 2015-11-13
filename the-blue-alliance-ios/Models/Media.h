@@ -2,17 +2,24 @@
 //  Media.h
 //  the-blue-alliance-ios
 //
-//  Created by Donald Pinckney on 6/28/14.
-//  Copyright (c) 2014 The Blue Alliance. All rights reserved.
+//  Created by Zach Orr on 9/17/15.
+//  Copyright © 2015 The Blue Alliance. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "_Media.h"
-#import "NSManagedObject+Create.h"
 
+@class Team, TBAMedia;
 
-@interface Media : _Media <NSManagedObjectCreatable>
+NS_ASSUME_NONNULL_BEGIN
 
-- (NSString *)youtubeVideoEmbedHTMLForSize:(CGSize)size;
+@interface Media : NSManagedObject
+
++ (instancetype)insertMediaWithModelMedia:(TBAMedia *)modelMedia forTeam:(Team *)team andYear:(NSInteger)year inManagedObjectContext:(NSManagedObjectContext *)context;
++ (NSArray *)insertMediasWithModelMedias:(NSArray<TBAMedia *> *)modelMedias forTeam:(Team *)team andYear:(NSInteger)year inManagedObjectContext:(NSManagedObjectContext *)context;
+
 @end
+
+NS_ASSUME_NONNULL_END
+
+#import "Media+CoreDataProperties.h"

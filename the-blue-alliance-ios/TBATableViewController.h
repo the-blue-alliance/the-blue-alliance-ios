@@ -1,0 +1,30 @@
+//
+//  TBATableViewController.h
+//  the-blue-alliance-ios
+//
+//  Created by Zach Orr on 7/11/15.
+//  Copyright (c) 2015 The Blue Alliance. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "TBAPersistenceController.h"
+
+@protocol TBATableViewControllerDelegate <NSObject>
+
+@required
+
+- (void)configureCell:(nonnull UITableViewCell *)cell atIndexPath:(nonnull NSIndexPath *)indexPath;
+
+@end
+
+@interface TBATableViewController : UITableViewController <NSFetchedResultsControllerDelegate>
+
+@property (null_resettable, nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nonnull, nonatomic, strong) TBAPersistenceController *persistenceController;
+@property (nullable, nonatomic, weak) id<TBATableViewControllerDelegate> tbaDelegate;
+@property (nonnull, nonatomic, copy) NSString *cellIdentifier;
+
+- (void)showNoDataViewWithText:(nonnull NSString *)text;
+- (void)hideNoDataView;
+
+@end

@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class TBAPersistenceController;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, readonly) TBAPersistenceController *persistenceController;
 
 @end

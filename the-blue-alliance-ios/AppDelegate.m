@@ -7,71 +7,67 @@
 //
 
 #import "AppDelegate.h"
-#import <GDIIndexBar/GDIIndexBar.h>
+#import "TBAPersistenceController.h"
+#import "TBAKit.h"
+#import "TeamsViewController.h"
+#import "EventRanking.h"
+#import "Team.h"
+#import "Event.h"
 
-@interface AppDelegate () <NSURLConnectionDataDelegate>
+@interface AppDelegate ()
+
+@property (strong, readwrite) TBAPersistenceController *persistenceController;
 
 @end
 
-
 @implementation AppDelegate
 
-- (void)configureSelectedImages
-{
-    NSArray *selectedImages = @[@"events_tab_icon_selected", @"teams_tab_icon_selected"];
-    
-    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-    UITabBar *tabBar = tabBarController.tabBar;
-    
-    int i = 0;
-    for (UITabBarItem *tabBarItem in [tabBar items]) {
-        NSString *selectedImage = selectedImages[i++];
-        (void)[tabBarItem initWithTitle:[tabBarItem title] image:[tabBarItem image] selectedImage:[UIImage imageNamed:selectedImage]];
-
-    }
-}
-
-
 #pragma mark - Main Entry Point
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [self setPersistenceController:[[TBAPersistenceController alloc] initWithCallback:^{
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        UITabBarController *rootTabBarController = [storyboard instantiateViewControllerWithIdentifier:@"RootTabBarController"];
+
+        for (UINavigationController *nav in rootTabBarController.viewControllers) {
+            TBAViewController *vc = (TBAViewController *)[nav.viewControllers firstObject];
+            vc.persistenceController = self.persistenceController;
+        }
+
+        UIView *overlayView = [[UIScreen mainScreen] snapshotViewAfterScreenUpdates:NO];
+        [rootTabBarController.view addSubview:overlayView];
+        self.window.rootViewController = rootTabBarController;
+        
+        [UIView animateWithDuration:0.75f delay:0.0f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            overlayView.alpha = 0;
+        } completion:^(BOOL finished) {
+            [overlayView removeFromSuperview];
+        }];
+    }]];
+
+#warning dynaically fetch version number here, also maybe add some user-specific string?
+    [[TBAKit sharedKit] setIdHeader:@"the-blue-alliance:ios:v0.1"];
+    
+#warning We should probably set some max's here or something
     NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0
                                                             diskCapacity:0
                                                                 diskPath:nil];
     [NSURLCache setSharedURLCache:sharedCache];
     
-    // Setup UI appearance
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    [[UINavigationBar appearance] setBarTintColor:[UIColor TBANavigationBarColor]];
-    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
-    [[UIToolbar appearance] setBarTintColor:[UIColor whiteColor]];
-    [[UITableView appearance] setSectionIndexBackgroundColor:[UIColor clearColor]];
-    [[UITableView appearance] setSectionIndexTrackingBackgroundColor:[UIColor clearColor]];
-    [[UITableView appearance] setSectionIndexColor:[UIColor TBANavigationBarColor]];
-    
-    [[GDIIndexBar appearance] setTextColor:[UIColor TBANavigationBarColor]];
-    [[GDIIndexBar appearance] setVerticalAlignment:GDIIndexBarAlignmentCenter];
-    [[GDIIndexBar appearance] setTextOffset:UIOffsetMake(8, 0)];
-    [[GDIIndexBar appearance] setBarWidth:40];
-    [[GDIIndexBar appearance] setBarBackgroundWidth:40];
-    [[GDIIndexBar appearance] setBarBackgroundColor:[UIColor clearColor]];
-    [[GDIIndexBar appearance] setAlpha:0.6];
-    
-    [self configureSelectedImages];
+    [self setupAppearance];
+    [self.window makeKeyAndVisible];
     
     return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    [[self persistenceController] save];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    [[self persistenceController] save];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -86,7 +82,22 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [[self persistenceController] save];
+}
+
+
+#pragma mark - Interface Methods
+
+- (void)setupAppearance {    
+    [[UINavigationBar appearance] setBarTintColor:[UIColor TBANavigationBarColor]];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
+    [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
+    
+    [[UIToolbar appearance] setBarTintColor:[UIColor whiteColor]];
+    [[UITableView appearance] setSectionIndexBackgroundColor:[UIColor clearColor]];
+    [[UITableView appearance] setSectionIndexTrackingBackgroundColor:[UIColor clearColor]];
+    [[UITableView appearance] setSectionIndexColor:[UIColor TBANavigationBarColor]];
 }
 
 @end
