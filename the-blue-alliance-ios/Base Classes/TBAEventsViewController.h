@@ -6,15 +6,18 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import "TBATableViewController.h"
+#import "TBARefreshTableViewController.h"
 
-@class District, Event;
+@class District, Event, Team;
 
-@interface TBAEventsViewController : TBATableViewController <TBATableViewControllerDelegate>
+@interface TBAEventsViewController : TBARefreshTableViewController <TBATableViewControllerDelegate>
 
+@property (nonatomic, strong) NSNumber *week;
+@property (nonatomic, strong) NSNumber *year;
+@property (nonatomic, strong) Team *team;
 @property (nonatomic, strong) District *district;
-@property (nonatomic, strong) NSPredicate *predicate;
 
+@property (nonatomic, copy) void (^eventsFetched)();
 @property (nonatomic, copy) void (^eventSelected)(Event *event);
 
 @end

@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import "TBACollectionViewController.h"
+#import "TBARefreshCollectionViewController.h"
 
 @class Team;
 
-@interface TBAMediaCollectionViewController : TBACollectionViewController <TBACollectionViewControllerDelegate>
+@interface TBAMediaCollectionViewController : TBARefreshCollectionViewController <TBACollectionViewControllerDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) Team *team;
 @property (nonatomic, assign) NSUInteger year;

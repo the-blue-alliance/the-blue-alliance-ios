@@ -10,7 +10,7 @@
 
 @class District;
 
-@interface DistrictViewController : TBARefreshViewController
+@interface DistrictViewController : TBAViewController
 
 @property (nonatomic, strong) District *district;
 

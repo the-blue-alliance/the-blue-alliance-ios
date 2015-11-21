@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import "TBARefreshViewController.h"
+#import "TBAViewController.h"
 
-@interface TeamsViewController : TBARefreshViewController
+@interface TeamsViewController : TBAViewController
 
 @end

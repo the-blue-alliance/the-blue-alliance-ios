@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import "TBATableViewController.h"
+#import "TBARefreshTableViewController.h"
 
 @class District, Event;
 
-@interface TBARankingsViewController : TBATableViewController <TBATableViewControllerDelegate>
+@interface TBARankingsViewController : TBARefreshTableViewController <TBATableViewControllerDelegate>
 
 @property (nonatomic, strong) District *district;
 @property (nonatomic, strong) Event *event;

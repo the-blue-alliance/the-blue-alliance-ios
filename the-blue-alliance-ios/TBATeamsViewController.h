@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import "TBATableViewController.h"
+#import "TBARefreshTableViewController.h"
 
 @class Event, Team;
 
-@interface TBATeamsViewController : TBATableViewController <TBATableViewControllerDelegate, UISearchBarDelegate>
+@interface TBATeamsViewController : TBARefreshTableViewController <TBATableViewControllerDelegate, UISearchBarDelegate>
 
 @property (nonatomic, weak) IBOutlet UISearchBar *searchBar;
 

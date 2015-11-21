@@ -13,17 +13,19 @@
 
 @required
 
-- (void)configureCell:(UICollectionViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+- (void)configureCell:(nonnull UICollectionViewCell *)cell atIndexPath:(nonnull NSIndexPath *)indexPath;
 
 @end
 
 @interface TBACollectionViewController : UICollectionViewController <NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, strong) TBAPersistenceController *persistenceController;
-@property (nonatomic, weak) id<TBACollectionViewControllerDelegate> tbaDelegate;
+@property (null_resettable, nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nullable, nonatomic, strong) TBAPersistenceController *persistenceController;
+@property (nullable, nonatomic, weak) id<TBACollectionViewControllerDelegate> tbaDelegate;
+@property (nonnull, nonatomic, copy) NSString *cellIdentifier;
 
-- (void)showNoDataViewWithText:(NSString *)text;
+- (void)showErrorAlertWithMessage:(nonnull NSString *)message;
+- (void)showNoDataViewWithText:(nonnull NSString *)text;
 - (void)hideNoDataView;
 
 @end

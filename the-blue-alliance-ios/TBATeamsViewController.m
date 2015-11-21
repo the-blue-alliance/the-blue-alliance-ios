@@ -10,6 +10,7 @@
 #import "TBATeamTableViewCell.h"
 #import "Event.h"
 #import "Team.h"
+#import "Team+Fetch.h"
 
 static NSString *const TeamCellReuseIdentifier = @"TeamCell";
 
@@ -51,6 +52,15 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
     
     self.tbaDelegate = self;
     self.cellIdentifier = TeamCellReuseIdentifier;
+    
+    __weak typeof(self) weakSelf = self;
+    self.refresh = ^void() {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf hideNoDataView];
+        [strongSelf updateRefresh:YES];
+        [strongSelf refreshData];
+    };
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -61,16 +71,41 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
     }
 }
 
-#pragma mark - Private Methods
+#pragma mark - Data Methods
 
-- (NSString *)cacheName {
-    NSString *cacheName;
-    if (self.event) {
-        cacheName = [NSString stringWithFormat:@"%@_teams", self.event.key];
-    } else {
-        cacheName = @"teams";
-    }
-    return cacheName;
+- (void)refreshData {
+    __block NSUInteger currentRequest;
+    
+    __weak typeof(self) weakSelf = self;
+    currentRequest = [Team fetchAllTeamsWithTaskIdChange:^(NSUInteger newTaskId, NSArray *batchTeam) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf addRequestIdentifier:newTaskId];
+        [strongSelf removeRequestIdentifier:currentRequest];
+        currentRequest = newTaskId;
+        
+        NSManagedObjectContext *tmpContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [tmpContext setParentContext:strongSelf.persistenceController.managedObjectContext];
+        [tmpContext performBlock:^{
+            [Team insertTeamsWithModelTeams:batchTeam inManagedObjectContext:tmpContext];
+            [tmpContext save:nil];
+        }];
+    } withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf removeRequestIdentifier:currentRequest];
+        
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf showErrorAlertWithMessage:@"Unable to load teams"];
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf.persistenceController save];
+            });
+        }
+    }];
+    [self addRequestIdentifier:currentRequest];
 }
 
 #pragma mark - TBA Table View Data Soruce
@@ -135,7 +170,6 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
 - (void)filterContentForSearchText:(NSString *)searchText {
     NSPredicate *predicate = [self predicateForSearchText:searchText];
     self.fetchedResultsController.fetchRequest.predicate = predicate;
-    [NSFetchedResultsController deleteCacheWithName:[self cacheName]];
     
     NSError *error = nil;
     if (![self.fetchedResultsController performFetch:&error]) {

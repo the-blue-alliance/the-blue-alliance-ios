@@ -75,17 +75,18 @@
 }
 
 - (void)cancelRefresh {
+    [self updateRefreshBarButtonItem:NO];
+    
     if ([self.requestsArray count] == 0) {
         return;
     }
+    NSLog(@"Refresh canceled");
 
     for (NSNumber *request in self.requestsArray) {
         NSUInteger requestIdentifier = [request unsignedIntegerValue];
         [[TBAKit sharedKit] cancelRequestWithIdentifier:requestIdentifier];
     }
     [self.requestsArray removeAllObjects];
-    
-    [self updateRefreshBarButtonItem:NO];
 }
 
 - (void)addRequestIdentifier:(NSUInteger)requestIdentifier {

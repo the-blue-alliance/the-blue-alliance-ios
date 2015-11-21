@@ -20,7 +20,6 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
 
 - (void)setYear:(NSUInteger)year {
     self.fetchedResultsController = nil;
-    [NSFetchedResultsController deleteCacheWithName:[self cacheName]];
     
     _year = year;
     [self.collectionView reloadData];
@@ -41,7 +40,7 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                     managedObjectContext:self.persistenceController.managedObjectContext
                                                                       sectionNameKeyPath:nil
-                                                                               cacheName:[self cacheName]];
+                                                                               cacheName:nil];
     _fetchedResultsController.delegate = self;
     
     NSError *error = nil;
@@ -59,40 +58,46 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
     [super viewDidLoad];
     
     self.tbaDelegate = self;
+    self.cellIdentifier = MediaCellReuseIdentifier;
+    
+    __weak typeof(self) weakSelf = self;
+    self.refresh = ^void() {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf hideNoDataView];
+        [strongSelf updateRefresh:YES];
+        [strongSelf refreshData];
+    };
 }
 
-#pragma mark - Private Methods
+#pragma mark - Data Methods
 
-- (NSString *)cacheName {
-    return [NSString stringWithFormat:@"%zd%@_media", self.year, self.team.key];
-}
-
-#pragma mark - Collection View Data Source
-#warning this can have a similar pattern as the table view controller
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return [[self.fetchedResultsController sections] count];
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSUInteger count;
-    if ([[self.fetchedResultsController sections] count] > 0) {
-        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
-        count = [sectionInfo numberOfObjects];
-    } else {
-        // TODO: Show no data screen;
-        count = 0;
+- (void)refreshData {
+    if (self.year == 0) {
+        return;
     }
-    return count;
+    
+    __weak typeof(self) weakSelf = self;
+    __block NSUInteger request = [[TBAKit sharedKit] fetchMediaForTeamKey:self.team.key andYear:self.year withCompletionBlock:^(NSArray *media, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf removeRequestIdentifier:request];
+        
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf showErrorAlertWithMessage:@"Unable to load team media"];
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [Media insertMediasWithModelMedias:media forTeam:self.team andYear:self.year inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
+                [strongSelf.persistenceController save];
+            });
+        }
+    }];
+    [self addRequestIdentifier:request];
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    TBAMediaCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MediaCellReuseIdentifier forIndexPath:indexPath];
-    
-    [self configureCell:cell atIndexPath:indexPath];
-    
-    return cell;
-}
+#pragma mark - TBA Table View Data Soruce
 
 - (void)configureCell:(TBAMediaCollectionViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     cell.imageView.image = nil;
@@ -100,6 +105,8 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
     Media *media = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.media = media;
 }
+
+#pragma mark - Collection View Delegate Flow Layout
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     return CGSizeMake(150.0f, 150.0f);

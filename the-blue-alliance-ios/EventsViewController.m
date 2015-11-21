@@ -38,18 +38,10 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     [super viewDidLoad];
     
     __weak typeof(self) weakSelf = self;
-    self.refresh = ^void() {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-
-        [strongSelf.eventsViewController hideNoDataView];
-        [strongSelf updateRefreshBarButtonItem:YES];
-        [strongSelf refreshData];
-    };
-    
     self.yearSelected = ^void(NSUInteger selectedYear) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        [strongSelf cancelRefresh];
+        [strongSelf.eventsViewController cancelRefresh];
         
         if (strongSelf.segmentedControl) {
             strongSelf.segmentedControl.selectedSegmentIndex = 0;
@@ -57,7 +49,8 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
         [strongSelf.eventsViewController hideNoDataView];
         
         strongSelf.currentYear = selectedYear;
-        [strongSelf updatePredicate];
+        strongSelf.eventsViewController.year = @(selectedYear);
+        [strongSelf updateWeek:nil];
         strongSelf.eventWeeks = nil;
         [strongSelf updateInterface];
         [strongSelf configureEvents];
@@ -70,15 +63,11 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 
 #pragma mark - Data Methods
 
-- (void)updatePredicate {
-    [self updatePredicateForWeek:nil];
-}
-
-- (void)updatePredicateForWeek:(nullable NSNumber *)week {
+- (void)updateWeek:(nullable NSNumber *)week {
     if (!week) {
         week = [self.eventWeeks firstObject];
     }
-    self.eventsViewController.predicate = [NSPredicate predicateWithFormat:@"week == %@ AND year == %@", week, @(self.currentYear)];
+    self.eventsViewController.week = week;
 }
 
 - (void)configureYears {
@@ -89,7 +78,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     
     if (self.currentYear == 0) {
         self.currentYear = year;
-        [self updatePredicate];
+        self.eventsViewController.year = @(year);
     }
 }
 
@@ -98,39 +87,12 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     [Event fetchEventsForYear:self.currentYear fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray * _Nullable events, NSError * _Nullable error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (error || !events || events.count == 0) {
-            strongSelf.refresh();
+            strongSelf.eventsViewController.refresh();
         } else {
             strongSelf.eventWeeks = [Event groupEventsByWeek:events];
             [strongSelf updateInterface];
         }
     }];
-}
-
-- (void)refreshData {
-    __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForYear:self.currentYear withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf removeRequestIdentifier:request];
-        
-        if (error) {
-            NSString *errorMessage = @"Unable to load events";
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (strongSelf.eventWeeks) {
-                    [strongSelf showErrorAlertWithMessage:errorMessage];
-                } else {
-                    [strongSelf.eventsViewController showNoDataViewWithText:errorMessage];
-                }
-            });
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf configureEvents];
-                [strongSelf.persistenceController save];
-            });
-        }
-    }];
-    [self addRequestIdentifier:request];
 }
 
 #pragma mark - Interface Methods
@@ -189,7 +151,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 
 - (void)segmentedControlValueChanged:(HMSegmentedControl *)segmentedControl {
     NSNumber *week = [self.eventWeeks objectAtIndex:segmentedControl.selectedSegmentIndex];
-    [self updatePredicateForWeek:week];
+    [self updateWeek:week];
 }
 
 #pragma mark - Navigation
@@ -198,8 +160,18 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     if ([segue.identifier isEqualToString:EventsViewControllerEmbed]) {
         self.eventsViewController = (TBAEventsViewController *)segue.destinationViewController;
         self.eventsViewController.persistenceController = self.persistenceController;
-        
+        if (self.eventWeeks) {
+            self.eventsViewController.week = [self.eventWeeks firstObject];
+        } else {
+            // Show loading screen
+        }
+        self.eventsViewController.year = @(self.currentYear);
+
         __weak typeof(self) weakSelf = self;
+        [self.eventsViewController setEventsFetched:^{
+            [weakSelf configureEvents];
+        }];
+
         self.eventsViewController.eventSelected = ^(Event *event) {
             [weakSelf performSegueWithIdentifier:EventViewControllerSegue sender:event];
         };

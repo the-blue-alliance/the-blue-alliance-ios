@@ -24,6 +24,7 @@
 @property (nullable, nonatomic, weak) id<TBATableViewControllerDelegate> tbaDelegate;
 @property (nonnull, nonatomic, copy) NSString *cellIdentifier;
 
+- (void)showErrorAlertWithMessage:(nonnull NSString *)message;
 - (void)showNoDataViewWithText:(nonnull NSString *)text;
 - (void)hideNoDataView;
 

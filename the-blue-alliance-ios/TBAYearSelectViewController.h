@@ -8,7 +8,7 @@
 
 #import "TBARefreshViewController.h"
 
-@interface TBAYearSelectViewController : TBARefreshViewController
+@interface TBAYearSelectViewController : TBAViewController
 
 @property (nonatomic, assign) NSUInteger currentYear;
 @property (nonatomic, copy) NSArray *years;

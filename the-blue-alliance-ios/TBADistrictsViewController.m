@@ -57,6 +57,45 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
     
     self.tbaDelegate = self;
     self.cellIdentifier = DistrictsCellIdentifier;
+    
+    __weak typeof(self) weakSelf = self;
+    self.refresh = ^void() {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf hideNoDataView];
+        [strongSelf refreshDistricts];
+    };
+}
+
+#pragma mark - Data Methods
+
+- (void)refreshDistricts {
+    if (self.year == 0) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showNoDataViewWithText:@"No year selected"];
+        });
+        return;
+    }
+    __block NSUInteger year = self.year;
+    
+    __weak typeof(self) weakSelf = self;
+    __block NSUInteger request = [[TBAKit sharedKit] fetchDistrictsForYear:year withCompletionBlock:^(NSArray *districts, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf removeRequestIdentifier:request];
+        
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf showErrorAlertWithMessage:@"Unable to load districts"];
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [District insertDistrictsWithDistrictDicts:districts forYear:year inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
+                [strongSelf.persistenceController save];
+            });
+        }
+    }];
+    [self addRequestIdentifier:request];
 }
 
 #pragma mark - TBA Table View Data Source

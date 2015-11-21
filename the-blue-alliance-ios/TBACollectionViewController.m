@@ -17,9 +17,24 @@
 
 @implementation TBACollectionViewController
 
-static NSString * const reuseIdentifier = @"Cell";
+#pragma mark - TBA Delegate Methods
+
+- (void)configureCell:(UICollectionViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    if([self.tbaDelegate respondsToSelector:@selector(configureCell:atIndexPath:)]) {
+        [self.tbaDelegate configureCell:cell atIndexPath:indexPath];
+    }
+}
 
 #pragma mark - No Data Views
+
+- (void)showErrorAlertWithMessage:(NSString *)message {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil]];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self presentViewController:alert animated:YES completion:nil];
+    });
+}
 
 - (void)showNoDataViewWithText:(NSString *)text {
     self.noDataViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"NoDataViewController"];
@@ -44,12 +59,31 @@ static NSString * const reuseIdentifier = @"Cell";
     }
 }
 
-#pragma mark - TBA Delegate Methods
+#pragma mark - Table View Data Source
 
-- (void)configureCell:(UICollectionViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
-    if([self.tbaDelegate respondsToSelector:@selector(configureCell:atIndexPath:)]) {
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return self.fetchedResultsController.sections.count;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    NSInteger rows = 0;
+    if (self.fetchedResultsController.sections.count > 0) {
+        id <NSFetchedResultsSectionInfo> sectionInfo = self.fetchedResultsController.sections[section];
+        rows = [sectionInfo numberOfObjects];
+    } else {
+        // TODO: Show no data screen
+    }
+    return rows;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:self.cellIdentifier forIndexPath:indexPath];
+    
+    if (self.tbaDelegate) {
         [self.tbaDelegate configureCell:cell atIndexPath:indexPath];
     }
+    
+    return cell;
 }
 
 #pragma mark - Fetched Results Controller Delegate

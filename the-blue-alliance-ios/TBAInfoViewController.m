@@ -8,6 +8,7 @@
 
 #import "TBAInfoViewController.h"
 #import "Team.h"
+#import "Team+Fetch.h"
 #import "Event.h"
 #import "Media.h"
 
@@ -23,6 +24,17 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
 
 #pragma mark - View Lifecycle
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    __weak typeof(self) weakSelf = self;
+    self.refresh = ^void() {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf refreshTeam];
+    };
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -34,6 +46,54 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
 - (void)styleInterface {
     self.tableView.estimatedRowHeight = 44.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+}
+
+#pragma mark - Data Methods
+
+- (void)fetchTeamAndRefresh:(BOOL)refresh {
+    __weak typeof(self) weakSelf = self;
+    [Team fetchTeamForKey:self.team.key fromContext:self.persistenceController.managedObjectContext checkUpstream:NO withCompletionBlock:^(Team *team, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf showErrorAlertWithMessage:@"Unable to fetch team info locally"];
+            });
+            return;
+        }
+        
+        if (!team) {
+            if (refresh) {
+                [self refresh];
+            }
+        } else {
+            strongSelf.team = team;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf.tableView reloadData];
+            });
+        }
+    }];
+}
+
+- (void)refreshTeam {
+    __weak typeof(self) weakSelf = self;
+    __block NSUInteger request = [[TBAKit sharedKit] fetchTeamForTeamKey:self.team.key withCompletionBlock:^(TBATeam *team, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf removeRequestIdentifier:request];
+        
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [Team insertTeamWithModelTeam:team inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
+                [strongSelf fetchTeamAndRefresh:NO];
+                [strongSelf.persistenceController save];
+            });
+        }
+    }];
+    [self addRequestIdentifier:request];
 }
 
 #pragma mark - Table View Data Source

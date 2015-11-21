@@ -9,6 +9,7 @@
 #import "TBARankingsViewController.h"
 #import "TBARankingTableViewCell.h"
 #import "District.h"
+#import "DistrictRanking.h"
 #import "Event.h"
 
 static NSString *const RankCellReuseIdentifier  = @"RankCell";
@@ -63,6 +64,40 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
     
     self.tbaDelegate = self;
     self.cellIdentifier = RankCellReuseIdentifier;
+    
+    __weak typeof(self) weakSelf = self;
+    self.refresh = ^void() {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf hideNoDataView];
+        [strongSelf refreshRankings];
+    };
+}
+
+#pragma mark - Data Methods
+
+- (void)refreshRankings {
+    [self updateRefresh:YES];
+
+    __weak typeof(self) weakSelf = self;
+    __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.district.key forYear:[self.district.year unsignedIntegerValue] withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf removeRequestIdentifier:request];
+        
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf showErrorAlertWithMessage:@"Unable to reload district rankings"];
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // TODO: These large inserts are hanging our UI thread. We need to look in to fixing it.
+                [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:strongSelf.district inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
+                [strongSelf.persistenceController save];
+            });
+        }
+    }];
+    [self addRequestIdentifier:request];
 }
 
 #pragma mark - TBA Table View Data Source

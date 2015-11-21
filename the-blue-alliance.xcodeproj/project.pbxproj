@@ -18,6 +18,7 @@
 		50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 50DFD1FA19205F6D009B686E /* UIColor+TBAColors.m */; };
 		50E65EA719198E5200714328 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50E65EA619198E5200714328 /* QuartzCore.framework */; };
 		92011EBB1AC6175400C4F1EC /* DistrictsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92011EBA1AC6175400C4F1EC /* DistrictsViewController.m */; };
+		920FA8451BEAC724002B8E32 /* TBARefreshTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 920FA8441BEAC724002B8E32 /* TBARefreshTableViewController.m */; };
 		9222F1191AD6910F00C0AEA0 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9222F1181AD6910F00C0AEA0 /* EventViewController.m */; };
 		9237F74B1B2CA74D00C89978 /* TBAPersistenceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9237F74A1B2CA74D00C89978 /* TBAPersistenceController.m */; };
 		9237F77E1B2CA7CB00C89978 /* TBA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9237F77C1B2CA7CB00C89978 /* TBA.xcdatamodeld */; };
@@ -65,6 +66,7 @@
 		92CB28331B8FEB3F00B41C89 /* TBAMatchesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CB28321B8FEB3F00B41C89 /* TBAMatchesViewController.m */; };
 		92CB28371B8FEB6B00B41C89 /* TBAMatchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CB28361B8FEB6B00B41C89 /* TBAMatchTableViewCell.m */; };
 		92CC57E61BABBC4000C10604 /* Event+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CC57E51BABBC4000C10604 /* Event+Fetch.m */; };
+		92E031681BFFEE120017CA79 /* TBARefreshCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E031671BFFEE120017CA79 /* TBARefreshCollectionViewController.m */; };
 		92E749101B27B0EC00C46487 /* TBAInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E7490F1B27B0EC00C46487 /* TBAInfoViewController.m */; };
 		92EAA4C01ABF6AB100F7CF39 /* SelectYearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EAA4BF1ABF6AB100F7CF39 /* SelectYearViewController.m */; };
 		92F1580C1AF55DB300884E8A /* DistrictViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F1580B1AF55DB300884E8A /* DistrictViewController.m */; };
@@ -93,6 +95,8 @@
 		92011EB91AC6175400C4F1EC /* DistrictsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictsViewController.h; sourceTree = "<group>"; };
 		92011EBA1AC6175400C4F1EC /* DistrictsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictsViewController.m; sourceTree = "<group>"; };
 		9208AA7F1ABDAEB900905224 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		920FA8431BEAC724002B8E32 /* TBARefreshTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBARefreshTableViewController.h; sourceTree = "<group>"; };
+		920FA8441BEAC724002B8E32 /* TBARefreshTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBARefreshTableViewController.m; sourceTree = "<group>"; };
 		9222F1171AD6910F00C0AEA0 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
 		9222F1181AD6910F00C0AEA0 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
 		9237F7491B2CA74D00C89978 /* TBAPersistenceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TBAPersistenceController.h; path = Models/TBAPersistenceController.h; sourceTree = "<group>"; };
@@ -188,6 +192,8 @@
 		92CB28361B8FEB6B00B41C89 /* TBAMatchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAMatchTableViewCell.m; sourceTree = "<group>"; };
 		92CC57E41BABBC4000C10604 /* Event+Fetch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Event+Fetch.h"; sourceTree = "<group>"; };
 		92CC57E51BABBC4000C10604 /* Event+Fetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Event+Fetch.m"; sourceTree = "<group>"; };
+		92E031661BFFEE120017CA79 /* TBARefreshCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBARefreshCollectionViewController.h; sourceTree = "<group>"; };
+		92E031671BFFEE120017CA79 /* TBARefreshCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBARefreshCollectionViewController.m; sourceTree = "<group>"; };
 		92E7490E1B27B0EC00C46487 /* TBAInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAInfoViewController.h; sourceTree = "<group>"; };
 		92E7490F1B27B0EC00C46487 /* TBAInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAInfoViewController.m; sourceTree = "<group>"; };
 		92EAA4BE1ABF6AB100F7CF39 /* SelectYearViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectYearViewController.h; sourceTree = "<group>"; };
@@ -460,6 +466,10 @@
 			children = (
 				925CD21C1AC247F200C9C3BF /* TBARefreshViewController.h */,
 				925CD21D1AC247F200C9C3BF /* TBARefreshViewController.m */,
+				920FA8431BEAC724002B8E32 /* TBARefreshTableViewController.h */,
+				920FA8441BEAC724002B8E32 /* TBARefreshTableViewController.m */,
+				92E031661BFFEE120017CA79 /* TBARefreshCollectionViewController.h */,
+				92E031671BFFEE120017CA79 /* TBARefreshCollectionViewController.m */,
 			);
 			name = Refresh;
 			sourceTree = "<group>";
@@ -737,6 +747,7 @@
 				9243D3EE1BABB70D00512D3B /* District.m in Sources */,
 				9243D3F81BABB70D00512D3B /* MatchVideo.m in Sources */,
 				92FBF89D1B2DBC4100533CBE /* TBAMediaCollectionViewCell.m in Sources */,
+				920FA8451BEAC724002B8E32 /* TBARefreshTableViewController.m in Sources */,
 				92EAA4C01ABF6AB100F7CF39 /* SelectYearViewController.m in Sources */,
 				927E8C4C1B268A3A00C93E6C /* TBATeamsViewController.m in Sources */,
 				9243D3F41BABB70D00512D3B /* EventAlliance.m in Sources */,
@@ -751,6 +762,7 @@
 				9243D3F51BABB70D00512D3B /* Match+CoreDataProperties.m in Sources */,
 				92E749101B27B0EC00C46487 /* TBAInfoViewController.m in Sources */,
 				9243D3EB1BABB70D00512D3B /* EventWebcast+CoreDataProperties.m in Sources */,
+				92E031681BFFEE120017CA79 /* TBARefreshCollectionViewController.m in Sources */,
 				927E8C431B24BBC100C93E6C /* TeamViewController.m in Sources */,
 				9243D3F71BABB70D00512D3B /* MatchVideo+CoreDataProperties.m in Sources */,
 				9243D3ED1BABB70D00512D3B /* District+CoreDataProperties.m in Sources */,

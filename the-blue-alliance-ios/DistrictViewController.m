@@ -41,20 +41,6 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    __weak typeof(self) weakSelf = self;
-    self.refresh = ^void() {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-
-        if (strongSelf.segmentedControl.selectedSegmentIndex == TBADistrictDataTypeEvents) {
-            [strongSelf.eventsViewController hideNoDataView];
-            [strongSelf refreshDistrictEvents];
-        } else {
-            [strongSelf.rankingsViewController hideNoDataView];
-            [strongSelf refreshRankings];
-        }
-        [strongSelf updateRefreshBarButtonItem:YES];
-    };
-
     [self styleInterface];
 }
 
@@ -69,79 +55,37 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 - (void)styleInterface {
     self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
     self.navigationItem.title = [NSString stringWithFormat:@"%@ %@ Districts", self.district.year, self.district.name];
+
+    [self updateInterface];
 }
 
 - (void)updateInterface {
     if (self.segmentedControl.selectedSegmentIndex == TBADistrictDataTypeEvents) {
         [self showView:self.eventsView];
+        
+        [self.rankingsViewController cancelRefresh];
+        
         if (self.eventsViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.refresh();
+            self.eventsViewController.refresh();
         }
     } else {
         [self showView:self.rankingsView];
+        
+        [self.eventsViewController cancelRefresh];
+        
         if (self.rankingsViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.refresh();
+            self.rankingsViewController.refresh();
         }
     }
 }
 
 - (IBAction)segmentedControlValueChanged:(id)sender {
-    [self cancelRefresh];
+    if (self.segmentedControl.selectedSegmentIndex == TBADistrictDataTypeRankings) {
+        [self.eventsViewController cancelRefresh];
+    } else {
+        [self.rankingsViewController cancelRefresh];
+    }
     [self updateInterface];
-}
-
-#pragma mark - District Event Methods
-
-- (void)refreshDistrictEvents {
-    __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForDistrictShort:self.district.key forYear:[self.district.year unsignedIntegerValue] withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf removeRequestIdentifier:request];
-        
-        if (error) {
-            NSString *errorMessage = @"Unable to load district events";
-            dispatch_async(dispatch_get_main_queue(), ^{
-/*
-                if (strongSelf.eventsViewController.events) {
-                    [strongSelf showErrorAlertWithMessage:errorMessage];
-                } else {
-                    [strongSelf.eventsViewController showNoDataViewWithText:errorMessage];
-                }
-*/
-            });
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf.persistenceController save];
-            });
-        }
-    }];
-    [self addRequestIdentifier:request];
-}
-
-#pragma mark - Disitrict Ranking Methods
-
-- (void)refreshRankings {
-    __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.district.key forYear:[self.district.year unsignedIntegerValue] withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf removeRequestIdentifier:request];
-        
-        if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to reload district rankings"];
-            });
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                // TODO: These large inserts are hanging our UI thread. We need to look in to fixing it.
-                [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:strongSelf.district inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf.persistenceController save];
-            });
-        }
-    }];
-    [self addRequestIdentifier:request];
 }
 
 #pragma mark - Navigation
@@ -151,9 +95,8 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
         self.eventsViewController = (TBAEventsViewController *)segue.destinationViewController;
         self.eventsViewController.district = self.district;
         self.eventsViewController.persistenceController = self.persistenceController;
-        self.eventsViewController.predicate = [NSPredicate predicateWithFormat:@"year == %@ AND eventDistrictString == %@", self.district.year, self.district.name];
+        self.eventsViewController.year = self.district.year;
         
-        __weak typeof(self) weakSelf = self;
         self.eventsViewController.eventSelected = ^(Event *event) {
             NSLog(@"Selected event: %@", event.shortName);
         };
