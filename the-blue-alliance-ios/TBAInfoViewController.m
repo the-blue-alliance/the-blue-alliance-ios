@@ -14,12 +14,6 @@
 
 static NSString *const InfoCellReuseIdentifier = @"InfoCell";
 
-@interface TBAInfoViewController ()
-
-@property (nonatomic, assign) BOOL expandSponsors;
-
-@end
-
 @implementation TBAInfoViewController
 
 #pragma mark - View Lifecycle
@@ -121,10 +115,7 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
     }
     if (self.team.name && indexPath.row == 1) {
         cell.textLabel.text = self.team.name;
-        cell.textLabel.numberOfLines = 2;
-        
-        cell.accessoryType = UITableViewCellAccessoryDetailButton;
-        cell.tintColor = [UIColor colorWithRed:0.79 green:0.79 blue:0.81 alpha:1];
+        cell.textLabel.numberOfLines = 0;
     } else if (self.event.dateString && indexPath.row == 0) {
         cell.textLabel.text = self.event.dateString;
         
@@ -161,14 +152,6 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    /*
-    NSString *key = [self.infoDictionary keyAtIndex:indexPath.row];
-    if ([key isEqualToString:@"sponsors"]) {
-        self.expandSponsors = !self.expandSponsors;
-        [self.tableView reloadData];
-    }
-    */
 }
 
 #pragma mark - Private Methods
