@@ -118,7 +118,10 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 }
 
 - (void)setupSegmentedControl {
-    NSArray *titles = @[@"Info", @"Teams", @"Rankings", @"Matches", @"Alliances", @"District Points", @"Stats", @"Awards"];
+    NSMutableArray *titles = [NSMutableArray arrayWithArray:@[@"Info", @"Teams", @"Rankings", @"Matches", @"Alliances", @"Stats", @"Awards"]];
+    if (TBADistrictTypeNoDistrict != [self.event eventDistrict].integerValue) {
+        [titles insertObject:@"District Points" atIndex:[titles indexOfObject:@"Stats"]];
+    }
     self.segmentedControl = [[HMSegmentedControl alloc] initWithSectionTitles:titles];
     
     self.segmentedControl.frame = self.segmentedControlView.frame;
