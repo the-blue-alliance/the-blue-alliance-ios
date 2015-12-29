@@ -78,7 +78,7 @@
     }
 
     // Everyone is a winner in 2015 ╮ (. ❛ ᴗ ❛.) ╭
-    if (_match.event.year.integerValue == 2015) {
+    if (_match.event.year.integerValue == 2015 && _match.compLevel.integerValue != CompLevelFinal) {
         self.redContainerView.layer.borderWidth = 0.0f;
         self.blueContainerView.layer.borderWidth = 0.0f;
     } else if (_match.redScore > _match.blueScore) {
