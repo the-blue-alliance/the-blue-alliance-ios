@@ -7,6 +7,7 @@
 //
 
 #import "TBAMatchTableViewCell.h"
+#import "Event.h"
 
 @interface TBAMatchTableViewCell ()
 
@@ -76,7 +77,11 @@
         self.blueScoreLabel.hidden = NO;
     }
 
-    if (_match.redScore > _match.blueScore) {
+    // Everyone is a winner in 2015 ╮ (. ❛ ᴗ ❛.) ╭
+    if (_match.event.year.integerValue == 2015) {
+        self.redContainerView.layer.borderWidth = 0.0f;
+        self.blueContainerView.layer.borderWidth = 0.0f;
+    } else if (_match.redScore > _match.blueScore) {
         self.redContainerView.layer.borderWidth = 2.0f;
         self.blueContainerView.layer.borderWidth = 0.0f;
     } else if (_match.blueScore > _match.redScore) {
