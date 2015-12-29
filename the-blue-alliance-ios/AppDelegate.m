@@ -93,11 +93,12 @@
 
 #pragma mark - Interface Methods
 
-- (void)setupAppearance {    
+- (void)setupAppearance {
     [[UINavigationBar appearance] setBarTintColor:[UIColor TBANavigationBarColor]];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
+    [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
     
     [[UIToolbar appearance] setBarTintColor:[UIColor whiteColor]];
     [[UITableView appearance] setSectionIndexBackgroundColor:[UIColor clearColor]];
