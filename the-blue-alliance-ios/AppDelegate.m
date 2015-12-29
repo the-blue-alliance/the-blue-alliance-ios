@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "TBAPersistenceController.h"
+#import "TBANavigationControllerDelegate.h"
 #import "TBAKit.h"
 #import "TeamsViewController.h"
 #import "EventRanking.h"
@@ -17,6 +18,7 @@
 @interface AppDelegate ()
 
 @property (strong, readwrite) TBAPersistenceController *persistenceController;
+@property (nonatomic, strong) TBANavigationControllerDelegate *navigationDelegate;
 
 @end
 
@@ -28,8 +30,11 @@
     [self setPersistenceController:[[TBAPersistenceController alloc] initWithCallback:^{
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UITabBarController *rootTabBarController = [storyboard instantiateViewControllerWithIdentifier:@"RootTabBarController"];
-
+        self.navigationDelegate = [[TBANavigationControllerDelegate alloc] init];
+        
         for (UINavigationController *nav in rootTabBarController.viewControllers) {
+            nav.delegate = self.navigationDelegate;
+            
             TBAViewController *vc = (TBAViewController *)[nav.viewControllers firstObject];
             vc.persistenceController = self.persistenceController;
         }

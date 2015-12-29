@@ -56,6 +56,7 @@
 		926C054C1AAF741E00E9215A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 926C054B1AAF741E00E9215A /* Images.xcassets */; };
 		927048221AC23BF8002E46CE /* TeamsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 927048211AC23BF8002E46CE /* TeamsViewController.m */; };
 		9270482B1AC23C4E002E46CE /* TBATeamTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9270482A1AC23C4E002E46CE /* TBATeamTableViewCell.m */; };
+		92754DEE1C32495D002E1855 /* TBANavigationControllerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 92754DED1C32495D002E1855 /* TBANavigationControllerDelegate.m */; };
 		927E8C431B24BBC100C93E6C /* TeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 927E8C421B24BBC100C93E6C /* TeamViewController.m */; };
 		927E8C471B2689EF00C93E6C /* TBAEventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 927E8C461B2689EF00C93E6C /* TBAEventsViewController.m */; };
 		927E8C4C1B268A3A00C93E6C /* TBATeamsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 927E8C4B1B268A3A00C93E6C /* TBATeamsViewController.m */; };
@@ -169,6 +170,8 @@
 		927048211AC23BF8002E46CE /* TeamsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamsViewController.m; sourceTree = "<group>"; };
 		927048291AC23C4E002E46CE /* TBATeamTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBATeamTableViewCell.h; sourceTree = "<group>"; };
 		9270482A1AC23C4E002E46CE /* TBATeamTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBATeamTableViewCell.m; sourceTree = "<group>"; };
+		92754DEC1C32495D002E1855 /* TBANavigationControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBANavigationControllerDelegate.h; sourceTree = "<group>"; };
+		92754DED1C32495D002E1855 /* TBANavigationControllerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBANavigationControllerDelegate.m; sourceTree = "<group>"; };
 		927E8C411B24BBC100C93E6C /* TeamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamViewController.h; sourceTree = "<group>"; };
 		927E8C421B24BBC100C93E6C /* TeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamViewController.m; sourceTree = "<group>"; };
 		927E8C451B2689EF00C93E6C /* TBAEventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TBAEventsViewController.h; path = "Base Classes/TBAEventsViewController.h"; sourceTree = "<group>"; };
@@ -461,6 +464,15 @@
 			name = Teams;
 			sourceTree = "<group>";
 		};
+		92754DEB1C32491C002E1855 /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				92754DEC1C32495D002E1855 /* TBANavigationControllerDelegate.h */,
+				92754DED1C32495D002E1855 /* TBANavigationControllerDelegate.m */,
+			);
+			name = Delegates;
+			sourceTree = "<group>";
+		};
 		9275F2DC1B35BC6200C74D7A /* Refresh */ = {
 			isa = PBXGroup;
 			children = (
@@ -511,6 +523,7 @@
 		927E8C481B2689F400C93E6C /* Base Classes */ = {
 			isa = PBXGroup;
 			children = (
+				92754DEB1C32491C002E1855 /* Delegates */,
 				9260016D1B519FA90027FE95 /* Container Views */,
 				9260016C1B519F9A0027FE95 /* Data Views */,
 			);
@@ -746,6 +759,7 @@
 				926001671B517DF40027FE95 /* TBANoDataViewController.m in Sources */,
 				9243D3EE1BABB70D00512D3B /* District.m in Sources */,
 				9243D3F81BABB70D00512D3B /* MatchVideo.m in Sources */,
+				92754DEE1C32495D002E1855 /* TBANavigationControllerDelegate.m in Sources */,
 				92FBF89D1B2DBC4100533CBE /* TBAMediaCollectionViewCell.m in Sources */,
 				920FA8451BEAC724002B8E32 /* TBARefreshTableViewController.m in Sources */,
 				92EAA4C01ABF6AB100F7CF39 /* SelectYearViewController.m in Sources */,
