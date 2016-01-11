@@ -35,7 +35,7 @@ static NSString *const MatchCellReuseIdentifier = @"MatchCell";
     // Need a cache name here
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                     managedObjectContext:self.persistenceController.managedObjectContext
-                                                                      sectionNameKeyPath:nil
+                                                                      sectionNameKeyPath:@"compLevel"
                                                                                cacheName:[NSString stringWithFormat:@"%@_matches", self.event.key]];
     _fetchedResultsController.delegate = self;
     
@@ -62,6 +62,25 @@ static NSString *const MatchCellReuseIdentifier = @"MatchCell";
 - (void)configureCell:(TBAMatchTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Match *match = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.match = match;
+}
+
+#pragma mark - Table View Data Source
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 28.0f;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    
+    header.backgroundView.backgroundColor = [UIColor TBANavigationBarColor];
+    header.textLabel.textColor = [UIColor whiteColor];
+//    header.textLabel.font = [UIFont systemFontOfSize:12.0f];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    Match *firstMatch = [[[self.fetchedResultsController sections][section] objects] firstObject];
+    return [NSString stringWithFormat:@"%@ Matches", [firstMatch compLevelString]];
 }
 
 #pragma mark - Table View Delegate
