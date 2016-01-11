@@ -80,8 +80,10 @@
 }
 
 - (NSString *)timeString {
-    // TODO: Add a -timeString method using NSDate and local times to generate a string
-    return @"";
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"EEE h:mm a"];
+
+    return [dateFormatter stringFromDate:self.time];
 }
 
 - (NSString *)compLevelString {

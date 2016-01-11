@@ -28,6 +28,8 @@
 
 @property (nonatomic, weak) IBOutlet UILabel *timeLabel;
 
+@property (nonatomic, strong) NSArray<UIView *> *coloredViews;
+
 @end
 
 @implementation TBAMatchTableViewCell
@@ -37,6 +39,49 @@
     
     self.redContainerView.layer.borderColor = [UIColor redColor].CGColor;
     self.blueContainerView.layer.borderColor = [UIColor blueColor].CGColor;
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    NSArray<UIColor *> *colors = [self storeBaseColorsForView:self.coloredViews];
+    [super setSelected:selected animated:animated];
+    
+    if (selected){
+        [self restoreBaseColors:colors forViews:self.coloredViews];
+    }
+}
+
+-(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
+    NSArray<UIColor *> *colors = [self storeBaseColorsForView:self.coloredViews];
+    [super setHighlighted:highlighted animated:animated];
+    
+    if (highlighted){
+        [self restoreBaseColors:colors forViews:self.coloredViews];
+    }
+}
+
+- (NSArray<UIColor *> *)storeBaseColorsForView:(NSArray<UIView *> *)views {
+    NSMutableArray *colors = [[NSMutableArray alloc] init];
+    for (UIView *view in views) {
+        [colors addObject:view.backgroundColor];
+    }
+    return colors;
+}
+
+- (void)restoreBaseColors:(NSArray<UIColor *> *)colors forViews:(NSArray<UIView *> *)views {
+    if (colors.count != views.count) {
+        return;
+    }
+
+    for (int i = 0; i < colors.count; i++) {
+        UIView *view = views[i];
+        view.backgroundColor = colors[i];
+    }
+}
+
+#pragma mark - Properities
+
+- (NSArray<UIView *> *)coloredViews {
+    return @[self.redContainerView, self.redScoreLabel, self.blueContainerView, self.blueScoreLabel];
 }
 
 - (void)setMatch:(Match *)match {
