@@ -154,7 +154,7 @@
                     <navigationItem key="navigationItem" id="4pe-f2-zA2">
                         <nil key="title"/>
                         <view key="titleView" contentMode="scaleToFill" id="c4L-OJ-CrB">
-                            <rect key="frame" x="236" y="5.5" width="128" height="33"/>
+                            <rect key="frame" x="236" y="6" width="128" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Districts" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g76-Fu-X7s">
@@ -264,6 +264,62 @@
             </objects>
             <point key="canvasLocation" x="2683.125" y="303.16901408450701"/>
         </scene>
+        <!--Alliances View Controller-->
+        <scene sceneID="RtE-Sp-Guu">
+            <objects>
+                <tableViewController id="gYT-tK-kmi" customClass="TBAAlliancesViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="qbK-sC-lfr">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="443"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AllianceCell" id="io7-oh-AJH" customClass="TBAAllianceCell">
+                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="io7-oh-AJH" id="fgR-zL-oQw">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="8TW-mx-xe9">
+                                            <rect key="frame" x="130" y="0.0" width="450" height="42"/>
+                                        </stackView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Alliance #1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i3P-5G-OqI">
+                                            <rect key="frame" x="21" y="-2" width="89" height="45"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="44" id="Xqa-0K-4f1"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="8TW-mx-xe9" secondAttribute="bottom" id="4Rr-Cg-uDh"/>
+                                        <constraint firstItem="8TW-mx-xe9" firstAttribute="top" secondItem="fgR-zL-oQw" secondAttribute="top" id="8Wf-Vg-MUz"/>
+                                        <constraint firstAttribute="trailing" secondItem="8TW-mx-xe9" secondAttribute="trailing" constant="20" id="QiX-fF-Y3s"/>
+                                        <constraint firstItem="i3P-5G-OqI" firstAttribute="top" secondItem="fgR-zL-oQw" secondAttribute="top" constant="-1" id="R4h-S7-c2R"/>
+                                        <constraint firstItem="8TW-mx-xe9" firstAttribute="leading" secondItem="i3P-5G-OqI" secondAttribute="trailing" constant="20" id="UGM-IU-FtZ"/>
+                                        <constraint firstItem="i3P-5G-OqI" firstAttribute="centerY" secondItem="fgR-zL-oQw" secondAttribute="centerY" id="gVL-SA-Q81"/>
+                                        <constraint firstAttribute="bottom" secondItem="i3P-5G-OqI" secondAttribute="bottom" constant="-1" id="i66-gj-Zdq"/>
+                                        <constraint firstItem="i3P-5G-OqI" firstAttribute="leading" secondItem="fgR-zL-oQw" secondAttribute="leading" constant="21" id="o8f-UN-5L3"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="allianceNumberLabel" destination="i3P-5G-OqI" id="dWD-tT-yZh"/>
+                                    <outlet property="allianceStackView" destination="8TW-mx-xe9" id="esb-CW-tLQ"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="gYT-tK-kmi" id="aEu-VY-Mbh"/>
+                            <outlet property="delegate" destination="gYT-tK-kmi" id="5Dp-sR-OPm"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5lA-Q1-moR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3945" y="-304.5"/>
+        </scene>
         <!--Districts View Controller-->
         <scene sceneID="E0C-1v-jqd">
             <objects>
@@ -301,7 +357,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AjH-yw-tbT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3945" y="-325.35211267605632"/>
+            <point key="canvasLocation" x="3945" y="337"/>
         </scene>
         <!--No Data View Controller-->
         <scene sceneID="ZC5-Ii-uvx">
@@ -723,7 +779,7 @@
                     <navigationItem key="navigationItem" id="uzj-dD-tNd">
                         <nil key="title"/>
                         <view key="titleView" contentMode="scaleToFill" id="mcY-gS-Ww7">
-                            <rect key="frame" x="236" y="5.5" width="128" height="33"/>
+                            <rect key="frame" x="236" y="6" width="128" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Team 2337" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PdT-FR-3pi">
@@ -802,7 +858,7 @@
                     <navigationItem key="navigationItem" id="nwE-Me-WJo">
                         <nil key="title"/>
                         <view key="titleView" contentMode="scaleToFill" id="id9-ex-69K">
-                            <rect key="frame" x="236" y="5.5" width="128" height="33"/>
+                            <rect key="frame" x="236" y="6" width="128" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Events" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A1f-8v-Cv4">
@@ -931,6 +987,12 @@
                                     <constraint firstAttribute="height" constant="44" id="0Fu-zd-97V"/>
                                 </constraints>
                             </view>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GFM-5p-JYL">
+                                <rect key="frame" x="0.0" y="44" width="600" height="443"/>
+                                <connections>
+                                    <segue destination="gYT-tK-kmi" kind="embed" identifier="AlliancesViewControllerEmbed" id="riO-BM-qPf"/>
+                                </connections>
+                            </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8lk-1o-sYm" userLabel="Matches View">
                                 <rect key="frame" x="0.0" y="44" width="600" height="443"/>
                                 <connections>
@@ -959,6 +1021,7 @@
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="c83-bI-91p" secondAttribute="trailing" id="21J-jN-urY"/>
+                            <constraint firstItem="GFM-5p-JYL" firstAttribute="top" secondItem="yqx-t0-75q" secondAttribute="bottom" id="3WX-Ch-u01"/>
                             <constraint firstItem="fLC-8k-2Ba" firstAttribute="top" secondItem="yqx-t0-75q" secondAttribute="bottom" id="637-zB-Axc"/>
                             <constraint firstItem="yqx-t0-75q" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="6H1-xb-VhA"/>
                             <constraint firstItem="68F-KG-6JN" firstAttribute="top" secondItem="UTP-aq-H6o" secondAttribute="bottom" id="COU-6s-GIb"/>
@@ -971,8 +1034,11 @@
                             <constraint firstItem="UTP-aq-H6o" firstAttribute="top" secondItem="yqx-t0-75q" secondAttribute="bottom" id="Wq7-c3-b4z"/>
                             <constraint firstItem="68F-KG-6JN" firstAttribute="top" secondItem="8lk-1o-sYm" secondAttribute="bottom" id="XOm-Qx-ALg"/>
                             <constraint firstAttribute="trailing" secondItem="UTP-aq-H6o" secondAttribute="trailing" id="bA3-bX-N2H"/>
+                            <constraint firstItem="GFM-5p-JYL" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="jaa-Mr-gKd"/>
                             <constraint firstItem="c83-bI-91p" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="kyy-LT-eF7"/>
+                            <constraint firstItem="68F-KG-6JN" firstAttribute="top" secondItem="GFM-5p-JYL" secondAttribute="bottom" id="oQ8-Fx-Puy"/>
                             <constraint firstItem="68F-KG-6JN" firstAttribute="top" secondItem="c83-bI-91p" secondAttribute="bottom" id="qF0-yv-tud"/>
+                            <constraint firstAttribute="trailing" secondItem="GFM-5p-JYL" secondAttribute="trailing" id="svE-VS-6B5"/>
                             <constraint firstItem="c83-bI-91p" firstAttribute="top" secondItem="yqx-t0-75q" secondAttribute="bottom" id="thr-6z-zDd"/>
                             <constraint firstAttribute="trailing" secondItem="8lk-1o-sYm" secondAttribute="trailing" id="xmb-cg-7Ye"/>
                             <constraint firstItem="UTP-aq-H6o" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="yBX-Pg-wVM"/>
@@ -981,6 +1047,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="2015 Kettering University District" id="4ar-iU-waM"/>
                     <connections>
+                        <outlet property="alliancesView" destination="GFM-5p-JYL" id="M9A-py-Nxg"/>
                         <outlet property="infoView" destination="UTP-aq-H6o" id="ihf-8I-e1X"/>
                         <outlet property="matchesView" destination="8lk-1o-sYm" id="E8n-7k-npp"/>
                         <outlet property="rankingsView" destination="fLC-8k-2Ba" id="h97-p2-JrH"/>
@@ -997,7 +1064,7 @@
             <objects>
                 <tableViewController id="0ro-Yg-Pvq" customClass="TBATeamsViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="6Vg-1f-Vmg">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="487"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="443"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" id="hMw-KA-wEv">
@@ -1292,10 +1359,10 @@
         <image name="tba_blue_lamp" width="110" height="181"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="f6F-s5-vT6"/>
+        <segue reference="8A3-99-YiF"/>
+        <segue reference="ijh-4t-Dqv"/>
         <segue reference="zon-7C-eSE"/>
-        <segue reference="uwf-Zh-tyc"/>
-        <segue reference="oWq-M9-Pon"/>
+        <segue reference="eRd-Dy-LTL"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

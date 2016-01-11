@@ -11,6 +11,7 @@
 #import "TBATeamsViewController.h"
 #import "TBARankingsViewController.h"
 #import "TBAMatchesViewController.h"
+#import "TBAAlliancesViewController.h"
 #import "HMSegmentedControl.h"
 #import <PureLayout/PureLayout.h>
 #import "Event.h"
@@ -48,6 +49,9 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 @property (nonatomic, strong) TBAMatchesViewController *matchesViewController;
 @property (nonatomic, weak) IBOutlet UIView *matchesView;
 
+@property (nonatomic, strong) TBAAlliancesViewController *alliancesViewController;
+@property (nonatomic, strong) IBOutlet UIView *alliancesView;
+
 @property (nonatomic, strong) NSArray<NSNumber *> *eventWeeks;
 
 @end
@@ -74,6 +78,9 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
         } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBAEventDataTypeMatches) {
             [strongSelf.matchesViewController hideNoDataView];
             [strongSelf refreshMatches];
+        } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBAEventDataTypeAlliances) {
+            [strongSelf.matchesViewController hideNoDataView];
+            [strongSelf refreshEvent];
         }
         [strongSelf updateRefreshBarButtonItem:YES];
     };
@@ -112,6 +119,11 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
     } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeMatches) {
         [self showView:self.matchesView];
         if (self.matchesViewController.fetchedResultsController.fetchedObjects.count == 0) {
+            self.refresh();
+        }
+    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeAlliances) {
+        [self showView:self.alliancesView];
+        if (self.alliancesViewController.fetchedResultsController.fetchedObjects.count == 0) {
             self.refresh();
         }
     }
@@ -267,6 +279,10 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
     [self addRequestIdentifier:request];
 }
 
+#pragma mark - Alliances
+
+// Do I even have to do anything here like what?
+
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -286,6 +302,10 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
         self.matchesViewController = segue.destinationViewController;
         self.matchesViewController.persistenceController = self.persistenceController;
         self.matchesViewController.event = self.event;
+    } else if ([segue.identifier isEqualToString:@"AlliancesViewControllerEmbed"]) {
+        self.alliancesViewController = segue.destinationViewController;
+        self.alliancesViewController.persistenceController = self.persistenceController;
+        self.alliancesViewController.event = self.event;
     }
 }
 

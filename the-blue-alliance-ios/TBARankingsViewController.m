@@ -76,6 +76,7 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
 
 #pragma mark - Data Methods
 
+#warning why is this even in here?? we have this in the event VC, why do we do this for districts
 - (void)refreshRankings {
     [self updateRefresh:YES];
 

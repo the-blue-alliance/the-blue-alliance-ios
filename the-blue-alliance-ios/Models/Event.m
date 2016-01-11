@@ -225,14 +225,14 @@
     event.endDate = modelEvent.endDate;
     
     /*
-     event.webcasts = [NSSet setWithArray:[EventWebcast insertEventWebcastsWithModelEventWebcasts:modelEvent.webcast
-     forEvent:event
-     inManagedObjectContext:context]];
+    event.webcasts = [NSSet setWithArray:[EventWebcast insertEventWebcastsWithModelEventWebcasts:modelEvent.webcast
+    forEvent:event
+    inManagedObjectContext:context]];
+    */
      
-     event.alliances = [NSSet setWithArray:[EventAlliance insertEventAlliancesWithModelEventAlliances:modelEvent.alliances
-     forEvent:event
-     inManagedObjectContext:context]];
-     */
+    event.alliances = [NSSet setWithArray:[EventAlliance insertEventAlliancesWithModelEventAlliances:modelEvent.alliances
+                                                                                            forEvent:event
+                                                                              inManagedObjectContext:context]];
     
     return event;
 }
