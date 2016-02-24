@@ -111,24 +111,17 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
 #warning this needs to change based on the data we do/don't have
     if (self.team.location && indexPath.row == 0) {
         cell.textLabel.text = [NSString stringWithFormat:@"from %@", self.team.location];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     if (self.team.name && indexPath.row == 1) {
         cell.textLabel.text = self.team.name;
         cell.textLabel.numberOfLines = 0;
     } else if (self.event.dateString && indexPath.row == 0) {
         cell.textLabel.text = self.event.dateString;
-        
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     if (self.team.website && indexPath.row == 2) {
         cell.textLabel.text = self.team.website;
-
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     } else if (self.event.location && indexPath.row == 1) {
         cell.textLabel.text = self.event.location;
-        
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     return cell;
 }
