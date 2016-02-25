@@ -20,8 +20,6 @@
                         <segue destination="fSV-38-1aY" kind="relationship" relationship="viewControllers" id="AoZ-wN-0Eu"/>
                         <segue destination="nQR-ZR-NjM" kind="relationship" relationship="viewControllers" id="ji3-D1-LRk"/>
                         <segue destination="cQz-fe-GbZ" kind="relationship" relationship="viewControllers" id="ohh-2L-1GY"/>
-                        <segue destination="8Rv-FI-PXX" kind="relationship" relationship="viewControllers" id="Kmi-gz-LO6"/>
-                        <segue destination="7ba-7u-OBk" kind="relationship" relationship="viewControllers" id="6bO-D3-awy"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Mm-Tx-fFz" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -94,34 +92,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Tp-Yk-gug" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1179.375" y="303.16901408450701"/>
-        </scene>
-        <!--myTBA-->
-        <scene sceneID="N0o-fo-V9e">
-            <objects>
-                <navigationController id="8Rv-FI-PXX" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="myTBA" image="ic_grade_black" id="mbw-7r-umr"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="fq2-Bo-nBP">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="VUd-Mk-416" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1179.375" y="1018.3098591549295"/>
-        </scene>
-        <!--Settings-->
-        <scene sceneID="pY7-eR-C65">
-            <objects>
-                <navigationController id="7ba-7u-OBk" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Settings" image="ic_settings_black" id="U58-E7-s83"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7Dt-a2-VEu">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hho-uX-Rvw" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1179.375" y="1724.9999999999998"/>
         </scene>
         <!--Districts View Controller-->
         <scene sceneID="wX8-t8-fft">
@@ -1353,9 +1323,7 @@
     <resources>
         <image name="ic_assignment_black" width="24" height="24"/>
         <image name="ic_event_black" width="24" height="24"/>
-        <image name="ic_grade_black" width="24" height="24"/>
         <image name="ic_group_black" width="24" height="24"/>
-        <image name="ic_settings_black" width="24" height="24"/>
         <image name="tba_blue_lamp" width="110" height="181"/>
     </resources>
     <inferredMetricsTieBreakers>
