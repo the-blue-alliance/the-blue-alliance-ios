@@ -162,6 +162,7 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
         } else if (self.event) {
             cell.textLabel.text = text;
         }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     } else if ((indexPath.section == 0 && self.infoArray.count == 0) || indexPath.section == 1) {
         NSInteger row = indexPath.row;
         if (self.team) {
