@@ -14,6 +14,7 @@
 @required
 
 - (void)configureCell:(nonnull UITableViewCell *)cell atIndexPath:(nonnull NSIndexPath *)indexPath;
+- (void)showNoDataView;
 
 @end
 

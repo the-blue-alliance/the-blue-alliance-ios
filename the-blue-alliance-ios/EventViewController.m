@@ -70,16 +70,12 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
         if (strongSelf.segmentedControl.selectedSegmentIndex == TBAEventDataTypeInfo) {
             [strongSelf refreshEvent];
         } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBAEventDataTypeTeams) {
-            [strongSelf.teamsViewController hideNoDataView];
             [strongSelf refreshTeams];
         } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBAEventDataTypeRankings) {
-            [strongSelf.rankingsViewController hideNoDataView];
             [strongSelf refreshRankings];
         } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBAEventDataTypeMatches) {
-            [strongSelf.matchesViewController hideNoDataView];
             [strongSelf refreshMatches];
         } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBAEventDataTypeAlliances) {
-            [strongSelf.matchesViewController hideNoDataView];
             [strongSelf refreshEvent];
         }
         [strongSelf updateRefreshBarButtonItem:YES];
@@ -91,7 +87,7 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 #pragma mark - Interface Methods
 
 - (void)showView:(UIView *)showView {
-    for (UIView *view in @[self.infoView, self.teamsView, self.rankingsView, self.matchesView]) {
+    for (UIView *view in @[self.infoView, self.teamsView, self.rankingsView, self.matchesView, self.alliancesView]) {
         view.hidden = (showView == view ? NO : YES);
     }
 }

@@ -63,6 +63,10 @@ static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
+- (void)showNoDataView {
+    [self showNoDataViewWithText:@"No alliances for this event"];
+}
+
 #pragma mark - Table View Delegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

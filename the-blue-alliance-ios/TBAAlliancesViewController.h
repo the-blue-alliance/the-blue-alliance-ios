@@ -6,11 +6,11 @@
 //  Copyright © 2016 The Blue Alliance. All rights reserved.
 //
 
-#import "TBARefreshTableViewController.h"
+#import "TBATableViewController.h"
 
 @class Event;
 
-@interface TBAAlliancesViewController : TBARefreshTableViewController <TBATableViewControllerDelegate>
+@interface TBAAlliancesViewController : TBATableViewController <TBATableViewControllerDelegate>
 
 @property (nonatomic, strong) Event *event;
 

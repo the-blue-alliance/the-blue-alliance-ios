@@ -64,6 +64,10 @@ static NSString *const MatchCellReuseIdentifier = @"MatchCell";
     cell.match = match;
 }
 
+- (void)showNoDataView {
+    [self showNoDataViewWithText:@"No matches for this event"];
+}
+
 #pragma mark - Table View Data Source
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {

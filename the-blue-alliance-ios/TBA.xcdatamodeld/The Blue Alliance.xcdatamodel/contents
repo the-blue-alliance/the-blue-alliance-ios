@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15C50" minimumToolsVersion="Xcode 4.3">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15D21" minimumToolsVersion="Xcode 4.3">
     <entity name="District" representedClassName="District" syncable="YES">
         <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -102,6 +102,7 @@
         <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="locality" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="motto" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="nickname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="region" optional="YES" attributeType="String" syncable="YES"/>
@@ -126,6 +127,6 @@
         <element name="Match" positionX="-1287" positionY="2061" width="128" height="225"/>
         <element name="MatchVideo" positionX="-1278" positionY="2070" width="128" height="90"/>
         <element name="Media" positionX="-965" positionY="2159" width="128" height="135"/>
-        <element name="Team" positionX="-1242" positionY="2277" width="128" height="285"/>
+        <element name="Team" positionX="-1242" positionY="2277" width="128" height="300"/>
     </elements>
 </model>

@@ -82,8 +82,19 @@
         id <NSFetchedResultsSectionInfo> sectionInfo = self.fetchedResultsController.sections[section];
         rows = [sectionInfo numberOfObjects];
     } else {
-        // TODO: Show no data screen
+        if (self.tbaDelegate) {
+            [self.tbaDelegate showNoDataView];
+        }
     }
+    
+    if (rows == 0) {
+        if (self.tbaDelegate) {
+            [self.tbaDelegate showNoDataView];
+        }
+    } else {
+        [self hideNoDataView];
+    }
+    
     return rows;
 }
 

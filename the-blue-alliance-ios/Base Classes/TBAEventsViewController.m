@@ -91,7 +91,7 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
     
     self.tbaDelegate = self;
     self.cellIdentifier = EventCellReuseIdentifier;
- 
+    
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;

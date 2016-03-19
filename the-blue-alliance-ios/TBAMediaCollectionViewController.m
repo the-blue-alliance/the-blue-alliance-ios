@@ -64,7 +64,6 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        [strongSelf hideNoDataView];
         [strongSelf updateRefresh:YES];
         [strongSelf refreshData];
     };
@@ -104,6 +103,10 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
     
     Media *media = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.media = media;
+}
+
+- (void)showNoDataView {
+    [self showNoDataViewWithText:@"No media"];
 }
 
 #pragma mark - Collection View Delegate Flow Layout

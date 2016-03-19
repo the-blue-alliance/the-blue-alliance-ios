@@ -76,7 +76,7 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
 
 #pragma mark - Data Methods
 
-#warning why is this even in here?? we have this in the event VC, why do we do this for districts
+#warning Can we call this code from the EventVC instead of duplicating it in there
 - (void)refreshRankings {
     [self updateRefresh:YES];
 
@@ -111,6 +111,10 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
         EventRanking *ranking = [self.fetchedResultsController objectAtIndexPath:indexPath];
         cell.eventRanking = ranking;
     }
+}
+
+- (void)showNoDataView {
+    [self showNoDataViewWithText:@"No rankings for this event"];
 }
 
 #pragma mark - Table View Delegate

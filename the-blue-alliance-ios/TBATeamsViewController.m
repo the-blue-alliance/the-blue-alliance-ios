@@ -114,6 +114,10 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
     cell.team = [self.fetchedResultsController objectAtIndexPath:indexPath];
 }
 
+- (void)showNoDataView {
+    [self showNoDataViewWithText:@"No teams for this event"];
+}
+
 #pragma mark - Table View Delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

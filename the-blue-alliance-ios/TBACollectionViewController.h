@@ -14,6 +14,7 @@
 @required
 
 - (void)configureCell:(nonnull UICollectionViewCell *)cell atIndexPath:(nonnull NSIndexPath *)indexPath;
+- (void)showNoDataView;
 
 @end
 
