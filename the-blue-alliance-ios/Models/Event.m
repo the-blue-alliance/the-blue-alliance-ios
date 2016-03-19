@@ -104,7 +104,7 @@
 + (NSArray<NSNumber *> *)groupEventsByWeek:(NSArray<Event *> *)events {
     NSMutableArray<NSNumber *> *eventTypeArray = [[NSMutableArray alloc] init];
     
-    int currentWeek = 1;
+    float currentWeek = 1;
     NSDate *weekStart;
 
     NSCalendar *calendar = [NSCalendar currentCalendar];
@@ -140,8 +140,23 @@
                     weekStart = [calendar dateByAddingComponents:weekComponent toDate:weekStart options:0];
                 }
                 
-                [self addEventOrder:currentWeek toArray:eventTypeArray];
-                event.week = @(currentWeek);
+                /**
+                 * Special cases for 2016:
+                 * Week 1 is actually Week 0.5, eveything else is one less
+                 * See http://www.usfirst.org/roboticsprograms/frc/blog-The-Palmetto-Regional
+                 */
+                if (event.year.integerValue == 2016) {
+                    if (currentWeek == 1) {
+                        [eventTypeArray addObject:@(0.5f)];
+                        event.week = @(0.5);
+                    } else {
+                        [self addEventOrder:currentWeek - 1 toArray:eventTypeArray];
+                        event.week = @(currentWeek - 1);
+                    }
+                } else {
+                    [self addEventOrder:currentWeek toArray:eventTypeArray];
+                    event.week = @(currentWeek);
+                }
             }
         } else if ([event.eventType integerValue] == TBAEventTypePreseason) {
             [self addEventOrder:EventOrderPreseason toArray:eventTypeArray];

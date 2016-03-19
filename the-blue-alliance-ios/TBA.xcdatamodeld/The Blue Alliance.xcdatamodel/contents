@@ -31,7 +31,7 @@
         <attribute name="startDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="venueAddress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="week" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="week" optional="YES" attributeType="Float" defaultValueString="0" syncable="YES"/>
         <attribute name="year" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventAlliance" inverseName="event" inverseEntity="EventAlliance" syncable="YES"/>
         <relationship name="matches" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Match" inverseName="event" inverseEntity="Match" syncable="YES"/>

@@ -119,7 +119,16 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     NSMutableArray *mapped = [NSMutableArray arrayWithCapacity:weeks.count];
     [weeks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSNumber *num = (NSNumber *)obj;
-        [mapped addObject:[Event stringForEventOrder:[num integerValue]]];
+        /**
+         * Special cases for 2016:
+         * Week 1 is actually Week 0.5, eveything else is one less
+         * See http://www.usfirst.org/roboticsprograms/frc/blog-The-Palmetto-Regional
+         */
+        if (num.floatValue == 0.5) {
+            [mapped addObject:@"Week 0.5"];
+        } else {
+            [mapped addObject:[Event stringForEventOrder:[num integerValue]]];
+        }
     }];
     
     if (self.segmentedControl) {
