@@ -153,17 +153,14 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
         if (self.team) {
             if ([text isEqualToString:self.team.location]) {
                 cell.textLabel.text = [NSString stringWithFormat:@"from %@", text];
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             } else if ([text isEqualToString:self.team.name]) {
                 cell.textLabel.text = text;
                 cell.textLabel.numberOfLines = 0;
             } else if ([text isEqualToString:[self.event dateString]]) {
                 cell.textLabel.text = text;
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             }
         } else if (self.event) {
             cell.textLabel.text = text;
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
     } else if ((indexPath.section == 0 && self.infoArray.count == 0) || indexPath.section == 1) {
         NSInteger row = indexPath.row;
