@@ -44,13 +44,14 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
     [self styleInterface];
 }
 
-#pragma mark - Interface Actions
+#pragma mark - Private Methods
 
-- (void)showView:(UIView *)showView {
-    for (UIView *view in @[self.eventsView, self.rankingsView]) {
-        view.hidden = (showView == view ? NO : YES);
-    }
+- (void)cancelRefreshes {
+    [self.eventsViewController cancelRefresh];
+    [self.rankingsViewController cancelRefresh];
 }
+
+#pragma mark - Interface Actions
 
 - (void)styleInterface {
     self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
@@ -62,29 +63,25 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 - (void)updateInterface {
     if (self.segmentedControl.selectedSegmentIndex == TBADistrictDataTypeEvents) {
         [self showView:self.eventsView];
-        
-        [self.rankingsViewController cancelRefresh];
-        
         if (self.eventsViewController.fetchedResultsController.fetchedObjects.count == 0) {
             self.eventsViewController.refresh();
         }
     } else {
         [self showView:self.rankingsView];
-        
-        [self.eventsViewController cancelRefresh];
-        
         if (self.rankingsViewController.fetchedResultsController.fetchedObjects.count == 0) {
             self.rankingsViewController.refresh();
         }
     }
 }
 
-- (IBAction)segmentedControlValueChanged:(id)sender {
-    if (self.segmentedControl.selectedSegmentIndex == TBADistrictDataTypeRankings) {
-        [self.eventsViewController cancelRefresh];
-    } else {
-        [self.rankingsViewController cancelRefresh];
+- (void)showView:(UIView *)showView {
+    for (UIView *view in @[self.eventsView, self.rankingsView]) {
+        view.hidden = (showView == view ? NO : YES);
     }
+}
+
+- (IBAction)segmentedControlValueChanged:(id)sender {
+    [self cancelRefreshes];
     [self updateInterface];
 }
 

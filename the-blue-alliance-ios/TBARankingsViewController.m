@@ -11,6 +11,7 @@
 #import "District.h"
 #import "DistrictRanking.h"
 #import "Event.h"
+#import "EventRanking.h"
 
 static NSString *const RankCellReuseIdentifier  = @"RankCell";
 
@@ -76,29 +77,49 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
 
 #pragma mark - Data Methods
 
-#warning Can we call this code from the EventVC instead of duplicating it in there
 - (void)refreshRankings {
-    [self updateRefresh:YES];
-
-    __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.district.key forYear:[self.district.year unsignedIntegerValue] withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf removeRequestIdentifier:request];
-        
-        if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to reload district rankings"];
-            });
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                // TODO: These large inserts are hanging our UI thread. We need to look in to fixing it.
-                [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:strongSelf.district inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf.persistenceController save];
-            });
-        }
-    }];
-    [self addRequestIdentifier:request];
+    if (self.district) {
+        __weak typeof(self) weakSelf = self;
+        __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.district.key forYear:[self.district.year unsignedIntegerValue] withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            
+            [strongSelf removeRequestIdentifier:request];
+            
+            if (error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [strongSelf showErrorAlertWithMessage:@"Unable to reload district rankings"];
+                });
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    // TODO: These large inserts are hanging our UI thread. We need to look in to fixing it.
+                    [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:strongSelf.district inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
+                    [strongSelf.persistenceController save];
+                    [strongSelf.tableView reloadData];
+                });
+            }
+        }];
+        [self addRequestIdentifier:request];
+    } else if (self.event) {
+        __weak typeof(self) weakSelf = self;
+        __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForEventKey:self.event.key withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            
+            [strongSelf removeRequestIdentifier:request];
+            
+            if (error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [strongSelf showErrorAlertWithMessage:@"Unable to reload event rankings"];
+                });
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:self.event inManagedObjectContext:self.persistenceController.managedObjectContext];
+                    [strongSelf.persistenceController save];
+                    [strongSelf.tableView reloadData];
+                });
+            }
+        }];
+        [self addRequestIdentifier:request];
+    }
 }
 
 #pragma mark - TBA Table View Data Source

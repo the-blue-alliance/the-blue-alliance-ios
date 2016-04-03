@@ -41,7 +41,7 @@
     
     self.noDataViewController.view.alpha = 0.0f;
     [self.tableView setBackgroundView:self.noDataViewController.view];
-    
+
     if (text) {
         self.noDataViewController.textLabel.text = text;
     } else {
@@ -73,7 +73,15 @@
 #pragma mark - Table View Data Source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.fetchedResultsController.sections.count;
+    NSInteger sections = 0;
+    if (self.fetchedResultsController.sections.count > 0) {
+        sections = self.fetchedResultsController.sections.count;
+    } else {
+        if (self.tbaDelegate) {
+            [self.tbaDelegate showNoDataView];
+        }
+    }
+    return sections;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

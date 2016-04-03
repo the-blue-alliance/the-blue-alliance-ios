@@ -33,6 +33,8 @@
     
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
+    // Make sure our refresh control is above the background view so it shows during no data states
+    self.refreshControl.layer.zPosition = self.tableView.backgroundView.layer.zPosition + 1;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -43,24 +45,12 @@
 
 #pragma mark - Public Methods
 
-- (void)updateRefresh:(BOOL)refreshing {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (refreshing) {
-            [self.tableView setContentOffset:CGPointMake(0, -self.refreshControl.frame.size.height) animated:NO];
-            [self.refreshControl beginRefreshing];
-        } else {
-            [self.refreshControl endRefreshing];
-        }
-    });
-}
-
 - (void)cancelRefresh {
     [self updateRefresh:NO];
 
     if ([self.requestsArray count] == 0) {
         return;
     }
-    NSLog(@"Cancel refresh");
 
     for (NSNumber *request in self.requestsArray) {
         NSUInteger requestIdentifier = [request unsignedIntegerValue];
@@ -94,6 +84,17 @@
     if (self.refresh) {
         self.refresh();
     }
+}
+
+- (void)updateRefresh:(BOOL)refreshing {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (refreshing) {
+            [self.tableView setContentOffset:CGPointMake(0, -self.refreshControl.frame.size.height) animated:NO];
+            [self.refreshControl beginRefreshing];
+        } else {
+            [self.refreshControl endRefreshing];
+        }
+    });
 }
 
 @end

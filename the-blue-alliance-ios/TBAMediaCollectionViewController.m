@@ -64,7 +64,7 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        [strongSelf updateRefresh:YES];
+        [strongSelf hideNoDataView];
         [strongSelf refreshData];
     };
 }
@@ -90,6 +90,7 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
             dispatch_async(dispatch_get_main_queue(), ^{
                 [Media insertMediasWithModelMedias:media forTeam:self.team andYear:self.year inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
                 [strongSelf.persistenceController save];
+                [strongSelf.collectionView reloadData];
             });
         }
     }];
@@ -106,7 +107,7 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
 }
 
 - (void)showNoDataView {
-    [self showNoDataViewWithText:@"No media"];
+    [self showNoDataViewWithText:@"No media found for this team"];
 }
 
 #pragma mark - Collection View Delegate Flow Layout

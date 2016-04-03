@@ -15,7 +15,9 @@
 @property (nonatomic, weak) IBOutlet UISearchBar *searchBar;
 
 @property (nonatomic, strong) Event *event;
+
 @property (nonatomic, assign) BOOL showSearch;
+
 @property (nonatomic, copy) void (^teamSelected)(Team *team);
 
 @end

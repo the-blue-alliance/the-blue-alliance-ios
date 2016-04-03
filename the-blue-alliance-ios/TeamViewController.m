@@ -49,33 +49,30 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     [super viewDidLoad];
 
     __weak typeof(self) weakSelf = self;
-    // TODO: Need some way to refresh years participated
     self.yearSelected = ^void(NSUInteger selectedYear) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
+        [strongSelf cancelRefreshes];
+
         strongSelf.currentYear = selectedYear;
-
         strongSelf.mediaCollectionViewController.year = selectedYear;
-        if (strongSelf.mediaCollectionViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            strongSelf.mediaCollectionViewController.refresh();
-        }
-
         strongSelf.eventsViewController.year = @(selectedYear);
-        if (strongSelf.eventsViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            strongSelf.eventsViewController.refresh();
-        }
+        
+        [strongSelf updateInterface];
     };
     
     [self fetchYearsParticipatedAndRefresh:YES];
     [self styleInterface];
 }
 
-#pragma mark - Interface Methods
+#pragma mark - Private Methods
 
-- (void)showView:(UIView *)showView {
-    for (UIView *view in @[self.infoView, self.eventsView, self.mediaView]) {
-        view.hidden = (showView == view ? NO : YES);
-    }
+- (void)cancelRefreshes {
+    [self.infoViewController cancelRefresh];
+    [self.eventsViewController cancelRefresh];
+    [self.mediaCollectionViewController cancelRefresh];
 }
+
+#pragma mark - Interface Methods
 
 - (void)styleInterface {
     self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
@@ -83,34 +80,29 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 }
 
 - (void)updateInterface {
-    // TODO: Find a better pattern for canceling refreshes
     if (self.segmentedControl.selectedSegmentIndex == TBATeamDataTypeInfo) {
         [self showView:self.infoView];
-        
-        [self.eventsViewController cancelRefresh];
-        [self.mediaCollectionViewController cancelRefresh];
     } else if (self.segmentedControl.selectedSegmentIndex == TBATeamDataTypeEvents) {
         [self showView:self.eventsView];
-        
-        [self.infoViewController cancelRefresh];
-        [self.mediaCollectionViewController cancelRefresh];
-        
         if (self.eventsViewController.fetchedResultsController.fetchedObjects.count == 0) {
             self.eventsViewController.refresh();
         }
     } else {
         [self showView:self.mediaView];
-        
-        [self.infoViewController cancelRefresh];
-        [self.eventsViewController cancelRefresh];
-        
         if (self.mediaCollectionViewController.fetchedResultsController.fetchedObjects.count == 0) {
             self.mediaCollectionViewController.refresh();
         }
     }
 }
 
+- (void)showView:(UIView *)showView {
+    for (UIView *view in @[self.infoView, self.eventsView, self.mediaView]) {
+        view.hidden = (showView == view ? NO : YES);
+    }
+}
+
 - (IBAction)segmentedControlValueChanged:(id)sender {
+    [self cancelRefreshes];
     [self updateInterface];
 }
 

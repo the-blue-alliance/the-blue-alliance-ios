@@ -34,6 +34,7 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
 
 - (void)clearFRC {
     self.fetchedResultsController = nil;
+
     [self.tableView reloadData];
     [self.tableView setContentOffset:CGPointZero animated:NO];
 }
@@ -111,7 +112,6 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
         return;
     }
 
-    [self updateRefresh:YES];
     __weak typeof(self) weakSelf = self;
     if (self.team) {
         __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForTeamKey:self.team.key andYear:self.year.unsignedIntegerValue withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
@@ -127,6 +127,7 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
                 NSArray *newEvents = [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
                 [strongSelf.team addEvents:[NSSet setWithArray:newEvents]];
                 [strongSelf.persistenceController save];
+                [strongSelf.tableView reloadData];
             }
         }];
         [self addRequestIdentifier:request];
@@ -137,14 +138,15 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
             [strongSelf removeRequestIdentifier:request];
             
             if (error) {
-                NSString *errorMessage = @"Unable to load events";
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [strongSelf showErrorAlertWithMessage:errorMessage];
+                    [strongSelf showErrorAlertWithMessage:@"Unable to load events"];
                 });
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
                     [strongSelf.persistenceController save];
+                    [strongSelf.tableView reloadData];
+
                     if (self.eventsFetched) {
                         self.eventsFetched();
                     }
@@ -186,6 +188,10 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
 - (void)configureCell:(TBAEventTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Event *event = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.event = event;
+}
+
+- (void)showNoDataView {
+    [self showNoDataViewWithText:@"No events found"];
 }
 
 #pragma mark - Table View Delegate

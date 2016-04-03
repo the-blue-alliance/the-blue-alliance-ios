@@ -58,7 +58,6 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         [strongSelf hideNoDataView];
-        [strongSelf updateRefresh:YES];
         [strongSelf refreshData];
     };
 }
@@ -102,6 +101,7 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [strongSelf.persistenceController save];
+                [strongSelf.tableView reloadData];
             });
         }
     }];

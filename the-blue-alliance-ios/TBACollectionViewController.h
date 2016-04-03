@@ -20,7 +20,7 @@
 
 @interface TBACollectionViewController : UICollectionViewController <NSFetchedResultsControllerDelegate>
 
-@property (null_resettable, nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nullable, nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nullable, nonatomic, strong) TBAPersistenceController *persistenceController;
 @property (nullable, nonatomic, weak) id<TBACollectionViewControllerDelegate> tbaDelegate;
 @property (nonnull, nonatomic, copy) NSString *cellIdentifier;

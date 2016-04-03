@@ -6,13 +6,14 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import "TBATableViewController.h"
+#import "TBARefreshTableViewController.h"
 
 @class Event, Match;
 
-@interface TBAMatchesViewController : TBATableViewController <TBATableViewControllerDelegate>
+@interface TBAMatchesViewController : TBARefreshTableViewController <TBATableViewControllerDelegate>
 
 @property (nonatomic, strong) Event *event;
+
 @property (nonatomic, copy) void (^matchSelected)(Match *match);
 
 @end

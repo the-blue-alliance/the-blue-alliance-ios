@@ -15,7 +15,6 @@
 - (void)addRequestIdentifier:(NSUInteger)requestIdentifier;
 - (void)removeRequestIdentifier:(NSUInteger)requestIdentifier;
 
-- (void)updateRefresh:(BOOL)refreshing;
 - (void)cancelRefresh;
 
 @end

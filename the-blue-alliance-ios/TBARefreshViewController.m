@@ -64,23 +64,12 @@
 
 #pragma mark - Public Methods
 
-- (void)updateRefreshBarButtonItem:(BOOL)refreshing {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (refreshing) {
-            [self.navigationItem setRightBarButtonItem:self.activityBarButtonItem animated:YES];
-        } else {
-            [self.navigationItem setRightBarButtonItem:self.refreshBarButtonItem animated:YES];
-        }
-    });
-}
-
 - (void)cancelRefresh {
     [self updateRefreshBarButtonItem:NO];
     
     if ([self.requestsArray count] == 0) {
         return;
     }
-    NSLog(@"Refresh canceled");
 
     for (NSNumber *request in self.requestsArray) {
         NSUInteger requestIdentifier = [request unsignedIntegerValue];
@@ -110,6 +99,16 @@
     if (self.refresh) {
         self.refresh();
     }
+}
+
+- (void)updateRefreshBarButtonItem:(BOOL)refreshing {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (refreshing) {
+            [self.navigationItem setRightBarButtonItem:self.activityBarButtonItem animated:YES];
+        } else {
+            [self.navigationItem setRightBarButtonItem:self.refreshBarButtonItem animated:YES];
+        }
+    });
 }
 
 @end

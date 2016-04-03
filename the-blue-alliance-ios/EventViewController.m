@@ -63,34 +63,20 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    __weak typeof(self) weakSelf = self;
-    self.refresh = ^void() {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-
-        if (strongSelf.segmentedControl.selectedSegmentIndex == TBAEventDataTypeInfo) {
-            [strongSelf refreshEvent];
-        } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBAEventDataTypeTeams) {
-            [strongSelf refreshTeams];
-        } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBAEventDataTypeRankings) {
-            [strongSelf refreshRankings];
-        } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBAEventDataTypeMatches) {
-            [strongSelf refreshMatches];
-        } else if (strongSelf.segmentedControl.selectedSegmentIndex == TBAEventDataTypeAlliances) {
-            [strongSelf refreshEvent];
-        }
-        [strongSelf updateRefreshBarButtonItem:YES];
-    };
-    
     [self styleInterface];
 }
 
-#pragma mark - Interface Methods
+#pragma mark - Private Methods
 
-- (void)showView:(UIView *)showView {
-    for (UIView *view in @[self.infoView, self.teamsView, self.rankingsView, self.matchesView, self.alliancesView]) {
-        view.hidden = (showView == view ? NO : YES);
+- (void)cancelRefreshes {
+    // TODO: Make sure alliances VC gets added back here
+    NSArray *refreshTVCs = @[self.infoViewController, self.teamsViewController, self.rankingsViewController, self.matchesViewController];
+    for (TBARefreshTableViewController *refreshTVC in refreshTVCs) {
+        [refreshTVC cancelRefresh];
     }
 }
+
+#pragma mark - Interface Methods
 
 - (void)styleInterface {
     self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
@@ -101,27 +87,33 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 - (void)updateInterface {
     if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeInfo) {
         [self showView:self.infoView];
-        [self fetchEventAndRefresh:NO];
     } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeTeams) {
         [self showView:self.teamsView];
         if (self.teamsViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.refresh();
+            self.teamsViewController.refresh();
         }
     } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeRankings) {
         [self showView:self.rankingsView];
         if (self.rankingsViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.refresh();
+            self.rankingsViewController.refresh();
         }
     } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeMatches) {
         [self showView:self.matchesView];
         if (self.matchesViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.refresh();
+            self.matchesViewController.refresh();
         }
     } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeAlliances) {
         [self showView:self.alliancesView];
         if (self.alliancesViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.refresh();
+            // TODO: This needs to refresh
+//            self.alliancesViewController.refresh();
         }
+    }
+}
+
+- (void)showView:(UIView *)showView {
+    for (UIView *view in @[self.infoView, self.teamsView, self.rankingsView, self.matchesView, self.alliancesView]) {
+        view.hidden = (showView == view ? NO : YES);
     }
 }
 
@@ -152,138 +144,16 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 }
 
 - (void)segmentedControlValueChanged:(id)sender {
-    [self cancelRefresh];
+    [self cancelRefreshes];
     [self updateInterface];
 }
-
-#pragma mark - Event Info
-
-- (void)fetchEventAndRefresh:(BOOL)refresh {
-    __weak typeof(self) weakSelf = self;
-    [Event fetchEventForKey:self.event.key fromContext:self.persistenceController.managedObjectContext checkUpstream:NO withCompletionBlock:^(Event *event, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to fetch event info locally"];
-            });
-            return;
-        }
-        
-        if (!event) {
-            if (refresh) {
-                [self refresh];
-            }
-        } else {
-            strongSelf.event = event;
-            strongSelf.infoViewController.event = event;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf.infoViewController.tableView reloadData];
-            });
-        }
-    }];
-}
-
-- (void)refreshEvent {
-    __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchEventForEventKey:self.event.key withCompletionBlock:^(TBAEvent *event, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf removeRequestIdentifier:request];
-        
-        if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
-            });
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [Event insertEventWithModelEvent:event inManagedObjectContext:self.persistenceController.managedObjectContext];
-                [strongSelf fetchEventAndRefresh:NO];
-                [strongSelf.persistenceController save];
-            });
-        }
-    }];
-    [self addRequestIdentifier:request];
-}
-
-#pragma mark - Teams
-
-- (void)refreshTeams {
-    __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchTeamsForEventKey:self.event.key withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf removeRequestIdentifier:request];
-        
-        if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to reload teams for event"];
-            });
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSArray *localTeams = [Team insertTeamsWithModelTeams:teams inManagedObjectContext:self.persistenceController.managedObjectContext];
-                [self.event setTeams:[[NSSet alloc] initWithArray:localTeams]];
-                [strongSelf.persistenceController save];
-            });
-        }
-    }];
-    [self addRequestIdentifier:request];
-}
-
-#pragma mark - Rankings
-
-- (void)refreshRankings {
-    __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForEventKey:self.event.key withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf removeRequestIdentifier:request];
-        
-        if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to reload event rankings"];
-            });
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:self.event inManagedObjectContext:self.persistenceController.managedObjectContext];
-                [strongSelf.persistenceController save];
-            });
-        }
-    }];
-    [self addRequestIdentifier:request];
-}
-
-#pragma mark - Matches
-
-- (void)refreshMatches {
-    __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchMatchesForEventKey:self.event.key withCompletionBlock:^(NSArray *matches, NSInteger totalCount, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf removeRequestIdentifier:request];
-        
-        if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to reload event matches"];
-            });
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [Match insertMatchesWithModelMatches:matches forEvent:self.event inManagedObjectContext:self.persistenceController.managedObjectContext];
-                [strongSelf.persistenceController save];
-            });
-        }
-    }];
-    [self addRequestIdentifier:request];
-}
-
-#pragma mark - Alliances
-
-// Do I even have to do anything here like what?
 
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"InfoViewControllerEmbed"]) {
         self.infoViewController = segue.destinationViewController;
+        self.infoViewController.persistenceController = self.persistenceController;
         self.infoViewController.event = self.event;
     } else if ([segue.identifier isEqualToString:@"TeamsViewControllerEmbed"]) {
         self.teamsViewController = segue.destinationViewController;

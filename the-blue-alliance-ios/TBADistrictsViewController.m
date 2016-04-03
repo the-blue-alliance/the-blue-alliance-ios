@@ -92,6 +92,7 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
             dispatch_async(dispatch_get_main_queue(), ^{
                 [District insertDistrictsWithDistrictDicts:districts forYear:year inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
                 [strongSelf.persistenceController save];
+                [strongSelf.tableView reloadData];
             });
         }
     }];
@@ -103,6 +104,10 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     District *district = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = district.name;
+}
+
+- (void)showNoDataView {
+    [self showNoDataViewWithText:@"No districts found"];
 }
 
 #pragma mark - Table View Delegate

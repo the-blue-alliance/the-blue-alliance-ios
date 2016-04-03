@@ -13,6 +13,7 @@
 @interface TBADistrictsViewController : TBARefreshTableViewController <TBATableViewControllerDelegate>
 
 @property (nonatomic, assign) NSUInteger year;
+
 @property (nonatomic, copy) void (^districtSelected)(District *district);
 
 @end

@@ -10,6 +10,7 @@
 #import "Team.h"
 #import "Team+Fetch.h"
 #import "Event.h"
+#import "Event+Fetch.h"
 #import "Media.h"
 
 static NSString *const InfoCellReuseIdentifier = @"InfoCell";
@@ -33,7 +34,11 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        [strongSelf refreshTeam];
+        if (strongSelf.team) {
+            [strongSelf refreshTeam];
+        } else if (strongSelf.event) {
+            [strongSelf refreshEvent];
+        }
     };
 }
 
@@ -99,7 +104,6 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
     }];
 }
 
-#warning Don't I need some refresh for if it's an event??
 - (void)refreshTeam {
     __weak typeof(self) weakSelf = self;
     __block NSUInteger request = [[TBAKit sharedKit] fetchTeamForTeamKey:self.team.key withCompletionBlock:^(TBATeam *team, NSError *error) {
@@ -116,6 +120,54 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
                 [Team insertTeamWithModelTeam:team inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
                 [strongSelf fetchTeamAndRefresh:NO];
                 [strongSelf.persistenceController save];
+                [strongSelf.tableView reloadData];
+            });
+        }
+    }];
+    [self addRequestIdentifier:request];
+}
+
+- (void)fetchEventAndRefresh:(BOOL)refresh {
+    __weak typeof(self) weakSelf = self;
+    [Event fetchEventForKey:self.event.key fromContext:self.persistenceController.managedObjectContext checkUpstream:NO withCompletionBlock:^(Event *event, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf showErrorAlertWithMessage:@"Unable to fetch event info locally"];
+            });
+            return;
+        }
+        
+        if (!event) {
+            if (refresh) {
+                [self refresh];
+            }
+        } else {
+            strongSelf.event = event;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf.tableView reloadData];
+            });
+        }
+    }];
+}
+
+- (void)refreshEvent {
+    __weak typeof(self) weakSelf = self;
+    __block NSUInteger request = [[TBAKit sharedKit] fetchEventForEventKey:self.event.key withCompletionBlock:^(TBAEvent *event, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf removeRequestIdentifier:request];
+        
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [Event insertEventWithModelEvent:event inManagedObjectContext:self.persistenceController.managedObjectContext];
+                [strongSelf fetchEventAndRefresh:NO];
+                [strongSelf.persistenceController save];
+                [strongSelf.tableView reloadData];
             });
         }
     }];

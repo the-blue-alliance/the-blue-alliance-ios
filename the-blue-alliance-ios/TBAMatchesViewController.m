@@ -55,6 +55,38 @@ static NSString *const MatchCellReuseIdentifier = @"MatchCell";
     
     self.tbaDelegate = self;
     self.cellIdentifier = MatchCellReuseIdentifier;
+    
+    __weak typeof(self) weakSelf = self;
+    self.refresh = ^void() {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf hideNoDataView];
+        [strongSelf refreshMatches];
+    };
+}
+
+#pragma mark - Data Methods
+
+- (void)refreshMatches {
+    __weak typeof(self) weakSelf = self;
+    __block NSUInteger request = [[TBAKit sharedKit] fetchMatchesForEventKey:self.event.key withCompletionBlock:^(NSArray *matches, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf removeRequestIdentifier:request];
+        
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf showErrorAlertWithMessage:@"Unable to reload event matches"];
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [Match insertMatchesWithModelMatches:matches forEvent:self.event inManagedObjectContext:self.persistenceController.managedObjectContext];
+                [strongSelf.persistenceController save];
+                [strongSelf.tableView reloadData];
+            });
+        }
+    }];
+    [self addRequestIdentifier:request];
 }
 
 #pragma mark - TBA Table View Data Source
