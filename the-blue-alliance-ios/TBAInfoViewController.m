@@ -278,6 +278,59 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if ((indexPath.section == 0 && self.infoArray.count == 0) || indexPath.section == 1) {
+        NSInteger row = indexPath.row;
+        if (self.team) {
+            if (!self.team.website) {
+                row++;
+            }
+            NSString *url;
+            switch (row) {
+                case 0:
+                    url = self.team.website;
+                    break;
+                case 1:
+                    url = [NSString stringWithFormat:@"https://twitter.com/search?q=%%23%@", self.team.key];
+                    break;
+                case 2:
+                    url = [NSString stringWithFormat:@"https://www.youtube.com/results?search_query=%@", self.team.key];
+                    break;
+                case 3:
+                    url = [NSString stringWithFormat:@"http://www.chiefdelphi.com/media/photos/tags/%@", self.team.key];
+                    break;
+                default:
+                    break;
+            }
+            if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:url]]) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+            }
+        } else if (self.event) {
+            if (!self.event.website) {
+                row++;
+            }
+            NSString *url;
+            switch (row) {
+                case 0:
+                    url = self.event.website;
+                    break;
+                case 1:
+                    url = [NSString stringWithFormat:@"https://twitter.com/search?q=%%23%@", self.event.key];
+                    break;
+                case 2:
+                    url = [NSString stringWithFormat:@"https://www.youtube.com/results?search_query=%@", self.event.key];
+                    break;
+                case 3:
+                    url = [NSString stringWithFormat:@"http://www.chiefdelphi.com/media/photos/tags/%@", self.event.key];
+                    break;
+                default:
+                    break;
+            }
+            if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:url]]) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+            }
+        }
+    }
 }
 
 #pragma mark - Private Methods
