@@ -122,6 +122,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
             
             self.currentYear = year;
             self.mediaCollectionViewController.year = year;
+            self.eventsViewController.year = @(year);
         }
     }
 }
