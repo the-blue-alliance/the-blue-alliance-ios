@@ -111,7 +111,7 @@ static NSString *const MatchCellReuseIdentifier = @"MatchCell";
     
     header.backgroundView.backgroundColor = [UIColor TBANavigationBarColor];
     header.textLabel.textColor = [UIColor whiteColor];
-//    header.textLabel.font = [UIFont systemFontOfSize:12.0f];
+    header.textLabel.font = [UIFont systemFontOfSize:16.0f];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
