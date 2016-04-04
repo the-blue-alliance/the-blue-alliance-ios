@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class DistrictRanking, Event, EventPoints, EventRanking, Media;
+@class AwardRecipient, DistrictRanking, Event, EventPoints, EventRanking, Media;
 
 NS_ASSUME_NONNULL_BEGIN
 

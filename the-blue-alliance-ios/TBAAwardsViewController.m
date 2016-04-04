@@ -1,19 +1,22 @@
 //
-//  TBAAlliancesTableViewController.m
+//  TBAAwardsViewController.m
 //  the-blue-alliance
 //
-//  Created by Zach Orr on 1/10/16.
+//  Created by Zach Orr on 4/3/16.
 //  Copyright © 2016 The Blue Alliance. All rights reserved.
 //
 
-#import "TBAAlliancesViewController.h"
+#import "TBAAwardsViewController.h"
+#import "TBAAwardTableViewCell.h"
+#import "Award.h"
+#import "AwardRecipient.h"
 #import "Event.h"
-#import "EventAlliance.h"
-#import "TBAAllianceCell.h"
+#import "Team.h"
 
-static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
+static NSString *const AwardCellReuseIdentifier = @"AwardCell";
 
-@implementation TBAAlliancesViewController
+@implementation TBAAwardsViewController
+
 @synthesize fetchedResultsController = _fetchedResultsController;
 
 #pragma mark - Properities
@@ -23,13 +26,10 @@ static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
         return _fetchedResultsController;
     }
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventAlliance"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@", self.event];
-    [fetchRequest setPredicate:predicate];
-    
-    NSSortDescriptor *allianceNumberSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"allianceNumber" ascending:YES];
-    [fetchRequest setSortDescriptors:@[allianceNumberSortDescriptor]];
-    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Award"];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"event == %@", self.event]];
+    [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"awardType" ascending:YES]]];
+
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                     managedObjectContext:self.persistenceController.managedObjectContext
                                                                       sectionNameKeyPath:nil
@@ -37,11 +37,11 @@ static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
     _fetchedResultsController.delegate = self;
     
     NSError *error = nil;
-    if (![self.fetchedResultsController performFetch:&error]) {
+    if (![_fetchedResultsController performFetch:&error]) {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-
+    
     return _fetchedResultsController;
 }
 
@@ -49,35 +49,35 @@ static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     self.tbaDelegate = self;
-    self.cellIdentifier = AllianceCellReuseIdentifier;
+    self.cellIdentifier = AwardCellReuseIdentifier;
     
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         [strongSelf hideNoDataView];
-        [strongSelf refreshEvent];
+        [strongSelf refreshAwards];
     };
 }
 
 #pragma mark - Data Methods
 
-- (void)refreshEvent {
+- (void)refreshAwards {
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchEventForEventKey:self.event.key withCompletionBlock:^(TBAEvent *event, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchAwardsForEventKey:self.event.key withCompletionBlock:^(NSArray *awards, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         [strongSelf removeRequestIdentifier:request];
         
         if (error) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
+                [strongSelf showErrorAlertWithMessage:@"Unable to reload event matches"];
             });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                strongSelf.event = [Event insertEventWithModelEvent:event inManagedObjectContext:self.persistenceController.managedObjectContext];
+                [Award insertAwardsWithModelAwards:awards forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
                 [strongSelf.persistenceController save];
                 [strongSelf.tableView reloadData];
             });
@@ -88,15 +88,13 @@ static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
 
 #pragma mark - TBA Table View Data Source
 
-- (void)configureCell:(TBAAllianceCell *)cell atIndexPath:(NSIndexPath *)indexPath {
-    EventAlliance *alliance = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.eventAlliance = alliance;
-    
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+- (void)configureCell:(TBAAwardTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    Award *award = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    cell.award = award;
 }
 
 - (void)showNoDataView {
-    [self showNoDataViewWithText:@"No alliances for this event"];
+    [self showNoDataViewWithText:@"No awards for this event"];
 }
 
 #pragma mark - Table View Delegate
@@ -107,6 +105,10 @@ static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 44.0f;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];    
 }
 
 @end

@@ -240,6 +240,10 @@
     event.endDate = modelEvent.endDate;
     
     /*
+    need awards in heree too
+    */
+    
+    /*
     event.webcasts = [NSSet setWithArray:[EventWebcast insertEventWebcastsWithModelEventWebcasts:modelEvent.webcast
     forEvent:event
     inManagedObjectContext:context]];

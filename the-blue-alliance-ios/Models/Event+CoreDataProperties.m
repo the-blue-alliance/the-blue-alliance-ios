@@ -37,5 +37,6 @@
 @dynamic rankings;
 @dynamic teams;
 @dynamic webcasts;
+@dynamic awards;
 
 @end

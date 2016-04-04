@@ -18,6 +18,8 @@
 
 @implementation TBAAllianceCell
 
+
+
 - (void)setEventAlliance:(EventAlliance *)eventAlliance {
     _eventAlliance = eventAlliance;
     

@@ -658,6 +658,58 @@
             </objects>
             <point key="canvasLocation" x="3945" y="-2457.570422535211"/>
         </scene>
+        <!--Awards View Controller-->
+        <scene sceneID="Nvz-tC-li6">
+            <objects>
+                <tableViewController id="QUz-5n-OCV" customClass="TBAAwardsViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="bdA-2d-PUW">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="443"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AwardCell" rowHeight="100" id="XC2-y7-bo7" customClass="TBAAwardTableViewCell">
+                                <rect key="frame" x="0.0" y="28" width="600" height="100"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XC2-y7-bo7" id="KZU-yj-ThR">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="99.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YAU-2b-g4R">
+                                            <rect key="frame" x="16" y="11" width="568" height="19.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="tpO-2j-tbV">
+                                            <rect key="frame" x="16" y="35.5" width="568" height="59.5"/>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="YAU-2b-g4R" firstAttribute="leading" secondItem="KZU-yj-ThR" secondAttribute="leading" constant="16" id="Hal-O9-98T"/>
+                                        <constraint firstItem="YAU-2b-g4R" firstAttribute="top" secondItem="KZU-yj-ThR" secondAttribute="top" constant="11" id="KiI-Cv-r0l"/>
+                                        <constraint firstItem="tpO-2j-tbV" firstAttribute="leading" secondItem="KZU-yj-ThR" secondAttribute="leading" constant="16" id="LP9-Om-Ugw"/>
+                                        <constraint firstItem="tpO-2j-tbV" firstAttribute="top" secondItem="YAU-2b-g4R" secondAttribute="bottom" constant="5" id="P5i-L0-C1n"/>
+                                        <constraint firstAttribute="trailing" secondItem="tpO-2j-tbV" secondAttribute="trailing" constant="16" id="UzW-JF-EjW"/>
+                                        <constraint firstAttribute="trailing" secondItem="YAU-2b-g4R" secondAttribute="trailing" constant="16" id="ekR-5w-lVN"/>
+                                        <constraint firstAttribute="bottom" secondItem="tpO-2j-tbV" secondAttribute="bottom" constant="5" id="xee-8j-dDn"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="awardNameLabel" destination="YAU-2b-g4R" id="9po-fZ-8A0"/>
+                                    <outlet property="awardeeStackView" destination="tpO-2j-tbV" id="hcv-aP-Fk2"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="QUz-5n-OCV" id="0Ky-qu-WHA"/>
+                            <outlet property="delegate" destination="QUz-5n-OCV" id="SYI-54-XnG"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hb7-cU-wMn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3945" y="-3504.5"/>
+        </scene>
         <!--Teams-->
         <scene sceneID="ar2-Ed-Abr">
             <objects>
@@ -979,6 +1031,18 @@
                                     <constraint firstAttribute="height" constant="44" id="0Fu-zd-97V"/>
                                 </constraints>
                             </view>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fcu-sf-oYM" userLabel="Awards View">
+                                <rect key="frame" x="0.0" y="44" width="600" height="443"/>
+                                <connections>
+                                    <segue destination="QUz-5n-OCV" kind="embed" identifier="AwardsViewControllerEmbed" id="yZB-cd-90F"/>
+                                </connections>
+                            </containerView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eGR-6y-2vw" userLabel="District Points View">
+                                <rect key="frame" x="0.0" y="44" width="600" height="443"/>
+                                <connections>
+                                    <segue destination="Zl5-IH-oHj" kind="embed" identifier="DistrictPointsViewControllerEmbed" id="kME-mM-wVW"/>
+                                </connections>
+                            </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GFM-5p-JYL">
                                 <rect key="frame" x="0.0" y="44" width="600" height="443"/>
                                 <connections>
@@ -1013,25 +1077,33 @@
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="c83-bI-91p" secondAttribute="trailing" id="21J-jN-urY"/>
+                            <constraint firstItem="fcu-sf-oYM" firstAttribute="top" secondItem="yqx-t0-75q" secondAttribute="bottom" id="2dg-5i-5HC"/>
                             <constraint firstItem="GFM-5p-JYL" firstAttribute="top" secondItem="yqx-t0-75q" secondAttribute="bottom" id="3WX-Ch-u01"/>
+                            <constraint firstItem="68F-KG-6JN" firstAttribute="top" secondItem="fcu-sf-oYM" secondAttribute="bottom" id="5RD-9k-GgY"/>
                             <constraint firstItem="fLC-8k-2Ba" firstAttribute="top" secondItem="yqx-t0-75q" secondAttribute="bottom" id="637-zB-Axc"/>
                             <constraint firstItem="yqx-t0-75q" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="6H1-xb-VhA"/>
                             <constraint firstItem="68F-KG-6JN" firstAttribute="top" secondItem="UTP-aq-H6o" secondAttribute="bottom" id="COU-6s-GIb"/>
+                            <constraint firstItem="eGR-6y-2vw" firstAttribute="top" secondItem="yqx-t0-75q" secondAttribute="bottom" id="EMV-cc-SNA"/>
                             <constraint firstItem="yqx-t0-75q" firstAttribute="top" secondItem="7nG-7X-uOS" secondAttribute="bottom" id="FVp-Vs-KkE"/>
                             <constraint firstItem="68F-KG-6JN" firstAttribute="top" secondItem="fLC-8k-2Ba" secondAttribute="bottom" id="G5H-Eg-VV6"/>
+                            <constraint firstItem="68F-KG-6JN" firstAttribute="top" secondItem="eGR-6y-2vw" secondAttribute="bottom" id="HTp-np-dUC"/>
                             <constraint firstAttribute="trailing" secondItem="fLC-8k-2Ba" secondAttribute="trailing" id="Jac-Hd-XHF"/>
                             <constraint firstAttribute="trailing" secondItem="yqx-t0-75q" secondAttribute="trailing" id="L4N-xB-5qd"/>
                             <constraint firstItem="8lk-1o-sYm" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="Mch-oT-hcX"/>
                             <constraint firstItem="fLC-8k-2Ba" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="Rhz-4o-8OT"/>
+                            <constraint firstAttribute="trailing" secondItem="fcu-sf-oYM" secondAttribute="trailing" id="SQr-xN-hWE"/>
+                            <constraint firstItem="eGR-6y-2vw" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="TmG-Lo-1A4"/>
                             <constraint firstItem="UTP-aq-H6o" firstAttribute="top" secondItem="yqx-t0-75q" secondAttribute="bottom" id="Wq7-c3-b4z"/>
                             <constraint firstItem="68F-KG-6JN" firstAttribute="top" secondItem="8lk-1o-sYm" secondAttribute="bottom" id="XOm-Qx-ALg"/>
                             <constraint firstAttribute="trailing" secondItem="UTP-aq-H6o" secondAttribute="trailing" id="bA3-bX-N2H"/>
+                            <constraint firstItem="fcu-sf-oYM" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="ho8-Ex-6M1"/>
                             <constraint firstItem="GFM-5p-JYL" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="jaa-Mr-gKd"/>
                             <constraint firstItem="c83-bI-91p" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="kyy-LT-eF7"/>
                             <constraint firstItem="68F-KG-6JN" firstAttribute="top" secondItem="GFM-5p-JYL" secondAttribute="bottom" id="oQ8-Fx-Puy"/>
                             <constraint firstItem="68F-KG-6JN" firstAttribute="top" secondItem="c83-bI-91p" secondAttribute="bottom" id="qF0-yv-tud"/>
                             <constraint firstAttribute="trailing" secondItem="GFM-5p-JYL" secondAttribute="trailing" id="svE-VS-6B5"/>
                             <constraint firstItem="c83-bI-91p" firstAttribute="top" secondItem="yqx-t0-75q" secondAttribute="bottom" id="thr-6z-zDd"/>
+                            <constraint firstAttribute="trailing" secondItem="eGR-6y-2vw" secondAttribute="trailing" id="wdb-Ha-BAl"/>
                             <constraint firstAttribute="trailing" secondItem="8lk-1o-sYm" secondAttribute="trailing" id="xmb-cg-7Ye"/>
                             <constraint firstItem="UTP-aq-H6o" firstAttribute="leading" secondItem="MMF-wd-mQB" secondAttribute="leading" id="yBX-Pg-wVM"/>
                             <constraint firstItem="8lk-1o-sYm" firstAttribute="top" secondItem="yqx-t0-75q" secondAttribute="bottom" id="ydC-il-xIW"/>
@@ -1040,6 +1112,8 @@
                     <navigationItem key="navigationItem" title="2015 Kettering University District" id="4ar-iU-waM"/>
                     <connections>
                         <outlet property="alliancesView" destination="GFM-5p-JYL" id="M9A-py-Nxg"/>
+                        <outlet property="awardsView" destination="fcu-sf-oYM" id="ML5-6H-pTq"/>
+                        <outlet property="districtPointsView" destination="eGR-6y-2vw" id="04P-aR-Bb0"/>
                         <outlet property="infoView" destination="UTP-aq-H6o" id="ihf-8I-e1X"/>
                         <outlet property="matchesView" destination="8lk-1o-sYm" id="E8n-7k-npp"/>
                         <outlet property="rankingsView" destination="fLC-8k-2Ba" id="h97-p2-JrH"/>
@@ -1094,7 +1168,7 @@
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Location" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s6Q-Ez-DMG">
                                             <rect key="frame" x="76" y="24.5" width="508" height="13.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="textColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -1350,10 +1424,10 @@
         <image name="tba_blue_lamp" width="110" height="181"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="8A3-99-YiF"/>
-        <segue reference="ijh-4t-Dqv"/>
-        <segue reference="zon-7C-eSE"/>
         <segue reference="eRd-Dy-LTL"/>
+        <segue reference="8A3-99-YiF"/>
+        <segue reference="kME-mM-wVW"/>
+        <segue reference="ijh-4t-Dqv"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

@@ -30,7 +30,7 @@ typedef NS_ENUM(NSInteger, EventOrder) {
 };
 
 
-@class EventAlliance, EventPoints, EventRanking, EventWebcast, Match, Team;
+@class Award, EventAlliance, EventPoints, EventRanking, EventWebcast, Match, Team;
 
 NS_ASSUME_NONNULL_BEGIN
 

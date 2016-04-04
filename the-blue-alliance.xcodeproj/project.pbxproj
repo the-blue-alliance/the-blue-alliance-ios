@@ -49,6 +49,12 @@
 		9243D3FA1BABB70D00512D3B /* Media.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3E41BABB70D00512D3B /* Media.m */; };
 		9243D4021BABB92E00512D3B /* Team+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D4011BABB92E00512D3B /* Team+Fetch.m */; };
 		9243D4051BABB94C00512D3B /* District+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D4041BABB94C00512D3B /* District+Fetch.m */; };
+		92553DEA1CB1ED3A00D7E1EE /* TBAAwardsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92553DE91CB1ED3A00D7E1EE /* TBAAwardsViewController.m */; };
+		92553DFB1CB1F6F100D7E1EE /* Award+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 92553DF41CB1F6F100D7E1EE /* Award+CoreDataProperties.m */; };
+		92553DFC1CB1F6F100D7E1EE /* Award.m in Sources */ = {isa = PBXBuildFile; fileRef = 92553DF61CB1F6F100D7E1EE /* Award.m */; };
+		92553DFD1CB1F6F100D7E1EE /* AwardRecipient+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 92553DF81CB1F6F100D7E1EE /* AwardRecipient+CoreDataProperties.m */; };
+		92553DFE1CB1F6F100D7E1EE /* AwardRecipient.m in Sources */ = {isa = PBXBuildFile; fileRef = 92553DFA1CB1F6F100D7E1EE /* AwardRecipient.m */; };
+		92553E011CB2072300D7E1EE /* TBAAwardTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92553E001CB2072300D7E1EE /* TBAAwardTableViewCell.m */; };
 		925CD21E1AC247F200C9C3BF /* TBARefreshViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 925CD21D1AC247F200C9C3BF /* TBARefreshViewController.m */; };
 		925DECE71AF5B2D9007A7E94 /* TBARankingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 925DECE61AF5B2D9007A7E94 /* TBARankingTableViewCell.m */; };
 		926001671B517DF40027FE95 /* TBANoDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 926001661B517DF40027FE95 /* TBANoDataViewController.m */; };
@@ -159,6 +165,18 @@
 		9243D4011BABB92E00512D3B /* Team+Fetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Team+Fetch.m"; sourceTree = "<group>"; };
 		9243D4031BABB94C00512D3B /* District+Fetch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "District+Fetch.h"; sourceTree = "<group>"; };
 		9243D4041BABB94C00512D3B /* District+Fetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "District+Fetch.m"; sourceTree = "<group>"; };
+		92553DE81CB1ED3A00D7E1EE /* TBAAwardsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAAwardsViewController.h; sourceTree = "<group>"; };
+		92553DE91CB1ED3A00D7E1EE /* TBAAwardsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAAwardsViewController.m; sourceTree = "<group>"; };
+		92553DF31CB1F6F100D7E1EE /* Award+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Award+CoreDataProperties.h"; sourceTree = "<group>"; };
+		92553DF41CB1F6F100D7E1EE /* Award+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Award+CoreDataProperties.m"; sourceTree = "<group>"; };
+		92553DF51CB1F6F100D7E1EE /* Award.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Award.h; sourceTree = "<group>"; };
+		92553DF61CB1F6F100D7E1EE /* Award.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Award.m; sourceTree = "<group>"; };
+		92553DF71CB1F6F100D7E1EE /* AwardRecipient+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AwardRecipient+CoreDataProperties.h"; sourceTree = "<group>"; };
+		92553DF81CB1F6F100D7E1EE /* AwardRecipient+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AwardRecipient+CoreDataProperties.m"; sourceTree = "<group>"; };
+		92553DF91CB1F6F100D7E1EE /* AwardRecipient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AwardRecipient.h; sourceTree = "<group>"; };
+		92553DFA1CB1F6F100D7E1EE /* AwardRecipient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AwardRecipient.m; sourceTree = "<group>"; };
+		92553DFF1CB2072300D7E1EE /* TBAAwardTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAAwardTableViewCell.h; sourceTree = "<group>"; };
+		92553E001CB2072300D7E1EE /* TBAAwardTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAAwardTableViewCell.m; sourceTree = "<group>"; };
 		925CD21C1AC247F200C9C3BF /* TBARefreshViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBARefreshViewController.h; sourceTree = "<group>"; };
 		925CD21D1AC247F200C9C3BF /* TBARefreshViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBARefreshViewController.m; sourceTree = "<group>"; };
 		925DECE51AF5B2D9007A7E94 /* TBARankingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBARankingTableViewCell.h; sourceTree = "<group>"; };
@@ -328,6 +346,7 @@
 				9237F74A1B2CA74D00C89978 /* TBAPersistenceController.m */,
 				9237F77C1B2CA7CB00C89978 /* TBA.xcdatamodeld */,
 				9243D4061BABB96800512D3B /* Generated */,
+				92553DF21CB1F0CF00D7E1EE /* Award */,
 				9243D3FD1BABB74E00512D3B /* District */,
 				9243D3FC1BABB74600512D3B /* Event */,
 				9243D3FB1BABB71800512D3B /* Team */,
@@ -412,6 +431,10 @@
 		9243D4061BABB96800512D3B /* Generated */ = {
 			isa = PBXGroup;
 			children = (
+				92553DF31CB1F6F100D7E1EE /* Award+CoreDataProperties.h */,
+				92553DF41CB1F6F100D7E1EE /* Award+CoreDataProperties.m */,
+				92553DF71CB1F6F100D7E1EE /* AwardRecipient+CoreDataProperties.h */,
+				92553DF81CB1F6F100D7E1EE /* AwardRecipient+CoreDataProperties.m */,
 				9243D3C91BABB70D00512D3B /* District+CoreDataProperties.h */,
 				9243D3CA1BABB70D00512D3B /* District+CoreDataProperties.m */,
 				9243D3CD1BABB70D00512D3B /* DistrictRanking+CoreDataProperties.h */,
@@ -438,6 +461,28 @@
 			name = Generated;
 			sourceTree = "<group>";
 		};
+		92553DEB1CB1ED4100D7E1EE /* Awards */ = {
+			isa = PBXGroup;
+			children = (
+				92553DE81CB1ED3A00D7E1EE /* TBAAwardsViewController.h */,
+				92553DE91CB1ED3A00D7E1EE /* TBAAwardsViewController.m */,
+				92553DFF1CB2072300D7E1EE /* TBAAwardTableViewCell.h */,
+				92553E001CB2072300D7E1EE /* TBAAwardTableViewCell.m */,
+			);
+			name = Awards;
+			sourceTree = "<group>";
+		};
+		92553DF21CB1F0CF00D7E1EE /* Award */ = {
+			isa = PBXGroup;
+			children = (
+				92553DF51CB1F6F100D7E1EE /* Award.h */,
+				92553DF61CB1F6F100D7E1EE /* Award.m */,
+				92553DF91CB1F6F100D7E1EE /* AwardRecipient.h */,
+				92553DFA1CB1F6F100D7E1EE /* AwardRecipient.m */,
+			);
+			name = Award;
+			sourceTree = "<group>";
+		};
 		9260016C1B519F9A0027FE95 /* Data Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -446,6 +491,7 @@
 				92AC4FF71B471F36004A05E2 /* Rankings */,
 				927E8C4D1B268A3D00C93E6C /* Teams */,
 				92E749111B27B0EF00C46487 /* Info */,
+				92553DEB1CB1ED4100D7E1EE /* Awards */,
 				923E12701B52B4260089D9F8 /* Districts */,
 			);
 			name = "Data Views";
@@ -758,9 +804,11 @@
 				92F19E3E1C433FB50059C7B4 /* TBAAllianceCell.m in Sources */,
 				927048221AC23BF8002E46CE /* TeamsViewController.m in Sources */,
 				9243D3E51BABB70D00512D3B /* Team+CoreDataProperties.m in Sources */,
+				92553DFD1CB1F6F100D7E1EE /* AwardRecipient+CoreDataProperties.m in Sources */,
 				9243D3F61BABB70D00512D3B /* Match.m in Sources */,
 				92AE675F1B81FFB000D7418F /* TBAMediaCollectionViewController.m in Sources */,
 				9243D3EC1BABB70D00512D3B /* EventWebcast.m in Sources */,
+				92553DFC1CB1F6F100D7E1EE /* Award.m in Sources */,
 				9243D3FA1BABB70D00512D3B /* Media.m in Sources */,
 				923E126F1B52B4230089D9F8 /* TBADistrictsViewController.m in Sources */,
 				92CA3C5C1B88F2C30094DC7D /* TBACollectionViewController.m in Sources */,
@@ -776,7 +824,9 @@
 				9222F1191AD6910F00C0AEA0 /* EventViewController.m in Sources */,
 				9243D3E81BABB70D00512D3B /* Event.m in Sources */,
 				926001671B517DF40027FE95 /* TBANoDataViewController.m in Sources */,
+				92553DFE1CB1F6F100D7E1EE /* AwardRecipient.m in Sources */,
 				9243D3EE1BABB70D00512D3B /* District.m in Sources */,
+				92553DEA1CB1ED3A00D7E1EE /* TBAAwardsViewController.m in Sources */,
 				9243D3F81BABB70D00512D3B /* MatchVideo.m in Sources */,
 				92754DEE1C32495D002E1855 /* TBANavigationControllerDelegate.m in Sources */,
 				92FBF89D1B2DBC4100533CBE /* TBAMediaCollectionViewCell.m in Sources */,
@@ -792,11 +842,13 @@
 				92CB28371B8FEB6B00B41C89 /* TBAMatchTableViewCell.m in Sources */,
 				92CB28331B8FEB3F00B41C89 /* TBAMatchesViewController.m in Sources */,
 				9237F77E1B2CA7CB00C89978 /* TBA.xcdatamodeld in Sources */,
+				92553E011CB2072300D7E1EE /* TBAAwardTableViewCell.m in Sources */,
 				9243D3F51BABB70D00512D3B /* Match+CoreDataProperties.m in Sources */,
 				92E749101B27B0EC00C46487 /* TBAInfoViewController.m in Sources */,
 				9243D3EB1BABB70D00512D3B /* EventWebcast+CoreDataProperties.m in Sources */,
 				92E031681BFFEE120017CA79 /* TBARefreshCollectionViewController.m in Sources */,
 				92F19E341C4336600059C7B4 /* TBAAlliancesViewController.m in Sources */,
+				92553DFB1CB1F6F100D7E1EE /* Award+CoreDataProperties.m in Sources */,
 				927E8C431B24BBC100C93E6C /* TeamViewController.m in Sources */,
 				9243D3F71BABB70D00512D3B /* MatchVideo+CoreDataProperties.m in Sources */,
 				9243D3ED1BABB70D00512D3B /* District+CoreDataProperties.m in Sources */,

@@ -8,11 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class EventRanking, DistrictRanking;
+@class EventPoints, EventRanking, DistrictRanking;
 
 @interface TBARankingTableViewCell : UITableViewCell
 
+@property (nonatomic, weak) IBOutlet UILabel *rankLabel;
+
 @property (nonatomic, strong) DistrictRanking *districtRanking;
 @property (nonatomic, strong) EventRanking *eventRanking;
+@property (nonatomic, strong) EventPoints *eventPoints;
 
 @end

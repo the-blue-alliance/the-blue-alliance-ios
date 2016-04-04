@@ -9,12 +9,12 @@
 #import "TBARankingTableViewCell.h"
 #import "DistrictRanking.h"
 #import "EventRanking.h"
+#import "EventPoints.h"
 #import "Team.h"
 
 @interface TBARankingTableViewCell ()
 
 @property (nonatomic, weak) IBOutlet UILabel *teamNumberLabel;
-@property (nonatomic, weak) IBOutlet UILabel *rankLabel;
 @property (nonatomic, weak) IBOutlet UILabel *teamNameLabel;
 @property (nonatomic, weak) IBOutlet UILabel *recordLabel;
 @property (nonatomic, weak) IBOutlet UILabel *detailLabel;
@@ -46,6 +46,16 @@
         self.recordLabel.text = @"";
     }
     self.detailLabel.text = [_eventRanking infoString];
+}
+
+- (void)setEventPoints:(EventPoints *)eventPoints {
+    _eventPoints = eventPoints;
+    
+    self.teamNumberLabel.text = [NSString stringWithFormat:@"%@", _eventPoints.team.teamNumber];
+    self.teamNameLabel.text = [_eventPoints.team nickname];
+    self.detailLabel.text = [NSString stringWithFormat:@"%@ Points", _eventPoints.total];
+    
+    self.recordLabel.text = @"";
 }
 
 @end

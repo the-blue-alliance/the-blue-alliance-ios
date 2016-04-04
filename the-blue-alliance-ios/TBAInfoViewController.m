@@ -80,30 +80,6 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
 
 #pragma mark - Data Methods
 
-- (void)fetchTeamAndRefresh:(BOOL)refresh {
-    __weak typeof(self) weakSelf = self;
-    [Team fetchTeamForKey:self.team.key fromContext:self.persistenceController.managedObjectContext checkUpstream:NO withCompletionBlock:^(Team *team, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to fetch team info locally"];
-            });
-            return;
-        }
-        
-        if (!team) {
-            if (refresh) {
-                [self refresh];
-            }
-        } else {
-            strongSelf.team = team;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf.tableView reloadData];
-            });
-        }
-    }];
-}
-
 - (void)refreshTeam {
     __weak typeof(self) weakSelf = self;
     __block NSUInteger request = [[TBAKit sharedKit] fetchTeamForTeamKey:self.team.key withCompletionBlock:^(TBATeam *team, NSError *error) {
@@ -117,38 +93,15 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
             });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [Team insertTeamWithModelTeam:team inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf fetchTeamAndRefresh:NO];
+                strongSelf.team = [Team insertTeamWithModelTeam:team inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
                 [strongSelf.persistenceController save];
-                [strongSelf.tableView reloadData];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [strongSelf.tableView reloadData];
+                });
             });
         }
     }];
     [self addRequestIdentifier:request];
-}
-
-- (void)fetchEventAndRefresh:(BOOL)refresh {
-    __weak typeof(self) weakSelf = self;
-    [Event fetchEventForKey:self.event.key fromContext:self.persistenceController.managedObjectContext checkUpstream:NO withCompletionBlock:^(Event *event, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to fetch event info locally"];
-            });
-            return;
-        }
-        
-        if (!event) {
-            if (refresh) {
-                [self refresh];
-            }
-        } else {
-            strongSelf.event = event;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf.tableView reloadData];
-            });
-        }
-    }];
 }
 
 - (void)refreshEvent {
@@ -164,8 +117,7 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
             });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [Event insertEventWithModelEvent:event inManagedObjectContext:self.persistenceController.managedObjectContext];
-                [strongSelf fetchEventAndRefresh:NO];
+                strongSelf.event = [Event insertEventWithModelEvent:event inManagedObjectContext:self.persistenceController.managedObjectContext];
                 [strongSelf.persistenceController save];
                 [strongSelf.tableView reloadData];
             });

@@ -12,6 +12,7 @@
 #import "TBARankingsViewController.h"
 #import "TBAMatchesViewController.h"
 #import "TBAAlliancesViewController.h"
+#import "TBAAwardsViewController.h"
 #import "HMSegmentedControl.h"
 #import <PureLayout/PureLayout.h>
 #import "Event.h"
@@ -27,9 +28,9 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
     TBAEventDataTypeRankings,
     TBAEventDataTypeMatches,
     TBAEventDataTypeAlliances,
-    TBAEventDataTypeDistrictPoints,
     TBAEventDataTypeStats,
-    TBAEventDataTypeAwards
+    TBAEventDataTypeAwards,
+    TBAEventDataTypeDistrictPoints
 };
 
 @interface EventViewController ()
@@ -52,6 +53,14 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 @property (nonatomic, strong) TBAAlliancesViewController *alliancesViewController;
 @property (nonatomic, strong) IBOutlet UIView *alliancesView;
 
+// Need stats view controller :smile:
+
+@property (nonatomic, strong) TBAAwardsViewController *awardsViewController;
+@property (nonatomic, strong) IBOutlet UIView *awardsView;
+
+@property (nonatomic, strong) TBARankingsViewController *districtPointsViewController;
+@property (nonatomic, weak) IBOutlet UIView *districtPointsView;
+
 @property (nonatomic, strong) NSArray<NSNumber *> *eventWeeks;
 
 @end
@@ -69,10 +78,11 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 #pragma mark - Private Methods
 
 - (void)cancelRefreshes {
-    // TODO: Make sure alliances VC gets added back here
-    NSArray *refreshTVCs = @[self.infoViewController, self.teamsViewController, self.rankingsViewController, self.matchesViewController];
+    NSArray *refreshTVCs = @[self.infoViewController, self.teamsViewController, self.rankingsViewController, self.matchesViewController, self.alliancesViewController, self.awardsViewController, self.districtPointsViewController];
     for (TBARefreshTableViewController *refreshTVC in refreshTVCs) {
-        [refreshTVC cancelRefresh];
+        if (refreshTVC) {
+            [refreshTVC cancelRefresh];
+        }
     }
 }
 
@@ -105,14 +115,23 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
     } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeAlliances) {
         [self showView:self.alliancesView];
         if (self.alliancesViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            // TODO: This needs to refresh
-//            self.alliancesViewController.refresh();
+            self.alliancesViewController.refresh();
+        }
+    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeAwards) {
+        [self showView:self.awardsView];
+        if (self.awardsViewController.fetchedResultsController.fetchedObjects.count == 0) {
+            self.awardsViewController.refresh();
+        }
+    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeDistrictPoints) {
+        [self showView:self.districtPointsView];
+        if (self.districtPointsViewController.fetchedResultsController.fetchedObjects.count == 0) {
+            self.districtPointsViewController.refresh();
         }
     }
 }
 
 - (void)showView:(UIView *)showView {
-    for (UIView *view in @[self.infoView, self.teamsView, self.rankingsView, self.matchesView, self.alliancesView]) {
+    for (UIView *view in @[self.infoView, self.teamsView, self.rankingsView, self.matchesView, self.alliancesView, self.awardsView, self.districtPointsView]) {
         view.hidden = (showView == view ? NO : YES);
     }
 }
@@ -120,7 +139,7 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 - (void)setupSegmentedControl {
     NSMutableArray *titles = [NSMutableArray arrayWithArray:@[@"Info", @"Teams", @"Rankings", @"Matches", @"Alliances", @"Stats", @"Awards"]];
     if (TBADistrictTypeNoDistrict != [self.event eventDistrict].integerValue) {
-        [titles insertObject:@"District Points" atIndex:[titles indexOfObject:@"Stats"]];
+        [titles addObject:@"District Points"];
     }
     self.segmentedControl = [[HMSegmentedControl alloc] initWithSectionTitles:titles];
     
@@ -172,6 +191,15 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
         self.alliancesViewController = segue.destinationViewController;
         self.alliancesViewController.persistenceController = self.persistenceController;
         self.alliancesViewController.event = self.event;
+    } else if ([segue.identifier isEqualToString:@"AwardsViewControllerEmbed"]) {
+        self.awardsViewController = segue.destinationViewController;
+        self.awardsViewController.persistenceController = self.persistenceController;
+        self.awardsViewController.event = self.event;
+    } else if ([segue.identifier isEqualToString:@"DistrictPointsViewControllerEmbed"]) {
+        self.districtPointsViewController = segue.destinationViewController;
+        self.districtPointsViewController.persistenceController = self.persistenceController;
+        self.districtPointsViewController.event = self.event;
+        self.districtPointsViewController.showPoints = YES;
     }
 }
 

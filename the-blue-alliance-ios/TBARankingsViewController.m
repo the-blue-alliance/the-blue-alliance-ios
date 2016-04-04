@@ -12,6 +12,8 @@
 #import "DistrictRanking.h"
 #import "Event.h"
 #import "EventRanking.h"
+#import "EventPoints.h"
+#import "Team+Fetch.h"
 
 static NSString *const RankCellReuseIdentifier  = @"RankCell";
 
@@ -26,23 +28,33 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
     }
     
     NSFetchRequest *fetchRequest;
+    NSSortDescriptor *sortDescriptor;
     NSPredicate *predicate;
     NSString *cacheName;
-    if (self.event) {
+    if (self.event && !self.showPoints) {
         fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventRanking"];
         predicate = [NSPredicate predicateWithFormat:@"event == %@", self.event];
         cacheName = [NSString stringWithFormat:@"%@_rankings", self.event.key];
+        [fetchRequest setPredicate:predicate];
+        
+        sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"rank" ascending:YES];
+    } else if (self.event && self.showPoints) {
+        fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventPoints"];
+        predicate = [NSPredicate predicateWithFormat:@"event == %@", self.event];
+        cacheName = [NSString stringWithFormat:@"%@_points", self.event.key];
+        [fetchRequest setPredicate:predicate];
+        
+        sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"total" ascending:NO];
     } else if (self.district) {
         fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"DistrictRanking"];
         predicate = [NSPredicate predicateWithFormat:@"district == %@", self.district];
         cacheName = [NSString stringWithFormat:@"%@_rankings", self.district.key];
+        [fetchRequest setPredicate:predicate];
+
+        sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"rank" ascending:YES];
     }
-    [fetchRequest setPredicate:predicate];
+    [fetchRequest setSortDescriptors:@[sortDescriptor]];
     
-    NSSortDescriptor *rankSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"rank" ascending:YES];
-    [fetchRequest setSortDescriptors:@[rankSortDescriptor]];
-    
-    // Need a cache name here
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                     managedObjectContext:self.persistenceController.managedObjectContext
                                                                       sectionNameKeyPath:nil
@@ -99,7 +111,7 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
             }
         }];
         [self addRequestIdentifier:request];
-    } else if (self.event) {
+    } else if (self.event && !self.showPoints) {
         __weak typeof(self) weakSelf = self;
         __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForEventKey:self.event.key withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
             __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -112,9 +124,38 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
                 });
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:self.event inManagedObjectContext:self.persistenceController.managedObjectContext];
+                    [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
                     [strongSelf.persistenceController save];
                     [strongSelf.tableView reloadData];
+                });
+            }
+        }];
+        [self addRequestIdentifier:request];
+    } else if (self.event && self.showPoints) {
+        __weak typeof(self) weakSelf = self;
+        __block NSUInteger request = [[TBAKit sharedKit] fetchDistrictPointsForEventKey:self.event.key withCompletionBlock:^(NSDictionary *points, NSError *error) {
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            
+            [strongSelf removeRequestIdentifier:request];
+            
+            if (error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [strongSelf showErrorAlertWithMessage:@"Unable to reload district points"];
+                });
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSDictionary *pointsDict = points[@"points"];
+                    for (NSString *teamKey in pointsDict.allKeys) {
+                        [Team fetchTeamForKey:teamKey fromContext:strongSelf.persistenceController.managedObjectContext checkUpstream:YES withCompletionBlock:^(Team * _Nullable team, NSError * _Nullable error) {
+                            if (!error) {
+                                [EventPoints insertEventPointsWithEventPointsDict:pointsDict[teamKey] forEvent:strongSelf.event andTeam:team inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
+                            }
+                        }];
+                    }
+                    [strongSelf.persistenceController save];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [strongSelf.tableView reloadData];
+                    });
                 });
             }
         }];
@@ -128,14 +169,22 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
     if (self.district) {
         DistrictRanking *ranking = [self.fetchedResultsController objectAtIndexPath:indexPath];
         cell.districtRanking = ranking;
-    } else if (self.event) {
+    } else if (self.event && !self.showPoints) {
         EventRanking *ranking = [self.fetchedResultsController objectAtIndexPath:indexPath];
         cell.eventRanking = ranking;
+    } else if (self.event && self.showPoints) {
+        EventPoints *points = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        cell.eventPoints = points;
+        cell.rankLabel.text = [NSString stringWithFormat:@"Rank %ld", indexPath.row + 1];
     }
 }
 
 - (void)showNoDataView {
-    [self showNoDataViewWithText:@"No rankings for this event"];
+    if (self.showPoints) {
+        [self showNoDataViewWithText:@"No district points for this event"];
+    } else {
+        [self showNoDataViewWithText:@"No rankings for this event"];
+    }
 }
 
 #pragma mark - Table View Delegate

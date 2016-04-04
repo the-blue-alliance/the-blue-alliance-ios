@@ -39,6 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSSet<EventRanking *> *rankings;
 @property (nullable, nonatomic, retain) NSSet<Team *> *teams;
 @property (nullable, nonatomic, retain) NSSet<EventWebcast *> *webcasts;
+@property (nullable, nonatomic, retain) NSSet<Award *> *awards;
 
 @end
 
@@ -73,6 +74,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeWebcastsObject:(EventWebcast *)value;
 - (void)addWebcasts:(NSSet<EventWebcast *> *)values;
 - (void)removeWebcasts:(NSSet<EventWebcast *> *)values;
+
+- (void)addAwardsObject:(Award *)value;
+- (void)removeAwardsObject:(Award *)value;
+- (void)addAwards:(NSSet<Award *> *)values;
+- (void)removeAwards:(NSSet<Award *> *)values;
 
 @end
 

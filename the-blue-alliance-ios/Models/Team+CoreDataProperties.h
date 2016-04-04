@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSSet<EventRanking *> *eventRankings;
 @property (nullable, nonatomic, retain) NSSet<Event *> *events;
 @property (nullable, nonatomic, retain) NSSet<Media *> *media;
+@property (nullable, nonatomic, retain) NSSet<AwardRecipient *> *awards;
 
 @end
 
@@ -60,6 +61,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeMediaObject:(Media *)value;
 - (void)addMedia:(NSSet<Media *> *)values;
 - (void)removeMedia:(NSSet<Media *> *)values;
+
+- (void)addAwardsObject:(AwardRecipient *)value;
+- (void)removeAwardsObject:(AwardRecipient *)value;
+- (void)addAwards:(NSSet<AwardRecipient *> *)values;
+- (void)removeAwards:(NSSet<AwardRecipient *> *)values;
 
 @end
 

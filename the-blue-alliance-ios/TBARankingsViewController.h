@@ -14,6 +14,7 @@
 
 @property (nonatomic, strong) District *district;
 @property (nonatomic, strong) Event *event;
+@property (nonatomic, assign) BOOL showPoints;
 
 @property (nonatomic, copy) void (^rankingSelected)(id ranking);
 

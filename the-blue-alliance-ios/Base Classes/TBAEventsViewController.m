@@ -126,8 +126,11 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
             } else {
                 NSArray *newEvents = [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
                 [strongSelf.team addEvents:[NSSet setWithArray:newEvents]];
-                [strongSelf.persistenceController save];
-                [strongSelf.tableView reloadData];
+
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [strongSelf.persistenceController save];
+                    [strongSelf.tableView reloadData];
+                });
             }
         }];
         [self addRequestIdentifier:request];

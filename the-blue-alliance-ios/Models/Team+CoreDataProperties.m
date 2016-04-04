@@ -29,5 +29,6 @@
 @dynamic eventRankings;
 @dynamic events;
 @dynamic media;
+@dynamic awards;
 
 @end
