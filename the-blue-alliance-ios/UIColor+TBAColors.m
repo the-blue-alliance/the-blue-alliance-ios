@@ -10,26 +10,36 @@
 
 @implementation UIColor (TBAColors)
 
-+ (UIColor *)TBANavigationBarColor
-{
-    return [UIColor colorWithRed:0.2 green:0.2 blue:0.85 alpha:1];
++ (UIColor *)primaryBlue {
+    return [UIColor colorWithRed:(63.0f/255.0f) green:(81.0f/255.0f) blue:(181.0f/255.0f) alpha:1.0f];
 }
 
-+ (UIColor *)TBATableViewSeparatorColor
-{
-//    return [UIColor colorWithRed:FBTweakValue(@"Table Separators", @"Color", @"Red", 0.146, 0.0, 1.0) green:FBTweakValue(@"Table Separators", @"Color", @"Green", 0.370, 0.0, 1.0) blue:FBTweakValue(@"Table Separators", @"Color", @"Blue", 0.741, 0.0, 1.0) alpha:1.0];
-    
-    return [UIColor TBATintColor];
++ (UIColor *)primaryDarkBlue {
+    return [UIColor colorWithRed:(48.0f/255.0f) green:(63.0f/255.0f) blue:(159.0f/255.0f) alpha:1.0f];
 }
 
-+ (UIColor *)TBATintColor
-{
-//    return [UIColor colorWithRed:0.146 green:0.370 blue:0.741 alpha:1.000];
-    
-    // New, lighter color
-    return [UIColor colorWithRed:0.75
-                           green:0.85
-                            blue:1.0
-                           alpha:1.0];
++ (UIColor *)lightRed {
+    return [UIColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:(34.0f/255.0f)];
 }
+
++ (UIColor *)lighterRed {
+    return [UIColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:(17.0f/255.0f)];
+}
+
++ (UIColor *)lightBlue {
+    return [UIColor colorWithRed:0.0f green:0.0f blue:1.0f alpha:(34.0f/255.0f)];
+}
+
++ (UIColor *)lighterBlue {
+    return [UIColor colorWithRed:0.0f green:0.0f blue:1.0f alpha:(17.0f/255.0f)];
+}
+
++ (UIColor *)blue {
+    return [UIColor blueColor];
+}
+
++ (UIColor *)red {
+    return [UIColor redColor];
+}
+
 @end

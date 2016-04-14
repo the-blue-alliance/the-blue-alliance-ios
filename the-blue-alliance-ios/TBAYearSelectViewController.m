@@ -7,7 +7,7 @@
 //
 
 #import "TBAYearSelectViewController.h"
-#import "SelectYearViewController.h"
+#import "TBASelectYearViewController.h"
 
 @interface TBAYearSelectViewController ()
 
@@ -84,7 +84,8 @@
 
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 
-    SelectYearViewController *selectYearViewController = (SelectYearViewController *)[storyboard instantiateViewControllerWithIdentifier:@"SelectYearViewController"];
+    UINavigationController *navigationController = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"TBASelectYearNavigationController"];
+    TBASelectYearViewController *selectYearViewController = navigationController.viewControllers.firstObject;
     selectYearViewController.modalPresentationStyle = UIModalPresentationFormSheet;
     selectYearViewController.currentYear = self.currentYear;
     selectYearViewController.years = self.years;
@@ -92,7 +93,9 @@
         selectYearViewController.yearSelectedCallback = self.yearSelected;
     }
     
-    [self presentViewController:selectYearViewController animated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self presentViewController:navigationController animated:YES completion:nil];
+    }];
 }
 
 #pragma mark - Private Methods

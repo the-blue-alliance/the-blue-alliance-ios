@@ -75,7 +75,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
 #pragma mark - Interface Methods
 
 - (void)styleInterface {
-    self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
+    self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
     self.navigationItem.title = [NSString stringWithFormat:@"Team %@", self.team.teamNumber];
 }
 

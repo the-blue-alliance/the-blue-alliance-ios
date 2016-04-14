@@ -39,7 +39,10 @@
             vc.persistenceController = self.persistenceController;
         }
 
-        UIView *overlayView = [[UIScreen mainScreen] snapshotViewAfterScreenUpdates:NO];
+        // Doing all this nonsense so we can set up view controller's persistence controllers before they try to
+        // query for any kind of data. There's a bit of a flash when launching but it's not too bad.
+        UIViewController *launchViewController = [storyboard instantiateViewControllerWithIdentifier:@"Launch"];
+        UIView *overlayView = launchViewController.view;
         [rootTabBarController.view addSubview:overlayView];
         self.window.rootViewController = rootTabBarController;
         
@@ -94,7 +97,7 @@
 #pragma mark - Interface Methods
 
 - (void)setupAppearance {
-    [[UINavigationBar appearance] setBarTintColor:[UIColor TBANavigationBarColor]];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor primaryBlue]];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
@@ -103,7 +106,7 @@
     [[UIToolbar appearance] setBarTintColor:[UIColor whiteColor]];
     [[UITableView appearance] setSectionIndexBackgroundColor:[UIColor clearColor]];
     [[UITableView appearance] setSectionIndexTrackingBackgroundColor:[UIColor clearColor]];
-    [[UITableView appearance] setSectionIndexColor:[UIColor TBANavigationBarColor]];
+    [[UITableView appearance] setSectionIndexColor:[UIColor primaryBlue]];
 }
 
 @end

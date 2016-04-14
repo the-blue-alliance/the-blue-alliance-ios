@@ -8,7 +8,6 @@
 
 #import "TeamsViewController.h"
 #import "Team.h"
-#import <PureLayout/PureLayout.h>
 #import "TBATeamTableViewCell.h"
 #import "TBATeamsViewController.h"
 #import "TeamViewController.h"

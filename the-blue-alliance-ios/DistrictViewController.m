@@ -54,7 +54,7 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 #pragma mark - Interface Actions
 
 - (void)styleInterface {
-    self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
+    self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
     self.navigationItem.title = [NSString stringWithFormat:@"%@ %@ Districts", self.district.year, self.district.name];
 
     [self updateInterface];

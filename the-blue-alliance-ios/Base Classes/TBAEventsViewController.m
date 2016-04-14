@@ -160,18 +160,18 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
     }
 }
 
-#pragma mark - Table View Data Source
+#pragma mark - Table View Deelgate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 28.0f;
+    return 30.0f;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
     
-    header.backgroundView.backgroundColor = [UIColor TBANavigationBarColor];
+    header.backgroundView.backgroundColor = [UIColor primaryDarkBlue];
     header.textLabel.textColor = [UIColor whiteColor];
-    header.textLabel.font = [UIFont systemFontOfSize:12.0f];
+    header.textLabel.font = [UIFont systemFontOfSize:14.0f];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {

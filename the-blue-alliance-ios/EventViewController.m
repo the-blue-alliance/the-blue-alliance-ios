@@ -14,7 +14,6 @@
 #import "TBAAlliancesViewController.h"
 #import "TBAAwardsViewController.h"
 #import "HMSegmentedControl.h"
-#import <PureLayout/PureLayout.h>
 #import "Event.h"
 #import "EventRanking.h"
 #import "Match.h"
@@ -28,7 +27,7 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
     TBAEventDataTypeRankings,
     TBAEventDataTypeMatches,
     TBAEventDataTypeAlliances,
-    TBAEventDataTypeStats,
+//    TBAEventDataTypeStats,
     TBAEventDataTypeAwards,
     TBAEventDataTypeDistrictPoints
 };
@@ -89,7 +88,7 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 #pragma mark - Interface Methods
 
 - (void)styleInterface {
-    self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
+    self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
     self.navigationItem.title = [self.event friendlyNameWithYear:YES];
     [self setupSegmentedControl];
 }
@@ -137,29 +136,35 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 }
 
 - (void)setupSegmentedControl {
-    NSMutableArray *titles = [NSMutableArray arrayWithArray:@[@"Info", @"Teams", @"Rankings", @"Matches", @"Alliances", @"Stats", @"Awards"]];
+    NSMutableArray *titles = [NSMutableArray arrayWithArray:@[@"Info", @"Teams", @"Rankings", @"Matches", @"Alliances", @"Awards"]];
     if (TBADistrictTypeNoDistrict != [self.event eventDistrict].integerValue) {
         [titles addObject:@"District Points"];
     }
     self.segmentedControl = [[HMSegmentedControl alloc] initWithSectionTitles:titles];
     
     self.segmentedControl.frame = self.segmentedControlView.frame;
+    self.segmentedControl.translatesAutoresizingMaskIntoConstraints = NO;
     self.segmentedControl.segmentEdgeInset = UIEdgeInsetsMake(0, 10, 0, 10);
     self.segmentedControl.selectionStyle = HMSegmentedControlSelectionStyleFullWidthStripe;
     self.segmentedControl.selectionIndicatorLocation = HMSegmentedControlSelectionIndicatorLocationDown;
-    self.segmentedControl.backgroundColor = [UIColor TBANavigationBarColor];
+    self.segmentedControl.backgroundColor = [UIColor primaryBlue];
     self.segmentedControl.selectionIndicatorColor = [UIColor whiteColor];
     self.segmentedControl.segmentWidthStyle = HMSegmentedControlSegmentWidthStyleDynamic;
     self.segmentedControl.selectionIndicatorHeight = 3.0f;
     
     [self.segmentedControl setTitleFormatter:^NSAttributedString *(HMSegmentedControl *segmentedControl, NSString *title, NSUInteger index, BOOL selected) {
-        NSAttributedString *attString = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+        NSAttributedString *attString = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName : [UIColor whiteColor],
+                                                                                                      NSFontAttributeName: [UIFont systemFontOfSize:14.0f]}];
         return attString;
     }];
     [self.segmentedControl addTarget:self action:@selector(segmentedControlValueChanged:) forControlEvents:UIControlEventValueChanged];
     [self.segmentedControlView addSubview:self.segmentedControl];
     
-    [self.segmentedControl autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero];
+    NSLayoutConstraint *topConstraint = [NSLayoutConstraint constraintWithItem:self.segmentedControl attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.segmentedControlView attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f];
+    NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:self.segmentedControl attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.segmentedControlView attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f];
+    NSLayoutConstraint *leadingConstraint = [NSLayoutConstraint constraintWithItem:self.segmentedControl attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.segmentedControlView attribute:NSLayoutAttributeLeading multiplier:1.0f constant:0.0f];
+    NSLayoutConstraint *trailingConstraint = [NSLayoutConstraint constraintWithItem:self.segmentedControl attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.segmentedControlView attribute:NSLayoutAttributeTrailing multiplier:1.0f constant:0.0f];
+    [self.segmentedControlView addConstraints:@[topConstraint, bottomConstraint, leadingConstraint, trailingConstraint]];
 }
 
 - (void)segmentedControlValueChanged:(id)sender {

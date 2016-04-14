@@ -132,6 +132,8 @@
         <relationship name="media" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Media" inverseName="team" inverseEntity="Media" syncable="YES"/>
     </entity>
     <elements>
+        <element name="Award" positionX="-1287" positionY="2061" width="128" height="120"/>
+        <element name="AwardRecipient" positionX="-1260" positionY="2088" width="128" height="105"/>
         <element name="District" positionX="-1278" positionY="2070" width="128" height="105"/>
         <element name="DistrictRanking" positionX="-1287" positionY="2061" width="128" height="135"/>
         <element name="Event" positionX="-1485" positionY="1920" width="128" height="420"/>
@@ -143,7 +145,5 @@
         <element name="MatchVideo" positionX="-1278" positionY="2070" width="128" height="90"/>
         <element name="Media" positionX="-965" positionY="2159" width="128" height="135"/>
         <element name="Team" positionX="-1242" positionY="2277" width="128" height="315"/>
-        <element name="Award" positionX="-1287" positionY="2061" width="128" height="120"/>
-        <element name="AwardRecipient" positionX="-1260" positionY="2088" width="128" height="105"/>
     </elements>
 </model>

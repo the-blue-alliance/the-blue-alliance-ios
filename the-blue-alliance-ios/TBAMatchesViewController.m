@@ -103,15 +103,17 @@ static NSString *const MatchCellReuseIdentifier = @"MatchCell";
 #pragma mark - Table View Data Source
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 28.0f;
+    return 30.0f;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    
-    header.backgroundView.backgroundColor = [UIColor TBANavigationBarColor];
-    header.textLabel.textColor = [UIColor whiteColor];
-    header.textLabel.font = [UIFont systemFontOfSize:16.0f];
+    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
+        UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+        
+        header.backgroundView.backgroundColor = [UIColor primaryDarkBlue];
+        header.textLabel.textColor = [UIColor whiteColor];
+        header.textLabel.font = [UIFont systemFontOfSize:14.0f];
+    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -120,10 +122,6 @@ static NSString *const MatchCellReuseIdentifier = @"MatchCell";
 }
 
 #pragma mark - Table View Delegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewAutomaticDimension;
-}
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 100.0f;

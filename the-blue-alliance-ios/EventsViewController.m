@@ -10,7 +10,6 @@
 #import "EventViewController.h"
 #import "HMSegmentedControl.h"
 #import "Event+Fetch.h"
-#import <PureLayout/PureLayout.h>
 
 // TODO: Bring the events view to the current week, like the Android app
 
@@ -98,7 +97,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 #pragma mark - Interface Methods
 
 - (void)styleInterface {
-    self.segmentedControlView.backgroundColor = [UIColor TBANavigationBarColor];
+    self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
     self.navigationItem.title = @"Events";
 
     [self updateInterface];
@@ -138,24 +137,29 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     }
 
     self.segmentedControl = [[HMSegmentedControl alloc] initWithSectionTitles:mapped];
-    
+    self.segmentedControl.translatesAutoresizingMaskIntoConstraints = NO;
     self.segmentedControl.frame = self.segmentedControlView.frame;
     self.segmentedControl.segmentEdgeInset = UIEdgeInsetsMake(0, 10, 0, 10);
     self.segmentedControl.selectionStyle = HMSegmentedControlSelectionStyleFullWidthStripe;
     self.segmentedControl.selectionIndicatorLocation = HMSegmentedControlSelectionIndicatorLocationDown;
-    self.segmentedControl.backgroundColor = [UIColor TBANavigationBarColor];
+    self.segmentedControl.backgroundColor = [UIColor primaryBlue];
     self.segmentedControl.selectionIndicatorColor = [UIColor whiteColor];
     self.segmentedControl.segmentWidthStyle = HMSegmentedControlSegmentWidthStyleDynamic;
     self.segmentedControl.selectionIndicatorHeight = 3.0f;
     
     [self.segmentedControl setTitleFormatter:^NSAttributedString *(HMSegmentedControl *segmentedControl, NSString *title, NSUInteger index, BOOL selected) {
-        NSAttributedString *attString = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+        NSAttributedString *attString = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName : [UIColor whiteColor],
+                                                                                                      NSFontAttributeName: [UIFont systemFontOfSize:14.0f]}];
         return attString;
     }];
     [self.segmentedControl addTarget:self action:@selector(segmentedControlValueChanged:) forControlEvents:UIControlEventValueChanged];
     [self.segmentedControlView addSubview:self.segmentedControl];
     
-    [self.segmentedControl autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero];
+    NSLayoutConstraint *topConstraint = [NSLayoutConstraint constraintWithItem:self.segmentedControl attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.segmentedControlView attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f];
+    NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:self.segmentedControl attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.segmentedControlView attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f];
+    NSLayoutConstraint *leadingConstraint = [NSLayoutConstraint constraintWithItem:self.segmentedControl attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.segmentedControlView attribute:NSLayoutAttributeLeading multiplier:1.0f constant:0.0f];
+    NSLayoutConstraint *trailingConstraint = [NSLayoutConstraint constraintWithItem:self.segmentedControl attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.segmentedControlView attribute:NSLayoutAttributeTrailing multiplier:1.0f constant:0.0f];
+    [self.segmentedControlView addConstraints:@[topConstraint, bottomConstraint, leadingConstraint, trailingConstraint]];
 }
 
 - (void)segmentedControlValueChanged:(HMSegmentedControl *)segmentedControl {
@@ -172,7 +176,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
         if (self.eventWeeks) {
             self.eventsViewController.week = [self.eventWeeks firstObject];
         } else {
-            // Show loading screen
+            // TODO: Show loading screen
         }
         self.eventsViewController.year = @(self.currentYear);
 

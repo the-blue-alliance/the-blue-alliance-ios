@@ -8,7 +8,6 @@
 
 #import "TBATableViewController.h"
 #import "TBANoDataViewController.h"
-#import <PureLayout/PureLayout.h>
 
 @interface TBATableViewController ()
 
@@ -114,6 +113,16 @@
     }
     
     return cell;
+}
+
+#pragma mark - Table View Delegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 64.0f;
 }
 
 #pragma mark - Fetched Results Controller Delegate

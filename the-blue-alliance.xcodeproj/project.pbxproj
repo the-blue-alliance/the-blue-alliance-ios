@@ -75,7 +75,7 @@
 		92CC57E61BABBC4000C10604 /* Event+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CC57E51BABBC4000C10604 /* Event+Fetch.m */; };
 		92E031681BFFEE120017CA79 /* TBARefreshCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E031671BFFEE120017CA79 /* TBARefreshCollectionViewController.m */; };
 		92E749101B27B0EC00C46487 /* TBAInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E7490F1B27B0EC00C46487 /* TBAInfoViewController.m */; };
-		92EAA4C01ABF6AB100F7CF39 /* SelectYearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EAA4BF1ABF6AB100F7CF39 /* SelectYearViewController.m */; };
+		92EAA4C01ABF6AB100F7CF39 /* TBASelectYearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EAA4BF1ABF6AB100F7CF39 /* TBASelectYearViewController.m */; };
 		92F1580C1AF55DB300884E8A /* DistrictViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F1580B1AF55DB300884E8A /* DistrictViewController.m */; };
 		92F19E341C4336600059C7B4 /* TBAAlliancesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F19E331C4336600059C7B4 /* TBAAlliancesViewController.m */; };
 		92F19E3E1C433FB50059C7B4 /* TBAAllianceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F19E3D1C433FB50059C7B4 /* TBAAllianceCell.m */; };
@@ -219,8 +219,8 @@
 		92E031671BFFEE120017CA79 /* TBARefreshCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBARefreshCollectionViewController.m; sourceTree = "<group>"; };
 		92E7490E1B27B0EC00C46487 /* TBAInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAInfoViewController.h; sourceTree = "<group>"; };
 		92E7490F1B27B0EC00C46487 /* TBAInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAInfoViewController.m; sourceTree = "<group>"; };
-		92EAA4BE1ABF6AB100F7CF39 /* SelectYearViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectYearViewController.h; sourceTree = "<group>"; };
-		92EAA4BF1ABF6AB100F7CF39 /* SelectYearViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectYearViewController.m; sourceTree = "<group>"; };
+		92EAA4BE1ABF6AB100F7CF39 /* TBASelectYearViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBASelectYearViewController.h; sourceTree = "<group>"; };
+		92EAA4BF1ABF6AB100F7CF39 /* TBASelectYearViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBASelectYearViewController.m; sourceTree = "<group>"; };
 		92F1580A1AF55DB300884E8A /* DistrictViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictViewController.h; sourceTree = "<group>"; };
 		92F1580B1AF55DB300884E8A /* DistrictViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictViewController.m; sourceTree = "<group>"; };
 		92F19E321C4336600059C7B4 /* TBAAlliancesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAAlliancesViewController.h; sourceTree = "<group>"; };
@@ -654,8 +654,8 @@
 		92EAA4CA1AC0DFF000F7CF39 /* Select Year */ = {
 			isa = PBXGroup;
 			children = (
-				92EAA4BE1ABF6AB100F7CF39 /* SelectYearViewController.h */,
-				92EAA4BF1ABF6AB100F7CF39 /* SelectYearViewController.m */,
+				92EAA4BE1ABF6AB100F7CF39 /* TBASelectYearViewController.h */,
+				92EAA4BF1ABF6AB100F7CF39 /* TBASelectYearViewController.m */,
 			);
 			name = "Select Year";
 			sourceTree = "<group>";
@@ -831,7 +831,7 @@
 				92754DEE1C32495D002E1855 /* TBANavigationControllerDelegate.m in Sources */,
 				92FBF89D1B2DBC4100533CBE /* TBAMediaCollectionViewCell.m in Sources */,
 				920FA8451BEAC724002B8E32 /* TBARefreshTableViewController.m in Sources */,
-				92EAA4C01ABF6AB100F7CF39 /* SelectYearViewController.m in Sources */,
+				92EAA4C01ABF6AB100F7CF39 /* TBASelectYearViewController.m in Sources */,
 				927E8C4C1B268A3A00C93E6C /* TBATeamsViewController.m in Sources */,
 				9243D3F41BABB70D00512D3B /* EventAlliance.m in Sources */,
 				9243D3EA1BABB70D00512D3B /* EventRanking.m in Sources */,

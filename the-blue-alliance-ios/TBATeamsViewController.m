@@ -115,7 +115,7 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
 }
 
 - (void)showNoDataView {
-    [self showNoDataViewWithText:@"No teams for this event"];
+    [self showNoDataViewWithText:@"No teams found"];
 }
 
 #pragma mark - Table View Delegate

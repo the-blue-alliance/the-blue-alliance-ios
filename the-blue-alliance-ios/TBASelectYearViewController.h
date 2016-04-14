@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TBATableViewController.h"
 
-@interface SelectYearViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface TBASelectYearViewController : TBATableViewController <TBATableViewControllerDelegate>
 
 @property (nonatomic, assign) NSUInteger currentYear;
 @property (nonatomic, copy) NSArray *years;

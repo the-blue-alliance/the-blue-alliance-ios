@@ -42,12 +42,6 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
     };
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    [self styleInterface];
-}
-
 #pragma mark - Private Methods
 
 - (void)setupInfoArray {
@@ -69,13 +63,6 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
         }
     }
     self.infoArray = dataArr;
-}
-
-#pragma mark - Interface Methods
-
-- (void)styleInterface {
-    self.tableView.estimatedRowHeight = 44.0;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 #pragma mark - Data Methods
@@ -228,6 +215,17 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
     return titleName;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
+        UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+        header.textLabel.font = [UIFont systemFontOfSize:16.0f];
+
+        // Setting the textLabel title here to override a grouped table
+        // view's default behavior of capitalizing the header title's
+        header.textLabel.text = [self tableView:tableView titleForHeaderInSection:section];
+    }
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -283,6 +281,10 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
             }
         }
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 44.0f;
 }
 
 #pragma mark - Private Methods

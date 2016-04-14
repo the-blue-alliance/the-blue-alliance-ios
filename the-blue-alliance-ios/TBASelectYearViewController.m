@@ -6,32 +6,22 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import "SelectYearViewController.h"
+#import "TBASelectYearViewController.h"
 
 static NSString *const YearCellReuseIdentifier = @"Year Cell";
 
-@interface SelectYearViewController ()
-
-@property (nonatomic, weak) IBOutlet UITableView *tableView;
-
-@end
-
-@implementation SelectYearViewController
+@implementation TBASelectYearViewController
 
 #pragma mark - View Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self styleInterface];
+    self.title = @"Select Year";
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:YearCellReuseIdentifier];
 }
 
 #pragma mark - Interface Methods
-
-- (void)styleInterface {
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:YearCellReuseIdentifier];
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-}
 
 - (IBAction)cancelButtonTapped:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -44,23 +34,24 @@ static NSString *const YearCellReuseIdentifier = @"Year Cell";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // TODO: We need a no data screen here for no years
     return [self.years count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:YearCellReuseIdentifier forIndexPath:indexPath];
-    
+#pragma mark - TBA Table View Delegate
+
+- (void)configureCell:(nonnull UITableViewCell *)cell atIndexPath:(nonnull NSIndexPath *)indexPath {
     NSInteger year = [(NSNumber *)[self.years objectAtIndex:indexPath.row] integerValue];
     cell.textLabel.text = [NSString stringWithFormat:@"%zd", year];
     if (year == self.currentYear) {
-        cell.tintColor = [UIColor TBANavigationBarColor];
+        cell.tintColor = [UIColor primaryBlue];
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
-    
-    return cell;
+}
+
+- (void)showNoDataView {
+    [self showNoDataViewWithText:@"No years found"];
 }
 
 #pragma mark - Table View Delegate

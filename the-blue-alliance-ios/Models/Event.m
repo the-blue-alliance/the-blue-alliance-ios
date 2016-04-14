@@ -82,7 +82,7 @@
         
         dateText = [NSString stringWithFormat:@"%@ to %@",
                     [startDateFormatter stringFromDate:self.startDate],
-                    [endDateFormatter stringFromDate:self.endDate]];
+                    [startDateFormatter stringFromDate:self.endDate]];
         
     } else {
         dateText = [NSString stringWithFormat:@"%@ to %@",
@@ -239,15 +239,9 @@
     event.startDate = modelEvent.startDate;
     event.endDate = modelEvent.endDate;
     
-    /*
-    need awards in heree too
-    */
-    
-    /*
     event.webcasts = [NSSet setWithArray:[EventWebcast insertEventWebcastsWithModelEventWebcasts:modelEvent.webcast
-    forEvent:event
-    inManagedObjectContext:context]];
-    */
+                                                                                        forEvent:event
+                                                                          inManagedObjectContext:context]];
      
     event.alliances = [NSSet setWithArray:[EventAlliance insertEventAlliancesWithModelEventAlliances:modelEvent.alliances
                                                                                             forEvent:event
