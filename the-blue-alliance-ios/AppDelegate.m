@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "TBAPersistenceController.h"
+#import "TBANavigationController.h"
 #import "TBANavigationControllerDelegate.h"
 #import "TBAKit.h"
 #import "TeamsViewController.h"
@@ -68,28 +69,23 @@
     return YES;
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application
-{
+- (void)applicationWillResignActive:(UIApplication *)application {
     [[self persistenceController] save];
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
+- (void)applicationDidEnterBackground:(UIApplication *)application {
     [[self persistenceController] save];
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
+- (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
+- (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application
-{
+- (void)applicationWillTerminate:(UIApplication *)application {
     [[self persistenceController] save];
 }
 
@@ -97,16 +93,13 @@
 #pragma mark - Interface Methods
 
 - (void)setupAppearance {
-    [[UINavigationBar appearance] setBarTintColor:[UIColor primaryBlue]];
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
-    [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-    [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
-    
-    [[UIToolbar appearance] setBarTintColor:[UIColor whiteColor]];
-    [[UITableView appearance] setSectionIndexBackgroundColor:[UIColor clearColor]];
-    [[UITableView appearance] setSectionIndexTrackingBackgroundColor:[UIColor clearColor]];
-    [[UITableView appearance] setSectionIndexColor:[UIColor primaryBlue]];
+    UINavigationBar *navigationBarAppearance = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[[TBANavigationController class]]];
+    [navigationBarAppearance setTranslucent:NO];
+    [navigationBarAppearance setBarTintColor:[UIColor primaryBlue]];
+    [navigationBarAppearance setTintColor:[UIColor whiteColor]];
+    [navigationBarAppearance setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
+    [navigationBarAppearance setShadowImage:[[UIImage alloc] init]];
+    [navigationBarAppearance setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
 }
 
 @end

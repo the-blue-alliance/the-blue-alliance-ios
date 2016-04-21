@@ -30,7 +30,8 @@
     self.rankLabel.text = [NSString stringWithFormat:@"Rank %@", _districtRanking.rank];
     self.teamNameLabel.text = [_districtRanking.team nickname];
     self.detailLabel.text = [NSString stringWithFormat:@"%@ Points", _districtRanking.pointTotal];
-    self.recordLabel.hidden = YES;
+    
+    self.recordLabel.text = @"";
 }
 
 - (void)setEventRanking:(EventRanking *)eventRanking {
@@ -43,7 +44,7 @@
         self.recordLabel.hidden = NO;
         self.recordLabel.text = _eventRanking.record;
     } else {
-        self.recordLabel.hidden = YES;
+        self.recordLabel.text = @"";
     }
     self.detailLabel.text = [_eventRanking infoString];
 }
@@ -54,7 +55,8 @@
     self.teamNumberLabel.text = [NSString stringWithFormat:@"%@", _eventPoints.team.teamNumber];
     self.teamNameLabel.text = [_eventPoints.team nickname];
     self.detailLabel.text = [NSString stringWithFormat:@"%@ Points", _eventPoints.total];
-    self.recordLabel.hidden = YES;
+    
+    self.recordLabel.text = @"";
 }
 
 @end

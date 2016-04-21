@@ -8,6 +8,7 @@
 
 #import "TBAYearSelectViewController.h"
 #import "TBASelectYearViewController.h"
+#import "TBANavigationController.h"
 
 @interface TBAYearSelectViewController ()
 
@@ -59,10 +60,6 @@
 
 #pragma mark - Interface Methods
 
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
-}
-
 - (void)setupTapGesture {
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectYearButtonTapped:)];
     [self.navigationItem.titleView addGestureRecognizer:tapGesture];
@@ -84,7 +81,7 @@
 
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 
-    UINavigationController *navigationController = (UINavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"TBASelectYearNavigationController"];
+    TBANavigationController *navigationController = (TBANavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"TBASelectYearNavigationController"];
     TBASelectYearViewController *selectYearViewController = navigationController.viewControllers.firstObject;
     selectYearViewController.modalPresentationStyle = UIModalPresentationFormSheet;
     selectYearViewController.currentYear = self.currentYear;
@@ -93,9 +90,7 @@
         selectYearViewController.yearSelectedCallback = self.yearSelected;
     }
     
-    [self dismissViewControllerAnimated:YES completion:^{
-        [self presentViewController:navigationController animated:YES completion:nil];
-    }];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 #pragma mark - Private Methods

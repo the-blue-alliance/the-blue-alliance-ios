@@ -69,6 +69,7 @@
 		92AC4FF61B471F32004A05E2 /* TBARankingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AC4FF51B471F32004A05E2 /* TBARankingsViewController.m */; };
 		92AE675F1B81FFB000D7418F /* TBAMediaCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AE675E1B81FFB000D7418F /* TBAMediaCollectionViewController.m */; };
 		92BB8B981AC64DC800A041FA /* TBAYearSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B971AC64DC800A041FA /* TBAYearSelectViewController.m */; };
+		92C7C7A61CC8772A00076C52 /* TBANavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C7C7A51CC8772A00076C52 /* TBANavigationController.m */; };
 		92CA3C5C1B88F2C30094DC7D /* TBACollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CA3C5B1B88F2C30094DC7D /* TBACollectionViewController.m */; };
 		92CB28331B8FEB3F00B41C89 /* TBAMatchesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CB28321B8FEB3F00B41C89 /* TBAMatchesViewController.m */; };
 		92CB28371B8FEB6B00B41C89 /* TBAMatchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CB28361B8FEB6B00B41C89 /* TBAMatchTableViewCell.m */; };
@@ -207,6 +208,8 @@
 		92AE675E1B81FFB000D7418F /* TBAMediaCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAMediaCollectionViewController.m; sourceTree = "<group>"; };
 		92BB8B961AC64DC800A041FA /* TBAYearSelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAYearSelectViewController.h; sourceTree = "<group>"; };
 		92BB8B971AC64DC800A041FA /* TBAYearSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAYearSelectViewController.m; sourceTree = "<group>"; };
+		92C7C7A41CC8772A00076C52 /* TBANavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBANavigationController.h; sourceTree = "<group>"; };
+		92C7C7A51CC8772A00076C52 /* TBANavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBANavigationController.m; sourceTree = "<group>"; };
 		92CA3C5A1B88F2C30094DC7D /* TBACollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBACollectionViewController.h; sourceTree = "<group>"; };
 		92CA3C5B1B88F2C30094DC7D /* TBACollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBACollectionViewController.m; sourceTree = "<group>"; };
 		92CB28311B8FEB3F00B41C89 /* TBAMatchesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAMatchesViewController.h; sourceTree = "<group>"; };
@@ -560,6 +563,8 @@
 				92CA3C5B1B88F2C30094DC7D /* TBACollectionViewController.m */,
 				926001651B517DF40027FE95 /* TBANoDataViewController.h */,
 				926001661B517DF40027FE95 /* TBANoDataViewController.m */,
+				92C7C7A41CC8772A00076C52 /* TBANavigationController.h */,
+				92C7C7A51CC8772A00076C52 /* TBANavigationController.m */,
 			);
 			name = TBAVC;
 			sourceTree = "<group>";
@@ -826,6 +831,7 @@
 				926001671B517DF40027FE95 /* TBANoDataViewController.m in Sources */,
 				92553DFE1CB1F6F100D7E1EE /* AwardRecipient.m in Sources */,
 				9243D3EE1BABB70D00512D3B /* District.m in Sources */,
+				92C7C7A61CC8772A00076C52 /* TBANavigationController.m in Sources */,
 				92553DEA1CB1ED3A00D7E1EE /* TBAAwardsViewController.m in Sources */,
 				9243D3F81BABB70D00512D3B /* MatchVideo.m in Sources */,
 				92754DEE1C32495D002E1855 /* TBANavigationControllerDelegate.m in Sources */,

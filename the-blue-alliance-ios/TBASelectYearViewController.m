@@ -8,7 +8,7 @@
 
 #import "TBASelectYearViewController.h"
 
-static NSString *const YearCellReuseIdentifier = @"Year Cell";
+static NSString *const YearCellReuseIdentifier = @"YearCell";
 
 @implementation TBASelectYearViewController
 
@@ -18,7 +18,9 @@ static NSString *const YearCellReuseIdentifier = @"Year Cell";
     [super viewDidLoad];
     
     self.title = @"Select Year";
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:YearCellReuseIdentifier];
+    
+    self.tbaDelegate = self;
+    self.cellIdentifier = YearCellReuseIdentifier;
 }
 
 #pragma mark - Interface Methods
