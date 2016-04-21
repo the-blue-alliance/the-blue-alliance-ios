@@ -19,7 +19,7 @@
     
     // Specify criteria for filtering which objects to fetch
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@ AND webcastType == %@ AND channel == %@",
-                              event, @(modelEventWebcast.webcastType), modelEventWebcast.channel];;
+                              event, @(modelEventWebcast.type), modelEventWebcast.channel];;
     [fetchRequest setPredicate:predicate];
     
     EventWebcast *eventWebcast;
@@ -39,7 +39,7 @@
         eventWebcast = [NSEntityDescription insertNewObjectForEntityForName:@"EventWebcast" inManagedObjectContext:context];
     }
     
-    eventWebcast.webcastType = @(modelEventWebcast.webcastType);
+    eventWebcast.webcastType = @(modelEventWebcast.type);
     eventWebcast.channel = modelEventWebcast.channel;
     eventWebcast.file = modelEventWebcast.file;
     eventWebcast.event = event;
