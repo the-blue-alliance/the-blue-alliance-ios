@@ -45,6 +45,7 @@
     
     team.website = modelTeam.website;
     team.name = modelTeam.name;
+    team.motto = modelTeam.motto;
     team.locality = modelTeam.locality;
     team.region = modelTeam.region;
     team.countryName = modelTeam.countryName;
@@ -61,6 +62,16 @@
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (TBATeam *team in modelTeams) {
         [arr addObject:[self insertTeamWithModelTeam:team inManagedObjectContext:context]];
+    }
+    return arr;
+}
+
++ (NSArray *)insertTeamsWithModelTeams:(NSArray<TBATeam *> *)modelTeams forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context  {
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    for (TBATeam *team in modelTeams) {
+        Team *t = [self insertTeamWithModelTeam:team inManagedObjectContext:context];
+        [t addEventsObject:event];
+        [arr addObject:t];
     }
     return arr;
 }

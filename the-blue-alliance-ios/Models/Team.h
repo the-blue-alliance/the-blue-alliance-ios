@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)insertTeamWithModelTeam:(TBATeam *)modelTeam inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertTeamsWithModelTeams:(NSArray<TBATeam *> *)modelTeams inManagedObjectContext:(NSManagedObjectContext *)context;
++ (NSArray *)insertTeamsWithModelTeams:(NSArray<TBATeam *> *)modelTeams forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 
 - (NSArray *)sortedEventsForYear:(NSInteger)year;
 - (NSArray *)sortedYearsParticipated;

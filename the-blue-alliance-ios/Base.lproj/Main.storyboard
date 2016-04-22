@@ -183,6 +183,7 @@
                                             <segment title="Events"/>
                                             <segment title="Standings"/>
                                         </segments>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <action selector="segmentedControlValueChanged:" destination="XIf-XA-N6t" eventType="valueChanged" id="7RW-AB-BjO"/>
                                         </connections>
@@ -776,6 +777,7 @@
                                             <segment title="Events"/>
                                             <segment title="Media"/>
                                         </segments>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <action selector="segmentedControlValueChanged:" destination="XIf-XA-N6t" eventType="valueChanged" id="pVv-Do-h87"/>
                                             <action selector="segmentedControlValueChanged:" destination="2nM-IU-A97" eventType="valueChanged" id="wtm-pG-1Z5"/>
@@ -1310,7 +1312,7 @@
             <objects>
                 <tableViewController id="Zl5-IH-oHj" customClass="TBARankingsViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="72" sectionHeaderHeight="22" sectionFooterHeight="22" id="5h7-mt-vvf">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="443"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="448"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
@@ -1427,9 +1429,9 @@
         <image name="tba_blue_lamp" width="110" height="181"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="8A3-99-YiF"/>
+        <segue reference="2gc-Og-M1c"/>
+        <segue reference="uwf-Zh-tyc"/>
+        <segue reference="oWq-M9-Pon"/>
         <segue reference="eRd-Dy-LTL"/>
-        <segue reference="zon-7C-eSE"/>
-        <segue reference="ijh-4t-Dqv"/>
     </inferredMetricsTieBreakers>
 </document>

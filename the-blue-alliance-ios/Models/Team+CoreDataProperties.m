@@ -17,6 +17,7 @@
 @dynamic key;
 @dynamic locality;
 @dynamic location;
+@dynamic motto;
 @dynamic name;
 @dynamic nickname;
 @dynamic region;

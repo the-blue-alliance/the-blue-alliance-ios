@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *key;
 @property (nullable, nonatomic, retain) NSString *locality;
 @property (nullable, nonatomic, retain) NSString *location;
+@property (nullable, nonatomic, retain) NSString *motto;
 @property (nullable, nonatomic, retain) NSString *name;
 @property (nullable, nonatomic, retain) NSString *nickname;
 @property (nullable, nonatomic, retain) NSString *region;

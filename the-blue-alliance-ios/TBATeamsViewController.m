@@ -76,35 +76,56 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
     __block NSUInteger currentRequest;
     
     __weak typeof(self) weakSelf = self;
-    currentRequest = [Team fetchAllTeamsWithTaskIdChange:^(NSUInteger newTaskId, NSArray *batchTeam) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf addRequestIdentifier:newTaskId];
-        [strongSelf removeRequestIdentifier:currentRequest];
-        currentRequest = newTaskId;
-        
-        NSManagedObjectContext *tmpContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [tmpContext setParentContext:strongSelf.persistenceController.managedObjectContext];
-        [tmpContext performBlock:^{
-            [Team insertTeamsWithModelTeams:batchTeam inManagedObjectContext:tmpContext];
-            [tmpContext save:nil];
+    if (self.event) {
+        currentRequest = [[TBAKit sharedKit] fetchTeamsForEventKey:self.event.key withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            
+            [strongSelf removeRequestIdentifier:currentRequest];
+            
+            if (error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [strongSelf showNoDataViewWithText:@"Unable to load teams for event"];
+                });
+            } else {
+                [Team insertTeamsWithModelTeams:teams forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [strongSelf.persistenceController save];
+                    [strongSelf.tableView reloadData];
+                });
+            }
         }];
-    } withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf removeRequestIdentifier:currentRequest];
-        
-        if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to load teams"];
-            });
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf.persistenceController save];
-                [strongSelf.tableView reloadData];
-            });
-        }
-    }];
+    } else {
+        currentRequest = [Team fetchAllTeamsWithTaskIdChange:^(NSUInteger newTaskId, NSArray *batchTeam) {
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            
+            [strongSelf addRequestIdentifier:newTaskId];
+            [strongSelf removeRequestIdentifier:currentRequest];
+            currentRequest = newTaskId;
+            
+            NSManagedObjectContext *tmpContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+            [tmpContext setParentContext:strongSelf.persistenceController.managedObjectContext];
+            [tmpContext performBlock:^{
+                [Team insertTeamsWithModelTeams:batchTeam inManagedObjectContext:tmpContext];
+                [tmpContext save:nil];
+            }];
+        } withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            
+            [strongSelf removeRequestIdentifier:currentRequest];
+            
+            if (error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [strongSelf showErrorAlertWithMessage:@"Unable to load teams"];
+                });
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [strongSelf.persistenceController save];
+                    [strongSelf.tableView reloadData];
+                });
+            }
+        }];
+    }
     [self addRequestIdentifier:currentRequest];
 }
 
