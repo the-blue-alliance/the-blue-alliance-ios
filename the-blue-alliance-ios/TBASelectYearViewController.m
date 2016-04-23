@@ -42,8 +42,8 @@ static NSString *const YearCellReuseIdentifier = @"YearCell";
 #pragma mark - TBA Table View Delegate
 
 - (void)configureCell:(nonnull UITableViewCell *)cell atIndexPath:(nonnull NSIndexPath *)indexPath {
-    NSInteger year = [(NSNumber *)[self.years objectAtIndex:indexPath.row] integerValue];
-    cell.textLabel.text = [NSString stringWithFormat:@"%zd", year];
+    NSNumber *year = [self.years objectAtIndex:indexPath.row];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@", year];
     if (year == self.currentYear) {
         cell.tintColor = [UIColor primaryBlue];
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -61,7 +61,7 @@ static NSString *const YearCellReuseIdentifier = @"YearCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    NSInteger year = [(NSNumber *)[self.years objectAtIndex:indexPath.row] integerValue];
+    NSNumber *year = [self.years objectAtIndex:indexPath.row];
     if (self.yearSelectedCallback) {
         self.yearSelectedCallback(year);
     }

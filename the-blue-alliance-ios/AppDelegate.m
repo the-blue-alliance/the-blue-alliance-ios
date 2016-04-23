@@ -57,12 +57,6 @@
 #warning dynaically fetch version number here, also maybe add some user-specific string?
     [[TBAKit sharedKit] setIdHeader:@"the-blue-alliance:ios:v0.1"];
     
-#warning We should probably set some max's here or something
-    NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0
-                                                            diskCapacity:0
-                                                                diskPath:nil];
-    [NSURLCache setSharedURLCache:sharedCache];
-    
     [self setupAppearance];
     [self.window makeKeyAndVisible];
     
@@ -70,11 +64,11 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    [[self persistenceController] save];
+    [self.persistenceController save];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    [[self persistenceController] save];
+    [self.persistenceController save];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -86,7 +80,7 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    [[self persistenceController] save];
+    [self.persistenceController save];
 }
 
 

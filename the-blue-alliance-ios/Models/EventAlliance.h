@@ -6,14 +6,18 @@
 //  Copyright © 2016 The Blue Alliance. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "TBAManagedObject.h"
 
 @class Event;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EventAlliance : NSManagedObject
+@interface EventAlliance : TBAManagedObject
+
+@property (nullable, nonatomic, retain) NSArray<NSString *> *declines;
+@property (nonatomic, retain) NSArray<NSString *> *picks;
+@property (nonatomic, retain) NSNumber *allianceNumber;
+@property (nonatomic, retain) Event *event;
 
 + (instancetype)insertEventAllianceWithModelEventAlliance:(TBAEventAlliance *)modelEventAlliance withAllianceNumber:(int)number forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertEventAlliancesWithModelEventAlliances:(NSArray<TBAEventAlliance *> *)modelEventAlliances forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
@@ -21,5 +25,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#import "EventAlliance+CoreDataProperties.h"

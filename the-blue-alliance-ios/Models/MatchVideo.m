@@ -11,42 +11,23 @@
 
 @implementation MatchVideo
 
-+ (instancetype)insertMatchVideoWithModelMatchVideo:(TBAMatchVideo *)modelMatchVideo inManagedObjectContext:(NSManagedObjectContext *)context {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"MatchVideo" inManagedObjectContext:context];
-    [fetchRequest setEntity:entity];
-    
-    // Specify criteria for filtering which objects to fetch
+@dynamic key;
+@dynamic videoType;
+@dynamic match;
+
++ (instancetype)insertMatchVideoWithModelMatchVideo:(TBAMatchVideo *)modelMatchVideo forMatch:(Match *)match inManagedObjectContext:(NSManagedObjectContext *)context {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", modelMatchVideo.key];
-    [fetchRequest setPredicate:predicate];
-    
-    MatchVideo *matchVideo;
-    
-    NSError *error = nil;
-    NSArray *existingObjs = [context executeFetchRequest:fetchRequest error:&error];
-    if(existingObjs.count == 1) {
-        matchVideo = [existingObjs firstObject];
-    } else if(existingObjs.count > 1) {
-        // Delete them all, create a new a single new one
-        for (MatchVideo *mv in existingObjs) {
-            [context deleteObject:mv];
-        }
-    }
-    
-    if (matchVideo == nil) {
-        matchVideo = [NSEntityDescription insertNewObjectForEntityForName:@"MatchVideo" inManagedObjectContext:context];
-    }
-    
-    matchVideo.key = modelMatchVideo.key;
-    matchVideo.videoType = @(modelMatchVideo.type);
-    
-    return matchVideo;
+    return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(MatchVideo *matchVideo) {
+        matchVideo.key = modelMatchVideo.key;
+        matchVideo.videoType = @(modelMatchVideo.type);
+        matchVideo.match = match;
+    }];
 }
 
-+ (NSArray *)insertMatchVidoesWithModelMatchVidoes:(NSArray<TBAMatchVideo *> *)modelMatchVidoes inManagedObjectContext:(NSManagedObjectContext *)context {
++ (NSArray *)insertMatchVidoesWithModelMatchVidoes:(NSArray<TBAMatchVideo *> *)modelMatchVidoes forMatch:(Match *)match inManagedObjectContext:(NSManagedObjectContext *)context {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (TBAMatchVideo *matchVideo in modelMatchVidoes) {
-        [arr addObject:[self insertMatchVideoWithModelMatchVideo:matchVideo inManagedObjectContext:context]];
+        [arr addObject:[self insertMatchVideoWithModelMatchVideo:matchVideo forMatch:match inManagedObjectContext:context]];
     }
     return arr;
 }

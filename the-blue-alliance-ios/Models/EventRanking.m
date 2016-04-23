@@ -13,14 +13,15 @@
 
 @implementation EventRanking
 
+@dynamic info;
+@dynamic rank;
+@dynamic record;
+@dynamic event;
+@dynamic team;
+
 + (instancetype)insertEventRankingWithEventRankingArray:(NSArray *)eventRankingArray withKeys:(NSArray *)keys forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"EventRanking" inManagedObjectContext:context];
-    [fetchRequest setEntity:entity];
-    
     // Assume that the list of lists has rank first
     // and team # second, always
-    //
     NSUInteger teamKeyIndex = [keys indexOfObject:@"Team"];
     NSString *teamKey = [NSString stringWithFormat:@"frc%@", [eventRankingArray objectAtIndex:teamKeyIndex]];
     
@@ -42,48 +43,45 @@
     }
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@ AND team == %@", event, team];
-    [fetchRequest setPredicate:predicate];
-    
-    EventRanking *eventRanking;
-    
-    NSError *error = nil;
-    NSArray *existingObjs = [context executeFetchRequest:fetchRequest error:&error];
-    if(existingObjs.count == 1) {
-        eventRanking = [existingObjs firstObject];
-    } else if(existingObjs.count > 1) {
-        // Delete them all, create a new a single new one
-        for (EventRanking *er in existingObjs) {
-            [context deleteObject:er];
-        }
-    }
-    
-    if (eventRanking == nil) {
-        eventRanking = [NSEntityDescription insertNewObjectForEntityForName:@"EventRanking" inManagedObjectContext:context];
-    }
-    
-    NSUInteger rankKeyIndex = [keys indexOfObject:@"Rank"];
-    NSString *rankString = [eventRankingArray objectAtIndex:rankKeyIndex];
-    NSNumber *rank = @([rankString integerValue]);
-    eventRanking.rank = rank;
-    
-    NSMutableDictionary *infoDictionary = [[NSMutableDictionary alloc] init];
-    // Remove rank and team, since we don't need to keep them
-    // Keep the rest, and we'll make that our info dictionary
-    for (int i = 0; i < [keys count]; i++) {
-        if (i == rankKeyIndex || i == teamKeyIndex) {
-            continue;
-        }
-        NSString *key = [keys objectAtIndex:i];
-        id value = [eventRankingArray objectAtIndex:i];
+    return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(EventRanking *eventRanking) {
+        NSUInteger rankKeyIndex = [keys indexOfObject:@"Rank"];
+        NSString *rankString = [eventRankingArray objectAtIndex:rankKeyIndex];
+        NSNumber *rank = @([rankString integerValue]);
+        eventRanking.rank = rank;
         
-        [infoDictionary setObject:value forKey:key];
+        NSMutableDictionary *infoDictionary = [[NSMutableDictionary alloc] init];
+        // Remove rank and team, since we don't need to keep them
+        // Keep the rest, and we'll make that our info dictionary
+        for (int i = 0; i < [keys count]; i++) {
+            if (i == rankKeyIndex || i == teamKeyIndex) {
+                continue;
+            }
+            NSString *key = [keys objectAtIndex:i];
+            id value = [eventRankingArray objectAtIndex:i];
+            
+            [infoDictionary setObject:value forKey:key];
+        }
+        
+        Event *e = [context objectWithID:event.objectID];
+        
+        eventRanking.record = [self extractRecordString:&infoDictionary];
+        eventRanking.info = infoDictionary;
+        eventRanking.event = e;
+        eventRanking.team = team;
+    }];
+}
+
++ (NSArray *)insertEventRankingsWithEventRankings:(NSArray *)eventRankings forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    NSArray *rankingKeys;
+    for (NSArray *eventRanking in eventRankings) {
+        if (!rankingKeys) {
+            rankingKeys = eventRanking;
+        } else {
+            [arr addObject:[self insertEventRankingWithEventRankingArray:eventRanking withKeys:rankingKeys forEvent:event inManagedObjectContext:context]];
+        }
     }
-    eventRanking.record = [self extractRecordString:&infoDictionary];
-    eventRanking.info = infoDictionary;
-    eventRanking.event = event;
-    eventRanking.team = team;
-    
-    return eventRanking;
+    return arr;
 }
 
 + (NSString *)extractRecordString:(NSDictionary **)infoDictionary {
@@ -121,19 +119,6 @@
     *infoDictionary = [NSDictionary dictionaryWithDictionary:mutableInfoDictionary];
     
     return recordString;
-}
-
-+ (NSArray *)insertEventRankingsWithEventRankings:(NSArray *)eventRankings forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
-    NSMutableArray *arr = [[NSMutableArray alloc] init];
-    NSArray *rankingKeys;
-    for (NSArray *eventRanking in eventRankings) {
-        if (!rankingKeys) {
-            rankingKeys = eventRanking;
-        } else {
-            [arr addObject:[self insertEventRankingWithEventRankingArray:eventRanking withKeys:rankingKeys forEvent:event inManagedObjectContext:context]];
-        }
-    }
-    return arr;
 }
 
 - (NSString *)infoString {

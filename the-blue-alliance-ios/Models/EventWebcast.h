@@ -6,8 +6,7 @@
 //  Copyright © 2015 The Blue Alliance. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "TBAManagedObject.h"
 
 typedef NS_ENUM(NSInteger, WebcastType) {
     WebcastTypeLivestream,
@@ -24,7 +23,12 @@ typedef NS_ENUM(NSInteger, WebcastType) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EventWebcast : NSManagedObject
+@interface EventWebcast : TBAManagedObject
+
+@property (nullable, nonatomic, retain) NSString *channel;
+@property (nullable, nonatomic, retain) NSString *file;
+@property (nonatomic, retain) NSNumber *webcastType;
+@property (nonatomic, retain) Event *event;
 
 + (instancetype)insertEventWebcastWithModelEventWebcast:(TBAEventWebcast *)modelEventWebcast forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertEventWebcastsWithModelEventWebcasts:(NSArray<TBAEventWebcast *> *)modelEventWebcasts forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
@@ -32,5 +36,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#import "EventWebcast+CoreDataProperties.h"

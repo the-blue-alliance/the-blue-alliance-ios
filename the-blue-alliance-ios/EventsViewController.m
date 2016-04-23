@@ -37,7 +37,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     [super viewDidLoad];
     
     __weak typeof(self) weakSelf = self;
-    self.yearSelected = ^void(NSUInteger selectedYear) {
+    self.yearSelected = ^void(NSNumber *year) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         [strongSelf.eventsViewController cancelRefresh];
@@ -47,8 +47,8 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
         }
         [strongSelf.eventsViewController hideNoDataView];
         
-        strongSelf.currentYear = selectedYear;
-        strongSelf.eventsViewController.year = @(selectedYear);
+        strongSelf.currentYear = year;
+        strongSelf.eventsViewController.year = year;
         [strongSelf updateWeek:nil];
         strongSelf.eventWeeks = nil;
         [strongSelf updateInterface];
@@ -72,18 +72,18 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 - (void)configureYears {
     // TODO: Check if year + 1 exists (for next-season data trickling in)
     
-    NSInteger year = [TBAYearSelectViewController currentYear];
-    self.years = [TBAYearSelectViewController yearsBetweenStartYear:1992 endYear:year];
+    NSNumber *year = [TBAYearSelectViewController currentYear];
+    self.years = [TBAYearSelectViewController yearsBetweenStartYear:1992 endYear:year.integerValue];
     
     if (self.currentYear == 0) {
         self.currentYear = year;
-        self.eventsViewController.year = @(year);
+        self.eventsViewController.year = year;
     }
 }
 
 - (void)configureEvents {
     __weak typeof(self) weakSelf = self;
-    [Event fetchEventsForYear:self.currentYear fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray * _Nullable events, NSError * _Nullable error) {
+    [Event fetchEventsForYear:self.currentYear.integerValue fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray * _Nullable events, NSError * _Nullable error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (error || !events || events.count == 0) {
             strongSelf.eventsViewController.refresh();
@@ -178,7 +178,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
         } else {
             // TODO: Show loading screen
         }
-        self.eventsViewController.year = @(self.currentYear);
+        self.eventsViewController.year = self.currentYear;
 
         __weak typeof(self) weakSelf = self;
         [self.eventsViewController setEventsFetched:^{

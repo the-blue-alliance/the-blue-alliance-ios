@@ -23,9 +23,9 @@
 
 #pragma mark - Class Methods
 
-+ (NSInteger)currentYear {
++ (NSNumber *)currentYear {
     // TODO: Look for year + 1 as well when data starts coming in
-    return [[NSCalendar currentCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]];
+    return @([[NSCalendar currentCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]]);
 }
 
 + (NSArray *)yearsBetweenStartYear:(NSInteger)startYear endYear:(NSInteger)endYear {
@@ -38,12 +38,12 @@
 
 #pragma mark - Properities
 
-- (NSUInteger)currentYear {
-    return [[NSUserDefaults standardUserDefaults] integerForKey:[self currentYearUserDefaultsString]];
+- (NSNumber *)currentYear {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:[self currentYearUserDefaultsString]];
 }
 
-- (void)setCurrentYear:(NSUInteger)currentYear {
-    [[NSUserDefaults standardUserDefaults] setInteger:currentYear forKey:[self currentYearUserDefaultsString]];
+- (void)setCurrentYear:(NSNumber *)currentYear {
+    [[NSUserDefaults standardUserDefaults] setObject:currentYear forKey:[self currentYearUserDefaultsString]];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     [self updateYearInterface];
@@ -70,7 +70,7 @@
     if (self.currentYear == 0) {
         self.yearLabel.text = @"---";
     } else {
-        self.yearLabel.text = [NSString stringWithFormat:@"▾ %zd", self.currentYear];
+        self.yearLabel.text = [NSString stringWithFormat:@"▾ %@", self.currentYear];
     }
 }
 

@@ -15,47 +15,40 @@
 
 @implementation Team
 
+@dynamic countryName;
+@dynamic key;
+@dynamic locality;
+@dynamic location;
+@dynamic motto;
+@dynamic name;
+@dynamic nickname;
+@dynamic region;
+@dynamic rookieYear;
+@dynamic teamNumber;
+@dynamic website;
+@dynamic yearsParticipated;
+@dynamic districtRankings;
+@dynamic eventPoints;
+@dynamic eventRankings;
+@dynamic events;
+@dynamic media;
+@dynamic awards;
+
 + (instancetype)insertTeamWithModelTeam:(TBATeam *)modelTeam inManagedObjectContext:(NSManagedObjectContext *)context {
-    // Check for pre-existing object
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Team" inManagedObjectContext:context];
-    [fetchRequest setEntity:entity];
-    
-    // Specify criteria for filtering which objects to fetch
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", modelTeam.key];
-    [fetchRequest setPredicate:predicate];
-    
-    Team *team;
-    
-    NSError *error = nil;
-    NSArray *existingObjs = [context executeFetchRequest:fetchRequest error:&error];
-    
-    if(existingObjs.count == 1) {
-        team = [existingObjs firstObject];
-    } else if(existingObjs.count > 1) {
-        // Delete them all, create a new a single new one
-        for (Team *t in existingObjs) {
-            [context deleteObject:t];
-        }
-    }
-    
-    if (team == nil) {
-        team = [NSEntityDescription insertNewObjectForEntityForName:@"Team" inManagedObjectContext:context];
-    }
-    
-    team.website = modelTeam.website;
-    team.name = modelTeam.name;
-    team.motto = modelTeam.motto;
-    team.locality = modelTeam.locality;
-    team.region = modelTeam.region;
-    team.countryName = modelTeam.countryName;
-    team.location = modelTeam.location;
-    team.teamNumber = @(modelTeam.teamNumber);
-    team.key = modelTeam.key;
-    team.nickname = modelTeam.nickname;
-    team.rookieYear = @(modelTeam.rookieYear);
-    
-    return team;
+    return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Team *team) {
+        team.website = modelTeam.website;
+        team.name = modelTeam.name;
+        team.motto = modelTeam.motto;
+        team.locality = modelTeam.locality;
+        team.region = modelTeam.region;
+        team.countryName = modelTeam.countryName;
+        team.location = modelTeam.location;
+        team.teamNumber = @(modelTeam.teamNumber);
+        team.key = modelTeam.key;
+        team.nickname = modelTeam.nickname;
+        team.rookieYear = @(modelTeam.rookieYear);
+    }];
 }
 
 + (NSArray *)insertTeamsWithModelTeams:(NSArray<TBATeam *> *)modelTeams inManagedObjectContext:(NSManagedObjectContext *)context {
@@ -70,7 +63,7 @@
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (TBATeam *team in modelTeams) {
         Team *t = [self insertTeamWithModelTeam:team inManagedObjectContext:context];
-        [t addEventsObject:event];
+        t.events = [t.events setByAddingObject:event];
         [arr addObject:t];
     }
     return arr;
@@ -101,6 +94,18 @@
     
     NSSortDescriptor *highestToLowest = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:NO];
     return [years sortedArrayUsingDescriptors:@[highestToLowest]];
+}
+
+- (void)setEvents:(NSSet<Event *> * _Nullable)events forYear:(NSNumber *)year {
+    // Filter all events that are not in the year we're setting for
+    NSMutableSet<Event *> *allOtherEvents = [[NSMutableSet alloc] init];
+    for (Event *event in self.events) {
+        if (event.year.integerValue != year.integerValue) {
+            [allOtherEvents addObject:event];
+        }
+    }
+    // Combine all not-this-year events and our new this-year events
+    self.events = [allOtherEvents setByAddingObjectsFromSet:events];
 }
 
 @end

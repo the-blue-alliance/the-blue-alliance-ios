@@ -75,15 +75,11 @@ static NSString *const MatchCellReuseIdentifier = @"MatchCell";
         [strongSelf removeRequestIdentifier:request];
         
         if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to reload event matches"];
-            });
+            [strongSelf showErrorAlertWithMessage:@"Unable to reload event matches"];
         } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [Match insertMatchesWithModelMatches:matches forEvent:self.event inManagedObjectContext:self.persistenceController.managedObjectContext];
-                [strongSelf.persistenceController save];
-                [strongSelf.tableView reloadData];
-            });
+            [strongSelf.persistenceController performChanges:^{
+                [Match insertMatchesWithModelMatches:matches forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+            }];
         }
     }];
     [self addRequestIdentifier:request];

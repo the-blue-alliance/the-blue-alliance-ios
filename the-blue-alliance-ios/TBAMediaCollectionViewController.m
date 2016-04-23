@@ -18,11 +18,10 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
 
 #pragma mark - Properities
 
-- (void)setYear:(NSUInteger)year {
-    self.fetchedResultsController = nil;
-    
+- (void)setYear:(NSNumber *)year {
     _year = year;
-    [self.collectionView reloadData];
+    
+    [self clearFRC];
 }
 
 - (NSFetchedResultsController *)fetchedResultsController {
@@ -31,7 +30,7 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
     }
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Media"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"year == %@ AND team == %@", @(self.year), self.team];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"year == %@ AND team == %@", self.year, self.team];
     [fetchRequest setPredicate:predicate];
     
     NSSortDescriptor *mediaTypeSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"mediaType" ascending:YES];
@@ -77,21 +76,17 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
     }
     
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchMediaForTeamKey:self.team.key andYear:self.year withCompletionBlock:^(NSArray *media, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchMediaForTeamKey:self.team.key andYear:self.year.integerValue withCompletionBlock:^(NSArray *media, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         [strongSelf removeRequestIdentifier:request];
         
         if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to load team media"];
-            });
+            [strongSelf showErrorAlertWithMessage:@"Unable to load team media"];
         } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [Media insertMediasWithModelMedias:media forTeam:self.team andYear:self.year inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf.persistenceController save];
-                [strongSelf.collectionView reloadData];
-            });
+            [strongSelf.persistenceController performChanges:^{
+                [Media insertMediasWithModelMedias:media forTeam:strongSelf.team andYear:strongSelf.year.integerValue inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+            }];
         }
     }];
     [self addRequestIdentifier:request];

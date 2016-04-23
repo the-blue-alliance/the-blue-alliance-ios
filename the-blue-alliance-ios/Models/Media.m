@@ -12,41 +12,24 @@
 
 @implementation Media
 
+@dynamic foreignKey;
+@dynamic imagePartial;
+@dynamic mediaType;
+@dynamic year;
+@dynamic team;
+
 + (instancetype)insertMediaWithModelMedia:(TBAMedia *)modelMedia forTeam:(Team *)team andYear:(NSInteger)year inManagedObjectContext:(NSManagedObjectContext *)context {
-    // Check for pre-existing object
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Media" inManagedObjectContext:context];
-    [fetchRequest setEntity:entity];
-    
-    // Specify criteria for filtering which objects to fetch
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"team == %@ AND year == %@ AND foreignKey == %@", team, @(year), modelMedia.foreignKey];
-    [fetchRequest setPredicate:predicate];
-    
-    Media *media;
-    
-    NSError *error = nil;
-    NSArray *existingObjs = [context executeFetchRequest:fetchRequest error:&error];
-    
-    if(existingObjs.count == 1) {
-        media = [existingObjs firstObject];
-    } else if(existingObjs.count > 1) {
-        for (Media *m in existingObjs) {
-            [context deleteObject:m];
-        }
-    }
-    
-    if (media == nil) {
-        media = [NSEntityDescription insertNewObjectForEntityForName:@"Media" inManagedObjectContext:context];
-    }
-    
-    media.team = team;
-    media.year = @(year);
-    
-    media.foreignKey = modelMedia.foreignKey;
-    media.mediaType = @(modelMedia.type);
-    media.imagePartial = modelMedia.details.imagePartial;
-    
-    return media;
+    return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Media *media) {
+        Team *t = [context objectWithID:team.objectID];
+        
+        media.team = t;
+        media.year = @(year);
+        
+        media.foreignKey = modelMedia.foreignKey;
+        media.mediaType = @(modelMedia.type);
+        media.imagePartial = modelMedia.details.imagePartial;
+    }];
 }
 
 + (NSArray *)insertMediasWithModelMedias:(NSArray<TBAMedia *> *)modelMedias forTeam:(Team *)team andYear:(NSInteger)year inManagedObjectContext:(NSManagedObjectContext *)context {

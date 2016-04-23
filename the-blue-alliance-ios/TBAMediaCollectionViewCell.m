@@ -29,13 +29,7 @@
     [self.activityView startAnimating];
     
     NSURLRequest *request;
-    if (media.cachedData) {
-        [self.imageView setImage:[UIImage imageWithData:media.cachedData]];
-        
-        [self.activityView stopAnimating];
-        self.activityView.hidden = YES;
-        self.imageView.hidden = NO;
-    } else if ([media.mediaType integerValue] == TBAMediaTypeCDPhotoThread) {
+    if ([media.mediaType integerValue] == TBAMediaTypeCDPhotoThread) {
         NSURL *url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"http://www.chiefdelphi.com/media/img/%@", media.imagePartial]];
         request = [NSURLRequest requestWithURL:url];
     } else if (media.mediaType == TBAMediaTypeYouTube) {
@@ -51,7 +45,6 @@
                 // TODO: Show some temp photo in here
                 return;
             }
-            media.cachedData = data;
             if (self.imageLoadedFromWeb) {
                 self.imageLoadedFromWeb();
             }

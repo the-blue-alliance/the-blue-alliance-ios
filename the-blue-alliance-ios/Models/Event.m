@@ -17,6 +17,32 @@
 
 @implementation Event
 
+@dynamic endDate;
+@dynamic eventCode;
+@dynamic eventDistrict;
+@dynamic eventType;
+@dynamic facebookEid;
+@dynamic hybridType;
+@dynamic key;
+@dynamic location;
+@dynamic name;
+@dynamic official;
+@dynamic shortName;
+@dynamic startDate;
+@dynamic venueAddress;
+@dynamic website;
+@dynamic week;
+@dynamic year;
+@dynamic eventDistrictString;
+@dynamic eventTypeString;
+@dynamic alliances;
+@dynamic matches;
+@dynamic points;
+@dynamic rankings;
+@dynamic teams;
+@dynamic webcasts;
+@dynamic awards;
+
 + (nonnull NSString *)stringForEventOrder:(EventOrder)order {
     NSString *orderString;
     switch (order) {
@@ -70,6 +96,10 @@
 }
 
 - (NSString *)dateString {
+    if (!self.startDate || !self.endDate) {
+        return nil;
+    }
+
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
     NSDateFormatter *endDateFormatter = [[NSDateFormatter alloc] init];
@@ -196,58 +226,33 @@
 }
 
 + (instancetype)insertEventWithModelEvent:(TBAEvent *)modelEvent inManagedObjectContext:(NSManagedObjectContext *)context {
-    // Check for pre-existing object
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:context];
-    [fetchRequest setEntity:entity];
-    
-    // Specify criteria for filtering which objects to fetch
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", modelEvent.key];
-    [fetchRequest setPredicate:predicate];
-    
-    Event *event;
-    
-    NSError *error = nil;
-    NSArray *existingObjs = [context executeFetchRequest:fetchRequest error:&error];
-    if(existingObjs.count == 1) {
-        event = [existingObjs firstObject];
-    } else if(existingObjs.count > 1) {
-        // Delete them all, create a new a single new one
-        for (Event *e in existingObjs) {
-            [context deleteObject:e];
-        }
-    }
-    
-    if (event == nil) {
-        event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:context];
-    }
-    
-    event.key = modelEvent.key;
-    event.name = modelEvent.name;
-    event.shortName = modelEvent.shortName;
-    event.eventCode = modelEvent.eventCode;
-    event.eventType = @(modelEvent.eventType);
-    event.eventTypeString = modelEvent.eventTypeString;
-    event.eventDistrict = @(modelEvent.eventDistrict);
-    event.eventDistrictString = modelEvent.eventDistrictString;
-    event.year = @(modelEvent.year);
-    event.location = modelEvent.location;
-    event.venueAddress = modelEvent.venueAddress;
-    event.website = modelEvent.website;
-    event.facebookEid = modelEvent.facebookEid;
-    event.official = @(modelEvent.official);
-    event.startDate = modelEvent.startDate;
-    event.endDate = modelEvent.endDate;
-    
-    event.webcasts = [NSSet setWithArray:[EventWebcast insertEventWebcastsWithModelEventWebcasts:modelEvent.webcast
-                                                                                        forEvent:event
-                                                                          inManagedObjectContext:context]];
-     
-    event.alliances = [NSSet setWithArray:[EventAlliance insertEventAlliancesWithModelEventAlliances:modelEvent.alliances
+    return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Event *event) {
+        event.key = modelEvent.key;
+        event.name = modelEvent.name;
+        event.shortName = modelEvent.shortName;
+        event.eventCode = modelEvent.eventCode;
+        event.eventType = @(modelEvent.eventType);
+        event.eventTypeString = modelEvent.eventTypeString;
+        event.eventDistrict = @(modelEvent.eventDistrict);
+        event.eventDistrictString = modelEvent.eventDistrictString;
+        event.year = @(modelEvent.year);
+        event.location = modelEvent.location;
+        event.venueAddress = modelEvent.venueAddress;
+        event.website = modelEvent.website;
+        event.facebookEid = modelEvent.facebookEid;
+        event.official = @(modelEvent.official);
+        event.startDate = modelEvent.startDate;
+        event.endDate = modelEvent.endDate;
+        
+        event.webcasts = [NSSet setWithArray:[EventWebcast insertEventWebcastsWithModelEventWebcasts:modelEvent.webcast
                                                                                             forEvent:event
                                                                               inManagedObjectContext:context]];
-    
-    return event;
+        
+        event.alliances = [NSSet setWithArray:[EventAlliance insertEventAlliancesWithModelEventAlliances:modelEvent.alliances
+                                                                                                forEvent:event
+                                                                                  inManagedObjectContext:context]];
+    }];
 }
 
 + (NSArray<Event *> *)insertEventsWithModelEvents:(NSArray<TBAEvent *> *)modelEvents inManagedObjectContext:(NSManagedObjectContext *)context {

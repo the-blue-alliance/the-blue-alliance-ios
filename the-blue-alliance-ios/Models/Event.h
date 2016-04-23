@@ -6,8 +6,7 @@
 //  Copyright © 2015 The Blue Alliance. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "TBAManagedObject.h"
 
 typedef NS_ENUM(NSInteger, EventType) {
     EventTypeRegional = 0,
@@ -34,7 +33,34 @@ typedef NS_ENUM(NSInteger, EventOrder) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Event : NSManagedObject
+@interface Event : TBAManagedObject
+
+@property (nullable, nonatomic, retain) NSDate *endDate;
+@property (nonatomic, retain) NSString *eventCode;
+@property (nullable, nonatomic, retain) NSNumber *eventDistrict;
+@property (nonatomic, retain) NSNumber *eventType;
+@property (nullable, nonatomic, retain) NSString *facebookEid;
+@property (nonnull, retain) NSNumber *hybridType;
+@property (nonatomic, retain) NSString *key;
+@property (nullable, nonatomic, retain) NSString *location;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSNumber *official;
+@property (nullable, nonatomic, retain) NSString *shortName;
+@property (nullable, nonatomic, retain) NSDate *startDate;
+@property (nullable, nonatomic, retain) NSString *venueAddress;
+@property (nullable, nonatomic, retain) NSString *website;
+@property (nonatomic, retain) NSNumber *week;
+@property (nonatomic, retain) NSNumber *year;
+
+@property (nullable, nonatomic, retain) NSString *eventDistrictString;
+@property (nullable, nonatomic, retain) NSString *eventTypeString;
+@property (nullable, nonatomic, retain) NSSet<EventAlliance *> *alliances;
+@property (nullable, nonatomic, retain) NSSet<Match *> *matches;
+@property (nullable, nonatomic, retain) NSSet<EventPoints *> *points;
+@property (nullable, nonatomic, retain) NSSet<EventRanking *> *rankings;
+@property (nullable, nonatomic, retain) NSSet<Team *> *teams;
+@property (nullable, nonatomic, retain) NSSet<EventWebcast *> *webcasts;
+@property (nullable, nonatomic, retain) NSSet<Award *> *awards;
 
 - (nonnull NSString *)friendlyNameWithYear:(BOOL)withYear;
 - (nonnull NSString *)dateString;
@@ -49,5 +75,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#import "Event+CoreDataProperties.h"

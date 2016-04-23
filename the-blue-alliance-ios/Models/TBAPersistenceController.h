@@ -14,8 +14,10 @@ typedef void (^InitCallbackBlock)(void);
 @interface TBAPersistenceController : NSObject
 
 @property (strong, readonly) NSManagedObjectContext *managedObjectContext;
+@property (strong, readonly) NSManagedObjectContext *backgroundObjectContext;
 
 - (id)initWithCallback:(InitCallbackBlock)callback;
+- (void)performChanges:(void (^)())block;
 - (void)save;
 
 @end

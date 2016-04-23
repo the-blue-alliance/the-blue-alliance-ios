@@ -6,14 +6,32 @@
 //  Copyright © 2015 The Blue Alliance. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "TBAManagedObject.h"
 
 @class AwardRecipient, DistrictRanking, Event, EventPoints, EventRanking, Media;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Team : NSManagedObject
+@interface Team : TBAManagedObject
+
+@property (nullable, nonatomic, retain) NSString *countryName;
+@property (nonatomic, retain) NSString *key;
+@property (nullable, nonatomic, retain) NSString *locality;
+@property (nullable, nonatomic, retain) NSString *location;
+@property (nullable, nonatomic, retain) NSString *motto;
+@property (nullable, nonatomic, retain) NSString *name;
+@property (nullable, nonatomic, retain) NSString *nickname;
+@property (nullable, nonatomic, retain) NSString *region;
+@property (nullable, nonatomic, retain) NSNumber *rookieYear;
+@property (nonatomic, retain) NSNumber *teamNumber;
+@property (nullable, nonatomic, retain) NSString *website;
+@property (nullable, nonatomic, retain) id yearsParticipated;
+@property (nullable, nonatomic, retain) NSSet<DistrictRanking *> *districtRankings;
+@property (nullable, nonatomic, retain) NSSet<EventPoints *> *eventPoints;
+@property (nullable, nonatomic, retain) NSSet<EventRanking *> *eventRankings;
+@property (nullable, nonatomic, retain) NSSet<Event *> *events;
+@property (nullable, nonatomic, retain) NSSet<Media *> *media;
+@property (nullable, nonatomic, retain) NSSet<AwardRecipient *> *awards;
 
 + (instancetype)insertTeamWithModelTeam:(TBATeam *)modelTeam inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertTeamsWithModelTeams:(NSArray<TBATeam *> *)modelTeams inManagedObjectContext:(NSManagedObjectContext *)context;
@@ -21,9 +39,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray *)sortedEventsForYear:(NSInteger)year;
 - (NSArray *)sortedYearsParticipated;
+- (void)setEvents:(NSSet<Event *> * _Nullable)events forYear:(NSNumber *)year;
 
 @end
 
 NS_ASSUME_NONNULL_END
-
-#import "Team+CoreDataProperties.h"

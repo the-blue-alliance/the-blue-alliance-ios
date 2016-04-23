@@ -83,16 +83,11 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
             [strongSelf removeRequestIdentifier:currentRequest];
             
             if (error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [strongSelf showNoDataViewWithText:@"Unable to load teams for event"];
-                });
+                [strongSelf showNoDataViewWithText:@"Unable to load teams for event"];
             } else {
-                [Team insertTeamsWithModelTeams:teams forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [strongSelf.persistenceController save];
-                    [strongSelf.tableView reloadData];
-                });
+                [strongSelf.persistenceController performChanges:^{
+                    [Team insertTeamsWithModelTeams:teams forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+                }];
             }
         }];
     } else {
@@ -103,11 +98,8 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
             [strongSelf removeRequestIdentifier:currentRequest];
             currentRequest = newTaskId;
             
-            NSManagedObjectContext *tmpContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-            [tmpContext setParentContext:strongSelf.persistenceController.managedObjectContext];
-            [tmpContext performBlock:^{
-                [Team insertTeamsWithModelTeams:batchTeam inManagedObjectContext:tmpContext];
-                [tmpContext save:nil];
+            [strongSelf.persistenceController performChanges:^{
+                [Team insertTeamsWithModelTeams:batchTeam inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
             }];
         } withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
             __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -115,15 +107,14 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
             [strongSelf removeRequestIdentifier:currentRequest];
             
             if (error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [strongSelf showErrorAlertWithMessage:@"Unable to load teams"];
-                });
-            } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [strongSelf.persistenceController save];
-                    [strongSelf.tableView reloadData];
-                });
+                [strongSelf showErrorAlertWithMessage:@"Unable to load teams"];
             }
+            
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
+            [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"teamNumber" ascending:YES]]];
+            NSLog(@"Background: %@", [self.persistenceController.backgroundObjectContext executeFetchRequest:fetchRequest error:nil]);
+            NSLog(@"Main: %@", [self.persistenceController.managedObjectContext executeFetchRequest:fetchRequest error:nil]);
+
         }];
     }
     [self addRequestIdentifier:currentRequest];

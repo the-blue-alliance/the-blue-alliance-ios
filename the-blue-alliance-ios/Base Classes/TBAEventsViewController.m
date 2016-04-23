@@ -32,13 +32,6 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
     [self clearFRC];
 }
 
-- (void)clearFRC {
-    self.fetchedResultsController = nil;
-
-    [self.tableView reloadData];
-    [self.tableView setContentOffset:CGPointZero animated:NO];
-}
-
 - (NSFetchedResultsController *)fetchedResultsController {
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
@@ -105,7 +98,7 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
 #pragma mark - Data Methods
 
 - (void)refreshEvents {
-    if (!self.year || self.year.unsignedIntegerValue == 0) {
+    if (!self.year || self.year == 0) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self showNoDataViewWithText:@"No year selected"];
         });
@@ -114,42 +107,36 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
 
     __weak typeof(self) weakSelf = self;
     if (self.team) {
-        __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForTeamKey:self.team.key andYear:self.year.unsignedIntegerValue withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
+        __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForTeamKey:self.team.key andYear:self.year.integerValue withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
             __strong typeof(weakSelf) strongSelf = weakSelf;
             
             [strongSelf removeRequestIdentifier:request];
             
             if (error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [strongSelf showNoDataViewWithText:@"Unable to load events for team"];
-                });
+                [strongSelf showNoDataViewWithText:@"Unable to load events for team"];
             } else {
-                NSArray *newEvents = [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf.team addEvents:[NSSet setWithArray:newEvents]];
-
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [strongSelf.persistenceController save];
-                    [strongSelf.tableView reloadData];
-                });
+                [strongSelf.persistenceController performChanges:^{
+                    NSArray *newEvents = [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+                    Team *team = [strongSelf.persistenceController.backgroundObjectContext objectWithID:strongSelf.team.objectID];
+                    [team setEvents:[NSSet setWithArray:newEvents] forYear:strongSelf.year];
+                }];
             }
         }];
         [self addRequestIdentifier:request];
     } else {
-        __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForYear:self.year.unsignedIntegerValue withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
+        __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForYear:self.year.integerValue withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
             __strong typeof(weakSelf) strongSelf = weakSelf;
             
             [strongSelf removeRequestIdentifier:request];
             
             if (error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [strongSelf showErrorAlertWithMessage:@"Unable to load events"];
-                });
+                [strongSelf showErrorAlertWithMessage:@"Unable to load events"];
             } else {
+                [strongSelf.persistenceController performChanges:^{
+                    [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+                }];
+                
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                    [strongSelf.persistenceController save];
-                    [strongSelf.tableView reloadData];
-
                     if (self.eventsFetched) {
                         self.eventsFetched();
                     }

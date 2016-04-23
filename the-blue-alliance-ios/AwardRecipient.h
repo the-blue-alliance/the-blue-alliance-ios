@@ -6,21 +6,21 @@
 //  Copyright © 2016 The Blue Alliance. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
-#import "TBAAward.h"
+#import "TBAManagedObject.h"
 
-@class Award, Event, Team;
+@class TBAAwardRecipient, Award, Event, Team;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AwardRecipient : NSManagedObject
+@interface AwardRecipient : TBAManagedObject
 
-+ (instancetype)insertAwardRecipientWithModelAwardRecipient:(TBAAwardRecipient *)modelAwardRecipient forAward:(Award *)award forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
-+ (NSArray *)insertAwardRecipientsWithModelAwardRecipients:(NSArray<TBAAwardRecipient *> *)modelAwardRecipients forAward:(Award *)award forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
+@property (nullable, nonatomic, retain) NSString *name;
+@property (nullable, nonatomic, retain) Team *team;
+@property (nonatomic, retain) Award *award;
+
++ (AwardRecipient *)insertAwardRecipientWithModelAwardRecipient:(TBAAwardRecipient *)modelAwardRecipient forAward:(Award *)award inManagedObjectContext:(NSManagedObjectContext *)context;
++ (NSArray <AwardRecipient *> *)insertAwardRecipientsWithModelAwardRecipients:(NSArray<TBAAwardRecipient *> *)modelAwardRecipients forAward:(Award *)award inManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end
 
 NS_ASSUME_NONNULL_END
-
-#import "AwardRecipient+CoreDataProperties.h"

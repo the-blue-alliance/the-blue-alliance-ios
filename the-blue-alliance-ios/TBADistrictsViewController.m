@@ -16,11 +16,10 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
 
 #pragma mark - Properities
 
-- (void)setYear:(NSUInteger)year {
-    self.fetchedResultsController = nil;
-    
+- (void)setYear:(NSNumber *)year {
     _year = year;
-    [self.tableView reloadData];
+    
+    [self clearFRC];
 }
 
 - (NSFetchedResultsController *)fetchedResultsController {
@@ -29,7 +28,7 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
     }
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"District"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"year == %@", @(self.year)];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"year == %@", self.year];
     [fetchRequest setPredicate:predicate];
     
     NSSortDescriptor *nameSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
@@ -76,24 +75,18 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
         });
         return;
     }
-    __block NSUInteger year = self.year;
-    
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchDistrictsForYear:year withCompletionBlock:^(NSArray *districts, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchDistrictsForYear:self.year.integerValue withCompletionBlock:^(NSArray *districts, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         [strongSelf removeRequestIdentifier:request];
         
         if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to load districts"];
-            });
+            [strongSelf showErrorAlertWithMessage:@"Unable to load districts"];
         } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [District insertDistrictsWithDistrictDicts:districts forYear:year inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf.persistenceController save];
-                [strongSelf.tableView reloadData];
-            });
+            [strongSelf.persistenceController performChanges:^{
+                [District insertDistrictsWithDistrictDicts:districts forYear:strongSelf.year.integerValue inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+            }];
         }
     }];
     [self addRequestIdentifier:request];

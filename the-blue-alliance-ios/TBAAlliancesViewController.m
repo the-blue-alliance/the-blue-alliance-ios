@@ -72,15 +72,11 @@ static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
         [strongSelf removeRequestIdentifier:request];
         
         if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
-            });
+            [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
         } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                strongSelf.event = [Event insertEventWithModelEvent:event inManagedObjectContext:self.persistenceController.managedObjectContext];
-                [strongSelf.persistenceController save];
-                [strongSelf.tableView reloadData];
-            });
+            [strongSelf.persistenceController performChanges:^{
+                [Event insertEventWithModelEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+            }];
         }
     }];
     [self addRequestIdentifier:request];
