@@ -73,25 +73,35 @@
 }
 
 - (void)performChanges:(void (^)())block {
+    [self performChanges:block withCompletion:nil];
+}
+
+- (void)performChanges:(void (^)())block withCompletion:(void (^)())completion {
     [self.backgroundManagedObjectContext performBlock:^{
         block();
-        [self save];
+        [self save:completion];
     }];
 }
 
-- (void)save {
+- (void)save:(void (^)())completion {
     [self.backgroundManagedObjectContext performBlockAndWait:^{
         NSError *backgroundError;
         NSAssert([self.backgroundManagedObjectContext save:&backgroundError], @"Failed to save background context: %@\n%@", backgroundError.localizedDescription, backgroundError.userInfo);
         if (backgroundError) {
             [self.backgroundManagedObjectContext rollback];
+            if (completion) {
+                completion();
+            }
         } else {
             [self.managedObjectContext performBlockAndWait:^{
                 NSError *mainError;
                 NSAssert([self.managedObjectContext save:&mainError], @"Failed to save main context: %@\n%@", mainError.localizedDescription, mainError.userInfo);
                 if (mainError) {
                     [self.managedObjectContext rollback];
-                } 
+                }
+                if (completion) {
+                    completion();
+                }
             }];
         }
     }];

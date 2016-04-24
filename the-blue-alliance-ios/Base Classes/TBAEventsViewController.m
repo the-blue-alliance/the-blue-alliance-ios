@@ -134,13 +134,13 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
             } else {
                 [strongSelf.persistenceController performChanges:^{
                     [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+                } withCompletion:^{
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (self.eventsFetched) {
+                            self.eventsFetched();
+                        }
+                    });
                 }];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (self.eventsFetched) {
-                        self.eventsFetched();
-                    }
-                });
             }
         }];
         [self addRequestIdentifier:request];

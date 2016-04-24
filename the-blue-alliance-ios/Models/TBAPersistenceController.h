@@ -17,7 +17,9 @@ typedef void (^InitCallbackBlock)(void);
 @property (strong, readonly) NSManagedObjectContext *backgroundManagedObjectContext;
 
 - (id)initWithCallback:(InitCallbackBlock)callback;
+
 - (void)performChanges:(void (^)())block;
+- (void)performChanges:(void (^)())block withCompletion:(void (^)())completion;
 - (void)save;
 
 @end

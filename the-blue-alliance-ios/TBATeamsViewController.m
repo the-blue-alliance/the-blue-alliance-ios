@@ -109,12 +109,6 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
             if (error) {
                 [strongSelf showErrorAlertWithMessage:@"Unable to load teams"];
             }
-            
-            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
-            [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"teamNumber" ascending:YES]]];
-            NSLog(@"Background: %@", [self.persistenceController.backgroundManagedObjectContext executeFetchRequest:fetchRequest error:nil]);
-            NSLog(@"Main: %@", [self.persistenceController.managedObjectContext executeFetchRequest:fetchRequest error:nil]);
-
         }];
     }
     [self addRequestIdentifier:currentRequest];
