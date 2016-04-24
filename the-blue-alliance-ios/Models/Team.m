@@ -63,7 +63,8 @@
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (TBATeam *team in modelTeams) {
         Team *t = [self insertTeamWithModelTeam:team inManagedObjectContext:context];
-        t.events = [t.events setByAddingObject:event];
+        Event *e = [context objectWithID:event.objectID];
+        t.events = [t.events setByAddingObject:e];
         [arr addObject:t];
     }
     return arr;
