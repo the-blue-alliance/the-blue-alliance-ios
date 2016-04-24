@@ -75,7 +75,7 @@ static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
             [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
         } else {
             [strongSelf.persistenceController performChanges:^{
-                [Event insertEventWithModelEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+                [Event insertEventWithModelEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
             }];
         }
     }];

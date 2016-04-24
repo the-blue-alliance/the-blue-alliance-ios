@@ -85,7 +85,7 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
             [strongSelf showErrorAlertWithMessage:@"Unable to load districts"];
         } else {
             [strongSelf.persistenceController performChanges:^{
-                [District insertDistrictsWithDistrictDicts:districts forYear:strongSelf.year.integerValue inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+                [District insertDistrictsWithDistrictDicts:districts forYear:strongSelf.year.integerValue inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
             }];
         }
     }];

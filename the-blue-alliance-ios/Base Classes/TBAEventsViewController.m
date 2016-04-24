@@ -116,8 +116,8 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
                 [strongSelf showNoDataViewWithText:@"Unable to load events for team"];
             } else {
                 [strongSelf.persistenceController performChanges:^{
-                    NSArray *newEvents = [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
-                    Team *team = [strongSelf.persistenceController.backgroundObjectContext objectWithID:strongSelf.team.objectID];
+                    NSArray *newEvents = [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+                    Team *team = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.team.objectID];
                     [team setEvents:[NSSet setWithArray:newEvents] forYear:strongSelf.year];
                 }];
             }
@@ -133,7 +133,7 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
                 [strongSelf showErrorAlertWithMessage:@"Unable to load events"];
             } else {
                 [strongSelf.persistenceController performChanges:^{
-                    [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+                    [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
                 }];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{

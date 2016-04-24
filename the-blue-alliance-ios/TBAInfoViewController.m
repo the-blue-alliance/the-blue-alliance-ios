@@ -95,7 +95,7 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
             [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
         } else {
             [strongSelf.persistenceController performChanges:^{
-                [Team insertTeamWithModelTeam:team inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+                [Team insertTeamWithModelTeam:team inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
             }];
         }
     }];
@@ -113,7 +113,7 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
             [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
         } else {
             [strongSelf.persistenceController performChanges:^{
-                [Event insertEventWithModelEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+                [Event insertEventWithModelEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
             }];
         }
     }];

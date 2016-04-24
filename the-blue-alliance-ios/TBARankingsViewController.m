@@ -101,7 +101,7 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
                 [strongSelf showErrorAlertWithMessage:@"Unable to reload district rankings"];
             } else {
                 [strongSelf.persistenceController performChanges:^{
-                    [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:strongSelf.district inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+                    [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:strongSelf.district inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
                 }];
             }
         }];
@@ -117,7 +117,7 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
                 [strongSelf showErrorAlertWithMessage:@"Unable to reload event rankings"];
             } else {
                 [strongSelf.persistenceController performChanges:^{
-                    [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+                    [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
                 }];
             }
         }];
@@ -134,10 +134,10 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
             } else {
                 NSDictionary *pointsDict = points[@"points"];
                 for (NSString *teamKey in pointsDict.allKeys) {
-                    [Team fetchTeamForKey:teamKey fromContext:strongSelf.persistenceController.backgroundObjectContext checkUpstream:YES withCompletionBlock:^(Team * _Nullable team, NSError * _Nullable error) {
+                    [Team fetchTeamForKey:teamKey fromContext:strongSelf.persistenceController.backgroundManagedObjectContext checkUpstream:YES withCompletionBlock:^(Team * _Nullable team, NSError * _Nullable error) {
                         if (!error) {
                             [strongSelf.persistenceController performChanges:^{
-                                [EventPoints insertEventPointsWithEventPointsDict:pointsDict[teamKey] forEvent:strongSelf.event andTeam:team inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+                                [EventPoints insertEventPointsWithEventPointsDict:pointsDict[teamKey] forEvent:strongSelf.event andTeam:team inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
                             }];
                         }
                     }];

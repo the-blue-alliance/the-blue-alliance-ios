@@ -75,7 +75,7 @@ static NSString *const AwardCellReuseIdentifier = @"AwardCell";
             [strongSelf showErrorAlertWithMessage:@"Unable to reload event matches"];
         } else {
             [strongSelf.persistenceController performChanges:^{
-                [Award insertAwardsWithModelAwards:awards forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+                [Award insertAwardsWithModelAwards:awards forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
             }];
         }
     }];

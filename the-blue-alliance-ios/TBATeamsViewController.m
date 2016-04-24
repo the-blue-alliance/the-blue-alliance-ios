@@ -86,7 +86,7 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
                 [strongSelf showNoDataViewWithText:@"Unable to load teams for event"];
             } else {
                 [strongSelf.persistenceController performChanges:^{
-                    [Team insertTeamsWithModelTeams:teams forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+                    [Team insertTeamsWithModelTeams:teams forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
                 }];
             }
         }];
@@ -99,7 +99,7 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
             currentRequest = newTaskId;
             
             [strongSelf.persistenceController performChanges:^{
-                [Team insertTeamsWithModelTeams:batchTeam inManagedObjectContext:strongSelf.persistenceController.backgroundObjectContext];
+                [Team insertTeamsWithModelTeams:batchTeam inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
             }];
         } withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
             __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -112,7 +112,7 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
             
             NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
             [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"teamNumber" ascending:YES]]];
-            NSLog(@"Background: %@", [self.persistenceController.backgroundObjectContext executeFetchRequest:fetchRequest error:nil]);
+            NSLog(@"Background: %@", [self.persistenceController.backgroundManagedObjectContext executeFetchRequest:fetchRequest error:nil]);
             NSLog(@"Main: %@", [self.persistenceController.managedObjectContext executeFetchRequest:fetchRequest error:nil]);
 
         }];

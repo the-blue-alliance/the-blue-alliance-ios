@@ -11,7 +11,7 @@
 @interface TBAPersistenceController ()
 
 @property (strong, readwrite) NSManagedObjectContext *managedObjectContext;
-@property (strong, readwrite) NSManagedObjectContext *backgroundObjectContext;
+@property (strong, readwrite) NSManagedObjectContext *backgroundManagedObjectContext;
 
 @property (copy) InitCallbackBlock initCallback;
 
@@ -45,8 +45,8 @@
     self.managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     self.managedObjectContext.persistentStoreCoordinator = psc;
     
-    self.backgroundObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    self.backgroundObjectContext.parentContext = self.managedObjectContext;
+    self.backgroundManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    self.backgroundManagedObjectContext.parentContext = self.managedObjectContext;
     
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -73,18 +73,18 @@
 }
 
 - (void)performChanges:(void (^)())block {
-    [self.backgroundObjectContext performBlock:^{
+    [self.backgroundManagedObjectContext performBlock:^{
         block();
         [self save];
     }];
 }
 
 - (void)save {
-    [self.backgroundObjectContext performBlockAndWait:^{
+    [self.backgroundManagedObjectContext performBlockAndWait:^{
         NSError *backgroundError;
-        NSAssert([self.backgroundObjectContext save:&backgroundError], @"Failed to save background context: %@\n%@", backgroundError.localizedDescription, backgroundError.userInfo);
+        NSAssert([self.backgroundManagedObjectContext save:&backgroundError], @"Failed to save background context: %@\n%@", backgroundError.localizedDescription, backgroundError.userInfo);
         if (backgroundError) {
-            [self.backgroundObjectContext rollback];
+            [self.backgroundManagedObjectContext rollback];
         } else {
             [self.managedObjectContext performBlockAndWait:^{
                 NSError *mainError;
