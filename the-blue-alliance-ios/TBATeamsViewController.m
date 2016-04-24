@@ -14,6 +14,12 @@
 
 static NSString *const TeamCellReuseIdentifier = @"TeamCell";
 
+@interface TBATeamsViewController ()
+
+@property (nonatomic, weak) IBOutlet UISearchBar *searchBar;
+
+@end
+
 @implementation TBATeamsViewController
 @synthesize fetchedResultsController = _fetchedResultsController;
 
@@ -60,14 +66,6 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
         [strongSelf hideNoDataView];
         [strongSelf refreshData];
     };
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    if (!self.showSearch) {
-        [self hideSearchBar];
-    }
 }
 
 #pragma mark - Data Methods

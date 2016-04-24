@@ -15,8 +15,8 @@
 #import "Event+Fetch.h"
 #import "Media.h"
 
-static NSString *const EventsViewControllerEmbed    = @"EventsViewControllerEmbed";
 static NSString *const InfoViewControllerEmbed      = @"InfoViewControllerEmbed";
+static NSString *const EventsViewControllerEmbed    = @"EventsViewControllerEmbed";
 static NSString *const MediaViewControllerEmbed     = @"MediaViewControllerEmbed";
 
 typedef NS_ENUM(NSInteger, TBATeamDataType) {

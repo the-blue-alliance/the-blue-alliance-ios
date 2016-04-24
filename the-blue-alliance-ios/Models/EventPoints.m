@@ -15,6 +15,7 @@
 
 @dynamic alliancePoints;
 @dynamic awardPoints;
+@dynamic districtCMP;
 @dynamic elimPoints;
 @dynamic qualPoints;
 @dynamic total;
@@ -29,6 +30,7 @@
         eventPoints.event = event;
         eventPoints.alliancePoints = eventPointsDict[@"alliance_points"];
         eventPoints.awardPoints = eventPointsDict[@"award_points"];
+        eventPoints.districtCMP = eventPointsDict[@"district_cmp"];
         eventPoints.elimPoints = eventPointsDict[@"elim_points"];
         eventPoints.total = eventPointsDict[@"total"];
         eventPoints.qualPoints = eventPointsDict[@"qual_points"];

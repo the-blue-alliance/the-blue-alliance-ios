@@ -62,6 +62,7 @@
     <entity name="EventPoints" representedClassName="EventPoints" syncable="YES">
         <attribute name="alliancePoints" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="awardPoints" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="districtCMP" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="elimPoints" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="qualPoints" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="total" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -135,7 +136,7 @@
         <element name="DistrictRanking" positionX="-1287" positionY="2061" width="128" height="135"/>
         <element name="Event" positionX="-1485" positionY="1920" width="128" height="420"/>
         <element name="EventAlliance" positionX="-1260" positionY="2088" width="128" height="105"/>
-        <element name="EventPoints" positionX="-1269" positionY="2079" width="128" height="165"/>
+        <element name="EventPoints" positionX="-1269" positionY="2079" width="128" height="180"/>
         <element name="EventRanking" positionX="-1287" positionY="2061" width="128" height="120"/>
         <element name="EventWebcast" positionX="-1251" positionY="2097" width="128" height="105"/>
         <element name="Match" positionX="-1287" positionY="2061" width="128" height="225"/>

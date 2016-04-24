@@ -65,6 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nonnull NSString *)friendlyNameWithYear:(BOOL)withYear;
 - (nonnull NSString *)dateString;
 - (nonnull NSString *)hybridString;
+- (BOOL)isDistrict;
 
 + (nonnull NSString *)stringForEventOrder:(NSNumber *)order;
 + (NSArray<NSNumber *> *)groupEventsByWeek:(NSArray<Event *> *)events;

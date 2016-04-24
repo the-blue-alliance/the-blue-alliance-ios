@@ -79,7 +79,7 @@
 
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 
-    TBANavigationController *navigationController = (TBANavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"TBASelectYearNavigationController"];
+    TBANavigationController *navigationController = (TBANavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"TBASelectNavigationController"];
     TBASelectViewController *selectViewController = navigationController.viewControllers.firstObject;
     selectViewController.selectType = TBASelectTypeYear;
     selectViewController.currentNumber = self.currentYear;

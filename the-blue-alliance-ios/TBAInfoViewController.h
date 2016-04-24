@@ -8,11 +8,16 @@
 
 #import "TBARefreshTableViewController.h"
 
-@class Team, Event;
+@class Team, Event, EventViewController;
 
 @interface TBAInfoViewController : TBARefreshTableViewController
 
 @property (nonatomic, strong) Team *team;
 @property (nonatomic, strong) Event *event;
+
+@property (nonatomic, copy,) void (^showAlliances)();
+@property (nonatomic, copy,) void (^showDistrictPoints)();
+@property (nonatomic, copy,) void (^showStats)();
+@property (nonatomic, copy,) void (^showAwards)();
 
 @end

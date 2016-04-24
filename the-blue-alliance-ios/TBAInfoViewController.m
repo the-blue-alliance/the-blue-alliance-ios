@@ -13,7 +13,12 @@
 #import "Event+Fetch.h"
 #import "Media.h"
 
-static NSString *const InfoCellReuseIdentifier = @"InfoCell";
+static NSString *const InfoCellReuseIdentifier      = @"InfoCell";
+
+static NSString *const EventOptionAlliances         = @"Alliances";
+static NSString *const EventOptionDistrictPoints    = @"District Points";
+static NSString *const EventOptionStats             = @"Stats";
+static NSString *const EventOptionAwards            = @"Awards";
 
 @interface TBAInfoViewController ()
 
@@ -123,30 +128,37 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
 #pragma mark - Table View Data Source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if (self.infoArray.count == 0) {
-        return 1;
+    NSInteger sections = 0;
+    if (self.event) {
+        sections = 3;
+    } else if (self.team) {
+        sections = 2;
     }
-    return 2;
+    return sections;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSInteger numRows;
-    if (section == 0 && self.infoArray.count > 0) {
-        numRows = self.infoArray.count;
-    } else if ((section == 0 && self.infoArray.count == 0) || section == 1) {
-        if (self.team) {
-            numRows = self.team.website != nil ? 4 : 3;
-        } else if (self.event) {
-            numRows = self.event.website != nil ? 4 : 3;
+    NSInteger rows = 0;
+    if (section == 0) {
+        rows = self.infoArray.count;
+    } else {
+        if (self.event) {
+            if (section == 1) {
+                rows = self.event.isDistrict ? 4 : 3;
+            } else {
+                rows = self.event.website != nil ? 4 : 3;
+            }
+        } else if (self.team) {
+            rows = self.team.website != nil ? 4 : 3;
         }
     }
-    return numRows;
+    return rows;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:InfoCellReuseIdentifier forIndexPath:indexPath];
 
-    if (indexPath.section == 0 && self.infoArray.count > 0) {
+    if (indexPath.section == 0) {
         NSString *text = [self.infoArray objectAtIndex:indexPath.row];
         if (self.team) {
             if ([text isEqualToString:self.team.location]) {
@@ -158,13 +170,62 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
                 cell.textLabel.text = text;
                 cell.textLabel.numberOfLines = 0;
             }
+            
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         } else if (self.event) {
             cell.textLabel.text = text;
+            
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    } else if ((indexPath.section == 0 && self.infoArray.count == 0) || indexPath.section == 1) {
+    } else {
         NSInteger row = indexPath.row;
-        if (self.team) {
+        if (self.event) {
+            if (indexPath.section == 1) {
+                if (indexPath.row >= 1 && ![self.event isDistrict]) {
+                    row++;
+                }
+                switch (row) {
+                    case 0:
+                        cell.textLabel.text = EventOptionAlliances;
+                        break;
+                    case 1:
+                        cell.textLabel.text = EventOptionDistrictPoints;
+                        break;
+                    case 2:
+                        cell.textLabel.text = EventOptionStats;
+                        break;
+                    case 3:
+                        cell.textLabel.text = EventOptionAwards;
+                        break;
+                        
+                    default:
+                        break;
+                }
+            } else if (indexPath.section == 2) {
+                if (!self.event.website) {
+                    row++;
+                }
+                switch (row) {
+                    case 0:
+                        cell.textLabel.text = @"View event's website";
+                        break;
+                    case 1:
+                        cell.textLabel.text = [NSString stringWithFormat:@"View #%@ on Twitter", self.event.key];
+                        break;
+                    case 2:
+                        cell.textLabel.text = [NSString stringWithFormat:@"View %@ on YouTube", self.event.key];
+                        break;
+                    case 3:
+                        cell.textLabel.text = @"View photos on Chief Delphi";
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+        } else if (self.team) {
             if (!self.team.website) {
                 row++;
             }
@@ -184,28 +245,10 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
                 default:
                     break;
             }
-        } else if (self.event) {
-            if (!self.event.website) {
-                row++;
-            }
-            switch (row) {
-                case 0:
-                    cell.textLabel.text = @"View event's website";
-                    break;
-                case 1:
-                    cell.textLabel.text = [NSString stringWithFormat:@"View #%@ on Twitter", self.event.key];
-                    break;
-                case 2:
-                    cell.textLabel.text = [NSString stringWithFormat:@"View %@ on YouTube", self.event.key];
-                    break;
-                case 3:
-                    cell.textLabel.text = @"View photos on Chief Delphi";
-                    break;
-                default:
-                    break;
-            }
         }
+
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     }
     
     return cell;
@@ -215,9 +258,9 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     NSString *titleName;
-    if (section == 0 && self.infoArray.count > 0) {
+    if (section == 0) {
         titleName = [self titleString];
-    } else if ((section == 0 && self.infoArray.count == 0) || section == 1) {
+    } else if ((self.event && section == 2) || self.team) {
         titleName = @"Social media";
     }
     return titleName;
@@ -236,34 +279,39 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    if ((indexPath.section == 0 && self.infoArray.count == 0) || indexPath.section == 1) {
-        NSInteger row = indexPath.row;
-        if (self.team) {
-            if (!self.team.website) {
+
+    NSInteger row = indexPath.row;
+    if (self.event) {
+        if (indexPath.section == 1) {
+            if (indexPath.row >= 1 && ![self.event isDistrict]) {
                 row++;
             }
-            NSString *url;
             switch (row) {
                 case 0:
-                    url = self.team.website;
+                    if (self.showAlliances) {
+                        self.showAlliances();
+                    }
                     break;
                 case 1:
-                    url = [NSString stringWithFormat:@"https://twitter.com/search?q=%%23%@", self.team.key];
+                    if (self.showDistrictPoints) {
+                        self.showDistrictPoints();
+                    }
                     break;
                 case 2:
-                    url = [NSString stringWithFormat:@"https://www.youtube.com/results?search_query=%@", self.team.key];
+                    if (self.showStats) {
+                        self.showStats();
+                    }
                     break;
                 case 3:
-                    url = [NSString stringWithFormat:@"http://www.chiefdelphi.com/media/photos/tags/%@", self.team.key];
+                    if (self.showAwards) {
+                        self.showAwards();
+                    }
                     break;
+                    
                 default:
                     break;
             }
-            if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:url]]) {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
-            }
-        } else if (self.event) {
+        } else if (indexPath.section == 2) {
             if (!self.event.website) {
                 row++;
             }
@@ -287,6 +335,30 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
             if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:url]]) {
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
             }
+        }
+    } else if (self.team && indexPath.section == 1) {
+        if (!self.team.website) {
+            row++;
+        }
+        NSString *url;
+        switch (row) {
+            case 0:
+                url = self.team.website;
+                break;
+            case 1:
+                url = [NSString stringWithFormat:@"https://twitter.com/search?q=%%23%@", self.team.key];
+                break;
+            case 2:
+                url = [NSString stringWithFormat:@"https://www.youtube.com/results?search_query=%@", self.team.key];
+                break;
+            case 3:
+                url = [NSString stringWithFormat:@"http://www.chiefdelphi.com/media/photos/tags/%@", self.team.key];
+                break;
+            default:
+                break;
+        }
+        if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:url]]) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
         }
     }
 }

@@ -20,6 +20,6 @@ typedef void (^InitCallbackBlock)(void);
 
 - (void)performChanges:(void (^)())block;
 - (void)performChanges:(void (^)())block withCompletion:(void (^)())completion;
-- (void)save;
+- (void)save:(void (^)())completion;
 
 @end

@@ -13,11 +13,6 @@
 
 @interface TBASelectWeekViewController ()
 
-@property (nonatomic, strong) UIBarButtonItem *selectWeekBarButtonItem;
-
-@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
-@property (nonatomic, weak) IBOutlet UILabel *weekLabel;
-
 @end
 
 @implementation TBASelectWeekViewController

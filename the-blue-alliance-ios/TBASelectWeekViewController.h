@@ -10,6 +10,9 @@
 
 @interface TBASelectWeekViewController : TBAViewController
 
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (nonatomic, weak) IBOutlet UILabel *weekLabel;
+
 @property (nonatomic, strong) NSNumber *currentWeek;
 @property (nonatomic, copy) NSArray<NSNumber *> *weeks;
 

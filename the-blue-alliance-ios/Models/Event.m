@@ -226,6 +226,10 @@
     }
 }
 
+- (BOOL)isDistrict {
+    return self.eventDistrict.integerValue != TBADistrictTypeNoDistrict;
+}
+
 + (instancetype)insertEventWithModelEvent:(TBAEvent *)modelEvent inManagedObjectContext:(NSManagedObjectContext *)context {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", modelEvent.key];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Event *event) {

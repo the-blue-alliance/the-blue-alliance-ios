@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, retain) NSNumber *alliancePoints;
 @property (nonatomic, retain) NSNumber *awardPoints;
+@property (nonatomic, retain) NSNumber *districtCMP;
 @property (nonatomic, retain) NSNumber *elimPoints;
 @property (nonatomic, retain) NSNumber *qualPoints;
 @property (nonatomic, retain) NSNumber *total;

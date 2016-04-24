@@ -22,8 +22,6 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 
 @property (nonatomic, strong) TBAEventsViewController *eventsViewController;
 
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *yearBarButtonItem;
-
 @property (nonatomic, strong) NSNumber *currentYear;
 @property (nonatomic, strong) NSArray<NSNumber *> *years;
 
@@ -49,7 +47,9 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 - (void)setCurrentYear:(NSNumber *)currentYear {
     _currentYear = currentYear;
     
-    self.yearBarButtonItem.title = currentYear.stringValue;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateInterface];
+    });
 }
 
 #pragma mark - View Lifecycle
@@ -70,7 +70,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     
     [self configureYears];
     [self configureEvents];
-    [self styleInterface];
+    [self updateInterface];
 }
 
 #pragma mark - Data Methods
@@ -100,8 +100,12 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 
 #pragma mark - Interface Methods
 
-- (void)styleInterface {
-    self.navigationItem.title = @"Events";
+- (void)updateInterface {
+    if (self.currentYear) {
+        self.titleLabel.text = [NSString stringWithFormat:@"%@ Events", self.currentYear];
+    } else {
+        self.titleLabel.text = @"--- Events";
+    }
 }
 
 - (IBAction)selectYearButtonTapped:(id)sender {
@@ -139,7 +143,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:EventsViewControllerEmbed]) {
-        self.eventsViewController = (TBAEventsViewController *)segue.destinationViewController;
+        self.eventsViewController = segue.destinationViewController;
         self.eventsViewController.persistenceController = self.persistenceController;
         if (self.weeks) {
             self.eventsViewController.week = [self.weeks firstObject];
@@ -149,9 +153,9 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
         self.eventsViewController.year = self.currentYear;
 
         __weak typeof(self) weakSelf = self;
-        [self.eventsViewController setEventsFetched:^{
+        self.eventsViewController.eventsFetched = ^{
             [weakSelf configureEvents];
-        }];
+        };
 
         self.eventsViewController.eventSelected = ^(Event *event) {
             [weakSelf performSegueWithIdentifier:EventViewControllerSegue sender:event];
