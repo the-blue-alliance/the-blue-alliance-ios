@@ -147,8 +147,10 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (!error) {
+            Team *team = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.team.objectID];
+
             [strongSelf.persistenceController performChanges:^{
-                strongSelf.team.yearsParticipated = years;
+                team.yearsParticipated = years;
             }];
         }
     }];

@@ -84,8 +84,10 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
         if (error) {
             [strongSelf showErrorAlertWithMessage:@"Unable to load team media"];
         } else {
+            Team *team = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.team.objectID];
+            
             [strongSelf.persistenceController performChanges:^{
-                [Media insertMediasWithModelMedias:media forTeam:strongSelf.team andYear:strongSelf.year.integerValue inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+                [Media insertMediasWithModelMedias:media forTeam:team andYear:strongSelf.year.integerValue inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
             }];
         }
     }];

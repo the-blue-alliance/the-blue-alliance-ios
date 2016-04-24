@@ -85,8 +85,10 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
             if (error) {
                 [strongSelf showNoDataViewWithText:@"Unable to load teams for event"];
             } else {
+                Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
+                
                 [strongSelf.persistenceController performChanges:^{
-                    [Team insertTeamsWithModelTeams:teams forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+                    [Team insertTeamsWithModelTeams:teams forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
                 }];
             }
         }];

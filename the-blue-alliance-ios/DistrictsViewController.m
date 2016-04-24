@@ -66,8 +66,8 @@ static NSString *const DistrictViewControllerSegue  = @"DistrictViewControllerSe
 #pragma mark - Data Methods
 
 - (void)configureYears {
-    NSNumber *year = [TBAYearSelectViewController currentYear];
-    self.years = [TBAYearSelectViewController yearsBetweenStartYear:2009 endYear:year.integerValue];
+    NSNumber *year = [TBASelectYearViewController currentYear];
+    self.years = [TBASelectYearViewController yearsBetweenStartYear:2009 endYear:year.integerValue];
     
     if (self.currentYear == 0) {
         self.currentYear = year;

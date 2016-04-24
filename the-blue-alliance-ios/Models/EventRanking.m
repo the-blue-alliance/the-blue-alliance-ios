@@ -62,11 +62,9 @@
             [infoDictionary setObject:value forKey:key];
         }
         
-        Event *e = [context objectWithID:event.objectID];
-        
         eventRanking.record = [self extractRecordString:&infoDictionary];
         eventRanking.info = infoDictionary;
-        eventRanking.event = e;
+        eventRanking.event = event;
         eventRanking.team = team;
     }];
 }

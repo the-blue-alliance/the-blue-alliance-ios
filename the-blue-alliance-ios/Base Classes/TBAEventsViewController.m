@@ -115,9 +115,10 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
             if (error) {
                 [strongSelf showNoDataViewWithText:@"Unable to load events for team"];
             } else {
+                Team *team = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.team.objectID];
+
                 [strongSelf.persistenceController performChanges:^{
                     NSArray *newEvents = [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-                    Team *team = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.team.objectID];
                     [team setEvents:[NSSet setWithArray:newEvents] forYear:strongSelf.year];
                 }];
             }

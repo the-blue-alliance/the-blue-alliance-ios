@@ -21,9 +21,7 @@
 + (instancetype)insertMediaWithModelMedia:(TBAMedia *)modelMedia forTeam:(Team *)team andYear:(NSInteger)year inManagedObjectContext:(NSManagedObjectContext *)context {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"team == %@ AND year == %@ AND foreignKey == %@", team, @(year), modelMedia.foreignKey];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Media *media) {
-        Team *t = [context objectWithID:team.objectID];
-        
-        media.team = t;
+        media.team = team;
         media.year = @(year);
         
         media.foreignKey = modelMedia.foreignKey;

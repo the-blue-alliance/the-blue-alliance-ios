@@ -66,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nonnull NSString *)dateString;
 - (nonnull NSString *)hybridString;
 
-+ (nonnull NSString *)stringForEventOrder:(EventOrder)order;
++ (nonnull NSString *)stringForEventOrder:(NSNumber *)order;
 + (NSArray<NSNumber *> *)groupEventsByWeek:(NSArray<Event *> *)events;
 
 + (instancetype)insertEventWithModelEvent:(TBAEvent *)modelEvent inManagedObjectContext:(NSManagedObjectContext *)context;

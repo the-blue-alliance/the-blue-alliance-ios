@@ -601,7 +601,7 @@
             <objects>
                 <tableViewController id="vOw-E2-ue1" customClass="TBAEventsViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="65" sectionHeaderHeight="28" sectionFooterHeight="28" id="EbJ-9c-CcO">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="443"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -875,13 +875,13 @@
         <!--Select Year-->
         <scene sceneID="dzF-sw-z7e">
             <objects>
-                <tableViewController id="g6p-qo-Xgq" customClass="TBASelectYearViewController" sceneMemberID="viewController">
+                <tableViewController id="g6p-qo-Xgq" customClass="TBASelectViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="jPV-UK-tbg">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="YearCell" textLabel="NlU-XI-e1s" style="IBUITableViewCellStyleDefault" id="2jx-XG-uqo">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SelectCell" textLabel="NlU-XI-e1s" style="IBUITableViewCellStyleDefault" id="2jx-XG-uqo">
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2jx-XG-uqo" id="qyL-Gv-KjU">
@@ -919,7 +919,7 @@
         <!--Navigation Controller-->
         <scene sceneID="mA4-pj-5Ub">
             <objects>
-                <navigationController storyboardIdentifier="TBASelectYearNavigationController" id="l3r-yb-FVq" customClass="TBANavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="TBASelectNavigationController" id="l3r-yb-FVq" customClass="TBANavigationController" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="e6Y-ra-TVj">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -945,15 +945,8 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xjg-oB-ggr">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.85098039215686272" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="6zo-Nj-dS1"/>
-                                </constraints>
-                            </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sqK-kj-TgD">
-                                <rect key="frame" x="0.0" y="44" width="600" height="443"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="487"/>
                                 <connections>
                                     <segue destination="vOw-E2-ue1" kind="embed" identifier="EventsViewControllerEmbed" id="8A3-99-YiF"/>
                                 </connections>
@@ -961,17 +954,20 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="xjg-oB-ggr" firstAttribute="leading" secondItem="o2G-Eb-jFL" secondAttribute="leading" id="3ES-sz-H34"/>
-                            <constraint firstItem="sqK-kj-TgD" firstAttribute="top" secondItem="xjg-oB-ggr" secondAttribute="bottom" id="Dc4-5n-Kio"/>
+                            <constraint firstItem="sqK-kj-TgD" firstAttribute="top" secondItem="gdV-Ya-MWt" secondAttribute="bottom" id="Hyy-dF-09g"/>
                             <constraint firstAttribute="trailing" secondItem="sqK-kj-TgD" secondAttribute="trailing" id="hKd-cn-1Is"/>
-                            <constraint firstItem="xjg-oB-ggr" firstAttribute="top" secondItem="gdV-Ya-MWt" secondAttribute="bottom" id="jDu-76-I3g"/>
                             <constraint firstItem="evg-hJ-39r" firstAttribute="top" secondItem="sqK-kj-TgD" secondAttribute="bottom" id="nXr-q1-jHK"/>
-                            <constraint firstAttribute="trailing" secondItem="xjg-oB-ggr" secondAttribute="trailing" id="qQp-14-d9a"/>
                             <constraint firstItem="sqK-kj-TgD" firstAttribute="leading" secondItem="o2G-Eb-jFL" secondAttribute="leading" id="tdb-DH-1op"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="nwE-Me-WJo">
                         <nil key="title"/>
+                        <barButtonItem key="leftBarButtonItem" title="2016" id="1zn-WG-g3N">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="selectYearButtonTapped:" destination="Vgn-1j-Di4" id="IN0-MJ-Acg"/>
+                            </connections>
+                        </barButtonItem>
                         <view key="titleView" contentMode="scaleToFill" id="id9-ex-69K">
                             <rect key="frame" x="236" y="5.5" width="128" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -982,8 +978,8 @@
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="▾ 2015" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hEB-8Z-hgQ">
-                                    <rect key="frame" x="47" y="19" width="35" height="14"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="▾ Week 2" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hEB-8Z-hgQ">
+                                    <rect key="frame" x="40" y="19" width="48" height="14"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
@@ -999,10 +995,9 @@
                         </view>
                     </navigationItem>
                     <connections>
-                        <outlet property="eventsView" destination="sqK-kj-TgD" id="EXw-Mc-GVX"/>
-                        <outlet property="segmentedControlView" destination="xjg-oB-ggr" id="pfI-uj-GZV"/>
                         <outlet property="titleLabel" destination="A1f-8v-Cv4" id="5te-uc-ZJr"/>
-                        <outlet property="yearLabel" destination="hEB-8Z-hgQ" id="PRU-Sd-Zbl"/>
+                        <outlet property="weekLabel" destination="hEB-8Z-hgQ" id="Yil-Ai-5Fa"/>
+                        <outlet property="yearBarButtonItem" destination="1zn-WG-g3N" id="lci-8S-hwk"/>
                         <segue destination="kyn-5W-zgu" kind="show" identifier="EventViewControllerSegue" id="82k-17-wmC"/>
                     </connections>
                 </viewController>
@@ -1429,9 +1424,9 @@
         <image name="tba_blue_lamp" width="110" height="181"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="2gc-Og-M1c"/>
-        <segue reference="uwf-Zh-tyc"/>
-        <segue reference="oWq-M9-Pon"/>
+        <segue reference="8A3-99-YiF"/>
         <segue reference="eRd-Dy-LTL"/>
+        <segue reference="oWq-M9-Pon"/>
+        <segue reference="2gc-Og-M1c"/>
     </inferredMetricsTieBreakers>
 </document>
