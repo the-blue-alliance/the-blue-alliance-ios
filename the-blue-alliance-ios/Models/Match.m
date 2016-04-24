@@ -12,49 +12,40 @@
 
 @implementation Match
 
+@dynamic blueAlliance;
+@dynamic blueScore;
+@dynamic compLevel;
+@dynamic key;
+@dynamic matchNumber;
+@dynamic redAlliance;
+@dynamic redScore;
+@dynamic scoreBreakdown;
+@dynamic setNumber;
+@dynamic time;
+@dynamic event;
+@dynamic vidoes;
+
 + (instancetype)insertMatchWithModelMatch:(TBAMatch *)modelMatch forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Match" inManagedObjectContext:context];
-    [fetchRequest setEntity:entity];
-    
-    // Specify criteria for filtering which objects to fetch
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", modelMatch.key];
-    [fetchRequest setPredicate:predicate];
-    
-    Match *match;
-    
-    NSError *error = nil;
-    NSArray *existingObjs = [context executeFetchRequest:fetchRequest error:&error];
-    if(existingObjs.count == 1) {
-        match = [existingObjs firstObject];
-    } else if(existingObjs.count > 1) {
-        // Delete them all, create a new a single new one
-        for (Match *m in existingObjs) {
-            [context deleteObject:m];
-        }
-    }
-    
-    if (match == nil) {
-        match = [NSEntityDescription insertNewObjectForEntityForName:@"Match" inManagedObjectContext:context];
-    }
-    
-    match.key = modelMatch.key;
-    match.compLevel = @([self compLevelForString:modelMatch.compLevel]);
-    match.setNumber = @(modelMatch.setNumber);
-    match.matchNumber = @(modelMatch.matchNumber);
-    match.scoreBreakdown = modelMatch.scoreBreakdown;
-    match.time = modelMatch.time;
-    match.event = event;
-    
-    match.redAlliance = modelMatch.redAlliance.teams;
-    match.redScore = @(modelMatch.redAlliance.score);
-    
-    match.blueAlliance = modelMatch.blueAlliance.teams;
-    match.blueScore = @(modelMatch.blueAlliance.score);
-    
-    match.vidoes = [NSSet setWithArray:[MatchVideo insertMatchVidoesWithModelMatchVidoes:modelMatch.videos inManagedObjectContext:context]];
-    
-    return match;
+    return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Match *match) {
+        Event *e = [context objectWithID:event.objectID];
+        
+        match.key = modelMatch.key;
+        match.compLevel = @([self compLevelForString:modelMatch.compLevel]);
+        match.setNumber = @(modelMatch.setNumber);
+        match.matchNumber = @(modelMatch.matchNumber);
+        match.scoreBreakdown = modelMatch.scoreBreakdown;
+        match.time = modelMatch.time;
+        match.event = e;
+        
+        match.redAlliance = modelMatch.redAlliance.teams;
+        match.redScore = @(modelMatch.redAlliance.score);
+        
+        match.blueAlliance = modelMatch.blueAlliance.teams;
+        match.blueScore = @(modelMatch.blueAlliance.score);
+        
+        match.vidoes = [NSSet setWithArray:[MatchVideo insertMatchVidoesWithModelMatchVidoes:modelMatch.videos forMatch:match inManagedObjectContext:context]];
+    }];
 }
 
 + (NSArray *)insertMatchesWithModelMatches:(NSArray<TBAMatch *> *)modelMatches forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {

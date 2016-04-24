@@ -25,15 +25,13 @@
     }
 }
 
-#pragma mark - No Data Views
+#pragma mark - Public Methods
 
-- (void)showErrorAlertWithMessage:(NSString *)message {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil]];
+- (void)clearFRC {
+    self.fetchedResultsController = nil;
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self presentViewController:alert animated:YES completion:nil];
-    });
+    [self.collectionView reloadData];
+    [self.collectionView setContentOffset:CGPointZero animated:NO];
 }
 
 - (void)showNoDataViewWithText:(NSString *)text {
@@ -57,6 +55,15 @@
     if (self.noDataViewController) {
         [self.collectionView setBackgroundView:nil];
     }
+}
+
+- (void)showErrorAlertWithMessage:(NSString *)message {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil]];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self presentViewController:alert animated:YES completion:nil];
+    });
 }
 
 #pragma mark - Table View Data Source

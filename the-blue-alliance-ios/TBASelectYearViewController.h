@@ -11,9 +11,9 @@
 
 @interface TBASelectYearViewController : TBATableViewController <TBATableViewControllerDelegate>
 
-@property (nonatomic, assign) NSUInteger currentYear;
+@property (nonatomic, strong) NSNumber *currentYear;
 @property (nonatomic, copy) NSArray *years;
 
-@property (nonatomic, copy) void (^yearSelectedCallback)(NSUInteger selectedYear);
+@property (nonatomic, copy) void (^yearSelectedCallback)(NSNumber *year);
 
 @end

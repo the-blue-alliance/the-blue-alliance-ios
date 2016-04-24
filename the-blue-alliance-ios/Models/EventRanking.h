@@ -6,21 +6,25 @@
 //  Copyright © 2015 The Blue Alliance. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "TBAManagedObject.h"
 
 @class Event, Team;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EventRanking : NSManagedObject
+@interface EventRanking : TBAManagedObject
+
+@property (nullable, nonatomic, retain) id info;
+@property (nonatomic, retain) NSNumber *rank;
+@property (nonatomic, retain) NSString *record;
+@property (nonatomic, retain) Event *event;
+@property (nonatomic, retain) Team *team;
+
+- (NSString *)infoString;
 
 + (instancetype)insertEventRankingWithEventRankingArray:(NSArray<NSString *> *)eventRankingArray withKeys:(NSArray *)keys forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertEventRankingsWithEventRankings:(NSArray<NSArray *> *)eventRankings forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
-- (NSString *)infoString;
 
 @end
 
 NS_ASSUME_NONNULL_END
-
-#import "EventRanking+CoreDataProperties.h"

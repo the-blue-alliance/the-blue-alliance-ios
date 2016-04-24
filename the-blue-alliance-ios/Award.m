@@ -8,42 +8,28 @@
 
 #import "Award.h"
 #import "AwardRecipient.h"
+#import "TBAAward.h"
 #import "Event.h"
 
 @implementation Award
 
-+ (instancetype)insertAwardWithModelAward:(TBAAward *)modelAward forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Award" inManagedObjectContext:context];
-    [fetchRequest setEntity:entity];
-    
-    // Specify criteria for filtering which objects to fetch
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"awardType == %@ && year == %@ && event == %@", @(modelAward.awardType), @(modelAward.year), event];
-    [fetchRequest setPredicate:predicate];
-    
-    Award *award;
-    NSError *error = nil;
-    NSArray *existingObjs = [context executeFetchRequest:fetchRequest error:&error];
-    if(existingObjs.count == 1) {
-        award = [existingObjs firstObject];
-    } else if(existingObjs.count > 1) {
-        // Delete them all, create a new a single new one
-        for (Award *a in existingObjs) {
-            [context deleteObject:a];
-        }
-    }
+@dynamic name;
+@dynamic awardType;
+@dynamic year;
+@dynamic event;
+@dynamic recipients;
 
-    if (award == nil) {
-        award = [NSEntityDescription insertNewObjectForEntityForName:@"Award" inManagedObjectContext:context];
-    }
-    
-    award.name = modelAward.name;
-    award.year = @(modelAward.year);
-    award.awardType = @(modelAward.awardType);
-    award.event = event;
-    award.recipients = [NSSet setWithArray:[AwardRecipient insertAwardRecipientsWithModelAwardRecipients:modelAward.recipientList forAward:award forEvent:event inManagedObjectContext:context]];
-    
-    return award;
++ (Award *)insertAwardWithModelAward:(TBAAward *)modelAward forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"awardType == %@ && year == %@ && event == %@", @(modelAward.awardType), @(modelAward.year), event];
+    return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Award *award) {
+        Event *e = [context objectWithID:event.objectID];
+        
+        award.name = modelAward.name;
+        award.year = @(modelAward.year);
+        award.awardType = @(modelAward.awardType);
+        award.event = e;
+        award.recipients = [NSSet setWithArray:[AwardRecipient insertAwardRecipientsWithModelAwardRecipients:modelAward.recipientList forAward:award inManagedObjectContext:context]];
+    }];
 }
 
 + (NSArray<Award *> *)insertAwardsWithModelAwards:(NSArray<TBAAward *> *)modelAwards forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {

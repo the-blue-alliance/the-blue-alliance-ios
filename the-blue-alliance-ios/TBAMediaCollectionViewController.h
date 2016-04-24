@@ -13,6 +13,6 @@
 @interface TBAMediaCollectionViewController : TBARefreshCollectionViewController <TBACollectionViewControllerDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) Team *team;
-@property (nonatomic, assign) NSUInteger year;
+@property (nonatomic, strong) NSNumber *year;
 
 @end

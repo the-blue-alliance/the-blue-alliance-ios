@@ -11,7 +11,7 @@
 @interface TBAPersistenceController ()
 
 @property (strong, readwrite) NSManagedObjectContext *managedObjectContext;
-@property (strong) NSManagedObjectContext *privateContext;
+@property (strong, readwrite) NSManagedObjectContext *backgroundManagedObjectContext;
 
 @property (copy) InitCallbackBlock initCallback;
 
@@ -38,31 +38,30 @@
     
     NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"TBA" withExtension:@"momd"];
     NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    NSAssert(mom, @"%@:%@ No model to generate a store from", self.class, NSStringFromSelector(_cmd));
+    NSAssert(mom != nil, @"Error initializing Managed Object Model");
     
-    NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
-    NSAssert(coordinator, @"Failed to initialize coordinator");
+    NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
     
     self.managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-    [self.managedObjectContext setMergePolicy:NSMergeByPropertyObjectTrumpMergePolicy];
+    self.managedObjectContext.persistentStoreCoordinator = psc;
     
-    self.privateContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    self.privateContext.persistentStoreCoordinator = coordinator;
-    self.managedObjectContext.parentContext = self.privateContext;
+    self.backgroundManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    self.backgroundManagedObjectContext.parentContext = self.managedObjectContext;
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSPersistentStoreCoordinator *psc = self.privateContext.persistentStoreCoordinator;
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSURL *documentsURL = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+        NSURL *storeURL = [documentsURL URLByAppendingPathComponent:@"TBA.sqlite"];
+
         NSMutableDictionary *options = [[NSMutableDictionary alloc] init];
         options[NSMigratePersistentStoresAutomaticallyOption] = @YES;
         options[NSInferMappingModelAutomaticallyOption] = @YES;
         options[NSSQLitePragmasOption] = @{@"journal_mode": @"DELETE"};
-        
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSURL *documentsURL = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-        NSURL *storeURL = [documentsURL URLByAppendingPathComponent:@"TBA.sqlite"];
-        
-        NSError *error = nil;
-        NSAssert([psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error], @"Error initializing PSC: %@\n%@", [error localizedDescription], [error userInfo]);
+
+        NSError *error;
+        NSPersistentStoreCoordinator *psc = self.managedObjectContext.persistentStoreCoordinator;
+        NSPersistentStore *store = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error];
+        NSAssert(store != nil, @"Error initializing PSC: %@\n%@", [error localizedDescription], [error userInfo]);
         
         if (!self.initCallback)
             return;
@@ -73,18 +72,38 @@
     });
 }
 
-- (void)save {
-    if (!self.privateContext.hasChanges && !self.managedObjectContext.hasChanges)
-        return;
-    
-    [self.managedObjectContext performBlockAndWait:^{
-        NSError *error;
-        NSAssert([self.managedObjectContext save:&error], @"Failed to save main context: %@\n%@", error.localizedDescription, error.userInfo);
-        
-        [self.privateContext performBlock:^{
-            NSError *privateError;
-            NSAssert([self.privateContext save:&privateError], @"Error saving private context: %@\n%@", privateError.localizedDescription, privateError.userInfo);
-        }];
+- (void)performChanges:(void (^)())block {
+    [self performChanges:block withCompletion:nil];
+}
+
+- (void)performChanges:(void (^)())block withCompletion:(void (^)())completion {
+    [self.backgroundManagedObjectContext performBlock:^{
+        block();
+        [self save:completion];
+    }];
+}
+
+- (void)save:(void (^)())completion {
+    [self.backgroundManagedObjectContext performBlockAndWait:^{
+        NSError *backgroundError;
+        NSAssert([self.backgroundManagedObjectContext save:&backgroundError], @"Failed to save background context: %@\n%@", backgroundError.localizedDescription, backgroundError.userInfo);
+        if (backgroundError) {
+            [self.backgroundManagedObjectContext rollback];
+            if (completion) {
+                completion();
+            }
+        } else {
+            [self.managedObjectContext performBlockAndWait:^{
+                NSError *mainError;
+                NSAssert([self.managedObjectContext save:&mainError], @"Failed to save main context: %@\n%@", mainError.localizedDescription, mainError.userInfo);
+                if (mainError) {
+                    [self.managedObjectContext rollback];
+                }
+                if (completion) {
+                    completion();
+                }
+            }];
+        }
     }];
 }
 

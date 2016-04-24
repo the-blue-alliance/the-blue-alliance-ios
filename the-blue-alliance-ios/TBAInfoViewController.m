@@ -28,6 +28,7 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self registerForChangeNotifications];
     [self setupInfoArray];
     
     __weak typeof(self) weakSelf = self;
@@ -44,6 +45,20 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
 
 #pragma mark - Private Methods
 
+- (void)registerForChangeNotifications {
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:self.persistenceController.managedObjectContext queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        NSSet *updatedObjects = note.userInfo[NSUpdatedObjectsKey];
+        for (NSManagedObject *obj in updatedObjects) {
+            if (obj == self.event || obj == self.team) {
+                [self setupInfoArray];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.tableView reloadData];
+                });
+            }
+        }
+    }];
+}
+
 - (void)setupInfoArray {
     NSMutableArray *dataArr = [[NSMutableArray alloc] init];
     if (self.team) {
@@ -53,7 +68,9 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
         if (self.team.name) {
             [dataArr addObject:self.team.name];
         }
-        // TODO: Add motto here
+        if (self.team.motto) {
+            [dataArr addObject:self.team.motto];
+        }
     } else if (self.event) {
         if ([self.event dateString]) {
             [dataArr addObject:[self.event dateString]];
@@ -75,17 +92,11 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
         [strongSelf removeRequestIdentifier:request];
         
         if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
-            });
+            [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
         } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                strongSelf.team = [Team insertTeamWithModelTeam:team inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf.persistenceController save];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [strongSelf.tableView reloadData];
-                });
-            });
+            [strongSelf.persistenceController performChanges:^{
+                [Team insertTeamWithModelTeam:team inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+            }];
         }
     }];
     [self addRequestIdentifier:request];
@@ -99,15 +110,11 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
         [strongSelf removeRequestIdentifier:request];
         
         if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
-            });
+            [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
         } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                strongSelf.event = [Event insertEventWithModelEvent:event inManagedObjectContext:self.persistenceController.managedObjectContext];
-                [strongSelf.persistenceController save];
-                [strongSelf.tableView reloadData];
-            });
+            [strongSelf.persistenceController performChanges:^{
+                [Event insertEventWithModelEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+            }];
         }
     }];
     [self addRequestIdentifier:request];
@@ -147,8 +154,9 @@ static NSString *const InfoCellReuseIdentifier = @"InfoCell";
             } else if ([text isEqualToString:self.team.name]) {
                 cell.textLabel.text = text;
                 cell.textLabel.numberOfLines = 0;
-            } else if ([text isEqualToString:[self.event dateString]]) {
+            } else if ([text isEqualToString:self.team.motto]) {
                 cell.textLabel.text = text;
+                cell.textLabel.numberOfLines = 0;
             }
         } else if (self.event) {
             cell.textLabel.text = text;

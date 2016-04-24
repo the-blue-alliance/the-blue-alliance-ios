@@ -72,15 +72,11 @@ static NSString *const AwardCellReuseIdentifier = @"AwardCell";
         [strongSelf removeRequestIdentifier:request];
         
         if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf showErrorAlertWithMessage:@"Unable to reload event matches"];
-            });
+            [strongSelf showErrorAlertWithMessage:@"Unable to reload event matches"];
         } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [Award insertAwardsWithModelAwards:awards forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                [strongSelf.persistenceController save];
-                [strongSelf.tableView reloadData];
-            });
+            [strongSelf.persistenceController performChanges:^{
+                [Award insertAwardsWithModelAwards:awards forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+            }];
         }
     }];
     [self addRequestIdentifier:request];

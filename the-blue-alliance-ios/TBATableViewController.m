@@ -33,7 +33,14 @@
     }
 }
 
-#pragma mark - No Data Views
+#pragma mark - Public Methods
+
+- (void)clearFRC {
+    self.fetchedResultsController = nil;
+    
+    [self.tableView reloadData];
+    [self.tableView setContentOffset:CGPointZero animated:NO];
+}
 
 - (void)showNoDataViewWithText:(NSString *)text {
     self.noDataViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"NoDataViewController"];
@@ -57,8 +64,6 @@
         [self.tableView setBackgroundView:nil];
     }
 }
-
-#pragma mark - Alerts
 
 - (void)showErrorAlertWithMessage:(NSString *)message {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:message preferredStyle:UIAlertControllerStyleAlert];

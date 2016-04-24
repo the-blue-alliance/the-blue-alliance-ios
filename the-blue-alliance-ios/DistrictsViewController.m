@@ -9,8 +9,6 @@
 #import "DistrictsViewController.h"
 #import "TBADistrictsViewController.h"
 #import "District.h"
-#import "District+Fetch.h"
-#import "TBAKit.h"
 #import "DistrictViewController.h"
 
 static NSString *const DistrictsViewControllerEmbed = @"DistrictsViewControllerEmbed";
@@ -31,14 +29,14 @@ static NSString *const DistrictViewControllerSegue  = @"DistrictViewControllerSe
     [super viewDidLoad];
     
     __weak typeof(self) weakSelf = self;
-    self.yearSelected = ^void(NSUInteger selectedYear) {
+    self.yearSelected = ^void(NSNumber *year) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         [strongSelf.districtsViewController cancelRefresh];
         [strongSelf.districtsViewController hideNoDataView];
         
-        strongSelf.currentYear = selectedYear;
-        strongSelf.districtsViewController.year = selectedYear;
+        strongSelf.currentYear = year;
+        strongSelf.districtsViewController.year = year;
         
         [strongSelf updateInterface];
     };
@@ -68,8 +66,8 @@ static NSString *const DistrictViewControllerSegue  = @"DistrictViewControllerSe
 #pragma mark - Data Methods
 
 - (void)configureYears {
-    NSInteger year = [TBAYearSelectViewController currentYear];
-    self.years = [TBAYearSelectViewController yearsBetweenStartYear:2009 endYear:year];
+    NSNumber *year = [TBAYearSelectViewController currentYear];
+    self.years = [TBAYearSelectViewController yearsBetweenStartYear:2009 endYear:year.integerValue];
     
     if (self.currentYear == 0) {
         self.currentYear = year;

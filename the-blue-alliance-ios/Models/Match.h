@@ -6,8 +6,7 @@
 //  Copyright © 2015 The Blue Alliance. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "TBAManagedObject.h"
 
 typedef NS_ENUM(NSInteger, CompLevel) {
     CompLevelQualification,
@@ -20,7 +19,20 @@ typedef NS_ENUM(NSInteger, CompLevel) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Match : NSManagedObject
+@interface Match : TBAManagedObject
+
+@property (nonatomic, retain) NSArray<NSString *> *blueAlliance;
+@property (nonatomic, retain) NSNumber *blueScore;
+@property (nonatomic, retain) NSNumber *compLevel;
+@property (nonatomic, retain) NSString *key;
+@property (nonatomic, retain) NSNumber *matchNumber;
+@property (nonatomic, retain) NSArray<NSString *> *redAlliance;
+@property (nonatomic, retain) NSNumber *redScore;
+@property (nullable, nonatomic, retain) NSDictionary *scoreBreakdown;
+@property (nonatomic, retain) NSNumber *setNumber;
+@property (nonatomic, retain) NSDate *time;
+@property (nonatomic, retain) Event *event;
+@property (nullable, nonatomic, retain) NSSet<MatchVideo *> *vidoes;
 
 + (instancetype)insertMatchWithModelMatch:(TBAMatch *)modelMatch forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertMatchesWithModelMatches:(NSArray<TBAMatch *> *)modelMatches forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
@@ -32,5 +44,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#import "Match+CoreDataProperties.h"

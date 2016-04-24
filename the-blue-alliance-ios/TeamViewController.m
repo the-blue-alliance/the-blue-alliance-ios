@@ -49,22 +49,36 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     [super viewDidLoad];
 
     __weak typeof(self) weakSelf = self;
-    self.yearSelected = ^void(NSUInteger selectedYear) {
+    self.yearSelected = ^void(NSNumber *year) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         [strongSelf cancelRefreshes];
 
-        strongSelf.currentYear = selectedYear;
-        strongSelf.mediaCollectionViewController.year = selectedYear;
-        strongSelf.eventsViewController.year = @(selectedYear);
+        strongSelf.currentYear = year;
+        strongSelf.mediaCollectionViewController.year = year;
+        strongSelf.eventsViewController.year = year;
         
         [strongSelf updateInterface];
     };
     
+    [self registerForChangeNotifications];
     [self fetchYearsParticipatedAndRefresh:YES];
     [self styleInterface];
 }
 
 #pragma mark - Private Methods
+
+- (void)registerForChangeNotifications {
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:self.persistenceController.managedObjectContext queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        NSSet *updatedObjects = note.userInfo[NSUpdatedObjectsKey];
+        for (NSManagedObject *obj in updatedObjects) {
+            if (obj == self.team) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self fetchYearsParticipatedAndRefresh:NO];
+                });
+            }
+        }
+    }];
+}
 
 - (void)cancelRefreshes {
     [self.infoViewController cancelRefresh];
@@ -118,11 +132,11 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     } else {
         self.years = years;
         if (self.currentYear == 0) {
-            NSUInteger year = [(NSNumber *)[years firstObject] unsignedIntegerValue];
+            NSNumber *year = [years firstObject];
             
             self.currentYear = year;
             self.mediaCollectionViewController.year = year;
-            self.eventsViewController.year = @(year);
+            self.eventsViewController.year = year;
         }
     }
 }
@@ -133,11 +147,9 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (!error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+            [strongSelf.persistenceController performChanges:^{
                 strongSelf.team.yearsParticipated = years;
-                [strongSelf fetchYearsParticipatedAndRefresh:NO];
-                [strongSelf.persistenceController save];
-            });
+            }];
         }
     }];
 }
@@ -153,7 +165,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         self.eventsViewController = segue.destinationViewController;
         self.eventsViewController.persistenceController = self.persistenceController;
         self.eventsViewController.team = self.team;
-        self.eventsViewController.year = @(self.currentYear);
+        self.eventsViewController.year = self.currentYear;
         
         self.eventsViewController.eventSelected = ^(Event *event) {
             NSLog(@"Selected event: %@", event.shortName);

@@ -92,22 +92,17 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
 - (void)refreshRankings {
     if (self.district) {
         __weak typeof(self) weakSelf = self;
-        __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.district.key forYear:[self.district.year unsignedIntegerValue] withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
+        __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.district.key forYear:self.district.year.integerValue withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
             __strong typeof(weakSelf) strongSelf = weakSelf;
             
             [strongSelf removeRequestIdentifier:request];
             
             if (error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [strongSelf showErrorAlertWithMessage:@"Unable to reload district rankings"];
-                });
+                [strongSelf showErrorAlertWithMessage:@"Unable to reload district rankings"];
             } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    // TODO: These large inserts are hanging our UI thread. We need to look in to fixing it.
-                    [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:strongSelf.district inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                    [strongSelf.persistenceController save];
-                    [strongSelf.tableView reloadData];
-                });
+                [strongSelf.persistenceController performChanges:^{
+                    [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:strongSelf.district inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+                }];
             }
         }];
         [self addRequestIdentifier:request];
@@ -119,15 +114,11 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
             [strongSelf removeRequestIdentifier:request];
             
             if (error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [strongSelf showErrorAlertWithMessage:@"Unable to reload event rankings"];
-                });
+                [strongSelf showErrorAlertWithMessage:@"Unable to reload event rankings"];
             } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                    [strongSelf.persistenceController save];
-                    [strongSelf.tableView reloadData];
-                });
+                [strongSelf.persistenceController performChanges:^{
+                    [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+                }];
             }
         }];
         [self addRequestIdentifier:request];
@@ -139,24 +130,18 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
             [strongSelf removeRequestIdentifier:request];
             
             if (error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [strongSelf showErrorAlertWithMessage:@"Unable to reload district points"];
-                });
+                [strongSelf showErrorAlertWithMessage:@"Unable to reload district points"];
             } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSDictionary *pointsDict = points[@"points"];
-                    for (NSString *teamKey in pointsDict.allKeys) {
-                        [Team fetchTeamForKey:teamKey fromContext:strongSelf.persistenceController.managedObjectContext checkUpstream:YES withCompletionBlock:^(Team * _Nullable team, NSError * _Nullable error) {
-                            if (!error) {
-                                [EventPoints insertEventPointsWithEventPointsDict:pointsDict[teamKey] forEvent:strongSelf.event andTeam:team inManagedObjectContext:strongSelf.persistenceController.managedObjectContext];
-                            }
-                        }];
-                    }
-                    [strongSelf.persistenceController save];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [strongSelf.tableView reloadData];
-                    });
-                });
+                NSDictionary *pointsDict = points[@"points"];
+                for (NSString *teamKey in pointsDict.allKeys) {
+                    [Team fetchTeamForKey:teamKey fromContext:strongSelf.persistenceController.backgroundManagedObjectContext checkUpstream:YES withCompletionBlock:^(Team * _Nullable team, NSError * _Nullable error) {
+                        if (!error) {
+                            [strongSelf.persistenceController performChanges:^{
+                                [EventPoints insertEventPointsWithEventPointsDict:pointsDict[teamKey] forEvent:strongSelf.event andTeam:team inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+                            }];
+                        }
+                    }];
+                }
             }
         }];
         [self addRequestIdentifier:request];

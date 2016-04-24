@@ -10,12 +10,12 @@
 
 @interface TBAYearSelectViewController : TBAViewController
 
-@property (nonatomic, assign) NSUInteger currentYear;
+@property (nonatomic, strong) NSNumber *currentYear;
 @property (nonatomic, copy) NSArray *years;
 
-@property (nonatomic, copy) void (^yearSelected)(NSUInteger year);
+@property (nonatomic, copy) void (^yearSelected)(NSNumber *year);
 
-+ (NSInteger)currentYear;
++ (NSNumber *)currentYear;
 + (NSArray *)yearsBetweenStartYear:(NSInteger)startYear endYear:(NSInteger)endYear;
 
 @end
