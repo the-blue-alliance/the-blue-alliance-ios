@@ -100,8 +100,10 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
             if (error) {
                 [strongSelf showErrorAlertWithMessage:@"Unable to reload district rankings"];
             } else {
+                District *district = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.district.objectID];
+                
                 [strongSelf.persistenceController performChanges:^{
-                    [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:strongSelf.district inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+                    [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:district inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
                 }];
             }
         }];
@@ -116,8 +118,10 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
             if (error) {
                 [strongSelf showErrorAlertWithMessage:@"Unable to reload event rankings"];
             } else {
+                Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
+                
                 [strongSelf.persistenceController performChanges:^{
-                    [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+                    [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
                 }];
             }
         }];
@@ -136,8 +140,10 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
                 for (NSString *teamKey in pointsDict.allKeys) {
                     [Team fetchTeamForKey:teamKey fromContext:strongSelf.persistenceController.backgroundManagedObjectContext checkUpstream:YES withCompletionBlock:^(Team * _Nullable team, NSError * _Nullable error) {
                         if (!error) {
+                            Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
+                            
                             [strongSelf.persistenceController performChanges:^{
-                                [EventPoints insertEventPointsWithEventPointsDict:pointsDict[teamKey] forEvent:strongSelf.event andTeam:team inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+                                [EventPoints insertEventPointsWithEventPointsDict:pointsDict[teamKey] forEvent:event andTeam:team inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
                             }];
                         }
                     }];

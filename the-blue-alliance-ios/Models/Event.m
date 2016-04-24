@@ -43,9 +43,10 @@
 @dynamic webcasts;
 @dynamic awards;
 
-+ (nonnull NSString *)stringForEventOrder:(EventOrder)order {
++ (nonnull NSString *)stringForEventOrder:(NSNumber *)order {
     NSString *orderString;
-    switch (order) {
+    NSInteger orderInteger = order.integerValue;
+    switch (orderInteger) {
         case EventOrderPreseason:
             orderString = @"Preseason";
             break;
@@ -59,7 +60,7 @@
             orderString = @"Other";
             break;
         default:
-            orderString = [NSString stringWithFormat:@"Week %zd", order];
+            orderString = [NSString stringWithFormat:@"Week %@", order];
             break;
     }
     return orderString;
@@ -223,6 +224,10 @@
     } else {
         return self.eventTypeString;
     }
+}
+
+- (BOOL)isDistrict {
+    return self.eventDistrict.integerValue != TBADistrictTypeNoDistrict;
 }
 
 + (instancetype)insertEventWithModelEvent:(TBAEvent *)modelEvent inManagedObjectContext:(NSManagedObjectContext *)context {

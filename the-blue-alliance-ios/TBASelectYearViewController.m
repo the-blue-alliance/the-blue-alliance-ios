@@ -1,71 +1,101 @@
 //
-//  SelectYearViewController.m
+//  TBAYearSelectViewController.m
 //  the-blue-alliance-ios
 //
-//  Created by Zach Orr on 3/22/15.
+//  Created by Zach Orr on 3/27/15.
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
 #import "TBASelectYearViewController.h"
+#import "TBASelectViewController.h"
+#import "TBANavigationController.h"
 
-static NSString *const YearCellReuseIdentifier = @"YearCell";
+@interface TBASelectYearViewController ()
+
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (nonatomic, weak) IBOutlet UILabel *yearLabel;
+
+@end
 
 @implementation TBASelectYearViewController
 
+#pragma mark - Class Methods
+
++ (NSNumber *)currentYear {
+    // TODO: Look for year + 1 as well when data starts coming in
+    return @([[NSCalendar currentCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]]);
+}
+
++ (NSArray *)yearsBetweenStartYear:(NSInteger)startYear endYear:(NSInteger)endYear {
+    NSMutableArray *years = [[NSMutableArray alloc] init];
+    for (NSInteger i = endYear; i >= startYear; i--) {
+        [years addObject:[NSNumber numberWithInteger:i]];
+    }
+    return years;
+}
+
+#pragma mark - Properities
+
+- (NSNumber *)currentYear {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:[self currentYearUserDefaultsString]];
+}
+
+- (void)setCurrentYear:(NSNumber *)currentYear {
+    [[NSUserDefaults standardUserDefaults] setObject:currentYear forKey:[self currentYearUserDefaultsString]];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [self updateYearInterface];
+}
+
 #pragma mark - View Lifecycle
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
-    self.title = @"Select Year";
-    
-    self.tbaDelegate = self;
-    self.cellIdentifier = YearCellReuseIdentifier;
+    [self setupTapGesture];
+    [self updateYearInterface];
 }
 
 #pragma mark - Interface Methods
 
-- (IBAction)cancelButtonTapped:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+- (void)setupTapGesture {
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectYearButtonTapped:)];
+    [self.navigationItem.titleView addGestureRecognizer:tapGesture];
 }
 
-#pragma mark - Table View Data Source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.years count];
-}
-
-#pragma mark - TBA Table View Delegate
-
-- (void)configureCell:(nonnull UITableViewCell *)cell atIndexPath:(nonnull NSIndexPath *)indexPath {
-    NSNumber *year = [self.years objectAtIndex:indexPath.row];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@", year];
-    if (year == self.currentYear) {
-        cell.tintColor = [UIColor primaryBlue];
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+- (void)updateYearInterface {
+    self.titleLabel.text = self.navigationItem.title;
+    if (self.currentYear == 0) {
+        self.yearLabel.text = @"---";
     } else {
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        self.yearLabel.text = [NSString stringWithFormat:@"▾ %@", self.currentYear];
     }
 }
 
-- (void)showNoDataView {
-    [self showNoDataViewWithText:@"No years found"];
+- (void)selectYearButtonTapped:(id)sender {
+    if (self.currentYear == 0) {
+        return;
+    }
+
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+
+    TBANavigationController *navigationController = (TBANavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"TBASelectNavigationController"];
+    TBASelectViewController *selectViewController = navigationController.viewControllers.firstObject;
+    selectViewController.selectType = TBASelectTypeYear;
+    selectViewController.currentNumber = self.currentYear;
+    selectViewController.numbers = self.years;
+    if (self.yearSelected) {
+        selectViewController.numberSelected = self.yearSelected;
+    }
+    
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
-#pragma mark - Table View Delegate
+#pragma mark - Private Methods
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-    NSNumber *year = [self.years objectAtIndex:indexPath.row];
-    if (self.yearSelectedCallback) {
-        self.yearSelectedCallback(year);
-    }
-    [self dismissViewControllerAnimated:YES completion:nil];
+- (NSString *)currentYearUserDefaultsString {
+    NSString *classString = NSStringFromClass([self class]);
+    return [NSString stringWithFormat:@"%@.currentYear", classString];
 }
 
 @end

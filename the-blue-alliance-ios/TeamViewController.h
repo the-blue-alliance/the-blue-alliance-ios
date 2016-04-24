@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import "TBAYearSelectViewController.h"
+#import "TBASelectYearViewController.h"
 
 @class Team;
 
-@interface TeamViewController : TBAYearSelectViewController;
+@interface TeamViewController : TBASelectYearViewController;
 
 @property (nonatomic, weak) Team *team;
 

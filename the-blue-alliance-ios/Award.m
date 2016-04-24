@@ -22,12 +22,10 @@
 + (Award *)insertAwardWithModelAward:(TBAAward *)modelAward forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"awardType == %@ && year == %@ && event == %@", @(modelAward.awardType), @(modelAward.year), event];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Award *award) {
-        Event *e = [context objectWithID:event.objectID];
-        
         award.name = modelAward.name;
         award.year = @(modelAward.year);
         award.awardType = @(modelAward.awardType);
-        award.event = e;
+        award.event = event;
         award.recipients = [NSSet setWithArray:[AwardRecipient insertAwardRecipientsWithModelAwardRecipients:modelAward.recipientList forAward:award inManagedObjectContext:context]];
     }];
 }

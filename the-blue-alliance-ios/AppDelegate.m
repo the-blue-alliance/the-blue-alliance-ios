@@ -18,7 +18,7 @@
 
 @interface AppDelegate ()
 
-@property (strong, readwrite) TBAPersistenceController *persistenceController;
+@property (nonatomic, strong) TBAPersistenceController *persistenceController;
 @property (nonatomic, strong) TBANavigationControllerDelegate *navigationDelegate;
 
 @end
@@ -64,11 +64,11 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    [self.persistenceController save];
+    [self.persistenceController save:nil];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    [self.persistenceController save];
+    [self.persistenceController save:nil];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -80,7 +80,7 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    [self.persistenceController save];
+    [self.persistenceController save:nil];
 }
 
 

@@ -77,8 +77,10 @@ static NSString *const MatchCellReuseIdentifier = @"MatchCell";
         if (error) {
             [strongSelf showErrorAlertWithMessage:@"Unable to reload event matches"];
         } else {
+            Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
+            
             [strongSelf.persistenceController performChanges:^{
-                [Match insertMatchesWithModelMatches:matches forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+                [Match insertMatchesWithModelMatches:matches forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
             }];
         }
     }];

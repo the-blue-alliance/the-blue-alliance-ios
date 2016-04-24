@@ -14,6 +14,12 @@
 
 static NSString *const TeamCellReuseIdentifier = @"TeamCell";
 
+@interface TBATeamsViewController ()
+
+@property (nonatomic, weak) IBOutlet UISearchBar *searchBar;
+
+@end
+
 @implementation TBATeamsViewController
 @synthesize fetchedResultsController = _fetchedResultsController;
 
@@ -62,14 +68,6 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
     };
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    if (!self.showSearch) {
-        [self hideSearchBar];
-    }
-}
-
 #pragma mark - Data Methods
 
 - (void)refreshData {
@@ -85,8 +83,10 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
             if (error) {
                 [strongSelf showNoDataViewWithText:@"Unable to load teams for event"];
             } else {
+                Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
+                
                 [strongSelf.persistenceController performChanges:^{
-                    [Team insertTeamsWithModelTeams:teams forEvent:strongSelf.event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+                    [Team insertTeamsWithModelTeams:teams forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
                 }];
             }
         }];

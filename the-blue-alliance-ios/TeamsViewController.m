@@ -49,7 +49,6 @@ static NSString *const TeamViewControllerSegue  = @"TeamViewControllerSegue";
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:TeamsViewControllerEmbed]) {
         self.teamsViewController = (TBATeamsViewController *)segue.destinationViewController;
-        self.teamsViewController.showSearch = YES;
         self.teamsViewController.persistenceController = self.persistenceController;
         
         __weak typeof(self) weakSelf = self;

@@ -11,30 +11,32 @@
 #import "TBATeamsViewController.h"
 #import "TBARankingsViewController.h"
 #import "TBAMatchesViewController.h"
-#import "TBAAlliancesViewController.h"
-#import "TBAAwardsViewController.h"
-#import "HMSegmentedControl.h"
+#import "EventAlliancesViewController.h"
+#import "EventDistrictPointsViewController.h"
+#import "EventAwardsViewController.h"
 #import "Event.h"
-#import "EventRanking.h"
-#import "Match.h"
-#import "Event+Fetch.h"
-#import "Team.h"
-#import "Team+Fetch.h"
+
+static NSString *const InfoViewControllerEmbed      = @"InfoViewControllerEmbed";
+static NSString *const TeamsViewControllerEmbed     = @"TeamsViewControllerEmbed";
+static NSString *const RankingsViewControllerEmbed  = @"RankingsViewControllerEmbed";
+static NSString *const MatchesViewControllerEmbed   = @"MatchesViewControllerEmbed";
+
+static NSString *const AlliancesViewControllerSegue         = @"AlliancesViewControllerSegue";
+static NSString *const DistrictPointsViewControllerSegue    = @"DistrictPointsViewControllerSegue";
+static NSString *const StatsViewControllerSegue             = @"StatsViewControllerSegue";
+static NSString *const AwardsViewControllerSegue            = @"AwardsViewControllerSegue";
+
 
 typedef NS_ENUM(NSInteger, TBAEventDataType) {
     TBAEventDataTypeInfo = 0,
     TBAEventDataTypeTeams,
     TBAEventDataTypeRankings,
     TBAEventDataTypeMatches,
-    TBAEventDataTypeAlliances,
-//    TBAEventDataTypeStats,
-    TBAEventDataTypeAwards,
-    TBAEventDataTypeDistrictPoints
 };
 
 @interface EventViewController ()
 
-@property (nonatomic, strong) HMSegmentedControl *segmentedControl;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *segmentedControl;
 @property (nonatomic, strong) IBOutlet UIView *segmentedControlView;
 
 @property (nonatomic, strong) TBAInfoViewController *infoViewController;
@@ -48,19 +50,6 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 
 @property (nonatomic, strong) TBAMatchesViewController *matchesViewController;
 @property (nonatomic, weak) IBOutlet UIView *matchesView;
-
-@property (nonatomic, strong) TBAAlliancesViewController *alliancesViewController;
-@property (nonatomic, strong) IBOutlet UIView *alliancesView;
-
-// Need stats view controller :smile:
-
-@property (nonatomic, strong) TBAAwardsViewController *awardsViewController;
-@property (nonatomic, strong) IBOutlet UIView *awardsView;
-
-@property (nonatomic, strong) TBARankingsViewController *districtPointsViewController;
-@property (nonatomic, weak) IBOutlet UIView *districtPointsView;
-
-@property (nonatomic, strong) NSArray<NSNumber *> *eventWeeks;
 
 @end
 
@@ -77,7 +66,7 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 #pragma mark - Private Methods
 
 - (void)cancelRefreshes {
-    NSArray *refreshTVCs = @[self.infoViewController, self.teamsViewController, self.rankingsViewController, self.matchesViewController, self.alliancesViewController, self.awardsViewController, self.districtPointsViewController];
+    NSArray *refreshTVCs = @[self.infoViewController, self.teamsViewController, self.rankingsViewController, self.matchesViewController];
     for (TBARefreshTableViewController *refreshTVC in refreshTVCs) {
         if (refreshTVC) {
             [refreshTVC cancelRefresh];
@@ -90,7 +79,6 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 - (void)styleInterface {
     self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
     self.navigationItem.title = [self.event friendlyNameWithYear:YES];
-    [self setupSegmentedControl];
 }
 
 - (void)updateInterface {
@@ -111,63 +99,16 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
         if (self.matchesViewController.fetchedResultsController.fetchedObjects.count == 0) {
             self.matchesViewController.refresh();
         }
-    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeAlliances) {
-        [self showView:self.alliancesView];
-        if (self.alliancesViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.alliancesViewController.refresh();
-        }
-    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeAwards) {
-        [self showView:self.awardsView];
-        if (self.awardsViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.awardsViewController.refresh();
-        }
-    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeDistrictPoints) {
-        [self showView:self.districtPointsView];
-        if (self.districtPointsViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.districtPointsViewController.refresh();
-        }
     }
 }
 
 - (void)showView:(UIView *)showView {
-    for (UIView *view in @[self.infoView, self.teamsView, self.rankingsView, self.matchesView, self.alliancesView, self.awardsView, self.districtPointsView]) {
+    for (UIView *view in @[self.infoView, self.teamsView, self.rankingsView, self.matchesView]) {
         view.hidden = (showView == view ? NO : YES);
     }
 }
 
-- (void)setupSegmentedControl {
-    NSMutableArray *titles = [NSMutableArray arrayWithArray:@[@"Info", @"Teams", @"Rankings", @"Matches", @"Alliances", @"Awards"]];
-    if (TBADistrictTypeNoDistrict != [self.event eventDistrict].integerValue) {
-        [titles addObject:@"District Points"];
-    }
-    self.segmentedControl = [[HMSegmentedControl alloc] initWithSectionTitles:titles];
-    
-    self.segmentedControl.frame = self.segmentedControlView.frame;
-    self.segmentedControl.translatesAutoresizingMaskIntoConstraints = NO;
-    self.segmentedControl.segmentEdgeInset = UIEdgeInsetsMake(0, 10, 0, 10);
-    self.segmentedControl.selectionStyle = HMSegmentedControlSelectionStyleFullWidthStripe;
-    self.segmentedControl.selectionIndicatorLocation = HMSegmentedControlSelectionIndicatorLocationDown;
-    self.segmentedControl.backgroundColor = [UIColor primaryBlue];
-    self.segmentedControl.selectionIndicatorColor = [UIColor whiteColor];
-    self.segmentedControl.segmentWidthStyle = HMSegmentedControlSegmentWidthStyleDynamic;
-    self.segmentedControl.selectionIndicatorHeight = 3.0f;
-    
-    [self.segmentedControl setTitleFormatter:^NSAttributedString *(HMSegmentedControl *segmentedControl, NSString *title, NSUInteger index, BOOL selected) {
-        NSAttributedString *attString = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName : [UIColor whiteColor],
-                                                                                                      NSFontAttributeName: [UIFont systemFontOfSize:14.0f]}];
-        return attString;
-    }];
-    [self.segmentedControl addTarget:self action:@selector(segmentedControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-    [self.segmentedControlView addSubview:self.segmentedControl];
-    
-    NSLayoutConstraint *topConstraint = [NSLayoutConstraint constraintWithItem:self.segmentedControl attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.segmentedControlView attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f];
-    NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:self.segmentedControl attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.segmentedControlView attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f];
-    NSLayoutConstraint *leadingConstraint = [NSLayoutConstraint constraintWithItem:self.segmentedControl attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.segmentedControlView attribute:NSLayoutAttributeLeading multiplier:1.0f constant:0.0f];
-    NSLayoutConstraint *trailingConstraint = [NSLayoutConstraint constraintWithItem:self.segmentedControl attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.segmentedControlView attribute:NSLayoutAttributeTrailing multiplier:1.0f constant:0.0f];
-    [self.segmentedControlView addConstraints:@[topConstraint, bottomConstraint, leadingConstraint, trailingConstraint]];
-}
-
-- (void)segmentedControlValueChanged:(id)sender {
+- (IBAction)segmentedControlValueChanged:(id)sender {
     [self cancelRefreshes];
     [self updateInterface];
 }
@@ -175,37 +116,50 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"InfoViewControllerEmbed"]) {
+    if ([segue.identifier isEqualToString:InfoViewControllerEmbed]) {
         self.infoViewController = segue.destinationViewController;
         self.infoViewController.persistenceController = self.persistenceController;
         self.infoViewController.event = self.event;
-    } else if ([segue.identifier isEqualToString:@"TeamsViewControllerEmbed"]) {
+        
+        __weak typeof(self) weakSelf = self;
+        self.infoViewController.showAlliances = ^{
+            [weakSelf performSegueWithIdentifier:AlliancesViewControllerSegue sender:nil];
+        };
+        self.infoViewController.showDistrictPoints = ^{
+            [weakSelf performSegueWithIdentifier:DistrictPointsViewControllerSegue sender:nil];
+        };
+        self.infoViewController.showStats = ^{
+            [weakSelf performSegueWithIdentifier:StatsViewControllerSegue sender:nil];
+        };
+        self.infoViewController.showAwards = ^{
+            [weakSelf performSegueWithIdentifier:AwardsViewControllerSegue sender:nil];
+        };
+    } else if ([segue.identifier isEqualToString:TeamsViewControllerEmbed]) {
         self.teamsViewController = segue.destinationViewController;
         self.teamsViewController.persistenceController = self.persistenceController;
         self.teamsViewController.event = self.event;
-        self.teamsViewController.showSearch = NO;
-    } else if ([segue.identifier isEqualToString:@"RankingsViewControllerEmbed"]) {
+    } else if ([segue.identifier isEqualToString:RankingsViewControllerEmbed]) {
         self.rankingsViewController = segue.destinationViewController;
         self.rankingsViewController.persistenceController = self.persistenceController;
         self.rankingsViewController.event = self.event;
-    } else if ([segue.identifier isEqualToString:@"MatchesViewControllerEmbed"]) {
+    } else if ([segue.identifier isEqualToString:MatchesViewControllerEmbed]) {
         self.matchesViewController = segue.destinationViewController;
         self.matchesViewController.persistenceController = self.persistenceController;
         self.matchesViewController.event = self.event;
-    } else if ([segue.identifier isEqualToString:@"AlliancesViewControllerEmbed"]) {
-        self.alliancesViewController = segue.destinationViewController;
-        self.alliancesViewController.persistenceController = self.persistenceController;
-        self.alliancesViewController.event = self.event;
-    } else if ([segue.identifier isEqualToString:@"AwardsViewControllerEmbed"]) {
-        self.awardsViewController = segue.destinationViewController;
-        self.awardsViewController.persistenceController = self.persistenceController;
-        self.awardsViewController.event = self.event;
-    } else if ([segue.identifier isEqualToString:@"DistrictPointsViewControllerEmbed"]) {
-        self.districtPointsViewController = segue.destinationViewController;
-        self.districtPointsViewController.persistenceController = self.persistenceController;
-        self.districtPointsViewController.event = self.event;
-        self.districtPointsViewController.showPoints = YES;
+    } else if ([segue.identifier isEqualToString:AlliancesViewControllerSegue]) {
+        EventAlliancesViewController *eventAlliancesViewController = segue.destinationViewController;
+        eventAlliancesViewController.persistenceController = self.persistenceController;
+        eventAlliancesViewController.event = self.event;
+    } else if ([segue.identifier isEqualToString:AwardsViewControllerSegue]) {
+        EventAwardsViewController *eventAwardsViewController = segue.destinationViewController;
+        eventAwardsViewController.persistenceController = self.persistenceController;
+        eventAwardsViewController.event = self.event;
+    } else if ([segue.identifier isEqualToString:DistrictPointsViewControllerSegue]) {
+        EventDistrictPointsViewController *eventDistrictPointsViewController = segue.destinationViewController;
+        eventDistrictPointsViewController.persistenceController = self.persistenceController;
+        eventDistrictPointsViewController.event = self.event;
     }
+    // TODO: Add stats
 }
 
 @end

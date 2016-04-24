@@ -28,15 +28,13 @@
 + (instancetype)insertMatchWithModelMatch:(TBAMatch *)modelMatch forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", modelMatch.key];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Match *match) {
-        Event *e = [context objectWithID:event.objectID];
-        
         match.key = modelMatch.key;
         match.compLevel = @([self compLevelForString:modelMatch.compLevel]);
         match.setNumber = @(modelMatch.setNumber);
         match.matchNumber = @(modelMatch.matchNumber);
         match.scoreBreakdown = modelMatch.scoreBreakdown;
         match.time = modelMatch.time;
-        match.event = e;
+        match.event = event;
         
         match.redAlliance = modelMatch.redAlliance.teams;
         match.redScore = @(modelMatch.redAlliance.score);

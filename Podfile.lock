@@ -1,13 +1,10 @@
 PODS:
-  - HMSegmentedControl (1.5.2)
   - TBAKit (1.1.2)
 
 DEPENDENCIES:
-  - HMSegmentedControl
   - TBAKit
 
 SPEC CHECKSUMS:
-  HMSegmentedControl: 83b9686022d2176fb6457d2bdb61e5d6393fed7d
   TBAKit: 96f47ccc7268b9a7ece17b75e284818d7b7c7d80
 
 COCOAPODS: 0.39.0

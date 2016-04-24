@@ -44,9 +44,7 @@
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"district == %@ AND team == %@", district, team];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(DistrictRanking *districtRanking) {
-        District *d = [context objectWithID:district.objectID];
-        
-        districtRanking.district = d;
+        districtRanking.district = district;
         districtRanking.pointTotal = districtRankingDict[@"point_total"];
         districtRanking.rank = districtRankingDict[@"rank"];
         districtRanking.rookieBonus = districtRankingDict[@"rookie_bonus"];

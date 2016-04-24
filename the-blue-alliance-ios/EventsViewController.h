@@ -6,9 +6,8 @@
 //  Copyright (c) 2014 The Blue Alliance. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "TBAYearSelectViewController.h"
+#import "TBASelectWeekViewController.h"
 
-@interface EventsViewController : TBAYearSelectViewController
+@interface EventsViewController : TBASelectWeekViewController
 
 @end

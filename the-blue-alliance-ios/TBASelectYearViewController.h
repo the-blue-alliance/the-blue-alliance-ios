@@ -1,19 +1,21 @@
 //
-//  SelectYearViewController.h
+//  TBAYearSelectViewController.h
 //  the-blue-alliance-ios
 //
-//  Created by Zach Orr on 3/22/15.
+//  Created by Zach Orr on 3/27/15.
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "TBATableViewController.h"
+#import "TBARefreshViewController.h"
 
-@interface TBASelectYearViewController : TBATableViewController <TBATableViewControllerDelegate>
+@interface TBASelectYearViewController : TBAViewController
 
 @property (nonatomic, strong) NSNumber *currentYear;
 @property (nonatomic, copy) NSArray *years;
 
-@property (nonatomic, copy) void (^yearSelectedCallback)(NSNumber *year);
+@property (nonatomic, copy) void (^yearSelected)(NSNumber *year);
+
++ (NSNumber *)currentYear;
++ (NSArray *)yearsBetweenStartYear:(NSInteger)startYear endYear:(NSInteger)endYear;
 
 @end
