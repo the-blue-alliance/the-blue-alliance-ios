@@ -1,10 +1,13 @@
 PODS:
+  - OpenInGoogleMaps (0.1.0)
   - TBAKit (1.1.2)
 
 DEPENDENCIES:
+  - OpenInGoogleMaps
   - TBAKit
 
 SPEC CHECKSUMS:
+  OpenInGoogleMaps: 60dd887d2e2b2149166a03bd6dab1d4478a7d3e8
   TBAKit: 96f47ccc7268b9a7ece17b75e284818d7b7c7d80
 
 COCOAPODS: 0.39.0

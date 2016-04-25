@@ -8,13 +8,10 @@
 
 #import "AppDelegate.h"
 #import "TBAPersistenceController.h"
+#import "TBAViewController.h"
 #import "TBANavigationController.h"
 #import "TBANavigationControllerDelegate.h"
-#import "TBAKit.h"
-#import "TeamsViewController.h"
-#import "EventRanking.h"
-#import "Team.h"
-#import "Event.h"
+#import "OpenInGoogleMapsController.h"
 
 @interface AppDelegate ()
 
@@ -28,6 +25,9 @@
 #pragma mark - Main Entry Point
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [OpenInGoogleMapsController sharedInstance].callbackURL = [NSURL URLWithString:@"tba://"];
+    [OpenInGoogleMapsController sharedInstance].fallbackStrategy = kGoogleMapsFallbackAppleMaps;
+
     [self setPersistenceController:[[TBAPersistenceController alloc] initWithCallback:^{
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UITabBarController *rootTabBarController = [storyboard instantiateViewControllerWithIdentifier:@"RootTabBarController"];
@@ -83,6 +83,12 @@
     [self.persistenceController save:nil];
 }
 
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    if (!url) {
+        return NO;
+    }
+    return YES;
+}
 
 #pragma mark - Interface Methods
 

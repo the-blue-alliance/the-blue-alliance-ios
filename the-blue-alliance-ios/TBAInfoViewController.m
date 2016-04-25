@@ -7,11 +7,13 @@
 //
 
 #import "TBAInfoViewController.h"
+#import "OpenInGoogleMapsController.h"
 #import "Team.h"
 #import "Team+Fetch.h"
 #import "Event.h"
 #import "Event+Fetch.h"
 #import "Media.h"
+#import <EventKitUI/EventKitUI.h>
 
 static NSString *const InfoCellReuseIdentifier      = @"InfoCell";
 
@@ -20,7 +22,7 @@ static NSString *const EventOptionDistrictPoints    = @"District Points";
 static NSString *const EventOptionStats             = @"Stats";
 static NSString *const EventOptionAwards            = @"Awards";
 
-@interface TBAInfoViewController ()
+@interface TBAInfoViewController () <EKEventViewDelegate, EKEventEditViewDelegate>
 
 @property (nonatomic, strong) NSArray *infoArray;
 
@@ -163,21 +165,26 @@ static NSString *const EventOptionAwards            = @"Awards";
         if (self.team) {
             if ([text isEqualToString:self.team.location]) {
                 cell.textLabel.text = [NSString stringWithFormat:@"from %@", text];
-            } else if ([text isEqualToString:self.team.name]) {
-                cell.textLabel.text = text;
-                cell.textLabel.numberOfLines = 0;
-            } else if ([text isEqualToString:self.team.motto]) {
-                cell.textLabel.text = text;
-                cell.textLabel.numberOfLines = 0;
+                
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+            } else {
+                if ([text isEqualToString:self.team.name]) {
+                    cell.textLabel.text = text;
+                    cell.textLabel.numberOfLines = 0;
+                } else if ([text isEqualToString:self.team.motto]) {
+                    cell.textLabel.text = text;
+                    cell.textLabel.numberOfLines = 0;
+                }
+                
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
-            
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         } else if (self.event) {
             cell.textLabel.text = text;
             
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
         }
     } else {
         NSInteger row = indexPath.row;
@@ -281,6 +288,22 @@ static NSString *const EventOptionAwards            = @"Awards";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     NSInteger row = indexPath.row;
+    if (indexPath.section == 0) {
+        NSString *text = [self.infoArray objectAtIndex:indexPath.row];
+        
+        GoogleMapDefinition *definition = [[GoogleMapDefinition alloc] init];
+        if (self.team && [text isEqualToString:self.team.location]) {
+            definition.queryString = self.team.location;
+            [[OpenInGoogleMapsController sharedInstance] openMap:definition];
+        } else if (self.event) {
+            if ([text isEqualToString:self.event.location]) {
+                definition.queryString = self.event.location;
+                [[OpenInGoogleMapsController sharedInstance] openMap:definition];
+            } else {
+                [self createEventCalendarEvent];
+            }
+        }
+    }
     if (self.event) {
         if (indexPath.section == 1) {
             if (indexPath.row >= 1 && ![self.event isDistrict]) {
@@ -333,7 +356,9 @@ static NSString *const EventOptionAwards            = @"Awards";
                     break;
             }
             if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:url]]) {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+                });
             }
         }
     } else if (self.team && indexPath.section == 1) {
@@ -381,6 +406,97 @@ static NSString *const EventOptionAwards            = @"Awards";
         titleString = self.event.name;
     }
     return titleString;
+}
+
+- (void)createEventCalendarEvent {
+    EKEventStore *store = [[EKEventStore alloc] init];
+    
+    [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+        if (granted) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self createEventAndPresentViewController:store];
+            });
+        } else {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Unable to access Calendar" message:@"Permission was not granted for Calendar" preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *settingsAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                if ([[UIApplication sharedApplication] canOpenURL:url]) {
+                    [[UIApplication sharedApplication] openURL:url];
+                }
+            }];
+            [alert addAction:settingsAction];
+            
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+            [alert addAction:cancelAction];
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self presentViewController:alert animated:YES completion:nil];
+            });
+        }
+    }];
+}
+
+- (void)createEventAndPresentViewController:(EKEventStore *)store {
+    EKEvent *event = [self findCalendarEventInEventStore:store];
+
+    if (event) {
+        EKEventViewController *eventViewController = [[EKEventViewController alloc] init];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:eventViewController];
+
+        eventViewController.event = event;
+        eventViewController.allowsEditing = YES;
+        eventViewController.delegate = self;
+        
+        [self presentViewController:navigationController animated:YES completion:nil];
+    } else {
+        event = [self createEvent:store];
+        
+        EKEventEditViewController *editEventViewController = [[EKEventEditViewController alloc] init];
+        editEventViewController.event = event;
+        editEventViewController.eventStore = store;
+        editEventViewController.editViewDelegate = self;
+        
+        [self presentViewController:editEventViewController animated:YES completion:nil];
+    }
+}
+
+- (EKEvent *)createEvent:(EKEventStore *)store {
+    EKEvent *event = [EKEvent eventWithEventStore:store];
+    event.title = [NSString stringWithFormat:@"%@ Event", [self.event friendlyNameWithYear:YES]];
+    event.allDay = YES;
+    event.location = self.event.location;
+    event.calendar = [store defaultCalendarForNewEvents];
+    event.startDate = self.event.startDate;
+    event.endDate = self.event.endDate;
+
+    return event;
+}
+
+- (EKEvent *)findCalendarEventInEventStore:(EKEventStore *)store {
+    // Find calendar event with start/end date of our event
+    NSPredicate *predicate = [store predicateForEventsWithStartDate:self.event.startDate
+                                                            endDate:self.event.endDate
+                                                          calendars:nil];
+    
+    // Fetch all events that match the predicate
+    NSArray *events = [store eventsMatchingPredicate:predicate];
+    
+    for (EKEvent *event in events) {
+        if ([[NSString stringWithFormat:@"%@ Event", [self.event friendlyNameWithYear:YES]] isEqualToString:event.title]) {
+            return event;
+        }
+    }
+    
+    return nil;
+}
+
+- (void)eventViewController:(EKEventViewController *)controller didCompleteWithAction:(EKEventViewAction)action {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)eventEditViewController:(EKEventEditViewController *)controller didCompleteWithAction:(EKEventEditViewAction)action {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

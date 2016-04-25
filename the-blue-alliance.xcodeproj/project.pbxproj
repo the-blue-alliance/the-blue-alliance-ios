@@ -71,6 +71,8 @@
 		92E588B91CCD89D900710065 /* EventDistrictPointsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E588B81CCD89D900710065 /* EventDistrictPointsViewController.m */; };
 		92E588BC1CCD8A9500710065 /* EventStatsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E588BB1CCD8A9500710065 /* EventStatsViewController.m */; };
 		92E749101B27B0EC00C46487 /* TBAInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92E7490F1B27B0EC00C46487 /* TBAInfoViewController.m */; };
+		92E990091CCD9CE000EE8F71 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E990071CCD9CE000EE8F71 /* EventKit.framework */; };
+		92E9900A1CCD9CE000EE8F71 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E990081CCD9CE000EE8F71 /* EventKitUI.framework */; };
 		92EAA4C01ABF6AB100F7CF39 /* TBASelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92EAA4BF1ABF6AB100F7CF39 /* TBASelectViewController.m */; };
 		92F1580C1AF55DB300884E8A /* DistrictViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F1580B1AF55DB300884E8A /* DistrictViewController.m */; };
 		92F19E341C4336600059C7B4 /* TBAAlliancesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F19E331C4336600059C7B4 /* TBAAlliancesViewController.m */; };
@@ -204,6 +206,8 @@
 		92E588BB1CCD8A9500710065 /* EventStatsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventStatsViewController.m; sourceTree = "<group>"; };
 		92E7490E1B27B0EC00C46487 /* TBAInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAInfoViewController.h; sourceTree = "<group>"; };
 		92E7490F1B27B0EC00C46487 /* TBAInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAInfoViewController.m; sourceTree = "<group>"; };
+		92E990071CCD9CE000EE8F71 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
+		92E990081CCD9CE000EE8F71 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
 		92EAA4BE1ABF6AB100F7CF39 /* TBASelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBASelectViewController.h; sourceTree = "<group>"; };
 		92EAA4BF1ABF6AB100F7CF39 /* TBASelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBASelectViewController.m; sourceTree = "<group>"; };
 		92F1580A1AF55DB300884E8A /* DistrictViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictViewController.h; sourceTree = "<group>"; };
@@ -222,6 +226,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92E990091CCD9CE000EE8F71 /* EventKit.framework in Frameworks */,
+				92E9900A1CCD9CE000EE8F71 /* EventKitUI.framework in Frameworks */,
 				50E65EA719198E5200714328 /* QuartzCore.framework in Frameworks */,
 				50832DFF1918BB63003AC8A7 /* UIKit.framework in Frameworks */,
 				50832DFB1918BB63003AC8A7 /* Foundation.framework in Frameworks */,
@@ -253,6 +259,8 @@
 		50832DF91918BB63003AC8A7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				92E990071CCD9CE000EE8F71 /* EventKit.framework */,
+				92E990081CCD9CE000EE8F71 /* EventKitUI.framework */,
 				92ACD1AC1AAF6FE5009283C1 /* libPods.a */,
 				92ACD1AA1AAF6F51009283C1 /* libPods.a */,
 				92ACD1A81AAF6F46009283C1 /* libPods-PureLayout.a */,
