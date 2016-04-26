@@ -15,7 +15,9 @@
 #import "EventDistrictPointsViewController.h"
 #import "EventAwardsViewController.h"
 #import "EventTeamViewController.h"
+#import "Team.h"
 #import "Event.h"
+#import "EventRanking.h"
 
 static NSString *const InfoViewControllerEmbed      = @"InfoViewControllerEmbed";
 static NSString *const TeamsViewControllerEmbed     = @"TeamsViewControllerEmbed";
@@ -150,6 +152,12 @@ typedef NS_ENUM(NSInteger, TBAEventSegment) {
         self.rankingsViewController = segue.destinationViewController;
         self.rankingsViewController.persistenceController = self.persistenceController;
         self.rankingsViewController.event = self.event;
+        
+        __weak typeof(self) weakSelf = self;
+        self.rankingsViewController.rankingSelected = ^(id ranking) {
+            EventRanking *eventRanking = (EventRanking *)ranking;
+            [weakSelf performSegueWithIdentifier:EventTeamViewControllerSegue sender:eventRanking];
+        };
     } else if ([segue.identifier isEqualToString:MatchesViewControllerEmbed]) {
         self.matchesViewController = segue.destinationViewController;
         self.matchesViewController.persistenceController = self.persistenceController;
@@ -169,12 +177,18 @@ typedef NS_ENUM(NSInteger, TBAEventSegment) {
     }
     // TODO: Add stats
     else if ([segue.identifier isEqualToString:EventTeamViewControllerSegue]) {
-        Team *team = (Team *)sender;
-        
         EventTeamViewController *eventTeamViewController = segue.destinationViewController;
         eventTeamViewController.persistenceController = self.persistenceController;
         eventTeamViewController.event = self.event;
-        eventTeamViewController.team = team;
+        
+        if ([sender isKindOfClass:[Team class]]) {
+            Team *team = (Team *)sender;
+            eventTeamViewController.team = team;
+        } else if ([sender isKindOfClass:[EventRanking class]]) {
+            EventRanking *eventRanking = (EventRanking *)sender;
+            eventTeamViewController.team = eventRanking.team;
+            eventTeamViewController.eventRanking = eventRanking;
+        }
     }
 }
 

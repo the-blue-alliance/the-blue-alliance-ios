@@ -37,7 +37,7 @@
         match.time = modelMatch.time;
         match.event = event;
     
-        NSMutableSet<Team *> *redAlliance = [[NSMutableSet alloc] init];
+        NSMutableOrderedSet<Team *> *redAlliance = [[NSMutableOrderedSet alloc] init];
         for (NSString *teamKey in modelMatch.redAlliance.teams) {
             Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
             [redAlliance addObject:team];
@@ -45,7 +45,7 @@
         match.redAlliance = redAlliance;
         match.redScore = @(modelMatch.redAlliance.score);
         
-        NSMutableSet<Team *> *blueAlliance = [[NSMutableSet alloc] init];
+        NSMutableOrderedSet<Team *> *blueAlliance = [[NSMutableOrderedSet alloc] init];
         for (NSString *teamKey in modelMatch.blueAlliance.teams) {
             Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
             [blueAlliance addObject:team];

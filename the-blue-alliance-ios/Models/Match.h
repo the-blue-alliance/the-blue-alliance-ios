@@ -31,8 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain) NSDate *time;
 @property (nonatomic, retain) Event *event;
 @property (nullable, nonatomic, retain) NSSet<MatchVideo *> *vidoes;
-@property (nullable, nonatomic, retain) NSSet<Team *> *redAlliance;
-@property (nullable, nonatomic, retain) NSSet<Team *> *blueAlliance;
+@property (nullable, nonatomic, retain) NSOrderedSet<Team *> *redAlliance;
+@property (nullable, nonatomic, retain) NSOrderedSet<Team *> *blueAlliance;
 
 + (instancetype)insertMatchWithModelMatch:(TBAMatch *)modelMatch forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertMatchesWithModelMatches:(NSArray<TBAMatch *> *)modelMatches forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;

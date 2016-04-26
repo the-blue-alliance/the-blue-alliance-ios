@@ -32,12 +32,11 @@
     }
     
     // OH PICK BOY http://photos.prnewswire.com/prnvar/20140130/NY56077
-    NSArray *picks = [eventAlliance.picks allObjects];
-    for (Team *team in picks) {
+    for (Team *team in eventAlliance.picks) {
         UILabel *pickLabel = [[UILabel alloc] init];
         pickLabel.textAlignment = NSTextAlignmentCenter;
         
-        if (team == picks.firstObject) {
+        if (team == eventAlliance.picks.firstObject) {
             NSDictionary *underlineAttribute = @{NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)};
             pickLabel.attributedText = [[NSAttributedString alloc] initWithString:team.teamNumber.stringValue
                                                                        attributes:underlineAttribute];

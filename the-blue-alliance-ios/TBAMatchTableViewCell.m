@@ -92,20 +92,17 @@
     
     self.matchNumberLabel.text = [_match friendlyMatchName];
     
-    NSArray<Team *> *redAlliance = [_match.redAlliance allObjects];
-    NSArray<Team *> *blueAlliance = [_match.blueAlliance allObjects];
-
-    for (int i = 0; i < redAlliance.count; i++) {
+    for (int i = 0; i < match.redAlliance.count; i++) {
         UILabel *label = self.redLabels[i];
-        Team *team = redAlliance[i];
+        Team *team = match.redAlliance[i];
         
         label.text = team.teamNumber.stringValue;
     }
     self.redScoreLabel.text = _match.redScore.stringValue;
     
-    for (int i = 0; i < blueAlliance.count; i++) {
+    for (int i = 0; i < match.blueAlliance.count; i++) {
         UILabel *label = self.blueLabels[i];
-        Team *team = blueAlliance[i];
+        Team *team = match.blueAlliance[i];
         
         label.text = team.teamNumber.stringValue;
     }

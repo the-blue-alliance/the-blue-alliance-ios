@@ -107,6 +107,7 @@ typedef NS_ENUM(NSInteger, TBAEventTeamSegment) {
         self.summaryViewController.persistenceController = self.persistenceController;
         self.summaryViewController.event = self.event;
         self.summaryViewController.team = self.team;
+        self.summaryViewController.eventRanking = self.eventRanking;
     } else if ([segue.identifier isEqualToString:MatchesViewControllerEmbed]) {
         self.matchesViewController = segue.destinationViewController;
         self.matchesViewController.persistenceController = self.persistenceController;

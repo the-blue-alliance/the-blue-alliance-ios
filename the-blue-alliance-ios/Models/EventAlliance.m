@@ -20,14 +20,14 @@
 + (instancetype)insertEventAllianceWithModelEventAlliance:(TBAEventAlliance *)modelEventAlliance withAllianceNumber:(int)number forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@ AND allianceNumber == %@", event, @(number)];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(EventAlliance *eventAlliance) {
-        NSMutableSet<Team *> *picks = [[NSMutableSet alloc] init];
+        NSMutableOrderedSet<Team *> *picks = [[NSMutableOrderedSet alloc] init];
         for (NSString *teamKey in modelEventAlliance.picks) {
             Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
             [picks addObject:team];
         }
         eventAlliance.picks = picks;
 
-        NSMutableSet<Team *> *declines = [[NSMutableSet alloc] init];
+        NSMutableOrderedSet<Team *> *declines = [[NSMutableOrderedSet alloc] init];
         for (NSString *teamKey in modelEventAlliance.declines) {
             Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
             [declines addObject:team];

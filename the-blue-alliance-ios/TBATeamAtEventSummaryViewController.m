@@ -18,7 +18,6 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 
 @interface TBATeamAtEventSummaryViewController ()
 
-@property (nonatomic, strong) EventRanking *eventRanking;
 @property (nonatomic, strong) EventAlliance *eventAlliance;
 
 @end
@@ -160,6 +159,7 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSInteger rows = 1;
+#warning If no event ranking we're showing the wrong cell
     if (self.eventRanking) {
         rows = 3;
     }
@@ -175,8 +175,12 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
     } else if (indexPath.row == 1) {
         cell.titleLabel.text = @"Alliance";
         if (self.eventAlliance) {
-            NSNumber *pickOrder = @([[self.eventAlliance.picks allObjects] indexOfObject:self.team]);
-            cell.subtitleLabel.text = [NSString stringWithFormat:@"%@ pick on the %@ alliance", [pickOrder stringWithSuffix], [self.eventAlliance.allianceNumber stringWithSuffix]];
+            NSNumber *pickOrder = @([self.eventAlliance.picks indexOfObject:self.team]);
+            if (pickOrder.integerValue == 0) {
+                cell.subtitleLabel.text = [NSString stringWithFormat:@"Captain of the %@ alliance", [self.eventAlliance.allianceNumber stringWithSuffix]];
+            } else {
+                cell.subtitleLabel.text = [NSString stringWithFormat:@"%@ pick on the %@ alliance", [pickOrder stringWithSuffix], [self.eventAlliance.allianceNumber stringWithSuffix]];
+            }
         } else {
             cell.subtitleLabel.text = @"Not picked for an alliance";
         }

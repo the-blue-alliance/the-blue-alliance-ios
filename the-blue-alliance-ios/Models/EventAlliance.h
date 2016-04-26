@@ -16,8 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, retain) NSNumber *allianceNumber;
 @property (nonatomic, retain) Event *event;
-@property (nonatomic, retain) NSSet<Team *> *picks;
-@property (nullable, nonatomic, retain) NSSet<Team *> *declines;
+@property (nonatomic, retain) NSOrderedSet<Team *> *picks;
+@property (nullable, nonatomic, retain) NSOrderedSet<Team *> *declines;
 
 + (instancetype)insertEventAllianceWithModelEventAlliance:(TBAEventAlliance *)modelEventAlliance withAllianceNumber:(int)number forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertEventAlliancesWithModelEventAlliances:(NSArray<TBAEventAlliance *> *)modelEventAlliances forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;

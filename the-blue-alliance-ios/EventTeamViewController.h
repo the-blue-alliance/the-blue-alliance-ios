@@ -8,11 +8,12 @@
 
 #import "TBAViewController.h"
 
-@class Event, Team;
+@class Event, EventRanking, Team;
 
 @interface EventTeamViewController : TBAViewController
 
-@property (nonatomic, strong) Event *event;
 @property (nonatomic, strong) Team *team;
+@property (nonatomic, strong) Event *event;
+@property (nonatomic, strong) EventRanking *eventRanking;
 
 @end
