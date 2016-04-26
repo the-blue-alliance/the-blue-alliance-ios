@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="nhP-3p-HrF">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Teams-->
@@ -157,20 +158,12 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="kqC-2F-OLf" secondAttribute="trailing" id="0dX-fb-ReQ"/>
-                                <constraint firstAttribute="centerX" secondItem="kqC-2F-OLf" secondAttribute="centerX" id="EqA-PQ-Sx7"/>
-                                <constraint firstAttribute="centerX" secondItem="dIy-n9-qfg" secondAttribute="centerX" id="QP6-Zt-eqY"/>
                                 <constraint firstAttribute="trailing" secondItem="dIy-n9-qfg" secondAttribute="trailing" id="hW0-Im-xZp"/>
                                 <constraint firstAttribute="bottom" secondItem="kqC-2F-OLf" secondAttribute="bottom" id="iDk-84-hwc"/>
                                 <constraint firstItem="dIy-n9-qfg" firstAttribute="top" secondItem="zbj-9S-BC4" secondAttribute="top" id="mBw-Q1-Uzj"/>
                                 <constraint firstItem="kqC-2F-OLf" firstAttribute="leading" secondItem="zbj-9S-BC4" secondAttribute="leading" id="ntY-2V-j2w"/>
                                 <constraint firstItem="dIy-n9-qfg" firstAttribute="leading" secondItem="zbj-9S-BC4" secondAttribute="leading" id="wFM-lm-Sbk"/>
                             </constraints>
-                            <variation key="default">
-                                <mask key="constraints">
-                                    <exclude reference="QP6-Zt-eqY"/>
-                                    <exclude reference="EqA-PQ-Sx7"/>
-                                </mask>
-                            </variation>
                         </view>
                     </navigationItem>
                     <connections>
@@ -229,7 +222,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="UXC-Ij-TGj">
-                                            <rect key="frame" x="16" y="12" width="568" height="46"/>
+                                            <rect key="frame" x="8" y="12" width="584" height="46"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" text="7332" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a2K-ZB-iNb">
                                                     <rect key="frame" x="0.0" y="0.0" width="44" height="46"/>
@@ -241,16 +234,16 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="3gh-jD-b3g">
-                                                    <rect key="frame" x="49" y="0.0" width="519" height="46"/>
+                                                    <rect key="frame" x="49" y="0.0" width="535" height="46"/>
                                                     <subviews>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Team Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tVE-We-Kpv">
-                                                            <rect key="frame" x="0.0" y="0.0" width="519" height="29"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="535" height="29"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" verticalHuggingPriority="750" text="Location" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i2r-00-yHE">
-                                                            <rect key="frame" x="0.0" y="29" width="519" height="17"/>
+                                                            <rect key="frame" x="0.0" y="29" width="535" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
@@ -261,9 +254,9 @@
                                         </stackView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="UXC-Ij-TGj" firstAttribute="leading" secondItem="1IS-2Y-4fy" secondAttribute="leading" constant="16" id="30P-o0-qex"/>
+                                        <constraint firstItem="UXC-Ij-TGj" firstAttribute="leading" secondItem="1IS-2Y-4fy" secondAttribute="leadingMargin" id="BUV-0D-8oM"/>
                                         <constraint firstAttribute="bottom" secondItem="UXC-Ij-TGj" secondAttribute="bottom" constant="12" id="JIJ-kH-yjy"/>
-                                        <constraint firstAttribute="trailing" secondItem="UXC-Ij-TGj" secondAttribute="trailing" constant="16" id="Q5M-1K-jtJ"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="UXC-Ij-TGj" secondAttribute="trailing" id="Ph0-Xd-9Uh"/>
                                         <constraint firstItem="UXC-Ij-TGj" firstAttribute="top" secondItem="1IS-2Y-4fy" secondAttribute="top" constant="12" id="mjn-MB-8xg"/>
                                     </constraints>
                                 </tableViewCellContentView>

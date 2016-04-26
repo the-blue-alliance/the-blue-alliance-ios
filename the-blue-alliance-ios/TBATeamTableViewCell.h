@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "TBATableViewCell.h"
 
 @class Team;
 
-@interface TBATeamTableViewCell : UITableViewCell
+@interface TBATeamTableViewCell : TBATableViewCell
 
 @property (nonatomic, strong) Team *team;
 

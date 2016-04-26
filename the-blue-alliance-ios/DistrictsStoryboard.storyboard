@@ -74,19 +74,11 @@
                             <constraints>
                                 <constraint firstAttribute="bottom" secondItem="Vm1-ij-ChP" secondAttribute="bottom" id="18c-bh-vNM"/>
                                 <constraint firstAttribute="trailing" secondItem="Vm1-ij-ChP" secondAttribute="trailing" id="3ZB-ff-YZC"/>
-                                <constraint firstAttribute="centerX" secondItem="Vm1-ij-ChP" secondAttribute="centerX" id="8zt-sy-YPp"/>
                                 <constraint firstItem="GBJ-Tz-zKN" firstAttribute="top" secondItem="siO-Ef-lww" secondAttribute="top" id="Gcs-vy-vv9"/>
                                 <constraint firstItem="Vm1-ij-ChP" firstAttribute="leading" secondItem="siO-Ef-lww" secondAttribute="leading" id="Jya-Aj-bE2"/>
                                 <constraint firstAttribute="trailing" secondItem="GBJ-Tz-zKN" secondAttribute="trailing" id="Vj5-0b-Fg7"/>
                                 <constraint firstItem="GBJ-Tz-zKN" firstAttribute="leading" secondItem="siO-Ef-lww" secondAttribute="leading" id="ej6-Bx-KuV"/>
-                                <constraint firstAttribute="centerX" secondItem="GBJ-Tz-zKN" secondAttribute="centerX" id="smS-2c-jc3"/>
                             </constraints>
-                            <variation key="default">
-                                <mask key="constraints">
-                                    <exclude reference="smS-2c-jc3"/>
-                                    <exclude reference="8zt-sy-YPp"/>
-                                </mask>
-                            </variation>
                         </view>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
