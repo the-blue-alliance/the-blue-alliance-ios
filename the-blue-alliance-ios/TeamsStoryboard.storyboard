@@ -141,14 +141,14 @@
                             <rect key="frame" x="236" y="5.5" width="128" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Team 2337" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dIy-n9-qfg">
-                                    <rect key="frame" x="20" y="0.0" width="88" height="21"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Team 2337" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dIy-n9-qfg">
+                                    <rect key="frame" x="0.0" y="0.0" width="128" height="21"/>
                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="▾ 2015" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kqC-2F-OLf">
-                                    <rect key="frame" x="47" y="19" width="35" height="14"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="▾ 2015" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kqC-2F-OLf">
+                                    <rect key="frame" x="0.0" y="19" width="128" height="14"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
@@ -156,21 +156,31 @@
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
+                                <constraint firstAttribute="trailing" secondItem="kqC-2F-OLf" secondAttribute="trailing" id="0dX-fb-ReQ"/>
                                 <constraint firstAttribute="centerX" secondItem="kqC-2F-OLf" secondAttribute="centerX" id="EqA-PQ-Sx7"/>
                                 <constraint firstAttribute="centerX" secondItem="dIy-n9-qfg" secondAttribute="centerX" id="QP6-Zt-eqY"/>
+                                <constraint firstAttribute="trailing" secondItem="dIy-n9-qfg" secondAttribute="trailing" id="hW0-Im-xZp"/>
                                 <constraint firstAttribute="bottom" secondItem="kqC-2F-OLf" secondAttribute="bottom" id="iDk-84-hwc"/>
                                 <constraint firstItem="dIy-n9-qfg" firstAttribute="top" secondItem="zbj-9S-BC4" secondAttribute="top" id="mBw-Q1-Uzj"/>
+                                <constraint firstItem="kqC-2F-OLf" firstAttribute="leading" secondItem="zbj-9S-BC4" secondAttribute="leading" id="ntY-2V-j2w"/>
+                                <constraint firstItem="dIy-n9-qfg" firstAttribute="leading" secondItem="zbj-9S-BC4" secondAttribute="leading" id="wFM-lm-Sbk"/>
                             </constraints>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="QP6-Zt-eqY"/>
+                                    <exclude reference="EqA-PQ-Sx7"/>
+                                </mask>
+                            </variation>
                         </view>
                     </navigationItem>
                     <connections>
                         <outlet property="eventsView" destination="uxh-MB-ygJ" id="zwj-Fc-4vu"/>
                         <outlet property="infoView" destination="Tkm-f8-Hyq" id="Xzp-2Y-RBB"/>
                         <outlet property="mediaView" destination="LGg-Sq-i1g" id="l4G-eJ-snP"/>
+                        <outlet property="navigationSubtitleLabel" destination="kqC-2F-OLf" id="v4q-Oq-jYo"/>
+                        <outlet property="navigationTitleLabel" destination="dIy-n9-qfg" id="6Id-aZ-Lp7"/>
                         <outlet property="segmentedControl" destination="dKX-Re-rNo" id="W5p-jc-95R"/>
                         <outlet property="segmentedControlView" destination="Vy9-Jj-EVV" id="dlY-rD-Rbz"/>
-                        <outlet property="titleLabel" destination="dIy-n9-qfg" id="XVB-ts-Yiy"/>
-                        <outlet property="yearLabel" destination="kqC-2F-OLf" id="xiz-Ct-Fgn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eQG-As-Ps5" userLabel="First Responder" sceneMemberID="firstResponder"/>

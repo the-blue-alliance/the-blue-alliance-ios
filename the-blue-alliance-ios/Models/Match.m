@@ -9,6 +9,7 @@
 #import "Match.h"
 #import "Event.h"
 #import "MatchVideo.h"
+#import "Team+Fetch.h"
 
 @implementation Match
 
@@ -35,11 +36,21 @@
         match.scoreBreakdown = modelMatch.scoreBreakdown;
         match.time = modelMatch.time;
         match.event = event;
-        
-        match.redAlliance = modelMatch.redAlliance.teams;
+    
+        NSMutableSet<Team *> *redAlliance = [[NSMutableSet alloc] init];
+        for (NSString *teamKey in modelMatch.redAlliance.teams) {
+            Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
+            [redAlliance addObject:team];
+        }
+        match.redAlliance = redAlliance;
         match.redScore = @(modelMatch.redAlliance.score);
         
-        match.blueAlliance = modelMatch.blueAlliance.teams;
+        NSMutableSet<Team *> *blueAlliance = [[NSMutableSet alloc] init];
+        for (NSString *teamKey in modelMatch.blueAlliance.teams) {
+            Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
+            [blueAlliance addObject:team];
+        }
+        match.blueAlliance = blueAlliance;
         match.blueScore = @(modelMatch.blueAlliance.score);
         
         match.vidoes = [NSSet setWithArray:[MatchVideo insertMatchVidoesWithModelMatchVidoes:modelMatch.videos forMatch:match inManagedObjectContext:context]];

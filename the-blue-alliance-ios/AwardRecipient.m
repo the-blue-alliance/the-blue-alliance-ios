@@ -22,19 +22,10 @@
     NSPredicate *predicate;
     __block Team *team;
     if (modelAwardRecipient.teamNumber != 0) {
-        dispatch_semaphore_t teamSemaphore = dispatch_semaphore_create(0);
-        
-        NSString *teamKey = [NSString stringWithFormat:@"frc%ld", modelAwardRecipient.teamNumber];
-        [Team fetchTeamForKey:teamKey fromContext:context checkUpstream:YES withCompletionBlock:^(Team *localTeam, NSError *error) {
-            if (error || !localTeam) {
-                dispatch_semaphore_signal(teamSemaphore);
-            } else {
-                team = localTeam;
-                dispatch_semaphore_signal(teamSemaphore);
-            }
-        }];
-        dispatch_semaphore_wait(teamSemaphore, DISPATCH_TIME_FOREVER);
-        
+        NSString *teamNumber = [@(modelAwardRecipient.teamNumber) stringValue];
+        NSString *teamKey = [NSString stringWithFormat:@"frc%@", teamNumber];
+
+        team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
         predicate = [NSPredicate predicateWithFormat:@"team == %@ AND award == %@", team, award];
     } else if (modelAwardRecipient.awardee) {
         predicate = [NSPredicate predicateWithFormat:@"name == %@ AND award == %@", modelAwardRecipient.awardee, award];

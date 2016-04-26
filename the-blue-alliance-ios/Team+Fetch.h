@@ -14,8 +14,4 @@
 // Check upstream
 + (NSUInteger)fetchAllTeamsWithTaskIdChange:(void (^_Nullable)(NSUInteger newTaskId, NSArray *_Nonnull batchTeam))taskIdChanged withCompletionBlock:(void(^_Nullable)(NSArray *_Nonnull teams, NSInteger totalCount, NSError *_Nullable error))completion;
 
-// Check locally
-+ (void)fetchTeamForKey:(nonnull NSString *)key fromContext:(nonnull NSManagedObjectContext *)context checkUpstream:(BOOL)upstream withCompletionBlock:(void(^_Nullable)(Team *_Nullable team, NSError *_Nullable error))completion;
-+ (void)fetchTeamsForKeys:(nonnull NSArray<NSString *> *)keys fromContext:(nonnull NSManagedObjectContext *)context withCompletionBlock:(void(^_Nullable)(NSArray *_Nullable teams, NSError *_Nullable error))completion;
-
 @end

@@ -60,6 +60,14 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         [strongSelf updateInterface];
     };
     
+    /*
+     * If we have a stub team created from a different view, it might be missing data
+     * We'll go ahead and attempt to update it
+     */
+    if (!self.team.name) {
+        self.infoViewController.refresh();
+    }
+    
     [self registerForChangeNotifications];
     [self fetchYearsParticipatedAndRefresh:YES];
     [self styleInterface];

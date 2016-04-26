@@ -8,16 +8,16 @@
 
 #import "TBAManagedObject.h"
 
-@class Event;
+@class Event, Team;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EventAlliance : TBAManagedObject
 
-@property (nullable, nonatomic, retain) NSArray<NSString *> *declines;
-@property (nonatomic, retain) NSArray<NSString *> *picks;
 @property (nonatomic, retain) NSNumber *allianceNumber;
 @property (nonatomic, retain) Event *event;
+@property (nonatomic, retain) NSSet<Team *> *picks;
+@property (nullable, nonatomic, retain) NSSet<Team *> *declines;
 
 + (instancetype)insertEventAllianceWithModelEventAlliance:(TBAEventAlliance *)modelEventAlliance withAllianceNumber:(int)number forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertEventAlliancesWithModelEventAlliances:(NSArray<TBAEventAlliance *> *)modelEventAlliances forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;

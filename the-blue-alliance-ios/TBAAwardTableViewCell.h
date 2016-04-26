@@ -6,11 +6,11 @@
 //  Copyright © 2016 The Blue Alliance. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "TBATableViewCell.h"
 
 @class Award;
 
-@interface TBAAwardTableViewCell : UITableViewCell
+@interface TBAAwardTableViewCell : TBATableViewCell
 
 @property (nonatomic, strong) Award *award;
 

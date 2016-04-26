@@ -24,7 +24,8 @@
 #pragma mark - Interface Methods
 
 - (void)styleInterface {
-    self.navigationItem.title = [NSString stringWithFormat:@"%@ Awards", [self.event friendlyNameWithYear:YES]];
+    self.navigationTitleLabel.text = @"Stats";
+    self.navigationSubtitleLabel.text = [NSString stringWithFormat:@"@ %@", [self.event friendlyNameWithYear:YES]];
 }
 
 /*

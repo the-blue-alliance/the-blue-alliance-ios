@@ -14,9 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EventRanking : TBAManagedObject
 
-@property (nullable, nonatomic, retain) id info;
+@property (nullable, nonatomic, retain) NSDictionary<NSString *, NSString *> *info;
 @property (nonatomic, retain) NSNumber *rank;
-@property (nonatomic, retain) NSString *record;
+@property (nullable, nonatomic, retain) NSString *record;
 @property (nonatomic, retain) Event *event;
 @property (nonatomic, retain) Team *team;
 

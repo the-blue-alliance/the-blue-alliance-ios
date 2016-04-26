@@ -11,10 +11,6 @@
 #import "TBASelectViewController.h"
 #import "Event.h"
 
-@interface TBASelectWeekViewController ()
-
-@end
-
 @implementation TBASelectWeekViewController
 
 #pragma mark - Class Methods
@@ -49,10 +45,11 @@
 }
 
 - (void)updateWeekInterface {
+    self.navigationTitleLabel.text = self.navigationItem.title;
     if (!self.currentWeek) {
-        self.weekLabel.text = @"---";
+        self.navigationSubtitleLabel.text = @"---";
     } else {
-        self.weekLabel.text = [NSString stringWithFormat:@"▾ %@", [Event stringForEventOrder:self.currentWeek]];
+        self.navigationSubtitleLabel.text = [NSString stringWithFormat:@"▾ %@", [Event stringForEventOrder:self.currentWeek]];
     }
 }
 

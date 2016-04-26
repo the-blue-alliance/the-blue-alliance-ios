@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "TBATableViewCell.h"
 
 @class EventPoints, EventRanking, DistrictRanking;
 
-@interface TBARankingTableViewCell : UITableViewCell
+@interface TBARankingTableViewCell : TBATableViewCell
 
 @property (nonatomic, weak) IBOutlet UILabel *rankLabel;
 

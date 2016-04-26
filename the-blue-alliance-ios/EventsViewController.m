@@ -102,9 +102,9 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 
 - (void)updateInterface {
     if (self.currentYear) {
-        self.titleLabel.text = [NSString stringWithFormat:@"%@ Events", self.currentYear];
+        self.navigationItem.title = [NSString stringWithFormat:@"%@ Events", self.currentYear];
     } else {
-        self.titleLabel.text = @"--- Events";
+        self.navigationItem.title = @"--- Events";
     }
 }
 

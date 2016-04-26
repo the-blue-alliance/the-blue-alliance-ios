@@ -15,24 +15,24 @@ typedef NS_ENUM(NSInteger, CompLevel) {
     CompLevelFinal
 };
 
-@class Event, MatchVideo;
+@class Event, Team, MatchVideo;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Match : TBAManagedObject
 
-@property (nonatomic, retain) NSArray<NSString *> *blueAlliance;
 @property (nonatomic, retain) NSNumber *blueScore;
 @property (nonatomic, retain) NSNumber *compLevel;
 @property (nonatomic, retain) NSString *key;
 @property (nonatomic, retain) NSNumber *matchNumber;
-@property (nonatomic, retain) NSArray<NSString *> *redAlliance;
 @property (nonatomic, retain) NSNumber *redScore;
 @property (nullable, nonatomic, retain) NSDictionary *scoreBreakdown;
 @property (nonatomic, retain) NSNumber *setNumber;
 @property (nonatomic, retain) NSDate *time;
 @property (nonatomic, retain) Event *event;
 @property (nullable, nonatomic, retain) NSSet<MatchVideo *> *vidoes;
+@property (nullable, nonatomic, retain) NSSet<Team *> *redAlliance;
+@property (nullable, nonatomic, retain) NSSet<Team *> *blueAlliance;
 
 + (instancetype)insertMatchWithModelMatch:(TBAMatch *)modelMatch forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertMatchesWithModelMatches:(NSArray<TBAMatch *> *)modelMatches forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;

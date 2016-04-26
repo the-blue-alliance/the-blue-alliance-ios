@@ -29,7 +29,8 @@ static NSString *const AwardsViewControllerEmbed = @"AwardsViewControllerEmbed";
 #pragma mark - Interface Methods
 
 - (void)styleInterface {
-    self.navigationItem.title = [NSString stringWithFormat:@"%@ Awards", [self.event friendlyNameWithYear:YES]];
+    self.navigationTitleLabel.text = @"Awards";
+    self.navigationSubtitleLabel.text = [NSString stringWithFormat:@"@ %@", [self.event friendlyNameWithYear:YES]];
 }
 
 #pragma mark - Navigation

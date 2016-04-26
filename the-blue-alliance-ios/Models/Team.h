@@ -8,7 +8,7 @@
 
 #import "TBAManagedObject.h"
 
-@class AwardRecipient, DistrictRanking, Event, EventPoints, EventRanking, Media;
+@class AwardRecipient, DistrictRanking, Event, EventPoints, EventRanking, Match, Media;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,8 +32,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSSet<Event *> *events;
 @property (nullable, nonatomic, retain) NSSet<Media *> *media;
 @property (nullable, nonatomic, retain) NSSet<AwardRecipient *> *awards;
+@property (nullable, nonatomic, retain) NSSet<Match *> *redMatches;
+@property (nullable, nonatomic, retain) NSSet<Match *> *blueMatches;
 
 + (instancetype)insertTeamWithModelTeam:(TBATeam *)modelTeam inManagedObjectContext:(NSManagedObjectContext *)context;
++ (instancetype)insertStubTeamWithKey:(NSString *)teamKey inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertTeamsWithModelTeams:(NSArray<TBATeam *> *)modelTeams inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertTeamsWithModelTeams:(NSArray<TBATeam *> *)modelTeams forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 

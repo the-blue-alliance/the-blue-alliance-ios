@@ -13,6 +13,9 @@
 
 @property (nonatomic, strong) TBAPersistenceController *persistenceController;
 
+@property (nonatomic, strong) IBOutlet UILabel *navigationTitleLabel;
+@property (nonatomic, strong) IBOutlet UILabel *navigationSubtitleLabel;
+
 - (void)showErrorAlertWithMessage:(NSString *)message;
 
 @end

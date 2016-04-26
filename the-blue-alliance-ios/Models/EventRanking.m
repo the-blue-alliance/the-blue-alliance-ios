@@ -24,23 +24,7 @@
     // and team # second, always
     NSUInteger teamKeyIndex = [keys indexOfObject:@"Team"];
     NSString *teamKey = [NSString stringWithFormat:@"frc%@", [eventRankingArray objectAtIndex:teamKeyIndex]];
-    
-    dispatch_semaphore_t teamSemaphore = dispatch_semaphore_create(0);
-    __block Team *team;
-    
-    [Team fetchTeamForKey:teamKey fromContext:context checkUpstream:YES withCompletionBlock:^(Team *localTeam, NSError *error) {
-        if (error || !localTeam) {
-            dispatch_semaphore_signal(teamSemaphore);
-        } else {
-            team = localTeam;
-            dispatch_semaphore_signal(teamSemaphore);
-        }
-    }];
-    dispatch_semaphore_wait(teamSemaphore, DISPATCH_TIME_FOREVER);
-    
-    if (team == nil) {
-        return nil;
-    }
+    Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@ AND team == %@", event, team];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(EventRanking *eventRanking) {
@@ -49,7 +33,7 @@
         NSNumber *rank = @([rankString integerValue]);
         eventRanking.rank = rank;
         
-        NSMutableDictionary *infoDictionary = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary<NSString *, NSString*> *infoDictionary = [[NSMutableDictionary alloc] init];
         // Remove rank and team, since we don't need to keep them
         // Keep the rest, and we'll make that our info dictionary
         for (int i = 0; i < [keys count]; i++) {

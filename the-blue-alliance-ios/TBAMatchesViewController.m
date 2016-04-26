@@ -9,6 +9,7 @@
 #import "TBAMatchesViewController.h"
 #import "TBAMatchTableViewCell.h"
 #import "Event.h"
+#import "Team.h"
 #import "Match.h"
 
 static NSString *const MatchCellReuseIdentifier = @"MatchCell";
@@ -22,25 +23,29 @@ static NSString *const MatchCellReuseIdentifier = @"MatchCell";
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
     }
-    
+
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Match"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@", self.event];
+    NSPredicate *predicate;
+    if (self.team) {
+        predicate = [NSPredicate predicateWithFormat:@"event == %@ AND (ANY redAlliance == %@ OR ANY blueAlliance == %@)", self.event, self.team, self.team];
+    } else {
+        predicate = [NSPredicate predicateWithFormat:@"event == %@", self.event];
+    }
     [fetchRequest setPredicate:predicate];
-    
+
     NSSortDescriptor *compLevelSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"compLevel" ascending:YES];
     NSSortDescriptor *setNumberSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"setNumber" ascending:YES];
     NSSortDescriptor *matchNumberSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"matchNumber" ascending:YES];
     [fetchRequest setSortDescriptors:@[compLevelSortDescriptor, setNumberSortDescriptor, matchNumberSortDescriptor]];
-    
-    // Need a cache name here
+
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                     managedObjectContext:self.persistenceController.managedObjectContext
                                                                       sectionNameKeyPath:@"compLevel"
-                                                                               cacheName:[NSString stringWithFormat:@"%@_matches", self.event.key]];
+                                                                               cacheName:nil];
     _fetchedResultsController.delegate = self;
     
     NSError *error = nil;
-    if (![self.fetchedResultsController performFetch:&error]) {
+    if (![_fetchedResultsController performFetch:&error]) {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }

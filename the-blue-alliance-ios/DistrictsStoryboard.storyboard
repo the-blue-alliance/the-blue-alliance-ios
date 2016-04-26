@@ -57,14 +57,14 @@
                             <rect key="frame" x="236" y="5.5" width="128" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Districts" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GBJ-Tz-zKN">
-                                    <rect key="frame" x="31" y="0.0" width="66" height="21"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Districts" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GBJ-Tz-zKN">
+                                    <rect key="frame" x="0.0" y="0.0" width="128" height="21"/>
                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="▾ 2015" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vm1-ij-ChP">
-                                    <rect key="frame" x="47" y="19" width="35" height="14"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="▾ 2015" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vm1-ij-ChP">
+                                    <rect key="frame" x="0.0" y="19" width="128" height="14"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
@@ -73,16 +73,26 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="bottom" secondItem="Vm1-ij-ChP" secondAttribute="bottom" id="18c-bh-vNM"/>
+                                <constraint firstAttribute="trailing" secondItem="Vm1-ij-ChP" secondAttribute="trailing" id="3ZB-ff-YZC"/>
                                 <constraint firstAttribute="centerX" secondItem="Vm1-ij-ChP" secondAttribute="centerX" id="8zt-sy-YPp"/>
                                 <constraint firstItem="GBJ-Tz-zKN" firstAttribute="top" secondItem="siO-Ef-lww" secondAttribute="top" id="Gcs-vy-vv9"/>
+                                <constraint firstItem="Vm1-ij-ChP" firstAttribute="leading" secondItem="siO-Ef-lww" secondAttribute="leading" id="Jya-Aj-bE2"/>
+                                <constraint firstAttribute="trailing" secondItem="GBJ-Tz-zKN" secondAttribute="trailing" id="Vj5-0b-Fg7"/>
+                                <constraint firstItem="GBJ-Tz-zKN" firstAttribute="leading" secondItem="siO-Ef-lww" secondAttribute="leading" id="ej6-Bx-KuV"/>
                                 <constraint firstAttribute="centerX" secondItem="GBJ-Tz-zKN" secondAttribute="centerX" id="smS-2c-jc3"/>
                             </constraints>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="smS-2c-jc3"/>
+                                    <exclude reference="8zt-sy-YPp"/>
+                                </mask>
+                            </variation>
                         </view>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="titleLabel" destination="GBJ-Tz-zKN" id="THM-7Z-uoh"/>
-                        <outlet property="yearLabel" destination="Vm1-ij-ChP" id="Z3g-V8-Stz"/>
+                        <outlet property="navigationSubtitleLabel" destination="Vm1-ij-ChP" id="hti-2u-e9Z"/>
+                        <outlet property="navigationTitleLabel" destination="GBJ-Tz-zKN" id="YX7-Gk-zSc"/>
                         <segue destination="Sat-ki-Ld3" kind="show" identifier="DistrictViewControllerSegue" id="uYT-CA-whI">
                             <nil key="action"/>
                         </segue>

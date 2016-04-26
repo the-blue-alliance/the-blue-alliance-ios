@@ -10,13 +10,6 @@
 #import "TBASelectViewController.h"
 #import "TBANavigationController.h"
 
-@interface TBASelectYearViewController ()
-
-@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
-@property (nonatomic, weak) IBOutlet UILabel *yearLabel;
-
-@end
-
 @implementation TBASelectYearViewController
 
 #pragma mark - Class Methods
@@ -64,11 +57,11 @@
 }
 
 - (void)updateYearInterface {
-    self.titleLabel.text = self.navigationItem.title;
+    self.navigationTitleLabel.text = self.navigationItem.title;
     if (self.currentYear == 0) {
-        self.yearLabel.text = @"---";
+        self.navigationSubtitleLabel.text = @"---";
     } else {
-        self.yearLabel.text = [NSString stringWithFormat:@"▾ %@", self.currentYear];
+        self.navigationSubtitleLabel.text = [NSString stringWithFormat:@"▾ %@", self.currentYear];
     }
 }
 

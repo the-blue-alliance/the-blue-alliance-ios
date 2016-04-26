@@ -25,23 +25,7 @@
 + (instancetype)insertDistrictRankingWithDistrictRankingDict:(NSDictionary<NSString *, id> *)districtRankingDict forDistrict:(District *)district inManagedObjectContext:(NSManagedObjectContext *)context {
     NSString *teamKey = districtRankingDict[@"team_key"];
     
-    dispatch_semaphore_t teamSemaphore = dispatch_semaphore_create(0);
-    __block Team *team;
-    
-    [Team fetchTeamForKey:teamKey fromContext:context checkUpstream:YES withCompletionBlock:^(Team *localTeam, NSError *error) {
-        if (error || !localTeam) {
-            dispatch_semaphore_signal(teamSemaphore);
-        } else {
-            team = localTeam;
-            dispatch_semaphore_signal(teamSemaphore);
-        }
-    }];
-    dispatch_semaphore_wait(teamSemaphore, DISPATCH_TIME_FOREVER);
-    
-    if (team == nil) {
-        return nil;
-    }
-    
+    Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"district == %@ AND team == %@", district, team];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(DistrictRanking *districtRanking) {
         districtRanking.district = district;

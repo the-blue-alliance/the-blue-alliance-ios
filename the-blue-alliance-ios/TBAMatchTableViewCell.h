@@ -6,10 +6,11 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "Match.h"
+#import "TBATableViewCell.h"
 
-@interface TBAMatchTableViewCell : UITableViewCell
+@class Match;
+
+@interface TBAMatchTableViewCell : TBATableViewCell
 
 @property (nonatomic, strong) Match *match;
 

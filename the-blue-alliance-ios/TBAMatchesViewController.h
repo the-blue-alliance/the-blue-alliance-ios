@@ -8,11 +8,12 @@
 
 #import "TBARefreshTableViewController.h"
 
-@class Event, Match;
+@class Event, Team, Match;
 
 @interface TBAMatchesViewController : TBARefreshTableViewController <TBATableViewControllerDelegate>
 
 @property (nonatomic, strong) Event *event;
+@property (nonatomic, strong) Team *team;
 
 @property (nonatomic, copy) void (^matchSelected)(Match *match);
 

@@ -6,11 +6,11 @@
 //  Copyright © 2016 The Blue Alliance. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "TBATableViewCell.h"
 
 @class EventAlliance;
 
-@interface TBAAllianceCell : UITableViewCell
+@interface TBAAllianceCell : TBATableViewCell
 
 @property (nonatomic, strong) EventAlliance *eventAlliance;
 

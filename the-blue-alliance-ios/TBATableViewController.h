@@ -20,7 +20,7 @@
 
 @interface TBATableViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 
-@property (nullable, nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nullable, nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonnull, nonatomic, strong) TBAPersistenceController *persistenceController;
 @property (nullable, nonatomic, weak) id<TBATableViewControllerDelegate> tbaDelegate;
 @property (nonnull, nonatomic, copy) NSString *cellIdentifier;

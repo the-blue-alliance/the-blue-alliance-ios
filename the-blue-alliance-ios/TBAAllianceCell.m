@@ -8,6 +8,7 @@
 
 #import "TBAAllianceCell.h"
 #import "EventAlliance.h"
+#import "Team.h"
 
 @interface TBAAllianceCell ()
 
@@ -23,24 +24,25 @@
 - (void)setEventAlliance:(EventAlliance *)eventAlliance {
     _eventAlliance = eventAlliance;
     
-    self.allianceNumberLabel.text = [NSString stringWithFormat:@"Alliance #%@:", _eventAlliance.allianceNumber];
+    self.allianceNumberLabel.text = [NSString stringWithFormat:@"Alliance #%@:", eventAlliance.allianceNumber];
 
     for (UIView *view in self.allianceStackView.arrangedSubviews) {
         [view removeFromSuperview];
         [self.allianceStackView removeArrangedSubview:view];
     }
     
-    for (int i = 0; i < self.eventAlliance.picks.count; i++) {
-        NSString *pick = [self.eventAlliance.picks[i] substringFromIndex:3];
-        
+    // OH PICK BOY http://photos.prnewswire.com/prnvar/20140130/NY56077
+    NSArray *picks = [eventAlliance.picks allObjects];
+    for (Team *team in picks) {
         UILabel *pickLabel = [[UILabel alloc] init];
         pickLabel.textAlignment = NSTextAlignmentCenter;
-        if (i == 0) {
+        
+        if (team == picks.firstObject) {
             NSDictionary *underlineAttribute = @{NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)};
-            pickLabel.attributedText = [[NSAttributedString alloc] initWithString:pick
-                                                                     attributes:underlineAttribute];
+            pickLabel.attributedText = [[NSAttributedString alloc] initWithString:team.teamNumber.stringValue
+                                                                       attributes:underlineAttribute];
         } else {
-            pickLabel.text = pick;
+            pickLabel.text = team.teamNumber.stringValue;
         }
         [self.allianceStackView addArrangedSubview:pickLabel];
     }

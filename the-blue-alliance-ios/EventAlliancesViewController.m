@@ -29,7 +29,8 @@ static NSString *const AlliancesViewControllerEmbed = @"AlliancesViewControllerE
 #pragma mark - Interface Methods
 
 - (void)styleInterface {
-    self.navigationItem.title = [NSString stringWithFormat:@"%@ Alliances", [self.event friendlyNameWithYear:YES]];
+    self.navigationTitleLabel.text = @"Alliances";
+    self.navigationSubtitleLabel.text = [NSString stringWithFormat:@"@ %@", [self.event friendlyNameWithYear:YES]];
 }
 
 #pragma mark - Navigation

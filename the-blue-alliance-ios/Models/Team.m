@@ -33,6 +33,8 @@
 @dynamic events;
 @dynamic media;
 @dynamic awards;
+@dynamic redMatches;
+@dynamic blueMatches;
 
 + (instancetype)insertTeamWithModelTeam:(TBATeam *)modelTeam inManagedObjectContext:(NSManagedObjectContext *)context {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", modelTeam.key];
@@ -48,6 +50,16 @@
         team.key = modelTeam.key;
         team.nickname = modelTeam.nickname;
         team.rookieYear = @(modelTeam.rookieYear);
+    }];
+}
+
++ (instancetype)insertStubTeamWithKey:(NSString *)teamKey inManagedObjectContext:(NSManagedObjectContext *)context {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", teamKey];
+    return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Team *team) {
+        NSString *teamNumber = [teamKey substringFromIndex:3];
+        
+        team.key = teamKey;
+        team.teamNumber = @([teamNumber integerValue]);
     }];
 }
 
@@ -77,7 +89,7 @@
     
     NSString *trimmedNickname = [nickname stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (!nickname || [trimmedNickname isEqualToString:@""]) {
-        nickname = [NSString stringWithFormat:@"Team %zd", self.teamNumber];
+        nickname = [NSString stringWithFormat:@"Team %@", self.teamNumber];
     }
     return nickname;
 }

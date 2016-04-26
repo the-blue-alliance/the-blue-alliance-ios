@@ -138,14 +138,11 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
             } else {
                 NSDictionary *pointsDict = points[@"points"];
                 for (NSString *teamKey in pointsDict.allKeys) {
-                    [Team fetchTeamForKey:teamKey fromContext:strongSelf.persistenceController.backgroundManagedObjectContext checkUpstream:YES withCompletionBlock:^(Team * _Nullable team, NSError * _Nullable error) {
-                        if (!error) {
-                            Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
-                            
-                            [strongSelf.persistenceController performChanges:^{
-                                [EventPoints insertEventPointsWithEventPointsDict:pointsDict[teamKey] forEvent:event andTeam:team inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-                            }];
-                        }
+                    Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+                    Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
+                    
+                    [strongSelf.persistenceController performChanges:^{
+                        [EventPoints insertEventPointsWithEventPointsDict:pointsDict[teamKey] forEvent:event andTeam:team inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
                     }];
                 }
             }
@@ -166,7 +163,7 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
     } else if (self.event && self.showPoints) {
         EventPoints *points = [self.fetchedResultsController objectAtIndexPath:indexPath];
         cell.eventPoints = points;
-        cell.rankLabel.text = [NSString stringWithFormat:@"Rank %ld", indexPath.row + 1];
+        cell.rankLabel.text = [NSString stringWithFormat:@"Rank %ld", (long)(indexPath.row + 1)];
     }
 }
 

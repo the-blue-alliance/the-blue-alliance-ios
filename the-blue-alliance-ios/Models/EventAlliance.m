@@ -7,20 +7,33 @@
 //
 
 #import "EventAlliance.h"
+#import "Team.h"
 #import "Event.h"
 
 @implementation EventAlliance
 
-@dynamic declines;
-@dynamic picks;
 @dynamic allianceNumber;
 @dynamic event;
+@dynamic picks;
+@dynamic declines;
 
 + (instancetype)insertEventAllianceWithModelEventAlliance:(TBAEventAlliance *)modelEventAlliance withAllianceNumber:(int)number forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@ AND allianceNumber == %@", event, @(number)];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(EventAlliance *eventAlliance) {
-        eventAlliance.picks = modelEventAlliance.picks;
-        eventAlliance.declines = modelEventAlliance.declines;
+        NSMutableSet<Team *> *picks = [[NSMutableSet alloc] init];
+        for (NSString *teamKey in modelEventAlliance.picks) {
+            Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
+            [picks addObject:team];
+        }
+        eventAlliance.picks = picks;
+
+        NSMutableSet<Team *> *declines = [[NSMutableSet alloc] init];
+        for (NSString *teamKey in modelEventAlliance.declines) {
+            Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
+            [declines addObject:team];
+        }
+        eventAlliance.declines = declines;
+        
         eventAlliance.event = event;
         eventAlliance.allianceNumber = @(number);
     }];

@@ -1,16 +1,16 @@
 //
-//  TBAAwardsViewController.h
+//  EventTeamViewController.h
 //  the-blue-alliance
 //
-//  Created by Zach Orr on 4/3/16.
+//  Created by Zach Orr on 4/25/16.
 //  Copyright © 2016 The Blue Alliance. All rights reserved.
 //
 
-#import "TBARefreshTableViewController.h"
+#import "TBAViewController.h"
 
 @class Event, Team;
 
-@interface TBAAwardsViewController : TBARefreshTableViewController <TBATableViewControllerDelegate>
+@interface EventTeamViewController : TBAViewController
 
 @property (nonatomic, strong) Event *event;
 @property (nonatomic, strong) Team *team;

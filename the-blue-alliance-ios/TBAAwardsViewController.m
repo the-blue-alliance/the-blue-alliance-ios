@@ -27,7 +27,13 @@ static NSString *const AwardCellReuseIdentifier = @"AwardCell";
     }
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Award"];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"event == %@", self.event]];
+    NSPredicate *predicate;
+    if (self.team) {
+        predicate =[NSPredicate predicateWithFormat:@"event == %@ AND (ANY recipients.team == %@)", self.event, self.team];
+    } else {
+        predicate = [NSPredicate predicateWithFormat:@"event == %@", self.event];
+    }
+    [fetchRequest setPredicate:predicate];
     [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"awardType" ascending:YES]]];
 
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest

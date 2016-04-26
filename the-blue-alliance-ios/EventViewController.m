@@ -14,6 +14,7 @@
 #import "EventAlliancesViewController.h"
 #import "EventDistrictPointsViewController.h"
 #import "EventAwardsViewController.h"
+#import "EventTeamViewController.h"
 #import "Event.h"
 
 static NSString *const InfoViewControllerEmbed      = @"InfoViewControllerEmbed";
@@ -26,12 +27,14 @@ static NSString *const DistrictPointsViewControllerSegue    = @"DistrictPointsVi
 static NSString *const StatsViewControllerSegue             = @"StatsViewControllerSegue";
 static NSString *const AwardsViewControllerSegue            = @"AwardsViewControllerSegue";
 
+static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerSegue";
 
-typedef NS_ENUM(NSInteger, TBAEventDataType) {
-    TBAEventDataTypeInfo = 0,
-    TBAEventDataTypeTeams,
-    TBAEventDataTypeRankings,
-    TBAEventDataTypeMatches,
+
+typedef NS_ENUM(NSInteger, TBAEventSegment) {
+    TBAEventSegmentInfo = 0,
+    TBAEventSegmentTeams,
+    TBAEventSegmentRankings,
+    TBAEventSegmentMatches,
 };
 
 @interface EventViewController ()
@@ -82,19 +85,19 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
 }
 
 - (void)updateInterface {
-    if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeInfo) {
+    if (self.segmentedControl.selectedSegmentIndex == TBAEventSegmentInfo) {
         [self showView:self.infoView];
-    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeTeams) {
+    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventSegmentTeams) {
         [self showView:self.teamsView];
         if (self.teamsViewController.fetchedResultsController.fetchedObjects.count == 0) {
             self.teamsViewController.refresh();
         }
-    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeRankings) {
+    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventSegmentRankings) {
         [self showView:self.rankingsView];
         if (self.rankingsViewController.fetchedResultsController.fetchedObjects.count == 0) {
             self.rankingsViewController.refresh();
         }
-    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventDataTypeMatches) {
+    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventSegmentMatches) {
         [self showView:self.matchesView];
         if (self.matchesViewController.fetchedResultsController.fetchedObjects.count == 0) {
             self.matchesViewController.refresh();
@@ -138,6 +141,11 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
         self.teamsViewController = segue.destinationViewController;
         self.teamsViewController.persistenceController = self.persistenceController;
         self.teamsViewController.event = self.event;
+        
+        __weak typeof(self) weakSelf = self;
+        self.teamsViewController.teamSelected = ^(Team *team){
+            [weakSelf performSegueWithIdentifier:EventTeamViewControllerSegue sender:team];
+        };
     } else if ([segue.identifier isEqualToString:RankingsViewControllerEmbed]) {
         self.rankingsViewController = segue.destinationViewController;
         self.rankingsViewController.persistenceController = self.persistenceController;
@@ -160,6 +168,14 @@ typedef NS_ENUM(NSInteger, TBAEventDataType) {
         eventDistrictPointsViewController.event = self.event;
     }
     // TODO: Add stats
+    else if ([segue.identifier isEqualToString:EventTeamViewControllerSegue]) {
+        Team *team = (Team *)sender;
+        
+        EventTeamViewController *eventTeamViewController = segue.destinationViewController;
+        eventTeamViewController.persistenceController = self.persistenceController;
+        eventTeamViewController.event = self.event;
+        eventTeamViewController.team = team;
+    }
 }
 
 @end

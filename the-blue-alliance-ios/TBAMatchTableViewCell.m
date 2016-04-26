@@ -7,7 +7,9 @@
 //
 
 #import "TBAMatchTableViewCell.h"
+#import "Match.h"
 #import "Event.h"
+#import "Team.h"
 
 @interface TBAMatchTableViewCell ()
 
@@ -90,22 +92,22 @@
     
     self.matchNumberLabel.text = [_match friendlyMatchName];
     
-    NSArray<NSString *> *redAlliance = _match.redAlliance;
-    NSArray<NSString *> *blueAlliance = _match.blueAlliance;
+    NSArray<Team *> *redAlliance = [_match.redAlliance allObjects];
+    NSArray<Team *> *blueAlliance = [_match.blueAlliance allObjects];
 
     for (int i = 0; i < redAlliance.count; i++) {
         UILabel *label = self.redLabels[i];
-        NSString *team = redAlliance[i];
+        Team *team = redAlliance[i];
         
-        label.text = [team substringFromIndex:3];
+        label.text = team.teamNumber.stringValue;
     }
     self.redScoreLabel.text = _match.redScore.stringValue;
     
     for (int i = 0; i < blueAlliance.count; i++) {
         UILabel *label = self.blueLabels[i];
-        NSString *team = blueAlliance[i];
+        Team *team = blueAlliance[i];
         
-        label.text = [team substringFromIndex:3];
+        label.text = team.teamNumber.stringValue;
     }
     self.blueScoreLabel.text = _match.blueScore.stringValue;
     
