@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 The Blue Alliance. All rights reserved.
 //
 
-#import "TBASelectWeekViewController.h"
+#import "TBASelectYearViewController.h"
 
-@interface EventsViewController : TBASelectWeekViewController
+@interface EventsViewController : TBASelectYearViewController
 
 @end

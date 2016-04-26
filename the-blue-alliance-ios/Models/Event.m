@@ -45,6 +45,16 @@
 
 + (nonnull NSString *)stringForEventOrder:(NSNumber *)order {
     NSString *orderString;
+    
+    /**
+     * Special cases for 2016:
+     * Order might be 0.5 - handle it right away
+     * See http://www.usfirst.org/roboticsprograms/frc/blog-The-Palmetto-Regional
+     */
+    if (order.floatValue == 0.5f) {
+        return @"Week 0.5";
+    }
+    
     NSInteger orderInteger = order.integerValue;
     switch (orderInteger) {
         case EventOrderPreseason:

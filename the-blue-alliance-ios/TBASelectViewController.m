@@ -52,7 +52,7 @@ static NSString *const SelectCellReuseIdentifier = @"SelectCell";
 
 - (void)configureCell:(nonnull UITableViewCell *)cell atIndexPath:(nonnull NSIndexPath *)indexPath {
     NSNumber *number = [self.numbers objectAtIndex:indexPath.row];
-    
+
     if (self.selectType == TBASelectTypeWeek) {
         cell.textLabel.text = [Event stringForEventOrder:number];
     } else {

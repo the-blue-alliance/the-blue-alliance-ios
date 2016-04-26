@@ -37,7 +37,9 @@
     [[NSUserDefaults standardUserDefaults] setObject:currentYear forKey:[self currentYearUserDefaultsString]];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    [self updateYearInterface];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateYearInterface];
+    });
 }
 
 #pragma mark - View Lifecycle

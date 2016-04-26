@@ -22,14 +22,13 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 
 @property (nonatomic, strong) TBAEventsViewController *eventsViewController;
 
-@property (nonatomic, strong) NSNumber *currentYear;
-@property (nonatomic, strong) NSArray<NSNumber *> *years;
+@property (nonatomic, strong) NSNumber *currentWeek;
+@property (nonatomic, strong) NSArray<NSNumber *> *weeks;
 
 @end
 
 
 @implementation EventsViewController
-@synthesize weeks = _weeks;
 
 #pragma mark - Properities
 
@@ -41,11 +40,15 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
         
         self.currentWeek = week;
         self.eventsViewController.week = week;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateInterface];
+        });
     }
 }
 
-- (void)setCurrentYear:(NSNumber *)currentYear {
-    _currentYear = currentYear;
+- (void)setCurrentWeek:(NSNumber *)currentWeek {
+    _currentWeek = currentWeek;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateInterface];
@@ -58,14 +61,18 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     [super viewDidLoad];
     
     __weak typeof(self) weakSelf = self;
-    self.weekSelected = ^(NSNumber *week) {
+    self.yearSelected = ^(NSNumber *year) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         [strongSelf.eventsViewController cancelRefresh];
         [strongSelf.eventsViewController hideNoDataView];
-        
-        strongSelf.currentWeek = week;
-        strongSelf.eventsViewController.week = week;
+
+        strongSelf.currentYear = year;
+        strongSelf.eventsViewController.year = year;
+
+        strongSelf.currentWeek = nil;
+        strongSelf.weeks = nil;
+        [strongSelf configureEvents];
     };
     
     [self configureYears];
@@ -101,15 +108,18 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 #pragma mark - Interface Methods
 
 - (void)updateInterface {
-    if (self.currentYear) {
-        self.navigationItem.title = [NSString stringWithFormat:@"%@ Events", self.currentYear];
+    NSString *titleString;
+    if (self.currentWeek) {
+        titleString = [Event stringForEventOrder:self.currentWeek];
     } else {
-        self.navigationItem.title = @"--- Events";
+        titleString = @"--- Events";
     }
+    self.navigationTitleLabel.text = titleString;
+    self.navigationItem.title = titleString;
 }
 
-- (IBAction)selectYearButtonTapped:(id)sender {
-    if (self.currentYear == 0) {
+- (IBAction)selectWeekButtonTapped:(id)sender {
+    if (!self.currentWeek) {
         return;
     }
     
@@ -117,25 +127,25 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     
     TBANavigationController *navigationController = (TBANavigationController *)[storyboard instantiateViewControllerWithIdentifier:@"TBASelectNavigationController"];
     TBASelectViewController *selectViewController = navigationController.viewControllers.firstObject;
-    selectViewController.selectType = TBASelectTypeYear;
-    selectViewController.currentNumber = self.currentYear;
-    selectViewController.numbers = self.years;
+    selectViewController.selectType = TBASelectTypeWeek;
+    selectViewController.currentNumber = self.currentWeek;
+    selectViewController.numbers = self.weeks;
     
     __weak typeof(self) weakSelf = self;
-    selectViewController.numberSelected = ^void(NSNumber *year) {
+    selectViewController.numberSelected = ^(NSNumber *week) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        
+
         [strongSelf.eventsViewController cancelRefresh];
         [strongSelf.eventsViewController hideNoDataView];
+
+        strongSelf.currentWeek = week;
+        strongSelf.eventsViewController.week = week;
         
-        strongSelf.currentYear = year;
-        strongSelf.eventsViewController.year = year;
-        
-        strongSelf.currentWeek = nil;
-        strongSelf.weeks = nil;
-        [strongSelf configureEvents];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateInterface];
+        });
     };
-    
+
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
