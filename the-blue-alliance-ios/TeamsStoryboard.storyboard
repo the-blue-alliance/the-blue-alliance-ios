@@ -174,11 +174,20 @@
                         <outlet property="navigationTitleLabel" destination="dIy-n9-qfg" id="6Id-aZ-Lp7"/>
                         <outlet property="segmentedControl" destination="dKX-Re-rNo" id="W5p-jc-95R"/>
                         <outlet property="segmentedControlView" destination="Vy9-Jj-EVV" id="dlY-rD-Rbz"/>
+                        <segue destination="YUN-E6-XlU" kind="show" identifier="EventTeamViewControllerSegue" id="hW4-R9-QUZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eQG-As-Ps5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2174" y="-353"/>
+        </scene>
+        <!--EventTeamViewController-->
+        <scene sceneID="mCt-TC-Iug">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="EventTeamViewController" id="YUN-E6-XlU" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0TX-5y-h3f" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2724" y="-681"/>
         </scene>
         <!--TBAInfoViewController-->
         <scene sceneID="r85-IA-KQt">
@@ -186,7 +195,7 @@
                 <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="TBAInfoViewController" id="eSz-a9-S2Q" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MUU-Na-Vkq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2961" y="-748"/>
+            <point key="canvasLocation" x="2715" y="-481"/>
         </scene>
         <!--TBAEventsViewController-->
         <scene sceneID="c2s-xM-8oV">
@@ -194,7 +203,7 @@
                 <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="TBAEventsViewController" id="BaQ-jQ-LD6" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bYe-6c-ebR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2970" y="-664"/>
+            <point key="canvasLocation" x="2724" y="-397"/>
         </scene>
         <!--Teams View Controller-->
         <scene sceneID="tdG-Bc-o18">

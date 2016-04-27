@@ -10,6 +10,7 @@
 #import "TBAEventsViewController.h"
 #import "TBAInfoViewController.h"
 #import "TBAMediaCollectionViewController.h"
+#import "EventTeamViewController.h"
 #import "Team.h"
 #import "Team+Fetch.h"
 #import "Event+Fetch.h"
@@ -18,6 +19,8 @@
 static NSString *const InfoViewControllerEmbed      = @"InfoViewControllerEmbed";
 static NSString *const EventsViewControllerEmbed    = @"EventsViewControllerEmbed";
 static NSString *const MediaViewControllerEmbed     = @"MediaViewControllerEmbed";
+
+static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerSegue";
 
 typedef NS_ENUM(NSInteger, TBATeamDataType) {
     TBATeamDataTypeInfo = 0,
@@ -177,14 +180,22 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         self.eventsViewController.team = self.team;
         self.eventsViewController.year = self.currentYear;
         
+        __weak typeof(self) weakSelf = self;
         self.eventsViewController.eventSelected = ^(Event *event) {
-            NSLog(@"Selected event: %@", event.shortName);
+            [weakSelf performSegueWithIdentifier:EventTeamViewControllerSegue sender:event];
         };
     } else if ([segue.identifier isEqualToString:MediaViewControllerEmbed]) {
         self.mediaCollectionViewController = segue.destinationViewController;
         self.mediaCollectionViewController.persistenceController = self.persistenceController;
         self.mediaCollectionViewController.team = self.team;
         self.mediaCollectionViewController.year = self.currentYear;
+    } else if ([segue.identifier isEqualToString:EventTeamViewControllerSegue]) {
+        Event *event = (Event *)sender;
+        
+        EventTeamViewController *eventTeamViewController = segue.destinationViewController;
+        eventTeamViewController.persistenceController = self.persistenceController;
+        eventTeamViewController.event = event;
+        eventTeamViewController.team = self.team;
     }
 }
 

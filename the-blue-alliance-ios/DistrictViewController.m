@@ -12,9 +12,15 @@
 #import "EventPoints.h"
 #import "Event+Fetch.h"
 #import "TBAEventsViewController.h"
+#import "EventViewController.h"
 #import "Team.h"
 #import "Team+Fetch.h"
 #import "TBARankingsViewController.h"
+
+static NSString *const EventsViewControllerEmbed    = @"EventsViewControllerEmbed";
+static NSString *const RankingsViewControllerEmbed  = @"RankingsViewControllerEmbed";
+
+static NSString *const EventViewControllerSegue     = @"EventViewControllerSegue";
 
 typedef NS_ENUM(NSInteger, TBADistrictDataType) {
     TBADistrictDataTypeEvents = 0,
@@ -86,16 +92,17 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"EventsViewControllerEmbed"]) {
+    if ([segue.identifier isEqualToString:EventsViewControllerEmbed]) {
         self.eventsViewController = (TBAEventsViewController *)segue.destinationViewController;
         self.eventsViewController.district = self.district;
         self.eventsViewController.persistenceController = self.persistenceController;
         self.eventsViewController.year = self.district.year;
         
+        __weak typeof(self) weakSelf = self;
         self.eventsViewController.eventSelected = ^(Event *event) {
-            NSLog(@"Selected event: %@", event.shortName);
+            [weakSelf performSegueWithIdentifier:EventViewControllerSegue sender:event];
         };
-    } else if ([segue.identifier isEqualToString:@"RankingsViewControllerEmbed"]) {
+    } else if ([segue.identifier isEqualToString:RankingsViewControllerEmbed]) {
         self.rankingsViewController = (TBARankingsViewController *)segue.destinationViewController;
         self.rankingsViewController.district = self.district;
         self.rankingsViewController.persistenceController = self.persistenceController;
@@ -104,6 +111,12 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
             DistrictRanking *districtRanking = (DistrictRanking *)ranking;
             NSLog(@"Selected ranking: %@", districtRanking);
         };
+    } else if ([segue.identifier isEqualToString:EventViewControllerSegue]) {
+        Event *event = (Event *)sender;
+        
+        EventViewController *eventViewController = segue.destinationViewController;
+        eventViewController.event = event;
+        eventViewController.persistenceController = self.persistenceController;
     }
 }
 

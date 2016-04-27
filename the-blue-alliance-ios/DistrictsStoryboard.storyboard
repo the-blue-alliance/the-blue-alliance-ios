@@ -163,11 +163,20 @@
                         <outlet property="rankingsView" destination="03V-JX-Kns" id="mc2-Uz-j3e"/>
                         <outlet property="segmentedControl" destination="w63-eU-p54" id="rl9-1J-c2K"/>
                         <outlet property="segmentedControlView" destination="ybx-Qa-bmY" id="Wc6-QJ-kIw"/>
+                        <segue destination="ugE-Bn-dBX" kind="show" identifier="EventViewControllerSegue" id="ZhV-AW-D31"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sWe-iJ-wn0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1927" y="535"/>
+        </scene>
+        <!--EventViewController-->
+        <scene sceneID="ZgY-pr-a14">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="EventViewController" id="ugE-Bn-dBX" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Xf-rX-Bnf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2440.5" y="289"/>
         </scene>
         <!--TBAEventsViewController-->
         <scene sceneID="rB4-yn-osd">

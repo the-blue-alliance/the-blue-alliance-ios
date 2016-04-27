@@ -10,6 +10,7 @@
 #import "TBATeamAtEventSummaryViewController.h"
 #import "TBAMatchesViewController.h"
 #import "TBAAwardsViewController.h"
+#import "MatchViewController.h"
 #import "Event.h"
 #import "Team.h"
 
@@ -17,6 +18,8 @@ static NSString *const SummaryViewControllerEmbed   = @"SummaryViewControllerEmb
 static NSString *const MatchesViewControllerEmbed   = @"MatchesViewControllerEmbed";
 static NSString *const StatsViewControllerEmbed     = @"StatsViewControllerEmbed";
 static NSString *const AwardsViewControllerEmbed    = @"AwardsViewControllerEmbed";
+
+static NSString *const MatchViewControllerSegue     = @"MatchViewControllerSegue";
 
 typedef NS_ENUM(NSInteger, TBAEventTeamSegment) {
     TBAEventTeamSegmentSummary = 0,
@@ -113,11 +116,22 @@ typedef NS_ENUM(NSInteger, TBAEventTeamSegment) {
         self.matchesViewController.persistenceController = self.persistenceController;
         self.matchesViewController.event = self.event;
         self.matchesViewController.team = self.team;
+        
+        __weak typeof(self) weakSelf = self;
+        self.matchesViewController.matchSelected = ^(Match *match) {
+            [weakSelf performSegueWithIdentifier:MatchViewControllerSegue sender:match];
+        };
     } else if ([segue.identifier isEqualToString:AwardsViewControllerEmbed]) {
         self.awardsViewController = segue.destinationViewController;
         self.awardsViewController.persistenceController = self.persistenceController;
         self.awardsViewController.event = self.event;
         self.awardsViewController.team = self.team;
+    } else if ([segue.identifier isEqualToString:MatchViewControllerSegue]) {
+        Match *match = (Match *)sender;
+        
+        MatchViewController *matchViewController = segue.destinationViewController;
+        matchViewController.persistenceController = self.persistenceController;
+        matchViewController.match = match;
     }
 }
 

@@ -275,7 +275,7 @@
         <!--2015 Kettering University District-->
         <scene sceneID="vhS-VX-JLy">
             <objects>
-                <viewController id="Ldo-gh-fb2" customClass="EventViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventViewController" id="Ldo-gh-fb2" customClass="EventViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="MgC-a2-42h"/>
                         <viewControllerLayoutGuide type="bottom" id="9Ox-Ox-tq9"/>
@@ -1246,6 +1246,7 @@
                         <outlet property="segmentedControlView" destination="rS6-dR-dxh" id="AAQ-UV-Z90"/>
                         <outlet property="statsView" destination="CVa-pc-UGX" id="Xfb-QG-qei"/>
                         <outlet property="summaryView" destination="Hdm-a8-YBQ" id="bXv-dm-YiX"/>
+                        <segue destination="cD6-6m-9nM" kind="show" identifier="MatchViewControllerSegue" id="sRl-KT-Osw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1YG-Qj-RDF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1452,4 +1453,7 @@
     <resources>
         <image name="ic_event_black" width="24" height="24"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="sRl-KT-Osw"/>
+    </inferredMetricsTieBreakers>
 </document>

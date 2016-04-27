@@ -127,7 +127,7 @@ static NSString *const MatchCellReuseIdentifier = @"MatchCell";
 #pragma mark - Table View Delegate
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 81.0f;
+    return 80.0f;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
