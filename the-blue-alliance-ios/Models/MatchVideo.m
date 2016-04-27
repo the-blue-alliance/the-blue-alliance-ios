@@ -24,9 +24,9 @@
     }];
 }
 
-+ (NSArray *)insertMatchVidoesWithModelMatchVidoes:(NSArray<TBAMatchVideo *> *)modelMatchVidoes forMatch:(Match *)match inManagedObjectContext:(NSManagedObjectContext *)context {
++ (NSArray *)insertMatchVideosWithModelMatchVideos:(NSArray<TBAMatchVideo *> *)modelMatchVideos forMatch:(Match *)match inManagedObjectContext:(NSManagedObjectContext *)context {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
-    for (TBAMatchVideo *matchVideo in modelMatchVidoes) {
+    for (TBAMatchVideo *matchVideo in modelMatchVideos) {
         [arr addObject:[self insertMatchVideoWithModelMatchVideo:matchVideo forMatch:match inManagedObjectContext:context]];
     }
     return arr;

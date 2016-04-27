@@ -10,6 +10,7 @@
 
 @interface TBARefreshViewController : TBAViewController
 
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, copy) void (^refresh)();
 
 - (void)addRequestIdentifier:(NSUInteger)requestIdentifier;

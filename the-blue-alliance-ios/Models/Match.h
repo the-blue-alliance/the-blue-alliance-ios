@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain) NSNumber *setNumber;
 @property (nonatomic, retain) NSDate *time;
 @property (nonatomic, retain) Event *event;
-@property (nullable, nonatomic, retain) NSSet<MatchVideo *> *vidoes;
+@property (nullable, nonatomic, retain) NSSet<MatchVideo *> *videos;
 @property (nullable, nonatomic, retain) NSOrderedSet<Team *> *redAlliance;
 @property (nullable, nonatomic, retain) NSOrderedSet<Team *> *blueAlliance;
 

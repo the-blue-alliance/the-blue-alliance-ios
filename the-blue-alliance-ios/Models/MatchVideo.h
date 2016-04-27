@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain) Match *match;
 
 + (instancetype)insertMatchVideoWithModelMatchVideo:(TBAMatchVideo *)modelMatchVideo forMatch:(Match *)match inManagedObjectContext:(NSManagedObjectContext *)context;
-+ (NSArray *)insertMatchVidoesWithModelMatchVidoes:(NSArray<TBAMatchVideo *> *)modelMatchVidoes forMatch:(Match *)match inManagedObjectContext:(NSManagedObjectContext *)context;
++ (NSArray *)insertMatchVideosWithModelMatchVideos:(NSArray<TBAMatchVideo *> *)modelMatchVideos forMatch:(Match *)match inManagedObjectContext:(NSManagedObjectContext *)context;
 
 - (NSURL *)videoUrl;
 

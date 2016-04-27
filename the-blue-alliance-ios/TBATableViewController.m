@@ -22,6 +22,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 64.0f;
+    
     self.tableView.backgroundColor = [UIColor colorWithRed:(239.0f/255.0f) green:(239.0f/255.0f) blue:(244.0f/255.0f) alpha:1.0f];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
@@ -44,8 +47,10 @@
 }
 
 - (void)showNoDataViewWithText:(NSString *)text {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    self.noDataViewController = [storyboard instantiateViewControllerWithIdentifier:@"NoDataViewController"];
+    if (!self.noDataViewController) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        self.noDataViewController = [storyboard instantiateViewControllerWithIdentifier:@"NoDataViewController"];
+    }
     
     self.noDataViewController.view.alpha = 0.0f;
     [self.tableView setBackgroundView:self.noDataViewController.view];
@@ -120,16 +125,6 @@
     }
     
     return cell;
-}
-
-#pragma mark - Table View Delegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewAutomaticDimension;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 64.0f;
 }
 
 #pragma mark - Fetched Results Controller Delegate

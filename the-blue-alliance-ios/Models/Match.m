@@ -24,7 +24,7 @@
 @dynamic setNumber;
 @dynamic time;
 @dynamic event;
-@dynamic vidoes;
+@dynamic videos;
 
 + (instancetype)insertMatchWithModelMatch:(TBAMatch *)modelMatch forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", modelMatch.key];
@@ -53,7 +53,7 @@
         match.blueAlliance = blueAlliance;
         match.blueScore = @(modelMatch.blueAlliance.score);
         
-        match.vidoes = [NSSet setWithArray:[MatchVideo insertMatchVidoesWithModelMatchVidoes:modelMatch.videos forMatch:match inManagedObjectContext:context]];
+        match.videos = [NSSet setWithArray:[MatchVideo insertMatchVideosWithModelMatchVideos:modelMatch.videos forMatch:match inManagedObjectContext:context]];
     }];
 }
 
@@ -87,7 +87,7 @@
 }
 
 - (NSString *)compLevelString {
-    NSString *compLevelString;
+    NSString *compLevelString = @"";
     switch (self.compLevel.integerValue) {
         case CompLevelQualification:
             compLevelString = @"Quals";
@@ -101,8 +101,8 @@
         case CompLevelFinal:
             compLevelString = @"Finals";
             break;
+
         default:
-            compLevelString = @"";
             break;
     }
     return compLevelString;

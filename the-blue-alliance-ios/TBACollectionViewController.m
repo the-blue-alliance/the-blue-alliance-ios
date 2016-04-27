@@ -35,9 +35,11 @@
 }
 
 - (void)showNoDataViewWithText:(NSString *)text {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    self.noDataViewController = [storyboard instantiateViewControllerWithIdentifier:@"NoDataViewController"];
-    
+    if (!self.noDataViewController) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        self.noDataViewController = [storyboard instantiateViewControllerWithIdentifier:@"NoDataViewController"];
+    }
+
     self.noDataViewController.view.alpha = 0.0f;
     [self.collectionView setBackgroundView:self.noDataViewController.view];
     

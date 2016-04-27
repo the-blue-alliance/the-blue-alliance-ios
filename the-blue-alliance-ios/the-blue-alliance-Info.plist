@@ -71,6 +71,8 @@
 			<string>com.thebluealliance.the-blue-alliance</string>
 		</dict>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

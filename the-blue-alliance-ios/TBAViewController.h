@@ -11,11 +11,13 @@
 
 @interface TBAViewController : UIViewController
 
-@property (nonatomic, strong) TBAPersistenceController *persistenceController;
+@property (nonnull, nonatomic, strong) TBAPersistenceController *persistenceController;
 
-@property (nonatomic, strong) IBOutlet UILabel *navigationTitleLabel;
-@property (nonatomic, strong) IBOutlet UILabel *navigationSubtitleLabel;
+@property (nullable, nonatomic, strong) IBOutlet UILabel *navigationTitleLabel;
+@property (nullable, nonatomic, strong) IBOutlet UILabel *navigationSubtitleLabel;
 
-- (void)showErrorAlertWithMessage:(NSString *)message;
+- (void)showErrorAlertWithMessage:(nonnull NSString *)message;
+- (void)showNoDataViewWithText:(nonnull NSString *)text;
+- (void)hideNoDataView;
 
 @end

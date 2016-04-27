@@ -15,6 +15,7 @@
 #import "EventDistrictPointsViewController.h"
 #import "EventAwardsViewController.h"
 #import "EventTeamViewController.h"
+#import "MatchViewController.h"
 #import "Team.h"
 #import "Event.h"
 #import "EventRanking.h"
@@ -28,6 +29,7 @@ static NSString *const AlliancesViewControllerSegue         = @"AlliancesViewCon
 static NSString *const DistrictPointsViewControllerSegue    = @"DistrictPointsViewControllerSegue";
 static NSString *const StatsViewControllerSegue             = @"StatsViewControllerSegue";
 static NSString *const AwardsViewControllerSegue            = @"AwardsViewControllerSegue";
+static NSString *const MatchViewControllerSegue             = @"MatchViewControllerSegue";
 
 static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerSegue";
 
@@ -162,6 +164,11 @@ typedef NS_ENUM(NSInteger, TBAEventSegment) {
         self.matchesViewController = segue.destinationViewController;
         self.matchesViewController.persistenceController = self.persistenceController;
         self.matchesViewController.event = self.event;
+        
+        __weak typeof(self) weakSelf = self;
+        self.matchesViewController.matchSelected = ^(Match *match) {
+            [weakSelf performSegueWithIdentifier:@"MatchViewControllerSegue" sender:match];
+        };
     } else if ([segue.identifier isEqualToString:AlliancesViewControllerSegue]) {
         EventAlliancesViewController *eventAlliancesViewController = segue.destinationViewController;
         eventAlliancesViewController.persistenceController = self.persistenceController;
@@ -189,6 +196,12 @@ typedef NS_ENUM(NSInteger, TBAEventSegment) {
             eventTeamViewController.team = eventRanking.team;
             eventTeamViewController.eventRanking = eventRanking;
         }
+    } else if ([segue.identifier isEqualToString:MatchViewControllerSegue]) {
+        Match *match = (Match *)sender;
+        
+        MatchViewController *matchViewController = segue.destinationViewController;
+        matchViewController.persistenceController = self.persistenceController;
+        matchViewController.match = match;
     }
 }
 

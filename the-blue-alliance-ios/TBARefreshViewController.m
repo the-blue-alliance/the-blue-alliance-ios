@@ -11,9 +11,6 @@
 
 @interface TBARefreshViewController ()
 
-@property (nonatomic, strong) UIBarButtonItem *activityBarButtonItem;
-@property (nonatomic, strong) UIBarButtonItem *refreshBarButtonItem;
-
 @property (nonatomic, strong) NSMutableArray *requestsArray;
 
 @end
@@ -22,25 +19,6 @@
 
 #pragma mark - Properities
 
-- (UIBarButtonItem *)activityBarButtonItem {
-    if (!_activityBarButtonItem) {
-        UIActivityIndicatorView *refreshActivityView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
-        [refreshActivityView sizeToFit];
-        [refreshActivityView setAutoresizingMask:(UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin)];
-        [refreshActivityView startAnimating];
-        
-        _activityBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:refreshActivityView];
-    }
-    return _activityBarButtonItem;
-}
-
-- (UIBarButtonItem *)refreshBarButtonItem {
-    if (!_refreshBarButtonItem) {
-        _refreshBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_refresh_white"] style:UIBarButtonItemStylePlain target:self action:@selector(refreshButtonTapped:)];
-    }
-    return _refreshBarButtonItem;
-}
-
 - (NSMutableArray *)requestsArray {
     if (!_requestsArray) {
         _requestsArray = [[NSMutableArray alloc] init];
@@ -48,13 +26,15 @@
     return _requestsArray;
 }
 
-#pragma mark - View Lifecycle
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    [self.navigationItem setRightBarButtonItem:self.refreshBarButtonItem];
+- (UIRefreshControl *)refreshControl {
+    if (!_refreshControl) {
+        _refreshControl = [[UIRefreshControl alloc] init];
+        [_refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
+    }
+    return _refreshControl;
 }
+
+#pragma mark - View Lifecycle
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -65,12 +45,12 @@
 #pragma mark - Public Methods
 
 - (void)cancelRefresh {
-    [self updateRefreshBarButtonItem:NO];
+    [self updateRefresh:NO];
     
     if ([self.requestsArray count] == 0) {
         return;
     }
-
+    
     for (NSNumber *request in self.requestsArray) {
         NSUInteger requestIdentifier = [request unsignedIntegerValue];
         [[TBAKit sharedKit] cancelRequestWithIdentifier:requestIdentifier];
@@ -80,6 +60,10 @@
 
 - (void)addRequestIdentifier:(NSUInteger)requestIdentifier {
     [self.requestsArray addObject:@(requestIdentifier)];
+    
+    if (self.refreshControl.isRefreshing == NO) {
+        [self updateRefresh:YES];
+    }
 }
 
 - (void)removeRequestIdentifier:(NSUInteger)requestIdentifier {
@@ -87,26 +71,26 @@
         return;
     }
     [self.requestsArray removeObject:@(requestIdentifier)];
-
+    
     if ([self.requestsArray count] == 0) {
-        [self updateRefreshBarButtonItem:NO];
+        [self updateRefresh:NO];
     }
 }
 
 #pragma mark - Private Methods
 
-- (void)refreshButtonTapped:(id)sender {
+- (void)refresh:(id)sender {
     if (self.refresh) {
         self.refresh();
     }
 }
 
-- (void)updateRefreshBarButtonItem:(BOOL)refreshing {
+- (void)updateRefresh:(BOOL)refreshing {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (refreshing) {
-            [self.navigationItem setRightBarButtonItem:self.activityBarButtonItem animated:YES];
+            [self.refreshControl beginRefreshing];
         } else {
-            [self.navigationItem setRightBarButtonItem:self.refreshBarButtonItem animated:YES];
+            [self.refreshControl endRefreshing];
         }
     });
 }
