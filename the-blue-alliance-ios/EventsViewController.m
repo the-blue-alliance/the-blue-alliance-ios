@@ -40,10 +40,6 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
         
         self.currentWeek = week;
         self.eventsViewController.week = week;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateInterface];
-        });
     }
 }
 

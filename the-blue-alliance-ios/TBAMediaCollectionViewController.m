@@ -70,6 +70,10 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
 
 #pragma mark - Data Methods
 
+- (BOOL)shouldNoDataRefresh {
+    return self.fetchedResultsController.fetchedObjects.count == 0;
+}
+
 - (void)refreshData {
     if (self.year == 0) {
         return;

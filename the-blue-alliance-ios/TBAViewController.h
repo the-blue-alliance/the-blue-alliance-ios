@@ -13,11 +13,18 @@
 
 @property (nonnull, nonatomic, strong) TBAPersistenceController *persistenceController;
 
+@property (nullable, nonatomic, strong) NSArray *refreshViewControllers;
+@property (nullable, nonatomic, strong) NSArray *containerViews;
+
 @property (nullable, nonatomic, strong) IBOutlet UILabel *navigationTitleLabel;
 @property (nullable, nonatomic, strong) IBOutlet UILabel *navigationSubtitleLabel;
 
 - (void)showErrorAlertWithMessage:(nonnull NSString *)message;
 - (void)showNoDataViewWithText:(nonnull NSString *)text;
 - (void)hideNoDataView;
+
+- (void)showView:(nonnull UIView *)showView;
+- (void)updateInterface;
+- (void)cancelRefreshes;
 
 @end

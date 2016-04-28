@@ -71,6 +71,10 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 
 #pragma mark - Data Methods
 
+- (BOOL)shouldNoDataRefresh {
+    return self.districtRanking.eventPoints.count == 0;
+}
+
 - (void)refreshDistrictRankings {
     __weak typeof(self) weakSelf = self;
     __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.districtRanking.district.key forYear:self.districtRanking.district.year.integerValue withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {

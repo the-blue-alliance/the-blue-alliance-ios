@@ -7,14 +7,14 @@
 //
 
 #import "EventDistrictPointsViewController.h"
-#import "TBARankingsViewController.h"
+#import "TBAPointsViewController.h"
 #import "Event.h"
 
 static NSString *const DistrictPointsViewControllerEmbed = @"DistrictPointsViewControllerEmbed";
 
 @interface EventDistrictPointsViewController ()
 
-@property (nonatomic, strong) TBARankingsViewController *districtPointsViewController;
+@property (nonatomic, strong) TBAPointsViewController *districtPointsViewController;
 
 @end
 
@@ -40,7 +40,6 @@ static NSString *const DistrictPointsViewControllerEmbed = @"DistrictPointsViewC
         self.districtPointsViewController = segue.destinationViewController;
         self.districtPointsViewController.persistenceController = self.persistenceController;
         self.districtPointsViewController.event = self.event;
-        self.districtPointsViewController.showPoints = YES;
     }
 }
 

@@ -70,6 +70,10 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
 
 #pragma mark - Data Methods
 
+- (BOOL)shouldNoDataRefresh {
+    return self.fetchedResultsController.fetchedObjects.count == 0;
+}
+
 - (void)refreshData {
     __block NSUInteger currentRequest;
     

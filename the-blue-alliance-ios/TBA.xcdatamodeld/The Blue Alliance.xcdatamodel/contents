@@ -134,18 +134,18 @@
         <relationship name="redMatches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="redAlliance" inverseEntity="Match" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Award" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="AwardRecipient" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="District" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="DistrictRanking" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Event" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="EventAlliance" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="EventPoints" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="EventRanking" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="EventWebcast" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Match" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="MatchVideo" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Media" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Team" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Award" positionX="-1287" positionY="2061" width="128" height="120"/>
+        <element name="AwardRecipient" positionX="-1260" positionY="2088" width="128" height="90"/>
+        <element name="District" positionX="-1278" positionY="2070" width="128" height="105"/>
+        <element name="DistrictRanking" positionX="-1287" positionY="2061" width="128" height="135"/>
+        <element name="Event" positionX="-1485" positionY="1920" width="128" height="420"/>
+        <element name="EventAlliance" positionX="-1260" positionY="2088" width="128" height="105"/>
+        <element name="EventPoints" positionX="-1269" positionY="2079" width="128" height="180"/>
+        <element name="EventRanking" positionX="-1287" positionY="2061" width="128" height="120"/>
+        <element name="EventWebcast" positionX="-1251" positionY="2097" width="128" height="105"/>
+        <element name="Match" positionX="-1287" positionY="2061" width="128" height="225"/>
+        <element name="MatchVideo" positionX="-1278" positionY="2070" width="128" height="90"/>
+        <element name="Media" positionX="-965" positionY="2159" width="128" height="120"/>
+        <element name="Team" positionX="-1242" positionY="2277" width="128" height="375"/>
     </elements>
 </model>

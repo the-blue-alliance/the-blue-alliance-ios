@@ -1,27 +1,25 @@
 //
-//  DistrictRankingTableViewCell.m
-//  the-blue-alliance-ios
+//  TBAPointsTableViewCell.m
+//  the-blue-alliance
 //
-//  Created by Zach Orr on 5/2/15.
-//  Copyright (c) 2015 The Blue Alliance. All rights reserved.
+//  Created by Zach Orr on 4/27/16.
+//  Copyright © 2016 The Blue Alliance. All rights reserved.
 //
 
-#import "TBARankingTableViewCell.h"
+#import "TBAPointsTableViewCell.h"
 #import "DistrictRanking.h"
-#import "EventRanking.h"
 #import "EventPoints.h"
 #import "Team.h"
 
-@interface TBARankingTableViewCell ()
+@interface TBAPointsTableViewCell ()
 
 @property (nonatomic, weak) IBOutlet UILabel *teamNumberLabel;
 @property (nonatomic, weak) IBOutlet UILabel *teamNameLabel;
-@property (nonatomic, weak) IBOutlet UILabel *recordLabel;
 @property (nonatomic, weak) IBOutlet UILabel *detailLabel;
 
 @end
 
-@implementation TBARankingTableViewCell
+@implementation TBAPointsTableViewCell
 
 - (void)setDistrictRanking:(DistrictRanking *)districtRanking {
     _districtRanking = districtRanking;
@@ -30,23 +28,6 @@
     self.rankLabel.text = [NSString stringWithFormat:@"Rank %@", _districtRanking.rank];
     self.teamNameLabel.text = [_districtRanking.team nickname];
     self.detailLabel.text = [NSString stringWithFormat:@"%@ Points", _districtRanking.pointTotal];
-    
-    self.recordLabel.text = @"";
-}
-
-- (void)setEventRanking:(EventRanking *)eventRanking {
-    _eventRanking = eventRanking;
-    
-    self.teamNumberLabel.text = [NSString stringWithFormat:@"%@", _eventRanking.team.teamNumber];
-    self.rankLabel.text = [NSString stringWithFormat:@"Rank %@", _eventRanking.rank];
-    self.teamNameLabel.text = [_eventRanking.team nickname];
-    if (_eventRanking.record) {
-        self.recordLabel.hidden = NO;
-        self.recordLabel.text = _eventRanking.record;
-    } else {
-        self.recordLabel.text = @"";
-    }
-    self.detailLabel.text = [_eventRanking infoString];
 }
 
 - (void)setEventPoints:(EventPoints *)eventPoints {
@@ -55,8 +36,6 @@
     self.teamNumberLabel.text = [NSString stringWithFormat:@"%@", _eventPoints.team.teamNumber];
     self.teamNameLabel.text = [_eventPoints.team nickname];
     self.detailLabel.text = [NSString stringWithFormat:@"%@ Points", _eventPoints.total];
-    
-    self.recordLabel.text = @"";
 }
 
 @end

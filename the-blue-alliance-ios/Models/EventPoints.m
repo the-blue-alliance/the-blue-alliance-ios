@@ -30,7 +30,12 @@
         eventPoints.event = event;
         eventPoints.alliancePoints = eventPointsDict[@"alliance_points"];
         eventPoints.awardPoints = eventPointsDict[@"award_points"];
+        
         eventPoints.districtCMP = eventPointsDict[@"district_cmp"];
+        if (!eventPoints.districtCMP) {
+            eventPoints.districtCMP = @(event.eventType.integerValue == TBAEventTypeDistrictCMP);
+        }
+        
         eventPoints.elimPoints = eventPointsDict[@"elim_points"];
         eventPoints.total = eventPointsDict[@"total"];
         eventPoints.qualPoints = eventPointsDict[@"qual_points"];

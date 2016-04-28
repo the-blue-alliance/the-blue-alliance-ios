@@ -38,7 +38,9 @@ static NSString *const DistrictViewControllerSegue  = @"DistrictViewControllerSe
         strongSelf.currentYear = year;
         strongSelf.districtsViewController.year = year;
         
-        [strongSelf updateInterface];
+        if ([strongSelf.districtsViewController shouldNoDataRefresh] && strongSelf.districtsViewController.refresh) {
+            strongSelf.districtsViewController.refresh();
+        }
     };
 
     [self configureYears];
@@ -48,19 +50,15 @@ static NSString *const DistrictViewControllerSegue  = @"DistrictViewControllerSe
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [self updateInterface];
+    if ([self.districtsViewController shouldNoDataRefresh] && self.districtsViewController.refresh) {
+        self.districtsViewController.refresh();
+    }
 }
 
 #pragma mark - Interface Methods
 
 - (void)styleInterface {
     self.navigationItem.title = @"Districts";
-}
-
-- (void)updateInterface {
-    if ([self.districtsViewController.fetchedResultsController.fetchedObjects count] == 0) {
-        self.districtsViewController.refresh();
-    }
 }
 
 #pragma mark - Data Methods

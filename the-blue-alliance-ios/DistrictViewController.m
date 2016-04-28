@@ -12,21 +12,21 @@
 #import "EventPoints.h"
 #import "Event+Fetch.h"
 #import "TBAEventsViewController.h"
+#import "TBAPointsViewController.h"
 #import "EventViewController.h"
 #import "Team.h"
 #import "Team+Fetch.h"
-#import "TBARankingsViewController.h"
 #import "DistrictTeamViewController.h"
 
 static NSString *const EventsViewControllerEmbed    = @"EventsViewControllerEmbed";
-static NSString *const RankingsViewControllerEmbed  = @"RankingsViewControllerEmbed";
+static NSString *const PointsViewControllerEmbed    = @"PointsViewControllerEmbed";
 
 static NSString *const EventViewControllerSegue         = @"EventViewControllerSegue";
 static NSString *const DistrictTeamViewControllerSegue  = @"DistrictTeamViewControllerSegue";
 
 typedef NS_ENUM(NSInteger, TBADistrictDataType) {
     TBADistrictDataTypeEvents = 0,
-    TBADistrictDataTypeRankings
+    TBADistrictDataTypePoints
 };
 
 @interface DistrictViewController ()
@@ -37,8 +37,8 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 @property (nonatomic, strong) TBAEventsViewController *eventsViewController;
 @property (nonatomic, strong) IBOutlet UIView *eventsView;
 
-@property (nonatomic, strong) TBARankingsViewController *rankingsViewController;
-@property (nonatomic, strong) IBOutlet UIView *rankingsView;
+@property (nonatomic, strong) TBAPointsViewController *pointsViewController;
+@property (nonatomic, strong) IBOutlet UIView *pointsView;
 
 @end
 
@@ -47,14 +47,11 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.refreshViewControllers = @[self.eventsViewController, self.pointsViewController];
+    self.containerViews = @[self.eventsView, self.pointsView];
+    
     [self styleInterface];
-}
-
-#pragma mark - Private Methods
-
-- (void)cancelRefreshes {
-    [self.eventsViewController cancelRefresh];
-    [self.rankingsViewController cancelRefresh];
+    [self updateInterface];
 }
 
 #pragma mark - Interface Actions
@@ -62,33 +59,14 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 - (void)styleInterface {
     self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
     self.navigationItem.title = [NSString stringWithFormat:@"%@ %@ Districts", self.district.year, self.district.name];
-
-    [self updateInterface];
 }
 
 - (void)updateInterface {
     if (self.segmentedControl.selectedSegmentIndex == TBADistrictDataTypeEvents) {
         [self showView:self.eventsView];
-        if (self.eventsViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.eventsViewController.refresh();
-        }
     } else {
-        [self showView:self.rankingsView];
-        if (self.rankingsViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.rankingsViewController.refresh();
-        }
+        [self showView:self.pointsView];
     }
-}
-
-- (void)showView:(UIView *)showView {
-    for (UIView *view in @[self.eventsView, self.rankingsView]) {
-        view.hidden = (showView == view ? NO : YES);
-    }
-}
-
-- (IBAction)segmentedControlValueChanged:(id)sender {
-    [self cancelRefreshes];
-    [self updateInterface];
 }
 
 #pragma mark - Navigation
@@ -104,14 +82,14 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
         self.eventsViewController.eventSelected = ^(Event *event) {
             [weakSelf performSegueWithIdentifier:EventViewControllerSegue sender:event];
         };
-    } else if ([segue.identifier isEqualToString:RankingsViewControllerEmbed]) {
-        self.rankingsViewController = (TBARankingsViewController *)segue.destinationViewController;
-        self.rankingsViewController.persistenceController = self.persistenceController;
-        self.rankingsViewController.district = self.district;
+    } else if ([segue.identifier isEqualToString:PointsViewControllerEmbed]) {
+        self.pointsViewController = (TBAPointsViewController *)segue.destinationViewController;
+        self.pointsViewController.persistenceController = self.persistenceController;
+        self.pointsViewController.district = self.district;
 
         __weak typeof(self) weakSelf = self;
-        self.rankingsViewController.rankingSelected = ^(id ranking) {
-            DistrictRanking *districtRanking = (DistrictRanking *)ranking;
+        self.pointsViewController.pointsSelected = ^(id points) {
+            DistrictRanking *districtRanking = (DistrictRanking *)points;
             [weakSelf performSegueWithIdentifier:DistrictTeamViewControllerSegue sender:districtRanking];
         };
     } else if ([segue.identifier isEqualToString:EventViewControllerSegue]) {

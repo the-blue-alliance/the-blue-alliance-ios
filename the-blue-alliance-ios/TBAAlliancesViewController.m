@@ -64,6 +64,10 @@ static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
 
 #pragma mark - Data Methods
 
+- (BOOL)noDataRefresh {
+    return self.fetchedResultsController.fetchedObjects.count == 0;
+}
+
 - (void)refreshEvent {
     __weak typeof(self) weakSelf = self;
     __block NSUInteger request = [[TBAKit sharedKit] fetchEventForEventKey:self.event.key withCompletionBlock:^(TBAEvent *event, NSError *error) {
@@ -87,7 +91,6 @@ static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
 - (void)configureCell:(TBAAllianceCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     EventAlliance *alliance = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.eventAlliance = alliance;
-    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 

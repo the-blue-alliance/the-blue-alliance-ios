@@ -51,18 +51,12 @@ typedef NS_ENUM(NSInteger, TBAEventTeamSegment) {
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    // TODO: Add Stats
+    self.refreshViewControllers = @[self.summaryViewController, self.matchesViewController, self.matchesViewController, self.awardsViewController];
+    self.containerViews = @[self.summaryView, self.matchesView, self.statsView, self.awardsView];
+    
     [self styleInterface];
-}
-
-#pragma mark - Private Methods
-
-- (void)cancelRefreshes {
-    NSArray *refreshTVCs = @[self.awardsViewController];
-    for (TBARefreshTableViewController *refreshTVC in refreshTVCs) {
-        if (refreshTVC) {
-            [refreshTVC cancelRefresh];
-        }
-    }
+    [self updateInterface];
 }
 
 #pragma mark - Interface Methods
@@ -79,27 +73,13 @@ typedef NS_ENUM(NSInteger, TBAEventTeamSegment) {
         [self showView:self.summaryView];
     } else if (self.segmentedControl.selectedSegmentIndex == TBAEventTeamSegmentMatches) {
         [self showView:self.matchesView];
-        if (self.matchesViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.matchesViewController.refresh();
-        }
-    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventTeamSegmentAwards) {
+    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventTeamSegmentStats) {
         [self showView:self.awardsView];
-        if (self.awardsViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.awardsViewController.refresh();
-        }
+    }
+    else if (self.segmentedControl.selectedSegmentIndex == TBAEventTeamSegmentAwards) {
+        [self showView:self.awardsView];
     }
     // TODO: Add stats
-}
-
-- (void)showView:(UIView *)showView {
-    for (UIView *view in @[self.summaryView, self.matchesView, self.statsView, self.awardsView]) {
-        view.hidden = (showView == view ? NO : YES);
-    }
-}
-
-- (IBAction)segmentedControlValueChanged:(id)sender {
-    [self cancelRefreshes];
-    [self updateInterface];
 }
 
 #pragma mark - Navigation

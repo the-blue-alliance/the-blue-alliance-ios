@@ -30,14 +30,14 @@
         return obj;
     }
     
-    return [self fetchInContext:context configure:^(NSFetchRequest *fetch) {
-        fetch.predicate = predicate;
-        fetch.returnsObjectsAsFaults = NO;
-        fetch.fetchLimit = 1;
+    return [self fetchInContext:context configure:^(NSFetchRequest *fetchRequest) {
+        fetchRequest.predicate = predicate;
+        fetchRequest.returnsObjectsAsFaults = NO;
+        fetchRequest.fetchLimit = 1;
     }].firstObject;
 }
 
-+ (NSArray<__kindof TBAManagedObject *> *)fetchInContext:(NSManagedObjectContext *)context configure:(void (^)(NSFetchRequest *fetch))configure {
++ (NSArray<__kindof TBAManagedObject *> *)fetchInContext:(NSManagedObjectContext *)context configure:(void (^)(NSFetchRequest *fetchRequest))configure {
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:self.entityName];
     configure(request);
     return [context executeFetchRequest:request error:nil];

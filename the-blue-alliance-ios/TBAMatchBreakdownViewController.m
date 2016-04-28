@@ -10,4 +10,8 @@
 
 @implementation TBAMatchBreakdownViewController
 
+- (BOOL)shouldNoDataRefresh {
+    return NO;
+}
+
 @end

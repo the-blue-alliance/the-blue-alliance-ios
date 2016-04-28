@@ -39,18 +39,10 @@ typedef NS_ENUM(NSInteger, TBAMatchSegment) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.refreshViewControllers = @[self.matchViewController, self.matchBreakdownViewController];
+    self.containerViews = @[self.matchView, self.matchBreakdownView];
+    
     [self styleInterface];
-}
-
-#pragma mark - Private Methods
-
-- (void)cancelRefreshes {
-    NSArray *refreshTVCs = @[self.matchViewController, self.matchBreakdownViewController];
-    for (TBARefreshTableViewController *refreshTVC in refreshTVCs) {
-        if (refreshTVC) {
-            [refreshTVC cancelRefresh];
-        }
-    }
 }
 
 #pragma mark - Interface Methods
@@ -60,6 +52,8 @@ typedef NS_ENUM(NSInteger, TBAMatchSegment) {
     
     self.navigationTitleLabel.text = [NSString stringWithFormat:@"%@ %@", [self.match shortCompLevelString], self.match.matchNumber];
     self.navigationSubtitleLabel.text = [NSString stringWithFormat:@"@ %@", [self.match.event friendlyNameWithYear:YES]];
+    
+    [self updateInterface];
 }
 
 - (void)updateInterface {
@@ -68,17 +62,6 @@ typedef NS_ENUM(NSInteger, TBAMatchSegment) {
     } else if (self.segmentedControl.selectedSegmentIndex == TBAMatchSegmentBreakdown) {
         [self showView:self.matchBreakdownView];
     }
-}
-
-- (void)showView:(UIView *)showView {
-    for (UIView *view in @[self.matchView, self.matchBreakdownView]) {
-        view.hidden = (showView == view ? NO : YES);
-    }
-}
-
-- (IBAction)segmentedControlValueChanged:(id)sender {
-    [self cancelRefreshes];
-    [self updateInterface];
 }
 
 #pragma mark - Navigation

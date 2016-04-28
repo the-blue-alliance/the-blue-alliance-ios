@@ -97,6 +97,10 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
 
 #pragma mark - Data Methods
 
+- (BOOL)shouldNoDataRefresh {
+    return self.fetchedResultsController.fetchedObjects.count == 0;
+}
+
 - (void)refreshEvents {
     if (!self.year || self.year == 0) {
         dispatch_async(dispatch_get_main_queue(), ^{

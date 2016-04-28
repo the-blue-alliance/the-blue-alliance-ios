@@ -1,23 +1,26 @@
 //
-//  TBARankingsViewController.m
-//  the-blue-alliance-ios
+//  TBAPointsViewController.m
+//  the-blue-alliance
 //
-//  Created by Zach Orr on 7/3/15.
-//  Copyright (c) 2015 The Blue Alliance. All rights reserved.
+//  Created by Zach Orr on 4/27/16.
+//  Copyright © 2016 The Blue Alliance. All rights reserved.
 //
 
-#import "TBARankingsViewController.h"
-#import "TBARankingTableViewCell.h"
+#import "TBAPointsViewController.h"
+#import "TBAPointsTableViewCell.h"
 #import "District.h"
 #import "DistrictRanking.h"
 #import "Event.h"
-#import "EventRanking.h"
 #import "EventPoints.h"
-#import "Team+Fetch.h"
+#import "Team.h"
 
-static NSString *const RankCellReuseIdentifier  = @"RankCell";
+static NSString *const PointsCellReuseIdentifier  = @"PointsCell";
 
-@implementation TBARankingsViewController
+@interface TBAPointsViewController () <TBATableViewControllerDelegate>
+
+@end
+
+@implementation TBAPointsViewController
 @synthesize fetchedResultsController = _fetchedResultsController;
 
 #pragma mark - Properities
@@ -28,33 +31,21 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
     }
     
     NSFetchRequest *fetchRequest;
-    NSSortDescriptor *sortDescriptor;
-    NSPredicate *predicate;
     NSString *cacheName;
-    if (self.event && !self.showPoints) {
-        fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventRanking"];
-        predicate = [NSPredicate predicateWithFormat:@"event == %@", self.event];
-        cacheName = [NSString stringWithFormat:@"%@_rankings", self.event.key];
-        [fetchRequest setPredicate:predicate];
-        
-        sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"rank" ascending:YES];
-    } else if (self.event && self.showPoints) {
+    if (self.event) {
         fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventPoints"];
-        predicate = [NSPredicate predicateWithFormat:@"event == %@", self.event];
-        cacheName = [NSString stringWithFormat:@"%@_points", self.event.key];
-        [fetchRequest setPredicate:predicate];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"event == %@", self.event];
+        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"total" ascending:NO]];
         
-        sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"total" ascending:NO];
+        cacheName = [NSString stringWithFormat:@"%@_points", self.event.key];
     } else if (self.district) {
         fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"DistrictRanking"];
-        predicate = [NSPredicate predicateWithFormat:@"district == %@", self.district];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"district == %@", self.district];
+        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"rank" ascending:YES]];
+        
         cacheName = [NSString stringWithFormat:@"%@_rankings", self.district.key];
-        [fetchRequest setPredicate:predicate];
-
-        sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"rank" ascending:YES];
     }
-    [fetchRequest setSortDescriptors:@[sortDescriptor]];
-    
+
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                     managedObjectContext:self.persistenceController.managedObjectContext
                                                                       sectionNameKeyPath:nil
@@ -76,20 +67,24 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
     [super viewDidLoad];
     
     self.tbaDelegate = self;
-    self.cellIdentifier = RankCellReuseIdentifier;
+    self.cellIdentifier = PointsCellReuseIdentifier;
     
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         [strongSelf hideNoDataView];
-        [strongSelf refreshRankings];
+        [strongSelf refreshPoints];
     };
 }
 
 #pragma mark - Data Methods
 
-- (void)refreshRankings {
+- (BOOL)shouldNoDataRefresh {
+    return self.fetchedResultsController.fetchedObjects.count == 0;
+}
+
+- (void)refreshPoints {
     if (self.district) {
         __weak typeof(self) weakSelf = self;
         __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.district.key forYear:self.district.year.integerValue withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
@@ -108,25 +103,7 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
             }
         }];
         [self addRequestIdentifier:request];
-    } else if (self.event && !self.showPoints) {
-        __weak typeof(self) weakSelf = self;
-        __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForEventKey:self.event.key withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            
-            [strongSelf removeRequestIdentifier:request];
-            
-            if (error) {
-                [strongSelf showErrorAlertWithMessage:@"Unable to reload event rankings"];
-            } else {
-                Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
-                
-                [strongSelf.persistenceController performChanges:^{
-                    [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-                }];
-            }
-        }];
-        [self addRequestIdentifier:request];
-    } else if (self.event && self.showPoints) {
+    } else if (self.event) {
         __weak typeof(self) weakSelf = self;
         __block NSUInteger request = [[TBAKit sharedKit] fetchDistrictPointsForEventKey:self.event.key withCompletionBlock:^(NSDictionary *points, NSError *error) {
             __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -153,14 +130,11 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
 
 #pragma mark - TBA Table View Data Source
 
-- (void)configureCell:(TBARankingTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+- (void)configureCell:(TBAPointsTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     if (self.district) {
         DistrictRanking *ranking = [self.fetchedResultsController objectAtIndexPath:indexPath];
         cell.districtRanking = ranking;
-    } else if (self.event && !self.showPoints) {
-        EventRanking *ranking = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        cell.eventRanking = ranking;
-    } else if (self.event && self.showPoints) {
+    } else if (self.event) {
         EventPoints *points = [self.fetchedResultsController objectAtIndexPath:indexPath];
         cell.eventPoints = points;
         cell.rankLabel.text = [NSString stringWithFormat:@"Rank %ld", (long)(indexPath.row + 1)];
@@ -168,10 +142,10 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
 }
 
 - (void)showNoDataView {
-    if (self.showPoints) {
-        [self showNoDataViewWithText:@"No district points for this event"];
+    if (self.district) {
+        [self showNoDataViewWithText:@"No points for this district"];
     } else {
-        [self showNoDataViewWithText:@"No rankings for this event"];
+        [self showNoDataViewWithText:@"No points for this event"];
     }
 }
 
@@ -184,9 +158,9 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (self.rankingSelected) {
-        id ranking = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        self.rankingSelected(ranking);
+    if (self.pointsSelected) {
+        id points = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        self.pointsSelected(points);
     }
 }
 

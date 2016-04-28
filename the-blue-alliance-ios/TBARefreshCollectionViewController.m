@@ -49,6 +49,12 @@
 
 #pragma mark - Public Methods
 
+- (BOOL)shouldNoDataRefresh {
+    // Implement this in subclass
+    NSAssert(NO, @"This is an abstract method and should be overridden");
+    return NO;
+}
+
 - (void)cancelRefresh {
     [self updateRefresh:NO];
     

@@ -33,13 +33,7 @@ static NSString *const TeamViewControllerSegue  = @"TeamViewControllerSegue";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [self updateInterface];
-}
-
-#pragma mark - Interface Methods
-
-- (void)updateInterface {
-    if (self.teamsViewController.fetchedResultsController.fetchedObjects.count == 0) {
+    if ([self.teamsViewController shouldNoDataRefresh] && self.teamsViewController.refresh) {
         self.teamsViewController.refresh();
     }
 }

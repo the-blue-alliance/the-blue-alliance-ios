@@ -17,21 +17,33 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 
 @interface TBADistrictRankingBreakdownViewController () <TBATableViewControllerDelegate>
 
-@property (nonatomic, strong) NSArray *sortedEventPoints;
-
 @end
 
 @implementation TBADistrictRankingBreakdownViewController
+@synthesize fetchedResultsController = _fetchedResultsController;
 
-#pragma mark - Properities
-
-- (NSArray *)sortedEventPoints {
-    if (_sortedEventPoints == nil) {
-        NSSortDescriptor *weekSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"event.week" ascending:YES];
-        _sortedEventPoints = [self.districtRanking.eventPoints sortedArrayUsingDescriptors:@[weekSortDescriptor]];
+- (NSFetchedResultsController *)fetchedResultsController {
+    if (_fetchedResultsController != nil) {
+        return _fetchedResultsController;
     }
     
-    return _sortedEventPoints;
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventPoints"];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"districtRanking == %@", self.districtRanking];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"event.week" ascending:YES]];
+    
+    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                      sectionNameKeyPath:@"event"
+                                                                               cacheName:nil];
+    _fetchedResultsController.delegate = self;
+    
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
+    return _fetchedResultsController;
 }
 
 #pragma mark - View Lifecycle
@@ -48,27 +60,13 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
     
     self.tbaDelegate = self;
     self.cellIdentifier = SummaryCellReuseIdentifier;
-    
-    [self registerForChangeNotifications];
-}
-
-#pragma mark - Private Methods
-
-- (void)registerForChangeNotifications {
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:self.persistenceController.managedObjectContext queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-        NSSet *updatedObjects = note.userInfo[NSUpdatedObjectsKey];
-        for (NSManagedObject *obj in updatedObjects) {
-            if (obj == self.districtRanking || obj == self.districtRanking.district) {
-                self.sortedEventPoints = nil;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.tableView reloadData];
-                });
-            }
-        }
-    }];
 }
 
 #pragma mark - Data Methods
+
+- (BOOL)shouldNoDataRefresh {
+    return self.fetchedResultsController.fetchedObjects.count == 0;
+}
 
 - (void)refreshDistrictRankings {
     __weak typeof(self) weakSelf = self;
@@ -92,10 +90,6 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 
 #pragma mark - Table View Data Source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.districtRanking.eventPoints.count;
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 5;
 }
@@ -103,7 +97,7 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 #pragma mark - TBA Table View Data Source
 
 - (void)configureCell:(TBASummaryTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
-    EventPoints *eventPoints = self.sortedEventPoints[indexPath.section];
+    EventPoints *eventPoints = [[[self.fetchedResultsController sections][indexPath.section] objects] firstObject];
 
     NSString *pointTypeString;
     NSNumber *points;
@@ -149,13 +143,13 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    EventPoints *eventPoints = self.sortedEventPoints[section];
+    EventPoints *firstEventPoints = [[[self.fetchedResultsController sections][section] objects] firstObject];
     
     NSString *title;
-    if (eventPoints.districtCMP) {
-        title = eventPoints.event.name;
+    if (firstEventPoints.districtCMP) {
+        title = firstEventPoints.event.name;
     } else {
-        title = [NSString stringWithFormat:@"%@ District - %@", [self.districtRanking.district.key uppercaseString], eventPoints.event.name];
+        title = [NSString stringWithFormat:@"%@ District - %@", [self.districtRanking.district.key uppercaseString], firstEventPoints.event.name];
     }
     return title;
 }

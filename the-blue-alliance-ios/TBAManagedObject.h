@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)entityName;
 + (nonnull instancetype)findOrCreateInContext:(NSManagedObjectContext *)context matchingPredicate:(NSPredicate *)predicate configure:(void (^)(id obj))configure;
 + (nullable instancetype)findOrFetchInContext:(NSManagedObjectContext *)context matchingPredicate:(NSPredicate *)predicate;
-+ (NSArray<__kindof TBAManagedObject *> *)fetchInContext:(NSManagedObjectContext *)context configure:(void (^)(NSFetchRequest *fetch))configure;
++ (NSArray<__kindof TBAManagedObject *> *)fetchInContext:(NSManagedObjectContext *)context configure:(void (^)(NSFetchRequest *fetchRequest))configure;
 + (instancetype)materializedObjectInContext:(NSManagedObjectContext *)context matchingPredicate:(NSPredicate *)predicate;
 
 @end

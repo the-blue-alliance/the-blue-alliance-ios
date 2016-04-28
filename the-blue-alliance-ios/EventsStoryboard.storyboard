@@ -95,7 +95,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m6n-XR-ieF">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="487"/>
                                 <connections>
-                                    <segue destination="Wyf-cN-VJx" kind="embed" identifier="DistrictPointsViewControllerEmbed" id="nFJ-BJ-ngF"/>
+                                    <segue destination="Vrq-mJ-xdw" kind="embed" identifier="DistrictPointsViewControllerEmbed" id="vFt-DN-Taw"/>
                                 </connections>
                             </containerView>
                         </subviews>
@@ -146,11 +146,11 @@
             </objects>
             <point key="canvasLocation" x="3227" y="-104"/>
         </scene>
-        <!--TBARankingsViewController-->
-        <scene sceneID="mG3-xY-h4B">
+        <!--TBAPointsViewController-->
+        <scene sceneID="zEa-uY-sqy">
             <objects>
-                <viewControllerPlaceholder referencedIdentifier="TBARankingsViewController" id="Wyf-cN-VJx" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Dp2-LV-EvX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewControllerPlaceholder storyboardName="DistrictsStoryboard" referencedIdentifier="TBAPointsViewController" id="Vrq-mJ-xdw" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XdJ-ZZ-X2x" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3227.5" y="317"/>
         </scene>
@@ -763,16 +763,16 @@
             </objects>
             <point key="canvasLocation" x="3869.5" y="-1652"/>
         </scene>
-        <!--Rankings View Controller-->
+        <!--Event Rankings View Controller-->
         <scene sceneID="Dvw-3a-yNC">
             <objects>
-                <tableViewController storyboardIdentifier="TBARankingsViewController" id="EyO-2S-Gbz" customClass="TBARankingsViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="TBARankingsViewController" id="EyO-2S-Gbz" customClass="TBAEventRankingsViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="72" sectionHeaderHeight="22" sectionFooterHeight="22" id="fLO-SY-tCY">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="443"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="RankCell" rowHeight="61" id="A3S-oN-ysp" customClass="TBARankingTableViewCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="RankCell" rowHeight="61" id="A3S-oN-ysp" customClass="TBAEventRankingTableViewCell">
                                 <rect key="frame" x="0.0" y="22" width="600" height="61"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="A3S-oN-ysp" id="qZQ-jt-Lhc">

@@ -91,6 +91,11 @@ static NSString *const EventOptionAwards            = @"Awards";
 
 #pragma mark - Data Methods
 
+- (BOOL)shouldNoDataRefresh {
+#warning Think about complex refreshes, like what if we're refreshing event/district rankings and see we don't have a team name
+    return ((self.team && !self.team.name) || (self.event && !self.event.name));
+}
+
 - (void)refreshTeam {
     __weak typeof(self) weakSelf = self;
     __block NSUInteger request = [[TBAKit sharedKit] fetchTeamForTeamKey:self.team.key withCompletionBlock:^(TBATeam *team, NSError *error) {

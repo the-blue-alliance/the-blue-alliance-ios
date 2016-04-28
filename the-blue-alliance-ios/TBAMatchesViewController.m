@@ -72,6 +72,10 @@ static NSString *const MatchCellReuseIdentifier = @"MatchCell";
 
 #pragma mark - Data Methods
 
+- (BOOL)shouldNoDataRefresh {
+    return self.fetchedResultsController.fetchedObjects.count == 0;
+}
+
 - (void)refreshMatches {
     __weak typeof(self) weakSelf = self;
     __block NSUInteger request = [[TBAKit sharedKit] fetchMatchesForEventKey:self.event.key withCompletionBlock:^(NSArray *matches, NSInteger totalCount, NSError *error) {

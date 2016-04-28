@@ -107,6 +107,10 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 
 #pragma mark - Data Methods
 
+- (BOOL)shouldNoDataRefresh {
+    return !self.eventRanking;
+}
+
 - (void)refreshEventRanking {
     __weak typeof(self) weakSelf = self;
     __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForEventKey:self.event.key withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {

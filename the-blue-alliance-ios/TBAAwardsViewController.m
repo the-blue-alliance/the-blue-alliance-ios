@@ -70,6 +70,10 @@ static NSString *const AwardCellReuseIdentifier = @"AwardCell";
 
 #pragma mark - Data Methods
 
+- (BOOL)shouldNoDataRefresh {
+    return self.fetchedResultsController.fetchedObjects.count == 0;
+}
+
 - (void)refreshAwards {
     __weak typeof(self) weakSelf = self;
     __block NSUInteger request = [[TBAKit sharedKit] fetchAwardsForEventKey:self.event.key withCompletionBlock:^(NSArray *awards, NSInteger totalCount, NSError *error) {
@@ -95,6 +99,7 @@ static NSString *const AwardCellReuseIdentifier = @"AwardCell";
 - (void)configureCell:(TBAAwardTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Award *award = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.award = award;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
 - (void)showNoDataView {

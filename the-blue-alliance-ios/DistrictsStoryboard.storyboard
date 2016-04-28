@@ -247,7 +247,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="03V-JX-Kns" userLabel="Rankings View">
                                 <rect key="frame" x="0.0" y="44" width="600" height="448"/>
                                 <connections>
-                                    <segue destination="ntp-v5-hnQ" kind="embed" identifier="RankingsViewControllerEmbed" id="tXh-yJ-DnN"/>
+                                    <segue destination="cSb-59-AZb" kind="embed" identifier="PointsViewControllerEmbed" id="G3F-wp-EgI"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fn8-nJ-lxT" userLabel="Events View">
@@ -275,7 +275,7 @@
                     <navigationItem key="navigationItem" title="2012 Michigan Districts" id="wFh-7K-trp"/>
                     <connections>
                         <outlet property="eventsView" destination="fn8-nJ-lxT" id="2Z4-tx-B4J"/>
-                        <outlet property="rankingsView" destination="03V-JX-Kns" id="mc2-Uz-j3e"/>
+                        <outlet property="pointsView" destination="03V-JX-Kns" id="5ny-Gf-W0W"/>
                         <outlet property="segmentedControl" destination="w63-eU-p54" id="rl9-1J-c2K"/>
                         <outlet property="segmentedControlView" destination="ybx-Qa-bmY" id="Wc6-QJ-kIw"/>
                         <segue destination="ugE-Bn-dBX" kind="show" identifier="EventViewControllerSegue" id="ZhV-AW-D31"/>
@@ -300,15 +300,97 @@
                 <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="TBAEventsViewController" id="8Sz-YX-4hN" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2ar-uT-sNm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2429" y="510"/>
+            <point key="canvasLocation" x="2537" y="494"/>
         </scene>
-        <!--TBARankingsViewController-->
-        <scene sceneID="501-Sw-f6U">
+        <!--Points View Controller-->
+        <scene sceneID="Hlo-6n-6VA">
             <objects>
-                <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="TBARankingsViewController" id="ntp-v5-hnQ" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="AaN-ZF-n0D" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tableViewController storyboardIdentifier="TBAPointsViewController" id="cSb-59-AZb" customClass="TBAPointsViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="55" sectionHeaderHeight="28" sectionFooterHeight="28" id="czX-ER-zic">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="448"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="PointsCell" rowHeight="55" id="iao-WV-kiw" customClass="TBAPointsTableViewCell">
+                                <rect key="frame" x="0.0" y="28" width="600" height="55"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iao-WV-kiw" id="0lL-tC-j1L">
+                                    <rect key="frame" x="0.0" y="0.0" width="567" height="54.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bto-8s-Qfs">
+                                            <rect key="frame" x="8" y="8" width="551" height="39"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="lHA-os-oto">
+                                                    <rect key="frame" x="0.0" y="0.0" width="60" height="39"/>
+                                                    <subviews>
+                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="7332" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NpE-ig-42x">
+                                                            <rect key="frame" x="0.0" y="0.0" width="60" height="25"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="60" id="lnQ-z4-VGi"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Rank 111" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PQk-rW-KaE">
+                                                            <rect key="frame" x="0.0" y="25" width="60" height="14"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="14" id="CvG-Eh-ea9"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="60" id="qax-Vb-Dax"/>
+                                                    </constraints>
+                                                </stackView>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="1Ph-8g-x5c">
+                                                    <rect key="frame" x="60" y="0.0" width="491" height="39"/>
+                                                    <subviews>
+                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Team Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bRF-ja-F22">
+                                                            <rect key="frame" x="0.0" y="0.0" width="491" height="22"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" verticalHuggingPriority="750" text="123 Points" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r2y-5g-hYA">
+                                                            <rect key="frame" x="0.0" y="22" width="491" height="17"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="Bto-8s-Qfs" secondAttribute="bottom" constant="8" id="5bm-LI-pAu"/>
+                                        <constraint firstItem="Bto-8s-Qfs" firstAttribute="leading" secondItem="0lL-tC-j1L" secondAttribute="leadingMargin" id="Vl6-k0-qf0"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="Bto-8s-Qfs" secondAttribute="trailing" id="WLl-r8-c9G"/>
+                                        <constraint firstItem="Bto-8s-Qfs" firstAttribute="top" secondItem="0lL-tC-j1L" secondAttribute="top" constant="8" id="ftT-GP-1cF"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="detailLabel" destination="r2y-5g-hYA" id="8ro-fP-f14"/>
+                                    <outlet property="rankLabel" destination="PQk-rW-KaE" id="xh1-fb-1nT"/>
+                                    <outlet property="teamNameLabel" destination="bRF-ja-F22" id="QCP-NH-nHp"/>
+                                    <outlet property="teamNumberLabel" destination="NpE-ig-42x" id="SFe-18-xK4"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="cSb-59-AZb" id="jBv-0e-7ln"/>
+                            <outlet property="delegate" destination="cSb-59-AZb" id="mIc-2G-LEu"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6rm-0b-oHh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2436.5" y="560"/>
+            <point key="canvasLocation" x="2743" y="845"/>
         </scene>
         <!--EventTeamViewController-->
         <scene sceneID="tpt-Mc-6gy">

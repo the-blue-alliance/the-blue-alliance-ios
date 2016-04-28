@@ -45,18 +45,10 @@ typedef NS_ENUM(NSInteger, TBADistrictTeamSegment) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.refreshViewControllers = @[self.summaryViewController, self.rankingBreakdownViewController];
+    self.containerViews = @[self.summaryView, self.breakdownView];
+    
     [self styleInterface];
-}
-
-#pragma mark - Private Methods
-
-- (void)cancelRefreshes {
-    NSArray *refreshTVCs = @[self.summaryViewController, self.rankingBreakdownViewController];
-    for (TBARefreshTableViewController *refreshTVC in refreshTVCs) {
-        if (refreshTVC) {
-            [refreshTVC cancelRefresh];
-        }
-    }
 }
 
 #pragma mark - Interface Methods
@@ -74,17 +66,6 @@ typedef NS_ENUM(NSInteger, TBADistrictTeamSegment) {
     } else if (self.segmentedControl.selectedSegmentIndex == TBADistrictTeamSegmentBreakdown) {
         [self showView:self.breakdownView];
     }
-}
-
-- (void)showView:(UIView *)showView {
-    for (UIView *view in @[self.summaryView, self.breakdownView]) {
-        view.hidden = (showView == view ? NO : YES);
-    }
-}
-
-- (IBAction)segmentedControlValueChanged:(id)sender {
-    [self cancelRefreshes];
-    [self updateInterface];
 }
 
 #pragma mark - Navigation

@@ -63,17 +63,14 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         [strongSelf updateInterface];
     };
     
-    /*
-     * If we have a stub team created from a different view, it might be missing data
-     * We'll go ahead and attempt to update it
-     */
-    if (!self.team.name) {
-        self.infoViewController.refresh();
-    }
+    self.refreshViewControllers = @[self.infoViewController, self.eventsViewController, self.mediaCollectionViewController];
+    self.containerViews = @[self.infoView, self.eventsView, self.mediaView];
     
     [self registerForChangeNotifications];
     [self fetchYearsParticipatedAndRefresh:YES];
+    
     [self styleInterface];
+    [self updateInterface];
 }
 
 #pragma mark - Private Methods
@@ -91,12 +88,6 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     }];
 }
 
-- (void)cancelRefreshes {
-    [self.infoViewController cancelRefresh];
-    [self.eventsViewController cancelRefresh];
-    [self.mediaCollectionViewController cancelRefresh];
-}
-
 #pragma mark - Interface Methods
 
 - (void)styleInterface {
@@ -109,26 +100,9 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         [self showView:self.infoView];
     } else if (self.segmentedControl.selectedSegmentIndex == TBATeamDataTypeEvents) {
         [self showView:self.eventsView];
-        if (self.eventsViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.eventsViewController.refresh();
-        }
     } else {
         [self showView:self.mediaView];
-        if (self.mediaCollectionViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.mediaCollectionViewController.refresh();
-        }
     }
-}
-
-- (void)showView:(UIView *)showView {
-    for (UIView *view in @[self.infoView, self.eventsView, self.mediaView]) {
-        view.hidden = (showView == view ? NO : YES);
-    }
-}
-
-- (IBAction)segmentedControlValueChanged:(id)sender {
-    [self cancelRefreshes];
-    [self updateInterface];
 }
 
 #pragma mark - Years Participated

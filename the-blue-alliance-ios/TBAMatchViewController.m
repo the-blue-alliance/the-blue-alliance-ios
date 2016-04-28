@@ -75,8 +75,7 @@
     };
     
     [self registerForChangeNotifications];
-    [self updateMatchView];
-    [self updateMatchVideos];
+    [self updateInterface];
 }
 
 #pragma mark - Private Methods
@@ -87,8 +86,7 @@
         for (NSManagedObject *obj in updatedObjects) {
             if (obj == self.match) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateMatchView];
-                    [self updateMatchVideos];
+                    [self updateInterface];
                 });
             }
         }
@@ -96,6 +94,10 @@
 }
 
 #pragma mark - Data Methods
+
+- (BOOL)shouldNoDataRefresh {
+    return self.match.videos.count == 0;
+}
 
 - (void)refreshMatches {
     __weak typeof(self) weakSelf = self;
@@ -118,6 +120,11 @@
 }
 
 #pragma mark - Interface Methods
+
+- (void)updateInterface {
+    [self updateMatchView];
+    [self updateMatchVideos];
+}
 
 - (void)updateMatchVideos {
     for (UIView *view in self.videoStackView.arrangedSubviews) {

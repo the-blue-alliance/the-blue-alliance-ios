@@ -9,7 +9,7 @@
 #import "EventViewController.h"
 #import "TBAInfoViewController.h"
 #import "TBATeamsViewController.h"
-#import "TBARankingsViewController.h"
+#import "TBAEventRankingsViewController.h"
 #import "TBAMatchesViewController.h"
 #import "EventAlliancesViewController.h"
 #import "EventDistrictPointsViewController.h"
@@ -52,7 +52,7 @@ typedef NS_ENUM(NSInteger, TBAEventSegment) {
 @property (nonatomic, strong) TBATeamsViewController *teamsViewController;
 @property (nonatomic, weak) IBOutlet UIView *teamsView;
 
-@property (nonatomic, strong) TBARankingsViewController *rankingsViewController;
+@property (nonatomic, strong) TBAEventRankingsViewController *rankingsViewController;
 @property (nonatomic, weak) IBOutlet UIView *rankingsView;
 
 @property (nonatomic, strong) TBAMatchesViewController *matchesViewController;
@@ -67,18 +67,11 @@ typedef NS_ENUM(NSInteger, TBAEventSegment) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.refreshViewControllers = @[self.infoViewController, self.teamsViewController, self.rankingsViewController, self.matchesViewController];
+    self.containerViews = @[self.infoView, self.teamsView, self.rankingsView, self.matchesView];
+    
     [self styleInterface];
-}
-
-#pragma mark - Private Methods
-
-- (void)cancelRefreshes {
-    NSArray *refreshTVCs = @[self.infoViewController, self.teamsViewController, self.rankingsViewController, self.matchesViewController];
-    for (TBARefreshTableViewController *refreshTVC in refreshTVCs) {
-        if (refreshTVC) {
-            [refreshTVC cancelRefresh];
-        }
-    }
+    [self updateInterface];
 }
 
 #pragma mark - Interface Methods
@@ -93,31 +86,11 @@ typedef NS_ENUM(NSInteger, TBAEventSegment) {
         [self showView:self.infoView];
     } else if (self.segmentedControl.selectedSegmentIndex == TBAEventSegmentTeams) {
         [self showView:self.teamsView];
-        if (self.teamsViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.teamsViewController.refresh();
-        }
     } else if (self.segmentedControl.selectedSegmentIndex == TBAEventSegmentRankings) {
         [self showView:self.rankingsView];
-        if (self.rankingsViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.rankingsViewController.refresh();
-        }
     } else if (self.segmentedControl.selectedSegmentIndex == TBAEventSegmentMatches) {
         [self showView:self.matchesView];
-        if (self.matchesViewController.fetchedResultsController.fetchedObjects.count == 0) {
-            self.matchesViewController.refresh();
-        }
     }
-}
-
-- (void)showView:(UIView *)showView {
-    for (UIView *view in @[self.infoView, self.teamsView, self.rankingsView, self.matchesView]) {
-        view.hidden = (showView == view ? NO : YES);
-    }
-}
-
-- (IBAction)segmentedControlValueChanged:(id)sender {
-    [self cancelRefreshes];
-    [self updateInterface];
 }
 
 #pragma mark - Navigation
