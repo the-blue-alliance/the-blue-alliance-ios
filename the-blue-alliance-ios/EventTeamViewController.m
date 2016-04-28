@@ -30,9 +30,6 @@ typedef NS_ENUM(NSInteger, TBAEventTeamSegment) {
 
 @interface EventTeamViewController ()
 
-@property (nonatomic, strong) IBOutlet UISegmentedControl *segmentedControl;
-@property (nonatomic, strong) IBOutlet UIView *segmentedControlView;
-
 @property (nonatomic, strong) TBATeamAtEventSummaryViewController *summaryViewController;
 @property (nonatomic, strong) IBOutlet UIView *summaryView;
 

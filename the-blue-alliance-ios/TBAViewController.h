@@ -14,6 +14,9 @@
 
 @property (nonnull, nonatomic, strong) TBAPersistenceController *persistenceController;
 
+@property (nullable, nonatomic, strong) IBOutlet UISegmentedControl *segmentedControl;
+@property (nullable, nonatomic, strong) IBOutlet UIView *segmentedControlView;
+
 @property (nullable, nonatomic, strong) NSArray *refreshViewControllers;
 @property (nullable, nonatomic, strong) NSArray *containerViews;
 

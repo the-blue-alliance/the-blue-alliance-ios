@@ -31,9 +31,6 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 
 @interface DistrictViewController ()
 
-@property (nonatomic, strong) IBOutlet UISegmentedControl *segmentedControl;
-@property (nonatomic, strong) IBOutlet UIView *segmentedControlView;
-
 @property (nonatomic, strong) TBAEventsViewController *eventsViewController;
 @property (nonatomic, strong) IBOutlet UIView *eventsView;
 

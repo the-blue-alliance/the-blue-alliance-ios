@@ -29,9 +29,6 @@ typedef NS_ENUM(NSInteger, TBADistrictTeamSegment) {
 
 @interface DistrictTeamViewController ()
 
-@property (nonatomic, strong) IBOutlet UISegmentedControl *segmentedControl;
-@property (nonatomic, strong) IBOutlet UIView *segmentedControlView;
-
 @property (nonatomic, strong) TBATeamAtDistrictSummaryViewController *summaryViewController;
 @property (nonatomic, strong) IBOutlet UIView *summaryView;
 

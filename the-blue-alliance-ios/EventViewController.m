@@ -43,9 +43,6 @@ typedef NS_ENUM(NSInteger, TBAEventSegment) {
 
 @interface EventViewController ()
 
-@property (nonatomic, strong) IBOutlet UISegmentedControl *segmentedControl;
-@property (nonatomic, strong) IBOutlet UIView *segmentedControlView;
-
 @property (nonatomic, strong) TBAInfoViewController *infoViewController;
 @property (nonatomic, weak) IBOutlet UIView *infoView;
 

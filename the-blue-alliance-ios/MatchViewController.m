@@ -23,9 +23,6 @@ typedef NS_ENUM(NSInteger, TBAMatchSegment) {
 
 @interface MatchViewController ()
 
-@property (nonatomic, strong) IBOutlet UISegmentedControl *segmentedControl;
-@property (nonatomic, strong) IBOutlet UIView *segmentedControlView;
-
 @property (nonatomic, strong) TBAMatchViewController *matchViewController;
 @property (nonatomic, weak) IBOutlet UIView *matchView;
 
