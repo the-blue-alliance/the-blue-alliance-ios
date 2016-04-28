@@ -52,7 +52,7 @@
 }
 
 - (NSArray<UIView *> *)coloredViews {
-    return @[self.redContainerView, self.redScoreLabel, self.blueContainerView, self.blueScoreLabel];
+    return @[self.redContainerView, self.redScoreLabel, self.blueContainerView, self.blueScoreLabel, self.timeLabel];
 }
 
 - (void)setMatch:(Match *)match {

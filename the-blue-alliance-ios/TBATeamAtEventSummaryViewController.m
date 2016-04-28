@@ -163,7 +163,6 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSInteger rows = 1;
-#warning If no event ranking we're showing the wrong cell
     if (self.eventRanking) {
         rows = 3;
     }
@@ -173,10 +172,10 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 #pragma mark - TBA Table View Data Source
 
 - (void)configureCell:(TBASummaryTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == 0) {
+    if (indexPath.row == 0 && self.eventRanking) {
         cell.titleLabel.text = @"Rank";
         cell.subtitleLabel.text = [self.eventRanking.rank stringWithSuffix];
-    } else if (indexPath.row == 1) {
+    } else if ((indexPath.row == 1 && self.eventRanking) || (indexPath.row == 0 && !self.eventRanking)) {
         cell.titleLabel.text = @"Alliance";
         if (self.eventAlliance) {
             NSNumber *pickOrder = @([self.eventAlliance.picks indexOfObject:self.team]);
@@ -188,7 +187,7 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
         } else {
             cell.subtitleLabel.text = @"Not picked for an alliance";
         }
-    } else if (indexPath.row == 2) {
+    } else {
         NSMutableArray *breakdownArray = [[NSMutableArray alloc] init];
         for (NSString *key in self.eventRanking.info) {
             [breakdownArray addObject:[NSString stringWithFormat:@"%@: %@", key, self.eventRanking.info[key]]];
