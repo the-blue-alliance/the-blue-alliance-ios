@@ -1,5 +1,5 @@
 //
-//  TBATableViewController.h
+//  TBAContainerTableViewController.h
 //  the-blue-alliance-ios
 //
 //  Created by Zach Orr on 7/11/15.
@@ -18,7 +18,7 @@
 
 @end
 
-@interface TBATableViewController : UITableViewController <NSFetchedResultsControllerDelegate>
+@interface TBAContainerTableViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 
 @property (nullable, nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonnull, nonatomic, strong) TBAPersistenceController *persistenceController;

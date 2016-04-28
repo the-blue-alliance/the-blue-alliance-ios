@@ -1,13 +1,14 @@
 //
 //  TBAViewController.h
-//  the-blue-alliance-ios
+//  the-blue-alliance
 //
-//  Created by Zach Orr on 5/4/15.
-//  Copyright (c) 2015 The Blue Alliance. All rights reserved.
+//  Created by Zach Orr on 4/28/16.
+//  Copyright © 2016 The Blue Alliance. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "TBAPersistenceController.h"
+
+@class TBAPersistenceController;
 
 @interface TBAViewController : UIViewController
 
@@ -18,10 +19,6 @@
 
 @property (nullable, nonatomic, strong) IBOutlet UILabel *navigationTitleLabel;
 @property (nullable, nonatomic, strong) IBOutlet UILabel *navigationSubtitleLabel;
-
-- (void)showErrorAlertWithMessage:(nonnull NSString *)message;
-- (void)showNoDataViewWithText:(nonnull NSString *)text;
-- (void)hideNoDataView;
 
 - (void)showView:(nonnull UIView *)showView;
 - (void)updateInterface;

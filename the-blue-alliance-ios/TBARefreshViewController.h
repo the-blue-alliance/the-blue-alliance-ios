@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import "TBAViewController.h"
+#import "TBAContainerViewController.h"
 
-@interface TBARefreshViewController : TBAViewController
+@interface TBARefreshViewController : TBAContainerViewController
 
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, copy) void (^refresh)();

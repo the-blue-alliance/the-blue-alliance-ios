@@ -1,21 +1,21 @@
 //
-//  TBACollectionViewController.m
+//  TBAContainerCollectionViewController.m
 //  the-blue-alliance-ios
 //
 //  Created by Zach Orr on 8/22/15.
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import "TBACollectionViewController.h"
+#import "TBAContainerCollectionViewController.h"
 #import "TBANoDataViewController.h"
 
-@interface TBACollectionViewController ()
+@interface TBAContainerCollectionViewController ()
 
 @property (nonatomic, strong) TBANoDataViewController *noDataViewController;
 
 @end
 
-@implementation TBACollectionViewController
+@implementation TBAContainerCollectionViewController
 
 #pragma mark - TBA Delegate Methods
 

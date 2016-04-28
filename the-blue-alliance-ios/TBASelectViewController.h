@@ -6,14 +6,14 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import "TBATableViewController.h"
+#import "TBAContainerTableViewController.h"
 
 typedef NS_ENUM(NSInteger, TBASelectType) {
     TBASelectTypeWeek,
     TBASelectTypeYear
 };
 
-@interface TBASelectViewController : TBATableViewController <TBATableViewControllerDelegate>
+@interface TBASelectViewController : TBAContainerTableViewController <TBATableViewControllerDelegate>
 
 @property (nonatomic, assign) TBASelectType selectType;
 

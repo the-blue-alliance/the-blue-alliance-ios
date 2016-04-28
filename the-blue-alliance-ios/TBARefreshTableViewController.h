@@ -6,9 +6,9 @@
 //  Copyright © 2015 The Blue Alliance. All rights reserved.
 //
 
-#import "TBATableViewController.h"
+#import "TBAContainerTableViewController.h"
 
-@interface TBARefreshTableViewController : TBATableViewController
+@interface TBARefreshTableViewController : TBAContainerTableViewController
 
 @property (nonatomic, copy) void (^refresh)();
 

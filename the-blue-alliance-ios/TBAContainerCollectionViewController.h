@@ -1,5 +1,5 @@
 //
-//  TBACollectionViewController.h
+//  TBAContainerCollectionViewController.h
 //  the-blue-alliance-ios
 //
 //  Created by Zach Orr on 8/22/15.
@@ -18,7 +18,7 @@
 
 @end
 
-@interface TBACollectionViewController : UICollectionViewController <NSFetchedResultsControllerDelegate>
+@interface TBAContainerCollectionViewController : UICollectionViewController <NSFetchedResultsControllerDelegate>
 
 @property (nullable, nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nullable, nonatomic, strong) TBAPersistenceController *persistenceController;
