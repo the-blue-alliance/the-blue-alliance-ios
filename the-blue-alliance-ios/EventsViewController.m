@@ -73,6 +73,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     
     [self configureYears];
     [self configureEvents];
+    
     [self updateInterface];
 }
 

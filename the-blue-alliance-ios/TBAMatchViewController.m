@@ -75,6 +75,7 @@
     };
     
     [self registerForChangeNotifications];
+    
     [self updateInterface];
 }
 
