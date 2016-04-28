@@ -69,7 +69,9 @@
     CompLevel compLevel;
     if ([compLevelString isEqualToString:@"qm"]) {
         compLevel = CompLevelQualification;
-    } else if ([compLevelString isEqualToString:@"ef"] || [compLevelString isEqualToString:@"qf"]) {
+    } else if ([compLevelString isEqualToString:@"ef"]) {
+        compLevel = CompLevelOctoFinal;
+    } else if ([compLevelString isEqualToString:@"qf"]) {
         compLevel = CompLevelQuarterFinal;
     } else if ([compLevelString isEqualToString:@"sf"]) {
         compLevel = CompLevelSemiFinal;
@@ -90,13 +92,16 @@
     NSString *compLevelString = @"";
     switch (self.compLevel.integerValue) {
         case CompLevelQualification:
-            compLevelString = @"Quals";
+            compLevelString = @"Qualification";
+            break;
+        case CompLevelOctoFinal:
+            compLevelString = @"Octofinal";
             break;
         case CompLevelQuarterFinal:
-            compLevelString = @"Quarters";
+            compLevelString = @"Quarterfinal";
             break;
         case CompLevelSemiFinal:
-            compLevelString = @"Semis";
+            compLevelString = @"Semifinal";
             break;
         case CompLevelFinal:
             compLevelString = @"Finals";
@@ -108,12 +113,38 @@
     return compLevelString;
 }
 
+- (NSString *)shortCompLevelString {
+    NSString *compLevelString = @"";
+    switch (self.compLevel.integerValue) {
+        case CompLevelQualification:
+            compLevelString = @"Qual";
+            break;
+        case CompLevelOctoFinal:
+            compLevelString = @"Octofinal";
+            break;
+        case CompLevelQuarterFinal:
+            compLevelString = @"Quarter";
+            break;
+        case CompLevelSemiFinal:
+            compLevelString = @"Semi";
+            break;
+        case CompLevelFinal:
+            compLevelString = @"Final";
+            break;
+            
+        default:
+            break;
+    }
+    return compLevelString;
+}
+
 - (NSString *)friendlyMatchName {
-    NSString *matchName = [self compLevelString];
+    NSString *matchName = [self shortCompLevelString];
     switch (self.compLevel.integerValue) {
         case CompLevelQualification:
             matchName = [NSString stringWithFormat:@"%@ %@", matchName, self.matchNumber.stringValue];
             break;
+        case CompLevelOctoFinal:
         case CompLevelQuarterFinal:
         case CompLevelSemiFinal:
         case CompLevelFinal:

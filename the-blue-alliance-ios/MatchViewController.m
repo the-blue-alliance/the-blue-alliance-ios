@@ -58,7 +58,7 @@ typedef NS_ENUM(NSInteger, TBAMatchSegment) {
 - (void)styleInterface {
     self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
     
-    self.navigationTitleLabel.text = [NSString stringWithFormat:@"%@ %@", [self.match compLevelString], self.match.matchNumber];
+    self.navigationTitleLabel.text = [NSString stringWithFormat:@"%@ %@", [self.match shortCompLevelString], self.match.matchNumber];
     self.navigationSubtitleLabel.text = [NSString stringWithFormat:@"@ %@", [self.match.event friendlyNameWithYear:YES]];
 }
 

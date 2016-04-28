@@ -10,6 +10,7 @@
 
 typedef NS_ENUM(NSInteger, CompLevel) {
     CompLevelQualification,
+    CompLevelOctoFinal,
     CompLevelQuarterFinal,
     CompLevelSemiFinal,
     CompLevelFinal
@@ -39,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)timeString;
 - (NSString *)compLevelString;
+- (NSString *)shortCompLevelString;
 - (NSString *)friendlyMatchName;
 
 @end
