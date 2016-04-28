@@ -41,12 +41,6 @@
     self.collectionView.alwaysBounceVertical = YES;
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [self cancelRefresh];
-}
-
 #pragma mark - Public Methods
 
 - (BOOL)shouldNoDataRefresh {

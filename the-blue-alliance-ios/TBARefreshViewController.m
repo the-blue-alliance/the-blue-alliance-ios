@@ -34,14 +34,6 @@
     return _refreshControl;
 }
 
-#pragma mark - View Lifecycle
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [self cancelRefresh];
-}
-
 #pragma mark - Public Methods
 
 - (BOOL)shouldNoDataRefresh {

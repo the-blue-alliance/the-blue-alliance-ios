@@ -37,12 +37,6 @@
     self.refreshControl.layer.zPosition = self.tableView.backgroundView.layer.zPosition + 1;
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [self cancelRefresh];
-}
-
 #pragma mark - Public Methods
 
 - (BOOL)shouldNoDataRefresh {

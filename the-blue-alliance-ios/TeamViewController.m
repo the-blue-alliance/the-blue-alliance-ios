@@ -22,12 +22,6 @@ static NSString *const MediaViewControllerEmbed     = @"MediaViewControllerEmbed
 
 static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerSegue";
 
-typedef NS_ENUM(NSInteger, TBATeamDataType) {
-    TBATeamDataTypeInfo = 0,
-    TBATeamDataTypeEvents,
-    TBATeamDataTypeMedia
-};
-
 @interface TeamViewController ()
 
 @property (nonatomic, strong) TBAInfoViewController *infoViewController;
@@ -56,8 +50,6 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
         strongSelf.currentYear = year;
         strongSelf.mediaCollectionViewController.year = year;
         strongSelf.eventsViewController.year = year;
-        
-        [strongSelf updateInterface];
     };
     
     self.refreshViewControllers = @[self.infoViewController, self.eventsViewController, self.mediaCollectionViewController];
@@ -67,7 +59,13 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     [self fetchYearsParticipatedAndRefresh:YES];
     
     [self styleInterface];
-    [self updateInterface];
+}
+
+#pragma mark - Interface Methods
+
+- (void)styleInterface {
+    self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
+    self.navigationItem.title = [NSString stringWithFormat:@"Team %@", self.team.teamNumber];
 }
 
 #pragma mark - Private Methods
@@ -85,24 +83,7 @@ typedef NS_ENUM(NSInteger, TBATeamDataType) {
     }];
 }
 
-#pragma mark - Interface Methods
-
-- (void)styleInterface {
-    self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
-    self.navigationItem.title = [NSString stringWithFormat:@"Team %@", self.team.teamNumber];
-}
-
-- (void)updateInterface {
-    if (self.segmentedControl.selectedSegmentIndex == TBATeamDataTypeInfo) {
-        [self showView:self.infoView];
-    } else if (self.segmentedControl.selectedSegmentIndex == TBATeamDataTypeEvents) {
-        [self showView:self.eventsView];
-    } else {
-        [self showView:self.mediaView];
-    }
-}
-
-#pragma mark - Years Participated
+#pragma mark - Data Methods
 
 - (void)fetchYearsParticipatedAndRefresh:(BOOL)refresh {
     NSArray *years = [self.team sortedYearsParticipated];

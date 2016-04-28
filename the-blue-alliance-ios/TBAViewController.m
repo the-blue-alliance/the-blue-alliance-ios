@@ -11,8 +11,29 @@
 
 @implementation TBAViewController
 
+#pragma mark - View Lifecycle
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
+    
+    [self updateInterface];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self cancelRefreshes];
+}
+
+#pragma mark - Public Methods
+
 - (void)updateInterface {
-    // Implement in subview
+    if (self.segmentedControl && self.containerViews.count > self.segmentedControl.selectedSegmentIndex) {
+        UIView *showView = self.containerViews[self.segmentedControl.selectedSegmentIndex];
+        [self showView:showView];
+    }
 }
 
 - (void)showView:(UIView *)showView {

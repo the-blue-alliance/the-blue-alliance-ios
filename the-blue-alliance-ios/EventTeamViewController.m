@@ -21,13 +21,6 @@ static NSString *const AwardsViewControllerEmbed    = @"AwardsViewControllerEmbe
 
 static NSString *const MatchViewControllerSegue     = @"MatchViewControllerSegue";
 
-typedef NS_ENUM(NSInteger, TBAEventTeamSegment) {
-    TBAEventTeamSegmentSummary = 0,
-    TBAEventTeamSegmentMatches,
-    TBAEventTeamSegmentStats,
-    TBAEventTeamSegmentAwards,
-};
-
 @interface EventTeamViewController ()
 
 @property (nonatomic, strong) TBATeamAtEventSummaryViewController *summaryViewController;
@@ -53,30 +46,13 @@ typedef NS_ENUM(NSInteger, TBAEventTeamSegment) {
     self.containerViews = @[self.summaryView, self.matchesView, self.statsView, self.awardsView];
     
     [self styleInterface];
-    [self updateInterface];
 }
 
 #pragma mark - Interface Methods
 
 - (void)styleInterface {
-    self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
-    
     self.navigationTitleLabel.text = [NSString stringWithFormat:@"Team %@", self.team.teamNumber];
     self.navigationSubtitleLabel.text = [NSString stringWithFormat:@"@ %@", [self.event friendlyNameWithYear:YES]];
-}
-
-- (void)updateInterface {
-    if (self.segmentedControl.selectedSegmentIndex == TBAEventTeamSegmentSummary) {
-        [self showView:self.summaryView];
-    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventTeamSegmentMatches) {
-        [self showView:self.matchesView];
-    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventTeamSegmentStats) {
-        [self showView:self.awardsView];
-    }
-    else if (self.segmentedControl.selectedSegmentIndex == TBAEventTeamSegmentAwards) {
-        [self showView:self.awardsView];
-    }
-    // TODO: Add stats
 }
 
 #pragma mark - Navigation

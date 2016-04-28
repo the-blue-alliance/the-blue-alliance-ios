@@ -20,11 +20,6 @@ static NSString *const BreakdownViewControllerEmbed = @"BreakdownViewControllerE
 
 static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerSegue";
 
-typedef NS_ENUM(NSInteger, TBADistrictTeamSegment) {
-    TBADistrictTeamSegmentSummary = 0,
-    TBADistrictTeamSegmentBreakdown
-};
-
 @class District, DistrictRanking, Team;
 
 @interface DistrictTeamViewController ()
@@ -51,18 +46,8 @@ typedef NS_ENUM(NSInteger, TBADistrictTeamSegment) {
 #pragma mark - Interface Methods
 
 - (void)styleInterface {
-    self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
-    
     self.navigationTitleLabel.text = [NSString stringWithFormat:@"Team %@", self.districtRanking.team.teamNumber];
     self.navigationSubtitleLabel.text = [NSString stringWithFormat:@"@ %@ %@", self.district.year, [self.district.key uppercaseString]];
-}
-
-- (void)updateInterface {
-    if (self.segmentedControl.selectedSegmentIndex == TBADistrictTeamSegmentSummary) {
-        [self showView:self.summaryView];
-    } else if (self.segmentedControl.selectedSegmentIndex == TBADistrictTeamSegmentBreakdown) {
-        [self showView:self.breakdownView];
-    }
 }
 
 #pragma mark - Navigation

@@ -76,53 +76,12 @@
     
     [self registerForChangeNotifications];
     
-    [self updateInterface];
-}
-
-#pragma mark - Private Methods
-
-- (void)registerForChangeNotifications {
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:self.persistenceController.managedObjectContext queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-        NSSet *updatedObjects = note.userInfo[NSUpdatedObjectsKey];
-        for (NSManagedObject *obj in updatedObjects) {
-            if (obj == self.match) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateInterface];
-                });
-            }
-        }
-    }];
-}
-
-#pragma mark - Data Methods
-
-- (BOOL)shouldNoDataRefresh {
-    return self.match.videos.count == 0;
-}
-
-- (void)refreshMatches {
-    __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchMatchesForEventKey:self.match.event.key withCompletionBlock:^(NSArray *matches, NSInteger totalCount, NSError *error) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf removeRequestIdentifier:request];
-        
-        if (error) {
-            [strongSelf showErrorAlertWithMessage:@"Unable to reload match"];
-        } else {
-            Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.match.event.objectID];
-            
-            [strongSelf.persistenceController performChanges:^{
-                [Match insertMatchesWithModelMatches:matches forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-            }];
-        }
-    }];
-    [self addRequestIdentifier:request];
+    [self styleInterface];
 }
 
 #pragma mark - Interface Methods
 
-- (void)updateInterface {
+- (void)styleInterface {
     [self updateMatchView];
     [self updateMatchVideos];
 }
@@ -132,7 +91,7 @@
         [view removeFromSuperview];
         [self.videoStackView removeArrangedSubview:view];
     }
-
+    
     for (MatchVideo *matchVideo in [self.match.videos allObjects]) {
         [self.videoStackView addArrangedSubview:[self videoViewForMatchVideo:matchVideo]];
     }
@@ -207,6 +166,47 @@
         self.redScoreLabel.font = notWinnerFont;
         self.blueScoreLabel.font = notWinnerFont;
     }
+}
+
+#pragma mark - Private Methods
+
+- (void)registerForChangeNotifications {
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:self.persistenceController.managedObjectContext queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        NSSet *updatedObjects = note.userInfo[NSUpdatedObjectsKey];
+        for (NSManagedObject *obj in updatedObjects) {
+            if (obj == self.match) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self styleInterface];
+                });
+            }
+        }
+    }];
+}
+
+#pragma mark - Data Methods
+
+- (BOOL)shouldNoDataRefresh {
+    return self.match.videos.count == 0;
+}
+
+- (void)refreshMatches {
+    __weak typeof(self) weakSelf = self;
+    __block NSUInteger request = [[TBAKit sharedKit] fetchMatchesForEventKey:self.match.event.key withCompletionBlock:^(NSArray *matches, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf removeRequestIdentifier:request];
+        
+        if (error) {
+            [strongSelf showErrorAlertWithMessage:@"Unable to reload match"];
+        } else {
+            Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.match.event.objectID];
+            
+            [strongSelf.persistenceController performChanges:^{
+                [Match insertMatchesWithModelMatches:matches forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+            }];
+        }
+    }];
+    [self addRequestIdentifier:request];
 }
 
 @end

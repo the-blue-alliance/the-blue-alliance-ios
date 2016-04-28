@@ -24,11 +24,6 @@ static NSString *const PointsViewControllerEmbed    = @"PointsViewControllerEmbe
 static NSString *const EventViewControllerSegue         = @"EventViewControllerSegue";
 static NSString *const DistrictTeamViewControllerSegue  = @"DistrictTeamViewControllerSegue";
 
-typedef NS_ENUM(NSInteger, TBADistrictDataType) {
-    TBADistrictDataTypeEvents = 0,
-    TBADistrictDataTypePoints
-};
-
 @interface DistrictViewController ()
 
 @property (nonatomic, strong) TBAEventsViewController *eventsViewController;
@@ -48,22 +43,12 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
     self.containerViews = @[self.eventsView, self.pointsView];
     
     [self styleInterface];
-    [self updateInterface];
 }
 
 #pragma mark - Interface Actions
 
 - (void)styleInterface {
-    self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
     self.navigationItem.title = [NSString stringWithFormat:@"%@ %@ Districts", self.district.year, self.district.name];
-}
-
-- (void)updateInterface {
-    if (self.segmentedControl.selectedSegmentIndex == TBADistrictDataTypeEvents) {
-        [self showView:self.eventsView];
-    } else {
-        [self showView:self.pointsView];
-    }
 }
 
 #pragma mark - Navigation

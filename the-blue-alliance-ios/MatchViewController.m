@@ -16,11 +16,6 @@
 static NSString *const MatchViewControllerEmbed             = @"MatchViewControllerEmbed";
 static NSString *const MatchBreakdownViewControllerEmbed    = @"MatchBreakdownViewControllerEmbed";
 
-typedef NS_ENUM(NSInteger, TBAMatchSegment) {
-    TBAMatchSegmentMatch = 0,
-    TBAMatchSegmentBreakdown
-};
-
 @interface MatchViewController ()
 
 @property (nonatomic, strong) TBAMatchViewController *matchViewController;
@@ -45,20 +40,8 @@ typedef NS_ENUM(NSInteger, TBAMatchSegment) {
 #pragma mark - Interface Methods
 
 - (void)styleInterface {
-    self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
-    
     self.navigationTitleLabel.text = [NSString stringWithFormat:@"%@ %@", [self.match shortCompLevelString], self.match.matchNumber];
     self.navigationSubtitleLabel.text = [NSString stringWithFormat:@"@ %@", [self.match.event friendlyNameWithYear:YES]];
-    
-    [self updateInterface];
-}
-
-- (void)updateInterface {
-    if (self.segmentedControl.selectedSegmentIndex == TBAMatchSegmentMatch) {
-        [self showView:self.matchView];
-    } else if (self.segmentedControl.selectedSegmentIndex == TBAMatchSegmentBreakdown) {
-        [self showView:self.matchBreakdownView];
-    }
 }
 
 #pragma mark - Navigation

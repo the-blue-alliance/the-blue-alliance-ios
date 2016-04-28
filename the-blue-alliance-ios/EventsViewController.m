@@ -47,7 +47,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     _currentWeek = currentWeek;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateInterface];
+        [self styleInterface];
     });
 }
 
@@ -74,7 +74,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     [self configureYears];
     [self configureEvents];
     
-    [self updateInterface];
+    [self styleInterface];
 }
 
 #pragma mark - Data Methods
@@ -104,13 +104,14 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 
 #pragma mark - Interface Methods
 
-- (void)updateInterface {
+- (void)styleInterface {
     NSString *titleString;
     if (self.currentWeek) {
         titleString = [Event stringForEventOrder:self.currentWeek];
     } else {
         titleString = @"--- Events";
     }
+    
     self.navigationTitleLabel.text = titleString;
     self.navigationItem.title = titleString;
 }
@@ -139,7 +140,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
         strongSelf.eventsViewController.week = week;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateInterface];
+            [self styleInterface];
         });
     };
 

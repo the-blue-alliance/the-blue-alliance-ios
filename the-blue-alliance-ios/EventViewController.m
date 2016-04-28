@@ -33,14 +33,6 @@ static NSString *const MatchViewControllerSegue             = @"MatchViewControl
 
 static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerSegue";
 
-
-typedef NS_ENUM(NSInteger, TBAEventSegment) {
-    TBAEventSegmentInfo = 0,
-    TBAEventSegmentTeams,
-    TBAEventSegmentRankings,
-    TBAEventSegmentMatches,
-};
-
 @interface EventViewController ()
 
 @property (nonatomic, strong) TBAInfoViewController *infoViewController;
@@ -68,26 +60,12 @@ typedef NS_ENUM(NSInteger, TBAEventSegment) {
     self.containerViews = @[self.infoView, self.teamsView, self.rankingsView, self.matchesView];
     
     [self styleInterface];
-    [self updateInterface];
 }
 
 #pragma mark - Interface Methods
 
 - (void)styleInterface {
-    self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
     self.navigationItem.title = [self.event friendlyNameWithYear:YES];
-}
-
-- (void)updateInterface {
-    if (self.segmentedControl.selectedSegmentIndex == TBAEventSegmentInfo) {
-        [self showView:self.infoView];
-    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventSegmentTeams) {
-        [self showView:self.teamsView];
-    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventSegmentRankings) {
-        [self showView:self.rankingsView];
-    } else if (self.segmentedControl.selectedSegmentIndex == TBAEventSegmentMatches) {
-        [self showView:self.matchesView];
-    }
 }
 
 #pragma mark - Navigation
