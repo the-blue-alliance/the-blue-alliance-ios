@@ -196,7 +196,7 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 }
 
 - (void)showNoDataView {
-    [self showNoDataViewWithText:@"No summary for team"];
+    [self showNoDataViewWithText:@"No summary for team at event"];
 }
 
 #pragma mark - Table View Delegate

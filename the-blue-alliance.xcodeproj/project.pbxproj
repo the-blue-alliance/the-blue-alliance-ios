@@ -37,6 +37,9 @@
 		9243D3F81BABB70D00512D3B /* MatchVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3E01BABB70D00512D3B /* MatchVideo.m */; };
 		9243D3FA1BABB70D00512D3B /* Media.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D3E41BABB70D00512D3B /* Media.m */; };
 		9243D4021BABB92E00512D3B /* Team+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9243D4011BABB92E00512D3B /* Team+Fetch.m */; };
+		924E94221CD07A3000C2EADB /* DistrictTeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E94211CD07A3000C2EADB /* DistrictTeamViewController.m */; };
+		924E94261CD07DD000C2EADB /* TBATeamAtDistrictSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E94251CD07DD000C2EADB /* TBATeamAtDistrictSummaryViewController.m */; };
+		924E942A1CD07DF600C2EADB /* TBADistrictRankingBreakdownViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 924E94291CD07DF600C2EADB /* TBADistrictRankingBreakdownViewController.m */; };
 		92553DEA1CB1ED3A00D7E1EE /* TBAAwardsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92553DE91CB1ED3A00D7E1EE /* TBAAwardsViewController.m */; };
 		92553DFC1CB1F6F100D7E1EE /* Award.m in Sources */ = {isa = PBXBuildFile; fileRef = 92553DF61CB1F6F100D7E1EE /* Award.m */; };
 		92553DFE1CB1F6F100D7E1EE /* AwardRecipient.m in Sources */ = {isa = PBXBuildFile; fileRef = 92553DFA1CB1F6F100D7E1EE /* AwardRecipient.m */; };
@@ -146,6 +149,12 @@
 		9243D3E41BABB70D00512D3B /* Media.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Media.m; path = Models/Media.m; sourceTree = "<group>"; };
 		9243D4001BABB92E00512D3B /* Team+Fetch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Team+Fetch.h"; sourceTree = "<group>"; };
 		9243D4011BABB92E00512D3B /* Team+Fetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Team+Fetch.m"; sourceTree = "<group>"; };
+		924E94201CD07A3000C2EADB /* DistrictTeamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictTeamViewController.h; sourceTree = "<group>"; };
+		924E94211CD07A3000C2EADB /* DistrictTeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictTeamViewController.m; sourceTree = "<group>"; };
+		924E94241CD07DD000C2EADB /* TBATeamAtDistrictSummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBATeamAtDistrictSummaryViewController.h; sourceTree = "<group>"; };
+		924E94251CD07DD000C2EADB /* TBATeamAtDistrictSummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBATeamAtDistrictSummaryViewController.m; sourceTree = "<group>"; };
+		924E94281CD07DF600C2EADB /* TBADistrictRankingBreakdownViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBADistrictRankingBreakdownViewController.h; sourceTree = "<group>"; };
+		924E94291CD07DF600C2EADB /* TBADistrictRankingBreakdownViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBADistrictRankingBreakdownViewController.m; sourceTree = "<group>"; };
 		92553DE81CB1ED3A00D7E1EE /* TBAAwardsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAAwardsViewController.h; sourceTree = "<group>"; };
 		92553DE91CB1ED3A00D7E1EE /* TBAAwardsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAAwardsViewController.m; sourceTree = "<group>"; };
 		92553DF51CB1F6F100D7E1EE /* Award.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Award.h; sourceTree = "<group>"; };
@@ -381,6 +390,7 @@
 			children = (
 				923E126D1B52B4230089D9F8 /* TBADistrictsViewController.h */,
 				923E126E1B52B4230089D9F8 /* TBADistrictsViewController.m */,
+				924E94271CD07DD300C2EADB /* Team @ District */,
 			);
 			name = Districts;
 			sourceTree = "<group>";
@@ -444,6 +454,26 @@
 				9243D3E01BABB70D00512D3B /* MatchVideo.m */,
 			);
 			name = Match;
+			sourceTree = "<group>";
+		};
+		924E94231CD07A3300C2EADB /* Team @ District */ = {
+			isa = PBXGroup;
+			children = (
+				924E94201CD07A3000C2EADB /* DistrictTeamViewController.h */,
+				924E94211CD07A3000C2EADB /* DistrictTeamViewController.m */,
+			);
+			name = "Team @ District";
+			sourceTree = "<group>";
+		};
+		924E94271CD07DD300C2EADB /* Team @ District */ = {
+			isa = PBXGroup;
+			children = (
+				924E94241CD07DD000C2EADB /* TBATeamAtDistrictSummaryViewController.h */,
+				924E94251CD07DD000C2EADB /* TBATeamAtDistrictSummaryViewController.m */,
+				924E94281CD07DF600C2EADB /* TBADistrictRankingBreakdownViewController.h */,
+				924E94291CD07DF600C2EADB /* TBADistrictRankingBreakdownViewController.m */,
+			);
+			name = "Team @ District";
 			sourceTree = "<group>";
 		};
 		92553DEB1CB1ED4100D7E1EE /* Awards */ = {
@@ -730,6 +760,7 @@
 			children = (
 				92F1580A1AF55DB300884E8A /* DistrictViewController.h */,
 				92F1580B1AF55DB300884E8A /* DistrictViewController.m */,
+				924E94231CD07A3300C2EADB /* Team @ District */,
 			);
 			name = District;
 			sourceTree = "<group>";
@@ -886,6 +917,7 @@
 				927E8C471B2689EF00C93E6C /* TBAEventsViewController.m in Sources */,
 				50DFD1FB19205F6D009B686E /* UIColor+TBAColors.m in Sources */,
 				9243D3F21BABB70D00512D3B /* EventPoints.m in Sources */,
+				924E94261CD07DD000C2EADB /* TBATeamAtDistrictSummaryViewController.m in Sources */,
 				92011EBB1AC6175400C4F1EC /* DistrictsViewController.m in Sources */,
 				9243D3E61BABB70D00512D3B /* Team.m in Sources */,
 				9222F1191AD6910F00C0AEA0 /* EventViewController.m in Sources */,
@@ -898,6 +930,7 @@
 				92E588BC1CCD8A9500710065 /* EventStatsViewController.m in Sources */,
 				9243D3F81BABB70D00512D3B /* MatchVideo.m in Sources */,
 				92E990111CCF092400EE8F71 /* TBATeamAtEventSummaryViewController.m in Sources */,
+				924E942A1CD07DF600C2EADB /* TBADistrictRankingBreakdownViewController.m in Sources */,
 				92754DEE1C32495D002E1855 /* TBANavigationControllerDelegate.m in Sources */,
 				92FBF89D1B2DBC4100533CBE /* TBAMediaCollectionViewCell.m in Sources */,
 				92E588B91CCD89D900710065 /* EventDistrictPointsViewController.m in Sources */,
@@ -930,6 +963,7 @@
 				9270482B1AC23C4E002E46CE /* TBATeamTableViewCell.m in Sources */,
 				50832E071918BB63003AC8A7 /* main.m in Sources */,
 				923F3F201AF868E00099DA0C /* TBAViewController.m in Sources */,
+				924E94221CD07A3000C2EADB /* DistrictTeamViewController.m in Sources */,
 				92AC4FF61B471F32004A05E2 /* TBARankingsViewController.m in Sources */,
 				92E990181CCF1A5A00EE8F71 /* TBATableViewCell.m in Sources */,
 				92E990251CCF29DD00EE8F71 /* TBASelectViewController.m in Sources */,

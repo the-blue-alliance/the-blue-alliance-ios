@@ -16,11 +16,13 @@
 #import "Team.h"
 #import "Team+Fetch.h"
 #import "TBARankingsViewController.h"
+#import "DistrictTeamViewController.h"
 
 static NSString *const EventsViewControllerEmbed    = @"EventsViewControllerEmbed";
 static NSString *const RankingsViewControllerEmbed  = @"RankingsViewControllerEmbed";
 
-static NSString *const EventViewControllerSegue     = @"EventViewControllerSegue";
+static NSString *const EventViewControllerSegue         = @"EventViewControllerSegue";
+static NSString *const DistrictTeamViewControllerSegue  = @"DistrictTeamViewControllerSegue";
 
 typedef NS_ENUM(NSInteger, TBADistrictDataType) {
     TBADistrictDataTypeEvents = 0,
@@ -94,8 +96,8 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:EventsViewControllerEmbed]) {
         self.eventsViewController = (TBAEventsViewController *)segue.destinationViewController;
-        self.eventsViewController.district = self.district;
         self.eventsViewController.persistenceController = self.persistenceController;
+        self.eventsViewController.district = self.district;
         self.eventsViewController.year = self.district.year;
         
         __weak typeof(self) weakSelf = self;
@@ -104,19 +106,27 @@ typedef NS_ENUM(NSInteger, TBADistrictDataType) {
         };
     } else if ([segue.identifier isEqualToString:RankingsViewControllerEmbed]) {
         self.rankingsViewController = (TBARankingsViewController *)segue.destinationViewController;
-        self.rankingsViewController.district = self.district;
         self.rankingsViewController.persistenceController = self.persistenceController;
+        self.rankingsViewController.district = self.district;
 
+        __weak typeof(self) weakSelf = self;
         self.rankingsViewController.rankingSelected = ^(id ranking) {
             DistrictRanking *districtRanking = (DistrictRanking *)ranking;
-            NSLog(@"Selected ranking: %@", districtRanking);
+            [weakSelf performSegueWithIdentifier:DistrictTeamViewControllerSegue sender:districtRanking];
         };
     } else if ([segue.identifier isEqualToString:EventViewControllerSegue]) {
         Event *event = (Event *)sender;
         
         EventViewController *eventViewController = segue.destinationViewController;
-        eventViewController.event = event;
         eventViewController.persistenceController = self.persistenceController;
+        eventViewController.event = event;
+    } else if ([segue.identifier isEqualToString:DistrictTeamViewControllerSegue]) {
+        DistrictRanking *districtRanking = (DistrictRanking *)sender;
+        
+        DistrictTeamViewController *districtTeamViewController = segue.destinationViewController;
+        districtTeamViewController.persistenceController = self.persistenceController;
+        districtTeamViewController.district = self.district;
+        districtTeamViewController.districtRanking = districtRanking;
     }
 }
 

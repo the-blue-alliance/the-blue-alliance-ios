@@ -28,7 +28,6 @@
         <!--View Controller-->
         <scene sceneID="DSa-0z-3Eq">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="MEL-aa-kaR" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="Launch" id="19C-7d-G5E" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="aOu-Ab-VmZ"/>
@@ -54,6 +53,7 @@
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MEL-aa-kaR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="135" y="-686.61971830985908"/>
         </scene>

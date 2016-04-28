@@ -42,7 +42,7 @@
             __block Event *event;
             
             [Event fetchEventForKey:eventKey fromContext:context checkUpstream:YES withCompletionBlock:^(Event *localEvent, NSError *error) {
-                if (error || !event) {
+                if (error || !localEvent) {
                     dispatch_semaphore_signal(eventSemaphore);
                 } else {
                     event = localEvent;

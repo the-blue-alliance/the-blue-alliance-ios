@@ -148,7 +148,7 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
     }
 }
 
-#pragma mark - Table View Deelgate
+#pragma mark - Table View Delgate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 30.0f;
