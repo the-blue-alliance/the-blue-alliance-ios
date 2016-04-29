@@ -23,8 +23,6 @@
 @property (nullable, nonatomic, strong) IBOutlet UILabel *navigationTitleLabel;
 @property (nullable, nonatomic, strong) IBOutlet UILabel *navigationSubtitleLabel;
 
-- (void)showView:(nonnull UIView *)showView;
-- (void)updateInterface;
 - (void)cancelRefreshes;
 
 @end
