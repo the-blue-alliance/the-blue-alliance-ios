@@ -12,7 +12,7 @@
 
 @interface TBAPointsTableViewCell : TBATableViewCell
 
-@property (nonatomic, weak) IBOutlet UILabel *rankLabel;
+@property (nonatomic, strong) IBOutlet UILabel *rankLabel;
 
 @property (nonatomic, strong) DistrictRanking *districtRanking;
 @property (nonatomic, strong) EventPoints *eventPoints;

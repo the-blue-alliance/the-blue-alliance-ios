@@ -25,8 +25,13 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 @interface TeamViewController ()
 
 @property (nonatomic, strong) TBAInfoViewController *infoViewController;
+@property (nonatomic, strong) IBOutlet UIView *infoView;
+
 @property (nonatomic, strong) TBAEventsViewController *eventsViewController;
+@property (nonatomic, strong) IBOutlet UIView *eventsView;
+
 @property (nonatomic, strong) TBAMediaCollectionViewController *mediaCollectionViewController;
+@property (nonatomic, strong) IBOutlet UIView *mediaView;
 
 @end
 
@@ -37,6 +42,9 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.refreshViewControllers = @[self.infoViewController, self.eventsViewController, self.mediaCollectionViewController];
+    self.containerViews = @[self.infoView, self.eventsView, self.mediaView];
+    
     __weak typeof(self) weakSelf = self;
     self.yearSelected = ^void(NSNumber *year) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -46,8 +54,6 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
         strongSelf.mediaCollectionViewController.year = year;
         strongSelf.eventsViewController.year = year;
     };
-    
-    self.refreshViewControllers = @[self.infoViewController, self.eventsViewController, self.mediaCollectionViewController];
     
     [self registerForChangeNotifications];
     [self fetchYearsParticipatedAndRefresh:YES];

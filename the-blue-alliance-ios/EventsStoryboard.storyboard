@@ -69,9 +69,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="eventsView" destination="ncj-It-8mR" id="veW-N0-TjJ"/>
                         <outlet property="navigationSubtitleLabel" destination="Zv5-gf-wpu" id="0ru-UT-K1N"/>
                         <outlet property="navigationTitleLabel" destination="0vN-pn-VcM" id="9Qp-tw-j26"/>
-                        <outletCollection property="containerViews" destination="ncj-It-8mR" id="wUM-Q6-8us"/>
                         <segue destination="Ldo-gh-fb2" kind="show" identifier="EventViewControllerSegue" id="sfO-6Y-0jh">
                             <nil key="action"/>
                         </segue>
@@ -139,9 +139,9 @@
                         </view>
                     </navigationItem>
                     <connections>
+                        <outlet property="districtPointsView" destination="m6n-XR-ieF" id="TJD-FK-YCH"/>
                         <outlet property="navigationSubtitleLabel" destination="3pw-45-4RG" id="rx8-ag-24M"/>
                         <outlet property="navigationTitleLabel" destination="Kqc-RR-du5" id="0wv-RR-KP8"/>
-                        <outletCollection property="containerViews" destination="m6n-XR-ieF" id="bQH-iu-Fuw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qHv-58-vvl" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -213,7 +213,6 @@
                     <connections>
                         <outlet property="navigationSubtitleLabel" destination="hiD-mP-ogW" id="Zj7-D8-0EH"/>
                         <outlet property="navigationTitleLabel" destination="Wmg-jM-17V" id="Ldh-rN-Y9W"/>
-                        <outletCollection property="containerViews" destination="bKd-vL-Teb" id="04f-te-WjN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nDk-4H-8bE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -278,9 +277,9 @@
                         </view>
                     </navigationItem>
                     <connections>
+                        <outlet property="awardsView" destination="B1m-DQ-zhk" id="Zes-Rq-Fsw"/>
                         <outlet property="navigationSubtitleLabel" destination="L7m-mM-WbA" id="2hf-ru-muI"/>
                         <outlet property="navigationTitleLabel" destination="EAH-AY-oL2" id="hYb-FE-GzC"/>
-                        <outletCollection property="containerViews" destination="B1m-DQ-zhk" id="dsg-6Y-835"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3sU-VP-LQ5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -374,12 +373,12 @@
                     </view>
                     <navigationItem key="navigationItem" title="2015 Kettering University District" id="Oai-tT-Kxv"/>
                     <connections>
-                        <outlet property="segmentedControl" destination="XcY-Z1-Gmd" id="s4E-fs-ybo"/>
+                        <outlet property="infoView" destination="Ha6-uz-QbN" id="4Us-x1-jAF"/>
+                        <outlet property="matchesView" destination="KOc-xN-wUD" id="vN3-HZ-2Hk"/>
+                        <outlet property="rankingsView" destination="OlS-O1-0Cm" id="IqM-fs-gbf"/>
+                        <outlet property="segmentedControl" destination="XcY-Z1-Gmd" id="kod-ab-ofv"/>
                         <outlet property="segmentedControlView" destination="knT-mN-Jhw" id="Eau-uS-mwC"/>
-                        <outletCollection property="containerViews" destination="Ha6-uz-QbN" id="YSY-Fm-jRV"/>
-                        <outletCollection property="containerViews" destination="QxF-oe-DD0" id="sT2-bm-fat"/>
-                        <outletCollection property="containerViews" destination="OlS-O1-0Cm" id="FjV-LF-54B"/>
-                        <outletCollection property="containerViews" destination="KOc-xN-wUD" id="NIA-gb-ub3"/>
+                        <outlet property="teamsView" destination="QxF-oe-DD0" id="ONp-Vb-EmS"/>
                         <segue destination="pPI-JR-o31" kind="show" identifier="AlliancesViewControllerSegue" id="NLs-9A-dWi"/>
                         <segue destination="K00-Eq-oFg" kind="show" identifier="DistrictPointsViewControllerSegue" id="x38-6w-T9F"/>
                         <segue destination="ssD-c4-hZu" kind="show" identifier="StatsViewControllerSegue" id="LnB-jJ-sFL"/>
@@ -450,9 +449,9 @@
                         </view>
                     </navigationItem>
                     <connections>
+                        <outlet property="alliancesView" destination="G2x-It-vcM" id="aSL-bh-OSW"/>
                         <outlet property="navigationSubtitleLabel" destination="dAs-GG-zyc" id="46F-5k-Ojh"/>
                         <outlet property="navigationTitleLabel" destination="xeP-zS-O7y" id="4BQ-vu-yeV"/>
-                        <outletCollection property="containerViews" destination="G2x-It-vcM" id="IL6-yy-BFT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K2f-sa-GY0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1129,12 +1128,12 @@
                         </view>
                     </navigationItem>
                     <connections>
+                        <outlet property="matchBreakdownView" destination="19M-n2-xJN" id="ggA-DD-uVL"/>
+                        <outlet property="matchView" destination="O4U-lz-k51" id="dFy-rD-10k"/>
                         <outlet property="navigationSubtitleLabel" destination="eyR-4r-4cO" id="U0Z-4F-HDU"/>
                         <outlet property="navigationTitleLabel" destination="3do-hw-G56" id="ju7-Al-weO"/>
                         <outlet property="segmentedControl" destination="Fej-aD-MKx" id="OZx-jL-YbT"/>
                         <outlet property="segmentedControlView" destination="7LE-F5-UsW" id="1N2-4Y-l94"/>
-                        <outletCollection property="containerViews" destination="O4U-lz-k51" id="zRt-xY-xKw"/>
-                        <outletCollection property="containerViews" destination="19M-n2-xJN" id="DR9-cG-6Om"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NW2-F7-hXH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1254,14 +1253,14 @@
                         </view>
                     </navigationItem>
                     <connections>
+                        <outlet property="awardsView" destination="IjK-9d-p7c" id="gVP-9O-Yjj"/>
+                        <outlet property="matchesView" destination="tZA-Kc-gWr" id="34j-WL-HaX"/>
                         <outlet property="navigationSubtitleLabel" destination="m23-6c-viN" id="92J-um-buT"/>
                         <outlet property="navigationTitleLabel" destination="F1K-26-yRE" id="zP0-1Q-LkV"/>
                         <outlet property="segmentedControl" destination="M3j-pc-Ncr" id="MZ8-ME-crP"/>
                         <outlet property="segmentedControlView" destination="rS6-dR-dxh" id="AAQ-UV-Z90"/>
-                        <outletCollection property="containerViews" destination="Hdm-a8-YBQ" id="gZp-Sf-gR4"/>
-                        <outletCollection property="containerViews" destination="tZA-Kc-gWr" id="5kv-jH-3bS"/>
-                        <outletCollection property="containerViews" destination="CVa-pc-UGX" id="ihK-WF-Pyc"/>
-                        <outletCollection property="containerViews" destination="IjK-9d-p7c" id="DNu-13-WI3"/>
+                        <outlet property="statsView" destination="CVa-pc-UGX" id="sef-K6-ofQ"/>
+                        <outlet property="summaryView" destination="Hdm-a8-YBQ" id="LrN-SH-SyO"/>
                         <segue destination="cD6-6m-9nM" kind="show" identifier="MatchViewControllerSegue" id="sRl-KT-Osw"/>
                     </connections>
                 </viewController>
@@ -1470,6 +1469,6 @@
         <image name="ic_event_black" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="oWg-ro-u0z"/>
+        <segue reference="sRl-KT-Osw"/>
     </inferredMetricsTieBreakers>
 </document>

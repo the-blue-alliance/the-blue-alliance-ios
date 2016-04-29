@@ -15,6 +15,7 @@ static NSString *const AlliancesViewControllerEmbed = @"AlliancesViewControllerE
 @interface EventAlliancesViewController ()
 
 @property (nonatomic, strong) TBAAlliancesViewController *alliancesViewController;
+@property (nonatomic, strong) IBOutlet UIView *alliancesView;
 
 @end
 
@@ -24,6 +25,7 @@ static NSString *const AlliancesViewControllerEmbed = @"AlliancesViewControllerE
     [super viewDidLoad];
 
     self.refreshViewControllers = @[self.alliancesViewController];
+    self.containerViews = @[self.alliancesView];
     
     [self styleInterface];
 }

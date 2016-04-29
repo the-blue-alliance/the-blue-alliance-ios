@@ -15,6 +15,7 @@ static NSString *const AwardsViewControllerEmbed = @"AwardsViewControllerEmbed";
 @interface EventAwardsViewController ()
 
 @property (nonatomic, strong) TBAAwardsViewController *awardsViewController;
+@property (nonatomic, strong) IBOutlet UIView *awardsView;
 
 @end
 
@@ -24,6 +25,7 @@ static NSString *const AwardsViewControllerEmbed = @"AwardsViewControllerEmbed";
     [super viewDidLoad];
 
     self.refreshViewControllers = @[self.awardsViewController];
+    self.containerViews = @[self.awardsView];
     
     [self styleInterface];
 }

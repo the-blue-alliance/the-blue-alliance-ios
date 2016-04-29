@@ -25,7 +25,10 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 @interface DistrictTeamViewController ()
 
 @property (nonatomic, strong) TBATeamAtDistrictSummaryViewController *summaryViewController;
+@property (nonatomic, strong) IBOutlet UIView *summaryView;
+
 @property (nonatomic, strong) TBADistrictRankingBreakdownViewController *rankingBreakdownViewController;
+@property (nonatomic, strong) IBOutlet UIView *rankingBreakdownView;
 
 @end
 
@@ -35,6 +38,7 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
     [super viewDidLoad];
     
     self.refreshViewControllers = @[self.summaryViewController, self.rankingBreakdownViewController];
+    self.containerViews = @[self.summaryView, self.rankingBreakdownView];
     
     [self styleInterface];
 }

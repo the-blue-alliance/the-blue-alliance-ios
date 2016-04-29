@@ -21,6 +21,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 @interface EventsViewController ()
 
 @property (nonatomic, strong) TBAEventsViewController *eventsViewController;
+@property (nonatomic, strong) IBOutlet UIView *eventsView;
 
 @property (nonatomic, strong) NSNumber *currentWeek;
 @property (nonatomic, strong) NSArray<NSNumber *> *weeks;
@@ -57,6 +58,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     [super viewDidLoad];
     
     self.refreshViewControllers = @[self.eventsViewController];
+    self.containerViews = @[self.eventsView];
     
     __weak typeof(self) weakSelf = self;
     self.yearSelected = ^(NSNumber *year) {

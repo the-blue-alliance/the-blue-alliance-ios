@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class TBAPersistenceController;
+@class TBAPersistenceController, TBARefreshViewController;
 
 @interface TBAViewController : UIViewController
 
 @property (nonnull, readonly) TBAPersistenceController *persistenceController;
 
-@property (nullable, nonatomic, strong) NSArray *refreshViewControllers;
-@property (nullable, nonatomic, strong) IBOutletCollection(UIView) NSArray *containerViews;
+@property (nullable, nonatomic, strong) NSArray<TBARefreshViewController *> *refreshViewControllers;
+@property (nullable, nonatomic, strong) NSArray<UIView *> *containerViews;
 
 @property (nullable, nonatomic, strong) IBOutlet UISegmentedControl *segmentedControl;
 @property (nullable, nonatomic, strong) IBOutlet UIView *segmentedControlView;

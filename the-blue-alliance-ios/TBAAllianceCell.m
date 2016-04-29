@@ -12,8 +12,8 @@
 
 @interface TBAAllianceCell ()
 
-@property (nonatomic, weak) IBOutlet UILabel *allianceNumberLabel;
-@property (nonatomic, weak) IBOutlet UIStackView *allianceStackView;
+@property (nonatomic, strong) IBOutlet UILabel *allianceNumberLabel;
+@property (nonatomic, strong) IBOutlet UIStackView *allianceStackView;
 
 @end
 

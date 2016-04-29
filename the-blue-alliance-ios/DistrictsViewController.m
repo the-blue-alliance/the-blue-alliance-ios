@@ -17,6 +17,7 @@ static NSString *const DistrictViewControllerSegue  = @"DistrictViewControllerSe
 @interface DistrictsViewController ()
 
 @property (nonatomic, strong) TBADistrictsViewController *districtsViewController;
+@property (nonatomic, strong) IBOutlet UIView *districtsView;
 
 @end
 
@@ -29,6 +30,7 @@ static NSString *const DistrictViewControllerSegue  = @"DistrictViewControllerSe
     [super viewDidLoad];
     
     self.refreshViewControllers = @[self.districtsViewController];
+    self.containerViews = @[self.districtsView];
     
     __weak typeof(self) weakSelf = self;
     self.yearSelected = ^void(NSNumber *year) {

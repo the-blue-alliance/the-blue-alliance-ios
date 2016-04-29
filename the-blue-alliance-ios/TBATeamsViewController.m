@@ -14,9 +14,9 @@
 
 static NSString *const TeamCellReuseIdentifier = @"TeamCell";
 
-@interface TBATeamsViewController ()
+@interface TBATeamsViewController () <TBATableViewControllerDelegate, UISearchBarDelegate>
 
-@property (nonatomic, weak) IBOutlet UISearchBar *searchBar;
+@property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
 
 @end
 

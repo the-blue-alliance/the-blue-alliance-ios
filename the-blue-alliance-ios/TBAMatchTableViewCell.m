@@ -13,17 +13,17 @@
 
 @interface TBAMatchTableViewCell ()
 
-@property (nonatomic, weak) IBOutlet UILabel *matchNumberLabel;
+@property (nonatomic, strong) IBOutlet UILabel *matchNumberLabel;
 
-@property (nonatomic, weak) IBOutlet UIStackView *redStackView;
-@property (nonatomic, weak) IBOutlet UIView *redContainerView;
-@property (nonatomic, weak) IBOutlet UILabel *redScoreLabel;
+@property (nonatomic, strong) IBOutlet UIStackView *redStackView;
+@property (nonatomic, strong) IBOutlet UIView *redContainerView;
+@property (nonatomic, strong) IBOutlet UILabel *redScoreLabel;
 
-@property (nonatomic, weak) IBOutlet UIStackView *blueStackView;
-@property (nonatomic, weak) IBOutlet UIView *blueContainerView;
-@property (nonatomic, weak) IBOutlet UILabel *blueScoreLabel;
+@property (nonatomic, strong) IBOutlet UIStackView *blueStackView;
+@property (nonatomic, strong) IBOutlet UIView *blueContainerView;
+@property (nonatomic, strong) IBOutlet UILabel *blueScoreLabel;
 
-@property (nonatomic, weak) IBOutlet UILabel *timeLabel;
+@property (nonatomic, strong) IBOutlet UILabel *timeLabel;
 
 @property (nonatomic, strong) NSArray<UIView *> *coloredViews;
 

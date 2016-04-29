@@ -19,7 +19,10 @@ static NSString *const MatchBreakdownViewControllerEmbed    = @"MatchBreakdownVi
 @interface MatchViewController ()
 
 @property (nonatomic, strong) TBAMatchViewController *matchViewController;
+@property (nonatomic, strong) IBOutlet UIView *matchView;
+
 @property (nonatomic, strong) TBAMatchBreakdownViewController *matchBreakdownViewController;
+@property (nonatomic, strong) IBOutlet UIView *matchBreakdownView;
 
 @end
 
@@ -29,6 +32,7 @@ static NSString *const MatchBreakdownViewControllerEmbed    = @"MatchBreakdownVi
     [super viewDidLoad];
     
     self.refreshViewControllers = @[self.matchViewController, self.matchBreakdownViewController];
+    self.containerViews = @[self.matchView, self.matchBreakdownView];
     
     [self styleInterface];
 }

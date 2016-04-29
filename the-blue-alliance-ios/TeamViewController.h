@@ -12,6 +12,6 @@
 
 @interface TeamViewController : TBASelectYearViewController;
 
-@property (nonatomic, weak) Team *team;
+@property (nonatomic, strong) Team *team;
 
 @end

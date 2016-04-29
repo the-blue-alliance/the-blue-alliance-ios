@@ -27,7 +27,10 @@ static NSString *const DistrictTeamViewControllerSegue  = @"DistrictTeamViewCont
 @interface DistrictViewController ()
 
 @property (nonatomic, strong) TBAEventsViewController *eventsViewController;
+@property (nonatomic, strong) IBOutlet UIView *eventsView;
+
 @property (nonatomic, strong) TBAPointsViewController *pointsViewController;
+@property (nonatomic, strong) IBOutlet UIView *pointsView;
 
 @end
 
@@ -37,6 +40,7 @@ static NSString *const DistrictTeamViewControllerSegue  = @"DistrictTeamViewCont
     [super viewDidLoad];
 
     self.refreshViewControllers = @[self.eventsViewController, self.pointsViewController];
+    self.containerViews = @[self.eventsView, self.pointsView];
     
     [self styleInterface];
 }

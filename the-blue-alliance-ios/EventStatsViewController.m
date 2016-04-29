@@ -19,6 +19,7 @@
     [super viewDidLoad];
     
     self.refreshViewControllers = @[];
+    self.containerViews = @[];
     
     [self styleInterface];
 }

@@ -10,6 +10,6 @@
 
 @interface TBANoDataViewController : UIViewController
 
-@property (nonatomic, weak) IBOutlet UILabel *textLabel;
+@property (nonatomic, strong) IBOutlet UILabel *textLabel;
 
 @end

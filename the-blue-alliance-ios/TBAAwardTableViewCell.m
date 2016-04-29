@@ -13,8 +13,8 @@
 
 @interface TBAAwardTableViewCell ()
 
-@property (nonatomic, weak) IBOutlet UILabel *awardNameLabel;
-@property (nonatomic, weak) IBOutlet UIStackView *awardeeStackView;
+@property (nonatomic, strong) IBOutlet UILabel *awardNameLabel;
+@property (nonatomic, strong) IBOutlet UIStackView *awardeeStackView;
 
 @end
 

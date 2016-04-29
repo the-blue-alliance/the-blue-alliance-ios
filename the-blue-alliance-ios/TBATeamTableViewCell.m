@@ -11,9 +11,9 @@
 
 @interface TBATeamTableViewCell ()
 
-@property (nonatomic, weak) IBOutlet UILabel *numberLabel;
-@property (nonatomic, weak) IBOutlet UILabel *nameLabel;
-@property (nonatomic, weak) IBOutlet UILabel *locationLabel;
+@property (nonatomic, strong) IBOutlet UILabel *numberLabel;
+@property (nonatomic, strong) IBOutlet UILabel *nameLabel;
+@property (nonatomic, strong) IBOutlet UILabel *locationLabel;
 
 @end
 

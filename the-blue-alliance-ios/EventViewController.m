@@ -36,9 +36,16 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 @interface EventViewController ()
 
 @property (nonatomic, strong) TBAInfoViewController *infoViewController;
+@property (nonatomic, strong) IBOutlet UIView *infoView;
+
 @property (nonatomic, strong) TBATeamsViewController *teamsViewController;
+@property (nonatomic, strong) IBOutlet UIView *teamsView;
+
 @property (nonatomic, strong) TBAEventRankingsViewController *rankingsViewController;
+@property (nonatomic, strong) IBOutlet UIView *rankingsView;
+
 @property (nonatomic, strong) TBAMatchesViewController *matchesViewController;
+@property (nonatomic, strong) IBOutlet UIView *matchesView;
 
 @end
 
@@ -50,6 +57,7 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
     [super viewDidLoad];
     
     self.refreshViewControllers = @[self.infoViewController, self.teamsViewController, self.rankingsViewController, self.matchesViewController];
+    self.containerViews = @[self.infoView, self.teamsView, self.rankingsView, self.matchesView];
     
     [self styleInterface];
 }

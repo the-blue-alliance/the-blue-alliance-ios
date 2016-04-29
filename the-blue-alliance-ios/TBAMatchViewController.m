@@ -15,20 +15,20 @@
 
 @interface TBAMatchViewController ()
 
-@property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 
-@property (nonatomic, weak) IBOutlet UIStackView *redStackView;
-@property (nonatomic, weak) IBOutlet UIView *redContainerView;
-@property (nonatomic, weak) IBOutlet UILabel *redScoreLabel;
+@property (nonatomic, strong) IBOutlet UIStackView *redStackView;
+@property (nonatomic, strong) IBOutlet UIView *redContainerView;
+@property (nonatomic, strong) IBOutlet UILabel *redScoreLabel;
 
-@property (nonatomic, weak) IBOutlet UIStackView *blueStackView;
-@property (nonatomic, weak) IBOutlet UIView *blueContainerView;
-@property (nonatomic, weak) IBOutlet UILabel *blueScoreLabel;
+@property (nonatomic, strong) IBOutlet UIStackView *blueStackView;
+@property (nonatomic, strong) IBOutlet UIView *blueContainerView;
+@property (nonatomic, strong) IBOutlet UILabel *blueScoreLabel;
 
-@property (nonatomic, weak) IBOutlet UILabel *scoreTitleLabel;
-@property (nonatomic, weak) IBOutlet UILabel *timeLabel;
+@property (nonatomic, strong) IBOutlet UILabel *scoreTitleLabel;
+@property (nonatomic, strong) IBOutlet UILabel *timeLabel;
 
-@property (nonatomic, weak) IBOutlet UIStackView *videoStackView;
+@property (nonatomic, strong) IBOutlet UIStackView *videoStackView;
 
 @end
 

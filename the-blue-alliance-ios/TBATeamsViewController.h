@@ -10,7 +10,7 @@
 
 @class Event, Team;
 
-@interface TBATeamsViewController : TBARefreshTableViewController <TBATableViewControllerDelegate, UISearchBarDelegate>
+@interface TBATeamsViewController : TBARefreshTableViewController
 
 @property (nonatomic, strong) Event *event;
 

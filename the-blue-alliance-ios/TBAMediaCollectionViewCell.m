@@ -12,7 +12,7 @@
 
 @interface TBAMediaCollectionViewCell ()
 
-@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityView;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityView;
 
 @end
 

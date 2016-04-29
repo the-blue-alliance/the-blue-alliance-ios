@@ -18,6 +18,7 @@ static NSString *const TeamViewControllerSegue  = @"TeamViewControllerSegue";
 @interface TeamsViewController ()
 
 @property (nonatomic, strong) TBATeamsViewController *teamsViewController;
+@property (nonatomic, strong) IBOutlet UIView *teamsView;
 
 @end
 
@@ -30,14 +31,7 @@ static NSString *const TeamViewControllerSegue  = @"TeamViewControllerSegue";
     [super viewDidLoad];
     
     self.refreshViewControllers = @[self.teamsViewController];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-
-    if ([self.teamsViewController shouldNoDataRefresh] && self.teamsViewController.refresh) {
-        self.teamsViewController.refresh();
-    }
+    self.containerViews = @[self.teamsView];
 }
 
 #pragma mark - Navigation

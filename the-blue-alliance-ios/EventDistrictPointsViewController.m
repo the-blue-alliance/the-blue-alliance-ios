@@ -15,6 +15,7 @@ static NSString *const DistrictPointsViewControllerEmbed = @"DistrictPointsViewC
 @interface EventDistrictPointsViewController ()
 
 @property (nonatomic, strong) TBAPointsViewController *districtPointsViewController;
+@property (nonatomic, strong) IBOutlet UIView *districtPointsView;
 
 @end
 
@@ -24,6 +25,7 @@ static NSString *const DistrictPointsViewControllerEmbed = @"DistrictPointsViewC
     [super viewDidLoad];
     
     self.refreshViewControllers = @[self.districtPointsViewController];
+    self.containerViews = @[self.districtPointsView];
     
     [self styleInterface];
 }

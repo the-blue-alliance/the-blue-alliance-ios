@@ -24,8 +24,15 @@ static NSString *const MatchViewControllerSegue     = @"MatchViewControllerSegue
 @interface EventTeamViewController ()
 
 @property (nonatomic, strong) TBATeamAtEventSummaryViewController *summaryViewController;
+@property (nonatomic, strong) IBOutlet UIView *summaryView;
+
 @property (nonatomic, strong) TBAMatchesViewController *matchesViewController;
+@property (nonatomic, strong) IBOutlet UIView *matchesView;
+
+@property (nonatomic, strong) IBOutlet UIView *statsView;
+
 @property (nonatomic, strong) TBAAwardsViewController *awardsViewController;
+@property (nonatomic, strong) IBOutlet UIView *awardsView;
 
 @end
 
@@ -35,7 +42,8 @@ static NSString *const MatchViewControllerSegue     = @"MatchViewControllerSegue
     [super viewDidLoad];
 
     // TODO: Add Stats
-    self.refreshViewControllers = @[self.summaryViewController, self.matchesViewController, self.matchesViewController, self.awardsViewController];
+    self.refreshViewControllers = @[self.summaryViewController, self.matchesViewController, self.awardsViewController];
+    self.containerViews = @[self.summaryView, self.matchesView, self.awardsView];
     
     [self styleInterface];
 }
