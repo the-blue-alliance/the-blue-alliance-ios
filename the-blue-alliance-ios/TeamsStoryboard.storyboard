@@ -53,6 +53,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Teams" id="cTr-ry-GEK"/>
                     <connections>
+                        <outletCollection property="containerViews" destination="i9D-ed-e6p" id="yGs-Ew-HSI"/>
                         <segue destination="RXd-ju-9Fj" kind="show" identifier="TeamViewControllerSegue" id="qeF-aH-QTQ">
                             <nil key="action"/>
                         </segue>
@@ -167,13 +168,13 @@
                         </view>
                     </navigationItem>
                     <connections>
-                        <outlet property="eventsView" destination="uxh-MB-ygJ" id="zwj-Fc-4vu"/>
-                        <outlet property="infoView" destination="Tkm-f8-Hyq" id="Xzp-2Y-RBB"/>
-                        <outlet property="mediaView" destination="LGg-Sq-i1g" id="l4G-eJ-snP"/>
                         <outlet property="navigationSubtitleLabel" destination="kqC-2F-OLf" id="v4q-Oq-jYo"/>
                         <outlet property="navigationTitleLabel" destination="dIy-n9-qfg" id="6Id-aZ-Lp7"/>
                         <outlet property="segmentedControl" destination="dKX-Re-rNo" id="W5p-jc-95R"/>
                         <outlet property="segmentedControlView" destination="Vy9-Jj-EVV" id="dlY-rD-Rbz"/>
+                        <outletCollection property="containerViews" destination="Tkm-f8-Hyq" id="o0e-t2-drM"/>
+                        <outletCollection property="containerViews" destination="uxh-MB-ygJ" id="JDi-Yp-sVv"/>
+                        <outletCollection property="containerViews" destination="LGg-Sq-i1g" id="RWl-4V-1ix"/>
                         <segue destination="YUN-E6-XlU" kind="show" identifier="EventTeamViewControllerSegue" id="hW4-R9-QUZ"/>
                     </connections>
                 </viewController>

@@ -7,9 +7,25 @@
 //
 
 #import "TBAViewController.h"
+#import "TBANavigationController.h"
 #import "TBARefreshViewController.h"
 
 @implementation TBAViewController
+
+#pragma mark - Properities
+
+- (TBAPersistenceController *)persistenceController {
+    TBANavigationController *navigationController = (TBANavigationController *)self.navigationController;
+    return navigationController.persistenceController;
+}
+
+- (void)setRefreshViewControllers:(NSArray *)refreshViewControllers {
+    _refreshViewControllers = refreshViewControllers;
+    
+    for (TBARefreshViewController *refreshViewController in refreshViewControllers) {
+        refreshViewController.persistenceController = self.persistenceController;
+    }
+}
 
 #pragma mark - View Lifecycle
 
@@ -17,6 +33,10 @@
     [super viewDidLoad];
     
     self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
     [self updateInterface];
 }
@@ -40,15 +60,15 @@
     for (int i = 0; i < self.containerViews.count; i++) {
         UIView *containerView = self.containerViews[i];
         
-        BOOL shouldShowView = (containerView == showView ? NO : YES);
-        if (shouldShowView) {
+        BOOL shouldHideView = (containerView == showView ? NO : YES);
+        if (!shouldHideView) {
             // Check if our view controller is in a no data state, refresh if it is
             TBARefreshViewController *refreshViewController = self.refreshViewControllers[i];
-            if ([refreshViewController respondsToSelector:@selector(shouldNoDataRefresh)] && [refreshViewController shouldNoDataRefresh]) {
+            if ([refreshViewController shouldNoDataRefresh]) {
                 refreshViewController.refresh();
             }
         }
-        containerView.hidden = shouldShowView;
+        containerView.hidden = shouldHideView;
     }
 }
 

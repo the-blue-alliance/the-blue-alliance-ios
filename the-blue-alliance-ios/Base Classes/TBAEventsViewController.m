@@ -36,6 +36,10 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
     }
+
+    if (!self.persistenceController) {
+        return nil;
+    }
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Event"];
     

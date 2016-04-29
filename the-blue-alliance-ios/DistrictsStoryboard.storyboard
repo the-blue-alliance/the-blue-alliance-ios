@@ -86,6 +86,7 @@
                     <connections>
                         <outlet property="navigationSubtitleLabel" destination="Vm1-ij-ChP" id="hti-2u-e9Z"/>
                         <outlet property="navigationTitleLabel" destination="GBJ-Tz-zKN" id="YX7-Gk-zSc"/>
+                        <outletCollection property="containerViews" destination="oAl-TB-6CC" id="y5S-RR-YbT"/>
                         <segue destination="Sat-ki-Ld3" kind="show" identifier="DistrictViewControllerSegue" id="uYT-CA-whI">
                             <nil key="action"/>
                         </segue>
@@ -274,10 +275,10 @@
                     </view>
                     <navigationItem key="navigationItem" title="2012 Michigan Districts" id="wFh-7K-trp"/>
                     <connections>
-                        <outlet property="eventsView" destination="fn8-nJ-lxT" id="2Z4-tx-B4J"/>
-                        <outlet property="pointsView" destination="03V-JX-Kns" id="5ny-Gf-W0W"/>
                         <outlet property="segmentedControl" destination="w63-eU-p54" id="rl9-1J-c2K"/>
                         <outlet property="segmentedControlView" destination="ybx-Qa-bmY" id="Wc6-QJ-kIw"/>
+                        <outletCollection property="containerViews" destination="fn8-nJ-lxT" id="yE1-d4-MtG"/>
+                        <outletCollection property="containerViews" destination="03V-JX-Kns" id="fXM-4y-32L"/>
                         <segue destination="ugE-Bn-dBX" kind="show" identifier="EventViewControllerSegue" id="ZhV-AW-D31"/>
                         <segue destination="Kz0-3G-cQe" kind="show" identifier="DistrictTeamViewControllerSegue" id="fm4-76-0XP"/>
                     </connections>
@@ -494,12 +495,12 @@
                         </view>
                     </navigationItem>
                     <connections>
-                        <outlet property="breakdownView" destination="Znv-u2-Vni" id="olf-87-BD4"/>
                         <outlet property="navigationSubtitleLabel" destination="xPn-xh-yja" id="0BE-C1-Dun"/>
                         <outlet property="navigationTitleLabel" destination="R1y-Xb-lf0" id="HzV-AV-5Jt"/>
                         <outlet property="segmentedControl" destination="Mg6-eg-OUq" id="SD0-O5-eML"/>
                         <outlet property="segmentedControlView" destination="CJU-Rg-zWf" id="MfE-hg-36a"/>
-                        <outlet property="summaryView" destination="QAe-J2-KmB" id="El7-VC-ChN"/>
+                        <outletCollection property="containerViews" destination="QAe-J2-KmB" id="tcT-m5-4gY"/>
+                        <outletCollection property="containerViews" destination="Znv-u2-Vni" id="p4R-7Q-kg6"/>
                         <segue destination="lLC-ad-b9k" kind="show" identifier="EventTeamViewControllerSegue" id="NkU-Zq-qkm"/>
                     </connections>
                 </viewController>

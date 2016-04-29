@@ -71,6 +71,7 @@
                     <connections>
                         <outlet property="navigationSubtitleLabel" destination="Zv5-gf-wpu" id="0ru-UT-K1N"/>
                         <outlet property="navigationTitleLabel" destination="0vN-pn-VcM" id="9Qp-tw-j26"/>
+                        <outletCollection property="containerViews" destination="ncj-It-8mR" id="wUM-Q6-8us"/>
                         <segue destination="Ldo-gh-fb2" kind="show" identifier="EventViewControllerSegue" id="sfO-6Y-0jh">
                             <nil key="action"/>
                         </segue>
@@ -140,6 +141,7 @@
                     <connections>
                         <outlet property="navigationSubtitleLabel" destination="3pw-45-4RG" id="rx8-ag-24M"/>
                         <outlet property="navigationTitleLabel" destination="Kqc-RR-du5" id="0wv-RR-KP8"/>
+                        <outletCollection property="containerViews" destination="m6n-XR-ieF" id="bQH-iu-Fuw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qHv-58-vvl" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -165,7 +167,18 @@
                     <view key="view" contentMode="scaleToFill" id="FVS-Ix-8Yw">
                         <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bKd-vL-Teb">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="487"/>
+                            </containerView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="bKd-vL-Teb" firstAttribute="leading" secondItem="FVS-Ix-8Yw" secondAttribute="leading" id="910-bR-dD8"/>
+                            <constraint firstAttribute="trailing" secondItem="bKd-vL-Teb" secondAttribute="trailing" id="TYF-fz-uZ9"/>
+                            <constraint firstItem="im0-Jo-YEu" firstAttribute="top" secondItem="bKd-vL-Teb" secondAttribute="bottom" id="g77-wm-jpa"/>
+                            <constraint firstItem="bKd-vL-Teb" firstAttribute="top" secondItem="QJJ-Jx-C82" secondAttribute="bottom" id="rpB-dh-6uF"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="zDZ-Wx-c0P">
                         <nil key="title"/>
@@ -200,6 +213,7 @@
                     <connections>
                         <outlet property="navigationSubtitleLabel" destination="hiD-mP-ogW" id="Zj7-D8-0EH"/>
                         <outlet property="navigationTitleLabel" destination="Wmg-jM-17V" id="Ldh-rN-Y9W"/>
+                        <outletCollection property="containerViews" destination="bKd-vL-Teb" id="04f-te-WjN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nDk-4H-8bE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -266,6 +280,7 @@
                     <connections>
                         <outlet property="navigationSubtitleLabel" destination="L7m-mM-WbA" id="2hf-ru-muI"/>
                         <outlet property="navigationTitleLabel" destination="EAH-AY-oL2" id="hYb-FE-GzC"/>
+                        <outletCollection property="containerViews" destination="B1m-DQ-zhk" id="dsg-6Y-835"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3sU-VP-LQ5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -284,25 +299,25 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KOc-xN-wUD" userLabel="Matches View">
+                            <containerView opaque="NO" tag="4" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KOc-xN-wUD" userLabel="Matches View">
                                 <rect key="frame" x="0.0" y="44" width="600" height="443"/>
                                 <connections>
                                     <segue destination="pIb-Kp-d91" kind="embed" identifier="MatchesViewControllerEmbed" id="WlJ-tP-rS7"/>
                                 </connections>
                             </containerView>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OlS-O1-0Cm" userLabel="Rankings View">
+                            <containerView opaque="NO" tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OlS-O1-0Cm" userLabel="Rankings View">
                                 <rect key="frame" x="0.0" y="44" width="600" height="443"/>
                                 <connections>
                                     <segue destination="EyO-2S-Gbz" kind="embed" identifier="RankingsViewControllerEmbed" id="4sm-Hz-qPD"/>
                                 </connections>
                             </containerView>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QxF-oe-DD0" userLabel="Teams View">
+                            <containerView opaque="NO" tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QxF-oe-DD0" userLabel="Teams View">
                                 <rect key="frame" x="0.0" y="44" width="600" height="443"/>
                                 <connections>
                                     <segue destination="yQ0-mv-Tay" kind="embed" identifier="TeamsViewControllerEmbed" id="V79-ve-Nfj"/>
                                 </connections>
                             </containerView>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ha6-uz-QbN" userLabel="Info View">
+                            <containerView opaque="NO" tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ha6-uz-QbN" userLabel="Info View">
                                 <rect key="frame" x="0.0" y="44" width="600" height="443"/>
                                 <connections>
                                     <segue destination="NLj-iW-eLP" kind="embed" identifier="InfoViewControllerEmbed" id="scj-iZ-JkJ"/>
@@ -359,12 +374,12 @@
                     </view>
                     <navigationItem key="navigationItem" title="2015 Kettering University District" id="Oai-tT-Kxv"/>
                     <connections>
-                        <outlet property="infoView" destination="Ha6-uz-QbN" id="Ola-8w-waf"/>
-                        <outlet property="matchesView" destination="KOc-xN-wUD" id="nRs-ac-fqi"/>
-                        <outlet property="rankingsView" destination="OlS-O1-0Cm" id="dgk-qK-AsY"/>
                         <outlet property="segmentedControl" destination="XcY-Z1-Gmd" id="s4E-fs-ybo"/>
                         <outlet property="segmentedControlView" destination="knT-mN-Jhw" id="Eau-uS-mwC"/>
-                        <outlet property="teamsView" destination="QxF-oe-DD0" id="JNt-xw-uX4"/>
+                        <outletCollection property="containerViews" destination="Ha6-uz-QbN" id="YSY-Fm-jRV"/>
+                        <outletCollection property="containerViews" destination="QxF-oe-DD0" id="sT2-bm-fat"/>
+                        <outletCollection property="containerViews" destination="OlS-O1-0Cm" id="FjV-LF-54B"/>
+                        <outletCollection property="containerViews" destination="KOc-xN-wUD" id="NIA-gb-ub3"/>
                         <segue destination="pPI-JR-o31" kind="show" identifier="AlliancesViewControllerSegue" id="NLs-9A-dWi"/>
                         <segue destination="K00-Eq-oFg" kind="show" identifier="DistrictPointsViewControllerSegue" id="x38-6w-T9F"/>
                         <segue destination="ssD-c4-hZu" kind="show" identifier="StatsViewControllerSegue" id="LnB-jJ-sFL"/>
@@ -437,6 +452,7 @@
                     <connections>
                         <outlet property="navigationSubtitleLabel" destination="dAs-GG-zyc" id="46F-5k-Ojh"/>
                         <outlet property="navigationTitleLabel" destination="xeP-zS-O7y" id="4BQ-vu-yeV"/>
+                        <outletCollection property="containerViews" destination="G2x-It-vcM" id="IL6-yy-BFT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K2f-sa-GY0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1113,12 +1129,12 @@
                         </view>
                     </navigationItem>
                     <connections>
-                        <outlet property="matchBreakdownView" destination="19M-n2-xJN" id="Xf5-9n-whg"/>
-                        <outlet property="matchView" destination="O4U-lz-k51" id="CW5-B7-HYJ"/>
                         <outlet property="navigationSubtitleLabel" destination="eyR-4r-4cO" id="U0Z-4F-HDU"/>
                         <outlet property="navigationTitleLabel" destination="3do-hw-G56" id="ju7-Al-weO"/>
                         <outlet property="segmentedControl" destination="Fej-aD-MKx" id="OZx-jL-YbT"/>
                         <outlet property="segmentedControlView" destination="7LE-F5-UsW" id="1N2-4Y-l94"/>
+                        <outletCollection property="containerViews" destination="O4U-lz-k51" id="zRt-xY-xKw"/>
+                        <outletCollection property="containerViews" destination="19M-n2-xJN" id="DR9-cG-6Om"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NW2-F7-hXH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1238,14 +1254,14 @@
                         </view>
                     </navigationItem>
                     <connections>
-                        <outlet property="awardsView" destination="IjK-9d-p7c" id="7Yf-c7-wez"/>
-                        <outlet property="matchesView" destination="tZA-Kc-gWr" id="hMI-5k-0h9"/>
                         <outlet property="navigationSubtitleLabel" destination="m23-6c-viN" id="92J-um-buT"/>
                         <outlet property="navigationTitleLabel" destination="F1K-26-yRE" id="zP0-1Q-LkV"/>
                         <outlet property="segmentedControl" destination="M3j-pc-Ncr" id="MZ8-ME-crP"/>
                         <outlet property="segmentedControlView" destination="rS6-dR-dxh" id="AAQ-UV-Z90"/>
-                        <outlet property="statsView" destination="CVa-pc-UGX" id="Xfb-QG-qei"/>
-                        <outlet property="summaryView" destination="Hdm-a8-YBQ" id="bXv-dm-YiX"/>
+                        <outletCollection property="containerViews" destination="Hdm-a8-YBQ" id="gZp-Sf-gR4"/>
+                        <outletCollection property="containerViews" destination="tZA-Kc-gWr" id="5kv-jH-3bS"/>
+                        <outletCollection property="containerViews" destination="CVa-pc-UGX" id="ihK-WF-Pyc"/>
+                        <outletCollection property="containerViews" destination="IjK-9d-p7c" id="DNu-13-WI3"/>
                         <segue destination="cD6-6m-9nM" kind="show" identifier="MatchViewControllerSegue" id="sRl-KT-Osw"/>
                     </connections>
                 </viewController>
@@ -1454,6 +1470,6 @@
         <image name="ic_event_black" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="sRl-KT-Osw"/>
+        <segue reference="oWg-ro-u0z"/>
     </inferredMetricsTieBreakers>
 </document>

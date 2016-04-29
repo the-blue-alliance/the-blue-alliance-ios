@@ -29,6 +29,10 @@ static NSString *const PointsCellReuseIdentifier  = @"PointsCell";
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
     }
+
+    if (!self.persistenceController) {
+        return nil;
+    }
     
     NSFetchRequest *fetchRequest;
     NSString *cacheName;

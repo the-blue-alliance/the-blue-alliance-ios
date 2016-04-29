@@ -29,6 +29,10 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
     }
+
+    if (!self.persistenceController) {
+        return nil;
+    }
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
     if (self.event) {

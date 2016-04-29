@@ -25,6 +25,10 @@ static NSString *const AwardCellReuseIdentifier = @"AwardCell";
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
     }
+
+    if (!self.persistenceController) {
+        return nil;
+    }
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Award"];
     NSPredicate *predicate;

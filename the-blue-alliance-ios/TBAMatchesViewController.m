@@ -24,6 +24,10 @@ static NSString *const MatchCellReuseIdentifier = @"MatchCell";
         return _fetchedResultsController;
     }
 
+    if (!self.persistenceController) {
+        return nil;
+    }
+
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Match"];
     NSPredicate *predicate;
     if (self.team) {

@@ -23,6 +23,8 @@ static NSString *const DistrictPointsViewControllerEmbed = @"DistrictPointsViewC
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.refreshViewControllers = @[self.districtPointsViewController];
+    
     [self styleInterface];
 }
 
@@ -38,7 +40,6 @@ static NSString *const DistrictPointsViewControllerEmbed = @"DistrictPointsViewC
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:DistrictPointsViewControllerEmbed]) {
         self.districtPointsViewController = segue.destinationViewController;
-        self.districtPointsViewController.persistenceController = self.persistenceController;
         self.districtPointsViewController.event = self.event;
     }
 }

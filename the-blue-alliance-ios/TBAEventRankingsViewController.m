@@ -30,6 +30,10 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
         return _fetchedResultsController;
     }
 
+    if (!self.persistenceController) {
+        return nil;
+    }
+
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventRanking"];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"event == %@", self.event];
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"rank" ascending:YES]];

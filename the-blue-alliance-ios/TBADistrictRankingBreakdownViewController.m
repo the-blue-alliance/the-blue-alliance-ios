@@ -22,9 +22,15 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 @implementation TBADistrictRankingBreakdownViewController
 @synthesize fetchedResultsController = _fetchedResultsController;
 
+#pragma mark - Properities
+
 - (NSFetchedResultsController *)fetchedResultsController {
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
+    }
+
+    if (!self.persistenceController) {
+        return nil;
     }
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventPoints"];

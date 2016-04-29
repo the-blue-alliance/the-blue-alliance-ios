@@ -25,13 +25,8 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 @interface TeamViewController ()
 
 @property (nonatomic, strong) TBAInfoViewController *infoViewController;
-@property (nonatomic, weak) IBOutlet UIView *infoView;
-
 @property (nonatomic, strong) TBAEventsViewController *eventsViewController;
-@property (nonatomic, weak) IBOutlet UIView *eventsView;
-
 @property (nonatomic, strong) TBAMediaCollectionViewController *mediaCollectionViewController;
-@property (nonatomic, weak) IBOutlet UIView *mediaView;
 
 @end
 
@@ -53,7 +48,6 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
     };
     
     self.refreshViewControllers = @[self.infoViewController, self.eventsViewController, self.mediaCollectionViewController];
-    self.containerViews = @[self.infoView, self.eventsView, self.mediaView];
     
     [self registerForChangeNotifications];
     [self fetchYearsParticipatedAndRefresh:YES];
@@ -124,11 +118,9 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:InfoViewControllerEmbed]) {
         self.infoViewController = segue.destinationViewController;
-        self.infoViewController.persistenceController = self.persistenceController;
         self.infoViewController.team = self.team;
     } else if ([segue.identifier isEqualToString:EventsViewControllerEmbed]) {
         self.eventsViewController = segue.destinationViewController;
-        self.eventsViewController.persistenceController = self.persistenceController;
         self.eventsViewController.team = self.team;
         self.eventsViewController.year = self.currentYear;
         
@@ -138,14 +130,12 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
         };
     } else if ([segue.identifier isEqualToString:MediaViewControllerEmbed]) {
         self.mediaCollectionViewController = segue.destinationViewController;
-        self.mediaCollectionViewController.persistenceController = self.persistenceController;
         self.mediaCollectionViewController.team = self.team;
         self.mediaCollectionViewController.year = self.currentYear;
     } else if ([segue.identifier isEqualToString:EventTeamViewControllerSegue]) {
         Event *event = (Event *)sender;
         
         EventTeamViewController *eventTeamViewController = segue.destinationViewController;
-        eventTeamViewController.persistenceController = self.persistenceController;
         eventTeamViewController.event = event;
         eventTeamViewController.team = self.team;
     }

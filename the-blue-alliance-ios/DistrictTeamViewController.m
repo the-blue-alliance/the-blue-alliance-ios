@@ -25,10 +25,7 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 @interface DistrictTeamViewController ()
 
 @property (nonatomic, strong) TBATeamAtDistrictSummaryViewController *summaryViewController;
-@property (nonatomic, strong) IBOutlet UIView *summaryView;
-
 @property (nonatomic, strong) TBADistrictRankingBreakdownViewController *rankingBreakdownViewController;
-@property (nonatomic, strong) IBOutlet UIView *breakdownView;
 
 @end
 
@@ -38,7 +35,6 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
     [super viewDidLoad];
     
     self.refreshViewControllers = @[self.summaryViewController, self.rankingBreakdownViewController];
-    self.containerViews = @[self.summaryView, self.breakdownView];
     
     [self styleInterface];
 }
@@ -55,7 +51,6 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:SummaryViewControllerEmbed]) {
         self.summaryViewController = segue.destinationViewController;
-        self.summaryViewController.persistenceController = self.persistenceController;
         self.summaryViewController.districtRanking = self.districtRanking;
         
         __weak typeof(self) weakSelf = self;
@@ -64,13 +59,11 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
         };
     } else if ([segue.identifier isEqualToString:BreakdownViewControllerEmbed]) {
         self.rankingBreakdownViewController = segue.destinationViewController;
-        self.rankingBreakdownViewController.persistenceController = self.persistenceController;
         self.rankingBreakdownViewController.districtRanking = self.districtRanking;
     } else if ([segue.identifier isEqualToString:EventTeamViewControllerSegue]) {
         EventPoints *eventPoints = (EventPoints *)sender;
         
         EventTeamViewController *eventTeamViewController = segue.destinationViewController;
-        eventTeamViewController.persistenceController = self.persistenceController;
         eventTeamViewController.event = eventPoints.event;
         eventTeamViewController.team = self.districtRanking.team;
     }

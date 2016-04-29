@@ -24,15 +24,8 @@ static NSString *const MatchViewControllerSegue     = @"MatchViewControllerSegue
 @interface EventTeamViewController ()
 
 @property (nonatomic, strong) TBATeamAtEventSummaryViewController *summaryViewController;
-@property (nonatomic, strong) IBOutlet UIView *summaryView;
-
 @property (nonatomic, strong) TBAMatchesViewController *matchesViewController;
-@property (nonatomic, strong) IBOutlet UIView *matchesView;
-
-@property (nonatomic, strong) IBOutlet UIView *statsView;
-
 @property (nonatomic, strong) TBAAwardsViewController *awardsViewController;
-@property (nonatomic, strong) IBOutlet UIView *awardsView;
 
 @end
 
@@ -43,7 +36,6 @@ static NSString *const MatchViewControllerSegue     = @"MatchViewControllerSegue
 
     // TODO: Add Stats
     self.refreshViewControllers = @[self.summaryViewController, self.matchesViewController, self.matchesViewController, self.awardsViewController];
-    self.containerViews = @[self.summaryView, self.matchesView, self.statsView, self.awardsView];
     
     [self styleInterface];
 }
@@ -60,13 +52,11 @@ static NSString *const MatchViewControllerSegue     = @"MatchViewControllerSegue
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:SummaryViewControllerEmbed]) {
         self.summaryViewController = segue.destinationViewController;
-        self.summaryViewController.persistenceController = self.persistenceController;
         self.summaryViewController.event = self.event;
         self.summaryViewController.team = self.team;
         self.summaryViewController.eventRanking = self.eventRanking;
     } else if ([segue.identifier isEqualToString:MatchesViewControllerEmbed]) {
         self.matchesViewController = segue.destinationViewController;
-        self.matchesViewController.persistenceController = self.persistenceController;
         self.matchesViewController.event = self.event;
         self.matchesViewController.team = self.team;
         
@@ -76,14 +66,12 @@ static NSString *const MatchViewControllerSegue     = @"MatchViewControllerSegue
         };
     } else if ([segue.identifier isEqualToString:AwardsViewControllerEmbed]) {
         self.awardsViewController = segue.destinationViewController;
-        self.awardsViewController.persistenceController = self.persistenceController;
         self.awardsViewController.event = self.event;
         self.awardsViewController.team = self.team;
     } else if ([segue.identifier isEqualToString:MatchViewControllerSegue]) {
         Match *match = (Match *)sender;
         
         MatchViewController *matchViewController = segue.destinationViewController;
-        matchViewController.persistenceController = self.persistenceController;
         matchViewController.match = match;
     }
 }

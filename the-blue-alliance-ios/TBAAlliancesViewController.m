@@ -23,6 +23,10 @@ static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
         return _fetchedResultsController;
     }
     
+    if (!self.persistenceController) {
+        return nil;
+    }
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventAlliance"];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@", self.event];
     [fetchRequest setPredicate:predicate];

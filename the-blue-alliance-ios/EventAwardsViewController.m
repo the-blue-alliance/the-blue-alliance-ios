@@ -23,6 +23,8 @@ static NSString *const AwardsViewControllerEmbed = @"AwardsViewControllerEmbed";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.refreshViewControllers = @[self.awardsViewController];
+    
     [self styleInterface];
 }
 
@@ -38,7 +40,6 @@ static NSString *const AwardsViewControllerEmbed = @"AwardsViewControllerEmbed";
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:AwardsViewControllerEmbed]) {
         self.awardsViewController = segue.destinationViewController;
-        self.awardsViewController.persistenceController = self.persistenceController;
         self.awardsViewController.event = self.event;
     }
 }

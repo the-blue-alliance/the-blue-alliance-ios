@@ -36,16 +36,9 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 @interface EventViewController ()
 
 @property (nonatomic, strong) TBAInfoViewController *infoViewController;
-@property (nonatomic, weak) IBOutlet UIView *infoView;
-
 @property (nonatomic, strong) TBATeamsViewController *teamsViewController;
-@property (nonatomic, weak) IBOutlet UIView *teamsView;
-
 @property (nonatomic, strong) TBAEventRankingsViewController *rankingsViewController;
-@property (nonatomic, weak) IBOutlet UIView *rankingsView;
-
 @property (nonatomic, strong) TBAMatchesViewController *matchesViewController;
-@property (nonatomic, weak) IBOutlet UIView *matchesView;
 
 @end
 
@@ -57,7 +50,6 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
     [super viewDidLoad];
     
     self.refreshViewControllers = @[self.infoViewController, self.teamsViewController, self.rankingsViewController, self.matchesViewController];
-    self.containerViews = @[self.infoView, self.teamsView, self.rankingsView, self.matchesView];
     
     [self styleInterface];
 }
@@ -73,7 +65,6 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:InfoViewControllerEmbed]) {
         self.infoViewController = segue.destinationViewController;
-        self.infoViewController.persistenceController = self.persistenceController;
         self.infoViewController.event = self.event;
         
         __weak typeof(self) weakSelf = self;
@@ -91,7 +82,6 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
         };
     } else if ([segue.identifier isEqualToString:TeamsViewControllerEmbed]) {
         self.teamsViewController = segue.destinationViewController;
-        self.teamsViewController.persistenceController = self.persistenceController;
         self.teamsViewController.event = self.event;
         
         __weak typeof(self) weakSelf = self;
@@ -100,7 +90,6 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
         };
     } else if ([segue.identifier isEqualToString:RankingsViewControllerEmbed]) {
         self.rankingsViewController = segue.destinationViewController;
-        self.rankingsViewController.persistenceController = self.persistenceController;
         self.rankingsViewController.event = self.event;
         
         __weak typeof(self) weakSelf = self;
@@ -110,7 +99,6 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
         };
     } else if ([segue.identifier isEqualToString:MatchesViewControllerEmbed]) {
         self.matchesViewController = segue.destinationViewController;
-        self.matchesViewController.persistenceController = self.persistenceController;
         self.matchesViewController.event = self.event;
         
         __weak typeof(self) weakSelf = self;
@@ -119,21 +107,17 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
         };
     } else if ([segue.identifier isEqualToString:AlliancesViewControllerSegue]) {
         EventAlliancesViewController *eventAlliancesViewController = segue.destinationViewController;
-        eventAlliancesViewController.persistenceController = self.persistenceController;
         eventAlliancesViewController.event = self.event;
     } else if ([segue.identifier isEqualToString:AwardsViewControllerSegue]) {
         EventAwardsViewController *eventAwardsViewController = segue.destinationViewController;
-        eventAwardsViewController.persistenceController = self.persistenceController;
         eventAwardsViewController.event = self.event;
     } else if ([segue.identifier isEqualToString:DistrictPointsViewControllerSegue]) {
         EventDistrictPointsViewController *eventDistrictPointsViewController = segue.destinationViewController;
-        eventDistrictPointsViewController.persistenceController = self.persistenceController;
         eventDistrictPointsViewController.event = self.event;
     }
     // TODO: Add stats
     else if ([segue.identifier isEqualToString:EventTeamViewControllerSegue]) {
         EventTeamViewController *eventTeamViewController = segue.destinationViewController;
-        eventTeamViewController.persistenceController = self.persistenceController;
         eventTeamViewController.event = self.event;
         
         if ([sender isKindOfClass:[Team class]]) {
@@ -148,7 +132,6 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
         Match *match = (Match *)sender;
         
         MatchViewController *matchViewController = segue.destinationViewController;
-        matchViewController.persistenceController = self.persistenceController;
         matchViewController.match = match;
     }
 }

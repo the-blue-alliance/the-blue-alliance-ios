@@ -28,6 +28,8 @@ static NSString *const DistrictViewControllerSegue  = @"DistrictViewControllerSe
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.refreshViewControllers = @[self.districtsViewController];
+    
     __weak typeof(self) weakSelf = self;
     self.yearSelected = ^void(NSNumber *year) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -78,7 +80,6 @@ static NSString *const DistrictViewControllerSegue  = @"DistrictViewControllerSe
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:DistrictsViewControllerEmbed]) {
         self.districtsViewController = (TBADistrictsViewController *)segue.destinationViewController;
-        self.districtsViewController.persistenceController = self.persistenceController;
         self.districtsViewController.year = self.currentYear;
         
         __weak typeof(self) weakSelf = self;
@@ -89,7 +90,6 @@ static NSString *const DistrictViewControllerSegue  = @"DistrictViewControllerSe
         District *district = (District *)sender;
         
         DistrictViewController *districtViewController = (DistrictViewController *)segue.destinationViewController;
-        districtViewController.persistenceController = self.persistenceController;
         districtViewController.district = district;
     }
 }

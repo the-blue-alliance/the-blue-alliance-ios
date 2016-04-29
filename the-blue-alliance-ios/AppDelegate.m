@@ -33,11 +33,9 @@
         UITabBarController *rootTabBarController = [storyboard instantiateViewControllerWithIdentifier:@"RootTabBarController"];
         self.navigationDelegate = [[TBANavigationControllerDelegate alloc] init];
         
-        for (UINavigationController *nav in rootTabBarController.viewControllers) {
+        for (TBANavigationController *nav in rootTabBarController.viewControllers) {
             nav.delegate = self.navigationDelegate;
-            
-            TBAViewController *vc = (TBAViewController *)[nav.viewControllers firstObject];
-            vc.persistenceController = self.persistenceController;
+            nav.persistenceController = self.persistenceController;
         }
 
         // Doing all this nonsense so we can set up view controller's persistence controllers before they try to

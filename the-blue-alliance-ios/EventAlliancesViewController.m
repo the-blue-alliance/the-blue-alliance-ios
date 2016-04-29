@@ -23,6 +23,8 @@ static NSString *const AlliancesViewControllerEmbed = @"AlliancesViewControllerE
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.refreshViewControllers = @[self.alliancesViewController];
+    
     [self styleInterface];
 }
 
@@ -38,7 +40,6 @@ static NSString *const AlliancesViewControllerEmbed = @"AlliancesViewControllerE
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:AlliancesViewControllerEmbed]) {
         self.alliancesViewController = segue.destinationViewController;
-        self.alliancesViewController.persistenceController = self.persistenceController;
         self.alliancesViewController.event = self.event;
     }
 }

@@ -19,10 +19,7 @@ static NSString *const MatchBreakdownViewControllerEmbed    = @"MatchBreakdownVi
 @interface MatchViewController ()
 
 @property (nonatomic, strong) TBAMatchViewController *matchViewController;
-@property (nonatomic, weak) IBOutlet UIView *matchView;
-
 @property (nonatomic, strong) TBAMatchBreakdownViewController *matchBreakdownViewController;
-@property (nonatomic, weak) IBOutlet UIView *matchBreakdownView;
 
 @end
 
@@ -32,7 +29,6 @@ static NSString *const MatchBreakdownViewControllerEmbed    = @"MatchBreakdownVi
     [super viewDidLoad];
     
     self.refreshViewControllers = @[self.matchViewController, self.matchBreakdownViewController];
-    self.containerViews = @[self.matchView, self.matchBreakdownView];
     
     [self styleInterface];
 }
@@ -49,11 +45,9 @@ static NSString *const MatchBreakdownViewControllerEmbed    = @"MatchBreakdownVi
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:MatchViewControllerEmbed]) {
         self.matchViewController = segue.destinationViewController;
-        self.matchViewController.persistenceController = self.persistenceController;
         self.matchViewController.match = self.match;
     } else if ([segue.identifier isEqualToString:MatchBreakdownViewControllerEmbed]) {
         self.matchBreakdownViewController = segue.destinationViewController;
-        self.matchBreakdownViewController.persistenceController = self.persistenceController;
         self.matchBreakdownViewController.match = self.match;
     }
 }

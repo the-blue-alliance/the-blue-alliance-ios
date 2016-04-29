@@ -27,10 +27,7 @@ static NSString *const DistrictTeamViewControllerSegue  = @"DistrictTeamViewCont
 @interface DistrictViewController ()
 
 @property (nonatomic, strong) TBAEventsViewController *eventsViewController;
-@property (nonatomic, strong) IBOutlet UIView *eventsView;
-
 @property (nonatomic, strong) TBAPointsViewController *pointsViewController;
-@property (nonatomic, strong) IBOutlet UIView *pointsView;
 
 @end
 
@@ -40,7 +37,6 @@ static NSString *const DistrictTeamViewControllerSegue  = @"DistrictTeamViewCont
     [super viewDidLoad];
 
     self.refreshViewControllers = @[self.eventsViewController, self.pointsViewController];
-    self.containerViews = @[self.eventsView, self.pointsView];
     
     [self styleInterface];
 }
@@ -56,7 +52,6 @@ static NSString *const DistrictTeamViewControllerSegue  = @"DistrictTeamViewCont
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:EventsViewControllerEmbed]) {
         self.eventsViewController = (TBAEventsViewController *)segue.destinationViewController;
-        self.eventsViewController.persistenceController = self.persistenceController;
         self.eventsViewController.district = self.district;
         self.eventsViewController.year = self.district.year;
         
@@ -66,7 +61,6 @@ static NSString *const DistrictTeamViewControllerSegue  = @"DistrictTeamViewCont
         };
     } else if ([segue.identifier isEqualToString:PointsViewControllerEmbed]) {
         self.pointsViewController = (TBAPointsViewController *)segue.destinationViewController;
-        self.pointsViewController.persistenceController = self.persistenceController;
         self.pointsViewController.district = self.district;
 
         __weak typeof(self) weakSelf = self;
@@ -78,13 +72,11 @@ static NSString *const DistrictTeamViewControllerSegue  = @"DistrictTeamViewCont
         Event *event = (Event *)sender;
         
         EventViewController *eventViewController = segue.destinationViewController;
-        eventViewController.persistenceController = self.persistenceController;
         eventViewController.event = event;
     } else if ([segue.identifier isEqualToString:DistrictTeamViewControllerSegue]) {
         DistrictRanking *districtRanking = (DistrictRanking *)sender;
         
         DistrictTeamViewController *districtTeamViewController = segue.destinationViewController;
-        districtTeamViewController.persistenceController = self.persistenceController;
         districtTeamViewController.district = self.district;
         districtTeamViewController.districtRanking = districtRanking;
     }

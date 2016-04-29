@@ -28,6 +28,8 @@ static NSString *const TeamViewControllerSegue  = @"TeamViewControllerSegue";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.refreshViewControllers = @[self.teamsViewController];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -43,7 +45,6 @@ static NSString *const TeamViewControllerSegue  = @"TeamViewControllerSegue";
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:TeamsViewControllerEmbed]) {
         self.teamsViewController = (TBATeamsViewController *)segue.destinationViewController;
-        self.teamsViewController.persistenceController = self.persistenceController;
         
         __weak typeof(self) weakSelf = self;
         self.teamsViewController.teamSelected = ^(Team *team) {
@@ -55,7 +56,6 @@ static NSString *const TeamViewControllerSegue  = @"TeamViewControllerSegue";
     
         TeamViewController *teamViewController = segue.destinationViewController;
         teamViewController.team = team;
-        teamViewController.persistenceController = self.persistenceController;
     }
 }
 

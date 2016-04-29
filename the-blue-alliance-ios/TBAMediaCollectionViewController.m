@@ -28,6 +28,10 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
     }
+
+    if (!self.persistenceController) {
+        return nil;
+    }
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Media"];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"year == %@ AND team == %@", self.year, self.team];

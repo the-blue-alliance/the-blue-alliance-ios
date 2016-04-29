@@ -56,6 +56,8 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.refreshViewControllers = @[self.eventsViewController];
+    
     __weak typeof(self) weakSelf = self;
     self.yearSelected = ^(NSNumber *year) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -152,7 +154,6 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:EventsViewControllerEmbed]) {
         self.eventsViewController = segue.destinationViewController;
-        self.eventsViewController.persistenceController = self.persistenceController;
         if (self.weeks) {
             self.eventsViewController.week = [self.weeks firstObject];
         } else {
@@ -173,7 +174,6 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
         
         EventViewController *eventViewController = segue.destinationViewController;
         eventViewController.event = event;
-        eventViewController.persistenceController = self.persistenceController;
     }
 }
 

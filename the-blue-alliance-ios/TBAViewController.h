@@ -12,10 +12,10 @@
 
 @interface TBAViewController : UIViewController
 
-@property (nonnull, nonatomic, strong) TBAPersistenceController *persistenceController;
+@property (nonnull, readonly) TBAPersistenceController *persistenceController;
 
 @property (nullable, nonatomic, strong) NSArray *refreshViewControllers;
-@property (nullable, nonatomic, strong) NSArray *containerViews;
+@property (nullable, nonatomic, strong) IBOutletCollection(UIView) NSArray *containerViews;
 
 @property (nullable, nonatomic, strong) IBOutlet UISegmentedControl *segmentedControl;
 @property (nullable, nonatomic, strong) IBOutlet UIView *segmentedControlView;
