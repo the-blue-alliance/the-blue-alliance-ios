@@ -65,7 +65,6 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 #pragma mark - Interface Methods
 
 - (void)styleInterface {
-    self.segmentedControlView.backgroundColor = [UIColor primaryBlue];
     self.navigationItem.title = [NSString stringWithFormat:@"Team %@", self.team.teamNumber];
 }
 

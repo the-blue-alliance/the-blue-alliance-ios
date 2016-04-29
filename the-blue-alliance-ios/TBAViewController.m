@@ -10,6 +10,13 @@
 #import "TBANavigationController.h"
 #import "TBARefreshViewController.h"
 
+@interface TBAViewController ()
+
+@property (nullable, nonatomic, strong) IBOutlet UISegmentedControl *segmentedControl;
+@property (nullable, nonatomic, strong) IBOutlet UIView *segmentedControlView;
+
+@end
+
 @implementation TBAViewController
 
 #pragma mark - Properities

@@ -17,9 +17,6 @@
 @property (nullable, nonatomic, strong) NSArray<TBARefreshViewController *> *refreshViewControllers;
 @property (nullable, nonatomic, strong) NSArray<UIView *> *containerViews;
 
-@property (nullable, nonatomic, strong) IBOutlet UISegmentedControl *segmentedControl;
-@property (nullable, nonatomic, strong) IBOutlet UIView *segmentedControlView;
-
 @property (nullable, nonatomic, strong) IBOutlet UILabel *navigationTitleLabel;
 @property (nullable, nonatomic, strong) IBOutlet UILabel *navigationSubtitleLabel;
 
