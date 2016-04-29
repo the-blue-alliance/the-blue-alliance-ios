@@ -36,7 +36,9 @@
     }
     
     self.noDataViewController.view.alpha = 0.0f;
-    [self.view addSubview:self.noDataViewController.view];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.view addSubview:self.noDataViewController.view];
+    });
     
     if (text) {
         self.noDataViewController.textLabel.text = text;

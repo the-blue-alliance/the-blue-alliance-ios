@@ -41,7 +41,9 @@
     }
 
     self.noDataViewController.view.alpha = 0.0f;
-    [self.collectionView setBackgroundView:self.noDataViewController.view];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.collectionView setBackgroundView:self.noDataViewController.view];
+    });
     
     if (text) {
         self.noDataViewController.textLabel.text = text;
@@ -49,14 +51,20 @@
         self.noDataViewController.textLabel.text = @"No data to display";
     }
     
-    [UIView animateWithDuration:0.25f animations:^{
-        self.noDataViewController.view.alpha = 1.0f;
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.collectionView setBackgroundView:self.noDataViewController.view];
+        
+        [UIView animateWithDuration:0.25f animations:^{
+            self.noDataViewController.view.alpha = 1.0f;
+        }];
+    });
 }
 
 - (void)hideNoDataView {
     if (self.noDataViewController) {
-        [self.collectionView setBackgroundView:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.collectionView setBackgroundView:nil];
+        });
     }
 }
 
@@ -72,7 +80,13 @@
 #pragma mark - Table View Data Source
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return self.fetchedResultsController.sections.count;
+    NSInteger sections = 0;
+    if (self.fetchedResultsController.sections.count > 0) {
+        sections = self.fetchedResultsController.sections.count;
+    } else if (self.fetchedResultsController && self.tbaDelegate) {
+        [self.tbaDelegate showNoDataView];
+    }
+    return sections;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -80,18 +94,14 @@
     if (self.fetchedResultsController.sections.count > 0) {
         id <NSFetchedResultsSectionInfo> sectionInfo = self.fetchedResultsController.sections[section];
         rows = [sectionInfo numberOfObjects];
-    } else {
-        if (self.tbaDelegate) {
+        if (!rows || (rows && rows == 0 && self.tbaDelegate)) {
             [self.tbaDelegate showNoDataView];
+        } else {
+            [self hideNoDataView];
         }
+    } else if (self.fetchedResultsController && self.tbaDelegate) {
+        [self.tbaDelegate showNoDataView];
     }
-    
-    if (rows == 0) {
-        if (self.tbaDelegate) {
-            [self.tbaDelegate showNoDataView];
-        }
-    }
-    
     return rows;
 }
 
@@ -106,35 +116,6 @@
 }
 
 #pragma mark - Fetched Results Controller Delegate
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
-       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
-      newIndexPath:(NSIndexPath *)newIndexPath
-{
-    UICollectionView *collectionView = self.collectionView;
-    
-    switch(type) {
-            
-        case NSFetchedResultsChangeInsert:
-            [self.collectionView insertItemsAtIndexPaths:@[newIndexPath]];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
-            break;
-            
-        case NSFetchedResultsChangeUpdate: {
-            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
-            [self.tbaDelegate configureCell:cell atIndexPath:indexPath];
-        }
-            break;
-            
-        case NSFetchedResultsChangeMove:
-            [collectionView deleteItemsAtIndexPaths:@[indexPath]];
-            [collectionView insertItemsAtIndexPaths:@[newIndexPath]];
-            break;
-    }
-}
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
     [self.collectionView reloadData];

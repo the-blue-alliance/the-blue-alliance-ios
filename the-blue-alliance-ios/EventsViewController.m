@@ -63,9 +63,8 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     __weak typeof(self) weakSelf = self;
     self.yearSelected = ^(NSNumber *year) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf.eventsViewController cancelRefresh];
-        [strongSelf.eventsViewController hideNoDataView];
+
+        [strongSelf cancelRefreshes];
 
         strongSelf.currentYear = year;
         strongSelf.eventsViewController.year = year;
@@ -98,11 +97,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     __weak typeof(self) weakSelf = self;
     [Event fetchEventsForYear:self.currentYear.integerValue fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray * _Nullable events, NSError * _Nullable error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (error || !events || events.count == 0) {
-            strongSelf.eventsViewController.refresh();
-        } else {
-            strongSelf.weeks = [Event groupEventsByWeek:events];
-        }
+        strongSelf.weeks = [Event groupEventsByWeek:events];
     }];
 }
 
@@ -137,8 +132,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     selectViewController.numberSelected = ^(NSNumber *week) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
 
-        [strongSelf.eventsViewController cancelRefresh];
-        [strongSelf.eventsViewController hideNoDataView];
+        [strongSelf cancelRefreshes];
 
         strongSelf.currentWeek = week;
         strongSelf.eventsViewController.week = week;

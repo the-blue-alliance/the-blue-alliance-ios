@@ -42,4 +42,14 @@
     }];
 }
 
++ (NSArray *)insertEventPointsWithEventPointsDict:(NSDictionary<NSString *, NSDictionary *> *)eventPointsDict forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
+    NSMutableArray *eventPoints = [[NSMutableArray alloc] init];
+    for (NSString *teamKey in eventPointsDict.allKeys) {
+        Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
+        NSDictionary *teamPointsDict = eventPointsDict[teamKey];
+        [eventPoints addObject:[self insertEventPointsWithEventPointsDict:teamPointsDict forEvent:event andTeam:team inManagedObjectContext:context]];
+    }
+    return eventPoints;
+}
+
 @end

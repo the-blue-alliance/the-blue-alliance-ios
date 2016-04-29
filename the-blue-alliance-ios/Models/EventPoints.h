@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain) Team *team;
 
 + (instancetype)insertEventPointsWithEventPointsDict:(NSDictionary<NSString *, NSNumber *> *)eventPointsDict forEvent:(Event *)event andTeam:(Team *)team inManagedObjectContext:(NSManagedObjectContext *)context;
++ (NSArray *)insertEventPointsWithEventPointsDict:(NSDictionary<NSString *, NSDictionary *> *)eventPointsDict forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end
 

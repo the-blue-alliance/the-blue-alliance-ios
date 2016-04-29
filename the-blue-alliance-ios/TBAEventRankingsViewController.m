@@ -82,17 +82,17 @@ static NSString *const RankCellReuseIdentifier  = @"RankCell";
     __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForEventKey:self.event.key withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        [strongSelf removeRequestIdentifier:request];
-        
         if (error) {
             [strongSelf showErrorAlertWithMessage:@"Unable to reload event rankings"];
-        } else {
-            Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
-            
-            [strongSelf.persistenceController performChanges:^{
-                [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-            }];
         }
+        
+        Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
+        
+        [strongSelf.persistenceController performChanges:^{
+            [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        } withCompletion:^{
+            [strongSelf removeRequestIdentifier:request];
+        }];
     }];
     [self addRequestIdentifier:request];
 }

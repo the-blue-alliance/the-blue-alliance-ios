@@ -87,17 +87,17 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
     __block NSUInteger request = [[TBAKit sharedKit] fetchMediaForTeamKey:self.team.key andYear:self.year.integerValue withCompletionBlock:^(NSArray *media, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        [strongSelf removeRequestIdentifier:request];
-        
         if (error) {
             [strongSelf showErrorAlertWithMessage:@"Unable to load team media"];
-        } else {
-            Team *team = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.team.objectID];
-            
-            [strongSelf.persistenceController performChanges:^{
-                [Media insertMediasWithModelMedias:media forTeam:team andYear:strongSelf.year.integerValue inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-            }];
         }
+        
+        Team *team = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.team.objectID];
+        
+        [strongSelf.persistenceController performChanges:^{
+            [Media insertMediasWithModelMedias:media forTeam:team andYear:strongSelf.year.integerValue inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        } withCompletion:^{
+            [strongSelf removeRequestIdentifier:request];
+        }];
     }];
     [self addRequestIdentifier:request];
 }

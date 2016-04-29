@@ -83,17 +83,17 @@ static NSString *const AwardCellReuseIdentifier = @"AwardCell";
     __block NSUInteger request = [[TBAKit sharedKit] fetchAwardsForEventKey:self.event.key withCompletionBlock:^(NSArray *awards, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        [strongSelf removeRequestIdentifier:request];
-        
         if (error) {
             [strongSelf showErrorAlertWithMessage:@"Unable to reload event matches"];
-        } else {
-            Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
-
-            [strongSelf.persistenceController performChanges:^{
-                [Award insertAwardsWithModelAwards:awards forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-            }];
         }
+
+        Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
+
+        [strongSelf.persistenceController performChanges:^{
+            [Award insertAwardsWithModelAwards:awards forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        } withCompletion:^{
+            [strongSelf removeRequestIdentifier:request];
+        }];
     }];
     [self addRequestIdentifier:request];
 }

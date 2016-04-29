@@ -14,6 +14,7 @@
 
 @property (nonatomic, strong) NSNumber *week;
 @property (nonatomic, strong) NSNumber *year;
+
 @property (nonatomic, strong) Team *team;
 @property (nonatomic, strong) District *district;
 

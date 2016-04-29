@@ -68,7 +68,11 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         [strongSelf hideNoDataView];
-        [strongSelf refreshData];
+        if (strongSelf.event) {
+            [strongSelf refreshEventTeams];
+        } else {
+            [strongSelf refreshAllTeams];
+        }
     };
 }
 
@@ -78,47 +82,49 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
     return self.fetchedResultsController.fetchedObjects.count == 0;
 }
 
-- (void)refreshData {
-    __block NSUInteger currentRequest;
-    
+- (void)refreshEventTeams {
     __weak typeof(self) weakSelf = self;
-    if (self.event) {
-        currentRequest = [[TBAKit sharedKit] fetchTeamsForEventKey:self.event.key withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            
+    __block NSUInteger currentRequest = [[TBAKit sharedKit] fetchTeamsForEventKey:self.event.key withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        if (error) {
+            [strongSelf showErrorAlertWithMessage:@"Unable to load teams for event"];
+        }
+        
+        Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
+        
+        [strongSelf.persistenceController performChanges:^{
+            [Team insertTeamsWithModelTeams:teams forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        } withCompletion:^{
             [strongSelf removeRequestIdentifier:currentRequest];
-            
-            if (error) {
-                [strongSelf showNoDataViewWithText:@"Unable to load teams for event"];
-            } else {
-                Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
-                
-                [strongSelf.persistenceController performChanges:^{
-                    [Team insertTeamsWithModelTeams:teams forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-                }];
-            }
         }];
-    } else {
-        currentRequest = [Team fetchAllTeamsWithTaskIdChange:^(NSUInteger newTaskId, NSArray *batchTeam) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            
-            [strongSelf addRequestIdentifier:newTaskId];
-            [strongSelf removeRequestIdentifier:currentRequest];
-            currentRequest = newTaskId;
-            
-            [strongSelf.persistenceController performChanges:^{
-                [Team insertTeamsWithModelTeams:batchTeam inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-            }];
-        } withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            
-            [strongSelf removeRequestIdentifier:currentRequest];
-            
-            if (error) {
-                [strongSelf showErrorAlertWithMessage:@"Unable to load teams"];
-            }
+    }];
+    [self addRequestIdentifier:currentRequest];
+}
+
+- (void)refreshAllTeams {
+    __weak typeof(self) weakSelf = self;
+    __block NSUInteger currentRequest = [Team fetchAllTeamsWithTaskIdChange:^(NSUInteger newTaskId, NSArray *batchTeam) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf addRequestIdentifier:newTaskId];
+        __block NSUInteger oldTaskId = currentRequest;
+        currentRequest = newTaskId;
+        
+        [strongSelf.persistenceController performChanges:^{
+            [Team insertTeamsWithModelTeams:batchTeam inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        } withCompletion:^{
+            [strongSelf removeRequestIdentifier:oldTaskId];
         }];
-    }
+    } withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf removeRequestIdentifier:currentRequest];
+        
+        if (error) {
+            [strongSelf showErrorAlertWithMessage:@"Unable to load teams"];
+        }
+    }];
     [self addRequestIdentifier:currentRequest];
 }
 
@@ -194,7 +200,6 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
         NSLog(@"An error happened and we should handle it - %@", error.localizedDescription);
     }
     
-    [self.fetchedResultsController.delegate controllerDidChangeContent:self.fetchedResultsController];
     [self.tableView reloadData];
 }
 
@@ -203,7 +208,13 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
 - (NSPredicate *)predicateForSearchText:(NSString *)searchText {
     NSPredicate *searchPredicate;
     if (searchText && searchText.length) {
-        searchPredicate = [NSPredicate predicateWithFormat:@"(nickname contains[cd] %@ OR teamNumber.stringValue beginswith[cd] %@)", searchText, searchText];
+        if (self.event) {
+            searchPredicate = [NSPredicate predicateWithFormat:@"ANY events = %@ AND (nickname contains[cd] %@ OR teamNumber.stringValue beginswith[cd] %@)", self.event, searchText, searchText];
+        } else {
+            searchPredicate = [NSPredicate predicateWithFormat:@"(nickname contains[cd] %@ OR teamNumber.stringValue beginswith[cd] %@)", searchText, searchText];
+        }
+    } else if (self.event) {
+        searchPredicate = [NSPredicate predicateWithFormat:@"ANY events = %@", self.event];
     }
     return searchPredicate;
 }

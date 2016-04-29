@@ -78,7 +78,11 @@ static NSString *const PointsCellReuseIdentifier  = @"PointsCell";
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         [strongSelf hideNoDataView];
-        [strongSelf refreshPoints];
+        if (strongSelf.district) {
+            [strongSelf refreshDistrictPoints];
+        } else {
+            [strongSelf refreshEventPoints];
+        }
     };
 }
 
@@ -88,48 +92,45 @@ static NSString *const PointsCellReuseIdentifier  = @"PointsCell";
     return self.fetchedResultsController.fetchedObjects.count == 0;
 }
 
-- (void)refreshPoints {
-    if (self.district) {
-        __weak typeof(self) weakSelf = self;
-        __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.district.key forYear:self.district.year.integerValue withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            
+- (void)refreshDistrictPoints {
+    __weak typeof(self) weakSelf = self;
+    __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.district.key forYear:self.district.year.integerValue withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        if (error) {
+            [strongSelf showErrorAlertWithMessage:@"Unable to reload district rankings"];
+        }
+        
+        District *district = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.district.objectID];
+        
+        [strongSelf.persistenceController performChanges:^{
+            [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:district inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        } withCompletion:^{
             [strongSelf removeRequestIdentifier:request];
-            
-            if (error) {
-                [strongSelf showErrorAlertWithMessage:@"Unable to reload district rankings"];
-            } else {
-                District *district = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.district.objectID];
-                
-                [strongSelf.persistenceController performChanges:^{
-                    [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:district inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-                }];
-            }
         }];
-        [self addRequestIdentifier:request];
-    } else if (self.event) {
-        __weak typeof(self) weakSelf = self;
-        __block NSUInteger request = [[TBAKit sharedKit] fetchDistrictPointsForEventKey:self.event.key withCompletionBlock:^(NSDictionary *points, NSError *error) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            
+    }];
+    [self addRequestIdentifier:request];
+}
+
+- (void)refreshEventPoints {
+    __weak typeof(self) weakSelf = self;
+    __block NSUInteger request = [[TBAKit sharedKit] fetchDistrictPointsForEventKey:self.event.key withCompletionBlock:^(NSDictionary *points, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        if (error) {
+            [strongSelf showErrorAlertWithMessage:@"Unable to reload district points"];
+        }
+        
+        NSDictionary *pointsDict = [points objectForKey:@"points"];
+        Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
+        
+        [strongSelf.persistenceController performChanges:^{
+            [EventPoints insertEventPointsWithEventPointsDict:pointsDict forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        } withCompletion:^{
             [strongSelf removeRequestIdentifier:request];
-            
-            if (error) {
-                [strongSelf showErrorAlertWithMessage:@"Unable to reload district points"];
-            } else {
-                NSDictionary *pointsDict = points[@"points"];
-                for (NSString *teamKey in pointsDict.allKeys) {
-                    Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-                    Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
-                    
-                    [strongSelf.persistenceController performChanges:^{
-                        [EventPoints insertEventPointsWithEventPointsDict:pointsDict[teamKey] forEvent:event andTeam:team inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-                    }];
-                }
-            }
         }];
-        [self addRequestIdentifier:request];
-    }
+    }];
+    [self addRequestIdentifier:request];
 }
 
 #pragma mark - TBA Table View Data Source

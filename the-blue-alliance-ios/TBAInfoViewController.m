@@ -101,15 +101,15 @@ static NSString *const EventOptionAwards            = @"Awards";
     __block NSUInteger request = [[TBAKit sharedKit] fetchTeamForTeamKey:self.team.key withCompletionBlock:^(TBATeam *team, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        [strongSelf removeRequestIdentifier:request];
-        
         if (error) {
             [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
-        } else {
-            [strongSelf.persistenceController performChanges:^{
-                [Team insertTeamWithModelTeam:team inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-            }];
         }
+        
+        [strongSelf.persistenceController performChanges:^{
+            [Team insertTeamWithModelTeam:team inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        } withCompletion:^{
+            [strongSelf removeRequestIdentifier:request];
+        }];
     }];
     [self addRequestIdentifier:request];
 }
@@ -119,15 +119,15 @@ static NSString *const EventOptionAwards            = @"Awards";
     __block NSUInteger request = [[TBAKit sharedKit] fetchEventForEventKey:self.event.key withCompletionBlock:^(TBAEvent *event, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        [strongSelf removeRequestIdentifier:request];
-        
         if (error) {
             [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
-        } else {
-            [strongSelf.persistenceController performChanges:^{
-                [Event insertEventWithModelEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-            }];
         }
+        
+        [strongSelf.persistenceController performChanges:^{
+            [Event insertEventWithModelEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        } withCompletion:^{
+            [strongSelf removeRequestIdentifier:request];
+        }];
     }];
     [self addRequestIdentifier:request];
 }

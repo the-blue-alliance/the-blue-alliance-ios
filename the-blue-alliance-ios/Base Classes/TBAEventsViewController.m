@@ -95,7 +95,21 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         [strongSelf hideNoDataView];
-        [strongSelf refreshEvents];
+        
+        if (!self.year || self.year == 0) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf showNoDataViewWithText:@"No year selected"];
+            });
+            return;
+        } else {
+            if (strongSelf.team) {
+                [strongSelf refreshTeamEvents];
+            } else if (strongSelf.district) {
+                [strongSelf refreshDistrictEvents];
+            } else {
+                [strongSelf refreshAllEvents];
+            }
+        }
     };
 }
 
@@ -105,55 +119,67 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
     return self.fetchedResultsController.fetchedObjects.count == 0;
 }
 
-- (void)refreshEvents {
-    if (!self.year || self.year == 0) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self showNoDataViewWithText:@"No year selected"];
-        });
-        return;
-    }
-
+- (void)refreshTeamEvents {
     __weak typeof(self) weakSelf = self;
-    if (self.team) {
-        __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForTeamKey:self.team.key andYear:self.year.integerValue withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            
+    __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForTeamKey:self.team.key andYear:self.year.integerValue withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        if (error) {
+            [strongSelf showErrorAlertWithMessage:@"Unable to load events for team"];
+        }
+        
+        Team *team = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.team.objectID];
+        
+        [strongSelf.persistenceController performChanges:^{
+            NSArray *newEvents = [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+            [team setEvents:[NSSet setWithArray:newEvents] forYear:strongSelf.year];
+        } withCompletion:^{
             [strongSelf removeRequestIdentifier:request];
-            
-            if (error) {
-                [strongSelf showNoDataViewWithText:@"Unable to load events for team"];
-            } else {
-                Team *team = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.team.objectID];
+        }];
+    }];
+    [self addRequestIdentifier:request];
+}
 
-                [strongSelf.persistenceController performChanges:^{
-                    NSArray *newEvents = [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-                    [team setEvents:[NSSet setWithArray:newEvents] forYear:strongSelf.year];
-                }];
-            }
+- (void)refreshDistrictEvents {
+    __weak typeof(self) weakSelf = self;
+    __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForDistrictShort:self.district.key forYear:self.year.integerValue withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        if (error) {
+            [strongSelf showErrorAlertWithMessage:@"Unable to load events for district"];
+        }
+        
+        [strongSelf.persistenceController performChanges:^{
+            [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        } withCompletion:^{
+            [strongSelf removeRequestIdentifier:request];
         }];
-        [self addRequestIdentifier:request];
-    } else {
-        __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForYear:self.year.integerValue withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            
+    }];
+    [self addRequestIdentifier:request];
+}
+
+- (void)refreshAllEvents {
+    __weak typeof(self) weakSelf = self;
+    __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForYear:self.year.integerValue withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        if (error) {
+            [strongSelf showErrorAlertWithMessage:@"Unable to load events"];
+        }
+        
+        [strongSelf.persistenceController performChanges:^{
+            [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        } withCompletion:^{
             [strongSelf removeRequestIdentifier:request];
             
-            if (error) {
-                [strongSelf showErrorAlertWithMessage:@"Unable to load events"];
-            } else {
-                [strongSelf.persistenceController performChanges:^{
-                    [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-                } withCompletion:^{
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if (self.eventsFetched) {
-                            self.eventsFetched();
-                        }
-                    });
-                }];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (!error && self.eventsFetched) {
+                    self.eventsFetched();
+                }
+            });
         }];
-        [self addRequestIdentifier:request];
-    }
+    }];
+    [self addRequestIdentifier:request];
 }
 
 #pragma mark - Table View Delgate

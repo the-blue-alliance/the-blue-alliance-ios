@@ -53,7 +53,6 @@
     }
     
     self.noDataViewController.view.alpha = 0.0f;
-    [self.tableView setBackgroundView:self.noDataViewController.view];
 
     if (text) {
         self.noDataViewController.textLabel.text = text;
@@ -61,14 +60,20 @@
         self.noDataViewController.textLabel.text = @"No data to display";
     }
     
-    [UIView animateWithDuration:0.25f animations:^{
-        self.noDataViewController.view.alpha = 1.0f;
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView setBackgroundView:self.noDataViewController.view];
+        
+        [UIView animateWithDuration:0.25f animations:^{
+            self.noDataViewController.view.alpha = 1.0f;
+        }];
+    });
 }
 
 - (void)hideNoDataView {
     if (self.noDataViewController) {
-        [self.tableView setBackgroundView:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView setBackgroundView:nil];
+        });
     }
 }
 
@@ -87,10 +92,8 @@
     NSInteger sections = 0;
     if (self.fetchedResultsController.sections.count > 0) {
         sections = self.fetchedResultsController.sections.count;
-    } else {
-        if (self.tbaDelegate) {
-            [self.tbaDelegate showNoDataView];
-        }
+    } else if (self.fetchedResultsController && self.tbaDelegate) {
+        [self.tbaDelegate showNoDataView];
     }
     return sections;
 }
@@ -100,18 +103,13 @@
     if (self.fetchedResultsController.sections.count > 0) {
         id <NSFetchedResultsSectionInfo> sectionInfo = self.fetchedResultsController.sections[section];
         rows = [sectionInfo numberOfObjects];
-    } else {
-        if (self.tbaDelegate) {
+        if (!rows || (rows && rows == 0 && self.tbaDelegate)) {
             [self.tbaDelegate showNoDataView];
+        } else {
+            [self hideNoDataView];
         }
-    }
-    
-    if (rows == 0) {
-        if (self.tbaDelegate) {
-            [self.tbaDelegate showNoDataView];
-        }
-    } else {
-        [self hideNoDataView];
+    } else if (self.fetchedResultsController && self.tbaDelegate) {
+        [self.tbaDelegate showNoDataView];
     }
     
     return rows;
@@ -129,70 +127,8 @@
 
 #pragma mark - Fetched Results Controller Delegate
 
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-    [self.tableView beginUpdates];
-}
-
-- (void)controller:(NSFetchedResultsController *)controller
-  didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
-           atIndex:(NSUInteger)sectionIndex
-     forChangeType:(NSFetchedResultsChangeType)type
-{
-    UITableView *tableView = self.tableView;
-
-    switch(type) {
-
-        case NSFetchedResultsChangeInsert:
-            [tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]
-                     withRowAnimation:UITableViewRowAnimationNone];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]
-                     withRowAnimation:UITableViewRowAnimationNone];
-            break;
-            
-        default:
-            break;
-    }
-}
-
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
-       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
-      newIndexPath:(NSIndexPath *)newIndexPath
-{
-    UITableView *tableView = self.tableView;
-    
-    switch(type) {
-            
-        case NSFetchedResultsChangeInsert:
-            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
-                             withRowAnimation:UITableViewRowAnimationAutomatic];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
-                             withRowAnimation:UITableViewRowAnimationAutomatic];
-            break;
-            
-        case NSFetchedResultsChangeUpdate: {
-            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-            [self.tbaDelegate configureCell:cell atIndexPath:indexPath];
-        }
-            break;
-            
-        case NSFetchedResultsChangeMove:
-            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
-                             withRowAnimation:UITableViewRowAnimationAutomatic];
-            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
-                             withRowAnimation:UITableViewRowAnimationAutomatic];
-            break;
-    }
-}
-
-
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    [self.tableView endUpdates];
+    [self.tableView reloadData];
 }
 
 @end

@@ -116,23 +116,23 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
     __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForEventKey:self.event.key withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        [strongSelf removeRequestIdentifier:request];
-        
         if (error) {
             [strongSelf showErrorAlertWithMessage:@"Unable to reload event rankings"];
-        } else {
-            Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
-            
-            [strongSelf.persistenceController performChanges:^{
-                NSArray *eventRankings = [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-                for (EventRanking *ranking in eventRankings) {
-                    if (ranking.team == strongSelf.team) {
-                        strongSelf.eventRanking = ranking;
-                        break;
-                    }
-                }
-            }];
         }
+        
+        Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
+        
+        [strongSelf.persistenceController performChanges:^{
+            NSArray *eventRankings = [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+            for (EventRanking *ranking in eventRankings) {
+                if (ranking.team == strongSelf.team) {
+                    strongSelf.eventRanking = ranking;
+                    break;
+                }
+            }
+        } withCompletion:^{
+            [strongSelf removeRequestIdentifier:request];
+        }];
     }];
     [self addRequestIdentifier:request];
 }
@@ -142,15 +142,15 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
     __block NSUInteger request = [[TBAKit sharedKit] fetchEventForEventKey:self.event.key withCompletionBlock:^(TBAEvent *event, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        [strongSelf removeRequestIdentifier:request];
-        
         if (error) {
             [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
-        } else {
-            [strongSelf.persistenceController performChanges:^{
-                [Event insertEventWithModelEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-            }];
         }
+        
+        [strongSelf.persistenceController performChanges:^{
+            [Event insertEventWithModelEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        } withCompletion:^{
+            [strongSelf removeRequestIdentifier:request];
+        }];
     }];
     [self addRequestIdentifier:request];
 }

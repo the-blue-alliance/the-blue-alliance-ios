@@ -36,27 +36,14 @@ static NSString *const DistrictViewControllerSegue  = @"DistrictViewControllerSe
     self.yearSelected = ^void(NSNumber *year) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        [strongSelf.districtsViewController cancelRefresh];
-        [strongSelf.districtsViewController hideNoDataView];
+        [strongSelf cancelRefreshes];
         
         strongSelf.currentYear = year;
         strongSelf.districtsViewController.year = year;
-        
-        if ([strongSelf.districtsViewController shouldNoDataRefresh] && strongSelf.districtsViewController.refresh) {
-            strongSelf.districtsViewController.refresh();
-        }
     };
 
     [self configureYears];
     [self styleInterface];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-
-    if ([self.districtsViewController shouldNoDataRefresh] && self.districtsViewController.refresh) {
-        self.districtsViewController.refresh();
-    }
 }
 
 #pragma mark - Interface Methods

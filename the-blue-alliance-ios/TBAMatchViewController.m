@@ -194,17 +194,17 @@
     __block NSUInteger request = [[TBAKit sharedKit] fetchMatchesForEventKey:self.match.event.key withCompletionBlock:^(NSArray *matches, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        [strongSelf removeRequestIdentifier:request];
-        
         if (error) {
             [strongSelf showErrorAlertWithMessage:@"Unable to reload match"];
-        } else {
-            Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.match.event.objectID];
-            
-            [strongSelf.persistenceController performChanges:^{
-                [Match insertMatchesWithModelMatches:matches forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-            }];
         }
+        
+        Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.match.event.objectID];
+        
+        [strongSelf.persistenceController performChanges:^{
+            [Match insertMatchesWithModelMatches:matches forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        } withCompletion:^{
+            [strongSelf removeRequestIdentifier:request];
+        }];
     }];
     [self addRequestIdentifier:request];
 }

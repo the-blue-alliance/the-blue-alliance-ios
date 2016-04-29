@@ -75,6 +75,10 @@
     
     if ([self.requestsArray count] == 0) {
         [self updateRefresh:NO];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
     }
 }
 

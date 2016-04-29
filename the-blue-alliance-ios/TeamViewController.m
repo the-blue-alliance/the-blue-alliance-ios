@@ -48,6 +48,7 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
     __weak typeof(self) weakSelf = self;
     self.yearSelected = ^void(NSNumber *year) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
+        
         [strongSelf cancelRefreshes];
 
         strongSelf.currentYear = year;

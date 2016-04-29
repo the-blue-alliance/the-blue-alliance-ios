@@ -50,7 +50,9 @@
 #pragma mark - Public Methods
 
 - (void)updateInterface {
-    if (self.segmentedControl && self.containerViews.count > self.segmentedControl.selectedSegmentIndex) {
+    if (!self.segmentedControl && self.containerViews.count == 1) {
+        [self showView:self.containerViews.firstObject];
+    } else if (self.segmentedControl && self.containerViews.count > self.segmentedControl.selectedSegmentIndex) {
         UIView *showView = self.containerViews[self.segmentedControl.selectedSegmentIndex];
         [self showView:showView];
     }

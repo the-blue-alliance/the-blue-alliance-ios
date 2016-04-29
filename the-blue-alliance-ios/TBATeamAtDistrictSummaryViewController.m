@@ -80,17 +80,17 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
     __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.districtRanking.district.key forYear:self.districtRanking.district.year.integerValue withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        [strongSelf removeRequestIdentifier:request];
-        
         if (error) {
             [strongSelf showErrorAlertWithMessage:@"Unable to reload district rankings"];
-        } else {
-            District *district = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.districtRanking.district.objectID];
-            
-            [strongSelf.persistenceController performChanges:^{
-                [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:district inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-            }];
         }
+        
+        District *district = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.districtRanking.district.objectID];
+        
+        [strongSelf.persistenceController performChanges:^{
+            [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:district inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        } withCompletion:^{
+            [strongSelf removeRequestIdentifier:request];
+        }];
     }];
     [self addRequestIdentifier:request];
 }
