@@ -102,7 +102,7 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 - (void)configureCell:(TBASummaryTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     EventTeamStat *teamStat = (EventTeamStat *)[self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.titleLabel.text = [teamStat statTypeString];
-    cell.subtitleLabel.text = [NSString stringWithFormat:@"%f", teamStat.score.doubleValue];
+    cell.subtitleLabel.text = [NSString stringWithFormat:@"%.2f", teamStat.score.doubleValue];
 }
 
 - (void)showNoDataView {
