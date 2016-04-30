@@ -9,9 +9,10 @@
 #import "TBAManagedObject.h"
 
 typedef NS_ENUM(NSInteger, StatType) {
+    StatTypeUnknown,
     StatTypeOPR,
-    StatTypeCCWM,
-    StatTypeDPR
+    StatTypeDPR,
+    StatTypeCCWM
 };
 
 @class Event, Team;
@@ -25,6 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain) Event *event;
 @property (nonatomic, retain) Team *team;
 
+- (nonnull NSString *)statTypeString;
+
++ (StatType)statTypeForDictionaryKey:(NSString *)key;
 + (instancetype)insertEventTeamStat:(NSNumber *)score ofType:(StatType)statType forTeam:(Team *)team atEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertEventTeamStats:(NSDictionary<NSString *, NSNumber *> *)eventTeamStats ofType:(StatType)statType forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 

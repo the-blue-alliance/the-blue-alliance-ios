@@ -16,8 +16,20 @@
 @dynamic team;
 @dynamic event;
 
++ (StatType)statTypeForDictionaryKey:(NSString *)key {
+    StatType statType;
+    if ([key isEqualToString:@"oprs"]) {
+        statType = StatTypeOPR;
+    } else if ([key isEqualToString:@"ccwms"]) {
+        statType = StatTypeCCWM;
+    } else if ([key isEqualToString:@"dprs"]) {
+        statType = StatTypeDPR;
+    }
+    return statType;
+}
+
 + (instancetype)insertEventTeamStat:(NSNumber *)score ofType:(StatType)statType forTeam:(Team *)team atEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@ AND team == %@", event, team];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@ AND team == %@ AND statType == %@", event, team, @(statType)];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(EventTeamStat *eventTeamStat) {
         eventTeamStat.statType = @(statType);
         eventTeamStat.score = score;
@@ -34,6 +46,28 @@
         [arr addObject:[self insertEventTeamStat:statScore ofType:statType forTeam:team atEvent:event inManagedObjectContext:context]];
     }
     return arr;
+}
+
+- (nonnull NSString *)statTypeString {
+    NSString *statTypeString = @"";
+    switch (self.statType.integerValue) {
+        case 0:
+            statTypeString = @"Unknown";
+            break;
+        case 1:
+            statTypeString = @"OPR";
+            break;
+        case 2:
+            statTypeString = @"DPR";
+            break;
+        case 3:
+            statTypeString = @"CCWM";
+            break;
+            
+        default:
+            break;
+    }
+    return statTypeString;
 }
 
 @end

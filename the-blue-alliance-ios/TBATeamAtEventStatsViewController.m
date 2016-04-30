@@ -8,6 +8,8 @@
 
 #import "TBATeamAtEventStatsViewController.h"
 #import "TBASummaryTableViewCell.h"
+#import "EventTeamStat.h"
+#import "Event.h"
 
 static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 
@@ -16,48 +18,95 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 @end
 
 @implementation TBATeamAtEventStatsViewController
+@synthesize fetchedResultsController = _fetchedResultsController;
+
+#pragma mark - Properities
+
+- (NSFetchedResultsController *)fetchedResultsController {
+    if (_fetchedResultsController != nil) {
+        return _fetchedResultsController;
+    }
+    
+    if (!self.persistenceController) {
+        return nil;
+    }
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventTeamStat"];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"event == %@ AND team == %@", self.event, self.team];
+    fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"statType" ascending:YES]];
+    
+    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                      sectionNameKeyPath:nil
+                                                                               cacheName:nil];
+    _fetchedResultsController.delegate = self;
+    
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
+    return _fetchedResultsController;
+}
 
 #pragma mark - View Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    __weak typeof(self) weakSelf = self;
-    [self registerForChangeNotifications:^(id  _Nonnull changedObject) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (changedObject == strongSelf.event || changedObject == strongSelf.team) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf.tableView reloadData];
-            });
-        }
-    }];
-    
-    self.refresh = ^void() {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf refreshEventStats];
-    };
-    
+
     self.tbaDelegate = self;
     self.cellIdentifier = SummaryCellReuseIdentifier;
+    
+    __weak typeof(self) weakSelf = self;
+    self.refresh = ^void() {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        [strongSelf refreshEventStats];
+    };
+}
+
+#pragma mark - Data Methods
+
+- (BOOL)shouldNoDataRefresh {
+    return self.fetchedResultsController.fetchedObjects.count == 0;
 }
 
 - (void)refreshEventStats {
-    // Something in here
+    __weak typeof(self) weakSelf = self;
+    __block NSUInteger request = [[TBAKit sharedKit] fetchStatsForEventKey:self.event.key withCompletionBlock:^(NSDictionary *stats, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        if (error) {
+            [strongSelf showErrorAlertWithMessage:@"Unable to reload team stats"];
+        }
+        
+        Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
+        
+        [strongSelf.persistenceController performChanges:^{
+            for (NSString *statTypeKey in stats.allKeys) {
+                StatType statType = [EventTeamStat statTypeForDictionaryKey:statTypeKey];
+                if (statType == StatTypeUnknown) {
+                    continue;
+                }
+                [EventTeamStat insertEventTeamStats:stats[statTypeKey] ofType:statType forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+            }
+        } withCompletion:^{
+            [strongSelf removeRequestIdentifier:request];
+        }];
+    }];
+    [self addRequestIdentifier:request];
 }
 
-#pragma mark - Table View Data Source
+#pragma mark - TBA Table View Data Source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+- (void)configureCell:(TBASummaryTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    EventTeamStat *teamStat = (EventTeamStat *)[self.fetchedResultsController objectAtIndexPath:indexPath];
+    cell.titleLabel.text = [teamStat statTypeString];
+    cell.subtitleLabel.text = [NSString stringWithFormat:@"%f", teamStat.score.doubleValue];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSInteger rows = 1;
-    if (self.eventRanking) {
-        rows = 3;
-    }
-    return rows;
+- (void)showNoDataView {
+    [self showNoDataViewWithText:@"No stats for this event"];
 }
 
 @end

@@ -533,6 +533,63 @@
             </objects>
             <point key="canvasLocation" x="2578" y="570.5"/>
         </scene>
+        <!--Team At Event Stats View Controller-->
+        <scene sceneID="Et5-Dl-PC4">
+            <objects>
+                <tableViewController id="Ymq-te-jfS" customClass="TBATeamAtEventStatsViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="DLZ-1B-5mD">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="443"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SummaryCell" rowHeight="57" id="O96-Mb-QOx" customClass="TBASummaryTableViewCell">
+                                <rect key="frame" x="0.0" y="28" width="600" height="57"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="O96-Mb-QOx" id="pg8-hz-ePq">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="56.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="lBY-ba-p8Z">
+                                            <rect key="frame" x="8" y="8" width="584" height="41"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="750" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yau-jQ-Sx8">
+                                                    <rect key="frame" x="0.0" y="0.0" width="584" height="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ytc-lV-n16">
+                                                    <rect key="frame" x="0.0" y="17" width="584" height="24"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="lBY-ba-p8Z" secondAttribute="bottom" constant="8" id="FMB-10-VJU"/>
+                                        <constraint firstItem="lBY-ba-p8Z" firstAttribute="top" secondItem="pg8-hz-ePq" secondAttribute="top" constant="8" id="O9K-ER-50X"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="lBY-ba-p8Z" secondAttribute="trailing" id="dRm-79-5g3"/>
+                                        <constraint firstItem="lBY-ba-p8Z" firstAttribute="leading" secondItem="pg8-hz-ePq" secondAttribute="leadingMargin" id="qQB-yJ-eDt"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="subtitleLabel" destination="ytc-lV-n16" id="cIS-yj-1Yq"/>
+                                    <outlet property="titleLabel" destination="Yau-jQ-Sx8" id="kqC-AN-JXw"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Ymq-te-jfS" id="ZlG-vc-f17"/>
+                            <outlet property="delegate" destination="Ymq-te-jfS" id="Ucd-MG-onS"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="b4B-XZ-M1i" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3815" y="-2924.5"/>
+        </scene>
         <!--Match View Controller-->
         <scene sceneID="9Qx-5Y-dNQ">
             <objects>
@@ -1185,6 +1242,9 @@
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CVa-pc-UGX">
                                 <rect key="frame" x="0.0" y="44" width="600" height="443"/>
+                                <connections>
+                                    <segue destination="Ymq-te-jfS" kind="embed" identifier="StatsViewControllerEmbed" id="cmQ-yV-7ol"/>
+                                </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tZA-Kc-gWr">
                                 <rect key="frame" x="0.0" y="44" width="600" height="443"/>
@@ -1331,7 +1391,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5lD-e4-iYj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3815" y="-2935.5"/>
+            <point key="canvasLocation" x="3815" y="-3429.5"/>
         </scene>
         <!--TBAMatchesViewController-->
         <scene sceneID="8uf-f2-43z">

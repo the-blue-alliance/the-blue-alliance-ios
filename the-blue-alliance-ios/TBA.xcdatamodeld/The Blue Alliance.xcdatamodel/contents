@@ -51,7 +51,7 @@
         <relationship name="points" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventPoints" inverseName="event" inverseEntity="EventPoints" syncable="YES"/>
         <relationship name="rankings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventRanking" inverseName="event" inverseEntity="EventRanking" syncable="YES"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="events" inverseEntity="Team" syncable="YES"/>
-        <relationship name="teamStats" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventStat" inverseName="event" inverseEntity="EventStat" syncable="YES"/>
+        <relationship name="teamStats" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventTeamStat" inverseName="event" inverseEntity="EventTeamStat" syncable="YES"/>
         <relationship name="webcasts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventWebcast" inverseName="event" inverseEntity="EventWebcast" syncable="YES"/>
     </entity>
     <entity name="EventAlliance" representedClassName="EventAlliance" syncable="YES">
@@ -78,11 +78,11 @@
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="rankings" inverseEntity="Event" syncable="YES"/>
         <relationship name="team" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="eventRankings" inverseEntity="Team" syncable="YES"/>
     </entity>
-    <entity name="EventStat" syncable="YES">
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="statType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="teamStats" inverseEntity="Event" syncable="YES"/>
-        <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="eventStats" inverseEntity="Team" syncable="YES"/>
+    <entity name="EventTeamStat" representedClassName="EventTeamStat" syncable="YES">
+        <attribute name="score" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="statType" attributeType="Integer 16" minValueString="1" syncable="YES"/>
+        <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="teamStats" inverseEntity="Event" syncable="YES"/>
+        <relationship name="team" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="eventStats" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="EventWebcast" representedClassName="EventWebcast" syncable="YES">
         <attribute name="channel" optional="YES" attributeType="String" syncable="YES"/>
@@ -137,24 +137,24 @@
         <relationship name="eventPoints" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventPoints" inverseName="team" inverseEntity="EventPoints" syncable="YES"/>
         <relationship name="eventRankings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventRanking" inverseName="team" inverseEntity="EventRanking" syncable="YES"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="teams" inverseEntity="Event" syncable="YES"/>
-        <relationship name="eventStats" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventStat" inverseName="team" inverseEntity="EventStat" syncable="YES"/>
+        <relationship name="eventStats" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventTeamStat" inverseName="team" inverseEntity="EventTeamStat" syncable="YES"/>
         <relationship name="media" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Media" inverseName="team" inverseEntity="Media" syncable="YES"/>
         <relationship name="redMatches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="redAlliance" inverseEntity="Match" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Award" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="AwardRecipient" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="District" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="DistrictRanking" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Event" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="EventAlliance" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="EventPoints" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="EventRanking" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="EventStat" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="EventWebcast" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Match" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="MatchVideo" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Media" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Team" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Award" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="AwardRecipient" positionX="0" positionY="0" width="128" height="90"/>
+        <element name="District" positionX="0" positionY="0" width="128" height="105"/>
+        <element name="DistrictRanking" positionX="0" positionY="0" width="128" height="135"/>
+        <element name="Event" positionX="0" positionY="0" width="128" height="435"/>
+        <element name="EventAlliance" positionX="0" positionY="0" width="128" height="105"/>
+        <element name="EventPoints" positionX="0" positionY="0" width="128" height="180"/>
+        <element name="EventRanking" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="EventTeamStat" positionX="0" positionY="0" width="128" height="105"/>
+        <element name="EventWebcast" positionX="0" positionY="0" width="128" height="105"/>
+        <element name="Match" positionX="0" positionY="0" width="128" height="225"/>
+        <element name="MatchVideo" positionX="0" positionY="0" width="128" height="90"/>
+        <element name="Media" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="Team" positionX="0" positionY="0" width="128" height="390"/>
     </elements>
 </model>
