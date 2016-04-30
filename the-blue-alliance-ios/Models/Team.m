@@ -31,6 +31,7 @@
 @dynamic eventPoints;
 @dynamic eventRankings;
 @dynamic events;
+@dynamic eventStats;
 @dynamic media;
 @dynamic awards;
 @dynamic redMatches;

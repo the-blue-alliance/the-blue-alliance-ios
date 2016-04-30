@@ -84,8 +84,6 @@
     
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf hideNoDataView];
         [strongSelf refreshMatches];
     };
     
