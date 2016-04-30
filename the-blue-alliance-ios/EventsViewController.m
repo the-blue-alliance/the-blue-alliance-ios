@@ -117,7 +117,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 }
 
 - (IBAction)selectWeekButtonTapped:(id)sender {
-    if (!self.currentWeek) {
+    if (!self.weeks || self.weeks.count == 0 || !self.currentWeek) {
         return;
     }
     
