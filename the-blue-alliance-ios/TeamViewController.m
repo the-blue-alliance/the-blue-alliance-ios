@@ -56,7 +56,7 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
         strongSelf.eventsViewController.year = year;
     };
     
-    [self fetchYearsParticipatedAndRefresh:YES];
+    [self fetchYearsParticipated];
     [self styleInterface];
 }
 
@@ -68,13 +68,11 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 
 #pragma mark - Data Methods
 
-- (void)fetchYearsParticipatedAndRefresh:(BOOL)refresh {
+- (void)fetchYearsParticipated {
     NSArray *years = [self.team sortedYearsParticipated];
     if (!years || [years count] == 0) {
         self.currentYear = 0;
-        if (refresh) {
-            [self refreshYearsParticipated];
-        }
+        [self refreshYearsParticipated];
     } else {
         self.years = years;
         if (self.currentYear == 0) {
@@ -97,6 +95,8 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 
             [strongSelf.persistenceController performChanges:^{
                 team.yearsParticipated = years;
+            } withCompletion:^{
+                [strongSelf fetchYearsParticipated];
             }];
         }
     }];
