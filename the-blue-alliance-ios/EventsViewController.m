@@ -12,6 +12,7 @@
 #import "TBASelectYearViewController.h"
 #import "TBASelectViewController.h"
 #import "Event+Fetch.h"
+#import "Event.h"
 
 // TODO: Bring the events view to the current week, like the Android app
 
@@ -37,10 +38,8 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
     _weeks = weeks;
     
     if (weeks && !self.currentWeek) {
-        NSNumber *week = weeks.firstObject;
-        
-        self.currentWeek = week;
-        self.eventsViewController.week = week;
+        self.currentWeek = @([EventWeek eventOrderForDate:[NSDate date]]);
+        self.eventsViewController.week = self.currentWeek;
     }
 }
 

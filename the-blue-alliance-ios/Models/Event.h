@@ -75,4 +75,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface EventWeek : NSObject
++ (NSArray *)championshipWeeks;
++ (NSArray *)firstCompitionWeeks;
++ (NSInteger)eventOrderForDate:(NSDate *)date;
++ (NSInteger)competitionWeekForDate:(NSDate *)date;
++ (NSInteger)championshipWeekForYear:(NSInteger)year;
+@end
+
 NS_ASSUME_NONNULL_END

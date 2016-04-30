@@ -279,3 +279,68 @@
 }
 
 @end
+
+@implementation EventWeek
+
++ (NSInteger)eventOrderForDate:(NSDate *)date {
+    NSInteger year = [[NSCalendar currentCalendar] component:NSCalendarUnitYear fromDate:date];
+    NSInteger week;
+
+    if ([self competitionWeekForDate:[NSDate date]] == [self championshipWeekForYear:year]) {
+        week = EventOrderChampionship;
+    } else if ([self competitionWeekForDate:[NSDate date]] > [self championshipWeekForYear:year]) {
+        week = EventOrderOffseason;
+    } else if ([[NSCalendar currentCalendar] component:NSCalendarUnitWeekOfYear fromDate:date] < [self firstCompetitionWeekForYear:year]) {
+        week = EventOrderPreseason;
+    } else {
+        week = [self competitionWeekForDate:date];
+    }
+
+    return week;
+}
+
++ (NSArray *)firstCompitionWeeks {
+    return  @[@6, @8, @8, @7, @12, @9, @9, @8,         // 1992 - 1999
+              @0, @8, @9, @9, @9, @9, @8, @8, @8, @8,  // 2000 - 2009
+              @9, @9, @8, @8, @8, @8, @8];             // 2010 -
+
+}
+
++ (NSInteger)firstCompetitionWeekForYear:(NSInteger)year {
+    NSInteger offset = year - 1992;
+    if ([self firstCompitionWeeks].count > offset) {
+        return offset >= [self firstCompitionWeeks].count || offset < 0 ?
+        [[[self firstCompitionWeeks] objectAtIndex:([self firstCompitionWeeks].count)] integerValue] :
+        [[[self firstCompitionWeeks] objectAtIndex:offset] integerValue];
+    } else {
+        return [[[self firstCompitionWeeks] objectAtIndex:([self firstCompitionWeeks].count)] integerValue];
+    }
+}
+
++ (NSInteger)competitionWeekForDate:(NSDate *)date {
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSInteger selectedWeek = [calendar component:NSCalendarUnitWeekOfYear fromDate:[calendar dateByAddingUnit:NSCalendarUnitWeekOfYear
+                                                                                                        value:-1
+                                                                                                       toDate:date
+                                                                                                      options:NSCalendarWrapComponents]];
+    NSInteger week = (selectedWeek - [self firstCompetitionWeekForYear:[calendar component:NSCalendarUnitYear fromDate:date]]);
+    return week < 0 ? 0 : week;
+}
+
+
++ (NSArray *)championshipWeeks {
+    return @[@1, @1, @1, @6, @4, @6, @5, @9,               // 1992 - 1999
+             @5, @6, @8, @6, @7, @8, @7, @7, @8, @8,       // 2000 - 2009
+             @7, @9, @9, @9, @9, @9, @10];                 // 2010 -
+}
+
++ (NSInteger)championshipWeekForYear:(NSInteger)year {
+    NSInteger offset = year - 1992;
+    if ([self championshipWeeks].count > offset) {
+        return [[[self championshipWeeks] objectAtIndex:(offset - 1)] integerValue];
+    } else {
+        return [[[self championshipWeeks] objectAtIndex:([self championshipWeeks].count - 1)] integerValue];
+    }
+}
+
+@end
