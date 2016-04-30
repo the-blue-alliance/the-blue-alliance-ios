@@ -52,7 +52,6 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
     
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        
         [strongSelf refreshDistrictRankings];
     };
     

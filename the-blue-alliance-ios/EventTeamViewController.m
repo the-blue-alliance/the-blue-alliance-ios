@@ -8,6 +8,7 @@
 
 #import "EventTeamViewController.h"
 #import "TBATeamAtEventSummaryViewController.h"
+#import "TBATeamAtEventStatsViewController.h"
 #import "TBAMatchesViewController.h"
 #import "TBAAwardsViewController.h"
 #import "MatchViewController.h"
@@ -29,6 +30,7 @@ static NSString *const MatchViewControllerSegue     = @"MatchViewControllerSegue
 @property (nonatomic, strong) TBAMatchesViewController *matchesViewController;
 @property (nonatomic, strong) IBOutlet UIView *matchesView;
 
+@property (nonatomic, strong) TBATeamAtEventStatsViewController *statsViewController;
 @property (nonatomic, strong) IBOutlet UIView *statsView;
 
 @property (nonatomic, strong) TBAAwardsViewController *awardsViewController;
@@ -41,9 +43,8 @@ static NSString *const MatchViewControllerSegue     = @"MatchViewControllerSegue
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    // TODO: Add Stats
-    self.refreshViewControllers = @[self.summaryViewController, self.matchesViewController, self.awardsViewController];
-    self.containerViews = @[self.summaryView, self.matchesView, self.awardsView];
+    self.refreshViewControllers = @[self.summaryViewController, self.matchesViewController, self.statsViewController, self.awardsViewController];
+    self.containerViews = @[self.summaryView, self.matchesView, self.statsView, self.awardsView];
     
     [self styleInterface];
 }
@@ -72,6 +73,10 @@ static NSString *const MatchViewControllerSegue     = @"MatchViewControllerSegue
         self.matchesViewController.matchSelected = ^(Match *match) {
             [weakSelf performSegueWithIdentifier:MatchViewControllerSegue sender:match];
         };
+    } else if ([segue.identifier isEqualToString:StatsViewControllerEmbed]) {
+        self.statsViewController = segue.destinationViewController;
+        self.statsViewController.event = self.event;
+        self.statsViewController.team = self.team;
     } else if ([segue.identifier isEqualToString:AwardsViewControllerEmbed]) {
         self.awardsViewController = segue.destinationViewController;
         self.awardsViewController.event = self.event;

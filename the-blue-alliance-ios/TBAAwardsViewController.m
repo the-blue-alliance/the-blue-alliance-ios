@@ -66,8 +66,6 @@ static NSString *const AwardCellReuseIdentifier = @"AwardCell";
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf hideNoDataView];
         [strongSelf refreshAwards];
     };
 }

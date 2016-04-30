@@ -29,7 +29,7 @@ typedef NS_ENUM(NSInteger, EventOrder) {
 };
 
 
-@class Award, EventAlliance, EventPoints, EventRanking, EventWebcast, Match, Team;
+@class Award, EventAlliance, EventPoints, EventRanking, EventTeamStat, EventWebcast, Match, Team;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -38,7 +38,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSDate *endDate;
 @property (nonatomic, retain) NSString *eventCode;
 @property (nullable, nonatomic, retain) NSNumber *eventDistrict;
+@property (nullable, nonatomic, retain) NSString *eventDistrictString;
 @property (nonatomic, retain) NSNumber *eventType;
+@property (nullable, nonatomic, retain) NSString *eventTypeString;
 @property (nullable, nonatomic, retain) NSString *facebookEid;
 @property (nonnull, retain) NSNumber *hybridType;
 @property (nonatomic, retain) NSString *key;
@@ -52,15 +54,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain) NSNumber *week;
 @property (nonatomic, retain) NSNumber *year;
 
-@property (nullable, nonatomic, retain) NSString *eventDistrictString;
-@property (nullable, nonatomic, retain) NSString *eventTypeString;
 @property (nullable, nonatomic, retain) NSSet<EventAlliance *> *alliances;
+@property (nullable, nonatomic, retain) NSSet<Award *> *awards;
 @property (nullable, nonatomic, retain) NSSet<Match *> *matches;
 @property (nullable, nonatomic, retain) NSSet<EventPoints *> *points;
 @property (nullable, nonatomic, retain) NSSet<EventRanking *> *rankings;
 @property (nullable, nonatomic, retain) NSSet<Team *> *teams;
+@property (nullable, nonatomic, retain) NSSet<EventTeamStat *> *teamStats;
 @property (nullable, nonatomic, retain) NSSet<EventWebcast *> *webcasts;
-@property (nullable, nonatomic, retain) NSSet<Award *> *awards;
 
 - (nonnull NSString *)friendlyNameWithYear:(BOOL)withYear;
 - (nonnull NSString *)dateString;
@@ -73,6 +74,15 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)insertEventWithModelEvent:(TBAEvent *)modelEvent inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray<Event *> *)insertEventsWithModelEvents:(NSArray<TBAEvent *> *)modelEvents inManagedObjectContext:(NSManagedObjectContext *)context;
 
+@end
+
+@interface EventWeek : NSObject
++ (NSInteger)firstCompetitionWeekEventOrderForYear:(NSInteger)year;
++ (NSArray *)championshipCompetitionWeeks;
++ (NSArray *)firstCompetitionYearWeeks;
++ (NSInteger)eventOrderForDate:(NSDate *)date;
++ (NSInteger)competitionWeekForDate:(NSDate *)date;
++ (NSInteger)championshipCompetitionWeekForYear:(NSInteger)year;
 @end
 
 NS_ASSUME_NONNULL_END
