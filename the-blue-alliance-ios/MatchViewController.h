@@ -8,10 +8,11 @@
 
 #import "TBAViewController.h"
 
-@class Match;
+@class Match, Team;
 
 @interface MatchViewController : TBAViewController
 
 @property (nonatomic, strong) Match *match;
+@property (nonatomic, strong) Team *team;
 
 @end

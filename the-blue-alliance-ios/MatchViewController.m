@@ -49,6 +49,7 @@ static NSString *const MatchBreakdownViewControllerEmbed    = @"MatchBreakdownVi
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:MatchViewControllerEmbed]) {
         self.matchViewController = segue.destinationViewController;
+        self.matchViewController.team = self.team;
         self.matchViewController.match = self.match;
     } else if ([segue.identifier isEqualToString:MatchBreakdownViewControllerEmbed]) {
         self.matchBreakdownViewController = segue.destinationViewController;

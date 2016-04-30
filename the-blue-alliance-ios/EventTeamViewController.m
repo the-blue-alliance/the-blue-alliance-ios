@@ -80,6 +80,7 @@ static NSString *const MatchViewControllerSegue     = @"MatchViewControllerSegue
         Match *match = (Match *)sender;
         
         MatchViewController *matchViewController = segue.destinationViewController;
+        matchViewController.team = self.team;
         matchViewController.match = match;
     }
 }

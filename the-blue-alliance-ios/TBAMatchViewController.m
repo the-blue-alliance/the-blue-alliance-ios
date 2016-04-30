@@ -39,7 +39,13 @@
 - (UILabel *)labelForTeam:(Team *)team {
     UILabel *teamLabel = [[UILabel alloc] init];
     teamLabel.text = team.teamNumber.stringValue;
-    teamLabel.font = [UIFont systemFontOfSize:14.0f];
+    UIFont *teamLabelFont;
+    if (self.team.teamNumber.integerValue == team.teamNumber.integerValue) {
+        teamLabelFont = [UIFont systemFontOfSize:14.0f weight:UIFontWeightBold];
+    } else {
+        teamLabelFont = [UIFont systemFontOfSize:14.0f];
+    }
+    teamLabel.font = teamLabelFont;
     teamLabel.textAlignment = NSTextAlignmentCenter;
     teamLabel.backgroundColor = [UIColor clearColor];
     return teamLabel;

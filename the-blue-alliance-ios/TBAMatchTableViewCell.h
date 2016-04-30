@@ -8,10 +8,11 @@
 
 #import "TBATableViewCell.h"
 
-@class Match;
+@class Match, Team;
 
 @interface TBAMatchTableViewCell : TBATableViewCell
 
 @property (nonatomic, strong) Match *match;
+@property (nonatomic, strong) Team *team;
 
 @end

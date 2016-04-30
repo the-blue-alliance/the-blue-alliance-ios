@@ -104,6 +104,7 @@ static NSString *const MatchCellReuseIdentifier = @"MatchCell";
 
 - (void)configureCell:(TBAMatchTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Match *match = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    cell.team = self.team;
     cell.match = match;
 }
 

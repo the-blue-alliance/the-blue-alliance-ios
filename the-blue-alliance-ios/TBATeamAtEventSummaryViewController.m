@@ -81,10 +81,7 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
     
     self.tbaDelegate = self;
     self.cellIdentifier = SummaryCellReuseIdentifier;
-    
-    if (!self.eventRanking) {
-        [self refreshEventRanking];
-    }
+
     [self setupEventAlliance];
 }
 
@@ -102,7 +99,7 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 #pragma mark - Data Methods
 
 - (BOOL)shouldNoDataRefresh {
-    return !self.eventRanking;
+    return self.eventRanking == nil;
 }
 
 - (void)refreshEventRanking {

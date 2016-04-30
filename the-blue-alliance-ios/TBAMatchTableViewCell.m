@@ -57,8 +57,31 @@
 
 - (void)setMatch:(Match *)match {
     _match = match;
+
+    [self configureCell];
+}
+
+- (void)setTeam:(Team *)team {
+    _team = team;
     
-    self.matchNumberLabel.text = [match friendlyMatchName];
+    if (self.match) {
+        [self configureCell];
+    }
+}
+
+#pragma mark - Cell Lifecycle
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    
+    self.redContainerView.layer.borderColor = [UIColor redColor].CGColor;
+    self.blueContainerView.layer.borderColor = [UIColor blueColor].CGColor;
+}
+
+#pragma mark - Private Methods
+
+- (void)configureCell {
+    self.matchNumberLabel.text = [self.match friendlyMatchName];
     
     for (UIView *view in self.redStackView.arrangedSubviews) {
         if (view == self.redScoreLabel) {
@@ -88,9 +111,9 @@
     }
     self.blueScoreLabel.text = self.match.blueScore.stringValue;
     
-    if (match.blueScore.integerValue < 0 && match.redScore.integerValue < 0) {
+    if (self.match.blueScore.integerValue < 0 && self.match.redScore.integerValue < 0) {
         self.timeLabel.hidden = NO;
-        self.timeLabel.text = [match timeString];
+        self.timeLabel.text = [self.match timeString];
     } else {
         self.timeLabel.hidden = YES;
     }
@@ -99,19 +122,19 @@
     UIFont *notWinnerFont = [UIFont systemFontOfSize:14 weight:UIFontWeightMedium];
     
     // Everyone is a winner in 2015 ╮ (. ❛ ᴗ ❛.) ╭
-    if (match.event.year.integerValue == 2015 && match.compLevel.integerValue != CompLevelFinal) {
+    if (self.match.event.year.integerValue == 2015 && self.match.compLevel.integerValue != CompLevelFinal) {
         self.redContainerView.layer.borderWidth = 0.0f;
         self.blueContainerView.layer.borderWidth = 0.0f;
         
         self.redScoreLabel.font = notWinnerFont;
         self.blueScoreLabel.font = notWinnerFont;
-    } else if (match.redScore > match.blueScore) {
+    } else if (self.match.redScore > self.match.blueScore) {
         self.redContainerView.layer.borderWidth = 2.0f;
         self.blueContainerView.layer.borderWidth = 0.0f;
         
         self.redScoreLabel.font = winnerFont;
         self.blueScoreLabel.font = notWinnerFont;
-    } else if (match.blueScore > match.redScore) {
+    } else if (self.match.blueScore > self.match.redScore) {
         self.blueContainerView.layer.borderWidth = 2.0f;
         self.redContainerView.layer.borderWidth = 0.0f;
         
@@ -126,21 +149,16 @@
     }
 }
 
-#pragma mark - Cell Lifecycle
-
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    
-    self.redContainerView.layer.borderColor = [UIColor redColor].CGColor;
-    self.blueContainerView.layer.borderColor = [UIColor blueColor].CGColor;
-}
-
-#pragma mark - Private Methods
-
 - (UILabel *)labelForTeam:(Team *)team {
     UILabel *teamLabel = [[UILabel alloc] init];
     teamLabel.text = team.teamNumber.stringValue;
-    teamLabel.font = [UIFont systemFontOfSize:14.0f];
+    UIFont *teamLabelFont;
+    if (self.team.teamNumber.integerValue == team.teamNumber.integerValue) {
+        teamLabelFont = [UIFont systemFontOfSize:14.0f weight:UIFontWeightBold];
+    } else {
+        teamLabelFont = [UIFont systemFontOfSize:14.0f];
+    }
+    teamLabel.font = teamLabelFont;
     teamLabel.textAlignment = NSTextAlignmentCenter;
     teamLabel.backgroundColor = [UIColor clearColor];
     return teamLabel;
