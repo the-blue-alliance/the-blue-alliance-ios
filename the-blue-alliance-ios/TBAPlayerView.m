@@ -9,19 +9,10 @@
 #import "TBAPlayerView.h"
 #import "YTPlayerView.h"
 #import "MatchVideo.h"
-@import AVKit;
-@import AVFoundation;
 
-@interface TBAPlayerView () <YTPlayerViewDelegate, AVPlayerViewControllerDelegate>
-
-@property (nonatomic, strong) UIView *playerSubview;
+@interface TBAPlayerView () <YTPlayerViewDelegate>
 
 @property (nonatomic, strong) YTPlayerView *youtubePlayerView;
-
-@property (nonatomic, strong) AVPlayerViewController *avPlayerViewController;
-//@property (nonatomic, strong) AVPlayerLayer *playerLayer;
-//@property (nonatomic, strong) UIView *tbaPlayerView;
-
 @property (nonatomic, strong) UIActivityIndicatorView *loadingActivityIndicator;
 
 @end
@@ -33,6 +24,7 @@
 - (UIActivityIndicatorView *)loadingActivityIndicator {
     if (!_loadingActivityIndicator) {
         _loadingActivityIndicator = [[UIActivityIndicatorView alloc] init];
+        _loadingActivityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _loadingActivityIndicator;
 }
@@ -46,47 +38,44 @@
     return _youtubePlayerView;
 }
 
-- (AVPlayerViewController *)avPlayerViewController {
-    if (!_avPlayerViewController) {
-        _avPlayerViewController = [[AVPlayerViewController alloc] init];
-        _avPlayerViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
-        _avPlayerViewController.delegate = self;
-    }
-    return _avPlayerViewController;
-}
-
 - (void)setMatchVideo:(MatchVideo *)matchVideo {
     _matchVideo = matchVideo;
     
-    if (self.playerSubview) {
-        [self.playerSubview removeFromSuperview];
+    if (!self.youtubePlayerView.superview) {
+        [self addSubview:self.youtubePlayerView];
+
+        NSLayoutConstraint *leadingConstraint = [NSLayoutConstraint constraintWithItem:self.youtubePlayerView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeading multiplier:1.0f constant:0.0f];
+        NSLayoutConstraint *trailingConstraint = [NSLayoutConstraint constraintWithItem:self.youtubePlayerView attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTrailing multiplier:1.0f constant:0.0f];
+        NSLayoutConstraint *topConstraint = [NSLayoutConstraint constraintWithItem:self.youtubePlayerView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f];
+        NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:self.youtubePlayerView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f];
+        [self addConstraints:@[leadingConstraint, trailingConstraint, topConstraint, bottomConstraint]];
     }
 
-    self.backgroundColor = [UIColor blueColor];
-    
-    if (matchVideo.videoType.integerValue == MatchVideoTypeYouTube) {
-        self.playerSubview = self.youtubePlayerView;
-        if (![self.youtubePlayerView loadWithVideoId:matchVideo.key]) {
-            // TODO: Failed to load video
-        }
-    } else if (matchVideo.videoType.integerValue == MatchVideoTypeTBA) {
-        self.playerSubview = self.avPlayerViewController.view;
-        NSLog(@"Here: %@", [NSURL URLWithString:matchVideo.key]);
-        self.avPlayerViewController.player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:matchVideo.key]];
+    if (!self.loadingActivityIndicator.superview) {
+        [self addSubview:self.loadingActivityIndicator];
+        
+        NSLayoutConstraint *centerHorizontallyConstraint = [NSLayoutConstraint constraintWithItem:self.loadingActivityIndicator attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f];
+        NSLayoutConstraint *centerVerticallyConstraint = [NSLayoutConstraint constraintWithItem:self.loadingActivityIndicator attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f];
+        [self addConstraints:@[centerHorizontallyConstraint, centerVerticallyConstraint]];
     }
-    
-    [self addSubview:self.playerSubview];
 
-    NSLayoutConstraint *leadingConstraint = [NSLayoutConstraint constraintWithItem:self.playerSubview attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeading multiplier:1.0f constant:0.0f];
-    NSLayoutConstraint *trailingConstraint = [NSLayoutConstraint constraintWithItem:self.playerSubview attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTrailing multiplier:1.0f constant:0.0f];
-    NSLayoutConstraint *topConstraint = [NSLayoutConstraint constraintWithItem:self.playerSubview attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f];
-    NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:self.playerSubview attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f];
-    [self addConstraints:@[leadingConstraint, trailingConstraint, topConstraint, bottomConstraint]];
-
+    [self.loadingActivityIndicator startAnimating];
+    if (![self.youtubePlayerView loadWithVideoId:matchVideo.key]) {
+        // TODO: Failed to load video
+        [self.loadingActivityIndicator stopAnimating];
+    }
 }
 
 #pragma mark YTPlayerViewDelegate
 
-// Something in here
+- (UIView *)playerViewPreferredInitialLoadingView:(YTPlayerView *)playerView {
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = [UIColor blackColor];
+    return view;
+}
+
+- (void)playerViewDidBecomeReady:(YTPlayerView *)playerView {
+    [self.loadingActivityIndicator stopAnimating];
+}
 
 @end

@@ -103,6 +103,10 @@
     }
     
     for (MatchVideo *matchVideo in [self.match.videos allObjects]) {
+        // Skip all TBA videos - they're mostly flv's and can't be played in the YTPlayerView or a AVPlayer
+        if (matchVideo.videoType.integerValue == MatchVideoTypeTBA) {
+            continue;
+        }
         [self.videoStackView addArrangedSubview:[self videoViewForMatchVideo:matchVideo]];
     }
 }
