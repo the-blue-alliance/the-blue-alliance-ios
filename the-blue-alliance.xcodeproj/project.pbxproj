@@ -319,7 +319,7 @@
 				50832E091918BB63003AC8A7 /* AppDelegate.h */,
 				50832E0A1918BB63003AC8A7 /* AppDelegate.m */,
 				92E9901F1CCF1E4300EE8F71 /* Additions */,
-				927E8C481B2689F400C93E6C /* Container View Controllers */,
+				927E8C481B2689F400C93E6C /* Data View Controllers */,
 				924E94381CD2C15500C2EADB /* Superclasses */,
 				92C5B871192C0BC400AFDBCA /* Events */,
 				9270481F1AC23BE8002E46CE /* Teams */,
@@ -502,6 +502,7 @@
 			children = (
 				924E94351CD2C15300C2EADB /* TBAViewController.h */,
 				924E94361CD2C15300C2EADB /* TBAViewController.m */,
+				9275F2DD1B35BC6800C74D7A /* Select Year VC */,
 			);
 			name = Superclasses;
 			sourceTree = "<group>";
@@ -559,8 +560,6 @@
 				92E9901A1CCF1A6A00EE8F71 /* Table View */,
 				92E990191CCF1A6300EE8F71 /* Collection View */,
 				9275F2DE1B35BC7D00C74D7A /* No Data */,
-				9275F2DC1B35BC6200C74D7A /* Refresh */,
-				9275F2DD1B35BC6800C74D7A /* Select Year VC */,
 			);
 			name = "Container Views";
 			sourceTree = "<group>";
@@ -627,14 +626,15 @@
 			name = Team;
 			sourceTree = "<group>";
 		};
-		927E8C481B2689F400C93E6C /* Container View Controllers */ = {
+		927E8C481B2689F400C93E6C /* Data View Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				92754DEB1C32491C002E1855 /* Navigation */,
 				9260016D1B519FA90027FE95 /* Container Views */,
+				9275F2DC1B35BC6200C74D7A /* Refresh */,
 				9260016C1B519F9A0027FE95 /* Data Views */,
 			);
-			name = "Container View Controllers";
+			name = "Data View Controllers";
 			sourceTree = "<group>";
 		};
 		927E8C491B2689FB00C93E6C /* Events */ = {

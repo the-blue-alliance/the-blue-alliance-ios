@@ -12,10 +12,25 @@
 @interface TBAContainerCollectionViewController ()
 
 @property (nonatomic, strong) TBANoDataViewController *noDataViewController;
+@property (nonatomic, strong) id changeObserver;
 
 @end
 
 @implementation TBAContainerCollectionViewController
+
+#pragma mark - View Lifecycle
+
+- (void)dealloc {
+    [self removeChangeObserver];
+}
+
+#pragma mark - Private Methods
+
+- (void)removeChangeObserver {
+    if (self.changeObserver) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self.changeObserver];
+    }
+}
 
 #pragma mark - TBA Delegate Methods
 
@@ -26,6 +41,17 @@
 }
 
 #pragma mark - Public Methods
+
+- (void)registerForChangeNotifications:(void (^_Nonnull)(id _Nonnull changedObject))changeBlock {
+    [self removeChangeObserver];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:self.persistenceController.managedObjectContext queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        NSSet *updatedObjects = note.userInfo[NSUpdatedObjectsKey];
+        for (NSManagedObject *obj in updatedObjects) {
+            changeBlock(obj);
+        }
+    }];
+}
 
 - (void)clearFRC {
     self.fetchedResultsController = nil;

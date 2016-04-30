@@ -56,9 +56,7 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
         strongSelf.eventsViewController.year = year;
     };
     
-    [self registerForChangeNotifications];
     [self fetchYearsParticipatedAndRefresh:YES];
-    
     [self styleInterface];
 }
 
@@ -66,21 +64,6 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 
 - (void)styleInterface {
     self.navigationItem.title = [NSString stringWithFormat:@"Team %@", self.team.teamNumber];
-}
-
-#pragma mark - Private Methods
-
-- (void)registerForChangeNotifications {
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:self.persistenceController.managedObjectContext queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-        NSSet *updatedObjects = note.userInfo[NSUpdatedObjectsKey];
-        for (NSManagedObject *obj in updatedObjects) {
-            if (obj == self.team) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self fetchYearsParticipatedAndRefresh:NO];
-                });
-            }
-        }
-    }];
 }
 
 #pragma mark - Data Methods

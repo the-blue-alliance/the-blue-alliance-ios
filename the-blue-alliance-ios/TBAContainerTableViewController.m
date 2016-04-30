@@ -12,6 +12,7 @@
 @interface TBAContainerTableViewController ()
 
 @property (nonatomic, strong) TBANoDataViewController *noDataViewController;
+@property (nonatomic, strong) id changeObserver;
 
 @end
 
@@ -29,6 +30,18 @@
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
+- (void)dealloc {
+    [self removeChangeObserver];
+}
+
+#pragma mark - Private Methods
+
+- (void)removeChangeObserver {
+    if (self.changeObserver) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self.changeObserver];
+    }
+}
+
 #pragma mark - TBA Delegate Methods
 
 - (void)configureCell:(nonnull UITableViewCell *)cell atIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -38,6 +51,17 @@
 }
 
 #pragma mark - Public Methods
+
+- (void)registerForChangeNotifications:(void (^_Nonnull)(id _Nonnull changedObject))changeBlock {
+    [self removeChangeObserver];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:self.persistenceController.managedObjectContext queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        NSSet *updatedObjects = note.userInfo[NSUpdatedObjectsKey];
+        for (NSManagedObject *obj in updatedObjects) {
+            changeBlock(obj);
+        }
+    }];
+}
 
 - (void)clearFRC {
     self.fetchedResultsController = nil;

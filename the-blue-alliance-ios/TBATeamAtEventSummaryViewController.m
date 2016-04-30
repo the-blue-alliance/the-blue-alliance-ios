@@ -61,6 +61,17 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
     [super viewDidLoad];
     
     __weak typeof(self) weakSelf = self;
+    [self registerForChangeNotifications:^(id  _Nonnull changedObject) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (changedObject == strongSelf.eventRanking || changedObject == strongSelf.event) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf.tableView reloadData];
+            });
+        } else if (changedObject == self.event) {
+            [strongSelf setupEventAlliance];
+        }
+    }];
+    
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
@@ -71,8 +82,6 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
     self.tbaDelegate = self;
     self.cellIdentifier = SummaryCellReuseIdentifier;
     
-    [self registerForChangeNotifications];
-    
     if (!self.eventRanking) {
         [self refreshEventRanking];
     }
@@ -80,21 +89,6 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 }
 
 #pragma mark - Private Methods
-
-- (void)registerForChangeNotifications {
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:self.persistenceController.managedObjectContext queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-        NSSet *updatedObjects = note.userInfo[NSUpdatedObjectsKey];
-        for (NSManagedObject *obj in updatedObjects) {
-            if (obj == self.eventRanking || obj == self.event) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.tableView reloadData];
-                });
-            } else if (obj == self.event) {
-                [self setupEventAlliance];
-            }
-        }
-    }];
-}
 
 - (void)setupEventAlliance {
     for (EventAlliance *alliance in self.event.alliances) {

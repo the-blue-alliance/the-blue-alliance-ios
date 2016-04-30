@@ -35,10 +35,17 @@ static NSString *const EventOptionAwards            = @"Awards";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self registerForChangeNotifications];
-    [self setupInfoArray];
-    
     __weak typeof(self) weakSelf = self;
+    [self registerForChangeNotifications:^(id  _Nonnull changedObject) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (changedObject == strongSelf.event || changedObject == strongSelf.team) {
+            [strongSelf setupInfoArray];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf.tableView reloadData];
+            });
+        }
+    }];
+    
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
@@ -48,23 +55,11 @@ static NSString *const EventOptionAwards            = @"Awards";
             [strongSelf refreshEvent];
         }
     };
+    
+    [self setupInfoArray];
 }
 
 #pragma mark - Private Methods
-
-- (void)registerForChangeNotifications {
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:self.persistenceController.managedObjectContext queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-        NSSet *updatedObjects = note.userInfo[NSUpdatedObjectsKey];
-        for (NSManagedObject *obj in updatedObjects) {
-            if (obj == self.event || obj == self.team) {
-                [self setupInfoArray];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.tableView reloadData];
-                });
-            }
-        }
-    }];
-}
 
 - (void)setupInfoArray {
     NSMutableArray *dataArr = [[NSMutableArray alloc] init];
@@ -92,7 +87,6 @@ static NSString *const EventOptionAwards            = @"Awards";
 #pragma mark - Data Methods
 
 - (BOOL)shouldNoDataRefresh {
-#warning Think about complex refreshes, like what if we're refreshing event/district rankings and see we don't have a team name
     return ((self.team && !self.team.name) || (self.event && !self.event.name));
 }
 

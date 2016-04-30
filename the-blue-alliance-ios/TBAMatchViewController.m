@@ -65,16 +65,23 @@
     self.redContainerView.layer.borderColor = [UIColor redColor].CGColor;
     self.blueContainerView.layer.borderColor = [UIColor blueColor].CGColor;
     [self.scrollView addSubview:self.refreshControl];
-    
+
     __weak typeof(self) weakSelf = self;
+    [self registerForChangeNotifications:^(id  _Nonnull changedObject) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (changedObject == strongSelf.match) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [strongSelf styleInterface];
+            });
+        }
+    }];
+    
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         [strongSelf hideNoDataView];
         [strongSelf refreshMatches];
     };
-    
-    [self registerForChangeNotifications];
     
     [self styleInterface];
 }
@@ -166,21 +173,6 @@
         self.redScoreLabel.font = notWinnerFont;
         self.blueScoreLabel.font = notWinnerFont;
     }
-}
-
-#pragma mark - Private Methods
-
-- (void)registerForChangeNotifications {
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:self.persistenceController.managedObjectContext queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-        NSSet *updatedObjects = note.userInfo[NSUpdatedObjectsKey];
-        for (NSManagedObject *obj in updatedObjects) {
-            if (obj == self.match) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self styleInterface];
-                });
-            }
-        }
-    }];
 }
 
 #pragma mark - Data Methods

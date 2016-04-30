@@ -13,6 +13,8 @@
 
 @property (nonnull, nonatomic, strong) TBAPersistenceController *persistenceController;
 
+- (void)registerForChangeNotifications:(void (^_Nonnull)(id _Nonnull changedObject))changeBlock;
+
 - (void)showErrorAlertWithMessage:(nonnull NSString *)message;
 - (void)showNoDataViewWithText:(nonnull NSString *)text;
 - (void)hideNoDataView;

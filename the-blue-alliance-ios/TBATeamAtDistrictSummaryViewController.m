@@ -39,8 +39,17 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     __weak typeof(self) weakSelf = self;
+    [self registerForChangeNotifications:^(id  _Nonnull changedObject) {
+        if (changedObject == self.districtRanking || changedObject == self.districtRanking.district) {
+            self.sortedEventPoints = nil;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+        }
+    }];
+    
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
@@ -49,24 +58,6 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
     
     self.tbaDelegate = self;
     self.cellIdentifier = SummaryCellReuseIdentifier;
-    
-    [self registerForChangeNotifications];
-}
-
-#pragma mark - Private Methods
-
-- (void)registerForChangeNotifications {
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:self.persistenceController.managedObjectContext queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-        NSSet *updatedObjects = note.userInfo[NSUpdatedObjectsKey];
-        for (NSManagedObject *obj in updatedObjects) {
-            if (obj == self.districtRanking || obj == self.districtRanking.district) {
-                self.sortedEventPoints = nil;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.tableView reloadData];
-                });
-            }
-        }
-    }];
 }
 
 #pragma mark - Data Methods
