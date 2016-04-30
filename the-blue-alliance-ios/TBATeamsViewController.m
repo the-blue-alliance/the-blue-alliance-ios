@@ -66,8 +66,7 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf hideNoDataView];
+
         if (strongSelf.event) {
             [strongSelf refreshEventTeams];
         } else {

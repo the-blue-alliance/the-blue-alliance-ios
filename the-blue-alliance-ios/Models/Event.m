@@ -41,6 +41,7 @@
 @dynamic rankings;
 @dynamic teams;
 @dynamic webcasts;
+@dynamic teamStats;
 @dynamic awards;
 
 + (nonnull NSString *)stringForEventOrder:(NSNumber *)order {

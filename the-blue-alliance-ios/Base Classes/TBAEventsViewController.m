@@ -94,8 +94,6 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
-        [strongSelf hideNoDataView];
-        
         if (!self.year || self.year == 0) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [strongSelf showNoDataViewWithText:@"No year selected"];

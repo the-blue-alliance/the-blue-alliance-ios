@@ -8,7 +8,7 @@
 
 #import "TBAManagedObject.h"
 
-@class AwardRecipient, DistrictRanking, Event, EventPoints, EventRanking, Match, Media;
+@class AwardRecipient, DistrictRanking, Event, EventPoints, EventRanking, EventTeamStat, Match, Media;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSSet<EventPoints *> *eventPoints;
 @property (nullable, nonatomic, retain) NSSet<EventRanking *> *eventRankings;
 @property (nullable, nonatomic, retain) NSSet<Event *> *events;
+@property (nullable, nonatomic, retain) NSSet<EventTeamStat *> *eventStats;
 @property (nullable, nonatomic, retain) NSSet<Media *> *media;
 @property (nullable, nonatomic, retain) NSSet<AwardRecipient *> *awards;
 @property (nullable, nonatomic, retain) NSSet<Match *> *redMatches;
