@@ -282,13 +282,28 @@
 
 @implementation EventWeek
 
+// This class uses the NCCalendarUnit standard of calling week of the year a "Year Week".
+// A week into the competition season is called a "Competition Week".
+// 
+// Example: 'championshipYearWeekForYear' returns what week of the year championship falls on
+// based on what competition week it is.
+
+
++ (NSInteger)firstCompetitionWeekEventOrderForYear:(NSInteger)year {
+    if ([self championshipYearWeekForYear:year] == [self firstCompetitionWeekForYear:year]) {
+        return EventOrderChampionship;
+    } else {
+        return 1;
+    }
+}
+
 + (NSInteger)eventOrderForDate:(NSDate *)date {
     NSInteger year = [[NSCalendar currentCalendar] component:NSCalendarUnitYear fromDate:date];
     NSInteger week;
 
-    if ([self competitionWeekForDate:[NSDate date]] == [self championshipWeekForYear:year]) {
+    if ([self competitionWeekForDate:[NSDate date]] == [self championshipCompetitionWeekForYear:year]) {
         week = EventOrderChampionship;
-    } else if ([self competitionWeekForDate:[NSDate date]] > [self championshipWeekForYear:year]) {
+    } else if ([self competitionWeekForDate:[NSDate date]] > [self championshipCompetitionWeekForYear:year]) {
         week = EventOrderOffseason;
     } else if ([[NSCalendar currentCalendar] component:NSCalendarUnitWeekOfYear fromDate:date] < [self firstCompetitionWeekForYear:year]) {
         week = EventOrderPreseason;
@@ -299,7 +314,7 @@
     return week;
 }
 
-+ (NSArray *)firstCompitionWeeks {
++ (NSArray *)firstCompetitionYearWeeks {
     return  @[@6, @8, @8, @7, @12, @9, @9, @8,         // 1992 - 1999
               @0, @8, @9, @9, @9, @9, @8, @8, @8, @8,  // 2000 - 2009
               @9, @9, @8, @8, @8, @8, @8];             // 2010 -
@@ -308,12 +323,12 @@
 
 + (NSInteger)firstCompetitionWeekForYear:(NSInteger)year {
     NSInteger offset = year - 1992;
-    if ([self firstCompitionWeeks].count > offset) {
-        return offset >= [self firstCompitionWeeks].count || offset < 0 ?
-        [[[self firstCompitionWeeks] objectAtIndex:([self firstCompitionWeeks].count)] integerValue] :
-        [[[self firstCompitionWeeks] objectAtIndex:offset] integerValue];
+    if ([self firstCompetitionYearWeeks].count > offset) {
+        return offset >= [self firstCompetitionYearWeeks].count || offset < 0 ?
+        [[[self firstCompetitionYearWeeks] objectAtIndex:([self firstCompetitionYearWeeks].count)] integerValue] :
+        [[[self firstCompetitionYearWeeks] objectAtIndex:offset] integerValue];
     } else {
-        return [[[self firstCompitionWeeks] objectAtIndex:([self firstCompitionWeeks].count)] integerValue];
+        return [[[self firstCompetitionYearWeeks] objectAtIndex:([self firstCompetitionYearWeeks].count)] integerValue];
     }
 }
 
@@ -328,18 +343,24 @@
 }
 
 
-+ (NSArray *)championshipWeeks {
++ (NSArray *)championshipCompetitionWeeks {
     return @[@1, @1, @1, @6, @4, @6, @5, @9,               // 1992 - 1999
              @5, @6, @8, @6, @7, @8, @7, @7, @8, @8,       // 2000 - 2009
              @7, @9, @9, @9, @9, @9, @10];                 // 2010 -
 }
 
-+ (NSInteger)championshipWeekForYear:(NSInteger)year {
++ (NSInteger)championshipYearWeekForYear:(NSInteger)year {
+    return ([self championshipCompetitionWeekForYear:year] + [self firstCompetitionWeekForYear:year]) - 1;
+}
+
++ (NSInteger)championshipCompetitionWeekForYear:(NSInteger)year {
     NSInteger offset = year - 1992;
-    if ([self championshipWeeks].count > offset) {
-        return [[[self championshipWeeks] objectAtIndex:(offset - 1)] integerValue];
+    if (1995 >= year) {
+        return [[[self championshipCompetitionWeeks] objectAtIndex:offset] integerValue];
+    } else if ([self championshipCompetitionWeeks].count > offset) {
+        return [[[self championshipCompetitionWeeks] objectAtIndex:(offset - 1)] integerValue];
     } else {
-        return [[[self championshipWeeks] objectAtIndex:([self championshipWeeks].count - 1)] integerValue];
+        return [[[self championshipCompetitionWeeks] objectAtIndex:([self championshipCompetitionWeeks].count - 1)] integerValue];
     }
 }
 

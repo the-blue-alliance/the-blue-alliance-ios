@@ -36,11 +36,11 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 
 - (void)setWeeks:(NSArray<NSNumber *> *)weeks {
     _weeks = weeks;
-
+    
     if (weeks && !self.currentWeek) {
         self.currentWeek = self.currentYear.integerValue == [[NSCalendar currentCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]] ?
         @([EventWeek eventOrderForDate:[NSDate date]]) :
-        @1;
+        @([EventWeek firstCompetitionWeekEventOrderForYear:self.currentYear.integerValue]);
         self.eventsViewController.week = self.currentWeek;
     }
 }
