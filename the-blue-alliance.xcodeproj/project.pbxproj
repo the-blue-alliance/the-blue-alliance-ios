@@ -704,6 +704,7 @@
 				92C6A6F31CD52F110014BAFF /* TBAPlayerView.m */,
 			);
 			name = "View Subclasses";
+		};
 		92C6A6EE1CD5021F0014BAFF /* Team @ Event Stats */ = {
 			isa = PBXGroup;
 			children = (
