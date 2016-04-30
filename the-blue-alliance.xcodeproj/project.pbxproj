@@ -62,6 +62,7 @@
 		92AC4FF61B471F32004A05E2 /* TBAEventRankingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AC4FF51B471F32004A05E2 /* TBAEventRankingsViewController.m */; };
 		92AE675F1B81FFB000D7418F /* TBAMediaCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92AE675E1B81FFB000D7418F /* TBAMediaCollectionViewController.m */; };
 		92BB8B981AC64DC800A041FA /* TBASelectYearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B971AC64DC800A041FA /* TBASelectYearViewController.m */; };
+		92C6A6F41CD52F110014BAFF /* TBAPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C6A6F31CD52F110014BAFF /* TBAPlayerView.m */; };
 		92C7C7A61CC8772A00076C52 /* TBANavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C7C7A51CC8772A00076C52 /* TBANavigationController.m */; };
 		92CA3C5C1B88F2C30094DC7D /* TBAContainerCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CA3C5B1B88F2C30094DC7D /* TBAContainerCollectionViewController.m */; };
 		92CB28331B8FEB3F00B41C89 /* TBAMatchesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CB28321B8FEB3F00B41C89 /* TBAMatchesViewController.m */; };
@@ -204,6 +205,8 @@
 		92AE675E1B81FFB000D7418F /* TBAMediaCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TBAMediaCollectionViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		92BB8B961AC64DC800A041FA /* TBASelectYearViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBASelectYearViewController.h; sourceTree = "<group>"; };
 		92BB8B971AC64DC800A041FA /* TBASelectYearViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBASelectYearViewController.m; sourceTree = "<group>"; };
+		92C6A6F21CD52F110014BAFF /* TBAPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAPlayerView.h; sourceTree = "<group>"; };
+		92C6A6F31CD52F110014BAFF /* TBAPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAPlayerView.m; sourceTree = "<group>"; };
 		92C7C7A41CC8772A00076C52 /* TBANavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBANavigationController.h; sourceTree = "<group>"; };
 		92C7C7A51CC8772A00076C52 /* TBANavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBANavigationController.m; sourceTree = "<group>"; };
 		92CA3C5A1B88F2C30094DC7D /* TBAContainerCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAContainerCollectionViewController.h; sourceTree = "<group>"; };
@@ -629,6 +632,7 @@
 		927E8C481B2689F400C93E6C /* Data View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				92C6A6F51CD52F3C0014BAFF /* View Subclasses */,
 				92754DEB1C32491C002E1855 /* Navigation */,
 				9260016D1B519FA90027FE95 /* Container Views */,
 				9275F2DC1B35BC6200C74D7A /* Refresh */,
@@ -682,6 +686,15 @@
 				9222F11A1AD6911300C0AEA0 /* Event */,
 			);
 			name = Events;
+			sourceTree = "<group>";
+		};
+		92C6A6F51CD52F3C0014BAFF /* View Subclasses */ = {
+			isa = PBXGroup;
+			children = (
+				92C6A6F21CD52F110014BAFF /* TBAPlayerView.h */,
+				92C6A6F31CD52F110014BAFF /* TBAPlayerView.m */,
+			);
+			name = "View Subclasses";
 			sourceTree = "<group>";
 		};
 		92CB28341B8FEB4600B41C89 /* Matches */ = {
@@ -987,6 +1000,7 @@
 				9237F77E1B2CA7CB00C89978 /* TBA.xcdatamodeld in Sources */,
 				92553E011CB2072300D7E1EE /* TBAAwardTableViewCell.m in Sources */,
 				92794DA71CCBD40F00660082 /* TBAManagedObject.m in Sources */,
+				92C6A6F41CD52F110014BAFF /* TBAPlayerView.m in Sources */,
 				92E990151CCF16A200EE8F71 /* TBASummaryTableViewCell.m in Sources */,
 				92E749101B27B0EC00C46487 /* TBAInfoViewController.m in Sources */,
 				92E9900D1CCDD33600EE8F71 /* EventTeamViewController.m in Sources */,

@@ -68,7 +68,7 @@ static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
 
 #pragma mark - Data Methods
 
-- (BOOL)noDataRefresh {
+- (BOOL)shouldNoDataRefresh {
     return self.fetchedResultsController.fetchedObjects.count == 0;
 }
 
