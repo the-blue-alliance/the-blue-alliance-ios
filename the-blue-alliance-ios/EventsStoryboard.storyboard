@@ -1156,7 +1156,7 @@
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="KBG-mB-fVT">
                                                             <rect key="frame" x="0.0" y="32" width="90" height="31"/>
                                                             <subviews>
-                                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="play_black" translatesAutoresizingMaskIntoConstraints="NO" id="Hg3-a0-ler">
+                                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_action_play_over_video" translatesAutoresizingMaskIntoConstraints="NO" id="Hg3-a0-ler">
                                                                     <rect key="frame" x="0.0" y="0.0" width="90" height="31"/>
                                                                 </imageView>
                                                             </subviews>
@@ -1739,8 +1739,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="ic_action_play_over_video" width="32" height="32"/>
         <image name="ic_event_black" width="24" height="24"/>
-        <image name="play_black" width="28" height="28"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="sRl-KT-Osw"/>
