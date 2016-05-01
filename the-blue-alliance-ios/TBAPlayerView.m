@@ -9,6 +9,7 @@
 #import "TBAPlayerView.h"
 #import "YTPlayerView.h"
 #import "MatchVideo.h"
+#import "Media.h"
 
 @interface TBAPlayerView () <YTPlayerViewDelegate>
 
@@ -19,11 +20,22 @@
 
 @implementation TBAPlayerView
 
+#pragma mark - Initilization
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return self;
+}
+
 #pragma mark - Properities
 
 - (UIActivityIndicatorView *)loadingActivityIndicator {
     if (!_loadingActivityIndicator) {
         _loadingActivityIndicator = [[UIActivityIndicatorView alloc] init];
+        _loadingActivityIndicator.hidesWhenStopped = YES;
         _loadingActivityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _loadingActivityIndicator;
@@ -40,17 +52,29 @@
 
 - (void)setMatchVideo:(MatchVideo *)matchVideo {
     _matchVideo = matchVideo;
+    _media = nil;
     
+    [self configureCell];
+}
+
+- (void)setMedia:(Media *)media {
+    _media = media;
+    _matchVideo = nil;
+    
+    [self configureCell];
+}
+
+- (void)configureCell {
     if (!self.youtubePlayerView.superview) {
         [self addSubview:self.youtubePlayerView];
-
+        
         NSLayoutConstraint *leadingConstraint = [NSLayoutConstraint constraintWithItem:self.youtubePlayerView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeading multiplier:1.0f constant:0.0f];
         NSLayoutConstraint *trailingConstraint = [NSLayoutConstraint constraintWithItem:self.youtubePlayerView attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTrailing multiplier:1.0f constant:0.0f];
         NSLayoutConstraint *topConstraint = [NSLayoutConstraint constraintWithItem:self.youtubePlayerView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f];
         NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:self.youtubePlayerView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f];
         [self addConstraints:@[leadingConstraint, trailingConstraint, topConstraint, bottomConstraint]];
     }
-
+    
     if (!self.loadingActivityIndicator.superview) {
         [self addSubview:self.loadingActivityIndicator];
         
@@ -58,9 +82,17 @@
         NSLayoutConstraint *centerVerticallyConstraint = [NSLayoutConstraint constraintWithItem:self.loadingActivityIndicator attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f];
         [self addConstraints:@[centerHorizontallyConstraint, centerVerticallyConstraint]];
     }
-
+    
     [self.loadingActivityIndicator startAnimating];
-    if (![self.youtubePlayerView loadWithVideoId:matchVideo.key]) {
+    
+    NSString *youtubeKey = @"";
+    if (self.matchVideo) {
+        youtubeKey = self.matchVideo.key;
+    } else if (self.media) {
+        youtubeKey = self.media.foreignKey;
+    }
+
+    if (![self.youtubePlayerView loadWithVideoId:youtubeKey]) {
         // TODO: Failed to load video
         [self.loadingActivityIndicator stopAnimating];
     }

@@ -7,20 +7,47 @@
 //
 
 #import "TBAMediaCollectionViewController.h"
-#import "TBAMediaCollectionViewCell.h"
+#import "TBAPlayerView.h"
+#import "TBAMediaView.h"
+#import "TBAMedia.h"
 #import "Media.h"
 #import "Team.h"
 
 static NSString *const MediaCellReuseIdentifier = @"MediaCell";
+
+@interface TBAMediaCollectionViewController ()
+
+// Key is video ID, value is an instanciated player view with that ID
+@property (nonatomic, strong) NSMutableDictionary<NSString *, TBAPlayerView *> *playerViews;
+// Key is an image foreign key, value is a downloaded UIImage or a null if not completed
+@property (nonatomic, strong) NSMutableDictionary<NSString *, UIImage *> *downloadedImages;
+
+@end
 
 @implementation TBAMediaCollectionViewController
 @synthesize fetchedResultsController = _fetchedResultsController;
 
 #pragma mark - Properities
 
+- (NSMutableDictionary *)playerViews {
+    if (!_playerViews) {
+        _playerViews = [[NSMutableDictionary alloc] init];
+    }
+    return _playerViews;
+}
+
+- (NSMutableDictionary *)downloadedImages {
+    if (!_downloadedImages) {
+        _downloadedImages = [[NSMutableDictionary alloc] init];
+    }
+    return _downloadedImages;
+}
+
 - (void)setYear:(NSNumber *)year {
     _year = year;
     
+    self.playerViews = nil;
+    self.downloadedImages = nil;
     [self clearFRC];
 }
 
@@ -100,23 +127,78 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
     [self addRequestIdentifier:request];
 }
 
+#pragma mark - Private Methods
+
+- (TBAPlayerView *)playerViewForMedia:(Media *)media {
+    TBAPlayerView *playerView = self.playerViews[media.foreignKey];
+    if (!playerView) {
+        playerView = [[TBAPlayerView alloc] init];
+        playerView.media = media;
+
+        self.playerViews[media.foreignKey] = playerView;
+    }
+    return playerView;
+}
+
+- (TBAMediaView *)mediaViewForMedia:(Media *)media {
+    UIImage *downloadedImage = self.downloadedImages[media.foreignKey];
+    
+    TBAMediaView *mediaView = [[TBAMediaView alloc] init];
+    mediaView.downloadedImage = downloadedImage;
+    mediaView.media = media;
+    mediaView.imageDownloaded = ^(UIImage *image) {
+        self.downloadedImages[media.foreignKey] = image;
+    };
+    return mediaView;
+}
+
 #pragma mark - TBA Table View Data Soruce
 
-- (void)configureCell:(TBAMediaCollectionViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
-    cell.imageView.image = nil;
-    
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Media *media = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.media = media;
+    
+    UIView *mediaView;
+    if (media.mediaType.integerValue == TBAMediaTypeYouTube) {
+        mediaView = [self playerViewForMedia:media];
+    } else if (media.mediaType.integerValue == TBAMediaTypeCDPhotoThread) {
+        mediaView = [self mediaViewForMedia:media];
+    }
+    [cell.contentView addSubview:mediaView];
+    
+    NSLayoutConstraint *leadingConstraint = [NSLayoutConstraint constraintWithItem:mediaView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:cell.contentView attribute:NSLayoutAttributeLeading multiplier:1.0f constant:0.0f];
+    NSLayoutConstraint *trailingConstraint = [NSLayoutConstraint constraintWithItem:mediaView attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:cell.contentView attribute:NSLayoutAttributeTrailing multiplier:1.0f constant:0.0f];
+    NSLayoutConstraint *topConstraint = [NSLayoutConstraint constraintWithItem:mediaView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:cell.contentView attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.0f];
+    NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:mediaView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:cell.contentView attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f];
+    [cell.contentView addConstraints:@[leadingConstraint, trailingConstraint, topConstraint, bottomConstraint]];
 }
 
 - (void)showNoDataView {
     [self showNoDataViewWithText:@"No media found for this team"];
 }
 
+#pragma mark - Rotation Methods
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    [self.collectionView.collectionViewLayout invalidateLayout];
+}
+
 #pragma mark - Collection View Delegate Flow Layout
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(150.0f, 150.0f);
+    NSInteger horizontalSizeClass = self.traitCollection.horizontalSizeClass;
+    
+    NSInteger numberPerLine = 2;
+    if (horizontalSizeClass == UIUserInterfaceSizeClassRegular) {
+        numberPerLine = 3;
+    }
+    
+    CGFloat spacerSize = 3;
+    CGFloat viewWidth = CGRectGetWidth(self.view.frame);
+    
+    CGFloat cellWidth = (viewWidth - (spacerSize * 2) - (spacerSize * (numberPerLine - 1)))/numberPerLine;
+    return CGSizeMake(cellWidth, cellWidth);
 }
 
 @end

@@ -53,7 +53,6 @@
 
 - (TBAPlayerView *)videoViewForMatchVideo:(MatchVideo *)matchVideo {
     TBAPlayerView *videoView = [[TBAPlayerView alloc] init];
-    videoView.translatesAutoresizingMaskIntoConstraints = NO;
     videoView.matchVideo = matchVideo;
     
     NSLayoutConstraint *widescreenConstraint = [NSLayoutConstraint constraintWithItem:videoView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:videoView attribute:NSLayoutAttributeHeight multiplier:(16.0f/9.0f) constant:0.0f];
