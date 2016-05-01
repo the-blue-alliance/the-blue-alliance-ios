@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="RwJ-bX-Uzb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="RwJ-bX-Uzb">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -180,7 +180,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="567" height="71.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" misplaced="YES" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="mtD-gC-INJ">
+                                        <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="mtD-gC-INJ">
                                             <rect key="frame" x="8" y="8" width="551" height="56"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" text="7332" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r1H-Jt-2V8">
@@ -192,16 +192,16 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="VWN-bS-TpY">
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="VWN-bS-TpY">
                                                     <rect key="frame" x="59" y="0.0" width="492" height="56"/>
                                                     <subviews>
-                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" misplaced="YES" text="Team Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lq1-GJ-Ze0">
+                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Team Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lq1-GJ-Ze0">
                                                             <rect key="frame" x="0.0" y="0.0" width="492" height="39"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" verticalHuggingPriority="750" verticalCompressionResistancePriority="749" misplaced="YES" text="Stats Here" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W7f-gm-Daq">
+                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" verticalHuggingPriority="750" verticalCompressionResistancePriority="749" text="Stats Here" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W7f-gm-Daq">
                                                             <rect key="frame" x="0.0" y="39" width="492" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -982,9 +982,9 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="Cc4-Ao-ywY">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="443"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="InfoCell" textLabel="5XL-41-P1R" style="IBUITableViewCellStyleDefault" id="tpe-dM-621">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BasicCell" textLabel="5XL-41-P1R" style="IBUITableViewCellStyleDefault" id="tpe-dM-621">
                                 <rect key="frame" x="0.0" y="49.5" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tpe-dM-621" id="i5Q-mW-KtC">
@@ -1000,6 +1000,28 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="InfoCell" id="6Ww-1u-2aa" customClass="TBAInfoTableViewCell">
+                                <rect key="frame" x="0.0" y="93.5" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6Ww-1u-2aa" id="4Og-eE-968">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="rQK-Kq-xsw">
+                                            <rect key="frame" x="8" y="8" width="584" height="27.5"/>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="rQK-Kq-xsw" secondAttribute="bottom" constant="8" id="A6Z-Gv-3Er"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="rQK-Kq-xsw" secondAttribute="trailing" id="E5e-LK-afL"/>
+                                        <constraint firstItem="rQK-Kq-xsw" firstAttribute="leading" secondItem="4Og-eE-968" secondAttribute="leadingMargin" id="VJg-Ib-77h"/>
+                                        <constraint firstItem="rQK-Kq-xsw" firstAttribute="top" secondItem="4Og-eE-968" secondAttribute="top" constant="8" id="uEV-qW-o8P"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="infoStackView" destination="rQK-Kq-xsw" id="E0U-KJ-bdt"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
