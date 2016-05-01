@@ -190,7 +190,15 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
             NSString *playoffsString = [NSString stringWithFormat:@"Playoffs: %.2f", playoffData.doubleValue];
 
             cell.titleLabel.text = dataTitle;
-            cell.subtitleLabel.text = [NSString stringWithFormat:@"%@\n%@", qualsString, playoffsString];
+            
+            // Remove Qual info for Einstein
+            NSString *subtitleString;
+            if (self.event.eventType.integerValue == TBAEventTypeCMPFinals) {
+                subtitleString = playoffsString;
+            } else {
+                subtitleString = [NSString stringWithFormat:@"%@\n%@", qualsString, playoffsString];
+            }
+            cell.subtitleLabel.text = subtitleString;
         } else {
             // Grab the key for the dictionary we need (Match Stats, Defense Stats, Tower Stats)
             NSString *dictKey = self.eventStats.allKeys[indexPath.section];
@@ -209,15 +217,25 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
                 NSString *highScoreStringFormat = @"%@ in %@";
                 NSString *qualsString = [NSString stringWithFormat:highScoreStringFormat, qualData[0], qualData[2]];
                 NSString *playoffsString = [NSString stringWithFormat:highScoreStringFormat, playoffData[0], playoffData[2]];
-
-                subtitleString = [NSString stringWithFormat:@"%@\n%@", qualsString, playoffsString];
+                
+                // Remove Qual info for Einstein
+                if (self.event.eventType.integerValue == TBAEventTypeCMPFinals) {
+                    subtitleString = playoffsString;
+                } else {
+                    subtitleString = [NSString stringWithFormat:@"%@\n%@", qualsString, playoffsString];
+                }
             } else {
                 // All the defense and tower stats
                 NSString *dataStringFormat = @"%@: %@ / %@ = %.2f%%";
                 NSString *qualsString = [NSString stringWithFormat:dataStringFormat, @"Quals", qualData[0], qualData[1], qualData[2].doubleValue];
                 NSString *playoffsString = [NSString stringWithFormat:dataStringFormat, @"Playoffs", playoffData[0], playoffData[1], playoffData[2].doubleValue];
 
-                subtitleString = [NSString stringWithFormat:@"%@\n%@", qualsString, playoffsString];
+                // Remove Qual info for Einstein
+                if (self.event.eventType.integerValue == TBAEventTypeCMPFinals) {
+                    subtitleString = playoffsString;
+                } else {
+                    subtitleString = [NSString stringWithFormat:@"%@\n%@", qualsString, playoffsString];
+                }
             }
             
             cell.titleLabel.text = dataTitle;
