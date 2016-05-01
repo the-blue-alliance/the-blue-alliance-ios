@@ -7,11 +7,11 @@
 //
 
 #import "TBAMatchViewController.h"
-#import "YTPlayerView.h"
 #import "Team.h"
 #import "Event.h"
 #import "Match.h"
 #import "MatchVideo.h"
+#import "TBAPlayerView.h"
 
 @interface TBAMatchViewController ()
 
@@ -51,15 +51,14 @@
     return teamLabel;
 }
 
-- (YTPlayerView *)videoViewForMatchVideo:(MatchVideo *)matchVideo {
-    YTPlayerView *videoView = [[YTPlayerView alloc] init];
+- (TBAPlayerView *)videoViewForMatchVideo:(MatchVideo *)matchVideo {
+    TBAPlayerView *videoView = [[TBAPlayerView alloc] init];
     videoView.translatesAutoresizingMaskIntoConstraints = NO;
+    videoView.matchVideo = matchVideo;
     
     NSLayoutConstraint *widescreenConstraint = [NSLayoutConstraint constraintWithItem:videoView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:videoView attribute:NSLayoutAttributeHeight multiplier:(16.0f/9.0f) constant:0.0f];
     [videoView addConstraints:@[widescreenConstraint]];
-    
-    [videoView loadWithVideoId:matchVideo.key];
-    
+
     return videoView;
 }
 
@@ -104,6 +103,10 @@
     }
     
     for (MatchVideo *matchVideo in [self.match.videos allObjects]) {
+        // Skip all TBA videos - they're mostly flv's and can't be played in the YTPlayerView or a AVPlayer
+        if (matchVideo.videoType.integerValue == MatchVideoTypeTBA) {
+            continue;
+        }
         [self.videoStackView addArrangedSubview:[self videoViewForMatchVideo:matchVideo]];
     }
 }
