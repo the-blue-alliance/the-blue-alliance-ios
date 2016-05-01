@@ -24,6 +24,7 @@
 @property (nonatomic, strong) IBOutlet UILabel *blueScoreLabel;
 
 @property (nonatomic, strong) IBOutlet UILabel *timeLabel;
+@property (nonatomic, strong) IBOutlet UIStackView *playIconStackView;
 
 @property (nonatomic, strong) NSArray<UIView *> *coloredViews;
 
@@ -82,6 +83,7 @@
 
 - (void)configureCell {
     self.matchNumberLabel.text = [self.match friendlyMatchName];
+    self.playIconStackView.hidden = ![self.match.videos count];;
     
     for (UIView *view in self.redStackView.arrangedSubviews) {
         if (view == self.redScoreLabel) {
