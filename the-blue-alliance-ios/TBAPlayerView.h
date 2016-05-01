@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class MatchVideo;
+@class MatchVideo, Media;
 
 @interface TBAPlayerView : UIView
 
 @property (nonatomic, strong) MatchVideo *matchVideo;
+@property (nonatomic, strong) Media *media;
 
 @end
