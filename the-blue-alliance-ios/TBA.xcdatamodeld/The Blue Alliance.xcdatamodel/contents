@@ -41,6 +41,7 @@
         <attribute name="official" attributeType="Boolean" syncable="YES"/>
         <attribute name="shortName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="startDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="stats" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="venueAddress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="week" attributeType="Double" defaultValueString="0" syncable="YES"/>
@@ -146,7 +147,7 @@
         <element name="AwardRecipient" positionX="0" positionY="0" width="128" height="90"/>
         <element name="District" positionX="0" positionY="0" width="128" height="105"/>
         <element name="DistrictRanking" positionX="0" positionY="0" width="128" height="135"/>
-        <element name="Event" positionX="0" positionY="0" width="128" height="435"/>
+        <element name="Event" positionX="0" positionY="0" width="128" height="450"/>
         <element name="EventAlliance" positionX="0" positionY="0" width="128" height="105"/>
         <element name="EventPoints" positionX="0" positionY="0" width="128" height="180"/>
         <element name="EventRanking" positionX="0" positionY="0" width="128" height="120"/>

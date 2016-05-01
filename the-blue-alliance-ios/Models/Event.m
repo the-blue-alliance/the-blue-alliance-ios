@@ -29,6 +29,7 @@
 @dynamic official;
 @dynamic shortName;
 @dynamic startDate;
+@dynamic stats;
 @dynamic venueAddress;
 @dynamic website;
 @dynamic week;

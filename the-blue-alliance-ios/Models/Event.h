@@ -49,6 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain) NSNumber *official;
 @property (nullable, nonatomic, retain) NSString *shortName;
 @property (nullable, nonatomic, retain) NSDate *startDate;
+@property (nullable, nonatomic, retain) NSDictionary *stats;
 @property (nullable, nonatomic, retain) NSString *venueAddress;
 @property (nullable, nonatomic, retain) NSString *website;
 @property (nonatomic, retain) NSNumber *week;

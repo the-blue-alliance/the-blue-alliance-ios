@@ -82,7 +82,6 @@
     return arr;
 }
 
-
 - (NSString *)nickname {
     [self willAccessValueForKey:@"nickname"];
     NSString *nickname = [self primitiveValueForKey:@"nickname"];

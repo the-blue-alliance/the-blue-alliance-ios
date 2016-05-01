@@ -15,6 +15,7 @@
 #import "EventDistrictPointsViewController.h"
 #import "EventAwardsViewController.h"
 #import "EventTeamViewController.h"
+#import "EventStatsViewController.h"
 #import "MatchViewController.h"
 #import "Team.h"
 #import "Event.h"
@@ -122,9 +123,10 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
     } else if ([segue.identifier isEqualToString:DistrictPointsViewControllerSegue]) {
         EventDistrictPointsViewController *eventDistrictPointsViewController = segue.destinationViewController;
         eventDistrictPointsViewController.event = self.event;
-    }
-    // TODO: Add stats
-    else if ([segue.identifier isEqualToString:EventTeamViewControllerSegue]) {
+    } else if ([segue.identifier isEqualToString:StatsViewControllerSegue]) {
+        EventStatsViewController *eventStatsViewController = segue.destinationViewController;
+        eventStatsViewController.event = self.event;
+    } else if ([segue.identifier isEqualToString:EventTeamViewControllerSegue]) {
         EventTeamViewController *eventTeamViewController = segue.destinationViewController;
         eventTeamViewController.event = self.event;
         

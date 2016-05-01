@@ -396,11 +396,7 @@ static NSString *const EventOptionAwards            = @"Awards";
 - (NSString *)titleString {
     NSString *titleString;
     if (self.team) {
-        if (self.team.name) {
-            titleString = [self.team nickname];
-        } else {
-            titleString = [NSString stringWithFormat:@"Team %@", self.team.teamNumber];
-        }
+        titleString = self.team.nickname;
     } else {
         titleString = self.event.name;
     }
