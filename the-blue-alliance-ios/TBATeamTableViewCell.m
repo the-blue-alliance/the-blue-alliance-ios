@@ -22,17 +22,14 @@
 - (void)setTeam:(Team *)team {
     _team = team;
     
-    if (self.team.name) {
-        self.nameLabel.text = team.nickname;
-    } else {
-        self.nameLabel.text = [NSString stringWithFormat:@"Team %@", team.teamNumber];
-    }
+    self.nameLabel.text = self.team.nickname;
+    self.numberLabel.text = [NSString stringWithFormat:@"%@", team.teamNumber];
+
     if (self.team.location) {
         self.locationLabel.text = team.location;
     } else {
         self.locationLabel.text = @"";
     }
-    self.numberLabel.text = [NSString stringWithFormat:@"%@", team.teamNumber];
 }
 
 @end
