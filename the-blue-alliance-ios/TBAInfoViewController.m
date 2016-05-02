@@ -134,6 +134,9 @@ static NSString *const EventOptionAwards            = @"Awards";
         } else if (self.team) {
             cell.team = self.team;
         }
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
         return cell;
     } else if (self.event) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:BasicCellReuseIdentifier forIndexPath:indexPath];

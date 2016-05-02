@@ -18,21 +18,15 @@
 
 @implementation TBAInfoTableViewCell
 
-- (UILabel *)labelWithText:(NSString *)text {
+- (UILabel *)titleLabelWithText:(NSString *)text {
     UILabel *label = [[UILabel alloc] init];
     label.text = text;
-    return label;
-}
-
-- (UILabel *)titleLabelWithText:(NSString *)text {
-    UILabel *label = [self labelWithText:text];
     label.font = [UIFont systemFontOfSize:16.0f];
     return label;
 }
 
 - (UILabel *)subtitleLabelWithText:(NSString *)text {
-    UILabel *label = [self labelWithText:text];
-    label.font = [UIFont systemFontOfSize:14.0f];
+    UILabel *label = [self titleLabelWithText:text];
     label.textColor = [UIColor darkGrayColor];
     return label;
 }
