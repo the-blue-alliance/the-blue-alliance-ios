@@ -11,7 +11,6 @@
 #import "TBAViewController.h"
 #import "TBANavigationController.h"
 #import "TBANavigationControllerDelegate.h"
-#import "Team+Fetch.h"
 #import "OpenInGoogleMapsController.h"
 
 @interface AppDelegate ()
@@ -33,9 +32,6 @@
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UITabBarController *rootTabBarController = [storyboard instantiateViewControllerWithIdentifier:@"RootTabBarController"];
         self.navigationDelegate = [[TBANavigationControllerDelegate alloc] init];
-     
-        // Refresh all our teams, if we don't have any
-        [self setupTeamsForPersistenceController:self.persistenceController];
         
         // Pass persistence controller to all navigation controllers
         for (TBANavigationController *nav in rootTabBarController.viewControllers) {
@@ -103,24 +99,6 @@
     [navigationBarAppearance setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
     [navigationBarAppearance setShadowImage:[[UIImage alloc] init]];
     [navigationBarAppearance setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
-}
-
-#pragma mark - Private Methods
-
-- (void)setupTeamsForPersistenceController:(TBAPersistenceController *)persistenceController {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:[Team entityName]];
-    
-    NSError *error;
-    NSUInteger count = [persistenceController.backgroundManagedObjectContext countForFetchRequest:fetchRequest error:&error];
-    if (error) {
-        NSLog(@"Error setting up teams: %@", error);
-    } else if (count == 0) {
-        [Team fetchAllTeamsWithTaskIdChange:^(NSUInteger newTaskId, NSArray *batchTeam) {
-            [persistenceController performChanges:^{
-                [Team insertTeamsWithModelTeams:batchTeam inManagedObjectContext:persistenceController.backgroundManagedObjectContext];
-            }];
-        } withCompletionBlock:nil];
-    }
 }
 
 @end
