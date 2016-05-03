@@ -1,17 +1,14 @@
 PODS:
-  - OpenInGoogleMaps (0.1.0)
   - OrderedDictionary (1.2)
   - TBAKit (1.1.3)
   - youtube-ios-player-helper (0.1.6)
 
 DEPENDENCIES:
-  - OpenInGoogleMaps
   - OrderedDictionary
   - TBAKit
   - youtube-ios-player-helper (~> 0.1.4)
 
 SPEC CHECKSUMS:
-  OpenInGoogleMaps: 60dd887d2e2b2149166a03bd6dab1d4478a7d3e8
   OrderedDictionary: 9cc5d69c5c5314ad696ed1839190724e83d534c7
   TBAKit: d1382e28e66f5a88687a5c9fd1d0acfb3b6bfd85
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
