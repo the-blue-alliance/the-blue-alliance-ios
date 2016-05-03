@@ -98,6 +98,7 @@
 		92F1580C1AF55DB300884E8A /* DistrictViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F1580B1AF55DB300884E8A /* DistrictViewController.m */; };
 		92F19E341C4336600059C7B4 /* TBAAlliancesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F19E331C4336600059C7B4 /* TBAAlliancesViewController.m */; };
 		92F19E3E1C433FB50059C7B4 /* TBAAllianceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 92F19E3D1C433FB50059C7B4 /* TBAAllianceCell.m */; };
+		CA4295631CD644CD003ABB01 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CA4295621CD644CD003ABB01 /* Settings.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -278,6 +279,7 @@
 		92F19E331C4336600059C7B4 /* TBAAlliancesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TBAAlliancesViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		92F19E3C1C433FB50059C7B4 /* TBAAllianceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAAllianceCell.h; sourceTree = "<group>"; };
 		92F19E3D1C433FB50059C7B4 /* TBAAllianceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAAllianceCell.m; sourceTree = "<group>"; };
+		CA4295621CD644CD003ABB01 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		F15BD1416BFF2143335792BA /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -362,6 +364,7 @@
 				50832E021918BB63003AC8A7 /* the-blue-alliance-Info.plist */,
 				50832E031918BB63003AC8A7 /* InfoPlist.strings */,
 				50832E061918BB63003AC8A7 /* main.m */,
+				CA4295621CD644CD003ABB01 /* Settings.bundle */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -940,6 +943,7 @@
 				92E588AE1CCD819300710065 /* TeamsStoryboard.storyboard in Resources */,
 				50832E0E1918BB63003AC8A7 /* Main.storyboard in Resources */,
 				50832E051918BB63003AC8A7 /* InfoPlist.strings in Resources */,
+				CA4295631CD644CD003ABB01 /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
