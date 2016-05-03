@@ -165,10 +165,15 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
             [strongSelf showErrorAlertWithMessage:@"Unable to load events"];
         }
         
+        __block NSArray<Event *> *localEvents;
         [strongSelf.persistenceController performChanges:^{
-            [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+            localEvents = [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
         } withCompletion:^{
             [strongSelf removeRequestIdentifier:request];
+            
+            for (Event *event in localEvents) {
+                [strongSelf fetchTeamsForEvent:event];
+            }
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (!error && self.eventsFetched) {
@@ -178,6 +183,22 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
         }];
     }];
     [self addRequestIdentifier:request];
+}
+
+- (void)fetchTeamsForEvent:(Event *)event {
+    __weak typeof(self) weakSelf = self;
+    // Don't add the request identifier - we can update teams in the background silently
+    [[TBAKit sharedKit] fetchTeamsForEventKey:event.key withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (error) {
+            return;
+        }
+        
+        Event *e = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:event.objectID];
+        [strongSelf.persistenceController performChanges:^{
+            [Team insertTeamsWithModelTeams:teams forEvent:e inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        }];
+    }];
 }
 
 #pragma mark - Table View Delgate

@@ -29,6 +29,7 @@
         UITabBarController *rootTabBarController = [storyboard instantiateViewControllerWithIdentifier:@"RootTabBarController"];
         self.navigationDelegate = [[TBANavigationControllerDelegate alloc] init];
         
+        // Pass persistence controller to all navigation controllers
         for (TBANavigationController *nav in rootTabBarController.viewControllers) {
             nav.delegate = self.navigationDelegate;
             nav.persistenceController = self.persistenceController;
