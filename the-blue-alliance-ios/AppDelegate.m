@@ -11,7 +11,6 @@
 #import "TBAViewController.h"
 #import "TBANavigationController.h"
 #import "TBANavigationControllerDelegate.h"
-#import "OpenInGoogleMapsController.h"
 
 @interface AppDelegate ()
 
@@ -25,9 +24,6 @@
 #pragma mark - Main Entry Point
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [OpenInGoogleMapsController sharedInstance].callbackURL = [NSURL URLWithString:@"tba://"];
-    [OpenInGoogleMapsController sharedInstance].fallbackStrategy = kGoogleMapsFallbackAppleMaps;
-    
     [self setPersistenceController:[[TBAPersistenceController alloc] initWithCallback:^{
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UITabBarController *rootTabBarController = [storyboard instantiateViewControllerWithIdentifier:@"RootTabBarController"];
