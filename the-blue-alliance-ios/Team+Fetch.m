@@ -32,7 +32,12 @@
             existingTeamsBlock = [existingTeamsBlock arrayByAddingObjectsFromArray:teams];
         }
         
-        if ([teams count] == 0) {
+        NSInteger maxTeamPage = [[NSUserDefaults standardUserDefaults] integerForKey:@"MaxTeamPage"];
+        
+        if ([teams count] == 0 && page >= maxTeamPage) {
+            [[NSUserDefaults standardUserDefaults] setInteger:page forKey:@"MaxTeamPage"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
             if (completion) {
                 completion(existingTeamsBlock, [existingTeamsBlock count], error);
             }
