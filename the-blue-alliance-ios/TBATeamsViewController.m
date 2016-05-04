@@ -73,6 +73,14 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
             [strongSelf refreshAllTeams];
         }
     };
+    
+    [self styleInterface];
+}
+
+#pragma mark - Interface Methods
+
+- (void)styleInterface {
+    self.searchBar.tintColor = [UIColor primaryBlue];
 }
 
 #pragma mark - Data Methods
