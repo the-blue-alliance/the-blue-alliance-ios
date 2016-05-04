@@ -1,18 +1,17 @@
 //
-//  TBAInfoViewController.h
-//  the-blue-alliance-ios
+//  TBAEventInfoViewController.h
+//  the-blue-alliance
 //
-//  Created by Zach Orr on 6/9/15.
-//  Copyright (c) 2015 The Blue Alliance. All rights reserved.
+//  Created by Zach Orr on 5/3/16.
+//  Copyright © 2016 The Blue Alliance. All rights reserved.
 //
 
 #import "TBARefreshTableViewController.h"
 
-@class Team, Event, EventViewController;
+@class Event;
 
-@interface TBAInfoViewController : TBARefreshTableViewController
+@interface TBAEventInfoViewController : TBARefreshTableViewController
 
-@property (nonatomic, strong) Team *team;
 @property (nonatomic, strong) Event *event;
 
 @property (nonatomic, copy,) void (^showAlliances)();

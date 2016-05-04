@@ -114,7 +114,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tkm-f8-Hyq" userLabel="Info View">
                                 <rect key="frame" x="0.0" y="44" width="600" height="443"/>
                                 <connections>
-                                    <segue destination="eSz-a9-S2Q" kind="embed" identifier="InfoViewControllerEmbed" id="2xd-Xs-oex"/>
+                                    <segue destination="kRO-AY-mOT" kind="embed" identifier="InfoViewControllerEmbed" id="9Zm-Dc-aOK"/>
                                 </connections>
                             </containerView>
                         </subviews>
@@ -182,21 +182,72 @@
             </objects>
             <point key="canvasLocation" x="2174" y="-353"/>
         </scene>
+        <!--Team Info View Controller-->
+        <scene sceneID="smx-60-dZz">
+            <objects>
+                <tableViewController id="kRO-AY-mOT" customClass="TBATeamInfoViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="hIW-O2-A6I">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="443"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BasicCell" textLabel="u4e-Sn-RA1" style="IBUITableViewCellStyleDefault" id="589-Yk-J6d">
+                                <rect key="frame" x="0.0" y="49.5" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="589-Yk-J6d" id="m4S-nN-WGU">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="u4e-Sn-RA1">
+                                            <rect key="frame" x="15" y="0.0" width="570" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="InfoCell" id="OOh-Yq-iay" customClass="TBAInfoTableViewCell">
+                                <rect key="frame" x="0.0" y="93.5" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OOh-Yq-iay" id="VJT-rp-UIk">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="TBO-gQ-TUU">
+                                            <rect key="frame" x="8" y="8" width="584" height="27.5"/>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="TBO-gQ-TUU" firstAttribute="top" secondItem="VJT-rp-UIk" secondAttribute="top" constant="8" id="4fw-ui-0f7"/>
+                                        <constraint firstAttribute="bottom" secondItem="TBO-gQ-TUU" secondAttribute="bottom" constant="8" id="Bh5-yJ-znH"/>
+                                        <constraint firstItem="TBO-gQ-TUU" firstAttribute="leading" secondItem="VJT-rp-UIk" secondAttribute="leadingMargin" id="FCT-DZ-Ifj"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="TBO-gQ-TUU" secondAttribute="trailing" id="yOf-bZ-mUw"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="infoStackView" destination="TBO-gQ-TUU" id="qFU-80-qjH"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="kRO-AY-mOT" id="q86-2c-vZ2"/>
+                            <outlet property="delegate" destination="kRO-AY-mOT" id="LmF-1C-GMm"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DhA-fK-BJT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2930" y="-1001.5"/>
+        </scene>
         <!--EventTeamViewController-->
         <scene sceneID="mCt-TC-Iug">
             <objects>
                 <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="EventTeamViewController" id="YUN-E6-XlU" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0TX-5y-h3f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2724" y="-681"/>
-        </scene>
-        <!--TBAInfoViewController-->
-        <scene sceneID="r85-IA-KQt">
-            <objects>
-                <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="TBAInfoViewController" id="eSz-a9-S2Q" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="MUU-Na-Vkq" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2715" y="-481"/>
+            <point key="canvasLocation" x="2724" y="-456"/>
         </scene>
         <!--TBAEventsViewController-->
         <scene sceneID="c2s-xM-8oV">
