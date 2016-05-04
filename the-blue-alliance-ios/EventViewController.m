@@ -7,7 +7,7 @@
 //
 
 #import "EventViewController.h"
-#import "TBAInfoViewController.h"
+#import "TBAEventInfoViewController.h"
 #import "TBATeamsViewController.h"
 #import "TBAEventRankingsViewController.h"
 #import "TBAMatchesViewController.h"
@@ -36,7 +36,7 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 
 @interface EventViewController ()
 
-@property (nonatomic, strong) TBAInfoViewController *infoViewController;
+@property (nonatomic, strong) TBAEventInfoViewController *infoViewController;
 @property (nonatomic, strong) IBOutlet UIView *infoView;
 
 @property (nonatomic, strong) TBATeamsViewController *teamsViewController;
