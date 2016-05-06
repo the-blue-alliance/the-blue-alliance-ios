@@ -41,7 +41,8 @@
         [pickLabel setUserInteractionEnabled:YES];
         pickLabel.textAlignment = NSTextAlignmentCenter;
         [pickLabel setTextColor:[UIColor blueColor]];
-        
+
+        pickLabel.tag = [eventAlliance.picks indexOfObject:team];
         if (team == eventAlliance.picks.firstObject) {
             NSDictionary *underlineAttribute = @{NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)};
             pickLabel.attributedText = [[NSAttributedString alloc] initWithString:team.teamNumber.stringValue
@@ -55,6 +56,6 @@
 
 - (void)teamLabelTapped:(UITapGestureRecognizer *)sender {
     UILabel *teamLabel = (UILabel *)sender.view;
-    [self.delegate teamNumberTapped:teamLabel.text];
+    self.teamSelected([[self.eventAlliance picks] objectAtIndex:teamLabel.tag]);
 }
 @end
