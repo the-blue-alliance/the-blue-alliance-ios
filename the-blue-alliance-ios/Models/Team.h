@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)insertStubTeamWithKey:(NSString *)teamKey inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertTeamsWithModelTeams:(NSArray<TBATeam *> *)modelTeams inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertTeamsWithModelTeams:(NSArray<TBATeam *> *)modelTeams forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
++ (NSNumber *)teamNumberFromNumberString:(NSString *)teamNumber;
 
 - (NSArray *)sortedEventsForYear:(NSInteger)year;
 - (NSArray *)sortedYearsParticipated;

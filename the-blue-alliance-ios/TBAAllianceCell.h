@@ -9,9 +9,15 @@
 #import "TBATableViewCell.h"
 
 @class EventAlliance;
+@protocol TBAAllianceCellDelegate;
 
 @interface TBAAllianceCell : TBATableViewCell
-
+@property (nonatomic, weak) id <TBAAllianceCellDelegate> delegate;
 @property (nonatomic, strong) EventAlliance *eventAlliance;
 
+@end
+
+@protocol TBAAllianceCellDelegate <NSObject>
+@optional
+-(void)teamNumberTapped:(NSString *)teamNumber;
 @end

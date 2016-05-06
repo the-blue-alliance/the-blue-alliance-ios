@@ -7,11 +7,18 @@
 //
 
 #import "TBAAlliancesViewController.h"
-#import "Event.h"
+#import "EventTeamViewController.h"
+#import "Event.h" 
+#import "Team.h"
 #import "EventAlliance.h"
 #import "TBAAllianceCell.h"
 
 static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
+static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerSegue";
+
+@interface TBAAlliancesViewController ()
+@property (nonatomic, strong) Team *selectedTeam;
+@end
 
 @implementation TBAAlliancesViewController
 @synthesize fetchedResultsController = _fetchedResultsController;
@@ -94,6 +101,7 @@ static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
     EventAlliance *alliance = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.eventAlliance = alliance;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.delegate = self;
 }
 
 - (void)showNoDataView {
@@ -104,6 +112,33 @@ static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 44.0f;
+}
+
+#pragma mark - Alliance Cell Delegate
+
+- (void)teamNumberTapped:(NSString *)teamNumber {
+    NSFetchRequest *teamFetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"teamNumber == %@", [Team teamNumberFromNumberString:teamNumber]]];
+    [teamFetchRequest setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSArray *fetchResults = [self.persistenceController.managedObjectContext executeFetchRequest:teamFetchRequest error:&error];
+    if (!error) {
+        Team *team = (Team *)[fetchResults firstObject];
+        self.selectedTeam = team;
+        [self performSegueWithIdentifier:EventTeamViewControllerSegue sender:nil];
+    } else {
+        // Something has gone terribly wrong. Bail out!
+        NSLog(@"Error while searching for team from Event Stats: %@", error);
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([EventTeamViewControllerSegue isEqualToString:segue.identifier]) {
+        EventTeamViewController *eventTeamController = [segue destinationViewController];
+        eventTeamController.event = self.event;
+        eventTeamController.team = self.selectedTeam;
+    }
 }
 
 @end

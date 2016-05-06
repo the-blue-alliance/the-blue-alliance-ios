@@ -9,8 +9,9 @@
 #import "TBARefreshTableViewController.h"
 
 @class Event, Team;
+@protocol TBAAllianceCellDelegate;
 
-@interface TBAAlliancesViewController : TBARefreshTableViewController <TBATableViewControllerDelegate>
+@interface TBAAlliancesViewController : TBARefreshTableViewController <TBATableViewControllerDelegate, TBAAllianceCellDelegate>
 
 @property (nonatomic, strong) Event *event;
 
