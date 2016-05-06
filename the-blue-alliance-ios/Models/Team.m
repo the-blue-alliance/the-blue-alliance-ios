@@ -82,6 +82,12 @@
     return arr;
 }
 
++ (NSNumber *)teamNumberFromNumberString:(NSString *)teamNumber {
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setNumberStyle:NSNumberFormatterNoStyle];
+    return [numberFormatter numberFromString:teamNumber];
+}
+
 - (NSString *)nickname {
     [self willAccessValueForKey:@"nickname"];
     NSString *nickname = [self primitiveValueForKey:@"nickname"];

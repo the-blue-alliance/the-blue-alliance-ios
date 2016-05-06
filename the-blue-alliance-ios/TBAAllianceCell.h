@@ -8,10 +8,9 @@
 
 #import "TBATableViewCell.h"
 
-@class EventAlliance;
+@class EventAlliance, Team;
 
 @interface TBAAllianceCell : TBATableViewCell
-
 @property (nonatomic, strong) EventAlliance *eventAlliance;
-
+@property (nonatomic, copy) void (^teamSelected)(Team *team);
 @end
