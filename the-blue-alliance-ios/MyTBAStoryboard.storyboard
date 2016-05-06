@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Sim-9L-dvo">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--myTBA-->
+        <scene sceneID="esL-UV-RZT">
+            <objects>
+                <navigationController id="Sim-9L-dvo" customClass="TBANavigationController" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="myTBA" image="ic_star_white" id="tw2-LI-T9w"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="gIN-M8-DBg">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="V56-dH-nPb" kind="relationship" relationship="rootViewController" id="n5s-mD-qaR"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mQA-kb-QCa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-345" y="264"/>
+        </scene>
+        <!--myTBA-->
+        <scene sceneID="NLR-IL-zc9">
+            <objects>
+                <viewController id="V56-dH-nPb" customClass="MyTBAViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="o3s-Jn-ZMN"/>
+                        <viewControllerLayoutGuide type="bottom" id="FKp-tc-D0n"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="A15-X3-rMR">
+                        <rect key="frame" x="0.0" y="64" width="600" height="487"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZcB-3a-GQb">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="487"/>
+                                <connections>
+                                    <segue destination="qLz-RP-685" kind="embed" identifier="MyTBASignInEmbed" id="hQ5-BL-an0"/>
+                                </connections>
+                            </containerView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8wR-a4-mth" userLabel="Segmented Control View">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                <subviews>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="TZe-eS-z0z">
+                                        <rect key="frame" x="16" y="8" width="568" height="29"/>
+                                        <segments>
+                                            <segment title="Favorites"/>
+                                            <segment title="Subscriptions"/>
+                                            <segment title="Notifications"/>
+                                        </segments>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <action selector="segmentedControlValueChanged:" destination="V56-dH-nPb" eventType="valueChanged" id="fqe-Bv-qWm"/>
+                                        </connections>
+                                    </segmentedControl>
+                                </subviews>
+                                <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.85098039219999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="TZe-eS-z0z" secondAttribute="trailing" constant="16" id="LQy-LZ-USG"/>
+                                    <constraint firstAttribute="centerY" secondItem="TZe-eS-z0z" secondAttribute="centerY" id="ceU-w3-IWA"/>
+                                    <constraint firstItem="TZe-eS-z0z" firstAttribute="leading" secondItem="8wR-a4-mth" secondAttribute="leading" constant="16" id="gfk-sn-s7E"/>
+                                    <constraint firstAttribute="height" constant="44" id="iIX-Yt-qF0"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="ZcB-3a-GQb" secondAttribute="trailing" id="D72-Pr-LI5"/>
+                            <constraint firstItem="ZcB-3a-GQb" firstAttribute="leading" secondItem="A15-X3-rMR" secondAttribute="leading" id="Ln3-wW-O92"/>
+                            <constraint firstItem="FKp-tc-D0n" firstAttribute="top" secondItem="ZcB-3a-GQb" secondAttribute="bottom" id="O2t-GG-CaV"/>
+                            <constraint firstItem="ZcB-3a-GQb" firstAttribute="top" secondItem="8wR-a4-mth" secondAttribute="bottom" id="XAs-tv-TNc"/>
+                            <constraint firstItem="8wR-a4-mth" firstAttribute="top" secondItem="o3s-Jn-ZMN" secondAttribute="bottom" id="dqk-Nz-KNL"/>
+                            <constraint firstAttribute="trailing" secondItem="8wR-a4-mth" secondAttribute="trailing" id="hXt-Ke-6wG"/>
+                            <constraint firstItem="8wR-a4-mth" firstAttribute="leading" secondItem="A15-X3-rMR" secondAttribute="leading" id="lue-4m-ePG"/>
+                            <constraint firstItem="ZcB-3a-GQb" firstAttribute="top" secondItem="o3s-Jn-ZMN" secondAttribute="bottom" id="uZ0-um-Qfl"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="XAs-tv-TNc"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <navigationItem key="navigationItem" title="myTBA" id="pdZ-um-qLQ"/>
+                    <connections>
+                        <outlet property="segmentedControl" destination="TZe-eS-z0z" id="zJE-xB-nU2"/>
+                        <outlet property="segmentedControlView" destination="8wR-a4-mth" id="dlF-9e-jwg"/>
+                        <outlet property="signInView" destination="ZcB-3a-GQb" id="LME-5H-b1L"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Kqo-PZ-pO3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="370" y="259"/>
+        </scene>
+        <!--MyTBA Sign In View Controller-->
+        <scene sceneID="cUo-39-FLR">
+            <objects>
+                <viewController id="qLz-RP-685" customClass="MyTBASignInViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="LTv-U0-MeU"/>
+                        <viewControllerLayoutGuide type="bottom" id="5sV-Wc-Bl5"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="nMo-yf-GLc">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="487"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="kms-TU-jw8">
+                                <rect key="frame" x="20" y="189" width="560" height="109"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" text="myTBA" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mck-oX-QhH">
+                                        <rect key="frame" x="0.0" y="0.0" width="560" height="22"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" misplaced="YES" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tkb-fz-Phw">
+                                        <rect key="frame" x="0.0" y="22" width="560" height="58"/>
+                                        <string key="text">myTBA allows you to subscribe to a variety of notifications, such as match results for your favorite teams or the winners of an event. You can also mark teams, events, and matches as favorites for easy access.</string>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="749" verticalCompressionResistancePriority="749" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nvl-uM-rpr">
+                                        <rect key="frame" x="0.0" y="79" width="560" height="30"/>
+                                        <state key="normal" title="Sign In with Google"/>
+                                        <connections>
+                                            <action selector="signInTapped:" destination="qLz-RP-685" eventType="touchUpInside" id="bgl-eo-WKu"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="kms-TU-jw8" secondAttribute="width" constant="40" id="F3l-r4-K0T"/>
+                            <constraint firstItem="kms-TU-jw8" firstAttribute="centerY" secondItem="nMo-yf-GLc" secondAttribute="centerY" id="Ra9-yr-JyR"/>
+                            <constraint firstItem="kms-TU-jw8" firstAttribute="centerX" secondItem="nMo-yf-GLc" secondAttribute="centerX" id="UbF-ED-mwC"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="kms-TU-jw8" secondAttribute="leading" id="siJ-Nj-7jw"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dQn-67-FLb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="370" y="973.5"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ic_star_white" width="24" height="24"/>
+    </resources>
+</document>

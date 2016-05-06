@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="19C-7d-G5E">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="19C-7d-G5E">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
@@ -19,6 +19,7 @@
                         <segue destination="HK2-oB-ZN3" kind="relationship" relationship="viewControllers" id="ibh-Nj-OWg"/>
                         <segue destination="B9e-zg-E4Z" kind="relationship" relationship="viewControllers" id="Uti-OS-9fj"/>
                         <segue destination="Xg6-rP-Kok" kind="relationship" relationship="viewControllers" id="LCT-85-2nM"/>
+                        <segue destination="Cnr-ef-wMM" kind="relationship" relationship="viewControllers" id="f7u-eP-8Be"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Mm-Tx-fFz" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -86,6 +87,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XAf-2C-MPc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="694" y="93"/>
+        </scene>
+        <!--MyTBAStoryboard-->
+        <scene sceneID="BqX-ip-fvi">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MyTBAStoryboard" id="Cnr-ef-wMM" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" image="ic_star_white" id="waM-6L-n2L"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zXa-OP-WTC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="700.5" y="194"/>
         </scene>
         <!--No Data View Controller-->
         <scene sceneID="ZC5-Ii-uvx">
@@ -190,6 +201,7 @@
         <image name="ic_assignment_black" width="24" height="24"/>
         <image name="ic_event_black" width="24" height="24"/>
         <image name="ic_group_black" width="24" height="24"/>
+        <image name="ic_star_white" width="24" height="24"/>
         <image name="tba_blue_lamp" width="110" height="181"/>
     </resources>
 </document>
