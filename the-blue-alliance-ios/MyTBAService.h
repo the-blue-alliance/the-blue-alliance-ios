@@ -18,6 +18,7 @@ typedef void (^MyTBARequestCompletionBlock)(NSURLResponse *response, id parsedDa
 
 + (instancetype)sharedService;
 
+- (NSUInteger)callApiMethod:(NSString *)aMethod andCompletionHandler:(TBAKitRequestCompletionBlock)aHandler;
 - (void)removeAuthentication;
 
 @end

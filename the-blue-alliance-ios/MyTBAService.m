@@ -10,13 +10,17 @@
 #import "MyTBAAuthenticaion.h"
 #import "Valet.h"
 
-static NSString *const MyTBARootURL     = @"https://tbatv-prod-hrd.appspot.com/_ah/api/";
+static NSString *const MyTBARootURL     = @"https://tba-dev-phil.appspot.com/_ah/api/";
 static NSString *const MyTBAServicePath = @"tbaMobile/v9/";
 static NSString *const MyTBAClientID    = @"259024084762-alrj1fdklkqm268asaj6tv71u4cdae10.apps.googleusercontent.com";
 static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
 
+#define kEtagString     @"ETAG:"
+#define kErrorDomain    @"com.the-blue-alliance.MyTBA.ErrorDomain"
+
 @interface MyTBAService () <NSURLSessionTaskDelegate>
 
+@property (nonatomic, strong) NSMutableDictionary *requests;
 @property (nonatomic, strong) NSURLSession *urlSession;
 @property (nonatomic, strong) VALValet *keychainValet;
 
@@ -50,6 +54,7 @@ static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
 - (instancetype)init {
     self = [super init];
     if (self) {
+        self.requests = [[NSMutableDictionary alloc] init];
         self.keychainValet = [[VALValet alloc] initWithIdentifier:@"MyTBA" accessibility:VALAccessibilityAlways];
     }
     return self;
@@ -92,21 +97,19 @@ static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
     [self.keychainValet removeObjectForKey:MyTBAKeychainKey];
 }
 
-// Set this up for the etag nonsense
-/*
-- (NSString *)lastModifiedForURL:(NSURL *)url {
-    NSString *urlString = [NSString stringWithFormat:@"%@%@", kLastModifiedString, url.description];
+- (NSString *)etagForURL:(NSURL *)url {
+    NSString *urlString = [NSString stringWithFormat:@"%@%@", kEtagString, url.description];
     return [[NSUserDefaults standardUserDefaults] stringForKey:urlString];
 }
 
-- (void)setLastModified:(NSString *)lastModified forURL:(NSURL *)url {
-    NSString *urlString = [NSString stringWithFormat:@"%@%@", kLastModifiedString, url.description];
-    [[NSUserDefaults standardUserDefaults] setObject:lastModified forKey:urlString];
+- (void)setEtag:(NSString *)etag forURL:(NSURL *)url {
+    NSString *urlString = [NSString stringWithFormat:@"%@%@", kEtagString, url.description];
+    [[NSUserDefaults standardUserDefaults] setObject:etag forKey:urlString];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (NSUInteger)callApiMethod:(NSString *)aMethod andCompletionHandler:(TBAKitRequestCompletionBlock)aHandler  {
-    if (self.idHeader == nil) {
+    if (self.authentication == nil) {
         NSError *error = [self errorWithCode:TBAKitErrorCodeInvalidIDHeader andDescription:@"Invalid ID Header"];
         
         if (aHandler) {
@@ -120,21 +123,25 @@ static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
     NSURL *requestURL = [[NSURL alloc] initWithString:aMethod relativeToURL:baseURL];
     
     // Fetch etag here
-//    NSString *ifModifiedSince = [self lastModifiedForURL:requestURL.absoluteURL];
+    NSString *etag = [self etagForURL:requestURL.absoluteURL];
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:requestURL
                                                                 cachePolicy:NSURLRequestReloadIgnoringCacheData
                                                             timeoutInterval:15.0f];
-    request.HTTPMethod = @"GET";
+    request.HTTPMethod = @"POST";
     // Set etag and oauth stuff
-    [request setValue:self.idHeader forHTTPHeaderField:@"X-TBA-App-Id"];
-    if (ifModifiedSince) {
-        [request setValue:ifModifiedSince forHTTPHeaderField:@"If-Modified-Since"];
+    [request setValue:[NSString stringWithFormat:@"%@ %@", self.authentication.tokenType, self.authentication.accessToken] forHTTPHeaderField:@"Authorization"];
+    [request setValue:@"no-cache" forHTTPHeaderField:@"Cache-Control"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+
+    if (etag) {
+        [request setValue:etag forHTTPHeaderField:@"If-None-Match"];
     }
  
     NSURLSessionDataTask *dataTask = [self.urlSession dataTaskWithRequest:request];
     
-    TBARequestWrapper *requestWrapper = [[TBARequestWrapper alloc] init];
+    MyTBARequestWrapper *requestWrapper = [[MyTBARequestWrapper alloc] init];
     
     requestWrapper.dataTask = dataTask;
     requestWrapper.completionHandler = aHandler;
@@ -147,7 +154,7 @@ static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
 }
 
 - (void)cancelRequestWithIdentifier:(NSUInteger)identifier {
-    TBARequestWrapper *requestWrapper = (self.requests)[@(identifier)];
+    MyTBARequestWrapper *requestWrapper = (self.requests)[@(identifier)];
     [requestWrapper.dataTask cancel];
     
     [self.requests removeObjectForKey:@(identifier)];
@@ -156,12 +163,12 @@ static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
 #pragma mark - <NSURLSessionTaskDelegate> Methods
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
-    TBARequestWrapper *requestWrapper = (self.requests)[@(dataTask.taskIdentifier)];
+    MyTBARequestWrapper *requestWrapper = (self.requests)[@(dataTask.taskIdentifier)];
     [requestWrapper.receivedData appendData:data];
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)sessionError {
-    TBARequestWrapper *requestWrapper = (self.requests)[@(task.taskIdentifier)];
+    MyTBARequestWrapper *requestWrapper = (self.requests)[@(task.taskIdentifier)];
     NSInteger statusCode = ((NSHTTPURLResponse *)task.response).statusCode;
     
     NSError *error = nil;
@@ -170,6 +177,7 @@ static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
     if (sessionError) {
         error = sessionError;
     } else if (statusCode != 304) {
+        // CHECK IF WE HAVE TO HANDLE 304's HERE
         parsedData = [NSJSONSerialization JSONObjectWithData:requestWrapper.receivedData
                                                      options:0
                                                        error:&error];
@@ -177,11 +185,11 @@ static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
         if (parsedData) {
             NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
             NSDictionary *headerFields = response.allHeaderFields;
-            NSString *lastModified = headerFields[@"Last-Modified"];
-            
-            if (lastModified) {
-                [self setLastModified:lastModified forURL:task.originalRequest.URL];
-            }
+//            NSString *lastModified = headerFields[@"Last-Modified"];
+//            
+//            if (lastModified) {
+//                [self setLastModified:lastModified forURL:task.originalRequest.URL];
+//            }
         } else if (!error) {
             error = [self errorWithCode:TBAKitErrorCodeJSONParsingFailed andDescription:@"JSON Parsing Failed."];
         }
@@ -229,6 +237,5 @@ static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
     
     return self;
 }
-*/
 
 @end

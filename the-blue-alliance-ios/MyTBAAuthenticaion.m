@@ -57,11 +57,12 @@
     if (response[@"token_type"]) {
         self.tokenType = response[@"token_type"];
     }
-    if (response[@"expiresIn"]) {
-        NSNumber *expiresIn = [NSNumber numberWithInteger:[response[@"expiresIn"] integerValue]];
+    if (response[@"expires_in"]) {
+        NSNumber *expiresIn = [NSNumber numberWithInteger:[response[@"expires_in"] integerValue]];
         
         unsigned long deltaSeconds = [expiresIn unsignedLongValue];
         if (deltaSeconds > 0) {
+            // Make sure this is the right timezone we're working with for server stuff
             self.expirationDate = [NSDate dateWithTimeIntervalSinceNow:deltaSeconds];
         }
     }

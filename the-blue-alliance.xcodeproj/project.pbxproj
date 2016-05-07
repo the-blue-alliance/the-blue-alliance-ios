@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		142135E91CDD9A4600A84880 /* TBAFavorite.m in Sources */ = {isa = PBXBuildFile; fileRef = 142135E81CDD9A4600A84880 /* TBAFavorite.m */; };
 		146826D21CDD793500736330 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 146826D11CDD793500736330 /* Security.framework */; };
 		146FD6DD1CDD6DCB0023DCE5 /* MyTBAAuthenticaion.m in Sources */ = {isa = PBXBuildFile; fileRef = 146FD6DC1CDD6DCB0023DCE5 /* MyTBAAuthenticaion.m */; };
 		14CD46921CDCF53A00CF7BA7 /* MyTBAAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CD46911CDCF53A00CF7BA7 /* MyTBAAuthViewController.m */; };
@@ -112,6 +113,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		142135E71CDD9A4600A84880 /* TBAFavorite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAFavorite.h; sourceTree = "<group>"; };
+		142135E81CDD9A4600A84880 /* TBAFavorite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAFavorite.m; sourceTree = "<group>"; };
 		146826D11CDD793500736330 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		146FD6DB1CDD6DCB0023DCE5 /* MyTBAAuthenticaion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTBAAuthenticaion.h; sourceTree = "<group>"; };
 		146FD6DC1CDD6DCB0023DCE5 /* MyTBAAuthenticaion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTBAAuthenticaion.m; sourceTree = "<group>"; };
@@ -347,6 +350,8 @@
 			children = (
 				921257531CDC367000A9E19D /* MyTBAService.h */,
 				921257541CDC367000A9E19D /* MyTBAService.m */,
+				142135E71CDD9A4600A84880 /* TBAFavorite.h */,
+				142135E81CDD9A4600A84880 /* TBAFavorite.m */,
 			);
 			name = "MyTBA API";
 			sourceTree = "<group>";
@@ -1147,6 +1152,7 @@
 				9243D3E61BABB70D00512D3B /* Team.m in Sources */,
 				9222F1191AD6910F00C0AEA0 /* EventViewController.m in Sources */,
 				9243D3E81BABB70D00512D3B /* Event.m in Sources */,
+				142135E91CDD9A4600A84880 /* TBAFavorite.m in Sources */,
 				92A29FC51CD5466200104EC9 /* TBAPlayerView.m in Sources */,
 				926001671B517DF40027FE95 /* TBANoDataViewController.m in Sources */,
 				92553DFE1CB1F6F100D7E1EE /* AwardRecipient.m in Sources */,
