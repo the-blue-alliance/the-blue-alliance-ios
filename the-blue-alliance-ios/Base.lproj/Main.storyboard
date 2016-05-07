@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="19C-7d-G5E">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="19C-7d-G5E">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
@@ -62,7 +62,7 @@
         <scene sceneID="zz9-Qj-l2G">
             <objects>
                 <viewControllerPlaceholder storyboardName="EventsStoryboard" id="HK2-oB-ZN3" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Events" image="ic_event_black" id="Na7-7S-5gn"/>
+                    <tabBarItem key="tabBarItem" title="Events" image="ic_event" id="Na7-7S-5gn"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LtT-7g-Xf7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -72,7 +72,7 @@
         <scene sceneID="8Qq-4q-Qjn">
             <objects>
                 <viewControllerPlaceholder storyboardName="TeamsStoryboard" id="B9e-zg-E4Z" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Teams" image="ic_group_black" id="eUL-AJ-ENz"/>
+                    <tabBarItem key="tabBarItem" title="Teams" image="ic_people" id="eUL-AJ-ENz"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qe3-ao-i5e" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -82,7 +82,7 @@
         <scene sceneID="lcj-1r-tVp">
             <objects>
                 <viewControllerPlaceholder storyboardName="DistrictsStoryboard" id="Xg6-rP-Kok" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Districts" image="ic_assignment_black" id="xfk-cQ-U5f"/>
+                    <tabBarItem key="tabBarItem" title="Districts" image="ic_assignment" id="xfk-cQ-U5f"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XAf-2C-MPc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -92,7 +92,7 @@
         <scene sceneID="BqX-ip-fvi">
             <objects>
                 <viewControllerPlaceholder storyboardName="MyTBAStoryboard" id="Cnr-ef-wMM" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" image="ic_star_white" id="waM-6L-n2L"/>
+                    <tabBarItem key="tabBarItem" title="myTBA" image="ic_star" id="waM-6L-n2L"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zXa-OP-WTC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -198,10 +198,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_assignment_black" width="24" height="24"/>
-        <image name="ic_event_black" width="24" height="24"/>
-        <image name="ic_group_black" width="24" height="24"/>
-        <image name="ic_star_white" width="24" height="24"/>
+        <image name="ic_assignment" width="24" height="24"/>
+        <image name="ic_event" width="24" height="24"/>
+        <image name="ic_people" width="24" height="24"/>
+        <image name="ic_star" width="24" height="24"/>
         <image name="tba_blue_lamp" width="110" height="181"/>
     </resources>
 </document>

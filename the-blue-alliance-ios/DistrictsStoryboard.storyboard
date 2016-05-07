@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="OeX-cI-hNA">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="OeX-cI-hNA">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -9,7 +9,7 @@
         <scene sceneID="i25-7d-54v">
             <objects>
                 <navigationController id="OeX-cI-hNA" customClass="TBANavigationController" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Districts" image="ic_assignment_black" id="FJt-rN-XbO"/>
+                    <tabBarItem key="tabBarItem" title="Districts" image="ic_assignment" id="FJt-rN-XbO"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="BiF-nD-3qQ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -549,6 +549,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_assignment_black" width="24" height="24"/>
+        <image name="ic_assignment" width="24" height="24"/>
     </resources>
 </document>

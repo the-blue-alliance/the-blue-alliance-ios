@@ -11,23 +11,13 @@
 #import "TBAFavoritesViewController.h"
 #import "TBASubscriptionsViewController.h"
 #import "TBANotificationsViewController.h"
-#import "GTLServiceMyTBA.h"
-#import "GTMOAuth2ViewControllerTouch.h"
-#import "GTLQuery.h"
-#import "TBAFavorite.h"
+#import "MyTBAService.h"
+#import "MyTBAAuthViewController.h"
+#import "MyTBAAuthenticaion.h"
 
-// Google Auth constants
-static NSString *const MyTBAScope       = @"https://www.googleapis.com/auth/userinfo.email"; // scope for email
-static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
-static NSString *const MyTBAClientID    = @"259024084762-oatcrduj4uf6hc0m6lko9pb82i71n9sb.apps.googleusercontent.com";
-
-// Navigation contants
 static NSString *const MyTBASignInEmbed = @"MyTBASignInEmbed";
 
-/*
-static NSString *const EventViewControllerSegue         = @"EventViewControllerSegue";
-static NSString *const DistrictTeamViewControllerSegue  = @"DistrictTeamViewControllerSegue";
-*/
+static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 
 @interface MyTBAViewController ()
 
@@ -43,38 +33,31 @@ static NSString *const DistrictTeamViewControllerSegue  = @"DistrictTeamViewCont
 @property (nonatomic, strong) TBANotificationsViewController *recentNotificationsViewController;
 @property (nonatomic, strong) IBOutlet UIView *recentNotificationsView;
 
+@property (nonatomic, strong) UIBarButtonItem *signOutBarButtonItem;
+
 @end
 
 @implementation MyTBAViewController
 
+#pragma mark - Properities
+
+- (UIBarButtonItem *)signOutBarButtonItem {
+    if (!_signOutBarButtonItem) {
+        _signOutBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Sign Out" style:UIBarButtonItemStylePlain target:self action:@selector(signOutTapped:)];
+    }
+    return _signOutBarButtonItem;
+}
+
+#pragma mark - View Lifecycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Check if signed in, if not, show the other shit
-    GTMOAuth2Authentication *auth = [GTMOAuth2ViewControllerTouch authForGoogleFromKeychainForName:MyTBAKeychainKey clientID:MyTBAClientID clientSecret:nil error:nil];
-    if (auth) {
-        self.signInView.hidden = YES;
-        [[GTLServiceMyTBA sharedService] setAuthorizer:auth];
-        [self queryForScoresList];
-    } else {
-        self.signInView.hidden = NO;
-        [self.view bringSubviewToFront:self.signInView];
-    }
-
 //    self.refreshViewControllers = @[self.favoritesViewController, self.subscriptionsViewController, self.recentNotificationsViewController];
 //    self.containerViews = @[self.favoritesView, self.subscriptionsView, self.recentNotificationsView];
     
     [self styleInterface];
-}
-
-- (void)queryForScoresList {
-    NSString *methodName = @"favorites/list";
-    GTLQuery *query = [GTLQuery queryWithMethodName:methodName];
-    query.expectedObjectClass = [TBAFavorite class];
-    [[GTLServiceMyTBA sharedService] executeQuery:query completionHandler:^(GTLServiceTicket *ticket, id object, NSError *error) {
-        NSLog(@"Error: %@", error);
-        NSLog(@"Obj: %@", object);
-    }];
+    [self updateInterface];
 }
 
 #pragma mark - Interface Actions
@@ -83,41 +66,68 @@ static NSString *const DistrictTeamViewControllerSegue  = @"DistrictTeamViewCont
     self.navigationItem.title = @"myTBA";
 }
 
+- (void)updateInterface {
+    if ([MyTBAService sharedService].authentication) {
+        self.signInView.hidden = YES;
+        self.navigationItem.rightBarButtonItem = self.signOutBarButtonItem;
+    } else {
+        self.signInView.hidden = NO;
+        [self.view bringSubviewToFront:self.signInView];
+        self.navigationItem.rightBarButtonItem = nil;
+    }
+}
+
+#pragma mark - IB Actions
+
+- (IBAction)signOutTapped:(id)sender {
+    // Alert view to sign out
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Sign Out?" message:@"Are you sure you want to sign out of myTBA?" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *signOutAction = [UIAlertAction actionWithTitle:@"Sign Out" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[MyTBAService sharedService] removeAuthentication];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateInterface];
+        });
+    }];
+    [alertController addAction:signOutAction];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    [alertController addAction:cancelAction];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self presentViewController:alertController animated:YES completion:nil];
+    });
+}
+
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // 259024084762-oatcrduj4uf6hc0m6lko9pb82i71n9sb.apps.googleusercontent.com
     __weak typeof(self) weakSelf = self;
     if ([segue.identifier isEqualToString:MyTBASignInEmbed]) {
         self.signInViewController = segue.destinationViewController;
         self.signInViewController.signIn = ^() {
-            GTMOAuth2ViewControllerTouch *authViewControlelr = [[GTMOAuth2ViewControllerTouch alloc] initWithScope:MyTBAScope
-                                                                                                          clientID:MyTBAClientID
-                                                                                                      clientSecret:nil
-                                                                                                  keychainItemName:MyTBAKeychainKey
-                                                                                                          delegate:weakSelf
-                                                                                                  finishedSelector:@selector(viewController:finishedWithAuth:error:)];
-            
-            [weakSelf presentViewController:authViewControlelr animated:YES completion:nil];
+            [weakSelf performSegueWithIdentifier:@"MyTBAAuthSegue" sender:nil];
         };
-    }
-}
-
-
-#pragma mark - Google Auth Sign In
-
-- (void)viewController:(GTMOAuth2ViewControllerTouch *)viewController finishedWithAuth:(GTMOAuth2Authentication *)auth error:(NSError *)error {
-    [self dismissViewControllerAnimated:YES completion:nil];
-    
-    if (error != nil) {
-        NSLog(@"Auth error");
-        // Authentication failed
-        // Show an erro in here I suppose
-    } else {
-        NSLog(@"Auth succeeded");
-        // Authentication succeeded
-        [[GTLServiceMyTBA sharedService] setAuthorizer:auth];
-        self.signInView.hidden = YES;
+    } else if ([segue.identifier isEqualToString:@"MyTBAAuthSegue"]) {
+        UINavigationController *navigationController = segue.destinationViewController;
+        MyTBAAuthViewController *authViewController = navigationController.viewControllers.firstObject;
+        
+        authViewController.authSucceeded = ^() {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateInterface];
+            });
+        };
+        
+        authViewController.authFailed = ^(NSError *error) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Error" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *okayAction = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
+            [alertController addAction:okayAction];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self presentViewController:alertController animated:YES completion:nil];
+            });
+        };
     }
 }
 

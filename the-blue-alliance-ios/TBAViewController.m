@@ -45,7 +45,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self updateInterface];
+    [self updateSegmentedControlViews];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -54,9 +54,9 @@
     [self cancelRefreshes];
 }
 
-#pragma mark - Public Methods
+#pragma mark - Private Methods
 
-- (void)updateInterface {
+- (void)updateSegmentedControlViews {
     if (!self.segmentedControl && self.containerViews.count == 1) {
         [self showView:self.containerViews.firstObject];
     } else if (self.segmentedControl && self.containerViews.count > self.segmentedControl.selectedSegmentIndex) {
@@ -93,7 +93,7 @@
 
 - (IBAction)segmentedControlValueChanged:(id)sender {
     [self cancelRefreshes];
-    [self updateInterface];
+    [self updateSegmentedControlViews];
 }
 
 @end

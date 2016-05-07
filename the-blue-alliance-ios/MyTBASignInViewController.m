@@ -8,10 +8,6 @@
 
 #import "MyTBASignInViewController.h"
 
-@interface MyTBASignInViewController ()
-
-@end
-
 @implementation MyTBASignInViewController
 
 - (IBAction)signInTapped:(id)sender {

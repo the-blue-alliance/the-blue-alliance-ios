@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Sim-9L-dvo">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Sim-9L-dvo">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -9,7 +9,7 @@
         <scene sceneID="esL-UV-RZT">
             <objects>
                 <navigationController id="Sim-9L-dvo" customClass="TBANavigationController" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="myTBA" image="ic_star_white" id="tw2-LI-T9w"/>
+                    <tabBarItem key="tabBarItem" title="myTBA" image="ic_star" id="tw2-LI-T9w"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="gIN-M8-DBg">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -89,6 +89,7 @@
                         <outlet property="segmentedControl" destination="TZe-eS-z0z" id="zJE-xB-nU2"/>
                         <outlet property="segmentedControlView" destination="8wR-a4-mth" id="dlF-9e-jwg"/>
                         <outlet property="signInView" destination="ZcB-3a-GQb" id="LME-5H-b1L"/>
+                        <segue destination="EUC-7J-pY3" kind="presentation" identifier="MyTBAAuthSegue" id="cw1-Wg-Z7t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kqo-PZ-pO3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -107,47 +108,185 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="kms-TU-jw8">
-                                <rect key="frame" x="20" y="189" width="560" height="109"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="kms-TU-jw8">
+                                <rect key="frame" x="20" y="123" width="560" height="216"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" text="myTBA" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mck-oX-QhH">
-                                        <rect key="frame" x="0.0" y="0.0" width="560" height="22"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Yxx-M6-kNl">
+                                        <rect key="frame" x="0.0" y="0.0" width="560" height="24"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_star" translatesAutoresizingMaskIntoConstraints="NO" id="wdp-gP-pc0">
+                                                <rect key="frame" x="268" y="0.0" width="24" height="24"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="24" id="IgZ-LW-OP8"/>
+                                                    <constraint firstAttribute="width" constant="24" id="LEH-iq-P21"/>
+                                                </constraints>
+                                            </imageView>
+                                        </subviews>
+                                    </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Welcome to myTBA!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mck-oX-QhH">
+                                        <rect key="frame" x="0.0" y="32" width="560" height="22"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="22" id="RQb-Qd-eaR"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" misplaced="YES" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tkb-fz-Phw">
-                                        <rect key="frame" x="0.0" y="22" width="560" height="58"/>
-                                        <string key="text">myTBA allows you to subscribe to a variety of notifications, such as match results for your favorite teams or the winners of an event. You can also mark teams, events, and matches as favorites for easy access.</string>
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="749" verticalCompressionResistancePriority="749" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nvl-uM-rpr">
-                                        <rect key="frame" x="0.0" y="79" width="560" height="30"/>
-                                        <state key="normal" title="Sign In with Google"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="DQT-AB-CPa">
+                                        <rect key="frame" x="0.0" y="62" width="560" height="24"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_favorite" translatesAutoresizingMaskIntoConstraints="NO" id="hHE-Kz-LYv">
+                                                <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="24" id="hFr-Pk-2s6"/>
+                                                    <constraint firstAttribute="width" constant="24" id="onG-Q2-jyj"/>
+                                                </constraints>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Favorites are used for personalized content and quick access and then here's more than one line" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="01g-QA-kKO">
+                                                <rect key="frame" x="32" y="0.0" width="528" height="24"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="toe-l0-I8i">
+                                        <rect key="frame" x="0.0" y="94" width="560" height="24"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_notifications" translatesAutoresizingMaskIntoConstraints="NO" id="IrW-rC-bjp">
+                                                <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="24" id="JhB-zM-v4k"/>
+                                                    <constraint firstAttribute="height" constant="24" id="gZE-C1-cbV"/>
+                                                </constraints>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subscriptions are used for push notifications and now let's make this two lines as well" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bQO-Yc-pIv">
+                                                <rect key="frame" x="32" y="0.0" width="528" height="24"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nvl-uM-rpr">
+                                        <rect key="frame" x="0.0" y="126" width="560" height="48"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                        <state key="normal" title="Sign in with Google" backgroundImage="btn_google_signin_light_normal_ios">
+                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="selected" backgroundImage="btn_google_signin_light_pressed_ios"/>
+                                        <state key="highlighted" backgroundImage="btn_google_signin_light_pressed_ios"/>
                                         <connections>
-                                            <action selector="signInTapped:" destination="qLz-RP-685" eventType="touchUpInside" id="bgl-eo-WKu"/>
+                                            <action selector="signInTapped:" destination="qLz-RP-685" eventType="touchUpInside" id="2u2-hR-5KA"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rIt-Tv-8dP">
+                                        <rect key="frame" x="0.0" y="182" width="560" height="34"/>
+                                        <string key="text">The Blue Alliance uses Google Accounts to handle our login. Only your email address is shared with us and it will always be kept private.</string>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="kms-TU-jw8" secondAttribute="width" constant="40" id="F3l-r4-K0T"/>
                             <constraint firstItem="kms-TU-jw8" firstAttribute="centerY" secondItem="nMo-yf-GLc" secondAttribute="centerY" id="Ra9-yr-JyR"/>
                             <constraint firstItem="kms-TU-jw8" firstAttribute="centerX" secondItem="nMo-yf-GLc" secondAttribute="centerX" id="UbF-ED-mwC"/>
                             <constraint firstAttribute="leadingMargin" secondItem="kms-TU-jw8" secondAttribute="leading" id="siJ-Nj-7jw"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="siJ-Nj-7jw"/>
+                            </mask>
+                        </variation>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dQn-67-FLb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="370" y="973.5"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="wob-LI-oME">
+            <objects>
+                <navigationController id="EUC-7J-pY3" customClass="TBANavigationController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="pQf-Wn-0Ew">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="H3z-it-9dq" kind="relationship" relationship="rootViewController" id="GGZ-vK-knQ"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VBR-5c-CkY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="370" y="-509"/>
+        </scene>
+        <!--Sign In-->
+        <scene sceneID="QD3-a7-6SC">
+            <objects>
+                <viewController id="H3z-it-9dq" customClass="MyTBAAuthViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qSp-pi-nzz"/>
+                        <viewControllerLayoutGuide type="bottom" id="i9J-RE-p4e"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="sja-a9-nWD">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wXD-fQ-iMj">
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
+                                <connections>
+                                    <outlet property="delegate" destination="H3z-it-9dq" id="WWl-FE-6Mh"/>
+                                </connections>
+                            </webView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Rc1-u5-9L2">
+                                <rect key="frame" x="290" y="322" width="20" height="20"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="wXD-fQ-iMj" secondAttribute="trailing" id="658-vs-dZF"/>
+                            <constraint firstItem="wXD-fQ-iMj" firstAttribute="leading" secondItem="sja-a9-nWD" secondAttribute="leading" id="9nN-jq-ite"/>
+                            <constraint firstItem="Rc1-u5-9L2" firstAttribute="centerX" secondItem="wXD-fQ-iMj" secondAttribute="centerX" id="Avl-7H-MiO"/>
+                            <constraint firstItem="wXD-fQ-iMj" firstAttribute="top" secondItem="qSp-pi-nzz" secondAttribute="bottom" id="JBf-Gg-HTl"/>
+                            <constraint firstItem="Rc1-u5-9L2" firstAttribute="centerY" secondItem="sja-a9-nWD" secondAttribute="centerY" id="Kpa-2S-SUB"/>
+                            <constraint firstItem="Rc1-u5-9L2" firstAttribute="centerY" secondItem="wXD-fQ-iMj" secondAttribute="centerY" id="Pw4-2t-ahh"/>
+                            <constraint firstItem="Rc1-u5-9L2" firstAttribute="centerX" secondItem="sja-a9-nWD" secondAttribute="centerX" id="QTH-f6-MyE"/>
+                            <constraint firstItem="i9J-RE-p4e" firstAttribute="top" secondItem="wXD-fQ-iMj" secondAttribute="bottom" id="faI-HU-fJ0"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Kpa-2S-SUB"/>
+                                <exclude reference="QTH-f6-MyE"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <navigationItem key="navigationItem" title="Sign In" id="er6-tF-5xO">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="hZT-Cm-9Dm">
+                            <connections>
+                                <action selector="cancelButtonTapped:" destination="H3z-it-9dq" id="W37-gb-DR5"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="webView" destination="wXD-fQ-iMj" id="3Zg-tp-0gi"/>
+                        <outlet property="webViewActivityIndicator" destination="Rc1-u5-9L2" id="elY-ET-FkV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fg3-Gx-PCs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1033" y="-509"/>
+        </scene>
     </scenes>
     <resources>
-        <image name="ic_star_white" width="24" height="24"/>
+        <image name="btn_google_signin_light_normal_ios" width="40" height="48"/>
+        <image name="btn_google_signin_light_pressed_ios" width="40" height="48"/>
+        <image name="ic_favorite" width="24" height="24"/>
+        <image name="ic_notifications" width="24" height="24"/>
+        <image name="ic_star" width="24" height="24"/>
     </resources>
 </document>
