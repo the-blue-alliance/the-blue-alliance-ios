@@ -53,9 +53,6 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    self.refreshViewControllers = @[self.favoritesViewController, self.subscriptionsViewController, self.recentNotificationsViewController];
-//    self.containerViews = @[self.favoritesView, self.subscriptionsView, self.recentNotificationsView];
-    
     [self styleInterface];
     [self updateInterface];
 }
@@ -70,12 +67,9 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
     if ([MyTBAService sharedService].authentication) {
         self.signInView.hidden = YES;
         self.navigationItem.rightBarButtonItem = self.signOutBarButtonItem;
-        
-        NSLog(@"Token: %@", [MyTBAService sharedService].authentication.accessToken);
-        NSLog(@"Expired: %@", [MyTBAService sharedService].authentication.expired ? @"YES" : @"NO");
-        [[MyTBAService sharedService] callApiMethod:@"favorites/list" andCompletionHandler:^(NSURLResponse *response, id parsedData, NSError *error) {
+        [[MyTBAService sharedService] fetchFavorites:^(NSArray<TBAFavorite *> *favorites, NSError *error) {
             NSLog(@"Error: %@", error);
-            NSLog(@"Parsed Data: %@", parsedData);
+            NSLog(@"Favories: %@", favorites);
         }];
     } else {
         self.signInView.hidden = NO;

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class MyTBAAuthenticaion;
+@class TBAFavorite, MyTBAAuthenticaion;
 
 typedef void (^MyTBARequestCompletionBlock)(NSURLResponse *response, id parsedData, NSError *error);
 
@@ -18,7 +18,11 @@ typedef void (^MyTBARequestCompletionBlock)(NSURLResponse *response, id parsedDa
 
 + (instancetype)sharedService;
 
-- (NSUInteger)callApiMethod:(NSString *)aMethod andCompletionHandler:(TBAKitRequestCompletionBlock)aHandler;
+// Authentication
 - (void)removeAuthentication;
+
+// Favorites
+
+- (NSUInteger)fetchFavorites:(void (^)(NSArray<TBAFavorite *> *favorites, NSError *error))completion;
 
 @end

@@ -10,4 +10,8 @@
 
 @interface TBAFavorite : TBAModel
 
+@property (nonatomic, strong) NSString *deviceKey;
+@property (nonatomic, strong) NSString *modelKey;
+@property (nonatomic, strong) NSNumber *modelType;
+
 @end

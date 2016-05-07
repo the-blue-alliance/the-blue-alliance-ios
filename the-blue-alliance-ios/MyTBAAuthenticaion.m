@@ -18,7 +18,7 @@
 
 #pragma mark - Properities
 
-- (BOOL)isExpired {
+- (BOOL)expired {
     BOOL shouldRefresh;
     if (!self.expirationDate) {
         shouldRefresh = YES;

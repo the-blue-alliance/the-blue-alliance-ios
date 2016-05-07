@@ -117,16 +117,19 @@
     
     NSDateFormatter *endDateFormatter = [[NSDateFormatter alloc] init];
     [endDateFormatter setDateFormat:@"MMM dd, y"];
+
+    NSDateFormatter *startDateFormatter = [[NSDateFormatter alloc] init];
+    [startDateFormatter setDateFormat:@"MMM dd"];
     
     NSString *dateText;
-    if ([calendar component:NSCalendarUnitYear fromDate:self.startDate] == [calendar component:NSCalendarUnitYear fromDate:self.endDate]) {
-        NSDateFormatter *startDateFormatter = [[NSDateFormatter alloc] init];
-        [startDateFormatter setDateFormat:@"MMM dd"];
+    if ([self.startDate isEqualToDate:self.endDate]) {
+        dateText = [NSString stringWithFormat:@"%@",
+                    [endDateFormatter stringFromDate:self.startDate]];
         
+    } else if ([calendar component:NSCalendarUnitYear fromDate:self.startDate] == [calendar component:NSCalendarUnitYear fromDate:self.endDate]) {
         dateText = [NSString stringWithFormat:@"%@ to %@",
                     [startDateFormatter stringFromDate:self.startDate],
                     [startDateFormatter stringFromDate:self.endDate]];
-        
     } else {
         dateText = [NSString stringWithFormat:@"%@ to %@",
                     [endDateFormatter stringFromDate:self.startDate],

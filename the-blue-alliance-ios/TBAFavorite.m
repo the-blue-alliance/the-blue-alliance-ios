@@ -10,4 +10,10 @@
 
 @implementation TBAFavorite
 
+- (void)updateFromServerResponse:(NSDictionary *)response {
+    self.deviceKey = [self parseStringForKey:@"device_key" fromResponse:response];
+    self.modelKey = [self parseStringForKey:@"model_key" fromResponse:response];
+    self.modelType = [self parseNumberForKey:@"model_type" fromResponse:response];
+}
+
 @end
