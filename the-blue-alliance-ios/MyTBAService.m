@@ -32,6 +32,7 @@ static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
 @end
 
 @implementation MyTBAService
+@synthesize authentication = _authentication;
 
 #pragma mark - Class Methods
 
@@ -56,9 +57,21 @@ static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
 
 #pragma mark - Properties
 
+- (void)setAuthentication:(MyTBAAuthenticaion *)authentication {
+    _authentication = authentication;
+    
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:authentication];
+    [self.keychainValet setObject:data forKey:MyTBAKeychainKey];
+}
+
 - (MyTBAAuthenticaion *)authentication {
-    NSData *data = [self.keychainValet objectForKey:MyTBAKeychainKey];
-    return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    if (!_authentication) {
+        NSData *data = [self.keychainValet objectForKey:MyTBAKeychainKey];
+        if (data) {
+            _authentication = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        }
+    }
+    return _authentication;
 }
 
 - (NSURLSession *)urlSession {
@@ -73,13 +86,10 @@ static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
 
 #pragma mark - Public Methods
 
-- (BOOL)setAuthenticaion:(MyTBAAuthenticaion *)auth {
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:auth];
-    return [self.keychainValet setObject:data forKey:MyTBAKeychainKey];
-}
+- (void)removeAuthentication {
+    _authentication = nil;
 
-- (BOOL)removeAuthentication {
-    return [self.keychainValet removeObjectForKey:MyTBAKeychainKey];
+    [self.keychainValet removeObjectForKey:MyTBAKeychainKey];
 }
 
 // Set this up for the etag nonsense

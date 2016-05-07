@@ -14,11 +14,10 @@ typedef void (^MyTBARequestCompletionBlock)(NSURLResponse *response, id parsedDa
 
 @interface MyTBAService : NSObject
 
-@property (readonly) MyTBAAuthenticaion *authentication;
+@property (nonatomic, strong) MyTBAAuthenticaion *authentication;
 
 + (instancetype)sharedService;
 
-- (BOOL)setAuthenticaion:(MyTBAAuthenticaion *)auth;
-- (BOOL)removeAuthentication;
+- (void)removeAuthentication;
 
 @end

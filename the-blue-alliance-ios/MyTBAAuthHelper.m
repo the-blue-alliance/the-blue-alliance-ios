@@ -86,7 +86,7 @@ static NSString *const RedirectURL    = @"https://tba-dev-phil.appspot.com/oauth
             completionBlock(error);
         } else {
             MyTBAAuthenticaion *auth = [[MyTBAAuthenticaion alloc] initWithServerResponse:json];
-            [[MyTBAService sharedService] setAuthenticaion:auth];
+            [[MyTBAService sharedService] setAuthentication:auth];
 
             completionBlock(nil);
         }
@@ -104,7 +104,7 @@ static NSString *const RedirectURL    = @"https://tba-dev-phil.appspot.com/oauth
             completionBlock(error);
         } else {
             [auth updateWithResponse:json];
-            [[MyTBAService sharedService] setAuthenticaion:auth];
+            [[MyTBAService sharedService] setAuthentication:auth];
             
             completionBlock(nil);
         }
