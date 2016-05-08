@@ -11,12 +11,12 @@
 #import "TBAFavoritesViewController.h"
 #import "TBASubscriptionsViewController.h"
 #import "TBANotificationsViewController.h"
-#import "MyTBAService.h"
-#import "MyTBAAuthViewController.h"
-#import "MyTBAAuthenticaion.h"
+#import "TBAMyTBAOAuthViewController.h"
+#import "TBANavigationController.h"
+#import "Valet.h"
 
+static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
 static NSString *const MyTBASignInEmbed = @"MyTBASignInEmbed";
-
 static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 
 @interface MyTBAViewController ()
@@ -35,9 +35,14 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 
 @property (nonatomic, strong) UIBarButtonItem *signOutBarButtonItem;
 
+// Move these in to persistence controller?
+@property (nonatomic, strong) VALValet *keychainValet;
+@property (nonatomic, strong) TBAMyTBAAuthentication *authentication;
+
 @end
 
 @implementation MyTBAViewController
+@synthesize authentication = _authentication;
 
 #pragma mark - Properities
 
@@ -53,23 +58,43 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.keychainValet = [[VALValet alloc] initWithIdentifier:@"MyTBA" accessibility:VALAccessibilityAlways];
+    
     [self styleInterface];
     [self updateInterface];
 }
 
 #pragma mark - Interface Actions
 
+- (void)setAuthentication:(TBAMyTBAAuthentication *)authentication {
+    _authentication = authentication;
+    
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:authentication];
+    [self.keychainValet setObject:data forKey:MyTBAKeychainKey];
+}
+
+- (TBAMyTBAAuthentication *)authentication {
+    if (!_authentication) {
+        NSData *data = [self.keychainValet objectForKey:MyTBAKeychainKey];
+        if (data) {
+            _authentication = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        }
+    }
+    return _authentication;
+}
+
 - (void)styleInterface {
     self.navigationItem.title = @"myTBA";
 }
 
 - (void)updateInterface {
-    if ([MyTBAService sharedService].authentication) {
+    if (self.authentication) {
         self.signInView.hidden = YES;
         self.navigationItem.rightBarButtonItem = self.signOutBarButtonItem;
-        [[MyTBAService sharedService] fetchFavorites:^(NSArray<TBAFavorite *> *favorites, NSError *error) {
+        [[TBAKit sharedKit] setMyTBAAuthentication:self.authentication];
+        [[TBAKit sharedKit] fetchFavoritesWithCompletionBlock:^(NSArray<TBAFavorite *> *favorites, NSInteger totalCount, NSError *error) {
             NSLog(@"Error: %@", error);
-            NSLog(@"Favories: %@", favorites);
+            NSLog(@"Favorites: %@", favorites);
         }];
     } else {
         self.signInView.hidden = NO;
@@ -85,7 +110,8 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Sign Out?" message:@"Are you sure you want to sign out of myTBA?" preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *signOutAction = [UIAlertAction actionWithTitle:@"Sign Out" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [[MyTBAService sharedService] removeAuthentication];
+        _authentication = nil;
+        [self.keychainValet removeObjectForKey:MyTBAKeychainKey];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self updateInterface];
         });
@@ -100,6 +126,33 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
     });
 }
 
+- (void)signIn {
+    TBAMyTBAOAuthViewController *authViewController = [[TBAMyTBAOAuthViewController alloc] initWithClientID:@"259024084762-alrj1fdklkqm268asaj6tv71u4cdae10.apps.googleusercontent.com" clientSecret:@"_YKJIos8bKGzFm7PDHeN5abQ" andRedirectURL:@"https://tba-dev-phil.appspot.com/oauth2callback"];
+    
+    authViewController.authSucceeded = ^(TBAMyTBAAuthentication *auth) {
+        self.authentication = auth;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateInterface];
+        });
+    };
+    
+    authViewController.authFailed = ^(NSError *error) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Error" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *okayAction = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:okayAction];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self presentViewController:alertController animated:YES completion:nil];
+        });
+    };
+    
+    TBANavigationController *navigationController = [[TBANavigationController alloc] initWithRootViewController:authViewController];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self presentViewController:navigationController animated:YES completion:nil];
+    });
+}
+
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -107,27 +160,7 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
     if ([segue.identifier isEqualToString:MyTBASignInEmbed]) {
         self.signInViewController = segue.destinationViewController;
         self.signInViewController.signIn = ^() {
-            [weakSelf performSegueWithIdentifier:@"MyTBAAuthSegue" sender:nil];
-        };
-    } else if ([segue.identifier isEqualToString:@"MyTBAAuthSegue"]) {
-        UINavigationController *navigationController = segue.destinationViewController;
-        MyTBAAuthViewController *authViewController = navigationController.viewControllers.firstObject;
-        
-        authViewController.authSucceeded = ^() {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateInterface];
-            });
-        };
-        
-        authViewController.authFailed = ^(NSError *error) {
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Error" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-            
-            UIAlertAction *okayAction = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
-            [alertController addAction:okayAction];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self presentViewController:alertController animated:YES completion:nil];
-            });
+            [weakSelf signIn];
         };
     }
 }

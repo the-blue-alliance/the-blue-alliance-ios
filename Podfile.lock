@@ -1,6 +1,6 @@
 PODS:
   - OrderedDictionary (1.2)
-  - TBAKit (1.1.4)
+  - TBAKit (1.1.6)
   - Valet (2.2.1)
   - youtube-ios-player-helper (0.1.6)
 
@@ -12,7 +12,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   OrderedDictionary: 9cc5d69c5c5314ad696ed1839190724e83d534c7
-  TBAKit: 9cb2e72a66e3dcf283c6f7ff75b2a76ad336d721
+  TBAKit: 394af55c7d50e51179914bf335a88f1a4a6da83f
   Valet: 8873c1f797822a513b5b3b18d19955fc39b22aab
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
 
