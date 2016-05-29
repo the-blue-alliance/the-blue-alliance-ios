@@ -7,11 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		142135E91CDD9A4600A84880 /* TBAFavorite.m in Sources */ = {isa = PBXBuildFile; fileRef = 142135E81CDD9A4600A84880 /* TBAFavorite.m */; };
 		146826D21CDD793500736330 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 146826D11CDD793500736330 /* Security.framework */; };
-		146FD6DD1CDD6DCB0023DCE5 /* MyTBAAuthenticaion.m in Sources */ = {isa = PBXBuildFile; fileRef = 146FD6DC1CDD6DCB0023DCE5 /* MyTBAAuthenticaion.m */; };
-		14CD46921CDCF53A00CF7BA7 /* MyTBAAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CD46911CDCF53A00CF7BA7 /* MyTBAAuthViewController.m */; };
-		14CD46951CDCF5BE00CF7BA7 /* MyTBAAuthHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 14CD46941CDCF5BE00CF7BA7 /* MyTBAAuthHelper.m */; };
 		367C61D3D2B111EE15DCA552 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 848F6883F7A38746FB9A471C /* libPods.a */; };
 		50832DFB1918BB63003AC8A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFA1918BB63003AC8A7 /* Foundation.framework */; };
 		50832DFF1918BB63003AC8A7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50832DFE1918BB63003AC8A7 /* UIKit.framework */; };
@@ -30,7 +26,6 @@
 		9212574B1CDC339200A9E19D /* TBAFavoritesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9212574A1CDC339200A9E19D /* TBAFavoritesViewController.m */; };
 		9212574F1CDC33B000A9E19D /* TBASubscriptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9212574E1CDC33B000A9E19D /* TBASubscriptionsViewController.m */; };
 		921257521CDC33C000A9E19D /* TBANotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 921257511CDC33C000A9E19D /* TBANotificationsViewController.m */; };
-		921257551CDC367000A9E19D /* MyTBAService.m in Sources */ = {isa = PBXBuildFile; fileRef = 921257541CDC367000A9E19D /* MyTBAService.m */; };
 		9222F1191AD6910F00C0AEA0 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9222F1181AD6910F00C0AEA0 /* EventViewController.m */; };
 		9237F74B1B2CA74D00C89978 /* TBAPersistenceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9237F74A1B2CA74D00C89978 /* TBAPersistenceController.m */; };
 		9237F77E1B2CA7CB00C89978 /* TBA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9237F77C1B2CA7CB00C89978 /* TBA.xcdatamodeld */; };
@@ -113,15 +108,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		142135E71CDD9A4600A84880 /* TBAFavorite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAFavorite.h; sourceTree = "<group>"; };
-		142135E81CDD9A4600A84880 /* TBAFavorite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAFavorite.m; sourceTree = "<group>"; };
 		146826D11CDD793500736330 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		146FD6DB1CDD6DCB0023DCE5 /* MyTBAAuthenticaion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTBAAuthenticaion.h; sourceTree = "<group>"; };
-		146FD6DC1CDD6DCB0023DCE5 /* MyTBAAuthenticaion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTBAAuthenticaion.m; sourceTree = "<group>"; };
-		14CD46901CDCF53A00CF7BA7 /* MyTBAAuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTBAAuthViewController.h; sourceTree = "<group>"; };
-		14CD46911CDCF53A00CF7BA7 /* MyTBAAuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTBAAuthViewController.m; sourceTree = "<group>"; };
-		14CD46931CDCF5BE00CF7BA7 /* MyTBAAuthHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTBAAuthHelper.h; sourceTree = "<group>"; };
-		14CD46941CDCF5BE00CF7BA7 /* MyTBAAuthHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTBAAuthHelper.m; sourceTree = "<group>"; };
 		4BC2F7E27189D063BE57B1B3 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		50832DF71918BB63003AC8A7 /* the-blue-alliance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "the-blue-alliance.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		50832DFA1918BB63003AC8A7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -156,8 +143,6 @@
 		9212574E1CDC33B000A9E19D /* TBASubscriptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBASubscriptionsViewController.m; sourceTree = "<group>"; };
 		921257501CDC33C000A9E19D /* TBANotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBANotificationsViewController.h; sourceTree = "<group>"; };
 		921257511CDC33C000A9E19D /* TBANotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBANotificationsViewController.m; sourceTree = "<group>"; };
-		921257531CDC367000A9E19D /* MyTBAService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTBAService.h; sourceTree = "<group>"; };
-		921257541CDC367000A9E19D /* MyTBAService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTBAService.m; sourceTree = "<group>"; };
 		9222F1171AD6910F00C0AEA0 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
 		9222F1181AD6910F00C0AEA0 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
 		9237F7491B2CA74D00C89978 /* TBAPersistenceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TBAPersistenceController.h; path = Models/TBAPersistenceController.h; sourceTree = "<group>"; };
@@ -332,30 +317,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		146FD6DE1CDD77630023DCE5 /* OAuth */ = {
-			isa = PBXGroup;
-			children = (
-				146FD6DB1CDD6DCB0023DCE5 /* MyTBAAuthenticaion.h */,
-				146FD6DC1CDD6DCB0023DCE5 /* MyTBAAuthenticaion.m */,
-				14CD46931CDCF5BE00CF7BA7 /* MyTBAAuthHelper.h */,
-				14CD46941CDCF5BE00CF7BA7 /* MyTBAAuthHelper.m */,
-				14CD46901CDCF53A00CF7BA7 /* MyTBAAuthViewController.h */,
-				14CD46911CDCF53A00CF7BA7 /* MyTBAAuthViewController.m */,
-			);
-			name = OAuth;
-			sourceTree = "<group>";
-		};
-		14EC8C1F1CDD93060063A6B8 /* MyTBA API */ = {
-			isa = PBXGroup;
-			children = (
-				921257531CDC367000A9E19D /* MyTBAService.h */,
-				921257541CDC367000A9E19D /* MyTBAService.m */,
-				142135E71CDD9A4600A84880 /* TBAFavorite.h */,
-				142135E81CDD9A4600A84880 /* TBAFavorite.m */,
-			);
-			name = "MyTBA API";
-			sourceTree = "<group>";
-		};
 		50832DEE1918BB63003AC8A7 = {
 			isa = PBXGroup;
 			children = (
@@ -448,8 +409,6 @@
 		921257421CDC2F6300A9E19D /* MyTBA */ = {
 			isa = PBXGroup;
 			children = (
-				14EC8C1F1CDD93060063A6B8 /* MyTBA API */,
-				146FD6DE1CDD77630023DCE5 /* OAuth */,
 				921257431CDC2F8200A9E19D /* MyTBAStoryboard.storyboard */,
 				9212573F1CDC2F6000A9E19D /* MyTBAViewController.h */,
 				921257401CDC2F6000A9E19D /* MyTBAViewController.m */,
@@ -1136,9 +1095,7 @@
 				924E94371CD2C15300C2EADB /* TBAViewController.m in Sources */,
 				9212574B1CDC339200A9E19D /* TBAFavoritesViewController.m in Sources */,
 				92CA3C5C1B88F2C30094DC7D /* TBAContainerCollectionViewController.m in Sources */,
-				921257551CDC367000A9E19D /* MyTBAService.m in Sources */,
 				9243D4021BABB92E00512D3B /* Team+Fetch.m in Sources */,
-				14CD46951CDCF5BE00CF7BA7 /* MyTBAAuthHelper.m in Sources */,
 				92BB8B981AC64DC800A041FA /* TBASelectYearViewController.m in Sources */,
 				921257521CDC33C000A9E19D /* TBANotificationsViewController.m in Sources */,
 				927E8C471B2689EF00C93E6C /* TBAEventsViewController.m in Sources */,
@@ -1147,12 +1104,10 @@
 				92A29FD31CD5BF8900104EC9 /* TBAMediaView.m in Sources */,
 				924E94261CD07DD000C2EADB /* TBATeamAtDistrictSummaryViewController.m in Sources */,
 				92011EBB1AC6175400C4F1EC /* DistrictsViewController.m in Sources */,
-				14CD46921CDCF53A00CF7BA7 /* MyTBAAuthViewController.m in Sources */,
 				921257471CDC334B00A9E19D /* MyTBASignInViewController.m in Sources */,
 				9243D3E61BABB70D00512D3B /* Team.m in Sources */,
 				9222F1191AD6910F00C0AEA0 /* EventViewController.m in Sources */,
 				9243D3E81BABB70D00512D3B /* Event.m in Sources */,
-				142135E91CDD9A4600A84880 /* TBAFavorite.m in Sources */,
 				92A29FC51CD5466200104EC9 /* TBAPlayerView.m in Sources */,
 				926001671B517DF40027FE95 /* TBANoDataViewController.m in Sources */,
 				92553DFE1CB1F6F100D7E1EE /* AwardRecipient.m in Sources */,
@@ -1183,7 +1138,6 @@
 				92E990151CCF16A200EE8F71 /* TBASummaryTableViewCell.m in Sources */,
 				92A29FC91CD55BB600104EC9 /* TBATeamStatsViewController.m in Sources */,
 				92E9900D1CCDD33600EE8F71 /* EventTeamViewController.m in Sources */,
-				146FD6DD1CDD6DCB0023DCE5 /* MyTBAAuthenticaion.m in Sources */,
 				921257411CDC2F6000A9E19D /* MyTBAViewController.m in Sources */,
 				92E9902E1CD0130000EE8F71 /* TBAMatchBreakdownViewController.m in Sources */,
 				92E031681BFFEE120017CA79 /* TBARefreshCollectionViewController.m in Sources */,

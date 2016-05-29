@@ -51,7 +51,8 @@
 
 #warning dynaically fetch version number here, also maybe add some user-specific string?
     [[TBAKit sharedKit] setIdHeader:@"the-blue-alliance:ios:v0.1"];
-    
+    [[TBAKit sharedKit] setMyTBAAuthentication:self.persistenceController.authentication];
+
     [self setupAppearance];
     [self.window makeKeyAndVisible];
     
