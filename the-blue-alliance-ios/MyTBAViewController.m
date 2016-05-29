@@ -81,7 +81,6 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 #pragma mark - IB Actions
 
 - (IBAction)signOutTapped:(id)sender {
-    // Alert view to sign out
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Sign Out?" message:@"Are you sure you want to sign out of myTBA?" preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *signOutAction = [UIAlertAction actionWithTitle:@"Sign Out" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
