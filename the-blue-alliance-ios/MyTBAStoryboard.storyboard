@@ -141,22 +141,22 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="kms-TU-jw8">
-                                <rect key="frame" x="20" y="123" width="560" height="272"/>
+                                <rect key="frame" x="20" y="95" width="560" height="297"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Yxx-M6-kNl">
-                                        <rect key="frame" x="0.0" y="0.0" width="560" height="72"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="560" height="97"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_star" translatesAutoresizingMaskIntoConstraints="NO" id="wdp-gP-pc0">
-                                                <rect key="frame" x="244" y="0.0" width="72" height="72"/>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star_yellow" translatesAutoresizingMaskIntoConstraints="NO" id="wdp-gP-pc0">
+                                                <rect key="frame" x="229" y="0.0" width="102" height="97"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="72" id="IgZ-LW-OP8"/>
-                                                    <constraint firstAttribute="width" constant="72" id="LEH-iq-P21"/>
+                                                    <constraint firstAttribute="height" constant="97" id="IgZ-LW-OP8"/>
+                                                    <constraint firstAttribute="width" constant="102" id="LEH-iq-P21"/>
                                                 </constraints>
                                             </imageView>
                                         </subviews>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Welcome to myTBA!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mck-oX-QhH">
-                                        <rect key="frame" x="0.0" y="80" width="560" height="22"/>
+                                        <rect key="frame" x="0.0" y="105" width="560" height="22"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="22" id="RQb-Qd-eaR"/>
                                         </constraints>
@@ -165,16 +165,16 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="DQT-AB-CPa">
-                                        <rect key="frame" x="0.0" y="110" width="560" height="28"/>
+                                        <rect key="frame" x="0.0" y="135" width="560" height="28"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_favorite" translatesAutoresizingMaskIntoConstraints="NO" id="hHE-Kz-LYv">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="favorite" translatesAutoresizingMaskIntoConstraints="NO" id="hHE-Kz-LYv">
                                                 <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="28" id="hFr-Pk-2s6"/>
                                                     <constraint firstAttribute="width" constant="28" id="onG-Q2-jyj"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Favorites are used for personalized content and quick access and then here's more than one line" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="01g-QA-kKO">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Favorites are used for personalized content and quick access and then here's more than one line" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="01g-QA-kKO">
                                                 <rect key="frame" x="36" y="0.0" width="524" height="28"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -183,16 +183,16 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="toe-l0-I8i">
-                                        <rect key="frame" x="0.0" y="146" width="560" height="28"/>
+                                        <rect key="frame" x="0.0" y="171" width="560" height="28"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_notifications" translatesAutoresizingMaskIntoConstraints="NO" id="IrW-rC-bjp">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="notifications" translatesAutoresizingMaskIntoConstraints="NO" id="IrW-rC-bjp">
                                                 <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="28" id="JhB-zM-v4k"/>
                                                     <constraint firstAttribute="height" constant="28" id="gZE-C1-cbV"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subscriptions are used for push notifications and now let's make this two lines as well" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bQO-Yc-pIv">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Subscriptions are used for push notifications and now let's make this two lines as well" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bQO-Yc-pIv">
                                                 <rect key="frame" x="36" y="0.0" width="524" height="28"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -201,7 +201,7 @@
                                         </subviews>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nvl-uM-rpr">
-                                        <rect key="frame" x="0.0" y="182" width="560" height="48"/>
+                                        <rect key="frame" x="0.0" y="207" width="560" height="48"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                         <state key="normal" title="Sign in with Google" backgroundImage="btn_google_signin_light_normal_ios">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -213,7 +213,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rIt-Tv-8dP">
-                                        <rect key="frame" x="0.0" y="238" width="560" height="34"/>
+                                        <rect key="frame" x="0.0" y="263" width="560" height="34"/>
                                         <string key="text">The Blue Alliance uses Google Accounts to handle our login. Only your email address is shared with us and it will always be kept private.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -328,8 +328,9 @@
     <resources>
         <image name="btn_google_signin_light_normal_ios" width="40" height="48"/>
         <image name="btn_google_signin_light_pressed_ios" width="40" height="48"/>
-        <image name="ic_favorite" width="24" height="24"/>
-        <image name="ic_notifications" width="24" height="24"/>
+        <image name="favorite" width="28" height="26"/>
         <image name="ic_star" width="24" height="24"/>
+        <image name="notifications" width="23" height="28"/>
+        <image name="star_yellow" width="102" height="97"/>
     </resources>
 </document>
