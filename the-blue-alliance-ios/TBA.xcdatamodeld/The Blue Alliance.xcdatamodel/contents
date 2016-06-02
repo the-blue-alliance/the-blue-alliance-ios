@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15D21" minimumToolsVersion="Xcode 4.3">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15F34" minimumToolsVersion="Xcode 4.3">
     <entity name="Award" representedClassName="Award" syncable="YES">
         <attribute name="awardType" attributeType="Integer 16" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -91,6 +91,11 @@
         <attribute name="webcastType" attributeType="Integer 16" syncable="YES"/>
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="webcasts" inverseEntity="Event" syncable="YES"/>
     </entity>
+    <entity name="Favorite" syncable="YES">
+        <attribute name="deviceKey" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="modelKey" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="modelType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+    </entity>
     <entity name="Match" representedClassName="Match" syncable="YES">
         <attribute name="blueScore" attributeType="Integer 16" syncable="YES"/>
         <attribute name="compLevel" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -116,6 +121,11 @@
         <attribute name="mediaType" attributeType="Integer 16" syncable="YES"/>
         <attribute name="year" attributeType="Integer 16" syncable="YES"/>
         <relationship name="team" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="media" inverseEntity="Team" syncable="YES"/>
+    </entity>
+    <entity name="Subscription" syncable="YES">
+        <attribute name="deviceKey" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="modelKey" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="modelType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
     </entity>
     <entity name="Team" representedClassName="Team" syncable="YES">
         <attribute name="countryName" optional="YES" attributeType="String" syncable="YES"/>
@@ -153,9 +163,11 @@
         <element name="EventRanking" positionX="0" positionY="0" width="128" height="120"/>
         <element name="EventTeamStat" positionX="0" positionY="0" width="128" height="105"/>
         <element name="EventWebcast" positionX="0" positionY="0" width="128" height="105"/>
+        <element name="Favorite" positionX="9" positionY="153" width="128" height="90"/>
         <element name="Match" positionX="0" positionY="0" width="128" height="225"/>
         <element name="MatchVideo" positionX="0" positionY="0" width="128" height="90"/>
         <element name="Media" positionX="0" positionY="0" width="128" height="120"/>
         <element name="Team" positionX="0" positionY="0" width="128" height="390"/>
+        <element name="Subscription" positionX="9" positionY="153" width="128" height="90"/>
     </elements>
 </model>

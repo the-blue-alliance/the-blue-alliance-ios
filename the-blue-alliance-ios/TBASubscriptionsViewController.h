@@ -8,6 +8,6 @@
 
 #import "TBARefreshTableViewController.h"
 
-@interface TBASubscriptionsViewController : TBARefreshTableViewController
+@interface TBASubscriptionsViewController : TBARefreshTableViewController <TBATableViewControllerDelegate>
 
 @end

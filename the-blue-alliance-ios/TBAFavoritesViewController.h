@@ -8,6 +8,6 @@
 
 #import "TBARefreshTableViewController.h"
 
-@interface TBAFavoritesViewController : TBARefreshTableViewController
+@interface TBAFavoritesViewController : TBARefreshTableViewController <TBATableViewControllerDelegate>
 
 @end

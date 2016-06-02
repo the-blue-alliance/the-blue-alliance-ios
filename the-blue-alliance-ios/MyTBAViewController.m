@@ -14,8 +14,13 @@
 #import "TBAMyTBAOAuthViewController.h"
 #import "TBANavigationController.h"
 
-static NSString *const MyTBASignInEmbed = @"MyTBASignInEmbed";
+static NSString *const MyTBASignInEmbed         = @"MyTBASignInEmbed";
+static NSString *const MyTBAFavoritesEmbed      = @"MyTBAFavoritesEmbed";
+static NSString *const MyTBASubscriptionsEmbed  = @"MyTBASubscriptionsEmbed";
+static NSString *const MyTBANotificationsEmbed  = @"MyTBANotificationsEmbed";
+
 static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
+
 
 @interface MyTBAViewController ()
 
@@ -51,6 +56,9 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.refreshViewControllers = @[self.favoritesViewController];
+    self.containerViews = @[self.favoritesView];
+    
     [self styleInterface];
     [self updateInterface];
 }
@@ -75,7 +83,6 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 #pragma mark - IB Actions
 
 - (IBAction)signOutTapped:(id)sender {
-    // Alert view to sign out
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Sign Out?" message:@"Are you sure you want to sign out of myTBA?" preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *signOutAction = [UIAlertAction actionWithTitle:@"Sign Out" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -97,7 +104,7 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 }
 
 - (void)signIn {
-    TBAMyTBAOAuthViewController *authViewController = [[TBAMyTBAOAuthViewController alloc] initWithClientID:@"259024084762-alrj1fdklkqm268asaj6tv71u4cdae10.apps.googleusercontent.com" clientSecret:@"_YKJIos8bKGzFm7PDHeN5abQ" andRedirectURL:@"https://tba-dev-phil.appspot.com/oauth2callback"];
+    TBAMyTBAOAuthViewController *authViewController = [[TBAMyTBAOAuthViewController alloc] initWithClientID:@"836511118694-qne22910k33c8o7ut56umeu1q04uur9m.apps.googleusercontent.com" clientSecret:@"AIzaSyBk-dD_K5EavzVBp-M1-mgahnQQhiJCZnk" andRedirectURL:@"http://localhost"];
     
     authViewController.authSucceeded = ^(TBAMyTBAAuthentication *auth) {
         self.persistenceController.authentication = auth;
@@ -134,6 +141,8 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
         self.signInViewController.signIn = ^() {
             [weakSelf signIn];
         };
+    } else if ([segue.identifier isEqualToString:MyTBAFavoritesEmbed]) {
+        self.favoritesViewController = segue.destinationViewController;
     }
 }
 
