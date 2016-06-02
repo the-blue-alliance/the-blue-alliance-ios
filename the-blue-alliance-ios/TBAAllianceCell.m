@@ -33,9 +33,16 @@
     
     // OH PICK BOY http://photos.prnewswire.com/prnvar/20140130/NY56077
     for (Team *team in eventAlliance.picks) {
+        UITapGestureRecognizer *teamNumberTapRecogonizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(teamLabelTapped:)];
+        [teamNumberTapRecogonizer setNumberOfTapsRequired:1];
+
         UILabel *pickLabel = [[UILabel alloc] init];
+        [pickLabel addGestureRecognizer:teamNumberTapRecogonizer];
+        [pickLabel setUserInteractionEnabled:YES];
         pickLabel.textAlignment = NSTextAlignmentCenter;
-        
+        [pickLabel setTextColor:[UIColor blueColor]];
+
+        pickLabel.tag = [eventAlliance.picks indexOfObject:team];
         if (team == eventAlliance.picks.firstObject) {
             NSDictionary *underlineAttribute = @{NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)};
             pickLabel.attributedText = [[NSAttributedString alloc] initWithString:team.teamNumber.stringValue
@@ -47,4 +54,8 @@
     }
 }
 
+- (void)teamLabelTapped:(UITapGestureRecognizer *)sender {
+    UILabel *teamLabel = (UILabel *)sender.view;
+    self.teamSelected([[self.eventAlliance picks] objectAtIndex:teamLabel.tag]);
+}
 @end

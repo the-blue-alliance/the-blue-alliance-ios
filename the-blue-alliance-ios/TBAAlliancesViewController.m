@@ -7,11 +7,18 @@
 //
 
 #import "TBAAlliancesViewController.h"
-#import "Event.h"
+#import "EventTeamViewController.h"
+#import "Event.h" 
+#import "Team.h"
 #import "EventAlliance.h"
 #import "TBAAllianceCell.h"
 
 static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
+static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerSegue";
+
+@interface TBAAlliancesViewController ()
+@property (nonatomic, strong) Team *selectedTeam;
+@end
 
 @implementation TBAAlliancesViewController
 @synthesize fetchedResultsController = _fetchedResultsController;
@@ -94,6 +101,12 @@ static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
     EventAlliance *alliance = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.eventAlliance = alliance;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+    __weak typeof(self) weakSelf = self;
+    cell.teamSelected = ^void(Team *team) {
+        self.selectedTeam = team;
+        [weakSelf performSegueWithIdentifier:EventTeamViewControllerSegue sender:self];
+    };
 }
 
 - (void)showNoDataView {
@@ -104,6 +117,14 @@ static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 44.0f;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([EventTeamViewControllerSegue isEqualToString:segue.identifier]) {
+        EventTeamViewController *eventTeamController = [segue destinationViewController];
+        eventTeamController.event = self.event;
+        eventTeamController.team = self.selectedTeam;
+    }
 }
 
 @end
