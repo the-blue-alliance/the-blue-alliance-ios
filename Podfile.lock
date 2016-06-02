@@ -1,6 +1,6 @@
 PODS:
   - OrderedDictionary (1.2)
-  - TBAKit (1.1.4)
+  - TBAKit (1.1.8)
   - youtube-ios-player-helper (0.1.6)
 
 DEPENDENCIES:
@@ -10,7 +10,9 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   OrderedDictionary: 9cc5d69c5c5314ad696ed1839190724e83d534c7
-  TBAKit: 9cb2e72a66e3dcf283c6f7ff75b2a76ad336d721
+  TBAKit: 6c63486cb23bb8d136831ec616445043fc7b9174
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: e88c0c1c15cf5bdc4e2b495aabb595fbd1fe0482
+
+COCOAPODS: 1.0.0
