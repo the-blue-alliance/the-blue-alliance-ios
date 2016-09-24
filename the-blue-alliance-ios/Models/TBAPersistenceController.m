@@ -7,15 +7,8 @@
 //
 
 #import "TBAPersistenceController.h"
-#import "TBAMyTBAAuthentication.h"
-#import "Valet.h"
-
-static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
 
 @interface TBAPersistenceController ()
-
-@property (nonatomic, strong) VALValet *keychainValet;
-@property (nonatomic, strong) TBAMyTBAAuthentication *authentication;
 
 @property (strong, readwrite) NSManagedObjectContext *managedObjectContext;
 @property (strong, readwrite) NSManagedObjectContext *backgroundManagedObjectContext;
@@ -27,16 +20,6 @@ static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
 @end
 
 @implementation TBAPersistenceController
-@synthesize authentication = _authentication;
-
-#pragma mark - Properities
-
-- (VALValet *)keychainValet {
-    if (!_keychainValet) {
-        _keychainValet = [[VALValet alloc] initWithIdentifier:@"MyTBA" accessibility:VALAccessibilityAlways];
-    }
-    return _keychainValet;
-}
 
 #pragma mark - Initilization
 
@@ -124,29 +107,6 @@ static NSString *const MyTBAKeychainKey = @"myTBAKeychainItem";
             }];
         }
     }];
-}
-
-#pragma mark - MyTBA Authentication
-
-- (void)setAuthentication:(TBAMyTBAAuthentication *)authentication {
-    _authentication = authentication;
-    
-    if (authentication) {
-        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:authentication];
-        [self.keychainValet setObject:data forKey:MyTBAKeychainKey];
-    } else {
-        [self.keychainValet removeObjectForKey:MyTBAKeychainKey];
-    }
-}
-
-- (TBAMyTBAAuthentication *)authentication {
-    if (!_authentication) {
-        NSData *data = [self.keychainValet objectForKey:MyTBAKeychainKey];
-        if (data) {
-            _authentication = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        }
-    }
-    return _authentication;
 }
 
 @end

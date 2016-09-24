@@ -73,7 +73,7 @@ static NSString *const FavoritesCellIdentifier  = @"FavoritesCell";
     }
     
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchFavoritesWithCompletionBlock:^(NSArray<TBAFavorite *> *favorites, NSInteger totalCount, NSError *error) {
+    __block GTMSessionFetcher *fetcher = [[TBAKit sharedKit] fetchFavoritesWithCompletionBlock:^(NSArray<TBAFavorite *> *favorites, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
 
         if (error) {
@@ -84,10 +84,10 @@ static NSString *const FavoritesCellIdentifier  = @"FavoritesCell";
         [strongSelf.persistenceController performChanges:^{
             [Favorite insertFavoritesWithModelFavorites:favorites inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
         } withCompletion:^{
-            [strongSelf removeRequestIdentifier:request];
+            [strongSelf removeSessionFetcher:fetcher];
         }];
     }];
-    [self addRequestIdentifier:request];
+    [self addSessionFetcher:fetcher];
 }
 
 #pragma mark - TBA Table View Data Source

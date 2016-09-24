@@ -93,7 +93,7 @@ static NSString *const PointsCellReuseIdentifier  = @"PointsCell";
 
 - (void)refreshDistrictPoints {
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.district.key forYear:self.district.year.integerValue withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.district.key forYear:self.district.year.integerValue withCompletionBlock:^(NSArray *rankings, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (error) {

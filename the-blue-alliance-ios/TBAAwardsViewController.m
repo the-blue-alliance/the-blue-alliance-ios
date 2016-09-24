@@ -78,7 +78,7 @@ static NSString *const AwardCellReuseIdentifier = @"AwardCell";
 
 - (void)refreshAwards {
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchAwardsForEventKey:self.event.key withCompletionBlock:^(NSArray *awards, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchAwardsForEventKey:self.event.key withCompletionBlock:^(NSArray *awards, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (error) {

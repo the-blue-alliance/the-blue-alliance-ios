@@ -138,7 +138,7 @@
 		921257451CDC334B00A9E19D /* MyTBASignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTBASignInViewController.h; sourceTree = "<group>"; };
 		921257461CDC334B00A9E19D /* MyTBASignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTBASignInViewController.m; sourceTree = "<group>"; };
 		921257491CDC339200A9E19D /* TBAFavoritesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAFavoritesViewController.h; sourceTree = "<group>"; };
-		9212574A1CDC339200A9E19D /* TBAFavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAFavoritesViewController.m; sourceTree = "<group>"; };
+		9212574A1CDC339200A9E19D /* TBAFavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TBAFavoritesViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9212574D1CDC33B000A9E19D /* TBASubscriptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBASubscriptionsViewController.h; sourceTree = "<group>"; };
 		9212574E1CDC33B000A9E19D /* TBASubscriptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBASubscriptionsViewController.m; sourceTree = "<group>"; };
 		921257501CDC33C000A9E19D /* TBANotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBANotificationsViewController.h; sourceTree = "<group>"; };
@@ -180,12 +180,12 @@
 		9243D3E01BABB70D00512D3B /* MatchVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = MatchVideo.m; path = Models/MatchVideo.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9243D3E31BABB70D00512D3B /* Media.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Media.h; path = Models/Media.h; sourceTree = "<group>"; };
 		9243D3E41BABB70D00512D3B /* Media.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Media.m; path = Models/Media.m; sourceTree = "<group>"; };
-		9243D4001BABB92E00512D3B /* Team+Fetch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Team+Fetch.h"; sourceTree = "<group>"; };
-		9243D4011BABB92E00512D3B /* Team+Fetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Team+Fetch.m"; sourceTree = "<group>"; };
+		9243D4001BABB92E00512D3B /* Team+Fetch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "Team+Fetch.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		9243D4011BABB92E00512D3B /* Team+Fetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "Team+Fetch.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		924E94201CD07A3000C2EADB /* DistrictTeamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistrictTeamViewController.h; sourceTree = "<group>"; };
 		924E94211CD07A3000C2EADB /* DistrictTeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistrictTeamViewController.m; sourceTree = "<group>"; };
 		924E94241CD07DD000C2EADB /* TBATeamAtDistrictSummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBATeamAtDistrictSummaryViewController.h; sourceTree = "<group>"; };
-		924E94251CD07DD000C2EADB /* TBATeamAtDistrictSummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBATeamAtDistrictSummaryViewController.m; sourceTree = "<group>"; };
+		924E94251CD07DD000C2EADB /* TBATeamAtDistrictSummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TBATeamAtDistrictSummaryViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		924E94281CD07DF600C2EADB /* TBADistrictRankingBreakdownViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBADistrictRankingBreakdownViewController.h; sourceTree = "<group>"; };
 		924E94291CD07DF600C2EADB /* TBADistrictRankingBreakdownViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TBADistrictRankingBreakdownViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		924E942E1CD1C20C00C2EADB /* TBAPointsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAPointsViewController.h; sourceTree = "<group>"; };
@@ -222,7 +222,7 @@
 		92794DA51CCBD40F00660082 /* TBAManagedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAManagedObject.h; sourceTree = "<group>"; };
 		92794DA61CCBD40F00660082 /* TBAManagedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAManagedObject.m; sourceTree = "<group>"; };
 		927E8C411B24BBC100C93E6C /* TeamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamViewController.h; sourceTree = "<group>"; };
-		927E8C421B24BBC100C93E6C /* TeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamViewController.m; sourceTree = "<group>"; };
+		927E8C421B24BBC100C93E6C /* TeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TeamViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		927E8C451B2689EF00C93E6C /* TBAEventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TBAEventsViewController.h; path = "Base Classes/TBAEventsViewController.h"; sourceTree = "<group>"; };
 		927E8C461B2689EF00C93E6C /* TBAEventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = TBAEventsViewController.m; path = "Base Classes/TBAEventsViewController.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		927E8C4A1B268A3A00C93E6C /* TBATeamsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBATeamsViewController.h; sourceTree = "<group>"; };
@@ -276,7 +276,7 @@
 		92E9900B1CCDD33600EE8F71 /* EventTeamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTeamViewController.h; sourceTree = "<group>"; };
 		92E9900C1CCDD33600EE8F71 /* EventTeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTeamViewController.m; sourceTree = "<group>"; };
 		92E9900F1CCF092400EE8F71 /* TBATeamAtEventSummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBATeamAtEventSummaryViewController.h; sourceTree = "<group>"; };
-		92E990101CCF092400EE8F71 /* TBATeamAtEventSummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBATeamAtEventSummaryViewController.m; sourceTree = "<group>"; };
+		92E990101CCF092400EE8F71 /* TBATeamAtEventSummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TBATeamAtEventSummaryViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		92E990131CCF16A200EE8F71 /* TBASummaryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBASummaryTableViewCell.h; sourceTree = "<group>"; };
 		92E990141CCF16A200EE8F71 /* TBASummaryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBASummaryTableViewCell.m; sourceTree = "<group>"; };
 		92E990161CCF1A5A00EE8F71 /* TBATableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBATableViewCell.h; sourceTree = "<group>"; };
@@ -974,12 +974,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 50832E2C1918BB63003AC8A7 /* Build configuration list for PBXNativeTarget "the-blue-alliance" */;
 			buildPhases = (
-				2ED57B48C92F597C98D45DF0 /* 📦 Check Pods Manifest.lock */,
+				2ED57B48C92F597C98D45DF0 /* [CP] Check Pods Manifest.lock */,
 				50832DF31918BB63003AC8A7 /* Sources */,
 				50832DF41918BB63003AC8A7 /* Frameworks */,
 				50832DF51918BB63003AC8A7 /* Resources */,
-				E8AE4E5744E670C40ABEB11F /* 📦 Embed Pods Frameworks */,
-				0CB5D9130B61C6DBCE75E704 /* 📦 Copy Pods Resources */,
+				E8AE4E5744E670C40ABEB11F /* [CP] Embed Pods Frameworks */,
+				0CB5D9130B61C6DBCE75E704 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -996,7 +996,7 @@
 		50832DEF1918BB63003AC8A7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "The Blue Alliance";
 				TargetAttributes = {
 					50832DF61918BB63003AC8A7 = {
@@ -1041,14 +1041,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0CB5D9130B61C6DBCE75E704 /* 📦 Copy Pods Resources */ = {
+		0CB5D9130B61C6DBCE75E704 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1056,14 +1056,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-the-blue-alliance/Pods-the-blue-alliance-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		2ED57B48C92F597C98D45DF0 /* 📦 Check Pods Manifest.lock */ = {
+		2ED57B48C92F597C98D45DF0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1071,14 +1071,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		E8AE4E5744E670C40ABEB11F /* 📦 Embed Pods Frameworks */ = {
+		E8AE4E5744E670C40ABEB11F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1217,14 +1217,19 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1258,13 +1263,18 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

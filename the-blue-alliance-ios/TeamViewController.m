@@ -87,7 +87,7 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 
 - (void)refreshYearsParticipated {
     __weak typeof(self) weakSelf = self;
-    [[TBAKit sharedKit] fetchYearsParticipatedForTeamKey:self.team.key withCompletionBlock:^(NSArray *years, NSInteger totalCount, NSError *error) {
+    [[TBAKit sharedKit] fetchYearsParticipatedForTeamKey:self.team.key withCompletionBlock:^(NSArray *years, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (!error) {

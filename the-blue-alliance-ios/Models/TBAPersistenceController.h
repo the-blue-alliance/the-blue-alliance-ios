@@ -11,8 +11,6 @@
 
 typedef void (^InitCallbackBlock)(void);
 
-@class TBAMyTBAAuthentication;
-
 @interface TBAPersistenceController : NSObject
 
 @property (strong, readonly) NSManagedObjectContext *managedObjectContext;
@@ -23,8 +21,5 @@ typedef void (^InitCallbackBlock)(void);
 - (void)performChanges:(void (^)())block;
 - (void)performChanges:(void (^)())block withCompletion:(void (^)())completion;
 - (void)save:(void (^)())completion;
-
-- (void)setAuthentication:(TBAMyTBAAuthentication *)authentication;
-- (TBAMyTBAAuthentication *)authentication;
 
 @end

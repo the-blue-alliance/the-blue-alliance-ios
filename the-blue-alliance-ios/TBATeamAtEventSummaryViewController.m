@@ -104,7 +104,7 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 
 - (void)refreshEventRanking {
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForEventKey:self.event.key withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForEventKey:self.event.key withCompletionBlock:^(NSArray *rankings, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (error) {

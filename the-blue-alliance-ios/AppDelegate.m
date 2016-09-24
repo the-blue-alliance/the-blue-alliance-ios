@@ -11,6 +11,7 @@
 #import "TBAViewController.h"
 #import "TBANavigationController.h"
 #import "TBANavigationControllerDelegate.h"
+#import <AppAuth/AppAuth.h>
 
 @interface AppDelegate ()
 
@@ -51,7 +52,6 @@
 
 #warning dynaically fetch version number here, also maybe add some user-specific string?
     [[TBAKit sharedKit] setIdHeader:@"the-blue-alliance:ios:v0.1"];
-    [[TBAKit sharedKit] setMyTBAAuthentication:self.persistenceController.authentication];
 
     [self setupAppearance];
     [self.window makeKeyAndVisible];
@@ -79,11 +79,16 @@
     [self.persistenceController save:nil];
 }
 
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    if (!url) {
-        return NO;
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *, id> *)options {
+    // Google OAuth (for myTBA)
+    if ([[TBAKit sharedKit].myTBAAuthorizationFlow resumeAuthorizationFlowWithURL:url]) {
+        [TBAKit sharedKit].myTBAAuthorizationFlow = nil;
+        return YES;
     }
-    return YES;
+    
+    // Your additional URL handling (if any) goes here.
+    
+    return NO;
 }
 
 #pragma mark - Interface Methods

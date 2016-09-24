@@ -91,7 +91,7 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
 
 - (void)refreshEventTeams {
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger currentRequest = [[TBAKit sharedKit] fetchTeamsForEventKey:self.event.key withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
+    __block NSUInteger currentRequest = [[TBAKit sharedKit] fetchTeamsForEventKey:self.event.key withCompletionBlock:^(NSArray *teams, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (error) {
@@ -123,7 +123,7 @@ static NSString *const TeamCellReuseIdentifier = @"TeamCell";
         } withCompletion:^{
             [strongSelf removeRequestIdentifier:oldTaskId];
         }];
-    } withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
+    } withCompletionBlock:^(NSArray *teams, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         [strongSelf removeRequestIdentifier:currentRequest];

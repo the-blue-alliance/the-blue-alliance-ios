@@ -5,7 +5,6 @@ platform :ios, '9.0'
 pod 'TBAKit'
 pod 'youtube-ios-player-helper', '~> 0.1.4'
 pod 'OrderedDictionary'
-pod 'Valet'
 
 post_install do | installer |
   require 'fileutils'

@@ -189,7 +189,7 @@
 
 - (void)refreshMatches {
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchMatchesForEventKey:self.match.event.key withCompletionBlock:^(NSArray *matches, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchMatchesForEventKey:self.match.event.key withCompletionBlock:^(NSArray *matches, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (error) {

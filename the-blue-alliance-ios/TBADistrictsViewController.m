@@ -79,7 +79,7 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
     }
 
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchDistrictsForYear:self.year.integerValue withCompletionBlock:^(NSArray *districts, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchDistrictsForYear:self.year.integerValue withCompletionBlock:^(NSArray *districts, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
 
         if (error) {

@@ -13,16 +13,16 @@
 
 # pragma mark - Upstream
 
-+ (NSUInteger)fetchAllTeamsWithTaskIdChange:(void (^_Nullable)(NSUInteger newTaskId, NSArray *_Nonnull batchTeam))taskIdChanged withCompletionBlock:(void(^_Nullable)(NSArray *_Nonnull teams, NSInteger totalCount, NSError *_Nullable error))completion {
++ (NSUInteger)fetchAllTeamsWithTaskIdChange:(void (^_Nullable)(NSUInteger newTaskId, NSArray *_Nonnull batchTeam))taskIdChanged withCompletionBlock:(void(^_Nullable)(NSArray *_Nonnull teams, NSError *_Nullable error))completion {
     return [self fetchAllTeamsWithTaskIdChange:taskIdChanged withExistingTeams:nil forPage:0 withCompletionBlock:completion];
 }
 
-+ (NSUInteger)fetchAllTeamsWithTaskIdChange:(void (^)(NSUInteger newTaskId, NSArray *batchTeams))taskIdChanged withExistingTeams:(NSArray *)existingTeams forPage:(NSInteger)page withCompletionBlock:(void(^)(NSArray *teams, NSInteger totalCount, NSError *error))completion {
++ (NSUInteger)fetchAllTeamsWithTaskIdChange:(void (^)(NSUInteger newTaskId, NSArray *batchTeams))taskIdChanged withExistingTeams:(NSArray *)existingTeams forPage:(NSInteger)page withCompletionBlock:(void(^)(NSArray *teams, NSError *error))completion {
     __block NSArray *existingTeamsBlock = existingTeams;
 
-    return [[TBAKit sharedKit] fetchTeamsForPage:page withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
+    return [[TBAKit sharedKit] fetchTeamsForPage:page withCompletionBlock:^(NSArray *teams, NSError *error) {
         if (error) {
-            completion(teams, totalCount, error);
+            completion(teams, error);
             return;
         }
         
@@ -39,7 +39,7 @@
             [[NSUserDefaults standardUserDefaults] synchronize];
             
             if (completion) {
-                completion(existingTeamsBlock, [existingTeamsBlock count], error);
+                completion(existingTeamsBlock, error);
             }
         } else {
             NSUInteger newTaskId = [self fetchAllTeamsWithTaskIdChange:taskIdChanged withExistingTeams:existingTeamsBlock forPage:page + 1 withCompletionBlock:completion];

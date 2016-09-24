@@ -12,6 +12,9 @@
 
 @property (nonatomic, copy) void (^refresh)();
 
+- (void)addSessionFetcher:(GTMSessionFetcher *)sessionFetcher;
+- (void)removeSessionFetcher:(GTMSessionFetcher *)sessionFetcher;
+
 - (void)addRequestIdentifier:(NSUInteger)requestIdentifier;
 - (void)removeRequestIdentifier:(NSUInteger)requestIdentifier;
 

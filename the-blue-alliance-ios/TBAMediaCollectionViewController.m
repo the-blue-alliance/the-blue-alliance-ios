@@ -109,7 +109,7 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
     }
     
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchMediaForTeamKey:self.team.key andYear:self.year.integerValue withCompletionBlock:^(NSArray *media, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchMediaForTeamKey:self.team.key andYear:self.year.integerValue withCompletionBlock:^(NSArray *media, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (error) {

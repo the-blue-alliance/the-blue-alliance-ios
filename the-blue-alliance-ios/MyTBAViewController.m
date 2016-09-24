@@ -11,8 +11,11 @@
 #import "TBAFavoritesViewController.h"
 #import "TBASubscriptionsViewController.h"
 #import "TBANotificationsViewController.h"
-#import "TBAMyTBAOAuthViewController.h"
 #import "TBANavigationController.h"
+#import "AppDelegate.h"
+
+static NSString *const kClientID = @"836511118694-qne22910k33c8o7ut56umeu1q04uur9m.apps.googleusercontent.com";
+static NSString *const kRedirectURI = @"com.googleusercontent.apps.836511118694-qne22910k33c8o7ut56umeu1q04uur9m:/oauthredirect";
 
 static NSString *const MyTBASignInEmbed         = @"MyTBASignInEmbed";
 static NSString *const MyTBAFavoritesEmbed      = @"MyTBAFavoritesEmbed";
@@ -86,7 +89,6 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Sign Out?" message:@"Are you sure you want to sign out of myTBA?" preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *signOutAction = [UIAlertAction actionWithTitle:@"Sign Out" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        self.persistenceController.authentication = nil;
         [TBAKit sharedKit].myTBAAuthentication = nil;
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -104,32 +106,27 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 }
 
 - (void)signIn {
-    TBAMyTBAOAuthViewController *authViewController = [[TBAMyTBAOAuthViewController alloc] initWithClientID:@"836511118694-qne22910k33c8o7ut56umeu1q04uur9m.apps.googleusercontent.com" clientSecret:@"AIzaSyBk-dD_K5EavzVBp-M1-mgahnQQhiJCZnk" andRedirectURL:@"http://localhost"];
-    
-    authViewController.authSucceeded = ^(TBAMyTBAAuthentication *auth) {
-        self.persistenceController.authentication = auth;
-        [TBAKit sharedKit].myTBAAuthentication = auth;
+    [[TBAKit sharedKit] generateMyTBAAuthRequestWithClientID:kClientID
+                                                 redirectURL:kRedirectURI
+                                    presentingViewController:self
+                                                  completion:^(NSError *error) {
+                                                      if (error) {
+                                                          UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                                                                                   message:error.localizedDescription
+                                                                                                                            preferredStyle:UIAlertControllerStyleAlert];
 
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateInterface];
-        });
-    };
-    
-    authViewController.authFailed = ^(NSError *error) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Error" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *okayAction = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
-        [alertController addAction:okayAction];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self presentViewController:alertController animated:YES completion:nil];
-        });
-    };
-    
-    TBANavigationController *navigationController = [[TBANavigationController alloc] initWithRootViewController:authViewController];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self presentViewController:navigationController animated:YES completion:nil];
-    });
+                                                          UIAlertAction *okayAction = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
+                                                          [alertController addAction:okayAction];
+                                                          
+                                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                                              [self presentViewController:alertController animated:YES completion:nil];
+                                                          });
+                                                      }
+                                                      dispatch_async(dispatch_get_main_queue(), ^{
+                                                          [self updateInterface];
+                                                      });
+                                                      [[TBAKit sharedKit] fetchSubscriptionsWithCompletionBlock:nil];
+                                                  }];
 }
 
 #pragma mark - Navigation

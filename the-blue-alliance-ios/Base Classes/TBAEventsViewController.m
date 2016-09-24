@@ -119,7 +119,7 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
 
 - (void)refreshTeamEvents {
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForTeamKey:self.team.key andYear:self.year.integerValue withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForTeamKey:self.team.key andYear:self.year.integerValue withCompletionBlock:^(NSArray *events, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (error) {
@@ -140,7 +140,7 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
 
 - (void)refreshDistrictEvents {
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForDistrictShort:self.district.key forYear:self.year.integerValue withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForDistrictShort:self.district.key forYear:self.year.integerValue withCompletionBlock:^(NSArray *events, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (error) {
@@ -158,7 +158,7 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
 
 - (void)refreshAllEvents {
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForYear:self.year.integerValue withCompletionBlock:^(NSArray *events, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchEventsForYear:self.year.integerValue withCompletionBlock:^(NSArray *events, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (error) {
@@ -188,7 +188,7 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
 - (void)fetchTeamsForEvent:(Event *)event {
     __weak typeof(self) weakSelf = self;
     // Don't add the request identifier - we can update teams in the background silently
-    [[TBAKit sharedKit] fetchTeamsForEventKey:event.key withCompletionBlock:^(NSArray *teams, NSInteger totalCount, NSError *error) {
+    [[TBAKit sharedKit] fetchTeamsForEventKey:event.key withCompletionBlock:^(NSArray *teams, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (error) {
             return;

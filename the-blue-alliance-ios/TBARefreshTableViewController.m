@@ -8,6 +8,7 @@
 
 #import "TBARefreshTableViewController.h"
 #import "TBAKit.h"
+#import <GTMSessionFetcher/GTMSessionFetcher.h>
 
 @interface TBARefreshTableViewController ()
 
@@ -52,11 +53,39 @@
         return;
     }
 
-    for (NSNumber *request in self.requestsArray) {
-        NSUInteger requestIdentifier = [request unsignedIntegerValue];
-        [[TBAKit sharedKit] cancelRequestWithIdentifier:requestIdentifier];
+    for (id request in self.requestsArray) {
+        if ([request isKindOfClass:[GTMSessionFetcher class]]) {
+            GTMSessionFetcher *fetcher = (GTMSessionFetcher *)request;
+            [[TBAKit sharedKit] cancelMyTBARequestWithFetcher:fetcher];
+        } else if ([request isKindOfClass:[NSNumber class]]) {
+            NSUInteger requestIdentifier = [request unsignedIntegerValue];
+            [[TBAKit sharedKit] cancelRequestWithIdentifier:requestIdentifier];
+        }
     }
     [self.requestsArray removeAllObjects];
+}
+
+- (void)addSessionFetcher:(GTMSessionFetcher *)sessionFetcher {
+    [self.requestsArray addObject:sessionFetcher];
+    
+    if (self.refreshControl.isRefreshing == NO) {
+        [self updateRefresh:YES];
+    }
+}
+
+- (void)removeSessionFetcher:(GTMSessionFetcher *)sessionFetcher {
+    if (![self.requestsArray containsObject:sessionFetcher]) {
+        return;
+    }
+    [self.requestsArray removeObject:sessionFetcher];
+    
+    if ([self.requestsArray count] == 0) {
+        [self updateRefresh:NO];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+    }
 }
 
 - (void)addRequestIdentifier:(NSUInteger)requestIdentifier {

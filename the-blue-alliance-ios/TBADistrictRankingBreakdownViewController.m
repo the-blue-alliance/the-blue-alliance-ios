@@ -75,7 +75,7 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 
 - (void)refreshDistrictRankings {
     __weak typeof(self) weakSelf = self;
-    __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.districtRanking.district.key forYear:self.districtRanking.district.year.integerValue withCompletionBlock:^(NSArray *rankings, NSInteger totalCount, NSError *error) {
+    __block NSUInteger request = [[TBAKit sharedKit] fetchRankingsForDistrictShort:self.districtRanking.district.key forYear:self.districtRanking.district.year.integerValue withCompletionBlock:^(NSArray *rankings, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
                 
         if (error) {
