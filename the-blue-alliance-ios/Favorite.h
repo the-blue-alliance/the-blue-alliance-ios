@@ -10,6 +10,8 @@
 
 @class TBAFavorite;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface Favorite : TBAManagedObject
 
 @property (nonatomic, retain) NSString *deviceKey;
@@ -20,3 +22,5 @@
 + (NSArray<Favorite *> *)insertFavoritesWithModelFavorites:(NSArray<TBAFavorite *> *)modelFavorites inManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end
+
+NS_ASSUME_NONNULL_END

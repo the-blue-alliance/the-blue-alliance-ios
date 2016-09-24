@@ -28,6 +28,7 @@
 		9222F1191AD6910F00C0AEA0 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9222F1181AD6910F00C0AEA0 /* EventViewController.m */; };
 		9237F74B1B2CA74D00C89978 /* TBAPersistenceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9237F74A1B2CA74D00C89978 /* TBAPersistenceController.m */; };
 		9237F77E1B2CA7CB00C89978 /* TBA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9237F77C1B2CA7CB00C89978 /* TBA.xcdatamodeld */; };
+		923C1E471D971D4300F19F53 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = 923C1E461D971D4300F19F53 /* Subscription.m */; };
 		923E126F1B52B4230089D9F8 /* TBADistrictsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 923E126E1B52B4230089D9F8 /* TBADistrictsViewController.m */; };
 		923F3F201AF868E00099DA0C /* TBAContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 923F3F1F1AF868E00099DA0C /* TBAContainerViewController.m */; };
 		9240CDFC1AB5DA0B00D859A0 /* TBAEventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9240CDFB1AB5DA0B00D859A0 /* TBAEventTableViewCell.m */; };
@@ -148,6 +149,8 @@
 		9237F7491B2CA74D00C89978 /* TBAPersistenceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TBAPersistenceController.h; path = Models/TBAPersistenceController.h; sourceTree = "<group>"; };
 		9237F74A1B2CA74D00C89978 /* TBAPersistenceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TBAPersistenceController.m; path = Models/TBAPersistenceController.m; sourceTree = "<group>"; };
 		9237F77D1B2CA7CB00C89978 /* The Blue Alliance.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance.xcdatamodel"; sourceTree = "<group>"; };
+		923C1E451D971D4300F19F53 /* Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Subscription.h; path = Models/Subscription.h; sourceTree = "<group>"; };
+		923C1E461D971D4300F19F53 /* Subscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Subscription.m; path = Models/Subscription.m; sourceTree = "<group>"; };
 		923E126D1B52B4230089D9F8 /* TBADistrictsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBADistrictsViewController.h; sourceTree = "<group>"; };
 		923E126E1B52B4230089D9F8 /* TBADistrictsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TBADistrictsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		923F3F1E1AF868E00099DA0C /* TBAContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAContainerViewController.h; sourceTree = "<group>"; };
@@ -459,9 +462,19 @@
 				92EFCAA31CFBBE11007700B8 /* Favorite */,
 				9243D3FF1BABB7C300512D3B /* Match */,
 				9243D3FE1BABB78400512D3B /* Media */,
+				923C1E441D971CDF00F19F53 /* Subscriptions */,
 				9243D3FB1BABB71800512D3B /* Team */,
 			);
 			name = "Core Data";
+			sourceTree = "<group>";
+		};
+		923C1E441D971CDF00F19F53 /* Subscriptions */ = {
+			isa = PBXGroup;
+			children = (
+				923C1E451D971D4300F19F53 /* Subscription.h */,
+				923C1E461D971D4300F19F53 /* Subscription.m */,
+			);
+			name = Subscriptions;
 			sourceTree = "<group>";
 		};
 		923E12701B52B4260089D9F8 /* Districts */ = {
@@ -1118,6 +1131,7 @@
 				92A29FD31CD5BF8900104EC9 /* TBAMediaView.m in Sources */,
 				924E94261CD07DD000C2EADB /* TBATeamAtDistrictSummaryViewController.m in Sources */,
 				92011EBB1AC6175400C4F1EC /* DistrictsViewController.m in Sources */,
+				923C1E471D971D4300F19F53 /* Subscription.m in Sources */,
 				921257471CDC334B00A9E19D /* MyTBASignInViewController.m in Sources */,
 				9243D3E61BABB70D00512D3B /* Team.m in Sources */,
 				9222F1191AD6910F00C0AEA0 /* EventViewController.m in Sources */,

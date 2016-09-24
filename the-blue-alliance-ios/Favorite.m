@@ -18,7 +18,9 @@
 + (instancetype)insertFavoriteWithModelFavorite:(TBAFavorite *)modelFavorite inManagedObjectContext:(NSManagedObjectContext *)context {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"modelKey == %@", modelFavorite.modelKey];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Favorite *favorite) {
-        // Pass
+        favorite.deviceKey = modelFavorite.deviceKey;
+        favorite.modelKey = modelFavorite.modelKey;
+        favorite.modelType = @(modelFavorite.modelType);
     }];
 }
 

@@ -59,8 +59,8 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.refreshViewControllers = @[self.favoritesViewController];
-    self.containerViews = @[self.favoritesView];
+    self.refreshViewControllers = @[self.favoritesViewController, self.subscriptionsViewController, self.recentNotificationsViewController];
+    self.containerViews = @[self.favoritesView, self.subscriptionsView, self.recentNotificationsView];
     
     [self styleInterface];
     [self updateInterface];
@@ -125,7 +125,6 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
                                                       dispatch_async(dispatch_get_main_queue(), ^{
                                                           [self updateInterface];
                                                       });
-                                                      [[TBAKit sharedKit] fetchSubscriptionsWithCompletionBlock:nil];
                                                   }];
 }
 
@@ -140,6 +139,10 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
         };
     } else if ([segue.identifier isEqualToString:MyTBAFavoritesEmbed]) {
         self.favoritesViewController = segue.destinationViewController;
+    } else if ([segue.identifier isEqualToString:MyTBASubscriptionsEmbed]) {
+        self.subscriptionsViewController = segue.destinationViewController;
+    } else if ([segue.identifier isEqualToString:MyTBANotificationsEmbed]) {
+        self.recentNotificationsViewController = segue.destinationViewController;
     }
 }
 

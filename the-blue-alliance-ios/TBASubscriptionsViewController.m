@@ -7,6 +7,9 @@
 //
 
 #import "TBASubscriptionsViewController.h"
+#import "Subscription.h"
+
+static NSString *const SubscriptionsCellIdentifier  = @"SubscriptionsCell";
 
 @interface TBASubscriptionsViewController ()
 
@@ -48,24 +51,67 @@
 
 #pragma mark - View Lifecycle
 
+#pragma mark - View Lifecycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    self.tbaDelegate = self;
+    self.cellIdentifier = SubscriptionsCellIdentifier;
+    
+    __weak typeof(self) weakSelf = self;
+    self.refresh = ^void() {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        [strongSelf refreshSubscriptions];
+    };
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+
+#pragma mark - Data Methods
+
+- (BOOL)shouldNoDataRefresh {
+    return self.fetchedResultsController.fetchedObjects.count == 0;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)refreshSubscriptions {
+    if (![TBAKit sharedKit].myTBAAuthentication) {
+        return;
+    }
+    
+    __weak typeof(self) weakSelf = self;
+    __block GTMSessionFetcher *fetcher = [[TBAKit sharedKit] fetchSubscriptionsWithCompletionBlock:^(NSArray<TBASubscription *> *subscriptions, NSError *error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        if (error) {
+            [strongSelf showErrorAlertWithMessage:@"Unable to load favorites"];
+            NSLog(@"Error: %@", error);
+        }
+        
+        [strongSelf.persistenceController performChanges:^{
+            [Subscription insertSubscriptionsWithModelSubscriptions:subscriptions inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        } withCompletion:^{
+            [strongSelf removeSessionFetcher:fetcher];
+        }];
+    }];
+    [self addSessionFetcher:fetcher];
 }
-*/
+
+#pragma mark - TBA Table View Data Source
+
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    Subscription *subscription = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    cell.textLabel.text = subscription.modelKey;
+}
+
+- (void)showNoDataView {
+    [self showNoDataViewWithText:@"No subscriptions found"];
+}
+
+#pragma mark - Table View Delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    // Do something in here with selected favorite - probably look at type and push out
+}
 
 @end
