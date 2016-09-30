@@ -12,7 +12,6 @@
 
 @interface TBAViewController ()
 
-@property (nullable, nonatomic, strong) IBOutlet UISegmentedControl *segmentedControl;
 @property (nullable, nonatomic, strong) IBOutlet UIView *segmentedControlView;
 
 @end

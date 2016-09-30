@@ -10,8 +10,8 @@
 #import "MyTBASignInViewController.h"
 #import "TBAFavoritesViewController.h"
 #import "TBASubscriptionsViewController.h"
-#import "TBANotificationsViewController.h"
 #import "TBANavigationController.h"
+#import "TBARefreshViewController.h"
 #import "AppDelegate.h"
 
 static NSString *const kClientID = @"836511118694-qne22910k33c8o7ut56umeu1q04uur9m.apps.googleusercontent.com";
@@ -20,7 +20,6 @@ static NSString *const kRedirectURI = @"com.googleusercontent.apps.836511118694-
 static NSString *const MyTBASignInEmbed         = @"MyTBASignInEmbed";
 static NSString *const MyTBAFavoritesEmbed      = @"MyTBAFavoritesEmbed";
 static NSString *const MyTBASubscriptionsEmbed  = @"MyTBASubscriptionsEmbed";
-static NSString *const MyTBANotificationsEmbed  = @"MyTBANotificationsEmbed";
 
 static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 
@@ -35,9 +34,6 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 
 @property (nonatomic, strong) TBASubscriptionsViewController *subscriptionsViewController;
 @property (nonatomic, strong) IBOutlet UIView *subscriptionsView;
-
-@property (nonatomic, strong) TBANotificationsViewController *recentNotificationsViewController;
-@property (nonatomic, strong) IBOutlet UIView *recentNotificationsView;
 
 @property (nonatomic, strong) UIBarButtonItem *signOutBarButtonItem;
 
@@ -59,8 +55,8 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.refreshViewControllers = @[self.favoritesViewController, self.subscriptionsViewController, self.recentNotificationsViewController];
-    self.containerViews = @[self.favoritesView, self.subscriptionsView, self.recentNotificationsView];
+    self.refreshViewControllers = @[self.favoritesViewController, self.subscriptionsViewController];
+    self.containerViews = @[self.favoritesView, self.subscriptionsView];
     
     [self styleInterface];
     [self updateInterface];
@@ -89,11 +85,7 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Sign Out?" message:@"Are you sure you want to sign out of myTBA?" preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *signOutAction = [UIAlertAction actionWithTitle:@"Sign Out" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [TBAKit sharedKit].myTBAAuthentication = nil;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateInterface];
-        });
+        [self signOut];
     }];
     [alertController addAction:signOutAction];
     
@@ -121,11 +113,62 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
                                                           dispatch_async(dispatch_get_main_queue(), ^{
                                                               [self presentViewController:alertController animated:YES completion:nil];
                                                           });
+                                                      } else {
+                                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                                              [self updateInterface];
+                                                          });
+                                                          
+                                                          // Force refresh of selected view controller
+                                                          self.refreshViewControllers[self.segmentedControl.selectedSegmentIndex].refresh();
                                                       }
-                                                      dispatch_async(dispatch_get_main_queue(), ^{
-                                                          [self updateInterface];
-                                                      });
                                                   }];
+}
+
+- (void)signOut {
+    [TBAKit sharedKit].myTBAAuthentication = nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateInterface];
+    });
+    
+    [self clearMyTBAData];
+}
+
+#pragma mark - Private Methods
+
+- (void)clearMyTBAData {
+    // Clear favorites
+    __block NSError *clearFavoritesError;
+    NSFetchRequest *favoritesFetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Favorite"];
+    NSBatchDeleteRequest *deleteFavorites = [[NSBatchDeleteRequest alloc] initWithFetchRequest:favoritesFetchRequest];
+    [self.persistenceController performChanges:^{
+        [self.persistenceController.managedObjectContext.persistentStoreCoordinator executeRequest:deleteFavorites withContext:self.persistenceController.managedObjectContext error:&clearFavoritesError];
+    } withCompletion:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.favoritesViewController clearFRC];
+        });
+    }];
+    
+    if (clearFavoritesError) {
+        NSLog(@"Unable to delete favorites - %@", clearFavoritesError);
+    }
+    
+    // Clear subscriptions
+    __block NSError *clearSubscriptionsError;
+    NSFetchRequest *subscriptionsFetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Subscription"];
+    NSBatchDeleteRequest *deleteSubscriptions = [[NSBatchDeleteRequest alloc] initWithFetchRequest:subscriptionsFetchRequest];
+    [self.persistenceController performChanges:^{
+        [self.persistenceController.managedObjectContext.persistentStoreCoordinator executeRequest:deleteSubscriptions withContext:self.persistenceController.managedObjectContext error:&clearSubscriptionsError];
+    } withCompletion:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.subscriptionsViewController clearFRC];
+        });
+    }];
+    
+    if (clearSubscriptionsError) {
+        NSLog(@"Unable to delete subscriptions - %@", clearSubscriptionsError);
+    }
+    
+    // Clear notifications
 }
 
 #pragma mark - Navigation
@@ -141,8 +184,6 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
         self.favoritesViewController = segue.destinationViewController;
     } else if ([segue.identifier isEqualToString:MyTBASubscriptionsEmbed]) {
         self.subscriptionsViewController = segue.destinationViewController;
-    } else if ([segue.identifier isEqualToString:MyTBANotificationsEmbed]) {
-        self.recentNotificationsViewController = segue.destinationViewController;
     }
 }
 

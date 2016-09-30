@@ -10,7 +10,7 @@
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "1750D0FB-6822-4BED-8B0E-0AA1F640C8A0",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
     "3EBDDDEB6BDD8E11C078EC6B940B5D9C8E42F68A" : "the-blue-alliance-ios\/",
-    "4CBDBCD238AAD79A9A4BDD6AE2026CBCABAB03DE" : "hide\/TBAKit\/"
+    "4CBDBCD238AAD79A9A4BDD6AE2026CBCABAB03DE" : "TBAKit\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "the-blue-alliance",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,

@@ -8,6 +8,7 @@
 
 #import "TBAFavoritesViewController.h"
 #import "Favorite.h"
+#import <AppAuth/AppAuth.h>
 
 static NSString *const FavoritesCellIdentifier  = @"FavoritesCell";
 
@@ -77,7 +78,11 @@ static NSString *const FavoritesCellIdentifier  = @"FavoritesCell";
         __strong typeof(weakSelf) strongSelf = weakSelf;
 
         if (error) {
-            [strongSelf showErrorAlertWithMessage:@"Unable to load favorites"];
+            if ([error.domain isEqual:OIDOAuthTokenErrorDomain]) {
+                [strongSelf showErrorAlertWithMessage:@"Unable to load favorites - please sign out and sign back in to your account"];
+            } else {
+                [strongSelf showErrorAlertWithMessage:@"Unable to load favorites"];
+            }
             NSLog(@"Error: %@", error);
         }
         

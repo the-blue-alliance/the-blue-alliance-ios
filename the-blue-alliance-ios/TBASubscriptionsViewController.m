@@ -8,6 +8,7 @@
 
 #import "TBASubscriptionsViewController.h"
 #import "Subscription.h"
+#import <AppAuth/AppAuth.h>
 
 static NSString *const SubscriptionsCellIdentifier  = @"SubscriptionsCell";
 
@@ -83,7 +84,11 @@ static NSString *const SubscriptionsCellIdentifier  = @"SubscriptionsCell";
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (error) {
-            [strongSelf showErrorAlertWithMessage:@"Unable to load favorites"];
+            if ([error.domain isEqual:OIDOAuthTokenErrorDomain]) {
+                [strongSelf showErrorAlertWithMessage:@"Unable to load subscriptions - please sign out and sign back in to your account"];
+            } else {
+                [strongSelf showErrorAlertWithMessage:@"Unable to load subscriptions"];
+            }
             NSLog(@"Error: %@", error);
         }
         

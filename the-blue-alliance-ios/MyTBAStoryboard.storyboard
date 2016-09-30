@@ -48,7 +48,6 @@
                                         <segments>
                                             <segment title="Favorites"/>
                                             <segment title="Subscriptions"/>
-                                            <segment title="Notifications"/>
                                         </segments>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
@@ -64,11 +63,6 @@
                                     <constraint firstAttribute="height" constant="44" id="iIX-Yt-qF0"/>
                                 </constraints>
                             </view>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YwY-FV-gll">
-                                <connections>
-                                    <segue destination="dBi-ZR-eGm" kind="embed" identifier="MyTBANotificationsEmbed" id="q0q-5Q-kYH"/>
-                                </connections>
-                            </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M98-na-MHX">
                                 <connections>
                                     <segue destination="sZz-M2-tIx" kind="embed" identifier="MyTBASubscriptionsEmbed" id="3nw-rI-ZLE"/>
@@ -82,7 +76,6 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="YwY-FV-gll" firstAttribute="leading" secondItem="A15-X3-rMR" secondAttribute="leading" id="1Gs-o4-qty"/>
                             <constraint firstItem="FKp-tc-D0n" firstAttribute="top" secondItem="p33-Vz-lEm" secondAttribute="bottom" id="8ZW-Ya-Zsk"/>
                             <constraint firstAttribute="trailing" secondItem="ZcB-3a-GQb" secondAttribute="trailing" id="D72-Pr-LI5"/>
                             <constraint firstAttribute="trailing" secondItem="M98-na-MHX" secondAttribute="trailing" id="EHo-f4-qlG"/>
@@ -95,11 +88,8 @@
                             <constraint firstItem="M98-na-MHX" firstAttribute="leading" secondItem="A15-X3-rMR" secondAttribute="leading" id="cMf-oW-GVJ"/>
                             <constraint firstItem="8wR-a4-mth" firstAttribute="top" secondItem="o3s-Jn-ZMN" secondAttribute="bottom" id="dqk-Nz-KNL"/>
                             <constraint firstAttribute="bottom" secondItem="M98-na-MHX" secondAttribute="bottom" id="hFb-6U-im5"/>
-                            <constraint firstAttribute="trailing" secondItem="YwY-FV-gll" secondAttribute="trailing" id="hV5-vq-dwI"/>
                             <constraint firstAttribute="trailing" secondItem="8wR-a4-mth" secondAttribute="trailing" id="hXt-Ke-6wG"/>
                             <constraint firstItem="8wR-a4-mth" firstAttribute="leading" secondItem="A15-X3-rMR" secondAttribute="leading" id="lue-4m-ePG"/>
-                            <constraint firstItem="YwY-FV-gll" firstAttribute="top" secondItem="8wR-a4-mth" secondAttribute="bottom" id="ncB-9F-VrG"/>
-                            <constraint firstAttribute="bottom" secondItem="YwY-FV-gll" secondAttribute="bottom" id="rCY-jv-fHC"/>
                             <constraint firstItem="ZcB-3a-GQb" firstAttribute="top" secondItem="o3s-Jn-ZMN" secondAttribute="bottom" id="uZ0-um-Qfl"/>
                             <constraint firstAttribute="trailing" secondItem="p33-Vz-lEm" secondAttribute="trailing" id="y6E-Fu-dUZ"/>
                         </constraints>
@@ -112,7 +102,6 @@
                     <navigationItem key="navigationItem" title="myTBA" id="pdZ-um-qLQ"/>
                     <connections>
                         <outlet property="favoritesView" destination="p33-Vz-lEm" id="cEs-vb-FRD"/>
-                        <outlet property="recentNotificationsView" destination="YwY-FV-gll" id="Upx-v7-9E9"/>
                         <outlet property="segmentedControl" destination="TZe-eS-z0z" id="zJE-xB-nU2"/>
                         <outlet property="segmentedControlView" destination="8wR-a4-mth" id="dlF-9e-jwg"/>
                         <outlet property="signInView" destination="ZcB-3a-GQb" id="LME-5H-b1L"/>
@@ -207,7 +196,8 @@
                         </subviews>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="kms-TU-jw8" secondAttribute="width" constant="40" id="F3l-r4-K0T"/>
+                            <constraint firstItem="kms-TU-jw8" firstAttribute="leading" secondItem="nMo-yf-GLc" secondAttribute="leading" constant="20" id="0Pc-iT-eAw"/>
+                            <constraint firstAttribute="trailing" secondItem="kms-TU-jw8" secondAttribute="trailing" constant="20" id="Jhz-Y9-wPu"/>
                             <constraint firstItem="kms-TU-jw8" firstAttribute="centerY" secondItem="nMo-yf-GLc" secondAttribute="centerY" id="Ra9-yr-JyR"/>
                             <constraint firstItem="kms-TU-jw8" firstAttribute="centerX" secondItem="nMo-yf-GLc" secondAttribute="centerX" id="UbF-ED-mwC"/>
                             <constraint firstAttribute="leadingMargin" secondItem="kms-TU-jw8" secondAttribute="leading" id="siJ-Nj-7jw"/>
@@ -221,7 +211,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dQn-67-FLb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="370" y="973.5"/>
+            <point key="canvasLocation" x="369" y="950"/>
         </scene>
         <!--Favorites View Controller-->
         <scene sceneID="A9q-dV-9uo">
@@ -295,35 +285,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3A8-fn-6LU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1141" y="281.5"/>
-        </scene>
-        <!--Notifications View Controller-->
-        <scene sceneID="gax-Uz-ytD">
-            <objects>
-                <tableViewController id="dBi-ZR-eGm" customClass="TBANotificationsViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="c1I-Xx-aM2">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="5bV-7k-AIz">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5bV-7k-AIz" id="x4b-8t-2h8">
-                                    <frame key="frameInset" width="375" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="dBi-ZR-eGm" id="DdE-bh-CsL"/>
-                            <outlet property="delegate" destination="dBi-ZR-eGm" id="UCw-v7-C44"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="KdH-1k-Wq1" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1141" y="866.5"/>
+            <point key="canvasLocation" x="1141" y="337"/>
         </scene>
     </scenes>
     <resources>

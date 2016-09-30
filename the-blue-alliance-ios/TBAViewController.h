@@ -19,6 +19,7 @@
 
 @property (nullable, nonatomic, strong) IBOutlet UILabel *navigationTitleLabel;
 @property (nullable, nonatomic, strong) IBOutlet UILabel *navigationSubtitleLabel;
+@property (nullable, nonatomic, strong) IBOutlet UISegmentedControl *segmentedControl;
 
 - (void)cancelRefreshes;
 
