@@ -90,6 +90,9 @@ static NSString *const EventCellReuseIdentifier = @"EventCell";
     self.tbaDelegate = self;
     self.cellIdentifier = EventCellReuseIdentifier;
     
+    UINib *cellNib = [UINib nibWithNibName:NSStringFromClass([TBAEventTableViewCell class]) bundle:nil];
+    [self.tableView registerNib:cellNib forCellReuseIdentifier:self.cellIdentifier];
+    
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;

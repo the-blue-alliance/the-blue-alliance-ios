@@ -58,6 +58,9 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
     self.tbaDelegate = self;
     self.cellIdentifier = SummaryCellReuseIdentifier;
     
+    UINib *cellNib = [UINib nibWithNibName:NSStringFromClass([TBASummaryTableViewCell class]) bundle:nil];
+    [self.tableView registerNib:cellNib forCellReuseIdentifier:self.cellIdentifier];
+    
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;

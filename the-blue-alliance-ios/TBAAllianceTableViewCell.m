@@ -6,20 +6,18 @@
 //  Copyright © 2016 The Blue Alliance. All rights reserved.
 //
 
-#import "TBAAllianceCell.h"
+#import "TBAAllianceTableViewCell.h"
 #import "EventAlliance.h"
 #import "Team.h"
 
-@interface TBAAllianceCell ()
+@interface TBAAllianceTableViewCell ()
 
 @property (nonatomic, strong) IBOutlet UILabel *allianceNumberLabel;
 @property (nonatomic, strong) IBOutlet UIStackView *allianceStackView;
 
 @end
 
-@implementation TBAAllianceCell
-
-
+@implementation TBAAllianceTableViewCell
 
 - (void)setEventAlliance:(EventAlliance *)eventAlliance {
     _eventAlliance = eventAlliance;
@@ -58,4 +56,5 @@
     UILabel *teamLabel = (UILabel *)sender.view;
     self.teamSelected([[self.eventAlliance picks] objectAtIndex:teamLabel.tag]);
 }
+
 @end

@@ -27,6 +27,9 @@ static NSString *const EventOptionAwards            = @"Awards";
     
     self.tableView.sectionFooterHeight = 0.0f;
     
+    UINib *cellNib = [UINib nibWithNibName:NSStringFromClass([TBAInfoTableViewCell class]) bundle:nil];
+    [self.tableView registerNib:cellNib forCellReuseIdentifier:InfoCellReuseIdentifier];
+    
     __weak typeof(self) weakSelf = self;
     [self registerForChangeNotifications:^(id  _Nonnull changedObject) {
         __strong typeof(weakSelf) strongSelf = weakSelf;

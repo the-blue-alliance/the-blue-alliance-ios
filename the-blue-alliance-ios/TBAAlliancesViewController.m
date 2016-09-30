@@ -11,7 +11,7 @@
 #import "Event.h" 
 #import "Team.h"
 #import "EventAlliance.h"
-#import "TBAAllianceCell.h"
+#import "TBAAllianceTableViewCell.h"
 
 static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
 static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerSegue";
@@ -64,6 +64,9 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
     self.tbaDelegate = self;
     self.cellIdentifier = AllianceCellReuseIdentifier;
     
+    UINib *cellNib = [UINib nibWithNibName:NSStringFromClass([TBAAllianceTableViewCell class]) bundle:nil];
+    [self.tableView registerNib:cellNib forCellReuseIdentifier:self.cellIdentifier];
+    
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -97,7 +100,7 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
 
 #pragma mark - TBA Table View Data Source
 
-- (void)configureCell:(TBAAllianceCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+- (void)configureCell:(TBAAllianceTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     EventAlliance *alliance = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.eventAlliance = alliance;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;

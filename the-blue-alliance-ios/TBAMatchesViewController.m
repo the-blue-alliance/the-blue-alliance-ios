@@ -65,6 +65,9 @@ static NSString *const MatchCellReuseIdentifier = @"MatchCell";
     self.tbaDelegate = self;
     self.cellIdentifier = MatchCellReuseIdentifier;
     
+    UINib *cellNib = [UINib nibWithNibName:NSStringFromClass([TBAMatchTableViewCell class]) bundle:nil];
+    [self.tableView registerNib:cellNib forCellReuseIdentifier:self.cellIdentifier];
+    
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;

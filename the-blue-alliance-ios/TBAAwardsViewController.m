@@ -63,6 +63,9 @@ static NSString *const AwardCellReuseIdentifier = @"AwardCell";
     self.tbaDelegate = self;
     self.cellIdentifier = AwardCellReuseIdentifier;
     
+    UINib *cellNib = [UINib nibWithNibName:NSStringFromClass([TBAAwardTableViewCell class]) bundle:nil];
+    [self.tableView registerNib:cellNib forCellReuseIdentifier:self.cellIdentifier];
+    
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;

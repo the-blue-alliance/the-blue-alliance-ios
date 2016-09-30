@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AllianceCell" id="r6i-9V-I7y" customClass="TBAAllianceTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="r6i-9V-I7y" id="cnX-3d-ike">
+                <frame key="frameInset" width="375" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Alliance #1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dym-qk-ZJt">
+                        <constraints>
+                            <constraint firstAttribute="height" constant="44" id="5qO-C5-6cR"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="5Kv-iE-vYM"/>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="5Kv-iE-vYM" firstAttribute="leading" secondItem="Dym-qk-ZJt" secondAttribute="trailing" constant="20" id="Kao-2D-BAX"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="5Kv-iE-vYM" secondAttribute="trailing" id="RaT-0U-KHg"/>
+                    <constraint firstAttribute="bottom" secondItem="Dym-qk-ZJt" secondAttribute="bottom" id="Z1V-3S-jcJ"/>
+                    <constraint firstItem="5Kv-iE-vYM" firstAttribute="height" secondItem="Dym-qk-ZJt" secondAttribute="height" id="ZnH-lb-pQz"/>
+                    <constraint firstAttribute="bottom" secondItem="5Kv-iE-vYM" secondAttribute="bottom" id="ggf-Fb-Sm9"/>
+                    <constraint firstItem="Dym-qk-ZJt" firstAttribute="leading" secondItem="cnX-3d-ike" secondAttribute="leadingMargin" id="u2F-RJ-dDo"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="allianceNumberLabel" destination="Dym-qk-ZJt" id="SOw-1Q-njx"/>
+                <outlet property="allianceStackView" destination="5Kv-iE-vYM" id="qjq-r1-718"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

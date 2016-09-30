@@ -73,6 +73,9 @@ static NSString *const PointsCellReuseIdentifier  = @"PointsCell";
     self.tbaDelegate = self;
     self.cellIdentifier = PointsCellReuseIdentifier;
     
+    UINib *cellNib = [UINib nibWithNibName:NSStringFromClass([TBAPointsTableViewCell class]) bundle:nil];
+    [self.tableView registerNib:cellNib forCellReuseIdentifier:self.cellIdentifier];
+    
     __weak typeof(self) weakSelf = self;
     self.refresh = ^void() {
         __strong typeof(weakSelf) strongSelf = weakSelf;

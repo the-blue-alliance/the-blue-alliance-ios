@@ -1,5 +1,5 @@
 //
-//  TBAAllianceCell.h
+//  TBAAllianceTableViewCell.h
 //  the-blue-alliance
 //
 //  Created by Zach Orr on 1/10/16.
@@ -10,7 +10,9 @@
 
 @class EventAlliance, Team;
 
-@interface TBAAllianceCell : TBATableViewCell
+@interface TBAAllianceTableViewCell : TBATableViewCell
+
 @property (nonatomic, strong) EventAlliance *eventAlliance;
 @property (nonatomic, copy) void (^teamSelected)(Team *team);
+
 @end

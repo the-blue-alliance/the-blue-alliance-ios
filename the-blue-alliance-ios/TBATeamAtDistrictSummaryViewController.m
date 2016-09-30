@@ -40,6 +40,12 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.tbaDelegate = self;
+    self.cellIdentifier = SummaryCellReuseIdentifier;
+    
+    UINib *cellNib = [UINib nibWithNibName:NSStringFromClass([TBASummaryTableViewCell class]) bundle:nil];
+    [self.tableView registerNib:cellNib forCellReuseIdentifier:self.cellIdentifier];
+    
     __weak typeof(self) weakSelf = self;
     [self registerForChangeNotifications:^(id  _Nonnull changedObject) {
         if (changedObject == self.districtRanking || changedObject == self.districtRanking.district) {
@@ -54,9 +60,6 @@ static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
         __strong typeof(weakSelf) strongSelf = weakSelf;
         [strongSelf refreshDistrictRankings];
     };
-    
-    self.tbaDelegate = self;
-    self.cellIdentifier = SummaryCellReuseIdentifier;
 }
 
 #pragma mark - Data Methods
