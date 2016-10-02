@@ -12,8 +12,6 @@
 #import "Team.h"
 #import "Match.h"
 
-static NSString *const MatchCellReuseIdentifier = @"MatchCell";
-
 @implementation TBAMatchesViewController
 @synthesize fetchedResultsController = _fetchedResultsController;
 

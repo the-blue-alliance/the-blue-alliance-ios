@@ -14,12 +14,6 @@
 #import "EventRanking.h"
 #import "EventPoints.h"
 
-@interface TBAEventRankingsViewController () <TBATableViewControllerDelegate>
-
-@end
-
-static NSString *const RankCellReuseIdentifier  = @"RankCell";
-
 @implementation TBAEventRankingsViewController
 @synthesize fetchedResultsController = _fetchedResultsController;
 

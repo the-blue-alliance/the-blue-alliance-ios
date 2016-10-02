@@ -6,11 +6,13 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import "TBATableViewCell.h"
+#import "TBAMyTBATableViewCell.h"
+
+static NSString *const TeamCellReuseIdentifier = @"TeamCell";
 
 @class Team;
 
-@interface TBATeamTableViewCell : TBATableViewCell
+@interface TBATeamTableViewCell : TBAMyTBATableViewCell
 
 @property (nonatomic, strong) Team *team;
 

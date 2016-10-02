@@ -10,7 +10,6 @@
 #import "TBAInfoTableViewCell.h"
 #import "Event.h"
 
-static NSString *const InfoCellReuseIdentifier      = @"InfoCell";
 static NSString *const BasicCellReuseIdentifier     = @"BasicCell";
 
 static NSString *const EventOptionAlliances         = @"Alliances";

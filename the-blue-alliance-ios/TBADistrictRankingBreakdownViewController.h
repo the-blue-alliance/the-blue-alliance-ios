@@ -10,7 +10,7 @@
 
 @class DistrictRanking;
 
-@interface TBADistrictRankingBreakdownViewController : TBARefreshTableViewController
+@interface TBADistrictRankingBreakdownViewController : TBARefreshTableViewController <TBATableViewControllerDelegate>
 
 @property (nonatomic, strong) DistrictRanking *districtRanking;
 

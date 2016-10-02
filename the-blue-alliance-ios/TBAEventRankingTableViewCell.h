@@ -8,6 +8,8 @@
 
 #import "TBATableViewCell.h"
 
+static NSString *const RankCellReuseIdentifier  = @"RankCell";
+
 @class EventRanking;
 
 @interface TBAEventRankingTableViewCell : TBATableViewCell

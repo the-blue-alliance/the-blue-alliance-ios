@@ -8,6 +8,8 @@
 
 #import "TBATableViewCell.h"
 
+static NSString *const MatchCellReuseIdentifier = @"MatchCell";
+
 @class Match, Team;
 
 @interface TBAMatchTableViewCell : TBATableViewCell

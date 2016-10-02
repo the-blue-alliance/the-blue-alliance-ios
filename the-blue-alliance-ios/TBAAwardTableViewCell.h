@@ -8,6 +8,8 @@
 
 #import "TBATableViewCell.h"
 
+static NSString *const AwardCellReuseIdentifier = @"AwardCell";
+
 @class Award;
 
 @interface TBAAwardTableViewCell : TBATableViewCell

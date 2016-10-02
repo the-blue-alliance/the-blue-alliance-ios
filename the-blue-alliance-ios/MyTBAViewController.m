@@ -8,11 +8,12 @@
 
 #import "MyTBAViewController.h"
 #import "MyTBASignInViewController.h"
-#import "TBAFavoritesViewController.h"
-#import "TBASubscriptionsViewController.h"
+#import "TBAMyTBATableViewController.h"
 #import "TBANavigationController.h"
 #import "TBARefreshViewController.h"
 #import "AppDelegate.h"
+#import "Favorite.h"
+#import "Subscription.h"
 
 static NSString *const kClientID = @"836511118694-qne22910k33c8o7ut56umeu1q04uur9m.apps.googleusercontent.com";
 static NSString *const kRedirectURI = @"com.googleusercontent.apps.836511118694-qne22910k33c8o7ut56umeu1q04uur9m:/oauthredirect";
@@ -20,6 +21,10 @@ static NSString *const kRedirectURI = @"com.googleusercontent.apps.836511118694-
 static NSString *const MyTBASignInEmbed         = @"MyTBASignInEmbed";
 static NSString *const MyTBAFavoritesEmbed      = @"MyTBAFavoritesEmbed";
 static NSString *const MyTBASubscriptionsEmbed  = @"MyTBASubscriptionsEmbed";
+static NSString *const EventViewControllerSegue = @"EventViewControllerSegue";
+static NSString *const TeamViewControllerSegue  = @"TeamViewControllerSegue";
+static NSString *const MatchViewControllerSegue = @"MatchViewControllerSegue";
+
 
 static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 
@@ -29,10 +34,10 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 @property (nonatomic, strong) MyTBASignInViewController *signInViewController;
 @property (nonatomic, strong) IBOutlet UIView *signInView;
 
-@property (nonatomic, strong) TBAFavoritesViewController *favoritesViewController;
+@property (nonatomic, strong) TBAMyTBATableViewController *favoritesViewController;
 @property (nonatomic, strong) IBOutlet UIView *favoritesView;
 
-@property (nonatomic, strong) TBASubscriptionsViewController *subscriptionsViewController;
+@property (nonatomic, strong) TBAMyTBATableViewController *subscriptionsViewController;
 @property (nonatomic, strong) IBOutlet UIView *subscriptionsView;
 
 @property (nonatomic, strong) UIBarButtonItem *signOutBarButtonItem;
@@ -174,6 +179,8 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    TBAMyTBATableViewController *myTBATableViewController;
+    
     __weak typeof(self) weakSelf = self;
     if ([segue.identifier isEqualToString:MyTBASignInEmbed]) {
         self.signInViewController = segue.destinationViewController;
@@ -182,8 +189,33 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
         };
     } else if ([segue.identifier isEqualToString:MyTBAFavoritesEmbed]) {
         self.favoritesViewController = segue.destinationViewController;
+        self.favoritesViewController.modelClass = [Favorite class];
+        myTBATableViewController = self.favoritesViewController;
     } else if ([segue.identifier isEqualToString:MyTBASubscriptionsEmbed]) {
         self.subscriptionsViewController = segue.destinationViewController;
+        self.subscriptionsViewController.modelClass = [Subscription class];
+        myTBATableViewController = self.subscriptionsViewController;
+    }
+    
+    // Setup the actions for the myTBA data table view controllers
+    if (myTBATableViewController) {
+        myTBATableViewController.eventSelected = ^(Event *event) {
+            [self performSegueWithIdentifier:EventViewControllerSegue sender:event];
+        };
+        myTBATableViewController.eventSettingsTapped = ^(id myTBAObject, Event *event) {
+            // Push to event settings
+        };
+        
+        myTBATableViewController.teamSelected = ^(Team *team) {
+            [self performSegueWithIdentifier:TeamViewControllerSegue sender:team];
+        };
+        myTBATableViewController.teamSettingsTapped = ^(id myTBAObject, Team *team) {
+            // Push to team settings
+        };
+        
+        myTBATableViewController.matchSelected = ^(Match *match) {
+            [self performSegueWithIdentifier:MatchViewControllerSegue sender:match];
+        };
     }
 }
 

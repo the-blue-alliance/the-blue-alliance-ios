@@ -10,7 +10,7 @@
 
 @class Event, EventRanking;
 
-@interface TBAEventRankingsViewController : TBARefreshTableViewController
+@interface TBAEventRankingsViewController : TBARefreshTableViewController <TBATableViewControllerDelegate>
 
 @property (nonatomic, strong) Event *event;
 

@@ -62,4 +62,11 @@
     }
 }
 
++ (nullable Event *)fetchEventForKey:(nonnull NSString *)eventKey fromContext:(nonnull NSManagedObjectContext *)context {
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Event"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", eventKey];
+    [fetchRequest setPredicate:predicate];
+    return [context executeFetchRequest:fetchRequest error:nil].firstObject;
+}
+
 @end

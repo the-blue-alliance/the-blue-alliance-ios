@@ -11,7 +11,16 @@
 
 @implementation Team (Fetch)
 
-# pragma mark - Upstream
+#pragma mark - Local
+
++ (nullable Team *)fetchTeamForKey:(nonnull NSString *)teamKey fromContext:(nonnull NSManagedObjectContext *)context {
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", teamKey];
+    [fetchRequest setPredicate:predicate];
+    return [context executeFetchRequest:fetchRequest error:nil].firstObject;
+}
+
+#pragma mark - Upstream
 
 + (NSUInteger)fetchAllTeamsWithTaskIdChange:(void (^_Nullable)(NSUInteger newTaskId, NSArray *_Nonnull batchTeam))taskIdChanged withCompletionBlock:(void(^_Nullable)(NSArray *_Nonnull teams, NSError *_Nullable error))completion {
     return [self fetchAllTeamsWithTaskIdChange:taskIdChanged withExistingTeams:nil forPage:0 withCompletionBlock:completion];

@@ -12,9 +12,7 @@
 #import "Team.h"
 #import "Team+Fetch.h"
 
-static NSString *const TeamCellReuseIdentifier = @"TeamCell";
-
-@interface TBATeamsViewController () <TBATableViewControllerDelegate, UISearchBarDelegate>
+@interface TBATeamsViewController () <UISearchBarDelegate>
 
 @property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
 

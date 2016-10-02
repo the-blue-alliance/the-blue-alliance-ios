@@ -57,6 +57,21 @@
     }];
 }
 
++ (instancetype)insertStubMatchWithKey:(NSString *)matchKey inManagedObjectContext:(NSManagedObjectContext *)context {
+    // Need to insert a stub event as well
+    NSString *eventKey = [matchKey componentsSeparatedByString:@"_"].firstObject;
+    if (!eventKey) {
+        return nil;
+    }
+    Event *event = [Event insertStubEventWithKey:eventKey inManagedObjectContext:context];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", matchKey];
+    return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Match *match) {
+        match.key = matchKey;
+        match.event = event;
+    }];
+}
+
 + (NSArray *)insertMatchesWithModelMatches:(NSArray<TBAMatch *> *)modelMatches forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (TBAMatch *match in modelMatches) {

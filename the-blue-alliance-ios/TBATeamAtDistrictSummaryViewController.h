@@ -10,7 +10,7 @@
 
 @class DistrictRanking, EventPoints;
 
-@interface TBATeamAtDistrictSummaryViewController : TBARefreshTableViewController
+@interface TBATeamAtDistrictSummaryViewController : TBARefreshTableViewController <TBATableViewControllerDelegate>
 
 @property (nonatomic, strong) DistrictRanking *districtRanking;
 

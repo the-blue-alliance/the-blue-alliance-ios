@@ -6,11 +6,13 @@
 //  Copyright (c) 2015 The Blue Alliance. All rights reserved.
 //
 
-#import "TBATableViewCell.h"
+#import "TBAMyTBATableViewCell.h"
+
+static NSString *const EventCellReuseIdentifier = @"EventCell";
 
 @class Event;
 
-@interface TBAEventTableViewCell : TBATableViewCell
+@interface TBAEventTableViewCell : TBAMyTBATableViewCell
 
 @property (nonatomic, strong) Event *event;
 

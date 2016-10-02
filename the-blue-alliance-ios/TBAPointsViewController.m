@@ -14,12 +14,6 @@
 #import "EventPoints.h"
 #import "Team.h"
 
-static NSString *const PointsCellReuseIdentifier  = @"PointsCell";
-
-@interface TBAPointsViewController () <TBATableViewControllerDelegate>
-
-@end
-
 @implementation TBAPointsViewController
 @synthesize fetchedResultsController = _fetchedResultsController;
 

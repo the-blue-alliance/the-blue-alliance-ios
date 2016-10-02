@@ -12,9 +12,7 @@
 #import "Event.h"
 #import "OrderedDictionary.h"
 
-static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
-
-@interface TBAEventStatsViewController () <TBATableViewControllerDelegate>
+@interface TBAEventStatsViewController ()
 
 /* THIS is a mess. But here's how I'm handling this.
  * Keys for the dictionary should correspond to section header titles

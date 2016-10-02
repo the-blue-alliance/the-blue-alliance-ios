@@ -8,6 +8,8 @@
 
 #import "TBATableViewCell.h"
 
+static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
+
 @class EventAlliance, Team;
 
 @interface TBAAllianceTableViewCell : TBATableViewCell

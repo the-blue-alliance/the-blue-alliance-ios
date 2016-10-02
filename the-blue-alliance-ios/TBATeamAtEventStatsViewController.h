@@ -10,7 +10,7 @@
 
 @class Event, Team;
 
-@interface TBATeamAtEventStatsViewController : TBARefreshTableViewController
+@interface TBATeamAtEventStatsViewController : TBARefreshTableViewController <TBATableViewControllerDelegate>
 
 @property (nonatomic, strong) Team *team;
 @property (nonatomic, strong) Event *event;

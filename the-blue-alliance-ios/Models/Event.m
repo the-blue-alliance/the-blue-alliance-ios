@@ -275,6 +275,13 @@
     }];
 }
 
++ (instancetype)insertStubEventWithKey:(NSString *)eventKey inManagedObjectContext:(NSManagedObjectContext *)context {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", eventKey];
+    return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Event *event) {
+        event.key = eventKey;
+    }];
+}
+
 + (NSArray<Event *> *)insertEventsWithModelEvents:(NSArray<TBAEvent *> *)modelEvents inManagedObjectContext:(NSManagedObjectContext *)context {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (TBAEvent *event in modelEvents) {

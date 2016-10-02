@@ -13,8 +13,6 @@
 #import "Team.h"
 #import "UIColor+TBAColors.h"
 
-static NSString *const EventCellReuseIdentifier = @"EventCell";
-
 @implementation TBAEventsViewController
 @synthesize fetchedResultsController = _fetchedResultsController;
 

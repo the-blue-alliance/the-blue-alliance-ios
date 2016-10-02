@@ -12,6 +12,8 @@
 
 + (void)fetchEventsForYear:(NSUInteger)year fromContext:(nonnull NSManagedObjectContext *)context withCompletionBlock:(void(^_Nullable)(NSArray<Event *> *_Nullable events, NSError *_Nullable error))completion;
 
++ (nullable Event *)fetchEventForKey:(nonnull NSString *)eventKey fromContext:(nonnull NSManagedObjectContext *)context;
+
 + (void)fetchEventForKey:(nonnull NSString *)eventKey fromContext:(nonnull NSManagedObjectContext *)context checkUpstream:(BOOL)upstream withCompletionBlock:(void(^_Nullable)(Event *_Nullable event, NSError *_Nullable error))completion;
 
 @end

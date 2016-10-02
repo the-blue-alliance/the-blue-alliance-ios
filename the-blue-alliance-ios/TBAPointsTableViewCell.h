@@ -8,6 +8,8 @@
 
 #import "TBATableViewCell.h"
 
+static NSString *const PointsCellReuseIdentifier  = @"PointsCell";
+
 @class DistrictRanking, EventPoints;
 
 @interface TBAPointsTableViewCell : TBATableViewCell

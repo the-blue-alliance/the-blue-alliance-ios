@@ -106,6 +106,9 @@
                         <outlet property="segmentedControlView" destination="8wR-a4-mth" id="dlF-9e-jwg"/>
                         <outlet property="signInView" destination="ZcB-3a-GQb" id="LME-5H-b1L"/>
                         <outlet property="subscriptionsView" destination="M98-na-MHX" id="hTo-en-03P"/>
+                        <segue destination="zbd-dn-fYW" kind="show" identifier="EventViewControllerSegue" id="iB3-i3-7XS"/>
+                        <segue destination="87k-gB-aun" kind="show" identifier="TeamViewControllerSegue" id="P3s-gZ-2Th"/>
+                        <segue destination="QTe-dV-W9Z" kind="show" identifier="MatchViewControllerSegue" id="ET0-Gs-i8r"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kqo-PZ-pO3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -211,12 +214,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dQn-67-FLb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="369" y="950"/>
+            <point key="canvasLocation" x="164" y="982"/>
         </scene>
-        <!--Favorites View Controller-->
+        <!--MyTBA Table View Controller-->
         <scene sceneID="A9q-dV-9uo">
             <objects>
-                <tableViewController id="UOw-cr-dOX" customClass="TBAFavoritesViewController" sceneMemberID="viewController">
+                <tableViewController id="UOw-cr-dOX" customClass="TBAMyTBATableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="kCw-eu-xEh">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -250,10 +253,10 @@
             </objects>
             <point key="canvasLocation" x="1141" y="-228.5"/>
         </scene>
-        <!--Subscriptions View Controller-->
+        <!--MyTBA Table View Controller-->
         <scene sceneID="jpQ-gQ-bDM">
             <objects>
-                <tableViewController id="sZz-M2-tIx" customClass="TBASubscriptionsViewController" sceneMemberID="viewController">
+                <tableViewController id="sZz-M2-tIx" customClass="TBAMyTBATableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Nmo-DO-Vjg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -286,6 +289,30 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3A8-fn-6LU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1141" y="337"/>
+        </scene>
+        <!--EventViewController-->
+        <scene sceneID="Sak-Ry-c8C">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="EventViewController" id="zbd-dn-fYW" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bwP-so-i0S" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1326" y="695"/>
+        </scene>
+        <!--TeamsStoryboard-->
+        <scene sceneID="khy-lo-HBu">
+            <objects>
+                <viewControllerPlaceholder storyboardName="TeamsStoryboard" id="87k-gB-aun" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="W7B-Fh-jZ4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1098" y="745"/>
+        </scene>
+        <!--EventsStoryboard-->
+        <scene sceneID="YtB-Rd-wJ2">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EventsStoryboard" id="QTe-dV-W9Z" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Fr9-7h-dBv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="846" y="801"/>
         </scene>
     </scenes>
     <resources>

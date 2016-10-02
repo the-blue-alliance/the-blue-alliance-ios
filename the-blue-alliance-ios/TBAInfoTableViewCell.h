@@ -8,6 +8,8 @@
 
 #import "TBATableViewCell.h"
 
+static NSString *const InfoCellReuseIdentifier = @"InfoCell";
+
 @class Event, Team;
 
 @interface TBAInfoTableViewCell : TBATableViewCell

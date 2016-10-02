@@ -14,9 +14,7 @@
 #import "Event.h"
 #import "NSNumber+Additions.h"
 
-static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
-
-@interface TBATeamAtDistrictSummaryViewController () <TBATableViewControllerDelegate>
+@interface TBATeamAtDistrictSummaryViewController ()
 
 @property (nonatomic, strong) NSArray *sortedEventPoints;
 

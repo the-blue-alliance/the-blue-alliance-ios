@@ -73,6 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSArray<NSNumber *> *)groupEventsByWeek:(NSArray<Event *> *)events;
 
 + (instancetype)insertEventWithModelEvent:(TBAEvent *)modelEvent inManagedObjectContext:(NSManagedObjectContext *)context;
++ (instancetype)insertStubEventWithKey:(NSString *)eventKey inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray<Event *> *)insertEventsWithModelEvents:(NSArray<TBAEvent *> *)modelEvents inManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end

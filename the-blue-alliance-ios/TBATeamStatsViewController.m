@@ -11,12 +11,6 @@
 #import "EventTeamStat.h"
 #import "Event.h"
 
-static NSString *const TeamStatsCellReuseIdentifier = @"TeamStatsCell";
-
-@interface TBATeamStatsViewController () <TBATableViewControllerDelegate>
-
-@end
-
 @implementation TBATeamStatsViewController
 @synthesize fetchedResultsController = _fetchedResultsController;
 

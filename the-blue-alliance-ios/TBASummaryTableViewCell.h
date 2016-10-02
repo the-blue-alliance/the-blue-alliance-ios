@@ -8,6 +8,8 @@
 
 #import "TBATableViewCell.h"
 
+static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
+
 @interface TBASummaryTableViewCell : TBATableViewCell
 
 @property (nonatomic, strong) IBOutlet UILabel *titleLabel;

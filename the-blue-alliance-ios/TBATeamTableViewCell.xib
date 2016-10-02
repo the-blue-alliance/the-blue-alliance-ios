@@ -12,48 +12,65 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TtP-bU-UlA" id="dCQ-2S-23U">
-                <frame key="frameInset" width="342" height="69.5"/>
+                <frame key="frameInset" width="342" height="69"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="fsQ-SV-vyj">
+                    <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Ncu-C9-N7Z">
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" text="7332" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ksw-lX-xc3">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="44" id="l7y-gK-2h3"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="YSj-Vb-vAt">
+                            <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="fsQ-SV-vyj">
                                 <subviews>
-                                    <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Team Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fzo-No-2vs">
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" text="7332" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ksw-lX-xc3">
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="44" id="l7y-gK-2h3"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" verticalHuggingPriority="750" verticalCompressionResistancePriority="749" text="Location" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m6Q-5F-A0C">
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="YSj-Vb-vAt">
+                                        <subviews>
+                                            <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Team Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fzo-No-2vs">
+                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" verticalHuggingPriority="750" verticalCompressionResistancePriority="749" text="Location" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m6Q-5F-A0C">
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                             </stackView>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gwb-rN-WdJ">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="kRb-Hx-kp2"/>
+                                </constraints>
+                                <state key="normal" image="ic_settings"/>
+                                <connections>
+                                    <action selector="settingsButtonTapped:" destination="TtP-bU-UlA" eventType="touchUpInside" id="hGs-yf-2yG"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailingMargin" secondItem="fsQ-SV-vyj" secondAttribute="trailing" id="0jk-61-BYI"/>
-                    <constraint firstItem="fsQ-SV-vyj" firstAttribute="top" secondItem="dCQ-2S-23U" secondAttribute="top" constant="12" id="8DK-t1-4Y1"/>
-                    <constraint firstAttribute="bottom" secondItem="fsQ-SV-vyj" secondAttribute="bottom" constant="12" id="ePZ-Kc-PjM"/>
-                    <constraint firstItem="fsQ-SV-vyj" firstAttribute="leading" secondItem="dCQ-2S-23U" secondAttribute="leadingMargin" id="u8g-pP-637"/>
+                    <constraint firstAttribute="bottom" secondItem="Ncu-C9-N7Z" secondAttribute="bottom" constant="8" id="AJy-8P-XTI"/>
+                    <constraint firstItem="Ncu-C9-N7Z" firstAttribute="leading" secondItem="dCQ-2S-23U" secondAttribute="leadingMargin" id="Ffz-sD-TkZ"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="Ncu-C9-N7Z" secondAttribute="trailing" id="LWL-Xi-qxP"/>
+                    <constraint firstItem="Ncu-C9-N7Z" firstAttribute="top" secondItem="dCQ-2S-23U" secondAttribute="top" constant="8" id="XvW-Lw-e3d"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="locationLabel" destination="m6Q-5F-A0C" id="XJv-KA-HIm"/>
                 <outlet property="nameLabel" destination="fzo-No-2vs" id="Nhc-TV-EOB"/>
                 <outlet property="numberLabel" destination="ksw-lX-xc3" id="jLE-f4-wg3"/>
+                <outlet property="settingsButton" destination="gwb-rN-WdJ" id="kpS-am-lj2"/>
             </connections>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="ic_settings" width="24" height="24"/>
+    </resources>
 </document>

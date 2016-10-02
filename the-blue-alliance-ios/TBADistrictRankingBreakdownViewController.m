@@ -13,12 +13,6 @@
 #import "EventPoints.h"
 #import "Event.h"
 
-static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
-
-@interface TBADistrictRankingBreakdownViewController () <TBATableViewControllerDelegate>
-
-@end
-
 @implementation TBADistrictRankingBreakdownViewController
 @synthesize fetchedResultsController = _fetchedResultsController;
 

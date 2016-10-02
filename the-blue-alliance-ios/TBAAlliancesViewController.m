@@ -13,7 +13,6 @@
 #import "EventAlliance.h"
 #import "TBAAllianceTableViewCell.h"
 
-static NSString *const AllianceCellReuseIdentifier  = @"AllianceCell";
 static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerSegue";
 
 @interface TBAAlliancesViewController ()

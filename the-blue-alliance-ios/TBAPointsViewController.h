@@ -10,7 +10,7 @@
 
 @class District, Event;
 
-@interface TBAPointsViewController : TBARefreshTableViewController
+@interface TBAPointsViewController : TBARefreshTableViewController <TBATableViewControllerDelegate>
 
 @property (nonatomic, strong) District *district;
 @property (nonatomic, strong) Event *event;

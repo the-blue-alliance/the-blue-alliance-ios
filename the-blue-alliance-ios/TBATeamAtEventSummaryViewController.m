@@ -14,8 +14,6 @@
 #import "Team.h"
 #import "NSNumber+Additions.h"
 
-static NSString *const SummaryCellReuseIdentifier = @"SummaryCell";
-
 @interface TBATeamAtEventSummaryViewController ()
 
 @property (nonatomic, strong) EventAlliance *eventAlliance;

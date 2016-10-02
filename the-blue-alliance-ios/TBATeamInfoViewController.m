@@ -10,7 +10,6 @@
 #import "TBAInfoTableViewCell.h"
 #import "Team.h"
 
-static NSString *const InfoCellReuseIdentifier      = @"InfoCell";
 static NSString *const BasicCellReuseIdentifier     = @"BasicCell";
 
 @interface TBATeamInfoViewController ()

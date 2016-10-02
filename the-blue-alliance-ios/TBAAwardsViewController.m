@@ -13,8 +13,6 @@
 #import "Event.h"
 #import "Team.h"
 
-static NSString *const AwardCellReuseIdentifier = @"AwardCell";
-
 @implementation TBAAwardsViewController
 
 @synthesize fetchedResultsController = _fetchedResultsController;

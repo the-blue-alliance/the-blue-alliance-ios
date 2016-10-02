@@ -22,9 +22,10 @@
 		921257411CDC2F6000A9E19D /* MyTBAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 921257401CDC2F6000A9E19D /* MyTBAViewController.m */; };
 		921257441CDC2F8200A9E19D /* MyTBAStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 921257431CDC2F8200A9E19D /* MyTBAStoryboard.storyboard */; };
 		921257471CDC334B00A9E19D /* MyTBASignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 921257461CDC334B00A9E19D /* MyTBASignInViewController.m */; };
-		9212574B1CDC339200A9E19D /* TBAFavoritesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9212574A1CDC339200A9E19D /* TBAFavoritesViewController.m */; };
-		9212574F1CDC33B000A9E19D /* TBASubscriptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9212574E1CDC33B000A9E19D /* TBASubscriptionsViewController.m */; };
+		921C93CB1DA06CFA00C1C5E5 /* TBAMyTBATableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 921C93CA1DA06CFA00C1C5E5 /* TBAMyTBATableViewController.m */; };
 		9222F1191AD6910F00C0AEA0 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9222F1181AD6910F00C0AEA0 /* EventViewController.m */; };
+		9234D8E51DA07BD5009475C4 /* TBAMyTBATableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9234D8E41DA07BD5009475C4 /* TBAMyTBATableViewCell.m */; };
+		9234D8E81DA087EA009475C4 /* Match+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9234D8E71DA087EA009475C4 /* Match+Fetch.m */; };
 		9237F74B1B2CA74D00C89978 /* TBAPersistenceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9237F74A1B2CA74D00C89978 /* TBAPersistenceController.m */; };
 		9237F77E1B2CA7CB00C89978 /* TBA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9237F77C1B2CA7CB00C89978 /* TBA.xcdatamodeld */; };
 		923C1E471D971D4300F19F53 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = 923C1E461D971D4300F19F53 /* Subscription.m */; };
@@ -147,12 +148,14 @@
 		921257431CDC2F8200A9E19D /* MyTBAStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MyTBAStoryboard.storyboard; sourceTree = "<group>"; };
 		921257451CDC334B00A9E19D /* MyTBASignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTBASignInViewController.h; sourceTree = "<group>"; };
 		921257461CDC334B00A9E19D /* MyTBASignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTBASignInViewController.m; sourceTree = "<group>"; };
-		921257491CDC339200A9E19D /* TBAFavoritesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAFavoritesViewController.h; sourceTree = "<group>"; };
-		9212574A1CDC339200A9E19D /* TBAFavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TBAFavoritesViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		9212574D1CDC33B000A9E19D /* TBASubscriptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBASubscriptionsViewController.h; sourceTree = "<group>"; };
-		9212574E1CDC33B000A9E19D /* TBASubscriptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBASubscriptionsViewController.m; sourceTree = "<group>"; };
+		921C93C91DA06CFA00C1C5E5 /* TBAMyTBATableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAMyTBATableViewController.h; sourceTree = "<group>"; };
+		921C93CA1DA06CFA00C1C5E5 /* TBAMyTBATableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAMyTBATableViewController.m; sourceTree = "<group>"; };
 		9222F1171AD6910F00C0AEA0 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
 		9222F1181AD6910F00C0AEA0 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
+		9234D8E31DA07BD5009475C4 /* TBAMyTBATableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAMyTBATableViewCell.h; sourceTree = "<group>"; };
+		9234D8E41DA07BD5009475C4 /* TBAMyTBATableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAMyTBATableViewCell.m; sourceTree = "<group>"; };
+		9234D8E61DA087EA009475C4 /* Match+Fetch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Match+Fetch.h"; sourceTree = "<group>"; };
+		9234D8E71DA087EA009475C4 /* Match+Fetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Match+Fetch.m"; sourceTree = "<group>"; };
 		9237F7491B2CA74D00C89978 /* TBAPersistenceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TBAPersistenceController.h; path = Models/TBAPersistenceController.h; sourceTree = "<group>"; };
 		9237F74A1B2CA74D00C89978 /* TBAPersistenceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TBAPersistenceController.m; path = Models/TBAPersistenceController.m; sourceTree = "<group>"; };
 		9237F77D1B2CA7CB00C89978 /* The Blue Alliance.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance.xcdatamodel"; sourceTree = "<group>"; };
@@ -445,10 +448,10 @@
 		9212574C1CDC339400A9E19D /* myTBA */ = {
 			isa = PBXGroup;
 			children = (
-				921257491CDC339200A9E19D /* TBAFavoritesViewController.h */,
-				9212574A1CDC339200A9E19D /* TBAFavoritesViewController.m */,
-				9212574D1CDC33B000A9E19D /* TBASubscriptionsViewController.h */,
-				9212574E1CDC33B000A9E19D /* TBASubscriptionsViewController.m */,
+				921C93C91DA06CFA00C1C5E5 /* TBAMyTBATableViewController.h */,
+				921C93CA1DA06CFA00C1C5E5 /* TBAMyTBATableViewController.m */,
+				9234D8E31DA07BD5009475C4 /* TBAMyTBATableViewCell.h */,
+				9234D8E41DA07BD5009475C4 /* TBAMyTBATableViewCell.m */,
 			);
 			name = myTBA;
 			sourceTree = "<group>";
@@ -588,6 +591,8 @@
 			children = (
 				9243D3DB1BABB70D00512D3B /* Match.h */,
 				9243D3DC1BABB70D00512D3B /* Match.m */,
+				9234D8E61DA087EA009475C4 /* Match+Fetch.h */,
+				9234D8E71DA087EA009475C4 /* Match+Fetch.m */,
 				9243D3DF1BABB70D00512D3B /* MatchVideo.h */,
 				9243D3E01BABB70D00512D3B /* MatchVideo.m */,
 			);
@@ -1162,7 +1167,6 @@
 				924E94331CD1C21B00C2EADB /* TBAPointsTableViewCell.m in Sources */,
 				923E126F1B52B4230089D9F8 /* TBADistrictsViewController.m in Sources */,
 				924E94371CD2C15300C2EADB /* TBAViewController.m in Sources */,
-				9212574B1CDC339200A9E19D /* TBAFavoritesViewController.m in Sources */,
 				92CA3C5C1B88F2C30094DC7D /* TBAContainerCollectionViewController.m in Sources */,
 				9243D4021BABB92E00512D3B /* Team+Fetch.m in Sources */,
 				92BB8B981AC64DC800A041FA /* TBASelectYearViewController.m in Sources */,
@@ -1172,6 +1176,7 @@
 				92A29FD31CD5BF8900104EC9 /* TBAMediaView.m in Sources */,
 				924E94261CD07DD000C2EADB /* TBATeamAtDistrictSummaryViewController.m in Sources */,
 				92011EBB1AC6175400C4F1EC /* DistrictsViewController.m in Sources */,
+				9234D8E51DA07BD5009475C4 /* TBAMyTBATableViewCell.m in Sources */,
 				923C1E471D971D4300F19F53 /* Subscription.m in Sources */,
 				921257471CDC334B00A9E19D /* MyTBASignInViewController.m in Sources */,
 				9243D3E61BABB70D00512D3B /* Team.m in Sources */,
@@ -1188,7 +1193,6 @@
 				92A29FD01CD57BCA00104EC9 /* TBAEventStatsViewController.m in Sources */,
 				92E990111CCF092400EE8F71 /* TBATeamAtEventSummaryViewController.m in Sources */,
 				924E942A1CD07DF600C2EADB /* TBADistrictRankingBreakdownViewController.m in Sources */,
-				9212574F1CDC33B000A9E19D /* TBASubscriptionsViewController.m in Sources */,
 				926F72FB1CD6C38800338B4C /* TBAInfoTableViewCell.m in Sources */,
 				92754DEE1C32495D002E1855 /* TBANavigationControllerDelegate.m in Sources */,
 				92E588B91CCD89D900710065 /* EventDistrictPointsViewController.m in Sources */,
@@ -1218,6 +1222,7 @@
 				92F1580C1AF55DB300884E8A /* DistrictViewController.m in Sources */,
 				9260016A1B519E050027FE95 /* TBAContainerTableViewController.m in Sources */,
 				9243D3F01BABB70D00512D3B /* DistrictRanking.m in Sources */,
+				9234D8E81DA087EA009475C4 /* Match+Fetch.m in Sources */,
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,
 				92E9902B1CD012CF00EE8F71 /* TBAMatchViewController.m in Sources */,
 				925DECE71AF5B2D9007A7E94 /* TBAEventRankingTableViewCell.m in Sources */,
@@ -1234,6 +1239,7 @@
 				92A29FCD1CD55F7300104EC9 /* TBATeamStatsTableViewCell.m in Sources */,
 				92E588B61CCD89A300710065 /* EventAwardsViewController.m in Sources */,
 				9240FA8C1CD991AC00AA9EE9 /* TBATeamInfoViewController.m in Sources */,
+				921C93CB1DA06CFA00C1C5E5 /* TBAMyTBATableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
