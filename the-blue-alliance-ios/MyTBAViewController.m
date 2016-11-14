@@ -131,6 +131,11 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 
 - (void)signOut {
     [TBAKit sharedKit].myTBAAuthentication = nil;
+    
+    // Cancel any ongoing requests
+    [self.favoritesViewController cancelRefresh];
+    [self.subscriptionsViewController cancelRefresh];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateInterface];
     });
