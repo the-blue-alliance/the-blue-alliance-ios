@@ -25,7 +25,6 @@
 		921C93CB1DA06CFA00C1C5E5 /* TBAMyTBATableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 921C93CA1DA06CFA00C1C5E5 /* TBAMyTBATableViewController.m */; };
 		9222F1191AD6910F00C0AEA0 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9222F1181AD6910F00C0AEA0 /* EventViewController.m */; };
 		9234D8E51DA07BD5009475C4 /* TBAMyTBATableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9234D8E41DA07BD5009475C4 /* TBAMyTBATableViewCell.m */; };
-		9234D8E81DA087EA009475C4 /* Match+Fetch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9234D8E71DA087EA009475C4 /* Match+Fetch.m */; };
 		9237F74B1B2CA74D00C89978 /* TBAPersistenceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9237F74A1B2CA74D00C89978 /* TBAPersistenceController.m */; };
 		9237F77E1B2CA7CB00C89978 /* TBA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9237F77C1B2CA7CB00C89978 /* TBA.xcdatamodeld */; };
 		923C1E471D971D4300F19F53 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = 923C1E461D971D4300F19F53 /* Subscription.m */; };
@@ -154,8 +153,6 @@
 		9222F1181AD6910F00C0AEA0 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
 		9234D8E31DA07BD5009475C4 /* TBAMyTBATableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAMyTBATableViewCell.h; sourceTree = "<group>"; };
 		9234D8E41DA07BD5009475C4 /* TBAMyTBATableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAMyTBATableViewCell.m; sourceTree = "<group>"; };
-		9234D8E61DA087EA009475C4 /* Match+Fetch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Match+Fetch.h"; sourceTree = "<group>"; };
-		9234D8E71DA087EA009475C4 /* Match+Fetch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Match+Fetch.m"; sourceTree = "<group>"; };
 		9237F7491B2CA74D00C89978 /* TBAPersistenceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TBAPersistenceController.h; path = Models/TBAPersistenceController.h; sourceTree = "<group>"; };
 		9237F74A1B2CA74D00C89978 /* TBAPersistenceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TBAPersistenceController.m; path = Models/TBAPersistenceController.m; sourceTree = "<group>"; };
 		9237F77D1B2CA7CB00C89978 /* The Blue Alliance.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance.xcdatamodel"; sourceTree = "<group>"; };
@@ -591,8 +588,6 @@
 			children = (
 				9243D3DB1BABB70D00512D3B /* Match.h */,
 				9243D3DC1BABB70D00512D3B /* Match.m */,
-				9234D8E61DA087EA009475C4 /* Match+Fetch.h */,
-				9234D8E71DA087EA009475C4 /* Match+Fetch.m */,
 				9243D3DF1BABB70D00512D3B /* MatchVideo.h */,
 				9243D3E01BABB70D00512D3B /* MatchVideo.m */,
 			);
@@ -1222,7 +1217,6 @@
 				92F1580C1AF55DB300884E8A /* DistrictViewController.m in Sources */,
 				9260016A1B519E050027FE95 /* TBAContainerTableViewController.m in Sources */,
 				9243D3F01BABB70D00512D3B /* DistrictRanking.m in Sources */,
-				9234D8E81DA087EA009475C4 /* Match+Fetch.m in Sources */,
 				50832E0B1918BB63003AC8A7 /* AppDelegate.m in Sources */,
 				92E9902B1CD012CF00EE8F71 /* TBAMatchViewController.m in Sources */,
 				925DECE71AF5B2D9007A7E94 /* TBAEventRankingTableViewCell.m in Sources */,

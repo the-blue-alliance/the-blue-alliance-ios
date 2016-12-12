@@ -42,7 +42,19 @@
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (NSString *teamKey in eventTeamStats.allKeys) {
         NSNumber *statScore = eventTeamStats[teamKey];
-        Team *team = [Team insertStubTeamWithKey:[NSString stringWithFormat:@"frc%@", teamKey] inManagedObjectContext:context];
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        
+        __block Team *team;
+        [Team fetchTeamWithKey:[NSString stringWithFormat:@"frc%@", teamKey] inManagedObjectContext:context withCompletionBlock:^(Team * _Nonnull t, NSError * _Nonnull error) {
+            team = t;
+            dispatch_semaphore_signal(semaphore);
+        }];
+        dispatch_semaphore_signal(semaphore);
+        
+        if (!team) {
+            continue;
+        }
+        
         [arr addObject:[self insertEventTeamStat:statScore ofType:statType forTeam:team atEvent:event inManagedObjectContext:context]];
     }
     return arr;

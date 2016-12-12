@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nonnull NSString *)statTypeString;
 
 + (StatType)statTypeForDictionaryKey:(NSString *)key;
+
 + (instancetype)insertEventTeamStat:(NSNumber *)score ofType:(StatType)statType forTeam:(Team *)team atEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertEventTeamStats:(NSDictionary<NSString *, NSNumber *> *)eventTeamStats ofType:(StatType)statType forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 

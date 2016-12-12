@@ -37,6 +37,33 @@
 @dynamic redMatches;
 @dynamic blueMatches;
 
++ (Event *)findOrFetchTeamWithKey:(NSString *)teamKey inManagedObjectContext:(NSManagedObjectContext *)context {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", teamKey];
+    return [self findOrFetchInContext:context matchingPredicate:predicate];
+}
+
++ (void)fetchTeamWithKey:(NSString *)teamKey inManagedObjectContext:(NSManagedObjectContext *)context withCompletionBlock:(void (^)(Team *team, NSError *error))completion {
+    Team *t = [Team findOrFetchTeamWithKey:teamKey inManagedObjectContext:context];
+    if (t) {
+        if (completion) {
+            completion(t, nil);
+        }
+    } else {
+        [[TBAKit sharedKit] fetchTeamForTeamKey:teamKey withCompletionBlock:^(TBATeam *team, NSError *error) {
+            if (error) {
+                if (completion) {
+                    completion(nil, error);
+                }
+            } else {
+                Team *t = [Team insertTeamWithModelTeam:team inManagedObjectContext:context];
+                if (completion) {
+                    completion(t, nil);
+                }
+            }
+        }];
+    }
+}
+
 + (instancetype)insertTeamWithModelTeam:(TBATeam *)modelTeam inManagedObjectContext:(NSManagedObjectContext *)context {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", modelTeam.key];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Team *team) {
@@ -51,16 +78,6 @@
         team.key = modelTeam.key;
         team.nickname = modelTeam.nickname;
         team.rookieYear = @(modelTeam.rookieYear);
-    }];
-}
-
-+ (instancetype)insertStubTeamWithKey:(NSString *)teamKey inManagedObjectContext:(NSManagedObjectContext *)context {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", teamKey];
-    return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Team *team) {
-        NSString *teamNumber = [teamKey substringFromIndex:3];
-        
-        team.key = teamKey;
-        team.teamNumber = @([teamNumber integerValue]);
     }];
 }
 

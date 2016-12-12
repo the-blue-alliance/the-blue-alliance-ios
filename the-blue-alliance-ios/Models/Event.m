@@ -245,6 +245,35 @@
     return self.eventDistrict.integerValue != TBADistrictTypeNoDistrict;
 }
 
++ (Event *)findOrFetchEventWithKey:(NSString *)eventKey inManagedObjectContext:(NSManagedObjectContext *)context {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", eventKey];
+    return [self findOrFetchInContext:context matchingPredicate:predicate];
+}
+
++ (void)fetchEventWithKey:(NSString *)eventKey inManagedObjectContext:(NSManagedObjectContext *)context withCompletionBlock:(void (^)(Event * _Nullable event, NSError * _Nullable error))completion {
+    Event *e = [Event findOrFetchEventWithKey:eventKey inManagedObjectContext:context];
+    if (e) {
+        if (completion) {
+            completion(e, nil);
+        }
+    } else {
+        [[TBAKit sharedKit] fetchEventForEventKey:eventKey withCompletionBlock:^(TBAEvent *event, NSError *error) {
+            if (error) {
+                if (completion) {
+                    completion(nil, error);
+                }
+            } else {
+                [context performBlock:^{
+                    Event *e = [Event insertEventWithModelEvent:event inManagedObjectContext:context];
+                    if (completion) {
+                        completion(e, nil);
+                    }
+                }];
+            }
+        }];
+    }
+}
+
 + (instancetype)insertEventWithModelEvent:(TBAEvent *)modelEvent inManagedObjectContext:(NSManagedObjectContext *)context {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", modelEvent.key];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Event *event) {
@@ -272,13 +301,6 @@
         event.alliances = [NSSet setWithArray:[EventAlliance insertEventAlliancesWithModelEventAlliances:modelEvent.alliances
                                                                                                 forEvent:event
                                                                                   inManagedObjectContext:context]];
-    }];
-}
-
-+ (instancetype)insertStubEventWithKey:(NSString *)eventKey inManagedObjectContext:(NSManagedObjectContext *)context {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", eventKey];
-    return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Event *event) {
-        event.key = eventKey;
     }];
 }
 

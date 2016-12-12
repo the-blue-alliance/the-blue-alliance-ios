@@ -22,10 +22,7 @@
 @dynamic eventPoints;
 @dynamic team;
 
-+ (instancetype)insertDistrictRankingWithDistrictRankingDict:(NSDictionary<NSString *, id> *)districtRankingDict forDistrict:(District *)district inManagedObjectContext:(NSManagedObjectContext *)context {
-    NSString *teamKey = districtRankingDict[@"team_key"];
-    
-    Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
++ (instancetype)insertDistrictRankingWithDistrictRankingDict:(NSDictionary<NSString *, id> *)districtRankingDict forDistrict:(District *)district forTeam:(Team *)team inManagedObjectContext:(NSManagedObjectContext *)context {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"district == %@ AND team == %@", district, team];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(DistrictRanking *districtRanking) {
         districtRanking.district = district;
@@ -34,36 +31,47 @@
         districtRanking.rookieBonus = districtRankingDict[@"rookie_bonus"];
         districtRanking.team = team;
         
+        /*
         NSDictionary *eventPointsDict = districtRankingDict[@"event_points"];
         for (NSString *eventKey in [eventPointsDict allKeys]) {
             NSDictionary *eventPointDict = eventPointsDict[eventKey];
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
             
-            dispatch_semaphore_t eventSemaphore = dispatch_semaphore_create(0);
             __block Event *event;
-            
-            [Event fetchEventForKey:eventKey fromContext:context checkUpstream:YES withCompletionBlock:^(Event *localEvent, NSError *error) {
-                if (error || !localEvent) {
-                    dispatch_semaphore_signal(eventSemaphore);
-                } else {
-                    event = localEvent;
-                    dispatch_semaphore_signal(eventSemaphore);
-                }
+            [Event fetchEventWithKey:eventKey inManagedObjectContext:context withCompletionBlock:^(Event * _Nullable e, NSError * _Nullable error) {
+                event = e;
+                dispatch_semaphore_signal(semaphore);
             }];
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
             
-            dispatch_semaphore_wait(eventSemaphore, DISPATCH_TIME_FOREVER);
             if (event == nil) {
                 continue;
             }
             
             districtRanking.eventPoints = [districtRanking.eventPoints setByAddingObject:[EventPoints insertEventPointsWithEventPointsDict:eventPointDict forEvent:event andTeam:team inManagedObjectContext:context]];
         }
+        */
     }];
 }
 
 + (NSArray *)insertDistrictRankingsWithDistrictRankings:(NSArray<NSDictionary<NSString *, id> *> *)districtRankings forDistrict:(District *)district inManagedObjectContext:(NSManagedObjectContext *)context {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (NSDictionary *districtRanking in districtRankings) {
-        [arr addObject:[self insertDistrictRankingWithDistrictRankingDict:districtRanking forDistrict:district inManagedObjectContext:context]];
+        NSString *teamKey = districtRanking[@"team_key"];
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        
+        __block Team *team;
+        [Team fetchTeamWithKey:teamKey inManagedObjectContext:context withCompletionBlock:^(Team * _Nonnull t, NSError * _Nonnull error) {
+            team = t;
+            dispatch_semaphore_signal(semaphore);
+        }];
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        
+        if (!team) {
+            continue;
+        }
+
+        [arr addObject:[self insertDistrictRankingWithDistrictRankingDict:districtRanking forDistrict:district forTeam:team inManagedObjectContext:context]];
     }
     return arr;
 }

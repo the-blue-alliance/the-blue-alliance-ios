@@ -12,39 +12,6 @@
 
 #pragma mark - Local
 
-+ (void)fetchEventForKey:(nonnull NSString *)eventKey fromContext:(nonnull NSManagedObjectContext *)context checkUpstream:(BOOL)upstream withCompletionBlock:(void(^_Nullable)(Event *_Nullable event, NSError *_Nullable error))completion {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Event"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", eventKey];
-    [fetchRequest setPredicate:predicate];
-    
-    NSError *error = nil;
-    NSArray *events = [context executeFetchRequest:fetchRequest error:&error];
-    
-    Event *event;
-    if (events && [events count] > 0) {
-        event = [events firstObject];
-    }
-    
-    if (event) {
-        if (completion) {
-            completion(event, error);
-        }
-    } else if (upstream) {
-        [[TBAKit sharedKit] fetchEventForEventKey:eventKey withCompletionBlock:^(TBAEvent *upstreamEvent, NSError *error) {
-            if (error || !event) {
-                if (completion) {
-                    completion(nil, error);
-                }
-            } else {
-                Event *event = [Event insertEventWithModelEvent:upstreamEvent inManagedObjectContext:context];
-                if (completion) {
-                    completion(event,  nil);
-                }
-            }
-        }];
-    }
-}
-
 + (void)fetchEventsForYear:(NSUInteger)year fromContext:(nonnull NSManagedObjectContext *)context withCompletionBlock:(void(^_Nullable)(NSArray<Event *> *_Nullable events, NSError *_Nullable error))completion {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Event"];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"year == %@", @(year)];
@@ -60,13 +27,6 @@
     if (completion) {
         completion(events, error);
     }
-}
-
-+ (nullable Event *)fetchEventForKey:(nonnull NSString *)eventKey fromContext:(nonnull NSManagedObjectContext *)context {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Event"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", eventKey];
-    [fetchRequest setPredicate:predicate];
-    return [context executeFetchRequest:fetchRequest error:nil].firstObject;
 }
 
 @end

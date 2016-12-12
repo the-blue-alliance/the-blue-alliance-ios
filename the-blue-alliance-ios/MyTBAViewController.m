@@ -14,6 +14,9 @@
 #import "AppDelegate.h"
 #import "Favorite.h"
 #import "Subscription.h"
+#import "EventViewController.h"
+#import "TeamViewController.h"
+#import "MatchViewController.h"
 
 static NSString *const kClientID = @"836511118694-qne22910k33c8o7ut56umeu1q04uur9m.apps.googleusercontent.com";
 static NSString *const kRedirectURI = @"com.googleusercontent.apps.836511118694-qne22910k33c8o7ut56umeu1q04uur9m:/oauthredirect";
@@ -200,6 +203,21 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
         self.subscriptionsViewController = segue.destinationViewController;
         self.subscriptionsViewController.modelClass = [Subscription class];
         myTBATableViewController = self.subscriptionsViewController;
+    } else if ([segue.identifier isEqualToString:EventViewControllerSegue]) {
+        Event *event = (Event *)sender;
+        
+        EventViewController *eventViewController = segue.destinationViewController;
+        eventViewController.event = event;
+    } else if ([segue.identifier isEqualToString:TeamViewControllerSegue]) {
+        Team *team = (Team *)sender;
+        
+        TeamViewController *teamViewController = segue.destinationViewController;
+        teamViewController.team = team;
+    } else if ([segue.identifier isEqualToString:MatchViewControllerSegue]) {
+        Match *match = (Match *)sender;
+        
+        MatchViewController *matchViewController = segue.destinationViewController;
+        matchViewController.match = match;
     }
     
     // Setup the actions for the myTBA data table view controllers

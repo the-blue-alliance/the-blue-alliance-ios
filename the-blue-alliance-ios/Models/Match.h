@@ -35,8 +35,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSOrderedSet<Team *> *redAlliance;
 @property (nullable, nonatomic, retain) NSOrderedSet<Team *> *blueAlliance;
 
++ (nullable Match *)findOrFetchMatchWithKey:(NSString *)matchKey inManagedObjectContext:(NSManagedObjectContext *)context;
++ (void)fetchMatchWithKey:(NSString *)matchKey inManagedObjectContext:(NSManagedObjectContext *)context withCompletionBlock:(void (^)(Match * _Nullable match, NSError * _Nullable error))completion;
 + (instancetype)insertMatchWithModelMatch:(TBAMatch *)modelMatch forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
-+ (instancetype)insertStubMatchWithKey:(NSString *)matchKey inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertMatchesWithModelMatches:(NSArray<TBAMatch *> *)modelMatches forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 
 - (NSString *)timeString;

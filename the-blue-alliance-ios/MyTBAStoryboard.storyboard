@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Sim-9L-dvo">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Sim-9L-dvo">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -38,13 +41,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZcB-3a-GQb">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                                 <connections>
                                     <segue destination="qLz-RP-685" kind="embed" identifier="MyTBASignInEmbed" id="hQ5-BL-an0"/>
                                 </connections>
                             </containerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8wR-a4-mth" userLabel="Segmented Control View">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="TZe-eS-z0z">
+                                        <rect key="frame" x="16" y="7.5" width="343" height="29"/>
                                         <segments>
                                             <segment title="Favorites"/>
                                             <segment title="Subscriptions"/>
@@ -64,11 +70,13 @@
                                 </constraints>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M98-na-MHX">
+                                <rect key="frame" x="0.0" y="44" width="375" height="510"/>
                                 <connections>
                                     <segue destination="sZz-M2-tIx" kind="embed" identifier="MyTBASubscriptionsEmbed" id="3nw-rI-ZLE"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p33-Vz-lEm">
+                                <rect key="frame" x="0.0" y="44" width="375" height="510"/>
                                 <connections>
                                     <segue destination="UOw-cr-dOX" kind="embed" identifier="MyTBAFavoritesEmbed" id="RJn-XO-OYt"/>
                                 </connections>
@@ -128,10 +136,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="kms-TU-jw8">
+                                <rect key="frame" x="20" y="120.5" width="335" height="313.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Yxx-M6-kNl">
+                                        <rect key="frame" x="0.0" y="0.0" width="335" height="97"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star_yellow" translatesAutoresizingMaskIntoConstraints="NO" id="wdp-gP-pc0">
+                                                <rect key="frame" x="116.5" y="0.0" width="102" height="97"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="97" id="IgZ-LW-OP8"/>
                                                     <constraint firstAttribute="width" constant="102" id="LEH-iq-P21"/>
@@ -140,6 +151,7 @@
                                         </subviews>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Welcome to myTBA!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mck-oX-QhH">
+                                        <rect key="frame" x="0.0" y="105" width="335" height="22"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="22" id="RQb-Qd-eaR"/>
                                         </constraints>
@@ -148,14 +160,17 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="DQT-AB-CPa">
+                                        <rect key="frame" x="0.0" y="135" width="335" height="28"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="favorite" translatesAutoresizingMaskIntoConstraints="NO" id="hHE-Kz-LYv">
+                                                <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="28" id="hFr-Pk-2s6"/>
                                                     <constraint firstAttribute="width" constant="28" id="onG-Q2-jyj"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Favorites are used for personalized content and quick access and then here's more than one line" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="01g-QA-kKO">
+                                                <rect key="frame" x="36" y="0.0" width="299" height="28"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -163,14 +178,17 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="toe-l0-I8i">
+                                        <rect key="frame" x="0.0" y="171" width="335" height="28"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="notifications" translatesAutoresizingMaskIntoConstraints="NO" id="IrW-rC-bjp">
+                                                <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="28" id="JhB-zM-v4k"/>
                                                     <constraint firstAttribute="height" constant="28" id="gZE-C1-cbV"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Subscriptions are used for push notifications and now let's make this two lines as well" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bQO-Yc-pIv">
+                                                <rect key="frame" x="36" y="0.0" width="299" height="28"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -178,6 +196,7 @@
                                         </subviews>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nvl-uM-rpr">
+                                        <rect key="frame" x="0.0" y="207" width="335" height="48"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                         <state key="normal" title="Sign in with Google" backgroundImage="btn_google_signin_light_normal_ios">
                                             <color key="titleColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -189,6 +208,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rIt-Tv-8dP">
+                                        <rect key="frame" x="0.0" y="263" width="335" height="50.5"/>
                                         <string key="text">The Blue Alliance uses Google Accounts to handle our login. Only your email address is shared with us and it will always be kept private.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -202,7 +222,9 @@
                             <constraint firstItem="kms-TU-jw8" firstAttribute="leading" secondItem="nMo-yf-GLc" secondAttribute="leading" constant="20" id="0Pc-iT-eAw"/>
                             <constraint firstAttribute="trailing" secondItem="kms-TU-jw8" secondAttribute="trailing" constant="20" id="Jhz-Y9-wPu"/>
                             <constraint firstItem="kms-TU-jw8" firstAttribute="centerY" secondItem="nMo-yf-GLc" secondAttribute="centerY" id="Ra9-yr-JyR"/>
+                            <constraint firstItem="5sV-Wc-Bl5" firstAttribute="top" relation="greaterThanOrEqual" secondItem="kms-TU-jw8" secondAttribute="bottom" id="U5U-PI-cZp"/>
                             <constraint firstItem="kms-TU-jw8" firstAttribute="centerX" secondItem="nMo-yf-GLc" secondAttribute="centerX" id="UbF-ED-mwC"/>
+                            <constraint firstItem="kms-TU-jw8" firstAttribute="top" relation="greaterThanOrEqual" secondItem="LTv-U0-MeU" secondAttribute="bottom" id="iqb-9F-MdJ"/>
                             <constraint firstAttribute="leadingMargin" secondItem="kms-TU-jw8" secondAttribute="leading" id="siJ-Nj-7jw"/>
                         </constraints>
                         <variation key="default">
@@ -229,11 +251,11 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wpF-jy-OXE" id="TlT-xM-nHA">
-                                    <frame key="frameInset" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="aY8-Gs-tvQ">
-                                            <frame key="frameInset" minX="15" width="345" height="43"/>
+                                            <rect key="frame" x="15" y="0.0" width="345" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -266,11 +288,11 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="QQa-Lo-IgY" id="2KV-Iz-rJV">
-                                    <frame key="frameInset" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="IsG-cE-hDY">
-                                            <frame key="frameInset" minX="15" width="345" height="43"/>
+                                            <rect key="frame" x="15" y="0.0" width="345" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -298,18 +320,18 @@
             </objects>
             <point key="canvasLocation" x="1326" y="695"/>
         </scene>
-        <!--TeamsStoryboard-->
+        <!--TeamViewController-->
         <scene sceneID="khy-lo-HBu">
             <objects>
-                <viewControllerPlaceholder storyboardName="TeamsStoryboard" id="87k-gB-aun" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="TeamsStoryboard" referencedIdentifier="TeamViewController" id="87k-gB-aun" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W7B-Fh-jZ4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1098" y="745"/>
         </scene>
-        <!--EventsStoryboard-->
+        <!--MatchViewController-->
         <scene sceneID="YtB-Rd-wJ2">
             <objects>
-                <viewControllerPlaceholder storyboardName="EventsStoryboard" id="QTe-dV-W9Z" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="MatchViewController" id="QTe-dV-W9Z" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fr9-7h-dBv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="846" y="801"/>

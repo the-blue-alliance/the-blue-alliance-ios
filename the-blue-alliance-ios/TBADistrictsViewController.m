@@ -27,6 +27,10 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
         return _fetchedResultsController;
     }
     
+    if (!self.persistenceController) {
+        return nil;
+    }
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"District"];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"year == %@", self.year];
     [fetchRequest setPredicate:predicate];

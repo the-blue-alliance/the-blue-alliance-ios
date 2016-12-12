@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)infoString;
 
-+ (instancetype)insertEventRankingWithEventRankingArray:(NSArray<NSString *> *)eventRankingArray withKeys:(NSArray *)keys forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
++ (instancetype)insertEventRankingWithEventRankingArray:(NSArray *)eventRankingArray withKeys:(NSArray *)keys forEvent:(Event *)event forTeam:(Team *)team inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertEventRankingsWithEventRankings:(NSArray<NSArray *> *)eventRankings forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end

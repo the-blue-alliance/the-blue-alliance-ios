@@ -14,7 +14,6 @@
 #import "Team.h"
 #import "Team+Fetch.h"
 #import "Match.h"
-#import "Match+Fetch.h"
 #import "TBAEventTableViewCell.h"
 #import "TBATeamTableViewCell.h"
 #import "TBAMatchTableViewCell.h"
@@ -109,10 +108,13 @@
             NSLog(@"Error: %@", error);
         }
         
-        [strongSelf.persistenceController performChanges:^{
-            [Subscription insertSubscriptionsWithModelSubscriptions:subscriptions inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
-            [strongSelf removeSessionFetcher:fetcher];
+        NSManagedObjectContext *backgroundContext = strongSelf.persistenceController.backgroundManagedObjectContext;
+        [self setupMyTBAModels:subscriptions inContext:backgroundContext withCompletionBlock:^(NSArray<TBASubscription *> *subscriptions) {
+            [strongSelf.persistenceController performChanges:^{
+                [Subscription insertSubscriptionsWithModelSubscriptions:subscriptions inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+            } withCompletion:^{
+                [strongSelf removeSessionFetcher:fetcher];
+            }];
         }];
     }];
     [self addSessionFetcher:fetcher];
@@ -132,13 +134,58 @@
             NSLog(@"Error: %@", error);
         }
         
-        [strongSelf.persistenceController performChanges:^{
-            [Favorite insertFavoritesWithModelFavorites:favorites inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
-            [strongSelf removeSessionFetcher:fetcher];
+        NSManagedObjectContext *backgroundContext = strongSelf.persistenceController.backgroundManagedObjectContext;
+        [self setupMyTBAModels:favorites inContext:backgroundContext withCompletionBlock:^(NSArray<TBAFavorite *> *favorites) {
+            [strongSelf.persistenceController performChanges:^{
+                [Favorite insertFavoritesWithModelFavorites:favorites inManagedObjectContext:backgroundContext];
+            } withCompletion:^{
+                [strongSelf removeSessionFetcher:fetcher];
+            }];
         }];
     }];
     [self addSessionFetcher:fetcher];
+}
+
+- (void)setupMyTBAModels:(NSArray<TBAMyTBAModel *> *)models inContext:(NSManagedObjectContext *)context withCompletionBlock:(void (^)(NSArray<TBAMyTBAModel *> *models))completion; {
+    dispatch_group_t group = dispatch_group_create();
+
+    NSMutableArray<TBAMyTBAModel *> *modelsToInsert = [models mutableCopy];
+    for (TBAMyTBAModel *model in models) {
+        TBAMyTBAModelType type = model.modelType;
+        NSString *key = model.modelKey;
+        
+        if (type == TBAMyTBAModelTypeTeam) {
+            dispatch_group_enter(group);
+            [Team fetchTeamWithKey:key inManagedObjectContext:context withCompletionBlock:^(Team * _Nonnull team, NSError * _Nonnull error) {
+                if (!team) {
+                    [modelsToInsert removeObject:model];
+                }
+                dispatch_group_leave(group);
+            }];
+        } else if (type == TBAMyTBAModelTypeEvent) {
+            dispatch_group_enter(group);
+            [Event fetchEventWithKey:key inManagedObjectContext:context withCompletionBlock:^(Event * _Nullable event, NSError * _Nullable error) {
+                if (!event) {
+                    [modelsToInsert removeObject:model];
+                }
+                dispatch_group_leave(group);
+            }];
+        } else if (type == TBAMyTBAModelTypeMatch) {
+            dispatch_group_enter(group);
+            [Match fetchMatchWithKey:key inManagedObjectContext:context withCompletionBlock:^(Match * _Nullable match, NSError * _Nullable error) {
+                if (!match) {
+                    [modelsToInsert removeObject:model];
+                }
+                dispatch_group_leave(group);
+            }];
+        }
+    }
+
+    dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if (completion) {
+            completion(modelsToInsert);
+        }
+    });
 }
 
 #pragma mark - Private Methods
@@ -182,19 +229,22 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     Favorite *favorite;
     Subscription *subscription;
+    TBAMyTBAModelType modelType;
     if (self.modelClass == [Favorite class]) {
         favorite = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        modelType = favorite.modelType.integerValue;
     } else if (self.modelClass == [Subscription class]) {
         subscription = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        modelType = subscription.modelType.integerValue;
     }
     
     UITableViewCell *cell;
-    if (favorite.modelType.integerValue == TBAMyTBAModelTypeEvent || subscription.modelType.integerValue == TBAMyTBAModelTypeEvent) {
+    if (modelType == TBAMyTBAModelTypeEvent) {
         NSString *eventKey = favorite ? favorite.modelKey : subscription.modelKey;
         if ([eventKey containsString:@"*"]) {
             // TODO: Handle this
         }
-        Event *event = [Event fetchEventForKey:eventKey fromContext:self.persistenceController.managedObjectContext];
+        Event *event = [Event findOrFetchEventWithKey:eventKey inManagedObjectContext:self.persistenceController.managedObjectContext];
         
         TBAEventTableViewCell *eventCell = [tableView dequeueReusableCellWithIdentifier:EventCellReuseIdentifier forIndexPath:indexPath];
         eventCell.event = event;
@@ -208,9 +258,9 @@
         };
 
         cell = eventCell;
-    } else if (favorite.modelType.integerValue == TBAMyTBAModelTypeTeam || subscription.modelType.integerValue == TBAMyTBAModelTypeTeam) {
+    } else if (modelType == TBAMyTBAModelTypeTeam) {
         NSString *teamKey = favorite ? favorite.modelKey : subscription.modelKey;
-        Team *team = [Team fetchTeamForKey:teamKey fromContext:self.persistenceController.managedObjectContext];
+        Team *team = [Team findOrFetchTeamWithKey:teamKey inManagedObjectContext:self.persistenceController.managedObjectContext];
         
         TBATeamTableViewCell *teamCell = [tableView dequeueReusableCellWithIdentifier:TeamCellReuseIdentifier forIndexPath:indexPath];
         teamCell.team = team;
@@ -224,9 +274,9 @@
         };
         
         cell = teamCell;
-    } else if (favorite.modelType.integerValue == TBAMyTBAModelTypeMatch || subscription.modelType.integerValue == TBAMyTBAModelTypeMatch) {
+    } else if (modelType == TBAMyTBAModelTypeMatch) {
         NSString *matchKey = favorite ? favorite.modelKey : subscription.modelKey;
-        Match *match = [Match fetchMatchForKey:matchKey fromContext:self.persistenceController.managedObjectContext];
+        Match *match = [Match findOrFetchMatchWithKey:matchKey inManagedObjectContext:self.persistenceController.managedObjectContext];
         
         TBAMatchTableViewCell *matchCell = [tableView dequeueReusableCellWithIdentifier:MatchCellReuseIdentifier forIndexPath:indexPath];
         matchCell.match = match;
@@ -249,32 +299,34 @@
 
     Favorite *favorite;
     Subscription *subscription;
+    TBAMyTBAModelType modelType;
     if (self.modelClass == [Favorite class]) {
         favorite = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        modelType = favorite.modelType.integerValue;
     } else if (self.modelClass == [Subscription class]) {
         subscription = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        modelType = subscription.modelType.integerValue;
     }
     
-    if (favorite.modelType.integerValue == TBAMyTBAModelTypeEvent || subscription.modelType.integerValue == TBAMyTBAModelTypeEvent) {
+    if (modelType == TBAMyTBAModelTypeEvent) {
         NSString *eventKey = favorite ? favorite.modelKey : subscription.modelKey;
         // Don't push for * events, since it's not an event
         if ([eventKey containsString:@"*"]) {
             return;
         }
-        Event *event = [Event fetchEventForKey:eventKey fromContext:self.persistenceController.managedObjectContext];
-        
+        Event *event = [Event findOrFetchEventWithKey:eventKey inManagedObjectContext:self.persistenceController.managedObjectContext];
         if (self.eventSelected) {
             self.eventSelected(event);
         }
-    } else if (favorite.modelType.integerValue == TBAMyTBAModelTypeTeam || subscription.modelType.integerValue == TBAMyTBAModelTypeTeam) {
+    } else if (modelType == TBAMyTBAModelTypeTeam) {
         NSString *teamKey = favorite ? favorite.modelKey : subscription.modelKey;
-        Team *team = [Team fetchTeamForKey:teamKey fromContext:self.persistenceController.managedObjectContext];
+        Team *team = [Team findOrFetchInContext:self.persistenceController.managedObjectContext matchingPredicate:[NSPredicate predicateWithFormat:@"key == %@", teamKey]];
         if (self.teamSelected) {
             self.teamSelected(team);
         }
-    } else if (favorite.modelType.integerValue == TBAMyTBAModelTypeMatch || subscription.modelType.integerValue == TBAMyTBAModelTypeMatch) {
+    } else if (modelType == TBAMyTBAModelTypeMatch) {
         NSString *matchKey = favorite ? favorite.modelKey : subscription.modelKey;
-        Match *match = [Match fetchMatchForKey:matchKey fromContext:self.persistenceController.managedObjectContext];
+        Match *match = [Match findOrFetchMatchWithKey:matchKey inManagedObjectContext:self.persistenceController.managedObjectContext];
         if (self.matchSelected) {
             self.matchSelected(match);
         }

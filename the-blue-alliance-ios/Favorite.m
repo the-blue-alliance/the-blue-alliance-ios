@@ -24,19 +24,6 @@
         favorite.deviceKey = modelFavorite.deviceKey;
         favorite.modelKey = modelFavorite.modelKey;
         favorite.modelType = @(modelFavorite.modelType);
-        
-        // Insert stub models so we can have something to reference later
-        if (modelFavorite.modelType == TBAMyTBAModelTypeTeam) {
-            [Team insertStubTeamWithKey:favorite.modelKey inManagedObjectContext:context];
-        } else if (modelFavorite.modelType == TBAMyTBAModelTypeEvent) {
-            // If it's a * event (all event for year), we don't need to insert an event, since * is abstract and
-            // represents *all* events for a year
-            if (![favorite.modelKey containsString:@"*"]) {
-                [Event insertStubEventWithKey:favorite.modelKey inManagedObjectContext:context];
-            }
-        } else if (modelFavorite.modelType == TBAMyTBAModelTypeMatch) {
-            [Match insertStubMatchWithKey:favorite.modelKey inManagedObjectContext:context];
-        }
     }];
 }
 

@@ -26,6 +26,41 @@
 @dynamic event;
 @dynamic videos;
 
++ (nullable Match *)findOrFetchMatchWithKey:(NSString *)matchKey inManagedObjectContext:(NSManagedObjectContext *)context {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", matchKey];
+    return [self findOrFetchInContext:context matchingPredicate:predicate];
+}
+
++ (void)fetchMatchWithKey:(NSString *)matchKey inManagedObjectContext:(NSManagedObjectContext *)context withCompletionBlock:(void (^)(Match * _Nullable match, NSError * _Nullable error))completion {
+    Match *m = [Match findOrFetchMatchWithKey:matchKey inManagedObjectContext:context];
+    if (m) {
+        if (completion) {
+            completion(m, nil);
+        }
+    } else {
+        [[TBAKit sharedKit] fetchMatchForMatchKey:matchKey withCompletionBlock:^(TBAMatch *match, NSError *matchError) {
+            if (matchError) {
+                if (completion) {
+                    completion(nil, matchError);
+                }
+            } else {
+                [Event fetchEventWithKey:match.eventKey inManagedObjectContext:context withCompletionBlock:^(Event * _Nullable event, NSError * _Nullable eventError) {
+                    if (eventError) {
+                        if (completion) {
+                            completion(nil, eventError);
+                        }
+                    } else {
+                        Match *m = [Match insertMatchWithModelMatch:match forEvent:event inManagedObjectContext:context];
+                        if (completion) {
+                            completion(m, nil);
+                        }
+                    }
+                }];
+            }
+        }];
+    }
+}
+
 + (instancetype)insertMatchWithModelMatch:(TBAMatch *)modelMatch forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", modelMatch.key];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Match *match) {
@@ -37,38 +72,38 @@
         match.time = modelMatch.time;
         match.event = event;
     
+        
+        dispatch_group_t group = dispatch_group_create();
+        
         NSMutableOrderedSet<Team *> *redAlliance = [[NSMutableOrderedSet alloc] init];
         for (NSString *teamKey in modelMatch.redAlliance.teams) {
-            Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
-            [redAlliance addObject:team];
+            dispatch_group_enter(group);
+            [Team fetchTeamWithKey:teamKey inManagedObjectContext:context withCompletionBlock:^(Team * _Nonnull team, NSError * _Nonnull error) {
+                if (team) {
+                    [redAlliance addObject:team];
+                }
+                dispatch_group_leave(group);
+            }];
         }
+        dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
         match.redAlliance = redAlliance;
         match.redScore = @(modelMatch.redAlliance.score);
         
         NSMutableOrderedSet<Team *> *blueAlliance = [[NSMutableOrderedSet alloc] init];
         for (NSString *teamKey in modelMatch.blueAlliance.teams) {
-            Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
-            [blueAlliance addObject:team];
+            dispatch_group_enter(group);
+            [Team fetchTeamWithKey:teamKey inManagedObjectContext:context withCompletionBlock:^(Team * _Nonnull team, NSError * _Nonnull error) {
+                if (team) {
+                    [blueAlliance addObject:team];
+                }
+                dispatch_group_leave(group);
+            }];
         }
+        dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
         match.blueAlliance = blueAlliance;
         match.blueScore = @(modelMatch.blueAlliance.score);
         
         match.videos = [NSSet setWithArray:[MatchVideo insertMatchVideosWithModelMatchVideos:modelMatch.videos forMatch:match inManagedObjectContext:context]];
-    }];
-}
-
-+ (instancetype)insertStubMatchWithKey:(NSString *)matchKey inManagedObjectContext:(NSManagedObjectContext *)context {
-    // Need to insert a stub event as well
-    NSString *eventKey = [matchKey componentsSeparatedByString:@"_"].firstObject;
-    if (!eventKey) {
-        return nil;
-    }
-    Event *event = [Event insertStubEventWithKey:eventKey inManagedObjectContext:context];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@", matchKey];
-    return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(Match *match) {
-        match.key = matchKey;
-        match.event = event;
     }];
 }
 

@@ -19,13 +19,9 @@
 @dynamic event;
 @dynamic team;
 
-+ (instancetype)insertEventRankingWithEventRankingArray:(NSArray *)eventRankingArray withKeys:(NSArray *)keys forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
-    // Assume that the list of lists has rank first
-    // and team # second, always
++ (instancetype)insertEventRankingWithEventRankingArray:(NSArray *)eventRankingArray withKeys:(NSArray *)keys forEvent:(Event *)event forTeam:(Team *)team inManagedObjectContext:(NSManagedObjectContext *)context {
     NSUInteger teamKeyIndex = [keys indexOfObject:@"Team"];
-    NSString *teamKey = [NSString stringWithFormat:@"frc%@", [eventRankingArray objectAtIndex:teamKeyIndex]];
-    Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
-    
+
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@ AND team == %@", event, team];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(EventRanking *eventRanking) {
         NSUInteger rankKeyIndex = [keys indexOfObject:@"Rank"];
@@ -60,7 +56,24 @@
         if (!rankingKeys) {
             rankingKeys = eventRanking;
         } else {
-            [arr addObject:[self insertEventRankingWithEventRankingArray:eventRanking withKeys:rankingKeys forEvent:event inManagedObjectContext:context]];
+            // Assume that the list of lists has rank first
+            // and team # second, always
+            NSUInteger teamKeyIndex = [rankingKeys indexOfObject:@"Team"];
+            NSString *teamKey = [NSString stringWithFormat:@"frc%@", [eventRanking objectAtIndex:teamKeyIndex]];
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            
+            __block Team *team;
+            [Team fetchTeamWithKey:teamKey inManagedObjectContext:context withCompletionBlock:^(Team * _Nonnull t, NSError * _Nonnull error) {
+                team = t;
+                dispatch_semaphore_signal(semaphore);
+            }];
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            
+            if (!team) {
+                continue;
+            }
+            
+            [arr addObject:[self insertEventRankingWithEventRankingArray:eventRanking withKeys:rankingKeys forEvent:event forTeam:team inManagedObjectContext:context]];
         }
     }
     return arr;

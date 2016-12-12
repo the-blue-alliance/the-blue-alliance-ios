@@ -11,9 +11,6 @@
 
 @interface Team (Fetch)
 
-// Local
-+ (nullable Team *)fetchTeamForKey:(nonnull NSString *)teamKey fromContext:(nonnull NSManagedObjectContext *)context;
-
 // Check upstream
 + (NSUInteger)fetchAllTeamsWithTaskIdChange:(void (^_Nullable)(NSUInteger newTaskId, NSArray *_Nonnull batchTeam))taskIdChanged withCompletionBlock:(void(^_Nullable)(NSArray *_Nonnull teams, NSError *_Nullable error))completion;
 

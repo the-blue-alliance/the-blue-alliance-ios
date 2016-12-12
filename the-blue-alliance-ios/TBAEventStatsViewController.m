@@ -242,6 +242,8 @@
             cell.titleLabel.text = dataTitle;
             cell.subtitleLabel.text = subtitleString;
         }
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
 }
 

@@ -79,7 +79,7 @@ static NSString *const BasicCellReuseIdentifier     = @"BasicCell";
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSInteger rows = 0;
     if (section == 0) {
-        rows = 2;
+        rows = self.team.name != nil ? 2 : 1;
     } else if (section == 1) {
         rows = self.team.website != nil ? 4 : 3;
     }

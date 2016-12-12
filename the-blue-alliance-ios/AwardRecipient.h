@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) Team *team;
 @property (nonatomic, retain) Award *award;
 
-+ (AwardRecipient *)insertAwardRecipientWithModelAwardRecipient:(TBAAwardRecipient *)modelAwardRecipient forAward:(Award *)award inManagedObjectContext:(NSManagedObjectContext *)context;
++ (instancetype)insertAwardRecipientWithModelAwardRecipient:(TBAAwardRecipient *)modelAwardRecipient forAward:(Award *)award forTeam:(Team *)team withPredicate:(NSPredicate *)predicate inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray <AwardRecipient *> *)insertAwardRecipientsWithModelAwardRecipients:(NSArray<TBAAwardRecipient *> *)modelAwardRecipients forAward:(Award *)award inManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end

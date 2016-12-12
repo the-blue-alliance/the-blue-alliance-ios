@@ -36,8 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSSet<Match *> *redMatches;
 @property (nullable, nonatomic, retain) NSSet<Match *> *blueMatches;
 
++ (Team *)findOrFetchTeamWithKey:(NSString *)teamKey inManagedObjectContext:(NSManagedObjectContext *)context;
++ (void)fetchTeamWithKey:(NSString *)teamKey inManagedObjectContext:(NSManagedObjectContext *)context withCompletionBlock:(void (^)(Team *team, NSError *error))completion;
 + (instancetype)insertTeamWithModelTeam:(TBATeam *)modelTeam inManagedObjectContext:(NSManagedObjectContext *)context;
-+ (instancetype)insertStubTeamWithKey:(NSString *)teamKey inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertTeamsWithModelTeams:(NSArray<TBATeam *> *)modelTeams inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)insertTeamsWithModelTeams:(NSArray<TBATeam *> *)modelTeams forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSNumber *)teamNumberFromNumberString:(NSString *)teamNumber;

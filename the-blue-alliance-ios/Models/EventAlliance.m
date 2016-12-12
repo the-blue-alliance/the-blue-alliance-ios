@@ -20,18 +20,32 @@
 + (instancetype)insertEventAllianceWithModelEventAlliance:(TBAEventAlliance *)modelEventAlliance withAllianceNumber:(int)number forEvent:(Event *)event inManagedObjectContext:(NSManagedObjectContext *)context {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@ AND allianceNumber == %@", event, @(number)];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(EventAlliance *eventAlliance) {
+        dispatch_group_t group = dispatch_group_create();
+        
         NSMutableOrderedSet<Team *> *picks = [[NSMutableOrderedSet alloc] init];
         for (NSString *teamKey in modelEventAlliance.picks) {
-            Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
-            [picks addObject:team];
+            dispatch_group_enter(group);
+            [Team fetchTeamWithKey:teamKey inManagedObjectContext:context withCompletionBlock:^(Team * _Nonnull team, NSError * _Nonnull error) {
+                if (team) {
+                    [picks addObject:team];
+                }
+                dispatch_group_leave(group);
+            }];
         }
+        dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
         eventAlliance.picks = picks;
 
         NSMutableOrderedSet<Team *> *declines = [[NSMutableOrderedSet alloc] init];
         for (NSString *teamKey in modelEventAlliance.declines) {
-            Team *team = [Team insertStubTeamWithKey:teamKey inManagedObjectContext:context];
-            [declines addObject:team];
+            dispatch_group_enter(group);
+            [Team fetchTeamWithKey:teamKey inManagedObjectContext:context withCompletionBlock:^(Team * _Nonnull team, NSError * _Nonnull error) {
+                if (team) {
+                    [declines addObject:team];
+                }
+                dispatch_group_leave(group);
+            }];
         }
+        dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
         eventAlliance.declines = declines;
         
         eventAlliance.event = event;

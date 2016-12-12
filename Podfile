@@ -2,7 +2,8 @@ source 'https://github.com/CocoaPods/Specs.git'
 target 'the-blue-alliance'
 
 platform :ios, '9.0'
-pod 'TBAKit'
+# pod 'TBAKit'
+pod 'TBAKit', :path => '/Users/zach/Desktop/TBAKit'
 pod 'youtube-ios-player-helper', '~> 0.1.4'
 pod 'OrderedDictionary'
 

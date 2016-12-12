@@ -19,6 +19,10 @@
 
 @implementation TBATeamTableViewCell
 
+- (void)awakeFromNib {
+    [super awakeFromNib];
+}
+
 - (void)setTeam:(Team *)team {
     _team = team;
     

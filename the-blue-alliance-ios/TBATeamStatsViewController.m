@@ -108,6 +108,7 @@
         fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"statType" ascending:YES]];
     }];
     cell.teamStats = teamStats;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
 - (void)showNoDataView {
