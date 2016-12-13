@@ -25,7 +25,6 @@
 		921C93CB1DA06CFA00C1C5E5 /* TBAMyTBATableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 921C93CA1DA06CFA00C1C5E5 /* TBAMyTBATableViewController.m */; };
 		9222F1191AD6910F00C0AEA0 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9222F1181AD6910F00C0AEA0 /* EventViewController.m */; };
 		9234D8E51DA07BD5009475C4 /* TBAMyTBATableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9234D8E41DA07BD5009475C4 /* TBAMyTBATableViewCell.m */; };
-		9237F74B1B2CA74D00C89978 /* TBAPersistenceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9237F74A1B2CA74D00C89978 /* TBAPersistenceController.m */; };
 		9237F77E1B2CA7CB00C89978 /* TBA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9237F77C1B2CA7CB00C89978 /* TBA.xcdatamodeld */; };
 		923C1E471D971D4300F19F53 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = 923C1E461D971D4300F19F53 /* Subscription.m */; };
 		923E126F1B52B4230089D9F8 /* TBADistrictsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 923E126E1B52B4230089D9F8 /* TBADistrictsViewController.m */; };
@@ -153,8 +152,6 @@
 		9222F1181AD6910F00C0AEA0 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
 		9234D8E31DA07BD5009475C4 /* TBAMyTBATableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAMyTBATableViewCell.h; sourceTree = "<group>"; };
 		9234D8E41DA07BD5009475C4 /* TBAMyTBATableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBAMyTBATableViewCell.m; sourceTree = "<group>"; };
-		9237F7491B2CA74D00C89978 /* TBAPersistenceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TBAPersistenceController.h; path = Models/TBAPersistenceController.h; sourceTree = "<group>"; };
-		9237F74A1B2CA74D00C89978 /* TBAPersistenceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TBAPersistenceController.m; path = Models/TBAPersistenceController.m; sourceTree = "<group>"; };
 		9237F77D1B2CA7CB00C89978 /* The Blue Alliance.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "The Blue Alliance.xcdatamodel"; sourceTree = "<group>"; };
 		923C1E451D971D4300F19F53 /* Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Subscription.h; path = Models/Subscription.h; sourceTree = "<group>"; };
 		923C1E461D971D4300F19F53 /* Subscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Subscription.m; path = Models/Subscription.m; sourceTree = "<group>"; };
@@ -468,8 +465,6 @@
 		9237F7481B2CA73B00C89978 /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
-				9237F7491B2CA74D00C89978 /* TBAPersistenceController.h */,
-				9237F74A1B2CA74D00C89978 /* TBAPersistenceController.m */,
 				92794DA51CCBD40F00660082 /* TBAManagedObject.h */,
 				92794DA61CCBD40F00660082 /* TBAManagedObject.m */,
 				9237F77C1B2CA7CB00C89978 /* TBA.xcdatamodeld */,
@@ -1197,7 +1192,6 @@
 				9243D3EA1BABB70D00512D3B /* EventRanking.m in Sources */,
 				50832E3E1918BBEA003AC8A7 /* EventsViewController.m in Sources */,
 				9240CDFC1AB5DA0B00D859A0 /* TBAEventTableViewCell.m in Sources */,
-				9237F74B1B2CA74D00C89978 /* TBAPersistenceController.m in Sources */,
 				92CB28371B8FEB6B00B41C89 /* TBAMatchTableViewCell.m in Sources */,
 				92CB28331B8FEB3F00B41C89 /* TBAMatchesViewController.m in Sources */,
 				9237F77E1B2CA7CB00C89978 /* TBA.xcdatamodeld in Sources */,

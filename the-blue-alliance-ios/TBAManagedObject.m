@@ -18,7 +18,7 @@
 + (nonnull instancetype)findOrCreateInContext:(NSManagedObjectContext *)context matchingPredicate:(NSPredicate *)predicate configure:(void (^)(id obj))configure {
     TBAManagedObject *obj = [self findOrFetchInContext:context matchingPredicate:predicate];
     if (!obj) {
-        obj = [NSEntityDescription insertNewObjectForEntityForName:[self entityName] inManagedObjectContext:context];
+        obj = [[self alloc] initWithContext:context];
     }
     configure(obj);
     return obj;
@@ -38,9 +38,9 @@
 }
 
 + (NSArray<__kindof TBAManagedObject *> *)fetchInContext:(NSManagedObjectContext *)context configure:(void (^)(NSFetchRequest *fetchRequest))configure {
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:self.entityName];
+    NSFetchRequest *request = [self fetchRequest];
     configure(request);
-    return [context executeFetchRequest:request error:nil];
+    return [request execute:nil];
 }
 
 + (instancetype)materializedObjectInContext:(NSManagedObjectContext *)context matchingPredicate:(NSPredicate *)predicate {

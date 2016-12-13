@@ -23,16 +23,16 @@
         return _fetchedResultsController;
     }
 
-    if (!self.persistenceController) {
+    if (!self.persistentContainer) {
         return nil;
     }
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventPoints"];
+    NSFetchRequest *fetchRequest = [EventPoints fetchRequest];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"districtRanking == %@", self.districtRanking];
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"event.week" ascending:YES]];
     
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                    managedObjectContext:self.persistentContainer.viewContext
                                                                       sectionNameKeyPath:@"event"
                                                                                cacheName:nil];
     _fetchedResultsController.delegate = self;
@@ -79,11 +79,10 @@
             [strongSelf showErrorAlertWithMessage:@"Unable to reload event points"];
         }
         
-        District *district = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.districtRanking.district.objectID];
-        
-        [strongSelf.persistenceController performChanges:^{
-            [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:district inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            District *district = [backgroundContext objectWithID:strongSelf.districtRanking.district.objectID];
+            [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:district inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];

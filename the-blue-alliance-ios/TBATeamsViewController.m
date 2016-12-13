@@ -28,18 +28,18 @@
         return _fetchedResultsController;
     }
 
-    if (!self.persistenceController) {
+    if (!self.persistentContainer) {
         return nil;
     }
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Team"];
+    NSFetchRequest *fetchRequest = [Team fetchRequest];
     if (self.event) {
         [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"ANY events = %@", self.event]];
     }
     [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"teamNumber" ascending:YES]]];
     
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                    managedObjectContext:self.persistentContainer.viewContext
                                                                       sectionNameKeyPath:nil
                                                                                cacheName:nil];
     _fetchedResultsController.delegate = self;
@@ -99,11 +99,11 @@
             [strongSelf showErrorAlertWithMessage:@"Unable to load teams for event"];
         }
         
-        Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
         
-        [strongSelf.persistenceController performChanges:^{
-            [Team insertTeamsWithModelTeams:teams forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            Event *event = [backgroundContext objectWithID:strongSelf.event.objectID];
+            [Team insertTeamsWithModelTeams:teams forEvent:event inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:currentRequest];
         }];
     }];
@@ -119,9 +119,9 @@
         __block NSUInteger oldTaskId = currentRequest;
         currentRequest = newTaskId;
         
-        [strongSelf.persistenceController performChanges:^{
-            [Team insertTeamsWithModelTeams:batchTeam inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            [Team insertTeamsWithModelTeams:batchTeam inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:oldTaskId];
         }];
     } withCompletionBlock:^(NSArray *teams, NSError *error) {

@@ -73,9 +73,9 @@
             [strongSelf showErrorAlertWithMessage:@"Unable to reload team stats"];
         }
         
-        Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
-        
-        [strongSelf.persistenceController performChanges:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            Event *event = [backgroundContext objectWithID:strongSelf.event.objectID];
+            
             for (NSString *statTypeKey in stats.allKeys) {
                 if ([statTypeKey  isEqualToString:@"year_specific"]) {
                     event.stats = stats[statTypeKey];
@@ -84,10 +84,11 @@
                     if (statType == StatTypeUnknown) {
                         continue;
                     }
-                    [EventTeamStat insertEventTeamStats:stats[statTypeKey] ofType:statType forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+                    [EventTeamStat insertEventTeamStats:stats[statTypeKey] ofType:statType forEvent:event inManagedObjectContext:backgroundContext];
                 }
             }
-        } withCompletion:^{
+
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];

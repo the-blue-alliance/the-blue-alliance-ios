@@ -24,20 +24,20 @@
         return _fetchedResultsController;
     }
 
-    if (!self.persistenceController) {
+    if (!self.persistentContainer) {
         return nil;
     }
     
     NSFetchRequest *fetchRequest;
     NSString *cacheName;
     if (self.event) {
-        fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventPoints"];
+        fetchRequest = [EventPoints fetchRequest];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"event == %@", self.event];
         fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"total" ascending:NO]];
         
         cacheName = [NSString stringWithFormat:@"%@_points", self.event.key];
     } else if (self.district) {
-        fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"DistrictRanking"];
+        fetchRequest = [DistrictRanking fetchRequest];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"district == %@", self.district];
         fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"rank" ascending:YES]];
         
@@ -45,7 +45,7 @@
     }
 
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                    managedObjectContext:self.persistentContainer.viewContext
                                                                       sectionNameKeyPath:nil
                                                                                cacheName:cacheName];
     _fetchedResultsController.delegate = self;
@@ -97,11 +97,10 @@
             [strongSelf showErrorAlertWithMessage:@"Unable to reload district rankings"];
         }
         
-        District *district = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.district.objectID];
-        
-        [strongSelf.persistenceController performChanges:^{
-            [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:district inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            District *district = [backgroundContext objectWithID:strongSelf.district.objectID];
+            [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:district inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];
@@ -117,12 +116,11 @@
             [strongSelf showErrorAlertWithMessage:@"Unable to reload district points"];
         }
         
-        NSDictionary *pointsDict = [points objectForKey:@"points"];
-        Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
-        
-        [strongSelf.persistenceController performChanges:^{
-            [EventPoints insertEventPointsWithEventPointsDict:pointsDict forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            NSDictionary *pointsDict = [points objectForKey:@"points"];
+            Event *event = [backgroundContext objectWithID:strongSelf.event.objectID];
+            [EventPoints insertEventPointsWithEventPointsDict:pointsDict forEvent:event inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];

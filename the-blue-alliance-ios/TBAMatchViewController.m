@@ -196,11 +196,10 @@
             [strongSelf showErrorAlertWithMessage:@"Unable to reload match"];
         }
         
-        Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.match.event.objectID];
-        
-        [strongSelf.persistenceController performChanges:^{
-            [Match insertMatchesWithModelMatches:matches forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            Event *event = [backgroundContext objectWithID:strongSelf.match.event.objectID];
+            [Match insertMatchesWithModelMatches:matches forEvent:event inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];

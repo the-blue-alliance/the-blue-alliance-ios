@@ -24,11 +24,11 @@
         return _fetchedResultsController;
     }
 
-    if (!self.persistenceController) {
+    if (!self.persistentContainer) {
         return nil;
     }
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Award"];
+    NSFetchRequest *fetchRequest = [Award fetchRequest];
     NSPredicate *predicate;
     if (self.team) {
         predicate =[NSPredicate predicateWithFormat:@"event == %@ AND (ANY recipients.team == %@)", self.event, self.team];
@@ -39,7 +39,7 @@
     [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"awardType" ascending:YES]]];
 
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                    managedObjectContext:self.persistentContainer.viewContext
                                                                       sectionNameKeyPath:nil
                                                                                cacheName:nil];
     _fetchedResultsController.delegate = self;
@@ -86,11 +86,10 @@
             [strongSelf showErrorAlertWithMessage:@"Unable to reload event matches"];
         }
 
-        Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
-
-        [strongSelf.persistenceController performChanges:^{
-            [Award insertAwardsWithModelAwards:awards forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            Event *event = [backgroundContext objectWithID:strongSelf.event.objectID];
+            [Award insertAwardsWithModelAwards:awards forEvent:event inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];

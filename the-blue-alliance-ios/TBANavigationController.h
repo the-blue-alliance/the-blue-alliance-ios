@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TBAPersistenceController.h"
+@import CoreData;
 
 @interface TBANavigationController : UINavigationController
 
-@property (nonatomic, strong) TBAPersistenceController *persistenceController;
+@property (nonatomic, strong) NSPersistentContainer *persistentContainer;
 
 @end

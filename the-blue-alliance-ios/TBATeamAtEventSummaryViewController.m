@@ -46,11 +46,8 @@
         return _eventRanking;
     }
 
-    return [EventRanking fetchInContext:self.persistenceController.managedObjectContext configure:^(NSFetchRequest * _Nonnull fetch) {
-        fetch.predicate = [NSPredicate predicateWithFormat:@"event == %@ AND team == %@", self.event, self.team];
-        fetch.returnsObjectsAsFaults = NO;
-        fetch.fetchLimit = 1;
-    }].firstObject;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@ AND team == %@", self.event, self.team];
+    return [EventRanking findOrFetchInContext:self.persistentContainer.viewContext matchingPredicate:predicate];
 }
 
 #pragma mark - View Lifecycle
@@ -112,17 +109,18 @@
             [strongSelf showErrorAlertWithMessage:@"Unable to reload event rankings"];
         }
         
-        Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
-        
-        [strongSelf.persistenceController performChanges:^{
-            NSArray *eventRankings = [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            Event *event = [backgroundContext objectWithID:strongSelf.event.objectID];
+            
+            NSArray *eventRankings = [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:event inManagedObjectContext:backgroundContext];
             for (EventRanking *ranking in eventRankings) {
                 if (ranking.team == strongSelf.team) {
                     strongSelf.eventRanking = ranking;
                     break;
                 }
             }
-        } withCompletion:^{
+            
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];
@@ -138,9 +136,8 @@
             [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
         }
         
-        [strongSelf.persistenceController performChanges:^{
-            [Event insertEventWithModelEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            [Event insertEventWithModelEvent:event inManagedObjectContext:backgroundContext];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];

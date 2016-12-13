@@ -22,11 +22,11 @@
         return _fetchedResultsController;
     }
 
-    if (!self.persistenceController) {
+    if (!self.persistentContainer) {
         return nil;
     }
 
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Match"];
+    NSFetchRequest *fetchRequest = [Match fetchRequest];
     NSPredicate *predicate;
     if (self.team) {
         predicate = [NSPredicate predicateWithFormat:@"event == %@ AND (ANY redAlliance == %@ OR ANY blueAlliance == %@)", self.event, self.team, self.team];
@@ -41,7 +41,7 @@
     [fetchRequest setSortDescriptors:@[compLevelSortDescriptor, setNumberSortDescriptor, matchNumberSortDescriptor]];
 
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                    managedObjectContext:self.persistentContainer.viewContext
                                                                       sectionNameKeyPath:@"compLevel"
                                                                                cacheName:nil];
     _fetchedResultsController.delegate = self;
@@ -88,11 +88,10 @@
             [strongSelf showErrorAlertWithMessage:@"Unable to reload event matches"];
         }
         
-        Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
-        
-        [strongSelf.persistenceController performChanges:^{
-            [Match insertMatchesWithModelMatches:matches forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            Event *event = [backgroundContext objectWithID:strongSelf.event.objectID];
+            [Match insertMatchesWithModelMatches:matches forEvent:event inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];

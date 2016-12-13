@@ -35,11 +35,11 @@
         return _fetchedResultsController;
     }
 
-    if (!self.persistenceController) {
+    if (!self.persistentContainer) {
         return nil;
     }
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Event"];
+    NSFetchRequest *fetchRequest = [Event fetchRequest];
     
     NSSortDescriptor *firstSortDescriptor;
     NSString *sectionNameKeyPath;
@@ -66,7 +66,7 @@
     [fetchRequest setPredicate:predicate];
     
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                    managedObjectContext:self.persistentContainer.viewContext
                                                                       sectionNameKeyPath:sectionNameKeyPath
                                                                                cacheName:nil];
     _fetchedResultsController.delegate = self;
@@ -127,12 +127,12 @@
             [strongSelf showErrorAlertWithMessage:@"Unable to load events for team"];
         }
         
-        Team *team = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.team.objectID];
-        
-        [strongSelf.persistenceController performChanges:^{
-            NSArray *newEvents = [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            Team *team = [backgroundContext objectWithID:strongSelf.team.objectID];
+            
+            NSArray *newEvents = [Event insertEventsWithModelEvents:events inManagedObjectContext:backgroundContext];
             [team setEvents:[NSSet setWithArray:newEvents] forYear:strongSelf.year];
-        } withCompletion:^{
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];
@@ -148,9 +148,9 @@
             [strongSelf showErrorAlertWithMessage:@"Unable to load events for district"];
         }
         
-        [strongSelf.persistenceController performChanges:^{
-            [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            [Event insertEventsWithModelEvents:events inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];
@@ -167,9 +167,11 @@
         }
         
         __block NSArray<Event *> *localEvents;
-        [strongSelf.persistenceController performChanges:^{
-            localEvents = [Event insertEventsWithModelEvents:events inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            localEvents = [Event insertEventsWithModelEvents:events inManagedObjectContext:backgroundContext];
+            NSError *someOtherError;
+            [backgroundContext save:&someOtherError];
+            NSLog(@"ERROR: %@", someOtherError);
             [strongSelf removeRequestIdentifier:request];
             
             for (Event *event in localEvents) {
@@ -195,9 +197,10 @@
             return;
         }
         
-        Event *e = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:event.objectID];
-        [strongSelf.persistenceController performChanges:^{
-            [Team insertTeamsWithModelTeams:teams forEvent:e inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            Event *e = [backgroundContext objectWithID:event.objectID];
+            [Team insertTeamsWithModelTeams:teams forEvent:e inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
         }];
     }];
 }

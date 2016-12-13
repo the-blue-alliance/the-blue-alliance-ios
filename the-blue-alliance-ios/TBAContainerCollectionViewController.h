@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TBAPersistenceController.h"
+@import CoreData;
 
 @protocol TBACollectionViewControllerDelegate <NSObject>
 
@@ -21,7 +21,7 @@
 @interface TBAContainerCollectionViewController : UICollectionViewController <NSFetchedResultsControllerDelegate>
 
 @property (nullable, nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
-@property (nullable, nonatomic, strong) TBAPersistenceController *persistenceController;
+@property (nullable, nonatomic, strong) NSPersistentContainer *persistentContainer;
 @property (nullable, nonatomic, weak) id<TBACollectionViewControllerDelegate> tbaDelegate;
 @property (nonnull, nonatomic, copy) NSString *cellIdentifier;
 

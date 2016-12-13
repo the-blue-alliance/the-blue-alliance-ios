@@ -9,6 +9,7 @@
 #import "EventDistrictPointsViewController.h"
 #import "TBAPointsViewController.h"
 #import "Event.h"
+#import "Team.h"
 
 static NSString *const DistrictPointsViewControllerEmbed = @"DistrictPointsViewControllerEmbed";
 

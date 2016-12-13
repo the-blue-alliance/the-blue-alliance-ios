@@ -61,9 +61,9 @@ static NSString *const BasicCellReuseIdentifier     = @"BasicCell";
             [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
         }
         
-        [strongSelf.persistenceController performChanges:^{
-            [Team insertTeamWithModelTeam:team inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            [Team insertTeamWithModelTeam:team inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];

@@ -56,11 +56,11 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
         return _fetchedResultsController;
     }
 
-    if (!self.persistenceController) {
+    if (!self.persistentContainer) {
         return nil;
     }
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Media"];
+    NSFetchRequest *fetchRequest = [Media fetchRequest];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"year == %@ AND team == %@", self.year, self.team];
     [fetchRequest setPredicate:predicate];
     
@@ -68,7 +68,7 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
     [fetchRequest setSortDescriptors:@[mediaTypeSortDescriptor]];
     
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                    managedObjectContext:self.persistentContainer.viewContext
                                                                       sectionNameKeyPath:nil
                                                                                cacheName:nil];
     _fetchedResultsController.delegate = self;
@@ -116,11 +116,10 @@ static NSString *const MediaCellReuseIdentifier = @"MediaCell";
             [strongSelf showErrorAlertWithMessage:@"Unable to load team media"];
         }
         
-        Team *team = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.team.objectID];
-        
-        [strongSelf.persistenceController performChanges:^{
-            [Media insertMediasWithModelMedias:media forTeam:team andYear:strongSelf.year.integerValue inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            Team *team = [backgroundContext objectWithID:strongSelf.team.objectID];
+            [Media insertMediasWithModelMedias:media forTeam:team andYear:strongSelf.year.integerValue inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];

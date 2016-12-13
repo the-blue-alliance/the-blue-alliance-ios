@@ -7,15 +7,15 @@
 //
 
 #import "AppDelegate.h"
-#import "TBAPersistenceController.h"
 #import "TBAViewController.h"
 #import "TBANavigationController.h"
 #import "TBANavigationControllerDelegate.h"
 #import <AppAuth/AppAuth.h>
+@import CoreData;
 
 @interface AppDelegate ()
 
-@property (nonatomic, strong) TBAPersistenceController *persistenceController;
+@property (nonatomic, strong) NSPersistentContainer *persistentContainer;
 @property (nonatomic, strong) TBANavigationControllerDelegate *navigationDelegate;
 
 @end
@@ -25,7 +25,15 @@
 #pragma mark - Main Entry Point
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [self setPersistenceController:[[TBAPersistenceController alloc] initWithCallback:^{
+    self.persistentContainer = [[NSPersistentContainer alloc] initWithName:@"TBA"];
+    [self.persistentContainer loadPersistentStoresWithCompletionHandler:^(NSPersistentStoreDescription * _Nonnull storeDescription, NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"ERROR LOADING STORE: %@", error);
+            return;
+        }
+        
+        self.persistentContainer.viewContext.automaticallyMergesChangesFromParent = YES;
+        
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         UITabBarController *rootTabBarController = [storyboard instantiateViewControllerWithIdentifier:@"RootTabBarController"];
         self.navigationDelegate = [[TBANavigationControllerDelegate alloc] init];
@@ -33,9 +41,9 @@
         // Pass persistence controller to all navigation controllers
         for (TBANavigationController *nav in rootTabBarController.viewControllers) {
             nav.delegate = self.navigationDelegate;
-            nav.persistenceController = self.persistenceController;
+            nav.persistentContainer = self.persistentContainer;
         }
-
+        
         // Doing all this nonsense so we can set up view controller's persistence controllers before they try to
         // query for any kind of data. There's a bit of a flash when launching but it's not too bad.
         UIViewController *launchViewController = [storyboard instantiateViewControllerWithIdentifier:@"Launch"];
@@ -48,7 +56,7 @@
         } completion:^(BOOL finished) {
             [overlayView removeFromSuperview];
         }];
-    }]];
+    }];
 
 #warning dynaically fetch version number here, also maybe add some user-specific string?
     [[TBAKit sharedKit] setIdHeader:@"the-blue-alliance:ios:v0.1"];
@@ -60,11 +68,11 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    [self.persistenceController save:nil];
+    [self.persistentContainer.viewContext save:nil];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    [self.persistenceController save:nil];
+    [self.persistentContainer.viewContext save:nil];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -76,7 +84,7 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    [self.persistenceController save:nil];
+    [self.persistentContainer.viewContext save:nil];
 }
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *, id> *)options {

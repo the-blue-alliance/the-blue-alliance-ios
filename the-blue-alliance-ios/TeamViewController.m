@@ -91,11 +91,9 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (!error) {
-            Team *team = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.team.objectID];
-
-            [strongSelf.persistenceController performChanges:^{
+            [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+                Team *team = [backgroundContext objectWithID:strongSelf.team.objectID];
                 team.yearsParticipated = years;
-            } withCompletion:^{
                 [strongSelf fetchYearsParticipated];
             }];
         }

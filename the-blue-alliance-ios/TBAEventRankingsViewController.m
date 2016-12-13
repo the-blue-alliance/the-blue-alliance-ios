@@ -24,17 +24,17 @@
         return _fetchedResultsController;
     }
 
-    if (!self.persistenceController) {
+    if (!self.persistentContainer) {
         return nil;
     }
 
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventRanking"];
+    NSFetchRequest *fetchRequest = [EventRanking fetchRequest];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"event == %@", self.event];
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"rank" ascending:YES]];
 
     NSString *cacheName = [NSString stringWithFormat:@"%@_rankings", self.event.key];
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                    managedObjectContext:self.persistentContainer.viewContext
                                                                       sectionNameKeyPath:nil
                                                                                cacheName:cacheName];
     _fetchedResultsController.delegate = self;
@@ -81,11 +81,10 @@
             [strongSelf showErrorAlertWithMessage:@"Unable to reload event rankings"];
         }
         
-        Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
-        
-        [strongSelf.persistenceController performChanges:^{
-            [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            Event *event = [backgroundContext objectWithID:strongSelf.event.objectID];
+            [EventRanking insertEventRankingsWithEventRankings:rankings forEvent:event inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];

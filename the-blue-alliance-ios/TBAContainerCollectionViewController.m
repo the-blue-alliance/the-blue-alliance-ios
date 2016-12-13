@@ -45,7 +45,7 @@
 - (void)registerForChangeNotifications:(void (^_Nonnull)(id _Nonnull changedObject))changeBlock {
     [self removeChangeObserver];
     
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:self.persistenceController.managedObjectContext queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification object:self.persistentContainer.viewContext queue:nil usingBlock:^(NSNotification * _Nonnull note) {
         NSSet *updatedObjects = note.userInfo[NSUpdatedObjectsKey];
         for (NSManagedObject *obj in updatedObjects) {
             changeBlock(obj);

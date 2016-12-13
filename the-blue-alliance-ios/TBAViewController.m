@@ -20,16 +20,16 @@
 
 #pragma mark - Properities
 
-- (TBAPersistenceController *)persistenceController {
+- (NSPersistentContainer *)persistenceController {
     TBANavigationController *navigationController = (TBANavigationController *)self.navigationController;
-    return navigationController.persistenceController;
+    return navigationController.persistentContainer;
 }
 
 - (void)setRefreshViewControllers:(NSArray *)refreshViewControllers {
     _refreshViewControllers = refreshViewControllers;
     
     for (TBARefreshViewController *refreshViewController in refreshViewControllers) {
-        refreshViewController.persistenceController = self.persistenceController;
+        refreshViewController.persistentContainer = self.persistenceController;
     }
 }
 

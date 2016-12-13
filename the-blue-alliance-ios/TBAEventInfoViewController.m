@@ -60,9 +60,9 @@ static NSString *const EventOptionAwards            = @"Awards";
             [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
         }
         
-        [strongSelf.persistenceController performChanges:^{
-            [Event insertEventWithModelEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            [Event insertEventWithModelEvent:event inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];

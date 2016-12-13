@@ -13,7 +13,7 @@
 #pragma mark - Local
 
 + (void)fetchEventsForYear:(NSUInteger)year fromContext:(nonnull NSManagedObjectContext *)context withCompletionBlock:(void(^_Nullable)(NSArray<Event *> *_Nullable events, NSError *_Nullable error))completion {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Event"];
+    NSFetchRequest *fetchRequest = [Event fetchRequest];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"year == %@", @(year)];
     [fetchRequest setPredicate:predicate];
     
@@ -22,7 +22,7 @@
     [fetchRequest setSortDescriptors:@[startDateSortDescriptor, nameSortDescriptor]];
     
     NSError *error = nil;
-    NSArray *events = [context executeFetchRequest:fetchRequest error:&error];
+    NSArray *events = [fetchRequest execute:&error];
     
     if (completion) {
         completion(events, error);

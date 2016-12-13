@@ -21,16 +21,16 @@
         return _fetchedResultsController;
     }
     
-    if (!self.persistenceController) {
+    if (!self.persistentContainer) {
         return nil;
     }
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventTeamStat"];
+    NSFetchRequest *fetchRequest = [EventTeamStat fetchRequest];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"event == %@ AND statType == %@", self.event, @(StatTypeOPR)];
     fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"score" ascending:NO]];
 
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                    managedObjectContext:self.persistentContainer.viewContext
                                                                       sectionNameKeyPath:nil
                                                                                cacheName:nil];
     _fetchedResultsController.delegate = self;
@@ -78,9 +78,9 @@
             [strongSelf showErrorAlertWithMessage:@"Unable to reload team stats"];
         }
         
-        Event *event = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.event.objectID];
-        
-        [strongSelf.persistenceController performChanges:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            Event *event = [backgroundContext objectWithID:strongSelf.event.objectID];
+            
             for (NSString *statTypeKey in stats.allKeys) {
                 if ([statTypeKey  isEqualToString:@"year_specific"]) {
                     event.stats = stats[statTypeKey];
@@ -89,10 +89,11 @@
                     if (statType == StatTypeUnknown) {
                         continue;
                     }
-                    [EventTeamStat insertEventTeamStats:stats[statTypeKey] ofType:statType forEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
+                    [EventTeamStat insertEventTeamStats:stats[statTypeKey] ofType:statType forEvent:event inManagedObjectContext:backgroundContext];
                 }
             }
-        } withCompletion:^{
+            
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];
@@ -103,7 +104,7 @@
 
 - (void)configureCell:(TBATeamStatsTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     EventTeamStat *stat = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    NSArray *teamStats = [EventTeamStat fetchInContext:self.persistenceController.managedObjectContext configure:^(NSFetchRequest * _Nonnull fetchRequest) {
+    NSArray *teamStats = [EventTeamStat fetchInContext:self.persistentContainer.viewContext configure:^(NSFetchRequest * _Nonnull fetchRequest) {
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"event == %@ AND team == %@", self.event, stat.team];
         fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"statType" ascending:YES]];
     }];

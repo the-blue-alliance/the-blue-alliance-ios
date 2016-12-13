@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+@import CoreData;
 
-@class TBAPersistenceController, TBARefreshViewController;
+@class TBARefreshViewController;
 
 @interface TBAViewController : UIViewController
 
-@property (nonnull, readonly) TBAPersistenceController *persistenceController;
+@property (nonnull, readonly) NSPersistentContainer *persistentContainer;
 
 @property (nullable, nonatomic, strong) NSArray<TBARefreshViewController *> *refreshViewControllers;
 @property (nullable, nonatomic, strong) NSArray<UIView *> *containerViews;

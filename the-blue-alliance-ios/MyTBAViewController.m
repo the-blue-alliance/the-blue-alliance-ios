@@ -151,11 +151,12 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
 - (void)clearMyTBAData {
     // Clear favorites
     __block NSError *clearFavoritesError;
-    NSFetchRequest *favoritesFetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Favorite"];
+    NSFetchRequest *favoritesFetchRequest = [Favorite fetchRequest];
     NSBatchDeleteRequest *deleteFavorites = [[NSBatchDeleteRequest alloc] initWithFetchRequest:favoritesFetchRequest];
-    [self.persistenceController performChanges:^{
-        [self.persistenceController.managedObjectContext.persistentStoreCoordinator executeRequest:deleteFavorites withContext:self.persistenceController.managedObjectContext error:&clearFavoritesError];
-    } withCompletion:^{
+    [self.persistentContainer.persistentStoreCoordinator performBlock:^{
+        [self.persistentContainer.persistentStoreCoordinator executeRequest:deleteFavorites withContext:self.persistentContainer.viewContext error:&clearFavoritesError];
+        [self.persistentContainer.viewContext save:nil];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.favoritesViewController clearFRC];
         });
@@ -167,11 +168,12 @@ static NSString *const MyTBAAuthSegue   = @"MyTBAAuthSegue";
     
     // Clear subscriptions
     __block NSError *clearSubscriptionsError;
-    NSFetchRequest *subscriptionsFetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Subscription"];
+    NSFetchRequest *subscriptionsFetchRequest = [Subscription fetchRequest];
     NSBatchDeleteRequest *deleteSubscriptions = [[NSBatchDeleteRequest alloc] initWithFetchRequest:subscriptionsFetchRequest];
-    [self.persistenceController performChanges:^{
-        [self.persistenceController.managedObjectContext.persistentStoreCoordinator executeRequest:deleteSubscriptions withContext:self.persistenceController.managedObjectContext error:&clearSubscriptionsError];
-    } withCompletion:^{
+    [self.persistentContainer.viewContext performBlock:^{
+        [self.persistentContainer.persistentStoreCoordinator executeRequest:deleteSubscriptions withContext:self.persistentContainer.viewContext error:&clearSubscriptionsError];
+        [self.persistentContainer.viewContext save:nil];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.subscriptionsViewController clearFRC];
         });

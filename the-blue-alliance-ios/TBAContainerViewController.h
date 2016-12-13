@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TBAPersistenceController.h"
+@import CoreData;
 
 @interface TBAContainerViewController : UIViewController
 
-@property (nonnull, nonatomic, strong) TBAPersistenceController *persistenceController;
+@property (nonnull, nonatomic, strong) NSPersistentContainer *persistentContainer;
 
 - (void)registerForChangeNotifications:(void (^_Nonnull)(id _Nonnull changedObject))changeBlock;
 

@@ -96,7 +96,7 @@ static NSString *const EventViewControllerSegue  = @"EventViewControllerSegue";
 
 - (void)configureEvents {
     __weak typeof(self) weakSelf = self;
-    [Event fetchEventsForYear:self.currentYear.integerValue fromContext:self.persistenceController.managedObjectContext withCompletionBlock:^(NSArray * _Nullable events, NSError * _Nullable error) {
+    [Event fetchEventsForYear:self.currentYear.integerValue fromContext:self.persistentContainer.viewContext withCompletionBlock:^(NSArray * _Nullable events, NSError * _Nullable error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         strongSelf.weeks = [Event groupEventsByWeek:events];
     }];

@@ -29,11 +29,11 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
         return _fetchedResultsController;
     }
     
-    if (!self.persistenceController) {
+    if (!self.persistentContainer) {
         return nil;
     }
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"EventAlliance"];
+    NSFetchRequest *fetchRequest = [EventAlliance fetchRequest];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@", self.event];
     [fetchRequest setPredicate:predicate];
     
@@ -41,7 +41,7 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
     [fetchRequest setSortDescriptors:@[allianceNumberSortDescriptor]];
     
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                    managedObjectContext:self.persistentContainer.viewContext
                                                                       sectionNameKeyPath:nil
                                                                                cacheName:nil];
     _fetchedResultsController.delegate = self;
@@ -88,9 +88,9 @@ static NSString *const EventTeamViewControllerSegue = @"EventTeamViewControllerS
             [strongSelf showErrorAlertWithMessage:@"Unable to reload team info"];
         }
         
-        [strongSelf.persistenceController performChanges:^{
-            [Event insertEventWithModelEvent:event inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            [Event insertEventWithModelEvent:event inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];

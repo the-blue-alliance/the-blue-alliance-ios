@@ -75,11 +75,10 @@
             [strongSelf showErrorAlertWithMessage:@"Unable to reload district rankings"];
         }
         
-        District *district = [strongSelf.persistenceController.backgroundManagedObjectContext objectWithID:strongSelf.districtRanking.district.objectID];
-        
-        [strongSelf.persistenceController performChanges:^{
-            [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:district inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            District *district = [backgroundContext objectWithID:strongSelf.districtRanking.district.objectID];
+            [DistrictRanking insertDistrictRankingsWithDistrictRankings:rankings forDistrict:district inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];

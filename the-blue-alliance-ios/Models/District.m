@@ -16,16 +16,16 @@
 @dynamic year;
 @dynamic districtRankings;
 
-+ (instancetype)insertDistrictWithDistrictDict:(NSDictionary<NSString *, NSString *> *)districtDict forYear:(NSInteger)year inManagedObjectContext:(NSManagedObjectContext *)context {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@ && year == %@", districtDict[@"key"], @(year)];
++ (instancetype)insertDistrictWithDistrictDict:(NSDictionary<NSString *, NSString *> *)districtDict forYear:(NSNumber *)year inManagedObjectContext:(NSManagedObjectContext *)context {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"key == %@ && year == %@", districtDict[@"key"], year];
     return [self findOrCreateInContext:context matchingPredicate:predicate configure:^(District *district) {
         district.key = districtDict[@"key"];
         district.name = districtDict[@"name"];
-        district.year = @(year);
+        district.year = year;
     }];
 }
 
-+ (NSArray *)insertDistrictsWithDistrictDicts:(NSArray<NSDictionary<NSString *, NSString *> *> *)districtDicts forYear:(NSInteger)year inManagedObjectContext:(NSManagedObjectContext *)context {
++ (NSArray *)insertDistrictsWithDistrictDicts:(NSArray<NSDictionary<NSString *, NSString *> *> *)districtDicts forYear:(NSNumber *)year inManagedObjectContext:(NSManagedObjectContext *)context {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (NSDictionary *district in districtDicts) {
         [arr addObject:[self insertDistrictWithDistrictDict:district forYear:year inManagedObjectContext:context]];

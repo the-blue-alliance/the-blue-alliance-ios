@@ -27,11 +27,11 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
         return _fetchedResultsController;
     }
     
-    if (!self.persistenceController) {
+    if (!self.persistentContainer) {
         return nil;
     }
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"District"];
+    NSFetchRequest *fetchRequest = [District fetchRequest];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"year == %@", self.year];
     [fetchRequest setPredicate:predicate];
     
@@ -39,7 +39,7 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
     [fetchRequest setSortDescriptors:@[nameSortDescriptor]];
     
     _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                    managedObjectContext:self.persistenceController.managedObjectContext
+                                                                    managedObjectContext:self.persistentContainer.viewContext
                                                                       sectionNameKeyPath:nil
                                                                                cacheName:nil];
     _fetchedResultsController.delegate = self;
@@ -90,9 +90,9 @@ static NSString *const DistrictsCellIdentifier  = @"DistrictsCell";
             [strongSelf showErrorAlertWithMessage:@"Unable to load districts"];
         }
 
-        [strongSelf.persistenceController performChanges:^{
-            [District insertDistrictsWithDistrictDicts:districts forYear:strongSelf.year.integerValue inManagedObjectContext:strongSelf.persistenceController.backgroundManagedObjectContext];
-        } withCompletion:^{
+        [strongSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext * _Nonnull backgroundContext) {
+            [District insertDistrictsWithDistrictDicts:districts forYear:strongSelf.year inManagedObjectContext:backgroundContext];
+            [backgroundContext save:nil];
             [strongSelf removeRequestIdentifier:request];
         }];
     }];
