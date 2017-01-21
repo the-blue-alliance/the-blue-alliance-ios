@@ -1,0 +1,554 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		925D95061E30508B001D2F25 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D95031E30508B001D2F25 /* List.swift */; };
+		925D95071E30508B001D2F25 /* StaticList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D95041E30508B001D2F25 /* StaticList.swift */; };
+		925D95081E30508B001D2F25 /* DynamicList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D95051E30508B001D2F25 /* DynamicList.swift */; };
+		92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942D951E2154DA008E79CA /* AppDelegate.swift */; };
+		92942D9D1E2154DA008E79CA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942D9B1E2154DA008E79CA /* Main.storyboard */; };
+		92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92942D9E1E2154DA008E79CA /* Assets.xcassets */; };
+		92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942DA01E2154DA008E79CA /* LaunchScreen.storyboard */; };
+		92942DAB1E215700008E79CA /* TBA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92942DA91E215700008E79CA /* TBA.xcdatamodeld */; };
+		92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 92942DAE1E2158EC008E79CA /* Settings.bundle */; };
+		92942DB11E215B06008E79CA /* EventsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DB01E215B06008E79CA /* EventsTableViewController.swift */; };
+		92942DB71E215B7F008E79CA /* TeamsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DB61E215B7F008E79CA /* TeamsTableViewController.swift */; };
+		92942DB91E215B87008E79CA /* DistrictsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DB81E215B87008E79CA /* DistrictsViewController.swift */; };
+		92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */; };
+		92942DBD1E215BA6008E79CA /* EventsStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942DBC1E215BA6008E79CA /* EventsStoryboard.storyboard */; };
+		92942DBF1E215BEF008E79CA /* TeamsStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942DBE1E215BEF008E79CA /* TeamsStoryboard.storyboard */; };
+		92942DC11E215C0D008E79CA /* DistrictsStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942DC01E215C0D008E79CA /* DistrictsStoryboard.storyboard */; };
+		92942DC31E215C37008E79CA /* MyTBAStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942DC21E215C37008E79CA /* MyTBAStoryboard.storyboard */; };
+		92942DDF1E21D2EB008E79CA /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DDE1E21D2EB008E79CA /* EventViewController.swift */; };
+		92942E081E21DD06008E79CA /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942E071E21DD06008E79CA /* Event.swift */; };
+		92942E331E2303A5008E79CA /* CalendarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942E321E2303A5008E79CA /* CalendarExtension.swift */; };
+		92942E361E2A81E8008E79CA /* EventInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942E351E2A81E8008E79CA /* EventInfoTableViewController.swift */; };
+		92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */; };
+		EDFF19E0F3BF11120BBB92F8 /* Pods_the_blue_alliance_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C401C03BA9DC7144DBFA65EA /* Pods_the_blue_alliance_ios.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1C2601FEFE79E43A71B88523 /* Pods_the_blue_alliance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_the_blue_alliance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		614241F72C3BE7F89DD95428 /* Pods-the-blue-alliance-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-the-blue-alliance-ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios.debug.xcconfig"; sourceTree = "<group>"; };
+		891A553A526753BAB4660AC9 /* Pods-the-blue-alliance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-the-blue-alliance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-the-blue-alliance/Pods-the-blue-alliance.debug.xcconfig"; sourceTree = "<group>"; };
+		925D95031E30508B001D2F25 /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
+		925D95041E30508B001D2F25 /* StaticList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticList.swift; sourceTree = "<group>"; };
+		925D95051E30508B001D2F25 /* DynamicList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicList.swift; sourceTree = "<group>"; };
+		92942D921E2154DA008E79CA /* the-blue-alliance-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "the-blue-alliance-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		92942D951E2154DA008E79CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		92942D9C1E2154DA008E79CA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		92942D9E1E2154DA008E79CA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		92942DA11E2154DA008E79CA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		92942DA31E2154DA008E79CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		92942DAA1E215700008E79CA /* TBA.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TBA.xcdatamodel; sourceTree = "<group>"; };
+		92942DAE1E2158EC008E79CA /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		92942DB01E215B06008E79CA /* EventsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewController.swift; sourceTree = "<group>"; };
+		92942DB61E215B7F008E79CA /* TeamsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamsTableViewController.swift; sourceTree = "<group>"; };
+		92942DB81E215B87008E79CA /* DistrictsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictsViewController.swift; sourceTree = "<group>"; };
+		92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBAViewController.swift; sourceTree = "<group>"; };
+		92942DBC1E215BA6008E79CA /* EventsStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EventsStoryboard.storyboard; sourceTree = "<group>"; };
+		92942DBE1E215BEF008E79CA /* TeamsStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TeamsStoryboard.storyboard; sourceTree = "<group>"; };
+		92942DC01E215C0D008E79CA /* DistrictsStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = DistrictsStoryboard.storyboard; sourceTree = "<group>"; };
+		92942DC21E215C37008E79CA /* MyTBAStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MyTBAStoryboard.storyboard; sourceTree = "<group>"; };
+		92942DDE1E21D2EB008E79CA /* EventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
+		92942E071E21DD06008E79CA /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		92942E321E2303A5008E79CA /* CalendarExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CalendarExtension.swift; path = Extensions/CalendarExtension.swift; sourceTree = "<group>"; };
+		92942E351E2A81E8008E79CA /* EventInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventInfoTableViewController.swift; sourceTree = "<group>"; };
+		92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectNumberTableViewController.swift; sourceTree = "<group>"; };
+		AB45C28FC9D316785507BAAC /* Pods-the-blue-alliance-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-the-blue-alliance-ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios.release.xcconfig"; sourceTree = "<group>"; };
+		C401C03BA9DC7144DBFA65EA /* Pods_the_blue_alliance_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_the_blue_alliance_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3E1816E999790998C4D36C4 /* Pods-the-blue-alliance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-the-blue-alliance.release.xcconfig"; path = "Pods/Target Support Files/Pods-the-blue-alliance/Pods-the-blue-alliance.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		92942D8F1E2154DA008E79CA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EDFF19E0F3BF11120BBB92F8 /* Pods_the_blue_alliance_ios.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1FC2A75F3913B8037F340BCF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				891A553A526753BAB4660AC9 /* Pods-the-blue-alliance.debug.xcconfig */,
+				D3E1816E999790998C4D36C4 /* Pods-the-blue-alliance.release.xcconfig */,
+				614241F72C3BE7F89DD95428 /* Pods-the-blue-alliance-ios.debug.xcconfig */,
+				AB45C28FC9D316785507BAAC /* Pods-the-blue-alliance-ios.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		92942D891E2154DA008E79CA = {
+			isa = PBXGroup;
+			children = (
+				92942D941E2154DA008E79CA /* the-blue-alliance-ios */,
+				AB6808F14167475E1AE2783E /* Frameworks */,
+				1FC2A75F3913B8037F340BCF /* Pods */,
+				92942D931E2154DA008E79CA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		92942D931E2154DA008E79CA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				92942D921E2154DA008E79CA /* the-blue-alliance-ios.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		92942D941E2154DA008E79CA /* the-blue-alliance-ios */ = {
+			isa = PBXGroup;
+			children = (
+				92942D951E2154DA008E79CA /* AppDelegate.swift */,
+				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
+				92942DA31E2154DA008E79CA /* Info.plist */,
+				92942DA01E2154DA008E79CA /* LaunchScreen.storyboard */,
+				92942D9B1E2154DA008E79CA /* Main.storyboard */,
+				92942DAE1E2158EC008E79CA /* Settings.bundle */,
+				92EA0CEF1E2C296300C12A4C /* Protocols */,
+				92942E341E2303AB008E79CA /* Extensions */,
+				92942DAD1E215722008E79CA /* View Controllers */,
+				92942DAC1E215718008E79CA /* Core Data */,
+			);
+			path = "the-blue-alliance-ios";
+			sourceTree = "<group>";
+		};
+		92942DAC1E215718008E79CA /* Core Data */ = {
+			isa = PBXGroup;
+			children = (
+				92942DA91E215700008E79CA /* TBA.xcdatamodeld */,
+				92942E091E21DD18008E79CA /* Event */,
+			);
+			path = "Core Data";
+			sourceTree = "<group>";
+		};
+		92942DAD1E215722008E79CA /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				92942E311E230340008E79CA /* Base */,
+				92942DB21E215B08008E79CA /* Events */,
+				92942DB31E215B0E008E79CA /* Teams */,
+				92942DB41E215B1F008E79CA /* Districts */,
+				92942DB51E215B34008E79CA /* MyTBA */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		92942DB21E215B08008E79CA /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				92942DBC1E215BA6008E79CA /* EventsStoryboard.storyboard */,
+				92942DB01E215B06008E79CA /* EventsTableViewController.swift */,
+				92942DDE1E21D2EB008E79CA /* EventViewController.swift */,
+				92942E351E2A81E8008E79CA /* EventInfoTableViewController.swift */,
+			);
+			path = Events;
+			sourceTree = "<group>";
+		};
+		92942DB31E215B0E008E79CA /* Teams */ = {
+			isa = PBXGroup;
+			children = (
+				92942DBE1E215BEF008E79CA /* TeamsStoryboard.storyboard */,
+				92942DB61E215B7F008E79CA /* TeamsTableViewController.swift */,
+			);
+			path = Teams;
+			sourceTree = "<group>";
+		};
+		92942DB41E215B1F008E79CA /* Districts */ = {
+			isa = PBXGroup;
+			children = (
+				92942DC01E215C0D008E79CA /* DistrictsStoryboard.storyboard */,
+				92942DB81E215B87008E79CA /* DistrictsViewController.swift */,
+			);
+			path = Districts;
+			sourceTree = "<group>";
+		};
+		92942DB51E215B34008E79CA /* MyTBA */ = {
+			isa = PBXGroup;
+			children = (
+				92942DC21E215C37008E79CA /* MyTBAStoryboard.storyboard */,
+				92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */,
+			);
+			path = MyTBA;
+			sourceTree = "<group>";
+		};
+		92942E091E21DD18008E79CA /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				92942E071E21DD06008E79CA /* Event.swift */,
+			);
+			name = Event;
+			sourceTree = "<group>";
+		};
+		92942E311E230340008E79CA /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		92942E341E2303AB008E79CA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				92942E321E2303A5008E79CA /* CalendarExtension.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		92EA0CEF1E2C296300C12A4C /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				925D95031E30508B001D2F25 /* List.swift */,
+				925D95041E30508B001D2F25 /* StaticList.swift */,
+				925D95051E30508B001D2F25 /* DynamicList.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		AB6808F14167475E1AE2783E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1C2601FEFE79E43A71B88523 /* Pods_the_blue_alliance.framework */,
+				C401C03BA9DC7144DBFA65EA /* Pods_the_blue_alliance_ios.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		92942D911E2154DA008E79CA /* the-blue-alliance-ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "the-blue-alliance-ios" */;
+			buildPhases = (
+				29AD26E75C996A21D8D2055B /* [CP] Check Pods Manifest.lock */,
+				92942D8E1E2154DA008E79CA /* Sources */,
+				92942D8F1E2154DA008E79CA /* Frameworks */,
+				92942D901E2154DA008E79CA /* Resources */,
+				C66CFE3D34E1D709FFB95483 /* [CP] Embed Pods Frameworks */,
+				692CB8DE6F0D6DE7E7911FE6 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "the-blue-alliance-ios";
+			productName = "the-blue-alliance";
+			productReference = 92942D921E2154DA008E79CA /* the-blue-alliance-ios.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		92942D8A1E2154DA008E79CA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0820;
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = "The Blue Alliance";
+				TargetAttributes = {
+					92942D911E2154DA008E79CA = {
+						CreatedOnToolsVersion = 8.2.1;
+						LastSwiftMigration = 0820;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 92942D8D1E2154DA008E79CA /* Build configuration list for PBXProject "the-blue-alliance-ios" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 92942D891E2154DA008E79CA;
+			productRefGroup = 92942D931E2154DA008E79CA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				92942D911E2154DA008E79CA /* the-blue-alliance-ios */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		92942D901E2154DA008E79CA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				92942DBD1E215BA6008E79CA /* EventsStoryboard.storyboard in Resources */,
+				92942DC11E215C0D008E79CA /* DistrictsStoryboard.storyboard in Resources */,
+				92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */,
+				92942DBF1E215BEF008E79CA /* TeamsStoryboard.storyboard in Resources */,
+				92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */,
+				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
+				92942D9D1E2154DA008E79CA /* Main.storyboard in Resources */,
+				92942DC31E215C37008E79CA /* MyTBAStoryboard.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		29AD26E75C996A21D8D2055B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		692CB8DE6F0D6DE7E7911FE6 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C66CFE3D34E1D709FFB95483 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		92942D8E1E2154DA008E79CA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */,
+				92942DB91E215B87008E79CA /* DistrictsViewController.swift in Sources */,
+				92942DB71E215B7F008E79CA /* TeamsTableViewController.swift in Sources */,
+				925D95061E30508B001D2F25 /* List.swift in Sources */,
+				92942DAB1E215700008E79CA /* TBA.xcdatamodeld in Sources */,
+				92942E081E21DD06008E79CA /* Event.swift in Sources */,
+				92942E361E2A81E8008E79CA /* EventInfoTableViewController.swift in Sources */,
+				92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */,
+				92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */,
+				92942DDF1E21D2EB008E79CA /* EventViewController.swift in Sources */,
+				925D95071E30508B001D2F25 /* StaticList.swift in Sources */,
+				92942DB11E215B06008E79CA /* EventsTableViewController.swift in Sources */,
+				92942E331E2303A5008E79CA /* CalendarExtension.swift in Sources */,
+				925D95081E30508B001D2F25 /* DynamicList.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		92942D9B1E2154DA008E79CA /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				92942D9C1E2154DA008E79CA /* Base */,
+			);
+			name = Main.storyboard;
+			path = .;
+			sourceTree = "<group>";
+		};
+		92942DA01E2154DA008E79CA /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				92942DA11E2154DA008E79CA /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			path = .;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		92942DA41E2154DA008E79CA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		92942DA51E2154DA008E79CA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		92942DA71E2154DA008E79CA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 614241F72C3BE7F89DD95428 /* Pods-the-blue-alliance-ios.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.the-blue-alliance";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		92942DA81E2154DA008E79CA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AB45C28FC9D316785507BAAC /* Pods-the-blue-alliance-ios.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.the-blue-alliance";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		92942D8D1E2154DA008E79CA /* Build configuration list for PBXProject "the-blue-alliance-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				92942DA41E2154DA008E79CA /* Debug */,
+				92942DA51E2154DA008E79CA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "the-blue-alliance-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				92942DA71E2154DA008E79CA /* Debug */,
+				92942DA81E2154DA008E79CA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		92942DA91E215700008E79CA /* TBA.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				92942DAA1E215700008E79CA /* TBA.xcdatamodel */,
+			);
+			currentVersion = 92942DAA1E215700008E79CA /* TBA.xcdatamodel */;
+			path = TBA.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 92942D8A1E2154DA008E79CA /* Project object */;
+}
