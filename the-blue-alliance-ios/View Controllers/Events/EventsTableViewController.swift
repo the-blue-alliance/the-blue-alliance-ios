@@ -240,8 +240,6 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
                 let event = fetchedResultsController.object(at: indexPath)
                 let eventViewController = (segue.destination as! UINavigationController).topViewController as! EventViewController
                 eventViewController.event = event
-                eventViewController.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-                eventViewController.navigationItem.leftItemsSupplementBackButton = true
             }
         }
     }

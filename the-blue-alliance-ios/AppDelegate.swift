@@ -104,7 +104,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 guard let dataVC = nav.topViewController as? EventsTableViewController else {
                     continue
                 }
-                dataVC.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
                 dataVC.persistentContainer = self.persistentContainer
             }
         }
