@@ -13,7 +13,26 @@ import CoreData
 let EventCellReuseIdentifier = "EventCell"
 
 class EventsTableViewController: UITableViewController, DynamicTableList {
-    public var persistentContainer: NSPersistentContainer!
+    public var persistentContainer: NSPersistentContainer! {
+        didSet {
+            let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "hybridType", ascending: true),
+                                            NSSortDescriptor(key: "startDate", ascending: true),
+                                            NSSortDescriptor(key: "name", ascending: true)]
+            fetchRequest.predicate = NSPredicate(format: "week == %ld && year == %ld", week, year)
+            
+            fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer!.viewContext, sectionNameKeyPath: "hybridType", cacheName: nil)
+            
+            do {
+                try self.fetchedResultsController.performFetch()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
     typealias FetchedObject = Event
     public var fetchedResultsController: NSFetchedResultsController<Event>! {
         didSet {
@@ -42,30 +61,6 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "hybridType", ascending: true),
-                                        NSSortDescriptor(key: "startDate", ascending: true),
-                                        NSSortDescriptor(key: "name", ascending: true)]
-        fetchRequest.predicate = NSPredicate(format: "week == %ld && year == %ld", week, year)
-        
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer!.viewContext, sectionNameKeyPath: "hybridType", cacheName: nil)
-        
-        do {
-            try self.fetchedResultsController.performFetch()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-
-        /*
-         if let split = self.splitViewController {
-         let controllers = split.viewControllers
-         self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
-         }
-         */
         
         updateInterface()
     }
@@ -112,7 +107,7 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
+        clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
         super.viewWillAppear(animated)
     }
     
@@ -192,20 +187,6 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
         updateInterface()
     }
     
-    // MARK: - Data DynamicTableList
-    
-    public func cellIdentifier(at indexPath: IndexPath) -> String {
-        return EventCellReuseIdentifier
-    }
-    
-    func listView(_ listView: UITableView, configureCell cell: UITableViewCell, withObject object: Event, atIndexPath indexPath: IndexPath) {
-        cell.textLabel?.text = object.name
-    }
-    
-    public func listView(_ listView: UITableView, didSelectObject object: Event, atIndexPath indexPath: IndexPath) {
-        // This doesn't need to have anything
-    }
-    
     // MARK: Table View
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -222,6 +203,20 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         didSelectItem(at: indexPath)
+    }
+    
+    // MARK: - Data DynamicTableList
+    
+    public func cellIdentifier(at indexPath: IndexPath) -> String {
+        return EventCellReuseIdentifier
+    }
+    
+    func listView(_ listView: UITableView, configureCell cell: UITableViewCell, withObject object: Event, atIndexPath indexPath: IndexPath) {
+        cell.textLabel?.text = object.name
+    }
+    
+    public func listView(_ listView: UITableView, didSelectObject object: Event, atIndexPath indexPath: IndexPath) {
+        // This doesn't need to have anything, set setup our segues in IB
     }
     
     // MARK: - Fetched Controller
@@ -241,20 +236,12 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
             selectYearTableViewController.currentNumber = year
             selectYearTableViewController.numbers = Array(1992...Calendar.current.year).reversed()
         } else if segue.identifier == "EventSegue" {
-            let eventViewController = segue.destination as! EventViewController
-            eventViewController.event = fetchedResultsController.object(at: tableView.indexPathForSelectedRow!)
+            if let indexPath = self.tableView.indexPathForSelectedRow {
+                let event = fetchedResultsController.object(at: indexPath)
+                let eventViewController = (segue.destination as! UINavigationController).topViewController as! EventViewController
+                eventViewController.event = event
+            }
         }
-        /*
-         if segue.identifier == "showDetail" {
-         if let indexPath = self.tableView.indexPathForSelectedRow {
-         let object = self.fetchedResultsController.object(at: indexPath)
-         let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
-         controller.detailItem = object
-         controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
-         controller.navigationItem.leftItemsSupplementBackButton = true
-         }
-         }
-         */
     }
     
 }

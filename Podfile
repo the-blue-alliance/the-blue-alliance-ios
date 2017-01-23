@@ -2,7 +2,7 @@ platform :ios, '10.0'
 use_frameworks!
 
 target 'the-blue-alliance-ios' do
-  pod 'TBAKit', :path => '/Users/zach/Desktop/apiv3/TBAKit'
+  pod 'TBAKit', :path => '/Users/zach/Desktop/TBAKit'
 end
 
 post_install do | installer |
