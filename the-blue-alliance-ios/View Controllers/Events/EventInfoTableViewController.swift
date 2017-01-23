@@ -37,7 +37,7 @@ class EventInfoTableViewController: UITableViewController {
     
     var showAlliances: (() -> ())?
     var showDistrictPoints: (() -> ())?
-    var showStas: (() -> ())?
+    var showStats: (() -> ())?
     var showAwards: (() -> ())?
     
     override func viewDidLoad() {
@@ -152,8 +152,8 @@ class EventInfoTableViewController: UITableViewController {
                     showDistrictPoints()
                 }
             case EventDetailRow.stats.rawValue:
-                if let showStas = showStas {
-                    showStas()
+                if let showStats = showStats {
+                    showStats()
                 }
             case EventDetailRow.awards.rawValue:
                 if let showAwards = showAwards {

@@ -70,36 +70,65 @@
             </objects>
             <point key="canvasLocation" x="1807" y="304"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="DVU-mr-THE">
-            <objects>
-                <viewController id="oKG-1n-NwQ" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="V19-k0-VUF"/>
-                        <viewControllerLayoutGuide type="bottom" id="nBU-ea-k3A"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="agl-w8-Yid">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="W4e-1A-Tu0" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="793" y="1057"/>
-        </scene>
         <!--Split View Controller-->
         <scene sceneID="kCA-hq-rkW">
             <objects>
                 <splitViewController id="BfQ-42-8lp" sceneMemberID="viewController">
                     <connections>
-                        <segue destination="oKG-1n-NwQ" kind="relationship" relationship="detailViewController" id="WPG-fe-dfe"/>
                         <segue destination="49e-Tb-3d3" kind="relationship" relationship="masterViewController" id="GH2-gh-vKY"/>
+                        <segue destination="hlh-9O-TVD" kind="relationship" relationship="detailViewController" id="eXD-gn-NeL"/>
                     </connections>
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mba-x4-D3I" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-159" y="730"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="SYB-WQ-v6F">
+            <objects>
+                <viewController storyboardIdentifier="NoSelectionViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="muH-Fr-ePf" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="5lr-aL-Yqp"/>
+                        <viewControllerLayoutGuide type="bottom" id="o21-Vd-gne"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="9wk-a9-EOD">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select an event to get started" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qbp-JS-KgS">
+                                <rect key="frame" x="74" y="323" width="227" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="qbp-JS-KgS" firstAttribute="centerY" secondItem="9wk-a9-EOD" secondAttribute="centerY" id="BI5-wt-ODX"/>
+                            <constraint firstItem="qbp-JS-KgS" firstAttribute="centerX" secondItem="9wk-a9-EOD" secondAttribute="centerX" id="Sq5-sT-RX6"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="7KT-li-LK1"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Xx-Fv-YPR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1582" y="1066"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="QEb-jB-StR">
+            <objects>
+                <navigationController storyboardIdentifier="NoSelectionNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="hlh-9O-TVD" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="g9w-P9-pqO">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="muH-Fr-ePf" kind="relationship" relationship="rootViewController" id="XcI-ru-DTh"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Z1J-aF-qWr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="793" y="1066"/>
         </scene>
     </scenes>
 </document>

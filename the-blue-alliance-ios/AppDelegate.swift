@@ -19,6 +19,8 @@ public enum StatusConstants {
     static let maxSeasonKey = "max_season"
 }
 
+let kNoSelectionNavigationController = "NoSelectionNavigationController"
+
 extension TBAStatus {
 
     public static func defaultStatus() -> TBAStatus {
@@ -87,20 +89,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaults.standard.set(status?.datafeedDown, forKey: StatusConstants.isDatafeedDownKey)
             UserDefaults.standard.set(status?.maxSeason, forKey: StatusConstants.maxSeasonKey)
         }
-        
-        let splitViewController = self.window!.rootViewController as! UISplitViewController
-        splitViewController.delegate = self
-        
-        let tabBarController = splitViewController.viewControllers[0] as! UITabBarController
-        for vc in tabBarController.viewControllers! {
-            guard let nav = vc as? UINavigationController else {
-                continue
+
+        if let splitViewController = self.window?.rootViewController as? UISplitViewController {
+            splitViewController.preferredDisplayMode = .allVisible
+            splitViewController.delegate = self
+            
+            let tabBarController = splitViewController.viewControllers[0] as! UITabBarController
+            for vc in tabBarController.viewControllers! {
+                guard let nav = vc as? UINavigationController else {
+                    continue
+                }
+
+                // TODO: Pass down to ALL view controllers... but first they need to share a protocol
+                guard let dataVC = nav.topViewController as? EventsTableViewController else {
+                    continue
+                }
+                dataVC.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
+                dataVC.persistentContainer = self.persistentContainer
             }
-            // TODO: Pass down to ALL view controllers... but first they need to share a protocol
-            guard let dataVC = nav.viewControllers.first as? EventsTableViewController else {
-                continue
-            }
-            dataVC.persistentContainer = self.persistentContainer
         }
  
         return true
@@ -132,9 +138,70 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate: UISplitViewControllerDelegate {
     
-    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
-        return true
+    func splitViewController(_ splitViewController: UISplitViewController, showDetail vc: UIViewController, sender: Any?) -> Bool {
+        // If our split view controller is collapsed and we're trying to show a detail view,
+        // push it on the master navigation stack
+        if splitViewController.isCollapsed,
+            let masterTabBarController = splitViewController.viewControllers.first as? UITabBarController,
+            let masterNavigationController = masterTabBarController.viewControllers?.first as? UINavigationController {
+            // We want to push the view controller, but make sure we're not pushing something in a nav controller
+            guard let detailNavigationController = vc as? UINavigationController else {
+                return false
+            }
+            
+            guard let detailViewController = detailNavigationController.viewControllers.first else {
+                return false
+            }
+
+            masterNavigationController.show(detailViewController, sender: nil)
+            
+            return true
+        }
+        
+        return false
+    }
+
+    func primaryViewController(forCollapsing splitViewController: UISplitViewController) -> UIViewController? {
+        // If collapsing and detail view controller is Event view controller,
+        // push Event view controller on to primary navigation view controller and return
+        // the primary tab bar controller
+        if let detailNavigationController = splitViewController.viewControllers.last as? UINavigationController,
+            detailNavigationController.restorationIdentifier != kNoSelectionNavigationController {
+            // This is a view controller we want to push
+            if let masterTabBarController = splitViewController.viewControllers.first as? UITabBarController,
+                let masterNavigationController = masterTabBarController.viewControllers?.first as? UINavigationController {
+                // Add the detail navigation controller stack to our root navigation controller
+                masterNavigationController.viewControllers += detailNavigationController.viewControllers
+                return masterTabBarController
+            }
+        }
+        
+        return splitViewController.viewControllers.first
     }
     
-}
+    func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
+        // If our primary view controller is an Event view controller, pop the old one, return the tab bar,
+        // and setup the detail view controller to be the events view controller
+        //
+        // Otherwise, return our detail
+        if let masterTabViewController = splitViewController.viewControllers.first as? UITabBarController,
+            let masterNavigationController = masterTabViewController.selectedViewController as? UINavigationController,
+            masterNavigationController.topViewController?.restorationIdentifier != kNoSelectionNavigationController {
+            // We want to seperate this event view controller in to the detail view controller
+            if let detailViewControllers = masterNavigationController.popToRootViewController(animated: true) {
+                let detailNavigationController = UINavigationController()
+                detailNavigationController.viewControllers = detailViewControllers
+                splitViewController.viewControllers = [masterTabViewController, detailNavigationController]
+                
+                return detailNavigationController
+            }
+        }
+        
+        return emptyDetailViewController()
+    }
 
+    public func emptyDetailViewController() -> UIViewController {
+        return UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: kNoSelectionNavigationController)
+    }
+
+}
