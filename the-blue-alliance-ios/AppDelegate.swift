@@ -161,8 +161,8 @@ extension AppDelegate: UISplitViewControllerDelegate {
     }
 
     func primaryViewController(forCollapsing splitViewController: UISplitViewController) -> UIViewController? {
-        // If collapsing and detail view controller is Event view controller,
-        // push Event view controller on to primary navigation view controller and return
+        // If collapsing and detail view controller is not a no selection navigation view controller,
+        // push the first view controller on to primary navigation view controller and return
         // the primary tab bar controller
         if let detailNavigationController = splitViewController.viewControllers.last as? UINavigationController,
             detailNavigationController.restorationIdentifier != kNoSelectionNavigationController {
@@ -179,8 +179,8 @@ extension AppDelegate: UISplitViewControllerDelegate {
     }
     
     func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
-        // If our primary view controller is an Event view controller, pop the old one, return the tab bar,
-        // and setup the detail view controller to be the events view controller
+        // If our primary view controller is not a no selection view controller, pop the old one, return the tab bar,
+        // and setup the detail view controller to be the primary view controller
         //
         // Otherwise, return our detail
         if let masterTabViewController = splitViewController.viewControllers.first as? UITabBarController,
