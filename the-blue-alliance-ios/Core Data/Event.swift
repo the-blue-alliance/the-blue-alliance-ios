@@ -23,7 +23,7 @@ enum InitError: Error {
 
 extension Event {
 
-    static func insert(with model: TBAEvent, in context: NSManagedObjectContext) throws {
+    static func insert(with model: TBAEvent, in context: NSManagedObjectContext) throws -> Event {
         let predicate = NSPredicate(format: "key == %@", model.key)
         
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
@@ -38,9 +38,11 @@ extension Event {
         event.address = model.address
         event.city = model.city
         event.country = model.country
-        event.districtType = Int16(model.districtType.rawValue)
-        event.districtTypeName = model.districtTypeName?.rawValue
         
+        if let district = model.district {
+            event.district = try? District.insert(with: district, in: context)
+        }
+
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
@@ -108,14 +110,15 @@ extension Event {
         // Preseason < Regionals < Districts (MI, MAR, NE, PNW, IN), CMP Divisions, CMP Finals, Offseason, others
         // Will then sub-divide districts in to floats
         // ex: Michigan Districts: 1.1, Indiana Districts: 1.5
-        let isDistrict = (Int(event.districtType) != TBAEvent.DistrictType.NoDistrict.rawValue && Int(event.eventType) != TBAEvent.EventType.districtChampionship.rawValue)
-        event.hybridType = isDistrict ? Float(event.eventType) + (Float(event.districtType) / 10.0) : Float(event.eventType)
+        event.hybridType = event.isDistrict() ? Float(event.eventType) + (Float(event.districtType) / 10.0) : Float(event.eventType)
+        
+        return event
     }
 
     // MARK: - Helper Methods
     
     func isDistrict() -> Bool {
-        return self.districtType != Int16(TBAEvent.DistrictType.NoDistrict.rawValue)
+        return self.district != nil
     }
     
 }
