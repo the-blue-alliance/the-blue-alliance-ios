@@ -26,17 +26,14 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
     
     internal var weeks: [Int]?
     internal var week: Int = 1
-    internal var year = 2016
-    /*
     internal var year: Int = {
         var year = UserDefaults.standard.integer(forKey: StatusConstants.currentSeasonKey)
-        // TODO: We should really just wait until the currentSeasonKey is set... don't want to go over max season
         if year == 0 {
-            year = Calendar.current.year
+            // Default to the last safe year we know about
+            year = 2017
         }
         return year
     }()
-    */
 
     // MARK: - View Lifecycle
     
