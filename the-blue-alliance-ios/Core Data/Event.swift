@@ -115,4 +115,38 @@ extension Event {
         return event
     }
 
+    public func dateString() -> String? {
+        if self.startDate == nil || self.endDate == nil {
+            return nil
+        }
+        
+        let calendar = Calendar.current
+        
+        let shortDateFormatter = DateFormatter()
+        shortDateFormatter.dateFormat = "MMM dd"
+        
+        let longDateFormatter = DateFormatter()
+        longDateFormatter.dateFormat = "MMM dd, y"
+        
+        let startDate = Date(timeIntervalSince1970: self.startDate!.timeIntervalSince1970)
+        let endDate = Date(timeIntervalSince1970: self.endDate!.timeIntervalSince1970)
+        
+        if let timezone = timezone {
+            let tz = TimeZone(identifier: timezone)
+            shortDateFormatter.timeZone = tz
+            longDateFormatter.timeZone = tz
+        }
+        
+        var dateText: String?
+        if startDate == endDate {
+            dateText = longDateFormatter.string(from: Date(timeIntervalSince1970: endDate.timeIntervalSince1970))
+        } else if calendar.component(.year, from: startDate) == calendar.component(.year, from: endDate) {
+            dateText = "\(shortDateFormatter.string(from: startDate)) to \(shortDateFormatter.string(from: endDate))"
+        } else {
+            dateText = "\(longDateFormatter.string(from: startDate)) to \(longDateFormatter.string(from: endDate))"
+        }
+        
+        return dateText
+    }
+    
 }

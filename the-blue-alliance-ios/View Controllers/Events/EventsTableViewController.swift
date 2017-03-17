@@ -10,6 +10,7 @@ import UIKit
 import TBAKit
 import CoreData
 
+let EventSegue = "EventSegue"
 let EventCellReuseIdentifier = "EventCell"
 
 class EventsTableViewController: UITableViewController, DynamicTableList {
@@ -58,6 +59,10 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.register(UINib(nibName: "EventTableViewCell", bundle: nil), forCellReuseIdentifier: EventCellReuseIdentifier)
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 88.0
         
         updateInterface()
     }
@@ -213,11 +218,13 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
     }
     
     func listView(_ listView: UITableView, configureCell cell: UITableViewCell, withObject object: Event, atIndexPath indexPath: IndexPath) {
-        cell.textLabel?.text = object.name
+        if let cell = cell as? EventTableViewCell {
+            cell.event = object
+        }
     }
     
     public func listView(_ listView: UITableView, didSelectObject object: Event, atIndexPath indexPath: IndexPath) {
-        // This doesn't need to have anything, set setup our segues in IB
+        performSegue(withIdentifier: EventSegue, sender: nil)
     }
     
     // MARK: - Fetched Controller

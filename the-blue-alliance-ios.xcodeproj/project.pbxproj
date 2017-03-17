@@ -30,6 +30,8 @@
 		92942E361E2A81E8008E79CA /* EventInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942E351E2A81E8008E79CA /* EventInfoTableViewController.swift */; };
 		92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */; };
 		92FFE51E1E770D010037E48C /* District.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE51D1E770D010037E48C /* District.swift */; };
+		92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */; };
+		92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */; };
 		EDFF19E0F3BF11120BBB92F8 /* Pods_the_blue_alliance_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C401C03BA9DC7144DBFA65EA /* Pods_the_blue_alliance_ios.framework */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +64,8 @@
 		92942E351E2A81E8008E79CA /* EventInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventInfoTableViewController.swift; sourceTree = "<group>"; };
 		92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectNumberTableViewController.swift; sourceTree = "<group>"; };
 		92FFE51D1E770D010037E48C /* District.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = District.swift; sourceTree = "<group>"; };
+		92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewCell.xib; sourceTree = "<group>"; };
+		92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		AB45C28FC9D316785507BAAC /* Pods-the-blue-alliance-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-the-blue-alliance-ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios.release.xcconfig"; sourceTree = "<group>"; };
 		C401C03BA9DC7144DBFA65EA /* Pods_the_blue_alliance_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_the_blue_alliance_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3E1816E999790998C4D36C4 /* Pods-the-blue-alliance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-the-blue-alliance.release.xcconfig"; path = "Pods/Target Support Files/Pods-the-blue-alliance/Pods-the-blue-alliance.release.xcconfig"; sourceTree = "<group>"; };
@@ -119,6 +123,7 @@
 				92942DAE1E2158EC008E79CA /* Settings.bundle */,
 				92EA0CEF1E2C296300C12A4C /* Protocols */,
 				92942E341E2303AB008E79CA /* Extensions */,
+				92FFE5221E7C994B0037E48C /* View Elements */,
 				92942DAD1E215722008E79CA /* View Controllers */,
 				92942DAC1E215718008E79CA /* Core Data */,
 			);
@@ -219,6 +224,23 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
+		92FFE5221E7C994B0037E48C /* View Elements */ = {
+			isa = PBXGroup;
+			children = (
+				92FFE5231E7C994B0037E48C /* Events */,
+			);
+			path = "View Elements";
+			sourceTree = "<group>";
+		};
+		92FFE5231E7C994B0037E48C /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */,
+				92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */,
+			);
+			path = Events;
+			sourceTree = "<group>";
+		};
 		AB6808F14167475E1AE2783E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -297,6 +319,7 @@
 				92942DBF1E215BEF008E79CA /* TeamsStoryboard.storyboard in Resources */,
 				92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */,
 				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
+				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
 				92942D9D1E2154DA008E79CA /* Main.storyboard in Resources */,
 				92942DC31E215C37008E79CA /* MyTBAStoryboard.storyboard in Resources */,
 			);
@@ -365,6 +388,7 @@
 				92942DAB1E215700008E79CA /* TBA.xcdatamodeld in Sources */,
 				92942E081E21DD06008E79CA /* Event.swift in Sources */,
 				92942E361E2A81E8008E79CA /* EventInfoTableViewController.swift in Sources */,
+				92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */,
 				92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */,
 				92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */,
 				92942DDF1E21D2EB008E79CA /* EventViewController.swift in Sources */,
