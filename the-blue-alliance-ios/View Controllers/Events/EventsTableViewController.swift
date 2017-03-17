@@ -67,7 +67,11 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
         
         TBAEvent.fetchEvents(year) { (events, error) in
             if error != nil {
-                let alertController = UIAlertController(title: "Error!", message: "Unable to load events", preferredStyle: .alert)
+                let alertController = UIAlertController(title: "Error!", message: "Unable to load events - \(error!.localizedDescription)", preferredStyle: .alert)
+                
+                let okAction = UIAlertAction(title: "Okay", style: .default, handler: nil)
+                alertController.addAction(okAction)
+                
                 DispatchQueue.main.async {
                     self.present(alertController, animated: true, completion: nil)
                 }
@@ -81,7 +85,7 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
                 // Insert the events
                 events?.forEach({ (modelEvent) in
                     do {
-                        try Event.insert(with: modelEvent, in: backgroundContext)
+                        _ = try Event.insert(with: modelEvent, in: backgroundContext)
                     } catch {
                         print("Unable to insert event: \(error)")
                     }
