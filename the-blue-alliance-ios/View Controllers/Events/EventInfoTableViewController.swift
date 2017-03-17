@@ -57,7 +57,7 @@ class EventInfoTableViewController: UITableViewController {
         case EventInfoSection.detail.rawValue:
             // Only show Alliances, Stats, and Awards if event isn't a district
             let max = EventDetailRow.max.rawValue
-            return event.isDistrict() ? max - 1 : max
+            return event.district != nil ? max - 1 : max
         case EventInfoSection.link.rawValue:
             return EventLinkRow.max.rawValue
         default:
@@ -94,7 +94,7 @@ class EventInfoTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BasicCell", for: indexPath)
         
         var row = indexPath.row
-        if !event.isDistrict() && row >= 2 {
+        if event.district == nil && row >= 2 {
             row += 1
         }
         

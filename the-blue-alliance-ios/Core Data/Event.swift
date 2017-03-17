@@ -85,7 +85,7 @@ extension Event {
         // TODO: webcasts
         
         event.website = model.website
-        
+
         if let week = model.week {
             event.week = Int16(week)
         } else {
@@ -110,15 +110,9 @@ extension Event {
         // Preseason < Regionals < Districts (MI, MAR, NE, PNW, IN), CMP Divisions, CMP Finals, Offseason, others
         // Will then sub-divide districts in to floats
         // ex: Michigan Districts: 1.1, Indiana Districts: 1.5
-        event.hybridType = event.isDistrict() ? Float(event.eventType) + (Float(event.districtType) / 10.0) : Float(event.eventType)
+        event.hybridType = event.district != nil ? Float(event.eventType) + (Float(event.districtType) / 10.0) : Float(event.eventType)
         
         return event
     }
 
-    // MARK: - Helper Methods
-    
-    func isDistrict() -> Bool {
-        return self.district != nil
-    }
-    
 }
