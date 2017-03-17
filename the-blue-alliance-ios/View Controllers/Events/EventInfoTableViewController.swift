@@ -173,7 +173,7 @@ class EventInfoTableViewController: UITableViewController {
             case EventLinkRow.website.rawValue:
                 urlString = event.website
             case EventLinkRow.twitter.rawValue:
-                urlString = "https://twitter.com/search?q=%%23\(event.key!)"
+                urlString = "https://twitter.com/search?q=%23\(event.key!)"
             case EventLinkRow.youtube.rawValue:
                 urlString = "https://www.youtube.com/results?search_query=\(event.key!)"
             case EventLinkRow.chiefDelphi.rawValue:
