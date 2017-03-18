@@ -35,9 +35,18 @@
         <attribute name="week" optional="YES" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="year" attributeType="Integer 16" minValueString="1992" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="district" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="District" inverseName="events" inverseEntity="District" syncable="YES"/>
+        <relationship name="webcasts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Webcast" inverseName="event" inverseEntity="Webcast" syncable="YES"/>
+    </entity>
+    <entity name="Webcast" representedClassName="Webcast" syncable="YES" codeGenerationType="class">
+        <attribute name="channel" attributeType="String" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="file" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" attributeType="String" syncable="YES"/>
+        <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="webcasts" inverseEntity="Event" syncable="YES"/>
     </entity>
     <elements>
         <element name="District" positionX="-63" positionY="135" width="128" height="120"/>
-        <element name="Event" positionX="-63" positionY="-18" width="128" height="450"/>
+        <element name="Event" positionX="-63" positionY="-18" width="128" height="465"/>
+        <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
     </elements>
 </model>

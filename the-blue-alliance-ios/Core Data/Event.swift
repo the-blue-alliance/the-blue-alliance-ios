@@ -17,6 +17,28 @@ enum EventWeek: Int {
     case offseason = 100
 }
 
+public enum EventType: Int {
+    case regional = 0
+    case district = 1
+    case districtChampionship = 2
+    case championshipDivision = 3
+    case championshipFinals = 4
+    case offseason = 99
+    case preseason = 100
+    case unlabeled = -1
+}
+
+public enum EventTypeName: String {
+    case regional = "Regional"
+    case district = "District"
+    case districtChampionship = "District Championship"
+    case championshipDivision = "Championship Division"
+    case championshipFinals = "Championship Finals"
+    case offseason = "Offseason"
+    case preseason = "Preseason"
+    case unlabeled = "Unlabeled"
+}
+
 enum InitError: Error {
     case invalid(key: String)
 }
@@ -54,8 +76,8 @@ extension Event {
         event.endDate = NSDate(timeIntervalSince1970: endDate.timeIntervalSince1970)
         
         event.eventCode = model.eventCode
-        event.eventType = Int16(model.eventType.rawValue)
-        event.eventTypeName = model.eventTypeName.rawValue
+        event.eventType = Int16(model.eventType)
+        event.eventTypeName = model.eventTypeName
         event.firstEventID = model.firstEventID
         event.gmapsPlaceID = model.gmapsPlaceID
         event.gmapsURL = model.gmapsURL
@@ -83,6 +105,11 @@ extension Event {
         event.timezone = model.timezone
         
         // TODO: webcasts
+        if let webcasts = model.webcasts {
+            for modelWebcast in webcasts {
+                _ = try? Webcast.insert(with: modelWebcast, for: event, in: context)
+            }
+        }
         
         event.website = model.website
 
@@ -90,13 +117,13 @@ extension Event {
             event.week = Int16(week)
         } else {
             switch model.eventType {
-            case .unlabeled:
+            case EventType.unlabeled.rawValue:
                 event.week = Int16(EventWeek.unlabeled.rawValue)
-            case .preseason:
+            case EventType.preseason.rawValue:
                 event.week = Int16(EventWeek.preseason.rawValue)
-            case .districtChampionship, .championshipDivision, .championshipFinals:
+            case EventType.districtChampionship.rawValue, EventType.championshipDivision.rawValue, EventType.championshipFinals.rawValue:
                 event.week = Int16(EventWeek.championship.rawValue)
-            case .offseason:
+            case EventType.offseason.rawValue:
                 event.week = Int16(EventWeek.offseason.rawValue)
             default:
                 context.delete(event)
