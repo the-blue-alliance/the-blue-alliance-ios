@@ -17,12 +17,12 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
     public var persistentContainer: NSPersistentContainer! {
         didSet {
             let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "hybridType", ascending: true),
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "district.name", ascending: true),
                                             NSSortDescriptor(key: "startDate", ascending: true),
                                             NSSortDescriptor(key: "name", ascending: true)]
             fetchRequest.predicate = NSPredicate(format: "week == %ld && year == %ld", week, year)
             
-            fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer!.viewContext, sectionNameKeyPath: "hybridType", cacheName: nil)
+            fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer!.viewContext, sectionNameKeyPath: "district.name", cacheName: nil)
             
             do {
                 try self.fetchedResultsController.performFetch()
@@ -209,6 +209,22 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         didSelectItem(at: indexPath)
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let headerView = view as? UITableViewHeaderFooterView {
+            headerView.contentView.backgroundColor = UIColor.primaryDarkBlue
+            headerView.textLabel?.textColor = UIColor.white
+            headerView.textLabel?.font = UIFont.systemFont(ofSize: 14)
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if let event = fetchedResultsController.sections?[section].objects?.first as? Event, let district = event.district {
+            return "\(district.name!) District"
+        } else {
+           return "Regional"
+        }
     }
     
     // MARK: - Data DynamicTableList

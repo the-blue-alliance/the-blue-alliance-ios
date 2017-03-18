@@ -11,7 +11,7 @@ import TBAKit
 import CoreData
 
 extension District {
-
+    
     public enum DistrictTypeName: String {
         case Michigan = "Michigan"
         case MidAtlantic = "Mid-Atlantic"

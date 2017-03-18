@@ -19,25 +19,25 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="uRU-9b-pBx">
-                        <rect key="frame" x="16" y="8" width="352" height="70"/>
+                        <rect key="frame" x="20" y="8" width="344" height="70"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="751" text="Kettering University District" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MWI-Oa-cyJ">
-                                <rect key="frame" x="0.0" y="0.0" width="352" height="44"/>
+                                <rect key="frame" x="0.0" y="0.0" width="344" height="44"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="y5g-xa-Nud">
-                                <rect key="frame" x="0.0" y="52" width="352" height="18"/>
+                                <rect key="frame" x="0.0" y="52" width="344" height="18"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Flint, MI, USA" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wpq-KZ-UDU">
-                                        <rect key="frame" x="0.0" y="0.0" width="233" height="18"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="225" height="18"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Mar 02 to Mar 05" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tf8-tH-lcU">
-                                        <rect key="frame" x="233" y="0.0" width="119" height="18"/>
+                                        <rect key="frame" x="225" y="0.0" width="119" height="18"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -49,9 +49,9 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="uRU-9b-pBx" firstAttribute="top" secondItem="JLI-Bp-jBp" secondAttribute="top" constant="8" id="96x-4R-mqk"/>
-                    <constraint firstAttribute="trailing" secondItem="uRU-9b-pBx" secondAttribute="trailing" constant="16" id="F1g-bN-uWi"/>
+                    <constraint firstAttribute="trailing" secondItem="uRU-9b-pBx" secondAttribute="trailing" constant="20" id="F1g-bN-uWi"/>
                     <constraint firstAttribute="bottom" secondItem="uRU-9b-pBx" secondAttribute="bottom" constant="8" id="W1b-48-TEU"/>
-                    <constraint firstItem="uRU-9b-pBx" firstAttribute="leading" secondItem="JLI-Bp-jBp" secondAttribute="leading" constant="16" id="wJn-v5-qFT"/>
+                    <constraint firstItem="uRU-9b-pBx" firstAttribute="leading" secondItem="JLI-Bp-jBp" secondAttribute="leading" constant="20" id="wJn-v5-qFT"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

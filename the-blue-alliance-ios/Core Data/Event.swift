@@ -131,13 +131,7 @@ extension Event {
         }
         
         event.year = Int16(model.year)
-        
-        // Will sort high level events in order
-        // Preseason < Regionals < Districts (MI, MAR, NE, PNW, IN), CMP Divisions, CMP Finals, Offseason, others
-        // Will then sub-divide districts in to floats
-        // ex: Michigan Districts: 1.1, Indiana Districts: 1.5
-        event.hybridType = event.district != nil ? Float(event.eventType) + (Float(event.districtType) / 10.0) : Float(event.eventType)
-        
+                
         return event
     }
 

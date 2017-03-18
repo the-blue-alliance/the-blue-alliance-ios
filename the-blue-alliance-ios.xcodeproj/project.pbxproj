@@ -33,6 +33,7 @@
 		92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */; };
 		92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */; };
 		92FFE52A1E7CB1550037E48C /* Webcast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE5291E7CB1550037E48C /* Webcast.swift */; };
+		92FFE52C1E7CC60F0037E48C /* TBAColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE52B1E7CC60F0037E48C /* TBAColorExtension.swift */; };
 		EDFF19E0F3BF11120BBB92F8 /* Pods_the_blue_alliance_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C401C03BA9DC7144DBFA65EA /* Pods_the_blue_alliance_ios.framework */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +69,7 @@
 		92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewCell.xib; sourceTree = "<group>"; };
 		92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		92FFE5291E7CB1550037E48C /* Webcast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Webcast.swift; sourceTree = "<group>"; };
+		92FFE52B1E7CC60F0037E48C /* TBAColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TBAColorExtension.swift; path = Extensions/TBAColorExtension.swift; sourceTree = "<group>"; };
 		AB45C28FC9D316785507BAAC /* Pods-the-blue-alliance-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-the-blue-alliance-ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios.release.xcconfig"; sourceTree = "<group>"; };
 		C401C03BA9DC7144DBFA65EA /* Pods_the_blue_alliance_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_the_blue_alliance_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3E1816E999790998C4D36C4 /* Pods-the-blue-alliance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-the-blue-alliance.release.xcconfig"; path = "Pods/Target Support Files/Pods-the-blue-alliance/Pods-the-blue-alliance.release.xcconfig"; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 		92942E341E2303AB008E79CA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				92FFE52B1E7CC60F0037E48C /* TBAColorExtension.swift */,
 				92942E321E2303A5008E79CA /* CalendarExtension.swift */,
 			);
 			name = Extensions;
@@ -404,6 +407,7 @@
 				92FFE52A1E7CB1550037E48C /* Webcast.swift in Sources */,
 				92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */,
 				92942DDF1E21D2EB008E79CA /* EventViewController.swift in Sources */,
+				92FFE52C1E7CC60F0037E48C /* TBAColorExtension.swift in Sources */,
 				925D95071E30508B001D2F25 /* StaticList.swift in Sources */,
 				92942DB11E215B06008E79CA /* EventsTableViewController.swift in Sources */,
 				92942E331E2303A5008E79CA /* CalendarExtension.swift in Sources */,

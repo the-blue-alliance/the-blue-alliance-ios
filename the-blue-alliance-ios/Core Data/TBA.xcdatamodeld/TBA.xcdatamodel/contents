@@ -11,8 +11,6 @@
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="country" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="districtType" attributeType="Integer 16" minValueString="0" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="districtTypeName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="endDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="eventCode" attributeType="String" syncable="YES"/>
         <attribute name="eventType" attributeType="Integer 16" minValueString="0" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -20,7 +18,6 @@
         <attribute name="firstEventID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gmapsPlaceID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gmapsURL" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="hybridType" attributeType="Float" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="key" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="lat" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lng" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
@@ -45,8 +42,8 @@
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="webcasts" inverseEntity="Event" syncable="YES"/>
     </entity>
     <elements>
-        <element name="District" positionX="-63" positionY="135" width="128" height="120"/>
-        <element name="Event" positionX="-63" positionY="-18" width="128" height="465"/>
+        <element name="District" positionX="-63" positionY="135" width="128" height="30"/>
+        <element name="Event" positionX="-63" positionY="-18" width="128" height="420"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
     </elements>
 </model>
