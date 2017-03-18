@@ -104,7 +104,6 @@ extension Event {
         event.state = model.state
         event.timezone = model.timezone
         
-        // TODO: webcasts
         if let webcasts = model.webcasts {
             for modelWebcast in webcasts {
                 _ = try? Webcast.insert(with: modelWebcast, for: event, in: context)
