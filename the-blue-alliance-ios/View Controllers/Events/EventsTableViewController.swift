@@ -20,7 +20,7 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "district.name", ascending: true),
                                             NSSortDescriptor(key: "startDate", ascending: true),
                                             NSSortDescriptor(key: "name", ascending: true)]
-            fetchRequest.predicate = NSPredicate(format: "week == %ld && year == %ld", week, year)
+            fetchRequest.predicate = NSPredicate(format: "week == %ld && year == %ld", week, year())
             
             fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer!.viewContext, sectionNameKeyPath: "district.name", cacheName: nil)
             
@@ -46,14 +46,14 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
     
     internal var weeks: [Int]?
     internal var week: Int = 1
-    internal var year: Int = {
+    internal var year = { () -> Int in
         var year = UserDefaults.standard.integer(forKey: StatusConstants.currentSeasonKey)
         if year == 0 {
             // Default to the last safe year we know about
             year = 2017
         }
         return year
-    }()
+    }
 
     // MARK: - View Lifecycle
     
@@ -70,7 +70,7 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        TBAEvent.fetchEvents(year) { (events, error) in
+        TBAEvent.fetchEvents(year()) { (events, error) in
             if error != nil {
                 let alertController = UIAlertController(title: "Error!", message: "Unable to load events - \(error!.localizedDescription)", preferredStyle: .alert)
                 
@@ -126,12 +126,12 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
             navigationTitleLabel?.text = "Week \(week) Events"
         }
         
-        navigationDetailLabel?.text = "▾ \(year)"
+        navigationDetailLabel?.text = "▾ \(year())"
     }
-    
+
     func setupCurrentWeek() {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Event.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "year == %ld", year)
+        fetchRequest.predicate = NSPredicate(format: "year == %ld", year())
         fetchRequest.resultType = NSFetchRequestResultType.dictionaryResultType
         // TODO: Do we sort by week or startDate... or endDate?
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true)]
@@ -163,7 +163,7 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
     
     func setupWeeks() {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Event.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "year == %ld", year)
+        fetchRequest.predicate = NSPredicate(format: "year == %ld", year())
         fetchRequest.resultType = NSFetchRequestResultType.dictionaryResultType
         fetchRequest.propertiesToFetch = [Event.entity().propertiesByName["week"]!]
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true)]
@@ -179,7 +179,7 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
             return weekDict["week"]!.intValue
         })
         
-        if year == Calendar.current.year && week == -1 {
+        if year() == Calendar.current.year && week == -1 {
             // If it's the current year, setup the current week for this year
             setupCurrentWeek()
         } else {
@@ -252,12 +252,12 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
     // MARK: - Segues
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "SelectYear" {
+        if segue.identifier == "SelectYearSegue" {
             let nav = segue.destination as! UINavigationController
             let selectYearTableViewController = nav.viewControllers.first as! SelectNumberTableViewController
             
             selectYearTableViewController.selectNumberType = .year
-            selectYearTableViewController.currentNumber = year
+            selectYearTableViewController.currentNumber = year()
             selectYearTableViewController.numbers = Array(1992...Calendar.current.year).reversed()
         } else if segue.identifier == "EventSegue" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
