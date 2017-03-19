@@ -19,7 +19,7 @@ class EventsTableViewController: TBATableViewController, DynamicTableList {
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "district.name", ascending: true),
                                             NSSortDescriptor(key: "startDate", ascending: true),
                                             NSSortDescriptor(key: "name", ascending: true)]
-            fetchRequest.predicate = NSPredicate(format: "week == %ld && year == %ld", week, year)
+            fetchRequest.predicate = NSPredicate(format: "week == %ld && year == %ld", week, year())
             
             fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer!.viewContext, sectionNameKeyPath: "district.name", cacheName: nil)
             
@@ -40,11 +40,16 @@ class EventsTableViewController: TBATableViewController, DynamicTableList {
         }
     }
     
-    var week: Int = 1
-    var year: Int = 2017
-    var requests: [Int] = []
-    var eventsFetched: (() -> ())?
-    var eventSelected: ((Event) -> ())?
+    internal var weeks: [Int]?
+    internal var week: Int = 1
+    internal var year = { () -> Int in
+        var year = UserDefaults.standard.integer(forKey: StatusConstants.currentSeasonKey)
+        if year == 0 {
+            // Default to the last safe year we know about
+            year = 2017
+        }
+        return year
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
