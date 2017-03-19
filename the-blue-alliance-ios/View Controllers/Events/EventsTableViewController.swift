@@ -10,11 +10,10 @@ import UIKit
 import TBAKit
 import CoreData
 
-let EventSegue = "EventSegue"
 let EventCellReuseIdentifier = "EventCell"
 
-class EventsTableViewController: UITableViewController, DynamicTableList {
-    public var persistentContainer: NSPersistentContainer! {
+class EventsTableViewController: TBATableViewController, DynamicTableList {
+    override public var persistentContainer: NSPersistentContainer! {
         didSet {
             let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "district.name", ascending: true),
@@ -40,52 +39,37 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
             fetchedResultsController.delegate = self
         }
     }
-
-    @IBOutlet var navigationTitleLabel: UILabel?
-    @IBOutlet var navigationDetailLabel: UILabel?
     
-    internal var weeks: [Int]?
-    internal var week: Int = 1
-    internal var year: Int = {
-        var year = UserDefaults.standard.integer(forKey: StatusConstants.currentSeasonKey)
-        if year == 0 {
-            // Default to the last safe year we know about
-            year = 2017
-        }
-        return year
-    }()
+    var week: Int = 1
+    var year: Int = 2017
+    var requests: [Int] = []
+    var eventsFetched: (() -> ())?
+    var eventSelected: ((Event) -> ())?
 
-    // MARK: - View Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.register(UINib(nibName: "EventTableViewCell", bundle: nil), forCellReuseIdentifier: EventCellReuseIdentifier)
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 88.0
-        
-        updateInterface()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        TBAEvent.fetchEvents(year) { (events, error) in
+        if shouldNoDataRefresh() {
+            refresh()
+        }
+    }
+    
+    // MARK: - Refreshing
+    
+    func refresh() {
+        var request: Int?
+        request = TBAEvent.fetchEvents(year) { (events, error) in
             if error != nil {
-                let alertController = UIAlertController(title: "Error!", message: "Unable to load events - \(error!.localizedDescription)", preferredStyle: .alert)
-                
-                let okAction = UIAlertAction(title: "Okay", style: .default, handler: nil)
-                alertController.addAction(okAction)
-                
-                DispatchQueue.main.async {
-                    self.present(alertController, animated: true, completion: nil)
-                }
+                // self.showErrorAlert(withText: "Unable to load events - \(error!.localizedDescription)")
                 return
             }
             
-            print("Loaded \(events?.count) events")
-            
-            // TODO: The API for core data stuff is shit right now, take a pass at renaming
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 // Insert the events
                 events?.forEach({ (modelEvent) in
@@ -100,7 +84,9 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
                 do {
                     try backgroundContext.save()
                     DispatchQueue.main.async {
-                        self.setupWeeks()
+                        if let eventsFetched = self.eventsFetched {
+                            eventsFetched()
+                        }
                     }
                 } catch {
                     // Replace this implementation with code to handle the error appropriately.
@@ -112,85 +98,20 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
         }
     }
     
+    func shouldNoDataRefresh() -> Bool {
+        guard let fetchedObjects = fetchedResultsController.fetchedObjects else {
+            return false
+        }
+        return fetchedObjects.count == 0
+    }
+    
+    // MARK: - View Lifecycle
+    
     override func viewWillAppear(_ animated: Bool) {
+        // TODO: Can we move this somewhere else?
         clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
-        super.viewWillAppear(animated)
-    }
-    
-    // MARK: - Private Methods
-    
-    func updateInterface() {
-        if week == -1 {
-            navigationTitleLabel?.text = "---- Events"
-        } else {
-            navigationTitleLabel?.text = "Week \(week) Events"
-        }
-        
-        navigationDetailLabel?.text = "▾ \(year)"
-    }
-    
-    func setupCurrentWeek() {
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Event.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "year == %ld", year)
-        fetchRequest.resultType = NSFetchRequestResultType.dictionaryResultType
-        // TODO: Do we sort by week or startDate... or endDate?
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true)]
-        fetchRequest.propertiesToFetch = ["startDate", "endDate", "week"].map({ (propertyName) -> NSPropertyDescription in
-            return Event.entity().propertiesByName[propertyName]!
-        })
-        
-        guard let eventDates = try? persistentContainer?.viewContext.fetch(fetchRequest) as! [[String: Any]] else {
-            // TODO: Throw init error
-            return
-        }
-        
-        if eventDates.count == 0 {
-            // TODO: This is no good... we need to have some events. Show a "No Events for this year" data state?
-        }
-        
-        /*
-        let currentDate = Date()
-        var newestEvent = eventDates.first
-        for eventDate in eventDates.dropFirst() {
-            if currentDate >
-            
-            let newestEndDate = newestEvent["endDate"]
-            let startDate = eventDate["startDate"]
-            // let endDate = eventDate["endDate"]
-        }
-        */
-    }
-    
-    func setupWeeks() {
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Event.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "year == %ld", year)
-        fetchRequest.resultType = NSFetchRequestResultType.dictionaryResultType
-        fetchRequest.propertiesToFetch = [Event.entity().propertiesByName["week"]!]
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true)]
-        fetchRequest.returnsDistinctResults = true
-        
-        guard let weeks = try? persistentContainer?.viewContext.fetch(fetchRequest) as! [[String: NSNumber]] else {
-            // TODO: Throw init error
-            return
-        }
 
-        self.weeks = weeks.map({ (_ weekDict: [String: NSNumber]) -> Int in
-            // TODO: Don't force upwrap zachzor
-            return weekDict["week"]!.intValue
-        })
-        
-        if year == Calendar.current.year && week == -1 {
-            // If it's the current year, setup the current week for this year
-            setupCurrentWeek()
-        } else {
-            // Otherwise, default to the first week for this year
-            if let firstWeek = self.weeks?.first {
-                week = firstWeek
-            } else {
-                // TODO: Show "No events for current year"
-            }
-        }
-        updateInterface()
+        super.viewWillAppear(animated)
     }
     
     // MARK: Table View
@@ -221,9 +142,9 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if let event = fetchedResultsController.sections?[section].objects?.first as? Event, let district = event.district {
-            return "\(district.name!) District"
+            return "\(district.name!) Districts"
         } else {
-           return "Regional"
+           return "Regionals"
         }
     }
     
@@ -240,32 +161,15 @@ class EventsTableViewController: UITableViewController, DynamicTableList {
     }
     
     public func listView(_ listView: UITableView, didSelectObject object: Event, atIndexPath indexPath: IndexPath) {
-        performSegue(withIdentifier: EventSegue, sender: nil)
+        if let eventSelected = eventSelected {
+            eventSelected(object)
+        }
     }
     
     // MARK: - Fetched Controller
     
     @objc func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.reloadData()
-    }
-    
-    // MARK: - Segues
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "SelectYear" {
-            let nav = segue.destination as! UINavigationController
-            let selectYearTableViewController = nav.viewControllers.first as! SelectNumberTableViewController
-            
-            selectYearTableViewController.selectNumberType = .year
-            selectYearTableViewController.currentNumber = year
-            selectYearTableViewController.numbers = Array(1992...Calendar.current.year).reversed()
-        } else if segue.identifier == "EventSegue" {
-            if let indexPath = self.tableView.indexPathForSelectedRow {
-                let event = fetchedResultsController.object(at: indexPath)
-                let eventViewController = (segue.destination as! UINavigationController).topViewController as! EventViewController
-                eventViewController.event = event
-            }
-        }
     }
     
 }

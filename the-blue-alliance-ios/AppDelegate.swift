@@ -24,7 +24,8 @@ let kNoSelectionNavigationController = "NoSelectionNavigationController"
 extension TBAStatus {
 
     public static func defaultStatus() -> TBAStatus {
-        let currentYear = Calendar.current.year
+        // Set to the last safe year we know about
+        let currentYear = 2017
 
         let defaultStatusJSON: [String: Any] = [
             "android": [
@@ -40,7 +41,7 @@ extension TBAStatus {
             "is_datafeed_down": false,
             "max_season": currentYear
         ]
-        return try! TBAStatus(json: defaultStatusJSON)
+        return TBAStatus(json: defaultStatusJSON)!
     }
 
 }
@@ -75,19 +76,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Call our staus endpoint and save everything in NSUserDefaults - can we KVO these when they change?
         // TOOD: Maybe move this to applicationDidBecomeActive
         
-        TBAStatus.fetchStatus { (status, error) in
-            if let error = error {
-                print("Erorr fetching TBA status: \(error)")
+        _ = TBAStatus.fetchStatus { (status, error) in
+            if let status = status {
+                // Got a valid status back from the API - update everything
+                UserDefaults.standard.set(status.currentSeason, forKey: StatusConstants.currentSeasonKey)
+                UserDefaults.standard.set(status.downEvents, forKey: StatusConstants.downEventsKey)
+                // Note: We can update these two keys as we ship future versions, along with some migration code
+                UserDefaults.standard.set(status.iosInfo.latestAppVersion, forKey: StatusConstants.latestAppVersionKey)
+                UserDefaults.standard.set(status.iosInfo.minAppVersion, forKey: StatusConstants.minAppVersionKey)
+                UserDefaults.standard.set(status.datafeedDown, forKey: StatusConstants.isDatafeedDownKey)
+                UserDefaults.standard.set(status.maxSeason, forKey: StatusConstants.maxSeasonKey)
+            } else {
+                let defaultStatus = TBAStatus.defaultStatus()
+                // Didn't get a valid response from API - grab our default status
+                // Make sure we don't overwite too many things if they've already been set
+                
+                // Only set our current season if we haven't set our current season
+                if UserDefaults.standard.integer(forKey: StatusConstants.currentSeasonKey) == 0 {
+                    UserDefaults.standard.set(defaultStatus.currentSeason, forKey: StatusConstants.currentSeasonKey)
+                }
+                
+                // Set our latest app version if we've never set our latest app version before *or* our latest app
+                // version is less than the default latest app version
+                let latestAppVersion = UserDefaults.standard.integer(forKey: StatusConstants.latestAppVersionKey)
+                if latestAppVersion == 0 || latestAppVersion < defaultStatus.iosInfo.latestAppVersion {
+                    UserDefaults.standard.set(defaultStatus.iosInfo.latestAppVersion, forKey: StatusConstants.latestAppVersionKey)
+                }
+
+                let minAppVersion = UserDefaults.standard.integer(forKey: StatusConstants.minAppVersionKey)
+                if minAppVersion == 0 || minAppVersion < defaultStatus.iosInfo.minAppVersion {
+                    UserDefaults.standard.set(defaultStatus.iosInfo.minAppVersion, forKey: StatusConstants.minAppVersionKey)
+                }
+                
+                // Only set our max season if we haven't set our max season
+                if UserDefaults.standard.integer(forKey: StatusConstants.maxSeasonKey) == 0 {
+                    UserDefaults.standard.set(defaultStatus.maxSeason, forKey: StatusConstants.maxSeasonKey)
+                }
             }
-            
-            // TODO: We need to write some error handling to setup defaults here if we're written to these keys already or not
-            UserDefaults.standard.set(status?.currentSeason, forKey: StatusConstants.currentSeasonKey)
-            UserDefaults.standard.set(status?.downEvents, forKey: StatusConstants.downEventsKey)
-            // Note: We can update these two keys as we ship future versions, along with some migration code
-            UserDefaults.standard.set(status?.iosInfo.latestAppVersion, forKey: StatusConstants.latestAppVersionKey)
-            UserDefaults.standard.set(status?.iosInfo.minAppVersion, forKey: StatusConstants.minAppVersionKey)
-            UserDefaults.standard.set(status?.datafeedDown, forKey: StatusConstants.isDatafeedDownKey)
-            UserDefaults.standard.set(status?.maxSeason, forKey: StatusConstants.maxSeasonKey)
         }
 
         if let splitViewController = self.window?.rootViewController as? UISplitViewController {
@@ -100,14 +125,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     continue
                 }
 
-                // TODO: Pass down to ALL view controllers... but first they need to share a protocol
-                guard let dataVC = nav.topViewController as? EventsTableViewController else {
+                guard var dataVC = nav.topViewController as? TBAPersistenceController else {
                     continue
                 }
                 dataVC.persistentContainer = self.persistentContainer
             }
         }
  
+        setupAppearance()
+        
         return true
     }
 
@@ -133,6 +159,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    func setupAppearance() {
+        let navigationBarAppearance = UINavigationBar.appearance()
+        navigationBarAppearance.barTintColor = UIColor.primaryBlue
+        navigationBarAppearance.tintColor = UIColor.white
+        navigationBarAppearance.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+    }
+    
 }
 
 extension AppDelegate: UISplitViewControllerDelegate {

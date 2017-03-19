@@ -12,7 +12,8 @@ import UIKit
 extension UIColor {
     
     public class var primaryBlue: UIColor {
-        return UIColor.color(red: 63, green: 81, blue: 181)
+        return UIColor.colorWithRGB(rgbValue: 0x3f51b5)
+        
     }
 
     public class var primaryDarkBlue: UIColor {
@@ -23,4 +24,12 @@ extension UIColor {
         return UIColor(red: CGFloat(red/255.0), green: CGFloat(green/255.0), blue: CGFloat(blue/255.0), alpha: 1.0)
     }
     
+    class func colorWithRGB(rgbValue : UInt, alpha : CGFloat = 1.0) -> UIColor {
+        let red = CGFloat((rgbValue & 0xFF0000) >> 16) / 255
+        let green = CGFloat((rgbValue & 0xFF00) >> 8) / 255
+        let blue = CGFloat(rgbValue & 0xFF) / 255
+        
+        return UIColor(red: red, green: green, blue: blue, alpha: alpha)
+    }
+
 }

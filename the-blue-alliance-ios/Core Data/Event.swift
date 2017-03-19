@@ -56,7 +56,7 @@ extension Event {
         let events = try fetchRequest.execute()
         let event = events.first ?? Event(context: context)
         
-        // Setup event variables here
+        // Required: endDate, eventCode, eventType, key, name, startDate, year
         event.address = model.address
         event.city = model.city
         event.country = model.country

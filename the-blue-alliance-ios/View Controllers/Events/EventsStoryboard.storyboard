@@ -14,7 +14,7 @@
             <objects>
                 <tableViewController id="pfi-My-9V6" customClass="EventsTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="79" sectionHeaderHeight="28" sectionFooterHeight="28" id="iQ8-xM-XCb">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <connections>
@@ -53,25 +53,12 @@
                                 <constraint firstAttribute="bottom" secondItem="MEK-JT-P5j" secondAttribute="bottom" id="wgB-eE-5Hb"/>
                                 <constraint firstAttribute="trailing" secondItem="MEK-JT-P5j" secondAttribute="trailing" id="xlO-NV-7Xj"/>
                             </constraints>
-                            <connections>
-                                <outletCollection property="gestureRecognizers" destination="fnC-yl-cNS" appends="YES" id="VLE-3m-RWK"/>
-                            </connections>
                         </view>
                     </navigationItem>
-                    <connections>
-                        <outlet property="navigationDetailLabel" destination="8Rw-QZ-1Xs" id="XhP-aE-Aqk"/>
-                        <outlet property="navigationTitleLabel" destination="sdW-0x-uGx" id="yQn-bS-BRz"/>
-                        <segue destination="h3w-a2-jfL" kind="showDetail" identifier="EventSegue" id="hWO-ST-pwK"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Fs-uQ-IzR" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="fnC-yl-cNS">
-                    <connections>
-                        <segue destination="zN7-OB-kjx" kind="presentation" id="4g3-FA-1cC"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="464.80000000000001" y="-99.400299850074973"/>
+            <point key="canvasLocation" x="566" y="-115"/>
         </scene>
         <!--Event Info Table View Controller-->
         <scene sceneID="uEB-zg-f9S">
@@ -349,6 +336,77 @@
             </objects>
             <point key="canvasLocation" x="1326" y="-798"/>
         </scene>
+        <!--Events Container View Controller-->
+        <scene sceneID="bhK-em-3bi">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="z91-7t-C9z" customClass="EventsContainerViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="UOG-6y-CdD"/>
+                        <viewControllerLayoutGuide type="bottom" id="ITX-hW-zbi"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Yah-8P-k2n">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="baq-Dy-a8s">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <connections>
+                                    <segue destination="pfi-My-9V6" kind="embed" identifier="EventsEmbed" id="GC9-8R-yEb"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="baq-Dy-a8s" firstAttribute="top" secondItem="UOG-6y-CdD" secondAttribute="bottom" id="Bah-R8-iRh"/>
+                            <constraint firstItem="baq-Dy-a8s" firstAttribute="leading" secondItem="Yah-8P-k2n" secondAttribute="leading" id="JeM-G3-I0Z"/>
+                            <constraint firstAttribute="trailing" secondItem="baq-Dy-a8s" secondAttribute="trailing" id="RME-Yd-W0u"/>
+                            <constraint firstItem="ITX-hW-zbi" firstAttribute="top" secondItem="baq-Dy-a8s" secondAttribute="bottom" id="c3L-3f-ADC"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="6wM-oZ-YWx">
+                        <nil key="title"/>
+                        <view key="titleView" contentMode="scaleToFill" id="tUp-Gc-PhW">
+                            <rect key="frame" x="113" y="6" width="150" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="zsR-ip-asc">
+                                    <rect key="frame" x="0.0" y="0.0" width="150" height="33"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="749" text="Week 2 Events" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xid-la-Kbs">
+                                            <rect key="frame" x="18.5" y="0.0" width="113" height="19.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="▾ 2016" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GRh-Rh-0I5">
+                                            <rect key="frame" x="57.5" y="19.5" width="35" height="13.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </stackView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="zsR-ip-asc" firstAttribute="leading" secondItem="tUp-Gc-PhW" secondAttribute="leading" id="Hbm-T4-c3X"/>
+                                <constraint firstAttribute="trailing" secondItem="zsR-ip-asc" secondAttribute="trailing" id="QL4-2j-Tsv"/>
+                                <constraint firstItem="zsR-ip-asc" firstAttribute="top" secondItem="tUp-Gc-PhW" secondAttribute="top" id="aq4-dB-3cV"/>
+                                <constraint firstAttribute="bottom" secondItem="zsR-ip-asc" secondAttribute="bottom" id="fSD-TO-RQo"/>
+                            </constraints>
+                        </view>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="eventsView" destination="baq-Dy-a8s" id="4x3-yT-leB"/>
+                        <outlet property="navigationDetailLabel" destination="GRh-Rh-0I5" id="iH5-kh-58f"/>
+                        <outlet property="navigationTitleLabel" destination="xid-la-Kbs" id="WyV-cm-csd"/>
+                        <segue destination="h3w-a2-jfL" kind="showDetail" identifier="EventSegue" id="6BF-wx-4vp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PMM-ly-XEZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-193" y="-88"/>
+        </scene>
         <!--Events-->
         <scene sceneID="wuA-rn-zsq">
             <objects>
@@ -360,12 +418,12 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="pfi-My-9V6" kind="relationship" relationship="rootViewController" id="fgE-yF-eEE"/>
+                        <segue destination="z91-7t-C9z" kind="relationship" relationship="rootViewController" id="4jK-fO-xrS"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UZB-s2-Xeg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-455" y="-99"/>
+            <point key="canvasLocation" x="-913" y="-89"/>
         </scene>
     </scenes>
     <resources>
