@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BY6-SJ-b86">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BY6-SJ-b86">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -400,6 +400,9 @@
                                 <constraint firstItem="zsR-ip-asc" firstAttribute="top" secondItem="tUp-Gc-PhW" secondAttribute="top" id="aq4-dB-3cV"/>
                                 <constraint firstAttribute="bottom" secondItem="zsR-ip-asc" secondAttribute="bottom" id="fSD-TO-RQo"/>
                             </constraints>
+                            <connections>
+                                <outletCollection property="gestureRecognizers" destination="AsU-Is-Vhv" appends="YES" id="Ldl-sd-X9c"/>
+                            </connections>
                         </view>
                     </navigationItem>
                     <connections>
@@ -410,6 +413,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PMM-ly-XEZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="AsU-Is-Vhv">
+                    <connections>
+                        <segue destination="zN7-OB-kjx" kind="presentation" identifier="SelectYearSegue" id="ygW-l9-xTD"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-193" y="-88"/>
         </scene>

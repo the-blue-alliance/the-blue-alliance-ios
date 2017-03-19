@@ -12,6 +12,7 @@ import CoreData
 
 let EventsEmbed = "EventsEmbed"
 let EventSegue = "EventSegue"
+let SelectYearSegue = "SelectYearSegue"
 
 class EventsContainerViewController: TBAViewController {
     
@@ -20,15 +21,28 @@ class EventsContainerViewController: TBAViewController {
     
     internal var weeks: [Int]?
     internal var week: Int = 1
-    internal var year: Int = {
-        var year = UserDefaults.standard.integer(forKey: StatusConstants.currentSeasonKey)
-        if year == 0 {
-            // Default to the last safe year we know about
-            year = 2017
+    internal var year: Int {
+        didSet {
+            eventsViewController?.year = year
+            updateInterface()
         }
-        return year
-    }()
+    }
+    internal var maxYear = { () -> Int in
+        var maxYear = UserDefaults.standard.integer(forKey: StatusConstants.maxSeasonKey)
+        if maxYear == 0 {
+            // Default to the last safe year we know about
+            maxYear = 2017
+        }
+        return maxYear
+    }
 
+    required init?(coder aDecoder: NSCoder) {
+        let year = UserDefaults.standard.integer(forKey: StatusConstants.currentSeasonKey)
+        self.year = year != 0 ? year : 2017
+
+        super.init(coder: aDecoder)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -115,7 +129,16 @@ class EventsContainerViewController: TBAViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == EventSegue {
+        if segue.identifier == SelectYearSegue {
+            let nav = segue.destination as! UINavigationController
+            let selectYearTableViewController = nav.viewControllers.first as! SelectNumberTableViewController
+            selectYearTableViewController.selectNumberType = .year
+            selectYearTableViewController.currentNumber = year
+            selectYearTableViewController.numbers = Array(1992...maxYear()).reversed()
+            selectYearTableViewController.numberSelected = { number in
+                self.year = number
+            }
+        } else if segue.identifier == EventSegue {
             let eventViewController = (segue.destination as! UINavigationController).topViewController as! EventViewController
             eventViewController.event = sender as? Event
         } else if segue.identifier == EventsEmbed {

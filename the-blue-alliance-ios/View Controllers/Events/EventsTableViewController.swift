@@ -15,11 +15,15 @@ let EventCellReuseIdentifier = "EventCell"
 class EventsTableViewController: TBATableViewController, DynamicTableList {
     override public var persistentContainer: NSPersistentContainer! {
         didSet {
+            guard let year = year else {
+                return
+            }
+            
             let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "district.name", ascending: true),
                                             NSSortDescriptor(key: "startDate", ascending: true),
                                             NSSortDescriptor(key: "name", ascending: true)]
-            fetchRequest.predicate = NSPredicate(format: "week == %ld && year == %ld", week, year())
+            fetchRequest.predicate = NSPredicate(format: "week == %ld && year == %ld", week, year)
             
             fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer!.viewContext, sectionNameKeyPath: "district.name", cacheName: nil)
             
@@ -40,16 +44,15 @@ class EventsTableViewController: TBATableViewController, DynamicTableList {
         }
     }
     
-    internal var weeks: [Int]?
     internal var week: Int = 1
-    internal var year = { () -> Int in
-        var year = UserDefaults.standard.integer(forKey: StatusConstants.currentSeasonKey)
-        if year == 0 {
-            // Default to the last safe year we know about
-            year = 2017
+    internal var year: Int? {
+        didSet {
+            tableView.reloadData()
+            tableView.setContentOffset(.zero, animated: false)
         }
-        return year
     }
+    var eventsFetched: (() -> ())?
+    var eventSelected: ((Event) -> ())?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,6 +71,10 @@ class EventsTableViewController: TBATableViewController, DynamicTableList {
     // MARK: - Refreshing
     
     func refresh() {
+        guard let year = year else {
+            return
+        }
+        
         var request: Int?
         request = TBAEvent.fetchEvents(year) { (events, error) in
             if error != nil {

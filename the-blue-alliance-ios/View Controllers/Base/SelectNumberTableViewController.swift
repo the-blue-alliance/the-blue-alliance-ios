@@ -50,8 +50,8 @@ class SelectNumberTableViewController: UITableViewController {
         tableView.reloadRows(at: [indexPath], with: .automatic)
         
         let number = numbers![indexPath.row]
-        if selectNumberType == .year {
-            UserDefaults.standard.set(number, forKey: StatusConstants.currentSeasonKey)
+        if let numberSelected = numberSelected {
+            numberSelected(number)
         }
 
         dismiss(animated: true, completion: nil)
