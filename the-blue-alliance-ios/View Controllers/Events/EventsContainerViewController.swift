@@ -9,45 +9,118 @@
 import Foundation
 import UIKit
 import CoreData
+import TBAKit
 
 let EventsEmbed = "EventsEmbed"
 let EventSegue = "EventSegue"
+let SelectWeekSegue = "SelectWeekSegue"
 let SelectYearSegue = "SelectYearSegue"
 
-class EventsContainerViewController: TBAViewController {
+// Dear Zach... you just finished creating the EventOrder struct and using it internally for modeling this VC
+// This is an okay idea I suppose - you have these "abstract" ideas of types/weeks which you can use to setup
+// different labels and pull proper data and whatnot. Think about making it so EventOrder (or a better name) is
+// a function (or a transient propery?) on an Event object, and you just fetch all and pull that property from
+// events. That way you're not constantly assembling structs all over the fucking place based on data you pull
+// from Core Data.
+// 
+// Additionally, you'll need to refactor that NumberSelectViewController to use generics... it no longer takes
+// only a number, it takes a series of things. You should be able to figure something out.
+//
+// xoxo
+// 1:07am Zach
+
+public struct EventOrder: Equatable, Comparable {
+    public var type: Int
+    public var week: Int?
     
+    public init(type: Int, week: Int?) {
+        self.type = type
+        self.week = week
+    }
+    
+    // MARK: Equatable
+    
+    public static func ==(lhs: EventOrder, rhs: EventOrder) -> Bool {
+        return (lhs.type == rhs.type) && (lhs.week == rhs.week)
+    }
+
+    // MARK: Comparable
+    
+    // In order... Preseason, Week 1, Week 2, ..., Week 7, CMP, Offseason, Unlabeled
+    // (type: 100, week: nil) < (type: 0, week: 1)
+    // (type: 99, week: nil) < (type: -1, week: nil)
+    
+    public static func <(lhs: EventOrder, rhs: EventOrder) -> Bool {
+        // Preseason events should always come first
+        if lhs.type == EventType.preseason.rawValue || rhs.type == EventType.preseason.rawValue {
+            return lhs.type < rhs.type
+        }
+        return false
+    }
+    
+}
+
+class EventsContainerViewController: TBAViewController {
     internal var eventsViewController: EventsTableViewController?
     @IBOutlet internal var eventsView: UIView?
+    @IBOutlet internal var weeksButton: UIBarButtonItem?
     
-    internal var weeks: [Int]?
-    internal var week: Int = 1
-    internal var year: Int {
+    internal var weeks: [EventOrder]?
+    internal var maxYear: Int?
+    internal var week: EventOrder? {
         didSet {
-            eventsViewController?.year = year
-            updateInterface()
+            print("Set week")
+            eventsViewController?.week = week?.week
+
+            DispatchQueue.main.async {
+                self.updateInterface()
+            }
         }
     }
-    internal var maxYear = { () -> Int in
-        var maxYear = UserDefaults.standard.integer(forKey: StatusConstants.maxSeasonKey)
-        if maxYear == 0 {
-            // Default to the last safe year we know about
-            maxYear = 2017
+    internal var year: Int? {
+        didSet {
+            print("Set year")
+            eventsViewController?.year = year
+            
+            setupWeeks()
+            
+            DispatchQueue.main.async {
+                self.updateInterface()
+            }
         }
-        return maxYear
     }
 
     required init?(coder aDecoder: NSCoder) {
         let year = UserDefaults.standard.integer(forKey: StatusConstants.currentSeasonKey)
-        self.year = year != 0 ? year : 2017
-
+        if year != 0 {
+            self.year = year
+        }
+        
+        let maxYear = UserDefaults.standard.integer(forKey: StatusConstants.maxSeasonKey)
+        if maxYear != 0 {
+            self.maxYear = maxYear
+        }
+        
         super.init(coder: aDecoder)
+        print("Initilized")
     }
     
     override func viewDidLoad() {
+        print("View loaded")
         super.viewDidLoad()
         
         viewControllers = [eventsViewController!]
         containerViews = [eventsView!]
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.fetchedTBAStatus),
+                                               name: Notification.Name(kFetchedTBAStatus),
+                                               object: nil)
+        
+        // TODO: Sometimes this gets called twice...
+        if year != nil {
+            setupWeeks()
+        }
         
         updateInterface()
     }
@@ -55,22 +128,54 @@ class EventsContainerViewController: TBAViewController {
     // MARK: - Private Methods
 
     func updateInterface() {
-        if week == -1 {
-            navigationTitleLabel?.text = "---- Events"
+        print("Updating interface")
+        if let week = week {
+            navigationTitleLabel?.text = "\(Event.eventWeekString(eventOrder: week)) Events"
         } else {
-            navigationTitleLabel?.text = "Week \(week) Events"
+            navigationTitleLabel?.text = "---- Events"
         }
         
-        navigationDetailLabel?.text = "▾ \(year)"
+        if let year = year {
+            navigationDetailLabel?.text = "▾ \(year)"
+        } else {
+            navigationDetailLabel?.text = "▾ ----"
+        }
+        
+        if weeks != nil {
+            weeksButton?.title = "Weeks"
+        } else {
+            weeksButton?.title = "----"
+        }
+        
+        if year == nil && week == nil {
+            // Show loading
+        } else {
+            // Hide loading
+        }
     }
     
-    func setupCurrentWeek() {
+    func setupCurrentSeasonWeek() {
+        print("Setting up current season week")
+        guard let year = year else {
+            // TOOD: Show no year state
+            return
+        }
+
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Event.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "year == %ld", year)
+        // Fetch all events where endDate is today or after today
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        guard let date = dateFormatter.date(from: "2017-04-17") as? NSDate else {
+            fatalError("Zach you fucked up")
+        }
+        
+        fetchRequest.predicate = NSPredicate(format: "year == %ld && endDate >= %@", year, date)
         fetchRequest.resultType = NSFetchRequestResultType.dictionaryResultType
-        // TODO: Do we sort by week or startDate... or endDate?
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true)]
-        fetchRequest.propertiesToFetch = ["startDate", "endDate", "week"].map({ (propertyName) -> NSPropertyDescription in
+        fetchRequest.fetchLimit = 1
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "endDate", ascending: true)]
+        // TODO: Remove 'name' here
+        fetchRequest.propertiesToFetch = ["startDate", "endDate", "week", "name", "eventType"].map({ (propertyName) -> NSPropertyDescription in
             return Event.entity().propertiesByName[propertyName]!
         })
         
@@ -79,44 +184,60 @@ class EventsContainerViewController: TBAViewController {
             return
         }
         
-        if eventDates.count == 0 {
-            // TODO: This is no good... we need to have some events. Show a "No Events for this year" data state?
-        }
+        print(eventDates)
         
-        /*
-         let currentDate = Date()
-         var newestEvent = eventDates.first
-         for eventDate in eventDates.dropFirst() {
-         if currentDate >
-         
-         let newestEndDate = newestEvent["endDate"]
-         let startDate = eventDate["startDate"]
-         // let endDate = eventDate["endDate"]
-         }
-         */
+        // TODO: Need to know if we have no events OR if we just don't have any more events this year
+        // TODO: CMP is handled differently
+        if let dateDict = eventDates.first, let type = dateDict["eventType"] as? NSNumber, let week = dateDict["week"] as? NSNumber {
+            self.week = EventOrder(type: type.intValue, week: week.intValue)
+        } else {
+            // TODO: Show some error here
+        }
     }
     
     func setupWeeks() {
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Event.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "year == %ld", year)
-        fetchRequest.resultType = NSFetchRequestResultType.dictionaryResultType
-        fetchRequest.propertiesToFetch = [Event.entity().propertiesByName["week"]!]
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true)]
-        fetchRequest.returnsDistinctResults = true
-        
-        guard let weeks = try? persistentContainer?.viewContext.fetch(fetchRequest) as! [[String: NSNumber]] else {
-            // TODO: Throw init error
+        print("Setting up weeks")
+        guard let year = year else {
+            // TOOD: Show no year state
             return
         }
         
-        self.weeks = weeks.map({ (_ weekDict: [String: NSNumber]) -> Int in
-            // TODO: Don't force upwrap zachzor
-            return weekDict["week"]!.intValue
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Event.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "year == %ld", year)
+        // TODO: We need to change these sorts but it should be fine
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true), NSSortDescriptor(key: "eventType", ascending: true)]
+        
+        guard let events = try? persistentContainer?.viewContext.fetch(fetchRequest) as! [Event] else {
+            // TODO: Unable to fetch events
+            return
+        }
+        // TODO: Need to know if we have no events OR if we just don't have any more events this year
+        // TODO: CMP is handled differently
+        if events.count == 0 {
+            guard let eventsViewController = eventsViewController else {
+                // TODO: Show error here, or we could always call again once we set this VC
+                return
+            }
+            // Initial load of events for eventsVC
+            eventsViewController.refresh()
+            return
+        }
+
+        self.weeks = events.map { (e) -> EventOrder in
+            return EventOrder(type: Int(e.eventType), week: e.week?.intValue)
+        }.filter({ (<#EventOrder#>) -> Bool in
+            <#code#>
         })
         
-        if year == Calendar.current.year && week == -1 {
+        /*
+        self.weeks = events!.map { (event) -> EventOrder in
+            return event.eventOrder()
+        }
+        */
+
+        if year == Calendar.current.year && week == nil {
             // If it's the current year, setup the current week for this year
-            setupCurrentWeek()
+            setupCurrentSeasonWeek()
         } else {
             // Otherwise, default to the first week for this year
             if let firstWeek = self.weeks?.first {
@@ -125,18 +246,57 @@ class EventsContainerViewController: TBAViewController {
                 // TODO: Show "No events for current year"
             }
         }
-        updateInterface()
+        
+        DispatchQueue.main.async {
+            self.updateInterface()
+        }
+    }
+    
+    // MARK: - Observers
+    
+    func fetchedTBAStatus(notification: NSNotification) {
+        // TODO: Make sure we don't handle this if we already have both of these set
+        print("Fetched TBA status")
+        guard let status = notification.object as? TBAStatus else {
+            // TODO: Show error message
+            return
+        }
+        self.year = Int(status.currentSeason)
+        self.maxYear = Int(status.maxSeason)
+    }
+    
+    // MARK: - Navigation
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == SelectYearSegue && (maxYear == nil || year == nil) {
+            return false
+        } else if identifier == SelectWeekSegue && (weeks == nil || week == nil) {
+            return false
+        }
+        return true
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == SelectYearSegue {
+        if segue.identifier == SelectYearSegue || segue.identifier == SelectWeekSegue {
             let nav = segue.destination as! UINavigationController
             let selectYearTableViewController = nav.viewControllers.first as! SelectNumberTableViewController
-            selectYearTableViewController.selectNumberType = .year
-            selectYearTableViewController.currentNumber = year
-            selectYearTableViewController.numbers = Array(1992...maxYear()).reversed()
-            selectYearTableViewController.numberSelected = { number in
-                self.year = number
+            
+            if segue.identifier == SelectYearSegue {
+                selectYearTableViewController.selectNumberType = .year
+                selectYearTableViewController.currentNumber = year
+                selectYearTableViewController.numbers = Array(1992...maxYear!).reversed()
+                selectYearTableViewController.numberSelected = { number in
+                    self.year = number
+                }
+            } else {
+                /*
+                selectYearTableViewController.selectNumberType = .week
+                selectYearTableViewController.currentNumber = weeks.first!.week
+                selectYearTableViewController.numbers = Array(weeks!).reversed()
+                selectYearTableViewController.numberSelected = { number in
+                    self.week = number
+                }
+                */
             }
         } else if segue.identifier == EventSegue {
             let eventViewController = (segue.destination as! UINavigationController).topViewController as! EventViewController
@@ -144,7 +304,7 @@ class EventsContainerViewController: TBAViewController {
         } else if segue.identifier == EventsEmbed {
             eventsViewController = segue.destination as? EventsTableViewController
             if let weeks = weeks {
-                eventsViewController!.week = weeks.first!
+                eventsViewController!.week = weeks.first!.week
             } else {
                 // TODO: Show loading that we're fetching weeks...
             }

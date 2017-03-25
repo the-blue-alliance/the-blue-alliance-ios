@@ -29,7 +29,7 @@
         <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timezone" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="week" optional="YES" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="week" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="year" attributeType="Integer 16" minValueString="1992" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="district" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="District" inverseName="events" inverseEntity="District" syncable="YES"/>
         <relationship name="webcasts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Webcast" inverseName="event" inverseEntity="Webcast" syncable="YES"/>

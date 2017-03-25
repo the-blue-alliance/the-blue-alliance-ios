@@ -51,7 +51,7 @@ public protocol DynamicList: List, NSFetchedResultsControllerDelegate  {
 
   /// The fetched results controller that will be used to populate the list
   /// dynamically as the backing store is updated.
-  var fetchedResultsController: NSFetchedResultsController<FetchedObject>! { get set }
+  var fetchedResultsController: NSFetchedResultsController<FetchedObject>? { get set }
 }
 
 /**
@@ -125,7 +125,7 @@ public extension DynamicList where Object == FetchedObject {
     
   func performFetch() {
     do {
-      try fetchedResultsController.performFetch()
+      try fetchedResultsController?.performFetch()
     } catch let error {
       fatalError(error.localizedDescription)
     }
@@ -386,6 +386,9 @@ Object == FetchedObject {
    Method to call in `controllerDidChangeContent:`
    */
   func didChangeContent() {
+    guard let fetchedResultsController = fetchedResultsController else {
+        return
+    }
     for section in fetchedResultsController.sections! {
       print(section.numberOfObjects)
     }

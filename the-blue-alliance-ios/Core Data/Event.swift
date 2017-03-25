@@ -10,13 +10,6 @@ import Foundation
 import TBAKit
 import CoreData
 
-enum EventWeek: Int {
-    case unlabeled = -1
-    case preseason = 0
-    case championship = 99
-    case offseason = 100
-}
-
 public enum EventType: Int {
     case regional = 0
     case district = 1
@@ -113,28 +106,41 @@ extension Event {
         event.website = model.website
 
         if let week = model.week {
-            event.week = Int16(week)
-        } else {
-            switch model.eventType {
-            case EventType.unlabeled.rawValue:
-                event.week = Int16(EventWeek.unlabeled.rawValue)
-            case EventType.preseason.rawValue:
-                event.week = Int16(EventWeek.preseason.rawValue)
-            case EventType.districtChampionship.rawValue, EventType.championshipDivision.rawValue, EventType.championshipFinals.rawValue:
-                event.week = Int16(EventWeek.championship.rawValue)
-            case EventType.offseason.rawValue:
-                event.week = Int16(EventWeek.offseason.rawValue)
-            default:
-                context.delete(event)
-                throw InitError.invalid(key: "week")
-            }
+            event.week = NSNumber(integerLiteral: week)
         }
         
         event.year = Int16(model.year)
                 
         return event
     }
+    
+    // TODO: Move this somewhere else??
+    public class func eventWeekString(eventOrder: EventOrder) -> String {
+        let weekString: String?
+        if eventOrder.type == EventType.districtChampionship.rawValue || eventOrder.type == EventType.championshipDivision.rawValue || eventOrder.type == EventType.championshipFinals.rawValue {
+            // TODO: Need to handle different CMPs - "FIRST Championship - Houston" and "FIRST Championship - St. Louis"
+            weekString = "Championship"
+        } else {
+            guard let week = eventOrder.week else {
+                return "Other"
+            }
 
+            switch week {
+            case EventType.unlabeled.rawValue:
+                weekString = "Other"
+            case EventType.preseason.rawValue:
+                weekString = "Preseason"
+            case EventType.districtChampionship.rawValue, EventType.championshipDivision.rawValue, EventType.championshipFinals.rawValue:
+                weekString = "Championship"
+            case EventType.offseason.rawValue:
+                weekString = "Offseason"
+            default:
+                weekString = "Week \(week)"
+            }
+        }
+        return weekString!
+    }
+    
     public func dateString() -> String? {
         if self.startDate == nil || self.endDate == nil {
             return nil

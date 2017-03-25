@@ -13,9 +13,9 @@ import CoreData
 let EventCellReuseIdentifier = "EventCell"
 
 class EventsTableViewController: TBATableViewController, DynamicTableList {
-    override public var persistentContainer: NSPersistentContainer! {
+    override public var persistentContainer: NSPersistentContainer? {
         didSet {
-            guard let year = year else {
+            guard let persistentContainer = persistentContainer, let year = year, let week = week else {
                 return
             }
             
@@ -25,10 +25,10 @@ class EventsTableViewController: TBATableViewController, DynamicTableList {
                                             NSSortDescriptor(key: "name", ascending: true)]
             fetchRequest.predicate = NSPredicate(format: "week == %ld && year == %ld", week, year)
             
-            fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer!.viewContext, sectionNameKeyPath: "district.name", cacheName: nil)
+            fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "district.name", cacheName: nil)
             
             do {
-                try self.fetchedResultsController.performFetch()
+                try fetchedResultsController!.performFetch()
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -38,34 +38,37 @@ class EventsTableViewController: TBATableViewController, DynamicTableList {
         }
     }
     typealias FetchedObject = Event
-    public var fetchedResultsController: NSFetchedResultsController<Event>! {
+    public var fetchedResultsController: NSFetchedResultsController<Event>? {
         didSet {
-            fetchedResultsController.delegate = self
+            fetchedResultsController?.delegate = self
         }
     }
     
-    internal var week: Int = 1
+    internal var week: Int? {
+        didSet {
+            clearFRC()
+        }
+    }
     internal var year: Int? {
         didSet {
-            tableView.reloadData()
-            tableView.setContentOffset(.zero, animated: false)
+            clearFRC()
+            if shouldNoDataRefresh() {
+                refresh()
+            }
         }
     }
     var eventsFetched: (() -> ())?
     var eventSelected: ((Event) -> ())?
 
+    func clearFRC() {
+        tableView.reloadData()
+        tableView.setContentOffset(.zero, animated: false)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.register(UINib(nibName: "EventTableViewCell", bundle: nil), forCellReuseIdentifier: EventCellReuseIdentifier)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if shouldNoDataRefresh() {
-            refresh()
-        }
     }
     
     // MARK: - Refreshing
@@ -95,10 +98,8 @@ class EventsTableViewController: TBATableViewController, DynamicTableList {
                 // Save the context.
                 do {
                     try backgroundContext.save()
-                    DispatchQueue.main.async {
-                        if let eventsFetched = self.eventsFetched {
-                            eventsFetched()
-                        }
+                    if let eventsFetched = self.eventsFetched {
+                        eventsFetched()
                     }
                 } catch {
                     // Replace this implementation with code to handle the error appropriately.
@@ -111,7 +112,7 @@ class EventsTableViewController: TBATableViewController, DynamicTableList {
     }
     
     func shouldNoDataRefresh() -> Bool {
-        guard let fetchedObjects = fetchedResultsController.fetchedObjects else {
+        guard let fetchedObjects = fetchedResultsController?.fetchedObjects else {
             return false
         }
         return fetchedObjects.count == 0
@@ -153,7 +154,7 @@ class EventsTableViewController: TBATableViewController, DynamicTableList {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if let event = fetchedResultsController.sections?[section].objects?.first as? Event, let district = event.district {
+        if let event = fetchedResultsController?.sections?[section].objects?.first as? Event, let district = event.district {
             return "\(district.name!) Districts"
         } else {
            return "Regionals"

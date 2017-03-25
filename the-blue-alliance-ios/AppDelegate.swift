@@ -19,6 +19,9 @@ public enum StatusConstants {
     static let maxSeasonKey = "max_season"
 }
 
+// Notifications
+let kFetchedTBAStatus = "kFetchedTBAStatus"
+
 let kNoSelectionNavigationController = "NoSelectionNavigationController"
 
 extension TBAStatus {
@@ -86,6 +89,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 UserDefaults.standard.set(status.iosInfo.minAppVersion, forKey: StatusConstants.minAppVersionKey)
                 UserDefaults.standard.set(status.datafeedDown, forKey: StatusConstants.isDatafeedDownKey)
                 UserDefaults.standard.set(status.maxSeason, forKey: StatusConstants.maxSeasonKey)
+                
+                NotificationCenter.default.post(name: Notification.Name(kFetchedTBAStatus), object: status)
             } else {
                 let defaultStatus = TBAStatus.defaultStatus()
                 // Didn't get a valid response from API - grab our default status
@@ -112,6 +117,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if UserDefaults.standard.integer(forKey: StatusConstants.maxSeasonKey) == 0 {
                     UserDefaults.standard.set(defaultStatus.maxSeason, forKey: StatusConstants.maxSeasonKey)
                 }
+                
+                NotificationCenter.default.post(name: Notification.Name(kFetchedTBAStatus), object: defaultStatus)
             }
         }
 
