@@ -16,6 +16,7 @@ public enum EventType: Int {
     case districtChampionship = 2
     case championshipDivision = 3
     case championshipFinals = 4
+    case districtChampionshipDivision = 5
     case offseason = 99
     case preseason = 100
     case unlabeled = -1
@@ -114,10 +115,9 @@ extension Event {
         return event
     }
     
-    // TODO: Move this somewhere else??
     public class func eventWeekString(eventOrder: EventOrder) -> String {
         let weekString: String?
-        if eventOrder.type == EventType.districtChampionship.rawValue || eventOrder.type == EventType.championshipDivision.rawValue || eventOrder.type == EventType.championshipFinals.rawValue {
+        if eventOrder.type == EventType.championshipDivision.rawValue || eventOrder.type == EventType.championshipFinals.rawValue {
             // TODO: Need to handle different CMPs - "FIRST Championship - Houston" and "FIRST Championship - St. Louis"
             weekString = "Championship"
         } else {
@@ -130,12 +130,26 @@ extension Event {
                 weekString = "Other"
             case EventType.preseason.rawValue:
                 weekString = "Preseason"
-            case EventType.districtChampionship.rawValue, EventType.championshipDivision.rawValue, EventType.championshipFinals.rawValue:
+            // TODO: Drop this case since we handle it above
+            case EventType.championshipDivision.rawValue, EventType.championshipFinals.rawValue:
                 weekString = "Championship"
             case EventType.offseason.rawValue:
                 weekString = "Offseason"
             default:
-                weekString = "Week \(week)"
+                /**
+                 * Special cases for 2016:
+                 * Week 1 is actually Week 0.5, eveything else is one less
+                 * See http://www.usfirst.org/roboticsprograms/frc/blog-The-Palmetto-Regional
+                 */
+                if eventOrder.year == 2016 {
+                    if eventOrder.week == 0 {
+                        weekString = "Week 0.5"
+                    } else {
+                        weekString = "Week \(week)"
+                    }
+                } else {
+                    weekString = "Week \(week + 1)"
+                }
             }
         }
         return weekString!

@@ -29,21 +29,23 @@ let SelectYearSegue = "SelectYearSegue"
 // xoxo
 // 1:07am Zach
 
-public struct EventOrder: Equatable, Comparable {
+public struct EventOrder: Equatable, Comparable, Hashable, CustomStringConvertible {
     public var type: Int
     public var week: Int?
+    public var year: Int
     
-    public init(type: Int, week: Int?) {
+    public init(type: Int, week: Int?, year: Int) {
         self.type = type
         self.week = week
+        self.year = year
     }
     
     // MARK: Equatable
     
     public static func ==(lhs: EventOrder, rhs: EventOrder) -> Bool {
-        return (lhs.type == rhs.type) && (lhs.week == rhs.week)
+        return (lhs.type == rhs.type) && (lhs.week == rhs.week) && (lhs.year == rhs.year)
     }
-
+    
     // MARK: Comparable
     
     // In order... Preseason, Week 1, Week 2, ..., Week 7, CMP, Offseason, Unlabeled
@@ -51,11 +53,37 @@ public struct EventOrder: Equatable, Comparable {
     // (type: 99, week: nil) < (type: -1, week: nil)
     
     public static func <(lhs: EventOrder, rhs: EventOrder) -> Bool {
+        // Events with earlier years are always first
+        if lhs.year != rhs.year {
+            return lhs.year < rhs.year
+        }
         // Preseason events should always come first
         if lhs.type == EventType.preseason.rawValue || rhs.type == EventType.preseason.rawValue {
             return lhs.type < rhs.type
         }
         return false
+    }
+    
+    // MARK: Hashable
+    
+    public var hashValue : Int {
+        get {
+            var weekString = "nil"
+            if let week = week {
+                weekString = "\(week)"
+            }
+            return "\(self.type),\(weekString),\(self.year)".hashValue
+        }
+    }
+    
+    // MARK: CustomStringConvertible
+    
+    public var description: String {
+        var weekString = "nil"
+        if let week = week {
+            weekString = "\(week)"
+        }
+        return "Type: \(self.type) | Week: \(weekString) | Year: \(self.year)"
     }
     
 }
@@ -82,7 +110,10 @@ class EventsContainerViewController: TBAViewController {
             print("Set year")
             eventsViewController?.year = year
             
-            setupWeeks()
+            // Only setup weeks again if we've changed years
+            if week?.year != year {
+                setupWeeks()
+            }
             
             DispatchQueue.main.async {
                 self.updateInterface()
@@ -161,21 +192,15 @@ class EventsContainerViewController: TBAViewController {
             return
         }
 
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Event.fetchRequest()
         // Fetch all events where endDate is today or after today
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        guard let date = dateFormatter.date(from: "2017-04-17") as? NSDate else {
-            fatalError("Zach you fucked up")
-        }
+        let date = NSDate()
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Event.fetchRequest()
         
         fetchRequest.predicate = NSPredicate(format: "year == %ld && endDate >= %@", year, date)
         fetchRequest.resultType = NSFetchRequestResultType.dictionaryResultType
         fetchRequest.fetchLimit = 1
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "endDate", ascending: true)]
-        // TODO: Remove 'name' here
-        fetchRequest.propertiesToFetch = ["startDate", "endDate", "week", "name", "eventType"].map({ (propertyName) -> NSPropertyDescription in
+        fetchRequest.propertiesToFetch = ["startDate", "endDate", "week", "eventType"].map({ (propertyName) -> NSPropertyDescription in
             return Event.entity().propertiesByName[propertyName]!
         })
         
@@ -184,12 +209,10 @@ class EventsContainerViewController: TBAViewController {
             return
         }
         
-        print(eventDates)
-        
         // TODO: Need to know if we have no events OR if we just don't have any more events this year
         // TODO: CMP is handled differently
         if let dateDict = eventDates.first, let type = dateDict["eventType"] as? NSNumber, let week = dateDict["week"] as? NSNumber {
-            self.week = EventOrder(type: type.intValue, week: week.intValue)
+            self.week = EventOrder(type: type.intValue, week: week.intValue, year: year)
         } else {
             // TODO: Show some error here
         }
@@ -223,18 +246,11 @@ class EventsContainerViewController: TBAViewController {
             return
         }
 
-        self.weeks = events.map { (e) -> EventOrder in
-            return EventOrder(type: Int(e.eventType), week: e.week?.intValue)
-        }.filter({ (<#EventOrder#>) -> Bool in
-            <#code#>
-        })
+        self.weeks = Array(Set(events.map({ (e) -> EventOrder in
+            return EventOrder(type: Int(e.eventType), week: e.week?.intValue, year: year)
+        }))).sorted()
+        print(self.weeks!)
         
-        /*
-        self.weeks = events!.map { (event) -> EventOrder in
-            return event.eventOrder()
-        }
-        */
-
         if year == Calendar.current.year && week == nil {
             // If it's the current year, setup the current week for this year
             setupCurrentSeasonWeek()
