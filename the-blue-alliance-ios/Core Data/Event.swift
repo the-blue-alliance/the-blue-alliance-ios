@@ -149,4 +149,116 @@ extension Event {
         return dateText
     }
     
+    public var weekString: String {
+        var weekString = "nil"
+        let eventType = Int(self.eventType)
+        if eventType == EventType.championshipDivision.rawValue || eventType == EventType.championshipFinals.rawValue {
+            // TODO: Need to handle different CMPs - "FIRST Championship - Houston" and "FIRST Championship - St. Louis"
+            if year >= 2017, let city = city {
+                weekString = "Championship - \(city)"
+            } else {
+                weekString = "Championship"
+            }
+        } else {
+            switch eventType {
+            case EventType.unlabeled.rawValue:
+                weekString = "Other"
+            case EventType.preseason.rawValue:
+                weekString = "Preseason"
+            case EventType.offseason.rawValue:
+                weekString = "Offseason"
+            default:
+                guard let week = week else {
+                    return "Other"
+                }
+                
+                /**
+                 * Special cases for 2016:
+                 * Week 1 is actually Week 0.5, eveything else is one less
+                 * See http://www.usfirst.org/roboticsprograms/frc/blog-The-Palmetto-Regional
+                 */
+                if year == 2016 {
+                    if week == 0 {
+                        weekString = "Week 0.5"
+                    } else {
+                        weekString = "Week \(week.intValue)"
+                    }
+                } else {
+                    weekString = "Week \(week.intValue + 1)"
+                }
+            }
+        }
+        return weekString
+    }
+    
+}
+
+extension Event: Comparable {
+    
+    // MARK: Comparable
+    
+    // In order... Preseason, Week 1, Week 2, ..., Week 7, CMP, Offseason, Unlabeled
+    // (type: 100, week: nil) < (type: 0, week: 1)
+    // (type: 99, week: nil) < (type: -1, week: nil)
+    
+    public static func <(lhs: Event, rhs: Event) -> Bool {
+        if lhs.year != rhs.year {
+            return lhs.year < rhs.year
+        }
+        
+        let lhsType = Int(lhs.eventType)
+        let rhsType = Int(rhs.eventType)
+        
+        // Preseason events should always come first
+        if lhsType == EventType.preseason.rawValue || rhsType == EventType.preseason.rawValue {
+            // Preseason, being 100, has the highest event type. So even though this seems backwards... it's not
+            return lhsType > rhsType
+        }
+        // Unlabeled events go at the very end no matter what
+        if lhsType == EventType.unlabeled.rawValue || rhsType == EventType.unlabeled.rawValue {
+            // Same as preseason - unlabeled events are the lowest possible number so even though this line seems backwards it's not
+            return lhsType > rhsType
+        }
+        // Offseason events come after everything besides unlabeled
+        if lhsType == EventType.offseason.rawValue || rhsType == EventType.offseason.rawValue {
+            // We've already handled preseason (100) so now we can assume offseason's (99) will always be the highest type
+            return lhsType < rhsType
+        }
+        // CMP finals come after everything besides offseason, unlabeled
+        if lhsType == EventType.championshipFinals.rawValue || rhsType == EventType.championshipFinals.rawValue {
+            // Make sure we handle that districtCMPDivision case
+            if lhsType == EventType.districtChampionshipDivision.rawValue || rhsType == EventType.districtChampionshipDivision.rawValue {
+                return lhsType > rhsType
+            } else {
+                return lhsType < rhsType
+            }
+        }
+        // CMP divisions are next
+        if lhsType == EventType.championshipDivision.rawValue || rhsType == EventType.championshipDivision.rawValue {
+            // Make sure we handle that districtCMPDivision case
+            if lhsType == EventType.districtChampionshipDivision.rawValue || rhsType == EventType.districtChampionshipDivision.rawValue {
+                return lhsType > rhsType
+            } else {
+                return lhsType < rhsType
+            }
+        }
+        // EVERYTHING ELSE (districts, regionals, DCMPs, DCMP divisions) has weeks. This is just an easy sort... which event has a first week
+        // Only weird thing is how we're sorting events that have the same weeks. It goes...
+        // Regional < District < DCMP Division < DCMP
+        if let lhsWeek = lhs.week, let rhsWeek = rhs.week {
+            if lhsWeek == rhsWeek {
+                // Make sure we handle the weird case of district championship divisions being a higher number than DCMPs
+                if (lhsType == EventType.districtChampionshipDivision.rawValue || rhsType == EventType.districtChampionshipDivision.rawValue) &&
+                    (lhsType == EventType.districtChampionship.rawValue || rhsType == EventType.districtChampionship.rawValue) {
+                    return lhsType > rhsType
+                } else {
+                    return lhsType < rhsType
+                }
+            } else {
+                return lhsWeek.intValue < rhsWeek.intValue
+            }
+        }
+        return false
+    }
+    
 }

@@ -15,7 +15,7 @@ let EventCellReuseIdentifier = "EventCell"
 class EventsTableViewController: TBATableViewController, DynamicTableList {
     override public var persistentContainer: NSPersistentContainer? {
         didSet {
-            guard let persistentContainer = persistentContainer, let year = year, let week = week else {
+            guard let persistentContainer = persistentContainer, let year = year, let weekEvent = weekEvent else {
                 return
             }
             
@@ -23,7 +23,15 @@ class EventsTableViewController: TBATableViewController, DynamicTableList {
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "district.name", ascending: true),
                                             NSSortDescriptor(key: "startDate", ascending: true),
                                             NSSortDescriptor(key: "name", ascending: true)]
-            fetchRequest.predicate = NSPredicate(format: "week == %ld && year == %ld", week, year)
+
+            if let week = weekEvent.week {
+                // Event has a week - filter based on the week
+                fetchRequest.predicate = NSPredicate(format: "week == %ld && year == %ld", week.intValue, year)
+            } else {
+                // Event doesn't have a week - filter based on type
+                // TODO: This doesn't work for CMPs
+                fetchRequest.predicate = NSPredicate(format: "type == %ld && year == %ld", weekEvent.eventType, year)
+            }
             
             fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "district.name", cacheName: nil)
             
@@ -44,7 +52,7 @@ class EventsTableViewController: TBATableViewController, DynamicTableList {
         }
     }
     
-    internal var week: Int? {
+    internal var weekEvent: Event? {
         didSet {
             clearFRC()
         }
