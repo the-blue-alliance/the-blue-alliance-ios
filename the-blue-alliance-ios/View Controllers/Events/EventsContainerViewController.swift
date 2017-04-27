@@ -16,19 +16,6 @@ let EventSegue = "EventSegue"
 let SelectWeekSegue = "SelectWeekSegue"
 let SelectYearSegue = "SelectYearSegue"
 
-// Dear Zach... you just finished creating the EventOrder struct and using it internally for modeling this VC
-// This is an okay idea I suppose - you have these "abstract" ideas of types/weeks which you can use to setup
-// different labels and pull proper data and whatnot. Think about making it so EventOrder (or a better name) is
-// a function (or a transient propery?) on an Event object, and you just fetch all and pull that property from
-// events. That way you're not constantly assembling structs all over the fucking place based on data you pull
-// from Core Data.
-// 
-// Additionally, you'll need to refactor that NumberSelectViewController to use generics... it no longer takes
-// only a number, it takes a series of things. You should be able to figure something out.
-//
-// xoxo
-// 1:07am Zach
-
 public struct EventOrder: Equatable, Comparable, Hashable, CustomStringConvertible {
     public var type: Int
     public var week: Int?
@@ -53,13 +40,57 @@ public struct EventOrder: Equatable, Comparable, Hashable, CustomStringConvertib
     // (type: 99, week: nil) < (type: -1, week: nil)
     
     public static func <(lhs: EventOrder, rhs: EventOrder) -> Bool {
-        // Events with earlier years are always first
         if lhs.year != rhs.year {
             return lhs.year < rhs.year
         }
         // Preseason events should always come first
         if lhs.type == EventType.preseason.rawValue || rhs.type == EventType.preseason.rawValue {
+            // Preseason, being 100, has the highest event type. So even though this seems backwards... it's not
+            return lhs.type > rhs.type
+        }
+        // Unlabeled events go at the very end no matter what
+        if lhs.type == EventType.unlabeled.rawValue || rhs.type == EventType.unlabeled.rawValue {
+            // Same as preseason - unlabeled events are the lowest possible number so even though this line seems backwards it's not
+            return lhs.type > rhs.type
+        }
+        // Offseason events come after everything besides unlabeled
+        if lhs.type == EventType.offseason.rawValue || rhs.type == EventType.offseason.rawValue {
+            // We've already handled preseason (100) so now we can assume offseason's (99) will always be the highest type
             return lhs.type < rhs.type
+        }
+        // CMP finals come after everything besides offseason, unlabeled
+        if lhs.type == EventType.championshipFinals.rawValue || rhs.type == EventType.championshipFinals.rawValue {
+            // Make sure we handle that districtCMPDivision case
+            if lhs.type == EventType.districtChampionshipDivision.rawValue || rhs.type == EventType.districtChampionshipDivision.rawValue {
+                return lhs.type > rhs.type
+            } else {
+                return lhs.type < rhs.type
+            }
+        }
+        // CMP divisions are next
+        if lhs.type == EventType.championshipDivision.rawValue || rhs.type == EventType.championshipDivision.rawValue {
+            // Make sure we handle that districtCMPDivision case
+            if lhs.type == EventType.districtChampionshipDivision.rawValue || rhs.type == EventType.districtChampionshipDivision.rawValue {
+                return lhs.type > rhs.type
+            } else {
+                return lhs.type < rhs.type
+            }
+        }
+        // EVERYTHING ELSE (districts, regionals, DCMPs, DCMP divisions) has weeks. This is just an easy sort... which event has a first week
+        // Only weird thing is how we're sorting events that have the same weeks. It goes...
+        // Regional < District < DCMP Division < DCMP
+        if let lhsWeek = lhs.week, let rhsWeek = rhs.week {
+            if lhsWeek == rhsWeek {
+                // Make sure we handle the weird case of district championship divisions being a higher number than DCMPs
+                if (lhs.type == EventType.districtChampionshipDivision.rawValue || rhs.type == EventType.districtChampionshipDivision.rawValue) &&
+                    (lhs.type == EventType.districtChampionship.rawValue || rhs.type == EventType.districtChampionship.rawValue) {
+                    return lhs.type > rhs.type
+                } else {
+                    return lhs.type < rhs.type
+                }
+            } else {
+                return lhsWeek < rhsWeek
+            }
         }
         return false
     }
@@ -80,10 +111,39 @@ public struct EventOrder: Equatable, Comparable, Hashable, CustomStringConvertib
     
     public var description: String {
         var weekString = "nil"
-        if let week = week {
-            weekString = "\(week)"
+        if type == EventType.championshipDivision.rawValue || type == EventType.championshipFinals.rawValue {
+            // TODO: Need to handle different CMPs - "FIRST Championship - Houston" and "FIRST Championship - St. Louis"
+            weekString = "Championship"
+        } else {
+            switch type {
+            case EventType.unlabeled.rawValue:
+                weekString = "Other"
+            case EventType.preseason.rawValue:
+                weekString = "Preseason"
+            case EventType.offseason.rawValue:
+                weekString = "Offseason"
+            default:
+                guard let week = week else {
+                    return "Other"
+                }
+
+                /**
+                 * Special cases for 2016:
+                 * Week 1 is actually Week 0.5, eveything else is one less
+                 * See http://www.usfirst.org/roboticsprograms/frc/blog-The-Palmetto-Regional
+                 */
+                if year == 2016 {
+                    if week == 0 {
+                        weekString = "Week 0.5"
+                    } else {
+                        weekString = "Week \(week)"
+                    }
+                } else {
+                    weekString = "Week \(week + 1)"
+                }
+            }
         }
-        return "Type: \(self.type) | Week: \(weekString) | Year: \(self.year)"
+        return weekString
     }
     
 }
@@ -93,7 +153,7 @@ class EventsContainerViewController: TBAViewController {
     @IBOutlet internal var eventsView: UIView?
     @IBOutlet internal var weeksButton: UIBarButtonItem?
     
-    internal var weeks: [EventOrder]?
+    internal var weeks: [EventOrder] = []
     internal var maxYear: Int?
     internal var week: EventOrder? {
         didSet {
@@ -161,7 +221,7 @@ class EventsContainerViewController: TBAViewController {
     func updateInterface() {
         print("Updating interface")
         if let week = week {
-            navigationTitleLabel?.text = "\(Event.eventWeekString(eventOrder: week)) Events"
+            navigationTitleLabel?.text = "\(week.description) Events"
         } else {
             navigationTitleLabel?.text = "---- Events"
         }
@@ -172,7 +232,7 @@ class EventsContainerViewController: TBAViewController {
             navigationDetailLabel?.text = "▾ ----"
         }
         
-        if weeks != nil {
+        if !weeks.isEmpty {
             weeksButton?.title = "Weeks"
         } else {
             weeksButton?.title = "----"
@@ -245,18 +305,39 @@ class EventsContainerViewController: TBAViewController {
             eventsViewController.refresh()
             return
         }
-
-        self.weeks = Array(Set(events.map({ (e) -> EventOrder in
-            return EventOrder(type: Int(e.eventType), week: e.week?.intValue, year: year)
-        }))).sorted()
-        print(self.weeks!)
+        
+        var handledWeeks: Set<Int> = []
+        var handledTypes: Set<Int> = []
+        self.weeks = Array(events.flatMap({ (e) -> EventOrder? in
+            if let week = e.week {
+                // Make sure each week only shows up once
+                if handledWeeks.contains(week.intValue) {
+                    return nil
+                }
+                handledWeeks.insert(week.intValue)
+                return EventOrder(type: Int(e.eventType), week: week.intValue, year: year)
+            } else if Int(e.eventType) == EventType.championshipDivision.rawValue {
+                // Drop all district CMP divisions (they're grouped under CMPs not weeks)
+                return nil
+            } else if Int(e.eventType) == EventType.championshipFinals.rawValue {
+                // Always add all CMP finals
+                return EventOrder(type: Int(e.eventType), week: nil, year: year)
+            } else {
+                // Make sure we only have preseason, offseason, unlabeled once
+                if handledTypes.contains(Int(e.eventType)) {
+                    return nil
+                }
+                handledTypes.insert(Int(e.eventType))
+                return EventOrder(type: Int(e.eventType), week: nil, year: year)
+            }
+        })).sorted()
         
         if year == Calendar.current.year && week == nil {
             // If it's the current year, setup the current week for this year
             setupCurrentSeasonWeek()
         } else {
             // Otherwise, default to the first week for this year
-            if let firstWeek = self.weeks?.first {
+            if let firstWeek = self.weeks.first {
                 week = firstWeek
             } else {
                 // TODO: Show "No events for current year"
@@ -286,7 +367,7 @@ class EventsContainerViewController: TBAViewController {
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if identifier == SelectYearSegue && (maxYear == nil || year == nil) {
             return false
-        } else if identifier == SelectWeekSegue && (weeks == nil || week == nil) {
+        } else if identifier == SelectWeekSegue && (weeks.isEmpty || week == nil) {
             return false
         }
         return true
@@ -295,31 +376,36 @@ class EventsContainerViewController: TBAViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == SelectYearSegue || segue.identifier == SelectWeekSegue {
             let nav = segue.destination as! UINavigationController
-            let selectYearTableViewController = nav.viewControllers.first as! SelectNumberTableViewController
             
             if segue.identifier == SelectYearSegue {
-                selectYearTableViewController.selectNumberType = .year
-                selectYearTableViewController.currentNumber = year
-                selectYearTableViewController.numbers = Array(1992...maxYear!).reversed()
-                selectYearTableViewController.numberSelected = { number in
-                    self.year = number
+                let selectTableViewController = SelectTableViewController<Int>()
+                selectTableViewController.current = year
+                selectTableViewController.options = Array(1992...maxYear!).reversed()
+                selectTableViewController.optionSelected = { year in
+                    self.year = year
                 }
+                selectTableViewController.optionString = { year in
+                    return String(year)
+                }
+                nav.viewControllers = [selectTableViewController]
             } else {
-                /*
-                selectYearTableViewController.selectNumberType = .week
-                selectYearTableViewController.currentNumber = weeks.first!.week
-                selectYearTableViewController.numbers = Array(weeks!).reversed()
-                selectYearTableViewController.numberSelected = { number in
-                    self.week = number
+                let selectTableViewController = SelectTableViewController<EventOrder>()
+                selectTableViewController.current = week!
+                selectTableViewController.options = weeks
+                selectTableViewController.optionSelected = { week in
+                    self.week = week
                 }
-                */
+                selectTableViewController.optionString = { week in
+                    return week.description
+                }
+                nav.viewControllers = [selectTableViewController]
             }
         } else if segue.identifier == EventSegue {
             let eventViewController = (segue.destination as! UINavigationController).topViewController as! EventViewController
             eventViewController.event = sender as? Event
         } else if segue.identifier == EventsEmbed {
             eventsViewController = segue.destination as? EventsTableViewController
-            if let weeks = weeks {
+            if !weeks.isEmpty {
                 eventsViewController!.week = weeks.first!.week
             } else {
                 // TODO: Show loading that we're fetching weeks...

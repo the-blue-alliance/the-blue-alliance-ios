@@ -114,47 +114,7 @@ extension Event {
                 
         return event
     }
-    
-    public class func eventWeekString(eventOrder: EventOrder) -> String {
-        let weekString: String?
-        if eventOrder.type == EventType.championshipDivision.rawValue || eventOrder.type == EventType.championshipFinals.rawValue {
-            // TODO: Need to handle different CMPs - "FIRST Championship - Houston" and "FIRST Championship - St. Louis"
-            weekString = "Championship"
-        } else {
-            guard let week = eventOrder.week else {
-                return "Other"
-            }
-
-            switch week {
-            case EventType.unlabeled.rawValue:
-                weekString = "Other"
-            case EventType.preseason.rawValue:
-                weekString = "Preseason"
-            // TODO: Drop this case since we handle it above
-            case EventType.championshipDivision.rawValue, EventType.championshipFinals.rawValue:
-                weekString = "Championship"
-            case EventType.offseason.rawValue:
-                weekString = "Offseason"
-            default:
-                /**
-                 * Special cases for 2016:
-                 * Week 1 is actually Week 0.5, eveything else is one less
-                 * See http://www.usfirst.org/roboticsprograms/frc/blog-The-Palmetto-Regional
-                 */
-                if eventOrder.year == 2016 {
-                    if eventOrder.week == 0 {
-                        weekString = "Week 0.5"
-                    } else {
-                        weekString = "Week \(week)"
-                    }
-                } else {
-                    weekString = "Week \(week + 1)"
-                }
-            }
-        }
-        return weekString!
-    }
-    
+        
     public func dateString() -> String? {
         if self.startDate == nil || self.endDate == nil {
             return nil
