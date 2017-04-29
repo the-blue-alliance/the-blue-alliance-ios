@@ -121,10 +121,19 @@ class EventsContainerViewController: TBAViewController {
         }
 
         // Fetch all events where endDate is today or after today
-        let date = NSDate()
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Event.fetchRequest()
+        let date = Date()
+        // Remove time from date - we only care about the day
+        let components = Calendar.current.dateComponents([.day, .month, .year], from: date)
         
-        fetchRequest.predicate = NSPredicate(format: "year == %ld && endDate >= %@ && eventType != %ld", year, date, EventType.championshipDivision.rawValue)
+        // Conversion stuff because Core Data still uses NSDates
+        guard let swiftDate = Calendar.current.date(from: components) else {
+            // TODO: Show some error - this shouldn't happen
+            return
+        }
+        let coreDataDate = NSDate(timeIntervalSince1970: swiftDate.timeIntervalSince1970)
+        
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Event.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "year == %ld && (endDate >= %@) && eventType != %ld", year, coreDataDate, EventType.championshipDivision.rawValue)
         fetchRequest.fetchLimit = 1
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "endDate", ascending: true)]
         
