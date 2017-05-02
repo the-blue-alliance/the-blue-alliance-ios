@@ -12,72 +12,33 @@ import CoreData
 
 let EventCellReuseIdentifier = "EventCell"
 
-class EventsTableViewController: TBATableViewController, DynamicTableList {
-    override public var persistentContainer: NSPersistentContainer? {
-        didSet {
-            guard let persistentContainer = persistentContainer, let year = year, let weekEvent = weekEvent else {
-                return
-            }
-            
-            let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "district.name", ascending: true),
-                                            NSSortDescriptor(key: "startDate", ascending: true),
-                                            NSSortDescriptor(key: "name", ascending: true)]
-
-            if let week = weekEvent.week {
-                // Event has a week - filter based on the week
-                fetchRequest.predicate = NSPredicate(format: "week == %ld && year == %ld", week.intValue, year)
-            } else {
-                // Event doesn't have a week - filter based on type
-                // TODO: This doesn't work for CMPs
-                fetchRequest.predicate = NSPredicate(format: "type == %ld && year == %ld", weekEvent.eventType, year)
-            }
-            
-            fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "district.name", cacheName: nil)
-            
-            do {
-                try fetchedResultsController!.performFetch()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
-    typealias FetchedObject = Event
-    public var fetchedResultsController: NSFetchedResultsController<Event>? {
-        didSet {
-            fetchedResultsController?.delegate = self
-        }
-    }
+class EventsTableViewController: TBATableViewController {
     
     internal var weekEvent: Event? {
         didSet {
-            clearFRC()
+            if dataSource == nil {
+                setupTableView()
+            } else {
+                updateDataSource()
+            }
         }
     }
     internal var year: Int? {
         didSet {
-            clearFRC()
+            if dataSource == nil {
+                setupTableView()
+            } else {
+                updateDataSource()
+            }
+            
             if shouldNoDataRefresh() {
                 refresh()
             }
         }
     }
+
     var eventsFetched: (() -> ())?
     var eventSelected: ((Event) -> ())?
-
-    func clearFRC() {
-        tableView.reloadData()
-        tableView.setContentOffset(.zero, animated: false)
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        tableView.register(UINib(nibName: "EventTableViewCell", bundle: nil), forCellReuseIdentifier: EventCellReuseIdentifier)
-    }
     
     // MARK: - Refreshing
     
@@ -120,13 +81,19 @@ class EventsTableViewController: TBATableViewController, DynamicTableList {
     }
     
     func shouldNoDataRefresh() -> Bool {
-        guard let fetchedObjects = fetchedResultsController?.fetchedObjects else {
-            return false
+        if let events = dataSource?.fetchedResultsController.fetchedObjects, events.isEmpty {
+            return true
         }
-        return fetchedObjects.count == 0
+        return false
     }
     
     // MARK: - View Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setupTableView()
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         // TODO: Can we move this somewhere else?
@@ -135,23 +102,7 @@ class EventsTableViewController: TBATableViewController, DynamicTableList {
         super.viewWillAppear(animated)
     }
     
-    // MARK: Table View
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return sectionCount
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemCount(at: section)
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return cell(at: indexPath)
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        didSelectItem(at: indexPath)
-    }
+    // MARK: UITableView Delegate
     
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let headerView = view as? UITableViewHeaderFooterView {
@@ -161,36 +112,72 @@ class EventsTableViewController: TBATableViewController, DynamicTableList {
         }
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if let event = fetchedResultsController?.sections?[section].objects?.first as? Event, let district = event.district {
+    // MARK: Private
+    
+    fileprivate var dataSource: TableViewDataSource<Event, EventsTableViewController>?
+    
+    fileprivate func setupTableView() {
+        tableView.register(UINib(nibName: "EventTableViewCell", bundle: nil), forCellReuseIdentifier: EventCellReuseIdentifier)
+        
+        tableView.delegate = self
+        
+        setupDataSource()
+    }
+    
+    fileprivate func setupDataSource() {
+        guard let _ = weekEvent else {
+            // TODO: We need a week event
+            return
+        }
+        
+        let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "district.name", ascending: true),
+                                        NSSortDescriptor(key: "startDate", ascending: true),
+                                        NSSortDescriptor(key: "name", ascending: true)]
+        
+        setupFetchRequest(fetchRequest)
+        
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "district.name", cacheName: nil)
+        
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: EventCellReuseIdentifier, fetchedResultsController: frc, delegate: self)        
+    }
+
+    fileprivate func updateDataSource() {
+        dataSource?.reconfigureFetchRequest(setupFetchRequest(_:))
+    }
+    
+    fileprivate func setupFetchRequest(_ request: NSFetchRequest<Event>) {
+        guard let weekEvent = weekEvent else {
+            return
+        }
+
+        if let week = weekEvent.week {
+            // Event has a week - filter based on the week
+            request.predicate = NSPredicate(format: "week == %ld && year == 2017", week.intValue)
+        } else {
+            if Int(weekEvent.eventType) == EventType.championshipFinals.rawValue {
+                request.predicate = NSPredicate(format: "(eventType == %ld || eventType == %ld) && year == 2017", EventType.championshipFinals.rawValue, EventType.championshipDivision.rawValue)
+            } else {
+                request.predicate = NSPredicate(format: "eventType == %ld && year == 2017", weekEvent.eventType)
+            }
+        }
+    }
+    
+}
+
+extension EventsTableViewController: TableViewDataSourceDelegate {
+    
+    func configure(_ cell: EventTableViewCell, for object: Event) {
+        cell.event = object
+    }
+    
+    func title(for section: Int) -> String? {
+        let event = dataSource?.object(at: IndexPath(item: 0, section: section))
+        if let district = event?.district {
             return "\(district.name!) Districts"
         } else {
-           return "Regionals"
+            return "Regionals"
         }
-    }
-    
-    // MARK: - Data DynamicTableList
-    
-    public func cellIdentifier(at indexPath: IndexPath) -> String {
-        return EventCellReuseIdentifier
-    }
-    
-    func listView(_ listView: UITableView, configureCell cell: UITableViewCell, withObject object: Event, atIndexPath indexPath: IndexPath) {
-        if let cell = cell as? EventTableViewCell {
-            cell.event = object
-        }
-    }
-    
-    public func listView(_ listView: UITableView, didSelectObject object: Event, atIndexPath indexPath: IndexPath) {
-        if let eventSelected = eventSelected {
-            eventSelected(object)
-        }
-    }
-    
-    // MARK: - Fetched Controller
-    
-    @objc func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.reloadData()
     }
     
 }

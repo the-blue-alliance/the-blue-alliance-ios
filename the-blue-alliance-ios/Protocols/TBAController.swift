@@ -38,12 +38,13 @@ extension TBAContainerController {
 }
 
 protocol TBAPersistenceController {
-    var persistentContainer: NSPersistentContainer? { get set }
+    var persistentContainer: NSPersistentContainer! { get set }
 }
 
 class TBAViewController: UIViewController, TBAContainerController, TBAPersistenceController {
     
-    var persistentContainer: NSPersistentContainer?
+    var persistentContainer: NSPersistentContainer!
+
     var viewControllers: [TBAPersistenceController] = [] {
         didSet {
             if let persistentContainer = persistentContainer {
@@ -95,7 +96,7 @@ class TBAViewController: UIViewController, TBAContainerController, TBAPersistenc
 
 class TBATableViewController: UITableViewController, TBAPersistenceController {
     
-    var persistentContainer: NSPersistentContainer?
+    var persistentContainer: NSPersistentContainer!
     var noDataViewController: NoDataViewController?
     
     override func viewDidLoad() {

@@ -133,7 +133,7 @@ class EventsContainerViewController: TBAViewController {
         let coreDataDate = NSDate(timeIntervalSince1970: swiftDate.timeIntervalSince1970)
         
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Event.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "year == %ld && (endDate >= %@) && eventType != %ld", year, coreDataDate, EventType.championshipDivision.rawValue)
+        fetchRequest.predicate = NSPredicate(format: "year == %ld && endDate >= %@ && eventType != %ld", year, coreDataDate, EventType.championshipDivision.rawValue)
         fetchRequest.fetchLimit = 1
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "endDate", ascending: true)]
         
