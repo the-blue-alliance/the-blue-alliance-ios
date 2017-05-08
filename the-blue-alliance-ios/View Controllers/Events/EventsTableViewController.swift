@@ -147,18 +147,18 @@ class EventsTableViewController: TBATableViewController {
     }
     
     fileprivate func setupFetchRequest(_ request: NSFetchRequest<Event>) {
-        guard let weekEvent = weekEvent else {
+        guard let weekEvent = weekEvent, let year = year else {
             return
         }
 
         if let week = weekEvent.week {
             // Event has a week - filter based on the week
-            request.predicate = NSPredicate(format: "week == %ld && year == 2017", week.intValue)
+            request.predicate = NSPredicate(format: "week == %ld && year == %ld", week.intValue, year)
         } else {
             if Int(weekEvent.eventType) == EventType.championshipFinals.rawValue {
-                request.predicate = NSPredicate(format: "(eventType == %ld || eventType == %ld) && year == 2017", EventType.championshipFinals.rawValue, EventType.championshipDivision.rawValue)
+                request.predicate = NSPredicate(format: "(eventType == %ld || eventType == %ld) && year == %ld", EventType.championshipFinals.rawValue, EventType.championshipDivision.rawValue, year)
             } else {
-                request.predicate = NSPredicate(format: "eventType == %ld && year == 2017", weekEvent.eventType)
+                request.predicate = NSPredicate(format: "eventType == %ld && year == %ld", weekEvent.eventType, year)
             }
         }
     }

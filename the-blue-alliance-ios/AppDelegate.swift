@@ -76,52 +76,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Call our staus endpoint and save everything in NSUserDefaults - can we KVO these when they change?
-        // TOOD: Maybe move this to applicationDidBecomeActive
-        
-        _ = TBAStatus.fetchStatus { (status, error) in
-            if let status = status {
-                // Got a valid status back from the API - update everything
-                UserDefaults.standard.set(status.currentSeason, forKey: StatusConstants.currentSeasonKey)
-                UserDefaults.standard.set(status.downEvents, forKey: StatusConstants.downEventsKey)
-                // Note: We can update these two keys as we ship future versions, along with some migration code
-                UserDefaults.standard.set(status.iosInfo.latestAppVersion, forKey: StatusConstants.latestAppVersionKey)
-                UserDefaults.standard.set(status.iosInfo.minAppVersion, forKey: StatusConstants.minAppVersionKey)
-                UserDefaults.standard.set(status.datafeedDown, forKey: StatusConstants.isDatafeedDownKey)
-                UserDefaults.standard.set(status.maxSeason, forKey: StatusConstants.maxSeasonKey)
-                
-                NotificationCenter.default.post(name: Notification.Name(kFetchedTBAStatus), object: status)
-            } else {
-                let defaultStatus = TBAStatus.defaultStatus()
-                // Didn't get a valid response from API - grab our default status
-                // Make sure we don't overwite too many things if they've already been set
-                
-                // Only set our current season if we haven't set our current season
-                if UserDefaults.standard.integer(forKey: StatusConstants.currentSeasonKey) == 0 {
-                    UserDefaults.standard.set(defaultStatus.currentSeason, forKey: StatusConstants.currentSeasonKey)
-                }
-                
-                // Set our latest app version if we've never set our latest app version before *or* our latest app
-                // version is less than the default latest app version
-                let latestAppVersion = UserDefaults.standard.integer(forKey: StatusConstants.latestAppVersionKey)
-                if latestAppVersion == 0 || latestAppVersion < defaultStatus.iosInfo.latestAppVersion {
-                    UserDefaults.standard.set(defaultStatus.iosInfo.latestAppVersion, forKey: StatusConstants.latestAppVersionKey)
-                }
-
-                let minAppVersion = UserDefaults.standard.integer(forKey: StatusConstants.minAppVersionKey)
-                if minAppVersion == 0 || minAppVersion < defaultStatus.iosInfo.minAppVersion {
-                    UserDefaults.standard.set(defaultStatus.iosInfo.minAppVersion, forKey: StatusConstants.minAppVersionKey)
-                }
-                
-                // Only set our max season if we haven't set our max season
-                if UserDefaults.standard.integer(forKey: StatusConstants.maxSeasonKey) == 0 {
-                    UserDefaults.standard.set(defaultStatus.maxSeason, forKey: StatusConstants.maxSeasonKey)
-                }
-                
-                NotificationCenter.default.post(name: Notification.Name(kFetchedTBAStatus), object: defaultStatus)
-            }
-        }
-
         if let splitViewController = self.window?.rootViewController as? UISplitViewController {
             splitViewController.preferredDisplayMode = .allVisible
             splitViewController.delegate = self
@@ -159,13 +113,62 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        // Update our status - are events down, etc.
+        fetchTBAStatus()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    // MARK: Private
+    
+    func fetchTBAStatus() {
+        // Call our staus endpoint and save everything in NSUserDefaults
+        _ = TBAStatus.fetchStatus { (status, error) in
+            if let status = status {
+                // Got a valid status back from the API - update everything
+                UserDefaults.standard.set(status.currentSeason, forKey: StatusConstants.currentSeasonKey)
+                UserDefaults.standard.set(status.downEvents, forKey: StatusConstants.downEventsKey)
+                // Note: We can update these two keys as we ship future versions, along with some migration code
+                UserDefaults.standard.set(status.iosInfo.latestAppVersion, forKey: StatusConstants.latestAppVersionKey)
+                UserDefaults.standard.set(status.iosInfo.minAppVersion, forKey: StatusConstants.minAppVersionKey)
+                UserDefaults.standard.set(status.datafeedDown, forKey: StatusConstants.isDatafeedDownKey)
+                UserDefaults.standard.set(status.maxSeason, forKey: StatusConstants.maxSeasonKey)
+                
+                NotificationCenter.default.post(name: Notification.Name(kFetchedTBAStatus), object: status)
+            } else {
+                let defaultStatus = TBAStatus.defaultStatus()
+                // Didn't get a valid response from API - grab our default status
+                // Make sure we don't overwite too many things if they've already been set
+                
+                // Only set our current season if we haven't set our current season
+                if UserDefaults.standard.integer(forKey: StatusConstants.currentSeasonKey) == 0 {
+                    UserDefaults.standard.set(defaultStatus.currentSeason, forKey: StatusConstants.currentSeasonKey)
+                }
+                
+                // Set our latest app version if we've never set our latest app version before *or* our latest app
+                // version is less than the default latest app version
+                let latestAppVersion = UserDefaults.standard.integer(forKey: StatusConstants.latestAppVersionKey)
+                if latestAppVersion == 0 || latestAppVersion < defaultStatus.iosInfo.latestAppVersion {
+                    UserDefaults.standard.set(defaultStatus.iosInfo.latestAppVersion, forKey: StatusConstants.latestAppVersionKey)
+                }
+                
+                let minAppVersion = UserDefaults.standard.integer(forKey: StatusConstants.minAppVersionKey)
+                if minAppVersion == 0 || minAppVersion < defaultStatus.iosInfo.minAppVersion {
+                    UserDefaults.standard.set(defaultStatus.iosInfo.minAppVersion, forKey: StatusConstants.minAppVersionKey)
+                }
+                
+                // Only set our max season if we haven't set our max season
+                if UserDefaults.standard.integer(forKey: StatusConstants.maxSeasonKey) == 0 {
+                    UserDefaults.standard.set(defaultStatus.maxSeason, forKey: StatusConstants.maxSeasonKey)
+                }
+                
+                NotificationCenter.default.post(name: Notification.Name(kFetchedTBAStatus), object: defaultStatus)
+            }
+        }
+    }
+    
     func setupAppearance() {
         let navigationBarAppearance = UINavigationBar.appearance()
         navigationBarAppearance.barTintColor = UIColor.primaryBlue

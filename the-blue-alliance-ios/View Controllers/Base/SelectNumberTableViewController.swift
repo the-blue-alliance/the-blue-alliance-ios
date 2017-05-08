@@ -54,7 +54,7 @@ class SelectTableViewController<T: Comparable>: UITableViewController {
         tableView.reloadRows(at: [indexPath], with: .automatic)
         
         let option = options![indexPath.row]
-        if let optionSelected = optionSelected {
+        if let optionSelected = optionSelected, option != current {
             optionSelected(option)
         }
 

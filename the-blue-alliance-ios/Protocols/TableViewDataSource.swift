@@ -38,7 +38,9 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         fetchedResultsController.delegate = self
         try! fetchedResultsController.performFetch()
         tableView.dataSource = self
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
     var selectedObject: Object? {
@@ -54,7 +56,9 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         NSFetchedResultsController<NSFetchRequestResult>.deleteCache(withName: fetchedResultsController.cacheName)
         configure(fetchedResultsController.fetchRequest)
         do { try fetchedResultsController.performFetch() } catch { fatalError("fetch request failed") }
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 
 
@@ -93,17 +97,10 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
     }
     
     // MARK: NSFetchedResultsControllerDelegate
-
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
-    }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         tableView.reloadData()
     }
-
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
-    }
+    
 }
 

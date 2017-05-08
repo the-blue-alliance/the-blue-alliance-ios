@@ -37,11 +37,11 @@ class EventsContainerViewController: TBAViewController {
         didSet {
             print("Set year")
             eventsViewController?.year = year
+            // Year changed - remove our previously selected week
+            week = nil
+            weeks = []
             
-            // Only setup weeks again if we've changed years
-            if let week = week, Int(week.year) != year {
-                setupWeeks()
-            }
+            setupWeeks()
             
             DispatchQueue.main.async {
                 self.updateInterface()
