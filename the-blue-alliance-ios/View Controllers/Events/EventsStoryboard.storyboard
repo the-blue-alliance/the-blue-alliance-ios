@@ -207,7 +207,7 @@
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </segmentedControl>
                                 </subviews>
-                                <color key="backgroundColor" red="0.1469367892" green="0.079509273170000005" blue="0.81483942269999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="f16-3v-WkT" secondAttribute="trailing" constant="16" id="FHW-X8-kSY"/>
                                     <constraint firstItem="f16-3v-WkT" firstAttribute="centerY" secondItem="voy-KV-LhW" secondAttribute="centerY" id="Ofo-XQ-HLr"/>
@@ -268,6 +268,7 @@
                         <outlet property="infoView" destination="oHM-kT-1iW" id="A0H-il-OCI"/>
                         <outlet property="matchesView" destination="Tde-qb-9bC" id="JVC-lz-hvh"/>
                         <outlet property="rankingsView" destination="BQZ-ET-zvn" id="upP-JM-jn0"/>
+                        <outlet property="segmentedControlView" destination="voy-KV-LhW" id="j5i-Lc-SDl"/>
                         <outlet property="teamsView" destination="tQG-h2-47D" id="hbk-Rg-eBe"/>
                     </connections>
                 </viewController>

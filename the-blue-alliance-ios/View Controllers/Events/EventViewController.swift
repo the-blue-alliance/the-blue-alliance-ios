@@ -12,6 +12,7 @@ class EventViewController: UIViewController {
 
     public var event: Event!
     
+    @IBOutlet internal var segmentedControlView: UIView?
     @IBOutlet internal var infoView: UIView?
     @IBOutlet internal var teamsView: UIView?
     @IBOutlet internal var rankingsView: UIView?
@@ -21,8 +22,11 @@ class EventViewController: UIViewController {
         super.viewDidLoad()
 
         title = event.name
+        
         navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
         navigationItem.leftItemsSupplementBackButton = true
+        
+        segmentedControlView?.backgroundColor = UIColor.primaryBlue
     }
     
     // MARK: - Navigation

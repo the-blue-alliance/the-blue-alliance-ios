@@ -112,6 +112,13 @@ class EventsTableViewController: TBATableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let event = dataSource?.object(at: indexPath)
+        if let event = event, let eventSelected = eventSelected {
+            eventSelected(event)
+        }
+    }
+    
     // MARK: Private
     
     fileprivate var dataSource: TableViewDataSource<Event, EventsTableViewController>?
@@ -126,7 +133,7 @@ class EventsTableViewController: TBATableViewController {
     
     fileprivate func setupDataSource() {
         guard let _ = weekEvent else {
-            // TODO: We need a week event
+            // TODO: We need a week event for setupFetchRequest
             return
         }
         
