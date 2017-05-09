@@ -20,9 +20,11 @@ class SelectTableViewController<T: Comparable>: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.tableFooterView = UIView()
         
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissModal(_:)))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissModal(_:)))
     }
     
     // MARK: - Table view data source

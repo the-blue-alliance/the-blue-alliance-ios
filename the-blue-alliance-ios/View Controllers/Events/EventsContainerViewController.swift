@@ -162,7 +162,7 @@ class EventsContainerViewController: TBAViewController {
         // Filter out CMP divisions
         fetchRequest.predicate = NSPredicate(format: "year == %ld && eventType != %ld", year, EventType.championshipDivision.rawValue)
         // TODO: We need to change these sorts but it should be fine
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true), NSSortDescriptor(key: "eventType", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true), NSSortDescriptor(key: "eventType", ascending: true), NSSortDescriptor(key: "endDate", ascending: true)]
         
         guard let events = try? persistentContainer?.viewContext.fetch(fetchRequest) as! [Event] else {
             // TODO: Unable to fetch events
@@ -251,6 +251,7 @@ class EventsContainerViewController: TBAViewController {
             
             if segue.identifier == SelectYearSegue {
                 let selectTableViewController = SelectTableViewController<Int>()
+                selectTableViewController.title = "Select Year"
                 selectTableViewController.current = year
                 selectTableViewController.options = Array(1992...maxYear!).reversed()
                 selectTableViewController.optionSelected = { year in
@@ -262,6 +263,7 @@ class EventsContainerViewController: TBAViewController {
                 nav.viewControllers = [selectTableViewController]
             } else {
                 let selectTableViewController = SelectTableViewController<Event>()
+                selectTableViewController.title = "Select Week"
                 selectTableViewController.current = week!
                 selectTableViewController.options = weeks
                 selectTableViewController.optionSelected = { week in

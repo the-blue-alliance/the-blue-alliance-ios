@@ -368,7 +368,7 @@
                         </view>
                         <barButtonItem key="rightBarButtonItem" title="Weeks" id="rlI-6X-e3Z">
                             <connections>
-                                <segue destination="zN7-OB-kjx" kind="presentation" identifier="SelectWeekSegue" id="oO5-aj-OQj"/>
+                                <segue destination="zN7-OB-kjx" kind="presentation" identifier="SelectWeekSegue" modalPresentationStyle="formSheet" id="oO5-aj-OQj"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -383,7 +383,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PMM-ly-XEZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="AsU-Is-Vhv">
                     <connections>
-                        <segue destination="zN7-OB-kjx" kind="presentation" identifier="SelectYearSegue" id="ygW-l9-xTD"/>
+                        <segue destination="zN7-OB-kjx" kind="presentation" identifier="SelectYearSegue" modalPresentationStyle="formSheet" id="ygW-l9-xTD"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
