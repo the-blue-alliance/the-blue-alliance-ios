@@ -9,15 +9,16 @@
 import Foundation
 import UIKit
 import CoreData
+import TBAKit
 
-protocol TBAContainerController {
-    var viewControllers: [TBAPersistenceController] { get set }
+protocol Container {
+    var viewControllers: [Persistable & Refreshable] { get set }
     var containerViews: [UIView] { get set }
 
     var segmentedControl: UISegmentedControl? { get set }
 }
 
-extension TBAContainerController {
+extension Container {
     
     func updateSegmentedControlViews() {
         if segmentedControl == nil && containerViews.count == 1 {
@@ -28,28 +29,103 @@ extension TBAContainerController {
     }
     
     private func show(view showView: UIView) {
-        for (_, containerView) in containerViews.enumerated() {
+        for (index, containerView) in containerViews.enumerated() {
             let shouldHide = !(containerView == showView)
-            // TODO: Eventually, make sure we call refresh for new VC
+            if !shouldHide {
+                let refreshViewController = viewControllers[index]
+                if refreshViewController.shouldNoDataRefresh() {
+                    refreshViewController.refresh()
+                }
+            }
             containerView.isHidden = shouldHide
+        }
+    }
+
+    fileprivate func cancelRefreshes() {
+        viewControllers.forEach {
+            $0.cancelRefresh()
+        }
+    }
+
+}
+
+protocol Persistable: class {
+    var persistentContainer: NSPersistentContainer! { get set }
+    
+    var dataView: UIView { get }
+    var noDataView: UIView? { get set }
+}
+
+extension Persistable {
+    
+    func showNoDataView(with text: String?) {
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let noDataViewController = mainStoryboard.instantiateViewController(withIdentifier: "NoDataViewController") as! NoDataViewController
+        guard let noDataView = noDataViewController.view else {
+            fatalError("Failed to get no data view")
+        }
+        
+        if let text = text {
+            noDataViewController.textLabel?.text = text
+        } else {
+            noDataViewController.textLabel?.text = "No data to display"
+        }
+        
+        noDataView.alpha = 0
+        if let tableView = dataView as? UITableView {
+            tableView.backgroundView = noDataView
+        } else if let collectionView = dataView as? UICollectionView {
+            collectionView.backgroundView = noDataView
+        } else {
+            dataView.addSubview(noDataView)
+        }
+        
+        UIView.animate(withDuration: 0.25, animations: {
+            noDataView.alpha = 1.0
+        })
+    }
+    
+    func removeNoDataView() {
+        if let tableView = dataView as? UITableView {
+            tableView.backgroundView = nil
+        } else if let collectionView = dataView as? UICollectionView {
+            collectionView.backgroundView = nil
+        } else {
+            noDataView?.removeFromSuperview()
+        }
+    }
+
+}
+
+protocol Alertable {
+}
+
+extension Alertable where Self: UIViewController {
+    
+    func showErrorAlert(with message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+        
+        DispatchQueue.main.async {
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
 }
 
-protocol TBAPersistenceController {
-    var persistentContainer: NSPersistentContainer! { get set }
-}
+class ContainerViewController: UIViewController, Container, Persistable {
 
-class TBAViewController: UIViewController, TBAContainerController, TBAPersistenceController {
-    
     var persistentContainer: NSPersistentContainer!
+    var dataView: UIView {
+        return view
+    }
+    var noDataView: UIView?
 
-    var viewControllers: [TBAPersistenceController] = [] {
+    var viewControllers: [Persistable & Refreshable] = [] {
         didSet {
             if let persistentContainer = persistentContainer {
                 for controller in viewControllers {
-                    var c = controller
+                    let c = controller
                     c.persistentContainer = persistentContainer
                 }
             }
@@ -84,21 +160,25 @@ class TBAViewController: UIViewController, TBAContainerController, TBAPersistenc
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        // cancelRefreshes()
+        cancelRefreshes()
     }
     
     @IBAction func segmentedControlValueChanged(sender: Any) {
-        // cancelRefreshes()
+        cancelRefreshes()
         updateSegmentedControlViews()
     }
     
 }
 
-class TBATableViewController: UITableViewController, TBAPersistenceController {
-    
+class TBATableViewController: UITableViewController, Persistable, Refreshable {
+
     var persistentContainer: NSPersistentContainer!
-    var noDataViewController: NoDataViewController?
-    
+    var requests: [URLSessionDataTask] = []
+    var dataView: UIView {
+        return tableView
+    }
+    var noDataView: UIView?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -106,34 +186,96 @@ class TBATableViewController: UITableViewController, TBAPersistenceController {
         tableView.estimatedRowHeight = 64.0
         tableView.backgroundColor = UIColor.color(red: 239, green: 239, blue: 239)
         tableView.tableFooterView = UIView.init(frame: .zero)
+        
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
-    func showNoData(withText text: String?) {
-        if noDataViewController == nil {
-            let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            noDataViewController = mainStoryboard.instantiateViewController(withIdentifier: "NoDataViewController") as? NoDataViewController
+    func refresh() {
+        fatalError("Implement this downstream")
+    }
+    
+    func shouldNoDataRefresh() -> Bool {
+        fatalError("Implement this downstream")
+    }
+    
+}
+
+// MARK: Refreshing Protocol
+
+// Refreshable is a class-only protocol since we're mutating variables within the class that implements it
+// Value types cannot implement the Refreshable protocol
+protocol Refreshable: class {
+    var requests: [URLSessionDataTask] { get set }
+    var refreshControl: UIRefreshControl? { get set }
+    
+    func refresh()
+    func shouldNoDataRefresh() -> Bool
+}
+
+extension Refreshable {
+    
+    func cancelRefresh() {
+        update(refreshing: false)
+        
+        if requests.isEmpty {
+            return
         }
         
-        if let text = text {
-            noDataViewController?.textLabel?.text = text
-        } else {
-            noDataViewController?.textLabel?.text = "No data to display"
+        for request in requests {
+            request.cancel()
         }
+        requests.removeAll()
+    }
+    
+    func addRequest(request: URLSessionDataTask) {
+        if requests.contains(request) {
+            return
+        }
+        requests.append(request)
         
-        if noDataViewController?.view.superview == nil {
-            noDataViewController?.view.alpha = 0.0
-            tableView.backgroundView = noDataViewController?.view
+        if let refreshing = refreshControl?.isRefreshing, !refreshing {
+            update(refreshing: true)
+        }
+    }
+    
+    func removeRequest(request: URLSessionDataTask) {
+        guard let index = requests.index(of: request) else {
+            return
+        }
+        requests.remove(at: index)
+        
+        if requests.isEmpty {
+            update(refreshing: false)
             
-            weak var weakSelf = self
-            UIView.animate(withDuration: 0.25, animations: {
-                weakSelf!.noDataViewController?.view.alpha = 1.0
-            })
+            // TODO: Do we actually need this?
+            // Reload our data sources locally
+            DispatchQueue.main.async {
+                if let tableViewController = self as? UITableViewController {
+                    tableViewController.tableView.reloadData()
+                } else if let collectionViewController = self as? UICollectionViewController {
+                    collectionViewController.collectionView?.reloadData()
+                }
+            }
         }
     }
     
-    func hideNoData() {
-        if noDataViewController != nil {
-            tableView.backgroundView = nil
+    private func update(refreshing: Bool) {
+        DispatchQueue.main.async {
+            if let tableViewController = self as? UITableViewController {
+                print("Height: \(self.refreshControl?.frame.size.height ?? 0)")
+                // tableViewController.tableView.setContentOffset(CGPoint(x: 0, y: -(self.refreshControl?.frame.size.height ?? 0)), animated: true)
+                tableViewController.tableView.setContentOffset(.zero, animated: false)
+            } else if let collectionViewController = self as? UICollectionViewController {
+                collectionViewController.collectionView?.setContentOffset(CGPoint(x: 0, y: -(self.refreshControl?.frame.size.height ?? 0)), animated: true)
+            }
+
+            if refreshing {
+                self.refreshControl?.beginRefreshing()
+            } else {
+                self.refreshControl?.endRefreshing()
+            }
+
         }
     }
     

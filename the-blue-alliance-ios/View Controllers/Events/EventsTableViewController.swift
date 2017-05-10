@@ -16,20 +16,12 @@ class EventsTableViewController: TBATableViewController {
     
     internal var weekEvent: Event? {
         didSet {
-            if dataSource == nil {
-                setupTableView()
-            } else {
-                updateDataSource()
-            }
+            updateDataSource()
         }
     }
     internal var year: Int? {
         didSet {
-            if dataSource == nil {
-                setupTableView()
-            } else {
-                updateDataSource()
-            }
+            updateDataSource()
             
             if shouldNoDataRefresh() {
                 refresh()
@@ -40,15 +32,32 @@ class EventsTableViewController: TBATableViewController {
     var eventsFetched: (() -> ())?
     var eventSelected: ((Event) -> ())?
     
-    // MARK: - Refreshing
+    // MARK: - View Lifecycle
     
-    func refresh() {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        tableView.register(UINib(nibName: "EventTableViewCell", bundle: nil), forCellReuseIdentifier: EventCellReuseIdentifier)
+        tableView.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
+    }
+    
+    // MARK: - Refreshing
+        
+    override func refresh() {
         guard let year = year else {
             return
         }
         
-        var request: Int?
+        var request: URLSessionDataTask?
         request = TBAEvent.fetchEvents(year) { (events, error) in
+            self.removeRequest(request: request!)
+
             if error != nil {
                 // self.showErrorAlert(withText: "Unable to load events - \(error!.localizedDescription)")
                 return
@@ -78,28 +87,14 @@ class EventsTableViewController: TBATableViewController {
                 }
             })
         }
+        addRequest(request: request!)
     }
     
-    func shouldNoDataRefresh() -> Bool {
+    override func shouldNoDataRefresh() -> Bool {
         if let events = dataSource?.fetchedResultsController.fetchedObjects, events.isEmpty {
             return true
         }
         return false
-    }
-    
-    // MARK: - View Lifecycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        setupTableView()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        // TODO: Can we move this somewhere else?
-        clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
-
-        super.viewWillAppear(animated)
     }
     
     // MARK: UITableView Delegate
@@ -119,21 +114,13 @@ class EventsTableViewController: TBATableViewController {
         }
     }
     
-    // MARK: Private
+    // MARK: Table View Data Source
     
     fileprivate var dataSource: TableViewDataSource<Event, EventsTableViewController>?
     
-    fileprivate func setupTableView() {
-        tableView.register(UINib(nibName: "EventTableViewCell", bundle: nil), forCellReuseIdentifier: EventCellReuseIdentifier)
-        
-        tableView.delegate = self
-        
-        setupDataSource()
-    }
-    
     fileprivate func setupDataSource() {
         guard let _ = weekEvent else {
-            // TODO: We need a week event for setupFetchRequest
+            // TODO: We need a week event for setupFetchRequest - show an error
             return
         }
         
@@ -150,7 +137,11 @@ class EventsTableViewController: TBATableViewController {
     }
 
     fileprivate func updateDataSource() {
-        dataSource?.reconfigureFetchRequest(setupFetchRequest(_:))
+        if let dataSource = dataSource {
+            dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
+        } else {
+            setupDataSource()
+        }
     }
     
     fileprivate func setupFetchRequest(_ request: NSFetchRequest<Event>) {
@@ -185,6 +176,18 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
         } else {
             return "Regionals"
         }
+    }
+    
+    func showNoDataView() {
+        // Only show no data if we've loaded data once
+        if dataSource == nil {
+            return
+        }
+        showNoDataView(with: "Unable to load events")
+    }
+    
+    func hideNoDataView() {
+        removeNoDataView()
     }
     
 }

@@ -86,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     continue
                 }
 
-                guard var dataVC = nav.topViewController as? TBAPersistenceController else {
+                guard let dataVC = nav.topViewController as? Persistable else {
                     continue
                 }
                 dataVC.persistentContainer = self.persistentContainer

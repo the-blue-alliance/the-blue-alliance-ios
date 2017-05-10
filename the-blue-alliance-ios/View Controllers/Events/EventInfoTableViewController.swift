@@ -31,19 +31,15 @@ enum EventLinkRow: Int {
     case max
 }
 
-class EventInfoTableViewController: UITableViewController {
-
+class EventInfoTableViewController: TBATableViewController {
+    
     public var event: Event!
     
-    var showAlliances: (() -> ())?
-    var showDistrictPoints: (() -> ())?
-    var showStats: (() -> ())?
-    var showAwards: (() -> ())?
+    public var showAlliances: (() -> ())?
+    public var showDistrictPoints: (() -> ())?
+    public var showStats: (() -> ())?
+    public var showAwards: (() -> ())?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {

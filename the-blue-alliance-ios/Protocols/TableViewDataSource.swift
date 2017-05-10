@@ -16,6 +16,9 @@ protocol TableViewDataSourceDelegate: class {
     associatedtype Cell: UITableViewCell
     func configure(_ cell: Cell, for object: Object)
     func title(for section: Int) -> String?
+    
+    func showNoDataView()
+    func hideNoDataView()
 }
 
 extension TableViewDataSourceDelegate {
@@ -72,14 +75,26 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
     // MARK: UITableViewDataSource
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return fetchedResultsController.sections?.count ?? 0
+        let sections = fetchedResultsController.sections?.count ?? 0
+        if sections == 0 {
+            delegate.showNoDataView()
+        }
+        return sections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        var rows: Int = 0
         if let sections = fetchedResultsController.sections {
-            return sections[section].numberOfObjects
+            rows = sections[section].numberOfObjects
+            if rows == 0 {
+                delegate.showNoDataView()
+            } else {
+                delegate.hideNoDataView()
+            }
+        } else {
+            delegate.showNoDataView()
         }
-        return 0
+        return rows
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

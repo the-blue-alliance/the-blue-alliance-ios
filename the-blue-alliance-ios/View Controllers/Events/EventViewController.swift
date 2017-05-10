@@ -8,12 +8,13 @@
 
 import UIKit
 
-class EventViewController: UIViewController {
+class EventViewController: ContainerViewController {
 
     public var event: Event!
     
-    @IBOutlet internal var segmentedControlView: UIView?
+    internal var infoViewController: EventInfoTableViewController!
     @IBOutlet internal var infoView: UIView?
+    
     @IBOutlet internal var teamsView: UIView?
     @IBOutlet internal var rankingsView: UIView?
     @IBOutlet internal var matchesView: UIView?
@@ -23,10 +24,11 @@ class EventViewController: UIViewController {
 
         title = event.name
         
+        viewControllers = [infoViewController]
+        containerViews = [infoView!]
+        
         navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
         navigationItem.leftItemsSupplementBackButton = true
-        
-        segmentedControlView?.backgroundColor = UIColor.primaryBlue
     }
     
     // MARK: - Navigation
@@ -34,7 +36,7 @@ class EventViewController: UIViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "EventInfoEmbed" {
-            let infoViewController = segue.destination as! EventInfoTableViewController
+            infoViewController = segue.destination as! EventInfoTableViewController
             infoViewController.event = event
         }
     }

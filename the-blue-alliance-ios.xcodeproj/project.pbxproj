@@ -274,7 +274,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "the-blue-alliance-ios" */;
 			buildPhases = (
-				C19C35A71EB909F04E91197C /* 📦 Check Pods Manifest.lock */,
+				C19C35A71EB909F04E91197C /* [CP] Check Pods Manifest.lock */,
 				29AD26E75C996A21D8D2055B /* [CP] Check Pods Manifest.lock */,
 				92942D8E1E2154DA008E79CA /* Sources */,
 				92942D8F1E2154DA008E79CA /* Frameworks */,
@@ -393,19 +393,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C19C35A71EB909F04E91197C /* 📦 Check Pods Manifest.lock */ = {
+		C19C35A71EB909F04E91197C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		C66CFE3D34E1D709FFB95483 /* [CP] Embed Pods Frameworks */ = {

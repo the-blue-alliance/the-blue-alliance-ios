@@ -16,7 +16,7 @@ let EventSegue = "EventSegue"
 let SelectWeekSegue = "SelectWeekSegue"
 let SelectYearSegue = "SelectYearSegue"
 
-class EventsContainerViewController: TBAViewController {
+class EventsContainerViewController: ContainerViewController {
     internal var eventsViewController: EventsTableViewController?
     @IBOutlet internal var eventsView: UIView?
     @IBOutlet internal var weeksButton: UIBarButtonItem?
@@ -171,12 +171,14 @@ class EventsContainerViewController: TBAViewController {
         // TODO: Need to know if we have no events OR if we just don't have any more events this year
         // TODO: CMP is handled differently
         if events.count == 0 {
+            /*
             guard let eventsViewController = eventsViewController else {
                 // TODO: Show error here, or we could always call again once we set this VC
                 return
             }
             // Initial load of events for eventsVC
             eventsViewController.refresh()
+            */
             return
         }
         
