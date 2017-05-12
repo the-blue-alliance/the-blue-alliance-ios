@@ -14,4 +14,7 @@ import CoreData
 //let EventCellReuseIdentifier = "EventCell"
 
 class TeamsTableViewController: UITableViewController {
+    override func viewDidLoad() {
+        //let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest<Team>(entityName: "Team")
+    }
 }
