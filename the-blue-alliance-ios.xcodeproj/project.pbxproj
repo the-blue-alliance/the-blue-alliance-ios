@@ -25,6 +25,8 @@
 		92942E081E21DD06008E79CA /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942E071E21DD06008E79CA /* Event.swift */; };
 		92942E331E2303A5008E79CA /* CalendarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942E321E2303A5008E79CA /* CalendarExtension.swift */; };
 		92942E361E2A81E8008E79CA /* EventInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942E351E2A81E8008E79CA /* EventInfoTableViewController.swift */; };
+		929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929BBB041EC55742006D3854 /* InfoTableViewCell.swift */; };
+		929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 929BBB071EC55A22006D3854 /* InfoTableViewCell.xib */; };
 		92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
 		92F481ED1E7D978600B4ED7E /* NoDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481EC1E7D978600B4ED7E /* NoDataViewController.swift */; };
@@ -62,6 +64,8 @@
 		92942E071E21DD06008E79CA /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		92942E321E2303A5008E79CA /* CalendarExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CalendarExtension.swift; path = Extensions/CalendarExtension.swift; sourceTree = "<group>"; };
 		92942E351E2A81E8008E79CA /* EventInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventInfoTableViewController.swift; sourceTree = "<group>"; };
+		929BBB041EC55742006D3854 /* InfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoTableViewCell.swift; sourceTree = "<group>"; };
+		929BBB071EC55A22006D3854 /* InfoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoTableViewCell.xib; sourceTree = "<group>"; };
 		92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectNumberTableViewController.swift; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		92F481EC1E7D978600B4ED7E /* NoDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoDataViewController.swift; sourceTree = "<group>"; };
@@ -224,6 +228,15 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
+		929BBB061EC55745006D3854 /* Info */ = {
+			isa = PBXGroup;
+			children = (
+				929BBB071EC55A22006D3854 /* InfoTableViewCell.xib */,
+				929BBB041EC55742006D3854 /* InfoTableViewCell.swift */,
+			);
+			path = Info;
+			sourceTree = "<group>";
+		};
 		92EA0CEF1E2C296300C12A4C /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -237,6 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				92FFE5231E7C994B0037E48C /* Events */,
+				929BBB061EC55745006D3854 /* Info */,
 			);
 			path = "View Elements";
 			sourceTree = "<group>";
@@ -338,6 +352,7 @@
 				92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */,
 				92942DBF1E215BEF008E79CA /* TeamsStoryboard.storyboard in Resources */,
 				92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */,
+				929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */,
 				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
 				92942D9D1E2154DA008E79CA /* Main.storyboard in Resources */,
@@ -446,6 +461,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */,
+				929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */,
 				92FFE51E1E770D010037E48C /* District.swift in Sources */,
 				92942DB91E215B87008E79CA /* DistrictsViewController.swift in Sources */,
 				92942DB71E215B7F008E79CA /* TeamsTableViewController.swift in Sources */,

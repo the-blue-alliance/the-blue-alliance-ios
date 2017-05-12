@@ -57,7 +57,24 @@ protocol Persistable: class {
 }
 
 extension Persistable {
-        
+
+    func registerForChangeNotifications(changeBlock: @escaping (NSManagedObject) -> ()) {
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.NSManagedObjectContextObjectsDidChange,
+                                               object: self.persistentContainer.viewContext,
+                                               queue: nil) { (notification) in
+                                                if let updates = notification.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>, updates.count > 0 {
+                                                    for obj in updates {
+                                                        changeBlock(obj)
+                                                    }
+                                                }
+                                                if let refreshes = notification.userInfo?[NSRefreshedObjectsKey] as? Set<NSManagedObject>, refreshes.count > 0 {
+                                                    for obj in refreshes {
+                                                        changeBlock(obj)
+                                                    }
+                                                }
+        }
+    }
+    
     func showNoDataView(with text: String?) {
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let noDataViewController = mainStoryboard.instantiateViewController(withIdentifier: "NoDataViewController") as! NoDataViewController
@@ -113,7 +130,7 @@ extension Alertable where Self: UIViewController {
     
 }
 
-class ContainerViewController: UIViewController, Container, Persistable {
+class ContainerViewController: UIViewController, Container, Persistable, Alertable {
 
     var persistentContainer: NSPersistentContainer!
     var dataView: UIView {
@@ -140,19 +157,19 @@ class ContainerViewController: UIViewController, Container, Persistable {
     
     @IBOutlet var navigationTitleLabel: UILabel? {
         didSet {
-            navigationTitleLabel?.textColor = UIColor.white
+            navigationTitleLabel?.textColor = .white
         }
     }
     @IBOutlet var navigationDetailLabel: UILabel? {
         didSet {
-            navigationDetailLabel?.textColor = UIColor.white
+            navigationDetailLabel?.textColor = .white
         }
     }
     
     @IBOutlet var segmentedControl: UISegmentedControl?
     @IBOutlet var segmentedControlView: UIView? {
         didSet {
-            segmentedControlView?.backgroundColor = UIColor.primaryBlue
+            segmentedControlView?.backgroundColor = .primaryBlue
         }
     }
     
@@ -179,7 +196,7 @@ class ContainerViewController: UIViewController, Container, Persistable {
     
 }
 
-class TBATableViewController: UITableViewController, Persistable, Refreshable {
+class TBATableViewController: UITableViewController, Persistable, Refreshable, Alertable {
 
     var persistentContainer: NSPersistentContainer!
     var requests: [URLSessionDataTask] = []
@@ -195,7 +212,8 @@ class TBATableViewController: UITableViewController, Persistable, Refreshable {
         tableView.estimatedRowHeight = 64.0
         tableView.backgroundColor = UIColor.color(red: 239, green: 239, blue: 239)
         tableView.tableFooterView = UIView.init(frame: .zero)
-        
+        tableView.delegate = self
+
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
@@ -232,6 +250,8 @@ extension Refreshable {
     func shouldRefresh() -> Bool {
         return shouldNoDataRefresh() && !isRefreshing
     }
+    
+    // TODO: Add a method to add an observer on a single core data object for changes
     
     func cancelRefresh() {
         if requests.isEmpty {

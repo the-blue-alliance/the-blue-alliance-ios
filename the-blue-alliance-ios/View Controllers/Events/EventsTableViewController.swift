@@ -10,8 +10,6 @@ import UIKit
 import TBAKit
 import CoreData
 
-let EventCellReuseIdentifier = "EventCell"
-
 class EventsTableViewController: TBATableViewController {
     
     internal var weekEvent: Event? {
@@ -38,8 +36,7 @@ class EventsTableViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UINib(nibName: "EventTableViewCell", bundle: nil), forCellReuseIdentifier: EventCellReuseIdentifier)
-        tableView.delegate = self
+        tableView.register(UINib(nibName: String(describing: EventTableViewCell.self), bundle: nil), forCellReuseIdentifier: EventTableViewCell.reuseIdentifier)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,15 +52,14 @@ class EventsTableViewController: TBATableViewController {
             return
         }
         
-        // Get rid of our old no data view if we're refreshing
         removeNoDataView()
         
         var request: URLSessionDataTask?
         request = TBAEvent.fetchEvents(year) { (events, error) in
             self.removeRequest(request: request!)
 
-            if error != nil {
-                // self.showErrorAlert(withText: "Unable to load events - \(error!.localizedDescription)")
+            if let error = error {
+                self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
                 return
             }
             
@@ -72,22 +68,14 @@ class EventsTableViewController: TBATableViewController {
                 events?.forEach({ (modelEvent) in
                     do {
                         _ = try Event.insert(with: modelEvent, in: backgroundContext)
-                    } catch {
-                        print("Unable to insert event: \(error)")
+                    } catch let insertError {
+                        self.showErrorAlert(with: "Unable to insert event - \(insertError.localizedDescription)")
                     }
                 })
                 
-                // Save the context.
-                do {
-                    try backgroundContext.save()
-                    if let eventsFetched = self.eventsFetched {
-                        eventsFetched()
-                    }
-                } catch {
-                    // Replace this implementation with code to handle the error appropriately.
-                    // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                    let nserror = error as NSError
-                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                try? backgroundContext.save()
+                if let eventsFetched = self.eventsFetched {
+                    eventsFetched()
                 }
             })
         }
@@ -124,7 +112,6 @@ class EventsTableViewController: TBATableViewController {
     
     fileprivate func setupDataSource() {
         guard let _ = weekEvent else {
-            // TODO: We need a week event for setupFetchRequest - show an error
             return
         }
         
@@ -137,7 +124,7 @@ class EventsTableViewController: TBATableViewController {
         
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "district.name", cacheName: nil)
         
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: EventCellReuseIdentifier, fetchedResultsController: frc, delegate: self)        
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: EventTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
     fileprivate func updateDataSource() {

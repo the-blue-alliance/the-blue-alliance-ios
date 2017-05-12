@@ -22,17 +22,6 @@ public enum EventType: Int {
     case unlabeled = -1
 }
 
-public enum EventTypeName: String {
-    case regional = "Regional"
-    case district = "District"
-    case districtChampionship = "District Championship"
-    case championshipDivision = "Championship Division"
-    case championshipFinals = "Championship Finals"
-    case offseason = "Offseason"
-    case preseason = "Preseason"
-    case unlabeled = "Unlabeled"
-}
-
 enum InitError: Error {
     case invalid(key: String)
 }
@@ -105,7 +94,7 @@ extension Event {
         }
         
         event.website = model.website
-
+        
         if let week = model.week {
             event.week = NSNumber(integerLiteral: week)
         }
@@ -189,6 +178,11 @@ extension Event {
             }
         }
         return weekString
+    }
+    
+    public var friendlyNameWithYear: String {
+        let nameString = shortName ?? name
+        return "\(String(year)) \(nameString ?? "Unnamed") \(eventTypeName ?? "Event")"
     }
     
 }

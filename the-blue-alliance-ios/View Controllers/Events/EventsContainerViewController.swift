@@ -25,7 +25,6 @@ class EventsContainerViewController: ContainerViewController {
     internal var maxYear: Int?
     internal var week: Event? {
         didSet {
-            print("Set week")
             eventsViewController?.weekEvent = week
 
             DispatchQueue.main.async {
@@ -35,7 +34,6 @@ class EventsContainerViewController: ContainerViewController {
     }
     internal var year: Int? {
         didSet {
-            print("Set year")
             eventsViewController?.year = year
             // Year changed - remove our previously selected week
             week = nil
@@ -61,11 +59,9 @@ class EventsContainerViewController: ContainerViewController {
         }
         
         super.init(coder: aDecoder)
-        print("Initilized")
     }
     
     override func viewDidLoad() {
-        print("View loaded")
         super.viewDidLoad()
         
         viewControllers = [eventsViewController!]
@@ -76,18 +72,16 @@ class EventsContainerViewController: ContainerViewController {
                                                name: Notification.Name(kFetchedTBAStatus),
                                                object: nil)
         
-        // TODO: Sometimes this gets called twice...
         if year != nil {
             setupWeeks()
         }
-        
+
         updateInterface()
     }
     
     // MARK: - Private Methods
 
     func updateInterface() {
-        print("Updating interface")
         if let week = week {
             navigationTitleLabel?.text = "\(week.weekString) Events"
         } else {
@@ -114,9 +108,8 @@ class EventsContainerViewController: ContainerViewController {
     }
     
     func setupCurrentSeasonWeek() {
-        print("Setting up current season week")
         guard let year = year else {
-            // TOOD: Show no year state
+            showNoDataView(with: "No year selected")
             return
         }
 
@@ -127,7 +120,7 @@ class EventsContainerViewController: ContainerViewController {
         
         // Conversion stuff because Core Data still uses NSDates
         guard let swiftDate = Calendar.current.date(from: components) else {
-            // TODO: Show some error - this shouldn't happen
+            showErrorAlert(with: "Unable to setup current season week - datetime conversion failed")
             return
         }
         let coreDataDate = NSDate(timeIntervalSince1970: swiftDate.timeIntervalSince1970)
@@ -138,7 +131,7 @@ class EventsContainerViewController: ContainerViewController {
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "endDate", ascending: true)]
         
         guard let events = try? persistentContainer?.viewContext.fetch(fetchRequest) as! [Event] else {
-            // TODO: Throw init error
+            showErrorAlert(with: "Unable to setup current season week - fetch request failed")
             return
         }
         
@@ -147,14 +140,13 @@ class EventsContainerViewController: ContainerViewController {
         if !events.isEmpty {
             self.week = events.first
         } else {
-            // TODO: Show some error here
+            showErrorAlert(with: "Unable to setup current season week - no events for year")
         }
     }
     
     func setupWeeks() {
-        print("Setting up weeks")
         guard let year = year else {
-            // TOOD: Show no year state
+            showNoDataView(with: "No year selected")
             return
         }
         
@@ -171,14 +163,14 @@ class EventsContainerViewController: ContainerViewController {
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true), NSSortDescriptor(key: "eventType", ascending: true), NSSortDescriptor(key: "endDate", ascending: true)]
         
         guard let events = try? persistentContainer?.viewContext.fetch(fetchRequest) as! [Event] else {
-            // TODO: Unable to fetch events
+            showErrorAlert(with: "Unable to setup weeks - fetch request failed")
             return
         }
         // TODO: Need to know if we have no events OR if we just don't have any more events this year
         // TODO: CMP is handled differently
         if events.isEmpty {
             guard let eventsViewController = eventsViewController else {
-                // TODO: Show error here, or we could always call again once we set this VC
+                showErrorAlert(with: "Unable to setup weeks - eventsViewController not instantiated")
                 return
             }
             // Initial load of events for eventsVC
@@ -220,7 +212,7 @@ class EventsContainerViewController: ContainerViewController {
             if let firstWeek = self.weeks.first {
                 week = firstWeek
             } else {
-                // TODO: Show "No events for current year"
+                showErrorAlert(with: "Unable to setup weeks - no events for selected year")
             }
         }
         
@@ -232,10 +224,8 @@ class EventsContainerViewController: ContainerViewController {
     // MARK: - Observers
     
     func fetchedTBAStatus(notification: NSNotification) {
-        // TODO: Make sure we don't handle this if we already have both of these set
-        print("Fetched TBA status")
         guard let status = notification.object as? TBAStatus else {
-            // TODO: Show error message
+            showErrorAlert(with: "TBA status fetch failed")
             return
         }
         if year == nil {
@@ -289,6 +279,8 @@ class EventsContainerViewController: ContainerViewController {
         } else if segue.identifier == EventSegue {
             let eventViewController = (segue.destination as! UINavigationController).topViewController as! EventViewController
             eventViewController.event = sender as? Event
+            // TODO: Find a way to pass these down automagically like we did in the Obj-C version
+            eventViewController.persistentContainer = persistentContainer
         } else if segue.identifier == EventsEmbed {
             eventsViewController = segue.destination as? EventsTableViewController
             if !weeks.isEmpty {

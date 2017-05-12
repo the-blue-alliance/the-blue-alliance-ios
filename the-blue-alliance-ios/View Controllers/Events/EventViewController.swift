@@ -22,7 +22,7 @@ class EventViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = event.name
+        title = event.friendlyNameWithYear
         
         viewControllers = [infoViewController]
         containerViews = [infoView!]
@@ -33,7 +33,6 @@ class EventViewController: ContainerViewController {
     
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "EventInfoEmbed" {
             infoViewController = segue.destination as! EventInfoTableViewController

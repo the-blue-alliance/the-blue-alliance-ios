@@ -9,7 +9,8 @@
 import UIKit
 
 class EventTableViewCell: UITableViewCell {
-
+    
+    static let reuseIdentifier = "EventCell"
     public var event: Event? {
         didSet {
             nameLabel?.text = event?.name

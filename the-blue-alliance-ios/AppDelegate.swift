@@ -173,6 +173,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navigationBarAppearance = UINavigationBar.appearance()
         navigationBarAppearance.barTintColor = UIColor.primaryBlue
         navigationBarAppearance.tintColor = UIColor.white
+        navigationBarAppearance.shadowImage = UIImage()
+        navigationBarAppearance.setBackgroundImage(UIImage(), for: .default)
+        navigationBarAppearance.isTranslucent = false
         navigationBarAppearance.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
     }
     

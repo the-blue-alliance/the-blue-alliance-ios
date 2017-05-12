@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TBAKit
+import CoreData
 
 enum EventInfoSection: Int {
     case title
@@ -39,6 +41,61 @@ class EventInfoTableViewController: TBATableViewController {
     public var showDistrictPoints: (() -> ())?
     public var showStats: (() -> ())?
     public var showAwards: (() -> ())?
+    override var persistentContainer: NSPersistentContainer! {
+        didSet {
+            registerForChangeNotifications { (obj) in
+                if obj == self.event {
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                }
+            }
+        }
+    }
+    
+    // MARK: - View Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        tableView.sectionFooterHeight = 0
+        tableView.register(UINib(nibName: String(describing: InfoTableViewCell.self), bundle: nil), forCellReuseIdentifier: InfoTableViewCell.reuseIdentifier)
+    }
+    
+    // MARK: - Refresh
+    
+    override func refresh() {
+        removeNoDataView()
+
+        var request: URLSessionDataTask?
+        request = TBAEvent.fetchEvent(event.key!) { (modelEvent, error) in
+            self.removeRequest(request: request!)
+            
+            if let error = error {
+                self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
+                return
+            }
+            
+            guard let modelEvent = modelEvent else {
+                self.showErrorAlert(with: "Unable to refresh event - invalid event")
+                return
+            }
+            
+            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+                do {
+                    _ = try Event.insert(with: modelEvent, in: backgroundContext)
+                } catch let insertError {
+                    self.showErrorAlert(with: "Unable to insert event - \(insertError.localizedDescription)")
+                }
+                try? backgroundContext.save()
+            })
+        }
+        addRequest(request: request!)
+    }
+    
+    override func shouldNoDataRefresh() -> Bool {
+        return event.name == nil
+    }
     
     // MARK: - Table view data source
 
@@ -55,7 +112,8 @@ class EventInfoTableViewController: TBATableViewController {
             let max = EventDetailRow.max.rawValue
             return event.district != nil ? max : max - 1
         case EventInfoSection.link.rawValue:
-            return EventLinkRow.max.rawValue
+            let max = EventLinkRow.max.rawValue
+            return event.website != nil ? max : max - 1
         default:
             return 0
         }
@@ -78,9 +136,11 @@ class EventInfoTableViewController: TBATableViewController {
     }
     
     func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "BasicCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: InfoTableViewCell.reuseIdentifier, for: indexPath) as! InfoTableViewCell
+
+        cell.event = event
         
-        cell.textLabel?.text = event.name
+        cell.accessoryType = .none
         cell.selectionStyle = .none
         
         return cell
@@ -115,10 +175,14 @@ class EventInfoTableViewController: TBATableViewController {
     func tableView(_ tableView: UITableView, linkCellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BasicCell", for: indexPath)
         
-        switch indexPath.row {
+        var row = indexPath.row
+        if event.website == nil && row >= EventLinkRow.website.rawValue {
+            row += 1
+        }
+        
+        switch row {
         case EventLinkRow.website.rawValue:
             cell.textLabel?.text = "View event's website"
-        // TODO: Core Data is generating these keys as optionals and it shouldn't...
         case EventLinkRow.twitter.rawValue:
             cell.textLabel?.text = "View #\(event.key!) on Twitter"
         case EventLinkRow.youtube.rawValue:
@@ -136,7 +200,7 @@ class EventInfoTableViewController: TBATableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
+
         if indexPath.section == EventInfoSection.detail.rawValue {
             var row = indexPath.row
             if event.district == nil && row >= EventDetailRow.districtPoints.rawValue {
@@ -164,8 +228,13 @@ class EventInfoTableViewController: TBATableViewController {
                 break
             }
         } else if indexPath.section == EventInfoSection.link.rawValue {
+            var row = indexPath.row
+            if event.website == nil && row >= EventLinkRow.website.rawValue {
+                row += 1
+            }
+
             var urlString: String?
-            switch indexPath.row {
+            switch row {
             case EventLinkRow.website.rawValue:
                 urlString = event.website
             case EventLinkRow.twitter.rawValue:
@@ -186,15 +255,5 @@ class EventInfoTableViewController: TBATableViewController {
             }
         }
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
