@@ -158,6 +158,12 @@ class EventsContainerViewController: ContainerViewController {
             return
         }
         
+        // Don't re-setup weeks if we're in the same year as we already have... (ex: a refresh)
+        // TODO: This doesn't handle if a week is removed from our backing data store... that will break this
+        if let week = week, year == Int(week.year) {
+            return
+        }
+        
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Event.fetchRequest()
         // Filter out CMP divisions
         fetchRequest.predicate = NSPredicate(format: "year == %ld && eventType != %ld", year, EventType.championshipDivision.rawValue)
@@ -170,15 +176,15 @@ class EventsContainerViewController: ContainerViewController {
         }
         // TODO: Need to know if we have no events OR if we just don't have any more events this year
         // TODO: CMP is handled differently
-        if events.count == 0 {
-            /*
+        if events.isEmpty {
             guard let eventsViewController = eventsViewController else {
                 // TODO: Show error here, or we could always call again once we set this VC
                 return
             }
             // Initial load of events for eventsVC
-            eventsViewController.refresh()
-            */
+            if eventsViewController.shouldRefresh() {
+                eventsViewController.refresh()
+            }
             return
         }
         
@@ -232,8 +238,12 @@ class EventsContainerViewController: ContainerViewController {
             // TODO: Show error message
             return
         }
-        self.year = Int(status.currentSeason)
-        self.maxYear = Int(status.maxSeason)
+        if year == nil {
+            year = Int(status.currentSeason)
+        }
+        if maxYear == nil {
+            maxYear = Int(status.maxSeason)
+        }
     }
     
     // MARK: - Navigation

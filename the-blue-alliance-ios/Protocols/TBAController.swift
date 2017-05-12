@@ -33,7 +33,7 @@ extension Container {
             let shouldHide = !(containerView == showView)
             if !shouldHide {
                 let refreshViewController = viewControllers[index]
-                if refreshViewController.shouldNoDataRefresh() {
+                if refreshViewController.shouldRefresh() {
                     refreshViewController.refresh()
                 }
             }
@@ -41,7 +41,7 @@ extension Container {
         }
     }
 
-    fileprivate func cancelRefreshes() {
+    func cancelRefreshes() {
         viewControllers.forEach {
             $0.cancelRefresh()
         }
@@ -57,7 +57,7 @@ protocol Persistable: class {
 }
 
 extension Persistable {
-    
+        
     func showNoDataView(with text: String?) {
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let noDataViewController = mainStoryboard.instantiateViewController(withIdentifier: "NoDataViewController") as! NoDataViewController
@@ -120,7 +120,12 @@ class ContainerViewController: UIViewController, Container, Persistable {
         return view
     }
     var noDataView: UIView?
-
+    lazy var setupSegmentedControlViews: Any? = {
+        [unowned self] in
+        self.updateSegmentedControlViews()
+        return nil
+    }()
+    
     var viewControllers: [Persistable & Refreshable] = [] {
         didSet {
             if let persistentContainer = persistentContainer {
@@ -154,12 +159,16 @@ class ContainerViewController: UIViewController, Container, Persistable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        updateSegmentedControlViews()
+        // Equlivent of doing a dispatch_once in Obj-C
+        // Only setup the segmented control views on view did appear the first time
+        _ = setupSegmentedControlViews
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
+        // TODO: Consider... if a view is presented over top of the current view but no action is taken
+        // We don't want to cancel refreshes in that situation
         cancelRefreshes()
     }
     
@@ -215,9 +224,16 @@ protocol Refreshable: class {
 
 extension Refreshable {
     
+    var isRefreshing: Bool {
+        // We're not refreshing if our requests array is empty
+        return !requests.isEmpty
+    }
+    
+    func shouldRefresh() -> Bool {
+        return shouldNoDataRefresh() && !isRefreshing
+    }
+    
     func cancelRefresh() {
-        update(refreshing: false)
-        
         if requests.isEmpty {
             return
         }
@@ -226,6 +242,7 @@ extension Refreshable {
             request.cancel()
         }
         requests.removeAll()
+        updateRefresh()
     }
     
     func addRequest(request: URLSessionDataTask) {
@@ -233,10 +250,7 @@ extension Refreshable {
             return
         }
         requests.append(request)
-        
-        if let refreshing = refreshControl?.isRefreshing, !refreshing {
-            update(refreshing: true)
-        }
+        updateRefresh()
     }
     
     func removeRequest(request: URLSessionDataTask) {
@@ -244,10 +258,9 @@ extension Refreshable {
             return
         }
         requests.remove(at: index)
-        
+        updateRefresh()
+
         if requests.isEmpty {
-            update(refreshing: false)
-            
             // TODO: Do we actually need this?
             // Reload our data sources locally
             DispatchQueue.main.async {
@@ -260,22 +273,11 @@ extension Refreshable {
         }
     }
     
-    private func update(refreshing: Bool) {
-        DispatchQueue.main.async {
-            if let tableViewController = self as? UITableViewController {
-                print("Height: \(self.refreshControl?.frame.size.height ?? 0)")
-                // tableViewController.tableView.setContentOffset(CGPoint(x: 0, y: -(self.refreshControl?.frame.size.height ?? 0)), animated: true)
-                tableViewController.tableView.setContentOffset(.zero, animated: false)
-            } else if let collectionViewController = self as? UICollectionViewController {
-                collectionViewController.collectionView?.setContentOffset(CGPoint(x: 0, y: -(self.refreshControl?.frame.size.height ?? 0)), animated: true)
-            }
-
-            if refreshing {
-                self.refreshControl?.beginRefreshing()
-            } else {
-                self.refreshControl?.endRefreshing()
-            }
-
+    private func updateRefresh() {
+        if isRefreshing {
+            self.refreshControl?.beginRefreshing()
+        } else {
+            self.refreshControl?.endRefreshing()
         }
     }
     

@@ -21,6 +21,7 @@ class EventsTableViewController: TBATableViewController {
     }
     internal var year: Int? {
         didSet {
+            cancelRefresh()
             updateDataSource()
             
             if shouldNoDataRefresh() {
@@ -53,6 +54,9 @@ class EventsTableViewController: TBATableViewController {
         guard let year = year else {
             return
         }
+        
+        // Get rid of our old no data view if we're refreshing
+        removeNoDataView()
         
         var request: URLSessionDataTask?
         request = TBAEvent.fetchEvents(year) { (events, error) in
@@ -180,7 +184,7 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
     
     func showNoDataView() {
         // Only show no data if we've loaded data once
-        if dataSource == nil {
+        if isRefreshing {
             return
         }
         showNoDataView(with: "Unable to load events")
