@@ -199,6 +199,7 @@ class ContainerViewController: UIViewController, Container, Persistable, Alertab
 
 class TBATableViewController: UITableViewController, Persistable, Refreshable, Alertable {
 
+    let basicCellReuseIdentifier = "BasicCell"
     var persistentContainer: NSPersistentContainer!
     var requests: [URLSessionDataTask] = []
     var dataView: UIView {
@@ -214,7 +215,8 @@ class TBATableViewController: UITableViewController, Persistable, Refreshable, A
         tableView.backgroundColor = .backgroundGray
         tableView.tableFooterView = UIView.init(frame: .zero)
         tableView.delegate = self
-
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: basicCellReuseIdentifier)
+        
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }

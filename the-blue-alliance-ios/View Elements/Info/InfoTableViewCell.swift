@@ -13,23 +13,22 @@ class InfoTableViewCell: UITableViewCell {
     static let reuseIdentifier = "InfoCell"
     var event: Event? {
         didSet {
-            // team = nil
-            configureCell()
+            if event != nil {
+                team = nil
+                configureCell()
+            }
         }
     }
-    /*
     var team: Team? {
         didSet {
-            event = nil
+            if team != nil {
+                event = nil
+                configureCell()
+            }
         }
     }
-    */
     @IBOutlet private var infoStackView: UIStackView?
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
 
     // MARK: - Private Methods
     
@@ -74,6 +73,28 @@ class InfoTableViewCell: UITableViewCell {
             if let date = event.dateString() {
                 let dateLabel = subtitleLabelWithText(date)
                 infoStackView.addArrangedSubview(dateLabel)
+            }
+        } else if let team = team {
+            if let nickname = team.nickname {
+                let nicknameLabel = titleLabelWithText(nickname)
+                infoStackView.addArrangedSubview(nicknameLabel)
+            }
+            if let location = team.locationName {
+                let locationLabel = subtitleLabelWithText(location)
+                infoStackView.addArrangedSubview(locationLabel)
+            } else {
+                let location = [team.city, team.state, team.country].reduce("", { (locationString, locationPart) -> String in
+                    guard let locationPart = locationPart else {
+                        return locationString
+                    }
+                    return locationString.isEmpty ? locationPart : "\(locationString), \(locationPart)"
+                })
+                let locationLabel = subtitleLabelWithText(location)
+                infoStackView.addArrangedSubview(locationLabel)
+            }
+            if let motto = team.motto {
+                let mottoLabel = subtitleLabelWithText(motto)
+                infoStackView.addArrangedSubview(mottoLabel)
             }
         }
     }

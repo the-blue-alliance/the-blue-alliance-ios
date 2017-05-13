@@ -188,7 +188,8 @@ extension AppDelegate: UISplitViewControllerDelegate {
         // push it on the master navigation stack
         if splitViewController.isCollapsed,
             let masterTabBarController = splitViewController.viewControllers.first as? UITabBarController,
-            let masterNavigationController = masterTabBarController.viewControllers?.first as? UINavigationController {
+            // Need to get the VC for the currently selected tab...
+            let masterNavigationController = masterTabBarController.selectedViewController as? UINavigationController {
             // We want to push the view controller, but make sure we're not pushing something in a nav controller
             guard let detailNavigationController = vc as? UINavigationController else {
                 return false
@@ -214,7 +215,7 @@ extension AppDelegate: UISplitViewControllerDelegate {
             detailNavigationController.restorationIdentifier != kNoSelectionNavigationController {
             // This is a view controller we want to push
             if let masterTabBarController = splitViewController.viewControllers.first as? UITabBarController,
-                let masterNavigationController = masterTabBarController.viewControllers?.first as? UINavigationController {
+                let masterNavigationController = masterTabBarController.selectedViewController as? UINavigationController {
                 // Add the detail navigation controller stack to our root navigation controller
                 masterNavigationController.viewControllers += detailNavigationController.viewControllers
                 return masterTabBarController

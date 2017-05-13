@@ -147,7 +147,7 @@ class EventInfoTableViewController: TBATableViewController {
     }
 
     func tableView(_ tableView: UITableView, detailCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "BasicCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
         
         var row = indexPath.row
         if event.district == nil && row >= EventDetailRow.districtPoints.rawValue {
@@ -173,7 +173,7 @@ class EventInfoTableViewController: TBATableViewController {
     }
     
     func tableView(_ tableView: UITableView, linkCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "BasicCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
         
         var row = indexPath.row
         if event.website == nil && row >= EventLinkRow.website.rawValue {

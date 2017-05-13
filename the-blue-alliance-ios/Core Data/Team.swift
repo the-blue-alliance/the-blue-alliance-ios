@@ -24,7 +24,7 @@ extension Team {
     var yearsParticipated: [Int] {
         get {
             let yearsArray = yearsParticipatedArray as? Array<Int> ?? []
-            return yearsArray.sorted()
+            return yearsArray.sorted().reversed()
         }
         set {
             yearsParticipatedArray = newValue as NSArray
@@ -43,6 +43,7 @@ extension Team {
         let team = teams.first ?? Team(context: context)
         
         // Required: key, name, teamNumber, rookieYear
+        // TODO: Add in stuff that drops teams that don't have this info
         team.address = model.address
         team.city = model.city
         team.country = model.country

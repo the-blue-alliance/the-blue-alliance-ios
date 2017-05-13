@@ -29,12 +29,10 @@ class TeamsContainerViewController: ContainerViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == TeamSegue {
-            /*
-            let eventViewController = (segue.destination as! UINavigationController).topViewController as! EventViewController
-            eventViewController.event = sender as? Event
+            let teamViewController = (segue.destination as! UINavigationController).topViewController as! TeamViewController
+            teamViewController.team = sender as? Team
             // TODO: Find a way to pass these down automagically like we did in the Obj-C version
-            eventViewController.persistentContainer = persistentContainer
-            */
+            teamViewController.persistentContainer = persistentContainer
         } else if segue.identifier == TeamsEmbed {
             teamsViewController = segue.destination as? TeamsTableViewController
             teamsViewController?.teamSelected = { team in
