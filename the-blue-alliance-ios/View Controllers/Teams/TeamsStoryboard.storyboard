@@ -46,6 +46,19 @@
             </objects>
             <point key="canvasLocation" x="25" y="207"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Q3z-xa-l1L">
+            <objects>
+                <navigationController id="RxU-fr-KQf" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="cDn-i3-xad">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rNu-Al-QJW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2348" y="-228"/>
+        </scene>
         <!--Team View Controller-->
         <scene sceneID="HSe-tY-LfS">
             <objects>
@@ -128,6 +141,9 @@
                                 <constraint firstItem="u8w-tQ-SaQ" firstAttribute="top" secondItem="1qn-fE-Bbd" secondAttribute="top" id="U0t-Dh-Wii"/>
                                 <constraint firstItem="u8w-tQ-SaQ" firstAttribute="leading" secondItem="1qn-fE-Bbd" secondAttribute="leading" id="W5H-Xq-XsJ"/>
                             </constraints>
+                            <connections>
+                                <outletCollection property="gestureRecognizers" destination="uLu-fb-rT1" appends="YES" id="bQg-aE-JpG"/>
+                            </connections>
                         </view>
                     </navigationItem>
                     <connections>
@@ -139,6 +155,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fgu-2m-Jdl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="uLu-fb-rT1">
+                    <connections>
+                        <segue destination="RxU-fr-KQf" kind="presentation" identifier="SelectYearSegue" id="DFD-5b-SyM"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1562" y="466"/>
         </scene>

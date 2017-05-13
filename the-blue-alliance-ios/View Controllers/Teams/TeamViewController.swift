@@ -14,7 +14,14 @@ import TBAKit
 class TeamViewController: ContainerViewController {
     
     public var team: Team!
-    var year: Int?
+    var year: Int? {
+        didSet {
+            // TODO: Pass year down to VCs that need it
+            DispatchQueue.main.async {
+                self.updateInterface()
+            }
+        }
+    }
     
     internal var infoViewController: TeamInfoTableViewController!
     @IBOutlet internal var infoView: UIView?
@@ -72,18 +79,34 @@ class TeamViewController: ContainerViewController {
                 if self.year == nil, !self.team.yearsParticipated.isEmpty {
                     self.year = self.team.yearsParticipated.first
                 }
-                
-                DispatchQueue.main.async {
-                    self.updateInterface()
-                }
             })
         }
     }
     
     // MARK: - Navigation
     
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == SelectYearSegue, team.yearsParticipated.isEmpty {
+            return false
+        }
+        return true
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "TeamInfoEmbed" {
+        if segue.identifier == SelectYearSegue {
+            let nav = segue.destination as! UINavigationController
+            let selectTableViewController = SelectTableViewController<Int>()
+            selectTableViewController.title = "Select Year"
+            selectTableViewController.current = year
+            selectTableViewController.options = team.yearsParticipated
+            selectTableViewController.optionSelected = { year in
+                self.year = year
+            }
+            selectTableViewController.optionString = { year in
+                return String(year)
+            }
+            nav.viewControllers = [selectTableViewController]
+        } else if segue.identifier == "TeamInfoEmbed" {
             infoViewController = segue.destination as? TeamInfoTableViewController
             infoViewController.team = team
         }
