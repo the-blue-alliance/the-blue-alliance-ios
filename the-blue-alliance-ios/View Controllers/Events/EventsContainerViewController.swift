@@ -136,7 +136,8 @@ class EventsContainerViewController: ContainerViewController {
         }
         
         // TODO: Need to know if we have no events OR if we just don't have any more events this year
-        // TODO: CMP is handled differently
+        // If we don't have any more events this year *and* year != maxYear... just bump our year to maxYear and refresh
+        // Need to consider how this works if you switch to the current year in like December... we don't wanna bump
         if !events.isEmpty {
             self.week = events.first
         } else {
@@ -159,7 +160,6 @@ class EventsContainerViewController: ContainerViewController {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Event.fetchRequest()
         // Filter out CMP divisions
         fetchRequest.predicate = NSPredicate(format: "year == %ld && eventType != %ld", year, EventType.championshipDivision.rawValue)
-        // TODO: We need to change these sorts but it should be fine
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true), NSSortDescriptor(key: "eventType", ascending: true), NSSortDescriptor(key: "endDate", ascending: true)]
         
         guard let events = try? persistentContainer?.viewContext.fetch(fetchRequest) as! [Event] else {
@@ -167,7 +167,6 @@ class EventsContainerViewController: ContainerViewController {
             return
         }
         // TODO: Need to know if we have no events OR if we just don't have any more events this year
-        // TODO: CMP is handled differently
         if events.isEmpty {
             guard let eventsViewController = eventsViewController else {
                 showErrorAlert(with: "Unable to setup weeks - eventsViewController not instantiated")

@@ -28,6 +28,15 @@ enum InitError: Error {
 
 extension Event {
 
+    var divisionKeys: [String] {
+        get {
+            return divisionKeysArray as? Array<String> ?? []
+        }
+        set {
+            divisionKeysArray = newValue as NSArray
+        }
+    }
+    
     static func insert(with model: TBAEvent, in context: NSManagedObjectContext) throws -> Event {
         let predicate = NSPredicate(format: "key == %@", model.key)
         
@@ -48,6 +57,11 @@ extension Event {
             event.district = try? District.insert(with: district, in: context)
         }
 
+        // TODO: Let's see if we can get a background task or something to go through and form relationships...
+        if !model.divisionKeys.isEmpty {
+            event.divisionKeys = model.divisionKeys
+        }
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
@@ -75,6 +89,14 @@ extension Event {
         
         event.locationName = model.locationName
         event.name = model.name
+        
+        // TODO: Can we convert this to a relationship?
+        event.parentEventKey = model.parentEventKey
+        if let playoffType = model.playoffType {
+            event.playoffType = Int16(playoffType)
+        }
+        event.playoffTypeString = model.playoffTypeString
+        
         event.postalCode = model.postalCode
         event.shortName = model.shortName
         
