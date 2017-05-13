@@ -33,6 +33,7 @@
 		92D855D41EC68F4200572F27 /* TeamsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D31EC68F4200572F27 /* TeamsTableViewController.swift */; };
 		92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D61EC695C400572F27 /* TeamTableViewCell.swift */; };
 		92D855D91EC695CE00572F27 /* TeamTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92D855D81EC695CE00572F27 /* TeamTableViewCell.xib */; };
+		92D855E01EC6BA3900572F27 /* TeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855DF1EC6BA3900572F27 /* TeamViewController.swift */; };
 		92F481ED1E7D978600B4ED7E /* NoDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481EC1E7D978600B4ED7E /* NoDataViewController.swift */; };
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
 		92F481F31E7DA0A800B4ED7E /* TBAController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F21E7DA0A800B4ED7E /* TBAController.swift */; };
@@ -76,6 +77,7 @@
 		92D855D31EC68F4200572F27 /* TeamsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamsTableViewController.swift; sourceTree = "<group>"; };
 		92D855D61EC695C400572F27 /* TeamTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamTableViewCell.swift; sourceTree = "<group>"; };
 		92D855D81EC695CE00572F27 /* TeamTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TeamTableViewCell.xib; sourceTree = "<group>"; };
+		92D855DF1EC6BA3900572F27 /* TeamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamViewController.swift; sourceTree = "<group>"; };
 		92F481EC1E7D978600B4ED7E /* NoDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoDataViewController.swift; sourceTree = "<group>"; };
 		92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsContainerViewController.swift; sourceTree = "<group>"; };
 		92F481F21E7DA0A800B4ED7E /* TBAController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBAController.swift; sourceTree = "<group>"; };
@@ -177,8 +179,7 @@
 				92942DBC1E215BA6008E79CA /* EventsStoryboard.storyboard */,
 				92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */,
 				92942DB01E215B06008E79CA /* EventsTableViewController.swift */,
-				92942DDE1E21D2EB008E79CA /* EventViewController.swift */,
-				92942E351E2A81E8008E79CA /* EventInfoTableViewController.swift */,
+				92D855DA1EC6B8F100572F27 /* Event */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -189,6 +190,7 @@
 				92942DBE1E215BEF008E79CA /* TeamsStoryboard.storyboard */,
 				92D855D11EC68F3800572F27 /* TeamsContainerViewController.swift */,
 				92D855D31EC68F4200572F27 /* TeamsTableViewController.swift */,
+				92D855DF1EC6BA3900572F27 /* TeamViewController.swift */,
 			);
 			path = Teams;
 			sourceTree = "<group>";
@@ -262,6 +264,15 @@
 				92D855D61EC695C400572F27 /* TeamTableViewCell.swift */,
 			);
 			path = Teams;
+			sourceTree = "<group>";
+		};
+		92D855DA1EC6B8F100572F27 /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				92942DDE1E21D2EB008E79CA /* EventViewController.swift */,
+				92942E351E2A81E8008E79CA /* EventInfoTableViewController.swift */,
+			);
+			name = Event;
 			sourceTree = "<group>";
 		};
 		92EA0CEF1E2C296300C12A4C /* Protocols */ = {
@@ -490,6 +501,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92D855D41EC68F4200572F27 /* TeamsTableViewController.swift in Sources */,
+				92D855E01EC6BA3900572F27 /* TeamViewController.swift in Sources */,
 				92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */,
 				929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */,
 				92FFE51E1E770D010037E48C /* District.swift in Sources */,

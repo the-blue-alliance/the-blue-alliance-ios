@@ -21,6 +21,16 @@ extension Team {
         }
     }
     
+    var yearsParticipated: [Int] {
+        get {
+            let yearsArray = yearsParticipatedArray as? Array<Int> ?? []
+            return yearsArray.sorted()
+        }
+        set {
+            yearsParticipatedArray = newValue as NSArray
+        }
+    }
+    
     static func insert(with model: TBATeam, in context: NSManagedObjectContext) throws -> Team {
         let predicate = NSPredicate(format: "key == %@", model.key)
         

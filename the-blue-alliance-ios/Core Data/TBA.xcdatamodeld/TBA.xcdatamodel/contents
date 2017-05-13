@@ -57,6 +57,7 @@
         <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="teamNumber" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="yearsParticipatedArray" optional="YES" attributeType="Transformable" customClassName="NSArray" syncable="YES"/>
     </entity>
     <entity name="Webcast" representedClassName="Webcast" syncable="YES" codeGenerationType="class">
         <attribute name="channel" attributeType="String" syncable="YES"/>
@@ -68,7 +69,7 @@
     <elements>
         <element name="District" positionX="-63" positionY="135" width="128" height="30"/>
         <element name="Event" positionX="-63" positionY="-18" width="128" height="480"/>
-        <element name="Team" positionX="-54" positionY="135" width="128" height="315"/>
+        <element name="Team" positionX="-54" positionY="135" width="128" height="330"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
     </elements>
 </model>
