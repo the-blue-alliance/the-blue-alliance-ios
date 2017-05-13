@@ -66,11 +66,7 @@ class EventsTableViewController: TBATableViewController {
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 // Insert the events
                 events?.forEach({ (modelEvent) in
-                    do {
-                        _ = try Event.insert(with: modelEvent, in: backgroundContext)
-                    } catch let insertError {
-                        self.showErrorAlert(with: "Unable to insert event - \(insertError.localizedDescription)")
-                    }
+                    _ = try? Event.insert(with: modelEvent, in: backgroundContext)
                 })
                 
                 try? backgroundContext.save()

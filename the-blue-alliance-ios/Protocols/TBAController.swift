@@ -81,7 +81,8 @@ extension Persistable {
         guard let noDataView = noDataViewController.view else {
             fatalError("Failed to get no data view")
         }
-        
+        noDataView.backgroundColor = .backgroundGray
+
         if let text = text {
             noDataViewController.textLabel?.text = text
         } else {
@@ -210,7 +211,7 @@ class TBATableViewController: UITableViewController, Persistable, Refreshable, A
         
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 64.0
-        tableView.backgroundColor = UIColor.color(red: 239, green: 239, blue: 239)
+        tableView.backgroundColor = .backgroundGray
         tableView.tableFooterView = UIView.init(frame: .zero)
         tableView.delegate = self
 

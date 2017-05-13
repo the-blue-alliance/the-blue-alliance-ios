@@ -54,7 +54,7 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
     func object(at indexPath: IndexPath) -> Object {
         return (fetchedResultsController.object(at: indexPath) as! Object)
     }
-
+    
     func reconfigureFetchRequest(_ configure: (NSFetchRequest<Result>) -> ()) {
         NSFetchedResultsController<NSFetchRequestResult>.deleteCache(withName: fetchedResultsController.cacheName)
         configure(fetchedResultsController.fetchRequest)

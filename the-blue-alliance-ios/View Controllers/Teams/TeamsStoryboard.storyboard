@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="caC-xe-F51">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="caC-xe-F51">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Teams Table View Controller-->
+        <!--Teams-->
         <scene sceneID="y8R-0E-Jnd">
             <objects>
-                <viewController id="HTs-xx-or4" customClass="TeamsTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="HTs-xx-or4" customClass="TeamsContainerViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="blr-HB-6gJ"/>
                         <viewControllerLayoutGuide type="bottom" id="7Oh-ab-yrH"/>
@@ -21,21 +21,58 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Teams" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6cT-fh-tJ4">
-                                <rect key="frame" x="162" y="323" width="51" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xj7-zt-9aV">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <connections>
+                                    <segue destination="6nb-tX-gbn" kind="embed" identifier="TeamsEmbed" id="XqG-5R-2CI"/>
+                                </connections>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Xj7-zt-9aV" firstAttribute="leading" secondItem="BNv-E8-Fup" secondAttribute="leading" id="Ob8-D3-g4r"/>
+                            <constraint firstItem="Xj7-zt-9aV" firstAttribute="top" secondItem="blr-HB-6gJ" secondAttribute="bottom" id="Ych-FY-jfX"/>
+                            <constraint firstItem="7Oh-ab-yrH" firstAttribute="top" secondItem="Xj7-zt-9aV" secondAttribute="bottom" id="hOU-Pf-zVZ"/>
+                            <constraint firstAttribute="trailing" secondItem="Xj7-zt-9aV" secondAttribute="trailing" id="qq4-x7-MYC"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="7QQ-lR-4rM"/>
+                    <navigationItem key="navigationItem" title="Teams" id="7QQ-lR-4rM"/>
+                    <connections>
+                        <outlet property="teamsView" destination="Xj7-zt-9aV" id="BAb-Nd-6Xz"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0pa-QZ-uBx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="25" y="207"/>
+        </scene>
+        <!--Teams Table View Controller-->
+        <scene sceneID="all-fB-X7S">
+            <objects>
+                <tableViewController id="6nb-tX-gbn" customClass="TeamsTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="DfO-6d-lqn">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" id="4fw-cJ-S4t">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="6nb-tX-gbn" id="MLf-4Z-4pK"/>
+                            </connections>
+                        </searchBar>
+                        <connections>
+                            <outlet property="dataSource" destination="6nb-tX-gbn" id="Zkq-5e-idg"/>
+                            <outlet property="delegate" destination="6nb-tX-gbn" id="7Vg-at-c9i"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <outlet property="searchBar" destination="4fw-cJ-S4t" id="dje-kO-8Jx"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="d9L-DA-VGf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="823" y="206"/>
         </scene>
         <!--Teams-->
         <scene sceneID="4uX-kA-Eba">
