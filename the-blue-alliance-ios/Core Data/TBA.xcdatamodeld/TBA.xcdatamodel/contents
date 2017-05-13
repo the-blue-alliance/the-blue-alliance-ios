@@ -19,6 +19,7 @@
         <attribute name="firstEventID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gmapsPlaceID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gmapsURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hybridType" attributeType="String" syncable="YES"/>
         <attribute name="key" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="lat" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lng" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
@@ -70,7 +71,7 @@
     </entity>
     <elements>
         <element name="District" positionX="-63" positionY="135" width="128" height="30"/>
-        <element name="Event" positionX="-63" positionY="-18" width="128" height="495"/>
+        <element name="Event" positionX="-63" positionY="-18" width="128" height="510"/>
         <element name="Team" positionX="-54" positionY="135" width="128" height="345"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
     </elements>

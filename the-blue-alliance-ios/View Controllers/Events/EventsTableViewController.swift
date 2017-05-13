@@ -167,14 +167,13 @@ class EventsTableViewController: TBATableViewController {
 
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
         
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "eventType", ascending: true),
-                                        NSSortDescriptor(key: "district.name", ascending: true),
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "hybridType", ascending: true),
                                         NSSortDescriptor(key: "startDate", ascending: true),
                                         NSSortDescriptor(key: "name", ascending: true)]
         
         setupFetchRequest(fetchRequest)
         
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "eventType", cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "hybridType", cacheName: nil)
         
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: EventTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
@@ -198,7 +197,8 @@ class EventsTableViewController: TBATableViewController {
                 request.predicate = NSPredicate(format: "week == %ld && year == %ld", week.intValue, year)
             } else {
                 if Int(weekEvent.eventType) == EventType.championshipFinals.rawValue {
-                    request.predicate = NSPredicate(format: "(eventType == %ld || eventType == %ld) && year == %ld", EventType.championshipFinals.rawValue, EventType.championshipDivision.rawValue, year)
+                    // 2017 and onward - handle multiple CMPs
+                    request.predicate = NSPredicate(format: "(eventType == %ld || eventType == %ld) && year == %ld && (key == %@ || parentEventKey == %@)", EventType.championshipFinals.rawValue, EventType.championshipDivision.rawValue, year, weekEvent.key!, weekEvent.key!)
                 } else {
                     request.predicate = NSPredicate(format: "eventType == %ld && year == %ld", weekEvent.eventType, year)
                 }
@@ -221,11 +221,17 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
             return nil
         }
         
-        if event.isDistrictChampionship || event.isChampionship {
+        if event.isDistrictChampionship {
+            guard let district = event.district, let eventTypeName = event.eventTypeName else {
+                return nil
+            }
+            return Int(event.eventType) == EventType.districtChampionshipDivision.rawValue ? "\(district.name!) \(eventTypeName)s" : "\(eventTypeName)s"
+        } else if event.isChampionship {
             guard let eventTypeName = event.eventTypeName else {
                 return nil
             }
-            return "\(eventTypeName)s"
+            // CMP Finals are already plural
+            return Int(event.eventType) == EventType.championshipFinals.rawValue ? eventTypeName : "\(eventTypeName)s"
         } else {
             return event.district != nil ? "\(event.district!.name ?? "") District Events" : "Regional Events"
         }

@@ -36,7 +36,7 @@ extension Event {
             divisionKeysArray = newValue as NSArray
         }
     }
-    
+        
     static func insert(with model: TBAEvent, in context: NSManagedObjectContext) throws -> Event {
         let predicate = NSPredicate(format: "key == %@", model.key)
         
@@ -78,6 +78,7 @@ extension Event {
         event.firstEventID = model.firstEventID
         event.gmapsPlaceID = model.gmapsPlaceID
         event.gmapsURL = model.gmapsURL
+        
         event.key = model.key
         
         if let lat = model.lat {
@@ -122,10 +123,38 @@ extension Event {
         }
         
         event.year = Int16(model.year)
-                
+        
+        event.hybridType = event.calculateHybridType()
+        
         return event
     }
-        
+    
+    // hybridType is used a mechanism for sorting Events properly in fetch result controllers... they use a variety
+    // of event data to kinda "move around" events in our data model to get groups/order right
+    // Caution: Here be dragons...
+    // Preseason < Regionals < Districts (sorted alphabetically by abbrev), DCMP Divisions, DCMP Finals, CMP Divisions, CMP Finals, Offseason, others
+    // District events will be sorted together based on their district
+    // NOTE: THIS IS NOT A PERFECT SORT OF EVENTS - since we use a string, things get sorted based on string sorting logic
+    // Ex: 1 is a district, and 100 is a preseason event, but 1 gets put before 100 which gets put before 2 (DCMPs)
+    // We can work on exanding this if it becomes a problem, but with the currenting filtering for the Events FRC it's not a problem
+    private func calculateHybridType() -> String {
+        var hybridType = String(eventType)
+        // Group districts together, group district CMPs together
+        if isDistrictChampionship {
+            // Due to how DCMP divisions come *after* everything else if sorted by default
+            // This is a bit of a hack to get them to show up before DCMPs
+            // Future-proofing - group DCMP divisions together based on district
+            if Int(eventType) == EventType.districtChampionshipDivision.rawValue, let district = district {
+                hybridType = "\(EventType.districtChampionship.rawValue)..\(district.abbreviation!).dcmpd"
+            } else {
+                hybridType = "\(hybridType).dcmp"
+            }
+        } else if let district = district, !isDistrictChampionship {
+            hybridType = "\(hybridType).\(district.abbreviation!)"
+        }
+        return hybridType
+    }
+    
     public func dateString() -> String? {
         if self.startDate == nil || self.endDate == nil {
             return nil
@@ -216,7 +245,7 @@ extension Event {
         let type = Int(eventType)
         return type == EventType.districtChampionshipDivision.rawValue || type == EventType.districtChampionship.rawValue
     }
-
+    
 }
 
 extension Event: Comparable {
