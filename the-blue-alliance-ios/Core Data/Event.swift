@@ -216,6 +216,7 @@ extension Event {
         let type = Int(eventType)
         return type == EventType.districtChampionshipDivision.rawValue || type == EventType.districtChampionship.rawValue
     }
+
 }
 
 extension Event: Comparable {

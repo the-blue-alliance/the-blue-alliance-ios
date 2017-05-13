@@ -167,21 +167,14 @@ class EventsTableViewController: TBATableViewController {
 
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
         
-        var sortDescriptors: [NSSortDescriptor] = [NSSortDescriptor(key: "district.name", ascending: true),
-                                                   NSSortDescriptor(key: "startDate", ascending: true),
-                                                   NSSortDescriptor(key: "name", ascending: true)]
-        var sectionNameKeyPath = "district.name"
-
-        // TODO: DCMP fields are still coming at the end of this list... need to fix that
-        if team != nil {
-            sortDescriptors.insert(NSSortDescriptor(key: "eventType", ascending: true), at: 0)
-            sectionNameKeyPath = "eventType"
-        }
-        fetchRequest.sortDescriptors = sortDescriptors
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "eventType", ascending: true),
+                                        NSSortDescriptor(key: "district.name", ascending: true),
+                                        NSSortDescriptor(key: "startDate", ascending: true),
+                                        NSSortDescriptor(key: "name", ascending: true)]
         
         setupFetchRequest(fetchRequest)
         
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "eventType", cacheName: nil)
         
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: EventTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
