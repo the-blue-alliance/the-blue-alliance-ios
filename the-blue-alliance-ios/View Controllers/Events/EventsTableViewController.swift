@@ -12,6 +12,14 @@ import CoreData
 
 class EventsTableViewController: TBATableViewController {
     
+    var team: Team?
+    // var district: District?
+
+    override var persistentContainer: NSPersistentContainer! {
+        didSet {
+            updateDataSource()
+        }
+    }
     internal var weekEvent: Event? {
         didSet {
             updateDataSource()
@@ -46,25 +54,40 @@ class EventsTableViewController: TBATableViewController {
     }
     
     // MARK: - Refreshing
-        
+
     override func refresh() {
+        removeNoDataView()
+        
+        if team != nil {
+            refreshTeamEvents()
+        } else {
+            refreshAllEvents()
+        }
+    }
+    
+    override func shouldNoDataRefresh() -> Bool {
+        if let events = dataSource?.fetchedResultsController.fetchedObjects, events.isEmpty {
+            return true
+        }
+        return false
+    }
+
+    // TODO: Filter these refresh methods down to one method by doing something clever... it's the same code so
+    func refreshAllEvents() {
         guard let year = year else {
             return
         }
-        
-        removeNoDataView()
-        
+
         var request: URLSessionDataTask?
         request = TBAEvent.fetchEvents(year) { (events, error) in
             self.removeRequest(request: request!)
-
+            
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
                 return
             }
             
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
-                // Insert the events
                 events?.forEach({ (modelEvent) in
                     _ = try? Event.insert(with: modelEvent, in: backgroundContext)
                 })
@@ -78,11 +101,42 @@ class EventsTableViewController: TBATableViewController {
         addRequest(request: request!)
     }
     
-    override func shouldNoDataRefresh() -> Bool {
-        if let events = dataSource?.fetchedResultsController.fetchedObjects, events.isEmpty {
-            return true
+    func refreshTeamEvents() {
+        // Get all events for the team - we'll filter by year
+        guard let team = team else {
+            return
         }
-        return false
+
+        var request: URLSessionDataTask?
+        request = TBATeam.fetchEventsForTeam(team.key!) { (events, error) in
+            self.removeRequest(request: request!)
+            
+            if let error = error {
+                self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
+                return
+            }
+            
+            guard let events = events else {
+                return
+            }
+            
+            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+                let backgroundTeam = backgroundContext.object(with: team.objectID) as! Team
+                backgroundTeam.events = Set(events.flatMap({ (modelEvent) -> Event? in
+                    do {
+                        return try Event.insert(with: modelEvent, in: backgroundContext)
+                    } catch {
+                        return nil
+                    }
+                })) as NSSet
+                
+                try? backgroundContext.save()
+                if let eventsFetched = self.eventsFetched {
+                    eventsFetched()
+                }
+            })
+        }
+        addRequest(request: request!)
     }
     
     // MARK: UITableView Delegate
@@ -107,18 +161,27 @@ class EventsTableViewController: TBATableViewController {
     fileprivate var dataSource: TableViewDataSource<Event, EventsTableViewController>?
     
     fileprivate func setupDataSource() {
-        guard let _ = weekEvent else {
+        guard let persistentContainer = persistentContainer else {
             return
         }
-        
+
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "district.name", ascending: true),
-                                        NSSortDescriptor(key: "startDate", ascending: true),
-                                        NSSortDescriptor(key: "name", ascending: true)]
+        
+        var sortDescriptors: [NSSortDescriptor] = [NSSortDescriptor(key: "district.name", ascending: true),
+                                                   NSSortDescriptor(key: "startDate", ascending: true),
+                                                   NSSortDescriptor(key: "name", ascending: true)]
+        var sectionNameKeyPath = "district.name"
+
+        // TODO: DCMP fields are still coming at the end of this list... need to fix that
+        if team != nil {
+            sortDescriptors.insert(NSSortDescriptor(key: "eventType", ascending: true), at: 0)
+            sectionNameKeyPath = "eventType"
+        }
+        fetchRequest.sortDescriptors = sortDescriptors
         
         setupFetchRequest(fetchRequest)
         
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "district.name", cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
         
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: EventTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
@@ -132,19 +195,23 @@ class EventsTableViewController: TBATableViewController {
     }
     
     fileprivate func setupFetchRequest(_ request: NSFetchRequest<Event>) {
-        guard let weekEvent = weekEvent, let year = year else {
+        guard let year = year else {
             return
         }
 
-        if let week = weekEvent.week {
-            // Event has a week - filter based on the week
-            request.predicate = NSPredicate(format: "week == %ld && year == %ld", week.intValue, year)
-        } else {
-            if Int(weekEvent.eventType) == EventType.championshipFinals.rawValue {
-                request.predicate = NSPredicate(format: "(eventType == %ld || eventType == %ld) && year == %ld", EventType.championshipFinals.rawValue, EventType.championshipDivision.rawValue, year)
+        if let weekEvent = weekEvent {
+            if let week = weekEvent.week {
+                // Event has a week - filter based on the week
+                request.predicate = NSPredicate(format: "week == %ld && year == %ld", week.intValue, year)
             } else {
-                request.predicate = NSPredicate(format: "eventType == %ld && year == %ld", weekEvent.eventType, year)
+                if Int(weekEvent.eventType) == EventType.championshipFinals.rawValue {
+                    request.predicate = NSPredicate(format: "(eventType == %ld || eventType == %ld) && year == %ld", EventType.championshipFinals.rawValue, EventType.championshipDivision.rawValue, year)
+                } else {
+                    request.predicate = NSPredicate(format: "eventType == %ld && year == %ld", weekEvent.eventType, year)
+                }
             }
+        } else if let team = team {
+            request.predicate = NSPredicate(format: "year == %ld AND ANY teams == %@", year, team)
         }
     }
     
@@ -157,11 +224,17 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
     }
     
     func title(for section: Int) -> String? {
-        let event = dataSource?.object(at: IndexPath(item: 0, section: section))
-        if let district = event?.district {
-            return "\(district.name!) Districts"
+        guard let event = dataSource?.object(at: IndexPath(item: 0, section: section)) else {
+            return nil
+        }
+        
+        if event.isDistrictChampionship || event.isChampionship {
+            guard let eventTypeName = event.eventTypeName else {
+                return nil
+            }
+            return "\(eventTypeName)s"
         } else {
-            return "Regionals"
+            return event.district != nil ? "\(event.district!.name ?? "") District Events" : "Regional Events"
         }
     }
     
@@ -178,3 +251,4 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
     }
     
 }
+

@@ -82,6 +82,9 @@
                                             <segment title="Media"/>
                                         </segments>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <action selector="segmentedControlValueChangedWithSender:" destination="5by-aT-woR" eventType="valueChanged" id="mAh-74-jcK"/>
+                                        </connections>
                                     </segmentedControl>
                                 </subviews>
                                 <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -98,16 +101,26 @@
                                     <segue destination="1eu-y6-6Br" kind="embed" identifier="TeamInfoEmbed" id="q15-CI-zg8"/>
                                 </connections>
                             </containerView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FtO-pB-UKC">
+                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
+                                <connections>
+                                    <segue destination="wLf-ZD-Wn1" kind="embed" identifier="TeamEventsEmbed" id="Tx2-V4-aM8"/>
+                                </connections>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="7wB-xc-qxs" secondAttribute="trailing" id="4D0-Lh-ZLL"/>
                             <constraint firstItem="h7Z-Xj-wB2" firstAttribute="leading" secondItem="gdf-MN-RnZ" secondAttribute="leading" id="8Hx-hl-xAq"/>
+                            <constraint firstAttribute="trailing" secondItem="FtO-pB-UKC" secondAttribute="trailing" id="Eja-bm-3zd"/>
                             <constraint firstItem="nhg-Li-uWZ" firstAttribute="top" secondItem="h7Z-Xj-wB2" secondAttribute="bottom" id="F0K-Qi-3tY"/>
                             <constraint firstAttribute="trailing" secondItem="h7Z-Xj-wB2" secondAttribute="trailing" id="Fig-f2-pdk"/>
                             <constraint firstItem="7wB-xc-qxs" firstAttribute="leading" secondItem="gdf-MN-RnZ" secondAttribute="leading" id="MpN-4e-fjH"/>
                             <constraint firstItem="7wB-xc-qxs" firstAttribute="top" secondItem="m6P-mj-L99" secondAttribute="bottom" id="OOJ-ut-c9e"/>
                             <constraint firstItem="h7Z-Xj-wB2" firstAttribute="top" secondItem="7wB-xc-qxs" secondAttribute="bottom" id="OY9-SF-86N"/>
+                            <constraint firstItem="FtO-pB-UKC" firstAttribute="leading" secondItem="gdf-MN-RnZ" secondAttribute="leading" id="brr-Bf-IBx"/>
+                            <constraint firstItem="FtO-pB-UKC" firstAttribute="top" secondItem="7wB-xc-qxs" secondAttribute="bottom" id="kx3-71-saY"/>
+                            <constraint firstItem="nhg-Li-uWZ" firstAttribute="top" secondItem="FtO-pB-UKC" secondAttribute="bottom" id="r4g-l4-aZ9"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="0VD-YP-YBq">
@@ -147,6 +160,7 @@
                         </view>
                     </navigationItem>
                     <connections>
+                        <outlet property="eventsView" destination="FtO-pB-UKC" id="BK3-nr-Ftr"/>
                         <outlet property="infoView" destination="h7Z-Xj-wB2" id="31k-fw-Xem"/>
                         <outlet property="navigationDetailLabel" destination="1gO-W4-baF" id="9wc-OW-jRC"/>
                         <outlet property="navigationTitleLabel" destination="LNf-Os-1qq" id="lLC-vF-mZw"/>
@@ -161,7 +175,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1562" y="466"/>
+            <point key="canvasLocation" x="1560.8" y="465.51724137931041"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="oEx-y3-Wd4">
@@ -195,7 +209,15 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l83-UJ-g2N" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="942" y="1160"/>
+            <point key="canvasLocation" x="913" y="1190"/>
+        </scene>
+        <!--EventsTableViewController-->
+        <scene sceneID="HJt-xh-rGw">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="EventsTableViewController" id="wLf-ZD-Wn1" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6SP-bG-V7b" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1599" y="951"/>
         </scene>
         <!--Teams Table View Controller-->
         <scene sceneID="all-fB-X7S">

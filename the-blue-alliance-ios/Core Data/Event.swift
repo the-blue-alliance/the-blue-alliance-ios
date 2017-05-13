@@ -207,6 +207,15 @@ extension Event {
         return "\(String(year)) \(nameString ?? "Unnamed") \(eventTypeName ?? "Event")"
     }
     
+    public var isChampionship: Bool {
+        let type = Int(eventType)
+        return type == EventType.championshipDivision.rawValue || type == EventType.championshipFinals.rawValue
+    }
+    
+    public var isDistrictChampionship: Bool {
+        let type = Int(eventType)
+        return type == EventType.districtChampionshipDivision.rawValue || type == EventType.districtChampionship.rawValue
+    }
 }
 
 extension Event: Comparable {

@@ -9,14 +9,13 @@
 import UIKit
 import TBAKit
 
-
-
 class TeamViewController: ContainerViewController {
     
     public var team: Team!
     var year: Int? {
         didSet {
-            // TODO: Pass year down to VCs that need it
+            eventsViewController.year = year
+
             DispatchQueue.main.async {
                 self.updateInterface()
             }
@@ -26,7 +25,9 @@ class TeamViewController: ContainerViewController {
     internal var infoViewController: TeamInfoTableViewController!
     @IBOutlet internal var infoView: UIView?
     
+    internal var eventsViewController: EventsTableViewController!
     @IBOutlet internal var eventsView: UIView?
+
     @IBOutlet internal var mediaView: UIView?
     
     override func viewDidLoad() {
@@ -34,8 +35,8 @@ class TeamViewController: ContainerViewController {
         
         title = "Team \(team.teamNumber)"
         
-        viewControllers = [infoViewController]
-        containerViews = [infoView!]
+        viewControllers = [infoViewController, eventsViewController]
+        containerViews = [infoView!, eventsView!]
         
         navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
         navigationItem.leftItemsSupplementBackButton = true
@@ -109,6 +110,13 @@ class TeamViewController: ContainerViewController {
         } else if segue.identifier == "TeamInfoEmbed" {
             infoViewController = segue.destination as? TeamInfoTableViewController
             infoViewController.team = team
+        } else if segue.identifier == "TeamEventsEmbed" {
+            eventsViewController = segue.destination as? EventsTableViewController
+            eventsViewController.team = team
+            eventsViewController.year = year
+            eventsViewController.eventSelected = { event in
+                // TODO: Push to team@event VC
+            }
         }
     }
     
