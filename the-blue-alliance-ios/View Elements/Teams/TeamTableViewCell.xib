@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,10 +19,10 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Tyb-Ns-30f">
-                        <rect key="frame" x="8" y="8" width="326" height="53.5"/>
+                        <rect key="frame" x="16" y="8" width="318" height="53.5"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="QYQ-jO-saV">
-                                <rect key="frame" x="0.0" y="0.0" width="326" height="53.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="318" height="53.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" text="7332" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vxL-kB-K0K">
                                         <rect key="frame" x="0.0" y="0.0" width="44" height="53.5"/>
@@ -35,16 +34,16 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="6eP-Ga-gQh">
-                                        <rect key="frame" x="59" y="0.0" width="267" height="53.5"/>
+                                        <rect key="frame" x="59" y="0.0" width="259" height="53.5"/>
                                         <subviews>
                                             <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Team Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5pm-5N-rYU">
-                                                <rect key="frame" x="0.0" y="0.0" width="267" height="36.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="259" height="36.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" verticalHuggingPriority="750" verticalCompressionResistancePriority="749" text="Location" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ana-Js-nEd">
-                                                <rect key="frame" x="0.0" y="36.5" width="267" height="17"/>
+                                                <rect key="frame" x="0.0" y="36.5" width="259" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -57,9 +56,9 @@
                     </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailingMargin" secondItem="Tyb-Ns-30f" secondAttribute="trailing" id="2fr-pj-ava"/>
-                    <constraint firstItem="Tyb-Ns-30f" firstAttribute="leading" secondItem="b4Q-6L-HOM" secondAttribute="leadingMargin" id="G5T-Wq-3p6"/>
                     <constraint firstItem="Tyb-Ns-30f" firstAttribute="top" secondItem="b4Q-6L-HOM" secondAttribute="top" constant="8" id="YI2-Tt-dCX"/>
+                    <constraint firstItem="Tyb-Ns-30f" firstAttribute="leading" secondItem="b4Q-6L-HOM" secondAttribute="leading" constant="16" id="ir5-Pv-ubw"/>
+                    <constraint firstAttribute="trailing" secondItem="Tyb-Ns-30f" secondAttribute="trailing" constant="8" id="usB-WP-Wpk"/>
                     <constraint firstAttribute="bottom" secondItem="Tyb-Ns-30f" secondAttribute="bottom" constant="8" id="xSb-Qj-GAj"/>
                 </constraints>
             </tableViewCellContentView>

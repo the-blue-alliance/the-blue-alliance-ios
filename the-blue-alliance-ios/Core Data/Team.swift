@@ -10,7 +10,7 @@ import Foundation
 import TBAKit
 import CoreData
 
-extension Team {
+extension Team: Locatable {
 
     var homeChampionship: [String: String] {
         get {
@@ -75,7 +75,7 @@ extension Team {
         
         return team
     }
-
+    
     static func fetchAllTeams(taskChanged: @escaping (URLSessionDataTask, [TBATeam]) -> (), completion: @escaping (Error?) -> ()) -> URLSessionDataTask {
         return fetchAllTeams(taskChanged: taskChanged, page: 0, completion: completion)
     }

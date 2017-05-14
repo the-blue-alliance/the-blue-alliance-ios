@@ -100,8 +100,10 @@ class TeamsTableViewController: TBATableViewController {
             }
             
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+                let backgroundEvent = backgroundContext.object(with: event.objectID) as! Event
                 teams?.forEach({ (modelTeam) in
-                    _ = try? Team.insert(with: modelTeam, in: backgroundContext)
+                    let t = try? Team.insert(with: modelTeam, in: backgroundContext)
+                    t?.addToEvents(backgroundEvent)
                 })
                 
                 try? backgroundContext.save()

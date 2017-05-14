@@ -26,6 +26,7 @@
 		92942E361E2A81E8008E79CA /* EventInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942E351E2A81E8008E79CA /* EventInfoTableViewController.swift */; };
 		929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929BBB041EC55742006D3854 /* InfoTableViewCell.swift */; };
 		929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 929BBB071EC55A22006D3854 /* InfoTableViewCell.xib */; };
+		929FCD951EC7EE9200A38E46 /* Locatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD941EC7EE9200A38E46 /* Locatable.swift */; };
 		92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
 		92D855CF1EC68ACE00572F27 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855CE1EC68ACE00572F27 /* Team.swift */; };
@@ -71,6 +72,7 @@
 		92942E351E2A81E8008E79CA /* EventInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventInfoTableViewController.swift; sourceTree = "<group>"; };
 		929BBB041EC55742006D3854 /* InfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoTableViewCell.swift; sourceTree = "<group>"; };
 		929BBB071EC55A22006D3854 /* InfoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoTableViewCell.xib; sourceTree = "<group>"; };
+		929FCD941EC7EE9200A38E46 /* Locatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locatable.swift; sourceTree = "<group>"; };
 		92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectNumberTableViewController.swift; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		92D855CE1EC68ACE00572F27 /* Team.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				92942DA91E215700008E79CA /* TBA.xcdatamodeld */,
+				929FCD961EC7EE9D00A38E46 /* Protocols */,
 				92D855D01EC68AD000572F27 /* Team */,
 				92FFE5281E7CB0250037E48C /* District */,
 				92942E091E21DD18008E79CA /* Event */,
@@ -250,6 +253,14 @@
 				929BBB041EC55742006D3854 /* InfoTableViewCell.swift */,
 			);
 			path = Info;
+			sourceTree = "<group>";
+		};
+		929FCD961EC7EE9D00A38E46 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				929FCD941EC7EE9200A38E46 /* Locatable.swift */,
+			);
+			name = Protocols;
 			sourceTree = "<group>";
 		};
 		92D855D01EC68AD000572F27 /* Team */ = {
@@ -512,6 +523,7 @@
 				92942DB91E215B87008E79CA /* DistrictsViewController.swift in Sources */,
 				92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */,
 				92942DAB1E215700008E79CA /* TBA.xcdatamodeld in Sources */,
+				929FCD951EC7EE9200A38E46 /* Locatable.swift in Sources */,
 				92F481F31E7DA0A800B4ED7E /* TBAController.swift in Sources */,
 				925288921EC7ABC6009B78A9 /* Event.swift in Sources */,
 				92942E361E2A81E8008E79CA /* EventInfoTableViewController.swift in Sources */,

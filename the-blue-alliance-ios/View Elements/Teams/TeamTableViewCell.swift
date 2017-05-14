@@ -18,17 +18,7 @@ class TeamTableViewCell: UITableViewCell {
             }
             numberLabel?.text = "\(team.teamNumber)"
             nameLabel?.text = (team.nickname != nil ? team.nickname : team.name)
-            
-            if let location = team.locationName {
-                locationLabel?.text = location
-            } else {
-                locationLabel?.text = [team.city, team.state, team.country].reduce("", { (locationString, locationPart) -> String in
-                    guard let locationPart = locationPart else {
-                        return locationString
-                    }
-                    return locationString.isEmpty ? locationPart : "\(locationString), \(locationPart)"
-                })
-            }
+            locationLabel?.text = team.locationString
         }
         
     }

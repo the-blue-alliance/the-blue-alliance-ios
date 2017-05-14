@@ -26,7 +26,7 @@ enum InitError: Error {
     case invalid(key: String)
 }
 
-extension Event {
+extension Event: Locatable {
 
     var divisionKeys: [String] {
         get {
@@ -128,7 +128,7 @@ extension Event {
         
         return event
     }
-    
+        
     // hybridType is used a mechanism for sorting Events properly in fetch result controllers... they use a variety
     // of event data to kinda "move around" events in our data model to get groups/order right
     // Caution: Here be dragons...

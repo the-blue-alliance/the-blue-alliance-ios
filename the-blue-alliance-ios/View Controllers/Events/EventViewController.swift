@@ -15,7 +15,9 @@ class EventViewController: ContainerViewController {
     internal var infoViewController: EventInfoTableViewController!
     @IBOutlet internal var infoView: UIView?
     
+    internal var teamsViewController: TeamsTableViewController!
     @IBOutlet internal var teamsView: UIView?
+    
     @IBOutlet internal var rankingsView: UIView?
     @IBOutlet internal var matchesView: UIView?
     
@@ -24,8 +26,8 @@ class EventViewController: ContainerViewController {
 
         title = event.friendlyNameWithYear
         
-        viewControllers = [infoViewController]
-        containerViews = [infoView!]
+        viewControllers = [infoViewController, teamsViewController]
+        containerViews = [infoView!, teamsView!]
         
         navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
         navigationItem.leftItemsSupplementBackButton = true
@@ -37,6 +39,12 @@ class EventViewController: ContainerViewController {
         if segue.identifier == "EventInfoEmbed" {
             infoViewController = segue.destination as! EventInfoTableViewController
             infoViewController.event = event
+        } else if segue.identifier == "EventTeamsEmbed" {
+            teamsViewController = segue.destination as! TeamsTableViewController
+            teamsViewController.event = event
+            teamsViewController.teamSelected = { team in
+                // TOOD: Show team@event
+            }
         }
     }
 

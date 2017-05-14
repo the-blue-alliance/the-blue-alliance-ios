@@ -66,7 +66,7 @@ class InfoTableViewCell: UITableViewCell {
                 let nameLabel = titleLabelWithText(name)
                 infoStackView.addArrangedSubview(nameLabel)
             }
-            if let location = event.locationName {
+            if let location = event.locationString {
                 let locationLabel = subtitleLabelWithText(location)
                 infoStackView.addArrangedSubview(locationLabel)
             }
@@ -79,16 +79,7 @@ class InfoTableViewCell: UITableViewCell {
                 let nicknameLabel = titleLabelWithText(nickname)
                 infoStackView.addArrangedSubview(nicknameLabel)
             }
-            if let location = team.locationName {
-                let locationLabel = subtitleLabelWithText(location)
-                infoStackView.addArrangedSubview(locationLabel)
-            } else {
-                let location = [team.city, team.state, team.country].reduce("", { (locationString, locationPart) -> String in
-                    guard let locationPart = locationPart else {
-                        return locationString
-                    }
-                    return locationString.isEmpty ? locationPart : "\(locationString), \(locationPart)"
-                })
+            if let location = team.locationString {
                 let locationLabel = subtitleLabelWithText(location)
                 infoStackView.addArrangedSubview(locationLabel)
             }
