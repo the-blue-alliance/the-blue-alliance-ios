@@ -10,36 +10,25 @@ import Foundation
 import TBAKit
 import CoreData
 
-extension Webcast {
+extension Webcast: Managed {
     
-    static func insert(with model: TBAWebcast, for event: Event, in context: NSManagedObjectContext) throws -> Webcast {
+    static func insert(with model: TBAWebcast, for event: Event, in context: NSManagedObjectContext) -> Webcast {
         let predicate = NSPredicate(format: "event == %@ AND type == %@ AND channel == %@", event, model.type, model.channel)
-
-        let fetchRequest: NSFetchRequest<Webcast> = Webcast.fetchRequest()
-        fetchRequest.predicate = predicate
-        fetchRequest.fetchLimit = 1
-        fetchRequest.returnsObjectsAsFaults = false
-        
-        let webcasts = try fetchRequest.execute()
-        let webcast = webcasts.first ?? Webcast(context: context)
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        // Setup event variables here
-        webcast.type = model.type
-        webcast.channel = model.channel
-        webcast.file = model.file
-        
-        guard let dateString = model.date, let date = dateFormatter.date(from: dateString) else {
-            context.delete(webcast)
-            throw InitError.invalid(key: "date")
-        }
-        webcast.date = NSDate(timeIntervalSince1970: date.timeIntervalSince1970)
-        
-        webcast.event = event
-        
-        return webcast
+
+        return findOrCreate(in: context, matching: predicate, configure: { (webcast) in
+            webcast.type = model.type
+            webcast.channel = model.channel
+            webcast.file = model.file
+            
+            if let dateString = model.date, let date = dateFormatter.date(from: dateString) {
+                webcast.date = NSDate(timeIntervalSince1970: date.timeIntervalSince1970)
+            }
+            
+            webcast.event = event
+        })
     }
     
 }

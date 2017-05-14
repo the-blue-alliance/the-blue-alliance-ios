@@ -50,24 +50,20 @@ class DistrictsTableViewController: TBATableViewController {
         
         var request: URLSessionDataTask?
         request = TBADistrict.fetchDistricts(year: year) { (districts, error) in
-            self.removeRequest(request: request!)
-            
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh districts - \(error.localizedDescription)")
-                return
-            }
-            
-            guard let districts = districts else {
-                self.showErrorAlert(with: "Unable to refresh districts - API error")
-                return
             }
             
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
-                districts.forEach({ (modelDistrict) in
-                    _ = try? District.insert(with: modelDistrict, in: backgroundContext)
+                districts?.forEach({ (modelDistrict) in
+                    _ = District.insert(with: modelDistrict, in: backgroundContext)
                 })
                 
-                try? backgroundContext.save()
+                if !backgroundContext.saveOrRollback() {
+                    self.showErrorAlert(with: "Unable to refresh districts - database error")
+                }
+                
+                self.removeRequest(request: request!)
             })
         }
         addRequest(request: request!)

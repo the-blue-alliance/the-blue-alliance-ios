@@ -82,27 +82,22 @@ class EventsTableViewController: TBATableViewController {
 
         var request: URLSessionDataTask?
         request = TBAEvent.fetchEvents(year) { (events, error) in
-            self.removeRequest(request: request!)
-            
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
-                return
-            }
-            
-            guard let events = events else {
-                self.showErrorAlert(with: "Unable to refresh events - API error")
-                return
             }
             
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
-                events.forEach({ (modelEvent) in
-                    _ = try? Event.insert(with: modelEvent, in: backgroundContext)
+                events?.forEach({ (modelEvent) in
+                    _ = Event.insert(with: modelEvent, in: backgroundContext)
                 })
                 
-                try? backgroundContext.save()
-                if let eventsFetched = self.eventsFetched {
+                if !backgroundContext.saveOrRollback() {
+                    self.showErrorAlert(with: "Unable to refresh event - database error")
+                } else if let eventsFetched = self.eventsFetched {
                     eventsFetched()
                 }
+                
+                self.removeRequest(request: request!)
             })
         }
         addRequest(request: request!)
@@ -120,28 +115,22 @@ class EventsTableViewController: TBATableViewController {
             
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
-                return
-            }
-            
-            guard let events = events else {
-                self.showErrorAlert(with: "Unable to refresh events - API error")
-                return
             }
             
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: team.objectID) as! Team
-                backgroundTeam.addToEvents(Set(events.flatMap({ (modelEvent) -> Event? in
-                    do {
-                        return try Event.insert(with: modelEvent, in: backgroundContext)
-                    } catch {
-                        return nil
-                    }
-                })) as NSSet)
+                let localEvents = events?.map({ (modelEvent) -> Event in
+                    return Event.insert(with: modelEvent, in: backgroundContext)
+                })
+                backgroundTeam.addToEvents(Set(localEvents ?? []) as NSSet)
                 
-                try? backgroundContext.save()
-                if let eventsFetched = self.eventsFetched {
+                if !backgroundContext.saveOrRollback() {
+                    self.showErrorAlert(with: "Unable to refresh event - database error")
+                } else if let eventsFetched = self.eventsFetched {
                     eventsFetched()
                 }
+                
+                self.removeRequest(request: request!)
             })
         }
         addRequest(request: request!)
@@ -154,32 +143,24 @@ class EventsTableViewController: TBATableViewController {
         
         var request: URLSessionDataTask?
         request = TBADistrict.fetchEventsForDistrict(key: district.key!, completion: { (events, error) in
-            self.removeRequest(request: request!)
-            
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
-                return
-            }
-            
-            guard let events = events else {
-                self.showErrorAlert(with: "Unable to refresh events - API error")
-                return
             }
             
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 let backgroundDistrict = backgroundContext.object(with: district.objectID) as! District
-                backgroundDistrict.addToEvents(Set(events.flatMap({ (modelEvent) -> Event? in
-                    do {
-                        return try Event.insert(with: modelEvent, in: backgroundContext)
-                    } catch {
-                        return nil
-                    }
-                })) as NSSet)
+                let localEvents = events?.map({ (modelEvent) -> Event in
+                    return Event.insert(with: modelEvent, in: backgroundContext)
+                })
+                backgroundDistrict.addToEvents(Set(localEvents ?? []) as NSSet)
                 
-                try? backgroundContext.save()
-                if let eventsFetched = self.eventsFetched {
+                if !backgroundContext.saveOrRollback() {
+                    self.showErrorAlert(with: "Unable to refresh event - database error")
+                } else if let eventsFetched = self.eventsFetched {
                     eventsFetched()
                 }
+                
+                self.removeRequest(request: request!)
             })
         })
         addRequest(request: request!)
@@ -272,8 +253,10 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
             return nil
         }
 
-        if event.district != nil {
-            return "Week \(event.weekString) Events"
+        if let _ = district {
+            return "\(event.weekString) Events"
+        } else if let district = event.district {
+            return "\(district.name ?? "") District Events"
         } else if event.isDistrictChampionship {
             guard let district = event.district, let eventTypeName = event.eventTypeName else {
                 return nil
@@ -286,7 +269,7 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
             // CMP Finals are already plural
             return Int(event.eventType) == EventType.championshipFinals.rawValue ? eventTypeName : "\(eventTypeName)s"
         } else {
-            return event.district != nil ? "\(event.district!.name ?? "") District Events" : "Regional Events"
+            return "Regional Events"
         }
     }
     

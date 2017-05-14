@@ -68,10 +68,10 @@ class TeamsTableViewController: TBATableViewController {
             
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 teams.forEach({ (modelTeam) in
-                    _ = try? Team.insert(with: modelTeam, in: backgroundContext)
+                    _ = Team.insert(with: modelTeam, in: backgroundContext)
                 })
                 
-                try? backgroundContext.save()
+                _ = backgroundContext.saveOrRollback()
                 self.removeRequest(request: previousRequest!)
             })
         }) { (error) in
@@ -84,7 +84,6 @@ class TeamsTableViewController: TBATableViewController {
         addRequest(request: request!)
     }
     
-    // TODO: Can we do something fancy to consolidate these? They're basically the same code
     func refreshEventTeams() {
         guard let event = event, let eventKey = event.key else {
             return
@@ -92,29 +91,22 @@ class TeamsTableViewController: TBATableViewController {
         
         var request: URLSessionDataTask?
         request = TBAEvent.fetchTeams(eventKey) { (teams, error) in
-            self.removeRequest(request: request!)
-            
             if let error = error {
-                self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
-                return
-            }
-            
-            guard let teams = teams else {
-                self.showErrorAlert(with: "Unable to refresh teams - API error")
-                return
+                self.showErrorAlert(with: "Unable to teams events - \(error.localizedDescription)")
             }
             
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: event.objectID) as! Event
-                backgroundEvent.addToTeams(Set(teams.flatMap({ (modelTeam) -> Team? in
-                    do {
-                        return try Team.insert(with: modelTeam, in: backgroundContext)
-                    } catch {
-                        return nil
-                    }
-                })) as NSSet)
+                let localTeams = teams?.map({ (modelTeam) -> Team in
+                    return Team.insert(with: modelTeam, in: backgroundContext)
+                })
+                backgroundEvent.addToTeams(Set(localTeams ?? []) as NSSet)
                 
-                try? backgroundContext.save()
+                if !backgroundContext.saveOrRollback() {
+                    self.showErrorAlert(with: "Unable to refresh teams - database error")
+                }
+
+                self.removeRequest(request: request!)
             })
         }
         addRequest(request: request!)

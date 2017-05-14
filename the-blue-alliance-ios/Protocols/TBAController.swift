@@ -298,9 +298,9 @@ extension Refreshable {
     
     private func updateRefresh() {
         if isRefreshing {
-            self.refreshControl?.beginRefreshing()
+            refreshControl?.beginRefreshing()
         } else {
-            self.refreshControl?.endRefreshing()
+            refreshControl?.endRefreshing()
         }
     }
     

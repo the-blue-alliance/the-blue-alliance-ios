@@ -13,18 +13,12 @@ class InfoTableViewCell: UITableViewCell {
     static let reuseIdentifier = "InfoCell"
     var event: Event? {
         didSet {
-            if event != nil {
-                team = nil
-                configureCell()
-            }
+            configureCell()
         }
     }
     var team: Team? {
         didSet {
-            if team != nil {
-                event = nil
-                configureCell()
-            }
+            configureCell()
         }
     }
     @IBOutlet private var infoStackView: UIStackView?

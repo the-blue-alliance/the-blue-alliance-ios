@@ -21,6 +21,7 @@ class EventsContainerViewController: ContainerViewController {
     @IBOutlet internal var eventsView: UIView?
     @IBOutlet internal var weeksButton: UIBarButtonItem?
     
+    internal var hasRefreshed: Bool = false
     internal var weeks: [Event]?
     internal var maxYear: Int?
     internal var week: Event? {
@@ -37,9 +38,11 @@ class EventsContainerViewController: ContainerViewController {
     internal var year: Int? {
         didSet {
             eventsViewController.year = year
+            
             // Year changed - remove our previously selected week
             week = nil
             weeks = nil
+            hasRefreshed = false
             
             setupWeeks()
             
@@ -119,6 +122,7 @@ class EventsContainerViewController: ContainerViewController {
 
         // Fetch all events where endDate is today or after today
         let date = Date()
+        
         // Remove time from date - we only care about the day
         let components = Calendar.current.dateComponents([.day, .month, .year], from: date)
         
@@ -129,21 +133,20 @@ class EventsContainerViewController: ContainerViewController {
         }
         let coreDataDate = NSDate(timeIntervalSince1970: swiftDate.timeIntervalSince1970)
         
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Event.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "year == %ld && endDate >= %@ && eventType != %ld", year, coreDataDate, EventType.championshipDivision.rawValue)
-        fetchRequest.fetchLimit = 1
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "endDate", ascending: true)]
-        
-        guard let events = try? persistentContainer?.viewContext.fetch(fetchRequest) as! [Event] else {
-            showErrorAlert(with: "Unable to setup current season week - fetch request failed")
-            return
+        let event = Event.fetchSingleObject(in: persistentContainer.viewContext) { (fetchRequest) in
+            fetchRequest.predicate = NSPredicate(format: "year == %ld && endDate >= %@ && eventType != %ld", year, coreDataDate, EventType.championshipDivision.rawValue)
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "endDate", ascending: true)]
+        }
+        let firstEvent = Event.fetchSingleObject(in: persistentContainer.viewContext) { (fetchRequest) in
+            fetchRequest.predicate = NSPredicate(format: "year == %ld", year)
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
         }
         
-        // TODO: Need to know if we have no events OR if we just don't have any more events this year
-        // If we don't have any more events this year *and* year != maxYear... just bump our year to maxYear and refresh
-        // Need to consider how this works if you switch to the current year in like December... we don't wanna bump
-        if !events.isEmpty {
-            self.week = events.first
+        if let event = event {
+            self.week = event
+        } else if let firstEvent = firstEvent {
+            // Couldn't get events for the year... use the *first* event for this year
+            self.week = firstEvent
         } else {
             showErrorAlert(with: "Unable to setup current season week - no events for year")
         }
@@ -161,23 +164,24 @@ class EventsContainerViewController: ContainerViewController {
             return
         }
         
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Event.fetchRequest()
-        // Filter out CMP divisions
-        fetchRequest.predicate = NSPredicate(format: "year == %ld && eventType != %ld", year, EventType.championshipDivision.rawValue)
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true), NSSortDescriptor(key: "eventType", ascending: true), NSSortDescriptor(key: "endDate", ascending: true)]
-        
-        guard let events = try? persistentContainer?.viewContext.fetch(fetchRequest) as! [Event] else {
-            showErrorAlert(with: "Unable to setup weeks - fetch request failed")
-            return
+        let events = Event.fetch(in: persistentContainer.viewContext) { (fetchRequest) in
+            // Filter out CMP divisions
+            fetchRequest.predicate = NSPredicate(format: "year == %ld && eventType != %ld", year, EventType.championshipDivision.rawValue)
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true), NSSortDescriptor(key: "eventType", ascending: true), NSSortDescriptor(key: "endDate", ascending: true)]
         }
-        // TODO: Need to know if we have no events OR if we just don't have any more events this year
-        if events.isEmpty {
+        
+        if events.isEmpty && !hasRefreshed {
             // Initial load of events for eventsVC
             if eventsViewController.shouldRefresh() {
+                hasRefreshed = true
                 eventsViewController.refresh()
             }
             return
+        } else if hasRefreshed {
+            showNoDataView(with: "No events for year")
+            return
         }
+
         
         var handledWeeks: Set<Int> = []
         var handledTypes: Set<Int> = []
@@ -264,6 +268,17 @@ class EventsContainerViewController: ContainerViewController {
                 let selectTableViewController = SelectTableViewController<Event>()
                 selectTableViewController.title = "Select Week"
                 selectTableViewController.current = week!
+                // Use compareCurrent for current season situation where the event stored in weeks may not actually
+                // be equal to the event we have stored in week... because the current event might not be the first event
+                selectTableViewController.compareCurrent = { current, option in
+                    // Handle CMPs different - since CMP has the same type and the same week, check based on keys
+                    let currentEventType = Int(current.eventType)
+                    let optionEventType = Int(option.eventType)
+                    if currentEventType == EventType.championshipFinals.rawValue, optionEventType == EventType.championshipFinals.rawValue {
+                        return current.key! == option.key!
+                    }
+                    return (current.week == option.week) && (current.eventType == option.eventType)
+                }
                 selectTableViewController.options = weeks
                 selectTableViewController.optionSelected = { week in
                     self.week = week

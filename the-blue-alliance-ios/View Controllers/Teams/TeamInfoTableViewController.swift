@@ -49,25 +49,20 @@ class TeamInfoTableViewController: TBATableViewController {
         
         var request: URLSessionDataTask?
         request = TBATeam.fetchTeam(team.key!, completion: { (modelTeam, error) in
-            self.removeRequest(request: request!)
-            
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh team - \(error.localizedDescription)")
-                return
-            }
-            
-            guard let modelTeam = modelTeam else {
-                self.showErrorAlert(with: "Unable to refresh team - API error")
-                return
             }
             
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
-                do {
-                    _ = try Team.insert(with: modelTeam, in: backgroundContext)
-                } catch let insertError {
-                    self.showErrorAlert(with: "Unable to insert team - \(insertError.localizedDescription)")
+                if let modelTeam = modelTeam {
+                    _ = Team.insert(with: modelTeam, in: backgroundContext)
                 }
-                try? backgroundContext.save()
+
+                if !backgroundContext.saveOrRollback() {
+                    self.showErrorAlert(with: "Unable to refresh team - database error")
+                }
+
+                self.removeRequest(request: request!)
             })
         })
         addRequest(request: request!)

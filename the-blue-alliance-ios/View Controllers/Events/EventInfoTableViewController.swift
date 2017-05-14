@@ -69,25 +69,20 @@ class EventInfoTableViewController: TBATableViewController {
 
         var request: URLSessionDataTask?
         request = TBAEvent.fetchEvent(event.key!) { (modelEvent, error) in
-            self.removeRequest(request: request!)
-            
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
-                return
-            }
-            
-            guard let modelEvent = modelEvent else {
-                self.showErrorAlert(with: "Unable to refresh event - API error")
-                return
             }
             
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
-                do {
-                    _ = try Event.insert(with: modelEvent, in: backgroundContext)
-                } catch let insertError {
-                    self.showErrorAlert(with: "Unable to insert event - \(insertError.localizedDescription)")
+                if let modelEvent = modelEvent {
+                    _ = Event.insert(with: modelEvent, in: backgroundContext)
                 }
-                try? backgroundContext.save()
+                
+                if !backgroundContext.saveOrRollback() {
+                    self.showErrorAlert(with: "Unable to refresh event - database error")
+                }
+                
+                self.removeRequest(request: request!)
             })
         }
         addRequest(request: request!)

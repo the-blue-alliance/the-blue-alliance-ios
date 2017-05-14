@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		924F8C851EC8C5F200F7447A /* Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924F8C841EC8C5F200F7447A /* Managed.swift */; };
+		924F8C871EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924F8C861EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift */; };
+		924F8C8B1EC8D27B00F7447A /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924F8C8A1EC8D27B00F7447A /* RankingTableViewCell.swift */; };
+		924F8C8D1EC8D28300F7447A /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924F8C8C1EC8D28300F7447A /* RankingTableViewCell.xib */; };
 		925288921EC7ABC6009B78A9 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925288911EC7ABC6009B78A9 /* Event.swift */; };
 		92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942D951E2154DA008E79CA /* AppDelegate.swift */; };
 		92942D9D1E2154DA008E79CA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942D9B1E2154DA008E79CA /* Main.storyboard */; };
@@ -29,6 +33,8 @@
 		929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */; };
 		929FCD9A1EC7F52700A38E46 /* DistrictsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD991EC7F52700A38E46 /* DistrictsTableViewController.swift */; };
 		929FCDA21EC8068800A38E46 /* DistrictViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCDA11EC8068800A38E46 /* DistrictViewController.swift */; };
+		929FCDA81EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCDA71EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift */; };
+		929FCDAA1EC8BFB000A38E46 /* DistrictRanking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCDA91EC8BFB000A38E46 /* DistrictRanking.swift */; };
 		92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
 		92D855CF1EC68ACE00572F27 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855CE1EC68ACE00572F27 /* Team.swift */; };
@@ -53,6 +59,10 @@
 		1C2601FEFE79E43A71B88523 /* Pods_the_blue_alliance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_the_blue_alliance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		614241F72C3BE7F89DD95428 /* Pods-the-blue-alliance-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-the-blue-alliance-ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios.debug.xcconfig"; sourceTree = "<group>"; };
 		891A553A526753BAB4660AC9 /* Pods-the-blue-alliance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-the-blue-alliance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-the-blue-alliance/Pods-the-blue-alliance.debug.xcconfig"; sourceTree = "<group>"; };
+		924F8C841EC8C5F200F7447A /* Managed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Managed.swift; sourceTree = "<group>"; };
+		924F8C861EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+Extension.swift"; sourceTree = "<group>"; };
+		924F8C8A1EC8D27B00F7447A /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
+		924F8C8C1EC8D28300F7447A /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		925288911EC7ABC6009B78A9 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		92942D921E2154DA008E79CA /* the-blue-alliance-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "the-blue-alliance-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92942D951E2154DA008E79CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -77,6 +87,8 @@
 		929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictsContainerViewController.swift; sourceTree = "<group>"; };
 		929FCD991EC7F52700A38E46 /* DistrictsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictsTableViewController.swift; sourceTree = "<group>"; };
 		929FCDA11EC8068800A38E46 /* DistrictViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictViewController.swift; sourceTree = "<group>"; };
+		929FCDA71EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictRankingsTableViewController.swift; sourceTree = "<group>"; };
+		929FCDA91EC8BFB000A38E46 /* DistrictRanking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictRanking.swift; sourceTree = "<group>"; };
 		92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectNumberTableViewController.swift; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		92D855CE1EC68ACE00572F27 /* Team.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
@@ -122,6 +134,23 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		924F8C881EC8C72000F7447A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				924F8C861EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		924F8C891EC8D26500F7447A /* Districts */ = {
+			isa = PBXGroup;
+			children = (
+				924F8C8C1EC8D28300F7447A /* RankingTableViewCell.xib */,
+				924F8C8A1EC8D27B00F7447A /* RankingTableViewCell.swift */,
+			);
+			path = Districts;
+			sourceTree = "<group>";
+		};
 		92942D891E2154DA008E79CA = {
 			isa = PBXGroup;
 			children = (
@@ -162,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				92942DA91E215700008E79CA /* TBA.xcdatamodeld */,
+				924F8C881EC8C72000F7447A /* Extensions */,
 				929FCD961EC7EE9D00A38E46 /* Protocols */,
 				92D855D01EC68AD000572F27 /* Team */,
 				92FFE5281E7CB0250037E48C /* District */,
@@ -265,6 +295,7 @@
 			isa = PBXGroup;
 			children = (
 				929FCD941EC7EE9200A38E46 /* Locatable.swift */,
+				924F8C841EC8C5F200F7447A /* Managed.swift */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";
@@ -273,6 +304,7 @@
 			isa = PBXGroup;
 			children = (
 				929FCDA11EC8068800A38E46 /* DistrictViewController.swift */,
+				929FCDA71EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift */,
 			);
 			name = District;
 			sourceTree = "<group>";
@@ -315,6 +347,7 @@
 		92FFE5221E7C994B0037E48C /* View Elements */ = {
 			isa = PBXGroup;
 			children = (
+				924F8C891EC8D26500F7447A /* Districts */,
 				92D855D51EC695AE00572F27 /* Teams */,
 				92FFE5231E7C994B0037E48C /* Events */,
 				929BBB061EC55745006D3854 /* Info */,
@@ -335,6 +368,7 @@
 			isa = PBXGroup;
 			children = (
 				92FFE51D1E770D010037E48C /* District.swift */,
+				929FCDA91EC8BFB000A38E46 /* DistrictRanking.swift */,
 			);
 			name = District;
 			sourceTree = "<group>";
@@ -424,6 +458,7 @@
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
 				92D855D91EC695CE00572F27 /* TeamTableViewCell.xib in Resources */,
 				92942D9D1E2154DA008E79CA /* Main.storyboard in Resources */,
+				924F8C8D1EC8D28300F7447A /* RankingTableViewCell.xib in Resources */,
 				92942DC31E215C37008E79CA /* MyTBAStoryboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -540,17 +575,22 @@
 				929FCD951EC7EE9200A38E46 /* Locatable.swift in Sources */,
 				92F481F31E7DA0A800B4ED7E /* TBAController.swift in Sources */,
 				925288921EC7ABC6009B78A9 /* Event.swift in Sources */,
+				924F8C851EC8C5F200F7447A /* Managed.swift in Sources */,
 				92942E361E2A81E8008E79CA /* EventInfoTableViewController.swift in Sources */,
+				929FCDA81EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift in Sources */,
 				92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */,
 				92D855CF1EC68ACE00572F27 /* Team.swift in Sources */,
 				92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */,
 				92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */,
+				924F8C871EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift in Sources */,
+				924F8C8B1EC8D27B00F7447A /* RankingTableViewCell.swift in Sources */,
 				92FFE52A1E7CB1550037E48C /* Webcast.swift in Sources */,
 				92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */,
 				92F481ED1E7D978600B4ED7E /* NoDataViewController.swift in Sources */,
 				92942DDF1E21D2EB008E79CA /* EventViewController.swift in Sources */,
 				929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */,
 				92FFE52C1E7CC60F0037E48C /* TBAColorExtension.swift in Sources */,
+				929FCDAA1EC8BFB000A38E46 /* DistrictRanking.swift in Sources */,
 				92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */,
 				92942DB11E215B06008E79CA /* EventsTableViewController.swift in Sources */,
 				92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */,

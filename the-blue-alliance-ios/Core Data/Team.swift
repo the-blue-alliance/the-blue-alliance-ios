@@ -10,7 +10,7 @@ import Foundation
 import TBAKit
 import CoreData
 
-extension Team: Locatable {
+extension Team: Locatable, Managed {
 
     var homeChampionship: [String: String] {
         get {
@@ -31,49 +31,39 @@ extension Team: Locatable {
         }
     }
     
-    static func insert(with model: TBATeam, in context: NSManagedObjectContext) throws -> Team {
+    static func insert(with model: TBATeam, in context: NSManagedObjectContext) -> Team {
         let predicate = NSPredicate(format: "key == %@", model.key)
-        
-        let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
-        fetchRequest.predicate = predicate
-        fetchRequest.fetchLimit = 1
-        fetchRequest.returnsObjectsAsFaults = false
-        
-        let teams = try fetchRequest.execute()
-        let team = teams.first ?? Team(context: context)
-        
-        // Required: key, name, teamNumber, rookieYear
-        // TODO: Add in stuff that drops teams that don't have this info
-        team.address = model.address
-        team.city = model.city
-        team.country = model.country
-        team.gmapsPlaceID = model.gmapsPlaceID
-        team.gmapsURL = model.gmapsURL
-        
-        if let homeChampionship = model.homeChampionship {
-            team.homeChampionship = homeChampionship
+        return findOrCreate(in: context, matching: predicate) { (team) in
+            // Required: key, name, teamNumber, rookieYear
+            team.address = model.address
+            team.city = model.city
+            team.country = model.country
+            team.gmapsPlaceID = model.gmapsPlaceID
+            team.gmapsURL = model.gmapsURL
+            
+            if let homeChampionship = model.homeChampionship {
+                team.homeChampionship = homeChampionship
+            }
+            
+            team.key = model.key
+            
+            if let lat = model.lat {
+                team.lat = NSNumber(value: lat)
+            }
+            if let lng = model.lng {
+                team.lng = NSNumber(value: lng)
+            }
+            
+            team.locationName = model.locationName
+            team.motto = model.motto
+            team.name = model.name
+            team.nickname = model.nickname
+            team.postalCode = model.postalCode
+            team.rookieYear = Int16(model.rookieYear)
+            team.state = model.state
+            team.teamNumber = Int32(model.teamNumber)
+            team.website = model.website
         }
-        
-        team.key = model.key
-        
-        if let lat = model.lat {
-            team.lat = NSNumber(value: lat)
-        }
-        if let lng = model.lng {
-            team.lng = NSNumber(value: lng)
-        }
-        
-        team.locationName = model.locationName
-        team.motto = model.motto
-        team.name = model.name
-        team.nickname = model.nickname
-        team.postalCode = model.postalCode
-        team.rookieYear = Int16(model.rookieYear)
-        team.state = model.state
-        team.teamNumber = Int32(model.teamNumber)
-        team.website = model.website
-        
-        return team
     }
     
     static func fetchAllTeams(taskChanged: @escaping (URLSessionDataTask, [TBATeam]) -> (), completion: @escaping (Error?) -> ()) -> URLSessionDataTask {

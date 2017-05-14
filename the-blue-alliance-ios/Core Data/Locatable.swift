@@ -19,7 +19,7 @@ extension Locatable {
     
     var locationString: String? {
         let location = [city, state, country].reduce("", { (locationString, locationPart) -> String in
-            guard let locationPart = locationPart else {
+            guard let locationPart = locationPart, !locationPart.isEmpty else {
                 return locationString
             }
             return locationString.isEmpty ? locationPart : "\(locationString), \(locationPart)"

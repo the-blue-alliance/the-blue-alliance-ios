@@ -188,6 +188,12 @@
                                     <constraint firstAttribute="trailing" secondItem="lEV-SV-UEO" secondAttribute="trailing" constant="16" id="Epi-eT-553"/>
                                 </constraints>
                             </view>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b0F-rX-fZp">
+                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
+                                <connections>
+                                    <segue destination="nkq-y1-HHW" kind="embed" identifier="DistrictRankingsEmbed" id="rq2-Hx-SoT"/>
+                                </connections>
+                            </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="skS-fS-apA">
                                 <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <connections>
@@ -197,18 +203,23 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="wVa-eo-PoC" firstAttribute="top" secondItem="b0F-rX-fZp" secondAttribute="bottom" id="3lb-CC-SeR"/>
+                            <constraint firstAttribute="trailing" secondItem="b0F-rX-fZp" secondAttribute="trailing" id="5K7-mh-e9e"/>
                             <constraint firstItem="n6X-A7-Tem" firstAttribute="leading" secondItem="jQs-jk-tcp" secondAttribute="leading" id="FGh-PT-BK0"/>
                             <constraint firstAttribute="trailing" secondItem="n6X-A7-Tem" secondAttribute="trailing" id="FUU-Cr-Gxr"/>
                             <constraint firstItem="skS-fS-apA" firstAttribute="top" secondItem="n6X-A7-Tem" secondAttribute="bottom" id="Iwe-tW-SY0"/>
                             <constraint firstItem="n6X-A7-Tem" firstAttribute="top" secondItem="Dyk-xy-Pg6" secondAttribute="bottom" id="LIA-m9-FG2"/>
+                            <constraint firstItem="b0F-rX-fZp" firstAttribute="top" secondItem="n6X-A7-Tem" secondAttribute="bottom" id="N56-3C-mvY"/>
                             <constraint firstItem="wVa-eo-PoC" firstAttribute="top" secondItem="skS-fS-apA" secondAttribute="bottom" id="T3O-iS-Dfi"/>
                             <constraint firstItem="skS-fS-apA" firstAttribute="leading" secondItem="jQs-jk-tcp" secondAttribute="leading" id="Vdi-2f-ekr"/>
+                            <constraint firstItem="b0F-rX-fZp" firstAttribute="leading" secondItem="jQs-jk-tcp" secondAttribute="leading" id="lDI-3D-QMl"/>
                             <constraint firstAttribute="trailing" secondItem="skS-fS-apA" secondAttribute="trailing" id="mdx-0h-RY4"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="zc9-zE-0GN"/>
                     <connections>
                         <outlet property="eventsView" destination="skS-fS-apA" id="dkx-U1-f03"/>
+                        <outlet property="rankingsView" destination="b0F-rX-fZp" id="WC3-56-N6Q"/>
                         <outlet property="segmentedControl" destination="lEV-SV-UEO" id="Hwx-Px-Fg8"/>
                         <outlet property="segmentedControlView" destination="n6X-A7-Tem" id="IPR-kH-oS4"/>
                         <segue destination="AwA-6t-1cZ" kind="show" identifier="EventSegue" id="yKx-Hz-4st"/>
@@ -233,6 +244,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9l1-5E-Uxh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1550" y="604"/>
+        </scene>
+        <!--District Rankings Table View Controller-->
+        <scene sceneID="3ST-AO-Ya2">
+            <objects>
+                <tableViewController id="nkq-y1-HHW" customClass="DistrictRankingsTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="zQ6-fT-9Ff">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="nkq-y1-HHW" id="f0y-dZ-bex"/>
+                            <outlet property="delegate" destination="nkq-y1-HHW" id="Xdg-vD-q02"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="C9d-do-usd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2230" y="923"/>
         </scene>
     </scenes>
     <resources>

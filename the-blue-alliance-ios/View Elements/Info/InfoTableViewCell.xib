@@ -19,13 +19,13 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="pTr-P1-tTD">
-                        <rect key="frame" x="16" y="8" width="380" height="55.5"/>
+                        <rect key="frame" x="20" y="8" width="372" height="55.5"/>
                     </stackView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="pTr-P1-tTD" firstAttribute="top" secondItem="mXb-2C-jZy" secondAttribute="top" constant="8" id="MAT-C2-viM"/>
-                    <constraint firstItem="pTr-P1-tTD" firstAttribute="leading" secondItem="mXb-2C-jZy" secondAttribute="leading" constant="16" id="Ufj-dP-5h7"/>
-                    <constraint firstAttribute="trailing" secondItem="pTr-P1-tTD" secondAttribute="trailing" constant="16" id="ZVm-9H-74R"/>
+                    <constraint firstItem="pTr-P1-tTD" firstAttribute="leading" secondItem="mXb-2C-jZy" secondAttribute="leading" constant="20" id="Ufj-dP-5h7"/>
+                    <constraint firstAttribute="trailing" secondItem="pTr-P1-tTD" secondAttribute="trailing" constant="20" id="ZVm-9H-74R"/>
                     <constraint firstAttribute="bottom" secondItem="pTr-P1-tTD" secondAttribute="bottom" constant="8" id="pTs-sE-8xn"/>
                 </constraints>
             </tableViewCellContentView>

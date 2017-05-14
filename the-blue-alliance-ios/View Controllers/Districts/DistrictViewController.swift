@@ -16,15 +16,16 @@ class DistrictViewController: ContainerViewController {
     internal var eventsViewController: EventsTableViewController!
     @IBOutlet internal var eventsView: UIView?
     
-    @IBOutlet internal var pointsView: UIView?
+    internal var rankingsViewController: DistrictRankingsTableViewController!
+    @IBOutlet internal var rankingsView: UIView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "\(district.year) \(district.name!) Districts"
         
-        viewControllers = [eventsViewController]
-        containerViews = [eventsView!]
+        viewControllers = [eventsViewController, rankingsViewController]
+        containerViews = [eventsView!, rankingsView!]
         
         if navigationController?.viewControllers.index(of: self) == 0 {
             navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
@@ -40,6 +41,12 @@ class DistrictViewController: ContainerViewController {
             eventsViewController.district = district
             eventsViewController.eventSelected = { event in
                 self.performSegue(withIdentifier: EventSegue, sender: event)
+            }
+        } else if segue.identifier == "DistrictRankingsEmbed" {
+            rankingsViewController = segue.destination as! DistrictRankingsTableViewController
+            rankingsViewController.district = district
+            rankingsViewController.rankingSelected = { ranking in
+                // TODO: Show team @ district VC
             }
         } else if segue.identifier == EventSegue {
             let eventViewController = segue.destination as! EventViewController

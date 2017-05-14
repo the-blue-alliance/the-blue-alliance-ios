@@ -22,11 +22,7 @@ public enum EventType: Int {
     case unlabeled = -1
 }
 
-enum InitError: Error {
-    case invalid(key: String)
-}
-
-extension Event: Locatable {
+extension Event: Locatable, Managed {
 
     var divisionKeys: [String] {
         get {
@@ -37,96 +33,83 @@ extension Event: Locatable {
         }
     }
         
-    static func insert(with model: TBAEvent, in context: NSManagedObjectContext) throws -> Event {
+    static func insert(with model: TBAEvent, in context: NSManagedObjectContext) -> Event {
         let predicate = NSPredicate(format: "key == %@", model.key)
-        
-        let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
-        fetchRequest.predicate = predicate
-        fetchRequest.fetchLimit = 1
-        fetchRequest.returnsObjectsAsFaults = false
-        
-        let events = try fetchRequest.execute()
-        let event = events.first ?? Event(context: context)
-        
-        // Required: endDate, eventCode, eventType, key, name, startDate, year
-        event.address = model.address
-        event.city = model.city
-        event.country = model.country
-        
-        if let district = model.district {
-            event.district = try? District.insert(with: district, in: context)
-        }
-
-        // TODO: Let's see if we can get a background task or something to go through and form relationships...
-        if !model.divisionKeys.isEmpty {
-            event.divisionKeys = model.divisionKeys
-        }
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        guard let endDate = dateFormatter.date(from: model.endDate) else {
-            context.delete(event)
-            throw InitError.invalid(key: "endDate")
-        }
-        
-        event.endDate = NSDate(timeIntervalSince1970: endDate.timeIntervalSince1970)
-        
-        event.eventCode = model.eventCode
-        event.eventType = Int16(model.eventType)
-        event.eventTypeName = model.eventTypeName
-        event.firstEventID = model.firstEventID
-        event.gmapsPlaceID = model.gmapsPlaceID
-        event.gmapsURL = model.gmapsURL
-        
-        event.key = model.key
-        
-        if let lat = model.lat {
-            event.lat = NSNumber(value: lat)
-        }
-        if let lng = model.lng {
-            event.lng = NSNumber(value: lng)
-        }
-        
-        event.locationName = model.locationName
-        event.name = model.name
-        
-        // TODO: Can we convert this to a relationship?
-        event.parentEventKey = model.parentEventKey
-        if let playoffType = model.playoffType {
-            event.playoffType = Int16(playoffType)
-        }
-        event.playoffTypeString = model.playoffTypeString
-        
-        event.postalCode = model.postalCode
-        event.shortName = model.shortName
-        
-        guard let startDate = dateFormatter.date(from: model.startDate) else {
-            context.delete(event)
-            throw InitError.invalid(key: "startDate")
-        }
-        event.startDate = NSDate(timeIntervalSince1970: startDate.timeIntervalSince1970)
-        
-        event.state = model.state
-        event.timezone = model.timezone
-        
-        if let webcasts = model.webcasts {
-            for modelWebcast in webcasts {
-                _ = try? Webcast.insert(with: modelWebcast, for: event, in: context)
+        return findOrCreate(in: context, matching: predicate) { (event) in
+            // Required: endDate, eventCode, eventType, key, name, startDate, year
+            event.address = model.address
+            event.city = model.city
+            event.country = model.country
+            
+            if let district = model.district {
+                event.district = District.insert(with: district, in: context)
             }
+            
+            // TODO: Let's see if we can get a background task or something to go through and form relationships...
+            if !model.divisionKeys.isEmpty {
+                event.divisionKeys = model.divisionKeys
+            }
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            
+            // TODO: Better way to handle this?
+            if let endDate = dateFormatter.date(from: model.endDate) {
+                event.endDate = NSDate(timeIntervalSince1970: endDate.timeIntervalSince1970)
+            }
+            
+            event.eventCode = model.eventCode
+            event.eventType = Int16(model.eventType)
+            event.eventTypeName = model.eventTypeName
+            event.firstEventID = model.firstEventID
+            event.gmapsPlaceID = model.gmapsPlaceID
+            event.gmapsURL = model.gmapsURL
+            
+            event.key = model.key
+            
+            if let lat = model.lat {
+                event.lat = NSNumber(value: lat)
+            }
+            if let lng = model.lng {
+                event.lng = NSNumber(value: lng)
+            }
+            
+            event.locationName = model.locationName
+            event.name = model.name
+            
+            // TODO: Can we convert this to a relationship?
+            event.parentEventKey = model.parentEventKey
+            if let playoffType = model.playoffType {
+                event.playoffType = Int16(playoffType)
+            }
+            event.playoffTypeString = model.playoffTypeString
+            
+            event.postalCode = model.postalCode
+            event.shortName = model.shortName
+            
+            if let startDate = dateFormatter.date(from: model.startDate) {
+                event.startDate = NSDate(timeIntervalSince1970: startDate.timeIntervalSince1970)
+            }
+            
+            event.state = model.state
+            event.timezone = model.timezone
+            
+            if let webcasts = model.webcasts {
+                event.addToWebcasts(Set(webcasts.map({ (modelWebcast) -> Webcast in
+                    return Webcast.insert(with: modelWebcast, for: event, in: context)
+                })) as NSSet)
+            }
+
+            event.website = model.website
+            
+            if let week = model.week {
+                event.week = NSNumber(integerLiteral: week)
+            }
+            
+            event.year = Int16(model.year)
+            
+            event.hybridType = event.calculateHybridType()
         }
-        
-        event.website = model.website
-        
-        if let week = model.week {
-            event.week = NSNumber(integerLiteral: week)
-        }
-        
-        event.year = Int16(model.year)
-        
-        event.hybridType = event.calculateHybridType()
-        
-        return event
     }
         
     // hybridType is used a mechanism for sorting Events properly in fetch result controllers... they use a variety
