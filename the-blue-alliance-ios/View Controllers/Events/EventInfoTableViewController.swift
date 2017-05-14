@@ -77,7 +77,7 @@ class EventInfoTableViewController: TBATableViewController {
             }
             
             guard let modelEvent = modelEvent else {
-                self.showErrorAlert(with: "Unable to refresh event - invalid event")
+                self.showErrorAlert(with: "Unable to refresh event - API error")
                 return
             }
             

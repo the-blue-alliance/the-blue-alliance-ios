@@ -57,7 +57,7 @@ class TeamInfoTableViewController: TBATableViewController {
             }
             
             guard let modelTeam = modelTeam else {
-                self.showErrorAlert(with: "Unable to refresh team - invalid team")
+                self.showErrorAlert(with: "Unable to refresh team - API error")
                 return
             }
             

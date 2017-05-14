@@ -89,7 +89,7 @@
         <!--2015 Kettering University District-->
         <scene sceneID="dha-2i-TWe">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="V9g-ZF-4u7" customClass="EventViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventViewController" hidesBottomBarWhenPushed="YES" id="V9g-ZF-4u7" customClass="EventViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="e3G-KZ-clu"/>
                         <viewControllerLayoutGuide type="bottom" id="0ON-FW-wcF"/>

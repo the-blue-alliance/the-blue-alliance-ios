@@ -38,14 +38,16 @@ class TeamViewController: ContainerViewController {
         viewControllers = [infoViewController, eventsViewController]
         containerViews = [infoView!, eventsView!]
         
-        navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-        navigationItem.leftItemsSupplementBackButton = true
+        if navigationController?.viewControllers.index(of: self) == 0 {
+            navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            navigationItem.leftItemsSupplementBackButton = true
+        }
         
         updateInterface()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         refreshYearsParticipated()
     }

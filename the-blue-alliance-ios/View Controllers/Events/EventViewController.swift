@@ -29,8 +29,10 @@ class EventViewController: ContainerViewController {
         viewControllers = [infoViewController, teamsViewController]
         containerViews = [infoView!, teamsView!]
         
-        navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-        navigationItem.leftItemsSupplementBackButton = true
+        if navigationController?.viewControllers.index(of: self) == 0 {
+            navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+            navigationItem.leftItemsSupplementBackButton = true
+        }
     }
     
     // MARK: - Navigation

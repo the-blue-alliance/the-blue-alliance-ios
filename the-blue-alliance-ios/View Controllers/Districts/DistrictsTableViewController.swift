@@ -57,8 +57,13 @@ class DistrictsTableViewController: TBATableViewController {
                 return
             }
             
+            guard let districts = districts else {
+                self.showErrorAlert(with: "Unable to refresh districts - API error")
+                return
+            }
+            
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
-                districts?.forEach({ (modelDistrict) in
+                districts.forEach({ (modelDistrict) in
                     _ = try? District.insert(with: modelDistrict, in: backgroundContext)
                 })
                 
@@ -125,6 +130,7 @@ extension DistrictsTableViewController: TableViewDataSourceDelegate {
     
     func configure(_ cell: UITableViewCell, for object: District) {
         cell.textLabel?.text = object.name
+        // TODO: Convert to some custom cell... show # of events if non-zero
     }
     
     func showNoDataView() {

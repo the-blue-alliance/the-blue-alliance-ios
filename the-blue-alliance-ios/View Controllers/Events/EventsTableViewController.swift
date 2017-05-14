@@ -13,7 +13,7 @@ import CoreData
 class EventsTableViewController: TBATableViewController {
     
     var team: Team?
-    // var district: District?
+    var district: District?
 
     override var persistentContainer: NSPersistentContainer! {
         didSet {
@@ -60,6 +60,8 @@ class EventsTableViewController: TBATableViewController {
         
         if team != nil {
             refreshTeamEvents()
+        } else if district != nil {
+            refreshDistrictEvents()
         } else {
             refreshAllEvents()
         }
@@ -87,8 +89,13 @@ class EventsTableViewController: TBATableViewController {
                 return
             }
             
+            guard let events = events else {
+                self.showErrorAlert(with: "Unable to refresh events - API error")
+                return
+            }
+            
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
-                events?.forEach({ (modelEvent) in
+                events.forEach({ (modelEvent) in
                     _ = try? Event.insert(with: modelEvent, in: backgroundContext)
                 })
                 
@@ -117,18 +124,19 @@ class EventsTableViewController: TBATableViewController {
             }
             
             guard let events = events else {
+                self.showErrorAlert(with: "Unable to refresh events - API error")
                 return
             }
             
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: team.objectID) as! Team
-                backgroundTeam.events = Set(events.flatMap({ (modelEvent) -> Event? in
+                backgroundTeam.addToEvents(Set(events.flatMap({ (modelEvent) -> Event? in
                     do {
                         return try Event.insert(with: modelEvent, in: backgroundContext)
                     } catch {
                         return nil
                     }
-                })) as NSSet
+                })) as NSSet)
                 
                 try? backgroundContext.save()
                 if let eventsFetched = self.eventsFetched {
@@ -136,6 +144,44 @@ class EventsTableViewController: TBATableViewController {
                 }
             })
         }
+        addRequest(request: request!)
+    }
+    
+    func refreshDistrictEvents() {
+        guard let district = district else {
+            return
+        }
+        
+        var request: URLSessionDataTask?
+        request = TBADistrict.fetchEventsForDistrict(key: district.key!, completion: { (events, error) in
+            self.removeRequest(request: request!)
+            
+            if let error = error {
+                self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
+                return
+            }
+            
+            guard let events = events else {
+                self.showErrorAlert(with: "Unable to refresh events - API error")
+                return
+            }
+            
+            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+                let backgroundDistrict = backgroundContext.object(with: district.objectID) as! District
+                backgroundDistrict.addToEvents(Set(events.flatMap({ (modelEvent) -> Event? in
+                    do {
+                        return try Event.insert(with: modelEvent, in: backgroundContext)
+                    } catch {
+                        return nil
+                    }
+                })) as NSSet)
+                
+                try? backgroundContext.save()
+                if let eventsFetched = self.eventsFetched {
+                    eventsFetched()
+                }
+            })
+        })
         addRequest(request: request!)
     }
     
@@ -167,13 +213,20 @@ class EventsTableViewController: TBATableViewController {
 
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
         
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "hybridType", ascending: true),
+        var firstSortDescriptor = NSSortDescriptor(key: "hybridType", ascending: true)
+        var sectionNameKeyPath = "hybridType"
+        if district != nil {
+            firstSortDescriptor = NSSortDescriptor(key: "week", ascending: true)
+            sectionNameKeyPath = "week"
+        }
+        
+        fetchRequest.sortDescriptors = [firstSortDescriptor,
                                         NSSortDescriptor(key: "startDate", ascending: true),
                                         NSSortDescriptor(key: "name", ascending: true)]
         
         setupFetchRequest(fetchRequest)
         
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "hybridType", cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
         
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: EventTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
@@ -187,11 +240,7 @@ class EventsTableViewController: TBATableViewController {
     }
     
     fileprivate func setupFetchRequest(_ request: NSFetchRequest<Event>) {
-        guard let year = year else {
-            return
-        }
-
-        if let weekEvent = weekEvent {
+        if let weekEvent = weekEvent, let year = year {
             if let week = weekEvent.week {
                 // Event has a week - filter based on the week
                 request.predicate = NSPredicate(format: "week == %ld && year == %ld", week.intValue, year)
@@ -203,8 +252,10 @@ class EventsTableViewController: TBATableViewController {
                     request.predicate = NSPredicate(format: "eventType == %ld && year == %ld", weekEvent.eventType, year)
                 }
             }
-        } else if let team = team {
+        } else if let team = team, let year = year {
             request.predicate = NSPredicate(format: "year == %ld AND ANY teams == %@", year, team)
+        } else if let district = district {
+            request.predicate = NSPredicate(format: "district == %@", district)
         }
     }
     
@@ -220,8 +271,10 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
         guard let event = dataSource?.object(at: IndexPath(item: 0, section: section)) else {
             return nil
         }
-        
-        if event.isDistrictChampionship {
+
+        if event.district != nil {
+            return "Week \(event.weekString) Events"
+        } else if event.isDistrictChampionship {
             guard let district = event.district, let eventTypeName = event.eventTypeName else {
                 return nil
             }

@@ -99,12 +99,20 @@ class TeamsTableViewController: TBATableViewController {
                 return
             }
             
+            guard let teams = teams else {
+                self.showErrorAlert(with: "Unable to refresh teams - API error")
+                return
+            }
+            
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: event.objectID) as! Event
-                teams?.forEach({ (modelTeam) in
-                    let t = try? Team.insert(with: modelTeam, in: backgroundContext)
-                    t?.addToEvents(backgroundEvent)
-                })
+                backgroundEvent.addToTeams(Set(teams.flatMap({ (modelTeam) -> Team? in
+                    do {
+                        return try Team.insert(with: modelTeam, in: backgroundContext)
+                    } catch {
+                        return nil
+                    }
+                })) as NSSet)
                 
                 try? backgroundContext.save()
             })

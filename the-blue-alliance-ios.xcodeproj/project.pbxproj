@@ -28,6 +28,7 @@
 		929FCD951EC7EE9200A38E46 /* Locatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD941EC7EE9200A38E46 /* Locatable.swift */; };
 		929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */; };
 		929FCD9A1EC7F52700A38E46 /* DistrictsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD991EC7F52700A38E46 /* DistrictsTableViewController.swift */; };
+		929FCDA21EC8068800A38E46 /* DistrictViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCDA11EC8068800A38E46 /* DistrictViewController.swift */; };
 		92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
 		92D855CF1EC68ACE00572F27 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855CE1EC68ACE00572F27 /* Team.swift */; };
@@ -75,6 +76,7 @@
 		929FCD941EC7EE9200A38E46 /* Locatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locatable.swift; sourceTree = "<group>"; };
 		929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictsContainerViewController.swift; sourceTree = "<group>"; };
 		929FCD991EC7F52700A38E46 /* DistrictsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictsTableViewController.swift; sourceTree = "<group>"; };
+		929FCDA11EC8068800A38E46 /* DistrictViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictViewController.swift; sourceTree = "<group>"; };
 		92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectNumberTableViewController.swift; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		92D855CE1EC68ACE00572F27 /* Team.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 				92942DC01E215C0D008E79CA /* DistrictsStoryboard.storyboard */,
 				929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */,
 				929FCD991EC7F52700A38E46 /* DistrictsTableViewController.swift */,
+				929FCDA01EC8066800A38E46 /* District */,
 			);
 			path = Districts;
 			sourceTree = "<group>";
@@ -264,6 +267,14 @@
 				929FCD941EC7EE9200A38E46 /* Locatable.swift */,
 			);
 			name = Protocols;
+			sourceTree = "<group>";
+		};
+		929FCDA01EC8066800A38E46 /* District */ = {
+			isa = PBXGroup;
+			children = (
+				929FCDA11EC8068800A38E46 /* DistrictViewController.swift */,
+			);
+			name = District;
 			sourceTree = "<group>";
 		};
 		92D855D01EC68AD000572F27 /* Team */ = {
@@ -525,6 +536,7 @@
 				92FFE51E1E770D010037E48C /* District.swift in Sources */,
 				92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */,
 				92942DAB1E215700008E79CA /* TBA.xcdatamodeld in Sources */,
+				929FCDA21EC8068800A38E46 /* DistrictViewController.swift in Sources */,
 				929FCD951EC7EE9200A38E46 /* Locatable.swift in Sources */,
 				92F481F31E7DA0A800B4ED7E /* TBAController.swift in Sources */,
 				925288921EC7ABC6009B78A9 /* Event.swift in Sources */,

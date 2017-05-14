@@ -94,7 +94,7 @@
                         <outlet property="districtsView" destination="Eai-1W-hxz" id="g5F-AK-Adj"/>
                         <outlet property="navigationDetailLabel" destination="M3t-za-QAd" id="mjA-0P-nih"/>
                         <outlet property="navigationTitleLabel" destination="ufs-qR-ECf" id="L4T-10-ICY"/>
-                        <segue destination="QNA-3F-vb8" kind="showDetail" id="bqP-Hz-kPc"/>
+                        <segue destination="QNA-3F-vb8" kind="showDetail" identifier="DistrictSegue" id="bqP-Hz-kPc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ES7-sx-7az" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -153,10 +153,10 @@
             </objects>
             <point key="canvasLocation" x="1110" y="123"/>
         </scene>
-        <!--View Controller-->
+        <!--District View Controller-->
         <scene sceneID="eU1-4M-quR">
             <objects>
-                <viewController id="Nch-Fk-SUm" sceneMemberID="viewController">
+                <viewController id="Nch-Fk-SUm" customClass="DistrictViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Dyk-xy-Pg6"/>
                         <viewControllerLayoutGuide type="bottom" id="wVa-eo-PoC"/>
@@ -164,13 +164,75 @@
                     <view key="view" contentMode="scaleToFill" id="jQs-jk-tcp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n6X-A7-Tem" userLabel="Segmented Control View">
+                                <rect key="frame" x="0.0" y="64" width="375" height="44"/>
+                                <subviews>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="lEV-SV-UEO">
+                                        <rect key="frame" x="16" y="8" width="343" height="29"/>
+                                        <segments>
+                                            <segment title="Events"/>
+                                            <segment title="Rankings"/>
+                                        </segments>
+                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <action selector="segmentedControlValueChangedWithSender:" destination="Nch-Fk-SUm" eventType="valueChanged" id="ort-S0-wO8"/>
+                                        </connections>
+                                    </segmentedControl>
+                                </subviews>
+                                <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="lEV-SV-UEO" firstAttribute="centerY" secondItem="n6X-A7-Tem" secondAttribute="centerY" id="0JP-pZ-oiW"/>
+                                    <constraint firstAttribute="height" constant="44" id="8c3-wV-Ofo"/>
+                                    <constraint firstItem="lEV-SV-UEO" firstAttribute="leading" secondItem="n6X-A7-Tem" secondAttribute="leading" constant="16" id="93d-jL-Z4t"/>
+                                    <constraint firstAttribute="trailing" secondItem="lEV-SV-UEO" secondAttribute="trailing" constant="16" id="Epi-eT-553"/>
+                                </constraints>
+                            </view>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="skS-fS-apA">
+                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
+                                <connections>
+                                    <segue destination="k5f-av-hFH" kind="embed" identifier="DistrictEventsEmbed" id="Fc4-vB-AMO"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="n6X-A7-Tem" firstAttribute="leading" secondItem="jQs-jk-tcp" secondAttribute="leading" id="FGh-PT-BK0"/>
+                            <constraint firstAttribute="trailing" secondItem="n6X-A7-Tem" secondAttribute="trailing" id="FUU-Cr-Gxr"/>
+                            <constraint firstItem="skS-fS-apA" firstAttribute="top" secondItem="n6X-A7-Tem" secondAttribute="bottom" id="Iwe-tW-SY0"/>
+                            <constraint firstItem="n6X-A7-Tem" firstAttribute="top" secondItem="Dyk-xy-Pg6" secondAttribute="bottom" id="LIA-m9-FG2"/>
+                            <constraint firstItem="wVa-eo-PoC" firstAttribute="top" secondItem="skS-fS-apA" secondAttribute="bottom" id="T3O-iS-Dfi"/>
+                            <constraint firstItem="skS-fS-apA" firstAttribute="leading" secondItem="jQs-jk-tcp" secondAttribute="leading" id="Vdi-2f-ekr"/>
+                            <constraint firstAttribute="trailing" secondItem="skS-fS-apA" secondAttribute="trailing" id="mdx-0h-RY4"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="zc9-zE-0GN"/>
+                    <connections>
+                        <outlet property="eventsView" destination="skS-fS-apA" id="dkx-U1-f03"/>
+                        <outlet property="segmentedControl" destination="lEV-SV-UEO" id="Hwx-Px-Fg8"/>
+                        <outlet property="segmentedControlView" destination="n6X-A7-Tem" id="IPR-kH-oS4"/>
+                        <segue destination="AwA-6t-1cZ" kind="show" identifier="EventSegue" id="yKx-Hz-4st"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Lq-xB-e2O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1898" y="123"/>
+        </scene>
+        <!--EventViewController-->
+        <scene sceneID="sqe-RD-sdn">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="EventViewController" id="AwA-6t-1cZ" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="S0n-8H-vXn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2682" y="-8"/>
+        </scene>
+        <!--EventsTableViewController-->
+        <scene sceneID="dor-cL-73Z">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="EventsTableViewController" id="k5f-av-hFH" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9l1-5E-Uxh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1550" y="604"/>
         </scene>
     </scenes>
     <resources>

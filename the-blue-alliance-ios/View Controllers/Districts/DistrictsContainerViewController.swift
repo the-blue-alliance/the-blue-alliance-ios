@@ -55,15 +55,7 @@ class DistrictsContainerViewController: ContainerViewController {
         
         updateInterface()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
-        if year == nil {
-            
-        }
-    }
-    
     // MARK: - Private Methods
     
     func updateInterface() {
@@ -116,8 +108,13 @@ class DistrictsContainerViewController: ContainerViewController {
             districtsViewController = segue.destination as? DistrictsTableViewController
             districtsViewController.year = year
             districtsViewController.districtSelected = { district in
-                // TODO: Show districts view controller
+                self.performSegue(withIdentifier: "DistrictSegue", sender: district)
             }
+        } else if segue.identifier == "DistrictSegue" {
+            let districtViewController = (segue.destination as! UINavigationController).topViewController as! DistrictViewController
+            districtViewController.district = sender as? District
+            // TODO: Find a way to pass these down automagically like we did in the Obj-C version
+            districtViewController.persistentContainer = persistentContainer
         }
     }
 }
