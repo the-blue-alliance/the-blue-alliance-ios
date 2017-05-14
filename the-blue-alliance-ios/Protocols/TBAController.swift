@@ -21,7 +21,7 @@ protocol Container {
 extension Container {
     
     func updateSegmentedControlViews() {
-        if segmentedControl == nil && containerViews.count == 1 {
+        if segmentedControl == nil, containerViews.count == 1 {
             show(view: containerViews.first!)
         } else if let segmentedControl = segmentedControl, containerViews.count > segmentedControl.selectedSegmentIndex {
             show(view: containerViews[segmentedControl.selectedSegmentIndex])

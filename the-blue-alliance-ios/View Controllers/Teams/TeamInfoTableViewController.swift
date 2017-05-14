@@ -151,7 +151,7 @@ class TeamInfoTableViewController: TBATableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
         
         var row = indexPath.row
-        if team.website == nil && row >= TeamLinkRow.website.rawValue {
+        if team.website == nil, row >= TeamLinkRow.website.rawValue {
             row += 1
         }
         
@@ -181,7 +181,7 @@ class TeamInfoTableViewController: TBATableViewController {
             tableView.reloadRows(at: [indexPath], with: .fade)
         } else if indexPath.section == TeamInfoSection.link.rawValue {
             var row = indexPath.row
-            if team.website == nil && row >= TeamLinkRow.website.rawValue {
+            if team.website == nil, row >= TeamLinkRow.website.rawValue {
                 row += 1
             }
             

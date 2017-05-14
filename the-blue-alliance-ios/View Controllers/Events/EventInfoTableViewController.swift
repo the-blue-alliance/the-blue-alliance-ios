@@ -150,7 +150,7 @@ class EventInfoTableViewController: TBATableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
         
         var row = indexPath.row
-        if event.district == nil && row >= EventDetailRow.districtPoints.rawValue {
+        if event.district == nil, row >= EventDetailRow.districtPoints.rawValue {
             row += 1
         }
         
@@ -176,7 +176,7 @@ class EventInfoTableViewController: TBATableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
         
         var row = indexPath.row
-        if event.website == nil && row >= EventLinkRow.website.rawValue {
+        if event.website == nil, row >= EventLinkRow.website.rawValue {
             row += 1
         }
         
@@ -203,7 +203,7 @@ class EventInfoTableViewController: TBATableViewController {
 
         if indexPath.section == EventInfoSection.detail.rawValue {
             var row = indexPath.row
-            if event.district == nil && row >= EventDetailRow.districtPoints.rawValue {
+            if event.district == nil, row >= EventDetailRow.districtPoints.rawValue {
                 row += 1
             }
 
@@ -229,7 +229,7 @@ class EventInfoTableViewController: TBATableViewController {
             }
         } else if indexPath.section == EventInfoSection.link.rawValue {
             var row = indexPath.row
-            if event.website == nil && row >= EventLinkRow.website.rawValue {
+            if event.website == nil, row >= EventLinkRow.website.rawValue {
                 row += 1
             }
 

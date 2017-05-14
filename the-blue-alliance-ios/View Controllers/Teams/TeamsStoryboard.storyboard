@@ -171,7 +171,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fgu-2m-Jdl" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="uLu-fb-rT1">
                     <connections>
-                        <segue destination="RxU-fr-KQf" kind="presentation" identifier="SelectYearSegue" id="DFD-5b-SyM"/>
+                        <segue destination="RxU-fr-KQf" kind="presentation" identifier="SelectYearSegue" modalPresentationStyle="formSheet" id="DFD-5b-SyM"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>

@@ -15,7 +15,6 @@
 		92942DAB1E215700008E79CA /* TBA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92942DA91E215700008E79CA /* TBA.xcdatamodeld */; };
 		92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 92942DAE1E2158EC008E79CA /* Settings.bundle */; };
 		92942DB11E215B06008E79CA /* EventsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DB01E215B06008E79CA /* EventsTableViewController.swift */; };
-		92942DB91E215B87008E79CA /* DistrictsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DB81E215B87008E79CA /* DistrictsViewController.swift */; };
 		92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */; };
 		92942DBD1E215BA6008E79CA /* EventsStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942DBC1E215BA6008E79CA /* EventsStoryboard.storyboard */; };
 		92942DBF1E215BEF008E79CA /* TeamsStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942DBE1E215BEF008E79CA /* TeamsStoryboard.storyboard */; };
@@ -27,6 +26,8 @@
 		929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929BBB041EC55742006D3854 /* InfoTableViewCell.swift */; };
 		929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 929BBB071EC55A22006D3854 /* InfoTableViewCell.xib */; };
 		929FCD951EC7EE9200A38E46 /* Locatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD941EC7EE9200A38E46 /* Locatable.swift */; };
+		929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */; };
+		929FCD9A1EC7F52700A38E46 /* DistrictsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD991EC7F52700A38E46 /* DistrictsTableViewController.swift */; };
 		92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
 		92D855CF1EC68ACE00572F27 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855CE1EC68ACE00572F27 /* Team.swift */; };
@@ -61,7 +62,6 @@
 		92942DAA1E215700008E79CA /* TBA.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TBA.xcdatamodel; sourceTree = "<group>"; };
 		92942DAE1E2158EC008E79CA /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		92942DB01E215B06008E79CA /* EventsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewController.swift; sourceTree = "<group>"; };
-		92942DB81E215B87008E79CA /* DistrictsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictsViewController.swift; sourceTree = "<group>"; };
 		92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBAViewController.swift; sourceTree = "<group>"; };
 		92942DBC1E215BA6008E79CA /* EventsStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EventsStoryboard.storyboard; sourceTree = "<group>"; };
 		92942DBE1E215BEF008E79CA /* TeamsStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TeamsStoryboard.storyboard; sourceTree = "<group>"; };
@@ -73,6 +73,8 @@
 		929BBB041EC55742006D3854 /* InfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoTableViewCell.swift; sourceTree = "<group>"; };
 		929BBB071EC55A22006D3854 /* InfoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoTableViewCell.xib; sourceTree = "<group>"; };
 		929FCD941EC7EE9200A38E46 /* Locatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locatable.swift; sourceTree = "<group>"; };
+		929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictsContainerViewController.swift; sourceTree = "<group>"; };
+		929FCD991EC7F52700A38E46 /* DistrictsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictsTableViewController.swift; sourceTree = "<group>"; };
 		92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectNumberTableViewController.swift; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		92D855CE1EC68ACE00572F27 /* Team.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
@@ -205,7 +207,8 @@
 			isa = PBXGroup;
 			children = (
 				92942DC01E215C0D008E79CA /* DistrictsStoryboard.storyboard */,
-				92942DB81E215B87008E79CA /* DistrictsViewController.swift */,
+				929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */,
+				929FCD991EC7F52700A38E46 /* DistrictsTableViewController.swift */,
 			);
 			path = Districts;
 			sourceTree = "<group>";
@@ -520,7 +523,6 @@
 				929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */,
 				92D855E21EC755D000572F27 /* TeamInfoTableViewController.swift in Sources */,
 				92FFE51E1E770D010037E48C /* District.swift in Sources */,
-				92942DB91E215B87008E79CA /* DistrictsViewController.swift in Sources */,
 				92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */,
 				92942DAB1E215700008E79CA /* TBA.xcdatamodeld in Sources */,
 				929FCD951EC7EE9200A38E46 /* Locatable.swift in Sources */,
@@ -535,11 +537,13 @@
 				92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */,
 				92F481ED1E7D978600B4ED7E /* NoDataViewController.swift in Sources */,
 				92942DDF1E21D2EB008E79CA /* EventViewController.swift in Sources */,
+				929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */,
 				92FFE52C1E7CC60F0037E48C /* TBAColorExtension.swift in Sources */,
 				92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */,
 				92942DB11E215B06008E79CA /* EventsTableViewController.swift in Sources */,
 				92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */,
 				92942E331E2303A5008E79CA /* CalendarExtension.swift in Sources */,
+				929FCD9A1EC7F52700A38E46 /* DistrictsTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

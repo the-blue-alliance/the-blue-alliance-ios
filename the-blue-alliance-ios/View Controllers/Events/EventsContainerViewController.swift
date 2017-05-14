@@ -17,15 +17,17 @@ let SelectWeekSegue = "SelectWeekSegue"
 let SelectYearSegue = "SelectYearSegue"
 
 class EventsContainerViewController: ContainerViewController {
-    internal var eventsViewController: EventsTableViewController?
+    internal var eventsViewController: EventsTableViewController!
     @IBOutlet internal var eventsView: UIView?
     @IBOutlet internal var weeksButton: UIBarButtonItem?
     
-    internal var weeks: [Event] = []
+    internal var weeks: [Event]?
     internal var maxYear: Int?
     internal var week: Event? {
         didSet {
-            eventsViewController?.weekEvent = week
+            if let eventsViewController = eventsViewController {
+                eventsViewController.weekEvent = week
+            }
 
             DispatchQueue.main.async {
                 self.updateInterface()
@@ -34,10 +36,10 @@ class EventsContainerViewController: ContainerViewController {
     }
     internal var year: Int? {
         didSet {
-            eventsViewController?.year = year
+            eventsViewController.year = year
             // Year changed - remove our previously selected week
             week = nil
-            weeks = []
+            weeks = nil
             
             setupWeeks()
             
@@ -48,6 +50,8 @@ class EventsContainerViewController: ContainerViewController {
     }
 
     required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+
         let year = UserDefaults.standard.integer(forKey: StatusConstants.currentSeasonKey)
         if year != 0 {
             self.year = year
@@ -58,19 +62,17 @@ class EventsContainerViewController: ContainerViewController {
             self.maxYear = maxYear
         }
         
-        super.init(coder: aDecoder)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.fetchedTBAStatus),
+                                               name: Notification.Name(kFetchedTBAStatus),
+                                               object: nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewControllers = [eventsViewController!]
+        viewControllers = [eventsViewController]
         containerViews = [eventsView!]
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(self.fetchedTBAStatus),
-                                               name: Notification.Name(kFetchedTBAStatus),
-                                               object: nil)
         
         if year != nil {
             setupWeeks()
@@ -94,13 +96,15 @@ class EventsContainerViewController: ContainerViewController {
             navigationDetailLabel?.text = "▾ ----"
         }
         
-        if !weeks.isEmpty {
+        if weeks != nil {
             weeksButton?.title = "Weeks"
+            weeksButton?.isEnabled = true
         } else {
             weeksButton?.title = "----"
+            weeksButton?.isEnabled = false
         }
         
-        if year == nil && week == nil {
+        if year == nil, week == nil {
             // Show loading
         } else {
             // Hide loading
@@ -168,10 +172,6 @@ class EventsContainerViewController: ContainerViewController {
         }
         // TODO: Need to know if we have no events OR if we just don't have any more events this year
         if events.isEmpty {
-            guard let eventsViewController = eventsViewController else {
-                showErrorAlert(with: "Unable to setup weeks - eventsViewController not instantiated")
-                return
-            }
             // Initial load of events for eventsVC
             if eventsViewController.shouldRefresh() {
                 eventsViewController.refresh()
@@ -203,12 +203,12 @@ class EventsContainerViewController: ContainerViewController {
             }
         })).sorted()
         
-        if year == Calendar.current.year && week == nil {
+        if year == Calendar.current.year, week == nil {
             // If it's the current year, setup the current week for this year
             setupCurrentSeasonWeek()
         } else {
             // Otherwise, default to the first week for this year
-            if let firstWeek = self.weeks.first {
+            if let firstWeek = weeks?.first {
                 week = firstWeek
             } else {
                 showErrorAlert(with: "Unable to setup weeks - no events for selected year")
@@ -230,17 +230,15 @@ class EventsContainerViewController: ContainerViewController {
         if year == nil {
             year = Int(status.currentSeason)
         }
-        if maxYear == nil {
-            maxYear = Int(status.maxSeason)
-        }
+        maxYear = Int(status.maxSeason)
     }
     
     // MARK: - Navigation
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if identifier == SelectYearSegue && (maxYear == nil || year == nil) {
+        if identifier == SelectYearSegue, (maxYear == nil || year == nil) {
             return false
-        } else if identifier == SelectWeekSegue && (weeks.isEmpty || week == nil) {
+        } else if identifier == SelectWeekSegue, (weeks == nil || week == nil) {
             return false
         }
         return true
@@ -282,17 +280,12 @@ class EventsContainerViewController: ContainerViewController {
             eventViewController.persistentContainer = persistentContainer
         } else if segue.identifier == EventsEmbed {
             eventsViewController = segue.destination as? EventsTableViewController
-            if !weeks.isEmpty {
-                eventsViewController!.weekEvent = weeks.first
-            } else {
-                // TODO: Show loading that we're fetching weeks...
-            }
-            eventsViewController!.year = year
-            
-            eventsViewController!.eventsFetched = {
+            eventsViewController.weekEvent = weeks?.first
+            eventsViewController.year = year
+            eventsViewController.eventsFetched = {
                 self.setupWeeks()
             }
-            eventsViewController!.eventSelected = { event in
+            eventsViewController.eventSelected = { event in
                 self.performSegue(withIdentifier: EventSegue, sender: event)
             }
         }
