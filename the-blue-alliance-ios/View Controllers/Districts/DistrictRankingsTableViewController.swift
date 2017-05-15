@@ -42,7 +42,7 @@ class DistrictRankingsTableViewController: TBATableViewController {
         
         // First things first... refresh all teams for the district, *then* fetch their rankings
         var request: URLSessionDataTask?
-        request = TBADistrict.fetchTeamsForDistrict(key: district.key!, completion: { (teams, error) in
+        request = TBADistrict.fetchTeams(key: district.key!, completion: { (teams, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
             }
@@ -56,7 +56,7 @@ class DistrictRankingsTableViewController: TBATableViewController {
                 _ = backgroundContext.saveOrRollback()
                 
                 var rankingsRequest: URLSessionDataTask?
-                rankingsRequest = TBADistrict.fetchDistrictRankings(key: self.district.key!, completion: { (rankings, error) in
+                rankingsRequest = TBADistrict.fetchRankings(key: self.district.key!, completion: { (rankings, error) in
                     if let error = error {
                         self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
                     }

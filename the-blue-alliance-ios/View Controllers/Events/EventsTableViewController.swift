@@ -142,7 +142,7 @@ class EventsTableViewController: TBATableViewController {
         }
         
         var request: URLSessionDataTask?
-        request = TBADistrict.fetchEventsForDistrict(key: district.key!, completion: { (events, error) in
+        request = TBADistrict.fetchEvents(key: district.key!, completion: { (events, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
             }
