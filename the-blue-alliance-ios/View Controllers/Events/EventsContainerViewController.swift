@@ -271,6 +271,9 @@ class EventsContainerViewController: ContainerViewController {
                 // Use compareCurrent for current season situation where the event stored in weeks may not actually
                 // be equal to the event we have stored in week... because the current event might not be the first event
                 selectTableViewController.compareCurrent = { current, option in
+                    guard let current = current else {
+                        return false
+                    }
                     // Handle CMPs different - since CMP has the same type and the same week, check based on keys
                     let currentEventType = Int(current.eventType)
                     let optionEventType = Int(option.eventType)

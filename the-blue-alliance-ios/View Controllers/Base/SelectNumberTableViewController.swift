@@ -16,7 +16,9 @@ class SelectTableViewController<T: Comparable>: UITableViewController {
     // Use compareCurrent AND current to compare the selected option to the current that is set
     // Return true from compare current if for the setup they're "equal"
     var current: T?
-    var compareCurrent: ((T, T) -> (Bool))?
+    var compareCurrent: (_ current: T?, _ option: T) -> (Bool) = { current, option in
+        return current == option
+    }
     
     var options: [T]?
     var optionSelected: ((_ option: T) -> (Swift.Void))?
@@ -47,18 +49,10 @@ class SelectTableViewController<T: Comparable>: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
         let option = options![indexPath.row]
-        if let current = current {
-            if let compareCurrent = compareCurrent {
-                if compareCurrent(current, option) {
-                    cell.accessoryType = .checkmark
-                } else {
-                    cell.accessoryType = .none
-                }
-            } else if option == current {
-                cell.accessoryType = .checkmark
-            } else {
-                cell.accessoryType = .none
-            }
+        if compareCurrent(current, option) {
+            cell.accessoryType = .checkmark
+        } else {
+            cell.accessoryType = .none
         }
 
         cell.textLabel?.text = optionString(option)
@@ -70,12 +64,8 @@ class SelectTableViewController<T: Comparable>: UITableViewController {
         tableView.reloadRows(at: [indexPath], with: .automatic)
         
         let option = options![indexPath.row]
-        if let optionSelected = optionSelected {
-            if option != current {
-                optionSelected(option)
-            } else if let current = current, let compareCurrent = compareCurrent, !compareCurrent(current, option) {
-                optionSelected(option)
-            }
+        if let optionSelected = optionSelected, !compareCurrent(current, option) {
+            optionSelected(option)
         }
 
         dismiss(animated: true, completion: nil)
