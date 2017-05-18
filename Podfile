@@ -2,8 +2,18 @@ platform :ios, '10.0'
 use_frameworks!
 
 target 'the-blue-alliance-ios' do
-  pod 'TBAKit', :path => '/Users/zach/Desktop/TBAKit', :branch => 'swift'
-  # pod 'TBAKit', :git => 'https://github.com/ZachOrr/TBAKit.git', :branch => 'swift'
+  # pod 'TBAKit', :path => '/Users/zach/Desktop/TBAKit', :branch => 'swift'
+  pod 'TBAKit', :git => 'https://github.com/ZachOrr/TBAKit.git', :branch => 'swift'
+  
+  pod 'React', :path => 'node_modules/react-native', :subspecs => [
+    'Core',
+    'RCTText',
+    'RCTNetwork',
+    'RCTWebSocket', # needed for debugging
+    # Add any other subspecs you want to use in your project
+  ]
+  # Explicitly include Yoga if you are using RN >= 0.42.0
+  pod "Yoga", :path => "node_modules/react-native/ReactCommon/yoga"
 end
 
 post_install do | installer |
