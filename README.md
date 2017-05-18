@@ -14,5 +14,5 @@ Setup
 	* `pod install`
 	* Open the project (`the-blue-alliance-ios.xcworkspace`)
 2. Run the React Native server
-	* `npm start`
+	* `react-native start`
 3. Build and run The Blue Alliance for iOS in Xcode!

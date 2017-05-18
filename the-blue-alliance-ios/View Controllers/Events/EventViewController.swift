@@ -47,8 +47,8 @@ class EventViewController: ContainerViewController {
             teamsViewController.event = event
             teamsViewController.teamSelected = { team in
                 // TOOD: Show team@event
-                let url = URL(string: "http://localhost:8081/index.ios.bundle?platform=ios")
-                let rootVC = RCTRootView(bundleURL: url!, moduleName: "TBATeamAtEventStatus", initialProperties: [:], launchOptions: [:])
+                let jsCodeLocation = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index.ios", fallbackResource: "")
+                let rootVC = RCTRootView(bundleURL: jsCodeLocation!, moduleName: "TBATeamAtEventStatus", initialProperties: [:], launchOptions: [:])
                 let viewController = UIViewController()
                 viewController.view = rootVC
                 self.navigationController?.pushViewController(viewController, animated: true)
