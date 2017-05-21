@@ -13,10 +13,10 @@ class EventViewController: ContainerViewController {
     public var event: Event!
     
     internal var infoViewController: EventInfoTableViewController!
-    @IBOutlet internal var infoView: UIView?
+    @IBOutlet internal var infoView: UIView!
     
     internal var teamsViewController: TeamsTableViewController!
-    @IBOutlet internal var teamsView: UIView?
+    @IBOutlet internal var teamsView: UIView!
     
     @IBOutlet internal var rankingsView: UIView?
     @IBOutlet internal var matchesView: UIView?
@@ -27,7 +27,7 @@ class EventViewController: ContainerViewController {
         title = event.friendlyNameWithYear
         
         viewControllers = [infoViewController, teamsViewController]
-        containerViews = [infoView!, teamsView!]
+        containerViews = [infoView, teamsView]
         
         if navigationController?.viewControllers.index(of: self) == 0 {
             navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
@@ -51,12 +51,9 @@ class EventViewController: ContainerViewController {
                 // TOOD: Show team@event
             }
         } else if segue.identifier == "EventAwardsSegue" {
-            let eventAwardsViewController = segue.destination as! EventAwardsTableViewController
+            let eventAwardsViewController = segue.destination as! EventAwardsViewController
             eventAwardsViewController.event = event
             eventAwardsViewController.persistentContainer = persistentContainer
-            eventAwardsViewController.teamSelected = { team in
-                // TODO: show team@event
-            }
         }
     }
 

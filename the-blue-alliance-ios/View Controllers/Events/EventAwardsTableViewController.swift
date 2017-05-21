@@ -10,6 +10,36 @@ import UIKit
 import CoreData
 import TBAKit
 
+class EventAwardsViewController: ContainerViewController {
+    public var event: Event!
+    
+    internal var awardsViewController: EventAwardsTableViewController!
+    @IBOutlet internal var awardsView: UIView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        navigationTitleLabel?.text = "Awards"
+        navigationDetailLabel?.text = "@ \(event.friendlyNameWithYear)"
+        
+        viewControllers = [awardsViewController]
+        containerViews = [awardsView]
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "EventAwardsEmbed" {
+            awardsViewController = segue.destination as! EventAwardsTableViewController
+            awardsViewController.event = event
+            awardsViewController.persistentContainer = persistentContainer
+            awardsViewController.teamSelected = { team in
+                // TODO: show team@event
+            }
+        }
+    }
+}
+
 class EventAwardsTableViewController: TBATableViewController {
 
     var event: Event!

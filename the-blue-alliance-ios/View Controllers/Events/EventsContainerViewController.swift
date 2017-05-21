@@ -18,7 +18,7 @@ let SelectYearSegue = "SelectYearSegue"
 
 class EventsContainerViewController: ContainerViewController {
     internal var eventsViewController: EventsTableViewController!
-    @IBOutlet internal var eventsView: UIView?
+    @IBOutlet internal var eventsView: UIView!
     @IBOutlet internal var weeksButton: UIBarButtonItem?
     
     internal var hasRefreshed: Bool = false
@@ -75,7 +75,7 @@ class EventsContainerViewController: ContainerViewController {
         super.viewDidLoad()
         
         viewControllers = [eventsViewController]
-        containerViews = [eventsView!]
+        containerViews = [eventsView]
         
         if year != nil {
             setupWeeks()
