@@ -157,11 +157,30 @@
                         <outlet property="segmentedControl" destination="f16-3v-WkT" id="oL6-yw-87B"/>
                         <outlet property="segmentedControlView" destination="voy-KV-LhW" id="irM-Bl-lOc"/>
                         <outlet property="teamsView" destination="tQG-h2-47D" id="hbk-Rg-eBe"/>
+                        <segue destination="Q1k-Pq-WsA" kind="show" identifier="EventAwardsSegue" id="tHY-TD-RaR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GxG-VS-fKS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2081" y="-87"/>
+        </scene>
+        <!--Event Awards Table View Controller-->
+        <scene sceneID="bv8-6e-hk4">
+            <objects>
+                <tableViewController id="Q1k-Pq-WsA" customClass="EventAwardsTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="2bH-CF-f2l">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="Q1k-Pq-WsA" id="x4f-5S-cXo"/>
+                            <outlet property="delegate" destination="Q1k-Pq-WsA" id="5Uf-gM-Xbg"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RB4-Xx-Cfv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3132" y="-561"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="DAM-z7-iku">

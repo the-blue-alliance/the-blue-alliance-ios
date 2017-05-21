@@ -18,7 +18,7 @@ class RankingTableViewCell: UITableViewCell {
             }
             rankLabel?.text = "Rank \(ranking.rank)"
             numberLabel?.text = "\(team.teamNumber)"
-            nameLabel?.text = "\(team.nickname ?? team.name!)"
+            nameLabel?.text = team.nickname ?? team.fallbackNickname
             detailLabel?.text = "\(ranking.pointTotal) Points"
         }
         

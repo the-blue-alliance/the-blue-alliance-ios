@@ -21,8 +21,7 @@ class InfoTableViewCell: UITableViewCell {
             configureCell()
         }
     }
-    @IBOutlet private var infoStackView: UIStackView?
-    
+    @IBOutlet private var infoStackView: UIStackView!
 
     // MARK: - Private Methods
     
@@ -47,10 +46,6 @@ class InfoTableViewCell: UITableViewCell {
     }
     
     private func configureCell() {
-        guard let infoStackView = infoStackView else {
-            return
-        }
-
         for view in infoStackView.arrangedSubviews {
             view.removeFromSuperview()
         }
@@ -69,10 +64,9 @@ class InfoTableViewCell: UITableViewCell {
                 infoStackView.addArrangedSubview(dateLabel)
             }
         } else if let team = team {
-            if let nickname = team.nickname {
-                let nicknameLabel = titleLabelWithText(nickname)
-                infoStackView.addArrangedSubview(nicknameLabel)
-            }
+            let nicknameLabel = titleLabelWithText(team.nickname ?? team.fallbackNickname)
+            infoStackView.addArrangedSubview(nicknameLabel)
+
             if let location = team.locationString {
                 let locationLabel = subtitleLabelWithText(location)
                 infoStackView.addArrangedSubview(locationLabel)

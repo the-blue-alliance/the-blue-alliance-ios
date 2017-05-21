@@ -297,10 +297,12 @@ extension Refreshable {
     }
     
     private func updateRefresh() {
-        if isRefreshing {
-            refreshControl?.beginRefreshing()
-        } else {
-            refreshControl?.endRefreshing()
+        DispatchQueue.main.async {
+            if self.isRefreshing {
+                self.refreshControl?.beginRefreshing()
+            } else {
+                self.refreshControl?.endRefreshing()
+            }
         }
     }
     

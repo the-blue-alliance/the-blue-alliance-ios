@@ -31,6 +31,26 @@ extension Team: Locatable, Managed {
         }
     }
     
+    var fallbackNickname: String {
+        return "Team \(teamNumber)"
+    }
+    
+    static func insert(with key: String, in context: NSManagedObjectContext) -> Team {
+        let predicate = NSPredicate(format: "key == %@", key)
+        // Let's not *overwrite* shit we already have
+        if let team = findOrFetch(in: context, matching: predicate) {
+            return team
+        }
+        return findOrCreate(in: context, matching: predicate) { (team) in
+            // Required: key, name, teamNumber
+            team.key = key
+            
+            let teamNumber = Int32(key.prefixTrim("frc"))!
+            team.name = "Team \(teamNumber)"
+            team.teamNumber = teamNumber
+        }
+    }
+    
     static func insert(with model: TBATeam, in context: NSManagedObjectContext) -> Team {
         let predicate = NSPredicate(format: "key == %@", model.key)
         return findOrCreate(in: context, matching: predicate) { (team) in

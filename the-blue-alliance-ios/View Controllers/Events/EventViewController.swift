@@ -41,11 +41,21 @@ class EventViewController: ContainerViewController {
         if segue.identifier == "EventInfoEmbed" {
             infoViewController = segue.destination as! EventInfoTableViewController
             infoViewController.event = event
+            infoViewController.showAwards = {
+                self.performSegue(withIdentifier: "EventAwardsSegue", sender: nil)
+            }
         } else if segue.identifier == "EventTeamsEmbed" {
             teamsViewController = segue.destination as! TeamsTableViewController
             teamsViewController.event = event
             teamsViewController.teamSelected = { team in
                 // TOOD: Show team@event
+            }
+        } else if segue.identifier == "EventAwardsSegue" {
+            let eventAwardsViewController = segue.destination as! EventAwardsTableViewController
+            eventAwardsViewController.event = event
+            eventAwardsViewController.persistentContainer = persistentContainer
+            eventAwardsViewController.teamSelected = { team in
+                // TODO: show team@event
             }
         }
     }
