@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16E195" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Award" representedClassName="Award" syncable="YES" codeGenerationType="class">
+        <attribute name="awardType" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="year" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="awards" inverseEntity="Event" syncable="YES"/>
+        <relationship name="recipients" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AwardRecipient" inverseName="award" inverseEntity="AwardRecipient" syncable="YES"/>
+    </entity>
+    <entity name="AwardRecipient" representedClassName="AwardRecipient" syncable="YES" codeGenerationType="class">
+        <attribute name="awardee" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="award" maxCount="1" deletionRule="Nullify" destinationEntity="Award" inverseName="recipients" inverseEntity="Award" syncable="YES"/>
+        <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="awards" inverseEntity="Team" syncable="YES"/>
+    </entity>
     <entity name="District" representedClassName="District" syncable="YES" codeGenerationType="class">
         <attribute name="abbreviation" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="key" attributeType="String" syncable="YES"/>
@@ -44,6 +56,7 @@
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="week" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="year" attributeType="Integer 16" minValueString="1992" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="awards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Award" inverseName="event" inverseEntity="Award" syncable="YES"/>
         <relationship name="district" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="District" inverseName="events" inverseEntity="District" syncable="YES"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="events" inverseEntity="Team" syncable="YES"/>
         <relationship name="webcasts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Webcast" inverseName="event" inverseEntity="Webcast" syncable="YES"/>
@@ -63,11 +76,12 @@
         <attribute name="name" attributeType="String" syncable="YES"/>
         <attribute name="nickname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="postalCode" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="rookieYear" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="rookieYear" optional="YES" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="teamNumber" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="yearsParticipatedArray" optional="YES" attributeType="Transformable" customClassName="NSArray" syncable="YES"/>
+        <relationship name="awards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AwardRecipient" inverseName="team" inverseEntity="AwardRecipient" syncable="YES"/>
         <relationship name="districtRankings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictRanking" inverseName="team" inverseEntity="DistrictRanking" syncable="YES"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="teams" inverseEntity="Event" syncable="YES"/>
     </entity>
@@ -79,10 +93,12 @@
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="webcasts" inverseEntity="Event" syncable="YES"/>
     </entity>
     <elements>
+        <element name="Award" positionX="-54" positionY="135" width="128" height="120"/>
+        <element name="AwardRecipient" positionX="-54" positionY="135" width="128" height="90"/>
         <element name="District" positionX="-63" positionY="135" width="128" height="135"/>
         <element name="DistrictRanking" positionX="-54" positionY="135" width="128" height="120"/>
-        <element name="Event" positionX="-63" positionY="-18" width="128" height="510"/>
-        <element name="Team" positionX="-54" positionY="135" width="128" height="360"/>
+        <element name="Event" positionX="-63" positionY="-18" width="128" height="525"/>
+        <element name="Team" positionX="-54" positionY="135" width="128" height="375"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
     </elements>
 </model>

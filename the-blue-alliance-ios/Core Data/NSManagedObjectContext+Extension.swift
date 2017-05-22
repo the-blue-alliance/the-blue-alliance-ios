@@ -21,6 +21,7 @@ extension NSManagedObjectContext {
             try save()
             return true
         } catch {
+            print(error)
             rollback()
             return false
         }

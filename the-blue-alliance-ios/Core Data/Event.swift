@@ -95,9 +95,9 @@ extension Event: Locatable, Managed {
             event.timezone = model.timezone
             
             if let webcasts = model.webcasts {
-                event.addToWebcasts(Set(webcasts.map({ (modelWebcast) -> Webcast in
+                event.webcasts = Set(webcasts.map({ (modelWebcast) -> Webcast in
                     return Webcast.insert(with: modelWebcast, for: event, in: context)
-                })) as NSSet)
+                })) as NSSet
             }
 
             event.website = model.website

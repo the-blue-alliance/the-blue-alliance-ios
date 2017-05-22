@@ -26,7 +26,7 @@ class DistrictsContainerViewController: ContainerViewController {
     }
     
     internal var districtsViewController: DistrictsTableViewController!
-    @IBOutlet internal var districtsView: UIView?
+    @IBOutlet internal var districtsView: UIView!
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -51,7 +51,7 @@ class DistrictsContainerViewController: ContainerViewController {
         super.viewDidLoad()
         
         viewControllers = [districtsViewController]
-        containerViews = [districtsView!]
+        containerViews = [districtsView]
         
         updateInterface()
     }

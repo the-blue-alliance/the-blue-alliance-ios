@@ -17,7 +17,7 @@ class TeamTableViewCell: UITableViewCell {
                 return
             }
             numberLabel?.text = "\(team.teamNumber)"
-            nameLabel?.text = (team.nickname != nil ? team.nickname : team.name)
+            nameLabel?.text = team.nickname ?? team.fallbackNickname
             locationLabel?.text = team.locationString
         }
         

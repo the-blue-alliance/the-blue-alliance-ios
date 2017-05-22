@@ -152,7 +152,7 @@ class EventsTableViewController: TBATableViewController {
                 let localEvents = events?.map({ (modelEvent) -> Event in
                     return Event.insert(with: modelEvent, in: backgroundContext)
                 })
-                backgroundDistrict.addToEvents(Set(localEvents ?? []) as NSSet)
+                backgroundDistrict.events = Set(localEvents ?? []) as NSSet
                 
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh event - database error")

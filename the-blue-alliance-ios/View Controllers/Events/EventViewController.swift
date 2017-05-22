@@ -14,10 +14,10 @@ class EventViewController: ContainerViewController {
     public var event: Event!
     
     internal var infoViewController: EventInfoTableViewController!
-    @IBOutlet internal var infoView: UIView?
+    @IBOutlet internal var infoView: UIView!
     
     internal var teamsViewController: TeamsTableViewController!
-    @IBOutlet internal var teamsView: UIView?
+    @IBOutlet internal var teamsView: UIView!
     
     @IBOutlet internal var rankingsView: UIView?
     @IBOutlet internal var matchesView: UIView?
@@ -28,7 +28,7 @@ class EventViewController: ContainerViewController {
         title = event.friendlyNameWithYear
         
         viewControllers = [infoViewController, teamsViewController]
-        containerViews = [infoView!, teamsView!]
+        containerViews = [infoView, teamsView]
         
         if navigationController?.viewControllers.index(of: self) == 0 {
             navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
@@ -42,6 +42,9 @@ class EventViewController: ContainerViewController {
         if segue.identifier == "EventInfoEmbed" {
             infoViewController = segue.destination as! EventInfoTableViewController
             infoViewController.event = event
+            infoViewController.showAwards = {
+                self.performSegue(withIdentifier: "EventAwardsSegue", sender: nil)
+            }
         } else if segue.identifier == "EventTeamsEmbed" {
             teamsViewController = segue.destination as! TeamsTableViewController
             teamsViewController.event = event
@@ -53,6 +56,10 @@ class EventViewController: ContainerViewController {
                 viewController.view = rootVC
                 self.navigationController?.pushViewController(viewController, animated: true)
             }
+        } else if segue.identifier == "EventAwardsSegue" {
+            let eventAwardsViewController = segue.destination as! EventAwardsViewController
+            eventAwardsViewController.event = event
+            eventAwardsViewController.persistentContainer = persistentContainer
         }
     }
 

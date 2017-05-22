@@ -41,6 +41,7 @@ class DistrictRankingsTableViewController: TBATableViewController {
         removeNoDataView()
         
         // First things first... refresh all teams for the district, *then* fetch their rankings
+        // Think about if we actually need this - two calls for this is kinda terrible but...
         var request: URLSessionDataTask?
         request = TBADistrict.fetchTeams(key: district.key!, completion: { (teams, error) in
             if let error = error {
@@ -76,7 +77,7 @@ class DistrictRankingsTableViewController: TBATableViewController {
                             }
                             return nil
                         })
-                        backgroundDistrict.addToRankings(Set(localRankings ?? []) as NSSet)
+                        backgroundDistrict.rankings = Set(localRankings ?? []) as NSSet
                         
                         if !backgroundContext.saveOrRollback() {
                             self.showErrorAlert(with: "Unable to refresh district rankings - database error")

@@ -15,14 +15,14 @@ let TeamsEmbed = "TeamsEmbed"
 let TeamSegue = "TeamSegue"
 
 class TeamsContainerViewController: ContainerViewController {
-    internal var teamsViewController: TeamsTableViewController?
-    @IBOutlet internal var teamsView: UIView?
+    internal var teamsViewController: TeamsTableViewController!
+    @IBOutlet internal var teamsView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewControllers = [teamsViewController!]
-        containerViews = [teamsView!]
+        viewControllers = [teamsViewController]
+        containerViews = [teamsView]
     }
     
     // MARK: - Navigation

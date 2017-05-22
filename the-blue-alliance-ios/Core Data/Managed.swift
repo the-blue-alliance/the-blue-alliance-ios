@@ -18,12 +18,12 @@ extension Managed where Self: NSManagedObject {
     public static var entityName: String { return entity.name!  }
     
     public static func findOrCreate(in context: NSManagedObjectContext, matching predicate: NSPredicate, configure: (Self) -> ()) -> Self {
-        guard let object = findOrFetch(in: context, matching: predicate) else {
-            let newObject: Self = context.insertObject()
-            configure(newObject)
-            return newObject
+        var object = findOrFetch(in: context, matching: predicate)
+        if object == nil {
+            object = context.insertObject()
         }
-        return object
+        configure(object!)
+        return object!
     }
     
     

@@ -23,10 +23,10 @@ class TeamViewController: ContainerViewController {
     }
     
     internal var infoViewController: TeamInfoTableViewController!
-    @IBOutlet internal var infoView: UIView?
+    @IBOutlet internal var infoView: UIView!
     
     internal var eventsViewController: EventsTableViewController!
-    @IBOutlet internal var eventsView: UIView?
+    @IBOutlet internal var eventsView: UIView!
 
     @IBOutlet internal var mediaView: UIView?
     
@@ -36,7 +36,7 @@ class TeamViewController: ContainerViewController {
         title = "Team \(team.teamNumber)"
         
         viewControllers = [infoViewController, eventsViewController]
-        containerViews = [infoView!, eventsView!]
+        containerViews = [infoView, eventsView]
         
         if navigationController?.viewControllers.index(of: self) == 0 {
             navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
