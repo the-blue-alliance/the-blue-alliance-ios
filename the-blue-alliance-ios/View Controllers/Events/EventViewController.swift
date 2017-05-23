@@ -64,6 +64,12 @@ class EventViewController: ContainerViewController {
             matchesViewController.matchSelected = { match in
                 self.performSegue(withIdentifier: "MatchSegue", sender: match)
             }
+        } else if segue.identifier == "EventMatchesEmbed" {
+            matchesViewController = segue.destination as! MatchesTableViewController
+            matchesViewController.event = event
+            matchesViewController.matchSelected = { match in
+                self.performSegue(withIdentifier: "MatchSegue", sender: match)
+            }
         } else if segue.identifier == "EventAwardsSegue" {
             let eventAwardsViewController = segue.destination as! EventAwardsViewController
             eventAwardsViewController.event = event
