@@ -78,7 +78,7 @@ class MatchTableViewCell: UITableViewCell {
         }
         
         for team in (match?.redAlliance?.reversed() ?? []) as! [Team] {
-            let teamLabel = labelForTeam(team)
+            let teamLabel = MatchTableViewCell.label(for: team, baseTeam: self.team)
             redStackView.insertArrangedSubview(teamLabel, at: 0)
         }
         redScoreLabel.text = match?.redScore?.stringValue
@@ -91,7 +91,7 @@ class MatchTableViewCell: UITableViewCell {
         }
         
         for team in (match?.blueAlliance?.reversed() ?? []) as! [Team] {
-            let teamLabel = labelForTeam(team)
+            let teamLabel = MatchTableViewCell.label(for: team, baseTeam: self.team)
             blueStackView.insertArrangedSubview(teamLabel, at: 0)
         }
         blueScoreLabel.text = match?.blueScore?.stringValue
@@ -139,11 +139,11 @@ class MatchTableViewCell: UITableViewCell {
         }
     }
     
-    private func labelForTeam(_ team: Team) -> UILabel {
+    public static func label(for team: Team, baseTeam: Team?) -> UILabel {
         let label = UILabel()
         label.text = "\(team.teamNumber)"
         var font: UIFont = .systemFont(ofSize: 14)
-        if team.teamNumber == self.team?.teamNumber {
+        if team.teamNumber == baseTeam?.teamNumber {
             font = .boldSystemFont(ofSize: 14)
         }
         label.font = font

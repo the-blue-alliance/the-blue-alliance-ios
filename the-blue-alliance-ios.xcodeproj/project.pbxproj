@@ -13,6 +13,9 @@
 		140523821ED352570072FB91 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140523811ED352570072FB91 /* Media.swift */; };
 		145C57B51ED377EB004955B2 /* MatchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */; };
 		145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */; };
+		145C57B91ED3C166004955B2 /* MatchInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57B81ED3C166004955B2 /* MatchInfoViewController.swift */; };
+		145C57BB1ED3C178004955B2 /* MatchBreakdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57BA1ED3C178004955B2 /* MatchBreakdownViewController.swift */; };
+		145C57BD1ED3C3AA004955B2 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57BC1ED3C3AA004955B2 /* PlayerView.swift */; };
 		924602A41ECD27CE0030EDBF /* EventAwardsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924602A31ECD27CE0030EDBF /* EventAwardsTableViewController.swift */; };
 		924602A71ECD2A750030EDBF /* Award.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924602A61ECD2A750030EDBF /* Award.swift */; };
 		924602AB1ECE8B1D0030EDBF /* AwardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924602AA1ECE8B1D0030EDBF /* AwardTableViewCell.swift */; };
@@ -73,6 +76,9 @@
 		140523811ED352570072FB91 /* Media.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
 		145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchTableViewCell.swift; sourceTree = "<group>"; };
 		145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MatchTableViewCell.xib; sourceTree = "<group>"; };
+		145C57B81ED3C166004955B2 /* MatchInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchInfoViewController.swift; sourceTree = "<group>"; };
+		145C57BA1ED3C178004955B2 /* MatchBreakdownViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchBreakdownViewController.swift; sourceTree = "<group>"; };
+		145C57BC1ED3C3AA004955B2 /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		1C2601FEFE79E43A71B88523 /* Pods_the_blue_alliance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_the_blue_alliance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		614241F72C3BE7F89DD95428 /* Pods-the-blue-alliance-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-the-blue-alliance-ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios.debug.xcconfig"; sourceTree = "<group>"; };
 		891A553A526753BAB4660AC9 /* Pods-the-blue-alliance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-the-blue-alliance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-the-blue-alliance/Pods-the-blue-alliance.debug.xcconfig"; sourceTree = "<group>"; };
@@ -150,8 +156,11 @@
 			children = (
 				140523791ED33E040072FB91 /* MatchesViewController.swift */,
 				1405237B1ED33F500072FB91 /* MatchViewController.swift */,
+				145C57B81ED3C166004955B2 /* MatchInfoViewController.swift */,
+				145C57BA1ED3C178004955B2 /* MatchBreakdownViewController.swift */,
 			);
-			path = Match;
+			name = Match;
+			path = Events/Match;
 			sourceTree = "<group>";
 		};
 		1405237D1ED352460072FB91 /* Match */ = {
@@ -173,6 +182,7 @@
 		145C57B31ED377DE004955B2 /* Match */ = {
 			isa = PBXGroup;
 			children = (
+				145C57BC1ED3C3AA004955B2 /* PlayerView.swift */,
 				145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */,
 				145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */,
 			);
@@ -289,6 +299,7 @@
 			isa = PBXGroup;
 			children = (
 				92942E311E230340008E79CA /* Base */,
+				140523781ED33DB10072FB91 /* Match */,
 				92942DB21E215B08008E79CA /* Events */,
 				92942DB31E215B0E008E79CA /* Teams */,
 				92942DB41E215B1F008E79CA /* Districts */,
@@ -417,7 +428,6 @@
 				92942DDE1E21D2EB008E79CA /* EventViewController.swift */,
 				92942E351E2A81E8008E79CA /* EventInfoTableViewController.swift */,
 				924602A31ECD27CE0030EDBF /* EventAwardsTableViewController.swift */,
-				140523781ED33DB10072FB91 /* Match */,
 			);
 			name = Event;
 			sourceTree = "<group>";
@@ -672,13 +682,16 @@
 				92F481F31E7DA0A800B4ED7E /* TBAController.swift in Sources */,
 				925288921EC7ABC6009B78A9 /* Event.swift in Sources */,
 				924F8C851EC8C5F200F7447A /* Managed.swift in Sources */,
+				145C57BD1ED3C3AA004955B2 /* PlayerView.swift in Sources */,
 				924602B71ECE99F50030EDBF /* StringExtension.swift in Sources */,
 				92942E361E2A81E8008E79CA /* EventInfoTableViewController.swift in Sources */,
 				140523821ED352570072FB91 /* Media.swift in Sources */,
 				929FCDA81EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift in Sources */,
+				145C57B91ED3C166004955B2 /* MatchInfoViewController.swift in Sources */,
 				92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */,
 				92D855CF1EC68ACE00572F27 /* Team.swift in Sources */,
 				92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */,
+				145C57BB1ED3C178004955B2 /* MatchBreakdownViewController.swift in Sources */,
 				92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */,
 				924F8C871EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift in Sources */,
 				924F8C8B1EC8D27B00F7447A /* RankingTableViewCell.swift in Sources */,
