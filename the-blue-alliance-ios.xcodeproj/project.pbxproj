@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1405237A1ED33E040072FB91 /* MatchesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140523791ED33E040072FB91 /* MatchesViewController.swift */; };
+		1405237C1ED33F500072FB91 /* MatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1405237B1ED33F500072FB91 /* MatchViewController.swift */; };
+		1405237F1ED3524C0072FB91 /* Match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1405237E1ED3524C0072FB91 /* Match.swift */; };
+		140523821ED352570072FB91 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140523811ED352570072FB91 /* Media.swift */; };
+		145C57B51ED377EB004955B2 /* MatchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */; };
+		145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */; };
+		145C57B91ED3C166004955B2 /* MatchInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57B81ED3C166004955B2 /* MatchInfoViewController.swift */; };
+		145C57BB1ED3C178004955B2 /* MatchBreakdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57BA1ED3C178004955B2 /* MatchBreakdownViewController.swift */; };
+		145C57BD1ED3C3AA004955B2 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57BC1ED3C3AA004955B2 /* PlayerView.swift */; };
 		924602A41ECD27CE0030EDBF /* EventAwardsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924602A31ECD27CE0030EDBF /* EventAwardsTableViewController.swift */; };
 		924602A71ECD2A750030EDBF /* Award.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924602A61ECD2A750030EDBF /* Award.swift */; };
 		924602AB1ECE8B1D0030EDBF /* AwardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924602AA1ECE8B1D0030EDBF /* AwardTableViewCell.swift */; };
@@ -61,6 +70,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		140523791ED33E040072FB91 /* MatchesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchesViewController.swift; sourceTree = "<group>"; };
+		1405237B1ED33F500072FB91 /* MatchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchViewController.swift; sourceTree = "<group>"; };
+		1405237E1ED3524C0072FB91 /* Match.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Match.swift; sourceTree = "<group>"; };
+		140523811ED352570072FB91 /* Media.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
+		145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchTableViewCell.swift; sourceTree = "<group>"; };
+		145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MatchTableViewCell.xib; sourceTree = "<group>"; };
+		145C57B81ED3C166004955B2 /* MatchInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchInfoViewController.swift; sourceTree = "<group>"; };
+		145C57BA1ED3C178004955B2 /* MatchBreakdownViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchBreakdownViewController.swift; sourceTree = "<group>"; };
+		145C57BC1ED3C3AA004955B2 /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		1C2601FEFE79E43A71B88523 /* Pods_the_blue_alliance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_the_blue_alliance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		614241F72C3BE7F89DD95428 /* Pods-the-blue-alliance-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-the-blue-alliance-ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios.debug.xcconfig"; sourceTree = "<group>"; };
 		891A553A526753BAB4660AC9 /* Pods-the-blue-alliance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-the-blue-alliance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-the-blue-alliance/Pods-the-blue-alliance.debug.xcconfig"; sourceTree = "<group>"; };
@@ -133,6 +151,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		140523781ED33DB10072FB91 /* Match */ = {
+			isa = PBXGroup;
+			children = (
+				140523791ED33E040072FB91 /* MatchesViewController.swift */,
+				1405237B1ED33F500072FB91 /* MatchViewController.swift */,
+				145C57B81ED3C166004955B2 /* MatchInfoViewController.swift */,
+				145C57BA1ED3C178004955B2 /* MatchBreakdownViewController.swift */,
+			);
+			name = Match;
+			path = Events/Match;
+			sourceTree = "<group>";
+		};
+		1405237D1ED352460072FB91 /* Match */ = {
+			isa = PBXGroup;
+			children = (
+				1405237E1ED3524C0072FB91 /* Match.swift */,
+			);
+			name = Match;
+			sourceTree = "<group>";
+		};
+		140523801ED352530072FB91 /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				140523811ED352570072FB91 /* Media.swift */,
+			);
+			name = Media;
+			sourceTree = "<group>";
+		};
+		145C57B31ED377DE004955B2 /* Match */ = {
+			isa = PBXGroup;
+			children = (
+				145C57BC1ED3C3AA004955B2 /* PlayerView.swift */,
+				145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */,
+				145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */,
+			);
+			path = Match;
+			sourceTree = "<group>";
+		};
 		1FC2A75F3913B8037F340BCF /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -226,6 +282,8 @@
 		92942DAC1E215718008E79CA /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
+				140523801ED352530072FB91 /* Media */,
+				1405237D1ED352460072FB91 /* Match */,
 				92942DA91E215700008E79CA /* TBA.xcdatamodeld */,
 				924F8C881EC8C72000F7447A /* Extensions */,
 				929FCD961EC7EE9D00A38E46 /* Protocols */,
@@ -241,6 +299,7 @@
 			isa = PBXGroup;
 			children = (
 				92942E311E230340008E79CA /* Base */,
+				140523781ED33DB10072FB91 /* Match */,
 				92942DB21E215B08008E79CA /* Events */,
 				92942DB31E215B0E008E79CA /* Teams */,
 				92942DB41E215B1F008E79CA /* Districts */,
@@ -385,6 +444,7 @@
 		92FFE5221E7C994B0037E48C /* View Elements */ = {
 			isa = PBXGroup;
 			children = (
+				145C57B31ED377DE004955B2 /* Match */,
 				924602A91ECE89C40030EDBF /* Awards */,
 				924F8C891EC8D26500F7447A /* Districts */,
 				92D855D51EC695AE00572F27 /* Teams */,
@@ -488,6 +548,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */,
+				145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */,
 				92942DBD1E215BA6008E79CA /* EventsStoryboard.storyboard in Resources */,
 				92942DC11E215C0D008E79CA /* DistrictsStoryboard.storyboard in Resources */,
 				92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */,
@@ -606,8 +667,11 @@
 				92D855D41EC68F4200572F27 /* TeamsTableViewController.swift in Sources */,
 				92D855E01EC6BA3900572F27 /* TeamViewController.swift in Sources */,
 				92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */,
+				1405237F1ED3524C0072FB91 /* Match.swift in Sources */,
 				929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */,
 				92D855E21EC755D000572F27 /* TeamInfoTableViewController.swift in Sources */,
+				1405237C1ED33F500072FB91 /* MatchViewController.swift in Sources */,
+				145C57B51ED377EB004955B2 /* MatchTableViewCell.swift in Sources */,
 				924602AB1ECE8B1D0030EDBF /* AwardTableViewCell.swift in Sources */,
 				92FFE51E1E770D010037E48C /* District.swift in Sources */,
 				92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */,
@@ -618,12 +682,16 @@
 				92F481F31E7DA0A800B4ED7E /* TBAController.swift in Sources */,
 				925288921EC7ABC6009B78A9 /* Event.swift in Sources */,
 				924F8C851EC8C5F200F7447A /* Managed.swift in Sources */,
+				145C57BD1ED3C3AA004955B2 /* PlayerView.swift in Sources */,
 				924602B71ECE99F50030EDBF /* StringExtension.swift in Sources */,
 				92942E361E2A81E8008E79CA /* EventInfoTableViewController.swift in Sources */,
+				140523821ED352570072FB91 /* Media.swift in Sources */,
 				929FCDA81EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift in Sources */,
+				145C57B91ED3C166004955B2 /* MatchInfoViewController.swift in Sources */,
 				92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */,
 				92D855CF1EC68ACE00572F27 /* Team.swift in Sources */,
 				92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */,
+				145C57BB1ED3C178004955B2 /* MatchBreakdownViewController.swift in Sources */,
 				92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */,
 				924F8C871EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift in Sources */,
 				924F8C8B1EC8D27B00F7447A /* RankingTableViewCell.swift in Sources */,
@@ -640,6 +708,7 @@
 				92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */,
 				92942E331E2303A5008E79CA /* CalendarExtension.swift in Sources */,
 				929FCD9A1EC7F52700A38E46 /* DistrictsTableViewController.swift in Sources */,
+				1405237A1ED33E040072FB91 /* MatchesViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

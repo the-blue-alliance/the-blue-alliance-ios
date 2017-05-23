@@ -20,15 +20,17 @@ class EventViewController: ContainerViewController {
     @IBOutlet internal var teamsView: UIView!
     
     @IBOutlet internal var rankingsView: UIView?
-    @IBOutlet internal var matchesView: UIView?
+    
+    internal var matchesViewController: MatchesTableViewController!
+    @IBOutlet internal var matchesView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = event.friendlyNameWithYear
         
-        viewControllers = [infoViewController, teamsViewController]
-        containerViews = [infoView, teamsView]
+        viewControllers = [infoViewController, teamsViewController, matchesViewController]
+        containerViews = [infoView, teamsView, matchesView]
         
         if navigationController?.viewControllers.index(of: self) == 0 {
             navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
@@ -56,10 +58,21 @@ class EventViewController: ContainerViewController {
                 viewController.view = rootVC
                 self.navigationController?.pushViewController(viewController, animated: true)
             }
+        } else if segue.identifier == "EventMatchesEmbed" {
+            matchesViewController = segue.destination as! MatchesTableViewController
+            matchesViewController.event = event
+            matchesViewController.matchSelected = { match in
+                self.performSegue(withIdentifier: "MatchSegue", sender: match)
+            }
         } else if segue.identifier == "EventAwardsSegue" {
             let eventAwardsViewController = segue.destination as! EventAwardsViewController
             eventAwardsViewController.event = event
             eventAwardsViewController.persistentContainer = persistentContainer
+        } else if segue.identifier == "MatchSegue" {
+            let match = sender as! Match
+            let matchViewController = segue.destination as! MatchViewController
+            matchViewController.match = match
+            matchViewController.persistentContainer = persistentContainer
         }
     }
 
