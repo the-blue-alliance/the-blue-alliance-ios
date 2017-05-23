@@ -56,12 +56,17 @@ class EventViewController: ContainerViewController {
             matchesViewController = segue.destination as! MatchesTableViewController
             matchesViewController.event = event
             matchesViewController.matchSelected = { match in
-                // TOOD: Show Match VC
+                self.performSegue(withIdentifier: "MatchSegue", sender: match)
             }
         } else if segue.identifier == "EventAwardsSegue" {
             let eventAwardsViewController = segue.destination as! EventAwardsViewController
             eventAwardsViewController.event = event
             eventAwardsViewController.persistentContainer = persistentContainer
+        } else if segue.identifier == "MatchSegue" {
+            let match = sender as! Match
+            let matchViewController = segue.destination as! MatchViewController
+            matchViewController.match = match
+            matchViewController.persistentContainer = persistentContainer
         }
     }
 

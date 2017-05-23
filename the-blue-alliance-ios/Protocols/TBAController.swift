@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import CoreData
 import TBAKit
+import PureLayout
 
 protocol Container {
     var viewControllers: [Persistable & Refreshable] { get set }
@@ -195,6 +196,34 @@ class ContainerViewController: UIViewController, Container, Persistable, Alertab
         updateSegmentedControlViews()
     }
     
+}
+
+class TBAViewController: UIViewController, Persistable, Refreshable, Alertable {
+
+    var persistentContainer: NSPersistentContainer!
+    var requests: [URLSessionDataTask] = []
+    var dataView: UIView {
+        return scrollView
+    }
+    var noDataView: UIView?
+    @IBOutlet var scrollView: UIScrollView!
+    var refreshControl: UIRefreshControl?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        scrollView.refreshControl = UIRefreshControl()
+        scrollView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        refreshControl = scrollView.refreshControl
+    }
+    
+    func refresh() {
+        fatalError("Implement this downstream")
+    }
+    
+    func shouldNoDataRefresh() -> Bool {
+        fatalError("Implement this downstream")
+    }
 }
 
 class TBATableViewController: UITableViewController, Persistable, Refreshable, Alertable {

@@ -2,8 +2,10 @@ platform :ios, '10.0'
 use_frameworks!
 
 target 'the-blue-alliance-ios' do
-  # pod 'TBAKit', :path => '/Users/zach/Desktop/TBAKit', :branch => 'swift'
+  # pod 'TBAKit', :path => '/Users/zachorr/Desktop/TBAKit', :branch => 'swift'
   pod 'TBAKit', :git => 'https://github.com/ZachOrr/TBAKit.git', :branch => 'swift'
+  pod "youtube-ios-player-helper", "~> 0.1.4"
+  pod 'PureLayout'
 end
 
 post_install do | installer |
