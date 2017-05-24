@@ -64,6 +64,7 @@
     </entity>
     <entity name="Match" representedClassName="Match" syncable="YES" codeGenerationType="class">
         <attribute name="actualTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="blueBreakdownDictionary" optional="YES" attributeType="Transformable" customClassName="NSDictionary" syncable="YES"/>
         <attribute name="blueScore" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="compLevel" attributeType="String" syncable="YES"/>
         <attribute name="compLevelInt" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
@@ -71,6 +72,7 @@
         <attribute name="matchNumber" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="postResultTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="predictedTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="redBreakdownDictionary" optional="YES" attributeType="Transformable" customClassName="NSDictionary" syncable="YES"/>
         <attribute name="redScore" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="setNumber" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
@@ -126,7 +128,7 @@
         <element name="District" positionX="-63" positionY="135" width="128" height="135"/>
         <element name="DistrictRanking" positionX="-54" positionY="135" width="128" height="120"/>
         <element name="Event" positionX="-63" positionY="-18" width="128" height="540"/>
-        <element name="Match" positionX="-54" positionY="135" width="128" height="285"/>
+        <element name="Match" positionX="-54" positionY="135" width="128" height="315"/>
         <element name="Media" positionX="-45" positionY="144" width="128" height="120"/>
         <element name="Team" positionX="-54" positionY="135" width="128" height="405"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>

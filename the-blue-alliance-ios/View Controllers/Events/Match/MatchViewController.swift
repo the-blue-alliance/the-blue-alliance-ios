@@ -23,11 +23,11 @@ class MatchViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationTitleLabel?.text = "\(match.shortCompLevelString) \(match.matchNumber)"
+        navigationTitleLabel?.text = "\(match.friendlyMatchName())"
         navigationDetailLabel?.text = "@ \(match.event!.friendlyNameWithYear)"
         
-        viewControllers = [matchInfoViewController]
-        containerViews = [infoView]
+        viewControllers = [matchInfoViewController, matchBreakdownViewController]
+        containerViews = [infoView, breakdownView]
     }
     
     // MARK: - Navigation
@@ -38,7 +38,8 @@ class MatchViewController: ContainerViewController {
             matchInfoViewController.match = match
             matchInfoViewController.team = team
         } else if segue.identifier == "MatchBreakdownEmbed" {
-            // Breakdown or something
+            matchBreakdownViewController = segue.destination as! MatchBreakdownViewController
+            matchBreakdownViewController.match = match
         }
     }
 

@@ -2,13 +2,14 @@ platform :ios, '10.0'
 use_frameworks!
 
 target 'the-blue-alliance-ios' do
-  # pod 'TBAKit', :path => '/Users/zachorr/Desktop/TBAKit', :branch => 'swift'
-  pod 'TBAKit', :git => 'https://github.com/ZachOrr/TBAKit.git', :branch => 'swift'
+  pod 'TBAKit', :path => '/Users/zachorr/Desktop/TBAKit', :branch => 'swift'
+  # pod 'TBAKit', :git => 'https://github.com/ZachOrr/TBAKit.git', :branch => 'swift'
   
   pod 'React', :path => 'node_modules/react-native', :subspecs => [
     'Core',
     'RCTText',
     'RCTNetwork',
+    'RCTImage',
     'RCTWebSocket', # needed for debugging
     # Add any other subspecs you want to use in your project
   ]

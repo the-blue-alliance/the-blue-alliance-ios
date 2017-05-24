@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import React
 
 class EventViewController: ContainerViewController {
 
@@ -52,11 +51,6 @@ class EventViewController: ContainerViewController {
             teamsViewController.event = event
             teamsViewController.teamSelected = { team in
                 // TOOD: Show team@event
-                let jsCodeLocation = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index.ios", fallbackResource: "")
-                let rootVC = RCTRootView(bundleURL: jsCodeLocation!, moduleName: "TBATeamAtEventStatus", initialProperties: [:], launchOptions: [:])
-                let viewController = UIViewController()
-                viewController.view = rootVC
-                self.navigationController?.pushViewController(viewController, animated: true)
             }
         } else if segue.identifier == "EventMatchesEmbed" {
             matchesViewController = segue.destination as! MatchesTableViewController

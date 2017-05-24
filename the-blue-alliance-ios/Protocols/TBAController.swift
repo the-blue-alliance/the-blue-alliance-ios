@@ -96,12 +96,14 @@ extension Persistable {
         } else if let collectionView = dataView as? UICollectionView {
             collectionView.backgroundView = noDataView
         } else {
-            dataView.addSubview(noDataView)
+            dataView.insertSubview(noDataView, at: 0)
+            noDataView.autoPinEdgesToSuperviewEdges()
         }
         
         UIView.animate(withDuration: 0.25, animations: {
             noDataView.alpha = 1.0
         })
+        self.noDataView = noDataView
     }
     
     func removeNoDataView() {
@@ -203,7 +205,7 @@ class TBAViewController: UIViewController, Persistable, Refreshable, Alertable {
     var persistentContainer: NSPersistentContainer!
     var requests: [URLSessionDataTask] = []
     var dataView: UIView {
-        return scrollView
+        return view
     }
     var noDataView: UIView?
     @IBOutlet var scrollView: UIScrollView!
