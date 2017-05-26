@@ -68,6 +68,9 @@ class TBABreakdownRow extends React.Component {
     );
   }
   renderRow(data, total) {
+    if (data == null) {
+      return
+    }
     if (!Array.isArray(data)) {
       data = [data]
     }
@@ -96,15 +99,18 @@ class TBABreakdownRow extends React.Component {
 }
 
 class TBAMatchBreakdown extends React.Component {
-  checksOrEmpty(checks, filledInChecks) {
-    return checks.map(function(value, i) {
-      var filledInCheck = filledInChecks ? filledInChecks[i] : null
-      if (filledInCheck == true) {
-        return <Image source={{uri: 'ic_check_circle_36pt'}} style={{width: 24, height: 24}} />
-      } else if (value == true) {
-        return <Image source={{uri: 'ic_check_36pt'}} style={{width: 24, height: 24}} />
-      }
-    });
+  renderRotorView(json_data, rotor_number) {
+    var autoEngaged = false
+    if (rotor_number == 1 || rotor_number == 2) {
+      autoEngaged = json_data["rotor" + rotor_number + "Auto"]
+    }
+    var teleopEngaged = json_data["rotor" + rotor_number + "Engaged"]
+    
+    if (autoEngaged) {
+      return <Image source={{uri: 'ic_check_circle_36pt'}} style={{width: 24, height: 24}} />
+    } else if (teleopEngaged) {
+      return <Image source={{uri: 'ic_check_36pt'}} style={{width: 24, height: 24}} />
+    }
   }
   checkOrXWithBonus(value, bonus) {
     if (value == true) {
@@ -117,6 +123,11 @@ class TBAMatchBreakdown extends React.Component {
     } else {
       return <Image source={{uri: 'ic_clear_36pt'}} style={{width: 24, height: 24}} />
     }
+  }
+  checkImage() {
+    return (
+      <Image source={{uri: 'ic_check_36pt'}} style={{width: 24, height: 24}} />
+    );
   }
   upArrow() {
     return (
@@ -147,8 +158,8 @@ class TBAMatchBreakdown extends React.Component {
                                 this.props.blueBreakdown.autoFuelPoints]}/>
 
         <TBABreakdownRow data={["Auto Rotors",
-                                this.checksOrEmpty([this.props.redBreakdown.rotor1Auto, this.props.redBreakdown.rotor2Auto]),
-                                this.checksOrEmpty([this.props.blueBreakdown.rotor1Auto, this.props.blueBreakdown.rotor2Auto])]}/>
+                                [this.props.redBreakdown.rotor1Auto ? this.checkImage() : null, this.props.redBreakdown.rotor2Auto ? this.checkImage() : null],
+                                [this.props.blueBreakdown.rotor1Auto ? this.checkImage() : null, this.props.blueBreakdown.rotor2Auto ? this.checkImage() : null]]}/>
 
         <TBABreakdownRow data={["Auto Rotor Points",
                                 this.props.redBreakdown.autoRotorPoints,
@@ -167,8 +178,8 @@ class TBAMatchBreakdown extends React.Component {
                                 this.props.blueBreakdown.teleopFuelPoints]}/>
 
         <TBABreakdownRow data={["Teleop Rotors",
-                                this.checksOrEmpty([this.props.redBreakdown.rotor1Engaged, this.props.redBreakdown.rotor2Engaged, this.props.redBreakdown.rotor3Engaged, this.props.redBreakdown.rotor4Engaged], [this.props.redBreakdown.rotor1Auto, this.props.redBreakdown.rotor2Auto]),
-                                this.checksOrEmpty([this.props.blueBreakdown.rotor1Engaged, this.props.blueBreakdown.rotor2Engaged, this.props.blueBreakdown.rotor3Engaged, this.props.blueBreakdown.rotor4Engaged], [this.props.blueBreakdown.rotor1Auto, this.props.blueBreakdown.rotor2Auto])]}/>
+                                [1, 2, 3, 4].map(rotor_number => this.renderRotorView(this.props.redBreakdown, rotor_number)),
+                                [1, 2, 3, 4].map(rotor_number => this.renderRotorView(this.props.blueBreakdown, rotor_number))]}/>
 
         <TBABreakdownRow data={["Teleop Rotor Points",
                                 this.props.redBreakdown.teleopRotorPoints,

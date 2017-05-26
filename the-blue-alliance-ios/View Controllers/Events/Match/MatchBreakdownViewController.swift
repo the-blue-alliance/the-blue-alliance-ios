@@ -48,11 +48,12 @@ class MatchBreakdownViewController: TBAViewController {
             breakdownView?.appProperties = dataForBreakdown()
             return
         }
-        
-        guard let jsCodeLocation = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index.ios", fallbackResource: "index.ios") else {
+
+        guard let jsCodeLocation = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index.ios", fallbackResource: nil) else {
             self.showNoDataView(with: "Unable to load breakdown")
             return
         }
+
         let initialProps = dataForBreakdown()
         // TODO: Use year when creating moduleName
         guard let rootView = RCTRootView(bundleURL: jsCodeLocation, moduleName: "TBAMatchBreakdown", initialProperties: initialProps, launchOptions: [:]) else {

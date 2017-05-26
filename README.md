@@ -15,4 +15,5 @@ Setup
 	* Open the project (`the-blue-alliance-ios.xcworkspace`)
 2. Run the React Native server
 	* `react-native start`
+	* To view RN logs, `react-native log-ios`
 3. Build and run The Blue Alliance for iOS in Xcode!
