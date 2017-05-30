@@ -55,8 +55,10 @@ class MatchBreakdownViewController: TBAViewController {
         }
 
         let initialProps = dataForBreakdown()
-        // TODO: Use year when creating moduleName
-        guard let rootView = RCTRootView(bundleURL: jsCodeLocation, moduleName: "TBAMatchBreakdown", initialProperties: initialProps, launchOptions: [:]) else {
+        
+        let breakdownName = "TBAMatchBreakdown\(match.event!.year)"
+        
+        guard let rootView = RCTRootView(bundleURL: jsCodeLocation, moduleName: breakdownName, initialProperties: initialProps, launchOptions: [:]) else {
             self.showNoDataView(with: "Unable to load breakdown")
             return
         }

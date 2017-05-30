@@ -62,15 +62,7 @@ const styles = StyleSheet.create({
 const Text = ({ style, ...props }) => <ReactNative.Text style={[styles.font, style]} {...props} />;
 
 class TBABreakdownRow extends React.Component {
-  renderRenderRender(text) {
-    return (
-      <Text>{text}</Text>
-    );
-  }
   renderRow(data, total) {
-    if (data == null) {
-      return
-    }
     if (!Array.isArray(data)) {
       data = [data]
     }
@@ -98,7 +90,7 @@ class TBABreakdownRow extends React.Component {
   }
 }
 
-class TBAMatchBreakdown extends React.Component {
+class TBAMatchBreakdown2017 extends React.Component {
   renderRotorView(json_data, rotor_number) {
     var autoEngaged = false
     if (rotor_number == 1 || rotor_number == 2) {
@@ -112,7 +104,7 @@ class TBAMatchBreakdown extends React.Component {
       return <Image source={{uri: 'ic_check_36pt'}} style={{width: 24, height: 24}} />
     }
   }
-  checkOrXWithBonus(value, bonus) {
+  bonusCommon(value, bonus) {
     if (value == true) {
       return (
         <View style={{alignItems: 'center', flexDirection: 'row'}}>
@@ -194,12 +186,12 @@ class TBAMatchBreakdown extends React.Component {
                                 this.props.blueBreakdown.teleopPoints]} total={true}/>
 
         <TBABreakdownRow data={["Pressure Reached",
-                                this.checkOrXWithBonus(this.props.redBreakdown.kPaBonusPoints == 20, this.props.redBreakdown.kPaBonusPoints),
-                                this.checkOrXWithBonus(this.props.blueBreakdown.kPaBonusPoints == 20, this.props.blueBreakdown.kPaBonusPoints)]}/>
+                                this.bonusCommon(this.props.redBreakdown.kPaBonusPoints == 20, this.props.redBreakdown.kPaBonusPoints),
+                                this.bonusCommon(this.props.blueBreakdown.kPaBonusPoints == 20, this.props.blueBreakdown.kPaBonusPoints)]}/>
 
         <TBABreakdownRow data={["All Rotors Engaged",
-                                this.checkOrXWithBonus(this.props.redBreakdown.rotor1Engaged && this.props.redBreakdown.rotor2Engaged && this.props.redBreakdown.rotor3Engaged && this.props.redBreakdown.rotor4Engaged, this.props.redBreakdown.rotorBonusPoints),
-                                this.checkOrXWithBonus(this.props.blueBreakdown.rotor1Engaged && this.props.blueBreakdown.rotor2Engaged && this.props.blueBreakdown.rotor3Engaged && this.props.blueBreakdown.rotor4Engaged, this.props.blueBreakdown.rotorBonusPoints)]}/>
+                                this.bonusCommon(this.props.redBreakdown.rotor1Engaged && this.props.redBreakdown.rotor2Engaged && this.props.redBreakdown.rotor3Engaged && this.props.redBreakdown.rotor4Engaged, this.props.redBreakdown.rotorBonusPoints),
+                                this.bonusCommon(this.props.blueBreakdown.rotor1Engaged && this.props.blueBreakdown.rotor2Engaged && this.props.blueBreakdown.rotor3Engaged && this.props.blueBreakdown.rotor4Engaged, this.props.blueBreakdown.rotorBonusPoints)]}/>
 
         <TBABreakdownRow data={["Fouls",
                                 ["+", this.props.redBreakdown.foulPoints],
@@ -219,4 +211,4 @@ class TBAMatchBreakdown extends React.Component {
 }
 
 // Module name
-AppRegistry.registerComponent('TBAMatchBreakdown', () => TBAMatchBreakdown);
+AppRegistry.registerComponent('TBAMatchBreakdown2017', () => TBAMatchBreakdown2017);
