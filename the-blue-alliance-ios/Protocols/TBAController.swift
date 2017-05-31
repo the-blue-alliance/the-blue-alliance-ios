@@ -270,6 +270,7 @@ protocol Refreshable: class {
     var requests: [URLSessionDataTask] { get set }
     var refreshControl: UIRefreshControl? { get set }
     
+    func disableRefresh()
     func refresh()
     func shouldNoDataRefresh() -> Bool
 }
@@ -283,6 +284,10 @@ extension Refreshable {
     
     func shouldRefresh() -> Bool {
         return shouldNoDataRefresh() && !isRefreshing
+    }
+    
+    func disableRefresh() {
+        self.refreshControl?.removeFromSuperview()
     }
     
     // TODO: Add a method to add an observer on a single core data object for changes

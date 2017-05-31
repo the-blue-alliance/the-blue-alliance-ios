@@ -42,6 +42,14 @@ class MatchBreakdownViewController: TBAViewController {
     }
     
     func updateBreakdownView() {
+        // Match breakdowns only exist for 2015 and onward
+        if Int(match.event!.year) < 2015 {
+            disableRefresh()
+            
+            self.showNoDataView(with: "No breakdown for year")
+            return
+        }
+        
         // If the breakdown view already exists, don't set it up again
         // Only update the properties for the view
         if let _ = breakdownView {
@@ -89,6 +97,9 @@ class MatchBreakdownViewController: TBAViewController {
     // MARK: Refresh
     
     override func shouldNoDataRefresh() -> Bool {
+        if Int(match.event!.year) < 2015 {
+            return false
+        }
         return match.redBreakdown == nil || match.blueBreakdown == nil
     }
     
