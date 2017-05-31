@@ -17,3 +17,12 @@ Setup
 	* `cd js && react-native start`
 	* To view RN logs, `react-native log-ios`
 3. Build and run The Blue Alliance for iOS in Xcode!
+
+Shipping
+-----
+0. Be sure to compile a local React Native bundle to be used offline
+
+```
+$ cd js
+$ react-native bundle --platform ios --dev false --entry-file index.ios.js --bundle-output ../the-blue-alliance-ios/React\ Native/main.jsbundle --assets-dest ../the-blue-alliance-ios/React\ Native/
+```

@@ -26,8 +26,17 @@ class MatchViewController: ContainerViewController {
         navigationTitleLabel?.text = "\(match.friendlyMatchName())"
         navigationDetailLabel?.text = "@ \(match.event!.friendlyNameWithYear)"
         
-        viewControllers = [matchInfoViewController, matchBreakdownViewController]
-        containerViews = [infoView, breakdownView]
+        // Only show match breakdown if year is 2015 or onward
+        if Int(match.event!.year) >= 2015 {
+            viewControllers = [matchInfoViewController, matchBreakdownViewController]
+            containerViews = [infoView, breakdownView]
+        } else {
+            segmentedControlView?.isHidden = true
+            breakdownView.isHidden = true
+            
+            viewControllers = [matchInfoViewController]
+            containerViews = [infoView]
+        }
     }
     
     // MARK: - Navigation
