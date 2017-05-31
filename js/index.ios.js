@@ -21,9 +21,6 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
     paddingTop: 2,
   },
-  lightGrey: {
-    backgroundColor: '#ddd',
-  },
   grey: {
     backgroundColor: '#ccc',
   },
