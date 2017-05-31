@@ -4,7 +4,6 @@ import React from 'react';
 import ReactNative from 'react-native';
 import {
   AppRegistry,
-  Image,
   StyleSheet,
   View
 } from 'react-native';
@@ -47,12 +46,13 @@ const styles = StyleSheet.create({
     minHeight: 40,
     marginBottom: 2,
   },
-  boxRow: {
-
-  },
   font: {
     fontSize: 12,
     textAlign: 'center'
+  },
+  imageSize: {
+    width: 24,
+    height: 24
   },
   total: {
     fontWeight: 'bold',
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
 });
 
 const Text = ({ style, ...props }) => <ReactNative.Text style={[styles.font, style]} {...props} />;
+const Image = ({ style, ...props }) => <ReactNative.Image style={[styles.imageSize, style]} {...props} />;
 
 class TBABreakdownRow extends React.Component {
   renderRow(data, total) {
@@ -76,13 +77,13 @@ class TBABreakdownRow extends React.Component {
   render() {
     return (
       <View style={[styles.row, styles.infoRow]}>
-        <View style={[styles.box, this.props.total && styles.red, !this.props.total && styles.lightRed, !this.props.vertical && styles.row, !this.props.vertical && styles.boxRow]}>
+        <View style={[styles.box, this.props.total && styles.red, !this.props.total && styles.lightRed, !this.props.vertical && styles.row]}>
           {this.renderRow(this.props.data[1])}
         </View>
         <View style={[styles.box, this.props.total && styles.grey, this.props.vertical && styles.grey]}>
           {this.renderRow(this.props.data[0], this.props.total)}
         </View>
-        <View style={[styles.box, this.props.total && styles.blue, !this.props.total && styles.lightBlue, !this.props.vertical && styles.row, !this.props.vertical && styles.boxRow]}>
+        <View style={[styles.box, this.props.total && styles.blue, !this.props.total && styles.lightBlue, !this.props.vertical && styles.row]}>
           {this.renderRow(this.props.data[2])}
         </View>
       </View>
@@ -99,36 +100,36 @@ class TBAMatchBreakdown2017 extends React.Component {
     var teleopEngaged = json_data["rotor" + rotor_number + "Engaged"]
     
     if (autoEngaged) {
-      return <Image source={{uri: 'ic_check_circle_36pt'}} style={{width: 24, height: 24}} />
+      return <Image source={require('./img/ic_check_circle_36pt.png')} />
     } else if (teleopEngaged) {
-      return <Image source={{uri: 'ic_check_36pt'}} style={{width: 24, height: 24}} />
+      return <Image source={require('./img/ic_check_36pt.png')} />
     }
   }
   bonusCommon(value, bonus) {
     if (value == true) {
       return (
         <View style={{alignItems: 'center', flexDirection: 'row'}}>
-          <Image source={{uri: 'ic_check_36pt'}} style={{width: 24, height: 24}} />
+          <Image source={require('./img/ic_check_36pt.png')} />
           <Text>(+ {bonus})</Text>
         </View>
       );
     } else {
-      return <Image source={{uri: 'ic_clear_36pt'}} style={{width: 24, height: 24}} />
+      return <Image source={require('./img/ic_clear_36pt.png')} />
     }
   }
   checkImage() {
     return (
-      <Image source={{uri: 'ic_check_36pt'}} style={{width: 24, height: 24}} />
+      <Image source={require('./img/ic_check_36pt.png')} />
     );
   }
   upArrow() {
     return (
-      <Image source={{uri: 'ic_keyboard_arrow_up_36pt'}} style={{width: 24, height: 24}} />
+      <Image source={require('./img/ic_keyboard_arrow_up_36pt.png')} />
     );
   }
   downArrow() {
     return (
-      <Image source={{uri: 'ic_keyboard_arrow_down_36pt'}} style={{width: 24, height: 24}} />
+      <Image source={require('./img/ic_keyboard_arrow_down_36pt.png')} />
     );
   }
   render() {
