@@ -202,8 +202,8 @@ class TBAMatchBreakdown2017 extends React.Component {
         <TBABreakdownRow data={["Total Score",
                                 this.props.redBreakdown.totalPoints,
                                 this.props.blueBreakdown.totalPoints]} total={true}/>
-				
-				{this.props.compLevel == "qm" ? <TBABreakdownRow data={["Ranking Points",
+
+        {this.props.compLevel == "qm" ? <TBABreakdownRow data={["Ranking Points",
                                 ["+", this.props.redBreakdown.tba_rpEarned, " RP"],
                                 ["+", this.props.blueBreakdown.tba_rpEarned, " RP"]]}/> : null}
 
@@ -214,32 +214,32 @@ class TBAMatchBreakdown2017 extends React.Component {
 
 class TBAMatchBreakdown2016 extends React.Component {
   defenseName(defense) {
-  	if (defense == "A_ChevalDeFrise") {
-  		return "Cheval De Frise"
-  	} else if (defense == "A_Portcullis") {
-  		return "Portcullis"
-  	} else if (defense == "B_Ramparts") {
-  		return "Ramparts"
-  	} else if (defense == "B_Moat") {
-  		return "Moat"
-  	} else if (defense == "C_SallyPort") {
-  		return "Sally Port"
-  	} else if (defense == "C_Drawbridge") {
-  		return "Drawbridge"
-  	} else if (defense == "D_RoughTerrain") {
-  		return "Rough Terrain"
-  	} else if (defense == "D_RockWall") {
-  		return "Rock Wall"
-  	} else {
-  		return "Unknown"
-  	}
+    if (defense == "A_ChevalDeFrise") {
+      return "Cheval De Frise"
+    } else if (defense == "A_Portcullis") {
+      return "Portcullis"
+    } else if (defense == "B_Ramparts") {
+      return "Ramparts"
+    } else if (defense == "B_Moat") {
+      return "Moat"
+    } else if (defense == "C_SallyPort") {
+      return "Sally Port"
+    } else if (defense == "C_Drawbridge") {
+      return "Drawbridge"
+    } else if (defense == "D_RoughTerrain") {
+      return "Rough Terrain"
+    } else if (defense == "D_RockWall") {
+      return "Rock Wall"
+    } else {
+      return "Unknown"
+    }
   }
   defenseCrossing(defense, crossingCount) {
       var defenseName = ""
       if (defense == "Low Bar") {
-      	defenseName = defense
+        defenseName = defense
       } else {
-      	defenseName = this.defenseName(defense)
+        defenseName = this.defenseName(defense)
       }
       return (
         <View>
@@ -250,7 +250,7 @@ class TBAMatchBreakdown2016 extends React.Component {
   }
   checkOrClear(value) {
     if (value == true) {
-    	return <Image source={require('./img/ic_check.png')} />
+      return <Image source={require('./img/ic_check.png')} />
     } else {
       return <Image source={require('./img/ic_clear.png')} />
     }
@@ -302,36 +302,36 @@ class TBAMatchBreakdown2016 extends React.Component {
                                 this.props.blueBreakdown.teleopCrossingPoints]} subtotal={true}/>
 
         <TBABreakdownRow data={["Teleop Boulders High",
-        												this.props.redBreakdown.teleopBouldersHigh,
-        												this.props.blueBreakdown.teleopBouldersHigh]}/>
+                                this.props.redBreakdown.teleopBouldersHigh,
+                                this.props.blueBreakdown.teleopBouldersHigh]}/>
 
         <TBABreakdownRow data={["Teleop Boulders Low",
-        												this.props.redBreakdown.teleopBouldersLow,
-        												this.props.blueBreakdown.teleopBouldersLow]}/>
+                                this.props.redBreakdown.teleopBouldersLow,
+                                this.props.blueBreakdown.teleopBouldersLow]}/>
 
         <TBABreakdownRow data={["Total Telop Boulder",
                                 this.props.redBreakdown.teleopBoulderPoints,
                                 this.props.blueBreakdown.teleopBoulderPoints]} subtotal={true}/>
 
         <TBABreakdownRow data={["Tower Challenge Points",
-        												this.props.redBreakdown.teleopChallengePoints,
-        												this.props.blueBreakdown.teleopChallengePoints]}/>
+                                this.props.redBreakdown.teleopChallengePoints,
+                                this.props.blueBreakdown.teleopChallengePoints]}/>
 
         <TBABreakdownRow data={["Tower Scale Points",
-        												this.props.redBreakdown.teleopScalePoints,
-        												this.props.blueBreakdown.teleopScalePoints]}/>
+                                this.props.redBreakdown.teleopScalePoints,
+                                this.props.blueBreakdown.teleopScalePoints]}/>
 
         <TBABreakdownRow data={["Total Teleop",
                                 this.props.redBreakdown.teleopPoints,
                                 this.props.blueBreakdown.teleopPoints]} total={true}/>
 
         <TBABreakdownRow data={["Defenses Breached",
-        												this.checkOrClear(this.props.redBreakdown.teleopDefensesBreached),
-        												this.checkOrClear(this.props.blueBreakdown.teleopDefensesBreached)]}/>
+                                this.checkOrClear(this.props.redBreakdown.teleopDefensesBreached),
+                                this.checkOrClear(this.props.blueBreakdown.teleopDefensesBreached)]}/>
 
         <TBABreakdownRow data={["Tower Captured",
-        												this.checkOrClear(this.props.redBreakdown.teleopTowerCaptured),
-        												this.checkOrClear(this.props.blueBreakdown.teleopTowerCaptured)]}/>
+                                this.checkOrClear(this.props.redBreakdown.teleopTowerCaptured),
+                                this.checkOrClear(this.props.blueBreakdown.teleopTowerCaptured)]}/>
 
         <TBABreakdownRow data={["Fouls",
                                 ["+", this.props.redBreakdown.foulPoints],
@@ -345,12 +345,12 @@ class TBAMatchBreakdown2016 extends React.Component {
                                 this.props.redBreakdown.totalPoints,
                                 this.props.blueBreakdown.totalPoints]} total={true}/>
 
-				{this.props.compLevel == "qm" ? <TBABreakdownRow data={["Ranking Points",
+        {this.props.compLevel == "qm" ? <TBABreakdownRow data={["Ranking Points",
                                 ["+", this.props.redBreakdown.tba_rpEarned, " RP"],
                                 ["+", this.props.blueBreakdown.tba_rpEarned, " RP"]]}/> : null}
 
       </View>
-		);
+    );
   }
 }
 
@@ -362,16 +362,16 @@ const COOP_SET_POINTS = 20;
 const COOP_STACK_POINTS = 40;
 
 class TBAMatchBreakdown2015 extends React.Component {
-	foulPoints(value) {
-		if (value == 0) {
-			return <Text>{value}</Text>
-		} else {
-			return <Text>- {value}</Text>
-		}
-	}
+  foulPoints(value) {
+    if (value == 0) {
+      return <Text>{value}</Text>
+    } else {
+      return <Text>- {value}</Text>
+    }
+  }
   pointsCommon(value, points) {
     if (value == true) {
-    	return <Text>{points}</Text>
+      return <Text>{points}</Text>
     } else {
       return <Text>0</Text>
     }
@@ -435,7 +435,7 @@ class TBAMatchBreakdown2015 extends React.Component {
                                 this.props.blueBreakdown.total_points]} total={true}/>
 
       </View>
-		);
+    );
   }
 }
 
