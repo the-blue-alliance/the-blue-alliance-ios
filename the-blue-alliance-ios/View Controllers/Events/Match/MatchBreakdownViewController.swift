@@ -85,10 +85,12 @@ class MatchBreakdownViewController: TBAViewController {
         let blueAlliance = match.blueAlliance?.allObjects.map({ (team) -> String in
             return "\((team as! Team).teamNumber)"
         })
+        
         return ["redTeams" : redAlliance ?? [],
                 "redBreakdown": match.redBreakdown ?? [:],
                 "blueTeams": blueAlliance ?? [],
-                "blueBreakdown": match.blueBreakdown ?? [:]]
+                "blueBreakdown": match.blueBreakdown ?? [:],
+                "compLevel": match.compLevel!]
     }
     
     // MARK: Refresh
