@@ -26,3 +26,9 @@ DerivedData
 #
 Pods/
 Podfile.lock
+
+# Node
+node_modules
+*.log
+.nvm
+

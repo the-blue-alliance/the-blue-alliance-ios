@@ -23,11 +23,20 @@ class MatchViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationTitleLabel?.text = "\(match.shortCompLevelString) \(match.matchNumber)"
+        navigationTitleLabel?.text = "\(match.friendlyMatchName())"
         navigationDetailLabel?.text = "@ \(match.event!.friendlyNameWithYear)"
         
-        viewControllers = [matchInfoViewController]
-        containerViews = [infoView]
+        // Only show match breakdown if year is 2015 or onward
+        if Int(match.event!.year) >= 2015 {
+            viewControllers = [matchInfoViewController, matchBreakdownViewController]
+            containerViews = [infoView, breakdownView]
+        } else {
+            segmentedControlView?.isHidden = true
+            breakdownView.isHidden = true
+            
+            viewControllers = [matchInfoViewController]
+            containerViews = [infoView]
+        }
     }
     
     // MARK: - Navigation
@@ -38,7 +47,8 @@ class MatchViewController: ContainerViewController {
             matchInfoViewController.match = match
             matchInfoViewController.team = team
         } else if segue.identifier == "MatchBreakdownEmbed" {
-            // Breakdown or something
+            matchBreakdownViewController = segue.destination as! MatchBreakdownViewController
+            matchBreakdownViewController.match = match
         }
     }
 
