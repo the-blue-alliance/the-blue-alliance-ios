@@ -18,6 +18,7 @@ class EventViewController: ContainerViewController {
     internal var teamsViewController: TeamsTableViewController!
     @IBOutlet internal var teamsView: UIView!
     
+    
     @IBOutlet internal var rankingsView: UIView?
     
     internal var matchesViewController: MatchesTableViewController!
