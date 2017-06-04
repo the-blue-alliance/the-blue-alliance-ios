@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -11,7 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="117" id="nH3-L6-lDJ" customClass="RankingTableViewCell" customModule="the_blue_alliance_ios" customModuleProvider="target">
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="117" id="nH3-L6-lDJ" customClass="EventRankingTableViewCell" customModule="the_blue_alliance_ios" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="420" height="117"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nH3-L6-lDJ" id="mBc-ir-Rhe">
@@ -25,15 +25,21 @@
                                 <rect key="frame" x="0.0" y="0.0" width="68" height="100.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" text="7332" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U0F-O3-fhT">
-                                        <rect key="frame" x="0.0" y="0.0" width="68" height="82.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="68" height="64.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rank 999" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g5M-Kd-TUO">
-                                        <rect key="frame" x="0.0" y="82.5" width="68" height="18"/>
+                                        <rect key="frame" x="0.0" y="64.5" width="68" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(1-2-3)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0VW-OE-b4Q" userLabel="WLT Label">
+                                        <rect key="frame" x="0.0" y="82.5" width="68" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -45,13 +51,13 @@
                                 <rect key="frame" x="76" y="0.0" width="283" height="100.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Team Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SZF-lW-7fe">
-                                        <rect key="frame" x="0.0" y="0.0" width="283" height="82.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="283" height="64.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="123 Points" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hh9-NG-vcV">
-                                        <rect key="frame" x="0.0" y="82.5" width="283" height="18"/>
+                                        <rect key="frame" x="0.0" y="64.5" width="283" height="36"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -59,6 +65,9 @@
                                 </subviews>
                             </stackView>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="U0F-O3-fhT" firstAttribute="baseline" secondItem="SZF-lW-7fe" secondAttribute="baseline" id="9QA-oD-ctQ"/>
+                        </constraints>
                     </stackView>
                 </subviews>
                 <constraints>
@@ -69,10 +78,11 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="detailLabel" destination="hh9-NG-vcV" id="omL-v3-ISS"/>
-                <outlet property="nameLabel" destination="SZF-lW-7fe" id="Shs-2D-Bte"/>
-                <outlet property="numberLabel" destination="U0F-O3-fhT" id="tJl-Pa-cbJ"/>
-                <outlet property="rankLabel" destination="g5M-Kd-TUO" id="Z3o-89-Au1"/>
+                <outlet property="WLTLabel" destination="0VW-OE-b4Q" id="0eQ-AD-qAW"/>
+                <outlet property="nameLabel" destination="SZF-lW-7fe" id="MBP-fY-Z3Z"/>
+                <outlet property="numberLabel" destination="U0F-O3-fhT" id="Dho-hP-00Q"/>
+                <outlet property="rankLabel" destination="g5M-Kd-TUO" id="ne3-gY-6tE"/>
+                <outlet property="rankingPointsLabel" destination="hh9-NG-vcV" id="gYp-qm-s4F"/>
             </connections>
             <point key="canvasLocation" x="127" y="70.5"/>
         </tableViewCell>

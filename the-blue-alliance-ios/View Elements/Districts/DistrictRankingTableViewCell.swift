@@ -9,8 +9,8 @@
 import Foundation
 import UIKit
 
-class RankingTableViewCell: UITableViewCell {
-    static let reuseIdentifier = "RankingCell"
+class DistrictRankingTableViewCell: UITableViewCell {
+    static let reuseIdentifier = "DistrictRankingCell"
     public var ranking: DistrictRanking? {
         didSet {
             guard let ranking = ranking, let team = ranking.team else {
@@ -20,6 +20,7 @@ class RankingTableViewCell: UITableViewCell {
             numberLabel?.text = "\(team.teamNumber)"
             nameLabel?.text = team.nickname ?? team.fallbackNickname
             detailLabel?.text = "\(ranking.pointTotal) Points"
+            
         }
         
     }

@@ -411,6 +411,24 @@
             </objects>
             <point key="canvasLocation" x="3766" y="-41"/>
         </scene>
+        <!--Event Rankings Table View Controller-->
+        <scene sceneID="TV6-tf-E65">
+            <objects>
+                <tableViewController id="CvT-u0-qAP" customClass="EventRankingsTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="qSk-IJ-lzD">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="CvT-u0-qAP" id="ncW-7S-VdT"/>
+                            <outlet property="delegate" destination="CvT-u0-qAP" id="qpN-dc-gaT"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RZI-DR-gwW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2134" y="-798"/>
+        </scene>
         <!--2015 Kettering University District-->
         <scene sceneID="dha-2i-TWe">
             <objects>
@@ -466,14 +484,23 @@
                                     <segue destination="gY3-yx-S9x" kind="embed" identifier="EventMatchesEmbed" id="QS9-LC-vAs"/>
                                 </connections>
                             </containerView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oxj-Ro-GMf" userLabel="Rankings View">
+                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
+                                <connections>
+                                    <segue destination="CvT-u0-qAP" kind="embed" identifier="EventRankingsEmbed" id="v1c-s6-m76"/>
+                                </connections>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="oxj-Ro-GMf" firstAttribute="top" secondItem="oHM-kT-1iW" secondAttribute="top" id="0hh-ag-tMs"/>
                             <constraint firstAttribute="bottom" secondItem="tQG-h2-47D" secondAttribute="bottom" id="28k-ot-jLF"/>
                             <constraint firstItem="tQG-h2-47D" firstAttribute="leading" secondItem="ohx-IE-DGa" secondAttribute="leading" id="4Da-Bu-1dO"/>
                             <constraint firstItem="1my-hd-O5i" firstAttribute="top" secondItem="voy-KV-LhW" secondAttribute="bottom" id="7Td-rE-ijK"/>
                             <constraint firstItem="voy-KV-LhW" firstAttribute="leading" secondItem="ohx-IE-DGa" secondAttribute="leading" id="8dU-fe-BsV"/>
                             <constraint firstItem="tQG-h2-47D" firstAttribute="top" secondItem="voy-KV-LhW" secondAttribute="bottom" id="8fP-GG-wfS"/>
+                            <constraint firstItem="oxj-Ro-GMf" firstAttribute="trailing" secondItem="tQG-h2-47D" secondAttribute="trailing" id="AmR-eM-LFm"/>
+                            <constraint firstItem="oxj-Ro-GMf" firstAttribute="bottom" secondItem="0ON-FW-wcF" secondAttribute="top" id="H4O-rt-8sS"/>
                             <constraint firstAttribute="trailing" secondItem="tQG-h2-47D" secondAttribute="trailing" id="K2F-Sv-yFL"/>
                             <constraint firstAttribute="trailing" secondItem="oHM-kT-1iW" secondAttribute="trailing" id="Uuq-oD-g26"/>
                             <constraint firstItem="1my-hd-O5i" firstAttribute="leading" secondItem="ohx-IE-DGa" secondAttribute="leading" id="au5-Hn-3yQ"/>
@@ -482,6 +509,7 @@
                             <constraint firstAttribute="trailing" secondItem="1my-hd-O5i" secondAttribute="trailing" id="fby-qV-XzS"/>
                             <constraint firstItem="oHM-kT-1iW" firstAttribute="leading" secondItem="ohx-IE-DGa" secondAttribute="leading" id="n0H-Uq-ogo"/>
                             <constraint firstAttribute="bottom" secondItem="oHM-kT-1iW" secondAttribute="bottom" id="ogl-xs-ae8"/>
+                            <constraint firstItem="oxj-Ro-GMf" firstAttribute="leading" secondItem="oHM-kT-1iW" secondAttribute="leading" id="oph-ZV-oBJ"/>
                             <constraint firstAttribute="trailing" secondItem="voy-KV-LhW" secondAttribute="trailing" id="p5h-Nb-70f"/>
                             <constraint firstItem="0ON-FW-wcF" firstAttribute="top" secondItem="1my-hd-O5i" secondAttribute="bottom" id="ybV-rI-Gsi"/>
                         </constraints>
@@ -490,6 +518,7 @@
                     <connections>
                         <outlet property="infoView" destination="oHM-kT-1iW" id="A0H-il-OCI"/>
                         <outlet property="matchesView" destination="1my-hd-O5i" id="Mwl-yM-Fhn"/>
+                        <outlet property="rankingsView" destination="oxj-Ro-GMf" id="bMq-QY-XD9"/>
                         <outlet property="segmentedControl" destination="f16-3v-WkT" id="oL6-yw-87B"/>
                         <outlet property="segmentedControlView" destination="voy-KV-LhW" id="irM-Bl-lOc"/>
                         <outlet property="teamsView" destination="tQG-h2-47D" id="hbk-Rg-eBe"/>

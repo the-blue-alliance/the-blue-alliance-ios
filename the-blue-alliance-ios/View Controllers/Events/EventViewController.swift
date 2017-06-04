@@ -18,19 +18,21 @@ class EventViewController: ContainerViewController {
     internal var teamsViewController: TeamsTableViewController!
     @IBOutlet internal var teamsView: UIView!
     
-    
-    @IBOutlet internal var rankingsView: UIView?
+    internal var rankingsViewController: EventRankingsTableViewController!
+    @IBOutlet internal var rankingsView: UIView!
     
     internal var matchesViewController: MatchesTableViewController!
     @IBOutlet internal var matchesView: UIView!
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = event.friendlyNameWithYear
         
-        viewControllers = [infoViewController, teamsViewController, matchesViewController]
-        containerViews = [infoView, teamsView, matchesView]
+        viewControllers = [infoViewController, teamsViewController, rankingsViewController, matchesViewController]
+        containerViews = [infoView, teamsView, rankingsView, matchesView]
         
         if navigationController?.viewControllers.index(of: self) == 0 {
             navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
@@ -58,6 +60,12 @@ class EventViewController: ContainerViewController {
             matchesViewController.event = event
             matchesViewController.matchSelected = { match in
                 self.performSegue(withIdentifier: "MatchSegue", sender: match)
+            }
+        } else if segue.identifier == "EventRankingsEmbed" {
+           rankingsViewController = segue.destination as! EventRankingsTableViewController
+            rankingsViewController.event = event
+            rankingsViewController.rankingSelected = { team in
+                // TODO: Show team@event
             }
         } else if segue.identifier == "EventAwardsSegue" {
             let eventAwardsViewController = segue.destination as! EventAwardsViewController
