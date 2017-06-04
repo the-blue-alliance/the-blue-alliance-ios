@@ -548,10 +548,10 @@
             </objects>
             <point key="canvasLocation" x="3766" y="-629"/>
         </scene>
-        <!--Event Points View Controller-->
+        <!--Event District Points View Controller-->
         <scene sceneID="gBG-rk-j7X">
             <objects>
-                <viewController id="OPq-JY-pBU" customClass="EventPointsViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="OPq-JY-pBU" customClass="EventDistrictPointsViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8Nu-Lp-riT"/>
                         <viewControllerLayoutGuide type="bottom" id="OEY-Yc-3PN"/>
@@ -609,19 +609,19 @@
                         </view>
                     </navigationItem>
                     <connections>
+                        <outlet property="districtPointsView" destination="WO3-PB-QQx" id="63q-vc-PXu"/>
                         <outlet property="navigationDetailLabel" destination="JoG-Yi-TsA" id="6X9-3C-RAH"/>
                         <outlet property="navigationTitleLabel" destination="82d-6r-Pia" id="H9Q-eL-AQG"/>
-                        <outlet property="pointsView" destination="WO3-PB-QQx" id="hcz-dw-oeZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ep5-iu-dPH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3001" y="-1302"/>
         </scene>
-        <!--Event Points Table View Controller-->
+        <!--Event District Points Table View Controller-->
         <scene sceneID="8AF-Mj-tAD">
             <objects>
-                <tableViewController id="eeu-xr-21E" customClass="EventPointsTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="eeu-xr-21E" customClass="EventDistrictPointsTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="ApT-7j-REg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -55,7 +55,7 @@
 		92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
 		92D5A1201EE476C800EBFC6F /* EventPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D5A11F1EE476C800EBFC6F /* EventPoints.swift */; };
-		92D5A1221EE48EC700EBFC6F /* EventPointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D5A1211EE48EC700EBFC6F /* EventPointsViewController.swift */; };
+		92D5A1221EE48EC700EBFC6F /* EventDistrictPointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D5A1211EE48EC700EBFC6F /* EventDistrictPointsViewController.swift */; };
 		92D855CF1EC68ACE00572F27 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855CE1EC68ACE00572F27 /* Team.swift */; };
 		92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D11EC68F3800572F27 /* TeamsContainerViewController.swift */; };
 		92D855D41EC68F4200572F27 /* TeamsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D31EC68F4200572F27 /* TeamsTableViewController.swift */; };
@@ -128,7 +128,7 @@
 		92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectNumberTableViewController.swift; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		92D5A11F1EE476C800EBFC6F /* EventPoints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventPoints.swift; sourceTree = "<group>"; };
-		92D5A1211EE48EC700EBFC6F /* EventPointsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventPointsViewController.swift; sourceTree = "<group>"; };
+		92D5A1211EE48EC700EBFC6F /* EventDistrictPointsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDistrictPointsViewController.swift; sourceTree = "<group>"; };
 		92D855CE1EC68ACE00572F27 /* Team.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
 		92D855D11EC68F3800572F27 /* TeamsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamsContainerViewController.swift; sourceTree = "<group>"; };
 		92D855D31EC68F4200572F27 /* TeamsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamsTableViewController.swift; sourceTree = "<group>"; };
@@ -450,7 +450,7 @@
 				92942DDE1E21D2EB008E79CA /* EventViewController.swift */,
 				92942E351E2A81E8008E79CA /* EventInfoTableViewController.swift */,
 				924602A31ECD27CE0030EDBF /* EventAwardsViewController.swift */,
-				92D5A1211EE48EC700EBFC6F /* EventPointsViewController.swift */,
+				92D5A1211EE48EC700EBFC6F /* EventDistrictPointsViewController.swift */,
 			);
 			name = Event;
 			sourceTree = "<group>";
@@ -724,7 +724,7 @@
 				92FFE52A1E7CB1550037E48C /* Webcast.swift in Sources */,
 				92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */,
 				92F481ED1E7D978600B4ED7E /* NoDataViewController.swift in Sources */,
-				92D5A1221EE48EC700EBFC6F /* EventPointsViewController.swift in Sources */,
+				92D5A1221EE48EC700EBFC6F /* EventDistrictPointsViewController.swift in Sources */,
 				924602A41ECD27CE0030EDBF /* EventAwardsViewController.swift in Sources */,
 				92942DDF1E21D2EB008E79CA /* EventViewController.swift in Sources */,
 				929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */,

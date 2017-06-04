@@ -10,11 +10,11 @@ import UIKit
 import CoreData
 import TBAKit
 
-class EventPointsViewController: ContainerViewController {
+class EventDistrictPointsViewController: ContainerViewController {
     public var event: Event!
     
-    internal var pointsViewController: EventPointsTableViewController!
-    @IBOutlet internal var pointsView: UIView!
+    internal var districtPointsViewController: EventDistrictPointsTableViewController!
+    @IBOutlet internal var districtPointsView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,25 +22,25 @@ class EventPointsViewController: ContainerViewController {
         navigationTitleLabel?.text = "District Points"
         navigationDetailLabel?.text = "@ \(event.friendlyNameWithYear)"
         
-        viewControllers = [pointsViewController]
-        containerViews = [pointsView]
+        viewControllers = [districtPointsViewController]
+        containerViews = [districtPointsView]
     }
     
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "EventPointsEmbed" {
-            pointsViewController = segue.destination as! EventPointsTableViewController
-            pointsViewController.event = event
-            pointsViewController.persistentContainer = persistentContainer
-            pointsViewController.teamSelected = { team in
+            districtPointsViewController = segue.destination as! EventDistrictPointsTableViewController
+            districtPointsViewController.event = event
+            districtPointsViewController.persistentContainer = persistentContainer
+            districtPointsViewController.teamSelected = { team in
                 // TODO: show team@event
             }
         }
     }
 }
 
-class EventPointsTableViewController: TBATableViewController {
+class EventDistrictPointsTableViewController: TBATableViewController {
     
     var event: Event!
     
@@ -102,7 +102,7 @@ class EventPointsTableViewController: TBATableViewController {
     
     // MARK: Table View Data Source
     
-    fileprivate var dataSource: TableViewDataSource<EventPoints, EventPointsTableViewController>?
+    fileprivate var dataSource: TableViewDataSource<EventPoints, EventDistrictPointsTableViewController>?
     
     fileprivate func setupDataSource() {
         guard let persistentContainer = persistentContainer else {
@@ -134,7 +134,7 @@ class EventPointsTableViewController: TBATableViewController {
     
 }
 
-extension EventPointsTableViewController: TableViewDataSourceDelegate {
+extension EventDistrictPointsTableViewController: TableViewDataSourceDelegate {
     
     func configure(_ cell: RankingTableViewCell, for object: EventPoints, at indexPath: IndexPath) {
         cell.points = object

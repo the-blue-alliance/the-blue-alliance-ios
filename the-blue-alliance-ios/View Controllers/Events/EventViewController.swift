@@ -72,7 +72,7 @@ class EventViewController: ContainerViewController {
             eventAwardsViewController.event = event
             eventAwardsViewController.persistentContainer = persistentContainer
         } else if segue.identifier == "EventPointsSegue" {
-            let eventAwardsViewController = segue.destination as! EventPointsViewController
+            let eventAwardsViewController = segue.destination as! EventDistrictPointsViewController
             eventAwardsViewController.event = event
             eventAwardsViewController.persistentContainer = persistentContainer
         } else if segue.identifier == "MatchSegue" {
