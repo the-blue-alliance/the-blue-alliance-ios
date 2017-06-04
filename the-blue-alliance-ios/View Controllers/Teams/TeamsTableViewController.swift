@@ -168,7 +168,7 @@ class TeamsTableViewController: TBATableViewController {
 
 extension TeamsTableViewController: TableViewDataSourceDelegate {
     
-    func configure(_ cell: TeamTableViewCell, for object: Team) {
+    func configure(_ cell: TeamTableViewCell, for object: Team, at indexPath: IndexPath) {
         cell.team = object
     }
     

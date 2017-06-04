@@ -138,7 +138,7 @@ class EventAwardsTableViewController: TBATableViewController {
 
 extension EventAwardsTableViewController: TableViewDataSourceDelegate {
     
-    func configure(_ cell: AwardTableViewCell, for object: Award) {
+    func configure(_ cell: AwardTableViewCell, for object: Award, at indexPath: IndexPath) {
         cell.selectionStyle = .none
         cell.award = object
         cell.teamSelected = teamSelected

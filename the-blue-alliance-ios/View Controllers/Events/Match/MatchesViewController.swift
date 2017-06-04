@@ -143,7 +143,7 @@ extension MatchesTableViewController: TableViewDataSourceDelegate {
         return "\(firstMatch.compLevelString) Matches"
     }
  
-    func configure(_ cell: MatchTableViewCell, for object: Match) {
+    func configure(_ cell: MatchTableViewCell, for object: Match, at indexPath: IndexPath) {
         cell.team = team
         cell.match = object
     }

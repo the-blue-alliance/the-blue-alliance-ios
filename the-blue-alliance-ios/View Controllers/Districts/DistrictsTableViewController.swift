@@ -124,7 +124,7 @@ class DistrictsTableViewController: TBATableViewController {
 
 extension DistrictsTableViewController: TableViewDataSourceDelegate {
     
-    func configure(_ cell: UITableViewCell, for object: District) {
+    func configure(_ cell: UITableViewCell, for object: District, at indexPath: IndexPath) {
         cell.textLabel?.text = object.name
         // TODO: Convert to some custom cell... show # of events if non-zero
     }

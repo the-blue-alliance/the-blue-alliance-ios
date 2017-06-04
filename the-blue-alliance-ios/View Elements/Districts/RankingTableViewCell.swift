@@ -23,7 +23,17 @@ class RankingTableViewCell: UITableViewCell {
         }
         
     }
- 
+    public var points: EventPoints? {
+        didSet {
+            guard let points = points, let team = points.team else {
+                return
+            }
+            numberLabel?.text = "\(team.teamNumber)"
+            nameLabel?.text = team.nickname ?? team.fallbackNickname
+            detailLabel?.text = "\(points.total) Points"
+        }
+    }
+    
     @IBOutlet public var rankLabel: UILabel?
     @IBOutlet private var numberLabel: UILabel?
     @IBOutlet private var nameLabel: UILabel?

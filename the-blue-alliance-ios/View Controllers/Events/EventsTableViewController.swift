@@ -244,7 +244,7 @@ class EventsTableViewController: TBATableViewController {
 
 extension EventsTableViewController: TableViewDataSourceDelegate {
     
-    func configure(_ cell: EventTableViewCell, for object: Event) {
+    func configure(_ cell: EventTableViewCell, for object: Event, at indexPath: IndexPath) {
         cell.event = object
     }
     
