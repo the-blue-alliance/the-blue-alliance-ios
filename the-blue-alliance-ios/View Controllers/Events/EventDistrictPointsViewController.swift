@@ -79,6 +79,7 @@ class EventDistrictPointsTableViewController: TBATableViewController {
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 
+                // TODO: We need to make sure we're using tiebreakers as well
                 let localPoints = eventPoints?.map({ (modelPoints) -> EventPoints in
                     return EventPoints.insert(with: modelPoints, for: backgroundEvent, in: backgroundContext)
                 })
