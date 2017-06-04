@@ -116,56 +116,70 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x0d-9Y-1i6" userLabel="Segmented Control View">
-                                <rect key="frame" x="0.0" y="64" width="375" height="44"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Fb0-1o-jgn">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="0rE-Du-PTU">
-                                        <rect key="frame" x="16" y="8" width="343" height="29"/>
-                                        <segments>
-                                            <segment title="Match"/>
-                                            <segment title="Breakdown"/>
-                                        </segments>
-                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <connections>
-                                            <action selector="segmentedControlValueChangedWithSender:" destination="V9g-ZF-4u7" eventType="valueChanged" id="PZJ-1A-RH9"/>
-                                            <action selector="segmentedControlValueChangedWithSender:" destination="Eer-R7-yJV" eventType="valueChanged" id="zw9-Tz-0sh"/>
-                                        </connections>
-                                    </segmentedControl>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x0d-9Y-1i6" userLabel="Segmented Control View">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                        <subviews>
+                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="0rE-Du-PTU">
+                                                <rect key="frame" x="16" y="8" width="343" height="29"/>
+                                                <segments>
+                                                    <segment title="Match"/>
+                                                    <segment title="Breakdown"/>
+                                                </segments>
+                                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <connections>
+                                                    <action selector="segmentedControlValueChangedWithSender:" destination="V9g-ZF-4u7" eventType="valueChanged" id="PZJ-1A-RH9"/>
+                                                    <action selector="segmentedControlValueChangedWithSender:" destination="Eer-R7-yJV" eventType="valueChanged" id="zw9-Tz-0sh"/>
+                                                </connections>
+                                            </segmentedControl>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="0rE-Du-PTU" secondAttribute="trailing" constant="16" id="5B6-cm-DJf"/>
+                                            <constraint firstItem="0rE-Du-PTU" firstAttribute="leading" secondItem="x0d-9Y-1i6" secondAttribute="leading" constant="16" id="Ffr-gS-TUf"/>
+                                            <constraint firstAttribute="height" priority="999" constant="44" id="cDu-0b-L4z"/>
+                                            <constraint firstItem="0rE-Du-PTU" firstAttribute="centerY" secondItem="x0d-9Y-1i6" secondAttribute="centerY" id="cZk-QV-KC3"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lop-Ak-h4u">
+                                        <rect key="frame" x="0.0" y="44" width="375" height="559"/>
+                                        <subviews>
+                                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pk8-Jn-Pke">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                                                <connections>
+                                                    <segue destination="1Me-02-2cf" kind="embed" identifier="MatchBreakdownEmbed" id="xlD-nE-wp0"/>
+                                                </connections>
+                                            </containerView>
+                                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="96T-mr-DKG">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                                                <connections>
+                                                    <segue destination="ljv-wV-xYX" kind="embed" identifier="MatchInfoEmbed" id="bmv-ms-6F3"/>
+                                                </connections>
+                                            </containerView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="pk8-Jn-Pke" firstAttribute="leading" secondItem="lop-Ak-h4u" secondAttribute="leading" id="7ft-N7-rzi"/>
+                                            <constraint firstAttribute="trailing" secondItem="pk8-Jn-Pke" secondAttribute="trailing" id="EcH-S0-MzF"/>
+                                            <constraint firstAttribute="trailing" secondItem="96T-mr-DKG" secondAttribute="trailing" id="GYK-bK-dgr"/>
+                                            <constraint firstAttribute="bottom" secondItem="pk8-Jn-Pke" secondAttribute="bottom" id="NuC-kf-fv5"/>
+                                            <constraint firstItem="pk8-Jn-Pke" firstAttribute="top" secondItem="lop-Ak-h4u" secondAttribute="top" id="Q8X-un-MYY"/>
+                                            <constraint firstAttribute="bottom" secondItem="96T-mr-DKG" secondAttribute="bottom" id="dD8-J0-TAr"/>
+                                            <constraint firstItem="96T-mr-DKG" firstAttribute="top" secondItem="lop-Ak-h4u" secondAttribute="top" id="l7q-NA-0I9"/>
+                                            <constraint firstItem="96T-mr-DKG" firstAttribute="leading" secondItem="lop-Ak-h4u" secondAttribute="leading" id="ni9-93-YfG"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="0rE-Du-PTU" secondAttribute="trailing" constant="16" id="5B6-cm-DJf"/>
-                                    <constraint firstItem="0rE-Du-PTU" firstAttribute="leading" secondItem="x0d-9Y-1i6" secondAttribute="leading" constant="16" id="Ffr-gS-TUf"/>
-                                    <constraint firstAttribute="height" constant="44" id="cDu-0b-L4z"/>
-                                    <constraint firstItem="0rE-Du-PTU" firstAttribute="centerY" secondItem="x0d-9Y-1i6" secondAttribute="centerY" id="cZk-QV-KC3"/>
-                                </constraints>
-                            </view>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pk8-Jn-Pke">
-                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
-                                <connections>
-                                    <segue destination="1Me-02-2cf" kind="embed" identifier="MatchBreakdownEmbed" id="xlD-nE-wp0"/>
-                                </connections>
-                            </containerView>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="96T-mr-DKG">
-                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
-                                <connections>
-                                    <segue destination="ljv-wV-xYX" kind="embed" identifier="MatchInfoEmbed" id="bmv-ms-6F3"/>
-                                </connections>
-                            </containerView>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="aHW-HZ-tOw" firstAttribute="top" secondItem="pk8-Jn-Pke" secondAttribute="bottom" id="1ZY-Z6-9Bd"/>
-                            <constraint firstItem="x0d-9Y-1i6" firstAttribute="leading" secondItem="O5L-ME-N4D" secondAttribute="leading" id="59F-qa-TkZ"/>
-                            <constraint firstItem="aHW-HZ-tOw" firstAttribute="top" secondItem="96T-mr-DKG" secondAttribute="bottom" id="8kt-HR-Gtn"/>
-                            <constraint firstItem="pk8-Jn-Pke" firstAttribute="leading" secondItem="O5L-ME-N4D" secondAttribute="leading" id="AUK-O8-g6n"/>
-                            <constraint firstAttribute="trailing" secondItem="96T-mr-DKG" secondAttribute="trailing" id="LoT-xJ-SSg"/>
-                            <constraint firstItem="96T-mr-DKG" firstAttribute="top" secondItem="x0d-9Y-1i6" secondAttribute="bottom" id="SV5-MW-QGU"/>
-                            <constraint firstAttribute="trailing" secondItem="x0d-9Y-1i6" secondAttribute="trailing" id="Xhx-Qi-vQl"/>
-                            <constraint firstItem="96T-mr-DKG" firstAttribute="leading" secondItem="O5L-ME-N4D" secondAttribute="leading" id="ZfH-X8-HP8"/>
-                            <constraint firstItem="x0d-9Y-1i6" firstAttribute="top" secondItem="9sx-MV-l5z" secondAttribute="bottom" id="csI-N8-zl1"/>
-                            <constraint firstItem="pk8-Jn-Pke" firstAttribute="top" secondItem="x0d-9Y-1i6" secondAttribute="bottom" id="lI3-X4-Ahq"/>
-                            <constraint firstAttribute="trailing" secondItem="pk8-Jn-Pke" secondAttribute="trailing" id="m3l-sM-ZfT"/>
+                            <constraint firstItem="aHW-HZ-tOw" firstAttribute="top" secondItem="Fb0-1o-jgn" secondAttribute="bottom" id="827-ZL-Mub"/>
+                            <constraint firstItem="Fb0-1o-jgn" firstAttribute="leading" secondItem="O5L-ME-N4D" secondAttribute="leading" id="Lwp-VR-hLF"/>
+                            <constraint firstItem="Fb0-1o-jgn" firstAttribute="top" secondItem="9sx-MV-l5z" secondAttribute="bottom" id="Ntn-0D-u4P"/>
+                            <constraint firstAttribute="trailing" secondItem="Fb0-1o-jgn" secondAttribute="trailing" id="tXH-Pd-BgZ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="4jr-JX-LLE">
@@ -224,8 +238,22 @@
                     <view key="view" contentMode="scaleToFill" id="CFF-64-pS0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DP6-K4-aR6">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                            </scrollView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ptu-aV-dKg" firstAttribute="top" secondItem="DP6-K4-aR6" secondAttribute="bottom" id="ba3-Rn-iUL"/>
+                            <constraint firstAttribute="trailing" secondItem="DP6-K4-aR6" secondAttribute="trailing" id="ic0-VD-iWy"/>
+                            <constraint firstItem="DP6-K4-aR6" firstAttribute="leading" secondItem="CFF-64-pS0" secondAttribute="leading" id="o4i-jo-rNK"/>
+                            <constraint firstItem="DP6-K4-aR6" firstAttribute="top" secondItem="zYo-yQ-QcQ" secondAttribute="bottom" id="pSK-0Y-Sw3"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="scrollView" destination="DP6-K4-aR6" id="rGK-Tx-aYk"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Odf-HV-RYB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

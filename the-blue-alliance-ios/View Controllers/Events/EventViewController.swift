@@ -66,6 +66,7 @@ class EventViewController: ContainerViewController {
             rankingsViewController.event = event
             rankingsViewController.rankingSelected = { team in
                 // TODO: Show team@event
+
             }
         } else if segue.identifier == "EventAwardsSegue" {
             let eventAwardsViewController = segue.destination as! EventAwardsViewController
