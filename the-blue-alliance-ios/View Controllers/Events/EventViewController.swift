@@ -49,6 +49,9 @@ class EventViewController: ContainerViewController {
             infoViewController.showDistrictPoints = {
                 self.performSegue(withIdentifier: "EventPointsSegue", sender: nil)
             }
+            infoViewController.showStats = {
+                self.performSegue(withIdentifier: "EventStatsSegue", sender: nil)
+            }
         } else if segue.identifier == "EventTeamsEmbed" {
             teamsViewController = segue.destination as! TeamsTableViewController
             teamsViewController.event = event
@@ -80,6 +83,10 @@ class EventViewController: ContainerViewController {
             let matchViewController = segue.destination as! MatchViewController
             matchViewController.match = match
             matchViewController.persistentContainer = persistentContainer
+        } else if segue.identifier == "EventStatsSegue" {
+            let statsViewController = segue.destination as! EventStatsContainerViewController
+            statsViewController.event = event
+            statsViewController.persistentContainer = persistentContainer
         }
     }
 

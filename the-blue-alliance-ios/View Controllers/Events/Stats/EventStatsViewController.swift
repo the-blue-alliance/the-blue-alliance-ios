@@ -1,32 +1,32 @@
 //
-//  MatchBreakdownViewController.swift
+//  EventStatsViewController.swift
 //  the-blue-alliance-ios
 //
-//  Created by Zach Orr on 5/22/17.
+//  Created by Zach Orr on 6/4/17.
 //  Copyright © 2017 The Blue Alliance. All rights reserved.
 //
 
 import Foundation
+import CoreData
+import TBAKit
 import UIKit
 import React
-import TBAKit
-import CoreData
 
-class MatchBreakdownViewController: TBAViewController {
+class EventStatsViewController: TBAViewController {
     
-    public var match: Match!
+    var event: Event!
     override var persistentContainer: NSPersistentContainer! {
         didSet {
             registerForChangeNotifications { (obj) in
-                if obj == self.match {
+                if obj == self.event {
                     DispatchQueue.main.async {
-                        self.updateBreakdownView()
+                        self.updateEventStatsView()
                     }
                 }
             }
         }
     }
-    private var breakdownView: RCTRootView?
+    private var eventStatsView: RCTRootView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,28 +37,28 @@ class MatchBreakdownViewController: TBAViewController {
     // MARK: Interface Methods
     
     func styleInterface() {
-        view.backgroundColor = UIColor.colorWithRGB(rgbValue: 0xdddddd)
-        updateBreakdownView()
+        updateEventStatsView()
     }
     
-    func updateBreakdownView() {
-        // Match breakdowns only exist for 2015 and onward
-        if Int(match.event!.year) < 2015 {
+    func updateEventStatsView() {
+        // Match breakdowns only exist for 2016 and onward
+        if Int(event.year) < 2016 {
             return
         }
         
+        /*
         // If the breakdown view already exists, don't set it up again
         // Only update the properties for the view
         if let _ = breakdownView {
             breakdownView?.appProperties = dataForBreakdown()
             return
         }
-
+        
         guard let jsCodeLocation = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index.ios", fallbackResource: nil) else {
             self.showNoDataView(with: "Unable to load breakdown")
             return
         }
-
+        
         let initialProps = dataForBreakdown()
         
         let breakdownName = "TBAMatchBreakdown\(match.event!.year)"
@@ -74,49 +74,30 @@ class MatchBreakdownViewController: TBAViewController {
         scrollView.addSubview(breakdownView!)
         breakdownView!.autoMatch(.width, to: .width, of: scrollView)
         breakdownView!.autoPinEdgesToSuperviewEdges()
-    }
-    
-    // MARK: Private
-    
-    func dataForBreakdown() -> [String: Any] {
-        let redAlliance = match.redAlliance?.allObjects.map({ (team) -> String in
-            return "\((team as! Team).teamNumber)"
-        })
-        let blueAlliance = match.blueAlliance?.allObjects.map({ (team) -> String in
-            return "\((team as! Team).teamNumber)"
-        })
-        
-        return ["redTeams" : redAlliance ?? [],
-                "redBreakdown": match.redBreakdown ?? [:],
-                "blueTeams": blueAlliance ?? [],
-                "blueBreakdown": match.blueBreakdown ?? [:],
-                "compLevel": match.compLevel!]
+        */
     }
     
     // MARK: Refresh
     
     override func shouldNoDataRefresh() -> Bool {
-        return match.redBreakdown == nil || match.blueBreakdown == nil
+        return event.insights == nil
     }
     
     override func refresh() {
         removeNoDataView()
         
         var request: URLSessionDataTask?
-        request = TBAMatch.fetchMatch(key: match.key!, { (modelMatch, error) in
+        request = TBAEvent.fetchInsights(event.key!, completion: { (insights, error) in
             if let error = error {
-                self.showErrorAlert(with: "Unable to refresh match - \(error.localizedDescription)")
+                self.showErrorAlert(with: "Unable to refresh event stats - \(error.localizedDescription)")
             }
             
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.match.event!.objectID) as! Event
-                
-                if let modelMatch = modelMatch {
-                    backgroundEvent.addToMatches(Match.insert(with: modelMatch, for: backgroundEvent, in: backgroundContext))
-                }
+                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
+                backgroundEvent.insights = insights
                 
                 if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh match - database error")
+                    self.showErrorAlert(with: "Unable to refresh event stats - database error")
                 }
                 
                 self.removeRequest(request: request!)
@@ -127,10 +108,10 @@ class MatchBreakdownViewController: TBAViewController {
     
 }
 
-extension MatchBreakdownViewController: RCTRootViewDelegate {
-
+extension EventStatsViewController: RCTRootViewDelegate {
+    
     func rootViewDidChangeIntrinsicSize(_ rootView: RCTRootView!) {
         rootView.autoSetDimension(.height, toSize: rootView.intrinsicContentSize.height)
     }
-
+    
 }

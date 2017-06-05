@@ -38,7 +38,7 @@
                                     </label>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="68" id="bu4-7F-sN4"/>
+                                    <constraint firstAttribute="width" constant="68" id="jM0-If-6fb"/>
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="WSx-AP-wpT">
@@ -70,6 +70,7 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="detailLabel" destination="hh9-NG-vcV" id="omL-v3-ISS"/>
+                <outlet property="detailLabelWidth" destination="jM0-If-6fb" id="pZm-qk-DLZ"/>
                 <outlet property="nameLabel" destination="SZF-lW-7fe" id="Shs-2D-Bte"/>
                 <outlet property="numberLabel" destination="U0F-O3-fhT" id="tJl-Pa-cbJ"/>
                 <outlet property="rankLabel" destination="g5M-Kd-TUO" id="Z3o-89-Au1"/>

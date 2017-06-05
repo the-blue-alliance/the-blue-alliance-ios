@@ -225,7 +225,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lyb-E6-ztn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3001" y="68"/>
+            <point key="canvasLocation" x="3001" y="54"/>
         </scene>
         <!--Match Breakdown View Controller-->
         <scene sceneID="u7t-Lp-cFc">
@@ -524,6 +524,7 @@
                         <segue destination="FeZ-ho-5g5" kind="show" identifier="EventAwardsSegue" id="mWY-FR-KSF"/>
                         <segue destination="Eer-R7-yJV" kind="show" identifier="MatchSegue" id="OAY-5h-eAa"/>
                         <segue destination="OPq-JY-pBU" kind="show" identifier="EventPointsSegue" id="jEl-q2-yCo"/>
+                        <segue destination="Qcp-lW-mIJ" kind="show" identifier="EventStatsSegue" id="9ca-nl-iQE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GxG-VS-fKS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -547,6 +548,135 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RB4-Xx-Cfv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3766" y="-629"/>
+        </scene>
+        <!--Event Stats Container View Controller-->
+        <scene sceneID="eUR-KO-g1l">
+            <objects>
+                <viewController id="Qcp-lW-mIJ" customClass="EventStatsContainerViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="biu-Fl-Tm6"/>
+                        <viewControllerLayoutGuide type="bottom" id="o2l-hG-ZqZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="KXx-me-VIV">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ch0-T2-tbi">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oq3-MQ-D1s" userLabel="Segmented Control View">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                        <subviews>
+                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Szh-R1-Xf2">
+                                                <rect key="frame" x="16" y="8" width="343" height="29"/>
+                                                <segments>
+                                                    <segment title="Team Stats"/>
+                                                    <segment title="Event Stats"/>
+                                                </segments>
+                                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <connections>
+                                                    <action selector="segmentedControlValueChangedWithSender:" destination="Eer-R7-yJV" eventType="valueChanged" id="GjS-yy-P7Z"/>
+                                                    <action selector="segmentedControlValueChangedWithSender:" destination="V9g-ZF-4u7" eventType="valueChanged" id="v62-A1-XEg"/>
+                                                </connections>
+                                            </segmentedControl>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="Szh-R1-Xf2" firstAttribute="centerY" secondItem="Oq3-MQ-D1s" secondAttribute="centerY" id="67S-J8-cyt"/>
+                                            <constraint firstItem="Szh-R1-Xf2" firstAttribute="leading" secondItem="Oq3-MQ-D1s" secondAttribute="leading" constant="16" id="Lss-iW-Il3"/>
+                                            <constraint firstAttribute="trailing" secondItem="Szh-R1-Xf2" secondAttribute="trailing" constant="16" id="cAR-V1-Bsr"/>
+                                            <constraint firstAttribute="height" priority="999" constant="44" id="lvn-wX-ueO"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xb9-GO-Y35">
+                                        <rect key="frame" x="0.0" y="44" width="375" height="559"/>
+                                        <subviews>
+                                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c0W-8N-8HW">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                                                <connections>
+                                                    <segue destination="oyp-Ey-4v7" kind="embed" identifier="EventStatsEmbed" id="E6e-wR-dub"/>
+                                                </connections>
+                                            </containerView>
+                                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6dU-MA-tjY">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                                                <connections>
+                                                    <segue destination="ibP-O4-6aD" kind="embed" identifier="TeamStatsEmbed" id="l9f-e1-7sU"/>
+                                                </connections>
+                                            </containerView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="6dU-MA-tjY" firstAttribute="top" secondItem="Xb9-GO-Y35" secondAttribute="top" id="ByH-vM-2vr"/>
+                                            <constraint firstItem="c0W-8N-8HW" firstAttribute="leading" secondItem="Xb9-GO-Y35" secondAttribute="leading" id="S13-cL-EXX"/>
+                                            <constraint firstAttribute="bottom" secondItem="c0W-8N-8HW" secondAttribute="bottom" id="W3m-vi-dI9"/>
+                                            <constraint firstAttribute="trailing" secondItem="6dU-MA-tjY" secondAttribute="trailing" id="XDy-bk-pmd"/>
+                                            <constraint firstAttribute="bottom" secondItem="6dU-MA-tjY" secondAttribute="bottom" id="lA4-ZH-dcX"/>
+                                            <constraint firstAttribute="trailing" secondItem="c0W-8N-8HW" secondAttribute="trailing" id="ohY-3d-2TA"/>
+                                            <constraint firstItem="c0W-8N-8HW" firstAttribute="top" secondItem="Xb9-GO-Y35" secondAttribute="top" id="t3E-Ht-YN8"/>
+                                            <constraint firstItem="6dU-MA-tjY" firstAttribute="leading" secondItem="Xb9-GO-Y35" secondAttribute="leading" id="vAG-35-esb"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="o2l-hG-ZqZ" firstAttribute="top" secondItem="ch0-T2-tbi" secondAttribute="bottom" id="H0b-XZ-rma"/>
+                            <constraint firstItem="ch0-T2-tbi" firstAttribute="leading" secondItem="KXx-me-VIV" secondAttribute="leading" id="Pi8-u2-7Ux"/>
+                            <constraint firstAttribute="trailing" secondItem="ch0-T2-tbi" secondAttribute="trailing" id="bvK-IL-WD8"/>
+                            <constraint firstItem="ch0-T2-tbi" firstAttribute="top" secondItem="biu-Fl-Tm6" secondAttribute="bottom" id="z4O-la-EXp"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="tzT-KY-fIm">
+                        <view key="titleView" contentMode="scaleToFill" id="6dl-rc-P09">
+                            <rect key="frame" x="112.5" y="5.5" width="150" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="B5W-E9-Pkd">
+                                    <rect key="frame" x="0.0" y="0.0" width="150" height="33"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="749" text="Stats" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bBe-5T-MZj">
+                                            <rect key="frame" x="55.5" y="0.0" width="39.5" height="19.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="@ 2015 Kettering University District" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n80-lS-vCB">
+                                            <rect key="frame" x="0.0" y="19.5" width="150" height="13.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </stackView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="B5W-E9-Pkd" firstAttribute="leading" secondItem="6dl-rc-P09" secondAttribute="leading" id="1fc-Y9-tOd"/>
+                                <constraint firstAttribute="bottom" secondItem="B5W-E9-Pkd" secondAttribute="bottom" id="gFC-ET-sQN"/>
+                                <constraint firstAttribute="trailing" secondItem="B5W-E9-Pkd" secondAttribute="trailing" id="h5d-Vq-ZAR"/>
+                                <constraint firstItem="B5W-E9-Pkd" firstAttribute="top" secondItem="6dl-rc-P09" secondAttribute="top" id="n7R-qy-urP"/>
+                            </constraints>
+                        </view>
+                        <barButtonItem key="rightBarButtonItem" image="ic_sort_white" id="p11-NQ-Iq8">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <segue destination="4p7-Kx-idt" kind="presentation" identifier="SelectFilterSegue" modalPresentationStyle="formSheet" id="Jlo-nF-4CI"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="eventStatsView" destination="c0W-8N-8HW" id="kdE-NQ-Eiz"/>
+                        <outlet property="navigationDetailLabel" destination="n80-lS-vCB" id="MCa-jq-EZD"/>
+                        <outlet property="navigationTitleLabel" destination="bBe-5T-MZj" id="BT0-zp-ZVV"/>
+                        <outlet property="segmentedControl" destination="Szh-R1-Xf2" id="p0u-od-Rvq"/>
+                        <outlet property="segmentedControlView" destination="Oq3-MQ-D1s" id="6fA-Lh-NG8"/>
+                        <outlet property="teamStatsView" destination="6dU-MA-tjY" id="jAD-Pd-PpZ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="swL-Yf-3z0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3001" y="-1969"/>
         </scene>
         <!--Event District Points View Controller-->
         <scene sceneID="gBG-rk-j7X">
@@ -838,11 +968,71 @@
             </objects>
             <point key="canvasLocation" x="-913" y="-89"/>
         </scene>
+        <!--Event Team Stats Table View Controller-->
+        <scene sceneID="Q8o-B4-gvq">
+            <objects>
+                <tableViewController id="ibP-O4-6aD" customClass="EventTeamStatsTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="5z8-PT-8Ec">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="ibP-O4-6aD" id="Chi-z7-kh6"/>
+                            <outlet property="delegate" destination="ibP-O4-6aD" id="biz-kh-kpH"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Sio-6y-wnD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3766" y="-2530"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="jfG-Vl-a7E">
+            <objects>
+                <navigationController id="4p7-Kx-idt" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="vku-1h-uz2">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nVD-Qk-vvY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4716" y="-3105"/>
+        </scene>
+        <!--Event Stats View Controller-->
+        <scene sceneID="uVQ-WN-IJZ">
+            <objects>
+                <viewController id="oyp-Ey-4v7" customClass="EventStatsViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="EDA-1b-nob">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JdN-Tm-Wtz">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="JdN-Tm-Wtz" secondAttribute="bottom" id="DCO-5u-kC2"/>
+                            <constraint firstItem="JdN-Tm-Wtz" firstAttribute="leading" secondItem="EDA-1b-nob" secondAttribute="leading" id="Ovu-nU-hk2"/>
+                            <constraint firstItem="JdN-Tm-Wtz" firstAttribute="top" secondItem="EDA-1b-nob" secondAttribute="top" id="nQC-j4-fol"/>
+                            <constraint firstAttribute="trailing" secondItem="JdN-Tm-Wtz" secondAttribute="trailing" id="tDr-bs-Xt8"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="scrollView" destination="JdN-Tm-Wtz" id="gAj-gN-hCR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kyB-V8-xS4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3766" y="-1889"/>
+        </scene>
     </scenes>
     <resources>
         <image name="first" width="30" height="30"/>
+        <image name="ic_sort_white" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ygW-l9-xTD"/>
+        <segue reference="oO5-aj-OQj"/>
     </inferredMetricsTieBreakers>
 </document>

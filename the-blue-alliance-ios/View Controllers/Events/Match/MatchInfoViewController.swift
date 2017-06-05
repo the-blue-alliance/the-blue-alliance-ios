@@ -194,7 +194,7 @@ class MatchInfoViewController: TBAViewController {
                 }
                 
                 if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to match - database error")
+                    self.showErrorAlert(with: "Unable to refresh match - database error")
                 }
                 
                 self.removeRequest(request: request!)

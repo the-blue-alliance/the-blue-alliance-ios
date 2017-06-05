@@ -29,6 +29,9 @@
 		924F8C8B1EC8D27B00F7447A /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924F8C8A1EC8D27B00F7447A /* RankingTableViewCell.swift */; };
 		924F8C8D1EC8D28300F7447A /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924F8C8C1EC8D28300F7447A /* RankingTableViewCell.xib */; };
 		925288921EC7ABC6009B78A9 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925288911EC7ABC6009B78A9 /* Event.swift */; };
+		9272924B1EE4A0830027CE7C /* EventStatsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272924A1EE4A0830027CE7C /* EventStatsContainerViewController.swift */; };
+		9272924D1EE4A0FC0027CE7C /* EventStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272924C1EE4A0FC0027CE7C /* EventStatsViewController.swift */; };
+		927292521EE4A48C0027CE7C /* EventTeamStatsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927292511EE4A48C0027CE7C /* EventTeamStatsTableViewController.swift */; };
 		92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942D951E2154DA008E79CA /* AppDelegate.swift */; };
 		92942D9D1E2154DA008E79CA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942D9B1E2154DA008E79CA /* Main.storyboard */; };
 		92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92942D9E1E2154DA008E79CA /* Assets.xcassets */; };
@@ -53,6 +56,7 @@
 		929FCDA81EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCDA71EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift */; };
 		929FCDAA1EC8BFB000A38E46 /* DistrictRanking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCDA91EC8BFB000A38E46 /* DistrictRanking.swift */; };
 		92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */; };
+		92B5DAC61EE4CE7C00B0A8F3 /* EventTeamStat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B5DAC51EE4CE7C00B0A8F3 /* EventTeamStat.swift */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
 		92D5A1201EE476C800EBFC6F /* EventPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D5A11F1EE476C800EBFC6F /* EventPoints.swift */; };
 		92D5A1221EE48EC700EBFC6F /* EventDistrictPointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D5A1211EE48EC700EBFC6F /* EventDistrictPointsViewController.swift */; };
@@ -100,6 +104,9 @@
 		924F8C8A1EC8D27B00F7447A /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
 		924F8C8C1EC8D28300F7447A /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		925288911EC7ABC6009B78A9 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		9272924A1EE4A0830027CE7C /* EventStatsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatsContainerViewController.swift; sourceTree = "<group>"; };
+		9272924C1EE4A0FC0027CE7C /* EventStatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatsViewController.swift; sourceTree = "<group>"; };
+		927292511EE4A48C0027CE7C /* EventTeamStatsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTeamStatsTableViewController.swift; sourceTree = "<group>"; };
 		92942D921E2154DA008E79CA /* the-blue-alliance-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "the-blue-alliance-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92942D951E2154DA008E79CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92942D9C1E2154DA008E79CA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -126,6 +133,7 @@
 		929FCDA71EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictRankingsTableViewController.swift; sourceTree = "<group>"; };
 		929FCDA91EC8BFB000A38E46 /* DistrictRanking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictRanking.swift; sourceTree = "<group>"; };
 		92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectNumberTableViewController.swift; sourceTree = "<group>"; };
+		92B5DAC51EE4CE7C00B0A8F3 /* EventTeamStat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTeamStat.swift; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		92D5A11F1EE476C800EBFC6F /* EventPoints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventPoints.swift; sourceTree = "<group>"; };
 		92D5A1211EE48EC700EBFC6F /* EventDistrictPointsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDistrictPointsViewController.swift; sourceTree = "<group>"; };
@@ -263,6 +271,16 @@
 			path = Districts;
 			sourceTree = "<group>";
 		};
+		9272924E1EE4A1000027CE7C /* Stats */ = {
+			isa = PBXGroup;
+			children = (
+				9272924A1EE4A0830027CE7C /* EventStatsContainerViewController.swift */,
+				927292511EE4A48C0027CE7C /* EventTeamStatsTableViewController.swift */,
+				9272924C1EE4A0FC0027CE7C /* EventStatsViewController.swift */,
+			);
+			path = Stats;
+			sourceTree = "<group>";
+		};
 		92942D891E2154DA008E79CA = {
 			isa = PBXGroup;
 			children = (
@@ -303,9 +321,9 @@
 		92942DAC1E215718008E79CA /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
+				92942DA91E215700008E79CA /* TBA.xcdatamodeld */,
 				140523801ED352530072FB91 /* Media */,
 				1405237D1ED352460072FB91 /* Match */,
-				92942DA91E215700008E79CA /* TBA.xcdatamodeld */,
 				924F8C881EC8C72000F7447A /* Extensions */,
 				929FCD961EC7EE9D00A38E46 /* Protocols */,
 				924602A51ECD2A680030EDBF /* Award */,
@@ -376,6 +394,7 @@
 			children = (
 				925288911EC7ABC6009B78A9 /* Event.swift */,
 				92D5A11F1EE476C800EBFC6F /* EventPoints.swift */,
+				92B5DAC51EE4CE7C00B0A8F3 /* EventTeamStat.swift */,
 				92FFE5291E7CB1550037E48C /* Webcast.swift */,
 			);
 			name = Event;
@@ -451,6 +470,7 @@
 				92942E351E2A81E8008E79CA /* EventInfoTableViewController.swift */,
 				924602A31ECD27CE0030EDBF /* EventAwardsViewController.swift */,
 				92D5A1211EE48EC700EBFC6F /* EventDistrictPointsViewController.swift */,
+				9272924E1EE4A1000027CE7C /* Stats */,
 			);
 			name = Event;
 			sourceTree = "<group>";
@@ -694,6 +714,7 @@
 				92D855E01EC6BA3900572F27 /* TeamViewController.swift in Sources */,
 				92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */,
 				1405237F1ED3524C0072FB91 /* Match.swift in Sources */,
+				9272924D1EE4A0FC0027CE7C /* EventStatsViewController.swift in Sources */,
 				929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */,
 				92D855E21EC755D000572F27 /* TeamInfoTableViewController.swift in Sources */,
 				1405237C1ED33F500072FB91 /* MatchViewController.swift in Sources */,
@@ -713,12 +734,15 @@
 				92942E361E2A81E8008E79CA /* EventInfoTableViewController.swift in Sources */,
 				140523821ED352570072FB91 /* Media.swift in Sources */,
 				929FCDA81EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift in Sources */,
+				92B5DAC61EE4CE7C00B0A8F3 /* EventTeamStat.swift in Sources */,
 				145C57B91ED3C166004955B2 /* MatchInfoViewController.swift in Sources */,
 				92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */,
+				9272924B1EE4A0830027CE7C /* EventStatsContainerViewController.swift in Sources */,
 				92D855CF1EC68ACE00572F27 /* Team.swift in Sources */,
 				92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */,
 				145C57BB1ED3C178004955B2 /* MatchBreakdownViewController.swift in Sources */,
 				92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */,
+				927292521EE4A48C0027CE7C /* EventTeamStatsTableViewController.swift in Sources */,
 				924F8C871EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift in Sources */,
 				924F8C8B1EC8D27B00F7447A /* RankingTableViewCell.swift in Sources */,
 				92FFE52A1E7CB1550037E48C /* Webcast.swift in Sources */,
