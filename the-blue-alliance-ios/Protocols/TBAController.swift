@@ -17,6 +17,8 @@ protocol Container {
     var containerViews: [UIView] { get set }
 
     var segmentedControl: UISegmentedControl? { get set }
+    
+    func switchedToIndex(_ index: Int)
 }
 
 extension Container {
@@ -30,6 +32,7 @@ extension Container {
     }
     
     private func show(view showView: UIView) {
+        var switchedIndex = 0
         for (index, containerView) in containerViews.enumerated() {
             let shouldHide = !(containerView == showView)
             if !shouldHide {
@@ -37,9 +40,11 @@ extension Container {
                 if refreshViewController.shouldRefresh() {
                     refreshViewController.refresh()
                 }
+                switchedIndex = index
             }
             containerView.isHidden = shouldHide
         }
+        switchedToIndex(switchedIndex)
     }
 
     func cancelRefreshes() {
@@ -198,6 +203,8 @@ class ContainerViewController: UIViewController, Container, Persistable, Alertab
         updateSegmentedControlViews()
     }
     
+    func switchedToIndex(_ index: Int) {}
+
 }
 
 class TBAViewController: UIViewController, Persistable, Refreshable, Alertable {

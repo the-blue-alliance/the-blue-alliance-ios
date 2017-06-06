@@ -10,7 +10,7 @@ target 'the-blue-alliance-ios' do
     'RCTText',
     'RCTNetwork',
     'RCTImage',
-    'DevSupport',
+    # 'DevSupport',
     'RCTWebSocket', # needed for debugging
     # Add any other subspecs you want to use in your project
   ]

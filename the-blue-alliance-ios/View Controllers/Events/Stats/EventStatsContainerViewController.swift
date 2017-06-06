@@ -20,6 +20,8 @@ class EventStatsContainerViewController: ContainerViewController {
     internal var eventStatsViewController: EventStatsViewController!
     @IBOutlet internal var eventStatsView: UIView!
     
+    @IBOutlet internal var filerBarButtonItem: UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,6 +38,18 @@ class EventStatsContainerViewController: ContainerViewController {
             
             viewControllers = [teamStatsViewController]
             containerViews = [teamStatsView]
+        }
+    }
+    
+    // MARK: - Container
+    
+    override func switchedToIndex(_ index: Int) {
+        // Show filter button if we switched to the team stats view controller
+        // Otherwise, hide the filter button
+        if index == 0 {
+            navigationItem.rightBarButtonItem = filerBarButtonItem
+        } else {
+            navigationItem.rightBarButtonItem = nil
         }
     }
     

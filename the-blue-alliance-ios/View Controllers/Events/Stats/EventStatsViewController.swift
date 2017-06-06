@@ -37,44 +37,43 @@ class EventStatsViewController: TBAViewController {
     // MARK: Interface Methods
     
     func styleInterface() {
+        scrollView.backgroundColor = .backgroundGray
+
         updateEventStatsView()
     }
     
     func updateEventStatsView() {
-        // Match breakdowns only exist for 2016 and onward
+        // Event stats only exist for 2016 and onward
         if Int(event.year) < 2016 {
             return
         }
         
-        /*
-        // If the breakdown view already exists, don't set it up again
+        // If the event stats view already exists, don't set it up again
         // Only update the properties for the view
-        if let _ = breakdownView {
-            breakdownView?.appProperties = dataForBreakdown()
+        if let _ = eventStatsView {
+            eventStatsView?.appProperties = event.insights
             return
         }
         
         guard let jsCodeLocation = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index.ios", fallbackResource: nil) else {
-            self.showNoDataView(with: "Unable to load breakdown")
+            self.showNoDataView(with: "Unable to load event stats")
             return
         }
         
-        let initialProps = dataForBreakdown()
         
-        let breakdownName = "TBAMatchBreakdown\(match.event!.year)"
+        let moduleName = "EventInsights\(event!.year)"
         
-        guard let rootView = RCTRootView(bundleURL: jsCodeLocation, moduleName: breakdownName, initialProperties: initialProps, launchOptions: [:]) else {
-            self.showNoDataView(with: "Unable to load breakdown")
+        guard let rootView = RCTRootView(bundleURL: jsCodeLocation, moduleName: moduleName, initialProperties: event.insights, launchOptions: [:]) else {
+            self.showNoDataView(with: "Unable to load event stats")
             return
         }
-        breakdownView = rootView
-        breakdownView!.delegate = self
-        breakdownView!.sizeFlexibility = .height
+        eventStatsView = rootView
+        eventStatsView!.delegate = self
+        eventStatsView!.sizeFlexibility = .height
         
-        scrollView.addSubview(breakdownView!)
-        breakdownView!.autoMatch(.width, to: .width, of: scrollView)
-        breakdownView!.autoPinEdgesToSuperviewEdges()
-        */
+        scrollView.addSubview(eventStatsView!)
+        eventStatsView!.autoMatch(.width, to: .width, of: scrollView)
+        eventStatsView!.autoPinEdgesToSuperviewEdges()
     }
     
     // MARK: Refresh

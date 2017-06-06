@@ -576,6 +576,7 @@
                                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <connections>
                                                     <action selector="segmentedControlValueChangedWithSender:" destination="Eer-R7-yJV" eventType="valueChanged" id="GjS-yy-P7Z"/>
+                                                    <action selector="segmentedControlValueChangedWithSender:" destination="Qcp-lW-mIJ" eventType="valueChanged" id="WVc-UE-wQS"/>
                                                     <action selector="segmentedControlValueChangedWithSender:" destination="V9g-ZF-4u7" eventType="valueChanged" id="v62-A1-XEg"/>
                                                 </connections>
                                             </segmentedControl>
@@ -667,6 +668,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="eventStatsView" destination="c0W-8N-8HW" id="kdE-NQ-Eiz"/>
+                        <outlet property="filerBarButtonItem" destination="p11-NQ-Iq8" id="bFd-Ou-Y6N"/>
                         <outlet property="navigationDetailLabel" destination="n80-lS-vCB" id="MCa-jq-EZD"/>
                         <outlet property="navigationTitleLabel" destination="bBe-5T-MZj" id="BT0-zp-ZVV"/>
                         <outlet property="segmentedControl" destination="Szh-R1-Xf2" id="p0u-od-Rvq"/>
@@ -1003,6 +1005,10 @@
         <scene sceneID="uVQ-WN-IJZ">
             <objects>
                 <viewController id="oyp-Ey-4v7" customClass="EventStatsViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="0ex-LI-Lac"/>
+                        <viewControllerLayoutGuide type="bottom" id="Mk1-rE-gsF"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="EDA-1b-nob">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
