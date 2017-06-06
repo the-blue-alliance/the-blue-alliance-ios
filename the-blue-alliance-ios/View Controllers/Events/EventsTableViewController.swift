@@ -80,6 +80,8 @@ class EventsTableViewController: TBATableViewController {
             return
         }
 
+        removeNoDataView()
+        
         var request: URLSessionDataTask?
         request = TBAEvent.fetchEvents(year) { (events, error) in
             if let error = error {

@@ -19,20 +19,20 @@ class PlayerView: UIView {
         }
     }
     
-    var youtubePlayerView: YTPlayerView = {
+    private var youtubePlayerView: YTPlayerView = {
         let youtubePlayerView = YTPlayerView()
         youtubePlayerView.translatesAutoresizingMaskIntoConstraints = false
         return youtubePlayerView
     }()
     
-    var loadingActivityIndicator: UIActivityIndicatorView = {
+    fileprivate var loadingActivityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView()
         activityIndicator.hidesWhenStopped = true
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         return activityIndicator
     }()
     
-    func configureView() {
+    private func configureView() {
         if youtubePlayerView.superview == nil {
             youtubePlayerView.delegate = self
             addSubview(youtubePlayerView)
@@ -46,14 +46,12 @@ class PlayerView: UIView {
         
         loadingActivityIndicator.startAnimating()
         
-        guard let mediaTypeString = media?.type else {
-            return
-        }
-        
-        let mediaType = MediaType(rawValue: mediaTypeString)
-        if mediaType == MediaType.youtubeVideo {
+        if media?.type! == MediaType.youtubeVideo.rawValue {
             if let key = media?.key {
                 youtubePlayerView.load(withVideoId: key)
+            }
+            if let foreignKey = media?.foreignKey {
+                youtubePlayerView.load(withVideoId: foreignKey)
             }
         }
     }

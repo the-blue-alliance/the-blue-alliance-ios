@@ -24,18 +24,37 @@ public enum MediaType: String {
     case pinterest = "pinterest-profile"
     case snapchat = "snapchat-profile"
     case twitch = "twitch-channel"
+    case instagramImage = "instagram-image"
 }
 
 extension Media: Managed {
     
-    static func insert(with model: TBAMedia, in context: NSManagedObjectContext) -> Media {
-        let predicate = NSPredicate(format: "key == %@ AND type == %@", model.key, model.type)
+    var details: [String: Any]? {
+        get {
+            return detailsDictionary as? Dictionary<String, Any> ?? [:]
+        }
+        set {
+            detailsDictionary = newValue as NSDictionary?
+        }
+    }
+    
+    static func insert(with model: TBAMedia, for year: Int, in context: NSManagedObjectContext) -> Media {
+        var mediaPredicate: NSPredicate?
+        if let key = model.key {
+            mediaPredicate = NSPredicate(format: "key == %@ AND type == %@", key, model.type)
+        } else if let foreignKey = model.foreignKey {
+            mediaPredicate = NSPredicate(format: "foreignKey == %@ AND type == %@", foreignKey, model.type)
+        }
+        guard let predicate = mediaPredicate else {
+            fatalError("No way to filter media")
+        }
         return findOrCreate(in: context, matching: predicate) { (media) in
-            // Required: key, type
+            // Required: type, year
             media.key = model.key
             media.type = model.type
+            media.year = Int16(year)
             media.foreignKey = model.foreignKey
-            // TODO: details
+            media.details = model.details
             media.preferred = model.preferred ?? false
         }
     }

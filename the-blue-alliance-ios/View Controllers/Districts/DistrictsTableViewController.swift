@@ -43,6 +43,9 @@ class DistrictsTableViewController: TBATableViewController {
     
     override func refresh() {
         guard let year = year else {
+            showNoDataView(with: "No year selected")
+            refreshControl!.endRefreshing()
+
             return
         }
 

@@ -15,7 +15,8 @@ class TeamViewController: ContainerViewController {
     var year: Int? {
         didSet {
             eventsViewController.year = year
-
+            mediaViewController.year = year
+            
             DispatchQueue.main.async {
                 self.updateInterface()
             }
@@ -28,15 +29,16 @@ class TeamViewController: ContainerViewController {
     internal var eventsViewController: EventsTableViewController!
     @IBOutlet internal var eventsView: UIView!
 
-    @IBOutlet internal var mediaView: UIView?
+    internal var mediaViewController: TeamMediaCollectionViewController!
+    @IBOutlet internal var mediaView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Team \(team.teamNumber)"
         
-        viewControllers = [infoViewController, eventsViewController]
-        containerViews = [infoView, eventsView]
+        viewControllers = [infoViewController, eventsViewController, mediaViewController]
+        containerViews = [infoView, eventsView, mediaView]
         
         if navigationController?.viewControllers.index(of: self) == 0 {
             navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
@@ -119,6 +121,10 @@ class TeamViewController: ContainerViewController {
             eventsViewController.eventSelected = { event in
                 // TODO: Push to team@event VC
             }
+        } else if segue.identifier == "TeamMediaEmbed" {
+            mediaViewController = segue.destination as? TeamMediaCollectionViewController
+            mediaViewController.team = team
+            mediaViewController.year = year
         }
     }
     

@@ -1,53 +1,47 @@
 //
-//  TableViewDataSource.swift
-//  the-blue-alliance
+//  CollectionViewDataSource.swift
+//  the-blue-alliance-ios
 //
-//  Created by Zach Orr on 4/30/17.
+//  Created by Zach Orr on 6/6/17.
 //  Copyright © 2017 The Blue Alliance. All rights reserved.
 //
 
+import Foundation
 import UIKit
 import CoreData
 
 // Pattern from: https://github.com/objcio/core-data
 
-protocol TableViewDataSourceDelegate: class {
-    associatedtype Object
-    associatedtype Cell: UITableViewCell
+protocol CollectionViewDataSourceDelegate: class {
+    associatedtype Object: NSFetchRequestResult
+    associatedtype Cell: UICollectionViewCell
     func configure(_ cell: Cell, for object: Object, at indexPath: IndexPath)
-    func title(for section: Int) -> String?
     
     func showNoDataView()
     func hideNoDataView()
 }
 
-extension TableViewDataSourceDelegate {
-    func title(for section: Int) -> String? {
-        return nil
-    }
-}
-
-class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataSourceDelegate>: NSObject, UITableViewDataSource, NSFetchedResultsControllerDelegate {
-
+class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: CollectionViewDataSourceDelegate>: NSObject, UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
+    
     typealias Object = Delegate.Object
     typealias Cell = Delegate.Cell
-
-    required init(tableView: UITableView, cellIdentifier: String, fetchedResultsController: NSFetchedResultsController<Result>, delegate: Delegate) {
-        self.tableView = tableView
+    
+    required init(collectionView: UICollectionView, cellIdentifier: String, fetchedResultsController: NSFetchedResultsController<Result>, delegate: Delegate) {
+        self.collectionView = collectionView
         self.cellIdentifier = cellIdentifier
         self.fetchedResultsController = fetchedResultsController
         self.delegate = delegate
         super.init()
         fetchedResultsController.delegate = self
         try! fetchedResultsController.performFetch()
-        tableView.dataSource = self
+        collectionView.dataSource = self
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+            self.collectionView.reloadData()
         }
     }
     
     var selectedObject: Object? {
-        guard let indexPath = tableView.indexPathForSelectedRow else { return nil }
+        guard let indexPath = collectionView.indexPathsForSelectedItems?.first else { return nil }
         return object(at: indexPath)
     }
     
@@ -60,20 +54,20 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         configure(fetchedResultsController.fetchRequest)
         do { try fetchedResultsController.performFetch() } catch { fatalError("fetch request failed") }
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+            self.collectionView.reloadData()
         }
     }
-
+    
     // MARK: Private
-
-    fileprivate let tableView: UITableView
+    
+    fileprivate let collectionView: UICollectionView
+    fileprivate let cellIdentifier: String
     public let fetchedResultsController: NSFetchedResultsController<Result>
     fileprivate weak var delegate: Delegate!
-    fileprivate let cellIdentifier: String
-
-    // MARK: UITableViewDataSource
-
-    func numberOfSections(in tableView: UITableView) -> Int {
+    
+    // MARK: UICollectionViewDataSource
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         let sections = fetchedResultsController.sections?.count ?? 0
         if sections == 0 {
             delegate.showNoDataView()
@@ -81,7 +75,7 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         return sections
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         var rows: Int = 0
         if let sections = fetchedResultsController.sections {
             rows = sections[section].numberOfObjects
@@ -96,25 +90,20 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         return rows
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let object = self.object(at: indexPath)
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? Cell
-            else { fatalError("Unexpected cell type at \(indexPath)") }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as? Cell else {
+            fatalError("Unexpected cell type at \(indexPath)")
+        }
         delegate.configure(cell, for: object, at: indexPath)
         return cell
-    }
 
-    // MARK: - UITableView
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return delegate.title(for: section)
     }
     
     // MARK: NSFetchedResultsControllerDelegate
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        tableView.reloadData()
+        collectionView.reloadData()
     }
     
 }
-
