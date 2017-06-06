@@ -8,7 +8,7 @@ const table = StyleSheet.create({
   header: {
     height: 28,
     justifyContent: 'center',
-    paddingLeft: 20,
+    left: 20,
     borderBottomWidth: StyleSheet.hairlineWidth,
     backgroundColor: '#303F9F',
   },
