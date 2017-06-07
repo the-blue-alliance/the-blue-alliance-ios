@@ -31,7 +31,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
     
     // MARK: - Refreshing
@@ -101,9 +100,16 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     // MARK: UICollectionView Delegate
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let media = dataSource?.object(at: indexPath)
-        // TODO: Make the media larger/show full size image
-        print("Tapped: \(media!.foreignKey!)")
+        // TODO: Eventually show the full image inside the app
+        guard let media = dataSource?.object(at: indexPath) else {
+            return
+        }
+        guard let url = media.viewImageURL else {
+            return
+        }
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
 
     // MARK: Table View Data Source
@@ -121,6 +127,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         
         setupFetchRequest(fetchRequest)
         
+        // TODO: Split section by photos/videos like we do on the web
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         
         dataSource = CollectionViewDataSource(collectionView: collectionView!, cellIdentifier: basicCellReuseIdentifier, fetchedResultsController: frc, delegate: self)
@@ -138,9 +145,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         guard let year = year else {
             return
         }
-        // TODO: Move this to a constant or something
-        let supportedMedia = [MediaType.cdPhotoThread.rawValue, MediaType.imgur.rawValue, MediaType.instagramImage.rawValue, MediaType.youtubeVideo.rawValue]
-        request.predicate = NSPredicate(format: "team == %@ AND year == %ld AND type in %@", team, year, supportedMedia)
+        // TODO: We could support GrabCAD here too if we wanted to
+        request.predicate = NSPredicate(format: "team == %@ AND year == %ld AND type in %@", team, year, MediaType.imageTypes)
     }
     
     // MARK: - Private
@@ -152,10 +158,9 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         
         var playerView = playerViews[foreignKey]
         if playerView == nil {
-            playerView = PlayerView()
+            playerView = PlayerView(media: media)
             playerViews[foreignKey] = playerView!
         }
-        playerView?.media = media
 
         return playerView!
     }
@@ -166,9 +171,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         }
         let downloadedImage = downloadedImages[foreignKey]
         
-        // TODO: Cache these?
-        let mediaView = MediaView()
-        mediaView.media = media
+        let mediaView = MediaView(media: media)
         mediaView.downloadedImage = downloadedImage
         mediaView.imageDownloaded = {
             self.downloadedImages[foreignKey] = $0

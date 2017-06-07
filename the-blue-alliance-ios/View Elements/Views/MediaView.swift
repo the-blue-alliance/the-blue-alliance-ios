@@ -10,7 +10,7 @@ import UIKit
 
 class MediaView: UIView {
     
-    public var media: Media? {
+    public var media: Media {
         didSet {
             if let dataTask = dataTask {
                 dataTask.cancel()
@@ -29,25 +29,25 @@ class MediaView: UIView {
     private var loadingActivityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         return activityIndicator
     }()
     private var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         return imageView
     }()
     private var dataTask: URLSessionDataTask?
     
-    init() {
+    init(media: Media) {
+        self.media = media
+
         super.init(frame: .zero)
-        
         backgroundColor = .white
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
     }
     
     func configureView() {
@@ -64,34 +64,12 @@ class MediaView: UIView {
         
         loadingActivityIndicator.startAnimating()
         
-        guard let media = media else {
-            return
-        }
-        guard let mediaType = MediaType(rawValue: media.type!) else {
-            return
-        }
-        
-        var url: URL?
-        if mediaType == .cdPhotoThread {
-            if let imagePartial = media.details?["image_partial"] as? String {
-                url = URL(string: "http://www.chiefdelphi.com/media/img/\(imagePartial)")
-            }
-        } else if mediaType == .imgur {
-            if let foreignKey = media.foreignKey {
-                url = URL(string: "http://imgur.com/\(foreignKey)")
-            }
-        } else if mediaType == .instagramImage {
-            if let foreignKey = media.foreignKey {
-                url = URL(string: "https://www.instagram.com/p/\(foreignKey)")
-            }
-        }
-        
-        if url == nil {
+        guard let url = media.imageDirectURL else {
             // TODO: Show some error if we can't get a URL
             return
         }
         
-        dataTask = URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
+        dataTask = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
             DispatchQueue.main.async {
                 self.loadingActivityIndicator.stopAnimating()
             }

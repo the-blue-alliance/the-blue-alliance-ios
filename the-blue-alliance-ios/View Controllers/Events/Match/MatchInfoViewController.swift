@@ -53,9 +53,7 @@ class MatchInfoViewController: TBAViewController {
     // MARK: Class Methods
     
     static func playerView(for video: Media) -> PlayerView {
-        let playerView = PlayerView()
-        playerView.translatesAutoresizingMaskIntoConstraints = false
-        playerView.media = video
+        let playerView = PlayerView(media: video)
 
         playerView.autoConstrainAttribute(.width, to: .height, of: playerView, withMultiplier: (16.0/9.0))
         
