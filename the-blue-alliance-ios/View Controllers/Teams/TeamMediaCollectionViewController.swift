@@ -33,13 +33,19 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         super.viewDidLoad()
     }
     
+    override func viewWillLayoutSubviews() {
+        // When the VC changes sizes, make sure we invalidate our layout to adjust the sizes of the cells
+        DispatchQueue.main.async {
+            self.collectionView?.collectionViewLayout.invalidateLayout()
+        }
+    }
+    
     // MARK: - Refreshing
     
     override func refresh() {
         guard let year = year else {
             showNoDataView(with: "No year selected")
             refreshControl!.endRefreshing()
-
             return
         }
         
@@ -56,7 +62,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
                 // Fetch all old media for team for year
                 let existingMedia = Media.fetch(in: backgroundContext, configurationBlock: { (request) in
-                    // Setup fetch request
+                    self.setupFetchRequest(request)
                 })
                 backgroundTeam.removeFromMedia(Set(existingMedia) as NSSet)
                 
@@ -86,7 +92,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         }
         return false
     }
-
+    
     // MARK: Rotation
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

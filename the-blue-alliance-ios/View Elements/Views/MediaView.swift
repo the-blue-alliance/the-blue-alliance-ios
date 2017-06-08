@@ -38,6 +38,8 @@ class MediaView: UIView {
         return imageView
     }()
     private var dataTask: URLSessionDataTask?
+    private var noDataLabel: UILabel?
+    private var noDataView: UIView?
     
     init(media: Media) {
         self.media = media
@@ -50,36 +52,72 @@ class MediaView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func showNoDataView(text: String) {
+        if let noDataLabel = noDataLabel {
+            noDataLabel.text = text
+            return
+        }
+        if let _ = noDataView {
+            removeNoDataView()
+        }
+
+        noDataLabel = UILabel()
+        noDataLabel?.text = text
+        noDataLabel?.font = UIFont.systemFont(ofSize: 14)
+        noDataLabel?.numberOfLines = 0
+        noDataLabel?.textColor = .black
+        noDataLabel?.alpha = 0.5
+        noDataLabel?.textAlignment = .center
+        
+        noDataView = UIView()
+        noDataView?.addSubview(noDataLabel!)
+        noDataLabel?.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
+        
+        addSubview(noDataView!)
+        noDataView?.autoPinEdgesToSuperviewEdges()
+    }
+    
+    func removeNoDataView() {
+        if let noDataView = noDataView {
+            noDataView.removeFromSuperview()
+        }
+    }
+    
     func configureView() {
         if imageView.superview == nil {
             addSubview(imageView)
             imageView.autoPinEdgesToSuperviewEdges()
         }
-        imageView.image = downloadedImage
+        
+        // If we already have a downloaded image... bail
+        if let downloadedImage = downloadedImage {
+            imageView.image = downloadedImage
+            return
+        }
         
         if loadingActivityIndicator.superview == nil {
             addSubview(loadingActivityIndicator)
             loadingActivityIndicator.autoCenterInSuperview()
         }
         
-        loadingActivityIndicator.startAnimating()
-        
         guard let url = media.imageDirectURL else {
-            // TODO: Show some error if we can't get a URL
+            showNoDataView(text: "No URL for media")
             return
         }
-        
+
+        removeNoDataView()
+        loadingActivityIndicator.startAnimating()
+
         dataTask = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
             DispatchQueue.main.async {
                 self.loadingActivityIndicator.stopAnimating()
             }
             
             if let error = error {
-                print(error)
-                // TODO: Show some error
+                self.showNoDataView(text: "Error loading media - \(error.localizedDescription)")
             } else if let data = data {
                 guard let image = UIImage(data: data) else {
-                    // TODO: Show error loading image
+                    self.showNoDataView(text: "Error loading media - invalid data from request")
                     return
                 }
                 if let imageDownloaded = self.imageDownloaded {
@@ -89,7 +127,7 @@ class MediaView: UIView {
                     self.imageView.image = image
                 }
             } else {
-                // TODO: Show error loading image
+                self.showNoDataView(text: "Error loading media - no data for request")
             }
         })
         dataTask?.resume()
