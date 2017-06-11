@@ -67,7 +67,7 @@ class TeamViewController: ContainerViewController {
     }
     
     func refreshYearsParticipated() {
-        _ = TBATeam.fetchYearsParticipated(team.key!) { (years, error) in
+        _ = TBAKit.sharedKit.fetchTeamYearsParticipated(key: team.key!, completion: { (years, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to fetch years participated - \(error.localizedDescription)")
                 return
@@ -76,7 +76,7 @@ class TeamViewController: ContainerViewController {
             guard let years = years as? [Int] else {
                 return
             }
-
+            
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 self.team.yearsParticipated = years
                 try? backgroundContext.save()
@@ -85,7 +85,7 @@ class TeamViewController: ContainerViewController {
                     self.year = self.team.yearsParticipated.first
                 }
             })
-        }
+        })
     }
     
     // MARK: - Navigation

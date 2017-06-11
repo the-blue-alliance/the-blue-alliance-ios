@@ -68,7 +68,7 @@ class EventInfoTableViewController: TBATableViewController {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = TBAEvent.fetchEvent(event.key!) { (modelEvent, error) in
+        request = TBAKit.sharedKit.fetchEvent(key: event.key!, completion: { (modelEvent, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
             }
@@ -84,7 +84,7 @@ class EventInfoTableViewController: TBATableViewController {
                 
                 self.removeRequest(request: request!)
             })
-        }
+        })
         addRequest(request: request!)
     }
     

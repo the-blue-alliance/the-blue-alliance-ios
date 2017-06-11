@@ -86,7 +86,7 @@ class EventStatsViewController: TBAViewController {
         removeNoDataView()
         
         var request: URLSessionDataTask?
-        request = TBAEvent.fetchInsights(event.key!, completion: { (insights, error) in
+        request = TBAKit.sharedKit.fetchEventInsights(key: event.key!, completion: { (insights, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event stats - \(error.localizedDescription)")
             }

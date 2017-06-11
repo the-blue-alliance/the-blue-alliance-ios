@@ -52,7 +52,7 @@ class DistrictsTableViewController: TBATableViewController {
         removeNoDataView()
         
         var request: URLSessionDataTask?
-        request = TBADistrict.fetchDistricts(year: year) { (districts, error) in
+        request = TBAKit.sharedKit.fetchDistricts(year: year, completion: { (districts, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh districts - \(error.localizedDescription)")
             }
@@ -68,7 +68,7 @@ class DistrictsTableViewController: TBATableViewController {
                 
                 self.removeRequest(request: request!)
             })
-        }
+        })
         addRequest(request: request!)
     }
     

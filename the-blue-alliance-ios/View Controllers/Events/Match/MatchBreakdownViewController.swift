@@ -103,7 +103,7 @@ class MatchBreakdownViewController: TBAViewController {
         removeNoDataView()
         
         var request: URLSessionDataTask?
-        request = TBAMatch.fetchMatch(key: match.key!, { (modelMatch, error) in
+        request = TBAKit.sharedKit.fetchMatch(key: match.key!, { (modelMatch, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh match - \(error.localizedDescription)")
             }

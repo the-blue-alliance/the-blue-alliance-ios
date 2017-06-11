@@ -71,7 +71,7 @@ class EventDistrictPointsTableViewController: TBATableViewController {
         removeNoDataView()
         
         var request: URLSessionDataTask?
-        request = TBAEvent.fetchDistrictPoints(event.key!, completion: { (eventPoints, tiebreakers, error) in
+        request = TBAKit.sharedKit.fetchEventDistrictPoints(key: event.key!, completion: { (eventPoints, tiebreakers, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event district points - \(error.localizedDescription)")
             }

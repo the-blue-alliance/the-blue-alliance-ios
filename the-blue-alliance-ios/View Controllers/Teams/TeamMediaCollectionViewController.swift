@@ -52,14 +52,14 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         removeNoDataView()
         
         var request: URLSessionDataTask?
-        request = TBATeam.fetchMedia(team.key!, year: year, completion: { (media, error) in
+        request = TBAKit.sharedKit.fetchTeamMedia(key: team.key!, year: year, completion: { (media, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh team media - \(error.localizedDescription)")
             }
             
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
-
+                
                 // Fetch all old media for team for year
                 let existingMedia = Media.fetch(in: backgroundContext, configurationBlock: { (request) in
                     self.setupFetchRequest(request)

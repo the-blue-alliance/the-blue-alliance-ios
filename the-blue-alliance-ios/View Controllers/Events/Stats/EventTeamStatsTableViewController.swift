@@ -63,7 +63,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
         removeNoDataView()
         
         var request: URLSessionDataTask?
-        request = TBAEvent.fetchTeamStats(event.key!, completion: { (stats, error) in
+        request = TBAKit.sharedKit.fetchEventTeamStats(key: event.key!, completion: { (stats, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event team stats - \(error.localizedDescription)")
             }

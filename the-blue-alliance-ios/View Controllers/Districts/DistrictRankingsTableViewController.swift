@@ -78,7 +78,7 @@ class DistrictRankingsTableViewController: TBATableViewController {
     }
     
     func refreshEvents(completion: @escaping (_ success: Bool) -> ()) -> URLSessionDataTask {
-        return TBADistrict.fetchEvents(key: district.key!, completion: { (events, error) in
+        return TBAKit.sharedKit.fetchDistrictEvents(key: district.key!, completion: { (events, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
                 completion(false)
@@ -98,7 +98,7 @@ class DistrictRankingsTableViewController: TBATableViewController {
     }
     
     func refreshTeams(completion: @escaping (_ success: Bool) -> ()) -> URLSessionDataTask {
-        return TBADistrict.fetchTeams(key: district.key!, completion: { (teams, error) in
+        return TBAKit.sharedKit.fetchDistrictTeams(key: district.key!, completion: { (teams, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
                 completion(false)
@@ -118,7 +118,7 @@ class DistrictRankingsTableViewController: TBATableViewController {
     }
     
     func refreshRankings(completion: @escaping (_ success: Bool) -> ()) -> URLSessionDataTask {
-        return TBADistrict.fetchRankings(key: self.district.key!, completion: { (rankings, error) in
+        return TBAKit.sharedKit.fetchDistrictRankings(key: district.key!, completion: { (rankings, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
                 completion(false)

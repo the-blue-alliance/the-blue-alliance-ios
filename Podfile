@@ -2,8 +2,7 @@ platform :ios, '10.0'
 use_frameworks!
 
 target 'the-blue-alliance-ios' do
-  pod 'TBAKit', :path => '/Users/zachorr/Desktop/TBAKit', :branch => 'swift'
-  # pod 'TBAKit', :git => 'https://github.com/ZachOrr/TBAKit.git', :branch => 'swift'
+  pod 'TBAKit', "~> 2.0.0"
   
   pod 'React', :path => 'js/node_modules/react-native', :subspecs => [
     'Core',
