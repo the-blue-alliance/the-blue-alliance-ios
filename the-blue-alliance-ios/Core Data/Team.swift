@@ -91,7 +91,7 @@ extension Team: Locatable, Managed {
     }
     
     static private func fetchAllTeams(taskChanged: @escaping (URLSessionDataTask, [TBATeam]) -> (), page: Int, completion: @escaping (Error?) -> ()) -> URLSessionDataTask {
-        return TBATeam.fetchTeams(page: page, completion: { (teams, error) in
+        return TBAKit.sharedKit.fetchTeams(page: page, completion: { (teams, error) in
             if let error = error {
                 completion(error)
                 return

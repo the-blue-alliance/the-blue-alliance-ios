@@ -76,6 +76,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        // TODO: Remove this
+        TBAKit.sharedKit.apiKey = "OHBBu0QbDiIJYKhAedTfkTxdrkXde1C21Sr90L1f1Pac4ahl4FJbNptNiXbCSCfH"
+        
         if let splitViewController = self.window?.rootViewController as? UISplitViewController {
             splitViewController.preferredDisplayMode = .allVisible
             splitViewController.delegate = self
@@ -125,7 +128,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func fetchTBAStatus() {
         // Call our staus endpoint and save everything in NSUserDefaults
-        _ = TBAStatus.fetchStatus { (status, error) in
+        _ = TBAKit.sharedKit.fetchStatus({ (status, error) in
             if let status = status {
                 // Got a valid status back from the API - update everything
                 UserDefaults.standard.set(status.currentSeason, forKey: StatusConstants.currentSeasonKey)
@@ -166,7 +169,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                 NotificationCenter.default.post(name: Notification.Name(kFetchedTBAStatus), object: defaultStatus)
             }
-        }
+        })
     }
     
     func setupAppearance() {

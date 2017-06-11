@@ -43,7 +43,7 @@ class MatchesTableViewController: TBATableViewController {
         removeNoDataView()
         
         var request: URLSessionDataTask?
-        request = TBAEvent.fetchMatches(event.key!, completion: { (matches, error) in
+        request = TBAKit.sharedKit.fetchEventMatches(key: event.key!, completion: { (matches, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event matches - \(error.localizedDescription)")
             }
@@ -89,7 +89,7 @@ class MatchesTableViewController: TBATableViewController {
         
         setupFetchRequest(fetchRequest)
         
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "compLevel", cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "compLevelInt", cacheName: nil)
         
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: MatchTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
@@ -143,7 +143,7 @@ extension MatchesTableViewController: TableViewDataSourceDelegate {
         return "\(firstMatch.compLevelString) Matches"
     }
  
-    func configure(_ cell: MatchTableViewCell, for object: Match) {
+    func configure(_ cell: MatchTableViewCell, for object: Match, at indexPath: IndexPath) {
         cell.team = team
         cell.match = object
     }

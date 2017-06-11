@@ -13,26 +13,35 @@ import PureLayout
 
 class PlayerView: UIView {
     
-    public var media: Media? {
+    public var media: Media {
         didSet {
             configureView()
         }
     }
     
-    var youtubePlayerView: YTPlayerView = {
+    private var youtubePlayerView: YTPlayerView = {
         let youtubePlayerView = YTPlayerView()
-        youtubePlayerView.translatesAutoresizingMaskIntoConstraints = false
         return youtubePlayerView
     }()
     
-    var loadingActivityIndicator: UIActivityIndicatorView = {
+    fileprivate var loadingActivityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView()
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         return activityIndicator
     }()
     
-    func configureView() {
+    init(media: Media) {
+        self.media = media
+        
+        super.init(frame: .zero)
+        backgroundColor = .white
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configureView() {
         if youtubePlayerView.superview == nil {
             youtubePlayerView.delegate = self
             addSubview(youtubePlayerView)
@@ -46,14 +55,12 @@ class PlayerView: UIView {
         
         loadingActivityIndicator.startAnimating()
         
-        guard let mediaTypeString = media?.type else {
-            return
-        }
-        
-        let mediaType = MediaType(rawValue: mediaTypeString)
-        if mediaType == MediaType.youtubeVideo {
-            if let key = media?.key {
+        if media.type! == MediaType.youtubeVideo.rawValue {
+            if let key = media.key {
                 youtubePlayerView.load(withVideoId: key)
+            }
+            if let foreignKey = media.foreignKey {
+                youtubePlayerView.load(withVideoId: foreignKey)
             }
         }
     }

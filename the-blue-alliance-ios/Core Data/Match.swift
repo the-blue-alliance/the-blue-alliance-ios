@@ -35,6 +35,24 @@ public enum MatchCompLevel: String {
 
 extension Match: Managed {
 
+    var redBreakdown: [String: Any]? {
+        get {
+            return redBreakdownDictionary as? Dictionary<String, Any> ?? [:]
+        }
+        set {
+            redBreakdownDictionary = newValue as NSDictionary?
+        }
+    }
+    
+    var blueBreakdown: [String: Any]? {
+        get {
+            return blueBreakdownDictionary as? Dictionary<String, Any> ?? [:]
+        }
+        set {
+            blueBreakdownDictionary = newValue as NSDictionary?
+        }
+    }
+    
     var compLevelString: String {
         guard let compLevel = compLevel else {
             return ""
@@ -139,11 +157,12 @@ extension Match: Managed {
                 match.postResultTime = NSNumber(value: postResultTime)
             }
             
-            // TODO: Breakdown
+            match.redBreakdown = model.redBreakdown
+            match.blueBreakdown = model.blueBreakdown
             
             if let videos = model.videos {
                 match.videos = Set(videos.map({ (modelVideo) -> Media in
-                    return Media.insert(with: modelVideo, in: context)
+                    return Media.insert(with: modelVideo, for: Int(event.year), in: context)
                 })) as NSSet
             }
         }
@@ -163,7 +182,7 @@ extension Match: Managed {
              MatchCompLevel.quarterfinal.rawValue,
              MatchCompLevel.semifinal.rawValue,
              MatchCompLevel.final.rawValue:
-            return "\(matchName) \(setNumber)-\(matchNumber)"
+            return "\(matchName) \(setNumber) - \(matchNumber)"
 
         default:
             return matchName

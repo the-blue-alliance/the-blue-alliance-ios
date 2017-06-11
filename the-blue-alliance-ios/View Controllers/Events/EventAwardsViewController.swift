@@ -71,7 +71,7 @@ class EventAwardsTableViewController: TBATableViewController {
         removeNoDataView()
         
         var request: URLSessionDataTask?
-        request = TBAEvent.fetchAwards(event.key!, completion: { (awards, error) in
+        request = TBAKit.sharedKit.fetchEventAwards(key: event.key!, completion: { (awards, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event awards - \(error.localizedDescription)")
             }
@@ -138,7 +138,7 @@ class EventAwardsTableViewController: TBATableViewController {
 
 extension EventAwardsTableViewController: TableViewDataSourceDelegate {
     
-    func configure(_ cell: AwardTableViewCell, for object: Award) {
+    func configure(_ cell: AwardTableViewCell, for object: Award, at indexPath: IndexPath) {
         cell.selectionStyle = .none
         cell.award = object
         cell.teamSelected = teamSelected

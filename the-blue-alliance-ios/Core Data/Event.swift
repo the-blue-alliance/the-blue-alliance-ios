@@ -32,7 +32,16 @@ extension Event: Locatable, Managed {
             divisionKeysArray = newValue as NSArray
         }
     }
-        
+    
+    var insights: [String: Any]? {
+        get {
+            return insightsDictionary as? Dictionary<String, Any> ?? [:]
+        }
+        set {
+            insightsDictionary = newValue as NSDictionary?
+        }
+    }
+    
     static func insert(with model: TBAEvent, in context: NSManagedObjectContext) -> Event {
         let predicate = NSPredicate(format: "key == %@", model.key)
         return findOrCreate(in: context, matching: predicate) { (event) in

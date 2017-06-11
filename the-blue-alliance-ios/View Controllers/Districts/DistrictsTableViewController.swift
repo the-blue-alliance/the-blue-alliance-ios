@@ -43,13 +43,16 @@ class DistrictsTableViewController: TBATableViewController {
     
     override func refresh() {
         guard let year = year else {
+            showNoDataView(with: "No year selected")
+            refreshControl!.endRefreshing()
+
             return
         }
 
         removeNoDataView()
         
         var request: URLSessionDataTask?
-        request = TBADistrict.fetchDistricts(year: year) { (districts, error) in
+        request = TBAKit.sharedKit.fetchDistricts(year: year, completion: { (districts, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh districts - \(error.localizedDescription)")
             }
@@ -65,7 +68,7 @@ class DistrictsTableViewController: TBATableViewController {
                 
                 self.removeRequest(request: request!)
             })
-        }
+        })
         addRequest(request: request!)
     }
     
@@ -124,7 +127,7 @@ class DistrictsTableViewController: TBATableViewController {
 
 extension DistrictsTableViewController: TableViewDataSourceDelegate {
     
-    func configure(_ cell: UITableViewCell, for object: District) {
+    func configure(_ cell: UITableViewCell, for object: District, at indexPath: IndexPath) {
         cell.textLabel?.text = object.name
         // TODO: Convert to some custom cell... show # of events if non-zero
     }

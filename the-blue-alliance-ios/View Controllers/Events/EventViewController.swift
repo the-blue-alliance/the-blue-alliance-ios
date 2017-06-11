@@ -46,6 +46,12 @@ class EventViewController: ContainerViewController {
             infoViewController.showAwards = {
                 self.performSegue(withIdentifier: "EventAwardsSegue", sender: nil)
             }
+            infoViewController.showDistrictPoints = {
+                self.performSegue(withIdentifier: "EventPointsSegue", sender: nil)
+            }
+            infoViewController.showStats = {
+                self.performSegue(withIdentifier: "EventStatsSegue", sender: nil)
+            }
         } else if segue.identifier == "EventTeamsEmbed" {
             teamsViewController = segue.destination as! TeamsTableViewController
             teamsViewController.event = event
@@ -58,8 +64,18 @@ class EventViewController: ContainerViewController {
             matchesViewController.matchSelected = { match in
                 self.performSegue(withIdentifier: "MatchSegue", sender: match)
             }
+        } else if segue.identifier == "EventMatchesEmbed" {
+            matchesViewController = segue.destination as! MatchesTableViewController
+            matchesViewController.event = event
+            matchesViewController.matchSelected = { match in
+                self.performSegue(withIdentifier: "MatchSegue", sender: match)
+            }
         } else if segue.identifier == "EventAwardsSegue" {
             let eventAwardsViewController = segue.destination as! EventAwardsViewController
+            eventAwardsViewController.event = event
+            eventAwardsViewController.persistentContainer = persistentContainer
+        } else if segue.identifier == "EventPointsSegue" {
+            let eventAwardsViewController = segue.destination as! EventDistrictPointsViewController
             eventAwardsViewController.event = event
             eventAwardsViewController.persistentContainer = persistentContainer
         } else if segue.identifier == "MatchSegue" {
@@ -67,6 +83,10 @@ class EventViewController: ContainerViewController {
             let matchViewController = segue.destination as! MatchViewController
             matchViewController.match = match
             matchViewController.persistentContainer = persistentContainer
+        } else if segue.identifier == "EventStatsSegue" {
+            let statsViewController = segue.destination as! EventStatsContainerViewController
+            statsViewController.event = event
+            statsViewController.persistentContainer = persistentContainer
         }
     }
 

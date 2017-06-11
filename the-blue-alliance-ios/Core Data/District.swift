@@ -18,10 +18,7 @@ extension District: Managed {
             district.abbreviation = model.abbreviation
             district.name = model.name
             district.key = model.key
-            
-            if let year = model.year {
-                district.year = Int16(year)
-            }
+            district.year = Int16(model.year)
         })
     }
     
