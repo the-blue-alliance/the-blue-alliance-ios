@@ -89,7 +89,7 @@ class MatchesTableViewController: TBATableViewController {
         
         setupFetchRequest(fetchRequest)
         
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "compLevel", cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "compLevelInt", cacheName: nil)
         
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: MatchTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }

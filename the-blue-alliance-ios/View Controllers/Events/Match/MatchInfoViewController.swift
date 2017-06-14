@@ -40,7 +40,7 @@ class MatchInfoViewController: TBAViewController {
     @IBOutlet var blueStackView: UIStackView!
     @IBOutlet var blueContainerView: UIView! {
         didSet {
-            blueContainerView.layer.borderColor = UIColor.red.cgColor
+            blueContainerView.layer.borderColor = UIColor.blue.cgColor
         }
     }
     @IBOutlet var blueScoreLabel: UILabel!

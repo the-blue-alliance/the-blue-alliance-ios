@@ -76,6 +76,7 @@
     </entity>
     <entity name="Match" representedClassName="Match" syncable="YES" codeGenerationType="class">
         <attribute name="actualTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="blueBreakdownDictionary" optional="YES" attributeType="Transformable" customClassName="NSDictionary" syncable="YES"/>
         <attribute name="blueScore" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="compLevel" attributeType="String" syncable="YES"/>
         <attribute name="compLevelInt" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
@@ -83,6 +84,7 @@
         <attribute name="matchNumber" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="postResultTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="predictedTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="redBreakdownDictionary" optional="YES" attributeType="Transformable" customClassName="NSDictionary" syncable="YES"/>
         <attribute name="redScore" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="setNumber" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
@@ -144,5 +146,6 @@
         <element name="Media" positionX="-261" positionY="-135" width="128" height="120"/>
         <element name="Team" positionX="142" positionY="180" width="128" height="418"/>
         <element name="Webcast" positionX="-128" positionY="639" width="128" height="120"/>
+
     </elements>
 </model>
