@@ -61,9 +61,9 @@ class MatchBreakdownViewController: TBAViewController {
 
         let initialProps = dataForBreakdown()
         
-        let breakdownName = "TBAMatchBreakdown\(match.event!.year)"
+        let moduleName = "MatchBreakdown\(match.event!.year)"
         
-        guard let rootView = RCTRootView(bundleURL: jsCodeLocation, moduleName: breakdownName, initialProperties: initialProps, launchOptions: [:]) else {
+        guard let rootView = RCTRootView(bundleURL: jsCodeLocation, moduleName: moduleName, initialProperties: initialProps, launchOptions: [:]) else {
             self.showNoDataView(with: "Unable to load breakdown")
             return
         }
@@ -103,7 +103,7 @@ class MatchBreakdownViewController: TBAViewController {
         removeNoDataView()
         
         var request: URLSessionDataTask?
-        request = TBAMatch.fetchMatch(key: match.key!, { (modelMatch, error) in
+        request = TBAKit.sharedKit.fetchMatch(key: match.key!, { (modelMatch, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh match - \(error.localizedDescription)")
             }
@@ -116,7 +116,7 @@ class MatchBreakdownViewController: TBAViewController {
                 }
                 
                 if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to match - database error")
+                    self.showErrorAlert(with: "Unable to refresh match - database error")
                 }
                 
                 self.removeRequest(request: request!)

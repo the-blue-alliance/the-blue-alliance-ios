@@ -80,8 +80,10 @@ class EventsTableViewController: TBATableViewController {
             return
         }
 
+        removeNoDataView()
+        
         var request: URLSessionDataTask?
-        request = TBAEvent.fetchEvents(year) { (events, error) in
+        request = TBAKit.sharedKit.fetchEvents(year: year, completion: { (events, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
             }
@@ -99,7 +101,7 @@ class EventsTableViewController: TBATableViewController {
                 
                 self.removeRequest(request: request!)
             })
-        }
+        })
         addRequest(request: request!)
     }
     
@@ -110,7 +112,7 @@ class EventsTableViewController: TBATableViewController {
         }
 
         var request: URLSessionDataTask?
-        request = TBATeam.fetchEventsForTeam(team.key!) { (events, error) in
+        request = TBAKit.sharedKit.fetchTeamEvents(key: team.key!, completion: { (events, error) in
             self.removeRequest(request: request!)
             
             if let error = error {
@@ -132,7 +134,7 @@ class EventsTableViewController: TBATableViewController {
                 
                 self.removeRequest(request: request!)
             })
-        }
+        })
         addRequest(request: request!)
     }
     
@@ -142,7 +144,7 @@ class EventsTableViewController: TBATableViewController {
         }
         
         var request: URLSessionDataTask?
-        request = TBADistrict.fetchEvents(key: district.key!, completion: { (events, error) in
+        request = TBAKit.sharedKit.fetchDistrictEvents(key: district.key!, completion: { (events, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
             }
@@ -244,7 +246,7 @@ class EventsTableViewController: TBATableViewController {
 
 extension EventsTableViewController: TableViewDataSourceDelegate {
     
-    func configure(_ cell: EventTableViewCell, for object: Event) {
+    func configure(_ cell: EventTableViewCell, for object: Event, at indexPath: IndexPath) {
         cell.event = object
     }
     

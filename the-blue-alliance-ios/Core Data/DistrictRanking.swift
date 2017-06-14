@@ -24,8 +24,19 @@ extension DistrictRanking: Managed {
             if let rookieBonus = model.rookieBonus {
                 ranking.rookieBonus = Int16(rookieBonus)
             }
+            
+            ranking.eventPoints = Set(model.eventPoints.flatMap({ (modelPoints) -> EventPoints? in
+                guard let eventKey = modelPoints.eventKey else {
+                    return nil
+                }
+                
+                let eventPredicate = NSPredicate(format: "key == %@", eventKey)
+                guard let event = Event.findOrFetch(in: context, matching: eventPredicate) else {
+                    return nil
+                }
 
-            // TODO: Event points
+                return EventPoints.insert(with: modelPoints, for: event, and: team, in: context)
+            })) as NSSet
         })
     }
     

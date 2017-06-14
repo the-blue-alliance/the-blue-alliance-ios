@@ -15,7 +15,8 @@ class TeamViewController: ContainerViewController {
     var year: Int? {
         didSet {
             eventsViewController.year = year
-
+            mediaViewController.year = year
+            
             DispatchQueue.main.async {
                 self.updateInterface()
             }
@@ -28,15 +29,16 @@ class TeamViewController: ContainerViewController {
     internal var eventsViewController: EventsTableViewController!
     @IBOutlet internal var eventsView: UIView!
 
-    @IBOutlet internal var mediaView: UIView?
+    internal var mediaViewController: TeamMediaCollectionViewController!
+    @IBOutlet internal var mediaView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Team \(team.teamNumber)"
         
-        viewControllers = [infoViewController, eventsViewController]
-        containerViews = [infoView, eventsView]
+        viewControllers = [infoViewController, eventsViewController, mediaViewController]
+        containerViews = [infoView, eventsView, mediaView]
         
         if navigationController?.viewControllers.index(of: self) == 0 {
             navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
@@ -65,7 +67,7 @@ class TeamViewController: ContainerViewController {
     }
     
     func refreshYearsParticipated() {
-        _ = TBATeam.fetchYearsParticipated(team.key!) { (years, error) in
+        _ = TBAKit.sharedKit.fetchTeamYearsParticipated(key: team.key!, completion: { (years, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to fetch years participated - \(error.localizedDescription)")
                 return
@@ -74,7 +76,7 @@ class TeamViewController: ContainerViewController {
             guard let years = years as? [Int] else {
                 return
             }
-
+            
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 self.team.yearsParticipated = years
                 try? backgroundContext.save()
@@ -83,7 +85,7 @@ class TeamViewController: ContainerViewController {
                     self.year = self.team.yearsParticipated.first
                 }
             })
-        }
+        })
     }
     
     // MARK: - Navigation
@@ -119,6 +121,10 @@ class TeamViewController: ContainerViewController {
             eventsViewController.eventSelected = { event in
                 // TODO: Push to team@event VC
             }
+        } else if segue.identifier == "TeamMediaEmbed" {
+            mediaViewController = segue.destination as? TeamMediaCollectionViewController
+            mediaViewController.team = team
+            mediaViewController.year = year
         }
     }
     

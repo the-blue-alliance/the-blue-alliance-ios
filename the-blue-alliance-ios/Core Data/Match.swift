@@ -162,7 +162,7 @@ extension Match: Managed {
             
             if let videos = model.videos {
                 match.videos = Set(videos.map({ (modelVideo) -> Media in
-                    return Media.insert(with: modelVideo, in: context)
+                    return Media.insert(with: modelVideo, for: Int(event.year), in: context)
                 })) as NSSet
             }
         }

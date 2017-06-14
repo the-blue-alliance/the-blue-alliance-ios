@@ -1,0 +1,136 @@
+//
+//  MediaView.swift
+//  the-blue-alliance-ios
+//
+//  Created by Zach Orr on 6/6/17.
+//  Copyright © 2017 The Blue Alliance. All rights reserved.
+//
+
+import UIKit
+
+class MediaView: UIView {
+    
+    public var media: Media {
+        didSet {
+            if let dataTask = dataTask {
+                dataTask.cancel()
+                self.dataTask = nil
+            }
+            configureView()
+        }
+    }
+    public var downloadedImage: UIImage? {
+        didSet {
+            configureView()
+        }
+    }
+    var imageDownloaded: ((UIImage) -> Void)?
+    
+    private var loadingActivityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        activityIndicator.hidesWhenStopped = true
+        return activityIndicator
+    }()
+    private var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    private var dataTask: URLSessionDataTask?
+    private var noDataLabel: UILabel?
+    private var noDataView: UIView?
+    
+    init(media: Media) {
+        self.media = media
+
+        super.init(frame: .zero)
+        backgroundColor = .white
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func showNoDataView(text: String) {
+        if let noDataLabel = noDataLabel {
+            noDataLabel.text = text
+            return
+        }
+        if let _ = noDataView {
+            removeNoDataView()
+        }
+
+        noDataLabel = UILabel()
+        noDataLabel?.text = text
+        noDataLabel?.font = UIFont.systemFont(ofSize: 14)
+        noDataLabel?.numberOfLines = 0
+        noDataLabel?.textColor = .black
+        noDataLabel?.alpha = 0.5
+        noDataLabel?.textAlignment = .center
+        
+        noDataView = UIView()
+        noDataView?.addSubview(noDataLabel!)
+        noDataLabel?.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
+        
+        addSubview(noDataView!)
+        noDataView?.autoPinEdgesToSuperviewEdges()
+    }
+    
+    func removeNoDataView() {
+        if let noDataView = noDataView {
+            noDataView.removeFromSuperview()
+        }
+    }
+    
+    func configureView() {
+        if imageView.superview == nil {
+            addSubview(imageView)
+            imageView.autoPinEdgesToSuperviewEdges()
+        }
+        
+        // If we already have a downloaded image... bail
+        if let downloadedImage = downloadedImage {
+            imageView.image = downloadedImage
+            return
+        }
+        
+        if loadingActivityIndicator.superview == nil {
+            addSubview(loadingActivityIndicator)
+            loadingActivityIndicator.autoCenterInSuperview()
+        }
+        
+        guard let url = media.imageDirectURL else {
+            showNoDataView(text: "No URL for media")
+            return
+        }
+
+        removeNoDataView()
+        loadingActivityIndicator.startAnimating()
+
+        dataTask = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+            DispatchQueue.main.async {
+                self.loadingActivityIndicator.stopAnimating()
+            }
+            
+            if let error = error {
+                self.showNoDataView(text: "Error loading media - \(error.localizedDescription)")
+            } else if let data = data {
+                guard let image = UIImage(data: data) else {
+                    self.showNoDataView(text: "Error loading media - invalid data from request")
+                    return
+                }
+                if let imageDownloaded = self.imageDownloaded {
+                    imageDownloaded(image)
+                }
+                DispatchQueue.main.async {
+                    self.imageView.image = image
+                }
+            } else {
+                self.showNoDataView(text: "Error loading media - no data for request")
+            }
+        })
+        dataTask?.resume()
+    }
+    
+}

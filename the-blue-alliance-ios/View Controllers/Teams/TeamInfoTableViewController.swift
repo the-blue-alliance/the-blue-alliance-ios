@@ -48,7 +48,7 @@ class TeamInfoTableViewController: TBATableViewController {
         removeNoDataView()
         
         var request: URLSessionDataTask?
-        request = TBATeam.fetchTeam(team.key!, completion: { (modelTeam, error) in
+        request = TBAKit.sharedKit.fetchTeam(key: team.key!, completion: { (modelTeam, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh team - \(error.localizedDescription)")
             }
@@ -57,11 +57,11 @@ class TeamInfoTableViewController: TBATableViewController {
                 if let modelTeam = modelTeam {
                     _ = Team.insert(with: modelTeam, in: backgroundContext)
                 }
-
+                
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh team - database error")
                 }
-
+                
                 self.removeRequest(request: request!)
             })
         })

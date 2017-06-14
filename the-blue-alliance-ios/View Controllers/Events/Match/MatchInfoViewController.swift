@@ -53,9 +53,7 @@ class MatchInfoViewController: TBAViewController {
     // MARK: Class Methods
     
     static func playerView(for video: Media) -> PlayerView {
-        let playerView = PlayerView()
-        playerView.translatesAutoresizingMaskIntoConstraints = false
-        playerView.media = video
+        let playerView = PlayerView(media: video)
 
         playerView.autoConstrainAttribute(.width, to: .height, of: playerView, withMultiplier: (16.0/9.0))
         
@@ -181,7 +179,7 @@ class MatchInfoViewController: TBAViewController {
         removeNoDataView()
         
         var request: URLSessionDataTask?
-        request = TBAMatch.fetchMatch(key: match.key!, { (modelMatch, error) in
+        request = TBAKit.sharedKit.fetchMatch(key: match.key!, { (modelMatch, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh match - \(error.localizedDescription)")
             }
@@ -194,7 +192,7 @@ class MatchInfoViewController: TBAViewController {
                 }
                 
                 if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to match - database error")
+                    self.showErrorAlert(with: "Unable to refresh match - database error")
                 }
                 
                 self.removeRequest(request: request!)

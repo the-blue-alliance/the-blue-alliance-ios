@@ -90,7 +90,7 @@ class TeamsTableViewController: TBATableViewController {
         }
         
         var request: URLSessionDataTask?
-        request = TBAEvent.fetchTeams(eventKey) { (teams, error) in
+        request = TBAKit.sharedKit.fetchEventTeams(key: eventKey, completion: { (teams, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to teams events - \(error.localizedDescription)")
             }
@@ -105,10 +105,10 @@ class TeamsTableViewController: TBATableViewController {
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh teams - database error")
                 }
-
+                
                 self.removeRequest(request: request!)
             })
-        }
+        })
         addRequest(request: request!)
     }
     
@@ -168,7 +168,7 @@ class TeamsTableViewController: TBATableViewController {
 
 extension TeamsTableViewController: TableViewDataSourceDelegate {
     
-    func configure(_ cell: TeamTableViewCell, for object: Team) {
+    func configure(_ cell: TeamTableViewCell, for object: Team, at indexPath: IndexPath) {
         cell.team = object
     }
     

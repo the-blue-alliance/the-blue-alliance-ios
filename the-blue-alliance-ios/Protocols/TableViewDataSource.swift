@@ -14,7 +14,7 @@ import CoreData
 protocol TableViewDataSourceDelegate: class {
     associatedtype Object
     associatedtype Cell: UITableViewCell
-    func configure(_ cell: Cell, for object: Object)
+    func configure(_ cell: Cell, for object: Object, at indexPath: IndexPath)
     func title(for section: Int) -> String?
     
     func showNoDataView()
@@ -64,7 +64,6 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         }
     }
 
-
     // MARK: Private
 
     fileprivate let tableView: UITableView
@@ -101,7 +100,7 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         let object = self.object(at: indexPath)
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? Cell
             else { fatalError("Unexpected cell type at \(indexPath)") }
-        delegate.configure(cell, for: object)
+        delegate.configure(cell, for: object, at: indexPath)
         return cell
     }
 
