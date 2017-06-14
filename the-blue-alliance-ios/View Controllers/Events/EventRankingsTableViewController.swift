@@ -39,60 +39,39 @@ class EventRankingsTableViewController: TBATableViewController {
     
     override func refresh() {
         removeNoDataView()
-        
-        // First things first... refresh all teams for the district, *then* fetch their rankings
-        // Think about if we actually need this - two calls for this is kinda terrible but...
-        var request: URLSessionDataTask?
-        request = TBAEvent.fetchTeams(event.key!, completion: { (teams, error) in
+        var rankingsRequest: URLSessionDataTask?
+        rankingsRequest = event.fetchEventRankings(key: self.event.key!, completion: { (rankings, sortOrder, extraStats, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event rankings - \(error.localizedDescription)")
             }
             
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.performAndWait {
-                    teams?.forEach({ (modelTeam) in
-                        _ = Team.insert(with: modelTeam, in: backgroundContext)
-                    })
-                }
-                _ = backgroundContext.saveOrRollback()
+                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
+                let realRankings = (rankings?["rankings"] as! [[String: Any]]).map { TBAEventRanking.init(json: $0) }
                 
-                var rankingsRequest: URLSessionDataTask?
-                rankingsRequest = TBAEvent.fetchRankings(key: self.event.key!, completion: { (rankings, error) in
-                    if let error = error {
-                        self.showErrorAlert(with: "Unable to refresh event rankings - \(error.localizedDescription)")
-                    }
-                    
-                    self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
-                        let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
-                        let realRankings = (rankings?["rankings"] as! [[String: Any]]).map { TBAEventRanking.init(json: $0) }
-                        
-                        let localRankings = realRankings.flatMap({ (modelRanking) -> EventRanking? in
-                            var backgroundTeam: Team?
-                            backgroundContext.performAndWait {
-                                backgroundTeam = Team.fetchSingleObject(in: backgroundContext, configure: { (fetchRequest) in
-                                    fetchRequest.predicate = NSPredicate(format: "key == %@" , modelRanking!.teamKey)
-                                })
-                            }
-                            if let backgroundTeam = backgroundTeam {
-                                return EventRanking.insert(with: modelRanking!, for: backgroundEvent, for: backgroundTeam, in: backgroundContext)
-                            }
-                            return nil
+                let localRankings = realRankings.flatMap({ (modelRanking) -> EventRanking? in
+                    var backgroundTeam: Team?
+                    backgroundContext.performAndWait {
+                        backgroundTeam = Team.fetchSingleObject(in: backgroundContext, configure: { (fetchRequest) in
+                            fetchRequest.predicate = NSPredicate(format: "key == %@" , modelRanking!.teamKey)
                         })
-                        backgroundEvent.rankings = Set(localRankings ) as NSSet
-                        
-                        if !backgroundContext.saveOrRollback() {
-                            self.showErrorAlert(with: "Unable to refresh event rankings - database error")
-                        }
-                        
-                        self.removeRequest(request: rankingsRequest!)
-                    })
+                    }
+                    if let backgroundTeam = backgroundTeam {
+                        return EventRanking.insert(with: modelRanking!, for: backgroundEvent, for: backgroundTeam, in: backgroundContext)
+                    }
+                    return nil
                 })
-
-                self.addRequest(request: rankingsRequest!)
-                self.removeRequest(request: request!)
+                backgroundEvent.rankings = Set(localRankings ) as NSSet
+                
+                if !backgroundContext.saveOrRollback() {
+                    self.showErrorAlert(with: "Unable to refresh event rankings - database error")
+                }
+                
+                self.removeRequest(request: rankingsRequest!)
             })
         })
-        addRequest(request: request!)
+        
+        self.addRequest(request: rankingsRequest!)
     }
     
     override func shouldNoDataRefresh() -> Bool {

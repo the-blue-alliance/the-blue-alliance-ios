@@ -16,7 +16,8 @@
 		145C57B91ED3C166004955B2 /* MatchInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57B81ED3C166004955B2 /* MatchInfoViewController.swift */; };
 		145C57BB1ED3C178004955B2 /* MatchBreakdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57BA1ED3C178004955B2 /* MatchBreakdownViewController.swift */; };
 		145C57BD1ED3C3AA004955B2 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57BC1ED3C3AA004955B2 /* PlayerView.swift */; };
-		3045B2E61EE367AC0034A3A2 /* EventRankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3045B2E51EE367AC0034A3A2 /* EventRankingTableViewCell.xib */; };
+		149F85861EDF81200012E8BE /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 149F857F1EDF81200012E8BE /* main.jsbundle */; };
+        3045B2E61EE367AC0034A3A2 /* EventRankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3045B2E51EE367AC0034A3A2 /* EventRankingTableViewCell.xib */; };
 		3045B2E81EE367C10034A3A2 /* EventRankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045B2E71EE367C10034A3A2 /* EventRankingTableViewCell.swift */; };
 		3045B2EA1EE36AC20034A3A2 /* EventRankingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3045B2E91EE36AC20034A3A2 /* EventRankingsTableViewController.swift */; };
 		307BE1CC1EE0F2AB00AEF2E0 /* EventRanking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307BE1CB1EE0F2AB00AEF2E0 /* EventRanking.swift */; };

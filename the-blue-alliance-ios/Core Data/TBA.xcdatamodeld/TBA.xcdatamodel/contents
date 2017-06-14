@@ -64,12 +64,15 @@
         <relationship name="webcasts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Webcast" inverseName="event" inverseEntity="Webcast" syncable="YES"/>
     </entity>
     <entity name="EventRanking" representedClassName="EventRanking" syncable="YES" codeGenerationType="class">
-        <attribute name="qualAverage" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="rank" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="dq" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="extraStats" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="matchesPlayed" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="qualAverage" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="rank" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="record" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="tieBreakers" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="rankings" inverseEntity="Event" syncable="YES"/>
-        <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="eventRankings" inverseEntity="Team" syncable="YES"/>
+        <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="rankings" inverseEntity="Event" syncable="YES"/>
+        <relationship name="team" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="eventRankings" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Match" representedClassName="Match" syncable="YES" codeGenerationType="class">
         <attribute name="actualTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
@@ -119,7 +122,7 @@
         <relationship name="awards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AwardRecipient" inverseName="team" inverseEntity="AwardRecipient" syncable="YES"/>
         <relationship name="blueMatches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="blueAlliance" inverseEntity="Match" syncable="YES"/>
         <relationship name="districtRankings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictRanking" inverseName="team" inverseEntity="DistrictRanking" syncable="YES"/>
-        <relationship name="eventRankings" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EventRanking" inverseName="team" inverseEntity="EventRanking" syncable="YES"/>
+        <relationship name="eventRankings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventRanking" inverseName="team" inverseEntity="EventRanking" syncable="YES"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="teams" inverseEntity="Event" syncable="YES"/>
         <relationship name="redMatches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="redAlliance" inverseEntity="Match" syncable="YES"/>
     </entity>
@@ -136,10 +139,10 @@
         <element name="District" positionX="124" positionY="-135" width="128" height="135"/>
         <element name="DistrictRanking" positionX="369" positionY="-3" width="128" height="120"/>
         <element name="Event" positionX="-297" positionY="63" width="128" height="553"/>
-        <element name="EventRanking" positionX="36" positionY="645" width="128" height="133"/>
+        <element name="EventRanking" positionX="36" positionY="645" width="128" height="180"/>
         <element name="Match" positionX="-90" positionY="324" width="128" height="285"/>
         <element name="Media" positionX="-261" positionY="-135" width="128" height="120"/>
-        <element name="Team" positionX="115" positionY="198" width="128" height="420"/>
+        <element name="Team" positionX="142" positionY="180" width="128" height="418"/>
         <element name="Webcast" positionX="-128" positionY="639" width="128" height="120"/>
     </elements>
 </model>

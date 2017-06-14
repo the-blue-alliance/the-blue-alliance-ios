@@ -29,7 +29,7 @@ public enum MediaType: String {
 extension Media: Managed {
     
     static func insert(with model: TBAMedia, in context: NSManagedObjectContext) -> Media {
-        let predicate = NSPredicate(format: "key == %@ AND type == %@", model.key, model.type)
+        let predicate = NSPredicate(format: "key == %@ AND type == %@", model.key!, model.type)
         return findOrCreate(in: context, matching: predicate) { (media) in
             // Required: key, type
             media.key = model.key

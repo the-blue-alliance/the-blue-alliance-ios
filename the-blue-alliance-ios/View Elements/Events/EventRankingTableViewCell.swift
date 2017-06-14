@@ -19,13 +19,17 @@ class EventRankingTableViewCell: UITableViewCell {
             rankLabel?.text = "Rank \(ranking.rank)"
             numberLabel?.text = "\(team.teamNumber)"
             nameLabel?.text = team.nickname ?? team.fallbackNickname
-            rankingPointsLabel?.text = "Avg. \(ranking.qualAverage) Points"
-            if let record = ranking.record as? [String: Int] {
-                if let wins = record["wins"], let losses = record["losses"], let ties = record["ties"] {
-                    WLTLabel?.text = "(\(wins)-\(losses)-\(ties))"
-                }
+            if let qualAverage = ranking.qualAverage as? Double {
+                rankingPointsLabel?.text = "Avg. \(ranking.qualAverage) Points"
             }
-            
+            self.setupWLTLabel(ranking: ranking.record)
+        }
+        
+    }
+    
+    func setupWLTLabel(record: WLT) {
+        if let wins = record.wins, let losses = record.losses, let ties = record.ties {
+            WLTLabel?.text = "(\(wins)-\(losses)-\(ties))"
         }
         
     }
