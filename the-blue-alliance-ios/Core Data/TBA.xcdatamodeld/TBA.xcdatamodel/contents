@@ -62,6 +62,7 @@
         <relationship name="district" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="District" inverseName="events" inverseEntity="District" syncable="YES"/>
         <relationship name="matches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="event" inverseEntity="Match" syncable="YES"/>
         <relationship name="points" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventPoints" inverseName="event" inverseEntity="EventPoints" syncable="YES"/>
+        <relationship name="rankings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventRanking" inverseName="event" inverseEntity="EventRanking" syncable="YES"/>
         <relationship name="stats" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventTeamStat" inverseName="event" inverseEntity="EventTeamStat" syncable="YES"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="events" inverseEntity="Team" syncable="YES"/>
         <relationship name="webcasts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Webcast" inverseName="event" inverseEntity="Webcast" syncable="YES"/>
@@ -76,6 +77,17 @@
         <relationship name="districtRanking" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DistrictRanking" inverseName="eventPoints" inverseEntity="DistrictRanking" syncable="YES"/>
         <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="points" inverseEntity="Event" syncable="YES"/>
         <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="eventPoints" inverseEntity="Team" syncable="YES"/>
+    </entity>
+    <entity name="EventRanking" representedClassName="EventRanking" syncable="YES" codeGenerationType="class">
+        <attribute name="dq" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="extraStats" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="matchesPlayed" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="qualAverage" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="rank" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="record" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="tieBreakers" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="rankings" inverseEntity="Event" syncable="YES"/>
+        <relationship name="team" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="eventRankings" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="EventTeamStat" representedClassName="EventTeamStat" syncable="YES" codeGenerationType="class">
         <attribute name="ccwm" attributeType="Double" usesScalarValueType="YES" syncable="YES"/>
@@ -138,6 +150,7 @@
         <relationship name="blueMatches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="blueAlliance" inverseEntity="Match" syncable="YES"/>
         <relationship name="districtRankings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictRanking" inverseName="team" inverseEntity="DistrictRanking" syncable="YES"/>
         <relationship name="eventPoints" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventPoints" inverseName="team" inverseEntity="EventPoints" syncable="YES"/>
+        <relationship name="eventRankings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventRanking" inverseName="team" inverseEntity="EventRanking" syncable="YES"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="teams" inverseEntity="Event" syncable="YES"/>
         <relationship name="media" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Media" inverseName="team" inverseEntity="Media" syncable="YES"/>
         <relationship name="redMatches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="redAlliance" inverseEntity="Match" syncable="YES"/>
@@ -155,12 +168,13 @@
         <element name="AwardRecipient" positionX="-54" positionY="135" width="128" height="90"/>
         <element name="District" positionX="-63" positionY="135" width="128" height="135"/>
         <element name="DistrictRanking" positionX="-54" positionY="135" width="128" height="135"/>
-        <element name="Event" positionX="-63" positionY="-18" width="128" height="585"/>
+        <element name="Event" positionX="-63" positionY="-18" width="128" height="600"/>
+        <element name="EventRanking" positionX="160" positionY="192" width="128" height="180"/>
         <element name="EventPoints" positionX="-54" positionY="135" width="128" height="180"/>
         <element name="EventTeamStat" positionX="-54" positionY="135" width="128" height="120"/>
         <element name="Match" positionX="-54" positionY="135" width="128" height="315"/>
         <element name="Media" positionX="-45" positionY="144" width="128" height="165"/>
-        <element name="Team" positionX="-54" positionY="135" width="128" height="450"/>
+        <element name="Team" positionX="-54" positionY="135" width="128" height="465"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
     </elements>
 </model>
