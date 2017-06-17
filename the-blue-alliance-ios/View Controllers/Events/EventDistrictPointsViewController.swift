@@ -56,7 +56,7 @@ class EventDistrictPointsTableViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UINib(nibName: String(describing: DistrictRankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: DistrictRankingTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -117,7 +117,7 @@ class EventDistrictPointsTableViewController: TBATableViewController {
         
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: DistrictRankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
     
     fileprivate func updateDataSource() {
@@ -136,7 +136,7 @@ class EventDistrictPointsTableViewController: TBATableViewController {
 
 extension EventDistrictPointsTableViewController: TableViewDataSourceDelegate {
     
-    func configure(_ cell: DistrictRankingTableViewCell, for object: EventPoints, at indexPath: IndexPath) {
+    func configure(_ cell: RankingTableViewCell, for object: EventPoints, at indexPath: IndexPath) {
         cell.points = object
         cell.rankLabel?.text = "Rank \(indexPath.row + 1)"
     }

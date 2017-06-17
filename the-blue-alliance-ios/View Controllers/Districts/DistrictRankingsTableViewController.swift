@@ -26,7 +26,7 @@ class DistrictRankingsTableViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UINib(nibName: String(describing: DistrictRankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: DistrictRankingTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -180,7 +180,7 @@ class DistrictRankingsTableViewController: TBATableViewController {
         
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: DistrictRankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
     
     fileprivate func updateDataSource() {
@@ -199,8 +199,8 @@ class DistrictRankingsTableViewController: TBATableViewController {
 
 extension DistrictRankingsTableViewController: TableViewDataSourceDelegate {
 
-    func configure(_ cell: DistrictRankingTableViewCell, for object: DistrictRanking, at indexPath: IndexPath) {
-        cell.ranking = object
+    func configure(_ cell: RankingTableViewCell, for object: DistrictRanking, at indexPath: IndexPath) {
+        cell.districtRanking = object
     }
     
     func showNoDataView() {

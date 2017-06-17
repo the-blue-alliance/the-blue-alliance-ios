@@ -9,21 +9,38 @@
 import Foundation
 import UIKit
 
-class DistrictRankingTableViewCell: UITableViewCell {
-    static let reuseIdentifier = "DistrictRankingCell"
-    public var ranking: DistrictRanking? {
+class RankingTableViewCell: UITableViewCell {
+    static let reuseIdentifier = "RankingCell"
+    public var eventRanking: EventRanking? {
         didSet {
-            guard let ranking = ranking, let team = ranking.team else {
+            guard let ranking = eventRanking, let team = ranking.team else {
+                return
+            }
+            rankLabel?.text = "Rank \(ranking.rank)"
+            numberLabel?.text = "\(team.teamNumber)"
+            nameLabel?.text = team.nickname ?? team.fallbackNickname
+            if let qualAverage = ranking.qualAverage as? Double {
+                detailLabel?.text = "Avg. \(qualAverage) Points"
+            }
+            self.setupWLTLabel(ranking: ranking)
+        }
+        
+    }
+    
+    public var districtRanking: DistrictRanking? {
+        didSet {
+            guard let ranking = districtRanking, let team = ranking.team else {
                 return
             }
             rankLabel?.text = "Rank \(ranking.rank)"
             numberLabel?.text = "\(team.teamNumber)"
             nameLabel?.text = team.nickname ?? team.fallbackNickname
             detailLabel?.text = "\(ranking.pointTotal) Points"
-            
+
         }
         
     }
+    
     public var points: EventPoints? {
         didSet {
             guard let points = points, let team = points.team else {
@@ -34,6 +51,7 @@ class DistrictRankingTableViewCell: UITableViewCell {
             detailLabel?.text = "\(points.total) Points"
         }
     }
+    
     public var teamStat: EventTeamStat? {
         didSet {
             guard let teamStat = teamStat, let team = teamStat.team else {
@@ -47,9 +65,18 @@ class DistrictRankingTableViewCell: UITableViewCell {
         }
     }
     
+    func setupWLTLabel(ranking: EventRanking) {
+        if let wins = ranking.wins, let losses = ranking.losses, let ties = ranking.ties {
+            WLTLabel?.text = "(\(wins)-\(losses)-\(ties))"
+        }
+        
+    }
+ 
     @IBOutlet public var rankLabel: UILabel?
     @IBOutlet private var numberLabel: UILabel?
     @IBOutlet private var nameLabel: UILabel?
-    @IBOutlet private var detailLabel: UILabel?
-    @IBOutlet private var detailLabelWidth: NSLayoutConstraint?
+    @IBOutlet private var WLTLabel: UILabel?
+    @IBOutlet var detailLabel: UILabel!
+    @IBOutlet var detailLabelWidth: NSLayoutConstraint!
+    
 }

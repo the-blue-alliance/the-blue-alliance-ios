@@ -48,7 +48,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UINib(nibName: String(describing: EventRankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: EventRankingTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -107,7 +107,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
         
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: EventRankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
     
     fileprivate func updateDataSource() {
@@ -142,7 +142,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
 
 extension EventTeamStatsTableViewController: TableViewDataSourceDelegate {
     
-    func configure(_ cell: EventRankingTableViewCell, for object: EventTeamStat, at indexPath: IndexPath) {
+    func configure(_ cell: RankingTableViewCell, for object: EventTeamStat, at indexPath: IndexPath) {
         cell.teamStat = object
     }
     

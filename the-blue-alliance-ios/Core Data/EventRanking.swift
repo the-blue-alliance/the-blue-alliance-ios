@@ -24,8 +24,16 @@ extension EventRanking: Managed {
             
             ranking.rank = Int16(model.rank)
             
-            if let record = model.record {
-                ranking.record = record
+            if let wins = model.record?.wins {
+                ranking.wins = wins as NSNumber
+            }
+            
+            if let ties = model.record?.ties {
+                ranking.ties = ties as NSNumber
+            }
+            
+            if let losses = model.record?.losses {
+                ranking.losses = losses as NSNumber
             }
             
             if let tieBreakders = model.sortOrders as NSObject? {

@@ -26,7 +26,7 @@ class EventRankingsTableViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UINib(nibName: String(describing: EventRankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: EventRankingTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,28 +40,27 @@ class EventRankingsTableViewController: TBATableViewController {
     override func refresh() {
         removeNoDataView()
         var rankingsRequest: URLSessionDataTask?
-        rankingsRequest = event.fetchEventRankings(key: self.event.key!, completion: { (rankings, sortOrder, extraStats, error) in
+        rankingsRequest = TBAKit.sharedKit.fetchEventRankings(key: self.event.key!, completion: { (rankings, sortOrder, extraStats, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event rankings - \(error.localizedDescription)")
             }
             
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
-                let realRankings = (rankings?["rankings"] as! [[String: Any]]).map { TBAEventRanking.init(json: $0) }
                 
-                let localRankings = realRankings.flatMap({ (modelRanking) -> EventRanking? in
+                let localRankings = rankings?.flatMap({ (modelRanking) -> EventRanking? in
                     var backgroundTeam: Team?
                     backgroundContext.performAndWait {
                         backgroundTeam = Team.fetchSingleObject(in: backgroundContext, configure: { (fetchRequest) in
-                            fetchRequest.predicate = NSPredicate(format: "key == %@" , modelRanking!.teamKey)
+                            fetchRequest.predicate = NSPredicate(format: "key == %@" , modelRanking.teamKey)
                         })
                     }
                     if let backgroundTeam = backgroundTeam {
-                        return EventRanking.insert(with: modelRanking!, for: backgroundEvent, for: backgroundTeam, in: backgroundContext)
+                        return EventRanking.insert(with: modelRanking, for: backgroundEvent, for: backgroundTeam, in: backgroundContext)
                     }
                     return nil
                 })
-                backgroundEvent.rankings = Set(localRankings ) as NSSet
+                backgroundEvent.rankings = Set(localRankings ?? []) as NSSet
                 
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh event rankings - database error")
@@ -107,7 +106,7 @@ class EventRankingsTableViewController: TBATableViewController {
         
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: EventRankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
     
     fileprivate func updateDataSource() {
@@ -126,8 +125,8 @@ class EventRankingsTableViewController: TBATableViewController {
 
 extension EventRankingsTableViewController: TableViewDataSourceDelegate {
     
-    func configure(_ cell: EventRankingTableViewCell, for object: EventRanking) {
-        cell.ranking = object
+    func configure(_ cell: RankingTableViewCell, for object: EventRanking, at indexPath: IndexPath) {
+        cell.eventRanking = object
     }
     
     func showNoDataView() {
