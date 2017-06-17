@@ -81,11 +81,13 @@
     <entity name="EventRanking" representedClassName="EventRanking" syncable="YES" codeGenerationType="class">
         <attribute name="dq" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="extraStats" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="losses" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="matchesPlayed" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="qualAverage" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="rank" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="record" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="tieBreakers" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="ties" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="wins" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="rankings" inverseEntity="Event" syncable="YES"/>
         <relationship name="team" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="eventRankings" inverseEntity="Team" syncable="YES"/>
     </entity>
@@ -169,8 +171,8 @@
         <element name="District" positionX="-63" positionY="135" width="128" height="135"/>
         <element name="DistrictRanking" positionX="-54" positionY="135" width="128" height="135"/>
         <element name="Event" positionX="-63" positionY="-18" width="128" height="600"/>
-        <element name="EventRanking" positionX="160" positionY="192" width="128" height="180"/>
         <element name="EventPoints" positionX="-54" positionY="135" width="128" height="180"/>
+        <element name="EventRanking" positionX="160" positionY="192" width="128" height="210"/>
         <element name="EventTeamStat" positionX="-54" positionY="135" width="128" height="120"/>
         <element name="Match" positionX="-54" positionY="135" width="128" height="315"/>
         <element name="Media" positionX="-45" positionY="144" width="128" height="165"/>

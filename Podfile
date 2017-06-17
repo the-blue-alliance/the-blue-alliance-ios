@@ -3,7 +3,7 @@ use_frameworks!
 
 target 'the-blue-alliance-ios' do
 
-  pod 'TBAKit', "~> 2.0.0"
+  pod 'TBAKit'
   
   pod 'React', :path => 'js/node_modules/react-native', :subspecs => [
     'Core',
