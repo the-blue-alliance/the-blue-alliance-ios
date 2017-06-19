@@ -55,10 +55,11 @@ class EventRankingsTableViewController: TBATableViewController {
                             fetchRequest.predicate = NSPredicate(format: "key == %@" , modelRanking.teamKey)
                         })
                     }
-                    if let backgroundTeam = backgroundTeam {
-                        return EventRanking.insert(with: modelRanking, for: backgroundEvent, for: backgroundTeam, in: backgroundContext)
+                    if backgroundTeam == nil {
+                        backgroundTeam = Team.insert(with: modelRanking.teamKey, in: backgroundContext)
                     }
-                    return nil
+                    return EventRanking.insert(with: modelRanking, for: backgroundEvent, for: backgroundTeam!, in: backgroundContext)
+
                 })
                 backgroundEvent.rankings = Set(localRankings ?? []) as NSSet
                 
