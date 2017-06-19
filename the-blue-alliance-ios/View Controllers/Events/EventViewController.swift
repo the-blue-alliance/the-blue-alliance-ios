@@ -24,8 +24,6 @@ class EventViewController: ContainerViewController {
     internal var matchesViewController: MatchesTableViewController!
     @IBOutlet internal var matchesView: UIView!
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -72,7 +70,6 @@ class EventViewController: ContainerViewController {
             rankingsViewController.event = event
             rankingsViewController.rankingSelected = { team in
                 // TODO: Show team@event
-
             }
         } else if segue.identifier == "EventAwardsSegue" {
             let eventAwardsViewController = segue.destination as! EventAwardsViewController
