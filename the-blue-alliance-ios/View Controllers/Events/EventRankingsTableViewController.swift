@@ -39,6 +39,7 @@ class EventRankingsTableViewController: TBATableViewController {
     
     override func refresh() {
         removeNoDataView()
+        
         var rankingsRequest: URLSessionDataTask?
         rankingsRequest = TBAKit.sharedKit.fetchEventRankings(key: self.event.key!, completion: { (rankings, sortOrder, extraStats, error) in
             if let error = error {

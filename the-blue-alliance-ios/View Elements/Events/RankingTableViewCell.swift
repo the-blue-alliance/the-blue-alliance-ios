@@ -22,9 +22,8 @@ class RankingTableViewCell: UITableViewCell {
             if let qualAverage = ranking.qualAverage as? Double {
                 detailLabel?.text = "Avg. \(qualAverage) Points"
             }
-            self.setupWLTLabel(ranking: ranking)
+            setupWLTLabel(ranking: ranking)
         }
-        
     }
     
     public var districtRanking: DistrictRanking? {
@@ -36,9 +35,8 @@ class RankingTableViewCell: UITableViewCell {
             numberLabel?.text = "\(team.teamNumber)"
             nameLabel?.text = team.nickname ?? team.fallbackNickname
             detailLabel?.text = "\(ranking.pointTotal) Points"
-
+            wltLabel?.isHidden = true
         }
-        
     }
     
     public var points: EventPoints? {
@@ -59,7 +57,6 @@ class RankingTableViewCell: UITableViewCell {
             }
             numberLabel?.text = "\(team.teamNumber)"
             nameLabel?.text = team.nickname ?? team.fallbackNickname
-            detailLabelWidth?.isActive = false
             detailLabel?.text = String(format: "OPR: %.2f, DPR: %.2f, CCWM: %.2f", teamStat.opr, teamStat.dpr, teamStat.ccwm)
             rankLabel?.isHidden = true
         }
@@ -67,16 +64,14 @@ class RankingTableViewCell: UITableViewCell {
     
     func setupWLTLabel(ranking: EventRanking) {
         if let wins = ranking.wins, let losses = ranking.losses, let ties = ranking.ties {
-            WLTLabel?.text = "(\(wins)-\(losses)-\(ties))"
+            wltLabel?.text = "(\(wins)-\(losses)-\(ties))"
         }
-        
     }
  
     @IBOutlet public var rankLabel: UILabel?
     @IBOutlet private var numberLabel: UILabel?
     @IBOutlet private var nameLabel: UILabel?
-    @IBOutlet private var WLTLabel: UILabel?
+    @IBOutlet private var wltLabel: UILabel?
     @IBOutlet var detailLabel: UILabel!
-    @IBOutlet var detailLabelWidth: NSLayoutConstraint!
     
 }

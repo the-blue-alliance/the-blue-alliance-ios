@@ -80,12 +80,12 @@
     </entity>
     <entity name="EventRanking" representedClassName="EventRanking" syncable="YES" codeGenerationType="class">
         <attribute name="dq" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="extraStats" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="extraStatsArray" optional="YES" attributeType="Transformable" customClassName="NSArray" syncable="YES"/>
         <attribute name="losses" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="matchesPlayed" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="qualAverage" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="rank" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="tieBreakers" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="tieBreakersArray" optional="YES" attributeType="Transformable" customClassName="NSArray" syncable="YES"/>
         <attribute name="ties" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="wins" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="rankings" inverseEntity="Event" syncable="YES"/>
