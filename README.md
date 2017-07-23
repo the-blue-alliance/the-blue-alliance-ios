@@ -8,7 +8,7 @@ Setup
 0. Install all [React Native](https://facebook.github.io/react-native) dependencies
 	* `brew install node watchman`
 	* `npm install -g react-native-cli`
-	* `cd js && npm install`
+	* `cd js && npm install && cd ..`
 1. Install [Cocoapods](http://guides.cocoapods.org/using/getting-started.html#getting-started) to install package dependencies
 	* `sudo gem install cocoapods`
 	* `pod install`
