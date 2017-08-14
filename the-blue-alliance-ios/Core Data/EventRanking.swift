@@ -30,7 +30,34 @@ extension EventRanking: Managed {
         }
     }
     
-    static func insert(with model: TBAEventRanking, for event: Event, for team: Team, in context: NSManagedObjectContext) -> EventRanking {
+    var sortOrderInfoNames: [String] {
+        get {
+            return sortOrderInfoNamesArray as? Array<String> ?? []
+        }
+        set {
+            sortOrderInfoNamesArray = newValue as NSArray
+        }
+    }
+    
+    var infoString: String? {
+        get {
+            if !tieBreakers.isEmpty && !sortOrderInfoNames.isEmpty && tieBreakers.count == sortOrderInfoNames.count {
+                var string = ""
+                for (sortOrderName, sortOrderValue) in zip(sortOrderInfoNames, tieBreakers) {
+                    string.append("\(sortOrderName): \(sortOrderValue), ")
+                }
+                
+                // To remove the trailing comma and space
+                string.remove(at: string.index(before: string.endIndex))
+                string.remove(at: string.index(before: string.endIndex))
+                
+                return string
+            }
+            return nil
+        }
+    }
+    
+    static func insert(with model: TBAEventRanking, for event: Event, for team: Team, for sortOrderInfo: [TBAEventRankingSortOrder], in context: NSManagedObjectContext) -> EventRanking {
         let predicate = NSPredicate(format: "event == %@ AND team == %@", event, team)
         return findOrCreate(in: context, matching: predicate, configure: { (ranking) in
             ranking.event = event
@@ -43,23 +70,23 @@ extension EventRanking: Managed {
             ranking.rank = Int16(model.rank)
             
             if let wins = model.record?.wins {
-                ranking.wins = wins as NSNumber
+                ranking.wins = NSNumber(value: wins)
             }
             
             if let ties = model.record?.ties {
-                ranking.ties = ties as NSNumber
+                ranking.ties = NSNumber(value: ties)
             }
             
             if let losses = model.record?.losses {
-                ranking.losses = losses as NSNumber
+                ranking.losses = NSNumber(value: losses)
             }
             
             if let dq = model.dq {
-                ranking.dq = dq as NSNumber
+                ranking.dq = NSNumber(value: dq)
             }
             
             if let matchesPlayed = model.matchesPlayed {
-                ranking.matchesPlayed = matchesPlayed as NSNumber
+                ranking.matchesPlayed = NSNumber(value: matchesPlayed)
             }
             
             if let extraStats = model.extraStats, !extraStats.isEmpty {
@@ -68,6 +95,11 @@ extension EventRanking: Managed {
             
             if let tieBreakers = model.sortOrders, !tieBreakers.isEmpty {
                 ranking.tieBreakers = tieBreakers
+            }
+            
+            let sortOrderInfoNames = sortOrderInfo.map { $0.name }
+            if !sortOrderInfoNames.isEmpty {
+                ranking.sortOrderInfoNames = sortOrderInfoNames
             }
         })
     }

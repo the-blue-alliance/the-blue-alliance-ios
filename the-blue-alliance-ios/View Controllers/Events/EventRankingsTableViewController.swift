@@ -59,7 +59,7 @@ class EventRankingsTableViewController: TBATableViewController {
                     if backgroundTeam == nil {
                         backgroundTeam = Team.insert(with: modelRanking.teamKey, in: backgroundContext)
                     }
-                    return EventRanking.insert(with: modelRanking, for: backgroundEvent, for: backgroundTeam!, in: backgroundContext)
+                    return EventRanking.insert(with: modelRanking, for: backgroundEvent, for: backgroundTeam!, for: sortOrder!, in: backgroundContext)
 
                 })
                 backgroundEvent.rankings = Set(localRankings ?? []) as NSSet

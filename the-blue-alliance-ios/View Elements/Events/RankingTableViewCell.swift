@@ -21,6 +21,8 @@ class RankingTableViewCell: UITableViewCell {
             nameLabel?.text = team.nickname ?? team.fallbackNickname
             if let qualAverage = ranking.qualAverage as? Double {
                 detailLabel?.text = "Avg. \(qualAverage) Points"
+            } else if let detailsString = ranking.infoString {
+                detailLabel.text = detailsString
             } else {
                 detailLabel.isHidden = true
             }
