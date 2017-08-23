@@ -36,6 +36,9 @@
 		9272924B1EE4A0830027CE7C /* EventStatsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272924A1EE4A0830027CE7C /* EventStatsContainerViewController.swift */; };
 		9272924D1EE4A0FC0027CE7C /* EventStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272924C1EE4A0FC0027CE7C /* EventStatsViewController.swift */; };
 		927292521EE4A48C0027CE7C /* EventTeamStatsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927292511EE4A48C0027CE7C /* EventTeamStatsTableViewController.swift */; };
+		9274A3F51F35202200FAADF0 /* TeamAtEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274A3F41F35202200FAADF0 /* TeamAtEventViewController.swift */; };
+		9274A3F81F3520B900FAADF0 /* TeamSummaryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274A3F71F3520B900FAADF0 /* TeamSummaryTableViewController.swift */; };
+		9274A3FA1F3524F700FAADF0 /* TeamStatsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274A3F91F3524F700FAADF0 /* TeamStatsTableViewController.swift */; };
 		9291F7FC1EE6FC7D00EEB86B /* TeamMediaCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9291F7FB1EE6FC7D00EEB86B /* TeamMediaCollectionViewController.swift */; };
 		92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942D951E2154DA008E79CA /* AppDelegate.swift */; };
 		92942D9D1E2154DA008E79CA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942D9B1E2154DA008E79CA /* Main.storyboard */; };
@@ -116,6 +119,9 @@
 		9272924A1EE4A0830027CE7C /* EventStatsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatsContainerViewController.swift; sourceTree = "<group>"; };
 		9272924C1EE4A0FC0027CE7C /* EventStatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatsViewController.swift; sourceTree = "<group>"; };
 		927292511EE4A48C0027CE7C /* EventTeamStatsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTeamStatsTableViewController.swift; sourceTree = "<group>"; };
+		9274A3F41F35202200FAADF0 /* TeamAtEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamAtEventViewController.swift; sourceTree = "<group>"; };
+		9274A3F71F3520B900FAADF0 /* TeamSummaryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamSummaryTableViewController.swift; sourceTree = "<group>"; };
+		9274A3F91F3524F700FAADF0 /* TeamStatsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamStatsTableViewController.swift; sourceTree = "<group>"; };
 		9291F7FB1EE6FC7D00EEB86B /* TeamMediaCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamMediaCollectionViewController.swift; sourceTree = "<group>"; };
 		92942D921E2154DA008E79CA /* the-blue-alliance-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "the-blue-alliance-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92942D951E2154DA008E79CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -257,9 +263,8 @@
 		924602A81ECE85920030EDBF /* Team */ = {
 			isa = PBXGroup;
 			children = (
-				92D855DF1EC6BA3900572F27 /* TeamViewController.swift */,
-				92D855E11EC755D000572F27 /* TeamInfoTableViewController.swift */,
-				9291F7FB1EE6FC7D00EEB86B /* TeamMediaCollectionViewController.swift */,
+				9274A3F31F35200800FAADF0 /* Team */,
+				9274A3F61F35202400FAADF0 /* Team@Event */,
 			);
 			name = Team;
 			sourceTree = "<group>";
@@ -296,6 +301,26 @@
 				9272924C1EE4A0FC0027CE7C /* EventStatsViewController.swift */,
 			);
 			path = Stats;
+			sourceTree = "<group>";
+		};
+		9274A3F31F35200800FAADF0 /* Team */ = {
+			isa = PBXGroup;
+			children = (
+				92D855DF1EC6BA3900572F27 /* TeamViewController.swift */,
+				92D855E11EC755D000572F27 /* TeamInfoTableViewController.swift */,
+				9291F7FB1EE6FC7D00EEB86B /* TeamMediaCollectionViewController.swift */,
+			);
+			name = Team;
+			sourceTree = "<group>";
+		};
+		9274A3F61F35202400FAADF0 /* Team@Event */ = {
+			isa = PBXGroup;
+			children = (
+				9274A3F41F35202200FAADF0 /* TeamAtEventViewController.swift */,
+				9274A3F71F3520B900FAADF0 /* TeamSummaryTableViewController.swift */,
+				9274A3F91F3524F700FAADF0 /* TeamStatsTableViewController.swift */,
+			);
+			name = "Team@Event";
 			sourceTree = "<group>";
 		};
 		92942D891E2154DA008E79CA = {
@@ -744,6 +769,7 @@
 				1405237F1ED3524C0072FB91 /* Match.swift in Sources */,
 				9272924D1EE4A0FC0027CE7C /* EventStatsViewController.swift in Sources */,
 				9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */,
+				9274A3F81F3520B900FAADF0 /* TeamSummaryTableViewController.swift in Sources */,
 				929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */,
 				92D855E21EC755D000572F27 /* TeamInfoTableViewController.swift in Sources */,
 				1405237C1ED33F500072FB91 /* MatchViewController.swift in Sources */,
@@ -769,6 +795,7 @@
 				145C57B91ED3C166004955B2 /* MatchInfoViewController.swift in Sources */,
 				92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */,
 				9272924B1EE4A0830027CE7C /* EventStatsContainerViewController.swift in Sources */,
+				9274A3FA1F3524F700FAADF0 /* TeamStatsTableViewController.swift in Sources */,
 				92D855CF1EC68ACE00572F27 /* Team.swift in Sources */,
 				92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */,
 				145C57BB1ED3C178004955B2 /* MatchBreakdownViewController.swift in Sources */,
@@ -783,6 +810,7 @@
 				92942DDF1E21D2EB008E79CA /* EventViewController.swift in Sources */,
 				303F824A1EF593BE007CADA1 /* EventRankingsTableViewController.swift in Sources */,
 				929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */,
+				9274A3F51F35202200FAADF0 /* TeamAtEventViewController.swift in Sources */,
 				92FFE52C1E7CC60F0037E48C /* TBAColorExtension.swift in Sources */,
 				929FCDAA1EC8BFB000A38E46 /* DistrictRanking.swift in Sources */,
 				92D5A1201EE476C800EBFC6F /* EventPoints.swift in Sources */,

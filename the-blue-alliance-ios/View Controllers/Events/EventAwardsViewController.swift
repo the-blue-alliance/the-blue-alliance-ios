@@ -11,6 +11,7 @@ import CoreData
 import TBAKit
 
 class EventAwardsViewController: ContainerViewController {
+    
     public var event: Event!
     
     internal var awardsViewController: EventAwardsTableViewController!
@@ -38,12 +39,14 @@ class EventAwardsViewController: ContainerViewController {
             }
         }
     }
+
 }
 
 class EventAwardsTableViewController: TBATableViewController {
 
     var event: Event!
-    
+    var team: Team?
+
     override var persistentContainer: NSPersistentContainer! {
         didSet {
             updateDataSource()
@@ -129,9 +132,11 @@ class EventAwardsTableViewController: TBATableViewController {
     }
     
     fileprivate func setupFetchRequest(_ request: NSFetchRequest<Award>) {
-        request.predicate = NSPredicate(format: "event == %@", event)
-        // if team
-        // predicate = [NSPredicate predicateWithFormat:@"event == %@ AND (ANY recipients.team == %@)", self.event, self.team];
+        if let team = team {
+            request.predicate = NSPredicate(format: "event == %@ AND (ANY recipients.team == %@)", event, team)
+        } else {
+            request.predicate = NSPredicate(format: "event == %@", event)
+        }
     }
     
 }
