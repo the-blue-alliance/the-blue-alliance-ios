@@ -21,29 +21,29 @@ extension EventRanking: Managed {
         }
     }
     
-    var tieBreakers: [Double] {
+    var tieBreakerValues: [Double] {
         get {
-            return tieBreakersArray as? Array<Double> ?? []
+            return tieBreakerValuesArray as? Array<Double> ?? []
         }
         set {
-            tieBreakersArray = newValue as NSArray
+            tieBreakerValuesArray = newValue as NSArray
         }
     }
     
-    var sortOrderInfoNames: [String] {
+    var tieBreakerNames: [String] {
         get {
-            return sortOrderInfoNamesArray as? Array<String> ?? []
+            return tieBreakerNamesArray as? Array<String> ?? []
         }
         set {
-            sortOrderInfoNamesArray = newValue as NSArray
+            tieBreakerNamesArray = newValue as NSArray
         }
     }
     
     var infoString: String? {
         get {
-            if !tieBreakers.isEmpty && !sortOrderInfoNames.isEmpty && tieBreakers.count == sortOrderInfoNames.count {
+            if !tieBreakerValues.isEmpty, !tieBreakerNames.isEmpty, tieBreakerValues.count == tieBreakerNames.count {
                 var string = ""
-                for (sortOrderName, sortOrderValue) in zip(sortOrderInfoNames, tieBreakers) {
+                for (sortOrderName, sortOrderValue) in zip(tieBreakerNames, tieBreakerValues) {
                     string.append("\(sortOrderName): \(sortOrderValue), ")
                 }
                 
@@ -93,13 +93,13 @@ extension EventRanking: Managed {
                 ranking.extraStats = extraStats
             }
             
-            if let tieBreakers = model.sortOrders, !tieBreakers.isEmpty {
-                ranking.tieBreakers = tieBreakers
+            if let tieBreakerValues = model.sortOrders, !tieBreakerValues.isEmpty {
+                ranking.tieBreakerValues = tieBreakerValues
             }
             
-            let sortOrderInfoNames = sortOrderInfo.map { $0.name }
-            if !sortOrderInfoNames.isEmpty {
-                ranking.sortOrderInfoNames = sortOrderInfoNames
+            let tieBreakerNames = sortOrderInfo.map { $0.name }
+            if !tieBreakerNames.isEmpty {
+                ranking.tieBreakerNames = tieBreakerNames
             }
         })
     }
