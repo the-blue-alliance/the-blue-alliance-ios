@@ -18,6 +18,7 @@ class DistrictsTableViewController: TBATableViewController {
             updateDataSource()
         }
     }
+    
     internal var year: Int? {
         didSet {
             cancelRefresh()
