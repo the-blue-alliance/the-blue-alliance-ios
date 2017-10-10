@@ -25,4 +25,12 @@ post_install do | installer |
   require 'fileutils'
   FileUtils.cp_r('Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios-acknowledgements.plist',
   'the-blue-alliance-ios/Settings.bundle/Acknowledgements.plist', :remove_destination => true)
+
+  installer.pods_project.targets.each do |target|
+    if "#{target}" == "AppAuth"
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '9.3'
+      end
+    end
+  end
 end
