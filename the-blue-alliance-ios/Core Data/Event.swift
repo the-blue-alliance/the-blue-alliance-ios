@@ -17,6 +17,7 @@ public enum EventType: Int {
     case championshipDivision = 3
     case championshipFinals = 4
     case districtChampionshipDivision = 5
+    case festivalOfChampions = 6
     case offseason = 99
     case preseason = 100
     case unlabeled = -1
@@ -199,6 +200,8 @@ extension Event: Locatable, Managed {
                 weekString = "Preseason"
             case EventType.offseason.rawValue:
                 weekString = "Offseason"
+            case EventType.festivalOfChampions.rawValue:
+                weekString = "Festival of Champions"
             default:
                 guard let week = week else {
                     return "Other"
@@ -288,6 +291,10 @@ extension Event: Comparable {
             } else {
                 return lhsType < rhsType
             }
+        }
+        // Throw Festival of Champions at the end, since it's the last event
+        if lhsType == EventType.festivalOfChampions.rawValue || rhsType == EventType.festivalOfChampions.rawValue {
+            return lhsType < rhsType
         }
         // EVERYTHING ELSE (districts, regionals, DCMPs, DCMP divisions) has weeks. This is just an easy sort... which event has a first week
         // Only weird thing is how we're sorting events that have the same weeks. It goes...
