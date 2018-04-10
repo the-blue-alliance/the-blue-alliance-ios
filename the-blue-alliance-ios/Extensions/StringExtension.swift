@@ -12,7 +12,7 @@ extension String {
     
     func prefixTrim(_ prefix: String) -> String {
         if let index = self.characters.index(where: {!prefix.characters.contains($0)}) {
-            return self[index..<self.endIndex]
+            return String(self[index..<self.endIndex])
         } else {
             return self
         }

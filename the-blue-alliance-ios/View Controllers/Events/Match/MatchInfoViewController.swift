@@ -26,8 +26,8 @@ class MatchInfoViewController: TBAViewController {
             }
         }
     }
-    let winnerFont = UIFont.systemFont(ofSize: 14, weight: UIFontWeightBold)
-    let notWinnerFont = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
+    let winnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
+    let notWinnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
 
     @IBOutlet var redStackView: UIStackView!
     @IBOutlet var redContainerView: UIView! {
