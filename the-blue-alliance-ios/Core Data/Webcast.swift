@@ -24,7 +24,7 @@ extension Webcast: Managed {
             webcast.file = model.file
             
             if let dateString = model.date, let date = dateFormatter.date(from: dateString) {
-                webcast.date = NSDate(timeIntervalSince1970: date.timeIntervalSince1970)
+                webcast.date = Date(timeIntervalSince1970: date.timeIntervalSince1970)
             }
             
             webcast.event = event

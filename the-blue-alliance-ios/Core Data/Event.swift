@@ -65,7 +65,7 @@ extension Event: Locatable, Managed {
             
             // TODO: Better way to handle this?
             if let endDate = dateFormatter.date(from: model.endDate) {
-                event.endDate = NSDate(timeIntervalSince1970: endDate.timeIntervalSince1970)
+                event.endDate = Date(timeIntervalSince1970: endDate.timeIntervalSince1970)
             }
             
             event.eventCode = model.eventCode
@@ -98,7 +98,7 @@ extension Event: Locatable, Managed {
             event.shortName = model.shortName
             
             if let startDate = dateFormatter.date(from: model.startDate) {
-                event.startDate = NSDate(timeIntervalSince1970: startDate.timeIntervalSince1970)
+                event.startDate = Date(timeIntervalSince1970: startDate.timeIntervalSince1970)
             }
             
             event.state = model.state

@@ -42,7 +42,7 @@ class AwardTableViewCell: UITableViewCell {
             let stackView = UIStackView()
             stackView.axis = .vertical
             stackView.tag = index
-            stackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.recipientTapped(gesture:))))
+            stackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(recipientTapped(gesture:))))
             for text in recipient.awardText {
                 let label = boldLabelWithText(text)
                 stackView.addArrangedSubview(label)

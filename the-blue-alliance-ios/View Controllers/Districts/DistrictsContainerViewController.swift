@@ -42,7 +42,7 @@ class DistrictsContainerViewController: ContainerViewController {
         }
         
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(self.fetchedTBAStatus),
+                                               selector: #selector(fetchedTBAStatus),
                                                name: Notification.Name(kFetchedTBAStatus),
                                                object: nil)
     }
@@ -70,7 +70,7 @@ class DistrictsContainerViewController: ContainerViewController {
 
     // MARK: - Observers
     
-    func fetchedTBAStatus(notification: NSNotification) {
+    @objc func fetchedTBAStatus(notification: NSNotification) {
         guard let status = notification.object as? TBAStatus else {
             showErrorAlert(with: "TBA status fetch failed")
             return

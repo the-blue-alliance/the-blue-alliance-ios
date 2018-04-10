@@ -23,8 +23,8 @@ class MatchTableViewCell: UITableViewCell {
             }
         }
     }
-    let winnerFont = UIFont.systemFont(ofSize: 14, weight: UIFontWeightBold)
-    let notWinnerFont = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
+    let winnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
+    let notWinnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
     
     @IBOutlet private var matchNumberLabel: UILabel!
     

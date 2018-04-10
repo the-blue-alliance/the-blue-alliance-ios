@@ -230,7 +230,7 @@ class TBAViewController: UIViewController, Persistable, Refreshable, Alertable {
         refreshControl = scrollView.refreshControl
     }
     
-    func refresh() {
+    @objc func refresh() {
         fatalError("Implement this downstream")
     }
     
@@ -263,7 +263,7 @@ class TBATableViewController: UITableViewController, Persistable, Refreshable, A
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
-    func refresh() {
+    @objc func refresh() {
         fatalError("Implement this downstream")
     }
     
@@ -296,7 +296,7 @@ class TBACollectionViewController: UICollectionViewController, Persistable, Refr
         refreshControl = collectionView!.refreshControl
     }
     
-    func refresh() {
+    @objc func refresh() {
         fatalError("Implement this downstream")
     }
     
