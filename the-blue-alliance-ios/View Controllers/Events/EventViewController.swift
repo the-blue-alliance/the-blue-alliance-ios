@@ -37,7 +37,7 @@ class EventViewController: ContainerViewController {
             navigationItem.leftItemsSupplementBackButton = true
         }
     }
-    
+        
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -57,7 +57,7 @@ class EventViewController: ContainerViewController {
             teamsViewController = segue.destination as! TeamsTableViewController
             teamsViewController.event = event
             teamsViewController.teamSelected = { team in
-                // TOOD: Show team@event
+                self.performSegue(withIdentifier: "TeamAtEventSegue", sender: team);
             }
         } else if segue.identifier == "EventMatchesEmbed" {
             matchesViewController = segue.destination as! MatchesTableViewController
@@ -88,6 +88,12 @@ class EventViewController: ContainerViewController {
             let statsViewController = segue.destination as! EventStatsContainerViewController
             statsViewController.event = event
             statsViewController.persistentContainer = persistentContainer
+        } else if segue.identifier == "TeamAtEventSegue" {
+            let team = sender as! Team
+            let teamAtEventViewController = segue.destination as! TeamAtEventViewController
+            teamAtEventViewController.team = team
+            teamAtEventViewController.event = event
+            teamAtEventViewController.persistentContainer = persistentContainer
         }
     }
 

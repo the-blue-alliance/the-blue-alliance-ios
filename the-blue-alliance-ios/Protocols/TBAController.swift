@@ -102,7 +102,9 @@ extension Persistable {
             collectionView.backgroundView = noDataView
         } else {
             dataView.insertSubview(noDataView, at: 0)
-            noDataView.autoPinEdgesToSuperviewEdges()
+            DispatchQueue.main.async {
+                noDataView.autoPinEdgesToSuperviewEdges()
+            }
         }
         
         UIView.animate(withDuration: 0.25, animations: {
