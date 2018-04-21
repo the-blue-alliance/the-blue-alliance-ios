@@ -40,8 +40,9 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         super.init()
         fetchedResultsController.delegate = self
         try! fetchedResultsController.performFetch()
-        tableView.dataSource = self
+
         DispatchQueue.main.async {
+            tableView.dataSource = self
             self.tableView.reloadData()
         }
     }
