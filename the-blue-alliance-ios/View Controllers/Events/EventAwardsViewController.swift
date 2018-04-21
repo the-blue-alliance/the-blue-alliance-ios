@@ -35,8 +35,14 @@ class EventAwardsViewController: ContainerViewController {
             awardsViewController.event = event
             awardsViewController.persistentContainer = persistentContainer
             awardsViewController.teamSelected = { team in
-                // TODO: show team@event
+                self.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
             }
+        } else if segue.identifier == "TeamAtEventSegue" {
+            let team = sender as! Team
+            let teamAtEventViewController = segue.destination as! TeamAtEventViewController
+            teamAtEventViewController.team = team
+            teamAtEventViewController.event = event
+            teamAtEventViewController.persistentContainer = persistentContainer
         }
     }
 

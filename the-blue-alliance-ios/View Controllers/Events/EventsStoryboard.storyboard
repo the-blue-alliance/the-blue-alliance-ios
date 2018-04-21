@@ -704,6 +704,7 @@
                         <outlet property="segmentedControl" destination="Szh-R1-Xf2" id="p0u-od-Rvq"/>
                         <outlet property="segmentedControlView" destination="Oq3-MQ-D1s" id="6fA-Lh-NG8"/>
                         <outlet property="teamStatsView" destination="6dU-MA-tjY" id="jAD-Pd-PpZ"/>
+                        <segue destination="fyt-Iq-1co" kind="show" identifier="TeamAtEventSegue" id="zPi-cg-PVX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="swL-Yf-3z0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -774,6 +775,7 @@
                         <outlet property="districtPointsView" destination="WO3-PB-QQx" id="63q-vc-PXu"/>
                         <outlet property="navigationDetailLabel" destination="JoG-Yi-TsA" id="6X9-3C-RAH"/>
                         <outlet property="navigationTitleLabel" destination="82d-6r-Pia" id="H9Q-eL-AQG"/>
+                        <segue destination="fyt-Iq-1co" kind="show" identifier="TeamAtEventSegue" id="BGq-4j-JKW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ep5-iu-dPH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -862,6 +864,7 @@
                         <outlet property="awardsView" destination="b4s-36-Irq" id="dEx-ai-0Mh"/>
                         <outlet property="navigationDetailLabel" destination="TM3-Dj-fW6" id="y48-9R-UI1"/>
                         <outlet property="navigationTitleLabel" destination="2JM-6a-cat" id="g7B-vD-GJt"/>
+                        <segue destination="fyt-Iq-1co" kind="show" identifier="TeamAtEventSegue" id="trB-a5-4Ei"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H4A-JV-Jlp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1077,6 +1080,7 @@
         <image name="ic_sort_white" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="BGq-4j-JKW"/>
         <segue reference="oO5-aj-OQj"/>
     </inferredMetricsTieBreakers>
 </document>

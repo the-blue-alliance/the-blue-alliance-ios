@@ -177,6 +177,7 @@
                         <outlet property="navigationTitleLabel" destination="LNf-Os-1qq" id="lLC-vF-mZw"/>
                         <outlet property="segmentedControl" destination="4e3-cZ-Ovp" id="7zR-OZ-9YF"/>
                         <outlet property="segmentedControlView" destination="7wB-xc-qxs" id="OZU-iw-BC2"/>
+                        <segue destination="Lps-JK-pYU" kind="show" identifier="TeamAtEventSegue" id="8Uu-oj-Z11"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fgu-2m-Jdl" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -92,6 +92,15 @@ class EventTeamStatsTableViewController: TBATableViewController {
         return false
     }
     
+    // MARK: UITableView Delegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let eventTeamStats = dataSource?.object(at: indexPath)
+        if let team = eventTeamStats?.team, let teamSelected = teamSelected {
+            teamSelected(team)
+        }
+    }
+    
     // MARK: Table View Data Source
     
     fileprivate var dataSource: TableViewDataSource<EventTeamStat, EventTeamStatsTableViewController>?

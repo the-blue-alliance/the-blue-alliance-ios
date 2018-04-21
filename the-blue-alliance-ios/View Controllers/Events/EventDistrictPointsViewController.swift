@@ -34,8 +34,14 @@ class EventDistrictPointsViewController: ContainerViewController {
             districtPointsViewController.event = event
             districtPointsViewController.persistentContainer = persistentContainer
             districtPointsViewController.teamSelected = { team in
-                // TODO: show team@event
+                self.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
             }
+        } else if segue.identifier == "TeamAtEventSegue" {
+            let team = sender as! Team
+            let teamAtEventViewController = segue.destination as! TeamAtEventViewController
+            teamAtEventViewController.team = team
+            teamAtEventViewController.event = event
+            teamAtEventViewController.persistentContainer = persistentContainer
         }
     }
 }
@@ -98,6 +104,15 @@ class EventDistrictPointsTableViewController: TBATableViewController {
             return true
         }
         return false
+    }
+    
+    // MARK: UITableView Delegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let eventPoints = dataSource?.object(at: indexPath)
+        if let team = eventPoints?.team, let teamSelected = teamSelected {
+            teamSelected(team)
+        }
     }
     
     // MARK: Table View Data Source

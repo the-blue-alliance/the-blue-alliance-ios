@@ -119,13 +119,18 @@ class TeamViewController: ContainerViewController {
             eventsViewController.team = team
             eventsViewController.year = year
             eventsViewController.eventSelected = { event in
-                // TODO: Push to team@event VC
+                self.performSegue(withIdentifier: "TeamAtEventSegue", sender: event)
             }
         } else if segue.identifier == "TeamMediaEmbed" {
             mediaViewController = segue.destination as? TeamMediaCollectionViewController
             mediaViewController.team = team
             mediaViewController.year = year
+        } else if segue.identifier == "TeamAtEventSegue" {
+            let event = sender as! Event
+            let teamAtEventViewController = segue.destination as! TeamAtEventViewController
+            teamAtEventViewController.team = team
+            teamAtEventViewController.event = event
+            teamAtEventViewController.persistentContainer = persistentContainer
         }
-    }
-    
+    }    
 }

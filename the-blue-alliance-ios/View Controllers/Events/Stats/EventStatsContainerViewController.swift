@@ -61,7 +61,7 @@ class EventStatsContainerViewController: ContainerViewController {
             teamStatsViewController.event = event
             teamStatsViewController.persistentContainer = persistentContainer
             teamStatsViewController.teamSelected = { team in
-                // TODO: show team@event
+                self.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
             }
         } else if segue.identifier == "EventStatsEmbed" {
             eventStatsViewController = segue.destination as! EventStatsViewController
@@ -97,6 +97,12 @@ class EventStatsContainerViewController: ContainerViewController {
                 }
             }
             nav.viewControllers = [selectTableViewController]
+        } else if segue.identifier == "TeamAtEventSegue" {
+            let team = sender as! Team
+            let teamAtEventViewController = segue.destination as! TeamAtEventViewController
+            teamAtEventViewController.team = team
+            teamAtEventViewController.event = event
+            teamAtEventViewController.persistentContainer = persistentContainer
         }
     }
 }
