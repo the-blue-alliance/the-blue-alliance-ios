@@ -44,6 +44,9 @@ class EventViewController: ContainerViewController {
         if segue.identifier == "EventInfoEmbed" {
             infoViewController = segue.destination as! EventInfoTableViewController
             infoViewController.event = event
+            infoViewController.showAlliances = {
+                // TODO: Show alliances in here
+            }
             infoViewController.showAwards = {
                 self.performSegue(withIdentifier: "EventAwardsSegue", sender: nil)
             }
