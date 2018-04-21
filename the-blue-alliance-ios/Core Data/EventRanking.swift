@@ -41,7 +41,7 @@ extension EventRanking: Managed {
     
     var infoString: String? {
         get {
-            if !tieBreakerValues.isEmpty, !tieBreakerNames.isEmpty, tieBreakerValues.count == tieBreakerNames.count {
+            if !tieBreakerValues.isEmpty, !tieBreakerNames.isEmpty {
                 var string = ""
                 for (sortOrderName, sortOrderValue) in zip(tieBreakerNames, tieBreakerValues) {
                     string.append("\(sortOrderName): \(sortOrderValue), ")
