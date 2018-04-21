@@ -134,8 +134,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 UserDefaults.standard.set(status.currentSeason, forKey: StatusConstants.currentSeasonKey)
                 UserDefaults.standard.set(status.downEvents, forKey: StatusConstants.downEventsKey)
                 // Note: We can update these two keys as we ship future versions, along with some migration code
-                UserDefaults.standard.set(status.iosInfo.latestAppVersion, forKey: StatusConstants.latestAppVersionKey)
-                UserDefaults.standard.set(status.iosInfo.minAppVersion, forKey: StatusConstants.minAppVersionKey)
+                UserDefaults.standard.set(status.ios.latestAppVersion, forKey: StatusConstants.latestAppVersionKey)
+                UserDefaults.standard.set(status.ios.minAppVersion, forKey: StatusConstants.minAppVersionKey)
                 UserDefaults.standard.set(status.datafeedDown, forKey: StatusConstants.isDatafeedDownKey)
                 UserDefaults.standard.set(status.maxSeason, forKey: StatusConstants.maxSeasonKey)
                 
@@ -153,13 +153,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // Set our latest app version if we've never set our latest app version before *or* our latest app
                 // version is less than the default latest app version
                 let latestAppVersion = UserDefaults.standard.integer(forKey: StatusConstants.latestAppVersionKey)
-                if latestAppVersion == 0 || latestAppVersion < defaultStatus.iosInfo.latestAppVersion {
-                    UserDefaults.standard.set(defaultStatus.iosInfo.latestAppVersion, forKey: StatusConstants.latestAppVersionKey)
+                if latestAppVersion == 0 || latestAppVersion < defaultStatus.ios.latestAppVersion {
+                    UserDefaults.standard.set(defaultStatus.ios.latestAppVersion, forKey: StatusConstants.latestAppVersionKey)
                 }
                 
                 let minAppVersion = UserDefaults.standard.integer(forKey: StatusConstants.minAppVersionKey)
-                if minAppVersion == 0 || minAppVersion < defaultStatus.iosInfo.minAppVersion {
-                    UserDefaults.standard.set(defaultStatus.iosInfo.minAppVersion, forKey: StatusConstants.minAppVersionKey)
+                if minAppVersion == 0 || minAppVersion < defaultStatus.ios.minAppVersion {
+                    UserDefaults.standard.set(defaultStatus.ios.minAppVersion, forKey: StatusConstants.minAppVersionKey)
                 }
                 
                 // Only set our max season if we haven't set our max season

@@ -13,7 +13,7 @@ import PureLayout
 
 class PlayerView: UIView {
     
-    public var media: Media {
+    public var playable: Playable {
         didSet {
             configureView()
         }
@@ -30,11 +30,12 @@ class PlayerView: UIView {
         return activityIndicator
     }()
     
-    init(media: Media) {
-        self.media = media
+    init(playable: Playable) {
+        self.playable = playable
         
         super.init(frame: .zero)
         backgroundColor = .white
+        configureView()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -55,13 +56,8 @@ class PlayerView: UIView {
         
         loadingActivityIndicator.startAnimating()
         
-        if media.type! == MediaType.youtubeVideo.rawValue {
-            if let key = media.key {
-                youtubePlayerView.load(withVideoId: key)
-            }
-            if let foreignKey = media.foreignKey {
-                youtubePlayerView.load(withVideoId: foreignKey)
-            }
+        if let youtubeKey = playable.youtubeKey {
+            youtubePlayerView.load(withVideoId: youtubeKey)
         }
     }
     

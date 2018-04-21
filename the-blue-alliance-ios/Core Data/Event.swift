@@ -24,24 +24,6 @@ public enum EventType: Int {
 }
 
 extension Event: Locatable, Managed {
-
-    var divisionKeys: [String] {
-        get {
-            return divisionKeysArray as? Array<String> ?? []
-        }
-        set {
-            divisionKeysArray = newValue as NSArray
-        }
-    }
-    
-    var insights: [String: Any]? {
-        get {
-            return insightsDictionary as? Dictionary<String, Any> ?? [:]
-        }
-        set {
-            insightsDictionary = newValue as NSDictionary?
-        }
-    }
     
     static func insert(with model: TBAEvent, in context: NSManagedObjectContext) -> Event {
         let predicate = NSPredicate(format: "key == %@", model.key)
@@ -55,22 +37,12 @@ extension Event: Locatable, Managed {
                 event.district = District.insert(with: district, in: context)
             }
             
-            // TODO: Let's see if we can get a background task or something to go through and form relationships...
-            if !model.divisionKeys.isEmpty {
-                event.divisionKeys = model.divisionKeys
-            }
+            event.divisionKeys = model.divisionKeys
             
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            
-            // TODO: Better way to handle this?
-            if let endDate = dateFormatter.date(from: model.endDate) {
-                event.endDate = Date(timeIntervalSince1970: endDate.timeIntervalSince1970)
-            }
-            
+            event.endDate = model.endDate
             event.eventCode = model.eventCode
             event.eventType = Int16(model.eventType)
-            event.eventTypeName = model.eventTypeName
+            event.eventTypeString = model.eventTypeString
             event.firstEventID = model.firstEventID
             event.gmapsPlaceID = model.gmapsPlaceID
             event.gmapsURL = model.gmapsURL
@@ -96,12 +68,8 @@ extension Event: Locatable, Managed {
             
             event.postalCode = model.postalCode
             event.shortName = model.shortName
-            
-            if let startDate = dateFormatter.date(from: model.startDate) {
-                event.startDate = Date(timeIntervalSince1970: startDate.timeIntervalSince1970)
-            }
-            
-            event.state = model.state
+            event.startDate = model.startDate
+            event.stateProv = model.stateProv
             event.timezone = model.timezone
             
             if let webcasts = model.webcasts {
@@ -228,7 +196,7 @@ extension Event: Locatable, Managed {
     
     public var friendlyNameWithYear: String {
         let nameString = shortName ?? name
-        return "\(String(year)) \(nameString ?? "Unnamed") \(eventTypeName ?? "Event")"
+        return "\(String(year)) \(nameString ?? "Unnamed") \(eventTypeString ?? "Event")"
     }
     
     public var isChampionship: Bool {

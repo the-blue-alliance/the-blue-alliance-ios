@@ -52,8 +52,8 @@ class MatchInfoViewController: TBAViewController {
     
     // MARK: Class Methods
     
-    static func playerView(for video: Media) -> PlayerView {
-        let playerView = PlayerView(media: video)
+    static func playerView(for matchVideo: MatchVideo) -> PlayerView {
+        let playerView = PlayerView(playable: matchVideo)
 
         playerView.autoConstrainAttribute(.width, to: .height, of: playerView, withMultiplier: (16.0/9.0))
         
@@ -159,7 +159,7 @@ class MatchInfoViewController: TBAViewController {
             view.removeFromSuperview()
         }
         
-        guard let videos = match.videos?.allObjects as? [Media] else {
+        guard let videos = match.videos?.allObjects as? [MatchVideo] else {
             return
         }
         

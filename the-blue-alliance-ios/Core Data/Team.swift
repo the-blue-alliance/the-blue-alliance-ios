@@ -11,26 +11,7 @@ import TBAKit
 import CoreData
 
 extension Team: Locatable, Managed {
-
-    var homeChampionship: [String: String] {
-        get {
-            return homeChampionshipDictionary as? Dictionary<String, String> ?? [:]
-        }
-        set {
-            homeChampionshipDictionary = newValue as NSDictionary
-        }
-    }
-    
-    var yearsParticipated: [Int] {
-        get {
-            let yearsArray = yearsParticipatedArray as? Array<Int> ?? []
-            return yearsArray.sorted().reversed()
-        }
-        set {
-            yearsParticipatedArray = newValue as NSArray
-        }
-    }
-    
+        
     var fallbackNickname: String {
         return "Team \(teamNumber)"
     }
@@ -80,9 +61,10 @@ extension Team: Locatable, Managed {
             team.nickname = model.nickname
             team.postalCode = model.postalCode
             team.rookieYear = Int16(model.rookieYear)
-            team.state = model.state
+            team.stateProv = model.stateProv
             team.teamNumber = Int32(model.teamNumber)
             team.website = model.website
+            team.homeChampionship = model.homeChampionship
         }
     }
     

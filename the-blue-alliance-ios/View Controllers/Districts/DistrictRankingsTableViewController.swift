@@ -128,7 +128,7 @@ class DistrictRankingsTableViewController: TBATableViewController {
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 let backgroundDistrict = backgroundContext.object(with: self.district.objectID) as! District
                 
-                let localRankings = rankings?.flatMap({ (modelRanking) -> DistrictRanking? in
+                let localRankings = rankings?.compactMap({ (modelRanking) -> DistrictRanking? in
                     var backgroundTeam: Team?
                     backgroundTeam = Team.findOrFetch(in: backgroundContext, matching: NSPredicate(format: "key == %@", modelRanking.teamKey))
                     if backgroundTeam == nil {

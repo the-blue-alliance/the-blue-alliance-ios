@@ -15,17 +15,15 @@ extension Award: Managed {
     static func insert(with model: TBAAward, for event: Event, in context: NSManagedObjectContext) -> Award {
         let predicate = NSPredicate(format: "awardType == %ld && year == %ld && event == %@", model.awardType, model.year, event)
         return findOrCreate(in: context, matching: predicate) { (award) in
-            // Required: awardType, event, name, year
+            // Required: awardType, event, name, year, recipients
             award.name = model.name
             award.awardType = Int16(model.awardType)
             award.event = event
             award.year = Int16(model.year)
-            
-            if let recipients = model.recipients {
-                award.recipients = Set(recipients.map({ (modelRecipient) -> AwardRecipient in
-                    return AwardRecipient.insert(with: modelRecipient, for: award, in: context)
-                })) as NSSet
-            }
+
+            award.recipients = Set(model.recipients.map({ (modelRecipient) -> AwardRecipient in
+                return AwardRecipient.insert(with: modelRecipient, for: award, in: context)
+            })) as NSSet
         }
     }
 

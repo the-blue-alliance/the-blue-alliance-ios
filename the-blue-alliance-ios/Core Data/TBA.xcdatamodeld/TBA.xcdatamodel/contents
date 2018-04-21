@@ -32,16 +32,16 @@
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="country" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="divisionKeysArray" optional="YES" attributeType="Transformable" customClassName="NSArray" syncable="YES"/>
+        <attribute name="divisionKeys" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
         <attribute name="endDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="eventCode" attributeType="String" syncable="YES"/>
         <attribute name="eventType" attributeType="Integer 16" minValueString="0" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="eventTypeName" attributeType="String" syncable="YES"/>
+        <attribute name="eventTypeString" attributeType="String" syncable="YES"/>
         <attribute name="firstEventID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gmapsPlaceID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gmapsURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="hybridType" attributeType="String" syncable="YES"/>
-        <attribute name="insightsDictionary" optional="YES" attributeType="Transformable" customClassName="NSDictionary" syncable="YES"/>
+        <attribute name="insights" optional="YES" attributeType="Transformable" customClassName="[String: Any]" syncable="YES"/>
         <attribute name="key" attributeType="String" syncable="YES"/>
         <attribute name="lat" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lng" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
@@ -53,7 +53,7 @@
         <attribute name="postalCode" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="shortName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="startDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="stateProv" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timezone" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="week" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
@@ -83,13 +83,13 @@
     </entity>
     <entity name="EventRanking" representedClassName="EventRanking" syncable="YES" codeGenerationType="class">
         <attribute name="dq" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="extraStatsArray" optional="YES" attributeType="Transformable" customClassName="NSArray" syncable="YES"/>
+        <attribute name="extraStats" optional="YES" attributeType="Transformable" customClassName="[Int]" syncable="YES"/>
         <attribute name="losses" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="matchesPlayed" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="qualAverage" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="rank" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="tieBreakerNamesArray" optional="YES" attributeType="Transformable" customClassName="NSArray" syncable="YES"/>
-        <attribute name="tieBreakerValuesArray" optional="YES" attributeType="Transformable" customClassName="NSArray" syncable="YES"/>
+        <attribute name="tieBreakerNames" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
+        <attribute name="tieBreakerValues" optional="YES" attributeType="Transformable" customClassName="[Double]" syncable="YES"/>
         <attribute name="ties" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="wins" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="rankings" inverseEntity="Event" syncable="YES"/>
@@ -105,7 +105,9 @@
     <entity name="Match" representedClassName="Match" syncable="YES" codeGenerationType="class">
         <attribute name="actualTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="blueBreakdown" optional="YES" attributeType="Transformable" customClassName="[String: Any]" syncable="YES"/>
+        <attribute name="blueDQTeamKeys" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
         <attribute name="blueScore" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="blueSurrogateTeamKeys" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
         <attribute name="compLevel" attributeType="String" syncable="YES"/>
         <attribute name="compLevelInt" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="key" attributeType="String" syncable="YES"/>
@@ -113,26 +115,32 @@
         <attribute name="postResultTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="predictedTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="redBreakdown" optional="YES" attributeType="Transformable" customClassName="[String: Any]" syncable="YES"/>
+        <attribute name="redDQTeamKeys" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
         <attribute name="redScore" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="redSurrogateTeamKeys" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
         <attribute name="setNumber" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="winningAlliance" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="blueAlliance" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="blueMatches" inverseEntity="Team" syncable="YES"/>
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="matches" inverseEntity="Event" syncable="YES"/>
         <relationship name="redAlliance" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="redMatches" inverseEntity="Team" syncable="YES"/>
-        <relationship name="videos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Media" inverseName="match" inverseEntity="Media" syncable="YES"/>
+        <relationship name="videos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MatchVideo" inverseName="match" inverseEntity="MatchVideo" syncable="YES"/>
         <fetchIndex name="byKeyIndex">
             <fetchIndexElement property="key" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
+    <entity name="MatchVideo" representedClassName="MatchVideo" syncable="YES" codeGenerationType="class">
+        <attribute name="key" attributeType="String" syncable="YES"/>
+        <attribute name="type" attributeType="String" syncable="YES"/>
+        <relationship name="match" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Match" inverseName="videos" inverseEntity="Match" syncable="YES"/>
+    </entity>
     <entity name="Media" representedClassName="Media" syncable="YES" codeGenerationType="class">
-        <attribute name="detailsDictionary" optional="YES" attributeType="Transformable" customClassName="NSDictionary" syncable="YES"/>
+        <attribute name="details" optional="YES" attributeType="Transformable" customClassName="[String: Any]" syncable="YES"/>
         <attribute name="foreignKey" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="preferred" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="type" attributeType="String" syncable="YES"/>
         <attribute name="year" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="match" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Match" inverseName="videos" inverseEntity="Match" syncable="YES"/>
         <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="media" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Team" representedClassName="Team" syncable="YES" codeGenerationType="class">
@@ -141,7 +149,7 @@
         <attribute name="country" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gmapsPlaceID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gmapsURL" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="homeChampionshipDictionary" optional="YES" attributeType="Transformable" customClassName="NSDictionary" syncable="YES"/>
+        <attribute name="homeChampionship" optional="YES" attributeType="Transformable" customClassName="[String: String]" syncable="YES"/>
         <attribute name="key" attributeType="String" syncable="YES"/>
         <attribute name="lat" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lng" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
@@ -151,10 +159,10 @@
         <attribute name="nickname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="postalCode" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="rookieYear" optional="YES" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="stateProv" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="teamNumber" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="yearsParticipatedArray" optional="YES" attributeType="Transformable" customClassName="NSArray" syncable="YES"/>
+        <attribute name="yearsParticipated" optional="YES" attributeType="Transformable" customClassName="[Int]" syncable="YES"/>
         <relationship name="awards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AwardRecipient" inverseName="team" inverseEntity="AwardRecipient" syncable="YES"/>
         <relationship name="blueMatches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="blueAlliance" inverseEntity="Match" syncable="YES"/>
         <relationship name="districtRankings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictRanking" inverseName="team" inverseEntity="DistrictRanking" syncable="YES"/>
@@ -180,13 +188,14 @@
         <element name="AwardRecipient" positionX="-54" positionY="135" width="128" height="90"/>
         <element name="District" positionX="-63" positionY="135" width="128" height="135"/>
         <element name="DistrictRanking" positionX="-54" positionY="135" width="128" height="135"/>
-        <element name="Event" positionX="-63" positionY="-18" width="128" height="600"/>
+        <element name="Event" positionX="-63" positionY="-18" width="128" height="30"/>
         <element name="EventPoints" positionX="-54" positionY="135" width="128" height="180"/>
-        <element name="EventRanking" positionX="160" positionY="192" width="128" height="225"/>
+        <element name="EventRanking" positionX="160" positionY="192" width="128" height="30"/>
         <element name="EventTeamStat" positionX="-54" positionY="135" width="128" height="120"/>
-        <element name="Match" positionX="-54" positionY="135" width="128" height="30"/>
-        <element name="Media" positionX="-45" positionY="144" width="128" height="165"/>
+        <element name="Match" positionX="-54" positionY="135" width="128" height="375"/>
+        <element name="Media" positionX="-45" positionY="144" width="128" height="30"/>
         <element name="Team" positionX="-54" positionY="135" width="128" height="465"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
+        <element name="MatchVideo" positionX="45" positionY="135" width="128" height="90"/>
     </elements>
 </model>

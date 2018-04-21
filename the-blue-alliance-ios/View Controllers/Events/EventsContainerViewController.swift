@@ -185,7 +185,7 @@ class EventsContainerViewController: ContainerViewController {
         
         var handledWeeks: Set<Int> = []
         var handledTypes: Set<Int> = []
-        self.weeks = Array(events.flatMap({ (event) -> Event? in
+        self.weeks = Array(events.compactMap({ (event) -> Event? in
             let eventType = Int(event.eventType)
             if let week = event.week {
                 // Make sure each week only shows up once

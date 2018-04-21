@@ -12,46 +12,14 @@ import CoreData
 
 extension EventRanking: Managed {
     
-    var extraStats: [Int] {
-        get {
-            return extraStatsArray as? Array<Int> ?? []
-        }
-        set {
-            extraStatsArray = newValue as NSArray
-        }
-    }
-    
-    var tieBreakerValues: [Double] {
-        get {
-            return tieBreakerValuesArray as? Array<Double> ?? []
-        }
-        set {
-            tieBreakerValuesArray = newValue as NSArray
-        }
-    }
-    
-    var tieBreakerNames: [String] {
-        get {
-            return tieBreakerNamesArray as? Array<String> ?? []
-        }
-        set {
-            tieBreakerNamesArray = newValue as NSArray
-        }
-    }
-    
     var infoString: String? {
         get {
-            if !tieBreakerValues.isEmpty, !tieBreakerNames.isEmpty {
-                var string = ""
+            if let tieBreakerValues = tieBreakerValues, !tieBreakerValues.isEmpty, let tieBreakerNames = tieBreakerNames, !tieBreakerNames.isEmpty {
+                var infoParts: [String] = []
                 for (sortOrderName, sortOrderValue) in zip(tieBreakerNames, tieBreakerValues) {
-                    string.append("\(sortOrderName): \(sortOrderValue), ")
+                    infoParts.append("\(sortOrderName): \(sortOrderValue)")
                 }
-                
-                // To remove the trailing comma and space
-                string.remove(at: string.index(before: string.endIndex))
-                string.remove(at: string.index(before: string.endIndex))
-                
-                return string
+                return infoParts.joined(separator: ", ")
             }
             return nil
         }

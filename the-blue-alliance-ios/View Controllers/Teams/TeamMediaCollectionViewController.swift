@@ -164,7 +164,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         
         var playerView = playerViews[foreignKey]
         if playerView == nil {
-            playerView = PlayerView(media: media)
+            playerView = PlayerView(playable: media)
             playerViews[foreignKey] = playerView!
         }
 

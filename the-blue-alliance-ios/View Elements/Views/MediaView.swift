@@ -60,21 +60,24 @@ class MediaView: UIView {
         if let _ = noDataView {
             removeNoDataView()
         }
-
-        noDataLabel = UILabel()
-        noDataLabel?.text = text
-        noDataLabel?.font = UIFont.systemFont(ofSize: 14)
-        noDataLabel?.numberOfLines = 0
-        noDataLabel?.textColor = .black
-        noDataLabel?.alpha = 0.5
-        noDataLabel?.textAlignment = .center
         
-        noDataView = UIView()
-        noDataView?.addSubview(noDataLabel!)
-        noDataLabel?.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
         
-        addSubview(noDataView!)
-        noDataView?.autoPinEdgesToSuperviewEdges()
+        DispatchQueue.main.async {
+            self.noDataLabel = UILabel()
+            self.noDataLabel?.text = text
+            self.noDataLabel?.font = UIFont.systemFont(ofSize: 14)
+            self.noDataLabel?.numberOfLines = 0
+            self.noDataLabel?.textColor = .black
+            self.noDataLabel?.alpha = 0.5
+            self.noDataLabel?.textAlignment = .center
+            
+            self.noDataView = UIView()
+            self.noDataView?.addSubview(self.noDataLabel!)
+            self.noDataLabel?.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
+            
+            self.addSubview(self.noDataView!)
+            self.noDataView?.autoPinEdgesToSuperviewEdges()
+        }
     }
     
     func removeNoDataView() {

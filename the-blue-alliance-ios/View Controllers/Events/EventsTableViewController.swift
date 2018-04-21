@@ -260,16 +260,16 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
         } else if let district = event.district {
             return "\(district.name ?? "") District Events"
         } else if event.isDistrictChampionship {
-            guard let district = event.district, let eventTypeName = event.eventTypeName else {
+            guard let district = event.district, let eventTypeString = event.eventTypeString else {
                 return nil
             }
-            return Int(event.eventType) == EventType.districtChampionshipDivision.rawValue ? "\(district.name!) \(eventTypeName)s" : "\(eventTypeName)s"
+            return Int(event.eventType) == EventType.districtChampionshipDivision.rawValue ? "\(district.name!) \(eventTypeString)s" : "\(eventTypeString)s"
         } else if event.isChampionship {
-            guard let eventTypeName = event.eventTypeName else {
+            guard let eventTypeString = event.eventTypeString else {
                 return nil
             }
             // CMP Finals are already plural
-            return Int(event.eventType) == EventType.championshipFinals.rawValue ? eventTypeName : "\(eventTypeName)s"
+            return Int(event.eventType) == EventType.championshipFinals.rawValue ? eventTypeString : "\(eventTypeString)s"
         } else {
             return "Regional Events"
         }

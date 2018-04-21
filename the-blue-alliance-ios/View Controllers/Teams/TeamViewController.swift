@@ -59,7 +59,8 @@ class TeamViewController: ContainerViewController {
     func updateInterface() {
         navigationTitleLabel?.text = "Team \(team.teamNumber)"
         
-        if !team.yearsParticipated.isEmpty, let year = year {
+        
+        if let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty, let year = year {
             navigationDetailLabel?.text = "▾ \(year)"
         } else {
             navigationDetailLabel?.text = "▾ ----"
@@ -72,17 +73,14 @@ class TeamViewController: ContainerViewController {
                 self.showErrorAlert(with: "Unable to fetch years participated - \(error.localizedDescription)")
                 return
             }
-            
-            guard let years = years as? [Int] else {
-                return
-            }
-            
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
-                self.team.yearsParticipated = years
+                if let years = years {
+                    self.team.yearsParticipated = years.sorted().reversed()
+                }
                 try? backgroundContext.save()
                 
-                if self.year == nil, !self.team.yearsParticipated.isEmpty {
-                    self.year = self.team.yearsParticipated.first
+                if self.year == nil, let yearsParticipated = self.team.yearsParticipated, !yearsParticipated.isEmpty {
+                    self.year = yearsParticipated.first
                 }
             })
         })
@@ -91,7 +89,7 @@ class TeamViewController: ContainerViewController {
     // MARK: - Navigation
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if identifier == SelectYearSegue, team.yearsParticipated.isEmpty {
+        if identifier == SelectYearSegue, team.yearsParticipated == nil, team.yearsParticipated!.isEmpty {
             return false
         }
         return true

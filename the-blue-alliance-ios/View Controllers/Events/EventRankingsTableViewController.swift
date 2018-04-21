@@ -49,7 +49,7 @@ class EventRankingsTableViewController: TBATableViewController {
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 
-                let localRankings = rankings?.flatMap({ (modelRanking) -> EventRanking? in
+                let localRankings = rankings?.compactMap({ (modelRanking) -> EventRanking? in
                     var backgroundTeam: Team?
                     backgroundContext.performAndWait {
                         backgroundTeam = Team.fetchSingleObject(in: backgroundContext, configure: { (fetchRequest) in

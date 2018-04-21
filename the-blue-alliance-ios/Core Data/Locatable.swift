@@ -10,7 +10,7 @@ import Foundation
 
 protocol Locatable {
     var city: String? { get }
-    var state: String? { get }
+    var stateProv: String? { get }
     var country: String? { get }
     var locationName: String? { get }
 }
@@ -18,7 +18,7 @@ protocol Locatable {
 extension Locatable {
     
     var locationString: String? {
-        let location = [city, state, country].reduce("", { (locationString, locationPart) -> String in
+        let location = [city, stateProv, country].reduce("", { (locationString, locationPart) -> String in
             guard let locationPart = locationPart, !locationPart.isEmpty else {
                 return locationString
             }

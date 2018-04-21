@@ -48,15 +48,13 @@ public enum MediaType: String {
 
 }
 
-extension Media: Managed {
+extension Media: Managed, Playable {
     
-    var details: [String: Any]? {
-        get {
-            return detailsDictionary as? Dictionary<String, Any> ?? [:]
+    var youtubeKey: String? {
+        if type == MediaType.youtubeVideo.rawValue {
+            return foreignKey
         }
-        set {
-            detailsDictionary = newValue as NSDictionary?
-        }
+        return nil
     }
     
     static func insert(with model: TBAMedia, for year: Int, in context: NSManagedObjectContext) -> Media {

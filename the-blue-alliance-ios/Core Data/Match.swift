@@ -101,6 +101,7 @@ extension Match: Managed {
             match.matchNumber = Int16(model.matchNumber)
             
             if let redAlliance = model.redAlliance {
+                // TODO: Think about converting this Alliance stuff in to an Alliance object, like we do in the API
                 match.redAlliance = Set(redAlliance.teams.map({ (teamKey) -> Team in
                     var team = Team.findOrFetch(in: context, matching: NSPredicate(format: "key == %@", teamKey))
                     if team == nil {
@@ -111,11 +112,12 @@ extension Match: Managed {
                 if redAlliance.score > -1 {
                     match.redScore = NSNumber(value: redAlliance.score)
                 }
-                // TODO: add surrogate teams
-                // TODO: add dq teams
+                match.redSurrogateTeamKeys = redAlliance.surrogateTeams
+                match.redDQTeamKeys = redAlliance.dqTeams
             }
             
             if let blueAlliance = model.blueAlliance {
+                // TODO: Think about converting this Alliance stuff in to an Alliance object, like we do in the API
                 match.blueAlliance = Set(blueAlliance.teams.map({ (teamKey) -> Team in
                     var team = Team.findOrFetch(in: context, matching: NSPredicate(format: "key == %@", teamKey))
                     if team == nil {
@@ -126,8 +128,8 @@ extension Match: Managed {
                 if blueAlliance.score > -1 {
                     match.blueScore = NSNumber(value: blueAlliance.score)
                 }
-                // TODO: add surrogate teams
-                // TODO: add dq teams
+                match.blueSurrogateTeamKeys = blueAlliance.surrogateTeams
+                match.blueDQTeamKeys = blueAlliance.dqTeams
             }
             
             match.winningAlliance = model.winningAlliance
@@ -149,8 +151,8 @@ extension Match: Managed {
             match.blueBreakdown = model.blueBreakdown
             
             if let videos = model.videos {
-                match.videos = Set(videos.map({ (modelVideo) -> Media in
-                    return Media.insert(with: modelVideo, for: Int(event.year), in: context)
+                match.videos = Set(videos.map({ (modelVideo) -> MatchVideo in
+                    return MatchVideo.insert(with: modelVideo, for: match, in: context)
                 })) as NSSet
             }
         }
