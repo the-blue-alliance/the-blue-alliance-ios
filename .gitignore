@@ -27,6 +27,8 @@ DerivedData
 Pods/
 Podfile.lock
 
+the-blue-alliance-ios.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+
 # Node
 node_modules
 *.log
