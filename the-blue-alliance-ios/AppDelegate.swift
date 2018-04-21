@@ -28,7 +28,7 @@ extension TBAStatus {
 
     public static func defaultStatus() -> TBAStatus {
         // Set to the last safe year we know about
-        let currentYear = 2017
+        let currentYear = UInt(2018)
 
         let defaultStatusJSON: [String: Any] = [
             "android": [
