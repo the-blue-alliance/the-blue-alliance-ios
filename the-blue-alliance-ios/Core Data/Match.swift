@@ -34,24 +34,6 @@ public enum MatchCompLevel: String {
 }
 
 extension Match: Managed {
-
-    var redBreakdown: [String: Any]? {
-        get {
-            return redBreakdownDictionary as? Dictionary<String, Any> ?? [:]
-        }
-        set {
-            redBreakdownDictionary = newValue as NSDictionary?
-        }
-    }
-    
-    var blueBreakdown: [String: Any]? {
-        get {
-            return blueBreakdownDictionary as? Dictionary<String, Any> ?? [:]
-        }
-        set {
-            blueBreakdownDictionary = newValue as NSDictionary?
-        }
-    }
     
     var compLevelString: String {
         guard let compLevel = compLevel else {
@@ -126,8 +108,11 @@ extension Match: Managed {
                     }
                     return team!
                 })) as NSSet
-                match.redScore = NSNumber(value: redAlliance.score)
+                if redAlliance.score > -1 {
+                    match.redScore = NSNumber(value: redAlliance.score)
+                }
                 // TODO: add surrogate teams
+                // TODO: add dq teams
             }
             
             if let blueAlliance = model.blueAlliance {
@@ -138,8 +123,11 @@ extension Match: Managed {
                     }
                     return team!
                 })) as NSSet
-                match.blueScore = NSNumber(value: blueAlliance.score)
+                if blueAlliance.score > -1 {
+                    match.blueScore = NSNumber(value: blueAlliance.score)
+                }
                 // TODO: add surrogate teams
+                // TODO: add dq teams
             }
             
             match.winningAlliance = model.winningAlliance

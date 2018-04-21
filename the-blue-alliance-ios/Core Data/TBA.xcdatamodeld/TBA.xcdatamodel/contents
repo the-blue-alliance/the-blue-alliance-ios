@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16G29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14133" systemVersion="17E199" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Award" representedClassName="Award" syncable="YES" codeGenerationType="class">
         <attribute name="awardType" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
@@ -42,7 +42,7 @@
         <attribute name="gmapsURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="hybridType" attributeType="String" syncable="YES"/>
         <attribute name="insightsDictionary" optional="YES" attributeType="Transformable" customClassName="NSDictionary" syncable="YES"/>
-        <attribute name="key" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="key" attributeType="String" syncable="YES"/>
         <attribute name="lat" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lng" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="locationName" optional="YES" attributeType="String" syncable="YES"/>
@@ -66,6 +66,9 @@
         <relationship name="stats" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventTeamStat" inverseName="event" inverseEntity="EventTeamStat" syncable="YES"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="events" inverseEntity="Team" syncable="YES"/>
         <relationship name="webcasts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Webcast" inverseName="event" inverseEntity="Webcast" syncable="YES"/>
+        <fetchIndex name="byKeyIndex">
+            <fetchIndexElement property="key" type="Binary" order="ascending"/>
+        </fetchIndex>
     </entity>
     <entity name="EventPoints" representedClassName="EventPoints" syncable="YES" codeGenerationType="class">
         <attribute name="alliancePoints" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
@@ -101,15 +104,15 @@
     </entity>
     <entity name="Match" representedClassName="Match" syncable="YES" codeGenerationType="class">
         <attribute name="actualTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="blueBreakdownDictionary" optional="YES" attributeType="Transformable" customClassName="NSDictionary" syncable="YES"/>
+        <attribute name="blueBreakdown" optional="YES" attributeType="Transformable" customClassName="[String: Any]" syncable="YES"/>
         <attribute name="blueScore" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="compLevel" attributeType="String" syncable="YES"/>
         <attribute name="compLevelInt" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="key" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="key" attributeType="String" syncable="YES"/>
         <attribute name="matchNumber" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="postResultTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="predictedTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="redBreakdownDictionary" optional="YES" attributeType="Transformable" customClassName="NSDictionary" syncable="YES"/>
+        <attribute name="redBreakdown" optional="YES" attributeType="Transformable" customClassName="[String: Any]" syncable="YES"/>
         <attribute name="redScore" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="setNumber" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
@@ -118,6 +121,9 @@
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="matches" inverseEntity="Event" syncable="YES"/>
         <relationship name="redAlliance" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="redMatches" inverseEntity="Team" syncable="YES"/>
         <relationship name="videos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Media" inverseName="match" inverseEntity="Media" syncable="YES"/>
+        <fetchIndex name="byKeyIndex">
+            <fetchIndexElement property="key" type="Binary" order="ascending"/>
+        </fetchIndex>
     </entity>
     <entity name="Media" representedClassName="Media" syncable="YES" codeGenerationType="class">
         <attribute name="detailsDictionary" optional="YES" attributeType="Transformable" customClassName="NSDictionary" syncable="YES"/>
@@ -136,7 +142,7 @@
         <attribute name="gmapsPlaceID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gmapsURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="homeChampionshipDictionary" optional="YES" attributeType="Transformable" customClassName="NSDictionary" syncable="YES"/>
-        <attribute name="key" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="key" attributeType="String" syncable="YES"/>
         <attribute name="lat" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lng" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="locationName" optional="YES" attributeType="String" syncable="YES"/>
@@ -158,6 +164,9 @@
         <relationship name="media" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Media" inverseName="team" inverseEntity="Media" syncable="YES"/>
         <relationship name="redMatches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="redAlliance" inverseEntity="Match" syncable="YES"/>
         <relationship name="stats" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventTeamStat" inverseName="team" inverseEntity="EventTeamStat" syncable="YES"/>
+        <fetchIndex name="byKeyIndex">
+            <fetchIndexElement property="key" type="Binary" order="ascending"/>
+        </fetchIndex>
     </entity>
     <entity name="Webcast" representedClassName="Webcast" syncable="YES" codeGenerationType="class">
         <attribute name="channel" attributeType="String" syncable="YES"/>
@@ -175,7 +184,7 @@
         <element name="EventPoints" positionX="-54" positionY="135" width="128" height="180"/>
         <element name="EventRanking" positionX="160" positionY="192" width="128" height="225"/>
         <element name="EventTeamStat" positionX="-54" positionY="135" width="128" height="120"/>
-        <element name="Match" positionX="-54" positionY="135" width="128" height="315"/>
+        <element name="Match" positionX="-54" positionY="135" width="128" height="30"/>
         <element name="Media" positionX="-45" positionY="144" width="128" height="165"/>
         <element name="Team" positionX="-54" positionY="135" width="128" height="465"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
