@@ -120,6 +120,7 @@ class TeamViewController: ContainerViewController {
             eventsViewController.year = year
             eventsViewController.eventSelected = { event in
                 // TODO: Push to team@event VC
+                
             }
         } else if segue.identifier == "TeamMediaEmbed" {
             mediaViewController = segue.destination as? TeamMediaCollectionViewController
