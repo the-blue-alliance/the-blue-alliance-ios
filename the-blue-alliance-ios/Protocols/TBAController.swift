@@ -152,10 +152,9 @@ class ContainerViewController: UIViewController, Container, Persistable, Alertab
         return view
     }
     var noDataView: UIView?
-    lazy var setupSegmentedControlViews: Any? = {
+    private lazy var setupSegmentedControlViews: Void = {
         [unowned self] in
         self.updateSegmentedControlViews()
-        return nil
     }()
     
     var viewControllers: [Persistable & Refreshable] = [] {

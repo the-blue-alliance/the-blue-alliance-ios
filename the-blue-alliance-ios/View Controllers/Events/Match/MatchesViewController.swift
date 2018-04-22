@@ -146,7 +146,7 @@ extension MatchesTableViewController: TableViewDataSourceDelegate {
         if isRefreshing {
             return
         }
-        showNoDataView(with: "Unable to load event matches")
+        showNoDataView(with: "No matches for event")
     }
     
     func hideNoDataView() {

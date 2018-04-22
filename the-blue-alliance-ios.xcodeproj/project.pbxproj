@@ -599,7 +599,6 @@
 				92942D901E2154DA008E79CA /* Resources */,
 				C66CFE3D34E1D709FFB95483 /* [CP] Embed Pods Frameworks */,
 				49CF8A9E90B81B810B769ED8 /* 📦 Embed Pods Frameworks */,
-				A63DA3CC8EA7626EC59FC58E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -702,21 +701,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A63DA3CC8EA7626EC59FC58E /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C19C35A71EB909F04E91197C /* [CP] Check Pods Manifest.lock */ = {

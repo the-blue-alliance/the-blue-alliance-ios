@@ -14,15 +14,24 @@ class TeamViewController: ContainerViewController {
     public var team: Team!
     var year: Int? {
         didSet {
-            eventsViewController.year = year
-            mediaViewController.year = year
+            if eventsViewController.year == nil || eventsViewController.year != year {
+                eventsViewController.year = year
+            }
+            if mediaViewController.year == nil || mediaViewController.year != year {
+                mediaViewController.year = year
+            }
             
             DispatchQueue.main.async {
                 self.updateInterface()
             }
         }
     }
-    
+    // Only refresh years participated once on appear
+    private lazy var refreshYearsParticipatedOnce: Void = {
+        [unowned self] in
+        self.refreshYearsParticipated()
+    }()
+
     internal var infoViewController: TeamInfoTableViewController!
     @IBOutlet internal var infoView: UIView!
     
@@ -51,7 +60,7 @@ class TeamViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        refreshYearsParticipated()
+        _ = refreshYearsParticipatedOnce
     }
     
     // MARK: - Private

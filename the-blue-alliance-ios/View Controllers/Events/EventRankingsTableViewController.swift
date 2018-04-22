@@ -129,7 +129,7 @@ extension EventRankingsTableViewController: TableViewDataSourceDelegate {
         if isRefreshing {
             return
         }
-        showNoDataView(with: "Unable to load event rankings")
+        showNoDataView(with: "No rankings for event")
     }
     
     func hideNoDataView() {
