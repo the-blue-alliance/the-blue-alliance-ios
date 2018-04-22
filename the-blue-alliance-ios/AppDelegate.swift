@@ -44,7 +44,10 @@ extension TBAStatus {
             "is_datafeed_down": false,
             "max_season": currentYear
         ]
+        
+
         return TBAStatus(json: defaultStatusJSON)!
+
     }
 
 }
@@ -174,6 +177,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func setupAppearance() {
         let navigationBarAppearance = UINavigationBar.appearance()
+        
         navigationBarAppearance.barTintColor = UIColor.primaryBlue
         navigationBarAppearance.tintColor = UIColor.white
         navigationBarAppearance.shadowImage = UIImage()

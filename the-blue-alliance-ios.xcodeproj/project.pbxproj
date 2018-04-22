@@ -525,6 +525,7 @@
 				9257DF4D208C0D1200F7E2BA /* EventAlliancesTableViewController.swift */,
 				92D5A1211EE48EC700EBFC6F /* EventDistrictPointsViewController.swift */,
 				303F82491EF593BE007CADA1 /* EventRankingsTableViewController.swift */,
+				92942E351E2A81E8008E79CA /* EventInfoTableViewController.swift */,
 				924602A31ECD27CE0030EDBF /* EventAwardsViewController.swift */,
 				9272924E1EE4A1000027CE7C /* Stats */,
 			);
@@ -599,6 +600,7 @@
 				92942D901E2154DA008E79CA /* Resources */,
 				C66CFE3D34E1D709FFB95483 /* [CP] Embed Pods Frameworks */,
 				49CF8A9E90B81B810B769ED8 /* 📦 Embed Pods Frameworks */,
+				A63DA3CC8EA7626EC59FC58E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -616,12 +618,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "The Blue Alliance";
 				TargetAttributes = {
 					92942D911E2154DA008E79CA = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = RHCNV9ZW2S;
+						DevelopmentTeam = VWKUK9SSFL;
 						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
@@ -702,6 +704,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A63DA3CC8EA7626EC59FC58E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C19C35A71EB909F04E91197C /* [CP] Check Pods Manifest.lock */ = {
@@ -860,6 +877,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -867,6 +885,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -916,6 +935,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -923,6 +943,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -957,7 +978,7 @@
 			baseConfigurationReference = 614241F72C3BE7F89DD95428 /* Pods-the-blue-alliance-ios.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = RHCNV9ZW2S;
+				DEVELOPMENT_TEAM = VWKUK9SSFL;
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.the-blue-alliance";
@@ -972,7 +993,7 @@
 			baseConfigurationReference = AB45C28FC9D316785507BAAC /* Pods-the-blue-alliance-ios.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = RHCNV9ZW2S;
+				DEVELOPMENT_TEAM = VWKUK9SSFL;
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.the-blue-alliance";
