@@ -20,7 +20,7 @@ class TeamsContainerViewController: ContainerViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         viewControllers = [teamsViewController]
         containerViews = [teamsView]
     }

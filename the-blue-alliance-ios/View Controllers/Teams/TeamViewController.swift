@@ -89,7 +89,10 @@ class TeamViewController: ContainerViewController {
     // MARK: - Navigation
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if identifier == SelectYearSegue, team.yearsParticipated == nil, team.yearsParticipated!.isEmpty {
+        if identifier == SelectYearSegue {
+            if let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty {
+                return true
+            }
             return false
         }
         return true

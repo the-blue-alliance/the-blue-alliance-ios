@@ -178,6 +178,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         navigationBarAppearance.barTintColor = UIColor.primaryBlue
         navigationBarAppearance.tintColor = UIColor.white
+        // Remove the shadow for a more seamless split between navigation bar and segmented controls
         navigationBarAppearance.shadowImage = UIImage()
         navigationBarAppearance.setBackgroundImage(UIImage(), for: .default)
         navigationBarAppearance.isTranslucent = false

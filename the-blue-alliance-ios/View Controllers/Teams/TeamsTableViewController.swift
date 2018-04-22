@@ -19,17 +19,21 @@ class TeamsTableViewController: TBATableViewController {
             updateDataSource()
         }
     }
-    @IBOutlet var searchBar: UISearchBar? {
-        didSet {
-            searchBar?.tintColor = .primaryBlue
-            searchBar?.placeholder = "Search"
-        }
-    }
-    
+    let searchController = UISearchController(searchResultsController: nil)
+
     // MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        
+        tableView.tableHeaderView = searchController.searchBar
+        
+        // Used to make sure the UISearchBar stays in our root VC (this VC) when presented and doesn't overlay in push
+        definesPresentationContext = true
         
         tableView.register(UINib(nibName: String(describing: TeamTableViewCell.self), bundle: nil), forCellReuseIdentifier: TeamTableViewCell.reuseIdentifier)
     }
@@ -117,8 +121,8 @@ class TeamsTableViewController: TBATableViewController {
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if let searchBar = searchBar, searchBar.isFirstResponder {
-            searchBar.resignFirstResponder()
+        if let text = searchController.searchBar.text, text.isEmpty, searchController.isActive {
+            searchController.isActive = false
         }
     }
     
@@ -146,7 +150,7 @@ class TeamsTableViewController: TBATableViewController {
     }
     
     fileprivate func setupFetchRequest(_ request: NSFetchRequest<Team>) {
-        if let searchText = searchBar?.text, !searchText.isEmpty {
+        if let searchText = searchController.searchBar.text, !searchText.isEmpty {
             if let event = event {
                 request.predicate = NSPredicate(format: "ANY events = %@ AND (nickname contains[cd] %@ OR teamNumber.stringValue beginswith[cd] %@)", event, searchText, searchText)
             } else {
@@ -180,34 +184,10 @@ extension TeamsTableViewController: TableViewDataSourceDelegate {
     
 }
 
-extension TeamsTableViewController: UISearchBarDelegate {
+extension TeamsTableViewController: UISearchResultsUpdating {
     
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchBar.showsCancelButton = true
-    }
-    
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        searchBar.showsCancelButton = false
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.text = nil
-        searchBar.resignFirstResponder()
-        
+    public func updateSearchResults(for searchController: UISearchController) {
         updateDataSource()
     }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        updateDataSource()
-    }
-    
-    func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-        searchBar.resignFirstResponder()
-        return true
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-    }
-    
+
 }
