@@ -194,8 +194,6 @@ class EventInfoTableViewController: TBATableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-
         if indexPath.section == EventInfoSection.detail.rawValue {
             var row = indexPath.row
             if event.district == nil, row >= EventDetailRow.districtPoints.rawValue {
@@ -248,6 +246,8 @@ class EventInfoTableViewController: TBATableViewController {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
             }
+
+            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
 

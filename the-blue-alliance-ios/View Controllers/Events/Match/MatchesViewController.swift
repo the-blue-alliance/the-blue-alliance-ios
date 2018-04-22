@@ -31,12 +31,6 @@ class MatchesTableViewController: TBATableViewController {
         tableView.register(UINib(nibName: String(describing: MatchTableViewCell.self), bundle: nil), forCellReuseIdentifier: MatchTableViewCell.reuseIdentifier)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
-    }
-    
     // MARK: - Refreshing
     
     override func refresh() {

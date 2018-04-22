@@ -11,9 +11,13 @@ import TBAKit
 import CoreData
 
 extension Team: Locatable, Managed {
-        
+    
     var fallbackNickname: String {
         return "Team \(teamNumber)"
+    }
+    
+    static func trimFRCPrefix(_ key: String) -> String {
+        return key.prefixTrim("frc")
     }
     
     static func insert(with key: String, in context: NSManagedObjectContext) -> Team {
@@ -26,7 +30,7 @@ extension Team: Locatable, Managed {
             // Required: key, name, teamNumber
             team.key = key
             
-            let teamNumber = Int32(key.prefixTrim("frc"))!
+            let teamNumber = Int32(trimFRCPrefix(key))!
             team.name = "Team \(teamNumber)"
             team.teamNumber = teamNumber
         }

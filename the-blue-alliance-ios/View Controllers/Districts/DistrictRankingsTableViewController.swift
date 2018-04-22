@@ -28,13 +28,7 @@ class DistrictRankingsTableViewController: TBATableViewController {
         
         tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
-        clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
-    }
-    
     // MARK: - Refreshing
     
     // TODO: Think about building a way to "chain" requests together for a refresh...

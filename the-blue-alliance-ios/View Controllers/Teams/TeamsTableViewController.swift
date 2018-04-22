@@ -32,13 +32,7 @@ class TeamsTableViewController: TBATableViewController {
         
         tableView.register(UINib(nibName: String(describing: TeamTableViewCell.self), bundle: nil), forCellReuseIdentifier: TeamTableViewCell.reuseIdentifier)
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
-        clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
-    }
-    
     // MARK: - Refreshing
     
     override func refresh() {
