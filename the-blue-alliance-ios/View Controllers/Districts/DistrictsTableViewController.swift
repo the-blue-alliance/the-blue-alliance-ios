@@ -31,14 +31,6 @@ class DistrictsTableViewController: TBATableViewController {
     }
     
     var districtSelected: ((District) -> ())?
-
-    // MARK: - View Lifecycle
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
-    }
     
     // MARK: - Refreshing
     

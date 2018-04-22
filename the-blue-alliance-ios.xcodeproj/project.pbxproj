@@ -33,8 +33,13 @@
 		924F8C851EC8C5F200F7447A /* Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924F8C841EC8C5F200F7447A /* Managed.swift */; };
 		924F8C871EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924F8C861EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift */; };
 		925288921EC7ABC6009B78A9 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925288911EC7ABC6009B78A9 /* Event.swift */; };
+		925471F7208CC6F100AD3204 /* EventAllianceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925471F6208CC6F100AD3204 /* EventAllianceTableViewCell.swift */; };
+		925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 925471F8208CC73F00AD3204 /* EventAllianceTableViewCell.xib */; };
 		9257DF46208BDCBF00F7E2BA /* MatchVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9257DF45208BDCBF00F7E2BA /* MatchVideo.swift */; };
 		9257DF48208BDEE200F7E2BA /* Playable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9257DF47208BDEE200F7E2BA /* Playable.swift */; };
+		9257DF4A208BFC4400F7E2BA /* EventAlliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9257DF49208BFC4400F7E2BA /* EventAlliance.swift */; };
+		9257DF4C208C078100F7E2BA /* WLT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9257DF4B208C078100F7E2BA /* WLT.swift */; };
+		9257DF4E208C0D1200F7E2BA /* EventAlliancesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9257DF4D208C0D1200F7E2BA /* EventAlliancesTableViewController.swift */; };
 		9272924B1EE4A0830027CE7C /* EventStatsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272924A1EE4A0830027CE7C /* EventStatsContainerViewController.swift */; };
 		9272924D1EE4A0FC0027CE7C /* EventStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272924C1EE4A0FC0027CE7C /* EventStatsViewController.swift */; };
 		927292521EE4A48C0027CE7C /* EventTeamStatsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927292511EE4A48C0027CE7C /* EventTeamStatsTableViewController.swift */; };
@@ -118,8 +123,13 @@
 		924F8C841EC8C5F200F7447A /* Managed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Managed.swift; sourceTree = "<group>"; };
 		924F8C861EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+Extension.swift"; sourceTree = "<group>"; };
 		925288911EC7ABC6009B78A9 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		925471F6208CC6F100AD3204 /* EventAllianceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceTableViewCell.swift; sourceTree = "<group>"; };
+		925471F8208CC73F00AD3204 /* EventAllianceTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventAllianceTableViewCell.xib; sourceTree = "<group>"; };
 		9257DF45208BDCBF00F7E2BA /* MatchVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchVideo.swift; sourceTree = "<group>"; };
 		9257DF47208BDEE200F7E2BA /* Playable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playable.swift; sourceTree = "<group>"; };
+		9257DF49208BFC4400F7E2BA /* EventAlliance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAlliance.swift; sourceTree = "<group>"; };
+		9257DF4B208C078100F7E2BA /* WLT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WLT.swift; sourceTree = "<group>"; };
+		9257DF4D208C0D1200F7E2BA /* EventAlliancesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAlliancesTableViewController.swift; sourceTree = "<group>"; };
 		9272924A1EE4A0830027CE7C /* EventStatsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatsContainerViewController.swift; sourceTree = "<group>"; };
 		9272924C1EE4A0FC0027CE7C /* EventStatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatsViewController.swift; sourceTree = "<group>"; };
 		927292511EE4A48C0027CE7C /* EventTeamStatsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTeamStatsTableViewController.swift; sourceTree = "<group>"; };
@@ -291,13 +301,6 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
-		924F8C891EC8D26500F7447A /* Districts */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Districts;
-			sourceTree = "<group>";
-		};
 		9272924E1EE4A1000027CE7C /* Stats */ = {
 			isa = PBXGroup;
 			children = (
@@ -440,10 +443,12 @@
 			isa = PBXGroup;
 			children = (
 				925288911EC7ABC6009B78A9 /* Event.swift */,
+				9257DF49208BFC4400F7E2BA /* EventAlliance.swift */,
 				303F82471EF59253007CADA1 /* EventRanking.swift */,
 				92D5A11F1EE476C800EBFC6F /* EventPoints.swift */,
 				92B5DAC51EE4CE7C00B0A8F3 /* EventTeamStat.swift */,
 				92FFE5291E7CB1550037E48C /* Webcast.swift */,
+				9257DF4B208C078100F7E2BA /* WLT.swift */,
 			);
 			name = Event;
 			sourceTree = "<group>";
@@ -517,6 +522,7 @@
 			children = (
 				92942DDE1E21D2EB008E79CA /* EventViewController.swift */,
 				92942E351E2A81E8008E79CA /* EventInfoTableViewController.swift */,
+				9257DF4D208C0D1200F7E2BA /* EventAlliancesTableViewController.swift */,
 				92D5A1211EE48EC700EBFC6F /* EventDistrictPointsViewController.swift */,
 				303F82491EF593BE007CADA1 /* EventRankingsTableViewController.swift */,
 				924602A31ECD27CE0030EDBF /* EventAwardsViewController.swift */,
@@ -541,7 +547,6 @@
 				9223AC861EE7214F00F54F93 /* Views */,
 				145C57B31ED377DE004955B2 /* Match */,
 				924602A91ECE89C40030EDBF /* Awards */,
-				924F8C891EC8D26500F7447A /* Districts */,
 				92D855D51EC695AE00572F27 /* Teams */,
 				92FFE5231E7C994B0037E48C /* Events */,
 				929BBB061EC55745006D3854 /* Info */,
@@ -556,6 +561,8 @@
 				304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */,
 				92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */,
 				92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */,
+				925471F8208CC73F00AD3204 /* EventAllianceTableViewCell.xib */,
+				925471F6208CC6F100AD3204 /* EventAllianceTableViewCell.swift */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -658,6 +665,7 @@
 				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
 				92D855D91EC695CE00572F27 /* TeamTableViewCell.xib in Resources */,
+				925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */,
 				92942D9D1E2154DA008E79CA /* Main.storyboard in Resources */,
 				92942DC31E215C37008E79CA /* MyTBAStoryboard.storyboard in Resources */,
 			);
@@ -765,7 +773,9 @@
 				92942DAB1E215700008E79CA /* TBA.xcdatamodeld in Sources */,
 				924602A71ECD2A750030EDBF /* Award.swift in Sources */,
 				929FCDA21EC8068800A38E46 /* DistrictViewController.swift in Sources */,
+				9257DF4C208C078100F7E2BA /* WLT.swift in Sources */,
 				929FCD951EC7EE9200A38E46 /* Locatable.swift in Sources */,
+				9257DF4A208BFC4400F7E2BA /* EventAlliance.swift in Sources */,
 				92F481F31E7DA0A800B4ED7E /* TBAController.swift in Sources */,
 				925288921EC7ABC6009B78A9 /* Event.swift in Sources */,
 				924F8C851EC8C5F200F7447A /* Managed.swift in Sources */,
@@ -800,6 +810,8 @@
 				92FFE52C1E7CC60F0037E48C /* TBAColorExtension.swift in Sources */,
 				929FCDAA1EC8BFB000A38E46 /* DistrictRanking.swift in Sources */,
 				92D5A1201EE476C800EBFC6F /* EventPoints.swift in Sources */,
+				925471F7208CC6F100AD3204 /* EventAllianceTableViewCell.swift in Sources */,
+				9257DF4E208C0D1200F7E2BA /* EventAlliancesTableViewController.swift in Sources */,
 				92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */,
 				303F82481EF59253007CADA1 /* EventRanking.swift in Sources */,
 				92942DB11E215B06008E79CA /* EventsTableViewController.swift in Sources */,

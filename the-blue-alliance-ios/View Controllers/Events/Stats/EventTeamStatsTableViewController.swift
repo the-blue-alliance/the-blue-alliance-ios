@@ -50,13 +50,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
         
         tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
-        clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
-    }
-    
     // MARK: - Refreshing
     
     override func refresh() {

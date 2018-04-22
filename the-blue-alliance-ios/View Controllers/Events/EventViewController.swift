@@ -45,7 +45,7 @@ class EventViewController: ContainerViewController {
             infoViewController = segue.destination as! EventInfoTableViewController
             infoViewController.event = event
             infoViewController.showAlliances = {
-                // TODO: Show alliances in here
+                self.performSegue(withIdentifier: "EventAlliancesSegue", sender: nil)
             }
             infoViewController.showAwards = {
                 self.performSegue(withIdentifier: "EventAwardsSegue", sender: nil)
@@ -74,6 +74,10 @@ class EventViewController: ContainerViewController {
             rankingsViewController.rankingSelected = { team in
                 self.performSegue(withIdentifier: "TeamAtEventSegue", sender: team);
             }
+        } else if segue.identifier == "EventAlliancesSegue" {
+            let eventAlliancesViewController = segue.destination as! EventAlliancesViewController
+            eventAlliancesViewController.event = event
+            eventAlliancesViewController.persistentContainer = persistentContainer
         } else if segue.identifier == "EventAwardsSegue" {
             let eventAwardsViewController = segue.destination as! EventAwardsViewController
             eventAwardsViewController.event = event
