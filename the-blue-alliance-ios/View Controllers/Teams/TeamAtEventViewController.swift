@@ -31,15 +31,50 @@ class TeamAtEventViewController: ContainerViewController {
         
         navigationTitleLabel?.text = "Team \(team.teamNumber)"
         navigationDetailLabel?.text = "@ \(event.friendlyNameWithYear)"
-        
-        // viewControllers = [summaryViewController, matchesViewController, statsViewController, awardsViewController]
-        // containerViews = [statusView, matchesView, statsView, awardsView]
+            
+        viewControllers = [summaryViewController, matchesViewController, statsViewController, awardsViewController]
+        containerViews = [statusView, matchesView, statsView, awardsView]
     }
     
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // TODO: Setup Segues here
+        if segue.identifier == "TeamAtEventStatusEmbed" {
+            summaryViewController = segue.destination as! TeamSummaryTableViewController
+        } else if segue.identifier == "TeamAtEventMatchesEmbed" {
+            matchesViewController = segue.destination as! MatchesTableViewController
+            matchesViewController.event = event
+            matchesViewController.team = team
+            matchesViewController.matchSelected = { match in
+                self.performSegue(withIdentifier: "MatchSegue", sender: match)
+            }
+        } else if segue.identifier == "TeamAtEventStatsEmbed" {
+            statsViewController = segue.destination as! TeamStatsTableViewController
+        } else if segue.identifier == "TeamAtEventAwardsEmbed" {
+            awardsViewController = segue.destination as! EventAwardsTableViewController
+            awardsViewController.event = event
+            awardsViewController.team = team
+            awardsViewController.teamSelected = { team in
+                // Don't push to team@event for team we're already showing team@event for
+                if team == self.team {
+                    return
+                }
+                self.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
+            }
+            awardsViewController.persistentContainer = persistentContainer
+        } else if segue.identifier == "MatchSegue" {
+            let match = sender as! Match
+            let matchViewController = segue.destination as! MatchViewController
+            matchViewController.match = match
+            matchViewController.team = team
+            matchViewController.persistentContainer = persistentContainer
+        } else if segue.identifier == "TeamAtEventSegue" {
+            let team = sender as! Team
+            let teamAtEventViewController = segue.destination as! TeamAtEventViewController
+            teamAtEventViewController.team = team
+            teamAtEventViewController.event = event
+            teamAtEventViewController.persistentContainer = persistentContainer
+        }
     }
     
 }

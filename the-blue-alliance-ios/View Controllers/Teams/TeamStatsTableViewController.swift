@@ -11,6 +11,12 @@ import UIKit
 
 class TeamStatsTableViewController: TBATableViewController {
     
-    // 
+    override func refresh() {
+        
+    }
+    
+    override func shouldNoDataRefresh() -> Bool {
+        return false
+    }
     
 }

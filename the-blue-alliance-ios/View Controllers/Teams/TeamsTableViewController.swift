@@ -22,6 +22,7 @@ class TeamsTableViewController: TBATableViewController {
     @IBOutlet var searchBar: UISearchBar? {
         didSet {
             searchBar?.tintColor = .primaryBlue
+            searchBar?.placeholder = "Search"
         }
     }
     

@@ -107,7 +107,7 @@
         <!--Match View Controller-->
         <scene sceneID="Csm-BX-pdF">
             <objects>
-                <viewController id="Eer-R7-yJV" customClass="MatchViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MatchViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Eer-R7-yJV" customClass="MatchViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="9sx-MV-l5z"/>
                         <viewControllerLayoutGuide type="bottom" id="aHW-HZ-tOw"/>
@@ -1041,7 +1041,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nVD-Qk-vvY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4716" y="-3105"/>
+            <point key="canvasLocation" x="4500" y="-3199"/>
         </scene>
         <!--Event Stats View Controller-->
         <scene sceneID="uVQ-WN-IJZ">
@@ -1170,7 +1170,7 @@
         <image name="ic_sort_white" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="mZl-Oj-qX6"/>
+        <segue reference="Xij-X1-snp"/>
         <segue reference="oO5-aj-OQj"/>
     </inferredMetricsTieBreakers>
 </document>
