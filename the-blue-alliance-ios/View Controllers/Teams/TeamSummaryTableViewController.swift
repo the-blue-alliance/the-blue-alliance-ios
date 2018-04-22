@@ -11,7 +11,6 @@ import UIKit
 
 class TeamSummaryTableViewController: TBATableViewController {
     
-    // Something in here
     override func refresh() {
         
     }

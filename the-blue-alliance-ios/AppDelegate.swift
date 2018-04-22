@@ -44,10 +44,8 @@ extension TBAStatus {
             "is_datafeed_down": false,
             "max_season": currentYear
         ]
-        
 
         return TBAStatus(json: defaultStatusJSON)!
-
     }
 
 }

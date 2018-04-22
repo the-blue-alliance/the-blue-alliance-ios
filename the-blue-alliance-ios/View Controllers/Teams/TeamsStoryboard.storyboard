@@ -62,7 +62,7 @@
         <!--Team View Controller-->
         <scene sceneID="HSe-tY-LfS">
             <objects>
-                <viewController storyboardIdentifier="TeamViewController" id="5by-aT-woR" customClass="TeamViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TeamViewController" hidesBottomBarWhenPushed="YES" id="5by-aT-woR" customClass="TeamViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="m6P-mj-L99"/>
                         <viewControllerLayoutGuide type="bottom" id="nhg-Li-uWZ"/>
@@ -341,25 +341,25 @@
                                 </constraints>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YIr-bk-8gR">
-                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
                                 <connections>
                                     <segue destination="K7R-m8-KYf" kind="embed" identifier="TeamAtEventStatusEmbed" id="GOp-9K-i06"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4r6-qu-3IW">
-                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
                                 <connections>
                                     <segue destination="r4I-0U-t0Q" kind="embed" identifier="TeamAtEventMatchesEmbed" id="xu0-6R-NR0"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="seF-8a-7xe">
-                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
                                 <connections>
                                     <segue destination="Lb0-pm-Dmi" kind="embed" identifier="TeamAtEventStatsEmbed" id="Lhj-Up-XYA"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="07K-8C-nSB">
-                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
                                 <connections>
                                     <segue destination="kMk-Yy-G80" kind="embed" identifier="TeamAtEventAwardsEmbed" id="w6e-vi-IcA"/>
                                 </connections>
@@ -435,6 +435,7 @@
                         <outlet property="statsView" destination="seF-8a-7xe" id="wL0-hD-t0j"/>
                         <outlet property="statusView" destination="YIr-bk-8gR" id="6bY-dP-ARF"/>
                         <segue destination="uEa-li-jHU" kind="show" identifier="MatchSegue" id="GzB-bx-98K"/>
+                        <segue destination="1O9-Ef-RV5" kind="show" identifier="TeamAtEventSegue" id="N0C-bf-yjW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DQr-Bh-8W9" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -442,12 +443,20 @@
             </objects>
             <point key="canvasLocation" x="1561" y="1852"/>
         </scene>
+        <!--TeamAtEventViewController-->
+        <scene sceneID="QzC-JW-6uF">
+            <objects>
+                <viewControllerPlaceholder referencedIdentifier="TeamAtEventViewController" id="1O9-Ef-RV5" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PXA-4Q-mwA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2210" y="1851"/>
+        </scene>
         <!--Matches Table View Controller-->
         <scene sceneID="Dan-Wv-jt8">
             <objects>
                 <tableViewController id="r4I-0U-t0Q" customClass="MatchesTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="wwf-QH-HwO">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <connections>
@@ -466,14 +475,14 @@
                 <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="MatchViewController" id="uEa-li-jHU" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D7z-Eg-vap" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1474" y="2254"/>
+            <point key="canvasLocation" x="1560" y="2274"/>
         </scene>
         <!--Team Summary Table View Controller-->
         <scene sceneID="oVG-qs-sr3">
             <objects>
                 <tableViewController id="K7R-m8-KYf" customClass="TeamSummaryTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="elw-jp-7t0">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <connections>
@@ -491,7 +500,7 @@
             <objects>
                 <tableViewController id="Lb0-pm-Dmi" customClass="TeamStatsTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="QgD-Ee-CbM">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <connections>
@@ -509,7 +518,7 @@
             <objects>
                 <tableViewController id="kMk-Yy-G80" customClass="EventAwardsTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="75H-7Z-L2N">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <connections>
