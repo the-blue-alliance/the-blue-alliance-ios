@@ -44,6 +44,7 @@ extension Event: Locatable, Managed {
             event.eventType = Int16(model.eventType)
             event.eventTypeString = model.eventTypeString
             event.firstEventID = model.firstEventID
+            event.firstEventCode = model.firstEventCode
             event.gmapsPlaceID = model.gmapsPlaceID
             event.gmapsURL = model.gmapsURL
             

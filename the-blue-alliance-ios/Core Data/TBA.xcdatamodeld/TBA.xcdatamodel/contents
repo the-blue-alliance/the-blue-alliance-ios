@@ -37,6 +37,7 @@
         <attribute name="eventCode" attributeType="String" syncable="YES"/>
         <attribute name="eventType" attributeType="Integer 16" minValueString="0" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="eventTypeString" attributeType="String" syncable="YES"/>
+        <attribute name="firstEventCode" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstEventID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gmapsPlaceID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gmapsURL" optional="YES" attributeType="String" syncable="YES"/>
@@ -207,7 +208,10 @@
         <element name="AwardRecipient" positionX="-54" positionY="135" width="128" height="90"/>
         <element name="District" positionX="-63" positionY="135" width="128" height="135"/>
         <element name="DistrictRanking" positionX="-54" positionY="135" width="128" height="135"/>
-        <element name="Event" positionX="-63" positionY="-18" width="128" height="30"/>
+        <element name="Event" positionX="-63" positionY="-18" width="128" height="615"/>
+        <element name="EventAlliance" positionX="54" positionY="144" width="128" height="135"/>
+        <element name="EventAllianceBackup" positionX="63" positionY="153" width="128" height="90"/>
+        <element name="EventAllianceStatus" positionX="72" positionY="162" width="128" height="135"/>
         <element name="EventPoints" positionX="-54" positionY="135" width="128" height="180"/>
         <element name="EventRanking" positionX="160" positionY="192" width="128" height="195"/>
         <element name="EventTeamStat" positionX="-54" positionY="135" width="128" height="120"/>
@@ -216,8 +220,5 @@
         <element name="Media" positionX="-45" positionY="144" width="128" height="30"/>
         <element name="Team" positionX="-54" positionY="135" width="128" height="465"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
-        <element name="EventAlliance" positionX="54" positionY="144" width="128" height="135"/>
-        <element name="EventAllianceBackup" positionX="63" positionY="153" width="128" height="90"/>
-        <element name="EventAllianceStatus" positionX="72" positionY="162" width="128" height="135"/>
     </elements>
 </model>
