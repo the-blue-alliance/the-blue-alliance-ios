@@ -50,6 +50,8 @@ class TeamAtEventViewController: ContainerViewController {
             }
         } else if segue.identifier == "TeamAtEventStatsEmbed" {
             statsViewController = segue.destination as! TeamStatsTableViewController
+            statsViewController.event = event
+            statsViewController.team = team
         } else if segue.identifier == "TeamAtEventAwardsEmbed" {
             awardsViewController = segue.destination as! EventAwardsTableViewController
             awardsViewController.event = event
@@ -61,7 +63,6 @@ class TeamAtEventViewController: ContainerViewController {
                 }
                 self.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
             }
-            awardsViewController.persistentContainer = persistentContainer
         } else if segue.identifier == "MatchSegue" {
             let match = sender as! Match
             let matchViewController = segue.destination as! MatchViewController

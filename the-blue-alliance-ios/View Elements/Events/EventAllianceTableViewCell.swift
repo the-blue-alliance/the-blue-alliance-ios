@@ -10,7 +10,7 @@ class EventAllianceTableViewCell: UITableViewCell {
             configureCell()
         }
     }
-    var teamSelected: ((String) -> ())?
+    var teamSelected: ((Team) -> ())?
 
     @IBOutlet private var levelLabel: UILabel!
     @IBOutlet private var nameLabel: UILabel!
@@ -19,12 +19,6 @@ class EventAllianceTableViewCell: UITableViewCell {
     private func labelWithText(_ text: String) -> UILabel {
         let label = UILabel()
         label.text = text
-        return label
-    }
-    
-    private func boldLabelWithText(_ text: String) -> UILabel {
-        let label = labelWithText(text)
-        label.font = UIFont.systemFont(ofSize: UIFont.labelFontSize, weight: UIFont.Weight.semibold)
         return label
     }
     
@@ -58,9 +52,17 @@ class EventAllianceTableViewCell: UITableViewCell {
             nameLabel.isHidden = true
         }
         
+        // TODO: Find a way to type these sorts of to-many relationships in Swift/Core Data
+        guard let picks = alliance.picks as? NSMutableOrderedSet else {
+            return
+        }
+        
         // OH PICK BOY http://photos.prnewswire.com/prnvar/20140130/NY56077
-        for (index, teamKey) in alliance.picks!.enumerated() {
-            let teamNumber = Team.trimFRCPrefix(teamKey)
+        for (index, team) in picks.enumerated() {
+            guard let team = team as? Team else {
+                continue
+            }
+            let teamNumber = "\(team.teamNumber)"
 
             var label: UILabel
             if index == 0 {
@@ -78,12 +80,15 @@ class EventAllianceTableViewCell: UITableViewCell {
     }
     
     @objc private func teamTapped(gesture: UITapGestureRecognizer) {
-        guard let index = gesture.view?.tag, let picks = alliance?.picks, index < picks.count else {
+        guard let teamSelected = teamSelected else {
             return
         }
-        let teamKey = picks[index]
-        if let teamSelected = teamSelected {
-            teamSelected(teamKey)
+        
+        guard let index = gesture.view?.tag, let picks = alliance?.picks?.array as? [Team], index < picks.count else {
+            return
         }
+
+        let team = picks[index]
+        teamSelected(team)
     }
 }

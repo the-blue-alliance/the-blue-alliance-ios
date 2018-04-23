@@ -123,15 +123,8 @@ class DistrictRankingsTableViewController: TBATableViewController {
                 let backgroundDistrict = backgroundContext.object(with: self.district.objectID) as! District
                 
                 let localRankings = rankings?.compactMap({ (modelRanking) -> DistrictRanking? in
-                    var backgroundTeam: Team?
-                    backgroundTeam = Team.findOrFetch(in: backgroundContext, matching: NSPredicate(format: "key == %@", modelRanking.teamKey))
-                    if backgroundTeam == nil {
-                        backgroundTeam = Team.insert(with: modelRanking.teamKey, in: backgroundContext)
-                    }
-                    if let backgroundTeam = backgroundTeam {
-                        return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, for: backgroundTeam, in: backgroundContext)
-                    }
-                    return nil
+                    let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
+                    return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, for: backgroundTeam, in: backgroundContext)
                 })
                 backgroundDistrict.rankings = Set(localRankings ?? []) as NSSet
                 

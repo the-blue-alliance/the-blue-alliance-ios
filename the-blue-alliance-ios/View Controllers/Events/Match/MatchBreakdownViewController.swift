@@ -12,21 +12,29 @@ import React
 import TBAKit
 import CoreData
 
-class MatchBreakdownViewController: TBAViewController {
+class MatchBreakdownViewController: TBAViewController, Observable {
     
     public var match: Match!
+    private var breakdownView: RCTRootView?
+    
+    // MARK: - Persistable
+    
     override var persistentContainer: NSPersistentContainer! {
         didSet {
-            registerForChangeNotifications { (obj) in
-                if obj == self.match {
-                    DispatchQueue.main.async {
-                        self.updateBreakdownView()
-                    }
+            contextObserver.observeObject(object: match, state: .updated) { [weak self] (_, _) in
+                DispatchQueue.main.async {
+                    self?.updateBreakdownView()
                 }
             }
         }
     }
-    private var breakdownView: RCTRootView?
+    
+    // MARK: - Observable
+    
+    typealias ManagedType = Match
+    lazy var contextObserver: CoreDataContextObserver<Match> = {
+        return CoreDataContextObserver(context: persistentContainer.viewContext)
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,11 +87,14 @@ class MatchBreakdownViewController: TBAViewController {
     // MARK: Private
     
     func dataForBreakdown() -> [String: Any] {
-        let redAlliance = match.redAlliance?.allObjects.map({ (team) -> String in
-            return "\((team as! Team).teamNumber)"
+        let redAllianceTeams = match.redAlliance?.array as? [Team]
+        let redAlliance = redAllianceTeams?.map({ (team) -> String in
+            return "\(team.teamNumber)"
         })
-        let blueAlliance = match.blueAlliance?.allObjects.map({ (team) -> String in
-            return "\((team as! Team).teamNumber)"
+        
+        let blueAllianceTeams = match.blueAlliance?.array as? [Team]
+        let blueAlliance = blueAllianceTeams?.map({ (team) -> String in
+            return "\(team.teamNumber)"
         })
         
         return ["redTeams" : redAlliance ?? [],

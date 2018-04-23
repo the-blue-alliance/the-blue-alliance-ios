@@ -36,16 +36,10 @@ extension AwardRecipient: Managed {
         var predicate: NSPredicate?
         var team: Team?
         if let awardee = model.awardee, let teamKey = model.teamKey {
-            team = Team.findOrFetch(in: context, matching: NSPredicate(format: "key == %@", teamKey))
-            if team == nil {
-                team = Team.insert(with: teamKey, in: context)
-            }
+            team = Team.insert(withKey: teamKey, in: context)
             predicate = NSPredicate(format: "awardee == %@ AND award == %@ AND team == %@", awardee, award, team!)
         } else if let teamKey = model.teamKey {
-            team = Team.findOrFetch(in: context, matching: NSPredicate(format: "key == %@", teamKey))
-            if team == nil {
-                team = Team.insert(with: teamKey, in: context)
-            }
+            team = Team.insert(withKey: teamKey, in: context)
             predicate = NSPredicate(format: "team == %@ AND award == %@", team!, award)
         } else if let awardee = model.awardee {
             predicate = NSPredicate(format: "awardee == %@ AND award == %@", awardee, award)

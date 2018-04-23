@@ -100,34 +100,29 @@ extension Match: Managed {
             match.setNumber = Int16(model.setNumber)
             match.matchNumber = Int16(model.matchNumber)
             
+            // TODO: Think about converting this Alliance stuff in to an Alliance object, like we do in the API
+            // It might actually make sense - we can store an `MatchAlliance` that can have a key associated with it too
+            // That way, when we pull `winningAlliance`, it can be more dynamic
             if let redAlliance = model.redAlliance {
-                // TODO: Think about converting this Alliance stuff in to an Alliance object, like we do in the API
-                match.redAlliance = Set(redAlliance.teams.map({ (teamKey) -> Team in
-                    var team = Team.findOrFetch(in: context, matching: NSPredicate(format: "key == %@", teamKey))
-                    if team == nil {
-                        team = Team.insert(with: teamKey, in: context)
-                    }
-                    return team!
-                })) as NSSet
+                match.redAlliance = NSMutableOrderedSet(array: redAlliance.teams.map({ (teamKey) -> Team in
+                    return Team.insert(withKey: teamKey, in: context)
+                }))
                 if redAlliance.score > -1 {
                     match.redScore = NSNumber(value: redAlliance.score)
                 }
+                // TODO: Make these reference Team objects
                 match.redSurrogateTeamKeys = redAlliance.surrogateTeams
                 match.redDQTeamKeys = redAlliance.dqTeams
             }
             
             if let blueAlliance = model.blueAlliance {
-                // TODO: Think about converting this Alliance stuff in to an Alliance object, like we do in the API
-                match.blueAlliance = Set(blueAlliance.teams.map({ (teamKey) -> Team in
-                    var team = Team.findOrFetch(in: context, matching: NSPredicate(format: "key == %@", teamKey))
-                    if team == nil {
-                        team = Team.insert(with: teamKey, in: context)
-                    }
-                    return team!
-                })) as NSSet
+                match.blueAlliance = NSMutableOrderedSet(array: blueAlliance.teams.map({ (teamKey) -> Team in
+                    return Team.insert(withKey: teamKey, in: context)
+                }))
                 if blueAlliance.score > -1 {
                     match.blueScore = NSNumber(value: blueAlliance.score)
                 }
+                // TODO: Make these reference Team objects
                 match.blueSurrogateTeamKeys = blueAlliance.surrogateTeams
                 match.blueDQTeamKeys = blueAlliance.dqTeams
             }

@@ -20,6 +20,7 @@ class SelectTableViewController<T: Comparable>: UITableViewController {
         return current == option
     }
     
+    // TODO: Why are options an Optional?? You need options, right?
     var options: [T]?
     var optionSelected: ((_ option: T) -> (Swift.Void))?
     var optionString: ((_ option: T) -> (String)) = { t in return "" }

@@ -79,8 +79,8 @@ class EventDistrictPointsTableViewController: TBATableViewController {
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 
-                let localPoints = eventPoints?.map({ (modelPoints) -> EventPoints in
-                    return EventPoints.insert(with: modelPoints, for: backgroundEvent, in: backgroundContext)
+                let localPoints = eventPoints?.map({ (modelPoints) -> DistrictEventPoints in
+                    return DistrictEventPoints.insert(with: modelPoints, for: backgroundEvent, in: backgroundContext)
                 })
                 backgroundEvent.points = Set(localPoints ?? []) as NSSet
                 
@@ -111,14 +111,14 @@ class EventDistrictPointsTableViewController: TBATableViewController {
     
     // MARK: Table View Data Source
     
-    fileprivate var dataSource: TableViewDataSource<EventPoints, EventDistrictPointsTableViewController>?
+    fileprivate var dataSource: TableViewDataSource<DistrictEventPoints, EventDistrictPointsTableViewController>?
     
     fileprivate func setupDataSource() {
         guard let persistentContainer = persistentContainer else {
             return
         }
         
-        let fetchRequest: NSFetchRequest<EventPoints> = EventPoints.fetchRequest()
+        let fetchRequest: NSFetchRequest<DistrictEventPoints> = DistrictEventPoints.fetchRequest()
         
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "total", ascending: false)]
         
@@ -137,7 +137,7 @@ class EventDistrictPointsTableViewController: TBATableViewController {
         }
     }
     
-    fileprivate func setupFetchRequest(_ request: NSFetchRequest<EventPoints>) {
+    fileprivate func setupFetchRequest(_ request: NSFetchRequest<DistrictEventPoints>) {
         request.predicate = NSPredicate(format: "event == %@", event)
     }
     
@@ -145,7 +145,7 @@ class EventDistrictPointsTableViewController: TBATableViewController {
 
 extension EventDistrictPointsTableViewController: TableViewDataSourceDelegate {
     
-    func configure(_ cell: RankingTableViewCell, for object: EventPoints, at indexPath: IndexPath) {
+    func configure(_ cell: RankingTableViewCell, for object: DistrictEventPoints, at indexPath: IndexPath) {
         cell.points = object
         cell.rankLabel?.text = "Rank \(indexPath.row + 1)"
     }

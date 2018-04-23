@@ -50,7 +50,7 @@ class RankingTableViewCell: UITableViewCell {
         }
     }
     
-    public var points: EventPoints? {
+    public var points: DistrictEventPoints? {
         didSet {
             guard let points = points, let team = points.team else {
                 return

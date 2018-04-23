@@ -20,9 +20,10 @@ extension Team: Locatable, Managed {
         return key.prefixTrim("frc")
     }
     
-    static func insert(with key: String, in context: NSManagedObjectContext) -> Team {
+    static func insert(withKey key: String, in context: NSManagedObjectContext) -> Team {
         let predicate = NSPredicate(format: "key == %@", key)
         // Let's not *overwrite* shit we already have
+        // TODO: Check if our Team object has a name... if it doesn't, go fetch from the web in the background
         if let team = findOrFetch(in: context, matching: predicate) {
             return team
         }

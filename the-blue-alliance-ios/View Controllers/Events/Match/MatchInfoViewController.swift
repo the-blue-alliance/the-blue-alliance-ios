@@ -11,24 +11,33 @@ import UIKit
 import CoreData
 import TBAKit
 
-class MatchInfoViewController: TBAViewController {
+class MatchInfoViewController: TBAViewController, Observable {
     
     public var match: Match!
     public var team: Team?
+
+    let winnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
+    let notWinnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
+
+    // MARK: - Persistable
+    
     override var persistentContainer: NSPersistentContainer! {
         didSet {
-            registerForChangeNotifications { (obj) in
-                if obj == self.match {
-                    DispatchQueue.main.async {
-                        self.styleInterface()
-                    }
+            contextObserver.observeObject(object: match, state: .updated) { [weak self] (_, _) in
+                DispatchQueue.main.async {
+                    self?.styleInterface()
                 }
             }
         }
     }
-    let winnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
-    let notWinnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
-
+    
+    // MARK: - Observable
+    
+    typealias ManagedType = Match
+    lazy var contextObserver: CoreDataContextObserver<Match> = {
+        return CoreDataContextObserver(context: persistentContainer.viewContext)
+    }()
+    
     @IBOutlet var redStackView: UIStackView!
     @IBOutlet var redContainerView: UIView! {
         didSet {

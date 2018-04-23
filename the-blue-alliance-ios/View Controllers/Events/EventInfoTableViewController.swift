@@ -33,7 +33,7 @@ enum EventLinkRow: Int {
     case max
 }
 
-class EventInfoTableViewController: TBATableViewController {
+class EventInfoTableViewController: TBATableViewController, Observable {
     
     public var event: Event!
     
@@ -41,20 +41,28 @@ class EventInfoTableViewController: TBATableViewController {
     public var showDistrictPoints: (() -> ())?
     public var showStats: (() -> ())?
     public var showAwards: (() -> ())?
+    
+    // MARK: - Persistable
+    
     override var persistentContainer: NSPersistentContainer! {
         didSet {
-            registerForChangeNotifications { (obj) in
-                if obj == self.event {
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
+            contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
                 }
             }
         }
     }
     
-    // MARK: - View Lifecycle
+    // MARK: - Observable
     
+    typealias ManagedType = Event
+    lazy var contextObserver: CoreDataContextObserver<Event> = {
+        return CoreDataContextObserver(context: persistentContainer.viewContext)
+    }()
+    
+    // MARK: - View Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         

@@ -27,9 +27,7 @@ class EventAlliancesViewController: ContainerViewController {
             alliancesViewController = segue.destination as! EventAlliancesTableViewController
             alliancesViewController.event = event
             alliancesViewController.persistentContainer = persistentContainer
-            alliancesViewController.teamSelected = { teamKey in
-                // TODO: Remove this for a better system, once we start passing keys instead of objects
-                let team = Team.insert(with: teamKey, in: self.persistentContainer.viewContext)
+            alliancesViewController.teamSelected = { team in
                 self.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
             }
         } else if segue.identifier == "TeamAtEventSegue" {
@@ -51,7 +49,7 @@ class EventAlliancesTableViewController: TBATableViewController {
         }
     }
     var event: Event!
-    var teamSelected: ((String) -> ())?
+    var teamSelected: ((Team) -> ())?
 
     // MARK: - View Lifecycle
     
@@ -68,18 +66,19 @@ class EventAlliancesTableViewController: TBATableViewController {
     override func refresh() {
         removeNoDataView()
         
-        let eventKey = event.key!
-        
         var alliancesRequest: URLSessionDataTask?
-        alliancesRequest = TBAKit.sharedKit.fetchEventAlliances(key: self.event.key!, completion: { (alliances, error) in
+        alliancesRequest = TBAKit.sharedKit.fetchEventAlliances(key: event.key!, completion: { (alliances, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event alliances - \(error.localizedDescription)")
             }
 
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
-                alliances?.forEach({ (alliance) in
-                    _ = EventAlliance.insert(with: alliance, for: eventKey, in: backgroundContext)
+                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
+
+                let localAlliances = alliances?.map({ (modelAlliance) -> EventAlliance in
+                    return EventAlliance.insert(with: modelAlliance, for: backgroundEvent, in: backgroundContext)
                 })
+                backgroundEvent.alliances = Set(localAlliances ?? []) as NSSet
 
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh event alliances - database error")
@@ -126,7 +125,7 @@ class EventAlliancesTableViewController: TBATableViewController {
     }
     
     fileprivate func setupFetchRequest(_ request: NSFetchRequest<EventAlliance>) {
-        request.predicate = NSPredicate(format: "eventKey == %@", event.key!)
+        request.predicate = NSPredicate(format: "event == %@", event)
     }
     
 }

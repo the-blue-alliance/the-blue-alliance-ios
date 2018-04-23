@@ -25,7 +25,7 @@ extension DistrictRanking: Managed {
                 ranking.rookieBonus = Int16(rookieBonus)
             }
             
-            ranking.eventPoints = Set(model.eventPoints.compactMap({ (modelPoints) -> EventPoints? in
+            ranking.eventPoints = Set(model.eventPoints.compactMap({ (modelPoints) -> DistrictEventPoints? in
                 guard let eventKey = modelPoints.eventKey else {
                     return nil
                 }
@@ -35,7 +35,7 @@ extension DistrictRanking: Managed {
                     return nil
                 }
 
-                return EventPoints.insert(with: modelPoints, for: event, and: team, in: context)
+                return DistrictEventPoints.insert(with: modelPoints, for: event, and: team, in: context)
             })) as NSSet
         })
     }

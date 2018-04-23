@@ -12,21 +12,31 @@ import TBAKit
 import UIKit
 import React
 
-class EventStatsViewController: TBAViewController {
+class EventStatsViewController: TBAViewController, Observable {
     
     var event: Event!
+    private var eventStatsView: RCTRootView?
+    
+    // MARK: - Persistable
+    
     override var persistentContainer: NSPersistentContainer! {
         didSet {
-            registerForChangeNotifications { (obj) in
-                if obj == self.event {
-                    DispatchQueue.main.async {
-                        self.updateEventStatsView()
-                    }
+            contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
+                DispatchQueue.main.async {
+                    self?.updateEventStatsView()
                 }
             }
         }
     }
-    private var eventStatsView: RCTRootView?
+    
+    // MARK: - Observable
+    
+    typealias ManagedType = Event
+    lazy var contextObserver: CoreDataContextObserver<Event> = {
+        return CoreDataContextObserver(context: persistentContainer.viewContext)
+    }()
+    
+    // MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -153,7 +153,7 @@ extension EventAwardsTableViewController: TableViewDataSourceDelegate {
         if isRefreshing {
             return
         }
-        showNoDataView(with: "Unable to load event awards")
+        showNoDataView(with: String(format: "No awards for %@", team != nil ? "team at event" : "event"))
     }
     
     func hideNoDataView() {

@@ -55,7 +55,7 @@ extension Container {
 
 }
 
-protocol Persistable: class {
+protocol Persistable: AnyObject {
     var persistentContainer: NSPersistentContainer! { get set }
     
     var dataView: UIView { get }
@@ -63,23 +63,6 @@ protocol Persistable: class {
 }
 
 extension Persistable {
-
-    func registerForChangeNotifications(changeBlock: @escaping (NSManagedObject) -> ()) {
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.NSManagedObjectContextObjectsDidChange,
-                                               object: self.persistentContainer.viewContext,
-                                               queue: nil) { (notification) in
-                                                if let updates = notification.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>, updates.count > 0 {
-                                                    for obj in updates {
-                                                        changeBlock(obj)
-                                                    }
-                                                }
-                                                if let refreshes = notification.userInfo?[NSRefreshedObjectsKey] as? Set<NSManagedObject>, refreshes.count > 0 {
-                                                    for obj in refreshes {
-                                                        changeBlock(obj)
-                                                    }
-                                                }
-        }
-    }
     
     func showNoDataView(with text: String?) {
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -127,6 +110,21 @@ extension Persistable {
         }
     }
 
+}
+
+protocol Observable: Persistable {
+    associatedtype ManagedType: NSManagedObject
+    
+    var contextObserver: CoreDataContextObserver<ManagedType> { get }
+    var observerPredicate: NSPredicate { get }
+}
+
+extension Observable {
+    
+    // Make observerPredicate optional
+    var observerPredicate: NSPredicate {
+        return NSPredicate()
+    }
 }
 
 protocol Alertable {
@@ -311,7 +309,7 @@ class TBACollectionViewController: UICollectionViewController, Persistable, Refr
 
 // Refreshable is a class-only protocol since we're mutating variables within the class that implements it
 // Value types cannot implement the Refreshable protocol
-protocol Refreshable: class {
+protocol Refreshable: AnyObject {
     var requests: [URLSessionDataTask] { get set }
     var refreshControl: UIRefreshControl? { get set }
     

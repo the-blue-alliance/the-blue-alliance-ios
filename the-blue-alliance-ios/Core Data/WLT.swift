@@ -21,7 +21,7 @@ public class WLT: NSObject, NSCoding {
     }
     
     public func encode(with aCoder: NSCoder) {
-        aCoder.encode(self.wins, forKey: "title")
+        aCoder.encode(self.wins, forKey: "wins")
         aCoder.encode(self.losses, forKey: "losses")
         aCoder.encode(self.ties, forKey: "ties")
     }

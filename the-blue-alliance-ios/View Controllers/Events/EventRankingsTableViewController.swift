@@ -44,17 +44,8 @@ class EventRankingsTableViewController: TBATableViewController {
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 
                 let localRankings = rankings?.compactMap({ (modelRanking) -> EventRanking? in
-                    var backgroundTeam: Team?
-                    backgroundContext.performAndWait {
-                        backgroundTeam = Team.fetchSingleObject(in: backgroundContext, configure: { (fetchRequest) in
-                            fetchRequest.predicate = NSPredicate(format: "key == %@" , modelRanking.teamKey)
-                        })
-                    }
-                    if backgroundTeam == nil {
-                        backgroundTeam = Team.insert(with: modelRanking.teamKey, in: backgroundContext)
-                    }
-                    return EventRanking.insert(with: modelRanking, for: backgroundEvent, for: backgroundTeam!, for: sortOrder!, in: backgroundContext)
-
+                    let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
+                    return EventRanking.insert(with: modelRanking, for: backgroundEvent, for: backgroundTeam, for: sortOrder!, in: backgroundContext)
                 })
                 backgroundEvent.rankings = Set(localRankings ?? []) as NSSet
                 
