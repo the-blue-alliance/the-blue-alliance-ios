@@ -35,11 +35,11 @@ export default class MatchBreakdown2018 extends React.Component {
                                 this.props.redBreakdown.autoRobot1 == "AutoRun" ? this.checkImage() : this.xImage(),
                                 this.props.blueBreakdown.autoRobot1 == "AutoRun" ? this.checkImage() : this.xImage()]}/>
 
-        <BreakdownRow data={["Robot 1 Auto Run",
+        <BreakdownRow data={["Robot 2 Auto Run",
                                 this.props.redBreakdown.autoRobot2 == "AutoRun" ? this.checkImage() : this.xImage(),
                                 this.props.blueBreakdown.autoRobot2 == "AutoRun" ? this.checkImage() : this.xImage()]}/>
 
-        <BreakdownRow data={["Robot 1 Auto Run",
+        <BreakdownRow data={["Robot 3 Auto Run",
                                 this.props.redBreakdown.autoRobot3 == "AutoRun" ? this.checkImage() : this.xImage(),
                                 this.props.blueBreakdown.autoRobot3 == "AutoRun" ? this.checkImage() : this.xImage()]}/>
 

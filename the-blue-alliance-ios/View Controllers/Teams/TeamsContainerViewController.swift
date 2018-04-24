@@ -35,8 +35,8 @@ class TeamsContainerViewController: ContainerViewController {
             teamViewController.persistentContainer = persistentContainer
         } else if segue.identifier == TeamsEmbed {
             teamsViewController = segue.destination as? TeamsTableViewController
-            teamsViewController?.teamSelected = { team in
-                self.performSegue(withIdentifier: TeamSegue, sender: team)
+            teamsViewController?.teamSelected = { [weak self] team in
+                self?.performSegue(withIdentifier: TeamSegue, sender: team)
             }
         }
     }

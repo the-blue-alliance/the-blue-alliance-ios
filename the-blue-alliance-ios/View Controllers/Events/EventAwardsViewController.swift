@@ -34,8 +34,8 @@ class EventAwardsViewController: ContainerViewController {
             awardsViewController = segue.destination as! EventAwardsTableViewController
             awardsViewController.event = event
             awardsViewController.persistentContainer = persistentContainer
-            awardsViewController.teamSelected = { team in
-                self.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
+            awardsViewController.teamSelected = { [weak self] team in
+                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
             }
         } else if segue.identifier == "TeamAtEventSegue" {
             let team = sender as! Team
@@ -72,7 +72,7 @@ class EventAwardsTableViewController: TBATableViewController {
     
     override func refresh() {
         removeNoDataView()
-        
+       
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchEventAwards(key: event.key!, completion: { (awards, error) in
             if let error = error {

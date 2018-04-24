@@ -5,6 +5,7 @@ target 'the-blue-alliance-ios' do
 
   pod 'TBAKit'
   
+  # React Native
   pod 'React', :path => 'js/node_modules/react-native', :subspecs => [
     'Core',
     'RCTText',
@@ -17,8 +18,22 @@ target 'the-blue-alliance-ios' do
   # Explicitly include Yoga if you are using RN >= 0.42.0
   pod "Yoga", :path => "js/node_modules/react-native/ReactCommon/yoga"
 
+  # Deps
   pod "youtube-ios-player-helper", "~> 0.1.4"
   pod 'PureLayout'
+  pod 'ZIPFoundation'
+  
+  # Firebase
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Core'
+  pod 'Firebase/Messaging'
+  pod 'Firebase/Performance'
+  pod 'Firebase/RemoteConfig'
+  pod 'Firebase/Storage'
+
+  # Crash reporting
+  pod 'Fabric', '~> 1.7.6'
+  pod 'Crashlytics', '~> 3.10.1'
 end
 
 post_install do | installer |

@@ -16,10 +16,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         didSet {
             cancelRefresh()
             updateDataSource()
-            
-            if shouldNoDataRefresh() {
-                refresh()
-            }
         }
     }
     var team: Team!
@@ -123,7 +119,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     fileprivate var dataSource: CollectionViewDataSource<Media, TeamMediaCollectionViewController>?
     
     fileprivate func setupDataSource() {
-        guard let persistentContainer = persistentContainer, let _ = year else {
+        // TODO: This seems like a weird place to check if we need a year, then not use the year
+        guard let persistentContainer = persistentContainer, year != nil else {
             return
         }
         
@@ -151,6 +148,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         guard let year = year else {
             return
         }
+        // TODO: Seems like if we don't have a year, we should just load all, right? Depends on when this gets set up
         // TODO: We could support GrabCAD here too if we wanted to
         request.predicate = NSPredicate(format: "team == %@ AND year == %ld AND type in %@", team, year, MediaType.imageTypes)
     }
@@ -179,8 +177,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         
         let mediaView = MediaView(media: media)
         mediaView.downloadedImage = downloadedImage
-        mediaView.imageDownloaded = {
-            self.downloadedImages[foreignKey] = $0
+        mediaView.imageDownloaded = { [weak self] in
+            self?.downloadedImages[foreignKey] = $0
         }
         
         return mediaView

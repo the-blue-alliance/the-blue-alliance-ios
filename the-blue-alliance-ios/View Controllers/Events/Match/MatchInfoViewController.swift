@@ -181,6 +181,8 @@ class MatchInfoViewController: TBAViewController, Observable {
     // MARK: Refresh
     
     override func shouldNoDataRefresh() -> Bool {
+        // TODO: Think about doing a quiet refresh in the background for match videos on initial load...
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/135
         return match?.videos?.count == 0
     }
     
@@ -203,11 +205,14 @@ class MatchInfoViewController: TBAViewController, Observable {
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh match - database error")
                 }
-                
                 self.removeRequest(request: request!)
             })
         })
         addRequest(request: request!)
+    }
+    
+    override func optionallyShowNoDataView() {
+        // We'll always have a match, so we shouldn't need to show a no data state
     }
     
 }

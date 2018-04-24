@@ -9,6 +9,9 @@
 import UIKit
 import CoreData
 import TBAKit
+import Firebase
+import UserNotifications
+import Crashlytics
 
 public enum StatusConstants {
     static let currentSeasonKey = "current_season"
@@ -20,6 +23,7 @@ public enum StatusConstants {
 }
 
 // Notifications
+// TODO: Subscribe to these notifications elsewhere
 let kFetchedTBAStatus = "kFetchedTBAStatus"
 
 let kNoSelectionNavigationController = "NoSelectionNavigationController"
@@ -29,7 +33,7 @@ extension TBAStatus {
     public static func defaultStatus() -> TBAStatus {
         // Set to the last safe year we know about
         let currentYear = UInt(2018)
-
+        // TODO: Move this JSON in to some file that get's generated when we build for release
         let defaultStatusJSON: [String: Any] = [
             "android": [
                 "latest_app_version": -1,
@@ -56,12 +60,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "TBA")
-        container.viewContext.automaticallyMergesChangesFromParent = true
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            container.viewContext.automaticallyMergesChangesFromParent = true
+
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                
+                Crashlytics.sharedInstance().recordError(error)
+
                 /*
                  Typical reasons for an error here include:
                  * The parent directory does not exist, cannot be created, or disallows writing.
@@ -96,8 +102,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 dataVC.persistentContainer = self.persistentContainer
             }
         }
- 
+        
         setupAppearance()
+        
+        FirebaseApp.configure()
+        Messaging.messaging().delegate = self
+        RemoteConfig.setupRemoteConfig()
+
+        // Attempt to download our newest React Native bundle
+        ReactNativeDownloader.updateReactNativeBundle()
+        
+        UNUserNotificationCenter.current().delegate = self
+        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (_, _) in }
+        application.registerForRemoteNotifications()
         
         return true
     }
@@ -117,15 +135,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        // Update our status - are events down, etc.
         fetchTBAStatus()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
+    
     // MARK: Private
+    
+    func setupAppearance() {
+        let navigationBarAppearance = UINavigationBar.appearance()
+        
+        navigationBarAppearance.barTintColor = UIColor.primaryBlue
+        navigationBarAppearance.tintColor = UIColor.white
+        // Remove the shadow for a more seamless split between navigation bar and segmented controls
+        navigationBarAppearance.shadowImage = UIImage()
+        navigationBarAppearance.setBackgroundImage(UIImage(), for: .default)
+        navigationBarAppearance.isTranslucent = false
+        navigationBarAppearance.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+    }
+    
+}
+
+// TBA-specific logic
+extension AppDelegate {
     
     func fetchTBAStatus() {
         // Call our staus endpoint and save everything in NSUserDefaults
@@ -172,17 +206,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         })
     }
+
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
     
-    func setupAppearance() {
-        let navigationBarAppearance = UINavigationBar.appearance()
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let userInfo = notification.request.content.userInfo
+        // Print full message.
+        print("Will present")
+        print(userInfo)
         
-        navigationBarAppearance.barTintColor = UIColor.primaryBlue
-        navigationBarAppearance.tintColor = UIColor.white
-        // Remove the shadow for a more seamless split between navigation bar and segmented controls
-        navigationBarAppearance.shadowImage = UIImage()
-        navigationBarAppearance.setBackgroundImage(UIImage(), for: .default)
-        navigationBarAppearance.isTranslucent = false
-        navigationBarAppearance.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+        // Handle notification information in foreground
+        completionHandler([])
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        let userInfo = response.notification.request.content.userInfo
+        // Print full message.
+        print("Push notification")
+        print(userInfo)
+        
+        // Handle being launched from a push notification
+        completionHandler()
+    }
+    
+}
+
+extension AppDelegate: MessagingDelegate {
+    
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        print("Firebase registration token: \(fcmToken)")
+    }
+    
+    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
+        print("Remote message")
+        // TODO: I have *no* idea how these get hit
+        print(remoteMessage.appData)
     }
     
 }

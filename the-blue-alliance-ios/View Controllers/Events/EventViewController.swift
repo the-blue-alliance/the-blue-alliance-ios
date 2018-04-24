@@ -44,35 +44,36 @@ class EventViewController: ContainerViewController {
         if segue.identifier == "EventInfoEmbed" {
             infoViewController = segue.destination as! EventInfoTableViewController
             infoViewController.event = event
-            infoViewController.showAlliances = {
-                self.performSegue(withIdentifier: "EventAlliancesSegue", sender: nil)
+            infoViewController.showAlliances = { [weak self] in
+                self?.performSegue(withIdentifier: "EventAlliancesSegue", sender: nil)
             }
-            infoViewController.showAwards = {
-                self.performSegue(withIdentifier: "EventAwardsSegue", sender: nil)
+            infoViewController.showAwards = { [weak self] in
+                self?.performSegue(withIdentifier: "EventAwardsSegue", sender: nil)
             }
-            infoViewController.showDistrictPoints = {
-                self.performSegue(withIdentifier: "EventPointsSegue", sender: nil)
+            infoViewController.showDistrictPoints = { [weak self] in
+                self?.performSegue(withIdentifier: "EventPointsSegue", sender: nil)
             }
-            infoViewController.showStats = {
-                self.performSegue(withIdentifier: "EventStatsSegue", sender: nil)
+            infoViewController.showStats = { [weak self] in
+                self?.performSegue(withIdentifier: "EventStatsSegue", sender: nil)
             }
         } else if segue.identifier == "EventTeamsEmbed" {
             teamsViewController = segue.destination as! TeamsTableViewController
             teamsViewController.event = event
-            teamsViewController.teamSelected = { team in
-                self.performSegue(withIdentifier: "TeamAtEventSegue", sender: team);
+            teamsViewController.teamSelected = { [weak self] team in
+                // TODO: Think about if these objects we pass down should be weak as well...
+                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team);
             }
         } else if segue.identifier == "EventMatchesEmbed" {
             matchesViewController = segue.destination as! MatchesTableViewController
             matchesViewController.event = event
-            matchesViewController.matchSelected = { match in
-                self.performSegue(withIdentifier: "MatchSegue", sender: match)
+            matchesViewController.matchSelected = { [weak self] match in
+                self?.performSegue(withIdentifier: "MatchSegue", sender: match)
             }
         } else if segue.identifier == "EventRankingsEmbed" {
            rankingsViewController = segue.destination as! EventRankingsTableViewController
             rankingsViewController.event = event
-            rankingsViewController.rankingSelected = { team in
-                self.performSegue(withIdentifier: "TeamAtEventSegue", sender: team);
+            rankingsViewController.rankingSelected = { [weak self] team in
+                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team);
             }
         } else if segue.identifier == "EventAlliancesSegue" {
             let eventAlliancesViewController = segue.destination as! EventAlliancesViewController

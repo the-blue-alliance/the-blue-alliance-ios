@@ -158,12 +158,6 @@ class EventsContainerViewController: ContainerViewController {
             return
         }
         
-        // Don't re-setup weeks if we're in the same year as we already have... (ex: a refresh)
-        // TODO: This doesn't handle if a week is removed from our backing data store... that will break this
-        if let week = week, year == Int(week.year) {
-            return
-        }
-        
         let events = Event.fetch(in: persistentContainer.viewContext) { (fetchRequest) in
             // Filter out CMP divisions
             fetchRequest.predicate = NSPredicate(format: "year == %ld && eventType != %ld", year, EventType.championshipDivision.rawValue)
@@ -182,7 +176,7 @@ class EventsContainerViewController: ContainerViewController {
             return
         }
 
-        
+        // Jesus, take the wheel
         var handledWeeks: Set<Int> = []
         var handledTypes: Set<Int> = []
         self.weeks = Array(events.compactMap({ (event) -> Event? in
@@ -257,8 +251,8 @@ class EventsContainerViewController: ContainerViewController {
                 selectTableViewController.title = "Select Year"
                 selectTableViewController.current = year
                 selectTableViewController.options = Array(1992...maxYear!).reversed()
-                selectTableViewController.optionSelected = { year in
-                    self.year = year
+                selectTableViewController.optionSelected = { [weak self] year in
+                    self?.year = year
                 }
                 selectTableViewController.optionString = { year in
                     return String(year)
@@ -283,8 +277,8 @@ class EventsContainerViewController: ContainerViewController {
                     return (current.week == option.week) && (current.eventType == option.eventType)
                 }
                 selectTableViewController.options = weeks
-                selectTableViewController.optionSelected = { week in
-                    self.week = week
+                selectTableViewController.optionSelected = { [weak self] week in
+                    self?.week = week
                 }
                 selectTableViewController.optionString = { week in
                     return week.weekString
@@ -300,11 +294,11 @@ class EventsContainerViewController: ContainerViewController {
             eventsViewController = segue.destination as? EventsTableViewController
             eventsViewController.weekEvent = weeks?.first
             eventsViewController.year = year
-            eventsViewController.eventsFetched = {
-                self.setupWeeks()
+            eventsViewController.eventsFetched = { [weak self] in
+                self?.setupWeeks()
             }
-            eventsViewController.eventSelected = { event in
-                self.performSegue(withIdentifier: EventSegue, sender: event)
+            eventsViewController.eventSelected = { [weak self] event in
+                self?.performSegue(withIdentifier: EventSegue, sender: event)
             }
         }
     }

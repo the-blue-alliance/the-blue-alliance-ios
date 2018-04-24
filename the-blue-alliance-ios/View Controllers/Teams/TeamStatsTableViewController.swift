@@ -28,7 +28,7 @@ class TeamStatsTableViewController: TBATableViewController, Observable {
     
     override var persistentContainer: NSPersistentContainer! {
         didSet {
-            self.teamStat = EventTeamStat.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
+            teamStat = EventTeamStat.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
         }
     }
     

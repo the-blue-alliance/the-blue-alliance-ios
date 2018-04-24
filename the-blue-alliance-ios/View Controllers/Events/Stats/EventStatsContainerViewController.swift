@@ -60,8 +60,8 @@ class EventStatsContainerViewController: ContainerViewController {
             teamStatsViewController = segue.destination as! EventTeamStatsTableViewController
             teamStatsViewController.event = event
             teamStatsViewController.persistentContainer = persistentContainer
-            teamStatsViewController.teamSelected = { team in
-                self.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
+            teamStatsViewController.teamSelected = { [weak self] team in
+                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
             }
         } else if segue.identifier == "EventStatsEmbed" {
             eventStatsViewController = segue.destination as! EventStatsViewController
@@ -76,11 +76,11 @@ class EventStatsContainerViewController: ContainerViewController {
                 return current == option
             }
             selectTableViewController.options = Array(EventTeamStatFilter.opr.rawValue..<EventTeamStatFilter.max.rawValue)
-            selectTableViewController.optionSelected = { filter in
+            selectTableViewController.optionSelected = { [weak self] filter in
                 guard let filterType = EventTeamStatFilter(rawValue: filter) else {
                     fatalError("Invalid filter")
                 }
-                self.teamStatsViewController.filter = filterType
+                self?.teamStatsViewController.filter = filterType
             }
             selectTableViewController.optionString = { filter in
                 switch filter {

@@ -24,5 +24,5 @@ Shipping
 
 ```
 $ cd js
-$ react-native bundle --platform ios --dev false --entry-file index.ios.js --bundle-output ../the-blue-alliance-ios/React\ Native/main.jsbundle --assets-dest ../the-blue-alliance-ios/React\ Native/
+$ react-native bundle --platform ios --dev true --assets-dest ios --entry-file index.ios.js --bundle-output ios/main.jsbundle
 ```
