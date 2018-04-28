@@ -8,11 +8,11 @@ const table = StyleSheet.create({
   header: {
     height: 28,
     justifyContent: 'center',
-    left: 20,
     borderBottomWidth: StyleSheet.hairlineWidth,
     backgroundColor: '#303F9F',
   },
   headerLabel: {
+    left: 20,
     fontSize: 14,
     color: 'white'
   },
@@ -24,10 +24,16 @@ const table = StyleSheet.create({
     left: 20,
     borderBottomColor: '#ddd'
   },
-  itemTitleLabel: {
+  titleLabel: {
     color: '#00000089',
     fontWeight: 'bold',
     fontSize: 12,
+  },
+  qualLabel: {
+    paddingTop: 4
+  },
+  playoffLabel: {
+    paddingTop: 4
   }
 });
 

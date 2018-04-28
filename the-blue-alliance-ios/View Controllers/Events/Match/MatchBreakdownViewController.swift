@@ -152,6 +152,8 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
     override func optionallyShowNoDataView() {
         if shouldNoDataRefresh() {
             showNoDataView(with: "No breakdown for match")
+        } else {
+            updateBreakdownView()
         }
     }
     

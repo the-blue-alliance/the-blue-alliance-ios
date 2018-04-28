@@ -67,15 +67,15 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
             return
         }
         
-        // If the event stats view already exists, don't set it up again
-        // Only update the properties for the view
-        if let eventStatsView = eventStatsView {
-            eventStatsView.appProperties = event.insights
+        guard let insights = event.insights else {
+            showNoDataView()
             return
         }
         
-        guard let insights = event.insights else {
-            showNoDataView()
+        // If the event stats view already exists, don't set it up again
+        // Only update the properties for the view
+        if let eventStatsView = eventStatsView {
+            eventStatsView.appProperties = insights
             return
         }
         
@@ -108,8 +108,13 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
     // MARK: Refresh
     
     override func shouldNoDataRefresh() -> Bool {
-        // TODO: We need to look for `qual` and `playoff`
-        return event.insights == nil
+        guard let insights = event.insights else {
+            return true
+        }
+        // https://github.com/ZachOrr/TBAKit/issues/11
+        let qual = insights["qual"]
+        let playoff = insights["playoff"]
+        return qual == nil || playoff == nil;
     }
     
     override func refresh() {
@@ -138,6 +143,8 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
     override func optionallyShowNoDataView() {
         if shouldNoDataRefresh() {
             showNoDataView()
+        } else {
+            updateEventStatsView()
         }
     }
     

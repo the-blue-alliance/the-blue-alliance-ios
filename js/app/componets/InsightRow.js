@@ -9,9 +9,13 @@ export default class InsightRow extends React.Component {
   render() {
     return (
       <View style={table.item}>
-        <Text style={table.itemTitleLabel} >{this.props.title}</Text>
-        <Text>Quals: {this.props.qual}</Text>
-        <Text>Playoffs: {this.props.playoff}</Text>
+        <Text style={table.titleLabel}>{this.props.title}</Text>
+        {this.props.qual != null &&
+          <Text style={table.qualLabel}>Quals: {this.props.qual}</Text>
+        }
+        {this.props.playoff != null &&
+          <Text style={table.playoffLabel}>Playoffs: {this.props.playoff}</Text>
+        }
       </View>
     );
   }

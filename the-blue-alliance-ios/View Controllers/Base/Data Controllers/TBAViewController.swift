@@ -35,6 +35,7 @@ class TBAViewController: UIViewController, DataController {
     }
     
     // TODO: https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/133
+    // FWIW, this name also sucks
     func optionallyShowNoDataView() {
         fatalError("Implement this downstream")
     }

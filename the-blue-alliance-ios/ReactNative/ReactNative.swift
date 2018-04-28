@@ -105,6 +105,7 @@ class ReactNativeDownloader {
             if let error = error {
                 print("Error writing compressed React Native bundle to filesystem: \(error.localizedDescription)")
             } else if url != nil, unzipCompressedBundle() == true {
+                print("Wrote React Native bundle to filesystem: \(compressedBundleURL)")
                 cleanupCompressedBundle()
             }
             completion(error)

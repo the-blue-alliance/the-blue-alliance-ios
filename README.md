@@ -24,5 +24,5 @@ Shipping
 
 ```
 $ cd js
-$ react-native bundle --platform ios --dev true --assets-dest ios --entry-file index.ios.js --bundle-output ios/main.jsbundle
+$ react-native bundle --platform ios --dev false --assets-dest ios --entry-file index.ios.js --bundle-output ios/main.jsbundle --reset-cache
 ```

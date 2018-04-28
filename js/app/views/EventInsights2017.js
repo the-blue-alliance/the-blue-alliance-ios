@@ -108,6 +108,10 @@ export default class EventInsights2017 extends React.Component {
                     qual={bonusStat(this.props.qual.rotor_4_engaged)}
                     playoff={bonusStat(this.props.playoff.rotor_4_engaged)}/>
 
+        <InsightRow title='"Unicorn Matches" (Win + kPa & Rotor Bonuses)'
+                    qual={bonusStat(this.props.qual.unicorn_matches)}
+                    playoff={bonusStat(this.props.playoff.unicorn_matches)}/>
+
       </View>
     );
   }
