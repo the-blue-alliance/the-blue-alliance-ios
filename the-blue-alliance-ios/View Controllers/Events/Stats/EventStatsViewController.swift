@@ -153,7 +153,7 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
     func showErrorView() {
         showNoDataView(with: "Unable to load event stats")
         // Disable refreshing if we hit an error
-        refreshControl = nil
+        disableRefreshing()
     }
 
 }

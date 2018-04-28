@@ -29,8 +29,7 @@ class TBAViewController: UIViewController, DataController {
         scrollView.backgroundColor = .clear
         view.backgroundColor = .backgroundGray
 
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        enableRefreshing()
     }
     
     @objc func refresh() {
@@ -45,5 +44,14 @@ class TBAViewController: UIViewController, DataController {
     // FWIW, this name also sucks
     func optionallyShowNoDataView() {
         fatalError("Implement this downstream")
+    }
+    
+    func enableRefreshing() {
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+    }
+    
+    func disableRefreshing() {
+        refreshControl = nil
     }
 }
