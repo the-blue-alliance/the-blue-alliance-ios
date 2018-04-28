@@ -1,11 +1,3 @@
-//
-//  EventsContainerViewController.swift
-//  the-blue-alliance-ios
-//
-//  Created by Zach Orr on 3/18/17.
-//  Copyright © 2017 The Blue Alliance. All rights reserved.
-//
-
 import Foundation
 import UIKit
 import CoreData
@@ -16,60 +8,71 @@ let EventSegue = "EventSegue"
 let SelectWeekSegue = "SelectWeekSegue"
 let SelectYearSegue = "SelectYearSegue"
 
-class EventsContainerViewController: ContainerViewController {
+class EventsContainerViewController: ContainerViewController, Observable {
     internal var eventsViewController: EventsTableViewController!
     @IBOutlet internal var eventsView: UIView!
     @IBOutlet internal var weeksButton: UIBarButtonItem?
     
+    // Used to manually refresh the first time for a year change, since our existing patterns won't refresh automatically
     internal var hasRefreshed: Bool = false
-    internal var weeks: [Event]?
-    internal var maxYear: Int?
-    internal var week: Event? {
+    // TODO: Default this from Firebase Config, or some status something
+    internal var year: Int = 2018 {
         didSet {
-            if let eventsViewController = eventsViewController {
-                eventsViewController.weekEvent = week
-            }
-
-            DispatchQueue.main.async {
-                self.updateInterface()
-            }
-        }
-    }
-    internal var year: Int? {
-        didSet {
-            eventsViewController.year = year
+            // Update to make sure we're watching for events for the proper year
+            updateEventObserver()
             
             // Year changed - remove our previously selected week
-            week = nil
-            weeks = nil
+            weekEvent = nil
+            weekEvents = []
             hasRefreshed = false
+
+            // Pass down year change so it can update it's FRC predicate
+            // Remove weekEvent before year on Events TVC - it's safer that way
+            eventsViewController.year = year
             
-            setupWeeks()
-            
+            // Update available weeks for the year
+            DispatchQueue.main.async {
+                self.setupWeeks()
+            }
+        }
+    }
+
+    // An array of events that are used to represent their corresponding week in the Week selector
+    // We need a full object as opposed to a number because of CMP, off-season, etc.
+    // TODO: Convert this to a data model that uses a Core Data model for init but isn't a Core Data model
+    internal var weekEvents: [Event] = []
+    // The selected Event from the weekEvents array to represent the Week to show
+    internal var weekEvent: Event? {
+        didSet {
+            // Pass down weekEvent change so it can update it's FRC predicate
+            eventsViewController.weekEvent = weekEvent
+
             DispatchQueue.main.async {
                 self.updateInterface()
             }
         }
     }
+    // TODO: Get this from Firebase Config
+    internal var maxYear: Int = 2018
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-
-        let year = UserDefaults.standard.integer(forKey: StatusConstants.currentSeasonKey)
-        if year != 0 {
-            self.year = year
+    // MARK: - Persistable
+    
+    override var persistentContainer: NSPersistentContainer! {
+        didSet {
+            // Watch for new events to get inserted to update
+            // This will usually be called on an initial refresh of the Events VC, after our Events TVC refreshes data
+            updateEventObserver()
         }
-        
-        let maxYear = UserDefaults.standard.integer(forKey: StatusConstants.maxSeasonKey)
-        if maxYear != 0 {
-            self.maxYear = maxYear
-        }
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(fetchedTBAStatus),
-                                               name: Notification.Name(kFetchedTBAStatus),
-                                               object: nil)
     }
+    
+    // MARK: - Observable
+    
+    typealias ManagedType = Event
+    lazy var contextObserver: CoreDataContextObserver<Event> = {
+        return CoreDataContextObserver(context: persistentContainer.viewContext)
+    }()
+    
+    // MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,89 +80,43 @@ class EventsContainerViewController: ContainerViewController {
         viewControllers = [eventsViewController]
         containerViews = [eventsView]
         
-        if year != nil {
-            setupWeeks()
-        }
-
+        setupWeeks()
         updateInterface()
     }
     
     // MARK: - Private Methods
-
+    
     func updateInterface() {
-        if let week = week {
-            navigationTitleLabel?.text = "\(week.weekString) Events"
+        if let weekEvent = weekEvent {
+            navigationTitleLabel?.text = "\(weekEvent.weekString) Events"
         } else {
             navigationTitleLabel?.text = "---- Events"
         }
+        navigationDetailLabel?.text = "▾ \(year)"
         
-        if let year = year {
-            navigationDetailLabel?.text = "▾ \(year)"
-        } else {
-            navigationDetailLabel?.text = "▾ ----"
-        }
-        
-        if weeks != nil {
-            weeksButton?.title = "Weeks"
-            weeksButton?.isEnabled = true
-        } else {
+        if weekEvents.isEmpty {
             weeksButton?.title = "----"
             weeksButton?.isEnabled = false
-        }
-        
-        if year == nil, week == nil {
-            // Show loading
         } else {
-            // Hide loading
+            weeksButton?.title = "Weeks"
+            weeksButton?.isEnabled = true
         }
     }
     
-    func setupCurrentSeasonWeek() {
-        guard let year = year else {
-            showNoDataView(with: "No year selected")
-            return
-        }
-
-        // Fetch all events where endDate is today or after today
-        let date = Date()
-        
-        // Remove time from date - we only care about the day
-        let components = Calendar.current.dateComponents([.day, .month, .year], from: date)
-        
-        // Conversion stuff because Core Data still uses NSDates
-        guard let swiftDate = Calendar.current.date(from: components) else {
-            showErrorAlert(with: "Unable to setup current season week - datetime conversion failed")
-            return
-        }
-        let coreDataDate = NSDate(timeIntervalSince1970: swiftDate.timeIntervalSince1970)
-        
-        let event = Event.fetchSingleObject(in: persistentContainer.viewContext) { (fetchRequest) in
-            fetchRequest.predicate = NSPredicate(format: "year == %ld && endDate >= %@ && eventType != %ld", year, coreDataDate, EventType.championshipDivision.rawValue)
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "endDate", ascending: true)]
-        }
-        let firstEvent = Event.fetchSingleObject(in: persistentContainer.viewContext) { (fetchRequest) in
-            fetchRequest.predicate = NSPredicate(format: "year == %ld", year)
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
-        }
-        
-        if let event = event {
-            self.week = event
-        } else if let firstEvent = firstEvent {
-            // Couldn't get events for the year... use the *first* event for this year
-            self.week = firstEvent
-        } else {
-            showErrorAlert(with: "Unable to setup current season week - no events for year")
+    func updateEventObserver() {
+        // Ignore Championship divisions - we don't want to take them in to account during our weeks calculation,
+        // so we don't bother watching for changes in them
+        let predicate = NSPredicate(format: "year == %ld && eventType != %ld", year, EventType.championshipDivision.rawValue)
+        contextObserver.observeInsertions(matchingPredicate: predicate) { [weak self] (events) in
+            DispatchQueue.main.async {
+                self?.setupWeeks()
+            }
         }
     }
     
     func setupWeeks() {
-        guard let year = year else {
-            showNoDataView(with: "No year selected")
-            return
-        }
-        
         let events = Event.fetch(in: persistentContainer.viewContext) { (fetchRequest) in
-            // Filter out CMP divisions
+            // Filter out CMP divisions - we don't want them below for our weeks calculation
             fetchRequest.predicate = NSPredicate(format: "year == %ld && eventType != %ld", year, EventType.championshipDivision.rawValue)
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true), NSSortDescriptor(key: "eventType", ascending: true), NSSortDescriptor(key: "endDate", ascending: true)]
         }
@@ -171,15 +128,14 @@ class EventsContainerViewController: ContainerViewController {
                 eventsViewController.refresh()
             }
             return
-        } else if hasRefreshed {
-            showNoDataView(with: "No events for year")
-            return
         }
 
+        // Take one event for each week(type) to use for our weekEvents array
+        // ex: one Preseason, one Week 1, one Week 2..., one CMP #1, one CMP #2, one Offseason
         // Jesus, take the wheel
         var handledWeeks: Set<Int> = []
         var handledTypes: Set<Int> = []
-        self.weeks = Array(events.compactMap({ (event) -> Event? in
+        self.weekEvents = Array(events.compactMap({ (event) -> Event? in
             let eventType = Int(event.eventType)
             if let week = event.week {
                 // Make sure each week only shows up once
@@ -201,15 +157,15 @@ class EventsContainerViewController: ContainerViewController {
             }
         })).sorted()
         
-        if year == Calendar.current.year, week == nil {
-            // If it's the current year, setup the current week for this year
-            setupCurrentSeasonWeek()
-        } else {
-            // Otherwise, default to the first week for this year
-            if let firstWeek = weeks?.first {
-                week = firstWeek
-            } else {
-                showErrorAlert(with: "Unable to setup weeks - no events for selected year")
+        // If we don't have a weekEvent yet, set one
+        // If we do have one, we don't want to jump where the user set their week to
+        if weekEvent == nil {
+            if year == Calendar.current.year {
+                // If it's the current year, setup the current week for this year
+                setupCurrentSeasonWeek()
+            } else if let firstWeekEvent = weekEvents.first {
+                // Otherwise, default to the first week for this years
+                weekEvent = firstWeekEvent
             }
         }
         
@@ -218,25 +174,43 @@ class EventsContainerViewController: ContainerViewController {
         }
     }
     
-    // MARK: - Observers
-    
-    @objc func fetchedTBAStatus(notification: NSNotification) {
-        guard let status = notification.object as? TBAStatus else {
-            showErrorAlert(with: "TBA status fetch failed")
+    func setupCurrentSeasonWeek() {
+        // Fetch all events where endDate is today or after today
+        let date = Date()
+        
+        // Remove time from date - we only care about the day
+        // We don't want to be too granular, or we bump forward too fast
+        let components = Calendar.current.dateComponents([.day, .month, .year], from: date)
+        
+        // Conversion stuff because Core Data still uses NSDates
+        guard let swiftDate = Calendar.current.date(from: components) else {
+            showErrorAlert(with: "Unable to setup current season week - datetime conversion failed")
             return
         }
-        if year == nil {
-            year = Int(status.currentSeason)
+        let coreDataDate = NSDate(timeIntervalSince1970: swiftDate.timeIntervalSince1970)
+        
+        // Find the first non-finished event for the selected year
+        let event = Event.fetchSingleObject(in: persistentContainer.viewContext) { (fetchRequest) in
+            fetchRequest.predicate = NSPredicate(format: "year == %ld && endDate >= %@ && eventType != %ld", year, coreDataDate, EventType.championshipDivision.rawValue)
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "endDate", ascending: true)]
         }
-        maxYear = Int(status.maxSeason)
+        // Find the first overall event for the selected year
+        let firstEvent = Event.fetchSingleObject(in: persistentContainer.viewContext) { (fetchRequest) in
+            fetchRequest.predicate = NSPredicate(format: "year == %ld", year)
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
+        }
+        
+        if let event = event {
+            weekEvent = event
+        } else if let firstEvent = firstEvent {
+            weekEvent = firstEvent
+        }
     }
     
     // MARK: - Navigation
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if identifier == SelectYearSegue, (maxYear == nil || year == nil) {
-            return false
-        } else if identifier == SelectWeekSegue, (weeks == nil || week == nil) {
+        if identifier == SelectWeekSegue, (weekEvents.isEmpty || weekEvent == nil) {
             return false
         }
         return true
@@ -250,7 +224,7 @@ class EventsContainerViewController: ContainerViewController {
                 let selectTableViewController = SelectTableViewController<Int>()
                 selectTableViewController.title = "Select Year"
                 selectTableViewController.current = year
-                selectTableViewController.options = Array(1992...maxYear!).reversed()
+                selectTableViewController.options = Array(1992...maxYear).reversed()
                 selectTableViewController.optionSelected = { [weak self] year in
                     self?.year = year
                 }
@@ -261,7 +235,7 @@ class EventsContainerViewController: ContainerViewController {
             } else {
                 let selectTableViewController = SelectTableViewController<Event>()
                 selectTableViewController.title = "Select Week"
-                selectTableViewController.current = week!
+                selectTableViewController.current = weekEvent!
                 // Use compareCurrent for current season situation where the event stored in weeks may not actually
                 // be equal to the event we have stored in week... because the current event might not be the first event
                 selectTableViewController.compareCurrent = { current, option in
@@ -276,9 +250,9 @@ class EventsContainerViewController: ContainerViewController {
                     }
                     return (current.week == option.week) && (current.eventType == option.eventType)
                 }
-                selectTableViewController.options = weeks
+                selectTableViewController.options = weekEvents
                 selectTableViewController.optionSelected = { [weak self] week in
-                    self?.week = week
+                    self?.weekEvent = week
                 }
                 selectTableViewController.optionString = { week in
                     return week.weekString
@@ -292,11 +266,8 @@ class EventsContainerViewController: ContainerViewController {
             eventViewController.persistentContainer = persistentContainer
         } else if segue.identifier == EventsEmbed {
             eventsViewController = segue.destination as? EventsTableViewController
-            eventsViewController.weekEvent = weeks?.first
+            eventsViewController.weekEvent = weekEvents.first
             eventsViewController.year = year
-            eventsViewController.eventsFetched = { [weak self] in
-                self?.setupWeeks()
-            }
             eventsViewController.eventSelected = { [weak self] event in
                 self?.performSegue(withIdentifier: EventSegue, sender: event)
             }

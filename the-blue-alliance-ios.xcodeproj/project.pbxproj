@@ -407,11 +407,11 @@
 			isa = PBXGroup;
 			children = (
 				92942E311E230340008E79CA /* Base */,
-				140523781ED33DB10072FB91 /* Match */,
 				92942DB21E215B08008E79CA /* Events */,
 				92942DB31E215B0E008E79CA /* Teams */,
 				92942DB41E215B1F008E79CA /* Districts */,
 				92942DB51E215B34008E79CA /* MyTBA */,
+				140523781ED33DB10072FB91 /* Match */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";

@@ -1,11 +1,3 @@
-//
-//  DistrictsTableViewController.swift
-//  the-blue-alliance-ios
-//
-//  Created by Zach Orr on 5/13/17.
-//  Copyright © 2017 The Blue Alliance. All rights reserved.
-//
-
 import Foundation
 import UIKit
 import CoreData
@@ -19,7 +11,7 @@ class DistrictsTableViewController: TBATableViewController {
         }
     }
     
-    internal var year: Int? {
+    internal var year: Int! {
         didSet {
             cancelRefresh()
             updateDataSource()
@@ -31,13 +23,6 @@ class DistrictsTableViewController: TBATableViewController {
     // MARK: - Refreshing
     
     override func refresh() {
-        guard let year = year else {
-            showNoDataView(with: "No year selected")
-            refreshControl!.endRefreshing()
-
-            return
-        }
-
         removeNoDataView()
         
         var request: URLSessionDataTask?

@@ -1,11 +1,3 @@
-//
-//  EventsTableViewController.swift
-//  the-blue-alliance
-//
-//  Created by Zach Orr on 1/7/17.
-//  Copyright © 2017 The Blue Alliance. All rights reserved.
-//
-
 import UIKit
 import TBAKit
 import CoreData
@@ -20,6 +12,8 @@ class EventsTableViewController: TBATableViewController {
             updateDataSource()
         }
     }
+    // The selected Event from the weekEvents array to represent the Week to show
+    // We need a full object as opposed to a number because of CMP, off-season, etc.
     internal var weekEvent: Event? {
         didSet {
             updateDataSource()
@@ -32,7 +26,6 @@ class EventsTableViewController: TBATableViewController {
         }
     }
 
-    var eventsFetched: (() -> ())?
     var eventSelected: ((Event) -> ())?
     
     // MARK: - View Lifecycle
@@ -84,10 +77,7 @@ class EventsTableViewController: TBATableViewController {
                 
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh event - database error")
-                } else if let eventsFetched = self.eventsFetched {
-                    eventsFetched()
                 }
-                
                 self.removeRequest(request: request!)
             })
         })
@@ -95,7 +85,6 @@ class EventsTableViewController: TBATableViewController {
     }
     
     func refreshTeamEvents() {
-        // Get all events for the team - we'll filter by year
         guard let team = team else {
             return
         }
@@ -115,10 +104,7 @@ class EventsTableViewController: TBATableViewController {
                 
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh event - database error")
-                } else if let eventsFetched = self.eventsFetched {
-                    eventsFetched()
                 }
-                
                 self.removeRequest(request: request!)
             })
         })
@@ -145,10 +131,7 @@ class EventsTableViewController: TBATableViewController {
                 
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh event - database error")
-                } else if let eventsFetched = self.eventsFetched {
-                    eventsFetched()
                 }
-                
                 self.removeRequest(request: request!)
             })
         })
@@ -174,10 +157,14 @@ class EventsTableViewController: TBATableViewController {
     
     // MARK: Table View Data Source
     
+    private func canSetupDataSource() -> Bool {
+        return (year != nil && weekEvent != nil) || (year != nil && team != nil) || (district != nil)
+    }
+    
     fileprivate var dataSource: TableViewDataSource<Event, EventsTableViewController>?
     
     fileprivate func setupDataSource() {
-        guard let persistentContainer = persistentContainer else {
+        guard let persistentContainer = persistentContainer, canSetupDataSource() == true else {
             return
         }
 
@@ -210,7 +197,7 @@ class EventsTableViewController: TBATableViewController {
     }
     
     fileprivate func setupFetchRequest(_ request: NSFetchRequest<Event>) {
-        if let weekEvent = weekEvent, let year = year {
+        if let year = year, let weekEvent = weekEvent {
             if let week = weekEvent.week {
                 // Event has a week - filter based on the week
                 request.predicate = NSPredicate(format: "week == %ld && year == %ld", week.intValue, year)
@@ -222,10 +209,14 @@ class EventsTableViewController: TBATableViewController {
                     request.predicate = NSPredicate(format: "eventType == %ld && year == %ld", weekEvent.eventType, year)
                 }
             }
-        } else if let team = team, let year = year {
+        } else if let year = year, let team = team {
             request.predicate = NSPredicate(format: "year == %ld AND ANY teams == %@", year, team)
         } else if let district = district {
             request.predicate = NSPredicate(format: "district == %@", district)
+        } else {
+            // Set this up so we fetch absolutely nothing and force a clear of all cells
+            // Used to bust our table view/FRC after we change years in Events VC
+            request.predicate = NSPredicate(format: "year == -1")
         }
     }
     

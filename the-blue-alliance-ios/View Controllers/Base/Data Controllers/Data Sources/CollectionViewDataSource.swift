@@ -13,7 +13,7 @@ protocol CollectionViewDataSourceDelegate: class {
     func hideNoDataView()
 }
 
-class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: CollectionViewDataSourceDelegate & Refreshable>: NSObject, UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
+class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: CollectionViewDataSourceDelegate>: NSObject, UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
     
     typealias Object = Delegate.Object
     typealias Cell = Delegate.Cell
@@ -46,9 +46,6 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
         NSFetchedResultsController<NSFetchRequestResult>.deleteCache(withName: fetchedResultsController.cacheName)
         configure(fetchedResultsController.fetchRequest)
         do { try fetchedResultsController.performFetch() } catch { fatalError("fetch request failed") }
-        if let fetchedCount = fetchedResultsController.fetchedObjects?.count, fetchedCount == 0, delegate.shouldRefresh() {
-            delegate.refresh()
-        }
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }

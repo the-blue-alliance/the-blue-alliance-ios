@@ -1,23 +1,20 @@
-//
-//  TeamViewController.swift
-//  the-blue-alliance-ios
-//
-//  Created by Zach Orr on 5/12/17.
-//  Copyright © 2017 The Blue Alliance. All rights reserved.
-//
-
 import UIKit
 import TBAKit
+import CoreData
 
-class TeamViewController: ContainerViewController {
+class TeamViewController: ContainerViewController, Observable {
     
-    public var team: Team!
+    public var team: Team! {
+        didSet {
+            updateYear()
+        }
+    }
     var year: Int? {
         didSet {
-            if eventsViewController.year == nil || eventsViewController.year != year {
+            if let year = year, eventsViewController.year != year {
                 eventsViewController.year = year
             }
-            if mediaViewController.year == nil || mediaViewController.year != year {
+            if let year = year, mediaViewController.year != year {
                 mediaViewController.year = year
             }
             
@@ -36,9 +33,32 @@ class TeamViewController: ContainerViewController {
     
     internal var eventsViewController: EventsTableViewController!
     @IBOutlet internal var eventsView: UIView!
-
+    
     internal var mediaViewController: TeamMediaCollectionViewController!
     @IBOutlet internal var mediaView: UIView!
+    
+    // MARK: - Persistable
+    
+    override var persistentContainer: NSPersistentContainer! {
+        didSet {
+            contextObserver.observeObject(object: team, state: .updated) { [weak self] (_, _) in
+                self?.updateYear()
+
+                DispatchQueue.main.async {
+                    self?.updateInterface()
+                }
+            }
+        }
+    }
+    
+    // MARK: - Observable
+    
+    typealias ManagedType = Team
+    lazy var contextObserver: CoreDataContextObserver<Team> = {
+        return CoreDataContextObserver(context: persistentContainer.viewContext)
+    }()
+    
+    // MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +72,7 @@ class TeamViewController: ContainerViewController {
             navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
             navigationItem.leftItemsSupplementBackButton = true
         }
-        
+
         updateInterface()
     }
     
@@ -63,6 +83,13 @@ class TeamViewController: ContainerViewController {
     }
     
     // MARK: - Private
+    
+    func updateYear() {
+        guard let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty, year == nil else {
+            return
+        }
+        year = yearsParticipated.first
+    }
     
     func updateInterface() {
         navigationTitleLabel?.text = "Team \(team.teamNumber)"
@@ -81,16 +108,14 @@ class TeamViewController: ContainerViewController {
                 return
             }
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
-                // TODO: Get a background team, observe changes, idiot.
-                // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/137
+                let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
+
                 if let years = years {
-                    self.team.yearsParticipated = years.sorted().reversed()
+                    backgroundTeam.yearsParticipated = years.sorted().reversed()
                 }
                 
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh years participated - database error")
-                } else if self.year == nil, let yearsParticipated = self.team.yearsParticipated, !yearsParticipated.isEmpty {
-                    self.year = yearsParticipated.first
                 }
             })
         })

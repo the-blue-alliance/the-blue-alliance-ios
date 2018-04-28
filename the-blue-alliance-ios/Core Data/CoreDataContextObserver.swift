@@ -8,10 +8,10 @@ public struct CoreDataContextObserverState: OptionSet {
     public static let inserted  = CoreDataContextObserverState(rawValue: 1 << 0)
     public static let updated   = CoreDataContextObserverState(rawValue: 1 << 1)
     public static let deleted   = CoreDataContextObserverState(rawValue: 1 << 2)
-    // public static let refreshed = CoreDataContextObserverState(rawValue: 1 << 3)
-    public static let all: CoreDataContextObserverState = [inserted, updated, deleted]
+    public static let refreshed = CoreDataContextObserverState(rawValue: 1 << 3)
+    public static let all: CoreDataContextObserverState = [inserted, updated, deleted, refreshed]
     
-    public static let allList: [CoreDataContextObserverState] = [inserted, updated, deleted]
+    public static let allList: [CoreDataContextObserverState] = [inserted, updated, deleted, refreshed]
 }
 
 public struct CoreDataObserverAction<T:NSManagedObject> {
@@ -32,7 +32,7 @@ public class CoreDataContextObserver<T:NSManagedObject> {
     // Call completion block when inserted objects match predicate
     private(set) var insertionPredicate: NSPredicate?
     // Completion blocks for only insertions actions - can only have one block for this
-    private(set) var completionForInsertedManagedObjectID: ((T) -> ())?
+    private(set) var completionForInsertedManagedObjectID: ((Set<T>) -> ())?
     
     private(set) weak var persistentStoreCoordinator: NSPersistentStoreCoordinator?
     
@@ -69,9 +69,9 @@ public class CoreDataContextObserver<T:NSManagedObject> {
             // Handle Insertion observers
             if state == .inserted, let completionBlock = completionForInsertedManagedObjectID {
                 // Filter objects that match predicate (or all objects), then call the completion block for each object
-                let filteredObjectSet = objectsSet.filter({ insertionPredicate?.evaluate(with: $0) ?? true })
-                for case let object as T in filteredObjectSet {
-                    completionBlock(object)
+                let filteredObjectSet = objectsSet.filter({ ($0 as? T) != nil }).filter({ insertionPredicate?.evaluate(with: $0) ?? true })
+                if let filteredInsertions = filteredObjectSet as? Set<T>, filteredObjectSet.count > 0 {
+                    completionBlock(filteredInsertions)
                 }
             }
             
@@ -103,7 +103,7 @@ public class CoreDataContextObserver<T:NSManagedObject> {
         }
     }
 
-    public func observeInsertions(matchingPredicate predicate: NSPredicate? = nil, completionBlock: @escaping (T) -> ()) {
+    public func observeInsertions(matchingPredicate predicate: NSPredicate? = nil, completionBlock: @escaping (Set<T>) -> ()) {
         // Side effect - only allow observing insertions OR updates
         unobserveAllObjects()
 

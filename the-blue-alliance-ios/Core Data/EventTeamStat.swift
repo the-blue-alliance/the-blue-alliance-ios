@@ -22,6 +22,7 @@ extension EventTeamStat: Managed {
         return findOrCreate(in: context, matching: predicate) { (stat) in
             stat.team = team
             stat.event = event
+
             stat.opr = model.opr
             stat.dpr = model.dpr
             stat.ccwm = model.ccwm

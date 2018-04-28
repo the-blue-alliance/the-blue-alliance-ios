@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  the-blue-alliance
-//
-//  Created by Zach Orr on 1/7/17.
-//  Copyright © 2017 The Blue Alliance. All rights reserved.
-//
-
 import UIKit
 import CoreData
 import TBAKit
@@ -13,46 +5,7 @@ import Firebase
 import UserNotifications
 import Crashlytics
 
-public enum StatusConstants {
-    static let currentSeasonKey = "current_season"
-    static let downEventsKey = "down_events"
-    static let latestAppVersionKey = "latest_app_version"
-    static let minAppVersionKey = "min_app_version"
-    static let isDatafeedDownKey = "is_datafeed_down"
-    static let maxSeasonKey = "max_season"
-}
-
-// Notifications
-// TODO: Subscribe to these notifications elsewhere
-let kFetchedTBAStatus = "kFetchedTBAStatus"
-
 let kNoSelectionNavigationController = "NoSelectionNavigationController"
-
-extension TBAStatus {
-
-    public static func defaultStatus() -> TBAStatus {
-        // Set to the last safe year we know about
-        let currentYear = UInt(2018)
-        // TODO: Move this JSON in to some file that get's generated when we build for release
-        let defaultStatusJSON: [String: Any] = [
-            "android": [
-                "latest_app_version": -1,
-                "min_app_version": -1
-            ],
-            "current_season": currentYear,
-            "down_events": [],
-            "ios": [
-                "latest_app_version": -1,
-                "min_app_version": -1
-            ],
-            "is_datafeed_down": false,
-            "max_season": currentYear
-        ]
-
-        return TBAStatus(json: defaultStatusJSON)!
-    }
-
-}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -106,16 +59,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupAppearance()
         
         FirebaseApp.configure()
-        Messaging.messaging().delegate = self
+        // Setup Remote Config
         RemoteConfig.setupRemoteConfig()
+        // Assign our Push Notification delegates
+        Messaging.messaging().delegate = self
+        UNUserNotificationCenter.current().delegate = self
 
         // Attempt to download our newest React Native bundle
         ReactNativeDownloader.updateReactNativeBundle()
-        
-        UNUserNotificationCenter.current().delegate = self
-        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (_, _) in }
-        application.registerForRemoteNotifications()
         
         return true
     }
@@ -135,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        fetchTBAStatus()
+        // Update anything we want to be fresh
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -156,57 +107,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationBarAppearance.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
     }
     
-}
-
-// TBA-specific logic
-extension AppDelegate {
-    
-    func fetchTBAStatus() {
-        // Call our staus endpoint and save everything in NSUserDefaults
-        _ = TBAKit.sharedKit.fetchStatus({ (status, error) in
-            if let status = status {
-                // Got a valid status back from the API - update everything
-                UserDefaults.standard.set(status.currentSeason, forKey: StatusConstants.currentSeasonKey)
-                UserDefaults.standard.set(status.downEvents, forKey: StatusConstants.downEventsKey)
-                // Note: We can update these two keys as we ship future versions, along with some migration code
-                UserDefaults.standard.set(status.ios.latestAppVersion, forKey: StatusConstants.latestAppVersionKey)
-                UserDefaults.standard.set(status.ios.minAppVersion, forKey: StatusConstants.minAppVersionKey)
-                UserDefaults.standard.set(status.datafeedDown, forKey: StatusConstants.isDatafeedDownKey)
-                UserDefaults.standard.set(status.maxSeason, forKey: StatusConstants.maxSeasonKey)
-                
-                NotificationCenter.default.post(name: Notification.Name(kFetchedTBAStatus), object: status)
-            } else {
-                let defaultStatus = TBAStatus.defaultStatus()
-                // Didn't get a valid response from API - grab our default status
-                // Make sure we don't overwite too many things if they've already been set
-                
-                // Only set our current season if we haven't set our current season
-                if UserDefaults.standard.integer(forKey: StatusConstants.currentSeasonKey) == 0 {
-                    UserDefaults.standard.set(defaultStatus.currentSeason, forKey: StatusConstants.currentSeasonKey)
-                }
-                
-                // Set our latest app version if we've never set our latest app version before *or* our latest app
-                // version is less than the default latest app version
-                let latestAppVersion = UserDefaults.standard.integer(forKey: StatusConstants.latestAppVersionKey)
-                if latestAppVersion == 0 || latestAppVersion < defaultStatus.ios.latestAppVersion {
-                    UserDefaults.standard.set(defaultStatus.ios.latestAppVersion, forKey: StatusConstants.latestAppVersionKey)
-                }
-                
-                let minAppVersion = UserDefaults.standard.integer(forKey: StatusConstants.minAppVersionKey)
-                if minAppVersion == 0 || minAppVersion < defaultStatus.ios.minAppVersion {
-                    UserDefaults.standard.set(defaultStatus.ios.minAppVersion, forKey: StatusConstants.minAppVersionKey)
-                }
-                
-                // Only set our max season if we haven't set our max season
-                if UserDefaults.standard.integer(forKey: StatusConstants.maxSeasonKey) == 0 {
-                    UserDefaults.standard.set(defaultStatus.maxSeason, forKey: StatusConstants.maxSeasonKey)
-                }
-                
-                NotificationCenter.default.post(name: Notification.Name(kFetchedTBAStatus), object: defaultStatus)
-            }
-        })
-    }
-
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {

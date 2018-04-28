@@ -9,6 +9,8 @@ extension EventAlliance: Managed {
         let predicate = NSPredicate(format: "event == %@ AND (SUBQUERY(picks, $pick, $pick.key IN %@) .@count == %d)", event, model.picks, model.picks.count)
         return findOrCreate(in: context, matching: predicate, configure: { (alliance) in
             // Required: picks, eventKey
+            alliance.event = event
+
             alliance.name = model.name
             
             if let backup = model.backup {
@@ -37,6 +39,7 @@ extension EventAllianceBackup: Managed {
     static func insert(with model: TBAAllianceBackup, for alliance: EventAlliance, in context: NSManagedObjectContext) -> EventAllianceBackup {
         let predicate = NSPredicate(format: "alliance == %@", alliance)
         return findOrCreate(in: context, matching: predicate, configure: { (allianceBackup) in
+            allianceBackup.alliance = alliance
             allianceBackup.inTeam = Team.insert(withKey: model.teamIn, in: context)
             allianceBackup.outTeam = Team.insert(withKey: model.teamOut, in: context)
         })
@@ -62,6 +65,8 @@ extension EventAllianceStatus: Managed {
     static func insert(with model: TBAAllianceStatus, for alliance: EventAlliance, in context: NSManagedObjectContext) -> EventAllianceStatus {
         let predicate = NSPredicate(format: "alliance == %@", alliance)
         return findOrCreate(in: context, matching: predicate, configure: { (allianceStatus) in
+            allianceStatus.alliance = alliance
+            
             if let currentRecord = model.currentRecord {
                 allianceStatus.currentRecord = WLT(wins: currentRecord.wins, losses: currentRecord.losses, ties: currentRecord.ties)
             }

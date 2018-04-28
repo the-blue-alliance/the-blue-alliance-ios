@@ -17,8 +17,8 @@ class TeamStatsTableViewController: TBATableViewController, Observable {
                     }
                 }
             } else {
-                contextObserver.observeInsertions { [weak self] (teamStat) in
-                    self?.teamStat = teamStat
+                contextObserver.observeInsertions { [weak self] (teamStats) in
+                    self?.teamStat = teamStats.first
                 }
             }
         }

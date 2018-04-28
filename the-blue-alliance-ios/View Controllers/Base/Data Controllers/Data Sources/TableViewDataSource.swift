@@ -19,7 +19,7 @@ extension TableViewDataSourceDelegate {
     }
 }
 
-class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataSourceDelegate & Refreshable>: NSObject, UITableViewDataSource, NSFetchedResultsControllerDelegate {
+class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataSourceDelegate>: NSObject, UITableViewDataSource, NSFetchedResultsControllerDelegate {
 
     typealias Object = Delegate.Object
     typealias Cell = Delegate.Cell
@@ -53,9 +53,6 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         NSFetchedResultsController<NSFetchRequestResult>.deleteCache(withName: fetchedResultsController.cacheName)
         configure(fetchedResultsController.fetchRequest)
         do { try fetchedResultsController.performFetch() } catch { fatalError("fetch request failed") }
-        if let fetchedCount = fetchedResultsController.fetchedObjects?.count, fetchedCount == 0, delegate.shouldRefresh() {
-            delegate.refresh()
-        }
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }

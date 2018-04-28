@@ -14,6 +14,7 @@ protocol Persistable: AnyObject {
 extension Persistable {
     
     func showNoDataView(with text: String?) {
+        // TODO: Fix this so we update an old no data view if one already exists
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let noDataViewController = mainStoryboard.instantiateViewController(withIdentifier: "NoDataViewController") as! NoDataViewController
         guard let noDataView = noDataViewController.view else {
