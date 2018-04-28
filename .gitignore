@@ -33,4 +33,6 @@ the-blue-alliance-ios.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 node_modules
 *.log
 .nvm
+js/ios/*
 
+the-blue-alliance-ios/GoogleService-Info.plist

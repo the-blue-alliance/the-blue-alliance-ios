@@ -1,11 +1,3 @@
-//
-//  TableViewDataSource.swift
-//  the-blue-alliance
-//
-//  Created by Zach Orr on 4/30/17.
-//  Copyright © 2017 The Blue Alliance. All rights reserved.
-//
-
 import UIKit
 import CoreData
 
@@ -27,23 +19,24 @@ extension TableViewDataSourceDelegate {
     }
 }
 
-class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataSourceDelegate>: NSObject, UITableViewDataSource, NSFetchedResultsControllerDelegate {
+class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataSourceDelegate & Refreshable>: NSObject, UITableViewDataSource, NSFetchedResultsControllerDelegate {
 
     typealias Object = Delegate.Object
     typealias Cell = Delegate.Cell
-
+    
     required init(tableView: UITableView, cellIdentifier: String, fetchedResultsController: NSFetchedResultsController<Result>, delegate: Delegate) {
         self.tableView = tableView
         self.cellIdentifier = cellIdentifier
         self.fetchedResultsController = fetchedResultsController
         self.delegate = delegate
+        
         super.init()
         fetchedResultsController.delegate = self
         try! fetchedResultsController.performFetch()
 
         DispatchQueue.main.async {
             tableView.dataSource = self
-            self.tableView.reloadData()
+            tableView.reloadData()
         }
     }
     
@@ -60,6 +53,9 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         NSFetchedResultsController<NSFetchRequestResult>.deleteCache(withName: fetchedResultsController.cacheName)
         configure(fetchedResultsController.fetchRequest)
         do { try fetchedResultsController.performFetch() } catch { fatalError("fetch request failed") }
+        if let fetchedCount = fetchedResultsController.fetchedObjects?.count, fetchedCount == 0, delegate.shouldRefresh() {
+            delegate.refresh()
+        }
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }

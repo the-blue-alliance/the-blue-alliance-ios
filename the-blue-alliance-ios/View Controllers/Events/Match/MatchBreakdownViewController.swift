@@ -12,9 +12,15 @@ import React
 import TBAKit
 import CoreData
 
-class MatchBreakdownViewController: TBAViewController, Observable {
+class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
     
     public var match: Match!
+    
+    // MARK: - React Native
+    
+    lazy internal var reactBridge: RCTBridge = {
+        return RCTBridge(delegate: self, launchOptions: [:])
+    }()
     private var breakdownView: RCTRootView?
     
     // MARK: - Persistable
@@ -39,6 +45,9 @@ class MatchBreakdownViewController: TBAViewController, Observable {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // TODO: Move this... out. Somewhere else. In the ReactNative Protocol
+        NotificationCenter.default.addObserver(self, selector: #selector(showErrorView), name: NSNotification.Name.RCTJavaScriptDidFailToLoad, object: nil)
+        
         styleInterface()
     }
     
@@ -57,31 +66,28 @@ class MatchBreakdownViewController: TBAViewController, Observable {
         
         // If the breakdown view already exists, don't set it up again
         // Only update the properties for the view
-        if let _ = breakdownView {
-            breakdownView?.appProperties = dataForBreakdown()
-            return
-        }
-
-        guard let jsCodeLocation = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index.ios", fallbackResource: nil) else {
-            self.showNoDataView(with: "Unable to load breakdown")
+        if let breakdownView = breakdownView {
+            breakdownView.appProperties = dataForBreakdown()
             return
         }
 
         let initialProps = dataForBreakdown()
-        
         let moduleName = "MatchBreakdown\(match.event!.year)"
-        
-        guard let rootView = RCTRootView(bundleURL: jsCodeLocation, moduleName: moduleName, initialProperties: initialProps, launchOptions: [:]) else {
-            self.showNoDataView(with: "Unable to load breakdown")
+
+        guard let breakdownView = RCTRootView(bridge: reactBridge, moduleName: moduleName, initialProperties: initialProps) else {
+            showErrorView()
             return
         }
-        breakdownView = rootView
-        breakdownView!.delegate = self
-        breakdownView!.sizeFlexibility = .height
         
-        scrollView.addSubview(breakdownView!)
-        breakdownView!.autoMatch(.width, to: .width, of: scrollView)
-        breakdownView!.autoPinEdgesToSuperviewEdges()
+        // breakdownView.loadingView
+        breakdownView.delegate = self
+        breakdownView.sizeFlexibility = .height
+        
+        removeNoDataView()
+        scrollView.addSubview(breakdownView)
+        
+        breakdownView.autoMatch(.width, to: .width, of: scrollView)
+        breakdownView.autoPinEdgesToSuperviewEdges()
     }
     
     // MARK: Private
@@ -104,6 +110,14 @@ class MatchBreakdownViewController: TBAViewController, Observable {
                 "compLevel": match.compLevel!]
     }
     
+    // MARK: - RCTBridgeDelegate
+    
+    func sourceURL(for bridge: RCTBridge!) -> URL! {
+        // Fetch our downloaded JS bundle (or our loctaal packager, if we're running in debug mode)
+        return sourceURL
+    }
+    // fallbackSourceURL
+    
     // MARK: Refresh
     
     override func shouldNoDataRefresh() -> Bool {
@@ -116,7 +130,7 @@ class MatchBreakdownViewController: TBAViewController, Observable {
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchMatch(key: match.key!, { (modelMatch, error) in
             if let error = error {
-                self.showErrorAlert(with: "Unable to refresh match - \(error.localizedDescription)")
+                self.showErrorAlert(with: "Unable to refresh match breakdown - \(error.localizedDescription)")
             }
             
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
@@ -127,13 +141,25 @@ class MatchBreakdownViewController: TBAViewController, Observable {
                 }
                 
                 if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh match - database error")
+                    self.showErrorAlert(with: "Unable to refresh match breakdown - database error")
                 }
-                
                 self.removeRequest(request: request!)
             })
         })
         addRequest(request: request!)
+    }
+    
+    override func optionallyShowNoDataView() {
+        if shouldNoDataRefresh() {
+            showNoDataView(with: "No breakdown for match")
+        }
+    }
+    
+    // MARK: Notifications
+    
+    @objc func showErrorView() {
+        // TODO: Think about logging an error here or something so we know if match brekadown fails, since we can fix
+        showNoDataView(with: "Unable to load match breakdown")
     }
     
 }

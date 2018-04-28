@@ -97,8 +97,8 @@ class DistrictsContainerViewController: ContainerViewController {
             selectTableViewController.title = "Select Year"
             selectTableViewController.current = year!
             selectTableViewController.options = Array(2009...maxYear!).reversed()
-            selectTableViewController.optionSelected = { year in
-                self.year = year
+            selectTableViewController.optionSelected = { [weak self] year in
+                self?.year = year
             }
             selectTableViewController.optionString = { year in
                 return String(year)
@@ -107,8 +107,8 @@ class DistrictsContainerViewController: ContainerViewController {
         } else if segue.identifier == "DistrictsEmbed" {
             districtsViewController = segue.destination as? DistrictsTableViewController
             districtsViewController.year = year
-            districtsViewController.districtSelected = { district in
-                self.performSegue(withIdentifier: "DistrictSegue", sender: district)
+            districtsViewController.districtSelected = { [weak self] district in
+                self?.performSegue(withIdentifier: "DistrictSegue", sender: district)
             }
         } else if segue.identifier == "DistrictSegue" {
             let districtViewController = (segue.destination as! UINavigationController).topViewController as! DistrictViewController

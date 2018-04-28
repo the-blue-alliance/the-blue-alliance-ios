@@ -12,9 +12,15 @@ import TBAKit
 import UIKit
 import React
 
-class EventStatsViewController: TBAViewController, Observable {
+class EventStatsViewController: TBAViewController, Observable, ReactNative {
     
     var event: Event!
+    
+    // MARK: - React Native
+    
+    lazy internal var reactBridge: RCTBridge = {
+        return RCTBridge(delegate: self, launchOptions: [:])
+    }()
     private var eventStatsView: RCTRootView?
     
     // MARK: - Persistable
@@ -41,6 +47,9 @@ class EventStatsViewController: TBAViewController, Observable {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // TODO: Move this... out. Somewhere else. In the ReactNative Protocol
+        NotificationCenter.default.addObserver(self, selector: #selector(showErrorView), name: NSNotification.Name.RCTJavaScriptDidFailToLoad, object: nil)
+        
         styleInterface()
     }
     
@@ -60,35 +69,46 @@ class EventStatsViewController: TBAViewController, Observable {
         
         // If the event stats view already exists, don't set it up again
         // Only update the properties for the view
-        if let _ = eventStatsView {
-            eventStatsView?.appProperties = event.insights
+        if let eventStatsView = eventStatsView {
+            eventStatsView.appProperties = event.insights
             return
         }
         
-        guard let jsCodeLocation = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index.ios", fallbackResource: nil) else {
-            self.showNoDataView(with: "Unable to load event stats")
+        guard let insights = event.insights else {
+            showNoDataView()
             return
         }
-        
         
         let moduleName = "EventInsights\(event!.year)"
-        
-        guard let rootView = RCTRootView(bundleURL: jsCodeLocation, moduleName: moduleName, initialProperties: event.insights, launchOptions: [:]) else {
-            self.showNoDataView(with: "Unable to load event stats")
+
+        guard let eventStatsView = RCTRootView(bridge: reactBridge, moduleName: moduleName, initialProperties: insights) else {
+            showErrorView()
             return
         }
-        eventStatsView = rootView
-        eventStatsView!.delegate = self
-        eventStatsView!.sizeFlexibility = .height
+
+        // breakdownView.loadingView
+        eventStatsView.delegate = self
+        eventStatsView.sizeFlexibility = .height
         
-        scrollView.addSubview(eventStatsView!)
-        eventStatsView!.autoMatch(.width, to: .width, of: scrollView)
-        eventStatsView!.autoPinEdgesToSuperviewEdges()
+        removeNoDataView()
+        scrollView.addSubview(eventStatsView)
+        
+        eventStatsView.autoMatch(.width, to: .width, of: scrollView)
+        eventStatsView.autoPinEdgesToSuperviewEdges()
     }
+    
+    // MARK: - RCTBridgeDelegate
+    
+    func sourceURL(for bridge: RCTBridge!) -> URL! {
+        // Fetch our downloaded JS bundle (or our local packager, if we're running in debug mode)
+        return sourceURL
+    }
+    // fallbackSourceURL
     
     // MARK: Refresh
     
     override func shouldNoDataRefresh() -> Bool {
+        // TODO: We need to look for `qual` and `playoff`
         return event.insights == nil
     }
     
@@ -115,6 +135,22 @@ class EventStatsViewController: TBAViewController, Observable {
         addRequest(request: request!)
     }
     
+    override func optionallyShowNoDataView() {
+        if shouldNoDataRefresh() {
+            showNoDataView()
+        }
+    }
+    
+    // MARK: Notifications
+    
+    @objc func showErrorView() {
+        showNoDataView(with: "Unable to load event stats")
+    }
+    
+    func showNoDataView() {
+        showNoDataView(with: "No stats for event")
+    }
+
 }
 
 extension EventStatsViewController: RCTRootViewDelegate {

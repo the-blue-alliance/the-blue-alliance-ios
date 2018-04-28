@@ -11,7 +11,7 @@ import breakdown from '../styles/breakdown';
 import images from '../config/images';
 
 export default class MatchBreakdown2016 extends React.Component {
-  
+
   defenseName(defense) {
     if (defense == "A_ChevalDeFrise") {
       return "Cheval De Frise"
@@ -33,7 +33,7 @@ export default class MatchBreakdown2016 extends React.Component {
       return "Unknown"
     }
   }
-  
+
   defenseCrossing(defense, crossingCount) {
       var defenseName = ""
       if (defense == "Low Bar") {
@@ -48,7 +48,7 @@ export default class MatchBreakdown2016 extends React.Component {
         </View>
       );
   }
-  
+
   checkOrClear(value) {
     if (value == true) {
       return <Image syle={breakdown.imageSize} source={images.check} />

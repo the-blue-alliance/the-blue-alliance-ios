@@ -45,8 +45,8 @@ class TeamAtEventViewController: ContainerViewController {
             matchesViewController = segue.destination as! MatchesTableViewController
             matchesViewController.event = event
             matchesViewController.team = team
-            matchesViewController.matchSelected = { match in
-                self.performSegue(withIdentifier: "MatchSegue", sender: match)
+            matchesViewController.matchSelected = { [weak self] match in
+                self?.performSegue(withIdentifier: "MatchSegue", sender: match)
             }
         } else if segue.identifier == "TeamAtEventStatsEmbed" {
             statsViewController = segue.destination as! TeamStatsTableViewController
@@ -56,12 +56,12 @@ class TeamAtEventViewController: ContainerViewController {
             awardsViewController = segue.destination as! EventAwardsTableViewController
             awardsViewController.event = event
             awardsViewController.team = team
-            awardsViewController.teamSelected = { team in
+            awardsViewController.teamSelected = { [weak self] team in
                 // Don't push to team@event for team we're already showing team@event for
-                if team == self.team {
+                guard let localTeam = self?.team, team != localTeam else {
                     return
                 }
-                self.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
+                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
             }
         } else if segue.identifier == "MatchSegue" {
             let match = sender as! Match

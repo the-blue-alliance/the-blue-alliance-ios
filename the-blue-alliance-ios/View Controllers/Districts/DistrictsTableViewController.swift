@@ -23,10 +23,6 @@ class DistrictsTableViewController: TBATableViewController {
         didSet {
             cancelRefresh()
             updateDataSource()
-            
-            if shouldNoDataRefresh() {
-                refresh()
-            }
         }
     }
     

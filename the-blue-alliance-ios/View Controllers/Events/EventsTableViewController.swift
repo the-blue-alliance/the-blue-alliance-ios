@@ -29,10 +29,6 @@ class EventsTableViewController: TBATableViewController {
         didSet {
             cancelRefresh()
             updateDataSource()
-            
-            if shouldNoDataRefresh() {
-                refresh()
-            }
         }
     }
 
@@ -68,7 +64,6 @@ class EventsTableViewController: TBATableViewController {
         return false
     }
 
-    // TODO: Filter these refresh methods down to one method by doing something clever... it's the same code so
     func refreshAllEvents() {
         guard let year = year else {
             return
@@ -107,8 +102,6 @@ class EventsTableViewController: TBATableViewController {
 
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchTeamEvents(key: team.key!, completion: { (events, error) in
-            self.removeRequest(request: request!)
-            
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
             }
@@ -249,10 +242,8 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
             return nil
         }
 
-        if let _ = district {
+        if district != nil {
             return "\(event.weekString) Events"
-        } else if let district = event.district {
-            return "\(district.name ?? "") District Events"
         } else if event.isDistrictChampionship {
             guard let district = event.district, let eventTypeString = event.eventTypeString else {
                 return nil
@@ -264,6 +255,8 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
             }
             // CMP Finals are already plural
             return Int(event.eventType) == EventType.championshipFinals.rawValue ? eventTypeString : "\(eventTypeString)s"
+        } else if let district = event.district {
+            return "\(district.name ?? "") District Events"
         } else {
             return "Regional Events"
         }

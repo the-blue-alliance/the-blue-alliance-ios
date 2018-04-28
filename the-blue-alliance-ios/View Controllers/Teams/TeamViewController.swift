@@ -27,9 +27,8 @@ class TeamViewController: ContainerViewController {
         }
     }
     // Only refresh years participated once on appear
-    private lazy var refreshYearsParticipatedOnce: Void = {
-        [unowned self] in
-        self.refreshYearsParticipated()
+    private lazy var refreshYearsParticipatedOnce: Void = { [weak self] in
+        self?.refreshYearsParticipated()
     }()
 
     internal var infoViewController: TeamInfoTableViewController!
@@ -68,7 +67,6 @@ class TeamViewController: ContainerViewController {
     func updateInterface() {
         navigationTitleLabel?.text = "Team \(team.teamNumber)"
         
-        
         if let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty, let year = year {
             navigationDetailLabel?.text = "▾ \(year)"
         } else {
@@ -83,12 +81,15 @@ class TeamViewController: ContainerViewController {
                 return
             }
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+                // TODO: Get a background team, observe changes, idiot.
+                // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/137
                 if let years = years {
                     self.team.yearsParticipated = years.sorted().reversed()
                 }
-                try? backgroundContext.save()
                 
-                if self.year == nil, let yearsParticipated = self.team.yearsParticipated, !yearsParticipated.isEmpty {
+                if !backgroundContext.saveOrRollback() {
+                    self.showErrorAlert(with: "Unable to refresh years participated - database error")
+                } else if self.year == nil, let yearsParticipated = self.team.yearsParticipated, !yearsParticipated.isEmpty {
                     self.year = yearsParticipated.first
                 }
             })
@@ -114,8 +115,8 @@ class TeamViewController: ContainerViewController {
             selectTableViewController.title = "Select Year"
             selectTableViewController.current = year
             selectTableViewController.options = team.yearsParticipated
-            selectTableViewController.optionSelected = { year in
-                self.year = year
+            selectTableViewController.optionSelected = { [weak self] year in
+                self?.year = year
             }
             selectTableViewController.optionString = { year in
                 return String(year)
@@ -128,8 +129,8 @@ class TeamViewController: ContainerViewController {
             eventsViewController = segue.destination as? EventsTableViewController
             eventsViewController.team = team
             eventsViewController.year = year
-            eventsViewController.eventSelected = { event in
-                self.performSegue(withIdentifier: "TeamAtEventSegue", sender: event)
+            eventsViewController.eventSelected = { [weak self] event in
+                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: event)
             }
         } else if segue.identifier == "TeamMediaEmbed" {
             mediaViewController = segue.destination as? TeamMediaCollectionViewController

@@ -27,8 +27,8 @@ class EventAlliancesViewController: ContainerViewController {
             alliancesViewController = segue.destination as! EventAlliancesTableViewController
             alliancesViewController.event = event
             alliancesViewController.persistentContainer = persistentContainer
-            alliancesViewController.teamSelected = { team in
-                self.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
+            alliancesViewController.teamSelected = { [weak self] team in
+                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
             }
         } else if segue.identifier == "TeamAtEventSegue" {
             let team = sender as! Team
@@ -60,7 +60,6 @@ class EventAlliancesTableViewController: TBATableViewController {
         tableView.rowHeight = 44
         tableView.register(UINib(nibName: String(describing: EventAllianceTableViewCell.self), bundle: nil), forCellReuseIdentifier: EventAllianceTableViewCell.reuseIdentifier)
     }
-        
     // MARK: - Refreshing
     
     override func refresh() {

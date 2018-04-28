@@ -57,7 +57,7 @@ class MediaView: UIView {
             noDataLabel.text = text
             return
         }
-        if let _ = noDataView {
+        if noDataView != nil {
             removeNoDataView()
         }
         

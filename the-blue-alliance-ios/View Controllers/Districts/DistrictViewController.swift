@@ -39,8 +39,8 @@ class DistrictViewController: ContainerViewController {
         if segue.identifier == "DistrictEventsEmbed" {
             eventsViewController = segue.destination as! EventsTableViewController
             eventsViewController.district = district
-            eventsViewController.eventSelected = { event in
-                self.performSegue(withIdentifier: EventSegue, sender: event)
+            eventsViewController.eventSelected = { [weak self] event in
+                self?.performSegue(withIdentifier: EventSegue, sender: event)
             }
         } else if segue.identifier == "DistrictRankingsEmbed" {
             rankingsViewController = segue.destination as! DistrictRankingsTableViewController

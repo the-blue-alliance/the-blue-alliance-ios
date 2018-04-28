@@ -27,7 +27,6 @@ class MatchViewController: ContainerViewController {
         navigationDetailLabel?.text = "@ \(match.event!.friendlyNameWithYear)"
         
         // Only show match breakdown if year is 2015 or onward
-        // TODO: Add code for hiding non-existant match breakdowns
         if Int(match.event!.year) >= 2015 {
             viewControllers = [matchInfoViewController, matchBreakdownViewController]
             containerViews = [infoView, breakdownView]

@@ -33,8 +33,8 @@ class EventDistrictPointsViewController: ContainerViewController {
             districtPointsViewController = segue.destination as! EventDistrictPointsTableViewController
             districtPointsViewController.event = event
             districtPointsViewController.persistentContainer = persistentContainer
-            districtPointsViewController.teamSelected = { team in
-                self.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
+            districtPointsViewController.teamSelected = { [weak self] team in
+                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
             }
         } else if segue.identifier == "TeamAtEventSegue" {
             let team = sender as! Team
