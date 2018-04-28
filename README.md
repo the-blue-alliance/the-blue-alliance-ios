@@ -16,6 +16,7 @@ Setup
 2. (Optional) Run the React Native server
 	* `cd js && react-native start`
 	* To view RN logs, `react-native log-ios`
+	* Debugging is easier if you install [react-devtools](https://github.com/facebook/react-devtools/tree/master/packages/react-devtools)
 3. Build and run The Blue Alliance for iOS in Xcode!
 
 Shipping

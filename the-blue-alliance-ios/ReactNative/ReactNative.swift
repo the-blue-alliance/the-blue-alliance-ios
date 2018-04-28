@@ -2,6 +2,7 @@ import Foundation
 import React
 import Firebase
 import ZIPFoundation
+import Crashlytics
 
 enum BundleName: String {
     case assets = "assets"
@@ -39,6 +40,8 @@ private var assetsURL: URL? {
 // TODO: I can't seem to implement sourceURLForBridge: and fallbackSourceURLForBridge: in a protocol extension...
 protocol ReactNative: RCTBridgeDelegate {
     var reactBridge: RCTBridge { get }
+    
+    func showErrorView()
 }
 
 extension ReactNative {
@@ -64,6 +67,13 @@ extension ReactNative {
             return bundleURL
         }
         return Bundle.main.url(forResource: "main", withExtension: "jsbundle")!
+    }
+
+    func reactNativeError(_ sender: NSNotification) {
+        if let error = sender.userInfo?["error"] as? Error {
+            Crashlytics.sharedInstance().recordError(error)
+        }
+        showErrorView()
     }
 
 }

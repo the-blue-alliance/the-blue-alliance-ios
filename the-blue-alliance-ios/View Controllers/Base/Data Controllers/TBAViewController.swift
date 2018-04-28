@@ -16,14 +16,21 @@ class TBAViewController: UIViewController, DataController {
     }
     var noDataView: UIView?
     @IBOutlet var scrollView: UIScrollView!
-    var refreshControl: UIRefreshControl?
+    var refreshControl: UIRefreshControl? {
+        didSet {
+            scrollView.refreshControl = refreshControl
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        scrollView.refreshControl = UIRefreshControl()
-        scrollView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        refreshControl = scrollView.refreshControl
+        // This allows us to see the no data view
+        scrollView.backgroundColor = .clear
+        view.backgroundColor = .backgroundGray
+
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
     @objc func refresh() {

@@ -1,11 +1,3 @@
-//
-//  EventStatsViewController.swift
-//  the-blue-alliance-ios
-//
-//  Created by Zach Orr on 6/4/17.
-//  Copyright © 2017 The Blue Alliance. All rights reserved.
-//
-
 import Foundation
 import CoreData
 import TBAKit
@@ -48,7 +40,7 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
         super.viewDidLoad()
         
         // TODO: Move this... out. Somewhere else. In the ReactNative Protocol
-        NotificationCenter.default.addObserver(self, selector: #selector(showErrorView), name: NSNotification.Name.RCTJavaScriptDidFailToLoad, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleReactNativeErrorNotification(_:)), name: NSNotification.Name.RCTJavaScriptDidFailToLoad, object: nil)
         
         styleInterface()
     }
@@ -56,8 +48,6 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
     // MARK: Interface Methods
     
     func styleInterface() {
-        scrollView.backgroundColor = .backgroundGray
-
         updateEventStatsView()
     }
     
@@ -71,7 +61,6 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
             showNoDataView()
             return
         }
-        
         // If the event stats view already exists, don't set it up again
         // Only update the properties for the view
         if let eventStatsView = eventStatsView {
@@ -85,7 +74,8 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
             showErrorView()
             return
         }
-
+        self.eventStatsView = eventStatsView
+        
         // breakdownView.loadingView
         eventStatsView.delegate = self
         eventStatsView.sizeFlexibility = .height
@@ -95,6 +85,10 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
         
         eventStatsView.autoMatch(.width, to: .width, of: scrollView)
         eventStatsView.autoPinEdgesToSuperviewEdges()
+    }
+    
+    func showNoDataView() {
+        showNoDataView(with: "No stats for event")
     }
     
     // MARK: - RCTBridgeDelegate
@@ -148,14 +142,18 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
         }
     }
     
-    // MARK: Notifications
+    // MARK: - ReactNative
+    // MARK: - Notifications
     
-    @objc func showErrorView() {
-        showNoDataView(with: "Unable to load event stats")
+    // TODO: This sucks, but also, we can't have @objc in a protocol extension so
+    @objc func handleReactNativeErrorNotification(_ sender: NSNotification) {
+        reactNativeError(sender)
     }
     
-    func showNoDataView() {
-        showNoDataView(with: "No stats for event")
+    func showErrorView() {
+        showNoDataView(with: "Unable to load event stats")
+        // Disable refreshing if we hit an error
+        refreshControl = nil
     }
 
 }

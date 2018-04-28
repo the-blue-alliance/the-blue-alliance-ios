@@ -46,8 +46,8 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
         super.viewDidLoad()
         
         // TODO: Move this... out. Somewhere else. In the ReactNative Protocol
-        NotificationCenter.default.addObserver(self, selector: #selector(showErrorView), name: NSNotification.Name.RCTJavaScriptDidFailToLoad, object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleReactNativeErrorNotification(_:)), name: NSNotification.Name.RCTJavaScriptDidFailToLoad, object: nil)
+
         styleInterface()
     }
     
@@ -55,6 +55,7 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
     
     func styleInterface() {
         view.backgroundColor = UIColor.colorWithRGB(rgbValue: 0xdddddd)
+
         updateBreakdownView()
     }
     
@@ -78,7 +79,8 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
             showErrorView()
             return
         }
-        
+        self.breakdownView = breakdownView
+
         // breakdownView.loadingView
         breakdownView.delegate = self
         breakdownView.sizeFlexibility = .height
@@ -157,13 +159,20 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
         }
     }
     
-    // MARK: Notifications
+    // MARK: - ReactNative
+    // MARK: - Notifications
     
-    @objc func showErrorView() {
-        // TODO: Think about logging an error here or something so we know if match brekadown fails, since we can fix
-        showNoDataView(with: "Unable to load match breakdown")
+    // TODO: This sucks, but also, we can't have @objc in a protocol extension so
+    @objc func handleReactNativeErrorNotification(_ sender: NSNotification) {
+        reactNativeError(sender)
     }
     
+    func showErrorView() {
+        showNoDataView(with: "Unable to load event stats")
+        // Disable refreshing if we hit an error
+        refreshControl = nil
+    }
+
 }
 
 extension MatchBreakdownViewController: RCTRootViewDelegate {
