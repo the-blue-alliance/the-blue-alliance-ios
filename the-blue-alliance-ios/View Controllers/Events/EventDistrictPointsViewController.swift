@@ -1,11 +1,3 @@
-//
-//  EventPointsTableViewController.swift
-//  the-blue-alliance-ios
-//
-//  Created by Zach Orr on 6/4/17.
-//  Copyright © 2017 The Blue Alliance. All rights reserved.
-//
-
 import UIKit
 import CoreData
 import TBAKit

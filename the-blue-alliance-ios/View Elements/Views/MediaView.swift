@@ -1,11 +1,3 @@
-//
-//  MediaView.swift
-//  the-blue-alliance-ios
-//
-//  Created by Zach Orr on 6/6/17.
-//  Copyright © 2017 The Blue Alliance. All rights reserved.
-//
-
 import UIKit
 
 class MediaView: UIView {

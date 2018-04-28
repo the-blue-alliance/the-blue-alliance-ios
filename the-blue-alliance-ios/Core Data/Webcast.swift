@@ -1,11 +1,3 @@
-//
-//  Webcast.swift
-//  the-blue-alliance-ios
-//
-//  Created by Zach Orr on 3/17/17.
-//  Copyright © 2017 The Blue Alliance. All rights reserved.
-//
-
 import Foundation
 import TBAKit
 import CoreData
