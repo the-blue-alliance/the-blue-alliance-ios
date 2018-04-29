@@ -72,6 +72,9 @@ class MatchInfoViewController: TBAViewController, Observable {
     // MARK: Interface Methods
     
     func styleInterface() {
+        // Override our default background color to be white
+        view.backgroundColor = .white
+
         updateMatchView()
         updateMatchVideos()
     }
@@ -203,7 +206,7 @@ class MatchInfoViewController: TBAViewController, Observable {
         addRequest(request: request!)
     }
     
-    override func optionallyShowNoDataView() {
+    override func reloadViewAfterRefresh() {
         // We'll always have a match, so we shouldn't need to show a no data state
     }
     

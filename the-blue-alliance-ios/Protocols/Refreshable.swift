@@ -63,7 +63,7 @@ extension Refreshable {
                     collectionViewController.collectionView?.reloadData()
                 } else if let viewController = self as? TBAViewController {
                     // TODO: https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/133
-                    viewController.optionallyShowNoDataView()
+                    viewController.reloadViewAfterRefresh()
                 }
             }
         }

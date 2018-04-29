@@ -41,16 +41,16 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
         
         // TODO: Move this... out. Somewhere else. In the ReactNative Protocol
         NotificationCenter.default.addObserver(self, selector: #selector(handleReactNativeErrorNotification(_:)), name: NSNotification.Name.RCTJavaScriptDidFailToLoad, object: nil)
-        
-        styleInterface()
     }
     
-    // MARK: Interface Methods
-    
-    func styleInterface() {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
         updateEventStatsView()
     }
     
+    // MARK: Interface Methods
+        
     func updateEventStatsView() {
         // Event stats only exist for 2016 and onward
         if Int(event.year) < 2016 {
@@ -61,6 +61,7 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
             showNoDataView()
             return
         }
+
         // If the event stats view already exists, don't set it up again
         // Only update the properties for the view
         if let eventStatsView = eventStatsView {
@@ -134,7 +135,7 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
         addRequest(request: request!)
     }
     
-    override func optionallyShowNoDataView() {
+    override func reloadViewAfterRefresh() {
         if shouldNoDataRefresh() {
             showNoDataView()
         } else {

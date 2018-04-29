@@ -39,16 +39,21 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
         
         // TODO: Move this... out. Somewhere else. In the ReactNative Protocol
         NotificationCenter.default.addObserver(self, selector: #selector(handleReactNativeErrorNotification(_:)), name: NSNotification.Name.RCTJavaScriptDidFailToLoad, object: nil)
-
+        
         styleInterface()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        updateBreakdownView()
     }
     
     // MARK: Interface Methods
     
     func styleInterface() {
+        // Override our default background color to match the match breakdown background color
         view.backgroundColor = UIColor.colorWithRGB(rgbValue: 0xdddddd)
-
-        updateBreakdownView()
     }
     
     func updateBreakdownView() {
@@ -57,17 +62,21 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
             return
         }
         
+        guard let breadownData = dataForBreakdown() else {
+            showNoDataView()
+            return
+        }
+        
         // If the breakdown view already exists, don't set it up again
         // Only update the properties for the view
         if let breakdownView = breakdownView {
-            breakdownView.appProperties = dataForBreakdown()
+            breakdownView.appProperties = breadownData
             return
         }
 
-        let initialProps = dataForBreakdown()
         let moduleName = "MatchBreakdown\(match.event!.year)"
 
-        guard let breakdownView = RCTRootView(bridge: reactBridge, moduleName: moduleName, initialProperties: initialProps) else {
+        guard let breakdownView = RCTRootView(bridge: reactBridge, moduleName: moduleName, initialProperties: breadownData) else {
             showErrorView()
             return
         }
@@ -86,7 +95,14 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
     
     // MARK: Private
     
-    func dataForBreakdown() -> [String: Any] {
+    func dataForBreakdown() -> [String: Any]? {
+        guard let redBreakdown = match.redBreakdown else {
+            return nil
+        }
+        guard let blueBreakdown = match.blueBreakdown else {
+            return nil
+        }
+        
         let redAllianceTeams = match.redAlliance?.array as? [Team]
         let redAlliance = redAllianceTeams?.map({ (team) -> String in
             return "\(team.teamNumber)"
@@ -98,9 +114,9 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
         })
         
         return ["redTeams" : redAlliance ?? [],
-                "redBreakdown": match.redBreakdown ?? [:],
+                "redBreakdown": redBreakdown,
                 "blueTeams": blueAlliance ?? [],
-                "blueBreakdown": match.blueBreakdown ?? [:],
+                "blueBreakdown": blueBreakdown,
                 "compLevel": match.compLevel!]
     }
     
@@ -143,9 +159,9 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
         addRequest(request: request!)
     }
     
-    override func optionallyShowNoDataView() {
+    override func reloadViewAfterRefresh() {
         if shouldNoDataRefresh() {
-            showNoDataView(with: "No breakdown for match")
+            showNoDataView()
         } else {
             updateBreakdownView()
         }
@@ -157,6 +173,10 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
     // TODO: This sucks, but also, we can't have @objc in a protocol extension so
     @objc func handleReactNativeErrorNotification(_ sender: NSNotification) {
         reactNativeError(sender)
+    }
+    
+    func showNoDataView() {
+        showNoDataView(with: "No breakdown for match")
     }
     
     func showErrorView() {
