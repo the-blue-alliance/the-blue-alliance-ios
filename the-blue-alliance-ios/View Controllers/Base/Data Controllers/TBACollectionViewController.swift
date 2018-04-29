@@ -13,7 +13,7 @@ class TBACollectionViewController: UICollectionViewController, DataController {
     var refreshView: UIScrollView {
         return collectionView!
     }
-    var noDataView: UIView?
+    var noDataViewController: NoDataViewController?
     var refreshControl: UIRefreshControl?
     
     override func viewDidLoad() {

@@ -14,7 +14,7 @@ class TBAViewController: UIViewController, DataController {
     var refreshView: UIScrollView {
         return scrollView
     }
-    var noDataView: UIView?
+    var noDataViewController: NoDataViewController?
     @IBOutlet var scrollView: UIScrollView!
     var refreshControl: UIRefreshControl? {
         didSet {

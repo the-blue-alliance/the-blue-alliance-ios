@@ -14,8 +14,8 @@ class TBATableViewController: UITableViewController, DataController {
     var refreshView: UIScrollView {
         return tableView
     }
-    var noDataView: UIView?
-    
+    var noDataViewController: NoDataViewController?
+
     // MARK: - View Lifecycle
     
     override func viewDidLoad() {

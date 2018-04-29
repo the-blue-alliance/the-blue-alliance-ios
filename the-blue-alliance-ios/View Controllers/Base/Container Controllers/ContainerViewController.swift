@@ -8,7 +8,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     var dataView: UIView {
         return view
     }
-    var noDataView: UIView?
+    var noDataViewController: NoDataViewController?
     private lazy var setupSegmentedControlViews: Void = { [weak self] in
         self?.updateSegmentedControlViews()
     }()
