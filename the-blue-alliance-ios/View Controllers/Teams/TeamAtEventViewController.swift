@@ -7,7 +7,7 @@ class TeamAtEventViewController: ContainerViewController {
     public var event: Event!
     
     internal var summaryViewController: TeamSummaryTableViewController!
-    @IBOutlet internal var statusView: UIView!
+    @IBOutlet internal var summaryView: UIView!
     
     internal var matchesViewController: MatchesTableViewController!
     @IBOutlet internal var matchesView: UIView!
@@ -25,13 +25,13 @@ class TeamAtEventViewController: ContainerViewController {
         navigationDetailLabel?.text = "@ \(event.friendlyNameWithYear)"
             
         viewControllers = [summaryViewController, matchesViewController, statsViewController, awardsViewController]
-        containerViews = [statusView, matchesView, statsView, awardsView]
+        containerViews = [summaryView, matchesView, statsView, awardsView]
     }
     
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "TeamAtEventStatusEmbed" {
+        if segue.identifier == "TeamAtEventSummaryEmbed" {
             summaryViewController = segue.destination as! TeamSummaryTableViewController
         } else if segue.identifier == "TeamAtEventMatchesEmbed" {
             matchesViewController = segue.destination as! MatchesTableViewController

@@ -44,7 +44,6 @@ class EventRankingsTableViewController: TBATableViewController {
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh event rankings - database error")
                 }
-                
                 self.removeRequest(request: rankingsRequest!)
             })
         })
