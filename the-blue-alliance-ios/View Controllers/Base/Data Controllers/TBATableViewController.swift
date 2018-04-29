@@ -16,6 +16,8 @@ class TBATableViewController: UITableViewController, DataController {
     }
     var noDataView: UIView?
     
+    // MARK: - View Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,6 +31,18 @@ class TBATableViewController: UITableViewController, DataController {
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
+    
+    // MARK: - UITableViewDelegate
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let headerView = view as? UITableViewHeaderFooterView {
+            headerView.contentView.backgroundColor = UIColor.primaryDarkBlue
+            headerView.textLabel?.textColor = UIColor.white
+            headerView.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        }
+    }
+    
+    // MARK: - Refreshable
     
     @objc func refresh() {
         fatalError("Implement this downstream")

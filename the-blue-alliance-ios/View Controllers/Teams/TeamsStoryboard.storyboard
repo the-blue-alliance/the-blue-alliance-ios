@@ -331,7 +331,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YIr-bk-8gR">
                                 <rect key="frame" x="0.0" y="108" width="375" height="510"/>
                                 <connections>
-                                    <segue destination="K7R-m8-KYf" kind="embed" identifier="TeamAtEventStatusEmbed" id="GOp-9K-i06"/>
+                                    <segue destination="K7R-m8-KYf" kind="embed" identifier="TeamAtEventSummaryEmbed" id="GOp-9K-i06"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4r6-qu-3IW">
@@ -421,7 +421,7 @@
                         <outlet property="segmentedControl" destination="wFa-0P-g9Z" id="Qiw-mY-01B"/>
                         <outlet property="segmentedControlView" destination="Gzn-Zq-0az" id="Wfg-v3-iCy"/>
                         <outlet property="statsView" destination="seF-8a-7xe" id="wL0-hD-t0j"/>
-                        <outlet property="statusView" destination="YIr-bk-8gR" id="6bY-dP-ARF"/>
+                        <outlet property="summaryView" destination="YIr-bk-8gR" id="bHI-6H-Ll3"/>
                         <segue destination="uEa-li-jHU" kind="show" identifier="MatchSegue" id="GzB-bx-98K"/>
                         <segue destination="1O9-Ef-RV5" kind="show" identifier="TeamAtEventSegue" id="N0C-bf-yjW"/>
                     </connections>
@@ -468,7 +468,7 @@
         <!--Team Summary Table View Controller-->
         <scene sceneID="oVG-qs-sr3">
             <objects>
-                <tableViewController id="K7R-m8-KYf" customClass="TeamSummaryTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="TeamSummaryTableViewController" id="K7R-m8-KYf" customClass="TeamSummaryTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="elw-jp-7t0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

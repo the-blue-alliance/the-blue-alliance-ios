@@ -139,15 +139,7 @@ class EventsTableViewController: TBATableViewController {
     }
     
     // MARK: UITableView Delegate
-    
-    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        if let headerView = view as? UITableViewHeaderFooterView {
-            headerView.contentView.backgroundColor = UIColor.primaryDarkBlue
-            headerView.textLabel?.textColor = UIColor.white
-            headerView.textLabel?.font = UIFont.systemFont(ofSize: 14)
-        }
-    }
-    
+        
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let event = dataSource?.object(at: indexPath)
         if let event = event, let eventSelected = eventSelected {
@@ -182,7 +174,7 @@ class EventsTableViewController: TBATableViewController {
                                         NSSortDescriptor(key: "name", ascending: true)]
         
         setupFetchRequest(fetchRequest)
-        
+
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
         
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: EventTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)

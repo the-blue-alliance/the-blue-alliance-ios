@@ -98,12 +98,10 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         return cell
     }
 
-    // MARK: - UITableView
-    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return delegate.title(for: section)
     }
-    
+        
     // MARK: NSFetchedResultsControllerDelegate
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
