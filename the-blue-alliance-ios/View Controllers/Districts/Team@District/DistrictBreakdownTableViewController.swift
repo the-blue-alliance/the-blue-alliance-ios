@@ -111,10 +111,7 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
     
     override func shouldNoDataRefresh() -> Bool {
         // This should never fire
-        if sortedEventPoints.count == 0 {
-            return true
-        }
-        return false
+        return sortedEventPoints.count == 0
     }
     
     // MARK: Table View Data Source

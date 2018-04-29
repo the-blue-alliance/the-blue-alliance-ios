@@ -78,10 +78,7 @@ class TeamStatsTableViewController: TBATableViewController, Observable {
     }
     
     override func shouldNoDataRefresh() -> Bool {
-        if teamStat == nil {
-            return true
-        }
-        return false
+        return teamStat == nil
     }
 
     // MARK: Table View Data Source

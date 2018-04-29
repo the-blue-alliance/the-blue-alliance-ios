@@ -178,7 +178,7 @@ class MatchInfoViewController: TBAViewController, Observable {
     override func shouldNoDataRefresh() -> Bool {
         // TODO: Think about doing a quiet refresh in the background for match videos on initial load...
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/135
-        return match?.videos?.count == 0
+        return (match.videos?.count ?? 0) == 0
     }
     
     override func refresh() {

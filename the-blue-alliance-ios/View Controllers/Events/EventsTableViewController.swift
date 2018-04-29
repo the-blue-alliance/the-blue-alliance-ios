@@ -62,8 +62,6 @@ class EventsTableViewController: TBATableViewController {
             return
         }
 
-        removeNoDataView()
-        
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchEvents(year: year, completion: { (events, error) in
             if let error = error {
