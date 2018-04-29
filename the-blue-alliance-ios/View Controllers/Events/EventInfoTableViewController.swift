@@ -81,7 +81,6 @@ class EventInfoTableViewController: TBATableViewController, Observable {
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh event - database error")
                 }
-                
                 self.removeRequest(request: request!)
             })
         })

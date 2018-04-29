@@ -97,15 +97,7 @@ class MatchesTableViewController: TBATableViewController {
     }
     
     // MARK: UITableView Delegate
-    
-    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        if let headerView = view as? UITableViewHeaderFooterView {
-            headerView.contentView.backgroundColor = UIColor.primaryDarkBlue
-            headerView.textLabel?.textColor = UIColor.white
-            headerView.textLabel?.font = UIFont.systemFont(ofSize: 14)
-        }
-    }
-    
+        
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let match = dataSource?.object(at: indexPath)
         if let match = match, let matchSelected = matchSelected {

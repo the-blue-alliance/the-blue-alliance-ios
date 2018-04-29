@@ -1,6 +1,8 @@
 import Foundation
 import UIKit
 
+let TeamAtDistrictSegue = "TeamAtDistrictSegue"
+
 class DistrictViewController: ContainerViewController {
 
     public var district: District!
@@ -37,14 +39,18 @@ class DistrictViewController: ContainerViewController {
         } else if segue.identifier == "DistrictRankingsEmbed" {
             rankingsViewController = segue.destination as! DistrictRankingsTableViewController
             rankingsViewController.district = district
-            rankingsViewController.rankingSelected = { ranking in
-                // TODO: Show team @ district VC
+            rankingsViewController.rankingSelected = { [weak self] ranking in
+                self?.performSegue(withIdentifier: TeamAtDistrictSegue, sender: ranking)
             }
         } else if segue.identifier == EventSegue {
             let eventViewController = segue.destination as! EventViewController
             eventViewController.event = sender as? Event
             // TODO: Find a way to pass these down automagically like we did in the Obj-C version
             eventViewController.persistentContainer = persistentContainer
+        } else if segue.identifier == TeamAtDistrictSegue {
+            let teamAtDistrictViewController = segue.destination as! TeamAtDistrictViewController
+            teamAtDistrictViewController.ranking = sender as! DistrictRanking
+            teamAtDistrictViewController.persistentContainer = persistentContainer
         }
     }
 
