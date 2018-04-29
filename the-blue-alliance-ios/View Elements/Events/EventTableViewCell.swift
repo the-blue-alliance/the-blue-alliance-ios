@@ -7,7 +7,7 @@ class EventTableViewCell: UITableViewCell {
             guard let event = event else {
                 return
             }
-            nameLabel?.text = event.shortName ?? event.name
+            nameLabel?.text = event.safeShortName
             locationLabel?.text = event.locationString
             dateLabel?.text = event.dateString()
         }

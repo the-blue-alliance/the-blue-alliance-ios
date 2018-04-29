@@ -147,14 +147,10 @@ class EventsTableViewController: TBATableViewController {
     
     // MARK: Table View Data Source
     
-    private func canSetupDataSource() -> Bool {
-        return (year != nil && weekEvent != nil) || (year != nil && team != nil) || (district != nil)
-    }
-    
     fileprivate var dataSource: TableViewDataSource<Event, EventsTableViewController>?
     
     fileprivate func setupDataSource() {
-        guard let persistentContainer = persistentContainer, canSetupDataSource() == true else {
+        guard let persistentContainer = persistentContainer else {
             return
         }
 

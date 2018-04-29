@@ -187,9 +187,15 @@ extension Event: Locatable, Managed {
         return weekString
     }
     
+    public var safeShortName: String {
+        guard let shortName = shortName else {
+            return name!
+        }
+        return shortName.isEmpty ? name! : shortName
+    }
+    
     public var friendlyNameWithYear: String {
-        let nameString = shortName ?? name
-        return "\(String(year)) \(nameString ?? "Unnamed") \(eventTypeString ?? "Event")"
+        return "\(String(year)) \(safeShortName) \(eventTypeString ?? "Event")"
     }
     
     public var isChampionship: Bool {
