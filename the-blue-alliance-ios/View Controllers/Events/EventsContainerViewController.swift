@@ -115,6 +115,11 @@ class EventsContainerViewController: ContainerViewController, Observable {
     }
     
     func setupWeeks() {
+        // If we fail to load our persistent container we don't want to crash here
+        guard let persistentContainer = persistentContainer else {
+            return
+        }
+
         let events = Event.fetch(in: persistentContainer.viewContext) { (fetchRequest) in
             // Filter out CMP divisions - we don't want them below for our weeks calculation
             fetchRequest.predicate = NSPredicate(format: "year == %ld && eventType != %ld", year, EventType.championshipDivision.rawValue)

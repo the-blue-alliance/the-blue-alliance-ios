@@ -17,10 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             container.viewContext.automaticallyMergesChangesFromParent = true
 
             if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                Crashlytics.sharedInstance().recordError(error)
-
                 /*
                  Typical reasons for an error here include:
                  * The parent directory does not exist, cannot be created, or disallows writing.
@@ -29,7 +25,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                  * The store could not be migrated to the current model version.
                  Check the error message to determine what the actual problem was.
                  */
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+                // https://stackoverflow.com/a/30941356/537341
+                var topWindow: UIWindow = UIWindow(frame: UIScreen.main.bounds)
+                topWindow.rootViewController = UIViewController()
+                topWindow.windowLevel = UIWindowLevelAlert + 1
+                
+                let alertController = UIAlertController(title: "Error Loading Data",
+                                                        message: "There was an error loading local data - try reinstalling The Blue Alliance",
+                                                        preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "Close", style: .default, handler: { (_) in
+                    fatalError("Unresolved error \(error), \(error.userInfo)")
+                }))
+                
+                topWindow.makeKeyAndVisible()
+                topWindow.rootViewController?.present(alertController, animated: true, completion: nil)
             }
         })
         return container
