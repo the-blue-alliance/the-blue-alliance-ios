@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="zd8-c7-caK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="zd8-c7-caK">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -31,11 +30,25 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="mx1-7Q-OWs"/>
+                    <navigationItem key="navigationItem" id="mx1-7Q-OWs">
+                        <barButtonItem key="rightBarButtonItem" image="ic_settings" id="q5v-hV-Rip">
+                            <connections>
+                                <segue destination="ZsQ-31-fxx" kind="presentation" id="tYU-l3-DSG"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dmc-u1-KXj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="290" y="185"/>
+        </scene>
+        <!--SettingsStoryboard-->
+        <scene sceneID="cqg-qK-BXh">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SettingsStoryboard" id="ZsQ-31-fxx" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="h1N-lJ-u1M" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="854" y="184"/>
         </scene>
         <!--MyTBA-->
         <scene sceneID="UUX-4W-j8f">
@@ -44,7 +57,7 @@
                     <tabBarItem key="tabBarItem" title="MyTBA" image="ic_star" id="cEE-0G-HtQ"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="F7l-l7-Yro">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -57,6 +70,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="ic_settings" width="24" height="24"/>
         <image name="ic_star" width="24" height="24"/>
     </resources>
 </document>
