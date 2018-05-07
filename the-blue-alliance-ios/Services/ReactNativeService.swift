@@ -4,39 +4,6 @@ import Firebase
 import ZIPFoundation
 import Crashlytics
 
-enum BundleName: String {
-    case assets = "assets"
-    case downloaded = "main.jsbundle"
-    case compressed = "ios.zip"
-}
-
-enum DefaultKeys: String {
-    case bundleGeneration = "kReactNativeBundleGenerationKey"
-}
-
-private var bundleGeneration: Int {
-    get {
-        return UserDefaults.standard.integer(forKey: DefaultKeys.bundleGeneration.rawValue)
-    }
-    set {
-        UserDefaults.standard.set(newValue, forKey: DefaultKeys.bundleGeneration.rawValue)
-        UserDefaults.standard.synchronize()
-    }
-}
-
-private var documentDirectory: URL? {
-    return try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-}
-private var compressedBundleURL: URL? {
-    return documentDirectory?.appendingPathComponent(BundleName.compressed.rawValue)
-}
-private var bundleURL: URL? {
-    return documentDirectory?.appendingPathComponent(BundleName.downloaded.rawValue)
-}
-private var assetsURL: URL? {
-    return documentDirectory?.appendingPathComponent(BundleName.compressed.rawValue)
-}
-
 // TODO: I can't seem to implement sourceURLForBridge: and fallbackSourceURLForBridge: in a protocol extension...
 protocol ReactNative: RCTBridgeDelegate {
     var reactBridge: RCTBridge { get }
@@ -63,7 +30,7 @@ extension ReactNative {
     }
 
     var prodSourceURL: URL {
-        if let bundleURL = bundleURL.reachableURL {
+        if let bundleURL = ReactNativeService.bundleURL.reachableURL {
             return bundleURL
         }
         return Bundle.main.url(forResource: "main", withExtension: "jsbundle")!
@@ -78,7 +45,40 @@ extension ReactNative {
 
 }
 
-class ReactNativeDownloader {
+class ReactNativeService {
+    
+    private enum BundleName: String {
+        case assets = "assets"
+        case downloaded = "main.jsbundle"
+        case compressed = "ios.zip"
+    }
+    
+    private enum DefaultKeys: String {
+        case bundleGeneration = "kReactNativeBundleGenerationKey"
+    }
+    
+    fileprivate static var bundleGeneration: Int {
+        get {
+            return UserDefaults.standard.integer(forKey: DefaultKeys.bundleGeneration.rawValue)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: DefaultKeys.bundleGeneration.rawValue)
+            UserDefaults.standard.synchronize()
+        }
+    }
+    
+    fileprivate static var documentDirectory: URL? {
+        return try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+    }
+    fileprivate static var compressedBundleURL: URL? {
+        return documentDirectory?.appendingPathComponent(BundleName.compressed.rawValue)
+    }
+    fileprivate static var bundleURL: URL? {
+        return documentDirectory?.appendingPathComponent(BundleName.downloaded.rawValue)
+    }
+    fileprivate static var assetsURL: URL? {
+        return documentDirectory?.appendingPathComponent(BundleName.compressed.rawValue)
+    }
     
     private static var remoteBundleReference: StorageReference {
         // TODO: Swap this for a prod url
@@ -86,6 +86,8 @@ class ReactNativeDownloader {
         let storage = Storage.storage()
         return storage.reference(forURL: String(format: "gs://%@/react-native/%@", storageBucket, BundleName.compressed.rawValue))
     }
+    
+    // TODO: Think about setting a retry timer on downloading if we fail
     
     public static func updateReactNativeBundle() {
         // Check if we have an orphaned compressed bundle that needs to be cleaned up (or unzipped)

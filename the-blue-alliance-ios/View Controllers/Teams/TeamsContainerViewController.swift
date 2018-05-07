@@ -3,8 +3,8 @@ import UIKit
 import CoreData
 import TBAKit
 
-let TeamsEmbed = "TeamsEmbed"
-let TeamSegue = "TeamSegue"
+private let TeamsEmbed = "TeamsEmbed"
+private let TeamSegue = "TeamSegue"
 
 class TeamsContainerViewController: ContainerViewController {
     internal var teamsViewController: TeamsTableViewController!

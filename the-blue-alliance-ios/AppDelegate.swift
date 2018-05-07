@@ -2,8 +2,9 @@ import UIKit
 import CoreData
 import TBAKit
 import Firebase
-import UserNotifications
 import Crashlytics
+import GoogleSignIn
+import UserNotifications
 
 let kNoSelectionNavigationController = "NoSelectionNavigationController"
 
@@ -61,6 +62,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 guard let dataVC = nav.topViewController as? Persistable else {
                     continue
                 }
+                // TODO: Make sure we only pass this once we have it, as well as a MOC
                 dataVC.persistentContainer = persistentContainer
             }
         }
@@ -70,12 +72,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         // Setup Remote Config
         RemoteConfig.setupRemoteConfig()
+
         // Assign our Push Notification delegates
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
 
         // Attempt to download our newest React Native bundle
-        ReactNativeDownloader.updateReactNativeBundle()
+        ReactNativeService.updateReactNativeBundle()
+
+        // myTBA/Google Sign In
+        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
+        GIDSignIn.sharedInstance().delegate = self
+        GIDSignIn.sharedInstance().signInSilently()
         
         return true
     }
@@ -102,6 +110,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
     
+    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
+            return GIDSignIn.sharedInstance().handle(url,
+                                                     sourceApplication:options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String,
+                                                     annotation: [:])
+    }
+    
     // MARK: Private
     
     func setupAppearance() {
@@ -114,6 +128,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationBarAppearance.setBackgroundImage(UIImage(), for: .default)
         navigationBarAppearance.isTranslucent = false
         navigationBarAppearance.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+    }
+    
+}
+
+extension AppDelegate: GIDSignInDelegate {
+    
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error?) {
+        // Don't respond to errors from signInSilently or a user cancelling a sign in
+        if let error = error as NSError?, (error.code == GIDSignInErrorCode.canceled.rawValue || error.code == GIDSignInErrorCode.canceled.rawValue) {
+            return
+        } else if let error = error {
+            Crashlytics.sharedInstance().recordError(error)
+            if let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? UIViewController & Alertable {
+                signInDelegate.showErrorAlert(with: "Error authorizing notifications - \(error.localizedDescription)")
+            }
+            return
+        }
+        
+        guard let authentication = user.authentication else { return }
+        MyTBA.shared.authentication = authentication.fetcherAuthorizer()
+        PushService.requestAuthorizationForNotifications { (error) in
+            if let error = error, let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? UIViewController & Alertable {
+                signInDelegate.showErrorAlert(with: "Error authorizing notifications - \(error.localizedDescription)")
+            }
+        }
     }
     
 }
@@ -146,6 +185,7 @@ extension AppDelegate: MessagingDelegate {
     
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
         print("Firebase registration token: \(fcmToken)")
+        PushService.registerPushToken(fcmToken)
     }
     
     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {

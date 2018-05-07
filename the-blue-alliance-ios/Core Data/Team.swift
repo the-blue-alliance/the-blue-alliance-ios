@@ -29,7 +29,7 @@ extension Team: Locatable, Managed {
         }
     }
     
-    static func insert(with model: TBATeam, in context: NSManagedObjectContext) -> Team {
+    public static func insert(with model: TBATeam, in context: NSManagedObjectContext) -> Team {
         let predicate = NSPredicate(format: "key == %@", model.key)
         return findOrCreate(in: context, matching: predicate) { (team) in
             // Required: key, name, teamNumber, rookieYear

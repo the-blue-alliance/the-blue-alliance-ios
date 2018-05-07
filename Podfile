@@ -1,7 +1,7 @@
 platform :ios, '10.0'
 use_frameworks!
 
-target 'the-blue-alliance-ios' do
+target 'The Blue Alliance' do
 
   pod 'TBAKit'
   
@@ -31,6 +31,10 @@ target 'the-blue-alliance-ios' do
   pod 'Firebase/RemoteConfig'
   pod 'Firebase/Storage'
 
+  # MyTBA
+  pod 'GTMSessionFetcher'
+  pod 'GoogleSignIn'
+
   # Crash reporting
   pod 'Fabric', '~> 1.7.6'
   pod 'Crashlytics', '~> 3.10.1'
@@ -38,7 +42,7 @@ end
 
 post_install do | installer |
   require 'fileutils'
-  FileUtils.cp_r('Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios-acknowledgements.plist',
+  FileUtils.cp_r('Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-acknowledgements.plist',
   'the-blue-alliance-ios/Settings.bundle/Acknowledgements.plist', :remove_destination => true)
 
   installer.pods_project.targets.each do |target|

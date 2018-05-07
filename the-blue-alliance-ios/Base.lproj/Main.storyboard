@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -86,7 +85,7 @@
         <!--No Data View Controller-->
         <scene sceneID="X7T-dy-8ek">
             <objects>
-                <viewController storyboardIdentifier="NoDataViewController" id="GfT-cj-IDv" customClass="NoDataViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NoDataViewController" id="GfT-cj-IDv" customClass="NoDataViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TTv-jf-5h2"/>
                         <viewControllerLayoutGuide type="bottom" id="udw-pW-5bx"/>
@@ -95,9 +94,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vCu-2G-4UD">
-                                <rect key="frame" x="20" y="323.5" width="335" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Some No Data Label Here" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vCu-2G-4UD">
+                                <rect key="frame" x="76" y="322" width="224" height="24"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -105,8 +104,8 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="vCu-2G-4UD" firstAttribute="centerX" secondItem="6P8-L9-Y4w" secondAttribute="centerX" id="Lu6-Ne-53p"/>
-                            <constraint firstAttribute="trailing" secondItem="vCu-2G-4UD" secondAttribute="trailing" constant="20" id="Y7d-KT-otO"/>
-                            <constraint firstItem="vCu-2G-4UD" firstAttribute="leading" secondItem="6P8-L9-Y4w" secondAttribute="leading" constant="20" id="gDF-uu-qlC"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="vCu-2G-4UD" secondAttribute="trailing" constant="20" id="Y7d-KT-otO"/>
+                            <constraint firstItem="vCu-2G-4UD" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6P8-L9-Y4w" secondAttribute="leading" constant="20" id="gDF-uu-qlC"/>
                             <constraint firstItem="vCu-2G-4UD" firstAttribute="centerY" secondItem="6P8-L9-Y4w" secondAttribute="centerY" id="jhO-WU-4Bh"/>
                         </constraints>
                     </view>
@@ -116,7 +115,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vdD-4z-zLt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-751" y="1452"/>
+            <point key="canvasLocation" x="-751.20000000000005" y="1451.4242878560722"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="SYB-WQ-v6F">

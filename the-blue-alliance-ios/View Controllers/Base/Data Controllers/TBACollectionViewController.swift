@@ -1,12 +1,14 @@
 import Foundation
 import UIKit
 import CoreData
+import GTMSessionFetcher
 
 class TBACollectionViewController: UICollectionViewController, DataController {
     
     let basicCellReuseIdentifier = "BasicCell"
     var persistentContainer: NSPersistentContainer!
     var requests: [URLSessionDataTask] = []
+    var fetches: [GTMSessionFetcher] = []
     var dataView: UIView {
         return collectionView!
     }

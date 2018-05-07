@@ -2,6 +2,8 @@ import UIKit
 import TBAKit
 import CoreData
 
+private let SelectYearSegue = "SelectYearSegue"
+
 class TeamViewController: ContainerViewController, Observable {
     
     public var team: Team! {

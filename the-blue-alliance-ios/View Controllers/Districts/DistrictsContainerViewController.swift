@@ -2,6 +2,8 @@ import Foundation
 import UIKit
 import TBAKit
 
+private let SelectYearSegue = "SelectYearSegue"
+
 class DistrictsContainerViewController: ContainerViewController {
     
     // TODO: Get these from Firebase Config
