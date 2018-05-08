@@ -11,7 +11,7 @@ private let EventSegue = "EventSegue"
 private let TeamSegue = "TeamSegue"
 private let MatchSegue = "MatchSegue"
 
-class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
+class MyTBAViewController: ContainerViewController {
     
     internal var signInViewController: MyTBASignInViewController!
     @IBOutlet internal var signInView: UIView!
@@ -45,11 +45,13 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // TODO: Fix the white status bar/white UINavigationController during sign in
+        // modalPresentationCapturesStatusBarAppearance = true
+
         viewControllers = [favoritesViewController, subscriptionsViewController]
         containerViews = [favoritesView, subscriptionsView]
         
         MyTBA.shared.authenticationProvider.add(observer: self)
-        GIDSignIn.sharedInstance().uiDelegate = self
 
         styleInterface()
     }

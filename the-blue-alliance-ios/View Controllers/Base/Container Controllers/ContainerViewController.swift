@@ -63,6 +63,9 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         
         // TODO: Consider... if a view is presented over top of the current view but no action is taken
         // We don't want to cancel refreshes in that situation
+        // TODO: Consider only canceling if we're moving backwards or sideways in the view hiearchy, if we have
+        // access to that information. Ex: Teams -> Team, we don't need to cancel the teams refresh
+        // if isMovingFromParentViewController {
         cancelRefreshes()
     }
     

@@ -13,7 +13,7 @@ protocol MyTBAManaged: Managed {
 extension Favorite: MyTBAManaged {
 
     static func insert(with model: MyTBAFavorite, in context: NSManagedObjectContext) -> Favorite {
-        let predicate = NSPredicate(format: "modelKey == %@ && modelType == %@", model.modelKey, model.modelType.rawValue)
+        let predicate = NSPredicate(format: "%K == %@ && %K == %@", #keyPath(Favorite.modelKey), model.modelKey, #keyPath(Favorite.modelType), model.modelType.rawValue)
         return findOrCreate(in: context, matching: predicate) { (favorite) in
             // Required: key, type
             favorite.modelKey = model.modelKey

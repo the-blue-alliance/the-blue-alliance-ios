@@ -13,11 +13,13 @@ class TeamViewController: ContainerViewController, Observable {
     }
     var year: Int? {
         didSet {
-            if let year = year, eventsViewController.year != year {
-                eventsViewController.year = year
+            // These need to be optional since we might not have our views setup when hitting this
+            // if we're being called from updateYear from TeamsContainerViewController segue (storyboards suck)
+            if let year = year, eventsViewController?.year != year {
+                eventsViewController?.year = year
             }
-            if let year = year, mediaViewController.year != year {
-                mediaViewController.year = year
+            if let year = year, mediaViewController?.year != year {
+                mediaViewController?.year = year
             }
             
             DispatchQueue.main.async {

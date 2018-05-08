@@ -9,7 +9,7 @@ class MyTBASignInViewController: UIViewController {
     @IBOutlet var subscriptionImageView: UIImageView!
     
     // MARK: - View Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -28,6 +28,8 @@ class MyTBASignInViewController: UIViewController {
         super.willTransition(to: newCollection, with: coordinator)
     }
     
+    // MARK: - Interface Methods
+
     func styleInterface() {
         view.backgroundColor = .backgroundGray
     }

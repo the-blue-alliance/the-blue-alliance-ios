@@ -5,7 +5,7 @@ import TBAKit
 extension Subscription: MyTBAManaged {
 
     static func insert(with model: MyTBASubscription, in context: NSManagedObjectContext) -> Subscription {
-        let predicate = NSPredicate(format: "modelKey == %@ && modelType == %@", model.modelKey, model.modelType.rawValue)
+        let predicate = NSPredicate(format: "%K == %@ && %K == %@", #keyPath(Subscription.modelKey), model.modelKey, #keyPath(Subscription.modelType), model.modelType.rawValue)
         return findOrCreate(in: context, matching: predicate) { (subscription) in
             // Required: key, type, notifications
             subscription.modelKey = model.modelKey
