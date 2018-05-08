@@ -1,13 +1,15 @@
 import Foundation
 import UIKit
 import CoreData
+import GTMSessionFetcher
 
-typealias DataController = Persistable & Refreshable & Alertable
+typealias DataController = Persistable & Refreshable & Alertable & Stateful
 
 class TBAViewController: UIViewController, DataController {
     
     var persistentContainer: NSPersistentContainer!
     var requests: [URLSessionDataTask] = []
+    var fetches: [GTMSessionFetcher] = []
     var dataView: UIView {
         return view
     }

@@ -39,7 +39,6 @@ class DistrictsTableViewController: TBATableViewController {
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh districts - database error")
                 }
-                
                 self.removeRequest(request: request!)
             })
         })

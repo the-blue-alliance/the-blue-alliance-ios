@@ -3,10 +3,10 @@ import UIKit
 import CoreData
 import TBAKit
 
-let EventsEmbed = "EventsEmbed"
-let EventSegue = "EventSegue"
-let SelectWeekSegue = "SelectWeekSegue"
-let SelectYearSegue = "SelectYearSegue"
+private let EventsEmbed = "EventsEmbed"
+private let EventSegue = "EventSegue"
+private let SelectWeekSegue = "SelectWeekSegue"
+private let SelectYearSegue = "SelectYearSegue"
 
 class EventsContainerViewController: ContainerViewController, Observable {
     internal var eventsViewController: EventsTableViewController!

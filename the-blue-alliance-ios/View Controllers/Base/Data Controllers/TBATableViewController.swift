@@ -1,6 +1,7 @@
 import Foundation
 import UIKit
 import CoreData
+import GTMSessionFetcher
 
 class TBATableViewController: UITableViewController, DataController {
     
@@ -8,6 +9,7 @@ class TBATableViewController: UITableViewController, DataController {
     
     var persistentContainer: NSPersistentContainer!
     var requests: [URLSessionDataTask] = []
+    var fetches: [GTMSessionFetcher] = []
     var dataView: UIView {
         return tableView
     }

@@ -29,7 +29,7 @@
         <!--Districts Container View Controller-->
         <scene sceneID="3XI-za-SVW">
             <objects>
-                <viewController id="tDg-RY-g1m" customClass="DistrictsContainerViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="tDg-RY-g1m" customClass="DistrictsContainerViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="UtB-cs-iUY"/>
                         <viewControllerLayoutGuide type="bottom" id="yvO-RM-v95"/>
@@ -108,7 +108,7 @@
         <!--Districts Table View Controller-->
         <scene sceneID="gjs-jP-lO7">
             <objects>
-                <tableViewController id="Nd1-sb-cnV" customClass="DistrictsTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="Nd1-sb-cnV" customClass="DistrictsTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Ty7-rw-2eH">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -155,7 +155,7 @@
         <!--District View Controller-->
         <scene sceneID="eU1-4M-quR">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="Nch-Fk-SUm" customClass="DistrictViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController hidesBottomBarWhenPushed="YES" id="Nch-Fk-SUm" customClass="DistrictViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Dyk-xy-Pg6"/>
                         <viewControllerLayoutGuide type="bottom" id="wVa-eo-PoC"/>
@@ -248,7 +248,7 @@
         <!--District Rankings Table View Controller-->
         <scene sceneID="3ST-AO-Ya2">
             <objects>
-                <tableViewController id="nkq-y1-HHW" customClass="DistrictRankingsTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="nkq-y1-HHW" customClass="DistrictRankingsTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="zQ6-fT-9Ff">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -266,7 +266,7 @@
         <!--Team At District View Controller-->
         <scene sceneID="Ft2-kb-bcZ">
             <objects>
-                <viewController id="azs-wX-jbc" customClass="TeamAtDistrictViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="azs-wX-jbc" customClass="TeamAtDistrictViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Z0f-CY-fAt"/>
                         <viewControllerLayoutGuide type="bottom" id="d4v-6p-wUC"/>
@@ -388,7 +388,7 @@
         <!--District Breakdown Table View Controller-->
         <scene sceneID="UsR-e0-Oyz">
             <objects>
-                <tableViewController id="Zux-bS-7g3" customClass="DistrictBreakdownTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="Zux-bS-7g3" customClass="DistrictBreakdownTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="5v1-lg-ry9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

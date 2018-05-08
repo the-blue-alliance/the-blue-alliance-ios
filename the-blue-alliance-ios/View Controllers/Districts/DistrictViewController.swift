@@ -1,7 +1,8 @@
 import Foundation
 import UIKit
 
-let TeamAtDistrictSegue = "TeamAtDistrictSegue"
+private let TeamAtDistrictSegue = "TeamAtDistrictSegue"
+private let EventSegue = "EventSegue"
 
 class DistrictViewController: ContainerViewController {
 
