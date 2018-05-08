@@ -74,8 +74,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         RemoteConfig.setupRemoteConfig()
 
         // Assign our Push Notification delegates
-        Messaging.messaging().delegate = self
-        UNUserNotificationCenter.current().delegate = self
+        Messaging.messaging().delegate = PushService.shared
+        UNUserNotificationCenter.current().delegate = PushService.shared
 
         // Attempt to download our newest React Native bundle
         ReactNativeService.updateReactNativeBundle()
@@ -156,45 +156,6 @@ extension AppDelegate: GIDSignInDelegate {
                 signInDelegate.showErrorAlert(with: "Error authorizing notifications - \(error.localizedDescription)")
             }
         }
-    }
-    
-}
-
-extension AppDelegate: UNUserNotificationCenterDelegate {
-    
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        let userInfo = notification.request.content.userInfo
-        // Print full message.
-        print("Will present")
-        print(userInfo)
-        
-        // Handle notification information in foreground
-        completionHandler([])
-    }
-    
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        let userInfo = response.notification.request.content.userInfo
-        // Print full message.
-        print("Push notification")
-        print(userInfo)
-        
-        // Handle being launched from a push notification
-        completionHandler()
-    }
-    
-}
-
-extension AppDelegate: MessagingDelegate {
-    
-    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        print("Firebase registration token: \(fcmToken)")
-        PushService.registerPushToken(fcmToken)
-    }
-    
-    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
-        print("Remote message")
-        // TODO: I have *no* idea how these get hit
-        print(remoteMessage.appData)
     }
     
 }

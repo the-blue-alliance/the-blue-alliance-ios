@@ -44,7 +44,11 @@ extension MyTBA {
         }
         
         return callApi(method: method, data: encodedRegistration, completion: { (registerResponse: MyTBARegisterResponse?, error: Error?) in
-            completion(error)
+            if let registerResponse = registerResponse, registerResponse.code >= 400 {
+                completion(APIError.error(registerResponse.message))
+            } else {
+                completion(error)
+            }
         })
     }
     

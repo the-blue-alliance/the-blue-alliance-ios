@@ -9,6 +9,7 @@ enum MyTBAModelType: String, Codable {
 
 protocol MyTBAResponse: Codable {}
 
+// Models for Favorite/Subscription
 protocol MyTBAModel: Codable {
     
     static var arrayKey: String { get }

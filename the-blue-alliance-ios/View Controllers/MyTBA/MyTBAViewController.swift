@@ -11,7 +11,7 @@ private let EventSegue = "EventSegue"
 private let TeamSegue = "TeamSegue"
 private let MatchSegue = "MatchSegue"
 
-class MyTBAViewController: ContainerViewController {
+class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     
     internal var signInViewController: MyTBASignInViewController!
     @IBOutlet internal var signInView: UIView!
@@ -51,6 +51,7 @@ class MyTBAViewController: ContainerViewController {
         viewControllers = [favoritesViewController, subscriptionsViewController]
         containerViews = [favoritesView, subscriptionsView]
         
+        GIDSignIn.sharedInstance().uiDelegate = self
         MyTBA.shared.authenticationProvider.add(observer: self)
 
         styleInterface()
@@ -160,7 +161,7 @@ class MyTBAViewController: ContainerViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let key = sender as? String ?? ""
         let predicate = NSPredicate(format: "key == %@", key)
-        
+
         if segue.identifier == EventSegue {
             let eventViewController = segue.destination as! EventViewController
             if let event = Event.findOrFetch(in: persistentContainer.viewContext, matching: predicate) {

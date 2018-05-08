@@ -33,6 +33,9 @@ class PushService: NSObject {
             UserDefaults.standard.synchronize()
         }
     }
+
+    // Private singleton, so we can capture auth changes
+    public static let shared = PushService()
     
     override init() {
         super.init()
@@ -67,6 +70,8 @@ class PushService: NSObject {
         registerPushToken(pendingRegisterPushToken)
     }
     
+    // Unregister is unused right now because myTBA needs to be auth'd to unregister but we unregister after a log out..
+    /*
     static func unregisterPushToken(_ token: String) {
         if MyTBA.shared.authentication == nil {
             // Not authenticated to MyTBA - save token for unregister once we're auth'd
@@ -89,7 +94,8 @@ class PushService: NSObject {
             unregisterPushToken(token)
         }
     }
-
+    */
+    
     static func requestAuthorizationForNotifications(_ completion: ((Error?) -> ())?) {
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
         UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (success, error) in
@@ -109,9 +115,49 @@ extension PushService: MyTBAAuthenticationObservable {
     
     func unauthenticated() {
         // TODO: By the nature of unregister being hooked up to unauth'd... won't this ALWAYS fail?
-        // THINK about maybe making sure we don't get push notifications anymore locally
+        // We should fix this, but probably fix this server-side, where unregister isn't an auth'd endpoint?
+        // Or maybe we can unauth if we pass the previous registration token or something?
+        /*
         if let currentPushToken = Messaging.messaging().fcmToken {
             PushService.unregisterPushToken(currentPushToken)
         }
+        */
     }
+}
+
+extension PushService: MessagingDelegate {
+    
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        print("Firebase registration token: \(fcmToken)")
+        PushService.registerPushToken(fcmToken)
+    }
+    
+    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
+        print(remoteMessage.appData)
+    }
+    
+}
+
+extension PushService: UNUserNotificationCenterDelegate {
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let userInfo = notification.request.content.userInfo
+        // Print full message.
+        print("Will present")
+        print(userInfo)
+        
+        // Handle notification information in foreground
+        completionHandler([])
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        let userInfo = response.notification.request.content.userInfo
+        // Print full message.
+        print("Push notification")
+        print(userInfo)
+        
+        // Handle being launched from a push notification
+        completionHandler()
+    }
+    
 }
