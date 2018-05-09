@@ -18,20 +18,6 @@ The Blue Alliance for iOS has a few build tool dependencies. Here's how to insta
 3. Install [Cocoapods](http://guides.cocoapods.org/using/getting-started.html#getting-started)
 	* `sudo gem install cocoapods`
 
-Building in Xcode
----
-1. Clone The Blue Alliance for iOS
-2. Be sure you have all required build tools, as described in the [Build Tool Dependencies](#build-tool-dependencies) section
-3. Install [React Native](https://facebook.github.io/react-native) dependencies
-	* `cd js && npm install && cd ..`
-4. Install [Cocoapods](http://guides.cocoapods.org/using/getting-started.html#getting-started) to install package dependencies
-	* `pod install`
-5. Open the workspace file (`the-blue-alliance-ios.xcworkspace`)
-6. Modify your bundle identifier to something locally namespaced to yourself (ex: `com.the-blue-alliance.zach-dev`)
-7. Add your `GoogleService-Info.plist` to `the-blue-alliance-ios/the-blue-alliance-ios` folder
-	* If you don't have a Firebase project setup, see the [Setup Firebase Project](#setup-firebase) section
-8. Build and run The Blue Alliance for iOS!
-
 Setup Firebase
 ---
 The Blue Alliance's mobile apps depend on Firebase. We configure Firebase in The Blue Alliance for iOS using a `GoogleService-Info.plist` file, provided by Firebase. The production plist isn't checked in to source control, since it contains an API key. You can setup your own Firebase application to develop against.
@@ -41,11 +27,24 @@ The Blue Alliance's mobile apps depend on Firebase. We configure Firebase in The
 3. Enter a project name to work with - preferrably something namespaced to yourself (ex: `zach-tba-dev`)
 4. After your project is done setting up, click your newly created project
 5. On the landing page, click `Add Firebase to your iOS app`
-6. Enter the bundle ID you entered in to your app earlier during the setup process
+6. Enter a locally namespaced bundle identifier (ex: `com.the-blue-alliance.zach-tba-dev`)
 7. Click `Register App`
-8. Download the `GoogleService-Info.plist` and drag it in to `the-blue-alliance-ios/the-blue-alliance-ios` folder
+8. Download the `GoogleService-Info.plist`
 
-At this point, in the project navigator in Xcode, the `GoogleService-Info.plist` file should go from being red to being black.
+Building in Xcode
+---
+1. Clone The Blue Alliance for iOS
+2. Be sure you have all required build tools, as described in the [Build Tool Dependencies](#build-tool-dependencies) section
+3. Install [React Native](https://facebook.github.io/react-native) dependencies
+	* `cd js && npm install && cd ..`
+4. Install [Cocoapods](http://guides.cocoapods.org/using/getting-started.html#getting-started) to install package dependencies
+	* `pod install`
+5. Open the workspace file (`the-blue-alliance-ios.xcworkspace`)
+6. Modify your bundle identifier to the same bundle identifier you used during your Firebase setup (ex: `com.the-blue-alliance.zach-dev`)
+7. Add your `GoogleService-Info.plist` to `the-blue-alliance-ios/the-blue-alliance-ios` folder
+	* If you don't have a Firebase project setup, see the [Setup Firebase Project](#setup-firebase) section
+	* If linked properly, the `GoogleService-Info.plist` file in the Xcode project navigation should go from being red to being black
+8. Build and run The Blue Alliance for iOS!
 
 Contributing
 ============
