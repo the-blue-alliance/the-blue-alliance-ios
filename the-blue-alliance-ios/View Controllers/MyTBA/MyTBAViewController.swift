@@ -46,6 +46,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         super.viewDidLoad()
         
         // TODO: Fix the white status bar/white UINavigationController during sign in
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/180
         // modalPresentationCapturesStatusBarAppearance = true
 
         viewControllers = [favoritesViewController, subscriptionsViewController]
@@ -169,6 +170,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
             }
             eventViewController.persistentContainer = persistentContainer
             // TODO: Handle passing a key
+            // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/177
         } else if segue.identifier == TeamSegue {
             let teamViewController = segue.destination as! TeamViewController
             if let team = Team.findOrFetch(in: persistentContainer.viewContext, matching: predicate) {

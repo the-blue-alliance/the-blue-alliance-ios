@@ -65,6 +65,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         // We don't want to cancel refreshes in that situation
         // TODO: Consider only canceling if we're moving backwards or sideways in the view hiearchy, if we have
         // access to that information. Ex: Teams -> Team, we don't need to cancel the teams refresh
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/176
         // if isMovingFromParentViewController {
         cancelRefreshes()
     }

@@ -24,7 +24,7 @@ class TBATableViewController: UITableViewController, DataController {
         super.viewDidLoad()
         
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 64.0
+//        tableView.estimatedRowHeight = 64.0
         tableView.backgroundColor = .backgroundGray
         tableView.tableFooterView = UIView.init(frame: .zero)
         tableView.delegate = self

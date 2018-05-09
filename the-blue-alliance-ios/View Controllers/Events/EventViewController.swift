@@ -52,7 +52,6 @@ class EventViewController: ContainerViewController {
             teamsViewController = segue.destination as! TeamsTableViewController
             teamsViewController.event = event
             teamsViewController.teamSelected = { [weak self] team in
-                // TODO: Think about if these objects we pass down should be weak as well...
                 self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team);
             }
         } else if segue.identifier == "EventMatchesEmbed" {

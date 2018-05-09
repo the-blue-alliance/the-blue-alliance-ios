@@ -117,6 +117,7 @@ extension PushService: MyTBAAuthenticationObservable {
         // TODO: By the nature of unregister being hooked up to unauth'd... won't this ALWAYS fail?
         // We should fix this, but probably fix this server-side, where unregister isn't an auth'd endpoint?
         // Or maybe we can unauth if we pass the previous registration token or something?
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/175
         /*
         if let currentPushToken = Messaging.messaging().fcmToken {
             PushService.unregisterPushToken(currentPushToken)

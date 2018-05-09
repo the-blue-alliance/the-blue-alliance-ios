@@ -147,7 +147,6 @@ extension Event: Locatable, Managed {
         var weekString = "nil"
         let eventType = Int(self.eventType)
         if eventType == EventType.championshipDivision.rawValue || eventType == EventType.championshipFinals.rawValue {
-            // TODO: Need to handle different CMPs - "FIRST Championship - Houston" and "FIRST Championship - St. Louis"
             if year >= 2017, let city = city {
                 weekString = "Championship - \(city)"
             } else {

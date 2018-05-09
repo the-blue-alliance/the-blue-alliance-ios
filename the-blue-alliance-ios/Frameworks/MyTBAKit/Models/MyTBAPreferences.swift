@@ -13,5 +13,5 @@ struct MyTBAPreferences {
 extension MyTBA {
     
     // TODO: Android has some local rate limiting, which is probably smart
-
+    // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/174
 }

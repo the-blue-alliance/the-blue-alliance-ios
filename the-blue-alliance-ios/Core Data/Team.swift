@@ -16,6 +16,7 @@ extension Team: Locatable, Managed {
         let predicate = NSPredicate(format: "key == %@", key)
         // Let's not *overwrite* shit we already have
         // TODO: Check if our Team object has a name... if it doesn't, go fetch from the web in the background
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/184
         if let team = findOrFetch(in: context, matching: predicate) {
             return team
         }

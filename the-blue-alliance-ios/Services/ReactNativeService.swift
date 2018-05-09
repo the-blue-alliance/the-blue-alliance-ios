@@ -82,12 +82,14 @@ class ReactNativeService {
     
     private static var remoteBundleReference: StorageReference {
         // TODO: Swap this for a prod url
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/128
         let storageBucket = FirebaseOptions.defaultOptions()?.storageBucket ?? "zach-tba-dev.appspot.com"
         let storage = Storage.storage()
         return storage.reference(forURL: String(format: "gs://%@/react-native/%@", storageBucket, BundleName.compressed.rawValue))
     }
     
     // TODO: Think about setting a retry timer on downloading if we fail
+    // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/166
     
     public static func updateReactNativeBundle() {
         // Check if we have an orphaned compressed bundle that needs to be cleaned up (or unzipped)

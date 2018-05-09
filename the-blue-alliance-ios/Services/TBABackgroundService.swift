@@ -9,9 +9,10 @@ enum BackgroundFetchError: Error {
 }
 
 // Manage background fetches of information, such as teams (used in a handful of places), events, and matches (only for myTBA)
-class TBABackgroundSerivce {
+class TBABackgroundService {
 
-    // TOOD: Combine these in to one method. I tried, but I lost the will to live.
+    // TODO: Combine these in to one method. I tried, but I lost the will to live.
+    // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/183
     
     static func backgroundFetchTeam(_ key: String, in context: NSManagedObjectContext, completion: @escaping (Team?, Error?) -> ()) {
         _ = TBAKit.sharedKit.fetchTeam(key: key) { (modelTeam, error) in

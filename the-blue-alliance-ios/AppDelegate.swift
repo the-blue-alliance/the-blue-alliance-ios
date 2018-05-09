@@ -47,6 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // TODO: Remove this
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/128
         TBAKit.sharedKit.apiKey = "OHBBu0QbDiIJYKhAedTfkTxdrkXde1C21Sr90L1f1Pac4ahl4FJbNptNiXbCSCfH"
         
         if let splitViewController = self.window?.rootViewController as? UISplitViewController {
@@ -63,6 +64,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     continue
                 }
                 // TODO: Make sure we only pass this once we have it, as well as a MOC
+                // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/165
                 dataVC.persistentContainer = persistentContainer
             }
         }

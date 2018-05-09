@@ -71,7 +71,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                     case .event:
                         if Event.findOrFetch(in: backgroundContext, matching: predicate) == nil {
                             self?.backgroundFetchKeys.insert(model.modelKey)
-                            TBABackgroundSerivce.backgroundFetchEvent(model.modelKey, in: backgroundContext, completion: { (_, _) in
+                            TBABackgroundService.backgroundFetchEvent(model.modelKey, in: backgroundContext, completion: { (_, _) in
                                 self?.backgroundFetchKeys.remove(model.modelKey)
                                 reloadTableViewCompletion()
                             })
@@ -79,7 +79,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                     case .team:
                         if Team.findOrFetch(in: backgroundContext, matching: predicate) == nil {
                             self?.backgroundFetchKeys.insert(model.modelKey)
-                            TBABackgroundSerivce.backgroundFetchTeam(model.modelKey, in: backgroundContext, completion: { (_, _) in
+                            TBABackgroundService.backgroundFetchTeam(model.modelKey, in: backgroundContext, completion: { (_, _) in
                                 self?.backgroundFetchKeys.remove(model.modelKey)
                                 reloadTableViewCompletion()
                             })
@@ -89,7 +89,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                         // Fetch our match if it doesn't exist or we don't have scores
                         if match?.redScore == nil || match?.blueScore == nil {
                             self?.backgroundFetchKeys.insert(model.modelKey)
-                            TBABackgroundSerivce.backgroundFetchMatch(model.modelKey, in: backgroundContext, completion: { (_, _) in
+                            TBABackgroundService.backgroundFetchMatch(model.modelKey, in: backgroundContext, completion: { (_, _) in
                                 self?.backgroundFetchKeys.remove(model.modelKey)
                                 reloadTableViewCompletion()
                             })
@@ -155,6 +155,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         let predicate = NSPredicate(format: "key == %@", obj.modelKey!)
 
         // TODO: All Cell subclasses need gear icons
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/179
         
         switch modelType {
         case .event:
