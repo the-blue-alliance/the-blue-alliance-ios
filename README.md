@@ -11,7 +11,7 @@ Build Tool Dependencies
 The Blue Alliance for iOS has a few build tool dependencies. Here's how to install those, if you need them
 
 1. Install [Xcode](https://developer.apple.com/xcode/)
-	* The Blue Alliance for iOS is written in Swift 4.1, so either Xcode 9.2 or 9.3 should work
+	* The Blue Alliance for iOS is written in Swift 4.1, which comes with Xcode 9.3+
 2. Install [React Native](https://facebook.github.io/react-native)
 	* `brew install node watchman`
 	* `npm install -g react-native-cli`
