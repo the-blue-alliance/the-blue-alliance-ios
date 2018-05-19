@@ -20,6 +20,9 @@
 		303F824A1EF593BE007CADA1 /* EventRankingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F82491EF593BE007CADA1 /* EventRankingsTableViewController.swift */; };
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
+		76B6DAD5209FA1A400E3CDDB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 76B6DAD4209FA1A400E3CDDB /* GoogleService-Info.plist */; };
+		76B6DAD8209FA2B300E3CDDB /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B6DAD7209FA2B300E3CDDB /* SettingsController.swift */; };
+		76B6DADA209FA2D300E3CDDB /* SettingsStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76B6DAD9209FA2D300E3CDDB /* SettingsStoryboard.storyboard */; };
 		920DF7CD20954B430041B487 /* TeamAtDistrictViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DF7CC20954B430041B487 /* TeamAtDistrictViewController.swift */; };
 		920DF7CF20954B5D0041B487 /* DistrictBreakdownTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DF7CE20954B5D0041B487 /* DistrictBreakdownTableViewController.swift */; };
 		9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */; };
@@ -98,7 +101,6 @@
 		92D855E21EC755D000572F27 /* TeamInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855E11EC755D000572F27 /* TeamInfoTableViewController.swift */; };
 		92DF0D19208FF7AD0043702A /* RemoteConfig+Setup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF0D18208FF7AD0043702A /* RemoteConfig+Setup.swift */; };
 		92DF0D1B208FF8C90043702A /* RemoteConfigDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92DF0D1A208FF8C90043702A /* RemoteConfigDefaults.plist */; };
-		92E6253E208EB3C000DF58C0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92E6253D208EB3C000DF58C0 /* GoogleService-Info.plist */; };
 		92F481ED1E7D978600B4ED7E /* NoDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481EC1E7D978600B4ED7E /* NoDataViewController.swift */; };
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
 		92FFE51E1E770D010037E48C /* District.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE51D1E770D010037E48C /* District.swift */; };
@@ -125,6 +127,9 @@
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
 		614241F72C3BE7F89DD95428 /* Pods-the-blue-alliance-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-the-blue-alliance-ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios.debug.xcconfig"; sourceTree = "<group>"; };
+		76B6DAD4209FA1A400E3CDDB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		76B6DAD7209FA2B300E3CDDB /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
+		76B6DAD9209FA2D300E3CDDB /* SettingsStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SettingsStoryboard.storyboard; sourceTree = "<group>"; };
 		891A553A526753BAB4660AC9 /* Pods-the-blue-alliance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-the-blue-alliance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-the-blue-alliance/Pods-the-blue-alliance.debug.xcconfig"; sourceTree = "<group>"; };
 		920DF7CC20954B430041B487 /* TeamAtDistrictViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamAtDistrictViewController.swift; sourceTree = "<group>"; };
 		920DF7CE20954B5D0041B487 /* DistrictBreakdownTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictBreakdownTableViewController.swift; sourceTree = "<group>"; };
@@ -206,7 +211,6 @@
 		92D855E11EC755D000572F27 /* TeamInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamInfoTableViewController.swift; sourceTree = "<group>"; };
 		92DF0D18208FF7AD0043702A /* RemoteConfig+Setup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RemoteConfig+Setup.swift"; sourceTree = "<group>"; };
 		92DF0D1A208FF8C90043702A /* RemoteConfigDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = RemoteConfigDefaults.plist; sourceTree = "<group>"; };
-		92E6253D208EB3C000DF58C0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		92E6253F208EC23000DF58C0 /* the-blue-alliance-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "the-blue-alliance-ios.entitlements"; sourceTree = "<group>"; };
 		92F481EC1E7D978600B4ED7E /* NoDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoDataViewController.swift; sourceTree = "<group>"; };
 		92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsContainerViewController.swift; sourceTree = "<group>"; };
@@ -279,6 +283,15 @@
 				AB45C28FC9D316785507BAAC /* Pods-the-blue-alliance-ios.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		76B6DAD6209FA2A200E3CDDB /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				76B6DAD9209FA2D300E3CDDB /* SettingsStoryboard.storyboard */,
+				76B6DAD7209FA2B300E3CDDB /* SettingsController.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		920DF7CB20954B430041B487 /* Team@District */ = {
@@ -387,8 +400,8 @@
 				92E6253F208EC23000DF58C0 /* the-blue-alliance-ios.entitlements */,
 				92942D951E2154DA008E79CA /* AppDelegate.swift */,
 				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
+				76B6DAD4209FA1A400E3CDDB /* GoogleService-Info.plist */,
 				92942DA31E2154DA008E79CA /* Info.plist */,
-				92E6253D208EB3C000DF58C0 /* GoogleService-Info.plist */,
 				92942DA01E2154DA008E79CA /* LaunchScreen.storyboard */,
 				92942D9B1E2154DA008E79CA /* Main.storyboard */,
 				92942DAE1E2158EC008E79CA /* Settings.bundle */,
@@ -471,6 +484,7 @@
 			children = (
 				92942DC21E215C37008E79CA /* MyTBAStoryboard.storyboard */,
 				92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */,
+				76B6DAD6209FA2A200E3CDDB /* Settings */,
 			);
 			path = MyTBA;
 			sourceTree = "<group>";
@@ -699,6 +713,7 @@
 				49CF8A9E90B81B810B769ED8 /* 📦 Embed Pods Frameworks */,
 				92E624CE208E8D1600DF58C0 /* Bundle React Native code and images */,
 				924E826C208FE7D20053247C /* ShellScript */,
+				1027B05E017B7EBB0CB66692 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -721,6 +736,7 @@
 				TargetAttributes = {
 					92942D911E2154DA008E79CA = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = VWKUK9SSFL;
 						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -754,7 +770,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92E6253E208EB3C000DF58C0 /* GoogleService-Info.plist in Resources */,
 				924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */,
 				145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */,
 				92942DBD1E215BA6008E79CA /* EventsStoryboard.storyboard in Resources */,
@@ -765,10 +780,12 @@
 				92942DBF1E215BEF008E79CA /* TeamsStoryboard.storyboard in Resources */,
 				92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */,
 				929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */,
+				76B6DADA209FA2D300E3CDDB /* SettingsStoryboard.storyboard in Resources */,
 				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
 				92858F2B208D783300811614 /* EventTeamStatTableViewCell.xib in Resources */,
 				92D855D91EC695CE00572F27 /* TeamTableViewCell.xib in Resources */,
+				76B6DAD5209FA1A400E3CDDB /* GoogleService-Info.plist in Resources */,
 				925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */,
 				929DB38E2095640C00FB575F /* ReverseSubtitleTableViewCell.xib in Resources */,
 				92942D9D1E2154DA008E79CA /* Main.storyboard in Resources */,
@@ -779,6 +796,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1027B05E017B7EBB0CB66692 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-the-blue-alliance-ios/Pods-the-blue-alliance-ios-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		29AD26E75C996A21D8D2055B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -897,6 +929,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76B6DAD8209FA2B300E3CDDB /* SettingsController.swift in Sources */,
 				929F57282092BA6500E5313A /* Observable.swift in Sources */,
 				92D855D41EC68F4200572F27 /* TeamsTableViewController.swift in Sources */,
 				92D855E01EC6BA3900572F27 /* TeamViewController.swift in Sources */,
@@ -1119,11 +1152,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = VWKUK9SSFL;
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.zach-dev";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.anas-dev";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -1136,11 +1169,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = VWKUK9SSFL;
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.zach-dev";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.anas-dev";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;

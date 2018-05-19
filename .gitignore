@@ -36,3 +36,4 @@ node_modules
 js/ios/*
 
 the-blue-alliance-ios/GoogleService-Info.plist
+the-blue-alliance-ios.xcodeproj/project.pbxproj
