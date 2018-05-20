@@ -1,6 +1,7 @@
 import UIKit
 import TBAKit
 import CoreData
+import Optik
 
 class TeamMediaCollectionViewController: TBACollectionViewController {
     
@@ -94,16 +95,11 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     // MARK: UICollectionView Delegate
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // TODO: Eventually show the full image inside the app
-        guard let media = dataSource?.object(at: indexPath) else {
-            return
-        }
-        guard let url = media.viewImageURL else {
-            return
-        }
-        if UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
+        let imageViewer = Optik.imageViewer(
+            withImages: Array(downloadedImages.values)
+        )
+
+        self.present(imageViewer, animated: true, completion: nil)
     }
 
     // MARK: Table View Data Source

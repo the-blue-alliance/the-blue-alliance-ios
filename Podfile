@@ -22,6 +22,7 @@ target 'The Blue Alliance' do
   pod "youtube-ios-player-helper", "~> 0.1.4"
   pod 'PureLayout'
   pod 'ZIPFoundation'
+  pod 'Optik'
   
   # Firebase
   pod 'Firebase/Analytics'
