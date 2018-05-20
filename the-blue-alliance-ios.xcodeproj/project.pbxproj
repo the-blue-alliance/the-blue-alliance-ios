@@ -20,6 +20,11 @@
 		303F824A1EF593BE007CADA1 /* EventRankingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F82491EF593BE007CADA1 /* EventRankingsTableViewController.swift */; };
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
+		76BE63FE20B1D1D600EA812D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 76BE63FD20B1D1D500EA812D /* GoogleService-Info.plist */; };
+		76BE640120B1D25A00EA812D /* SettingsStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76BE640020B1D25A00EA812D /* SettingsStoryboard.storyboard */; };
+		76BE640320B1D27200EA812D /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BE640220B1D27200EA812D /* SettingsTableViewController.swift */; };
+		76BE640820B1DEC000EA812D /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BE640720B1DEC000EA812D /* SwitchTableViewCell.swift */; };
+		76BE640A20B1DEE100EA812D /* SwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76BE640920B1DEE100EA812D /* SwitchTableViewCell.xib */; };
 		920DF7CD20954B430041B487 /* TeamAtDistrictViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DF7CC20954B430041B487 /* TeamAtDistrictViewController.swift */; };
 		920DF7CF20954B5D0041B487 /* DistrictBreakdownTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DF7CE20954B5D0041B487 /* DistrictBreakdownTableViewController.swift */; };
 		9221C616209BFF7D00477DE2 /* MyTBATableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9221C615209BFF7D00477DE2 /* MyTBATableViewCell.swift */; };
@@ -112,7 +117,6 @@
 		92D855E21EC755D000572F27 /* TeamInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855E11EC755D000572F27 /* TeamInfoTableViewController.swift */; };
 		92DF0D19208FF7AD0043702A /* RemoteConfig+Setup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF0D18208FF7AD0043702A /* RemoteConfig+Setup.swift */; };
 		92DF0D1B208FF8C90043702A /* RemoteConfigDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92DF0D1A208FF8C90043702A /* RemoteConfigDefaults.plist */; };
-		92E6253E208EB3C000DF58C0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92E6253D208EB3C000DF58C0 /* GoogleService-Info.plist */; };
 		92F481ED1E7D978600B4ED7E /* NoDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481EC1E7D978600B4ED7E /* NoDataViewController.swift */; };
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
 		92F8E356209AAE890094213F /* PushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E355209AAE890094213F /* PushService.swift */; };
@@ -140,6 +144,11 @@
 		303F82491EF593BE007CADA1 /* EventRankingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventRankingsTableViewController.swift; sourceTree = "<group>"; };
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
+		76BE63FD20B1D1D500EA812D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		76BE640020B1D25A00EA812D /* SettingsStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SettingsStoryboard.storyboard; sourceTree = "<group>"; };
+		76BE640220B1D27200EA812D /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		76BE640720B1DEC000EA812D /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
+		76BE640920B1DEE100EA812D /* SwitchTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwitchTableViewCell.xib; sourceTree = "<group>"; };
 		920DF7CC20954B430041B487 /* TeamAtDistrictViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamAtDistrictViewController.swift; sourceTree = "<group>"; };
 		920DF7CE20954B5D0041B487 /* DistrictBreakdownTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictBreakdownTableViewController.swift; sourceTree = "<group>"; };
 		9221C615209BFF7D00477DE2 /* MyTBATableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATableViewCell.swift; sourceTree = "<group>"; };
@@ -234,7 +243,6 @@
 		92D855E11EC755D000572F27 /* TeamInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamInfoTableViewController.swift; sourceTree = "<group>"; };
 		92DF0D18208FF7AD0043702A /* RemoteConfig+Setup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RemoteConfig+Setup.swift"; sourceTree = "<group>"; };
 		92DF0D1A208FF8C90043702A /* RemoteConfigDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = RemoteConfigDefaults.plist; sourceTree = "<group>"; };
-		92E6253D208EB3C000DF58C0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		92E6253F208EC23000DF58C0 /* the-blue-alliance-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "the-blue-alliance-ios.entitlements"; sourceTree = "<group>"; };
 		92F481EC1E7D978600B4ED7E /* NoDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoDataViewController.swift; sourceTree = "<group>"; };
 		92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsContainerViewController.swift; sourceTree = "<group>"; };
@@ -308,6 +316,24 @@
 				CC94969197ACDA090003638B /* Pods-The Blue Alliance.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		76BE63FF20B1D24B00EA812D /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				76BE640020B1D25A00EA812D /* SettingsStoryboard.storyboard */,
+				76BE640220B1D27200EA812D /* SettingsTableViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		76BE640620B1DE7B00EA812D /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				76BE640920B1DEE100EA812D /* SwitchTableViewCell.xib */,
+				76BE640720B1DEC000EA812D /* SwitchTableViewCell.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		920DF7CB20954B430041B487 /* Team@District */ = {
@@ -436,7 +462,7 @@
 				92942D951E2154DA008E79CA /* AppDelegate.swift */,
 				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
 				92942DA31E2154DA008E79CA /* Info.plist */,
-				92E6253D208EB3C000DF58C0 /* GoogleService-Info.plist */,
+				76BE63FD20B1D1D500EA812D /* GoogleService-Info.plist */,
 				92942DA01E2154DA008E79CA /* LaunchScreen.storyboard */,
 				92942D9B1E2154DA008E79CA /* Main.storyboard */,
 				92942DAE1E2158EC008E79CA /* Settings.bundle */,
@@ -477,6 +503,7 @@
 				92942DB31E215B0E008E79CA /* Teams */,
 				92942DB41E215B1F008E79CA /* Districts */,
 				92942DB51E215B34008E79CA /* MyTBA */,
+				76BE63FF20B1D24B00EA812D /* Settings */,
 				140523781ED33DB10072FB91 /* Match */,
 			);
 			path = "View Controllers";
@@ -723,6 +750,7 @@
 				92FFE5231E7C994B0037E48C /* Events */,
 				929BBB061EC55745006D3854 /* Info */,
 				9221C614209BFF6100477DE2 /* MyTBA */,
+				76BE640620B1DE7B00EA812D /* Settings */,
 			);
 			path = "View Elements";
 			sourceTree = "<group>";
@@ -798,6 +826,7 @@
 				TargetAttributes = {
 					92942D911E2154DA008E79CA = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = VWKUK9SSFL;
 						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -831,12 +860,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92E6253E208EB3C000DF58C0 /* GoogleService-Info.plist in Resources */,
 				924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */,
 				145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */,
 				92942DBD1E215BA6008E79CA /* EventsStoryboard.storyboard in Resources */,
 				92942DC11E215C0D008E79CA /* DistrictsStoryboard.storyboard in Resources */,
 				92DF0D1B208FF8C90043702A /* RemoteConfigDefaults.plist in Resources */,
+				76BE640A20B1DEE100EA812D /* SwitchTableViewCell.xib in Resources */,
 				92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */,
 				304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */,
 				92942DBF1E215BEF008E79CA /* TeamsStoryboard.storyboard in Resources */,
@@ -847,8 +876,10 @@
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
 				92858F2B208D783300811614 /* EventTeamStatTableViewCell.xib in Resources */,
 				92D855D91EC695CE00572F27 /* TeamTableViewCell.xib in Resources */,
+				76BE640120B1D25A00EA812D /* SettingsStoryboard.storyboard in Resources */,
 				925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */,
 				929DB38E2095640C00FB575F /* ReverseSubtitleTableViewCell.xib in Resources */,
+				76BE63FE20B1D1D600EA812D /* GoogleService-Info.plist in Resources */,
 				92942D9D1E2154DA008E79CA /* Main.storyboard in Resources */,
 				92942DC31E215C37008E79CA /* MyTBAStoryboard.storyboard in Resources */,
 			);
@@ -974,6 +1005,7 @@
 				1405237F1ED3524C0072FB91 /* Match.swift in Sources */,
 				9272924D1EE4A0FC0027CE7C /* EventStatsViewController.swift in Sources */,
 				9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */,
+				76BE640820B1DEC000EA812D /* SwitchTableViewCell.swift in Sources */,
 				9274A3F81F3520B900FAADF0 /* TeamSummaryTableViewController.swift in Sources */,
 				929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */,
 				92C9BD3120968FAC007FB9C8 /* Favorite.swift in Sources */,
@@ -994,6 +1026,7 @@
 				929FCDA21EC8068800A38E46 /* DistrictViewController.swift in Sources */,
 				9257DF4C208C078100F7E2BA /* WLT.swift in Sources */,
 				929FCD951EC7EE9200A38E46 /* Locatable.swift in Sources */,
+				76BE640320B1D27200EA812D /* SettingsTableViewController.swift in Sources */,
 				92688C2B2090091D00D12B7B /* ReactNativeService.swift in Sources */,
 				9257DF4A208BFC4400F7E2BA /* EventAlliance.swift in Sources */,
 				925288921EC7ABC6009B78A9 /* Event.swift in Sources */,
@@ -1203,11 +1236,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = VWKUK9SSFL;
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.zach-dev";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.anas-dev";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -1220,11 +1253,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = VWKUK9SSFL;
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.zach-dev";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.anas-dev";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
