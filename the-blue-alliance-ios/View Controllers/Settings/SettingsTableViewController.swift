@@ -61,7 +61,7 @@ class SettingsTableViewController: UITableViewController {
             return 4
             
         case 3:
-            return 1
+            return 2
             
         default:
             fatalError("This section does not exist")
@@ -70,6 +70,9 @@ class SettingsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BaseCell", for: indexPath)
+        
+        let thirdSectionLabels =  ["The Blue Alliance Website",  "The Blue Alliance for iOS is open source", "Contributors", "View changelog"]
+        let lastSectionLabels = ["Delete network cache", "Delete app data"]
         
         switch indexPath.section {
         case 0:
@@ -92,11 +95,11 @@ class SettingsTableViewController: UITableViewController {
             return cell
 
         case 2:
-            let textLabels =  ["The Blue Alliance Website",  "The Blue Alliance for iOS is open source", "Contributors", "View changelog"]
-            cell.textLabel?.text = textLabels [indexPath.row]
+            cell.textLabel?.text = thirdSectionLabels[indexPath.row]
             
         case 3:
-            cell.textLabel?.text = "Delete network cache"
+            cell.textLabel?.text = lastSectionLabels[indexPath.row]
+            
             cell.textLabel?.textColor = .red
             cell.textLabel?.textAlignment = .center
             
@@ -148,20 +151,38 @@ class SettingsTableViewController: UITableViewController {
             }
             
         case 3:
-            let alertController = UIAlertController(title: "Delete network cache", message: "Are you sure you want to delete all the network cache data ? This action is irreversible.", preferredStyle: .alert)
-            
-            let confirmAction = UIAlertAction(title: "Delete", style: .destructive) { (deleteAction) in
-                // TODO: Handle network cache deletion
+            if indexPath.row == 0 {
+                let alertController = UIAlertController(title: "Delete network cache", message: "Are you sure you want to delete all the network cache data ? This action is irreversible.", preferredStyle: .alert)
+                
+                let confirmAction = UIAlertAction(title: "Delete", style: .destructive) { (deleteAction) in
+                    // TODO: Handle network cache deletion
+                }
+                
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (deleteAction) in
+                    self.tableView.deselectRow(at: indexPath, animated: true)
+                }
+                
+                alertController.addAction(confirmAction)
+                alertController.addAction(cancelAction)
+                
+                self.present(alertController, animated: true, completion: nil)
+            } else {
+                let alertController = UIAlertController(title: "Delete app data", message: "Are you sure you want to delete the app data ? This action is irreversible.", preferredStyle: .alert)
+                
+                let confirmAction = UIAlertAction(title: "Delete", style: .destructive) { (deleteAction) in
+                    // TODO: Handle app data deletion
+                }
+                
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (deleteAction) in
+                    self.tableView.deselectRow(at: indexPath, animated: true)
+                }
+                
+                alertController.addAction(confirmAction)
+                alertController.addAction(cancelAction)
+                
+                self.present(alertController, animated: true, completion: nil)
             }
             
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (deleteAction) in
-                self.tableView.deselectRow(at: indexPath, animated: true)
-            }
-            
-            alertController.addAction(confirmAction)
-            alertController.addAction(cancelAction)
-            
-            self.present(alertController, animated: true, completion: nil)
             
         default:
             fatalError("This section does not exist")
