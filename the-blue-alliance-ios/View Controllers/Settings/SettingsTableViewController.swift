@@ -11,134 +11,31 @@ import UIKit
 class SettingsTableViewController: UITableViewController {
     
     // MARK: - View's lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "BaseCell")
-        tableView.register(UINib(nibName: "SwitchTableViewCell", bundle: nil), forCellReuseIdentifier: "SwitchCell")
-    }
-    
-    // MARK: - Interface Methods
-    
-    @IBAction func doneTapped(_ sender: UIBarButtonItem) {
-        self.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Table view configuration
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
-    }
-    
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0:
-            return "Account"
-            
-        case 1:
-            return "Notifications"
-            
-        case 2:
-            return "Info"
-            
-        case 3:
-            return "Extra"
-            
-        default:
-            fatalError("This section does not exist")
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return 1
-            
-        case 1:
-            return 1
-            
-        case 2:
-            return 4
-            
-        case 3:
-            return 2
-            
-        default:
-            fatalError("This section does not exist")
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "BaseCell", for: indexPath)
-        
-        let thirdSectionLabels =  ["The Blue Alliance Website",  "The Blue Alliance for iOS is open source", "Contributors", "View changelog"]
-        let lastSectionLabels = ["Delete network cache", "Delete app data"]
-        
-        switch indexPath.section {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchTableViewCell
-            cell.populate(withTitle: "Enable myTBA")
-            
-            // Configure the cell's switch state depending on wether the user is connected or not
-            if MyTBA.shared.authentication != nil {
-                cell.switchToggle.isOn = true
-            } else {
-                cell.switchToggle.isOn = false
-            }
-            
-            return cell
-            
-        case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchTableViewCell
-            cell.populate(withTitle: "Enable notifications")
-            
-            return cell
-
-        case 2:
-            cell.textLabel?.text = thirdSectionLabels[indexPath.row]
-            
-        case 3:
-            cell.textLabel?.text = lastSectionLabels[indexPath.row]
-            
-            cell.textLabel?.textColor = .red
-            cell.textLabel?.textAlignment = .center
-            
-        default:
-            fatalError("This row does not exist")
-        }
-        
-        return cell
-    }
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            // Handle authentification/unauthentification stuff
-            break
-            
-        case 1:
-            break
-            
-        case 2:
             var urlString: String?
             
             switch indexPath.row {
             case 0:
                 urlString = "https://www.thebluealliance.com"
                 self.tableView.deselectRow(at: indexPath, animated: true)
-                
             case 1:
                 urlString = "https://github.com/the-blue-alliance/the-blue-alliance-ios"
                 self.tableView.deselectRow(at: indexPath, animated: true)
-                
             case 2:
                 // TODO: Make a contributors list on Github
                 self.tableView.deselectRow(at: indexPath, animated: true)
-                
             case 3:
                 // TODO: Make a changelog
                 self.tableView.deselectRow(at: indexPath, animated: true)
-                
             default:
                 fatalError("This row does not exist")
             }
@@ -150,26 +47,27 @@ class SettingsTableViewController: UITableViewController {
                 }
             }
             
-        case 3:
+        case 1:
             if indexPath.row == 0 {
                 let alertController = UIAlertController(title: "Delete network cache", message: "Are you sure you want to delete all the network cache data ? This action is irreversible.", preferredStyle: .alert)
                 
-                let confirmAction = UIAlertAction(title: "Delete", style: .destructive) { (deleteAction) in
+                let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) { (deleteAction) in
                     // TODO: Handle network cache deletion
+                    
                 }
                 
                 let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (deleteAction) in
                     self.tableView.deselectRow(at: indexPath, animated: true)
                 }
                 
-                alertController.addAction(confirmAction)
+                alertController.addAction(deleteCacheAction)
                 alertController.addAction(cancelAction)
                 
                 self.present(alertController, animated: true, completion: nil)
             } else {
                 let alertController = UIAlertController(title: "Delete app data", message: "Are you sure you want to delete the app data ? This action is irreversible.", preferredStyle: .alert)
                 
-                let confirmAction = UIAlertAction(title: "Delete", style: .destructive) { (deleteAction) in
+                let deleteDataAction = UIAlertAction(title: "Delete", style: .destructive) { (deleteAction) in
                     // TODO: Handle app data deletion
                 }
                 
@@ -177,7 +75,7 @@ class SettingsTableViewController: UITableViewController {
                     self.tableView.deselectRow(at: indexPath, animated: true)
                 }
                 
-                alertController.addAction(confirmAction)
+                alertController.addAction(deleteDataAction)
                 alertController.addAction(cancelAction)
                 
                 self.present(alertController, animated: true, completion: nil)
@@ -188,13 +86,5 @@ class SettingsTableViewController: UITableViewController {
             fatalError("This section does not exist")
         }
     }
-    
-    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == 0 || indexPath.section == 1 {
-            return false
-        }
         
-        return true
-    }
-    
 }

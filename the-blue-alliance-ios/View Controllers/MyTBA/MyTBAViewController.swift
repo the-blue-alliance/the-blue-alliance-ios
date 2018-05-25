@@ -10,7 +10,6 @@ private let MyTBASubscriptionsEmbed = "MyTBASubscriptionsEmbed"
 private let EventSegue = "EventSegue"
 private let TeamSegue = "TeamSegue"
 private let MatchSegue = "MatchSegue"
-private let SettingsSegue = "SettingsSegue"
 
 class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     
@@ -148,11 +147,6 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     }
     
     // MARK: - Interface Methods
-    
-    @IBAction func settingsTapped(_ sender: UIBarButtonItem) {
-        performSegue(withIdentifier: SettingsSegue, sender: sender)
-    }
-    
     
     @IBAction func logoutTapped() {
         let signOutAlertController = UIAlertController(title: "Log Out?", message: "Are you sure you want to sign out of myTBA?", preferredStyle: .alert)

@@ -11,7 +11,7 @@
         <!--Teams-->
         <scene sceneID="y8R-0E-Jnd">
             <objects>
-                <viewController id="HTs-xx-or4" customClass="TeamsContainerViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="HTs-xx-or4" customClass="TeamsContainerViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="blr-HB-6gJ"/>
                         <viewControllerLayoutGuide type="bottom" id="7Oh-ab-yrH"/>
@@ -61,7 +61,7 @@
         <!--Team View Controller-->
         <scene sceneID="HSe-tY-LfS">
             <objects>
-                <viewController storyboardIdentifier="TeamViewController" hidesBottomBarWhenPushed="YES" id="5by-aT-woR" customClass="TeamViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TeamViewController" hidesBottomBarWhenPushed="YES" id="5by-aT-woR" customClass="TeamViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="m6P-mj-L99"/>
                         <viewControllerLayoutGuide type="bottom" id="nhg-Li-uWZ"/>
@@ -207,7 +207,7 @@
         <!--Team Info Table View Controller-->
         <scene sceneID="yYh-i7-3In">
             <objects>
-                <tableViewController id="1eu-y6-6Br" customClass="TeamInfoTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="1eu-y6-6Br" customClass="TeamInfoTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="aP2-kO-4Hp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -233,7 +233,7 @@
         <!--Team Media Collection View Controller-->
         <scene sceneID="lgN-Mu-XVH">
             <objects>
-                <collectionViewController id="6wK-qB-QRY" customClass="TeamMediaCollectionViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController id="6wK-qB-QRY" customClass="TeamMediaCollectionViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="Jen-Or-JgS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -258,7 +258,7 @@
         <!--Teams Table View Controller-->
         <scene sceneID="all-fB-X7S">
             <objects>
-                <tableViewController storyboardIdentifier="TeamsTableViewController" id="6nb-tX-gbn" customClass="TeamsTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="TeamsTableViewController" id="6nb-tX-gbn" customClass="TeamsTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="DfO-6d-lqn">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -294,7 +294,7 @@
         <!--Team At Event View Controller-->
         <scene sceneID="bEH-Tj-4Gt">
             <objects>
-                <viewController storyboardIdentifier="TeamAtEventViewController" id="Lps-JK-pYU" customClass="TeamAtEventViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TeamAtEventViewController" id="Lps-JK-pYU" customClass="TeamAtEventViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="80I-pn-hRI"/>
                         <viewControllerLayoutGuide type="bottom" id="OPq-Pd-mCH"/>
@@ -442,7 +442,7 @@
         <!--Matches Table View Controller-->
         <scene sceneID="Dan-Wv-jt8">
             <objects>
-                <tableViewController id="r4I-0U-t0Q" customClass="MatchesTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="r4I-0U-t0Q" customClass="MatchesTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="wwf-QH-HwO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -468,7 +468,7 @@
         <!--Team Summary Table View Controller-->
         <scene sceneID="oVG-qs-sr3">
             <objects>
-                <tableViewController storyboardIdentifier="TeamSummaryTableViewController" id="K7R-m8-KYf" customClass="TeamSummaryTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="TeamSummaryTableViewController" id="K7R-m8-KYf" customClass="TeamSummaryTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="elw-jp-7t0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -486,7 +486,7 @@
         <!--Team Stats Table View Controller-->
         <scene sceneID="qfr-CH-Fe9">
             <objects>
-                <tableViewController id="Lb0-pm-Dmi" customClass="TeamStatsTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="Lb0-pm-Dmi" customClass="TeamStatsTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="QgD-Ee-CbM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -504,7 +504,7 @@
         <!--Event Awards Table View Controller-->
         <scene sceneID="Dq1-te-jg2">
             <objects>
-                <tableViewController id="kMk-Yy-G80" customClass="EventAwardsTableViewController" customModule="the_blue_alliance_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="kMk-Yy-G80" customClass="EventAwardsTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="75H-7Z-L2N">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -81,11 +81,6 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="myTBA" id="trR-Vy-U4f">
-                        <barButtonItem key="leftBarButtonItem" image="ic_settings" id="hYW-NO-0nL">
-                            <connections>
-                                <action selector="settingsTapped:" destination="rOD-Gy-Vhg" id="FGw-DX-kkP"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Log Out" id="52q-Gn-IM2">
                             <connections>
                                 <action selector="logoutTapped" destination="rOD-Gy-Vhg" id="tUA-fw-5aE"/>
@@ -272,7 +267,6 @@
         <image name="btn_google_signin_light_pressed_ios" width="39" height="48"/>
         <image name="ic_favorite_border" width="24" height="24"/>
         <image name="ic_notifications_none" width="24" height="24"/>
-        <image name="ic_settings" width="24" height="24"/>
         <image name="ic_star" width="24" height="24"/>
         <image name="star_yellow" width="102" height="97"/>
     </resources>

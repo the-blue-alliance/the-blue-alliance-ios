@@ -23,6 +23,7 @@
                         <segue destination="NrY-54-hnD" kind="relationship" relationship="viewControllers" id="ZiY-9u-Xuy"/>
                         <segue destination="npC-1k-ltl" kind="relationship" relationship="viewControllers" id="7nw-O0-rhJ"/>
                         <segue destination="Sfk-vq-x4A" kind="relationship" relationship="viewControllers" id="uQY-v4-hhM"/>
+                        <segue destination="veq-TF-b9a" kind="relationship" relationship="viewControllers" id="dSG-Tl-9f2"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
@@ -68,6 +69,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zse-Z0-nrE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1807" y="304"/>
+        </scene>
+        <!--SettingsStoryboard-->
+        <scene sceneID="tSg-yy-b9Y">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SettingsStoryboard" id="veq-TF-b9a" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="T2U-bi-wj1"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="I9g-DM-3TU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1799" y="361"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="kCA-hq-rkW">

@@ -23,8 +23,6 @@
 		76BE63FE20B1D1D600EA812D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 76BE63FD20B1D1D500EA812D /* GoogleService-Info.plist */; };
 		76BE640120B1D25A00EA812D /* SettingsStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76BE640020B1D25A00EA812D /* SettingsStoryboard.storyboard */; };
 		76BE640320B1D27200EA812D /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BE640220B1D27200EA812D /* SettingsTableViewController.swift */; };
-		76BE640820B1DEC000EA812D /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BE640720B1DEC000EA812D /* SwitchTableViewCell.swift */; };
-		76BE640A20B1DEE100EA812D /* SwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76BE640920B1DEE100EA812D /* SwitchTableViewCell.xib */; };
 		920DF7CD20954B430041B487 /* TeamAtDistrictViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DF7CC20954B430041B487 /* TeamAtDistrictViewController.swift */; };
 		920DF7CF20954B5D0041B487 /* DistrictBreakdownTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DF7CE20954B5D0041B487 /* DistrictBreakdownTableViewController.swift */; };
 		9221C616209BFF7D00477DE2 /* MyTBATableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9221C615209BFF7D00477DE2 /* MyTBATableViewCell.swift */; };
@@ -147,8 +145,6 @@
 		76BE63FD20B1D1D500EA812D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		76BE640020B1D25A00EA812D /* SettingsStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SettingsStoryboard.storyboard; sourceTree = "<group>"; };
 		76BE640220B1D27200EA812D /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
-		76BE640720B1DEC000EA812D /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
-		76BE640920B1DEE100EA812D /* SwitchTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwitchTableViewCell.xib; sourceTree = "<group>"; };
 		920DF7CC20954B430041B487 /* TeamAtDistrictViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamAtDistrictViewController.swift; sourceTree = "<group>"; };
 		920DF7CE20954B5D0041B487 /* DistrictBreakdownTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictBreakdownTableViewController.swift; sourceTree = "<group>"; };
 		9221C615209BFF7D00477DE2 /* MyTBATableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATableViewCell.swift; sourceTree = "<group>"; };
@@ -323,15 +319,6 @@
 			children = (
 				76BE640020B1D25A00EA812D /* SettingsStoryboard.storyboard */,
 				76BE640220B1D27200EA812D /* SettingsTableViewController.swift */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
-		76BE640620B1DE7B00EA812D /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				76BE640920B1DEE100EA812D /* SwitchTableViewCell.xib */,
-				76BE640720B1DEC000EA812D /* SwitchTableViewCell.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -750,7 +737,6 @@
 				92FFE5231E7C994B0037E48C /* Events */,
 				929BBB061EC55745006D3854 /* Info */,
 				9221C614209BFF6100477DE2 /* MyTBA */,
-				76BE640620B1DE7B00EA812D /* Settings */,
 			);
 			path = "View Elements";
 			sourceTree = "<group>";
@@ -826,7 +812,6 @@
 				TargetAttributes = {
 					92942D911E2154DA008E79CA = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = VWKUK9SSFL;
 						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -865,7 +850,6 @@
 				92942DBD1E215BA6008E79CA /* EventsStoryboard.storyboard in Resources */,
 				92942DC11E215C0D008E79CA /* DistrictsStoryboard.storyboard in Resources */,
 				92DF0D1B208FF8C90043702A /* RemoteConfigDefaults.plist in Resources */,
-				76BE640A20B1DEE100EA812D /* SwitchTableViewCell.xib in Resources */,
 				92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */,
 				304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */,
 				92942DBF1E215BEF008E79CA /* TeamsStoryboard.storyboard in Resources */,
@@ -1007,7 +991,6 @@
 				1405237F1ED3524C0072FB91 /* Match.swift in Sources */,
 				9272924D1EE4A0FC0027CE7C /* EventStatsViewController.swift in Sources */,
 				9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */,
-				76BE640820B1DEC000EA812D /* SwitchTableViewCell.swift in Sources */,
 				9274A3F81F3520B900FAADF0 /* TeamSummaryTableViewController.swift in Sources */,
 				929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */,
 				92C9BD3120968FAC007FB9C8 /* Favorite.swift in Sources */,
@@ -1238,11 +1221,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
-				DEVELOPMENT_TEAM = VWKUK9SSFL;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.anas-dev";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.zach-dev";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -1255,11 +1238,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
-				DEVELOPMENT_TEAM = VWKUK9SSFL;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.anas-dev";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.zach-dev";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
