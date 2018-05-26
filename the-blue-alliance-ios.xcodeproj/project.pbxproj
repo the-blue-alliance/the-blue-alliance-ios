@@ -812,6 +812,7 @@
 				TargetAttributes = {
 					92942D911E2154DA008E79CA = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = VWKUK9SSFL;
 						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -1221,11 +1222,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = VWKUK9SSFL;
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.zach-dev";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.anas-dev";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -1238,11 +1239,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = VWKUK9SSFL;
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.zach-dev";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.anas-dev";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
