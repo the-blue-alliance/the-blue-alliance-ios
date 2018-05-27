@@ -9,34 +9,45 @@
 import UIKit
 import TBAKit
 
+enum SettingsSection: Int {
+    case info
+    case extra
+}
+
+enum InfoRow: Int {
+    case website
+    case repo
+    case contributors
+    case changelog
+}
+
+enum ExtraRow: Int {
+    case deleteNetworkCache
+    case deleteAppData
+}
+
 class SettingsTableViewController: UITableViewController {
-    
-    // MARK: - View's lifecycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
     
     // MARK: - Table view configuration
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
         switch indexPath.section {
-        case 0:
+        case SettingsSection.info.rawValue:
             var urlString: String?
             
             switch indexPath.row {
-            case 0:
+            case InfoRow.website.rawValue:
                 urlString = "https://www.thebluealliance.com"
-                self.tableView.deselectRow(at: indexPath, animated: true)
-            case 1:
+            case InfoRow.repo.rawValue:
                 urlString = "https://github.com/the-blue-alliance/the-blue-alliance-ios"
-                self.tableView.deselectRow(at: indexPath, animated: true)
-            case 2:
+            case InfoRow.contributors.rawValue:
                 // TODO: Make a contributors list on Github
-                self.tableView.deselectRow(at: indexPath, animated: true)
-            case 3:
+                break
+            case InfoRow.changelog.rawValue:
                 // TODO: Make a changelog
-                self.tableView.deselectRow(at: indexPath, animated: true)
+                break
             default:
                 fatalError("This row does not exist")
             }
@@ -48,8 +59,8 @@ class SettingsTableViewController: UITableViewController {
                 }
             }
             
-        case 1:
-            if indexPath.row == 0 {
+        case SettingsSection.extra.rawValue:
+            if indexPath.row == ExtraRow.deleteNetworkCache.rawValue {
                 let alertController = UIAlertController(title: "Delete network cache", message: "Are you sure you want to delete all the network cache data ? This action is irreversible.", preferredStyle: .alert)
                 
                 let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) { (deleteAction) in
@@ -81,7 +92,6 @@ class SettingsTableViewController: UITableViewController {
                 
                 self.present(alertController, animated: true, completion: nil)
             }
-            
             
         default:
             fatalError("This section does not exist")

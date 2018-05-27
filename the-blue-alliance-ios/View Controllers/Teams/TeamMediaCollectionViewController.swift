@@ -1,7 +1,6 @@
 import UIKit
 import TBAKit
 import CoreData
-import Optik
 
 class TeamMediaCollectionViewController: TBACollectionViewController {
     
@@ -95,11 +94,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     // MARK: UICollectionView Delegate
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let imageViewer = Optik.imageViewer(
-            withImages: Array(downloadedImages.values)
-        )
-
-        self.present(imageViewer, animated: true, completion: nil)
+        // Media viewer library ...
     }
 
     // MARK: Table View Data Source
