@@ -60,12 +60,12 @@ class SettingsTableViewController: UITableViewController {
             }
             
         case SettingsSection.extra.rawValue:
-            if indexPath.row == ExtraRow.deleteNetworkCache.rawValue {
+            switch indexPath.row {
+            case ExtraRow.deleteNetworkCache.rawValue:
                 let alertController = UIAlertController(title: "Delete network cache", message: "Are you sure you want to delete all the network cache data ? This action is irreversible.", preferredStyle: .alert)
                 
                 let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) { (deleteAction) in
-                    // TODO: Handle network cache deletion
-                    
+                    TBAKit.clearLastModified()
                 }
                 
                 let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (deleteAction) in
@@ -76,7 +76,7 @@ class SettingsTableViewController: UITableViewController {
                 alertController.addAction(cancelAction)
                 
                 self.present(alertController, animated: true, completion: nil)
-            } else {
+            case ExtraRow.deleteAppData.rawValue:
                 let alertController = UIAlertController(title: "Delete app data", message: "Are you sure you want to delete the app data ? This action is irreversible.", preferredStyle: .alert)
                 
                 let deleteDataAction = UIAlertAction(title: "Delete", style: .destructive) { (deleteAction) in
@@ -91,8 +91,10 @@ class SettingsTableViewController: UITableViewController {
                 alertController.addAction(cancelAction)
                 
                 self.present(alertController, animated: true, completion: nil)
+            default:
+                fatalError("This row does not exist")
             }
-            
+          
         default:
             fatalError("This section does not exist")
         }
