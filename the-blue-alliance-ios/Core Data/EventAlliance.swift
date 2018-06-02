@@ -40,11 +40,23 @@ extension EventAllianceBackup: Managed {
         let predicate = NSPredicate(format: "alliance == %@", alliance)
         return findOrCreate(in: context, matching: predicate, configure: { (allianceBackup) in
             allianceBackup.alliance = alliance
-            allianceBackup.inTeam = Team.insert(withKey: model.teamIn, in: context)
-            allianceBackup.outTeam = Team.insert(withKey: model.teamOut, in: context)
+            allianceBackup.setupTeams(with: model, in: context)
         })
     }
     
+    static func insert(with model: TBAAllianceBackup, for allianceStatus: EventStatusAlliance, in context: NSManagedObjectContext) -> EventAllianceBackup {
+        let predicate = NSPredicate(format: "%K == %@", #keyPath(EventAllianceBackup.allianceStatus), allianceStatus)
+        return findOrCreate(in: context, matching: predicate, configure: { (allianceBackup) in
+            allianceBackup.allianceStatus = allianceStatus
+            allianceBackup.setupTeams(with: model, in: context)
+        })
+    }
+    
+    private func setupTeams(with model: TBAAllianceBackup, in context: NSManagedObjectContext) {
+        inTeam = Team.insert(withKey: model.teamIn, in: context)
+        outTeam = Team.insert(withKey: model.teamOut, in: context)
+    }
+
 }
 
 extension EventAllianceStatus: Managed {
@@ -62,27 +74,39 @@ extension EventAllianceStatus: Managed {
         }
     }
     
+    // TODO: Consider combining these two in to a single insert using event/team to key these
     static func insert(with model: TBAAllianceStatus, for alliance: EventAlliance, in context: NSManagedObjectContext) -> EventAllianceStatus {
         let predicate = NSPredicate(format: "alliance == %@", alliance)
         return findOrCreate(in: context, matching: predicate, configure: { (allianceStatus) in
             allianceStatus.alliance = alliance
-            
-            if let currentRecord = model.currentRecord {
-                allianceStatus.currentRecord = WLT(wins: currentRecord.wins, losses: currentRecord.losses, ties: currentRecord.ties)
-            }
-
-            allianceStatus.level = model.level
-
-            if let playoffAverage = model.playoffAverage {
-                allianceStatus.playoffAverage = NSNumber(value: playoffAverage)
-            }
-            
-            if let record = model.record {
-                allianceStatus.record = WLT(wins: record.wins, losses: record.losses, ties: record.ties)
-            }
-            
-            allianceStatus.status = model.status
+            allianceStatus.setup(with: model, in: context)
         })
+    }
+    
+    static func insert(with model: TBAAllianceStatus, for eventStatus: EventStatus, in context: NSManagedObjectContext) -> EventAllianceStatus {
+        let predicate = NSPredicate(format: "%K == %@", #keyPath(EventAllianceStatus.eventStatus), eventStatus)
+        return findOrCreate(in: context, matching: predicate, configure: { (allianceStatus) in
+            allianceStatus.eventStatus = eventStatus
+            allianceStatus.setup(with: model, in: context)
+        })
+    }
+    
+    private func setup(with model: TBAAllianceStatus, in context: NSManagedObjectContext) {
+        if let currentRecord = model.currentRecord {
+            self.currentRecord = WLT(wins: currentRecord.wins, losses: currentRecord.losses, ties: currentRecord.ties)
+        }
+        
+        level = model.level
+        
+        if let playoffAverage = model.playoffAverage {
+            self.playoffAverage = NSNumber(value: playoffAverage)
+        }
+        
+        if let record = model.record {
+            self.record = WLT(wins: record.wins, losses: record.losses, ties: record.ties)
+        }
+        
+        status = model.status
     }
     
 }

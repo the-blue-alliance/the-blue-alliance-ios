@@ -424,6 +424,7 @@
                         <outlet property="summaryView" destination="YIr-bk-8gR" id="bHI-6H-Ll3"/>
                         <segue destination="uEa-li-jHU" kind="show" identifier="MatchSegue" id="GzB-bx-98K"/>
                         <segue destination="1O9-Ef-RV5" kind="show" identifier="TeamAtEventSegue" id="N0C-bf-yjW"/>
+                        <segue destination="PAz-lP-43P" kind="show" identifier="AwardsSegue" id="6K7-8Z-muA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DQr-Bh-8W9" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -463,7 +464,15 @@
                 <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="MatchViewController" id="uEa-li-jHU" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D7z-Eg-vap" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1560" y="2274"/>
+            <point key="canvasLocation" x="2186" y="1944"/>
+        </scene>
+        <!--EventAwardsViewController-->
+        <scene sceneID="EYn-hH-1iU">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="EventAwardsViewController" id="PAz-lP-43P" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="quZ-1p-iKT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2218" y="2016"/>
         </scene>
         <!--Team Summary Table View Controller-->
         <scene sceneID="oVG-qs-sr3">

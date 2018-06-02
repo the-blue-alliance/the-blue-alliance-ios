@@ -69,7 +69,7 @@ class RankingTableViewCell: UITableViewCell {
     
     func setupWLTLabel(ranking: EventRanking) {
         if let record = ranking.record {
-            wltLabel?.text = "(\(record.wins)-\(record.losses)-\(record.ties))"
+            wltLabel?.text = "(\(record.displayString()))"
         }
     }
 }

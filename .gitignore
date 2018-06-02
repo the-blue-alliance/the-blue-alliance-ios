@@ -25,7 +25,6 @@ DerivedData
 # http://guides.cocoapods.org/using/using-cocoapods.html#should-i-ignore-the-pods-directory-in-source-control
 #
 Pods/
-Podfile.lock
 
 the-blue-alliance-ios.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 
@@ -35,4 +34,16 @@ node_modules
 .nvm
 js/ios/*
 
-the-blue-alliance-ios/GoogleService-Info.plist
+GoogleService-Info.plist
+
+# fastlane specific
+fastlane/report.xml
+
+# deliver temporary files
+fastlane/Preview.html
+
+# snapshot generated screenshots
+fastlane/screenshots
+
+# scan temporary files
+fastlane/test_output

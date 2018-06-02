@@ -5,6 +5,7 @@ import TBAKit
 class EventAwardsViewController: ContainerViewController {
     
     public var event: Event!
+    public var team: Team?
     
     internal var awardsViewController: EventAwardsTableViewController!
     @IBOutlet internal var awardsView: UIView!
@@ -13,7 +14,11 @@ class EventAwardsViewController: ContainerViewController {
         super.viewDidLoad()
         
         navigationTitleLabel?.text = "Awards"
-        navigationDetailLabel?.text = "@ \(event.friendlyNameWithYear)"
+        if let team = team {
+            navigationDetailLabel?.text = "Team \(team.teamNumber) @ \(event.friendlyNameWithYear)"
+        } else {
+            navigationDetailLabel?.text = "@ \(event.friendlyNameWithYear)"
+        }
         
         viewControllers = [awardsViewController]
         containerViews = [awardsView]
@@ -25,8 +30,13 @@ class EventAwardsViewController: ContainerViewController {
         if segue.identifier == "EventAwardsEmbed" {
             awardsViewController = segue.destination as! EventAwardsTableViewController
             awardsViewController.event = event
+            awardsViewController.team = team
             awardsViewController.persistentContainer = persistentContainer
             awardsViewController.teamSelected = { [weak self] team in
+                // Don't push to team@event for team we're already showing team@event for
+                guard let localTeam = self?.team, team != localTeam else {
+                    return
+                }
                 self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
             }
         } else if segue.identifier == "TeamAtEventSegue" {
