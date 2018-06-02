@@ -23,10 +23,14 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UINib(nibName: String(describing: MyTBATableViewCell.self), bundle: nil), forCellReuseIdentifier: MyTBATableViewCell.reuseIdentifier)
-        tableView.register(UINib(nibName: String(describing: EventTableViewCell.self), bundle: nil), forCellReuseIdentifier: EventTableViewCell.reuseIdentifier)
-        tableView.register(UINib(nibName: String(describing: TeamTableViewCell.self), bundle: nil), forCellReuseIdentifier: TeamTableViewCell.reuseIdentifier)
-        tableView.register(UINib(nibName: String(describing: MatchTableViewCell.self), bundle: nil), forCellReuseIdentifier: MatchTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: String(describing: LoadingTableViewCell.self), bundle: nil),
+                           forCellReuseIdentifier: LoadingTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: String(describing: EventTableViewCell.self), bundle: nil),
+                           forCellReuseIdentifier: EventTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: String(describing: TeamTableViewCell.self), bundle: nil),
+                           forCellReuseIdentifier: TeamTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: String(describing: MatchTableViewCell.self), bundle: nil),
+                           forCellReuseIdentifier: MatchTableViewCell.reuseIdentifier)
     }
     
     // MARK: - Public methods
@@ -64,6 +68,10 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 let models = models as? [T.RemoteType]
                 let bgctx = backgroundContext
                 for model in models ?? [] {
+                    if self?.backgroundFetchKeys.contains(model.modelKey) ?? false {
+                        continue;
+                    }
+
                     _ = T.insert(with: model, in: bgctx)
                     
                     let predicate = NSPredicate(format: "key == %@", model.modelKey)
@@ -228,9 +236,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     
     // MARK: - Table Views
     
-    func tableView(_ tableView: UITableView, for myTBA: MyTBAEntity) -> MyTBATableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: MyTBATableViewCell.reuseIdentifier) as? MyTBATableViewCell ?? MyTBATableViewCell(style: .default, reuseIdentifier: MyTBATableViewCell.reuseIdentifier)
-        cell.myTBAObject = myTBA
+    func tableView(_ tableView: UITableView, for myTBA: MyTBAEntity) -> LoadingTableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: LoadingTableViewCell.reuseIdentifier) as? LoadingTableViewCell ?? LoadingTableViewCell(style: .default, reuseIdentifier: LoadingTableViewCell.reuseIdentifier)
+        cell.keyLabel.text = myTBA.modelKey
         cell.backgroundFetchActivityIndicator.isHidden = !backgroundFetchKeys.contains(myTBA.modelKey!)
         return cell
     }

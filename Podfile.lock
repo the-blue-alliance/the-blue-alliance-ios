@@ -134,7 +134,7 @@ DEPENDENCIES:
   - ZIPFoundation
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - Crashlytics
     - Fabric
     - Firebase
@@ -190,6 +190,6 @@ SPEC CHECKSUMS:
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
   ZIPFoundation: 68c35eb2637c21abe56dc60b3277636443bc1501
 
-PODFILE CHECKSUM: ebae1b5e0471244f83e854f1346545ab17bf296f
+PODFILE CHECKSUM: fce8767b6cabe3c8984642688017c8f62586b980
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.5.3

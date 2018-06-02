@@ -38,6 +38,10 @@ target 'The Blue Alliance' do
   # Crash reporting
   pod 'Fabric', '~> 1.7.6'
   pod 'Crashlytics', '~> 3.10.1'
+
+  target 'tba-unit-tests' do
+    inherit! :search_paths
+  end
 end
 
 post_install do | installer |

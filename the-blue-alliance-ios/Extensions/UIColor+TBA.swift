@@ -5,7 +5,6 @@ extension UIColor {
     
     public class var primaryBlue: UIColor {
         return .colorWithRGB(rgbValue: 0x3f51b5)
-        
     }
 
     public class var primaryDarkBlue: UIColor {

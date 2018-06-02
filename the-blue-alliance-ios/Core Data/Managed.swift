@@ -1,8 +1,3 @@
-//
-//  Managed.swift
-//  Moody
-//
-
 import CoreData
 
 public protocol Managed: class, NSFetchRequestResult {
