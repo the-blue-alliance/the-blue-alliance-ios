@@ -803,7 +803,7 @@
         <!--Event Awards View Controller-->
         <scene sceneID="PFz-7Y-0sp">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="FeZ-ho-5g5" customClass="EventAwardsViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventAwardsViewController" hidesBottomBarWhenPushed="YES" id="FeZ-ho-5g5" customClass="EventAwardsViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="C5x-Vd-exA"/>
                         <viewControllerLayoutGuide type="bottom" id="Pfu-nY-OeB"/>
@@ -1169,7 +1169,7 @@
         <image name="ic_sort_white" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Xij-X1-snp"/>
+        <segue reference="trB-a5-4Ei"/>
         <segue reference="oO5-aj-OQj"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -33,6 +33,14 @@ class TeamAtEventViewController: ContainerViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "TeamAtEventSummaryEmbed" {
             summaryViewController = segue.destination as! TeamSummaryTableViewController
+            summaryViewController.event = event
+            summaryViewController.team = team
+            summaryViewController.awardsSelected = { [weak self] in
+                self?.performSegue(withIdentifier: "AwardsSegue", sender: nil)
+            }
+            summaryViewController.matchSelected = { [weak self] match in
+                self?.performSegue(withIdentifier: "MatchSegue", sender: match)
+            }
         } else if segue.identifier == "TeamAtEventMatchesEmbed" {
             matchesViewController = segue.destination as! MatchesTableViewController
             matchesViewController.event = event
@@ -61,6 +69,11 @@ class TeamAtEventViewController: ContainerViewController {
             matchViewController.match = match
             matchViewController.team = team
             matchViewController.persistentContainer = persistentContainer
+        } else if segue.identifier == "AwardsSegue" {
+            let awardsViewController = segue.destination as! EventAwardsViewController
+            awardsViewController.event = event
+            awardsViewController.team = team
+            awardsViewController.persistentContainer = persistentContainer
         } else if segue.identifier == "TeamAtEventSegue" {
             let team = sender as! Team
             let teamAtEventViewController = segue.destination as! TeamAtEventViewController

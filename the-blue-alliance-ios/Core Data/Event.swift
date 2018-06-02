@@ -207,6 +207,13 @@ extension Event: Locatable, Managed {
         return type == EventType.districtChampionshipDivision.rawValue || type == EventType.districtChampionship.rawValue
     }
     
+    public var isHappeningNow: Bool {
+        guard let startDate = startDate, let endDate = endDate else {
+            return false
+        }
+        return Date().isBetween(date: startDate, andDate: endDate)
+    }
+    
 }
 
 extension Event: Comparable {

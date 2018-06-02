@@ -25,6 +25,7 @@ class TeamAtDistrictViewController: ContainerViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "TeamAtDistrictSummaryEmbed" {
+            // TODO: Let's make this a different VC since it's like... different
             summaryViewController = segue.destination as! TeamSummaryTableViewController
         } else if segue.identifier == "DistrictBreakdownEmbed" {
             breakdownViewController = segue.destination as! DistrictBreakdownTableViewController

@@ -8,7 +8,7 @@ enum BackgroundFetchError: Error {
     case error(Error)
 }
 
-// Manage background fetches of information, such as teams (used in a handful of places), events, and matches (only for myTBA)
+// Manage background fetches of information, such as teams (used in a handful of places), events, and matches
 class TBABackgroundService {
 
     // TODO: Combine these in to one method. I tried, but I lost the will to live.
