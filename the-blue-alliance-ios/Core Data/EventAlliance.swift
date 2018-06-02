@@ -21,11 +21,9 @@ extension EventAlliance: Managed {
                 return Team.insert(withKey: teamKey, in: context)
             }))
 
-            if let declines = model.declines {
-                alliance.declines = NSMutableOrderedSet(array: declines.map({ (teamKey) -> Team in
-                    return Team.insert(withKey: teamKey, in: context)
-                }))
-            }
+            alliance.declines = NSMutableOrderedSet(array: model.declines.map({ (teamKey) -> Team in
+                return Team.insert(withKey: teamKey, in: context)
+            }))
             
             if let status = model.status {
                 alliance.status = EventAllianceStatus.insert(with: status, for: alliance, in: context)
