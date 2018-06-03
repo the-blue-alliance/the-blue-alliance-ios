@@ -1,6 +1,5 @@
 import Foundation
 import UIKit
-import GTMSessionFetcher
 
 protocol RefreshView {
     func setContentOffset(_ contentOffset: CGPoint, animated: Bool)
@@ -9,7 +8,6 @@ protocol RefreshView {
 // Refreshable describes a class that has some data that can be refreshed from the server
 protocol Refreshable: AnyObject {
     var requests: [URLSessionDataTask] { get set }
-    var fetches: [GTMSessionFetcher] { get set }
     
     var refreshControl: UIRefreshControl? { get set }
     var refreshView: UIScrollView { get }
@@ -22,7 +20,7 @@ extension Refreshable {
     
     var isRefreshing: Bool {
         // We're not refreshing if our requests array is empty
-        return !requests.isEmpty || !fetches.isEmpty
+        return !requests.isEmpty
     }
     
     func shouldRefresh() -> Bool {
@@ -32,7 +30,7 @@ extension Refreshable {
     // TODO: Add a method to add an observer on a single core data object for changes
     
     func cancelRefresh() {
-        if requests.isEmpty && fetches.isEmpty {
+        if requests.isEmpty {
             return
         }
         
@@ -40,11 +38,6 @@ extension Refreshable {
             request.cancel()
         }
         requests.removeAll()
-        
-        for fetch in fetches {
-            fetch.stopFetching()
-        }
-        fetches.removeAll()
         
         updateRefresh()
     }
@@ -56,15 +49,7 @@ extension Refreshable {
         requests.append(request)
         updateRefresh()
     }
-    
-    func addFetch(fetch: GTMSessionFetcher) {
-        if fetches.contains(fetch) {
-            return
-        }
-        fetches.append(fetch)
-        updateRefresh()
-    }
-    
+
     func removeRequest(request: URLSessionDataTask) {
         guard let index = requests.index(of: request) else {
             return
@@ -76,19 +61,7 @@ extension Refreshable {
             noDataReload()
         }
     }
-    
-    func removeFetch(fetch: GTMSessionFetcher) {
-        guard let index = fetches.index(of: fetch) else {
-            return
-        }
-        fetches.remove(at: index)
-        updateRefresh()
-        
-        if fetches.isEmpty {
-            noDataReload()
-        }
-    }
-    
+
     private func noDataReload() {
         DispatchQueue.main.async {
             if let tableViewController = self as? UITableViewController {

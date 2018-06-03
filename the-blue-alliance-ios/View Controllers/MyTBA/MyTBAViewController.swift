@@ -1,8 +1,9 @@
-import UIKit
-import UserNotifications
-import GoogleSignIn
 import CoreData
 import Crashlytics
+import GoogleSignIn
+import FirebaseAuth
+import UIKit
+import UserNotifications
 
 private let MyTBAFavoritesEmbed = "MyTBAFavoritesEmbed"
 private let MyTBASubscriptionsEmbed = "MyTBASubscriptionsEmbed"
@@ -22,6 +23,10 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
     internal var subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>
     internal var subscriptionsView: UIView
+
+    private var isLoggedIn: Bool {
+        return MyTBA.shared.isAuthenticated
+    }
 
     required init?(coder aDecoder: NSCoder) {
         favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>()
@@ -68,8 +73,6 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
             dataView.autoPin(toBottomLayoutGuideOf: self, withInset: 0)
             dataView.autoPinEdge(.top, to: .bottom, of: segmentedControlView!)
         }
-        
-        let isLoggedIn = (MyTBA.shared.authentication != nil)
         signInView.isHidden = isLoggedIn
         
         updateInterface()
@@ -81,16 +84,13 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
             return
         }
 
-        let isLoggedIn = (MyTBA.shared.authentication != nil)
-
         navigationItem.rightBarButtonItem = isLoggedIn ? signOutBarButtonItem : nil
         signInView.isHidden = isLoggedIn
     }
     
     private func logout() {
-        // Remove auth for myTBA
-        MyTBA.shared.authentication = nil
         GIDSignIn.sharedInstance().signOut()
+        try! Auth.auth().signOut()
         
         // Cancel any ongoing requests
         for vc in [favoritesViewController, subscriptionsViewController] {

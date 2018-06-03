@@ -1,5 +1,4 @@
 import Foundation
-import GTMSessionFetcher
 
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/notification_type.py
 enum NotificationType: String, Codable {
@@ -40,13 +39,13 @@ struct MyTBASubscription: MyTBAModel, Codable {
     var modelType: MyTBAModelType
     var notifications: [NotificationType]
     
-    static var fetch: ((@escaping ([MyTBAModel]?, Error?) -> ()) -> GTMSessionFetcher) = MyTBA.shared.fetchSubscriptions
+    static var fetch: ((@escaping ([MyTBAModel]?, Error?) -> ()) -> URLSessionDataTask) = MyTBA.shared.fetchSubscriptions
 
 }
 
 extension MyTBA {
 
-    func fetchSubscriptions(_ completion: @escaping (_ subscriptions: [MyTBASubscription]?, _ error: Error?) -> ()) -> GTMSessionFetcher {
+    func fetchSubscriptions(_ completion: @escaping (_ subscriptions: [MyTBASubscription]?, _ error: Error?) -> ()) -> URLSessionDataTask {
         let method = "\(MyTBASubscription.arrayKey)/list"
         
         return callApi(method: method, completion: { (favoritesResponse: MyTBASubscriptionsResponse?, error) in
@@ -54,7 +53,7 @@ extension MyTBA {
         })
     }
 
-    func updateSubscription(_ subscriptions: MyTBASubscription, completion: @escaping (_ subscription: MyTBASubscription?, _ error: Error?) -> ()) -> GTMSessionFetcher? {
+    func updateSubscription(_ subscriptions: MyTBASubscription, completion: @escaping (_ subscription: MyTBASubscription?, _ error: Error?) -> ()) -> URLSessionDataTask? {
         return nil
     }
 

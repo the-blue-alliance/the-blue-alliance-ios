@@ -1,5 +1,4 @@
 import Foundation
-import GTMSessionFetcher
 
 enum MyTBAModelType: String, Codable {
     case event = "0"
@@ -17,6 +16,6 @@ protocol MyTBAModel: Codable {
     var modelKey: String { get set }
     var modelType: MyTBAModelType { get set }
     
-    static var fetch: ((@escaping ([MyTBAModel]?, Error?) -> ()) -> GTMSessionFetcher) { get }
+    static var fetch: ((@escaping ([MyTBAModel]?, Error?) -> ()) -> URLSessionDataTask) { get }
 }
 

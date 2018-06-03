@@ -1,5 +1,4 @@
 import Foundation
-import GTMSessionFetcher
 import Firebase
 
 struct MyTBARegisterRequest: Codable {
@@ -20,15 +19,15 @@ struct MyTBARegisterResponse: MyTBAResponse, Codable {
 
 extension MyTBA {
     
-    func register(_ token: String, completion: @escaping (_ error: Error?) -> ()) -> GTMSessionFetcher? {
+    func register(_ token: String, completion: @escaping (_ error: Error?) -> ()) -> URLSessionDataTask? {
         return registerUnregister("register", token: token, completion: completion)
     }
     
-    func unregister(_ token: String, completion: @escaping (_ error: Error?) -> ()) -> GTMSessionFetcher? {
+    func unregister(_ token: String, completion: @escaping (_ error: Error?) -> ()) -> URLSessionDataTask? {
         return registerUnregister("unregister", token: token, completion: completion)
     }
     
-    private func registerUnregister(_ method: String, token: String, completion: @escaping (_ error: Error?) -> ()) -> GTMSessionFetcher? {
+    private func registerUnregister(_ method: String, token: String, completion: @escaping (_ error: Error?) -> ()) -> URLSessionDataTask? {
         guard let uuid = UIDevice.current.identifierForVendor?.uuidString else {
             completion(APIError.error("Unable to update myTBA registration - no UUID"))
             return nil
@@ -43,7 +42,7 @@ extension MyTBA {
             return nil
         }
         
-        return callApi(method: method, data: encodedRegistration, completion: { (registerResponse: MyTBARegisterResponse?, error: Error?) in
+        return callApi(method: method, bodyData: encodedRegistration, completion: { (registerResponse: MyTBARegisterResponse?, error: Error?) in
             if let registerResponse = registerResponse, registerResponse.code >= 400 {
                 completion(APIError.error(registerResponse.message))
             } else {

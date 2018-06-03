@@ -1,9 +1,11 @@
-import UIKit
 import CoreData
-import TBAKit
-import Firebase
 import Crashlytics
+import Firebase
+import FirebaseAuth
+import FirebaseMessaging
 import GoogleSignIn
+import TBAKit
+import UIKit
 import UserNotifications
 
 let kNoSelectionNavigationController = "NoSelectionNavigationController"
@@ -86,7 +88,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
 
-        if GIDSignIn.sharedInstance().hasAuthInKeychain() {
+        // If we're authenticated with Google but don't have a Firebase user, get a Firebase user
+        if GIDSignIn.sharedInstance().hasAuthInKeychain() && Auth.auth().currentUser == nil {
             GIDSignIn.sharedInstance().signInSilently()
         }
         
@@ -152,10 +155,22 @@ extension AppDelegate: GIDSignInDelegate {
         }
         
         guard let authentication = user.authentication else { return }
-        MyTBA.shared.authentication = authentication.fetcherAuthorizer()
-        PushService.requestAuthorizationForNotifications { (error) in
-            if let error = error, let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? UIViewController & Alertable {
-                signInDelegate.showErrorAlert(with: "Error authorizing notifications - \(error.localizedDescription)")
+
+        let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
+                                                       accessToken: authentication.accessToken)
+
+        Auth.auth().signIn(with: credential) { (user, error) in
+            if let error = error {
+                Crashlytics.sharedInstance().recordError(error)
+                if let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? UIViewController & Alertable {
+                    signInDelegate.showErrorAlert(with: "Error signing in to Firebase - \(error.localizedDescription)")
+                }
+            } else {
+                PushService.requestAuthorizationForNotifications { (error) in
+                    if let error = error, let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? UIViewController & Alertable {
+                        signInDelegate.showErrorAlert(with: "Error authorizing notifications - \(error.localizedDescription)")
+                    }
+                }
             }
         }
     }

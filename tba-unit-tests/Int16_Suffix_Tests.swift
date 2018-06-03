@@ -1,8 +1,6 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-import XCTest
-
 class Int16_Suffix_Tests: XCTestCase {
     
     func test_suffix_positive() {

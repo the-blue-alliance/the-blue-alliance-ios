@@ -1,5 +1,4 @@
 import Foundation
-import GTMSessionFetcher
 
 struct MyTBAFavoritesRequest: Codable {
     
@@ -22,13 +21,13 @@ struct MyTBAFavorite: MyTBAModel, Codable {
     var modelKey: String
     var modelType: MyTBAModelType
     
-    static var fetch: ((@escaping ([MyTBAModel]?, Error?) -> ()) -> GTMSessionFetcher) = MyTBA.shared.fetchFavorites
+    static var fetch: ((@escaping ([MyTBAModel]?, Error?) -> ()) -> URLSessionDataTask) = MyTBA.shared.fetchFavorites
 
 }
 
 extension MyTBA {
 
-    func fetchFavorites(_ completion: @escaping (_ favorites: [MyTBAFavorite]?, _ error: Error?) -> ()) -> GTMSessionFetcher {
+    func fetchFavorites(_ completion: @escaping (_ favorites: [MyTBAFavorite]?, _ error: Error?) -> ()) -> URLSessionDataTask {
         let method = "\(MyTBAFavorite.arrayKey)/list"
         
         return callApi(method: method, completion: { (favoritesResponse: MyTBAFavoritesResponse?, error) in
@@ -36,7 +35,7 @@ extension MyTBA {
         })
     }
     
-    func updateFavorite(_ favorite: MyTBAFavorite, completion: @escaping (_ favorites: MyTBAFavorite?, _ error: Error?) -> ()) -> GTMSessionFetcher? {
+    func updateFavorite(_ favorite: MyTBAFavorite, completion: @escaping (_ favorites: MyTBAFavorite?, _ error: Error?) -> ()) -> URLSessionDataTask? {
         // Something in here
         return nil
     }

@@ -1,7 +1,6 @@
 import Foundation
 import CoreData
 import UIKit
-import GTMSessionFetcher
 
 /**
  MyTBATableViewController implements it's on FRC/TableViewDataSource logic, since the existing abstraction
@@ -50,8 +49,8 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         removeNoDataView()
         
         // I'd love to use MyTBAManaged's RemoteType here, but it doesn't seem like I can get it
-        var fetch: GTMSessionFetcher?
-        fetch = J.fetch() { (models, error) in
+        var request: URLSessionDataTask?
+        request = J.fetch() { (models, error) in
             let modelName = T.entityName.lowercased()
 
             if let error = error {
@@ -108,14 +107,14 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 if !backgroundContext.saveOrRollback() {
                     self?.showErrorAlert(with: "Unable to refresh \(modelName) - database error")
                 }
-                self?.removeFetch(fetch: fetch!)
+                self?.removeRequest(request: request!)
             })
         }
-        addFetch(fetch: fetch!)
+        addRequest(request: request!)
     }
     
     override func shouldNoDataRefresh() -> Bool {
-        if MyTBA.shared.authentication != nil, let objs = fetchedResultsController?.fetchedObjects, objs.isEmpty {
+        if MyTBA.shared.isAuthenticated, let objs = fetchedResultsController?.fetchedObjects, objs.isEmpty {
             return true
         }
         return false

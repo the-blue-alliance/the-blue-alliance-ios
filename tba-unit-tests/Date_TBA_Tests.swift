@@ -1,7 +1,7 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-struct KDate {
+internal struct KDate {
     static let secondsInAnHour = 3600.0
 }
 
