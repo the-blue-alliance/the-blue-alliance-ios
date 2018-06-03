@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="zd8-c7-caK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="zd8-c7-caK">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -138,7 +138,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" axis="vertical" distribution="equalSpacing" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="df3-tJ-tiz">
-                                <rect key="frame" x="20" y="109.5" width="335" height="399"/>
+                                <rect key="frame" x="20" y="138" width="335" height="343"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="HMx-CP-bZq">
                                         <rect key="frame" x="58.5" y="0.0" width="218" height="91.5"/>
@@ -158,36 +158,36 @@
                                             </label>
                                         </subviews>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="8NR-tu-2fP">
-                                        <rect key="frame" x="26" y="111.5" width="283.5" height="69"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="CmJ-zf-D4v">
+                                        <rect key="frame" x="8" y="111.5" width="319.5" height="41"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ic_favorite_border" translatesAutoresizingMaskIntoConstraints="NO" id="kVQ-Pk-Bu6">
-                                                <rect key="frame" x="127.5" y="0.0" width="28" height="28"/>
+                                                <rect key="frame" x="0.0" y="6.5" width="28" height="28"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="28" id="GYl-nt-IAU"/>
                                                     <constraint firstAttribute="width" constant="28" id="JSY-Mf-mBX"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Mark teams, events, and matches as favorites for quick access" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hoQ-yK-uRQ">
-                                                <rect key="frame" x="0.0" y="28" width="283.5" height="41"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Mark teams, events, and matches as favorites for fast access" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hoQ-yK-uRQ">
+                                                <rect key="frame" x="36" y="0.0" width="283.5" height="41"/>
                                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="sj0-Ew-fY1">
-                                        <rect key="frame" x="7.5" y="200.5" width="320" height="70.5"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="1000" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="imz-jW-NsS">
+                                        <rect key="frame" x="8" y="172.5" width="319.5" height="42.5"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" image="ic_notifications_none" translatesAutoresizingMaskIntoConstraints="NO" id="LWH-S5-EDz">
-                                                <rect key="frame" x="146" y="0.0" width="28" height="28"/>
+                                                <rect key="frame" x="0.0" y="7.5" width="28" height="28"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="28" id="Kwz-tL-3YI"/>
                                                     <constraint firstAttribute="width" constant="28" id="SVv-g1-VYP"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Subscribe to teams, events, and matches to get realtime updates" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LES-aL-ehs">
-                                                <rect key="frame" x="0.0" y="28" width="320" height="42.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="999" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Subscribe to teams, events, and matches to get realtime updates" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LES-aL-ehs">
+                                                <rect key="frame" x="36" y="0.0" width="283.5" height="42.5"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -195,7 +195,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="8Vp-Mj-x9O">
-                                        <rect key="frame" x="0.0" y="291" width="335" height="108"/>
+                                        <rect key="frame" x="0.0" y="235" width="335" height="108"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8v8-sc-Ys0">
                                                 <rect key="frame" x="0.0" y="0.0" width="335" height="48"/>
@@ -227,7 +227,9 @@
                                     </stackView>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="imz-jW-NsS" firstAttribute="leading" secondItem="CmJ-zf-D4v" secondAttribute="leading" id="6S4-NI-kWe"/>
                                     <constraint firstItem="8v8-sc-Ys0" firstAttribute="width" secondItem="df3-tJ-tiz" secondAttribute="width" id="mz9-Ih-jjW"/>
+                                    <constraint firstItem="imz-jW-NsS" firstAttribute="trailing" secondItem="CmJ-zf-D4v" secondAttribute="trailing" id="shS-eh-waI"/>
                                 </constraints>
                             </stackView>
                         </subviews>

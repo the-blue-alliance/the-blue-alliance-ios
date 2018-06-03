@@ -1,5 +1,5 @@
 import Foundation
-import GTMSessionFetcher
+import FirebaseAuth
 import FirebaseMessaging
 
 public typealias MyTBARequestCompletionBlock = (_ data: Data?, _ error: Error?) -> ()
@@ -16,12 +16,15 @@ public enum APIError: Error {
 
 class MyTBA {
     public static let shared = MyTBA()
-    
-    var authentication: GTMFetcherAuthorizationProtocol? {
+    private var authToken: String? {
         didSet {
-            fetcherService.authorizer = authentication
+            // Only disaptch on changed state
+            if oldValue == authToken {
+                return
+            }
+
             authenticationProvider.post { (observer) in
-                if authentication == nil {
+                if authToken == nil {
                     observer.unauthenticated()
                 } else {
                     observer.authenticated()
@@ -29,9 +32,34 @@ class MyTBA {
             }
         }
     }
+
+    public var isAuthenticated: Bool {
+        return authToken != nil
+    }
+
+    public init() {
+        self.urlSession = URLSession(configuration: .default)
+
+        // Block gets called on init - ignore the init call
+        var initCall = true
+        Auth.auth().addIDTokenDidChangeListener { [weak self] (auth, user) in
+            if initCall {
+                initCall = false
+                return
+            }
+
+            if let user = user {
+                user.getIDToken(completion: { [weak self] (token, error) in
+                    self?.authToken = token
+                })
+            } else {
+                self?.authToken = nil
+            }
+        }
+    }
     var authenticationProvider = Provider<MyTBAAuthenticationObservable>()
-    private var fetcherService: GTMSessionFetcherService
-    
+    private var urlSession: URLSession
+
     static var jsonEncoder: JSONEncoder {
         let jsonEncoder = JSONEncoder()
         jsonEncoder.keyEncodingStrategy = .convertToSnakeCase
@@ -43,25 +71,25 @@ class MyTBA {
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         return jsonDecoder
     }
-    
-    init() {
-        self.fetcherService = GTMSessionFetcherService()
-    }
-    
-    func callApi<T: MyTBAResponse>(method: String, data: Data? = nil, completion: @escaping (T?, Error?) -> ()) -> GTMSessionFetcher {
+
+    func callApi<T: MyTBAResponse>(method: String, bodyData: Data? = nil, completion: @escaping (T?, Error?) -> ()) -> URLSessionDataTask {
         let apiURL = URL(string: method, relativeTo: Constants.APIConstants.baseURL)!
         var request = URLRequest(url: apiURL)
         request.httpMethod = "POST"
-        
+
+        if let authToken = authToken {
+            request.addValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+        }
+
         #if DEBUG
-        if let data = data, let dataString = try? JSONSerialization.jsonObject(with: data, options: []) {
+        if let bodyData = bodyData, let dataString = try? JSONSerialization.jsonObject(with: bodyData, options: []) {
             print("POST: \(dataString)")
         }
         #endif
         
-        let sessionFetcher = fetcherService.fetcher(with: request)
-        sessionFetcher.bodyData = data
-        sessionFetcher.beginFetch { (data, error) in
+        request.httpBody = bodyData
+
+        let task = urlSession.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             if let error = error {
                 completion(nil, error)
             } else if let data = data {
@@ -81,7 +109,8 @@ class MyTBA {
                 completion(nil, APIError.error("Unexpected response from myTBA API"))
             }
         }
-        return sessionFetcher
+        task.resume()
+        return task
     }
 
 }

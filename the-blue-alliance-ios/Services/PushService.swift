@@ -1,7 +1,7 @@
-import Foundation
-import Firebase
-import UserNotifications
 import Crashlytics
+import FirebaseMessaging
+import Foundation
+import UserNotifications
 
 // PushService handles registering push notification tokens with TBA and handling APNS messages
 // Has to be an NSObject subclass so we can be a UNUserNotificationCenterDelegate
@@ -43,13 +43,9 @@ class PushService: NSObject {
         // Watch for MyTBA Authentication to process pending registrations
         MyTBA.shared.authenticationProvider.add(observer: self)
     }
-    
-    deinit {
-        MyTBA.shared.authenticationProvider.remove(observer: self)
-    }
-    
+
     static func registerPushToken(_ token: String) {
-        if MyTBA.shared.authentication == nil {
+        if !MyTBA.shared.isAuthenticated {
             // Not authenticated to MyTBA - save token for registration once we're auth'd
             pendingRegisterPushToken = token
         } else {

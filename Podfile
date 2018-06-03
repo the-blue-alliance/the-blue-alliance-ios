@@ -1,7 +1,7 @@
-platform :ios, '10.0'
-use_frameworks!
+platform :ios, '11.3'
 
 target 'The Blue Alliance' do
+  use_frameworks!
 
   pod 'TBAKit'
   
@@ -25,6 +25,7 @@ target 'The Blue Alliance' do
   
   # Firebase
   pod 'Firebase/Analytics'
+  pod 'Firebase/Auth'
   pod 'Firebase/Core'
   pod 'Firebase/Messaging'
   pod 'Firebase/Performance'
@@ -32,7 +33,6 @@ target 'The Blue Alliance' do
   pod 'Firebase/Storage'
 
   # MyTBA
-  pod 'GTMSessionFetcher'
   pod 'GoogleSignIn'
 
   # Crash reporting
