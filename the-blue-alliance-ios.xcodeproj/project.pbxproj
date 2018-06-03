@@ -20,6 +20,9 @@
 		303F824A1EF593BE007CADA1 /* EventRankingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F82491EF593BE007CADA1 /* EventRankingsTableViewController.swift */; };
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
+		76BE63FE20B1D1D600EA812D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 76BE63FD20B1D1D500EA812D /* GoogleService-Info.plist */; };
+		76BE640120B1D25A00EA812D /* SettingsStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76BE640020B1D25A00EA812D /* SettingsStoryboard.storyboard */; };
+		76BE640320B1D27200EA812D /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BE640220B1D27200EA812D /* SettingsTableViewController.swift */; };
 		920DF7CD20954B430041B487 /* TeamAtDistrictViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DF7CC20954B430041B487 /* TeamAtDistrictViewController.swift */; };
 		920DF7CF20954B5D0041B487 /* DistrictBreakdownTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DF7CE20954B5D0041B487 /* DistrictBreakdownTableViewController.swift */; };
 		9221C616209BFF7D00477DE2 /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */; };
@@ -161,6 +164,9 @@
 		303F82491EF593BE007CADA1 /* EventRankingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventRankingsTableViewController.swift; sourceTree = "<group>"; };
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
+		76BE63FD20B1D1D500EA812D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		76BE640020B1D25A00EA812D /* SettingsStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SettingsStoryboard.storyboard; sourceTree = "<group>"; };
+		76BE640220B1D27200EA812D /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		62775AD9BCC2271E3B2EB707 /* Pods-tba-unit-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.release.xcconfig"; sourceTree = "<group>"; };
 		920DF7CC20954B430041B487 /* TeamAtDistrictViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamAtDistrictViewController.swift; sourceTree = "<group>"; };
 		920DF7CE20954B5D0041B487 /* DistrictBreakdownTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictBreakdownTableViewController.swift; sourceTree = "<group>"; };
@@ -356,6 +362,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		76BE63FF20B1D24B00EA812D /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				76BE640020B1D25A00EA812D /* SettingsStoryboard.storyboard */,
+				76BE640220B1D27200EA812D /* SettingsTableViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		920DF7CB20954B430041B487 /* Team@District */ = {
 			isa = PBXGroup;
 			children = (
@@ -476,7 +491,7 @@
 				92942D951E2154DA008E79CA /* AppDelegate.swift */,
 				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
 				92942DA31E2154DA008E79CA /* Info.plist */,
-				92D8CD1220C2634200777D93 /* GoogleService-Info.plist */,
+				76BE63FD20B1D1D500EA812D /* GoogleService-Info.plist */,
 				92942DA01E2154DA008E79CA /* LaunchScreen.storyboard */,
 				92942D9B1E2154DA008E79CA /* Main.storyboard */,
 				92942DAE1E2158EC008E79CA /* Settings.bundle */,
@@ -517,6 +532,7 @@
 				92942DB31E215B0E008E79CA /* Teams */,
 				92942DB41E215B1F008E79CA /* Districts */,
 				92942DB51E215B34008E79CA /* MyTBA */,
+				76BE63FF20B1D24B00EA812D /* Settings */,
 				140523781ED33DB10072FB91 /* Match */,
 			);
 			path = "View Controllers";
@@ -954,9 +970,10 @@
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
 				92858F2B208D783300811614 /* EventTeamStatTableViewCell.xib in Resources */,
 				92D855D91EC695CE00572F27 /* TeamTableViewCell.xib in Resources */,
+				76BE640120B1D25A00EA812D /* SettingsStoryboard.storyboard in Resources */,
 				925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */,
 				929DB38E2095640C00FB575F /* ReverseSubtitleTableViewCell.xib in Resources */,
-				92D8CD1320C2634200777D93 /* GoogleService-Info.plist in Resources */,
+				76BE63FE20B1D1D600EA812D /* GoogleService-Info.plist in Resources */,
 				92942D9D1E2154DA008E79CA /* Main.storyboard in Resources */,
 				92942DC31E215C37008E79CA /* MyTBAStoryboard.storyboard in Resources */,
 			);
@@ -1064,6 +1081,7 @@
 				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/Optik/Optik.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/PureLayout/PureLayout.framework",
 				"${BUILT_PRODUCTS_DIR}/React/React.framework",
@@ -1078,6 +1096,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Optik.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PureLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
@@ -1129,6 +1148,7 @@
 				929FCDA21EC8068800A38E46 /* DistrictViewController.swift in Sources */,
 				9257DF4C208C078100F7E2BA /* WLT.swift in Sources */,
 				929FCD951EC7EE9200A38E46 /* Locatable.swift in Sources */,
+				76BE640320B1D27200EA812D /* SettingsTableViewController.swift in Sources */,
 				92688C2B2090091D00D12B7B /* ReactNativeService.swift in Sources */,
 				9257DF4A208BFC4400F7E2BA /* EventAlliance.swift in Sources */,
 				925288921EC7ABC6009B78A9 /* Event.swift in Sources */,

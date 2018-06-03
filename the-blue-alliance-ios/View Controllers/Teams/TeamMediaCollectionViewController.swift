@@ -94,16 +94,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     // MARK: UICollectionView Delegate
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // TODO: Eventually show the full image inside the app
-        guard let media = dataSource?.object(at: indexPath) else {
-            return
-        }
-        guard let url = media.viewImageURL else {
-            return
-        }
-        if UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
+        // Media viewer library ...
     }
 
     // MARK: Table View Data Source
