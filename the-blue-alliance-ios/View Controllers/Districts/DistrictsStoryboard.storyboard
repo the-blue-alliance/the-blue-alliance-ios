@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="u6V-K2-Air">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="u6V-K2-Air">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -229,6 +229,14 @@
             </objects>
             <point key="canvasLocation" x="1898" y="123"/>
         </scene>
+        <!--TeamAtEventViewController-->
+        <scene sceneID="jvA-fb-yZZ">
+            <objects>
+                <viewControllerPlaceholder storyboardName="TeamsStoryboard" referencedIdentifier="TeamAtEventViewController" id="Oby-sf-V7E" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="I3C-HX-eqy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2806" y="552"/>
+        </scene>
         <!--EventViewController-->
         <scene sceneID="sqe-RD-sdn">
             <objects>
@@ -301,7 +309,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IBM-P8-GXJ">
                                 <rect key="frame" x="0.0" y="108" width="375" height="510"/>
                                 <connections>
-                                    <segue destination="BWf-3S-ehe" kind="embed" identifier="TeamAtDistrictSummaryEmbed" id="wBQ-ln-mhD"/>
+                                    <segue destination="OQz-8Z-Alm" kind="embed" identifier="DistrictTeamSummaryEmbed" id="Mle-Ab-BSC"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WVg-fj-obT">
@@ -370,6 +378,7 @@
                         <outlet property="segmentedControl" destination="YI5-4W-tHr" id="30c-ez-7FH"/>
                         <outlet property="segmentedControlView" destination="T1q-et-ijI" id="0if-2z-1pt"/>
                         <outlet property="summaryView" destination="IBM-P8-GXJ" id="aNO-uy-qtl"/>
+                        <segue destination="Oby-sf-V7E" kind="show" identifier="TeamAtEventSegue" id="3QK-1I-o9G"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cdU-dT-zIt" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -377,13 +386,23 @@
             </objects>
             <point key="canvasLocation" x="2807" y="123"/>
         </scene>
-        <!--TeamSummaryTableViewController-->
-        <scene sceneID="hBI-E9-JhD">
+        <!--District Team Summary Table View Controller-->
+        <scene sceneID="HgN-6B-rdf">
             <objects>
-                <viewControllerPlaceholder storyboardName="TeamsStoryboard" referencedIdentifier="TeamSummaryTableViewController" id="BWf-3S-ehe" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hK6-j2-acE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tableViewController id="OQz-8Z-Alm" customClass="DistrictTeamSummaryTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="1TX-iE-vO1">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <connections>
+                            <outlet property="dataSource" destination="OQz-8Z-Alm" id="qLQ-FZ-eR2"/>
+                            <outlet property="delegate" destination="OQz-8Z-Alm" id="HaF-9X-Y4o"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GlB-g5-wbM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3723" y="-148"/>
+            <point key="canvasLocation" x="3828" y="-248"/>
         </scene>
         <!--District Breakdown Table View Controller-->
         <scene sceneID="UsR-e0-Oyz">
