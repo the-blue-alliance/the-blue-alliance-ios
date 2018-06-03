@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="72" id="GbO-tT-1eW" customClass="InfoTableViewCell" customModule="the_blue_alliance_ios" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="412" height="72"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GbO-tT-1eW" id="mXb-2C-jZy">
+                <rect key="frame" x="0.0" y="0.0" width="412" height="71.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="pTr-P1-tTD">
+                        <rect key="frame" x="20" y="8" width="372" height="55.5"/>
+                    </stackView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="pTr-P1-tTD" firstAttribute="top" secondItem="mXb-2C-jZy" secondAttribute="top" constant="8" id="MAT-C2-viM"/>
+                    <constraint firstItem="pTr-P1-tTD" firstAttribute="leading" secondItem="mXb-2C-jZy" secondAttribute="leading" constant="20" id="Ufj-dP-5h7"/>
+                    <constraint firstAttribute="trailing" secondItem="pTr-P1-tTD" secondAttribute="trailing" constant="20" id="ZVm-9H-74R"/>
+                    <constraint firstAttribute="bottom" secondItem="pTr-P1-tTD" secondAttribute="bottom" constant="8" id="pTs-sE-8xn"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="infoStackView" destination="pTr-P1-tTD" id="Odh-jX-U6c"/>
+            </connections>
+            <point key="canvasLocation" x="-210" y="-8"/>
+        </tableViewCell>
+    </objects>
+</document>

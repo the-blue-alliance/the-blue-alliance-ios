@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="caC-xe-F51">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Teams-->
+        <scene sceneID="y8R-0E-Jnd">
+            <objects>
+                <viewController id="HTs-xx-or4" customClass="TeamsContainerViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="blr-HB-6gJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="7Oh-ab-yrH"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="BNv-E8-Fup">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xj7-zt-9aV">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <connections>
+                                    <segue destination="6nb-tX-gbn" kind="embed" identifier="TeamsEmbed" id="XqG-5R-2CI"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Xj7-zt-9aV" firstAttribute="leading" secondItem="BNv-E8-Fup" secondAttribute="leading" id="Ob8-D3-g4r"/>
+                            <constraint firstItem="Xj7-zt-9aV" firstAttribute="top" secondItem="blr-HB-6gJ" secondAttribute="bottom" id="Ych-FY-jfX"/>
+                            <constraint firstItem="7Oh-ab-yrH" firstAttribute="top" secondItem="Xj7-zt-9aV" secondAttribute="bottom" id="hOU-Pf-zVZ"/>
+                            <constraint firstAttribute="trailing" secondItem="Xj7-zt-9aV" secondAttribute="trailing" id="qq4-x7-MYC"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Teams" id="7QQ-lR-4rM"/>
+                    <connections>
+                        <outlet property="teamsView" destination="Xj7-zt-9aV" id="BAb-Nd-6Xz"/>
+                        <segue destination="xrw-Gj-eke" kind="showDetail" identifier="TeamSegue" id="V5f-7D-Sa2"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0pa-QZ-uBx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="25" y="207"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Q3z-xa-l1L">
+            <objects>
+                <navigationController id="RxU-fr-KQf" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="cDn-i3-xad">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rNu-Al-QJW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2348" y="-228"/>
+        </scene>
+        <!--Team View Controller-->
+        <scene sceneID="HSe-tY-LfS">
+            <objects>
+                <viewController storyboardIdentifier="TeamViewController" hidesBottomBarWhenPushed="YES" id="5by-aT-woR" customClass="TeamViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="m6P-mj-L99"/>
+                        <viewControllerLayoutGuide type="bottom" id="nhg-Li-uWZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="gdf-MN-RnZ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7wB-xc-qxs" userLabel="Segmented Control View">
+                                <rect key="frame" x="0.0" y="64" width="375" height="44"/>
+                                <subviews>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="4e3-cZ-Ovp">
+                                        <rect key="frame" x="16" y="8" width="343" height="29"/>
+                                        <segments>
+                                            <segment title="Info"/>
+                                            <segment title="Events"/>
+                                            <segment title="Media"/>
+                                        </segments>
+                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <action selector="segmentedControlValueChangedWithSender:" destination="5by-aT-woR" eventType="valueChanged" id="mAh-74-jcK"/>
+                                        </connections>
+                                    </segmentedControl>
+                                </subviews>
+                                <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="4e3-cZ-Ovp" secondAttribute="trailing" constant="16" id="OtK-pQ-0bj"/>
+                                    <constraint firstItem="4e3-cZ-Ovp" firstAttribute="centerY" secondItem="7wB-xc-qxs" secondAttribute="centerY" id="c1U-Fj-qXB"/>
+                                    <constraint firstItem="4e3-cZ-Ovp" firstAttribute="leading" secondItem="7wB-xc-qxs" secondAttribute="leading" constant="16" id="fy4-IN-lzy"/>
+                                    <constraint firstAttribute="height" constant="44" id="p77-eW-tg9"/>
+                                </constraints>
+                            </view>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h7Z-Xj-wB2">
+                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
+                                <connections>
+                                    <segue destination="1eu-y6-6Br" kind="embed" identifier="TeamInfoEmbed" id="q15-CI-zg8"/>
+                                </connections>
+                            </containerView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FtO-pB-UKC">
+                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
+                                <connections>
+                                    <segue destination="wLf-ZD-Wn1" kind="embed" identifier="TeamEventsEmbed" id="Tx2-V4-aM8"/>
+                                </connections>
+                            </containerView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EZX-vs-64C">
+                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
+                                <connections>
+                                    <segue destination="6wK-qB-QRY" kind="embed" identifier="TeamMediaEmbed" id="1A2-oB-ose"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="7wB-xc-qxs" secondAttribute="trailing" id="4D0-Lh-ZLL"/>
+                            <constraint firstItem="h7Z-Xj-wB2" firstAttribute="leading" secondItem="gdf-MN-RnZ" secondAttribute="leading" id="8Hx-hl-xAq"/>
+                            <constraint firstAttribute="trailing" secondItem="FtO-pB-UKC" secondAttribute="trailing" id="Eja-bm-3zd"/>
+                            <constraint firstItem="nhg-Li-uWZ" firstAttribute="top" secondItem="h7Z-Xj-wB2" secondAttribute="bottom" id="F0K-Qi-3tY"/>
+                            <constraint firstAttribute="trailing" secondItem="h7Z-Xj-wB2" secondAttribute="trailing" id="Fig-f2-pdk"/>
+                            <constraint firstItem="7wB-xc-qxs" firstAttribute="leading" secondItem="gdf-MN-RnZ" secondAttribute="leading" id="MpN-4e-fjH"/>
+                            <constraint firstItem="7wB-xc-qxs" firstAttribute="top" secondItem="m6P-mj-L99" secondAttribute="bottom" id="OOJ-ut-c9e"/>
+                            <constraint firstItem="h7Z-Xj-wB2" firstAttribute="top" secondItem="7wB-xc-qxs" secondAttribute="bottom" id="OY9-SF-86N"/>
+                            <constraint firstItem="FtO-pB-UKC" firstAttribute="leading" secondItem="gdf-MN-RnZ" secondAttribute="leading" id="brr-Bf-IBx"/>
+                            <constraint firstAttribute="trailing" secondItem="EZX-vs-64C" secondAttribute="trailing" id="kEu-4Y-6LK"/>
+                            <constraint firstItem="EZX-vs-64C" firstAttribute="leading" secondItem="gdf-MN-RnZ" secondAttribute="leading" id="koO-ZW-wDk"/>
+                            <constraint firstItem="FtO-pB-UKC" firstAttribute="top" secondItem="7wB-xc-qxs" secondAttribute="bottom" id="kx3-71-saY"/>
+                            <constraint firstItem="nhg-Li-uWZ" firstAttribute="top" secondItem="FtO-pB-UKC" secondAttribute="bottom" id="r4g-l4-aZ9"/>
+                            <constraint firstItem="nhg-Li-uWZ" firstAttribute="top" secondItem="EZX-vs-64C" secondAttribute="bottom" id="ucR-0S-FJW"/>
+                            <constraint firstItem="EZX-vs-64C" firstAttribute="top" secondItem="7wB-xc-qxs" secondAttribute="bottom" id="uy9-AF-Dc4"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="0VD-YP-YBq">
+                        <nil key="title"/>
+                        <view key="titleView" contentMode="scaleToFill" id="1qn-fE-Bbd">
+                            <rect key="frame" x="112.5" y="5.5" width="150" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="u8w-tQ-SaQ">
+                                    <rect key="frame" x="-0.5" y="-0.5" width="150.5" height="34"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="749" text="Team 2337" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LNf-Os-1qq">
+                                            <rect key="frame" x="32.5" y="0.0" width="86" height="20.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="▾ 2016" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1gO-W4-baF">
+                                            <rect key="frame" x="58" y="20.5" width="34.5" height="13.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </stackView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="u8w-tQ-SaQ" secondAttribute="trailing" id="FRj-8H-iHl"/>
+                                <constraint firstAttribute="bottom" secondItem="u8w-tQ-SaQ" secondAttribute="bottom" id="T7O-xq-hWA"/>
+                                <constraint firstItem="u8w-tQ-SaQ" firstAttribute="top" secondItem="1qn-fE-Bbd" secondAttribute="top" id="U0t-Dh-Wii"/>
+                                <constraint firstItem="u8w-tQ-SaQ" firstAttribute="leading" secondItem="1qn-fE-Bbd" secondAttribute="leading" id="W5H-Xq-XsJ"/>
+                            </constraints>
+                            <connections>
+                                <outletCollection property="gestureRecognizers" destination="uLu-fb-rT1" appends="YES" id="bQg-aE-JpG"/>
+                            </connections>
+                        </view>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="eventsView" destination="FtO-pB-UKC" id="BK3-nr-Ftr"/>
+                        <outlet property="infoView" destination="h7Z-Xj-wB2" id="31k-fw-Xem"/>
+                        <outlet property="mediaView" destination="EZX-vs-64C" id="92J-lQ-nlD"/>
+                        <outlet property="navigationDetailLabel" destination="1gO-W4-baF" id="9wc-OW-jRC"/>
+                        <outlet property="navigationTitleLabel" destination="LNf-Os-1qq" id="lLC-vF-mZw"/>
+                        <outlet property="segmentedControl" destination="4e3-cZ-Ovp" id="7zR-OZ-9YF"/>
+                        <outlet property="segmentedControlView" destination="7wB-xc-qxs" id="OZU-iw-BC2"/>
+                        <segue destination="Lps-JK-pYU" kind="show" identifier="TeamAtEventSegue" id="8Uu-oj-Z11"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Fgu-2m-Jdl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="uLu-fb-rT1">
+                    <connections>
+                        <segue destination="RxU-fr-KQf" kind="presentation" identifier="SelectYearSegue" modalPresentationStyle="formSheet" id="DFD-5b-SyM"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="1560.8" y="465.51724137931041"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="oEx-y3-Wd4">
+            <objects>
+                <navigationController id="xrw-Gj-eke" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="KwD-xX-Ar6">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="5by-aT-woR" kind="relationship" relationship="rootViewController" id="pMM-Ff-JBK"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mVV-aQ-Zs4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="806" y="466"/>
+        </scene>
+        <!--Team Info Table View Controller-->
+        <scene sceneID="yYh-i7-3In">
+            <objects>
+                <tableViewController id="1eu-y6-6Br" customClass="TeamInfoTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="aP2-kO-4Hp">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <connections>
+                            <outlet property="dataSource" destination="1eu-y6-6Br" id="UWF-bd-F5t"/>
+                            <outlet property="delegate" destination="1eu-y6-6Br" id="3QB-bj-mdb"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="l83-UJ-g2N" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="913" y="1190"/>
+        </scene>
+        <!--EventsTableViewController-->
+        <scene sceneID="HJt-xh-rGw">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="EventsTableViewController" id="wLf-ZD-Wn1" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6SP-bG-V7b" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1599" y="951"/>
+        </scene>
+        <!--Team Media Collection View Controller-->
+        <scene sceneID="lgN-Mu-XVH">
+            <objects>
+                <collectionViewController id="6wK-qB-QRY" customClass="TeamMediaCollectionViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="Jen-Or-JgS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="3" minimumInteritemSpacing="3" id="dHO-JU-ltY">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="3" minY="3" maxX="3" maxY="3"/>
+                        </collectionViewFlowLayout>
+                        <cells/>
+                        <connections>
+                            <outlet property="dataSource" destination="6wK-qB-QRY" id="XBN-4T-drX"/>
+                            <outlet property="delegate" destination="6wK-qB-QRY" id="viy-dk-1ZM"/>
+                        </connections>
+                    </collectionView>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KNk-zT-y9B" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2234" y="1190"/>
+        </scene>
+        <!--Teams Table View Controller-->
+        <scene sceneID="all-fB-X7S">
+            <objects>
+                <tableViewController storyboardIdentifier="TeamsTableViewController" id="6nb-tX-gbn" customClass="TeamsTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="DfO-6d-lqn">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="6nb-tX-gbn" id="Zkq-5e-idg"/>
+                            <outlet property="delegate" destination="6nb-tX-gbn" id="7Vg-at-c9i"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="d9L-DA-VGf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="806" y="-191"/>
+        </scene>
+        <!--Teams-->
+        <scene sceneID="4uX-kA-Eba">
+            <objects>
+                <navigationController id="caC-xe-F51" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Teams" image="ic_people" id="SRS-vU-eIf"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="y4Q-x9-Oid">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="HTs-xx-or4" kind="relationship" relationship="rootViewController" id="kMm-Tl-Z5I"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cAx-KK-2fM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-745" y="206"/>
+        </scene>
+        <!--Team At Event View Controller-->
+        <scene sceneID="bEH-Tj-4Gt">
+            <objects>
+                <viewController storyboardIdentifier="TeamAtEventViewController" id="Lps-JK-pYU" customClass="TeamAtEventViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="80I-pn-hRI"/>
+                        <viewControllerLayoutGuide type="bottom" id="OPq-Pd-mCH"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="JUy-5H-Tpc">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gzn-Zq-0az" userLabel="Segmented Control View">
+                                <rect key="frame" x="0.0" y="64" width="375" height="44"/>
+                                <subviews>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="wFa-0P-g9Z">
+                                        <rect key="frame" x="16" y="8" width="343" height="29"/>
+                                        <segments>
+                                            <segment title="Summary"/>
+                                            <segment title="Matches"/>
+                                            <segment title="Stats"/>
+                                            <segment title="Awards"/>
+                                        </segments>
+                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <action selector="segmentedControlValueChangedWithSender:" destination="Lps-JK-pYU" eventType="valueChanged" id="Zr9-UQ-8GN"/>
+                                        </connections>
+                                    </segmentedControl>
+                                </subviews>
+                                <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="wFa-0P-g9Z" firstAttribute="leading" secondItem="Gzn-Zq-0az" secondAttribute="leading" constant="16" id="2x2-dT-HDj"/>
+                                    <constraint firstAttribute="height" constant="44" id="AMt-WW-m0l"/>
+                                    <constraint firstAttribute="trailing" secondItem="wFa-0P-g9Z" secondAttribute="trailing" constant="16" id="LbA-2R-fj6"/>
+                                    <constraint firstItem="wFa-0P-g9Z" firstAttribute="centerY" secondItem="Gzn-Zq-0az" secondAttribute="centerY" id="eZZ-V2-abA"/>
+                                </constraints>
+                            </view>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YIr-bk-8gR">
+                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
+                                <connections>
+                                    <segue destination="K7R-m8-KYf" kind="embed" identifier="TeamAtEventSummaryEmbed" id="GOp-9K-i06"/>
+                                </connections>
+                            </containerView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4r6-qu-3IW">
+                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
+                                <connections>
+                                    <segue destination="r4I-0U-t0Q" kind="embed" identifier="TeamAtEventMatchesEmbed" id="xu0-6R-NR0"/>
+                                </connections>
+                            </containerView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="seF-8a-7xe">
+                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
+                                <connections>
+                                    <segue destination="Lb0-pm-Dmi" kind="embed" identifier="TeamAtEventStatsEmbed" id="Lhj-Up-XYA"/>
+                                </connections>
+                            </containerView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="07K-8C-nSB">
+                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
+                                <connections>
+                                    <segue destination="kMk-Yy-G80" kind="embed" identifier="TeamAtEventAwardsEmbed" id="w6e-vi-IcA"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="seF-8a-7xe" firstAttribute="leading" secondItem="JUy-5H-Tpc" secondAttribute="leading" id="6en-ak-z1L"/>
+                            <constraint firstItem="YIr-bk-8gR" firstAttribute="top" secondItem="Gzn-Zq-0az" secondAttribute="bottom" id="B6E-hh-X6I"/>
+                            <constraint firstItem="seF-8a-7xe" firstAttribute="top" secondItem="Gzn-Zq-0az" secondAttribute="bottom" id="BOT-0E-3zc"/>
+                            <constraint firstItem="YIr-bk-8gR" firstAttribute="leading" secondItem="JUy-5H-Tpc" secondAttribute="leading" id="COf-FO-0rb"/>
+                            <constraint firstItem="07K-8C-nSB" firstAttribute="leading" secondItem="JUy-5H-Tpc" secondAttribute="leading" id="Ife-bK-Loe"/>
+                            <constraint firstItem="4r6-qu-3IW" firstAttribute="top" secondItem="Gzn-Zq-0az" secondAttribute="bottom" id="Mgk-Xy-xGi"/>
+                            <constraint firstItem="Gzn-Zq-0az" firstAttribute="top" secondItem="80I-pn-hRI" secondAttribute="bottom" id="Qn0-p6-AAG"/>
+                            <constraint firstItem="4r6-qu-3IW" firstAttribute="leading" secondItem="JUy-5H-Tpc" secondAttribute="leading" id="S1X-6l-Itm"/>
+                            <constraint firstItem="Gzn-Zq-0az" firstAttribute="leading" secondItem="JUy-5H-Tpc" secondAttribute="leading" id="SPE-jT-xfN"/>
+                            <constraint firstAttribute="trailing" secondItem="seF-8a-7xe" secondAttribute="trailing" id="Tst-SO-eiB"/>
+                            <constraint firstItem="OPq-Pd-mCH" firstAttribute="top" secondItem="4r6-qu-3IW" secondAttribute="bottom" id="U15-6f-Dmu"/>
+                            <constraint firstItem="OPq-Pd-mCH" firstAttribute="top" secondItem="seF-8a-7xe" secondAttribute="bottom" id="Xlf-zR-zrI"/>
+                            <constraint firstItem="OPq-Pd-mCH" firstAttribute="top" secondItem="YIr-bk-8gR" secondAttribute="bottom" id="aaZ-xz-GrH"/>
+                            <constraint firstAttribute="trailing" secondItem="07K-8C-nSB" secondAttribute="trailing" id="oSs-gc-P4e"/>
+                            <constraint firstItem="07K-8C-nSB" firstAttribute="top" secondItem="Gzn-Zq-0az" secondAttribute="bottom" id="rIW-mE-Gbe"/>
+                            <constraint firstAttribute="trailing" secondItem="YIr-bk-8gR" secondAttribute="trailing" id="rt6-bn-vxy"/>
+                            <constraint firstAttribute="trailing" secondItem="4r6-qu-3IW" secondAttribute="trailing" id="tSE-DV-xfS"/>
+                            <constraint firstAttribute="trailing" secondItem="Gzn-Zq-0az" secondAttribute="trailing" id="xgc-cJ-gTC"/>
+                            <constraint firstItem="OPq-Pd-mCH" firstAttribute="top" secondItem="07K-8C-nSB" secondAttribute="bottom" id="yIB-23-DZd"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="ivZ-td-ZSq">
+                        <nil key="title"/>
+                        <view key="titleView" contentMode="scaleToFill" id="T1J-eI-DMz">
+                            <rect key="frame" x="112.5" y="5.5" width="150" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="pwA-Ua-ROQ">
+                                    <rect key="frame" x="-0.5" y="-0.5" width="150.5" height="34"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="749" text="Team 2337" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="02i-u0-oc2">
+                                            <rect key="frame" x="32.5" y="0.0" width="86" height="20.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="@ 2015 Kettering University District" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d25-Fv-tgF">
+                                            <rect key="frame" x="0.0" y="20.5" width="150.5" height="13.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </stackView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="pwA-Ua-ROQ" firstAttribute="top" secondItem="T1J-eI-DMz" secondAttribute="top" id="KVs-tm-T7y"/>
+                                <constraint firstAttribute="trailing" secondItem="pwA-Ua-ROQ" secondAttribute="trailing" id="QGQ-ND-wAU"/>
+                                <constraint firstItem="pwA-Ua-ROQ" firstAttribute="leading" secondItem="T1J-eI-DMz" secondAttribute="leading" id="lZQ-yY-wsW"/>
+                                <constraint firstAttribute="bottom" secondItem="pwA-Ua-ROQ" secondAttribute="bottom" id="s1i-Tr-EDZ"/>
+                            </constraints>
+                            <connections>
+                                <outletCollection property="gestureRecognizers" destination="F9W-hs-LLT" appends="YES" id="UMa-de-4BA"/>
+                            </connections>
+                        </view>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="awardsView" destination="07K-8C-nSB" id="VyO-ID-IYN"/>
+                        <outlet property="matchesView" destination="4r6-qu-3IW" id="dOa-Hv-Nrf"/>
+                        <outlet property="navigationDetailLabel" destination="d25-Fv-tgF" id="dM2-pK-SoG"/>
+                        <outlet property="navigationTitleLabel" destination="02i-u0-oc2" id="OCm-Yf-pZ0"/>
+                        <outlet property="segmentedControl" destination="wFa-0P-g9Z" id="Qiw-mY-01B"/>
+                        <outlet property="segmentedControlView" destination="Gzn-Zq-0az" id="Wfg-v3-iCy"/>
+                        <outlet property="statsView" destination="seF-8a-7xe" id="wL0-hD-t0j"/>
+                        <outlet property="summaryView" destination="YIr-bk-8gR" id="bHI-6H-Ll3"/>
+                        <segue destination="uEa-li-jHU" kind="show" identifier="MatchSegue" id="GzB-bx-98K"/>
+                        <segue destination="1O9-Ef-RV5" kind="show" identifier="TeamAtEventSegue" id="N0C-bf-yjW"/>
+                        <segue destination="PAz-lP-43P" kind="show" identifier="AwardsSegue" id="6K7-8Z-muA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DQr-Bh-8W9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="F9W-hs-LLT"/>
+            </objects>
+            <point key="canvasLocation" x="1561" y="1852"/>
+        </scene>
+        <!--TeamAtEventViewController-->
+        <scene sceneID="QzC-JW-6uF">
+            <objects>
+                <viewControllerPlaceholder referencedIdentifier="TeamAtEventViewController" id="1O9-Ef-RV5" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PXA-4Q-mwA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2210" y="1851"/>
+        </scene>
+        <!--Matches Table View Controller-->
+        <scene sceneID="Dan-Wv-jt8">
+            <objects>
+                <tableViewController id="r4I-0U-t0Q" customClass="MatchesTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="wwf-QH-HwO">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="r4I-0U-t0Q" id="wbC-PS-fzg"/>
+                            <outlet property="delegate" destination="r4I-0U-t0Q" id="6UZ-PW-bT6"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dLs-l7-3dX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1303" y="2570"/>
+        </scene>
+        <!--MatchViewController-->
+        <scene sceneID="oa9-eS-X5I">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="MatchViewController" id="uEa-li-jHU" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="D7z-Eg-vap" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2186" y="1944"/>
+        </scene>
+        <!--EventAwardsViewController-->
+        <scene sceneID="EYn-hH-1iU">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EventsStoryboard" referencedIdentifier="EventAwardsViewController" id="PAz-lP-43P" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="quZ-1p-iKT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2218" y="2016"/>
+        </scene>
+        <!--Team Summary Table View Controller-->
+        <scene sceneID="oVG-qs-sr3">
+            <objects>
+                <tableViewController storyboardIdentifier="TeamSummaryTableViewController" id="K7R-m8-KYf" customClass="TeamSummaryTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="elw-jp-7t0">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="K7R-m8-KYf" id="Q12-eV-lEd"/>
+                            <outlet property="delegate" destination="K7R-m8-KYf" id="d7i-FJ-rjE"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Kmj-pn-BjD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="633" y="2570"/>
+        </scene>
+        <!--Team Stats Table View Controller-->
+        <scene sceneID="qfr-CH-Fe9">
+            <objects>
+                <tableViewController id="Lb0-pm-Dmi" customClass="TeamStatsTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="QgD-Ee-CbM">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="Lb0-pm-Dmi" id="Izb-x2-Cwj"/>
+                            <outlet property="delegate" destination="Lb0-pm-Dmi" id="bu0-MD-HFY"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rxL-2z-ZQh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1993" y="2570"/>
+        </scene>
+        <!--Event Awards Table View Controller-->
+        <scene sceneID="Dq1-te-jg2">
+            <objects>
+                <tableViewController id="kMk-Yy-G80" customClass="EventAwardsTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="75H-7Z-L2N">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="kMk-Yy-G80" id="FR0-te-x2x"/>
+                            <outlet property="delegate" destination="kMk-Yy-G80" id="YTY-jk-FTY"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lTR-hW-xgc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2655" y="2570"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ic_people" width="24" height="24"/>
+    </resources>
+</document>

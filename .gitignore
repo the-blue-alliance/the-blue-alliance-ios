@@ -1,3 +1,4 @@
+.DS_Store
 # Xcode
 #
 build/
@@ -25,3 +26,24 @@ DerivedData
 #
 Pods/
 
+the-blue-alliance-ios.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+
+# Node
+node_modules
+*.log
+.nvm
+js/ios/*
+
+GoogleService-Info.plist
+
+# fastlane specific
+fastlane/report.xml
+
+# deliver temporary files
+fastlane/Preview.html
+
+# snapshot generated screenshots
+fastlane/screenshots
+
+# scan temporary files
+fastlane/test_output
