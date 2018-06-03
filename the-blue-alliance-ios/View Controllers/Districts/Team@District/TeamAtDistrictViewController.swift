@@ -5,7 +5,7 @@ class TeamAtDistrictViewController: ContainerViewController {
     
     public var ranking: DistrictRanking!
     
-    internal var summaryViewController: TeamSummaryTableViewController!
+    internal var summaryViewController: DistrictTeamSummaryTableViewController!
     @IBOutlet internal var summaryView: UIView!
     
     internal var breakdownViewController: DistrictBreakdownTableViewController!
@@ -24,12 +24,21 @@ class TeamAtDistrictViewController: ContainerViewController {
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "TeamAtDistrictSummaryEmbed" {
-            // TODO: Let's make this a different VC since it's like... different
-            summaryViewController = segue.destination as! TeamSummaryTableViewController
+        if segue.identifier == "DistrictTeamSummaryEmbed" {
+            summaryViewController = segue.destination as! DistrictTeamSummaryTableViewController
+            summaryViewController.ranking = ranking
+            summaryViewController.eventPointsSelected = { [weak self] eventPoints in
+                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: eventPoints)
+            }
         } else if segue.identifier == "DistrictBreakdownEmbed" {
             breakdownViewController = segue.destination as! DistrictBreakdownTableViewController
             breakdownViewController.ranking = ranking
+        } else if segue.identifier == "TeamAtEventSegue" {
+            let eventPoints = sender as! DistrictEventPoints
+            let teamAtEventViewController = segue.destination as! TeamAtEventViewController
+            teamAtEventViewController.team = eventPoints.team!
+            teamAtEventViewController.event = eventPoints.event!
+            teamAtEventViewController.persistentContainer = persistentContainer
         }
     }
     

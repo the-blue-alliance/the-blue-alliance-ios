@@ -120,6 +120,7 @@
 		92D8CD1320C2634200777D93 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92D8CD1220C2634200777D93 /* GoogleService-Info.plist */; };
 		92DF0D19208FF7AD0043702A /* RemoteConfig+Setup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF0D18208FF7AD0043702A /* RemoteConfig+Setup.swift */; };
 		92DF0D1B208FF8C90043702A /* RemoteConfigDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92DF0D1A208FF8C90043702A /* RemoteConfigDefaults.plist */; };
+		92E6DB8B20C4609900396010 /* DistrictTeamSummaryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E6DB8A20C4609900396010 /* DistrictTeamSummaryTableViewController.swift */; };
 		92F431C920BE58890080FEB2 /* Date_TBA_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F431C820BE58890080FEB2 /* Date_TBA_Tests.swift */; };
 		92F431CB20BE59C20080FEB2 /* Int16_Suffix_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F431CA20BE59C20080FEB2 /* Int16_Suffix_Tests.swift */; };
 		92F481ED1E7D978600B4ED7E /* NoDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481EC1E7D978600B4ED7E /* NoDataViewController.swift */; };
@@ -266,6 +267,7 @@
 		92DF0D18208FF7AD0043702A /* RemoteConfig+Setup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RemoteConfig+Setup.swift"; sourceTree = "<group>"; };
 		92DF0D1A208FF8C90043702A /* RemoteConfigDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = RemoteConfigDefaults.plist; sourceTree = "<group>"; };
 		92E6253F208EC23000DF58C0 /* the-blue-alliance-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "the-blue-alliance-ios.entitlements"; sourceTree = "<group>"; };
+		92E6DB8A20C4609900396010 /* DistrictTeamSummaryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictTeamSummaryTableViewController.swift; sourceTree = "<group>"; };
 		92F431C820BE58890080FEB2 /* Date_TBA_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date_TBA_Tests.swift; sourceTree = "<group>"; };
 		92F431CA20BE59C20080FEB2 /* Int16_Suffix_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int16_Suffix_Tests.swift; sourceTree = "<group>"; };
 		92F481EC1E7D978600B4ED7E /* NoDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoDataViewController.swift; sourceTree = "<group>"; };
@@ -358,6 +360,7 @@
 			isa = PBXGroup;
 			children = (
 				920DF7CC20954B430041B487 /* TeamAtDistrictViewController.swift */,
+				92E6DB8A20C4609900396010 /* DistrictTeamSummaryTableViewController.swift */,
 				920DF7CE20954B5D0041B487 /* DistrictBreakdownTableViewController.swift */,
 			);
 			path = "Team@District";
@@ -1159,6 +1162,7 @@
 				920DF7CD20954B430041B487 /* TeamAtDistrictViewController.swift in Sources */,
 				92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */,
 				929F57222092B80B00E5313A /* ContainerViewController.swift in Sources */,
+				92E6DB8B20C4609900396010 /* DistrictTeamSummaryTableViewController.swift in Sources */,
 				927292521EE4A48C0027CE7C /* EventTeamStatsTableViewController.swift in Sources */,
 				924F8C871EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift in Sources */,
 				92FFE52A1E7CB1550037E48C /* Webcast.swift in Sources */,
