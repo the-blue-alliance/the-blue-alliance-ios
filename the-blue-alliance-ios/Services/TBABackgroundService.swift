@@ -13,8 +13,8 @@ class TBABackgroundService {
 
     // TODO: Combine these in to one method. I tried, but I lost the will to live.
     // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/183
-    
-    static func backgroundFetchTeam(_ key: String, in context: NSManagedObjectContext, completion: @escaping (Team?, Error?) -> ()) {
+
+    static func backgroundFetchTeam(_ key: String, in context: NSManagedObjectContext, completion: @escaping (Team?, Error?) -> Void) {
         _ = TBAKit.sharedKit.fetchTeam(key: key) { (modelTeam, error) in
             if let error = error {
                 print("Error in background fetch of team \(key) - \(error.localizedDescription)")
@@ -24,10 +24,10 @@ class TBABackgroundService {
                     completion(nil, BackgroundFetchError.message("No model for background fetch of team \(key)"))
                     return
                 }
-                
+
                 let team = Team.insert(with: modelTeam, in: context)
                 let success = context.saveOrRollback()
-                
+
                 if success == true {
                     completion(team, nil)
                 } else {
@@ -36,8 +36,8 @@ class TBABackgroundService {
             }
         }
     }
-    
-    static func backgroundFetchEvent(_ key: String, in context: NSManagedObjectContext, completion: @escaping (Event?, Error?) -> ()) {
+
+    static func backgroundFetchEvent(_ key: String, in context: NSManagedObjectContext, completion: @escaping (Event?, Error?) -> Void) {
         _ = TBAKit.sharedKit.fetchEvent(key: key) { (modelEvent, error) in
             if let error = error {
                 print("Error in background fetch of event \(key) - \(error.localizedDescription)")
@@ -47,10 +47,10 @@ class TBABackgroundService {
                     completion(nil, BackgroundFetchError.message("No model for background fetch of event \(key)"))
                     return
                 }
-                
+
                 let event = Event.insert(with: modelEvent, in: context)
                 let success = context.saveOrRollback()
-                
+
                 if success == true {
                     completion(event, nil)
                 } else {
@@ -59,8 +59,8 @@ class TBABackgroundService {
             }
         }
     }
-    
-    static func backgroundFetchMatch(_ key: String, in context: NSManagedObjectContext, completion: @escaping (Match?, Error?) -> ()) {
+
+    static func backgroundFetchMatch(_ key: String, in context: NSManagedObjectContext, completion: @escaping (Match?, Error?) -> Void) {
         // TODO: We could make this easier by removing the relationship between Match <-> Event as being non-optional
         // However, we'd have to make sure that matches that got inserted in the BG didn't get double inserted, and got
         // resolved and added to their respective events later. There are places that use event information on a Match
@@ -87,8 +87,8 @@ class TBABackgroundService {
             backgroundFetchMatch(key, for: event!, in: context, completion: completion)
         }
     }
-    
-    private static func backgroundFetchMatch(_ key: String, for event: Event, in context: NSManagedObjectContext, completion: @escaping (Match?, Error?) -> ()) {
+
+    private static func backgroundFetchMatch(_ key: String, for event: Event, in context: NSManagedObjectContext, completion: @escaping (Match?, Error?) -> Void) {
         _ = TBAKit.sharedKit.fetchMatch(key: key) { (modelMatch, error) in
             if let error = error {
                 print("Error in background fetch of match \(key) - \(error.localizedDescription)")
@@ -98,10 +98,10 @@ class TBABackgroundService {
                     completion(nil, BackgroundFetchError.message("No model for background fetch of match \(key)"))
                     return
                 }
-                
+
                 let match = Match.insert(with: modelMatch, for: event, in: context)
                 let success = context.saveOrRollback()
-                
+
                 if success == true {
                     completion(match, nil)
                 } else {
@@ -110,5 +110,5 @@ class TBABackgroundService {
             }
         }
     }
-    
+
 }

@@ -1,7 +1,7 @@
 import UIKit
 
 class MediaView: UIView {
-    
+
     public var media: Media {
         didSet {
             if let dataTask = dataTask {
@@ -17,7 +17,7 @@ class MediaView: UIView {
         }
     }
     var imageDownloaded: ((UIImage) -> Void)?
-    
+
     private var loadingActivityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         activityIndicator.hidesWhenStopped = true
@@ -32,18 +32,18 @@ class MediaView: UIView {
     private var dataTask: URLSessionDataTask?
     private var noDataLabel: UILabel?
     private var noDataView: UIView?
-    
+
     init(media: Media) {
         self.media = media
 
         super.init(frame: .zero)
         backgroundColor = .white
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func showNoDataView(text: String) {
         if let noDataLabel = noDataLabel {
             noDataLabel.text = text
@@ -52,8 +52,7 @@ class MediaView: UIView {
         if noDataView != nil {
             removeNoDataView()
         }
-        
-        
+
         DispatchQueue.main.async {
             self.noDataLabel = UILabel()
             self.noDataLabel?.text = text
@@ -62,39 +61,39 @@ class MediaView: UIView {
             self.noDataLabel?.textColor = .black
             self.noDataLabel?.alpha = 0.5
             self.noDataLabel?.textAlignment = .center
-            
+
             self.noDataView = UIView()
             self.noDataView?.addSubview(self.noDataLabel!)
             self.noDataLabel?.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
-            
+
             self.addSubview(self.noDataView!)
             self.noDataView?.autoPinEdgesToSuperviewEdges()
         }
     }
-    
+
     func removeNoDataView() {
         if let noDataView = noDataView {
             noDataView.removeFromSuperview()
         }
     }
-    
+
     func configureView() {
         if imageView.superview == nil {
             addSubview(imageView)
             imageView.autoPinEdgesToSuperviewEdges()
         }
-        
+
         // If we already have a downloaded image... bail
         if let downloadedImage = downloadedImage {
             imageView.image = downloadedImage
             return
         }
-        
+
         if loadingActivityIndicator.superview == nil {
             addSubview(loadingActivityIndicator)
             loadingActivityIndicator.autoCenterInSuperview()
         }
-        
+
         guard let url = media.imageDirectURL else {
             showNoDataView(text: "No URL for media")
             return
@@ -103,11 +102,11 @@ class MediaView: UIView {
         removeNoDataView()
         loadingActivityIndicator.startAnimating()
 
-        dataTask = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+        dataTask = URLSession.shared.dataTask(with: url, completionHandler: { (data, _, error) in
             DispatchQueue.main.async {
                 self.loadingActivityIndicator.stopAnimating()
             }
-            
+
             if let error = error {
                 self.showNoDataView(text: "Error loading media - \(error.localizedDescription)")
             } else if let data = data {
@@ -127,5 +126,5 @@ class MediaView: UIView {
         })
         dataTask?.resume()
     }
-    
+
 }

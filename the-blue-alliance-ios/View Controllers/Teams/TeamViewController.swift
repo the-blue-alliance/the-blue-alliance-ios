@@ -5,7 +5,7 @@ import CoreData
 private let SelectYearSegue = "SelectYearSegue"
 
 class TeamViewController: ContainerViewController, Observable {
-    
+
     public var team: Team! {
         didSet {
             updateYear()
@@ -21,7 +21,7 @@ class TeamViewController: ContainerViewController, Observable {
             if let year = year, mediaViewController?.year != year {
                 mediaViewController?.year = year
             }
-            
+
             DispatchQueue.main.async {
                 self.updateInterface()
             }
@@ -34,15 +34,15 @@ class TeamViewController: ContainerViewController, Observable {
 
     internal var infoViewController: TeamInfoTableViewController!
     @IBOutlet internal var infoView: UIView!
-    
+
     internal var eventsViewController: EventsTableViewController!
     @IBOutlet internal var eventsView: UIView!
-    
+
     internal var mediaViewController: TeamMediaCollectionViewController!
     @IBOutlet internal var mediaView: UIView!
-    
+
     // MARK: - Persistable
-    
+
     override var persistentContainer: NSPersistentContainer! {
         didSet {
             contextObserver.observeObject(object: team, state: .updated) { [weak self] (_, _) in
@@ -54,24 +54,24 @@ class TeamViewController: ContainerViewController, Observable {
             }
         }
     }
-    
+
     // MARK: - Observable
-    
+
     typealias ManagedType = Team
     lazy var contextObserver: CoreDataContextObserver<Team> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
-    
+
     // MARK: - View Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         title = "Team \(team.teamNumber)"
-        
+
         viewControllers = [infoViewController, eventsViewController, mediaViewController]
         containerViews = [infoView, eventsView, mediaView]
-        
+
         if navigationController?.viewControllers.index(of: self) == 0 {
             navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
             navigationItem.leftItemsSupplementBackButton = true
@@ -79,32 +79,32 @@ class TeamViewController: ContainerViewController, Observable {
 
         updateInterface()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         _ = refreshYearsParticipatedOnce
     }
-    
+
     // MARK: - Private
-    
+
     func updateYear() {
         guard let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty, year == nil else {
             return
         }
         year = yearsParticipated.first
     }
-    
+
     func updateInterface() {
         navigationTitleLabel?.text = "Team \(team.teamNumber)"
-        
+
         if let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty, let year = year {
             navigationDetailLabel?.text = "▾ \(year)"
         } else {
             navigationDetailLabel?.text = "▾ ----"
         }
     }
-    
+
     func refreshYearsParticipated() {
         _ = TBAKit.sharedKit.fetchTeamYearsParticipated(key: team.key!, completion: { (years, error) in
             if let error = error {
@@ -117,16 +117,16 @@ class TeamViewController: ContainerViewController, Observable {
                 if let years = years {
                     backgroundTeam.yearsParticipated = years.sorted().reversed()
                 }
-                
+
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh years participated - database error")
                 }
             })
         })
     }
-    
+
     // MARK: - Navigation
-    
+
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if identifier == SelectYearSegue {
             if let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty {
@@ -136,7 +136,7 @@ class TeamViewController: ContainerViewController, Observable {
         }
         return true
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == SelectYearSegue {
             let nav = segue.destination as! UINavigationController
@@ -172,5 +172,5 @@ class TeamViewController: ContainerViewController, Observable {
             teamAtEventViewController.event = event
             teamAtEventViewController.persistentContainer = persistentContainer
         }
-    }    
+    }
 }

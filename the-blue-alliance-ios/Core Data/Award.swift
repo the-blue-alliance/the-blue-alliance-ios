@@ -3,7 +3,7 @@ import CoreData
 import TBAKit
 
 extension Award: Managed {
-    
+
     static func insert(with model: TBAAward, for event: Event, in context: NSManagedObjectContext) -> Award {
         let predicate = NSPredicate(format: "awardType == %ld && year == %ld && event == %@", model.awardType, model.year, event)
         return findOrCreate(in: context, matching: predicate) { (award) in
@@ -21,9 +21,8 @@ extension Award: Managed {
 
 }
 
-
 extension AwardRecipient: Managed {
-    
+
     static func insert(with model: TBAAwardRecipient, for award: Award, in context: NSManagedObjectContext) -> AwardRecipient {
         var predicate: NSPredicate?
         var team: Team?
@@ -45,7 +44,7 @@ extension AwardRecipient: Managed {
             awardRecipient.award = award
         }
     }
-    
+
     public var awardText: [String] {
         var awardText: [String] = []
         if let team = team, let awardee = awardee {
@@ -61,5 +60,5 @@ extension AwardRecipient: Managed {
         }
         return awardText
     }
-    
+
 }

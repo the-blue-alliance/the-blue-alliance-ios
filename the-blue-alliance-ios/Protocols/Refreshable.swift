@@ -8,40 +8,40 @@ protocol RefreshView {
 // Refreshable describes a class that has some data that can be refreshed from the server
 protocol Refreshable: AnyObject {
     var requests: [URLSessionDataTask] { get set }
-    
+
     var refreshControl: UIRefreshControl? { get set }
     var refreshView: UIScrollView { get }
 
     func refresh()
-    func shouldNoDataRefresh() -> Bool    
+    func shouldNoDataRefresh() -> Bool
 }
 
 extension Refreshable {
-    
+
     var isRefreshing: Bool {
         // We're not refreshing if our requests array is empty
         return !requests.isEmpty
     }
-    
+
     func shouldRefresh() -> Bool {
         return shouldNoDataRefresh() && !isRefreshing
     }
-    
+
     // TODO: Add a method to add an observer on a single core data object for changes
-    
+
     func cancelRefresh() {
         if requests.isEmpty {
             return
         }
-        
+
         for request in requests {
             request.cancel()
         }
         requests.removeAll()
-        
+
         updateRefresh()
     }
-    
+
     func addRequest(request: URLSessionDataTask) {
         if requests.contains(request) {
             return
@@ -56,7 +56,7 @@ extension Refreshable {
         }
         requests.remove(at: index)
         updateRefresh()
-        
+
         if requests.isEmpty {
             noDataReload()
         }
@@ -74,7 +74,7 @@ extension Refreshable {
             }
         }
     }
-    
+
     private func updateRefresh() {
         DispatchQueue.main.async {
             if self.isRefreshing {
@@ -86,5 +86,5 @@ extension Refreshable {
             }
         }
     }
-    
+
 }

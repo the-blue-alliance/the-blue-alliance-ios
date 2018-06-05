@@ -1,7 +1,7 @@
 import UIKit
 
 class InfoTableViewCell: UITableViewCell {
-    
+
     static let reuseIdentifier = "InfoCell"
     var event: Event? {
         didSet {
@@ -16,32 +16,32 @@ class InfoTableViewCell: UITableViewCell {
     @IBOutlet private var infoStackView: UIStackView!
 
     // MARK: - Private Methods
-    
+
     private func labelWithText(_ text: String) -> UILabel {
         let label = UILabel()
         label.text = text
         label.numberOfLines = 0
         return label
     }
-    
+
     private func titleLabelWithText(_ text: String) -> UILabel {
         let label = labelWithText(text)
         label.font = .systemFont(ofSize: 18)
         return label
     }
-    
+
     private func subtitleLabelWithText(_ text: String) -> UILabel {
         let label = labelWithText(text)
         label.font = .systemFont(ofSize: 16)
         label.textColor = .darkGray
         return label
     }
-    
+
     private func configureCell() {
         for view in infoStackView.arrangedSubviews {
             view.removeFromSuperview()
         }
-        
+
         if let event = event {
             if let name = event.name {
                 let nameLabel = titleLabelWithText(name)
@@ -69,5 +69,5 @@ class InfoTableViewCell: UITableViewCell {
             }
         }
     }
-    
+
 }

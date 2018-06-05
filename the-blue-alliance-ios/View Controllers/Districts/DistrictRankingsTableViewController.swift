@@ -11,22 +11,22 @@ class DistrictRankingsTableViewController: TBATableViewController {
         }
     }
     var district: District!
-    var rankingSelected: ((DistrictRanking) -> ())?
-    
+    var rankingSelected: ((DistrictRanking) -> Void)?
+
     // MARK: - View Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
     }
-        
+
     // MARK: - Refreshing
-    
+
     // TODO: Think about building a way to "chain" requests together for a refresh...
     override func refresh() {
         removeNoDataView()
-        
+
         // First, fetch events
         var eventRequest: URLSessionDataTask?
         eventRequest = refreshEvents { (success) in
@@ -44,14 +44,14 @@ class DistrictRankingsTableViewController: TBATableViewController {
                     self.removeRequest(request: teamRequest!)
                     return
                 }
-                
+
                 // Fetch Rankings
                 var rankingsRequest: URLSessionDataTask?
                 rankingsRequest = self.refreshRankings(completion: { (success) in
                     if !success {
                         self.showErrorAlert(with: "Unable to refresh district rankings - database error")
                     }
-                    
+
                     self.removeRequest(request: rankingsRequest!)
                 })
                 self.addRequest(request: rankingsRequest!)
@@ -62,15 +62,15 @@ class DistrictRankingsTableViewController: TBATableViewController {
         }
         addRequest(request: eventRequest!)
     }
-    
-    func refreshEvents(completion: @escaping (_ success: Bool) -> ()) -> URLSessionDataTask {
+
+    func refreshEvents(completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
         return TBAKit.sharedKit.fetchDistrictEvents(key: district.key!, completion: { (events, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
                 completion(false)
                 return
             }
-            
+
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 backgroundContext.performAndWait {
                     events?.forEach({ (modelEvent) in
@@ -82,15 +82,15 @@ class DistrictRankingsTableViewController: TBATableViewController {
             })
         })
     }
-    
-    func refreshTeams(completion: @escaping (_ success: Bool) -> ()) -> URLSessionDataTask {
+
+    func refreshTeams(completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
         return TBAKit.sharedKit.fetchDistrictTeams(key: district.key!, completion: { (teams, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
                 completion(false)
                 return
             }
-            
+
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 backgroundContext.performAndWait {
                     teams?.forEach({ (modelTeam) in
@@ -102,66 +102,66 @@ class DistrictRankingsTableViewController: TBATableViewController {
             })
         })
     }
-    
-    func refreshRankings(completion: @escaping (_ success: Bool) -> ()) -> URLSessionDataTask {
+
+    func refreshRankings(completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
         return TBAKit.sharedKit.fetchDistrictRankings(key: district.key!, completion: { (rankings, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
                 completion(false)
                 return
             }
-            
+
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 let backgroundDistrict = backgroundContext.object(with: self.district.objectID) as! District
-                
+
                 let localRankings = rankings?.compactMap({ (modelRanking) -> DistrictRanking? in
                     let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
                     return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, for: backgroundTeam, in: backgroundContext)
                 })
                 backgroundDistrict.rankings = Set(localRankings ?? []) as NSSet
-                
+
                 let success = backgroundContext.saveOrRollback()
                 completion(success)
             })
         })
     }
-    
+
     override func shouldNoDataRefresh() -> Bool {
         if let rankings = dataSource?.fetchedResultsController.fetchedObjects, rankings.isEmpty {
             return true
         }
         return false
     }
-    
+
     // MARK: UITableView Delegate
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let ranking = dataSource?.object(at: indexPath)
         if let ranking = ranking, let rankingSelected = rankingSelected {
             rankingSelected(ranking)
         }
     }
-    
+
     // MARK: Table View Data Source
-    
+
     fileprivate var dataSource: TableViewDataSource<DistrictRanking, DistrictRankingsTableViewController>?
-    
+
     fileprivate func setupDataSource() {
         guard let persistentContainer = persistentContainer else {
             return
         }
-        
+
         let fetchRequest: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
-        
+
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]
-        
+
         setupFetchRequest(fetchRequest)
-        
+
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        
+
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
-    
+
     fileprivate func updateDataSource() {
         if let dataSource = dataSource {
             dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
@@ -169,11 +169,11 @@ class DistrictRankingsTableViewController: TBATableViewController {
             setupDataSource()
         }
     }
-    
+
     fileprivate func setupFetchRequest(_ request: NSFetchRequest<DistrictRanking>) {
         request.predicate = NSPredicate(format: "district == %@", district)
     }
-    
+
 }
 
 extension DistrictRankingsTableViewController: TableViewDataSourceDelegate {
@@ -181,16 +181,16 @@ extension DistrictRankingsTableViewController: TableViewDataSourceDelegate {
     func configure(_ cell: RankingTableViewCell, for object: DistrictRanking, at indexPath: IndexPath) {
         cell.districtRanking = object
     }
-    
+
     func showNoDataView() {
         if isRefreshing {
             return
         }
         showNoDataView(with: "Unable to load district rankings")
     }
-    
+
     func hideNoDataView() {
         removeNoDataView()
     }
-    
+
 }

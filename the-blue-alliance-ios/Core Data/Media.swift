@@ -17,13 +17,13 @@ public enum MediaType: String {
     case snapchatProfile = "snapchat-profile"
     case twitchChannel = "twitch-channel"
     case instagramImage = "instagram-image"
-    
+
     static var imageTypes: [String] {
         return [MediaType.cdPhotoThread.rawValue,
                 MediaType.imgur.rawValue,
                 MediaType.instagramImage.rawValue]
     }
-    
+
     static var socialTypes: [String] {
         return [MediaType.facebookProfile.rawValue,
                 MediaType.twitterProfile.rawValue,
@@ -35,20 +35,20 @@ public enum MediaType: String {
                 MediaType.snapchatProfile.rawValue,
                 MediaType.twitchChannel.rawValue]
     }
-    
+
     // TODO: profile_urls
 
 }
 
 extension Media: Managed, Playable {
-    
+
     var youtubeKey: String? {
         if type == MediaType.youtubeVideo.rawValue {
             return foreignKey
         }
         return nil
     }
-    
+
     static func insert(with model: TBAMedia, for year: Int, in context: NSManagedObjectContext) -> Media {
         var mediaPredicate: NSPredicate?
         if let key = model.key {
@@ -71,7 +71,7 @@ extension Media: Managed, Playable {
     }
 
     // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/models/media.py#L92
-    
+
     public var viewImageURL: URL? {
         if type! == MediaType.cdPhotoThread.rawValue {
             return cdphotothreadImageURL
@@ -85,7 +85,7 @@ extension Media: Managed, Playable {
             return nil
         }
     }
-    
+
     public var imageDirectURL: URL? {
         // Largest image that isn't max resolution (which can be arbitrarily huge)
         if type! == MediaType.cdPhotoThread.rawValue {
@@ -118,22 +118,22 @@ extension Media {
         }
         return URL(string: "http://www.chiefdelphi.com/media/img/\(image_partial)")
     }
-    
+
     private func cdphotothreadImageSize(_ size: CDPhotoTreadSize) -> URL? {
         guard let url = cdphotothreadImageURL else {
             return nil
         }
         return URL(string: url.absoluteString.replacingOccurrences(of: CDPhotoTreadSize.large.rawValue, with: size.rawValue))
     }
-    
+
     fileprivate var cdphotothreadImageURLMed: URL? {
         return cdphotothreadImageSize(.medium)
     }
-    
+
     private var cdphotothreadImageURLSm: URL? {
         return cdphotothreadImageSize(.medium)
     }
-    
+
     private var cdphotothreadThreadURL: URL? {
         guard let foreignKey = foreignKey else {
             return nil
@@ -151,70 +151,69 @@ extension Media {
         case medium = "m"
         case direct = "h"
     }
-    
+
     fileprivate var imgurURL: URL? {
         guard let foreignKey = foreignKey else {
             return nil
         }
         return URL(string: "https://imgur.com/\(foreignKey)")
     }
-    
+
     private func imgurImageSize(_ size: ImgurImageSize) -> URL? {
         guard let foreignKey = foreignKey else {
             return nil
         }
         return URL(string: "https://i.imgur.com/\(foreignKey)\(size.rawValue).jpg")
     }
-    
+
     private var imgurDirectURLSm: URL? {
         return imgurImageSize(.small)
     }
-    
+
     private var imgurDirectURLMed: URL? {
         return imgurImageSize(.medium)
     }
-    
+
     fileprivate var imgurDirectURL: URL? {
         return imgurImageSize(.direct)
     }
-    
+
 }
 
 // Instagram URLs
 extension Media {
-    
+
     fileprivate var instagramURL: URL? {
         guard let foreignKey = foreignKey else {
             return nil
         }
         return URL(string: "https://www.instagram.com/p/\(foreignKey)")
     }
-    
+
     fileprivate var instagramDirectURL: URL? {
         guard let thumbnail = details?["thumbnail_url"] as? String else {
             return nil
         }
         return URL(string: thumbnail)
     }
-    
+
 }
 
 // Grabcad URLs
 extension Media {
-    
+
     fileprivate var grabcadURL: URL? {
         guard let foreignKey = foreignKey else {
             return nil
         }
         return URL(string: "https://grabcad.com/library/\(foreignKey)")
     }
-    
+
     fileprivate var grabcadDirectURL: URL? {
         guard let modelImage = details?["model_image"] as? String else {
             return nil
         }
         return URL(string: modelImage.replacingOccurrences(of: "card.jpg", with: "large.png"))
     }
-    
-}
 
+}

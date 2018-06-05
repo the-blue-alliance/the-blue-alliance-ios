@@ -6,12 +6,12 @@ import UserNotifications
 // PushService handles registering push notification tokens with TBA and handling APNS messages
 // Has to be an NSObject subclass so we can be a UNUserNotificationCenterDelegate
 class PushService: NSObject {
-    
+
     private enum DefaultKeys: String {
         case pendingRegisterPushToken = "kPendingPushToken"
         case pendingUnregisterPushTokens = "kPendingUnregisterPushTokens"
     }
-    
+
     private static var pendingRegisterPushToken: String? {
         get {
             return UserDefaults.standard.string(forKey: DefaultKeys.pendingRegisterPushToken.rawValue)
@@ -21,7 +21,7 @@ class PushService: NSObject {
             UserDefaults.standard.synchronize()
         }
     }
-    
+
     private static var pendingUnregisterPushTokens: Set<String> {
         get {
             let arr = UserDefaults.standard.array(forKey: DefaultKeys.pendingUnregisterPushTokens.rawValue) as? [String] ?? []
@@ -36,7 +36,7 @@ class PushService: NSObject {
 
     // Private singleton, so we can capture auth changes
     public static let shared = PushService()
-    
+
     override init() {
         super.init()
 
@@ -58,14 +58,14 @@ class PushService: NSObject {
             }
         }
     }
-    
+
     private static func registerPendingPushToken() {
         guard let pendingRegisterPushToken = pendingRegisterPushToken else {
             return
         }
         registerPushToken(pendingRegisterPushToken)
     }
-    
+
     // Unregister is unused right now because myTBA needs to be auth'd to unregister but we unregister after a log out..
     /*
     static func unregisterPushToken(_ token: String) {
@@ -91,24 +91,24 @@ class PushService: NSObject {
         }
     }
     */
-    
-    static func requestAuthorizationForNotifications(_ completion: ((Error?) -> ())?) {
+
+    static func requestAuthorizationForNotifications(_ completion: ((Error?) -> Void)?) {
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (success, error) in
+        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (_, error) in
             if let completion = completion {
                 completion(error)
             }
         }
     }
-    
+
 }
 
 extension PushService: MyTBAAuthenticationObservable {
-    
+
     func authenticated() {
         PushService.registerPendingPushToken()
     }
-    
+
     func unauthenticated() {
         // TODO: By the nature of unregister being hooked up to unauth'd... won't this ALWAYS fail?
         // We should fix this, but probably fix this server-side, where unregister isn't an auth'd endpoint?
@@ -123,38 +123,38 @@ extension PushService: MyTBAAuthenticationObservable {
 }
 
 extension PushService: MessagingDelegate {
-    
+
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
         print("Firebase registration token: \(fcmToken)")
         PushService.registerPushToken(fcmToken)
     }
-    
+
     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
         print(remoteMessage.appData)
     }
-    
+
 }
 
 extension PushService: UNUserNotificationCenterDelegate {
-    
+
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
         // Print full message.
         print("Will present")
         print(userInfo)
-        
+
         // Handle notification information in foreground
         completionHandler([])
     }
-    
+
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
         // Print full message.
         print("Push notification")
         print(userInfo)
-        
+
         // Handle being launched from a push notification
         completionHandler()
     }
-    
+
 }

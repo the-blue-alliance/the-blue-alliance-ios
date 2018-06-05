@@ -1,13 +1,13 @@
 import Foundation
 
 extension Int16 {
-    
+
     func suffix() -> String {
         let positive = abs(self)
 
         let lastTwo = positive % 100
         let lastOne = lastTwo % 10
-        
+
         if 11 ... 20 ~= lastTwo {
             return "th"
         } else if lastOne == 1 {
@@ -20,5 +20,5 @@ extension Int16 {
             return "th"
         }
     }
-    
+
 }

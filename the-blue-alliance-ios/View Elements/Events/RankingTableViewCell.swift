@@ -3,13 +3,13 @@ import UIKit
 
 class RankingTableViewCell: UITableViewCell {
     static let reuseIdentifier = "RankingCell"
-    
+
     @IBOutlet public var rankLabel: UILabel?
     @IBOutlet private var numberLabel: UILabel?
     @IBOutlet private var nameLabel: UILabel?
     @IBOutlet private var wltLabel: UILabel?
     @IBOutlet var detailLabel: UILabel!
-    
+
     public var eventRanking: EventRanking? {
         didSet {
             guard let ranking = eventRanking, let team = ranking.team else {
@@ -28,7 +28,7 @@ class RankingTableViewCell: UITableViewCell {
             setupWLTLabel(ranking: ranking)
         }
     }
-    
+
     public var districtRanking: DistrictRanking? {
         didSet {
             guard let ranking = districtRanking, let team = ranking.team else {
@@ -41,7 +41,7 @@ class RankingTableViewCell: UITableViewCell {
             wltLabel?.isHidden = true
         }
     }
-    
+
     public var points: DistrictEventPoints? {
         didSet {
             guard let points = points, let team = points.team else {
@@ -53,7 +53,7 @@ class RankingTableViewCell: UITableViewCell {
             wltLabel?.isHidden = true
         }
     }
-    
+
     public var teamStat: EventTeamStat? {
         didSet {
             guard let teamStat = teamStat, let team = teamStat.team else {
@@ -66,7 +66,7 @@ class RankingTableViewCell: UITableViewCell {
             wltLabel?.isHidden = true
         }
     }
-    
+
     func setupWLTLabel(ranking: EventRanking) {
         if let record = ranking.record {
             wltLabel?.text = "(\(record.displayString()))"

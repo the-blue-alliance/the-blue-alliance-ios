@@ -12,7 +12,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
     internal var eventsViewController: EventsTableViewController!
     @IBOutlet internal var eventsView: UIView!
     @IBOutlet internal var weeksButton: UIBarButtonItem?
-    
+
     // Used to manually refresh the first time for a year change, since our existing patterns won't refresh automatically
     internal var hasRefreshed: Bool = false
     // TODO: Default this from Firebase Config, or some status something
@@ -20,7 +20,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
         didSet {
             // Update to make sure we're watching for events for the proper year
             updateEventObserver()
-            
+
             // Year changed - remove our previously selected week
             weekEvent = nil
             weekEvents = []
@@ -29,7 +29,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
             // Pass down year change so it can update it's FRC predicate
             // Remove weekEvent before year on Events TVC - it's safer that way
             eventsViewController.year = year
-            
+
             // Update available weeks for the year
             DispatchQueue.main.async {
                 self.setupWeeks()
@@ -56,7 +56,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
     internal var maxYear: Int = 2018
 
     // MARK: - Persistable
-    
+
     override var persistentContainer: NSPersistentContainer! {
         didSet {
             // Watch for new events to get inserted to update
@@ -64,28 +64,28 @@ class EventsContainerViewController: ContainerViewController, Observable {
             updateEventObserver()
         }
     }
-    
+
     // MARK: - Observable
-    
+
     typealias ManagedType = Event
     lazy var contextObserver: CoreDataContextObserver<Event> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
-    
+
     // MARK: - View Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         viewControllers = [eventsViewController]
         containerViews = [eventsView]
-        
+
         setupWeeks()
         updateInterface()
     }
-    
+
     // MARK: - Private Methods
-    
+
     func updateInterface() {
         if let weekEvent = weekEvent {
             navigationTitleLabel?.text = "\(weekEvent.weekString) Events"
@@ -93,7 +93,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
             navigationTitleLabel?.text = "---- Events"
         }
         navigationDetailLabel?.text = "▾ \(year)"
-        
+
         if weekEvents.isEmpty {
             weeksButton?.title = "----"
             weeksButton?.isEnabled = false
@@ -102,18 +102,18 @@ class EventsContainerViewController: ContainerViewController, Observable {
             weeksButton?.isEnabled = true
         }
     }
-    
+
     func updateEventObserver() {
         // Ignore Championship divisions - we don't want to take them in to account during our weeks calculation,
         // so we don't bother watching for changes in them
         let predicate = NSPredicate(format: "year == %ld && eventType != %ld", year, EventType.championshipDivision.rawValue)
-        contextObserver.observeInsertions(matchingPredicate: predicate) { [weak self] (events) in
+        contextObserver.observeInsertions(matchingPredicate: predicate) { [weak self] (_) in
             DispatchQueue.main.async {
                 self?.setupWeeks()
             }
         }
     }
-    
+
     func setupWeeks() {
         // If we fail to load our persistent container we don't want to crash here
         guard let persistentContainer = persistentContainer else {
@@ -125,7 +125,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
             fetchRequest.predicate = NSPredicate(format: "year == %ld && eventType != %ld", year, EventType.championshipDivision.rawValue)
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true), NSSortDescriptor(key: "eventType", ascending: true), NSSortDescriptor(key: "endDate", ascending: true)]
         }
-        
+
         if events.isEmpty && !hasRefreshed {
             // Initial load of events for eventsVC
             if eventsViewController.shouldRefresh() {
@@ -161,7 +161,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
                 return event
             }
         })).sorted()
-        
+
         // If we don't have a weekEvent yet, set one
         // If we do have one, we don't want to jump where the user set their week to
         if weekEvent == nil {
@@ -173,27 +173,27 @@ class EventsContainerViewController: ContainerViewController, Observable {
                 weekEvent = firstWeekEvent
             }
         }
-        
+
         DispatchQueue.main.async {
             self.updateInterface()
         }
     }
-    
+
     func setupCurrentSeasonWeek() {
         // Fetch all events where endDate is today or after today
         let date = Date()
-        
+
         // Remove time from date - we only care about the day
         // We don't want to be too granular, or we bump forward too fast
         let components = Calendar.current.dateComponents([.day, .month, .year], from: date)
-        
+
         // Conversion stuff because Core Data still uses NSDates
         guard let swiftDate = Calendar.current.date(from: components) else {
             showErrorAlert(with: "Unable to setup current season week - datetime conversion failed")
             return
         }
         let coreDataDate = NSDate(timeIntervalSince1970: swiftDate.timeIntervalSince1970)
-        
+
         // Find the first non-finished event for the selected year
         let event = Event.fetchSingleObject(in: persistentContainer.viewContext) { (fetchRequest) in
             fetchRequest.predicate = NSPredicate(format: "year == %ld && endDate >= %@ && eventType != %ld", year, coreDataDate, EventType.championshipDivision.rawValue)
@@ -204,27 +204,27 @@ class EventsContainerViewController: ContainerViewController, Observable {
             fetchRequest.predicate = NSPredicate(format: "year == %ld", year)
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
         }
-        
+
         if let event = event {
             weekEvent = event
         } else if let firstEvent = firstEvent {
             weekEvent = firstEvent
         }
     }
-    
+
     // MARK: - Navigation
-    
+
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if identifier == SelectWeekSegue, (weekEvents.isEmpty || weekEvent == nil) {
             return false
         }
         return true
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == SelectYearSegue || segue.identifier == SelectWeekSegue {
             let nav = segue.destination as! UINavigationController
-            
+
             if segue.identifier == SelectYearSegue {
                 let selectTableViewController = SelectTableViewController<Int>()
                 selectTableViewController.title = "Select Year"
@@ -278,5 +278,5 @@ class EventsContainerViewController: ContainerViewController, Observable {
             }
         }
     }
-    
+
 }

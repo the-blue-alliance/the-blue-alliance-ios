@@ -7,12 +7,12 @@ public protocol Managed: class, NSFetchRequestResult {
 }
 
 extension Managed where Self: NSManagedObject {
-    
+
     public static var entity: NSEntityDescription { return entity()  }
-    
+
     public static var entityName: String { return entity.name!  }
-    
-    public static func findOrCreate(in context: NSManagedObjectContext, matching predicate: NSPredicate, configure: (Self) -> ()) -> Self {
+
+    public static func findOrCreate(in context: NSManagedObjectContext, matching predicate: NSPredicate, configure: (Self) -> Void) -> Self {
         var object = findOrFetch(in: context, matching: predicate)
         if object == nil {
             object = context.insertObject()
@@ -20,8 +20,7 @@ extension Managed where Self: NSManagedObject {
         configure(object!)
         return object!
     }
-    
-    
+
     public static func findOrFetch(in context: NSManagedObjectContext, matching predicate: NSPredicate) -> Self? {
         guard let object = materializedObject(in: context, matching: predicate) else {
             return fetch(in: context) { request in
@@ -32,19 +31,19 @@ extension Managed where Self: NSManagedObject {
         }
         return object
     }
-    
-    public static func fetch(in context: NSManagedObjectContext, configurationBlock: (NSFetchRequest<Self>) -> () = { _ in }) -> [Self] {
+
+    public static func fetch(in context: NSManagedObjectContext, configurationBlock: (NSFetchRequest<Self>) -> Void = { _ in }) -> [Self] {
         let request = NSFetchRequest<Self>(entityName: Self.entityName)
         configurationBlock(request)
         return try! context.fetch(request)
     }
-    
-    public static func count(in context: NSManagedObjectContext, configure: (NSFetchRequest<Self>) -> () = { _ in }) -> Int {
+
+    public static func count(in context: NSManagedObjectContext, configure: (NSFetchRequest<Self>) -> Void = { _ in }) -> Int {
         let request = NSFetchRequest<Self>(entityName: entityName)
         configure(request)
         return try! context.count(for: request)
     }
-    
+
     public static func materializedObject(in context: NSManagedObjectContext, matching predicate: NSPredicate) -> Self? {
         for object in context.registeredObjects where !object.isFault {
             guard let result = object as? Self, predicate.evaluate(with: result) else { continue }
@@ -52,11 +51,11 @@ extension Managed where Self: NSManagedObject {
         }
         return nil
     }
-    
+
 }
 
 extension Managed where Self: NSManagedObject {
-    public static func fetchSingleObject(in context: NSManagedObjectContext, configure: (NSFetchRequest<Self>) -> ()) -> Self? {
+    public static func fetchSingleObject(in context: NSManagedObjectContext, configure: (NSFetchRequest<Self>) -> Void) -> Self? {
         let result = fetch(in: context) { request in
             configure(request)
             request.fetchLimit = 1

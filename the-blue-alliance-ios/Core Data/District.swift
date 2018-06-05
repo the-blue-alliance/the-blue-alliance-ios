@@ -3,7 +3,7 @@ import TBAKit
 import CoreData
 
 extension District: Managed {
-    
+
     public var abbreviationWithYear: String {
         return "\(String(year)) \(abbreviation!.uppercased())"
     }
@@ -18,5 +18,5 @@ extension District: Managed {
             district.year = Int16(model.year)
         })
     }
-    
+
 }

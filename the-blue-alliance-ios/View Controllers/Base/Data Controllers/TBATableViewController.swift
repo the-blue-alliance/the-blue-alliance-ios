@@ -3,9 +3,9 @@ import UIKit
 import CoreData
 
 class TBATableViewController: UITableViewController, DataController {
-    
+
     let basicCellReuseIdentifier = "BasicCell"
-    
+
     var persistentContainer: NSPersistentContainer!
     var requests: [URLSessionDataTask] = []
     var dataView: UIView {
@@ -17,10 +17,10 @@ class TBATableViewController: UITableViewController, DataController {
     var noDataViewController: NoDataViewController?
 
     // MARK: - View Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 64.0
         tableView.backgroundColor = .backgroundGray
@@ -31,9 +31,9 @@ class TBATableViewController: UITableViewController, DataController {
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
-    
+
     // MARK: - UITableViewDelegate
-    
+
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let headerView = view as? UITableViewHeaderFooterView {
             headerView.contentView.backgroundColor = UIColor.primaryDarkBlue
@@ -41,15 +41,15 @@ class TBATableViewController: UITableViewController, DataController {
             headerView.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         }
     }
-    
+
     // MARK: - Refreshable
-    
+
     @objc func refresh() {
         fatalError("Implement this downstream")
     }
-    
+
     func shouldNoDataRefresh() -> Bool {
         fatalError("Implement this downstream")
     }
-    
+
 }

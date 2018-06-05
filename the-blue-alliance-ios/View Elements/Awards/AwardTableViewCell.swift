@@ -11,13 +11,13 @@ class AwardTableViewCell: UITableViewCell {
     }
     private var recipients: [AwardRecipient]?
 
-    var teamSelected: ((Team) -> ())?
+    var teamSelected: ((Team) -> Void)?
     @IBOutlet private weak var awardNameLabel: UILabel!
     @IBOutlet private weak var awardInfoStackView: UIStackView!
-    
+
     private func configureCell() {
         awardNameLabel.text = award?.name
-        
+
         for view in awardInfoStackView.arrangedSubviews {
             view.removeFromSuperview()
         }
@@ -25,7 +25,7 @@ class AwardTableViewCell: UITableViewCell {
         guard let recipients = recipients else {
             return
         }
-        
+
         for (index, recipient) in recipients.enumerated() {
             if recipient.awardText.count == 0 {
                 continue
@@ -42,7 +42,7 @@ class AwardTableViewCell: UITableViewCell {
             awardInfoStackView.addArrangedSubview(stackView)
         }
     }
-    
+
     private func boldLabelWithText(_ text: String) -> UILabel {
         let label = UILabel()
         label.text = text
@@ -51,7 +51,7 @@ class AwardTableViewCell: UITableViewCell {
         label.textAlignment = .right
         return label
     }
-    
+
     @objc private func recipientTapped(gesture: UITapGestureRecognizer) {
         guard let tag = gesture.view?.tag, let recipient = recipients?[tag], let team = recipient.team else {
             return
@@ -60,5 +60,5 @@ class AwardTableViewCell: UITableViewCell {
             teamSelected(team)
         }
     }
-    
+
 }

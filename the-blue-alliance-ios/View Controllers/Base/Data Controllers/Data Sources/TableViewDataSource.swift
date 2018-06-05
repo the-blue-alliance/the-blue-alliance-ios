@@ -8,7 +8,7 @@ protocol TableViewDataSourceDelegate: class {
     associatedtype Cell: UITableViewCell
     func configure(_ cell: Cell, for object: Object, at indexPath: IndexPath)
     func title(for section: Int) -> String?
-    
+
     func showNoDataView()
     func hideNoDataView()
 }
@@ -23,13 +23,13 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
 
     typealias Object = Delegate.Object
     typealias Cell = Delegate.Cell
-    
+
     required init(tableView: UITableView, cellIdentifier: String, fetchedResultsController: NSFetchedResultsController<Result>, delegate: Delegate) {
         self.tableView = tableView
         self.cellIdentifier = cellIdentifier
         self.fetchedResultsController = fetchedResultsController
         self.delegate = delegate
-        
+
         super.init()
         fetchedResultsController.delegate = self
         try! fetchedResultsController.performFetch()
@@ -39,17 +39,17 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
             tableView.reloadData()
         }
     }
-    
+
     var selectedObject: Object? {
         guard let indexPath = tableView.indexPathForSelectedRow else { return nil }
         return object(at: indexPath)
     }
-    
+
     func object(at indexPath: IndexPath) -> Object {
         return (fetchedResultsController.object(at: indexPath) as! Object)
     }
-    
-    func reconfigureFetchRequest(_ configure: (NSFetchRequest<Result>) -> ()) {
+
+    func reconfigureFetchRequest(_ configure: (NSFetchRequest<Result>) -> Void) {
         NSFetchedResultsController<NSFetchRequestResult>.deleteCache(withName: fetchedResultsController.cacheName)
         configure(fetchedResultsController.fetchRequest)
         do { try fetchedResultsController.performFetch() } catch { fatalError("fetch request failed") }
@@ -74,7 +74,7 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         }
         return sections
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var rows: Int = 0
         if let sections = fetchedResultsController.sections {
@@ -101,12 +101,11 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return delegate.title(for: section)
     }
-        
+
     // MARK: NSFetchedResultsControllerDelegate
-    
+
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         tableView.reloadData()
     }
-    
-}
 
+}

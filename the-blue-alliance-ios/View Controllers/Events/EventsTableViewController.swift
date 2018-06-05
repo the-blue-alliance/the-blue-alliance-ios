@@ -3,7 +3,7 @@ import TBAKit
 import CoreData
 
 class EventsTableViewController: TBATableViewController {
-    
+
     var team: Team?
     var district: District?
 
@@ -26,21 +26,21 @@ class EventsTableViewController: TBATableViewController {
         }
     }
 
-    var eventSelected: ((Event) -> ())?
-    
+    var eventSelected: ((Event) -> Void)?
+
     // MARK: - View Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         tableView.register(UINib(nibName: String(describing: EventTableViewCell.self), bundle: nil), forCellReuseIdentifier: EventTableViewCell.reuseIdentifier)
     }
-        
+
     // MARK: - Refreshing
 
     override func refresh() {
         removeNoDataView()
-        
+
         if team != nil {
             refreshTeamEvents()
         } else if district != nil {
@@ -49,7 +49,7 @@ class EventsTableViewController: TBATableViewController {
             refreshAllEvents()
         }
     }
-    
+
     override func shouldNoDataRefresh() -> Bool {
         if let events = dataSource?.fetchedResultsController.fetchedObjects, events.isEmpty {
             return true
@@ -67,12 +67,12 @@ class EventsTableViewController: TBATableViewController {
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
             }
-            
+
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 events?.forEach({ (modelEvent) in
                     _ = Event.insert(with: modelEvent, in: backgroundContext)
                 })
-                
+
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh event - database error")
                 }
@@ -81,7 +81,7 @@ class EventsTableViewController: TBATableViewController {
         })
         addRequest(request: request!)
     }
-    
+
     func refreshTeamEvents() {
         guard let team = team else {
             return
@@ -92,14 +92,14 @@ class EventsTableViewController: TBATableViewController {
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
             }
-            
+
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: team.objectID) as! Team
                 let localEvents = events?.map({ (modelEvent) -> Event in
                     return Event.insert(with: modelEvent, in: backgroundContext)
                 })
                 backgroundTeam.addToEvents(Set(localEvents ?? []) as NSSet)
-                
+
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh event - database error")
                 }
@@ -108,25 +108,25 @@ class EventsTableViewController: TBATableViewController {
         })
         addRequest(request: request!)
     }
-    
+
     func refreshDistrictEvents() {
         guard let district = district else {
             return
         }
-        
+
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchDistrictEvents(key: district.key!, completion: { (events, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
             }
-            
+
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 let backgroundDistrict = backgroundContext.object(with: district.objectID) as! District
                 let localEvents = events?.map({ (modelEvent) -> Event in
                     return Event.insert(with: modelEvent, in: backgroundContext)
                 })
                 backgroundDistrict.events = Set(localEvents ?? []) as NSSet
-                
+
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh event - database error")
                 }
@@ -135,42 +135,42 @@ class EventsTableViewController: TBATableViewController {
         })
         addRequest(request: request!)
     }
-    
+
     // MARK: UITableView Delegate
-        
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let event = dataSource?.object(at: indexPath)
         if let event = event, let eventSelected = eventSelected {
             eventSelected(event)
         }
     }
-    
+
     // MARK: Table View Data Source
-    
+
     fileprivate var dataSource: TableViewDataSource<Event, EventsTableViewController>?
-    
+
     fileprivate func setupDataSource() {
         guard let persistentContainer = persistentContainer else {
             return
         }
 
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
-        
+
         var firstSortDescriptor = NSSortDescriptor(key: "hybridType", ascending: true)
         var sectionNameKeyPath = "hybridType"
         if district != nil {
             firstSortDescriptor = NSSortDescriptor(key: "week", ascending: true)
             sectionNameKeyPath = "week"
         }
-        
+
         fetchRequest.sortDescriptors = [firstSortDescriptor,
                                         NSSortDescriptor(key: "startDate", ascending: true),
                                         NSSortDescriptor(key: "name", ascending: true)]
-        
+
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
-        
+
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: EventTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
@@ -181,7 +181,7 @@ class EventsTableViewController: TBATableViewController {
             setupDataSource()
         }
     }
-    
+
     fileprivate func setupFetchRequest(_ request: NSFetchRequest<Event>) {
         if let year = year, let weekEvent = weekEvent {
             if let week = weekEvent.week {
@@ -205,15 +205,15 @@ class EventsTableViewController: TBATableViewController {
             request.predicate = NSPredicate(format: "year == -1")
         }
     }
-    
+
 }
 
 extension EventsTableViewController: TableViewDataSourceDelegate {
-    
+
     func configure(_ cell: EventTableViewCell, for object: Event, at indexPath: IndexPath) {
         cell.event = object
     }
-    
+
     func title(for section: Int) -> String? {
         guard let event = dataSource?.object(at: IndexPath(item: 0, section: section)) else {
             return nil
@@ -238,7 +238,7 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
             return "Regional Events"
         }
     }
-    
+
     func showNoDataView() {
         // Only show no data if we've loaded data once
         if isRefreshing {
@@ -246,10 +246,9 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
         }
         showNoDataView(with: "Unable to load events")
     }
-    
+
     func hideNoDataView() {
         removeNoDataView()
     }
-    
-}
 
+}

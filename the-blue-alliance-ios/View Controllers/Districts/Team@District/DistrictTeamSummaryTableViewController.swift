@@ -9,7 +9,7 @@ class DistrictTeamSummaryTableViewController: TBATableViewController {
     private var sortedEventPoints: [DistrictEventPoints] {
         return (ranking!.eventPoints?.sortedArray(using: [NSSortDescriptor(key: "event.startDate", ascending: true)]) as? [DistrictEventPoints]) ?? []
     }
-    var eventPointsSelected: ((DistrictEventPoints) -> ())?
+    var eventPointsSelected: ((DistrictEventPoints) -> Void)?
 
     // MARK: - Persistable
 
@@ -35,7 +35,7 @@ class DistrictTeamSummaryTableViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(UINib(nibName: String(describing: ReverseSubtitleTableViewCell.self),bundle: nil),
+        tableView.register(UINib(nibName: String(describing: ReverseSubtitleTableViewCell.self), bundle: nil),
                            forCellReuseIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier)
     }
 
@@ -108,7 +108,7 @@ class DistrictTeamSummaryTableViewController: TBATableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
+
         if isEventPointsRow(row: indexPath.row), let eventPointsSelected = eventPointsSelected {
             eventPointsSelected(sortedEventPoints[indexPath.row - 1])
         }

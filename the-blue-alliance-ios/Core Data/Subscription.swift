@@ -13,7 +13,7 @@ extension Subscription: MyTBAManaged {
             subscription.notifications = model.notifications.map({ $0.rawValue })
         }
     }
-    
+
     func toRemoteModel() -> MyTBASubscription {
         return MyTBASubscription(modelKey: modelKey!, modelType: MyTBAModelType(rawValue: modelType!)!, notifications: notifications!.map({ NotificationType(rawValue: $0)! }))
     }

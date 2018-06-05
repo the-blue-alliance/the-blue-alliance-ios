@@ -5,7 +5,7 @@ import TBAKit
 private let SelectYearSegue = "SelectYearSegue"
 
 class DistrictsContainerViewController: ContainerViewController {
-    
+
     // TODO: Get these from Firebase Config
     var maxYear: Int = 2018
     var year: Int = 2018 {
@@ -13,35 +13,34 @@ class DistrictsContainerViewController: ContainerViewController {
             if let districtsViewController = districtsViewController {
                 districtsViewController.year = year
             }
-            
+
             DispatchQueue.main.async {
                 self.updateInterface()
             }
         }
     }
-    
+
     internal var districtsViewController: DistrictsTableViewController!
     @IBOutlet internal var districtsView: UIView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         viewControllers = [districtsViewController]
         containerViews = [districtsView]
-        
+
         updateInterface()
     }
-        
+
     // MARK: - Private Methods
-    
+
     func updateInterface() {
         navigationTitleLabel?.text = "Districts"
         navigationDetailLabel?.text = "▾ \(year)"
     }
 
-    
     // MARK: - Navigation
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == SelectYearSegue {
             let nav = segue.destination as! UINavigationController

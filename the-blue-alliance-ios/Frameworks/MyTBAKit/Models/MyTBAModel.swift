@@ -10,12 +10,11 @@ protocol MyTBAResponse: Codable {}
 
 // Models for Favorite/Subscription
 protocol MyTBAModel: Codable {
-    
+
     static var arrayKey: String { get }
 
     var modelKey: String { get set }
     var modelType: MyTBAModelType { get set }
-    
-    static var fetch: ((@escaping ([MyTBAModel]?, Error?) -> ()) -> URLSessionDataTask) { get }
-}
 
+    static var fetch: ((@escaping ([MyTBAModel]?, Error?) -> Void) -> URLSessionDataTask) { get }
+}
