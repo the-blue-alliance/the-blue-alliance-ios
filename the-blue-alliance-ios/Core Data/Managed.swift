@@ -1,24 +1,16 @@
 import CoreData
 
 public protocol Managed: class, NSFetchRequestResult {
-    static var entity: NSEntityDescription { get }
     static var entityName: String { get }
     var managedObjectContext: NSManagedObjectContext? { get }
 }
 
 extension Managed where Self: NSManagedObject {
     
-    public static var entity: NSEntityDescription { return entity()  }
-
     public static var entityName: String {
-        // While running unit tests, entity() comes back uninitilized
-        #if DEBUG
-        let unitTesting = UserDefaults.standard.bool(forKey: "runningTests")
-        if unitTesting {
-            return String.init(describing: Self.self)
-        }
-        #endif
-        return entity.name!
+        // entity().name! seems to come back uninitialized during testing
+        // entities appear to exist inside our model - do some more digging
+        return String(NSStringFromClass(object_getClass(self)!))
     }
 
     public static func findOrCreate(in context: NSManagedObjectContext, matching predicate: NSPredicate, configure: (Self) -> ()) -> Self {

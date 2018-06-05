@@ -6,8 +6,7 @@ import CoreData
 class CoreDataTestCase: XCTestCase {
 
     private lazy var mockPersistantContainer: NSPersistentContainer = {
-        let managedObjectModel = NSManagedObjectModel.mergedModel(from: [Bundle(for: type(of: self))] )!
-        let container = NSPersistentContainer(name: "TBA", managedObjectModel: managedObjectModel)
+        let container = NSPersistentContainer(name: "TBA")
         let description = NSPersistentStoreDescription()
         description.type = NSInMemoryStoreType
         description.shouldAddStoreAsynchronously = false
