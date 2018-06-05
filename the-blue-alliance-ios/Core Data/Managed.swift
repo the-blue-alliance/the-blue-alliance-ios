@@ -12,7 +12,6 @@ extension Managed where Self: NSManagedObject {
 
     public static var entityName: String {
         // While running unit tests, entity() comes back uninitilized
-        // TOOD: S
         #if DEBUG
         let unitTesting = UserDefaults.standard.bool(forKey: "runningTests")
         if unitTesting {

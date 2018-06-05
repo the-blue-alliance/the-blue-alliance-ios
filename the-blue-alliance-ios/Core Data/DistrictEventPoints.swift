@@ -32,3 +32,11 @@ extension DistrictEventPoints: Managed {
     }
 
 }
+
+extension DistrictEventPoints {
+    
+    static func predicateForEvent(_ event: Event) -> NSPredicate {
+        return NSPredicate(format: "%K == %@", #keyPath(DistrictEventPoints.event), event)
+    }
+    
+}

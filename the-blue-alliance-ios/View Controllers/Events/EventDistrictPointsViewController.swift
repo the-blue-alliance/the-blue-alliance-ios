@@ -130,7 +130,7 @@ class EventDistrictPointsTableViewController: TBATableViewController {
     }
     
     fileprivate func setupFetchRequest(_ request: NSFetchRequest<DistrictEventPoints>) {
-        request.predicate = NSPredicate(format: "event == %@", event)
+        request.predicate = DistrictEventPoints.predicateForEvent(event)
     }
     
 }
