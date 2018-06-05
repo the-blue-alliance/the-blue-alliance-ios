@@ -124,7 +124,7 @@ class EventAlliancesTableViewController: TBATableViewController {
     }
     
     fileprivate func setupFetchRequest(_ request: NSFetchRequest<EventAlliance>) {
-        request.predicate = NSPredicate(format: "event == %@", event)
+        request.predicate = EventAlliance.predicateForEvent(event: event)
     }
     
 }

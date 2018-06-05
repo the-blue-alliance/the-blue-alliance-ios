@@ -32,6 +32,14 @@ extension EventAlliance: Managed {
     }
 }
 
+extension EventAlliance {
+    
+    public static func predicateForEvent(event: Event) -> NSPredicate {
+        return NSPredicate(format: "%K == %@", #keyPath(EventAlliance.event), event)
+    }
+    
+}
+
 extension EventAllianceBackup: Managed {
     
     static func insert(with model: TBAAllianceBackup, for alliance: EventAlliance, in context: NSManagedObjectContext) -> EventAllianceBackup {

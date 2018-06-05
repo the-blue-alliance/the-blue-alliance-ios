@@ -65,7 +65,8 @@ class TBABackgroundService {
         // However, we'd have to make sure that matches that got inserted in the BG didn't get double inserted, and got
         // resolved and added to their respective events later. There are places that use event information on a Match
         // though, so we'd have to remove those. This is for sure a decoupling that requires some though.
-        let event = Event.findOrFetch(in: context, matching: NSPredicate(format: "%K == %@", #keyPath(Event.key), key))
+        let event = Event.findOrFetch(in: context, matching: Event.predicateForKey(key))
+
         if event == nil {
             guard let eventKeySubstring = key.split(separator: "_").first else {
                 completion(nil, BackgroundFetchError.message("Unable to get Event for match \(key)"))

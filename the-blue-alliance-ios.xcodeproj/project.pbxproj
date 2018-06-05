@@ -96,6 +96,7 @@
 		929FCDA21EC8068800A38E46 /* DistrictViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCDA11EC8068800A38E46 /* DistrictViewController.swift */; };
 		929FCDA81EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCDA71EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift */; };
 		929FCDAA1EC8BFB000A38E46 /* DistrictRanking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCDA91EC8BFB000A38E46 /* DistrictRanking.swift */; };
+		92A3AF4B20C61B5E00F7EB7A /* EventAlliance_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A3AF4A20C61B5E00F7EB7A /* EventAlliance_Tests.swift */; };
 		92AAC69720967EC20076B977 /* MyTBAModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AAC69620967EC20076B977 /* MyTBAModel.swift */; };
 		92AAC69A209681400076B977 /* MyTBASubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AAC699209681400076B977 /* MyTBASubscription.swift */; };
 		92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */; };
@@ -240,6 +241,7 @@
 		929FCDA11EC8068800A38E46 /* DistrictViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictViewController.swift; sourceTree = "<group>"; };
 		929FCDA71EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictRankingsTableViewController.swift; sourceTree = "<group>"; };
 		929FCDA91EC8BFB000A38E46 /* DistrictRanking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictRanking.swift; sourceTree = "<group>"; };
+		92A3AF4A20C61B5E00F7EB7A /* EventAlliance_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAlliance_Tests.swift; sourceTree = "<group>"; };
 		92AAC69620967EC20076B977 /* MyTBAModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAModel.swift; sourceTree = "<group>"; };
 		92AAC699209681400076B977 /* MyTBASubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASubscription.swift; sourceTree = "<group>"; };
 		92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectNumberTableViewController.swift; sourceTree = "<group>"; };
@@ -770,6 +772,7 @@
 			isa = PBXGroup;
 			children = (
 				92D6484420BE4CC5008F0DB3 /* Event_Tests.swift */,
+				92A3AF4A20C61B5E00F7EB7A /* EventAlliance_Tests.swift */,
 			);
 			name = Event;
 			sourceTree = "<group>";
@@ -1210,6 +1213,7 @@
 			files = (
 				92D6484720BE51E0008F0DB3 /* CoreDataTestCase.swift in Sources */,
 				92F431C920BE58890080FEB2 /* Date_TBA_Tests.swift in Sources */,
+				92A3AF4B20C61B5E00F7EB7A /* EventAlliance_Tests.swift in Sources */,
 				92D6484520BE4CC5008F0DB3 /* Event_Tests.swift in Sources */,
 				92F431CB20BE59C20080FEB2 /* Int16_Suffix_Tests.swift in Sources */,
 			);

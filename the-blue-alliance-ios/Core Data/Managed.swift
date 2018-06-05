@@ -9,9 +9,19 @@ public protocol Managed: class, NSFetchRequestResult {
 extension Managed where Self: NSManagedObject {
     
     public static var entity: NSEntityDescription { return entity()  }
-    
-    public static var entityName: String { return entity.name!  }
-    
+
+    public static var entityName: String {
+        // While running unit tests, entity() comes back uninitilized
+        // TOOD: S
+        #if DEBUG
+        let unitTesting = UserDefaults.standard.bool(forKey: "runningTests")
+        if unitTesting {
+            return String.init(describing: Self.self)
+        }
+        #endif
+        return entity.name!
+    }
+
     public static func findOrCreate(in context: NSManagedObjectContext, matching predicate: NSPredicate, configure: (Self) -> ()) -> Self {
         var object = findOrFetch(in: context, matching: predicate)
         if object == nil {

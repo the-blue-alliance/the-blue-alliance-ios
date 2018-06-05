@@ -186,23 +186,21 @@ class EventsTableViewController: TBATableViewController {
         if let year = year, let weekEvent = weekEvent {
             if let week = weekEvent.week {
                 // Event has a week - filter based on the week
-                request.predicate = NSPredicate(format: "week == %ld && year == %ld", week.intValue, year)
+                request.predicate = Event.predicateForWeek(week.intValue, andYear: year)
             } else {
                 if Int(weekEvent.eventType) == EventType.championshipFinals.rawValue {
-                    // 2017 and onward - handle multiple CMPs
-                    request.predicate = NSPredicate(format: "(eventType == %ld || eventType == %ld) && year == %ld && (key == %@ || parentEventKey == %@)", EventType.championshipFinals.rawValue, EventType.championshipDivision.rawValue, year, weekEvent.key!, weekEvent.key!)
+                    request.predicate = Event.predicateForChampionshipEventsWithParentKey(weekEvent.key!, andYear: year)
                 } else {
-                    request.predicate = NSPredicate(format: "eventType == %ld && year == %ld", weekEvent.eventType, year)
+                    request.predicate = Event.predicateForEventType(Int(weekEvent.eventType), andYear: year)
                 }
             }
         } else if let year = year, let team = team {
-            request.predicate = NSPredicate(format: "year == %ld AND ANY teams == %@", year, team)
+            request.predicate = Event.predicateForTeams(withTeam: team, andYear: year)
         } else if let district = district {
-            request.predicate = NSPredicate(format: "district == %@", district)
+            request.predicate = Event.predicateForDistrict(district)
         } else {
             // Set this up so we fetch absolutely nothing and force a clear of all cells
-            // Used to bust our table view/FRC after we change years in Events VC
-            request.predicate = NSPredicate(format: "year == -1")
+            request.predicate = Event.predicateForNoResults()
         }
     }
     

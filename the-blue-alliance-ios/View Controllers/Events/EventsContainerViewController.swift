@@ -106,8 +106,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
     func updateEventObserver() {
         // Ignore Championship divisions - we don't want to take them in to account during our weeks calculation,
         // so we don't bother watching for changes in them
-        let predicate = NSPredicate(format: "year == %ld && eventType != %ld", year, EventType.championshipDivision.rawValue)
-        contextObserver.observeInsertions(matchingPredicate: predicate) { [weak self] (events) in
+        contextObserver.observeInsertions(matchingPredicate: Event.predicateExcludingChampionshipDivisionsForYear(year)) { [weak self] (events) in
             DispatchQueue.main.async {
                 self?.setupWeeks()
             }
@@ -122,7 +121,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
 
         let events = Event.fetch(in: persistentContainer.viewContext) { (fetchRequest) in
             // Filter out CMP divisions - we don't want them below for our weeks calculation
-            fetchRequest.predicate = NSPredicate(format: "year == %ld && eventType != %ld", year, EventType.championshipDivision.rawValue)
+            fetchRequest.predicate = Event.predicateExcludingChampionshipDivisionsForYear(year)
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true), NSSortDescriptor(key: "eventType", ascending: true), NSSortDescriptor(key: "endDate", ascending: true)]
         }
         
@@ -196,12 +195,12 @@ class EventsContainerViewController: ContainerViewController, Observable {
         
         // Find the first non-finished event for the selected year
         let event = Event.fetchSingleObject(in: persistentContainer.viewContext) { (fetchRequest) in
-            fetchRequest.predicate = NSPredicate(format: "year == %ld && endDate >= %@ && eventType != %ld", year, coreDataDate, EventType.championshipDivision.rawValue)
+            fetchRequest.predicate = Event.predicateExcludingChampionshipDivisionsForYear(year, beforeEndDate: coreDataDate)
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "endDate", ascending: true)]
         }
         // Find the first overall event for the selected year
         let firstEvent = Event.fetchSingleObject(in: persistentContainer.viewContext) { (fetchRequest) in
-            fetchRequest.predicate = NSPredicate(format: "year == %ld", year)
+            fetchRequest.predicate = Event.predicateForYear(year)
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
         }
         

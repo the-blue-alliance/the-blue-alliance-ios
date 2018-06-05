@@ -216,6 +216,78 @@ extension Event: Locatable, Managed {
     
 }
 
+extension Event {
+
+    // Event predicate for key - this should only return a single event
+    static func predicateForKey(_ key: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@", #keyPath(Event.key), key)
+    }
+
+    // Event predicate for for non-championship division events for year
+    static func predicateExcludingChampionshipDivisionsForYear(_ year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %ld && %K != %ld",
+                           #keyPath(Event.year), year,
+                           #keyPath(Event.eventType), EventType.championshipDivision.rawValue)
+    }
+    
+    // Event predicate for non-championsihp division events for year where end date is before specified date
+    static func predicateExcludingChampionshipDivisionsForYear(_ year: Int, beforeEndDate date: NSDate) -> NSPredicate {
+        return NSPredicate(format: "%K == %ld && %K >= %@ && %K != %ld",
+                           #keyPath(Event.year), year,
+                           #keyPath(Event.endDate), date,
+                           #keyPath(Event.eventType), EventType.championshipDivision.rawValue)
+    }
+    
+    // Event predicate for year
+    static func predicateForYear(_ year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %ld", #keyPath(Event.year), year)
+    }
+    
+    // Event predicate for week and year
+    static func predicateForWeek(_ week: Int, andYear year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %ld && %K == %ld",
+                           #keyPath(Event.week), week,
+                            #keyPath(Event.year), year)
+    }
+
+    // Event predicate for CMP finals and CMP divisions for a parent key for year - supports multiple championships
+    static func predicateForChampionshipEventsWithParentKey(_ key: String, andYear year: Int) -> NSPredicate {
+        return NSPredicate(format: "(%K == %ld || %K == %ld) && %K == %ld && (%K == %@ || %K == %@)",
+                           #keyPath(Event.eventType), EventType.championshipFinals.rawValue,
+                           #keyPath(Event.eventType), EventType.championshipDivision.rawValue,
+                           #keyPath(Event.year), year,
+                           #keyPath(Event.key), key,
+                           #keyPath(Event.parentEventKey), key)
+    }
+    
+    // Event predicate for event type and year
+    static func predicateForEventType(_ eventType: Int, andYear year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %ld && %K == %ld",
+                           #keyPath(Event.eventType), eventType,
+                           #keyPath(Event.year), year)
+    }
+    
+    // Event predicate where team is in `teams` and year
+    static func predicateForTeams(withTeam team: Team, andYear year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %ld AND ANY %K == %@",
+                           #keyPath(Event.year), year,
+                           #keyPath(Event.teams), team)
+    }
+    
+    // Event predicate for district
+    static func predicateForDistrict(_ district: District) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Event.district), district)
+    }
+    
+    // Event predicate for year where year is -1 (or non-existant)
+    // Used to bust our table view/FRC after we change years in Events VC
+    static func predicateForNoResults() -> NSPredicate {
+        return NSPredicate(format: "%K == -1", #keyPath(Event.year))
+    }
+    
+}
+
 extension Event: Comparable {
     
     // MARK: Comparable
