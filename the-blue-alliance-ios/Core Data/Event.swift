@@ -16,7 +16,7 @@ public enum EventType: Int {
 }
 
 extension Event: Locatable, Managed {
-    
+
     static func insert(with model: TBAEvent, in context: NSManagedObjectContext) -> Event {
         let predicate = NSPredicate(format: "key == %@", model.key)
         return findOrCreate(in: context, matching: predicate) { (event) in
@@ -24,13 +24,13 @@ extension Event: Locatable, Managed {
             event.address = model.address
             event.city = model.city
             event.country = model.country
-            
+
             if let district = model.district {
                 event.district = District.insert(with: district, in: context)
             }
-            
+
             event.divisionKeys = model.divisionKeys
-            
+
             event.endDate = model.endDate
             event.eventCode = model.eventCode
             event.eventType = Int16(model.eventType)
@@ -39,32 +39,32 @@ extension Event: Locatable, Managed {
             event.firstEventCode = model.firstEventCode
             event.gmapsPlaceID = model.gmapsPlaceID
             event.gmapsURL = model.gmapsURL
-            
+
             event.key = model.key
-            
+
             if let lat = model.lat {
                 event.lat = NSNumber(value: lat)
             }
             if let lng = model.lng {
                 event.lng = NSNumber(value: lng)
             }
-            
+
             event.locationName = model.locationName
             event.name = model.name
-            
+
             // TODO: Can we convert this to a relationship?
             event.parentEventKey = model.parentEventKey
             if let playoffType = model.playoffType {
                 event.playoffType = Int16(playoffType)
             }
             event.playoffTypeString = model.playoffTypeString
-            
+
             event.postalCode = model.postalCode
             event.shortName = model.shortName
             event.startDate = model.startDate
             event.stateProv = model.stateProv
             event.timezone = model.timezone
-            
+
             if let webcasts = model.webcasts {
                 event.webcasts = Set(webcasts.map({ (modelWebcast) -> Webcast in
                     return Webcast.insert(with: modelWebcast, for: event, in: context)
@@ -72,17 +72,17 @@ extension Event: Locatable, Managed {
             }
 
             event.website = model.website
-            
+
             if let week = model.week {
                 event.week = NSNumber(integerLiteral: week)
             }
-            
+
             event.year = Int16(model.year)
-            
+
             event.hybridType = event.calculateHybridType()
         }
     }
-        
+
     // hybridType is used a mechanism for sorting Events properly in fetch result controllers... they use a variety
     // of event data to kinda "move around" events in our data model to get groups/order right
     // Caution: Here be dragons...
@@ -108,29 +108,29 @@ extension Event: Locatable, Managed {
         }
         return hybridType
     }
-    
+
     public func dateString() -> String? {
         if self.startDate == nil || self.endDate == nil {
             return nil
         }
-        
+
         let calendar = Calendar.current
-        
+
         let shortDateFormatter = DateFormatter()
         shortDateFormatter.dateFormat = "MMM dd"
-        
+
         let longDateFormatter = DateFormatter()
         longDateFormatter.dateFormat = "MMM dd, y"
-        
+
         let startDate = Date(timeIntervalSince1970: self.startDate!.timeIntervalSince1970)
         let endDate = Date(timeIntervalSince1970: self.endDate!.timeIntervalSince1970)
-        
+
         if let timezone = timezone {
             let tz = TimeZone(identifier: timezone)
             shortDateFormatter.timeZone = tz
             longDateFormatter.timeZone = tz
         }
-        
+
         var dateText: String?
         if startDate == endDate {
             dateText = longDateFormatter.string(from: Date(timeIntervalSince1970: endDate.timeIntervalSince1970))
@@ -139,10 +139,10 @@ extension Event: Locatable, Managed {
         } else {
             dateText = "\(longDateFormatter.string(from: startDate)) to \(longDateFormatter.string(from: endDate))"
         }
-        
+
         return dateText
     }
-    
+
     public var weekString: String {
         var weekString = "nil"
         let eventType = Int(self.eventType)
@@ -166,7 +166,7 @@ extension Event: Locatable, Managed {
                 guard let week = week else {
                     return "Other"
                 }
-                
+
                 /**
                  * Special cases for 2016:
                  * Week 1 is actually Week 0.5, eveything else is one less
@@ -185,53 +185,53 @@ extension Event: Locatable, Managed {
         }
         return weekString
     }
-    
+
     public var safeShortName: String {
         guard let shortName = shortName else {
             return name!
         }
         return shortName.isEmpty ? name! : shortName
     }
-    
+
     public var friendlyNameWithYear: String {
         return "\(String(year)) \(safeShortName) \(eventTypeString ?? "Event")"
     }
-    
+
     public var isChampionship: Bool {
         let type = Int(eventType)
         return type == EventType.championshipDivision.rawValue || type == EventType.championshipFinals.rawValue
     }
-    
+
     public var isDistrictChampionship: Bool {
         let type = Int(eventType)
         return type == EventType.districtChampionshipDivision.rawValue || type == EventType.districtChampionship.rawValue
     }
-    
+
     public var isHappeningNow: Bool {
         guard let startDate = startDate, let endDate = endDate else {
             return false
         }
         return Date().isBetween(date: startDate, andDate: endDate)
     }
-    
+
 }
 
 extension Event: Comparable {
-    
+
     // MARK: Comparable
-    
+
     // In order... Preseason, Week 1, Week 2, ..., Week 7, CMP, Offseason, Unlabeled
     // (type: 100, week: nil) < (type: 0, week: 1)
     // (type: 99, week: nil) < (type: -1, week: nil)
-    
+
     public static func <(lhs: Event, rhs: Event) -> Bool {
         if lhs.year != rhs.year {
             return lhs.year < rhs.year
         }
-        
+
         let lhsType = Int(lhs.eventType)
         let rhsType = Int(rhs.eventType)
-        
+
         // Preseason events should always come first
         if lhsType == EventType.preseason.rawValue || rhsType == EventType.preseason.rawValue {
             // Preseason, being 100, has the highest event type. So even though this seems backwards... it's not
@@ -287,5 +287,5 @@ extension Event: Comparable {
         }
         return false
     }
-    
+
 }

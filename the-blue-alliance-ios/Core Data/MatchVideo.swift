@@ -8,14 +8,14 @@ public enum MatchVideoType: String {
 }
 
 extension MatchVideo: Managed, Playable {
-    
+
     var youtubeKey: String? {
         if type == MatchVideoType.youtube.rawValue {
             return key
         }
         return nil
     }
-    
+
     static func insert(with model: TBAMatchVideo, for match: Match, in context: NSManagedObjectContext) -> MatchVideo {
         let predicate = NSPredicate(format: "key == %@ AND type == %@", model.key, model.type)
         return findOrCreate(in: context, matching: predicate) { (matchVideo) in
@@ -25,5 +25,5 @@ extension MatchVideo: Managed, Playable {
             matchVideo.match = match
         }
     }
-    
+
 }

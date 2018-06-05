@@ -6,7 +6,7 @@ internal struct KDate {
 }
 
 class Date_TBA_Tests: XCTestCase {
-    
+
     func test_isBetween_true() {
         let oneHourAgo = Date(timeIntervalSinceNow: (-1 * KDate.secondsInAnHour))
         let now = Date()
@@ -15,7 +15,7 @@ class Date_TBA_Tests: XCTestCase {
         XCTAssert(halfHourAgo.isBetween(date: oneHourAgo, andDate: now))
         XCTAssert(halfHourAgo.isBetween(date: now, andDate: oneHourAgo))
     }
-    
+
     func test_isBetween_false() {
         let oneHourAgo = Date(timeIntervalSinceNow: (-1 * KDate.secondsInAnHour))
         let now = Date()
@@ -24,5 +24,5 @@ class Date_TBA_Tests: XCTestCase {
         XCTAssertFalse(epoch.isBetween(date: oneHourAgo, andDate: now))
         XCTAssertFalse(epoch.isBetween(date: now, andDate: oneHourAgo))
     }
-    
+
 }

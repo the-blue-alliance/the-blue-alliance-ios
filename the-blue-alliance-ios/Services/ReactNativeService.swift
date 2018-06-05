@@ -7,7 +7,7 @@ import Crashlytics
 // TODO: I can't seem to implement sourceURLForBridge: and fallbackSourceURLForBridge: in a protocol extension...
 protocol ReactNative: RCTBridgeDelegate {
     var reactBridge: RCTBridge { get }
-    
+
     func showErrorView()
 }
 
@@ -20,7 +20,7 @@ extension ReactNative {
         return prodSourceURL
         #endif
     }
-    
+
     fileprivate var debugSourceURL: URL {
         let debugSourceURL = URL(string: "http://localhost:8081/index.ios.bundle")
         if let debugSourceURL = debugSourceURL.reachableURL {
@@ -46,17 +46,17 @@ extension ReactNative {
 }
 
 class ReactNativeService {
-    
+
     private enum BundleName: String {
         case assets = "assets"
         case downloaded = "main.jsbundle"
         case compressed = "ios.zip"
     }
-    
+
     private enum DefaultKeys: String {
         case bundleGeneration = "kReactNativeBundleGenerationKey"
     }
-    
+
     fileprivate static var bundleGeneration: Int {
         get {
             return UserDefaults.standard.integer(forKey: DefaultKeys.bundleGeneration.rawValue)
@@ -66,7 +66,7 @@ class ReactNativeService {
             UserDefaults.standard.synchronize()
         }
     }
-    
+
     fileprivate static var documentDirectory: URL? {
         return try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
     }
@@ -79,7 +79,7 @@ class ReactNativeService {
     fileprivate static var assetsURL: URL? {
         return documentDirectory?.appendingPathComponent(BundleName.compressed.rawValue)
     }
-    
+
     private static var remoteBundleReference: StorageReference {
         // TODO: Swap this for a prod url
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/128
@@ -87,14 +87,14 @@ class ReactNativeService {
         let storage = Storage.storage()
         return storage.reference(forURL: String(format: "gs://%@/react-native/%@", storageBucket, BundleName.compressed.rawValue))
     }
-    
+
     // TODO: Think about setting a retry timer on downloading if we fail
     // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/166
-    
+
     public static func updateReactNativeBundle() {
         // Check if we have an orphaned compressed bundle that needs to be cleaned up (or unzipped)
         cleanupCompressedBundle()
-        
+
         // Check if we need to download a new compressed React Native bundle, or if the version we have is the most recent
         remoteBundleReference.getMetadata { (metadata, error) in
             if let error = error {
@@ -109,8 +109,8 @@ class ReactNativeService {
             }
         }
     }
-    
-    private static func downloadReactNativeBundle(completion: @escaping (Error?) -> ()) {
+
+    private static func downloadReactNativeBundle(completion: @escaping (Error?) -> Void) {
         guard let compressedBundleURL = compressedBundleURL else {
             return
         }
@@ -125,7 +125,7 @@ class ReactNativeService {
             completion(error)
         })
     }
-    
+
     private static func cleanupCompressedBundle() {
         // Check if we have an old compressed bundle to cleanup
         guard let compressedBundleURL = compressedBundleURL.reachableURL else {
@@ -137,14 +137,14 @@ class ReactNativeService {
         let safeToDelete = check.reduce(true) { (result, checkURL) -> Bool in
             return result && (checkURL.reachableURL != nil)
         }
-        
+
         // If we don't have the uncompressed files we need, attempt to uncompress them
         if safeToDelete == false, unzipCompressedBundle() == false {
             return
         }
         try? FileManager.default.removeItem(at: compressedBundleURL)
     }
-    
+
     // Returns true if unzip successful
     private static func unzipCompressedBundle() -> Bool {
         guard let documentDirectory = documentDirectory, let compressedBundleURL = compressedBundleURL else {

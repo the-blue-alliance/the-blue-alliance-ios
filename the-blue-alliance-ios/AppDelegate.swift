@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "TBA")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+        container.loadPersistentStores(completionHandler: { (_, error) in
             container.viewContext.automaticallyMergesChangesFromParent = true
 
             if let error = error as NSError? {
@@ -32,30 +32,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 var topWindow: UIWindow = UIWindow(frame: UIScreen.main.bounds)
                 topWindow.rootViewController = UIViewController()
                 topWindow.windowLevel = UIWindowLevelAlert + 1
-                
+
                 let alertController = UIAlertController(title: "Error Loading Data",
                                                         message: "There was an error loading local data - try reinstalling The Blue Alliance",
                                                         preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "Close", style: .default, handler: { (_) in
                     fatalError("Unresolved error \(error), \(error.userInfo)")
                 }))
-                
+
                 topWindow.makeKeyAndVisible()
                 topWindow.rootViewController?.present(alertController, animated: true, completion: nil)
             }
         })
         return container
     }()
-    
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // TODO: Remove this
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/128
         TBAKit.sharedKit.apiKey = "OHBBu0QbDiIJYKhAedTfkTxdrkXde1C21Sr90L1f1Pac4ahl4FJbNptNiXbCSCfH"
-        
+
         if let splitViewController = self.window?.rootViewController as? UISplitViewController {
             splitViewController.preferredDisplayMode = .allVisible
             splitViewController.delegate = self
-            
+
             let tabBarController = splitViewController.viewControllers[0] as! UITabBarController
             for vc in tabBarController.viewControllers! {
                 guard let nav = vc as? UINavigationController else {
@@ -70,9 +70,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 dataVC.persistentContainer = persistentContainer
             }
         }
-        
+
         setupAppearance()
-        
+
         FirebaseApp.configure()
         // Setup Remote Config
         RemoteConfig.setupRemoteConfig()
@@ -92,7 +92,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if GIDSignIn.sharedInstance().hasAuthInKeychain() && Auth.auth().currentUser == nil {
             GIDSignIn.sharedInstance().signInSilently()
         }
-        
+
         return true
     }
 
@@ -117,18 +117,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-    
-    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
+
+    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool {
         return GIDSignIn.sharedInstance().handle(url,
-                                                 sourceApplication:options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String,
+                                                 sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String,
                                                  annotation: options[UIApplicationOpenURLOptionsKey.annotation])
     }
-    
+
     // MARK: Private
-    
+
     func setupAppearance() {
         let navigationBarAppearance = UINavigationBar.appearance()
-        
+
         navigationBarAppearance.barTintColor = UIColor.primaryBlue
         navigationBarAppearance.tintColor = UIColor.white
         // Remove the shadow for a more seamless split between navigation bar and segmented controls
@@ -137,11 +137,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationBarAppearance.isTranslucent = false
         navigationBarAppearance.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
     }
-    
+
 }
 
 extension AppDelegate: GIDSignInDelegate {
-    
+
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error?) {
         // Don't respond to errors from signInSilently or a user cancelling a sign in
         if let error = error as NSError?, (error.code == GIDSignInErrorCode.canceled.rawValue || error.code == GIDSignInErrorCode.canceled.rawValue) {
@@ -153,13 +153,13 @@ extension AppDelegate: GIDSignInDelegate {
             }
             return
         }
-        
+
         guard let authentication = user.authentication else { return }
 
         let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
                                                        accessToken: authentication.accessToken)
 
-        Auth.auth().signIn(with: credential) { (user, error) in
+        Auth.auth().signIn(with: credential) { (_, error) in
             if let error = error {
                 Crashlytics.sharedInstance().recordError(error)
                 if let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? UIViewController & Alertable {
@@ -174,11 +174,11 @@ extension AppDelegate: GIDSignInDelegate {
             }
         }
     }
-    
+
 }
 
 extension AppDelegate: UISplitViewControllerDelegate {
-    
+
     func splitViewController(_ splitViewController: UISplitViewController, showDetail vc: UIViewController, sender: Any?) -> Bool {
         // If our split view controller is collapsed and we're trying to show a detail view,
         // push it on the master navigation stack
@@ -190,16 +190,16 @@ extension AppDelegate: UISplitViewControllerDelegate {
             guard let detailNavigationController = vc as? UINavigationController else {
                 return false
             }
-            
+
             guard let detailViewController = detailNavigationController.viewControllers.first else {
                 return false
             }
 
             masterNavigationController.show(detailViewController, sender: nil)
-            
+
             return true
         }
-        
+
         return false
     }
 
@@ -217,10 +217,10 @@ extension AppDelegate: UISplitViewControllerDelegate {
                 return masterTabBarController
             }
         }
-        
+
         return splitViewController.viewControllers.first
     }
-    
+
     func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
         // If our primary view controller is not a no selection view controller, pop the old one, return the tab bar,
         // and setup the detail view controller to be the primary view controller
@@ -234,11 +234,11 @@ extension AppDelegate: UISplitViewControllerDelegate {
                 let detailNavigationController = UINavigationController()
                 detailNavigationController.viewControllers = detailViewControllers
                 splitViewController.viewControllers = [masterTabViewController, detailNavigationController]
-                
+
                 return detailNavigationController
             }
         }
-        
+
         return emptyDetailViewController()
     }
 

@@ -2,7 +2,7 @@ import Foundation
 import FirebaseAuth
 import FirebaseMessaging
 
-public typealias MyTBARequestCompletionBlock = (_ data: Data?, _ error: Error?) -> ()
+public typealias MyTBARequestCompletionBlock = (_ data: Data?, _ error: Error?) -> Void
 
 struct Constants {
     struct APIConstants {
@@ -42,14 +42,14 @@ class MyTBA {
 
         // Block gets called on init - ignore the init call
         var initCall = true
-        Auth.auth().addIDTokenDidChangeListener { [weak self] (auth, user) in
+        Auth.auth().addIDTokenDidChangeListener { [weak self] (_, user) in
             if initCall {
                 initCall = false
                 return
             }
 
             if let user = user {
-                user.getIDToken(completion: { [weak self] (token, error) in
+                user.getIDToken(completion: { [weak self] (token, _) in
                     self?.authToken = token
                 })
             } else {
@@ -65,14 +65,14 @@ class MyTBA {
         jsonEncoder.keyEncodingStrategy = .convertToSnakeCase
         return jsonEncoder
     }
-    
+
     static var jsonDecoder: JSONDecoder {
         let jsonDecoder = JSONDecoder()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         return jsonDecoder
     }
 
-    func callApi<T: MyTBAResponse>(method: String, bodyData: Data? = nil, completion: @escaping (T?, Error?) -> ()) -> URLSessionDataTask {
+    func callApi<T: MyTBAResponse>(method: String, bodyData: Data? = nil, completion: @escaping (T?, Error?) -> Void) -> URLSessionDataTask {
         let apiURL = URL(string: method, relativeTo: Constants.APIConstants.baseURL)!
         var request = URLRequest(url: apiURL)
         request.httpMethod = "POST"
@@ -86,7 +86,7 @@ class MyTBA {
             print("POST: \(dataString)")
         }
         #endif
-        
+
         request.httpBody = bodyData
 
         let task = urlSession.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
@@ -98,7 +98,7 @@ class MyTBA {
                     print(dataString)
                 }
                 #endif
-                
+
                 do {
                     let response = try MyTBA.jsonDecoder.decode(T.self, from: data)
                     completion(response, nil)

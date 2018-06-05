@@ -2,7 +2,7 @@ import XCTest
 @testable import The_Blue_Alliance
 
 class Int16_Suffix_Tests: XCTestCase {
-    
+
     func test_suffix_positive() {
         test_suffix_multiple(multiplier: 1)
     }
@@ -29,5 +29,5 @@ class Int16_Suffix_Tests: XCTestCase {
         // Test a big number
         XCTAssertEqual(Int16(32007 * multiplier).suffix(), "th")
     }
-    
+
 }

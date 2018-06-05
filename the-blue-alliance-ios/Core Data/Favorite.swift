@@ -20,7 +20,7 @@ extension Favorite: MyTBAManaged {
             favorite.modelType = model.modelType.rawValue
         }
     }
-    
+
     func toRemoteModel() -> MyTBAFavorite {
         return MyTBAFavorite(modelKey: modelKey!, modelType: MyTBAModelType(rawValue: modelType!)!)
     }

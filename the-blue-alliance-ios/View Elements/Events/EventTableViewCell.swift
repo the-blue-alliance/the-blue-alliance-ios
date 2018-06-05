@@ -12,7 +12,7 @@ class EventTableViewCell: UITableViewCell {
             dateLabel?.text = event.dateString()
         }
     }
-    
+
     @IBOutlet private var nameLabel: UILabel?
     @IBOutlet private var locationLabel: UILabel?
     @IBOutlet private var dateLabel: UILabel?

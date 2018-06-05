@@ -3,33 +3,33 @@ import UIKit
 class EventViewController: ContainerViewController {
 
     public var event: Event!
-    
+
     internal var infoViewController: EventInfoTableViewController!
     @IBOutlet internal var infoView: UIView!
-    
+
     internal var teamsViewController: TeamsTableViewController!
     @IBOutlet internal var teamsView: UIView!
-    
+
     internal var rankingsViewController: EventRankingsTableViewController!
     @IBOutlet internal var rankingsView: UIView!
-    
+
     internal var matchesViewController: MatchesTableViewController!
     @IBOutlet internal var matchesView: UIView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = event.friendlyNameWithYear
-        
+
         viewControllers = [infoViewController, teamsViewController, rankingsViewController, matchesViewController]
         containerViews = [infoView, teamsView, rankingsView, matchesView]
-        
+
         if navigationController?.viewControllers.index(of: self) == 0 {
             navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
             navigationItem.leftItemsSupplementBackButton = true
         }
     }
-        
+
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -52,7 +52,7 @@ class EventViewController: ContainerViewController {
             teamsViewController = segue.destination as! TeamsTableViewController
             teamsViewController.event = event
             teamsViewController.teamSelected = { [weak self] team in
-                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team);
+                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
             }
         } else if segue.identifier == "EventMatchesEmbed" {
             matchesViewController = segue.destination as! MatchesTableViewController
@@ -64,7 +64,7 @@ class EventViewController: ContainerViewController {
            rankingsViewController = segue.destination as! EventRankingsTableViewController
             rankingsViewController.event = event
             rankingsViewController.rankingSelected = { [weak self] team in
-                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team);
+                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
             }
         } else if segue.identifier == "EventAlliancesSegue" {
             let eventAlliancesViewController = segue.destination as! EventAlliancesViewController

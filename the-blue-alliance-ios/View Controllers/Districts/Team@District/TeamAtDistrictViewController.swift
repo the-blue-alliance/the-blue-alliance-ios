@@ -2,27 +2,27 @@ import Foundation
 import UIKit
 
 class TeamAtDistrictViewController: ContainerViewController {
-    
+
     public var ranking: DistrictRanking!
-    
+
     internal var summaryViewController: DistrictTeamSummaryTableViewController!
     @IBOutlet internal var summaryView: UIView!
-    
+
     internal var breakdownViewController: DistrictBreakdownTableViewController!
     @IBOutlet internal var breakdownView: UIView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         navigationTitleLabel?.text = "Team \(ranking.team!.teamNumber)"
         navigationDetailLabel?.text = "@ \(ranking.district!.abbreviationWithYear)"
-        
+
         viewControllers = [summaryViewController, breakdownViewController]
         containerViews = [summaryView, breakdownView]
     }
-    
+
     // MARK: - Navigation
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "DistrictTeamSummaryEmbed" {
             summaryViewController = segue.destination as! DistrictTeamSummaryTableViewController
@@ -41,5 +41,5 @@ class TeamAtDistrictViewController: ContainerViewController {
             teamAtEventViewController.persistentContainer = persistentContainer
         }
     }
-    
+
 }

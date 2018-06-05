@@ -12,9 +12,9 @@ class TeamTableViewCell: UITableViewCell {
             nameLabel?.text = team.nickname ?? team.fallbackNickname
             locationLabel?.text = team.locationString
         }
-        
+
     }
-    
+
     @IBOutlet private var numberLabel: UILabel?
     @IBOutlet private var nameLabel: UILabel?
     @IBOutlet private var locationLabel: UILabel?

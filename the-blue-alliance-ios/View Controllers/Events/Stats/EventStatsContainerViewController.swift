@@ -8,18 +8,18 @@ class EventStatsContainerViewController: ContainerViewController {
 
     internal var teamStatsViewController: EventTeamStatsTableViewController!
     @IBOutlet internal var teamStatsView: UIView!
-    
+
     internal var eventStatsViewController: EventStatsViewController!
     @IBOutlet internal var eventStatsView: UIView!
-    
+
     @IBOutlet internal var filerBarButtonItem: UIBarButtonItem!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         navigationTitleLabel?.text = "Stats"
         navigationDetailLabel?.text = "@ \(event.friendlyNameWithYear)"
-        
+
         // Only show event stats if year is 2016 or onward
         if Int(event.year) >= 2016 {
             viewControllers = [teamStatsViewController, eventStatsViewController]
@@ -27,14 +27,14 @@ class EventStatsContainerViewController: ContainerViewController {
         } else {
             segmentedControlView?.isHidden = true
             eventStatsView.isHidden = true
-            
+
             viewControllers = [teamStatsViewController]
             containerViews = [teamStatsView]
         }
     }
-    
+
     // MARK: - Container
-    
+
     override func switchedToIndex(_ index: Int) {
         // Show filter button if we switched to the team stats view controller
         // Otherwise, hide the filter button
@@ -44,9 +44,9 @@ class EventStatsContainerViewController: ContainerViewController {
             navigationItem.rightBarButtonItem = nil
         }
     }
-    
+
     // MARK: - Navigation
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "TeamStatsEmbed" {
             teamStatsViewController = segue.destination as! EventTeamStatsTableViewController

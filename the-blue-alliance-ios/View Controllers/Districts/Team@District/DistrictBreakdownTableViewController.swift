@@ -9,9 +9,9 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
     private var sortedEventPoints: [DistrictEventPoints] {
         return (ranking!.eventPoints?.sortedArray(using: [NSSortDescriptor(key: "event.startDate", ascending: true)]) as? [DistrictEventPoints]) ?? []
     }
-    
+
     // MARK: - Persistable
-    
+
     override var persistentContainer: NSPersistentContainer! {
         didSet {
             contextObserver.observeObject(object: ranking, state: .updated) { [weak self] (_, _) in
@@ -21,27 +21,27 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
             }
         }
     }
-    
+
     // MARK: - Observable
-    
+
     typealias ManagedType = DistrictRanking
     lazy var contextObserver: CoreDataContextObserver<DistrictRanking> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
 
     // MARK: - View Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         tableView.register(UINib(nibName: String(describing: ReverseSubtitleTableViewCell.self), bundle: nil), forCellReuseIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier)
     }
 
     // MARK: - Refreshing
-    
+
     override func refresh() {
         removeNoDataView()
-        
+
         var rankingsRequest: URLSessionDataTask?
         rankingsRequest = TBAKit.sharedKit.fetchDistrictRankings(key: ranking.district!.key!, completion: { (rankings, error) in
             if let error = error {
@@ -49,13 +49,13 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
                 self.removeRequest(request: rankingsRequest!)
                 return
             }
-            
+
             // Might as well insert them all... we just need to only fetch
             guard let ranking = rankings?.first(where: { $0.teamKey == self.ranking!.team!.key! }) else {
                 self.removeRequest(request: rankingsRequest!)
                 return
             }
-            
+
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 let eventKeys = Set(ranking.eventPoints.map({ $0.eventKey! }))
                 let eventlessKeys = Set(eventKeys.compactMap({ (eventKey) -> String? in
@@ -63,7 +63,7 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
                     let event = Event.findOrFetch(in: backgroundContext, matching: predicate)
                     return event == nil ? eventKey : nil
                 }))
-                
+
                 // Fetch all the events we don't currently have
                 // Wait until fetches are done to insert rankings
                 let dispatchGroup = DispatchGroup()
@@ -74,7 +74,7 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
                     })
                 }
                 dispatchGroup.wait()
-                
+
                 let backgroundDistrict = backgroundContext.object(with: self.ranking!.district!.objectID) as! District
 
                 let localRankings = rankings?.compactMap({ (modelRanking) -> DistrictRanking? in
@@ -82,7 +82,7 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
                     return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, for: backgroundTeam, in: backgroundContext)
                 })
                 backgroundDistrict.rankings = Set(localRankings ?? []) as NSSet
-                
+
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh team district breakdown - database error")
                 }
@@ -91,14 +91,14 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
         })
         addRequest(request: rankingsRequest!)
     }
-    
-    func fetchEvent(eventKey: String, completion: @escaping (_ success: Bool) -> ()) -> URLSessionDataTask {
+
+    func fetchEvent(eventKey: String, completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
         return TBAKit.sharedKit.fetchEvent(key: eventKey, completion: { (modelEvent, error) in
             if error != nil {
                 completion(false)
                 return
             }
-            
+
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: self.ranking!.team!.objectID) as! Team
                 if let modelEvent = modelEvent {
@@ -108,14 +108,14 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
             })
         })
     }
-    
+
     override func shouldNoDataRefresh() -> Bool {
         // This should never fire
         return sortedEventPoints.count == 0
     }
-    
+
     // MARK: Table View Data Source
-    
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         let sections = sortedEventPoints.count
         if sections == 0 {
@@ -128,13 +128,13 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
         // Qual Points, Elim Points, Alliance Points, Award Points, Total Points
         return 5
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> ReverseSubtitleTableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier, for: indexPath) as! ReverseSubtitleTableViewCell
         cell.selectionStyle = .none
-        
+
         let eventPoints = sortedEventPoints[indexPath.section]
-        
+
         var pointsType: String = ""
         var points: Int16 = 0
 
@@ -156,22 +156,22 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
             points = eventPoints.total
         default: break
         }
-        
+
         cell.titleLabel.text = "\(pointsType) Points"
         cell.subtitleLabel.text = "\(points) Points"
-        
+
         return cell
     }
-    
+
     // MARK: - UITableViewDelegate
-    
+
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let eventPoints = sortedEventPoints[section]
         return eventPoints.event!.name
     }
-    
+
     // MARK: - Private Methods
-    
+
     func showNoDataView() {
         if isRefreshing {
             return

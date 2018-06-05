@@ -8,7 +8,7 @@ protocol Locatable {
 }
 
 extension Locatable {
-    
+
     var locationString: String? {
         let location = [city, stateProv, country].reduce("", { (locationString, locationPart) -> String in
             guard let locationPart = locationPart, !locationPart.isEmpty else {
@@ -18,5 +18,5 @@ extension Locatable {
         })
         return !location.isEmpty ? location : locationName
     }
-    
+
 }

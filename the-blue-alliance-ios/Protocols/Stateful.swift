@@ -17,13 +17,13 @@ extension Stateful {
             return
         }
         noDataView.backgroundColor = .clear
-        
+
         if let text = text {
             noDataViewController.textLabel?.text = text
         } else {
             noDataViewController.textLabel?.text = "No data to display"
         }
-        
+
         noDataView.alpha = 0
         if let tableView = dataView as? UITableView {
             tableView.backgroundView = noDataView
@@ -35,12 +35,12 @@ extension Stateful {
                 noDataView.autoPinEdgesToSuperviewEdges()
             }
         }
-        
+
         UIView.animate(withDuration: 0.25, animations: {
             noDataView.alpha = 1.0
         })
     }
-    
+
     func removeNoDataView() {
         if let tableView = dataView as? UITableView {
             DispatchQueue.main.async {

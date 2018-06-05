@@ -3,7 +3,7 @@ import UIKit
 class SelectTableViewController<T: Comparable>: UITableViewController {
 
     // TODO: Use UserDefaults to set currentYear as well
-    
+
     // Use current if you have a simple setup and you can do a simple comparision on events
     // Use compareCurrent AND current to compare the selected option to the current that is set
     // Return true from compare current if for the setup they're "equal"
@@ -11,23 +11,23 @@ class SelectTableViewController<T: Comparable>: UITableViewController {
     var compareCurrent: (_ current: T?, _ option: T) -> (Bool) = { current, option in
         return current == option
     }
-    
+
     // TODO: Why are options an Optional?? You need options, right?
     var options: [T]?
     var optionSelected: ((_ option: T) -> (Swift.Void))?
     var optionString: ((_ option: T) -> (String)) = { t in return "" }
-    
+
     // MARK: - View Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         tableView.tableFooterView = UIView()
-        
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissModal(_:)))
     }
-    
+
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -49,13 +49,13 @@ class SelectTableViewController<T: Comparable>: UITableViewController {
         }
 
         cell.textLabel?.text = optionString(option)
-        
+
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.reloadRows(at: [indexPath], with: .automatic)
-        
+
         let option = options![indexPath.row]
         if let optionSelected = optionSelected, !compareCurrent(current, option) {
             optionSelected(option)
@@ -63,7 +63,7 @@ class SelectTableViewController<T: Comparable>: UITableViewController {
 
         dismiss(animated: true, completion: nil)
     }
-    
+
     @IBAction func dismissModal(_ sender: UIBarButtonItem) {
        dismiss(animated: true, completion: nil)
     }

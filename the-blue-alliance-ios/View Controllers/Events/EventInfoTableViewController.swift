@@ -26,16 +26,16 @@ enum EventLinkRow: Int {
 }
 
 class EventInfoTableViewController: TBATableViewController, Observable {
-    
+
     public var event: Event!
-    
-    public var showAlliances: (() -> ())?
-    public var showDistrictPoints: (() -> ())?
-    public var showStats: (() -> ())?
-    public var showAwards: (() -> ())?
-    
+
+    public var showAlliances: (() -> Void)?
+    public var showDistrictPoints: (() -> Void)?
+    public var showStats: (() -> Void)?
+    public var showAwards: (() -> Void)?
+
     // MARK: - Persistable
-    
+
     override var persistentContainer: NSPersistentContainer! {
         didSet {
             contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
@@ -45,25 +45,25 @@ class EventInfoTableViewController: TBATableViewController, Observable {
             }
         }
     }
-    
+
     // MARK: - Observable
-    
+
     typealias ManagedType = Event
     lazy var contextObserver: CoreDataContextObserver<Event> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
-    
+
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         tableView.sectionFooterHeight = 0
         tableView.register(UINib(nibName: String(describing: InfoTableViewCell.self), bundle: nil), forCellReuseIdentifier: InfoTableViewCell.reuseIdentifier)
     }
-    
+
     // MARK: - Refresh
-    
+
     override func refresh() {
         removeNoDataView()
 
@@ -72,12 +72,12 @@ class EventInfoTableViewController: TBATableViewController, Observable {
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
             }
-            
+
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 if let modelEvent = modelEvent {
                     _ = Event.insert(with: modelEvent, in: backgroundContext)
                 }
-                
+
                 if !backgroundContext.saveOrRollback() {
                     self.showErrorAlert(with: "Unable to refresh event - database error")
                 }
@@ -86,11 +86,11 @@ class EventInfoTableViewController: TBATableViewController, Observable {
         })
         addRequest(request: request!)
     }
-    
+
     override func shouldNoDataRefresh() -> Bool {
         return event.name == nil
     }
-    
+
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -128,26 +128,26 @@ class EventInfoTableViewController: TBATableViewController, Observable {
         }()
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: InfoTableViewCell.reuseIdentifier, for: indexPath) as! InfoTableViewCell
 
         cell.event = event
-        
+
         cell.accessoryType = .none
         cell.selectionStyle = .none
-        
+
         return cell
     }
 
     func tableView(_ tableView: UITableView, detailCellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
-        
+
         var row = indexPath.row
         if event.district == nil, row >= EventDetailRow.districtPoints.rawValue {
             row += 1
         }
-        
+
         switch row {
         case EventDetailRow.alliances.rawValue:
             cell.textLabel?.text = "Alliances"
@@ -160,20 +160,20 @@ class EventInfoTableViewController: TBATableViewController, Observable {
         default:
             break
         }
-        
+
         cell.accessoryType = .disclosureIndicator
-        
+
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, linkCellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
-        
+
         var row = indexPath.row
         if event.website == nil, row >= EventLinkRow.website.rawValue {
             row += 1
         }
-        
+
         switch row {
         case EventLinkRow.website.rawValue:
             cell.textLabel?.text = "View event's website"
@@ -186,12 +186,12 @@ class EventInfoTableViewController: TBATableViewController, Observable {
         default:
             break
         }
-        
+
         cell.accessoryType = .disclosureIndicator
-        
+
         return cell
     }
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == EventInfoSection.detail.rawValue {
             var row = indexPath.row
@@ -238,7 +238,7 @@ class EventInfoTableViewController: TBATableViewController, Observable {
             default:
                 break
             }
-            
+
             if let urlString = urlString {
                 let url = URL(string: urlString)
                 if let url = url, UIApplication.shared.canOpenURL(url) {

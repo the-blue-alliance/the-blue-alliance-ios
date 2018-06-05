@@ -3,11 +3,11 @@ import UIKit
 import GoogleSignIn
 
 class MyTBASignInViewController: UIViewController {
-    
+
     @IBOutlet var starImageView: UIImageView!
     @IBOutlet var favoriteImageView: UIImageView!
     @IBOutlet var subscriptionImageView: UIImageView!
-    
+
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
@@ -15,7 +15,7 @@ class MyTBASignInViewController: UIViewController {
 
         styleInterface()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         hideOrShowImageViews(for: traitCollection)
 
@@ -27,7 +27,7 @@ class MyTBASignInViewController: UIViewController {
 
         super.willTransition(to: newCollection, with: coordinator)
     }
-    
+
     // MARK: - Interface Methods
 
     func styleInterface() {
@@ -40,7 +40,7 @@ class MyTBASignInViewController: UIViewController {
             image?.isHidden = (traitCollection.verticalSizeClass == .compact)
         }
     }
-    
+
     // MARK: - IBActions
 
     @IBAction func signIn() {

@@ -3,7 +3,7 @@ import TBAKit
 import CoreData
 
 extension Webcast: Managed {
-    
+
     static func insert(with model: TBAWebcast, for event: Event, in context: NSManagedObjectContext) -> Webcast {
         let predicate = NSPredicate(format: "event == %@ AND type == %@ AND channel == %@", event, model.type, model.channel)
 

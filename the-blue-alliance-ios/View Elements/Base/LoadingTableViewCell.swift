@@ -7,5 +7,5 @@ class LoadingTableViewCell: UITableViewCell {
 
     @IBOutlet public var keyLabel: UILabel!
     @IBOutlet public var backgroundFetchActivityIndicator: UIActivityIndicatorView!
-    
+
 }
