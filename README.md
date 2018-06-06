@@ -98,6 +98,16 @@ Working with React Native
 
 Instructions for installing, building, and debugging/running locally the React Native code can be found in [the-blue-alliance-react](https://github.com/the-blue-alliance/the-blue-alliance-react) repo. Execute these commands while in the `subtrees/the-blue-alliance-react` folder
 
+If you make changes to the React Native code and want to push them upstream, you can do this locally from this repo
+
+1. Add your forked project remote
+	* `git remote add <REMOTE NAME> <YOUR FORK URL>`
+Example: `git remote add zach-the-blue-alliance-react https://github.com/ZachOrr/the-blue-alliance-react.git`
+2. Push your changes to your forked repo
+`git subtree push --prefix=subtrees/the-blue-alliance-react <REMOTE NAME> <REMOTE BRANCH>`
+Example: `git subtree push --prefix=subtrees/the-blue-alliance-react zach-the-blue-alliance-react zach`
+3. Open a [Pull Request](https://github.com/the-blue-alliance/the-blue-alliance-react/pulls) against [the-blue-alliance-react](https://github.com/the-blue-alliance/the-blue-alliance-react) repo!
+
 myTBA Debug Setup
 ------------------
 Debug builds of the TBA app cannot receive (Firebase Cloud Messaging) push notifications from production TBA servers. To test the myTBA features of the app, e.g. to test push notifications end-to-end, you must set up a debug [TBA server](https://github.com/the-blue-alliance/the-blue-alliance) then configure the server and temporarily modify the app code.
