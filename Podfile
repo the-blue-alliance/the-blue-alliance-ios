@@ -1,4 +1,4 @@
-platform :ios, '11.3'
+platform :ios, '11.0'
 
 target 'The Blue Alliance' do
   use_frameworks!

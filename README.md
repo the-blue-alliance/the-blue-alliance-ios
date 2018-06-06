@@ -12,11 +12,15 @@ The Blue Alliance for iOS has a few build tool dependencies. Here's how to insta
 
 1. Install [Xcode](https://developer.apple.com/xcode/)
 	* The Blue Alliance for iOS is written in Swift 4.1, which comes with Xcode 9.3+
-2. Install [React Native](https://facebook.github.io/react-native)
-	* `brew install node watchman`
+2. Install [Ruby](https://www.ruby-lang.org/en/) (if it's not already installed on your system) and [Bundler](https://bundler.io/)
+	* `gem install bundler`
+3. Install gem dependencies with bundler
+	* `bundle install`
+4. Install [Node/npm](https://nodejs.org/en/)
+	* `brew install node`
+5. (Optional) Install [React Native](https://facebook.github.io/react-native) - this is only necessary if you're testing local changes to the React Native bundles
+	* `brew install watchman`
 	* `npm install -g react-native-cli`
-3. Install [Cocoapods](http://guides.cocoapods.org/using/getting-started.html#getting-started)
-	* `sudo gem install cocoapods`
 
 Setup Firebase
 ---
@@ -37,8 +41,8 @@ Building in Xcode
 2. Be sure you have all required build tools, as described in the [Build Tool Dependencies](#build-tool-dependencies) section
 3. Install [React Native](https://facebook.github.io/react-native) dependencies
 	* `cd js && npm install && cd ..`
-4. Install [Cocoapods](http://guides.cocoapods.org/using/getting-started.html#getting-started) to install package dependencies
-	* `pod install`
+4. Install [Cocoapods](http://guides.cocoapods.org/using/getting-started.html#getting-started) dependencies
+	* `bundle exec pod install --repo-update`
 5. Open the workspace file (`the-blue-alliance-ios.xcworkspace`)
 6. Modify your bundle identifier to the same bundle identifier you used during your Firebase setup (ex: `com.the-blue-alliance.zach-dev`)
 7. Add your `GoogleService-Info.plist` to `the-blue-alliance-ios/the-blue-alliance-ios` folder
@@ -51,7 +55,7 @@ Contributing
 
 Want to add features, fix bugs, or just poke around the code? No problem!
 
-Project Communication 
+Project Communication
 ---
  - Keep up to date with the [mailing list](https://groups.google.com/forum/#!forum/thebluealliance-developers).
  - Chat with us on our [Slack team](https://the-blue-alliance.slack.com/). (Request an invite in the mailing list.)
