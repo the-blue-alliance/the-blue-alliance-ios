@@ -32,7 +32,8 @@ the-blue-alliance-ios.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 node_modules
 *.log
 .nvm
-js/ios/*
+subtrees/the-blue-alliance-react/ios/*
+subtrees/the-blue-alliance-react/ios.zip
 
 GoogleService-Info.plist
 

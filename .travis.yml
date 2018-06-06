@@ -12,7 +12,7 @@ cache:
     - js/node_modules
 
 install:
-  - cd js && npm install && cd ..
+  - cd subtrees/the-blue-alliance-react && npm install && cd ../..
   - bundle install
   - bundle exec pod install --repo-update
   - cp mock-GoogleService-Info.plist the-blue-alliance-ios/GoogleService-Info.plist

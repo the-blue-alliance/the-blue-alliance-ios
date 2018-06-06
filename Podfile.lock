@@ -130,13 +130,13 @@ DEPENDENCIES:
   - Firebase/Storage
   - GoogleSignIn
   - PureLayout
-  - React/Core (from `js/node_modules/react-native`)
-  - React/RCTImage (from `js/node_modules/react-native`)
-  - React/RCTNetwork (from `js/node_modules/react-native`)
-  - React/RCTText (from `js/node_modules/react-native`)
-  - React/RCTWebSocket (from `js/node_modules/react-native`)
+  - React/Core (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
+  - React/RCTImage (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
+  - React/RCTNetwork (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
+  - React/RCTText (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
+  - React/RCTWebSocket (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
   - TBAKit
-  - Yoga (from `js/node_modules/react-native/ReactCommon/yoga`)
+  - Yoga (from `subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga`)
   - youtube-ios-player-helper (~> 0.1.4)
   - ZIPFoundation
 
@@ -168,9 +168,9 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   React:
-    :path: js/node_modules/react-native
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native
   Yoga:
-    :path: js/node_modules/react-native/ReactCommon/yoga
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga
 
 SPEC CHECKSUMS:
   Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
@@ -199,6 +199,6 @@ SPEC CHECKSUMS:
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
   ZIPFoundation: 68c35eb2637c21abe56dc60b3277636443bc1501
 
-PODFILE CHECKSUM: 7f0ca300cb7571f771615b3e9ecf75fb1a844ccb
+PODFILE CHECKSUM: 446d4c3c29d4b311721ebe495a10bc19a3d87f04
 
 COCOAPODS: 1.5.3
