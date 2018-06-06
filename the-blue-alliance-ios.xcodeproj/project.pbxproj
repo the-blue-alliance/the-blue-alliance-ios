@@ -45,6 +45,8 @@
 		9257DF4A208BFC4400F7E2BA /* EventAlliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9257DF49208BFC4400F7E2BA /* EventAlliance.swift */; };
 		9257DF4C208C078100F7E2BA /* WLT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9257DF4B208C078100F7E2BA /* WLT.swift */; };
 		9257DF4E208C0D1200F7E2BA /* EventAlliancesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9257DF4D208C0D1200F7E2BA /* EventAlliancesTableViewController.swift */; };
+		925B25B420C89C8000BCECFA /* ARKitRobotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925B25B320C89C8000BCECFA /* ARKitRobotViewController.swift */; };
+		925B25B620C89D3100BCECFA /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 925B25B520C89D3100BCECFA /* art.scnassets */; };
 		92688C2B2090091D00D12B7B /* ReactNativeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92688C2A2090091D00D12B7B /* ReactNativeService.swift */; };
 		926A8EE620B9B55100A25563 /* EventStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A8EE520B9B55100A25563 /* EventStatus.swift */; };
 		926A8EE820B9B6AB00A25563 /* EventStatusQual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A8EE720B9B6AB00A25563 /* EventStatusQual.swift */; };
@@ -187,6 +189,8 @@
 		9257DF49208BFC4400F7E2BA /* EventAlliance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAlliance.swift; sourceTree = "<group>"; };
 		9257DF4B208C078100F7E2BA /* WLT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WLT.swift; sourceTree = "<group>"; };
 		9257DF4D208C0D1200F7E2BA /* EventAlliancesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAlliancesTableViewController.swift; sourceTree = "<group>"; };
+		925B25B320C89C8000BCECFA /* ARKitRobotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARKitRobotViewController.swift; sourceTree = "<group>"; };
+		925B25B520C89D3100BCECFA /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		92688C2A2090091D00D12B7B /* ReactNativeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactNativeService.swift; sourceTree = "<group>"; };
 		926A8EE520B9B55100A25563 /* EventStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatus.swift; sourceTree = "<group>"; };
 		926A8EE720B9B6AB00A25563 /* EventStatusQual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusQual.swift; sourceTree = "<group>"; };
@@ -425,6 +429,7 @@
 				92D855DF1EC6BA3900572F27 /* TeamViewController.swift */,
 				92D855E11EC755D000572F27 /* TeamInfoTableViewController.swift */,
 				9291F7FB1EE6FC7D00EEB86B /* TeamMediaCollectionViewController.swift */,
+				925B25B320C89C8000BCECFA /* ARKitRobotViewController.swift */,
 			);
 			name = Team;
 			sourceTree = "<group>";
@@ -475,6 +480,7 @@
 				92E6253F208EC23000DF58C0 /* the-blue-alliance-ios.entitlements */,
 				92942D951E2154DA008E79CA /* AppDelegate.swift */,
 				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
+				925B25B520C89D3100BCECFA /* art.scnassets */,
 				92942DA31E2154DA008E79CA /* Info.plist */,
 				92D8CD1220C2634200777D93 /* GoogleService-Info.plist */,
 				92942DA01E2154DA008E79CA /* LaunchScreen.storyboard */,
@@ -900,6 +906,7 @@
 				TargetAttributes = {
 					92942D911E2154DA008E79CA = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = RHCNV9ZW2S;
 						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -949,6 +956,7 @@
 				92942DBF1E215BEF008E79CA /* TeamsStoryboard.storyboard in Resources */,
 				92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */,
 				929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */,
+				925B25B620C89D3100BCECFA /* art.scnassets in Resources */,
 				9221C618209BFF8700477DE2 /* LoadingTableViewCell.xib in Resources */,
 				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
@@ -1034,7 +1042,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\nsubtrees/the-blue-alliance-react/node_modules/react-native/packager/react-native-xcode.sh";
+			shellScript = "";
 		};
 		C82BF8916C8B32282B4357B2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1180,6 +1188,7 @@
 				929FCDAA1EC8BFB000A38E46 /* DistrictRanking.swift in Sources */,
 				92D5A1201EE476C800EBFC6F /* DistrictEventPoints.swift in Sources */,
 				925471F7208CC6F100AD3204 /* EventAllianceTableViewCell.swift in Sources */,
+				925B25B420C89C8000BCECFA /* ARKitRobotViewController.swift in Sources */,
 				92FF4A2E2099616B006B99F5 /* MyTBARegister.swift in Sources */,
 				9257DF4E208C0D1200F7E2BA /* EventAlliancesTableViewController.swift in Sources */,
 				926A8EE820B9B6AB00A25563 /* EventStatusQual.swift in Sources */,
@@ -1362,11 +1371,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = RHCNV9ZW2S;
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.development";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.zach-dev";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -1379,11 +1388,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = RHCNV9ZW2S;
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.the-blue-alliance";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.zach-dev";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;

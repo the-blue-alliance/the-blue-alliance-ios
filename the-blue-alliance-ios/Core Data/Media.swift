@@ -21,7 +21,8 @@ public enum MediaType: String {
     static var imageTypes: [String] {
         return [MediaType.cdPhotoThread.rawValue,
                 MediaType.imgur.rawValue,
-                MediaType.instagramImage.rawValue]
+                MediaType.instagramImage.rawValue,
+                MediaType.grabcad.rawValue]
     }
 
     static var socialTypes: [String] {

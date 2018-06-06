@@ -15,6 +15,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     var playerViews: [String: PlayerView] = [:]
     var downloadedImages: [String: UIImage] = [:]
 
+    var selectedMedia: (() -> Void)!
+
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
@@ -96,6 +98,10 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // TODO: Eventually show the full image inside the app
         guard let media = dataSource?.object(at: indexPath) else {
+            return
+        }
+        if media.type == MediaType.grabcad.rawValue {
+            selectedMedia()
             return
         }
         guard let url = media.viewImageURL else {

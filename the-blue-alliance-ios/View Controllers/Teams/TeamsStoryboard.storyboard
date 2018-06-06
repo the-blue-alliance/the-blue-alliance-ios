@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="caC-xe-F51">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="caC-xe-F51">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -177,6 +177,7 @@
                         <outlet property="segmentedControl" destination="4e3-cZ-Ovp" id="7zR-OZ-9YF"/>
                         <outlet property="segmentedControlView" destination="7wB-xc-qxs" id="OZU-iw-BC2"/>
                         <segue destination="Lps-JK-pYU" kind="show" identifier="TeamAtEventSegue" id="8Uu-oj-Z11"/>
+                        <segue destination="Ef2-Sr-Gbz" kind="presentation" identifier="ARKitRobotSegue" id="4ha-1j-yi0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fgu-2m-Jdl" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -187,6 +188,38 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1560.8" y="465.51724137931041"/>
+        </scene>
+        <!--Kit Robot View Controller-->
+        <scene sceneID="V4F-b6-PcH">
+            <objects>
+                <viewController id="Ef2-Sr-Gbz" customClass="ARKitRobotViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Rqf-Oc-McU"/>
+                        <viewControllerLayoutGuide type="bottom" id="rYF-vR-J99"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="m80-di-abK">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fJn-h1-7Ht">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            </arscnView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="rYF-vR-J99" firstAttribute="top" secondItem="fJn-h1-7Ht" secondAttribute="bottom" id="Eka-1L-9BO"/>
+                            <constraint firstItem="fJn-h1-7Ht" firstAttribute="top" secondItem="Rqf-Oc-McU" secondAttribute="bottom" id="Erd-Lj-38e"/>
+                            <constraint firstAttribute="trailing" secondItem="fJn-h1-7Ht" secondAttribute="trailing" id="Vkn-nq-wLF"/>
+                            <constraint firstItem="fJn-h1-7Ht" firstAttribute="leading" secondItem="m80-di-abK" secondAttribute="leading" id="W1j-Vr-NMX"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="sceneView" destination="fJn-h1-7Ht" id="bc6-Pf-tcY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4uz-f9-zJd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2582" y="466"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="oEx-y3-Wd4">

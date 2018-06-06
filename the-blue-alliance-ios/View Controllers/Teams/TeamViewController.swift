@@ -165,6 +165,9 @@ class TeamViewController: ContainerViewController, Observable {
             mediaViewController = segue.destination as? TeamMediaCollectionViewController
             mediaViewController.team = team
             mediaViewController.year = year
+            mediaViewController.selectedMedia = { [weak self] in
+                self?.performSegue(withIdentifier: "ARKitRobotSegue", sender: nil)
+            }
         } else if segue.identifier == "TeamAtEventSegue" {
             let event = sender as! Event
             let teamAtEventViewController = segue.destination as! TeamAtEventViewController
