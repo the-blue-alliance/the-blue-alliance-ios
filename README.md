@@ -42,7 +42,6 @@ The Blue Alliance's mobile apps depend on Firebase. We configure Firebase in The
 6. Enter a locally namespaced bundle identifier (ex: `com.the-blue-alliance.zach-tba-dev`)
 7. Click `Register App`
 8. Download the `GoogleService-Info.plist`
-9. Add your `GoogleService-Info.plist` to `the-blue-alliance-ios/the-blue-alliance-ios` folder
 
 Building in Xcode
 ---
