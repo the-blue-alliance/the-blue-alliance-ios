@@ -6,21 +6,29 @@ An iOS app for accessing information about the FIRST Robotics Competition.
 Setup
 ===
 
-Build Tool Dependencies
+Install Build Tool Dependencies
 ---
-The Blue Alliance for iOS has a few build tool dependencies. Here's how to install those, if you need them
+The Blue Alliance for iOS has a few build tool dependencies. Here's how to install those, if you need them. The commands below suggest [Homebrew](https://brew.sh/) to install the dependencies. If you're on Windows or Linux, follow the links to find platform-specific setup instructions.
 
 1. Install [Xcode](https://developer.apple.com/xcode/)
 	* The Blue Alliance for iOS is written in Swift 4.1, which comes with Xcode 9.3+
 2. Install [Ruby](https://www.ruby-lang.org/en/) (if it's not already installed on your system) and [Bundler](https://bundler.io/)
+	* `brew install ruby`
 	* `gem install bundler`
-3. Install gem dependencies with bundler
-	* `bundle install`
-4. Install [Node/npm](https://nodejs.org/en/)
+3. Install [Node/npm](https://nodejs.org/en/)
 	* `brew install node`
-5. (Optional) Install [React Native](https://facebook.github.io/react-native) - this is only necessary if you're testing local changes to the React Native bundles
-	* `brew install watchman`
-	* `npm install -g react-native-cli`
+
+
+Install Project Dependencies
+---
+These should be done after you've cloned the project and navigated to the project directory
+
+1. Install [React Native](https://facebook.github.io/react-native) dependencies
+	* `cd subtrees/the-blue-alliance-react && npm install && cd ../..`
+2. Install Ruby dependencies
+	* `bundle install`
+3. Install [Cocoapods](http://guides.cocoapods.org/using/getting-started.html#getting-started) dependencies
+	* `bundle exec pod install --repo-update`
 
 Setup Firebase
 ---
@@ -34,21 +42,22 @@ The Blue Alliance's mobile apps depend on Firebase. We configure Firebase in The
 6. Enter a locally namespaced bundle identifier (ex: `com.the-blue-alliance.zach-tba-dev`)
 7. Click `Register App`
 8. Download the `GoogleService-Info.plist`
+9. Add your `GoogleService-Info.plist` to `the-blue-alliance-ios/the-blue-alliance-ios` folder
 
 Building in Xcode
 ---
-1. Clone The Blue Alliance for iOS
-2. Be sure you have all required build tools, as described in the [Build Tool Dependencies](#build-tool-dependencies) section
-3. Install [React Native](https://facebook.github.io/react-native) dependencies
-	* `cd js && npm install && cd ..`
-4. Install [Cocoapods](http://guides.cocoapods.org/using/getting-started.html#getting-started) dependencies
-	* `bundle exec pod install --repo-update`
-5. Open the workspace file (`the-blue-alliance-ios.xcworkspace`)
-6. Modify your bundle identifier to the same bundle identifier you used during your Firebase setup (ex: `com.the-blue-alliance.zach-dev`)
-7. Add your `GoogleService-Info.plist` to `the-blue-alliance-ios/the-blue-alliance-ios` folder
-	* If you don't have a Firebase project setup, see the [Setup Firebase Project](#setup-firebase) section
-	* If linked properly, the `GoogleService-Info.plist` file in the Xcode project navigation should go from being red to being black
-8. Build and run The Blue Alliance for iOS!
+Before bulding in Xcode, make sure you've setup a Firebase project, as described in the [Setup Firebase](#setup-firebase) section
+
+1. Be sure you have all required build tools, as described in the [Install Build Tool Dependencies](#install-build-tool-dependencies) section
+2. Install project dependencies, as described in the [Install Project Dependencies](#install-project-dependencies) section
+3. Open the workspace file (`the-blue-alliance-ios.xcworkspace`)
+4. Modify your bundle identifier to the same bundle identifier you used during your Firebase setup
+	* Click `the-blue-alliance-ios` project in the left sidebar in Xcode
+	* On the left sidebar, under `Targets` click `The Blue Alliance`
+	* Click the `General` tab along the top bar
+	* Change `Bundle Identifier` to the bundle identifier you set during Firebase setup
+5. Add your `GoogleService-Info.plist` is in the `the-blue-alliance-ios/the-blue-alliance-ios` folder. If linked properly, the `GoogleService-Info.plist` file in the Xcode project navigation should go from being red to being black
+6. Build and run The Blue Alliance for iOS!
 
 Contributing
 ============
@@ -82,25 +91,12 @@ For more detailed instructions, see [GitHub's Guide to Contributing](https://gui
 
 Miscellaneous
 ===
-
 This is the junk drawer of sections. If you're looking for information not covered above, it might be here. Eventually, this information will move to the Wiki.
 
-Developing React Native Views
+Working with React Native
 ---
-If you're looking to add to or modify the React Native views (EventStats or MatchBreakdown), you can test your local changes by starting the React Native server
 
-* Start server: `cd js && react-native start`
-* To view RN logs: `react-native log-ios`
-* Debugging is easier if you install [react-devtools](https://github.com/facebook/react-devtools/tree/master/packages/react-devtools)
-
-Shipping
------
-Be sure to compile a local React Native bundle to be used offline
-
-```
-$ cd js
-$ react-native bundle --platform ios --dev false --assets-dest ios --entry-file index.ios.js --bundle-output ios/main.jsbundle --reset-cache
-```
+Instructions for installing, building, and debugging/running locally the React Native code can be found in [the-blue-alliance-react](https://github.com/the-blue-alliance/the-blue-alliance-react) repo. Execute these commands while in the `subtrees/the-blue-alliance-react` folder
 
 myTBA Debug Setup
 ------------------

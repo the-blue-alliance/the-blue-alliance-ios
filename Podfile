@@ -6,7 +6,7 @@ target 'The Blue Alliance' do
   pod 'TBAKit'
   
   # React Native
-  pod 'React', :path => 'js/node_modules/react-native', :subspecs => [
+  pod 'React', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native', :subspecs => [
     'Core',
     'RCTText',
     'RCTNetwork',
@@ -16,7 +16,7 @@ target 'The Blue Alliance' do
     # Add any other subspecs you want to use in your project
   ]
   # Explicitly include Yoga if you are using RN >= 0.42.0
-  pod "Yoga", :path => "js/node_modules/react-native/ReactCommon/yoga"
+  pod "Yoga", :path => "subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga"
 
   # Deps
   pod "youtube-ios-player-helper", "~> 0.1.4"
