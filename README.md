@@ -104,7 +104,7 @@ If you make changes to the React Native code and want to push them upstream, you
 	* Example: `git remote add zach-the-blue-alliance-react https://github.com/ZachOrr/the-blue-alliance-react.git`
 2. Push your changes to your forked repo
 	* `git subtree push --prefix=subtrees/the-blue-alliance-react <REMOTE NAME> <REMOTE BRANCH>`
-	* Example: `git subtree push --prefix=subtrees/the-blue-alliance-react zach-the-blue-alliance-react zach`
+	* Example: `git subtree push --prefix=subtrees/the-blue-alliance-react zach-the-blue-alliance-react master`
 3. Open a [Pull Request](https://github.com/the-blue-alliance/the-blue-alliance-react/pulls) against [the-blue-alliance-react](https://github.com/the-blue-alliance/the-blue-alliance-react) repo!
 
 myTBA Debug Setup
