@@ -1,4 +1,3 @@
-import Foundation
 import UIKit
 import CoreData
 import TBAKit
@@ -20,6 +19,15 @@ class DistrictsTableViewController: TBATableViewController {
 
     var districtSelected: ((District) -> Void)?
 
+    // MARK: View's lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Register controller for previewing
+        registerController()
+    }
+    
     // MARK: - Refreshing
 
     override func refresh() {
@@ -117,4 +125,41 @@ extension DistrictsTableViewController: TableViewDataSourceDelegate {
         removeNoDataView()
     }
 
+}
+
+extension DistrictsTableViewController: UIViewControllerPreviewingDelegate {
+    
+    private func registerController() {
+        if traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: tableView)
+        }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        self.registerController()
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
+        
+        // Instantiate Team detail view controller and set its properties
+        let districtDetailViewController = storyboard!.instantiateViewController(withIdentifier: "DistrictViewController") as! DistrictViewController
+        
+        if dataSource?.fetchedResultsController.fetchedObjects != nil {
+            districtDetailViewController.district = dataSource?.fetchedResultsController.fetchedObjects![(indexPath as NSIndexPath).row]
+        } else {
+            return nil
+        }
+        
+        // Configure the source rect to blur surrounding elements
+        previewingContext.sourceRect = cell.frame
+        
+        return districtDetailViewController
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
+    }
+    
 }

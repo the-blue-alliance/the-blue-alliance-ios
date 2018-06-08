@@ -1,7 +1,6 @@
-import Foundation
 import UIKit
-import CoreData
 import TBAKit
+import CoreData
 
 private let EventsEmbed = "EventsEmbed"
 private let EventSegue = "EventSegue"

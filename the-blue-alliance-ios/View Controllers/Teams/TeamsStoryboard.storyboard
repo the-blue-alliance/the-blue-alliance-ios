@@ -61,7 +61,7 @@
         <!--Team View Controller-->
         <scene sceneID="HSe-tY-LfS">
             <objects>
-                <viewController storyboardIdentifier="TeamViewController" hidesBottomBarWhenPushed="YES" id="5by-aT-woR" customClass="TeamViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TeamViewController" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="5by-aT-woR" customClass="TeamViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="m6P-mj-L99"/>
                         <viewControllerLayoutGuide type="bottom" id="nhg-Li-uWZ"/>
