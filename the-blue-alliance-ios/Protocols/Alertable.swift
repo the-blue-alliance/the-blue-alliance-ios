@@ -1,4 +1,3 @@
-import Foundation
 import UIKit
 
 // Alertable describes a UIViewController that shows UIAlerts

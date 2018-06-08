@@ -34,6 +34,9 @@ class EventsTableViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.register(UINib(nibName: String(describing: EventTableViewCell.self), bundle: nil), forCellReuseIdentifier: EventTableViewCell.reuseIdentifier)
+        
+        // Register controller for previewing
+        registerController()
     }
 
     // MARK: - Refreshing
@@ -251,4 +254,41 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
         removeNoDataView()
     }
 
+}
+
+extension EventsTableViewController: UIViewControllerPreviewingDelegate {
+    
+    private func registerController() {
+        if traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: tableView)
+        }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        self.registerController()
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
+        
+        // Instantiate Team detail view controller and set its properties
+        let eventDetailViewController = storyboard!.instantiateViewController(withIdentifier: "EventViewController") as! EventViewController
+        
+        if dataSource?.fetchedResultsController.fetchedObjects != nil {
+            eventDetailViewController.event = dataSource?.fetchedResultsController.fetchedObjects![(indexPath as NSIndexPath).row]
+        } else {
+            return nil
+        }
+        
+        // Configure the source rect to blur surrounding elements
+        previewingContext.sourceRect = cell.frame
+        
+        return eventDetailViewController
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
+    }
+    
 }

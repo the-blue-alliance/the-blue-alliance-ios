@@ -1,6 +1,5 @@
-import Foundation
-import CoreData
 import UIKit
+import CoreData
 
 /**
  MyTBATableViewController implements it's on FRC/TableViewDataSource logic, since the existing abstraction

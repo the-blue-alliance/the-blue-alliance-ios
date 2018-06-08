@@ -1,9 +1,8 @@
-import Foundation
 import TBAKit
 import CoreData
 
 class TeamsTableViewController: TBATableViewController {
-
+    
     var event: Event?
     var teamSelected: ((Team) -> Void)?
     override var persistentContainer: NSPersistentContainer! {
@@ -28,6 +27,9 @@ class TeamsTableViewController: TBATableViewController {
         definesPresentationContext = true
 
         tableView.register(UINib(nibName: String(describing: TeamTableViewCell.self), bundle: nil), forCellReuseIdentifier: TeamTableViewCell.reuseIdentifier)
+        
+        // Register controller for previewing
+        registerController()
     }
 
     // MARK: - Refreshing
@@ -174,6 +176,43 @@ extension TeamsTableViewController: TableViewDataSourceDelegate {
         removeNoDataView()
     }
 
+}
+
+extension TeamsTableViewController: UIViewControllerPreviewingDelegate {
+    
+    private func registerController() {
+        if traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: tableView)
+        }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        self.registerController()
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard let indexPath = tableView.indexPathForRow(at: location), let cell = tableView.cellForRow(at: indexPath) else { return nil }
+        
+        // Instantiate Team detail view controller and set its properties
+        let teamDetailViewController = storyboard!.instantiateViewController(withIdentifier: "TeamViewController") as! TeamViewController
+        
+        if dataSource?.fetchedResultsController.fetchedObjects != nil {
+            teamDetailViewController.team = dataSource?.fetchedResultsController.fetchedObjects![(indexPath as NSIndexPath).row]
+        } else {
+            return nil
+        }
+        
+        // Configure the source rect to blur surrounding elements
+        previewingContext.sourceRect = cell.frame
+        
+        return teamDetailViewController
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
+    }
+    
 }
 
 extension TeamsTableViewController: UISearchResultsUpdating {

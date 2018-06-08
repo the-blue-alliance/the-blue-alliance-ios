@@ -459,7 +459,7 @@
         <!--2015 Kettering University District-->
         <scene sceneID="dha-2i-TWe">
             <objects>
-                <viewController storyboardIdentifier="EventViewController" hidesBottomBarWhenPushed="YES" id="V9g-ZF-4u7" customClass="EventViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventViewController" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="V9g-ZF-4u7" customClass="EventViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="e3G-KZ-clu"/>
                         <viewControllerLayoutGuide type="bottom" id="0ON-FW-wcF"/>
@@ -1169,7 +1169,7 @@
         <image name="ic_sort_white" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="trB-a5-4Ei"/>
+        <segue reference="Xij-X1-snp"/>
         <segue reference="oO5-aj-OQj"/>
     </inferredMetricsTieBreakers>
 </document>

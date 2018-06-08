@@ -1,4 +1,3 @@
-import Foundation
 import UIKit
 
 private let TeamAtDistrictSegue = "TeamAtDistrictSegue"
