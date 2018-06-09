@@ -30,10 +30,17 @@ extension ReactNative {
     }
 
     var prodSourceURL: URL {
-        if let bundleURL = ReactNativeService.bundleURL.reachableURL {
-            return bundleURL
+        let fallbackURL = Bundle.main.url(forResource: "main", withExtension: "jsbundle")!
+        guard let documentsDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else {
+            return fallbackURL
         }
-        return Bundle.main.url(forResource: "main", withExtension: "jsbundle")!
+
+        let bundleURL = documentsDirectory.appendingPathComponent(ReactNativeService.BundleName.downloaded.rawValue)
+        if let reachable = try? bundleURL.checkResourceIsReachable(), reachable == false {
+            return fallbackURL
+        }
+
+        return bundleURL
     }
 
     func reactNativeError(_ sender: NSNotification) {
@@ -47,7 +54,7 @@ extension ReactNative {
 
 class ReactNativeService {
 
-    private enum BundleName: String {
+    fileprivate enum BundleName: String {
         case assets = "assets"
         case downloaded = "main.jsbundle"
         case compressed = "ios.zip"
@@ -57,78 +64,96 @@ class ReactNativeService {
         case bundleGeneration = "kReactNativeBundleGenerationKey"
     }
 
-    fileprivate static var bundleGeneration: Int {
+    fileprivate var bundleGeneration: Int {
         get {
-            return UserDefaults.standard.integer(forKey: DefaultKeys.bundleGeneration.rawValue)
+            return userDefaults.integer(forKey: DefaultKeys.bundleGeneration.rawValue)
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: DefaultKeys.bundleGeneration.rawValue)
-            UserDefaults.standard.synchronize()
+            userDefaults.set(newValue, forKey: DefaultKeys.bundleGeneration.rawValue)
+            userDefaults.synchronize()
         }
     }
 
-    fileprivate static var documentDirectory: URL? {
-        return try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+    fileprivate var documentDirectory: URL {
+        return try! fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
     }
-    fileprivate static var compressedBundleURL: URL? {
-        return documentDirectory?.appendingPathComponent(BundleName.compressed.rawValue)
+    fileprivate var compressedBundleURL: URL {
+        return documentDirectory.appendingPathComponent(BundleName.compressed.rawValue)
     }
-    fileprivate static var bundleURL: URL? {
-        return documentDirectory?.appendingPathComponent(BundleName.downloaded.rawValue)
+    fileprivate var bundleURL: URL {
+        return documentDirectory.appendingPathComponent(BundleName.downloaded.rawValue)
     }
-    fileprivate static var assetsURL: URL? {
-        return documentDirectory?.appendingPathComponent(BundleName.compressed.rawValue)
-    }
-
-    private static var remoteBundleReference: StorageReference {
-        // TODO: Swap this for a prod url
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/128
-        let storageBucket = FirebaseOptions.defaultOptions()?.storageBucket ?? "zach-tba-dev.appspot.com"
-        let storage = Storage.storage()
-        return storage.reference(forURL: String(format: "gs://%@/react-native/%@", storageBucket, BundleName.compressed.rawValue))
+    fileprivate var assetsURL: URL {
+        return documentDirectory.appendingPathComponent(BundleName.compressed.rawValue)
     }
 
-    // TODO: Think about setting a retry timer on downloading if we fail
-    // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/166
+    var userDefaults: UserDefaults
+    var fileManager: FileManager
+    var firebaseStorage: Storage
+    var firebaseOptions: FirebaseOptions
+    var retryService: RetryService
 
-    public static func updateReactNativeBundle() {
+    init(userDefaults: UserDefaults, fileManager: FileManager,  firebaseStorage: Storage, firebaseOptions: FirebaseOptions, retryService: RetryService) {
+        self.userDefaults = userDefaults
+        self.fileManager = fileManager
+        self.firebaseStorage = firebaseStorage
+        self.firebaseOptions = firebaseOptions
+        self.retryService = retryService
+    }
+
+    private var remoteBundleReference: StorageReference? {
+        guard let storageBucket = firebaseOptions.storageBucket else {
+            assertionFailure("Storage bucket nil - check GoogleService-Info.plist")
+            return nil
+        }
+        return firebaseStorage.reference(forURL: String(format: "gs://%@/react-native/%@",
+                                                        storageBucket,
+                                                        BundleName.compressed.rawValue))
+    }
+
+    public func updateReactNativeBundle() {
         // Check if we have an orphaned compressed bundle that needs to be cleaned up (or unzipped)
         cleanupCompressedBundle()
 
+        guard let remoteBundleReference = remoteBundleReference else {
+            assertionFailure("No remote bundle found - make sure Firebase is setup before updating RN")
+            return
+        }
+
         // Check if we need to download a new compressed React Native bundle, or if the version we have is the most recent
-        remoteBundleReference.getMetadata { (metadata, error) in
+        remoteBundleReference.getMetadata { [weak self] (metadata, error) in
             if let error = error {
                 print("Unable to fetch metadata for compressed React Native bundle: \(error.localizedDescription)")
-            } else if let metadata = metadata, Int(metadata.generation) > bundleGeneration {
+            } else if let metadata = metadata, let bundleGeneration = self?.bundleGeneration, Int(metadata.generation) > bundleGeneration {
                 // Download the newest React Native bundle
-                downloadReactNativeBundle(completion: { (error) in
+                self?.downloadReactNativeBundle(completion: { (error) in
                     if error == nil {
-                        bundleGeneration = Int(metadata.generation)
+                        self?.bundleGeneration = Int(metadata.generation)
                     }
                 })
             }
         }
     }
 
-    private static func downloadReactNativeBundle(completion: @escaping (Error?) -> Void) {
-        guard let compressedBundleURL = compressedBundleURL else {
+    private func downloadReactNativeBundle(completion: @escaping (Error?) -> Void) {
+        guard let remoteBundleReference = remoteBundleReference else {
+            assertionFailure("No remote bundle found - make sure Firebase is setup before updating RN")
             return
         }
 
-        remoteBundleReference.write(toFile: compressedBundleURL, completion: { (url, error) in
+        remoteBundleReference.write(toFile: compressedBundleURL, completion: { [weak self] (url, error) in
             if let error = error {
                 print("Error writing compressed React Native bundle to filesystem: \(error.localizedDescription)")
-            } else if url != nil, unzipCompressedBundle() == true {
-                print("Wrote React Native bundle to filesystem: \(compressedBundleURL)")
-                cleanupCompressedBundle()
+            } else if url != nil, self?.unzipCompressedBundle() == true {
+                self?.cleanupCompressedBundle()
             }
             completion(error)
         })
     }
 
-    private static func cleanupCompressedBundle() {
+    private func cleanupCompressedBundle() {
         // Check if we have an old compressed bundle to cleanup
-        guard let compressedBundleURL = compressedBundleURL.reachableURL else {
+        if let reachable = try? compressedBundleURL.checkResourceIsReachable(), reachable == false {
             return
         }
 
@@ -142,15 +167,25 @@ class ReactNativeService {
         if safeToDelete == false, unzipCompressedBundle() == false {
             return
         }
-        try? FileManager.default.removeItem(at: compressedBundleURL)
+        try? fileManager.removeItem(at: compressedBundleURL)
     }
 
     // Returns true if unzip successful
-    private static func unzipCompressedBundle() -> Bool {
-        guard let documentDirectory = documentDirectory, let compressedBundleURL = compressedBundleURL else {
-            return false
-        }
-        return (try? FileManager.default.unzipItem(at: compressedBundleURL, to: documentDirectory)) != nil
+    private func unzipCompressedBundle() -> Bool {
+        return (try? fileManager.unzipItem(at: compressedBundleURL, to: documentDirectory)) != nil
     }
+
+}
+
+extension ReactNativeService: Retryable {
+    var retryInterval: TimeInterval {
+        // Poll for new RN bundle every 15 mins
+        return 60 * 15
+    }
+
+    func retry() {
+        updateReactNativeBundle()
+    }
+
 
 }

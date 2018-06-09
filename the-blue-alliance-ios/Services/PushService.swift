@@ -12,54 +12,64 @@ class PushService: NSObject {
         case pendingUnregisterPushTokens = "kPendingUnregisterPushTokens"
     }
 
-    private static var pendingRegisterPushToken: String? {
+    private var pendingRegisterPushToken: String? {
         get {
-            return UserDefaults.standard.string(forKey: DefaultKeys.pendingRegisterPushToken.rawValue)
+            return userDefaults.string(forKey: DefaultKeys.pendingRegisterPushToken.rawValue)
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: DefaultKeys.pendingRegisterPushToken.rawValue)
-            UserDefaults.standard.synchronize()
+            userDefaults.set(newValue, forKey: DefaultKeys.pendingRegisterPushToken.rawValue)
+            userDefaults.synchronize()
         }
     }
 
-    private static var pendingUnregisterPushTokens: Set<String> {
+    private var pendingUnregisterPushTokens: Set<String> {
         get {
-            let arr = UserDefaults.standard.array(forKey: DefaultKeys.pendingUnregisterPushTokens.rawValue) as? [String] ?? []
+            let arr = userDefaults.array(forKey: DefaultKeys.pendingUnregisterPushTokens.rawValue) as? [String] ?? []
             return Set(arr)
         }
         set {
             let arr = Array(newValue)
-            UserDefaults.standard.set(arr, forKey: DefaultKeys.pendingUnregisterPushTokens.rawValue)
-            UserDefaults.standard.synchronize()
+            userDefaults.set(arr, forKey: DefaultKeys.pendingUnregisterPushTokens.rawValue)
+            userDefaults.synchronize()
         }
     }
 
-    // Private singleton, so we can capture auth changes
-    public static let shared = PushService()
+    var userDefaults: UserDefaults
+    var myTBA: MyTBA
+    var retryService: RetryService
 
-    override init() {
+    init(userDefaults: UserDefaults, myTBA: MyTBA, retryService: RetryService) {
+        self.userDefaults = userDefaults
+        self.myTBA = myTBA
+        self.retryService = retryService
+
         super.init()
-
-        // Watch for MyTBA Authentication to process pending registrations
-        MyTBA.shared.authenticationProvider.add(observer: self)
     }
 
-    static func registerPushToken(_ token: String) {
-        if !MyTBA.shared.isAuthenticated {
+    func registerWithMyTBAAuthenticationProvider() {
+        // Watch for MyTBA Authentication to process pending registrations
+        myTBA.authenticationProvider.add(observer: self)
+    }
+
+    fileprivate func registerPushToken(_ token: String) {
+        if !myTBA.isAuthenticated {
             // Not authenticated to MyTBA - save token for registration once we're auth'd
             pendingRegisterPushToken = token
         } else {
-            _ = MyTBA.shared.register(token) { (error) in
+            _ = myTBA.register(token) { [weak self] (error) in
                 if let error = error {
                     Crashlytics.sharedInstance().recordError(error)
+                    self?.registerRetryable()
+                } else {
+                    self?.unregisterRetryable()
                 }
                 // Either save or remove our pending push token as necessary
-                pendingRegisterPushToken = (error != nil ? token : nil)
+                self?.pendingRegisterPushToken = (error != nil ? token : nil)
             }
         }
     }
 
-    private static func registerPendingPushToken() {
+    private func registerPendingPushToken() {
         guard let pendingRegisterPushToken = pendingRegisterPushToken else {
             return
         }
@@ -106,7 +116,7 @@ class PushService: NSObject {
 extension PushService: MyTBAAuthenticationObservable {
 
     func authenticated() {
-        PushService.registerPendingPushToken()
+        registerPendingPushToken()
     }
 
     func unauthenticated() {
@@ -126,7 +136,7 @@ extension PushService: MessagingDelegate {
 
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
         print("Firebase registration token: \(fcmToken)")
-        PushService.registerPushToken(fcmToken)
+        registerPushToken(fcmToken)
     }
 
     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
@@ -155,6 +165,19 @@ extension PushService: UNUserNotificationCenterDelegate {
 
         // Handle being launched from a push notification
         completionHandler()
+    }
+
+}
+
+extension PushService: Retryable {
+
+    var retryInterval: TimeInterval {
+        // Retry push notification register/unregister once a minute until success
+        return 1 * 60
+    }
+
+    func retry() {
+        registerPendingPushToken()
     }
 
 }

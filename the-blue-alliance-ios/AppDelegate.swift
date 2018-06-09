@@ -10,10 +10,16 @@ import UserNotifications
 
 let kNoSelectionNavigationController = "NoSelectionNavigationController"
 
-@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    lazy var rootViewController: UIViewController = {
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let splitViewController = mainStoryboard.instantiateInitialViewController() as? UISplitViewController else {
+            fatalError("Unable to load root split view controller")
+        }
+        return splitViewController
+    }()
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "TBA")
         container.loadPersistentStores(completionHandler: { (_, error) in
@@ -46,11 +52,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
         return container
     }()
+    var pushService: PushService?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // TODO: Remove this
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/128
         TBAKit.sharedKit.apiKey = "OHBBu0QbDiIJYKhAedTfkTxdrkXde1C21Sr90L1f1Pac4ahl4FJbNptNiXbCSCfH"
+
+        window = UIWindow()
+        window?.rootViewController = rootViewController
 
         if let splitViewController = self.window?.rootViewController as? UISplitViewController {
             splitViewController.preferredDisplayMode = .allVisible
@@ -78,11 +88,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         RemoteConfig.setupRemoteConfig()
 
         // Assign our Push Notification delegates
-        Messaging.messaging().delegate = PushService.shared
-        UNUserNotificationCenter.current().delegate = PushService.shared
+        pushService = PushService(userDefaults: UserDefaults.standard,
+                                  myTBA: MyTBA.shared,
+                                  retryService: RetryService())
+        Messaging.messaging().delegate = pushService
+        UNUserNotificationCenter.current().delegate = pushService
 
-        // Attempt to download our newest React Native bundle
-        ReactNativeService.updateReactNativeBundle()
+        // Setup our React Native service
+        let reactNativeService = ReactNativeService(userDefaults: UserDefaults.standard,
+                                                    fileManager: FileManager.default,
+                                                    firebaseStorage: Storage.storage(),
+                                                    firebaseOptions: FirebaseOptions.defaultOptions()!,
+                                                    retryService: RetryService())
+        reactNativeService.registerRetryable(initiallyRetry: true)
 
         // myTBA/Google Sign In
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
@@ -92,6 +110,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if GIDSignIn.sharedInstance().hasAuthInKeychain() && Auth.auth().currentUser == nil {
             GIDSignIn.sharedInstance().signInSilently()
         }
+
+        window?.makeKeyAndVisible()
 
         return true
     }
