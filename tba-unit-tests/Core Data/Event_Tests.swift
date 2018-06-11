@@ -2,7 +2,7 @@ import XCTest
 import CoreData
 @testable import The_Blue_Alliance
 
-class Event_Tests: CoreDataTestCase {
+class EventTestCase: CoreDataTestCase {
 
     var event: Event!
 

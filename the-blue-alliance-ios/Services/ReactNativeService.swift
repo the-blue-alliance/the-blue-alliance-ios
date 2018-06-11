@@ -87,11 +87,11 @@ class ReactNativeService {
         return documentDirectory.appendingPathComponent(BundleName.compressed.rawValue)
     }
 
-    var userDefaults: UserDefaults
-    var fileManager: FileManager
-    var firebaseStorage: Storage
-    var firebaseOptions: FirebaseOptions
-    var retryService: RetryService
+    private var userDefaults: UserDefaults
+    private var fileManager: FileManager
+    private var firebaseStorage: Storage
+    private var firebaseOptions: FirebaseOptions
+    internal var retryService: RetryService
 
     init(userDefaults: UserDefaults, fileManager: FileManager,  firebaseStorage: Storage, firebaseOptions: FirebaseOptions, retryService: RetryService) {
         self.userDefaults = userDefaults

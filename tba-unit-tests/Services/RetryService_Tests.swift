@@ -20,9 +20,9 @@ class Retryable_Tests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         mockRetryable = nil
+
+        super.tearDown()
     }
 
     func test_isRetryRegistered() {

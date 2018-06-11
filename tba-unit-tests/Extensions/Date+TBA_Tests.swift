@@ -5,7 +5,7 @@ internal struct KDate {
     static let secondsInAnHour = 3600.0
 }
 
-class Date_TBA_Tests: XCTestCase {
+class DateTBATestCase: XCTestCase {
 
     func test_isBetween_true() {
         let oneHourAgo = Date(timeIntervalSinceNow: (-1 * KDate.secondsInAnHour))

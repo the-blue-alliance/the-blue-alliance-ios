@@ -34,9 +34,9 @@ class PushService: NSObject {
         }
     }
 
-    var userDefaults: UserDefaults
-    var myTBA: MyTBA
-    var retryService: RetryService
+    private var userDefaults: UserDefaults
+    private var myTBA: MyTBA
+    internal var retryService: RetryService
 
     init(userDefaults: UserDefaults, myTBA: MyTBA, retryService: RetryService) {
         self.userDefaults = userDefaults
@@ -44,11 +44,6 @@ class PushService: NSObject {
         self.retryService = retryService
 
         super.init()
-    }
-
-    func registerWithMyTBAAuthenticationProvider() {
-        // Watch for MyTBA Authentication to process pending registrations
-        myTBA.authenticationProvider.add(observer: self)
     }
 
     fileprivate func registerPushToken(_ token: String) {
@@ -61,6 +56,8 @@ class PushService: NSObject {
                     Crashlytics.sharedInstance().recordError(error)
                     self?.registerRetryable()
                 } else {
+                    // TODO: Make sure this timer gets removed from memory...
+                    // We don't want it hanging on to our object
                     self?.unregisterRetryable()
                 }
                 // Either save or remove our pending push token as necessary
