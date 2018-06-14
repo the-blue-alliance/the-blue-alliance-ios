@@ -14,6 +14,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    lazy var emptyNavigationController: UINavigationController = {
+        guard let emptyViewController = Bundle.main.loadNibNamed("EmptyViewController", owner: nil, options: nil)?.first as? UIViewController else {
+            fatalError("Unable to load empty view controller")
+        }
+
+        let navigationController = UINavigationController(rootViewController: emptyViewController)
+        navigationController.restorationIdentifier = kNoSelectionNavigationController
+
+        return navigationController
+    }()
+    lazy var persistentContainer: NSPersistentContainer = {
+        return NSPersistentContainer(name: "TBA")
+    }()
     lazy var pushService: PushService = {
         return PushService(userDefaults: UserDefaults.standard,
                            myTBA: MyTBA.shared,
@@ -28,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         guard let window = window else {
             fatalError("window should be window")
         }
-        window.rootViewController = launchViewController()
+        window.rootViewController = launchViewController
         window.makeKeyAndVisible()
 
         // Setup our Firebase app - make sure this is called before other Firebase setup
@@ -52,15 +65,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         remoteConfigService.registerRetryable()
 
         // Our app setup operation will load our persistent stores, fetch our remote config, propogate persistance container
-        let appSetupOperation = AppSetupOperation(window: window,
-                                                  rootSplitViewController: rootSplitViewController(),
-                                                  persistentContainer: NSPersistentContainer(name: "TBA"),
+        let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer,
                                                   remoteConfigService: remoteConfigService)
-        appSetupOperation.completionBlock = { [unowned appSetupOperation] in
-            if let error = appSetupOperation.completionError as NSError? {
+        weak var weakAppSetupOperation = appSetupOperation
+        appSetupOperation.completionBlock = { [weak self] in
+            if let error = weakAppSetupOperation?.completionError as NSError? {
                 Crashlytics.sharedInstance().recordError(error)
                 DispatchQueue.main.async {
                     AppDelegate.showFatalError(error, in: window)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    guard let rootSplitViewController = self?.rootSplitViewController else {
+                        fatalError("Unable to setup rootSplitViewController")
+                    }
+                    guard let window = self?.window else {
+                        fatalError("Window not setup when setting root vc")
+                    }
+                    guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
+                        fatalError("Unable to snapshot root view controller")
+                    }
+                    rootSplitViewController.view.addSubview(snapshot)
+                    window.rootViewController = rootSplitViewController
+
+                    // 0.35 is an iOS animation magic number... for now
+                    UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
+                        snapshot.layer.opacity = 0;
+                    }, completion: { (status) in
+                        snapshot.removeFromSuperview()
+                    })
                 }
             }
         }
@@ -98,24 +131,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     // MARK: Private
-
-    private func rootSplitViewController() -> UISplitViewController {
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let splitViewController = mainStoryboard.instantiateInitialViewController() as? UISplitViewController else {
-            fatalError("Unable to load root split view controller")
-        }
-        splitViewController.preferredDisplayMode = .allVisible
-        splitViewController.delegate = self
-        return splitViewController
-    }
-
-    private func launchViewController() -> UIViewController {
-        let launchStoryboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
-        guard let launchViewController = launchStoryboard.instantiateInitialViewController() else {
-            fatalError("Unable to load launch view controller")
-        }
-        return launchViewController
-    }
 
     private static func showFatalError(_ error: NSError, in window: UIWindow) {
         let alertController = UIAlertController(title: "Error Loading Data",
@@ -164,8 +179,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationBarAppearance.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
     }
 
-    private func launchScreen() -> UIViewController {
-        return UIStoryboard(name: "LaunchScreen", bundle: Bundle.main).instantiateInitialViewController()!
+    private var launchViewController: UIViewController {
+        let launchStoryboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
+        guard let launchViewController = launchStoryboard.instantiateInitialViewController() else {
+            fatalError("Unable to load launch view controller")
+        }
+        return launchViewController
+    }
+
+    private var rootSplitViewController: UISplitViewController {
+        // Root VC is a split view controller, with the left side being a tab bar,
+        // and the right side being a navigation controller
+        let splitViewController = UISplitViewController()
+        splitViewController.preferredDisplayMode = .allVisible
+        splitViewController.delegate = self
+
+        let mainBundle = Bundle.main
+        let tabBarController = UITabBarController()
+        let rootStoryboards = [UIStoryboard(name: "EventsStoryboard", bundle: mainBundle),
+                               UIStoryboard(name: "TeamsStoryboard", bundle: mainBundle),
+                               UIStoryboard(name: "DistrictsStoryboard", bundle: mainBundle),
+                               UIStoryboard(name: "MyTBAStoryboard", bundle: mainBundle)]
+        tabBarController.viewControllers = rootStoryboards.compactMap({ (storyboard) -> UIViewController? in
+            return storyboard.instantiateInitialViewController()
+        })
+        tabBarController.viewControllers?.forEach({ (viewController) in
+            guard let navigationController = viewController as? UINavigationController else {
+                fatalError("Root VC in controller should be a navigation controller")
+            }
+            guard let dataViewController = navigationController.topViewController as? Persistable else {
+                fatalError("Root view controller in navigation controller should be data vc")
+            }
+            dataViewController.persistentContainer = self.persistentContainer
+        })
+        splitViewController.viewControllers = [tabBarController, emptyNavigationController]
+
+        return splitViewController
     }
 
 }
@@ -269,11 +318,7 @@ extension AppDelegate: UISplitViewControllerDelegate {
             }
         }
 
-        return emptyDetailViewController()
-    }
-
-    private func emptyDetailViewController() -> UIViewController {
-        return UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: kNoSelectionNavigationController)
+        return emptyNavigationController
     }
 
 }

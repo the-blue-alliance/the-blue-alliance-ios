@@ -10,8 +10,10 @@ extension Stateful {
 
     func showNoDataView(with text: String?) {
         if noDataViewController == nil {
-            let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            noDataViewController = mainStoryboard.instantiateViewController(withIdentifier: "NoDataViewController") as? NoDataViewController
+            guard let noDataVC = Bundle.main.loadNibNamed("NoDataViewController", owner: nil, options: nil)?.first as? NoDataViewController else {
+                fatalError("Unable to load no data view controller")
+            }
+            noDataViewController = noDataVC
         }
         guard let noDataViewController = noDataViewController, let noDataView = noDataViewController.view else {
             return
