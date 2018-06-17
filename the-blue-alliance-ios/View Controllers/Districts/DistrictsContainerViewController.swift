@@ -1,14 +1,14 @@
 import Foundation
 import UIKit
 import TBAKit
+import FirebaseRemoteConfig
 
 private let SelectYearSegue = "SelectYearSegue"
 
 class DistrictsContainerViewController: ContainerViewController {
 
-    // TODO: Get these from Firebase Config
-    var maxYear: Int = 2018
-    var year: Int = 2018 {
+    var maxYear: Int = RemoteConfig.remoteConfig().maxSeason
+    var year: Int = RemoteConfig.remoteConfig().currentSeason {
         didSet {
             if let districtsViewController = districtsViewController {
                 districtsViewController.year = year

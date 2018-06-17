@@ -2,6 +2,7 @@ import Foundation
 import UIKit
 import CoreData
 import TBAKit
+import FirebaseRemoteConfig
 
 private let EventsEmbed = "EventsEmbed"
 private let EventSegue = "EventSegue"
@@ -15,8 +16,8 @@ class EventsContainerViewController: ContainerViewController, Observable {
 
     // Used to manually refresh the first time for a year change, since our existing patterns won't refresh automatically
     internal var hasRefreshed: Bool = false
-    // TODO: Default this from Firebase Config, or some status something
-    internal var year: Int = 2018 {
+
+    internal var year: Int = RemoteConfig.remoteConfig().currentSeason {
         didSet {
             // Update to make sure we're watching for events for the proper year
             updateEventObserver()
@@ -52,8 +53,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
             }
         }
     }
-    // TODO: Get this from Firebase Config
-    internal var maxYear: Int = 2018
+    internal var maxYear: Int = RemoteConfig.remoteConfig().maxSeason
 
     // MARK: - Persistable
 

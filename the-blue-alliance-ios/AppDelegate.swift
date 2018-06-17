@@ -13,105 +13,91 @@ let kNoSelectionNavigationController = "NoSelectionNavigationController"
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    lazy var rootViewController: UIViewController = {
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let splitViewController = mainStoryboard.instantiateInitialViewController() as? UISplitViewController else {
-            fatalError("Unable to load root split view controller")
+
+    lazy var emptyNavigationController: UINavigationController = {
+        guard let emptyViewController = Bundle.main.loadNibNamed("EmptyViewController", owner: nil, options: nil)?.first as? UIViewController else {
+            fatalError("Unable to load empty view controller")
         }
-        return splitViewController
+
+        let navigationController = UINavigationController(rootViewController: emptyViewController)
+        navigationController.restorationIdentifier = kNoSelectionNavigationController
+
+        return navigationController
     }()
     lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "TBA")
-        container.loadPersistentStores(completionHandler: { (_, error) in
-            container.viewContext.automaticallyMergesChangesFromParent = true
-
-            if let error = error as NSError? {
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
-                // https://stackoverflow.com/a/30941356/537341
-                var topWindow: UIWindow = UIWindow(frame: UIScreen.main.bounds)
-                topWindow.rootViewController = UIViewController()
-                topWindow.windowLevel = UIWindowLevelAlert + 1
-
-                let alertController = UIAlertController(title: "Error Loading Data",
-                                                        message: "There was an error loading local data - try reinstalling The Blue Alliance",
-                                                        preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "Close", style: .default, handler: { (_) in
-                    fatalError("Unresolved error \(error), \(error.userInfo)")
-                }))
-
-                topWindow.makeKeyAndVisible()
-                topWindow.rootViewController?.present(alertController, animated: true, completion: nil)
-            }
-        })
-        return container
+        return NSPersistentContainer(name: "TBA")
     }()
-    var pushService: PushService?
+    lazy var pushService: PushService = {
+        return PushService(userDefaults: UserDefaults.standard,
+                           myTBA: MyTBA.shared,
+                           retryService: RetryService())
+    }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // TODO: Remove this
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/128
+        AppDelegate.setupAppearance()
+
+        // Setup a dummy launch screen in our window while we're doing setup tasks
+        window = UIWindow()
+        guard let window = window else {
+            fatalError("window should be window")
+        }
+        window.rootViewController = launchViewController
+        window.makeKeyAndVisible()
+
+        // Setup our Firebase app - make sure this is called before other Firebase setup
+        FirebaseApp.configure()
+
+        // TODO: Load this from some secrets file
         TBAKit.sharedKit.apiKey = "OHBBu0QbDiIJYKhAedTfkTxdrkXde1C21Sr90L1f1Pac4ahl4FJbNptNiXbCSCfH"
 
-        window = UIWindow()
-        window?.rootViewController = rootViewController
-
-        if let splitViewController = self.window?.rootViewController as? UISplitViewController {
-            splitViewController.preferredDisplayMode = .allVisible
-            splitViewController.delegate = self
-
-            let tabBarController = splitViewController.viewControllers[0] as! UITabBarController
-            for vc in tabBarController.viewControllers! {
-                guard let nav = vc as? UINavigationController else {
-                    continue
-                }
-
-                guard let dataVC = nav.topViewController as? Persistable else {
-                    continue
-                }
-                // TODO: Make sure we only pass this once we have it, as well as a MOC
-                // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/165
-                dataVC.persistentContainer = persistentContainer
-            }
-        }
-
-        setupAppearance()
-
-        FirebaseApp.configure()
-        // Setup Remote Config
-        RemoteConfig.setupRemoteConfig()
-
-        // Assign our Push Notification delegates
-        pushService = PushService(userDefaults: UserDefaults.standard,
-                                  myTBA: MyTBA.shared,
-                                  retryService: RetryService())
-        Messaging.messaging().delegate = pushService
-        UNUserNotificationCenter.current().delegate = pushService
+        // Assign our Push Service as a delegate to all push-related classes
+        AppDelegate.setupPushServiceDelegates(with: pushService)
 
         // Setup our React Native service
-        let reactNativeService = ReactNativeService(userDefaults: UserDefaults.standard,
-                                                    fileManager: FileManager.default,
-                                                    firebaseStorage: Storage.storage(),
-                                                    firebaseOptions: FirebaseOptions.defaultOptions()!,
-                                                    retryService: RetryService())
-        reactNativeService.registerRetryable(initiallyRetry: true)
+        AppDelegate.setupReactNativeService()
 
-        // myTBA/Google Sign In
-        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
-        GIDSignIn.sharedInstance().delegate = self
+        // Kickoff background myTBA/Google sign in, along with setting up delegates
+        setupGoogleAuthentication()
 
-        // If we're authenticated with Google but don't have a Firebase user, get a Firebase user
-        if GIDSignIn.sharedInstance().hasAuthInKeychain() && Auth.auth().currentUser == nil {
-            GIDSignIn.sharedInstance().signInSilently()
+        // Setup our remote config - to be used by our app setup operation
+        let remoteConfigService = RemoteConfigService(remoteConfig: RemoteConfig.remoteConfig(),
+                                                      retryService: RetryService())
+        remoteConfigService.registerRetryable()
+
+        // Our app setup operation will load our persistent stores, fetch our remote config, propogate persistance container
+        let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer,
+                                                  remoteConfigService: remoteConfigService)
+        weak var weakAppSetupOperation = appSetupOperation
+        appSetupOperation.completionBlock = { [weak self] in
+            if let error = weakAppSetupOperation?.completionError as NSError? {
+                Crashlytics.sharedInstance().recordError(error)
+                DispatchQueue.main.async {
+                    AppDelegate.showFatalError(error, in: window)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    guard let rootSplitViewController = self?.rootSplitViewController else {
+                        fatalError("Unable to setup rootSplitViewController")
+                    }
+                    guard let window = self?.window else {
+                        fatalError("Window not setup when setting root vc")
+                    }
+                    guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
+                        fatalError("Unable to snapshot root view controller")
+                    }
+                    rootSplitViewController.view.addSubview(snapshot)
+                    window.rootViewController = rootSplitViewController
+
+                    // 0.35 is an iOS animation magic number... for now
+                    UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
+                        snapshot.layer.opacity = 0;
+                    }, completion: { (status) in
+                        snapshot.removeFromSuperview()
+                    })
+                }
+            }
         }
-
-        window?.makeKeyAndVisible()
+        OperationQueue.main.addOperation(appSetupOperation)
 
         return true
     }
@@ -146,7 +132,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: Private
 
-    func setupAppearance() {
+    private static func showFatalError(_ error: NSError, in window: UIWindow) {
+        let alertController = UIAlertController(title: "Error Loading Data",
+                                                message: "There was an error loading local data - try reinstalling The Blue Alliance",
+                                                preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Close", style: .default, handler: { (_) in
+            fatalError("Unresolved error \(error), \(error.userInfo)")
+        }))
+        window.rootViewController?.present(alertController, animated: true, completion: nil)
+    }
+
+    private static func setupPushServiceDelegates(with pushService: PushService) {
+        Messaging.messaging().delegate = pushService
+        UNUserNotificationCenter.current().delegate = pushService
+        MyTBA.shared.authenticationProvider.add(observer: pushService)
+    }
+
+    private static func setupReactNativeService() {
+        let reactNativeService = ReactNativeService(userDefaults: UserDefaults.standard,
+                                                    fileManager: FileManager.default,
+                                                    firebaseStorage: Storage.storage(),
+                                                    firebaseOptions: FirebaseOptions.defaultOptions()!,
+                                                    retryService: RetryService())
+        reactNativeService.registerRetryable(initiallyRetry: true)
+    }
+
+    private func setupGoogleAuthentication() {
+        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
+        GIDSignIn.sharedInstance().delegate = self
+
+        // If we're authenticated with Google but don't have a Firebase user, get a Firebase user
+        if GIDSignIn.sharedInstance().hasAuthInKeychain() && Auth.auth().currentUser == nil {
+            GIDSignIn.sharedInstance().signInSilently()
+        }
+    }
+
+    private static func setupAppearance() {
         let navigationBarAppearance = UINavigationBar.appearance()
 
         navigationBarAppearance.barTintColor = UIColor.primaryBlue
@@ -156,6 +177,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationBarAppearance.setBackgroundImage(UIImage(), for: .default)
         navigationBarAppearance.isTranslucent = false
         navigationBarAppearance.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+    }
+
+    private var launchViewController: UIViewController {
+        let launchStoryboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
+        guard let launchViewController = launchStoryboard.instantiateInitialViewController() else {
+            fatalError("Unable to load launch view controller")
+        }
+        return launchViewController
+    }
+
+    private var rootSplitViewController: UISplitViewController {
+        // Root VC is a split view controller, with the left side being a tab bar,
+        // and the right side being a navigation controller
+        let splitViewController = UISplitViewController()
+
+        let mainBundle = Bundle.main
+        let tabBarController = UITabBarController()
+        let rootStoryboards = [UIStoryboard(name: "EventsStoryboard", bundle: mainBundle),
+                               UIStoryboard(name: "TeamsStoryboard", bundle: mainBundle),
+                               UIStoryboard(name: "DistrictsStoryboard", bundle: mainBundle),
+                               UIStoryboard(name: "MyTBAStoryboard", bundle: mainBundle)]
+        tabBarController.viewControllers = rootStoryboards.compactMap({ (storyboard) -> UIViewController? in
+            return storyboard.instantiateInitialViewController()
+        })
+        tabBarController.viewControllers?.forEach({ (viewController) in
+            guard let navigationController = viewController as? UINavigationController else {
+                fatalError("Root VC in controller should be a navigation controller")
+            }
+            guard let dataViewController = navigationController.topViewController as? Persistable else {
+                fatalError("Root view controller in navigation controller should be data vc")
+            }
+            dataViewController.persistentContainer = self.persistentContainer
+        })
+        splitViewController.viewControllers = [tabBarController, emptyNavigationController]
+
+        splitViewController.preferredDisplayMode = .allVisible
+        splitViewController.delegate = self
+
+        return splitViewController
     }
 
 }
@@ -259,11 +319,7 @@ extension AppDelegate: UISplitViewControllerDelegate {
             }
         }
 
-        return emptyDetailViewController()
-    }
-
-    public func emptyDetailViewController() -> UIViewController {
-        return UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: kNoSelectionNavigationController)
+        return emptyNavigationController
     }
 
 }

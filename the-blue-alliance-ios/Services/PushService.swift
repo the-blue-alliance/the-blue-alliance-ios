@@ -34,9 +34,9 @@ class PushService: NSObject {
         }
     }
 
-    var userDefaults: UserDefaults
-    var myTBA: MyTBA
-    var retryService: RetryService
+    private var userDefaults: UserDefaults
+    private var myTBA: MyTBA
+    internal var retryService: RetryService
 
     init(userDefaults: UserDefaults, myTBA: MyTBA, retryService: RetryService) {
         self.userDefaults = userDefaults
@@ -46,25 +46,22 @@ class PushService: NSObject {
         super.init()
     }
 
-    func registerWithMyTBAAuthenticationProvider() {
-        // Watch for MyTBA Authentication to process pending registrations
-        myTBA.authenticationProvider.add(observer: self)
-    }
-
     fileprivate func registerPushToken(_ token: String) {
         if !myTBA.isAuthenticated {
             // Not authenticated to MyTBA - save token for registration once we're auth'd
             pendingRegisterPushToken = token
         } else {
-            _ = myTBA.register(token) { [weak self] (error) in
+            _ = myTBA.register(token) { (error) in
                 if let error = error {
                     Crashlytics.sharedInstance().recordError(error)
-                    self?.registerRetryable()
+                    DispatchQueue.main.async {
+                        self.registerRetryable()
+                    }
                 } else {
-                    self?.unregisterRetryable()
+                    self.unregisterRetryable()
                 }
                 // Either save or remove our pending push token as necessary
-                self?.pendingRegisterPushToken = (error != nil ? token : nil)
+                self.pendingRegisterPushToken = (error != nil ? token : nil)
             }
         }
     }
