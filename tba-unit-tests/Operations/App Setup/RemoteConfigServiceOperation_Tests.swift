@@ -38,6 +38,17 @@ class RemoteConfigServiceOperationTestCase: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
+    func test_retry_intervalPositive() {
+        XCTAssertGreaterThan(remoteConfigService.retryInterval, 0)
+    }
+
+    func test_retry_callsFetchRemoteConfig() {
+        let expectation = XCTestExpectation(description: "fetchRemoteConfig called")
+        remoteConfigService.fetchRemoteConfigExpectation = expectation
+        remoteConfigService.retry()
+        wait(for: [expectation], timeout: 1.0)
+    }
+
 }
 
 class MockRetryService: RetryService {}
@@ -45,8 +56,11 @@ class MockRetryService: RetryService {}
 class MockRemoteConfigService: RemoteConfigService {
 
     var mockError: Error?
+    var fetchRemoteConfigExpectation: XCTestExpectation?
 
     override func fetchRemoteConfig(completion: ((_ error: Error?) -> Void)? = nil) {
+        fetchRemoteConfigExpectation?.fulfill()
+
         completion?(mockError)
     }
 
@@ -57,9 +71,9 @@ class MockRemoteConfigServiceOperation: RemoteConfigServiceOperation {
     var finishExpectation: XCTestExpectation?
 
     override func finish() {
-        super.finish()
-
         finishExpectation?.fulfill()
+
+        super.finish()
     }
 
 }
