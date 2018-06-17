@@ -51,17 +51,17 @@ class PushService: NSObject {
             // Not authenticated to MyTBA - save token for registration once we're auth'd
             pendingRegisterPushToken = token
         } else {
-            _ = myTBA.register(token) { [weak self] (error) in
+            _ = myTBA.register(token) { (error) in
                 if let error = error {
                     Crashlytics.sharedInstance().recordError(error)
-                    self?.registerRetryable()
+                    DispatchQueue.main.async {
+                        self.registerRetryable()
+                    }
                 } else {
-                    // TODO: Make sure this timer gets removed from memory...
-                    // We don't want it hanging on to our object
-                    self?.unregisterRetryable()
+                    self.unregisterRetryable()
                 }
                 // Either save or remove our pending push token as necessary
-                self?.pendingRegisterPushToken = (error != nil ? token : nil)
+                self.pendingRegisterPushToken = (error != nil ? token : nil)
             }
         }
     }

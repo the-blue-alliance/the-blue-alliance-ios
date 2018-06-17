@@ -191,8 +191,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Root VC is a split view controller, with the left side being a tab bar,
         // and the right side being a navigation controller
         let splitViewController = UISplitViewController()
-        splitViewController.preferredDisplayMode = .allVisible
-        splitViewController.delegate = self
 
         let mainBundle = Bundle.main
         let tabBarController = UITabBarController()
@@ -213,6 +211,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             dataViewController.persistentContainer = self.persistentContainer
         })
         splitViewController.viewControllers = [tabBarController, emptyNavigationController]
+
+        splitViewController.preferredDisplayMode = .allVisible
+        splitViewController.delegate = self
 
         return splitViewController
     }
