@@ -45,6 +45,7 @@ struct MyTBASubscription: MyTBAModel, Codable {
 
 extension MyTBA {
 
+    @discardableResult
     func fetchSubscriptions(_ completion: @escaping (_ subscriptions: [MyTBASubscription]?, _ error: Error?) -> Void) -> URLSessionDataTask {
         let method = "\(MyTBASubscription.arrayKey)/list"
 
@@ -53,6 +54,7 @@ extension MyTBA {
         })
     }
 
+    @discardableResult
     func updateSubscription(_ subscriptions: MyTBASubscription, completion: @escaping (_ subscription: MyTBASubscription?, _ error: Error?) -> Void) -> URLSessionDataTask? {
         return nil
     }

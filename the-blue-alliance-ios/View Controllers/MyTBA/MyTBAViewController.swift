@@ -1,7 +1,8 @@
 import CoreData
 import Crashlytics
-import GoogleSignIn
 import FirebaseAuth
+import FirebaseMessaging
+import GoogleSignIn
 import UIKit
 import UserNotifications
 
@@ -17,6 +18,11 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     internal var signInViewController: MyTBASignInViewController!
     @IBOutlet internal var signInView: UIView!
     @IBOutlet internal var signOutBarButtonItem: UIBarButtonItem!
+    internal var signOutActivityIndicatorBarButtonItem: UIBarButtonItem = {
+        let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        activityIndicatorView.startAnimating()
+        return UIBarButtonItem(customView: activityIndicatorView)
+    }()
 
     internal var favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>
     internal var favoritesView: UIView
@@ -24,6 +30,13 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     internal var subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>
     internal var subscriptionsView: UIView
 
+    private var isLoggingOut: Bool = false {
+        didSet {
+            DispatchQueue.main.async {
+                self.updateInterface()
+            }
+        }
+    }
     private var isLoggedIn: Bool {
         return MyTBA.shared.isAuthenticated
     }
@@ -84,11 +97,35 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
             return
         }
 
-        navigationItem.rightBarButtonItem = isLoggedIn ? signOutBarButtonItem : nil
+        if isLoggingOut {
+            navigationItem.rightBarButtonItem = signOutActivityIndicatorBarButtonItem
+        } else {
+            navigationItem.rightBarButtonItem = isLoggedIn ? signOutBarButtonItem : nil
+        }
         signInView.isHidden = isLoggedIn
     }
 
     private func logout() {
+        guard let fcmToken = Messaging.messaging().fcmToken else {
+            // No FCM token to unregister
+            return
+        }
+
+        let signOutOperation = MyTBASignOutOperation(myTBA: MyTBA.shared, pushToken: fcmToken)
+        signOutOperation.completionBlock = { [unowned signOutOperation] in
+            self.isLoggingOut = false
+
+            if let error = signOutOperation.completionError {
+                Crashlytics.sharedInstance().recordError(error)
+            } else {
+                self.logoutSuccessful()
+            }
+        }
+        isLoggingOut = true
+        OperationQueue.main.addOperation(signOutOperation)
+    }
+
+    private func logoutSuccessful() {
         GIDSignIn.sharedInstance().signOut()
         try! Auth.auth().signOut()
 
@@ -150,8 +187,8 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
     @IBAction func logoutTapped() {
         let signOutAlertController = UIAlertController(title: "Log Out?", message: "Are you sure you want to sign out of myTBA?", preferredStyle: .alert)
-        signOutAlertController.addAction(UIAlertAction(title: "Log Out", style: .default, handler: { [weak self] (_) in
-            self?.logout()
+        signOutAlertController.addAction(UIAlertAction(title: "Log Out", style: .default, handler: { (_) in
+            self.logout()
         }))
         signOutAlertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(signOutAlertController, animated: true, completion: nil)

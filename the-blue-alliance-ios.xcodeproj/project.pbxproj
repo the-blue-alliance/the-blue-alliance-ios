@@ -111,6 +111,8 @@
 		92AAC69720967EC20076B977 /* MyTBAModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AAC69620967EC20076B977 /* MyTBAModel.swift */; };
 		92AAC69A209681400076B977 /* MyTBASubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AAC699209681400076B977 /* MyTBASubscription.swift */; };
 		92AF4D0C1E330790007E967D /* SelectNumberTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */; };
+		92B076F120FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B076F020FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift */; };
+		92B076F320FF948D00F9B2D7 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */; };
 		92B0AA3B20CB837A0074FDF1 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0AA3A20CB837A0074FDF1 /* main.swift */; };
 		92B5DAC61EE4CE7C00B0A8F3 /* EventTeamStat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B5DAC51EE4CE7C00B0A8F3 /* EventTeamStat.swift */; };
 		92B7372F20996F25009A7784 /* MyTBAPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B7372E20996F25009A7784 /* MyTBAPreferences.swift */; };
@@ -140,6 +142,7 @@
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
 		92F8E356209AAE890094213F /* PushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E355209AAE890094213F /* PushService.swift */; };
 		92F8E358209AB3B50094213F /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E357209AB3B50094213F /* Provider.swift */; };
+		92FE68BB20D8A1E8004A1481 /* MyTBASignOutOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FE68BA20D8A1E8004A1481 /* MyTBASignOutOperation.swift */; };
 		92FF4A2E2099616B006B99F5 /* MyTBARegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF4A2D2099616B006B99F5 /* MyTBARegister.swift */; };
 		92FFE51E1E770D010037E48C /* District.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE51D1E770D010037E48C /* District.swift */; };
 		92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */; };
@@ -268,6 +271,8 @@
 		92AAC69620967EC20076B977 /* MyTBAModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAModel.swift; sourceTree = "<group>"; };
 		92AAC699209681400076B977 /* MyTBASubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASubscription.swift; sourceTree = "<group>"; };
 		92AF4D0B1E330790007E967D /* SelectNumberTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectNumberTableViewController.swift; sourceTree = "<group>"; };
+		92B076F020FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignOutOperation_Tests.swift; sourceTree = "<group>"; };
+		92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppDelegate.swift; sourceTree = "<group>"; };
 		92B0AA3A20CB837A0074FDF1 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		92B5DAC51EE4CE7C00B0A8F3 /* EventTeamStat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTeamStat.swift; sourceTree = "<group>"; };
 		92B7372E20996F25009A7784 /* MyTBAPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferences.swift; sourceTree = "<group>"; };
@@ -300,6 +305,7 @@
 		92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsContainerViewController.swift; sourceTree = "<group>"; };
 		92F8E355209AAE890094213F /* PushService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushService.swift; sourceTree = "<group>"; };
 		92F8E357209AB3B50094213F /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+		92FE68BA20D8A1E8004A1481 /* MyTBASignOutOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignOutOperation.swift; sourceTree = "<group>"; };
 		92FF4A2D2099616B006B99F5 /* MyTBARegister.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBARegister.swift; sourceTree = "<group>"; };
 		92FFE51D1E770D010037E48C /* District.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = District.swift; sourceTree = "<group>"; };
 		92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewCell.xib; sourceTree = "<group>"; };
@@ -517,6 +523,7 @@
 			children = (
 				9287014720CD8C4A0077D6DA /* TBAOperation.swift */,
 				92BB717920CE05770081F4E5 /* App Setup */,
+				92FE68B920D8A1CF004A1481 /* myTBA */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -547,6 +554,7 @@
 				92E6253F208EC23000DF58C0 /* the-blue-alliance-ios.entitlements */,
 				92B0AA3A20CB837A0074FDF1 /* main.swift */,
 				92942D951E2154DA008E79CA /* AppDelegate.swift */,
+				92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */,
 				923A0D7620D21D3800BF5E31 /* Launch Views */,
 				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
 				92942DA31E2154DA008E79CA /* Info.plist */,
@@ -769,6 +777,14 @@
 			name = MyTBA;
 			sourceTree = "<group>";
 		};
+		92B076EF20FF8DDC00F9B2D7 /* myTBA */ = {
+			isa = PBXGroup;
+			children = (
+				92B076F020FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift */,
+			);
+			path = myTBA;
+			sourceTree = "<group>";
+		};
 		92BB717920CE05770081F4E5 /* App Setup */ = {
 			isa = PBXGroup;
 			children = (
@@ -784,6 +800,7 @@
 			children = (
 				92BB717B20CE116C0081F4E5 /* TBAOperation_Tests.swift */,
 				92BB717D20CE19E20081F4E5 /* App Setup */,
+				92B076EF20FF8DDC00F9B2D7 /* myTBA */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -864,6 +881,14 @@
 				92F8E357209AB3B50094213F /* Provider.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		92FE68B920D8A1CF004A1481 /* myTBA */ = {
+			isa = PBXGroup;
+			children = (
+				92FE68BA20D8A1E8004A1481 /* MyTBASignOutOperation.swift */,
+			);
+			path = myTBA;
 			sourceTree = "<group>";
 		};
 		92FFE5221E7C994B0037E48C /* View Elements */ = {
@@ -1181,6 +1206,7 @@
 				9272924D1EE4A0FC0027CE7C /* EventStatsViewController.swift in Sources */,
 				9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */,
 				9274A3F81F3520B900FAADF0 /* TeamSummaryTableViewController.swift in Sources */,
+				92FE68BB20D8A1E8004A1481 /* MyTBASignOutOperation.swift in Sources */,
 				9287014620CD8C0B0077D6DA /* PersistentContainerOperation.swift in Sources */,
 				929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */,
 				92C9BD3120968FAC007FB9C8 /* Favorite.swift in Sources */,
@@ -1276,6 +1302,7 @@
 				1405237A1ED33E040072FB91 /* MatchesViewController.swift in Sources */,
 				9249206F20BB0455001CAC5E /* Date+TBA.swift in Sources */,
 				9223AC851EE7214A00F54F93 /* MediaView.swift in Sources */,
+				92B076F320FF948D00F9B2D7 /* TestAppDelegate.swift in Sources */,
 				926A8EEA20B9B6BB00A25563 /* EventStatusAlliance.swift in Sources */,
 				929F571A2092AAF000E5313A /* URL+Reachable.swift in Sources */,
 				9255EB6D209AC9760006A745 /* RetryService.swift in Sources */,
@@ -1288,6 +1315,7 @@
 			files = (
 				924459C620CB796B0007570D /* Event_Tests.swift in Sources */,
 				92BB718420CE1E310081F4E5 /* Test.xcdatamodeld in Sources */,
+				92B076F120FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift in Sources */,
 				924459C320CB796B0007570D /* Date+TBA_Tests.swift in Sources */,
 				92BB717F20CE19F40081F4E5 /* PersistentContainerOperation_Tests.swift in Sources */,
 				924459C520CB796B0007570D /* CoreDataTestCase.swift in Sources */,

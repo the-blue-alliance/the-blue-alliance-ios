@@ -27,6 +27,7 @@ struct MyTBAFavorite: MyTBAModel, Codable {
 
 extension MyTBA {
 
+    @discardableResult
     func fetchFavorites(_ completion: @escaping (_ favorites: [MyTBAFavorite]?, _ error: Error?) -> Void) -> URLSessionDataTask {
         let method = "\(MyTBAFavorite.arrayKey)/list"
 
@@ -35,6 +36,7 @@ extension MyTBA {
         })
     }
 
+    @discardableResult
     func updateFavorite(_ favorite: MyTBAFavorite, completion: @escaping (_ favorites: MyTBAFavorite?, _ error: Error?) -> Void) -> URLSessionDataTask? {
         // Something in here
         return nil

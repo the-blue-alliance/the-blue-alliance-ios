@@ -12,18 +12,20 @@ struct MyTBARegisterRequest: Codable {
 
 struct MyTBARegisterResponse: MyTBAResponse, Codable {
 
-    var code: Int
+    var code: String
     var message: String
 
 }
 
 extension MyTBA {
 
+    @discardableResult
     func register(_ token: String, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTask? {
         return registerUnregister("register", token: token, completion: completion)
     }
 
-    func unregister(_ token: String, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTask? {
+    @discardableResult
+    @objc func unregister(_ token: String, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTask? {
         return registerUnregister("unregister", token: token, completion: completion)
     }
 
@@ -43,7 +45,7 @@ extension MyTBA {
         }
 
         return callApi(method: method, bodyData: encodedRegistration, completion: { (registerResponse: MyTBARegisterResponse?, error: Error?) in
-            if let registerResponse = registerResponse, registerResponse.code >= 400 {
+            if let registerResponse = registerResponse, registerResponse.code != "200" {
                 completion(APIError.error(registerResponse.message))
             } else {
                 completion(error)
