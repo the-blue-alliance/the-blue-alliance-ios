@@ -9,7 +9,6 @@ class PushService: NSObject {
 
     private enum DefaultKeys: String {
         case pendingRegisterPushToken = "kPendingPushToken"
-        case pendingUnregisterPushTokens = "kPendingUnregisterPushTokens"
     }
 
     private var pendingRegisterPushToken: String? {
@@ -18,18 +17,6 @@ class PushService: NSObject {
         }
         set {
             userDefaults.set(newValue, forKey: DefaultKeys.pendingRegisterPushToken.rawValue)
-            userDefaults.synchronize()
-        }
-    }
-
-    private var pendingUnregisterPushTokens: Set<String> {
-        get {
-            let arr = userDefaults.array(forKey: DefaultKeys.pendingUnregisterPushTokens.rawValue) as? [String] ?? []
-            return Set(arr)
-        }
-        set {
-            let arr = Array(newValue)
-            userDefaults.set(arr, forKey: DefaultKeys.pendingUnregisterPushTokens.rawValue)
             userDefaults.synchronize()
         }
     }
@@ -73,32 +60,6 @@ class PushService: NSObject {
         registerPushToken(pendingRegisterPushToken)
     }
 
-    // Unregister is unused right now because myTBA needs to be auth'd to unregister but we unregister after a log out..
-    /*
-    static func unregisterPushToken(_ token: String) {
-        if MyTBA.shared.authentication == nil {
-            // Not authenticated to MyTBA - save token for unregister once we're auth'd
-            pendingUnregisterPushTokens.insert(token)
-        } else {
-            _ = MyTBA.shared.unregister(token, completion: { (error) in
-                if let error = error {
-                    Crashlytics.sharedInstance().recordError(error)
-                    pendingUnregisterPushTokens.insert(token)
-                } else {
-                    pendingUnregisterPushTokens.remove(token)
-                }
-            })
-        }
-    }
-    
-    // To be used by a background timer
-    private static func unregisterPendingPushTokens() {
-        for token in pendingUnregisterPushTokens {
-            unregisterPushToken(token)
-        }
-    }
-    */
-
     static func requestAuthorizationForNotifications(_ completion: ((Error?) -> Void)?) {
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
         UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (_, error) in
@@ -117,15 +78,7 @@ extension PushService: MyTBAAuthenticationObservable {
     }
 
     func unauthenticated() {
-        // TODO: By the nature of unregister being hooked up to unauth'd... won't this ALWAYS fail?
-        // We should fix this, but probably fix this server-side, where unregister isn't an auth'd endpoint?
-        // Or maybe we can unauth if we pass the previous registration token or something?
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/175
-        /*
-        if let currentPushToken = Messaging.messaging().fcmToken {
-            PushService.unregisterPushToken(currentPushToken)
-        }
-        */
+        // unregister isn't asynchronous, so we don't subscribe to it
     }
 }
 
@@ -169,7 +122,7 @@ extension PushService: UNUserNotificationCenterDelegate {
 extension PushService: Retryable {
 
     var retryInterval: TimeInterval {
-        // Retry push notification register/unregister once a minute until success
+        // Retry push notification register once a minute until success
         return 1 * 60
     }
 

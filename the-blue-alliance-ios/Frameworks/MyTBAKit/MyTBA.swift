@@ -15,6 +15,7 @@ public enum APIError: Error {
 }
 
 class MyTBA {
+
     public static let shared = MyTBA()
     private var authToken: String? {
         didSet {
@@ -42,18 +43,18 @@ class MyTBA {
 
         // Block gets called on init - ignore the init call
         var initCall = true
-        Auth.auth().addIDTokenDidChangeListener { [weak self] (_, user) in
+        Auth.auth().addIDTokenDidChangeListener { (_, user) in
             if initCall {
                 initCall = false
                 return
             }
 
             if let user = user {
-                user.getIDToken(completion: { [weak self] (token, _) in
-                    self?.authToken = token
+                user.getIDToken(completion: { (token, _) in
+                    self.authToken = token
                 })
             } else {
-                self?.authToken = nil
+                self.authToken = nil
             }
         }
     }
@@ -83,7 +84,7 @@ class MyTBA {
 
         #if DEBUG
         if let bodyData = bodyData, let dataString = try? JSONSerialization.jsonObject(with: bodyData, options: []) {
-            print("POST: \(dataString)")
+            print("POST \(method): \(dataString)")
         }
         #endif
 
