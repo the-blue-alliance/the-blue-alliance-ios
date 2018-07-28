@@ -218,7 +218,7 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
         guard let event = dataSource?.object(at: IndexPath(item: 0, section: section)) else {
             return nil
         }
-
+        
         if district != nil {
             return "\(event.weekString) Events"
         } else if event.isDistrictChampionship {
@@ -234,6 +234,12 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
             return Int(event.eventType) == EventType.championshipFinals.rawValue ? eventTypeString : "\(eventTypeString)s"
         } else if let district = event.district {
             return "\(district.name ?? "") District Events"
+        } else if event.isFoC {
+            return "Festival of Champions"
+        } else if event.isOffseason {
+            return "Offseason Events"
+        } else if event.isPreseason {
+            return "Preseason Events"
         } else {
             return "Regional Events"
         }

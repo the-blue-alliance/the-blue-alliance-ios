@@ -206,6 +206,21 @@ extension Event: Locatable, Managed {
         let type = Int(eventType)
         return type == EventType.districtChampionshipDivision.rawValue || type == EventType.districtChampionship.rawValue
     }
+    
+    public var isFoC: Bool {
+        let type = Int(eventType)
+        return type == EventType.festivalOfChampions.rawValue;
+    }
+    
+    public var isPreseason: Bool {
+        let type = Int(eventType)
+        return type == EventType.preseason.rawValue;
+    }
+    
+    public var isOffseason: Bool {
+        let type = Int(eventType)
+        return type == EventType.offseason.rawValue;
+    }
 
     public var isHappeningNow: Bool {
         guard let startDate = startDate, let endDate = endDate else {
