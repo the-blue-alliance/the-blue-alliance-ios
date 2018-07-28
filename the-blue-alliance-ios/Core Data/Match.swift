@@ -53,15 +53,15 @@ extension Match: Managed {
         }
         switch compLevel {
         case MatchCompLevel.qualification.rawValue:
-            return "Qual"
+            return "Quals"
         case MatchCompLevel.eightfinal.rawValue:
-            return "Octofinal"
+            return "Eighths"
         case MatchCompLevel.quarterfinal.rawValue:
-            return "Quarter"
+            return "Quarters"
         case MatchCompLevel.semifinal.rawValue:
-            return "Semi"
+            return "Semis"
         case MatchCompLevel.final.rawValue:
-            return "Final"
+            return "Finals"
         default:
             return ""
         }
