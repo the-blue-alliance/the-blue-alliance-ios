@@ -4,6 +4,7 @@ import TBAKit
 
 extension EventStatus: Managed {
 
+    @discardableResult
     static func insert(with model: TBAEventStatus, team: Team, event: Event, in context: NSManagedObjectContext) -> EventStatus {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
                                     #keyPath(EventStatus.event), event, #keyPath(EventStatus.team), team)

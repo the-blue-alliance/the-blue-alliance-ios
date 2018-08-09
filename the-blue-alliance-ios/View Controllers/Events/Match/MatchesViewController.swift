@@ -42,9 +42,7 @@ class MatchesTableViewController: TBATableViewController {
                 })
                 backgroundEvent.matches = Set(localMatches ?? []) as NSSet
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh event matches - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: request!)
             })
         })

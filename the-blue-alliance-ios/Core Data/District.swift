@@ -8,6 +8,7 @@ extension District: Managed {
         return "\(String(year)) \(abbreviation!.uppercased())"
     }
 
+    @discardableResult
     static func insert(with model: TBADistrict, in context: NSManagedObjectContext) -> District {
         let predicate = NSPredicate(format: "key == %@", model.key)
         return findOrCreate(in: context, matching: predicate, configure: { (district) in

@@ -71,7 +71,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                         continue
                     }
 
-                    _ = T.insert(with: model, in: bgctx)
+                    T.insert(with: model, in: bgctx)
 
                     let predicate = NSPredicate(format: "key == %@", model.modelKey)
                     switch model.modelType {
@@ -104,9 +104,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                     }
                 }
 
-                if !backgroundContext.saveOrRollback() {
-                    self?.showErrorAlert(with: "Unable to refresh \(modelName) - database error")
-                }
+                backgroundContext.saveContext()
                 self?.removeRequest(request: request!)
             })
         }

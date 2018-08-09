@@ -69,9 +69,7 @@ class TeamStatsTableViewController: TBATableViewController, Observable {
                 })
                 backgroundEvent.stats = Set(localStats ?? []) as NSSet
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh team stats - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: request!)
             })
         })

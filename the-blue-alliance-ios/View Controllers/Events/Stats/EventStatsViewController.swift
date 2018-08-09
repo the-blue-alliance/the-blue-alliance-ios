@@ -125,10 +125,7 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 backgroundEvent.insights = insights
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh event stats - database error")
-                }
-
+                backgroundContext.saveContext()
                 self.removeRequest(request: request!)
             })
         })

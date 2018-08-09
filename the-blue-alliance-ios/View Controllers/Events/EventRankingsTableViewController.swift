@@ -41,9 +41,7 @@ class EventRankingsTableViewController: TBATableViewController {
                 })
                 backgroundEvent.rankings = Set(localRankings ?? []) as NSSet
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh event rankings - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: rankingsRequest!)
             })
         })

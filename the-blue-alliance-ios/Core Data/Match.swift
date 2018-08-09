@@ -79,6 +79,7 @@ extension Match: Managed {
         return dateFormatter.string(from: date)
     }
 
+    @discardableResult
     static func insert(with model: TBAMatch, for event: Event, in context: NSManagedObjectContext) -> Match {
         let predicate = NSPredicate(format: "key == %@", model.key)
         return findOrCreate(in: context, matching: predicate) { (match) in

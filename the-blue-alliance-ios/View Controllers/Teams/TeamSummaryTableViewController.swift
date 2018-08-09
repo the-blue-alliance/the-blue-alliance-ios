@@ -174,12 +174,10 @@ class TeamSummaryTableViewController: TBATableViewController {
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
 
                 if let modelStatus = modelStatus {
-                    _ = EventStatus.insert(with: modelStatus, team: backgroundTeam, event: backgroundEvent, in: backgroundContext)
+                    EventStatus.insert(with: modelStatus, team: backgroundTeam, event: backgroundEvent, in: backgroundContext)
                 }
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh event - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: teamStatusRequest!)
             })
         })
@@ -200,9 +198,7 @@ class TeamSummaryTableViewController: TBATableViewController {
                 })
                 backgroundEvent.addToAwards(Set(localAwards ?? []) as NSSet)
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh event awards for \(self.team.key!) - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: awardsRequest!)
             })
         })

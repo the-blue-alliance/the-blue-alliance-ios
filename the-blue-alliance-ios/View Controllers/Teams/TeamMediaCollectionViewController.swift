@@ -65,9 +65,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
                     backgroundContext.delete($0)
                 }
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh team media - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: request!)
             })
         })

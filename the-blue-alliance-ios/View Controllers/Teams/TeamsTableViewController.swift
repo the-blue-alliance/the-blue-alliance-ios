@@ -59,10 +59,10 @@ class TeamsTableViewController: TBATableViewController {
 
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 teams.forEach({ (modelTeam) in
-                    _ = Team.insert(with: modelTeam, in: backgroundContext)
+                    Team.insert(with: modelTeam, in: backgroundContext)
                 })
 
-                _ = backgroundContext.saveOrRollback()
+                backgroundContext.saveContext()
                 self.removeRequest(request: previousRequest!)
             })
         }) { (error) in
@@ -93,10 +93,7 @@ class TeamsTableViewController: TBATableViewController {
                 })
                 backgroundEvent.teams = Set(localTeams ?? []) as NSSet
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh teams - database error")
-                }
-
+                backgroundContext.saveContext()
                 self.removeRequest(request: request!)
             })
         })

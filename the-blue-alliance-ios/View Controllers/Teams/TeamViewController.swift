@@ -118,9 +118,7 @@ class TeamViewController: ContainerViewController, Observable {
                     backgroundTeam.yearsParticipated = years.sorted().reversed()
                 }
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh years participated - database error")
-                }
+                backgroundContext.saveContext()
             })
         })
     }

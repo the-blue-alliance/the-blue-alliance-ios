@@ -25,14 +25,8 @@ class TBABackgroundService {
                     return
                 }
 
-                let team = Team.insert(with: modelTeam, in: context)
-                let success = context.saveOrRollback()
-
-                if success == true {
-                    completion(team, nil)
-                } else {
-                    completion(nil, BackgroundFetchError.message("Unable to save background team for \(key)"))
-                }
+                Team.insert(with: modelTeam, in: context)
+                context.saveContext()
             }
         }
     }
@@ -48,14 +42,8 @@ class TBABackgroundService {
                     return
                 }
 
-                let event = Event.insert(with: modelEvent, in: context)
-                let success = context.saveOrRollback()
-
-                if success == true {
-                    completion(event, nil)
-                } else {
-                    completion(nil, BackgroundFetchError.message("Unable to save background event for \(key)"))
-                }
+                Event.insert(with: modelEvent, in: context)
+                context.saveContext()
             }
         }
     }
@@ -99,14 +87,8 @@ class TBABackgroundService {
                     return
                 }
 
-                let match = Match.insert(with: modelMatch, for: event, in: context)
-                let success = context.saveOrRollback()
-
-                if success == true {
-                    completion(match, nil)
-                } else {
-                    completion(nil, BackgroundFetchError.message("Unable to save background match for \(key)"))
-                }
+                Match.insert(with: modelMatch, for: event, in: context)
+                context.saveContext()
             }
         }
     }

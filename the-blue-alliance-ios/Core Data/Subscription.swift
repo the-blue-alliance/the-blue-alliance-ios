@@ -4,6 +4,7 @@ import TBAKit
 
 extension Subscription: MyTBAManaged {
 
+    @discardableResult
     static func insert(with model: MyTBASubscription, in context: NSManagedObjectContext) -> Subscription {
         let predicate = NSPredicate(format: "%K == %@ && %K == %@", #keyPath(Subscription.modelKey), model.modelKey, #keyPath(Subscription.modelType), model.modelType.rawValue)
         return findOrCreate(in: context, matching: predicate) { (subscription) in
