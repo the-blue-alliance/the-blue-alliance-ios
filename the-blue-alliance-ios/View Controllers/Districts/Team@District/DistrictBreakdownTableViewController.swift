@@ -69,7 +69,7 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
                 let dispatchGroup = DispatchGroup()
                 for eventKey in eventlessKeys {
                     dispatchGroup.enter()
-                    _ = self.fetchEvent(eventKey: eventKey, completion: { (_) in
+                    self.fetchEvent(eventKey: eventKey, completion: { (_) in
                         dispatchGroup.leave()
                     })
                 }
@@ -83,15 +83,14 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
                 })
                 backgroundDistrict.rankings = Set(localRankings ?? []) as NSSet
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh team district breakdown - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: rankingsRequest!)
             })
         })
         addRequest(request: rankingsRequest!)
     }
 
+    @discardableResult
     func fetchEvent(eventKey: String, completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
         return TBAKit.sharedKit.fetchEvent(key: eventKey, completion: { (modelEvent, error) in
             if error != nil {
@@ -104,7 +103,8 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
                 if let modelEvent = modelEvent {
                     backgroundTeam.addToEvents(Event.insert(with: modelEvent, in: backgroundContext))
                 }
-                completion(backgroundContext.saveOrRollback())
+                backgroundContext.saveContext()
+                completion(true)
             })
         })
     }

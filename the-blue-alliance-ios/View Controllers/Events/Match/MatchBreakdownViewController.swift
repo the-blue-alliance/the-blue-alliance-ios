@@ -150,9 +150,7 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
                     backgroundEvent.addToMatches(Match.insert(with: modelMatch, for: backgroundEvent, in: backgroundContext))
                 }
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh match breakdown - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: request!)
             })
         })

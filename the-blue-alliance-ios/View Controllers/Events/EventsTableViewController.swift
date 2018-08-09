@@ -70,12 +70,10 @@ class EventsTableViewController: TBATableViewController {
 
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 events?.forEach({ (modelEvent) in
-                    _ = Event.insert(with: modelEvent, in: backgroundContext)
+                    Event.insert(with: modelEvent, in: backgroundContext)
                 })
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh event - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: request!)
             })
         })
@@ -100,9 +98,7 @@ class EventsTableViewController: TBATableViewController {
                 })
                 backgroundTeam.addToEvents(Set(localEvents ?? []) as NSSet)
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh event - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: request!)
             })
         })
@@ -127,9 +123,7 @@ class EventsTableViewController: TBATableViewController {
                 })
                 backgroundDistrict.events = Set(localEvents ?? []) as NSSet
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh event - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: request!)
             })
         })

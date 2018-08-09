@@ -100,12 +100,8 @@ class MyTBA {
                 }
                 #endif
 
-                do {
-                    let response = try MyTBA.jsonDecoder.decode(T.self, from: data)
-                    completion(response, nil)
-                } catch {
-                    completion(nil, error)
-                }
+                let response = try! MyTBA.jsonDecoder.decode(T.self, from: data)
+                completion(response, nil)
             } else {
                 completion(nil, APIError.error("Unexpected response from myTBA API"))
             }

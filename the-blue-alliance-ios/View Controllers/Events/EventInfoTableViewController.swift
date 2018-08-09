@@ -75,12 +75,10 @@ class EventInfoTableViewController: TBATableViewController, Observable {
 
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 if let modelEvent = modelEvent {
-                    _ = Event.insert(with: modelEvent, in: backgroundContext)
+                    Event.insert(with: modelEvent, in: backgroundContext)
                 }
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh event - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: request!)
             })
         })

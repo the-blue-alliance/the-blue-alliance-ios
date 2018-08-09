@@ -158,7 +158,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
                 Crashlytics.sharedInstance().recordError(error)
             }
 
-            _ = persistentContainer.viewContext.saveOrRollback()
+            persistentContainer.viewContext.saveContext()
 
             DispatchQueue.main.async {
                 viewController.tableView.reloadData()

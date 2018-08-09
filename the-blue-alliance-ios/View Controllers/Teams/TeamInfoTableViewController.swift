@@ -47,13 +47,10 @@ class TeamInfoTableViewController: TBATableViewController {
 
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 if let modelTeam = modelTeam {
-                    _ = Team.insert(with: modelTeam, in: backgroundContext)
+                    Team.insert(with: modelTeam, in: backgroundContext)
                 }
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh team - database error")
-                }
-
+                backgroundContext.saveContext()
                 self.removeRequest(request: request!)
             })
         })

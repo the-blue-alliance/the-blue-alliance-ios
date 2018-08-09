@@ -89,9 +89,7 @@ class EventAwardsTableViewController: TBATableViewController {
                 })
                 backgroundEvent.awards = Set(localAwards ?? []) as NSSet
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh event awards - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: request!)
             })
         })

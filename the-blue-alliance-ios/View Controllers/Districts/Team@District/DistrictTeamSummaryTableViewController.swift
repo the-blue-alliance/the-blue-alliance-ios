@@ -59,9 +59,7 @@ class DistrictTeamSummaryTableViewController: TBATableViewController {
                 })
                 backgroundDistrict.rankings = Set(localRankings ?? []) as NSSet
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh event - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: request!)
             })
         })

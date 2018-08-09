@@ -33,12 +33,10 @@ class DistrictsTableViewController: TBATableViewController {
 
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 districts?.forEach({ (modelDistrict) in
-                    _ = District.insert(with: modelDistrict, in: backgroundContext)
+                    District.insert(with: modelDistrict, in: backgroundContext)
                 })
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh districts - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: request!)
             })
         })

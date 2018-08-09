@@ -74,11 +74,11 @@ class DistrictRankingsTableViewController: TBATableViewController {
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 backgroundContext.performAndWait {
                     events?.forEach({ (modelEvent) in
-                        _ = Event.insert(with: modelEvent, in: backgroundContext)
+                        Event.insert(with: modelEvent, in: backgroundContext)
                     })
                 }
-                let success = backgroundContext.saveOrRollback()
-                completion(success)
+                backgroundContext.saveContext()
+                completion(true)
             })
         })
     }
@@ -94,11 +94,11 @@ class DistrictRankingsTableViewController: TBATableViewController {
             self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
                 backgroundContext.performAndWait {
                     teams?.forEach({ (modelTeam) in
-                        _ = Team.insert(with: modelTeam, in: backgroundContext)
+                        Team.insert(with: modelTeam, in: backgroundContext)
                     })
                 }
-                let success = backgroundContext.saveOrRollback()
-                completion(success)
+                backgroundContext.saveContext()
+                completion(true)
             })
         })
     }
@@ -120,8 +120,8 @@ class DistrictRankingsTableViewController: TBATableViewController {
                 })
                 backgroundDistrict.rankings = Set(localRankings ?? []) as NSSet
 
-                let success = backgroundContext.saveOrRollback()
-                completion(success)
+                backgroundContext.saveContext()
+                completion(true)
             })
         })
     }

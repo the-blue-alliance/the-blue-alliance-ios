@@ -79,9 +79,7 @@ class EventAlliancesTableViewController: TBATableViewController {
                 })
                 backgroundEvent.alliances = Set(localAlliances ?? []) as NSSet
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh event alliances - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: alliancesRequest!)
             })
         })

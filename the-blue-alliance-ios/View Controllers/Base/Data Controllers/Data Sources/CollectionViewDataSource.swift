@@ -45,7 +45,7 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
     func reconfigureFetchRequest(_ configure: (NSFetchRequest<Result>) -> Void) {
         NSFetchedResultsController<NSFetchRequestResult>.deleteCache(withName: fetchedResultsController.cacheName)
         configure(fetchedResultsController.fetchRequest)
-        do { try fetchedResultsController.performFetch() } catch { fatalError("fetch request failed") }
+        try! fetchedResultsController.performFetch()
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }

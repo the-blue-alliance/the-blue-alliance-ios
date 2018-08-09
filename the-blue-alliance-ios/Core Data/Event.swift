@@ -17,6 +17,7 @@ public enum EventType: Int {
 
 extension Event: Locatable, Managed {
 
+    @discardableResult
     static func insert(with model: TBAEvent, in context: NSManagedObjectContext) -> Event {
         let predicate = NSPredicate(format: "key == %@", model.key)
         return findOrCreate(in: context, matching: predicate) { (event) in

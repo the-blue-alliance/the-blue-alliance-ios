@@ -76,9 +76,7 @@ class EventDistrictPointsTableViewController: TBATableViewController {
                 })
                 backgroundEvent.points = Set(localPoints ?? []) as NSSet
 
-                if !backgroundContext.saveOrRollback() {
-                    self.showErrorAlert(with: "Unable to refresh event district points - database error")
-                }
+                backgroundContext.saveContext()
                 self.removeRequest(request: request!)
             })
         })
