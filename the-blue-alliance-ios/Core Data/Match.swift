@@ -168,3 +168,23 @@ extension Match: Managed {
     }
 
 }
+
+extension Match: MyTBASubscribable {
+
+    var modelKey: String {
+        return key!
+    }
+
+    var modelType: MyTBAModelType {
+        return .match
+    }
+
+    static var notificationTypes: [NotificationType] {
+        return [
+            NotificationType.upcomingMatch,
+            NotificationType.matchScore,
+            NotificationType.matchVideo
+        ]
+    }
+
+}

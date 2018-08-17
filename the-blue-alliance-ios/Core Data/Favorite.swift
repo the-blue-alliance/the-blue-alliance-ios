@@ -12,13 +12,26 @@ protocol MyTBAManaged: Managed {
 
 extension Favorite: MyTBAManaged {
 
+    static func favoritePredicate(modelKey: String, modelType: MyTBAModelType) -> NSPredicate {
+        return NSPredicate(format: "%K == %@ && %K == %@",
+                           #keyPath(Favorite.modelKey),
+                           modelKey,
+                           #keyPath(Favorite.modelType),
+                           modelType.rawValue)
+    }
+
     @discardableResult
     static func insert(with model: MyTBAFavorite, in context: NSManagedObjectContext) -> Favorite {
-        let predicate = NSPredicate(format: "%K == %@ && %K == %@", #keyPath(Favorite.modelKey), model.modelKey, #keyPath(Favorite.modelType), model.modelType.rawValue)
+        return insert(modelKey: model.modelKey, modelType: model.modelType, in: context)
+    }
+
+    @discardableResult
+    static func insert(modelKey: String, modelType: MyTBAModelType, in context: NSManagedObjectContext) -> Favorite {
+        let predicate = favoritePredicate(modelKey: modelKey, modelType: modelType)
         return findOrCreate(in: context, matching: predicate) { (favorite) in
             // Required: key, type
-            favorite.modelKey = model.modelKey
-            favorite.modelType = model.modelType.rawValue
+            favorite.modelKey = modelKey
+            favorite.modelType = modelType.rawValue
         }
     }
 

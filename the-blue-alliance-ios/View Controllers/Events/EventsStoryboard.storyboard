@@ -541,8 +541,15 @@
                             <constraint firstItem="0ON-FW-wcF" firstAttribute="top" secondItem="1my-hd-O5i" secondAttribute="bottom" id="ybV-rI-Gsi"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="2015 Kettering University District" id="xo0-27-Bfw"/>
+                    <navigationItem key="navigationItem" title="2015 Kettering University District" id="xo0-27-Bfw">
+                        <barButtonItem key="rightBarButtonItem" image="ic_star" id="Y66-Cy-w2I">
+                            <connections>
+                                <action selector="presentMyTBAPreferences" destination="V9g-ZF-4u7" id="DZ3-gM-sOe"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="favoriteBarButtonItem" destination="Y66-Cy-w2I" id="TDF-Rk-DfI"/>
                         <outlet property="infoView" destination="oHM-kT-1iW" id="A0H-il-OCI"/>
                         <outlet property="matchesView" destination="1my-hd-O5i" id="Mwl-yM-Fhn"/>
                         <outlet property="rankingsView" destination="oxj-Ro-GMf" id="bMq-QY-XD9"/>
@@ -1167,9 +1174,10 @@
     <resources>
         <image name="ic_event" width="24" height="24"/>
         <image name="ic_sort_white" width="24" height="24"/>
+        <image name="ic_star" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="trB-a5-4Ei"/>
+        <segue reference="Xij-X1-snp"/>
         <segue reference="oO5-aj-OQj"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -14,6 +14,9 @@ protocol Refreshable: AnyObject {
 
     func refresh()
     func shouldNoDataRefresh() -> Bool
+
+    func enableRefreshing()
+    func disableRefreshing()
 }
 
 extension Refreshable {

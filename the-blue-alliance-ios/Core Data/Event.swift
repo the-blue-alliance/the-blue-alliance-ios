@@ -305,3 +305,27 @@ extension Event: Comparable {
     }
 
 }
+
+extension Event: MyTBASubscribable {
+
+    var modelKey: String {
+        return key!
+    }
+
+    var modelType: MyTBAModelType {
+        return .event
+    }
+
+    static var notificationTypes: [NotificationType] {
+        return [
+            NotificationType.upcomingMatch,
+            NotificationType.matchScore,
+            NotificationType.levelStarting,
+            NotificationType.allianceSelection,
+            NotificationType.awards,
+            NotificationType.scheduleUpdated,
+            NotificationType.matchVideo
+        ]
+    }
+
+}
