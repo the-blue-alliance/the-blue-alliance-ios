@@ -305,3 +305,19 @@ extension Event: Comparable {
     }
 
 }
+
+extension Event: MyTBASubscribable {
+
+    static var notificationTypes: [NotificationType] {
+        return [
+            NotificationType.upcomingMatch,
+            NotificationType.matchScore,
+            NotificationType.levelStarting,
+            NotificationType.allianceSelection,
+            NotificationType.awards,
+            NotificationType.scheduleUpdated,
+            NotificationType.matchVideo
+        ]
+    }
+
+}

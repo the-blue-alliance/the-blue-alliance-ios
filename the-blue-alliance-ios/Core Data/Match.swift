@@ -168,3 +168,15 @@ extension Match: Managed {
     }
 
 }
+
+extension Match: MyTBASubscribable {
+
+    static var notificationTypes: [NotificationType] {
+        return [
+            NotificationType.upcomingMatch,
+            NotificationType.matchScore,
+            NotificationType.matchVideo
+        ]
+    }
+
+}

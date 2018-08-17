@@ -92,3 +92,17 @@ extension Team: Locatable, Managed {
     }
 
 }
+
+extension Team: MyTBASubscribable {
+
+    static var notificationTypes: [NotificationType] {
+        return [
+            NotificationType.upcomingMatch,
+            NotificationType.matchScore,
+            NotificationType.allianceSelection,
+            NotificationType.awards,
+            NotificationType.matchVideo
+        ]
+    }
+
+}

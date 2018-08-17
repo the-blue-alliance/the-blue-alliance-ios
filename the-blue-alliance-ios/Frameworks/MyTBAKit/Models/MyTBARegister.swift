@@ -12,7 +12,7 @@ struct MyTBARegisterRequest: Codable {
 
 struct MyTBARegisterResponse: MyTBAResponse, Codable {
 
-    var code: String
+    var code: String // TODO: File a bug with web - this code needs to be an Int
     var message: String
 
 }

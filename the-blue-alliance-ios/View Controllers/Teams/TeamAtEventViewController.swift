@@ -3,6 +3,7 @@ import UIKit
 
 class TeamAtEventViewController: ContainerViewController {
 
+    // TODO: Team@Event needs myTBA
     public var team: Team!
     public var event: Event!
 

@@ -146,6 +146,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let fallbackCell = UITableViewCell()
         fallbackCell.textLabel?.text = "----"
+        fallbackCell.selectionStyle = .none
 
         guard let obj = fetchedResultsController?.object(at: indexPath) else {
             return fallbackCell
