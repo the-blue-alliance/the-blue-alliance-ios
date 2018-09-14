@@ -95,6 +95,14 @@ extension Team: Locatable, Managed {
 
 extension Team: MyTBASubscribable {
 
+    var modelKey: String {
+        return key!
+    }
+
+    var modelType: MyTBAModelType {
+        return .team
+    }
+
     static var notificationTypes: [NotificationType] {
         return [
             NotificationType.upcomingMatch,

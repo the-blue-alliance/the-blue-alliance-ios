@@ -308,6 +308,14 @@ extension Event: Comparable {
 
 extension Event: MyTBASubscribable {
 
+    var modelKey: String {
+        return key!
+    }
+
+    var modelType: MyTBAModelType {
+        return .event
+    }
+
     static var notificationTypes: [NotificationType] {
         return [
             NotificationType.upcomingMatch,

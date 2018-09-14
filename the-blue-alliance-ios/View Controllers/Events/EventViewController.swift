@@ -3,6 +3,9 @@ import UIKit
 class EventViewController: ContainerViewController, Subscribable {
 
     public var event: Event!
+    var subscribableModel: MyTBASubscribable {
+        return event
+    }
 
     internal var infoViewController: EventInfoTableViewController!
     @IBOutlet internal var infoView: UIView!
@@ -35,7 +38,7 @@ class EventViewController: ContainerViewController, Subscribable {
     // MARK: - Navigation
 
     @IBAction func presentMyTBAPreferences() {
-        presentMyTBAPreferences(modelKey: event.key!, modelType: .event)
+        presentMyTBAPreferences()
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

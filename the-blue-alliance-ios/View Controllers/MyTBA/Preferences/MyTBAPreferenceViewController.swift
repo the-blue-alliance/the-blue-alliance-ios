@@ -6,9 +6,13 @@ import UIKit
 // and a "Notification Settings" section with option cells
 class MyTBAPreferenceViewController: TBATableViewController {
 
-    let modelKey: String
-    let modelType: MyTBAModelType
+    var subscribableModel: MyTBASubscribable
 
+    lazy var notificationTypes: [NotificationType] = {
+        let subscribableModelClass = type(of: subscribableModel)
+        return subscribableModelClass.notificationTypes
+    }()
+    
     var favorite: Favorite?
     var isFavorite: Bool = false
 
@@ -19,17 +23,6 @@ class MyTBAPreferenceViewController: TBATableViewController {
     let managedObjectContext: NSManagedObjectContext
 
     var preferencesRequest: URLSessionDataTask?
-
-    lazy var notificationTypes: [NotificationType] = {
-        switch modelType {
-        case .event:
-            return Event.notificationTypes
-        case .team:
-            return Team.notificationTypes
-        case .match:
-            return Match.notificationTypes
-        }
-    }()
 
     private var isSaving: Bool = false {
         didSet {
@@ -49,19 +42,18 @@ class MyTBAPreferenceViewController: TBATableViewController {
         return UIBarButtonItem(customView: activityIndicatorView)
     }()
 
-    init(modelKey: String, modelType: MyTBAModelType, persistentContainer: NSPersistentContainer, myTBA: MyTBA) {
-        self.modelKey = modelKey
-        self.modelType = modelType
+    init(subscribableModel: MyTBASubscribable, persistentContainer: NSPersistentContainer, myTBA: MyTBA) {
+        self.subscribableModel = subscribableModel
 
         self.managedObjectContext = persistentContainer.viewContext
 
-        let favoritePredicate = Favorite.favoritePredicate(modelKey: modelKey, modelType: modelType)
+        let favoritePredicate = Favorite.favoritePredicate(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType)
         if let favorite = Favorite.findOrFetch(in: managedObjectContext, matching: favoritePredicate) {
             self.favorite = favorite
             self.isFavorite = true
         }
 
-        let subscriptionPredicate = Subscription.subscriptionPredicate(modelKey: modelKey, modelType: modelType)
+        let subscriptionPredicate = Subscription.subscriptionPredicate(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType)
         if let subscription = Subscription.findOrFetch(in: managedObjectContext, matching: subscriptionPredicate) {
             self.subscription = subscription
             self.notifications = subscription.notifications
@@ -132,15 +124,15 @@ class MyTBAPreferenceViewController: TBATableViewController {
         isSaving = true
 
         print("isFavorite: \(isFavorite ? "YES" : "NO") | notifications: \(notifications)")
-        preferencesRequest = myTBA.updatePreferences(modelKey: self.modelKey,
-            modelType: modelType,
+        preferencesRequest = myTBA.updatePreferences(modelKey: subscribableModel.modelKey,
+            modelType: subscribableModel.modelType,
             favorite: isFavorite,
             notifications: notifications) { [unowned self] (favoriteResponse, subscriptionResponse, error) in
                 self.preferencesRequest = nil
                 self.isSaving = false
 
                 if let error = error {
-                    self.showErrorAlert(with: "Unable to save myTBA preferences for \(self.modelKey) - \(error.localizedDescription)")
+                    self.showErrorAlert(with: "Unable to save myTBA preferences for \(self.subscribableModel.modelKey) - \(error.localizedDescription)")
                     return
                 }
 
@@ -155,10 +147,10 @@ class MyTBAPreferenceViewController: TBATableViewController {
                             self.managedObjectContext.delete(fav)
                         } else if self.isFavorite, self.favorite == nil {
                             // Insert
-                            Favorite.insert(modelKey: self.modelKey, modelType: self.modelType, in: self.managedObjectContext)
+                            Favorite.insert(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType, in: self.managedObjectContext)
                         }
                     } else {
-                        self.showErrorAlert(with: "Unable to save myTBA favorite preferences for \(self.modelKey) - \(favoriteResponse.message)") { (_) in
+                        self.showErrorAlert(with: "Unable to save myTBA favorite preferences for \(self.subscribableModel.modelKey) - \(favoriteResponse.message)") { (_) in
                             DispatchQueue.main.async {
                                 self.dismiss(animated: true, completion: nil)
                             }
@@ -182,11 +174,11 @@ class MyTBAPreferenceViewController: TBATableViewController {
                                 subscription.notifications = self.notifications
                             } else {
                                 // Insert
-                                Subscription.insert(modelKey: self.modelKey, modelType: self.modelType, notifications: self.notifications, in: self.managedObjectContext)
+                                Subscription.insert(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType, notifications: self.notifications, in: self.managedObjectContext)
                             }
                         }
                     } else {
-                        self.showErrorAlert(with: "Unable to save myTBA subscription preferences for \(self.modelKey) - \(subscriptionResponse.message)") { (_) in
+                        self.showErrorAlert(with: "Unable to save myTBA subscription preferences for \(self.subscribableModel.modelKey) - \(subscriptionResponse.message)") { (_) in
                             DispatchQueue.main.async {
                                 self.dismiss(animated: true, completion: nil)
                             }
@@ -256,6 +248,5 @@ class MyTBAPreferenceViewController: TBATableViewController {
         }
         return nil
     }
-
 
 }
