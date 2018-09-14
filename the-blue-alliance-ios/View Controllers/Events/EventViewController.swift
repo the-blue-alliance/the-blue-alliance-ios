@@ -1,9 +1,10 @@
 import UIKit
 
-class EventViewController: ContainerViewController, Subscribable {
+class EventViewController: MyTBAContainerViewController {
 
     public var event: Event!
-    var subscribableModel: MyTBASubscribable {
+
+    override var subscribableModel: MyTBASubscribable {
         return event
     }
 
@@ -18,8 +19,6 @@ class EventViewController: ContainerViewController, Subscribable {
 
     internal var matchesViewController: MatchesTableViewController!
     @IBOutlet internal var matchesView: UIView!
-
-    @IBOutlet var favoriteBarButtonItem: UIBarButtonItem!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,10 +35,6 @@ class EventViewController: ContainerViewController, Subscribable {
     }
 
     // MARK: - Navigation
-
-    @IBAction func presentMyTBAPreferences() {
-        presentMyTBAPreferences()
-    }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "EventInfoEmbed" {

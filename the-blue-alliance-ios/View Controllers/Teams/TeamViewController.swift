@@ -4,7 +4,7 @@ import CoreData
 
 private let SelectYearSegue = "SelectYearSegue"
 
-class TeamViewController: ContainerViewController, Observable {
+class TeamViewController: MyTBAContainerViewController, Observable {
 
     public var team: Team! {
         didSet {
@@ -31,6 +31,10 @@ class TeamViewController: ContainerViewController, Observable {
     private lazy var refreshYearsParticipatedOnce: Void = { [weak self] in
         self?.refreshYearsParticipated()
     }()
+
+    override var subscribableModel: MyTBASubscribable {
+        return team
+    }
 
     internal var infoViewController: TeamInfoTableViewController!
     @IBOutlet internal var infoView: UIView!

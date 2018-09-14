@@ -82,7 +82,7 @@ class MyTBAPreferenceViewController: TBATableViewController {
         preferencesRequest?.cancel()
     }
 
-    // MARK: Interface Methods
+    // MARK: - Interface Methods
 
     func styleInterface() {
         disableRefreshing()

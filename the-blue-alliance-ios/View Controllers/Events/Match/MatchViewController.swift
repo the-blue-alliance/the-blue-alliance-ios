@@ -1,10 +1,14 @@
 import Foundation
 import UIKit
 
-class MatchViewController: ContainerViewController {
+class MatchViewController: MyTBAContainerViewController {
 
     public var match: Match!
     public var team: Team?
+
+    override var subscribableModel: MyTBASubscribable {
+        return match
+    }
 
     internal var matchInfoViewController: MatchInfoViewController!
     @IBOutlet internal var infoView: UIView!

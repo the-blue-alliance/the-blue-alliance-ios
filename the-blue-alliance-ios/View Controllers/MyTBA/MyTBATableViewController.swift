@@ -65,7 +65,18 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
             self.persistentContainer?.performBackgroundTask({ [weak self] (backgroundContext) in
                 let models = models as? [T.RemoteType]
+                let modelKeys = models?.map({ (model) -> String in
+                    return model.modelKey
+                }) ?? []
                 let bgctx = backgroundContext
+
+                // Find all keys to delete from current DB, since our refresh says they don't exist anymore upstream
+                let deleteFetchRequest: NSFetchRequest = T.MyType.fetchRequest()
+                deleteFetchRequest.predicate = NSPredicate(format: "NOT (modelKey IN %@)", modelKeys)
+                let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetchRequest)
+                deleteRequest.resultType = .resultTypeObjectIDs
+                print(deleteFetchRequest)
+
                 for model in models ?? [] {
                     if self?.backgroundFetchKeys.contains(model.modelKey) ?? false {
                         continue
@@ -103,6 +114,12 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                         }
                     }
                 }
+
+                // Delete old models from DB
+                let result = try! self?.persistentContainer.persistentStoreCoordinator.execute(deleteRequest, with: backgroundContext) as? NSBatchDeleteResult
+                let objectIDArray = result?.result as? [NSManagedObjectID] ?? []
+                let changes = [NSDeletedObjectsKey: objectIDArray]
+                NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self!.persistentContainer.viewContext])
 
                 backgroundContext.saveContext()
                 self?.removeRequest(request: request!)

@@ -6,7 +6,7 @@ import UIKit
 // Ex: The 'Event' view controller conforms to Subscribable, which shows the subscribe UI
 
 protocol Subscribable {
-    var favoriteBarButtonItem: UIBarButtonItem! { get }
+    var favoriteBarButtonItem: UIBarButtonItem { get }
     var subscribableModel: MyTBASubscribable { get }
 }
 
