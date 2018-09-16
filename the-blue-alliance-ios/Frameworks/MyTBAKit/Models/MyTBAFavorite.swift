@@ -36,10 +36,4 @@ extension MyTBA {
         })
     }
 
-    @discardableResult
-    func updateFavorite(_ favorite: MyTBAFavorite, completion: @escaping (_ favorites: MyTBAFavorite?, _ error: Error?) -> Void) -> URLSessionDataTask? {
-        // Something in here
-        return nil
-    }
-
 }

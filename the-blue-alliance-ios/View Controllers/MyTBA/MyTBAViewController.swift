@@ -148,15 +148,10 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         deleteSubscriptions.resultType = .resultTypeObjectIDs
 
         for (viewController, deleteRequest) in zip([favoritesViewController, subscriptionsViewController], [deleteFavorites, deleteSubscriptions]) {
-            do {
-                let result = try self.persistentContainer.persistentStoreCoordinator.execute(deleteRequest, with: persistentContainer.viewContext) as? NSBatchDeleteResult
-                let objectIDArray = result?.result as? [NSManagedObjectID] ?? []
-                let changes = [NSDeletedObjectsKey: objectIDArray]
-                NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [persistentContainer.viewContext])
-            } catch {
-                // TODO: Mark these for deletion later...
-                Crashlytics.sharedInstance().recordError(error)
-            }
+            let result = try! self.persistentContainer.persistentStoreCoordinator.execute(deleteRequest, with: persistentContainer.viewContext) as? NSBatchDeleteResult
+            let objectIDArray = result?.result as? [NSManagedObjectID] ?? []
+            let changes = [NSDeletedObjectsKey: objectIDArray]
+            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [persistentContainer.viewContext])
 
             persistentContainer.viewContext.saveContext()
 

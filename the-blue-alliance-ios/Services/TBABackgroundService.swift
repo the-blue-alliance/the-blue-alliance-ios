@@ -25,8 +25,10 @@ class TBABackgroundService {
                     return
                 }
 
-                Team.insert(with: modelTeam, in: context)
+                let team = Team.insert(with: modelTeam, in: context)
                 context.saveContext()
+
+                completion(team, nil)
             }
         }
     }
@@ -42,8 +44,10 @@ class TBABackgroundService {
                     return
                 }
 
-                Event.insert(with: modelEvent, in: context)
+                let event = Event.insert(with: modelEvent, in: context)
                 context.saveContext()
+
+                completion(event, nil)
             }
         }
     }
@@ -87,8 +91,10 @@ class TBABackgroundService {
                     return
                 }
 
-                Match.insert(with: modelMatch, for: event, in: context)
+                let match = Match.insert(with: modelMatch, for: event, in: context)
                 context.saveContext()
+
+                completion(match, nil)
             }
         }
     }
