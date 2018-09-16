@@ -8,6 +8,8 @@
 	<integer>-1</integer>
 	<key>ios_latest_app_version</key>
 	<integer>-1</integer>
+	<key>mytba_enabled</key>
+	<string>0</string>
 	<key>current_season</key>
 	<real>2018</real>
 </dict>

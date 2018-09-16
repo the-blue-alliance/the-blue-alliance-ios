@@ -9,7 +9,8 @@ class RemoteConfigTBATestCase: XCTestCase {
         "current_season": NSNumber(value: 2015),
         "latest_app_version": NSNumber(value: -1),
         "min_app_version": NSNumber(value: -1),
-        "max_season": NSNumber(value: 2015)
+        "max_season": NSNumber(value: 2015),
+        "mytba_enabled": NSNumber(value: 1)
     ]
 
     override func setUp() {
@@ -39,6 +40,10 @@ class RemoteConfigTBATestCase: XCTestCase {
 
     func test_maxSeason() {
         XCTAssertEqual(remoteConfig.maxSeason, 2015)
+    }
+
+    func test_myTBAEnabled() {
+        XCTAssert(remoteConfig.myTBAEnabled)
     }
 
 }

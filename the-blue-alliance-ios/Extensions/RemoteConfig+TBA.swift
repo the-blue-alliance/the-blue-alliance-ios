@@ -8,6 +8,7 @@ extension RemoteConfig {
         static let latestAppVersion = "latest_app_version"
         static let minimumAppVersion = "min_app_version"
         static let maxSeason = "max_season"
+        static let myTBAEnabled = "mytba_enabled"
     }
 
     var currentSeason: Int {
@@ -40,6 +41,10 @@ extension RemoteConfig {
             return Calendar.current.year
         }
         return maxSeason.intValue
+    }
+
+    var myTBAEnabled: Bool {
+        return configValue(forKey: TBARemoteConfigKeys.myTBAEnabled).boolValue
     }
 
 }
