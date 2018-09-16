@@ -50,14 +50,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // TODO: Load this from some secrets file
         TBAKit.sharedKit.apiKey = "OHBBu0QbDiIJYKhAedTfkTxdrkXde1C21Sr90L1f1Pac4ahl4FJbNptNiXbCSCfH"
 
-        // Assign our Push Service as a delegate to all push-related classes
-        AppDelegate.setupPushServiceDelegates(with: pushService)
-
         // Setup our React Native service
         AppDelegate.setupReactNativeService()
-
-        // Kickoff background myTBA/Google sign in, along with setting up delegates
-        setupGoogleAuthentication()
 
         // Setup our remote config - to be used by our app setup operation
         let remoteConfigService = RemoteConfigService(remoteConfig: RemoteConfig.remoteConfig(),
@@ -87,6 +81,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                     rootSplitViewController.view.addSubview(snapshot)
                     window.rootViewController = rootSplitViewController
+
+                    if RemoteConfig.remoteConfig().myTBAEnabled {
+                        self?.setupMyTBA()
+                    }
 
                     // 0.35 is an iOS animation magic number... for now
                     UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
@@ -196,8 +194,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tabBarController = UITabBarController()
         let rootStoryboards = [UIStoryboard(name: "EventsStoryboard", bundle: mainBundle),
                                UIStoryboard(name: "TeamsStoryboard", bundle: mainBundle),
-                               UIStoryboard(name: "DistrictsStoryboard", bundle: mainBundle),
-                               UIStoryboard(name: "MyTBAStoryboard", bundle: mainBundle)]
+                               UIStoryboard(name: "DistrictsStoryboard", bundle: mainBundle)]
         tabBarController.viewControllers = rootStoryboards.compactMap({ (storyboard) -> UIViewController? in
             return storyboard.instantiateInitialViewController()
         })
@@ -216,6 +213,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         splitViewController.delegate = self
 
         return splitViewController
+    }
+
+    func setupMyTBA() {
+        guard let rootSplitViewController = window?.rootViewController as? UISplitViewController else {
+            return
+        }
+        guard let tabBarController = rootSplitViewController.viewControllers.first as? UITabBarController else {
+            return
+        }
+
+        let myTBAStoryboard = UIStoryboard(name: "MyTBAStoryboard", bundle: nil)
+        guard let myTBAViewController = myTBAStoryboard.instantiateInitialViewController() else {
+            return
+        }
+        tabBarController.viewControllers?.append(myTBAViewController)
+
+        // Assign our Push Service as a delegate to all push-related classes
+        AppDelegate.setupPushServiceDelegates(with: pushService)
+        // Kickoff background myTBA/Google sign in, along with setting up delegates
+        setupGoogleAuthentication()
     }
 
 }
