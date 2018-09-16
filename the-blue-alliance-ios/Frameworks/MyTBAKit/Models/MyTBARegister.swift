@@ -12,7 +12,7 @@ struct MyTBARegisterRequest: Codable {
 
 struct MyTBARegisterResponse: MyTBAResponse, Codable {
 
-    var code: String // TODO: File a bug with web - this code needs to be an Int
+    var code: Int
     var message: String
 
 }
@@ -45,7 +45,7 @@ extension MyTBA {
         }
 
         return callApi(method: method, bodyData: encodedRegistration, completion: { (registerResponse: MyTBARegisterResponse?, error: Error?) in
-            if let registerResponse = registerResponse, let code = Int(registerResponse.code), code >= 400 {
+            if let registerResponse = registerResponse, registerResponse.code >= 400 {
                 completion(APIError.error(registerResponse.message))
             } else {
                 completion(error)

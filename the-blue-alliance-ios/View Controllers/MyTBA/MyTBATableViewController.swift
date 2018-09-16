@@ -146,9 +146,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
         let fetchRequest = NSFetchRequest<T>(entityName: T.entityName)
 
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "modelType", ascending: true), NSSortDescriptor(key: "modelKey", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "modelTypeRaw", ascending: true), NSSortDescriptor(key: "modelKey", ascending: true)]
 
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "modelType", cacheName: nil)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "modelTypeRaw", cacheName: nil)
         fetchedResultsController!.delegate = self
         try! fetchedResultsController!.performFetch()
 
@@ -171,16 +171,12 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
         let myTBACell = self.tableView(tableView, for: obj)
 
-        guard let modelType = MyTBAModelType(rawValue: obj.modelType!) else {
-            return myTBACell
-        }
-
         let predicate = NSPredicate(format: "key == %@", obj.modelKey!)
 
         // TODO: All Cell subclasses need gear icons
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/179
 
-        switch modelType {
+        switch obj.modelType {
         case .event:
             guard let event = Event.findOrFetch(in: persistentContainer.viewContext, matching: predicate) else {
                 return myTBACell
@@ -236,10 +232,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             return nil
         }
 
-        guard let modelType = MyTBAModelType(rawValue: obj.modelType!) else {
-            return nil
-        }
-        switch modelType {
+        switch obj.modelType {
         case .event:
             return "Event"
         case .team:

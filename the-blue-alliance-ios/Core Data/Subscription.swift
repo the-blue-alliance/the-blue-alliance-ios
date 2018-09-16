@@ -17,7 +17,7 @@ extension Subscription: MyTBAManaged {
         return NSPredicate(format: "%K == %@ && %K == %@",
                            #keyPath(Subscription.modelKey),
                            modelKey,
-                           #keyPath(Subscription.modelType),
+                           #keyPath(Subscription.modelTypeRaw),
                            modelType.rawValue)
     }
 
@@ -32,13 +32,13 @@ extension Subscription: MyTBAManaged {
         return findOrCreate(in: context, matching: predicate) { (subscription) in
             // Required: key, type, notifications
             subscription.modelKey = modelKey
-            subscription.modelType = modelType.rawValue
+            subscription.modelType = modelType
             subscription.notificationsRaw = notifications.map({ $0.rawValue })
         }
     }
 
     func toRemoteModel() -> MyTBASubscription {
-        return MyTBASubscription(modelKey: modelKey!, modelType: MyTBAModelType(rawValue: modelType!)!, notifications: notifications)
+        return MyTBASubscription(modelKey: modelKey!, modelType: modelType, notifications: notifications)
     }
 
 }

@@ -196,7 +196,7 @@
     </entity>
     <entity name="MyTBAEntity" representedClassName="MyTBAEntity" syncable="YES" codeGenerationType="class">
         <attribute name="modelKey" attributeType="String" syncable="YES"/>
-        <attribute name="modelType" attributeType="String" syncable="YES"/>
+        <attribute name="modelTypeRaw" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <entity name="Subscription" representedClassName="Subscription" parentEntity="MyTBAEntity" syncable="YES" codeGenerationType="class">
         <attribute name="notificationsRaw" attributeType="Transformable" customClassName="[String]" syncable="YES"/>

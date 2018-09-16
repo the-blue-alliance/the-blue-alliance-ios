@@ -13,7 +13,7 @@ struct MyTBAPreferences: Codable {
 
 struct MyTBAPreferencesResponse: MyTBAResponse, Codable {
 
-    var code: String // TODO: These are the strangest codes I have ever seen. Also, this needs to be an Int
+    var code: Int
     var message: String
 
 }

@@ -16,7 +16,7 @@ extension Favorite: MyTBAManaged {
         return NSPredicate(format: "%K == %@ && %K == %@",
                            #keyPath(Favorite.modelKey),
                            modelKey,
-                           #keyPath(Favorite.modelType),
+                           #keyPath(Favorite.modelTypeRaw),
                            modelType.rawValue)
     }
 
@@ -31,11 +31,11 @@ extension Favorite: MyTBAManaged {
         return findOrCreate(in: context, matching: predicate) { (favorite) in
             // Required: key, type
             favorite.modelKey = modelKey
-            favorite.modelType = modelType.rawValue
+            favorite.modelType = modelType
         }
     }
 
     func toRemoteModel() -> MyTBAFavorite {
-        return MyTBAFavorite(modelKey: modelKey!, modelType: MyTBAModelType(rawValue: modelType!)!)
+        return MyTBAFavorite(modelKey: modelKey!, modelType: modelType)
     }
 }

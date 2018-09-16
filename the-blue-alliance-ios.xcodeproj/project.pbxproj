@@ -111,6 +111,7 @@
 		929FCDA21EC8068800A38E46 /* DistrictViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCDA11EC8068800A38E46 /* DistrictViewController.swift */; };
 		929FCDA81EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCDA71EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift */; };
 		929FCDAA1EC8BFB000A38E46 /* DistrictRanking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCDA91EC8BFB000A38E46 /* DistrictRanking.swift */; };
+		92A321C4214CBCA400FDADFB /* MyTBAEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A321C3214CBCA400FDADFB /* MyTBAEntity.swift */; };
 		92A4679C2103861F0096B89C /* MyTBAPreferenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A4679B2103861F0096B89C /* MyTBAPreferenceViewController.swift */; };
 		92AAC69720967EC20076B977 /* MyTBAModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AAC69620967EC20076B977 /* MyTBAModel.swift */; };
 		92AAC69A209681400076B977 /* MyTBASubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AAC699209681400076B977 /* MyTBASubscription.swift */; };
@@ -275,6 +276,7 @@
 		929FCDA11EC8068800A38E46 /* DistrictViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictViewController.swift; sourceTree = "<group>"; };
 		929FCDA71EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictRankingsTableViewController.swift; sourceTree = "<group>"; };
 		929FCDA91EC8BFB000A38E46 /* DistrictRanking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictRanking.swift; sourceTree = "<group>"; };
+		92A321C3214CBCA400FDADFB /* MyTBAEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAEntity.swift; sourceTree = "<group>"; };
 		92A4679B2103861F0096B89C /* MyTBAPreferenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferenceViewController.swift; sourceTree = "<group>"; };
 		92AAC69620967EC20076B977 /* MyTBAModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAModel.swift; sourceTree = "<group>"; };
 		92AAC699209681400076B977 /* MyTBASubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASubscription.swift; sourceTree = "<group>"; };
@@ -798,6 +800,7 @@
 		92AAC69B20968F710076B977 /* MyTBA */ = {
 			isa = PBXGroup;
 			children = (
+				92A321C3214CBCA400FDADFB /* MyTBAEntity.swift */,
 				92C9BD3020968FAC007FB9C8 /* Favorite.swift */,
 				92C9BD3220968FB3007FB9C8 /* Subscription.swift */,
 			);
@@ -1277,6 +1280,7 @@
 				140523821ED352570072FB91 /* Media.swift in Sources */,
 				929FCDA81EC8BE7200A38E46 /* DistrictRankingsTableViewController.swift in Sources */,
 				9257DF46208BDCBF00F7E2BA /* MatchVideo.swift in Sources */,
+				92A321C4214CBCA400FDADFB /* MyTBAEntity.swift in Sources */,
 				928018FA20964E7A00693447 /* MyTBAFavorite.swift in Sources */,
 				92B5DAC61EE4CE7C00B0A8F3 /* EventTeamStat.swift in Sources */,
 				145C57B91ED3C166004955B2 /* MatchInfoViewController.swift in Sources */,
