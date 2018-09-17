@@ -7,9 +7,9 @@ protocol Alertable {
 
 extension Alertable where Self: UIViewController {
 
-    func showErrorAlert(with message: String) {
+    func showErrorAlert(with message: String, okayAction: ((UIAlertAction) -> Swift.Void)? = nil) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: okayAction))
 
         DispatchQueue.main.async {
             self.present(alert, animated: true, completion: nil)

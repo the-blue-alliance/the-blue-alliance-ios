@@ -28,8 +28,7 @@ class TBATableViewController: UITableViewController, DataController {
         tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: basicCellReuseIdentifier)
 
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        enableRefreshing()
     }
 
     // MARK: - UITableViewDelegate
@@ -50,6 +49,15 @@ class TBATableViewController: UITableViewController, DataController {
 
     func shouldNoDataRefresh() -> Bool {
         fatalError("Implement this downstream")
+    }
+
+    func enableRefreshing() {
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+    }
+
+    func disableRefreshing() {
+        refreshControl = nil
     }
 
 }

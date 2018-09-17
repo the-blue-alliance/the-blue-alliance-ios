@@ -23,9 +23,7 @@ class TBACollectionViewController: UICollectionViewController, DataController {
         collectionView?.delegate = self
         collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: basicCellReuseIdentifier)
 
-        collectionView!.refreshControl = UIRefreshControl()
-        collectionView!.refreshControl!.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        refreshControl = collectionView!.refreshControl
+        enableRefreshing()
     }
 
     @objc func refresh() {
@@ -34,6 +32,15 @@ class TBACollectionViewController: UICollectionViewController, DataController {
 
     func shouldNoDataRefresh() -> Bool {
         fatalError("Implement this downstream")
+    }
+
+    func enableRefreshing() {
+        collectionView!.refreshControl = UIRefreshControl()
+        collectionView!.refreshControl!.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        refreshControl = collectionView!.refreshControl
+    }
+    func disableRefreshing() {
+        refreshControl = nil
     }
 
 }
