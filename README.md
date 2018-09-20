@@ -43,6 +43,21 @@ The Blue Alliance's mobile apps depend on Firebase. We configure Firebase in The
 7. Click `Register App`
 8. Download the `GoogleService-Info.plist`
 
+Setup Realtime Database
+---
+The Blue Alliance uses Firebase’s [Realtime Database](https://firebase.google.com/docs/database/) feature to sync information about FMS data availability and “down” events in realtime to clients. You may want to simulate this in your app for testing.
+
+1. Navigate to your Firebase project
+2. Click `Database`, under `Develop` in the left hand toolbar
+3. Create a Realtime Database - NOT a Cloud Firestore
+4. For simplicity, when prompted to set security rules for your Realtime Database, select `Start in test mode`
+5. Click `Enable`
+6. Under the hierarchy in your database, click the `+` button to add key/values
+
+Here’s an example of a configuration a Realtime Database where the FMS data feed is up, and one event (2018mike2) is offline.
+
+![realtime-database-example](screenshots/realtime-database-example.png)
+
 Building in Xcode
 ---
 Before bulding in Xcode, make sure you've setup a Firebase project, as described in the [Setup Firebase](#setup-firebase) section
