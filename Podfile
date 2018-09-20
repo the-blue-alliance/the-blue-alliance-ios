@@ -27,6 +27,7 @@ target 'The Blue Alliance' do
   pod 'Firebase/Analytics'
   pod 'Firebase/Auth'
   pod 'Firebase/Core'
+  pod 'Firebase/Database'
   pod 'Firebase/Messaging'
   pod 'Firebase/Performance'
   pod 'Firebase/RemoteConfig'

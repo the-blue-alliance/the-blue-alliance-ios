@@ -2,6 +2,7 @@ import CoreData
 import Crashlytics
 import Firebase
 import FirebaseAuth
+import FirebaseDatabase
 import FirebaseMessaging
 import GoogleSignIn
 import TBAKit
@@ -32,6 +33,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                            myTBA: MyTBA.shared,
                            retryService: RetryService())
     }()
+    lazy var realtimeDatabaseService: RealtimeDatabaseService = {
+        return RealtimeDatabaseService(databaseReference: Database.database().reference())
+    }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         AppDelegate.setupAppearance()
@@ -57,6 +61,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let remoteConfigService = RemoteConfigService(remoteConfig: RemoteConfig.remoteConfig(),
                                                       retryService: RetryService())
         remoteConfigService.registerRetryable()
+
+        // Listen for changes to FMS availability
+        registerForFMSStatusChanges()
 
         // Our app setup operation will load our persistent stores, fetch our remote config, propogate persistance container
         let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer,
@@ -270,6 +277,24 @@ extension AppDelegate: GIDSignInDelegate {
                 }
             }
         }
+    }
+
+}
+
+extension AppDelegate: FMSStatusSubscribable {
+
+    func fmsStatusChanged(isDatafeedDown: Bool) {
+        // We could react to hiding/showing something, like Android does
+        // Since we're not setup to do this, we'll show an alert view only when the data feed is down
+        if isDatafeedDown == false {
+            return
+        }
+
+        let alertController = UIAlertController(title: "FIRST's servers are down",
+                                                message: "We rely on FIRST to provide scores, ranking, and more. Unfortunately, FIRST's servers are broken right now, so we can't get the latest updates. The information you see here may be out of date.",
+                                                preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+        window?.rootViewController?.present(alertController, animated: true, completion: nil)
     }
 
 }
