@@ -1,6 +1,8 @@
 PODS:
+  - boost-for-react-native (1.63.0)
   - Crashlytics (3.10.1):
     - Fabric (~> 1.7.5)
+  - DoubleConversion (1.1.5)
   - Fabric (1.7.6)
   - Firebase/Analytics (4.13.0):
     - Firebase/Core
@@ -74,6 +76,11 @@ PODS:
   - FirebaseSwizzlingUtilities/ISASwizzling (1.0.1)
   - FirebaseSwizzlingUtilities/MethodSwizzling (1.0.1):
     - FirebaseCore (~> 4.0)
+  - Folly (2016.10.31.00):
+    - boost-for-react-native
+    - DoubleConversion
+    - glog
+  - glog (0.3.4)
   - GoogleSignIn (4.1.2):
     - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
     - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
@@ -106,23 +113,41 @@ PODS:
   - nanopb/encode (0.3.8)
   - Protobuf (3.5.0)
   - PureLayout (3.0.2)
-  - React/Core (0.43.0):
+  - React/Core (0.57.1):
+    - yoga (= 0.57.1.React)
+  - React/CxxBridge (0.57.1):
+    - Folly (= 2016.10.31.00)
+    - React/Core
     - React/cxxreact
-    - Yoga (= 0.43.0.React)
-  - React/cxxreact (0.43.0):
+  - React/cxxreact (0.57.1):
+    - boost-for-react-native (= 1.63.0)
+    - Folly (= 2016.10.31.00)
     - React/jschelpers
-  - React/jschelpers (0.43.0)
-  - React/RCTImage (0.43.0):
+    - React/jsinspector
+  - React/DevSupport (0.57.1):
+    - React/Core
+    - React/RCTWebSocket
+  - React/fishhook (0.57.1)
+  - React/jschelpers (0.57.1):
+    - Folly (= 2016.10.31.00)
+    - React/PrivateDatabase
+  - React/jsinspector (0.57.1)
+  - React/PrivateDatabase (0.57.1)
+  - React/RCTBlob (0.57.1):
+    - React/Core
+  - React/RCTImage (0.57.1):
     - React/Core
     - React/RCTNetwork
-  - React/RCTNetwork (0.43.0):
+  - React/RCTNetwork (0.57.1):
     - React/Core
-  - React/RCTText (0.43.0):
+  - React/RCTText (0.57.1):
     - React/Core
-  - React/RCTWebSocket (0.43.0):
+  - React/RCTWebSocket (0.57.1):
     - React/Core
+    - React/fishhook
+    - React/RCTBlob
   - TBAKit (2.0.5)
-  - Yoga (0.43.0.React)
+  - yoga (0.57.1.React)
   - youtube-ios-player-helper (0.1.6)
   - ZIPFoundation (0.9.6)
 
@@ -137,21 +162,26 @@ DEPENDENCIES:
   - Firebase/Performance
   - Firebase/RemoteConfig
   - Firebase/Storage
+  - Folly (from `subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - GoogleSignIn
   - PureLayout
   - React/Core (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
+  - React/CxxBridge (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
+  - React/DevSupport (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
   - React/RCTImage (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
   - React/RCTNetwork (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
   - React/RCTText (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
   - React/RCTWebSocket (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
   - TBAKit
-  - Yoga (from `subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga`)
+  - yoga (from `subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga`)
   - youtube-ios-player-helper (~> 0.1.4)
   - ZIPFoundation
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - boost-for-react-native
     - Crashlytics
+    - DoubleConversion
     - Fabric
     - Firebase
     - FirebaseABTesting
@@ -165,6 +195,7 @@ SPEC REPOS:
     - FirebaseRemoteConfig
     - FirebaseStorage
     - FirebaseSwizzlingUtilities
+    - glog
     - GoogleSignIn
     - GoogleToolboxForMac
     - GTMOAuth2
@@ -178,13 +209,17 @@ SPEC REPOS:
     - ZIPFoundation
 
 EXTERNAL SOURCES:
+  Folly:
+    :podspec: subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/Folly.podspec
   React:
     :path: subtrees/the-blue-alliance-react/node_modules/react-native
-  Yoga:
+  yoga:
     :path: subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga
 
 SPEC CHECKSUMS:
+  boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
+  DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
   Fabric: f8d42c893bb187326a7968b62abe55c36a987a46
   Firebase: 5ec5e863d269d82d66b4bf56856726f8fb8f0fb3
   FirebaseABTesting: d07d0ee833b842d5153549e4c7e2e2cb1c23a3f9
@@ -198,6 +233,8 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfig: 3e95fb7c072308492e85fa41d59d38b3d6fd2372
   FirebaseStorage: 0c223481c8f89ed300cf1239ddd2d9833622c65f
   FirebaseSwizzlingUtilities: 6006111d30248d2321ffac0231e246663e704ea3
+  Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
+  glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
   GoogleSignIn: d9ef55b10f0aa401a5de2747f59b725e4b9732ac
   GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
   GTMOAuth2: c77fe325e4acd453837e72d91e3b5f13116857b2
@@ -206,12 +243,12 @@ SPEC CHECKSUMS:
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
   PureLayout: 4d550abe49a94f24c2808b9b95db9131685fe4cd
-  React: 8f52d52389ef8a271b049f81634343290f59a356
+  React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
   TBAKit: 43455b6f1defc5e5edd268e58ca94894ae3123e1
-  Yoga: ee3dae4d89b27276f4be20241c2bab84f296b626
+  yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
   ZIPFoundation: 68c35eb2637c21abe56dc60b3277636443bc1501
 
-PODFILE CHECKSUM: f47d0cdb22b1409622f4733363bf3976be27581e
+PODFILE CHECKSUM: b153995c73569f9f0f21d0469a2410fdad2fd07c
 
 COCOAPODS: 1.5.3

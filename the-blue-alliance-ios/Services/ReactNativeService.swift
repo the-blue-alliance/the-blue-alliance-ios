@@ -30,14 +30,14 @@ extension ReactNative {
     }
 
     var prodSourceURL: URL {
-        let fallbackURL = Bundle.main.url(forResource: "main", withExtension: "jsbundle")!
+        let fallbackURL = Bundle.main.url(forResource: "main", withExtension: "jsbundle")
         guard let documentsDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else {
-            return fallbackURL
+            return fallbackURL!
         }
 
         let bundleURL = documentsDirectory.appendingPathComponent(ReactNativeService.BundleName.downloaded.rawValue)
         if let reachable = try? bundleURL.checkResourceIsReachable(), reachable == false {
-            return fallbackURL
+            return fallbackURL!
         }
 
         return bundleURL
@@ -55,8 +55,8 @@ extension ReactNative {
 class ReactNativeService {
 
     fileprivate enum BundleName: String {
-        case assets = "assets"
-        case downloaded = "main.jsbundle"
+        case assets = "ios/assets"
+        case downloaded = "ios/main.jsbundle"
         case compressed = "ios.zip"
     }
 
@@ -121,14 +121,14 @@ class ReactNativeService {
         }
 
         // Check if we need to download a new compressed React Native bundle, or if the version we have is the most recent
-        remoteBundleReference.getMetadata { [weak self] (metadata, error) in
+        remoteBundleReference.getMetadata { [unowned self] (metadata, error) in
             if let error = error {
                 print("Unable to fetch metadata for compressed React Native bundle: \(error.localizedDescription)")
-            } else if let metadata = metadata, let bundleGeneration = self?.bundleGeneration, Int(metadata.generation) > bundleGeneration {
+            } else if let metadata = metadata, Int(metadata.generation) > self.bundleGeneration {
                 // Download the newest React Native bundle
-                self?.downloadReactNativeBundle(completion: { (error) in
+                self.downloadReactNativeBundle(completion: { (error) in
                     if error == nil {
-                        self?.bundleGeneration = Int(metadata.generation)
+                        self.bundleGeneration = Int(metadata.generation)
                     }
                 })
             }
@@ -141,11 +141,12 @@ class ReactNativeService {
             return
         }
 
-        remoteBundleReference.write(toFile: compressedBundleURL, completion: { [weak self] (url, error) in
+        remoteBundleReference.write(toFile: compressedBundleURL, completion: { [unowned self] (url, error) in
             if let error = error {
                 print("Error writing compressed React Native bundle to filesystem: \(error.localizedDescription)")
-            } else if url != nil, self?.unzipCompressedBundle() == true {
-                self?.cleanupCompressedBundle()
+            } else if url != nil {
+                self.unzipCompressedBundle()
+                self.cleanupCompressedBundle()
             }
             completion(error)
         })
@@ -164,15 +165,15 @@ class ReactNativeService {
         }
 
         // If we don't have the uncompressed files we need, attempt to uncompress them
-        if safeToDelete == false, unzipCompressedBundle() == false {
-            return
+        if safeToDelete == false {
+            unzipCompressedBundle()
         }
+
         try? fileManager.removeItem(at: compressedBundleURL)
     }
 
-    // Returns true if unzip successful
-    private func unzipCompressedBundle() -> Bool {
-        return (try? fileManager.unzipItem(at: compressedBundleURL, to: documentDirectory)) != nil
+    private func unzipCompressedBundle() {
+        try? fileManager.unzipItem(at: compressedBundleURL, to: documentDirectory)
     }
 
 }

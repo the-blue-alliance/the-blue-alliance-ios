@@ -23,6 +23,8 @@
 		303F824A1EF593BE007CADA1 /* EventRankingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F82491EF593BE007CADA1 /* EventRankingsTableViewController.swift */; };
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
+		4085AAECE6FED588408E1998 /* Pods_The_Blue_Alliance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9210E0BF630718D1F1D86D50 /* Pods_The_Blue_Alliance.framework */; };
+		7B85965E417A419E237A9BEC /* Pods_tba_unit_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CD6F4605F6520909C3A47BC /* Pods_tba_unit_tests.framework */; };
 		920DF7CD20954B430041B487 /* TeamAtDistrictViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DF7CC20954B430041B487 /* TeamAtDistrictViewController.swift */; };
 		920DF7CF20954B5D0041B487 /* DistrictBreakdownTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DF7CE20954B5D0041B487 /* DistrictBreakdownTableViewController.swift */; };
 		9218462D20CDBBDB00AAB7F8 /* RemoteConfigServiceOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9218462C20CDBBDB00AAB7F8 /* RemoteConfigServiceOperation.swift */; };
@@ -152,8 +154,6 @@
 		92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */; };
 		92FFE52A1E7CB1550037E48C /* Webcast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE5291E7CB1550037E48C /* Webcast.swift */; };
 		92FFE52C1E7CC60F0037E48C /* UIColor+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE52B1E7CC60F0037E48C /* UIColor+TBA.swift */; };
-		A8DB6E3E14A89517725CECA5 /* Pods_tba_unit_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D769CDCC20E143E69BBB462D /* Pods_tba_unit_tests.framework */; };
-		E433BB10C1DF80CF8E3B0A81 /* Pods_The_Blue_Alliance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEB8BB931943169DA8FA080B /* Pods_The_Blue_Alliance.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -183,9 +183,11 @@
 		303F82491EF593BE007CADA1 /* EventRankingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventRankingsTableViewController.swift; sourceTree = "<group>"; };
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
-		62775AD9BCC2271E3B2EB707 /* Pods-tba-unit-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.release.xcconfig"; sourceTree = "<group>"; };
+		6CD6F4605F6520909C3A47BC /* Pods_tba_unit_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_unit_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		79238A6B6787447B97CA1947 /* Pods-tba-unit-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.release.xcconfig"; sourceTree = "<group>"; };
 		920DF7CC20954B430041B487 /* TeamAtDistrictViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamAtDistrictViewController.swift; sourceTree = "<group>"; };
 		920DF7CE20954B5D0041B487 /* DistrictBreakdownTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictBreakdownTableViewController.swift; sourceTree = "<group>"; };
+		9210E0BF630718D1F1D86D50 /* Pods_The_Blue_Alliance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_The_Blue_Alliance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9218462C20CDBBDB00AAB7F8 /* RemoteConfigServiceOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigServiceOperation.swift; sourceTree = "<group>"; };
 		9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingTableViewCell.xib; sourceTree = "<group>"; };
@@ -318,11 +320,9 @@
 		92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		92FFE5291E7CB1550037E48C /* Webcast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Webcast.swift; sourceTree = "<group>"; };
 		92FFE52B1E7CC60F0037E48C /* UIColor+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+TBA.swift"; path = "Extensions/UIColor+TBA.swift"; sourceTree = "<group>"; };
-		A79BA58FDFCFADC6438AA242 /* Pods-The Blue Alliance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.debug.xcconfig"; sourceTree = "<group>"; };
-		BEB8BB931943169DA8FA080B /* Pods_The_Blue_Alliance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_The_Blue_Alliance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C824DC4C47B24BC928FA946B /* Pods-tba-unit-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.debug.xcconfig"; sourceTree = "<group>"; };
-		CC94969197ACDA090003638B /* Pods-The Blue Alliance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.release.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.release.xcconfig"; sourceTree = "<group>"; };
-		D769CDCC20E143E69BBB462D /* Pods_tba_unit_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_unit_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C37BF8E3C87D11682BFD6E31 /* Pods-tba-unit-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.debug.xcconfig"; sourceTree = "<group>"; };
+		F29B287D8A73AD9FA7D88A5F /* Pods-The Blue Alliance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.release.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.release.xcconfig"; sourceTree = "<group>"; };
+		FB28516C81079A1D911225EC /* Pods-The Blue Alliance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -330,7 +330,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E433BB10C1DF80CF8E3B0A81 /* Pods_The_Blue_Alliance.framework in Frameworks */,
+				4085AAECE6FED588408E1998 /* Pods_The_Blue_Alliance.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,7 +338,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A8DB6E3E14A89517725CECA5 /* Pods_tba_unit_tests.framework in Frameworks */,
+				7B85965E417A419E237A9BEC /* Pods_tba_unit_tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,17 +397,6 @@
 				14B6727221529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift */,
 			);
 			path = Services;
-			sourceTree = "<group>";
-		};
-		1FC2A75F3913B8037F340BCF /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				A79BA58FDFCFADC6438AA242 /* Pods-The Blue Alliance.debug.xcconfig */,
-				CC94969197ACDA090003638B /* Pods-The Blue Alliance.release.xcconfig */,
-				C824DC4C47B24BC928FA946B /* Pods-tba-unit-tests.debug.xcconfig */,
-				62775AD9BCC2271E3B2EB707 /* Pods-tba-unit-tests.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 		920DF7CB20954B430041B487 /* Team@District */ = {
@@ -557,8 +546,8 @@
 				92942D941E2154DA008E79CA /* the-blue-alliance-ios */,
 				92D6483B20BE4CB8008F0DB3 /* tba-unit-tests */,
 				AB6808F14167475E1AE2783E /* Frameworks */,
-				1FC2A75F3913B8037F340BCF /* Pods */,
 				92942D931E2154DA008E79CA /* Products */,
+				B59EC7DFB53499801BB9D0CF /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -959,10 +948,21 @@
 			isa = PBXGroup;
 			children = (
 				928018F620964D9A00693447 /* MyTBAKit */,
-				BEB8BB931943169DA8FA080B /* Pods_The_Blue_Alliance.framework */,
-				D769CDCC20E143E69BBB462D /* Pods_tba_unit_tests.framework */,
+				9210E0BF630718D1F1D86D50 /* Pods_The_Blue_Alliance.framework */,
+				6CD6F4605F6520909C3A47BC /* Pods_tba_unit_tests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B59EC7DFB53499801BB9D0CF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FB28516C81079A1D911225EC /* Pods-The Blue Alliance.debug.xcconfig */,
+				F29B287D8A73AD9FA7D88A5F /* Pods-The Blue Alliance.release.xcconfig */,
+				C37BF8E3C87D11682BFD6E31 /* Pods-tba-unit-tests.debug.xcconfig */,
+				79238A6B6787447B97CA1947 /* Pods-tba-unit-tests.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -972,14 +972,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "The Blue Alliance" */;
 			buildPhases = (
-				0DE184E0F8728D9FB71E56D7 /* [CP] Check Pods Manifest.lock */,
+				755056F6B5C8077EFC8C547D /* [CP] Check Pods Manifest.lock */,
 				92942D8E1E2154DA008E79CA /* Sources */,
 				92942D8F1E2154DA008E79CA /* Frameworks */,
 				92942D901E2154DA008E79CA /* Resources */,
 				92E624CE208E8D1600DF58C0 /* Bundle React Native code and images */,
 				924E826C208FE7D20053247C /* Run Fabric */,
-				F423350F11BA1B2F9829986C /* [CP] Embed Pods Frameworks */,
-				0319A32809D476D17E3B1507 /* [CP] Copy Pods Resources */,
+				EC8899E5C4B28ADCF773CC89 /* [CP] Embed Pods Frameworks */,
+				8DC38C0B8F9F296BC3FE6EA3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -994,7 +994,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92D6484120BE4CB8008F0DB3 /* Build configuration list for PBXNativeTarget "tba-unit-tests" */;
 			buildPhases = (
-				C82BF8916C8B32282B4357B2 /* [CP] Check Pods Manifest.lock */,
+				0C0A9AC8A5EE2C37DEA0804F /* [CP] Check Pods Manifest.lock */,
 				92D6483620BE4CB8008F0DB3 /* Sources */,
 				92D6483720BE4CB8008F0DB3 /* Frameworks */,
 				92D6483820BE4CB8008F0DB3 /* Resources */,
@@ -1094,25 +1094,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0319A32809D476D17E3B1507 /* [CP] Copy Pods Resources */ = {
+		0C0A9AC8A5EE2C37DEA0804F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-resources.sh",
-				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+				"$(DERIVED_FILE_DIR)/Pods-tba-unit-tests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		0DE184E0F8728D9FB71E56D7 /* [CP] Check Pods Manifest.lock */ = {
+		755056F6B5C8077EFC8C547D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1128,6 +1128,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8DC38C0B8F9F296BC3FE6EA3 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-resources.sh",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		924E826C208FE7D20053247C /* Run Fabric */ = {
@@ -1156,33 +1174,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\nsubtrees/the-blue-alliance-react/node_modules/react-native/packager/react-native-xcode.sh\n";
+			shellScript = "export NODE_BINARY=node\nsubtrees/the-blue-alliance-react/node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		C82BF8916C8B32282B4357B2 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-tba-unit-tests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F423350F11BA1B2F9829986C /* [CP] Embed Pods Frameworks */ = {
+		EC8899E5C4B28ADCF773CC89 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/DoubleConversion/DoubleConversion.framework",
+				"${BUILT_PRODUCTS_DIR}/Folly/folly.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
@@ -1190,14 +1192,17 @@
 				"${BUILT_PRODUCTS_DIR}/PureLayout/PureLayout.framework",
 				"${BUILT_PRODUCTS_DIR}/React/React.framework",
 				"${BUILT_PRODUCTS_DIR}/TBAKit/TBAKit.framework",
-				"${BUILT_PRODUCTS_DIR}/Yoga/yoga.framework",
 				"${BUILT_PRODUCTS_DIR}/ZIPFoundation/ZIPFoundation.framework",
+				"${BUILT_PRODUCTS_DIR}/glog/glog.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+				"${BUILT_PRODUCTS_DIR}/yoga/yoga.framework",
 				"${BUILT_PRODUCTS_DIR}/youtube-ios-player-helper/youtube_ios_player_helper.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DoubleConversion.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/folly.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
@@ -1205,10 +1210,11 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PureLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZIPFoundation.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/glog.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/youtube_ios_player_helper.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1491,7 +1497,7 @@
 		};
 		92942DA71E2154DA008E79CA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A79BA58FDFCFADC6438AA242 /* Pods-The Blue Alliance.debug.xcconfig */;
+			baseConfigurationReference = FB28516C81079A1D911225EC /* Pods-The Blue Alliance.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
@@ -1508,7 +1514,7 @@
 		};
 		92942DA81E2154DA008E79CA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CC94969197ACDA090003638B /* Pods-The Blue Alliance.release.xcconfig */;
+			baseConfigurationReference = F29B287D8A73AD9FA7D88A5F /* Pods-The Blue Alliance.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
@@ -1525,7 +1531,7 @@
 		};
 		92D6484220BE4CB8008F0DB3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C824DC4C47B24BC928FA946B /* Pods-tba-unit-tests.debug.xcconfig */;
+			baseConfigurationReference = C37BF8E3C87D11682BFD6E31 /* Pods-tba-unit-tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1549,7 +1555,7 @@
 		};
 		92D6484320BE4CB8008F0DB3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 62775AD9BCC2271E3B2EB707 /* Pods-tba-unit-tests.release.xcconfig */;
+			baseConfigurationReference = 79238A6B6787447B97CA1947 /* Pods-tba-unit-tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
