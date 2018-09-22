@@ -21,6 +21,16 @@ or alternatively using `brew cask install fastlane`
 fastlane ios test
 ```
 Runs all the tests
+### ios test_unit
+```
+fastlane ios test_unit
+```
+
+### ios test_ui
+```
+fastlane ios test_ui
+```
+
 
 ----
 

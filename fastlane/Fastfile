@@ -14,7 +14,23 @@ platform :ios do
 
   desc "Runs all the tests"
   lane :test do
-    scan
+    test_unit
+    test_ui
+  end
+
+  lane :test_unit do
+    # Run unit tests
+    run_tests(
+      scheme: "tba-unit-tests",
+    )
+  end
+
+  lane :test_ui do
+    # Run UI tests
+    run_tests(
+      scheme: "tba-ui-tests",
+      devices: ["iPhone 8 Plus", "iPhone X", "iPad Pro (12.9-inch)"],
+    )
   end
 
 end
@@ -26,4 +42,3 @@ error do |lane, exception|
     username: "Travis CI",
   ) if is_ci? && ENV['SLACK_URL'] && git_branch == "master"
 end
-
