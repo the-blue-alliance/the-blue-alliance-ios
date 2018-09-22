@@ -8,15 +8,18 @@ target 'The Blue Alliance' do
   # React Native
   pod 'React', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native', :subspecs => [
     'Core',
+    'CxxBridge', # Include this for RN >= 0.47
+    'DevSupport', # Include this to enable In-App Devmenu if RN >= 0.43
     'RCTText',
     'RCTNetwork',
     'RCTImage',
-    # 'DevSupport',
     'RCTWebSocket', # needed for debugging
     # Add any other subspecs you want to use in your project
   ]
   # Explicitly include Yoga if you are using RN >= 0.42.0
-  pod "Yoga", :path => "subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga"
+  pod "yoga", :path => "subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga"
+  # Third party deps podspec link
+  pod 'Folly', :podspec => 'subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   # Deps
   pod "youtube-ios-player-helper", "~> 0.1.4"
