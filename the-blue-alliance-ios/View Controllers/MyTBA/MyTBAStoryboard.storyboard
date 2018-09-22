@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="zd8-c7-caK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zd8-c7-caK">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -31,10 +32,6 @@
         <scene sceneID="zPw-Xm-VDQ">
             <objects>
                 <viewController id="rOD-Gy-Vhg" customClass="MyTBAViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="1ad-9U-wc6"/>
-                        <viewControllerLayoutGuide type="bottom" id="u56-ag-8Mq"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="o9o-Rt-yoF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -71,14 +68,15 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="1fc-Z7-IQG" firstAttribute="top" secondItem="1ad-9U-wc6" secondAttribute="bottom" id="46F-G7-K5b"/>
-                            <constraint firstItem="1fc-Z7-IQG" firstAttribute="leading" secondItem="o9o-Rt-yoF" secondAttribute="leading" id="Dah-DN-oVW"/>
-                            <constraint firstItem="aCP-aS-KSy" firstAttribute="leading" secondItem="o9o-Rt-yoF" secondAttribute="leading" id="QPl-xt-zV0"/>
-                            <constraint firstAttribute="trailing" secondItem="1fc-Z7-IQG" secondAttribute="trailing" id="VJr-20-hDd"/>
+                            <constraint firstItem="1fc-Z7-IQG" firstAttribute="top" secondItem="Ml2-je-FQ0" secondAttribute="top" id="46F-G7-K5b"/>
+                            <constraint firstItem="1fc-Z7-IQG" firstAttribute="leading" secondItem="Ml2-je-FQ0" secondAttribute="leading" id="Dah-DN-oVW"/>
+                            <constraint firstItem="aCP-aS-KSy" firstAttribute="leading" secondItem="Ml2-je-FQ0" secondAttribute="leading" id="QPl-xt-zV0"/>
+                            <constraint firstItem="Ml2-je-FQ0" firstAttribute="trailing" secondItem="1fc-Z7-IQG" secondAttribute="trailing" id="VJr-20-hDd"/>
                             <constraint firstItem="aCP-aS-KSy" firstAttribute="top" secondItem="o9o-Rt-yoF" secondAttribute="top" id="pCX-zk-zg8"/>
-                            <constraint firstAttribute="trailing" secondItem="aCP-aS-KSy" secondAttribute="trailing" id="uge-b1-G88"/>
-                            <constraint firstItem="u56-ag-8Mq" firstAttribute="top" secondItem="aCP-aS-KSy" secondAttribute="bottom" id="wD3-iN-LGZ"/>
+                            <constraint firstItem="Ml2-je-FQ0" firstAttribute="trailing" secondItem="aCP-aS-KSy" secondAttribute="trailing" id="uge-b1-G88"/>
+                            <constraint firstItem="Ml2-je-FQ0" firstAttribute="bottom" secondItem="aCP-aS-KSy" secondAttribute="bottom" id="wD3-iN-LGZ"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="Ml2-je-FQ0"/>
                     </view>
                     <navigationItem key="navigationItem" title="myTBA" id="trR-Vy-U4f">
                         <barButtonItem key="rightBarButtonItem" title="Log Out" id="52q-Gn-IM2">
@@ -129,16 +127,12 @@
         <scene sceneID="1PW-cQ-0Cj">
             <objects>
                 <viewController id="ch0-Wu-X12" customClass="MyTBASignInViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="VmS-sQ-yqR"/>
-                        <viewControllerLayoutGuide type="bottom" id="tnZ-Ul-HuR"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="gU0-Ar-lAn">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" axis="vertical" distribution="equalSpacing" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="df3-tJ-tiz">
-                                <rect key="frame" x="20" y="139" width="335" height="341.5"/>
+                                <rect key="frame" x="20" y="137" width="335" height="344.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="HMx-CP-bZq">
                                         <rect key="frame" x="58.5" y="0.0" width="218" height="91.5"/>
@@ -159,17 +153,17 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="CmJ-zf-D4v">
-                                        <rect key="frame" x="8" y="111.5" width="319.5" height="41"/>
+                                        <rect key="frame" x="8" y="111.5" width="319.5" height="42.5"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ic_favorite_border" translatesAutoresizingMaskIntoConstraints="NO" id="kVQ-Pk-Bu6">
-                                                <rect key="frame" x="0.0" y="6.5" width="28" height="28"/>
+                                                <rect key="frame" x="0.0" y="7" width="28" height="28"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="28" id="GYl-nt-IAU"/>
                                                     <constraint firstAttribute="width" constant="28" id="JSY-Mf-mBX"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Mark teams, events, and matches as favorites for fast access" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hoQ-yK-uRQ">
-                                                <rect key="frame" x="36" y="0.0" width="283.5" height="41"/>
+                                                <rect key="frame" x="36" y="0.0" width="283.5" height="42.5"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -177,17 +171,17 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="1000" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="imz-jW-NsS">
-                                        <rect key="frame" x="8" y="172.5" width="319.5" height="41"/>
+                                        <rect key="frame" x="8" y="174" width="319.5" height="42.5"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" image="ic_notifications_none" translatesAutoresizingMaskIntoConstraints="NO" id="LWH-S5-EDz">
-                                                <rect key="frame" x="0.0" y="6.5" width="28" height="28"/>
+                                                <rect key="frame" x="0.0" y="7" width="28" height="28"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="28" id="Kwz-tL-3YI"/>
                                                     <constraint firstAttribute="width" constant="28" id="SVv-g1-VYP"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="999" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Subscribe to teams, events, and matches to get realtime updates" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LES-aL-ehs">
-                                                <rect key="frame" x="36" y="0.0" width="283.5" height="41"/>
+                                                <rect key="frame" x="36" y="0.0" width="283.5" height="42.5"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -195,7 +189,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="8Vp-Mj-x9O">
-                                        <rect key="frame" x="0.0" y="233.5" width="335" height="108"/>
+                                        <rect key="frame" x="0.0" y="236.5" width="335" height="108"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8v8-sc-Ys0">
                                                 <rect key="frame" x="0.0" y="0.0" width="335" height="48"/>
@@ -235,12 +229,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="df3-tJ-tiz" firstAttribute="top" relation="greaterThanOrEqual" secondItem="VmS-sQ-yqR" secondAttribute="bottom" constant="20" id="5zs-aD-ZYa"/>
+                            <constraint firstItem="df3-tJ-tiz" firstAttribute="top" relation="greaterThanOrEqual" secondItem="dtA-VW-nUx" secondAttribute="top" constant="20" id="5zs-aD-ZYa"/>
                             <constraint firstItem="df3-tJ-tiz" firstAttribute="centerY" secondItem="gU0-Ar-lAn" secondAttribute="centerY" id="Qt0-4A-nJ0"/>
-                            <constraint firstItem="df3-tJ-tiz" firstAttribute="leading" secondItem="gU0-Ar-lAn" secondAttribute="leading" constant="20" id="bPH-Pd-ftF"/>
-                            <constraint firstAttribute="trailing" secondItem="df3-tJ-tiz" secondAttribute="trailing" constant="20" id="hIy-MA-Koi"/>
-                            <constraint firstItem="tnZ-Ul-HuR" firstAttribute="top" relation="greaterThanOrEqual" secondItem="df3-tJ-tiz" secondAttribute="bottom" constant="20" id="skx-r3-AFZ"/>
+                            <constraint firstItem="df3-tJ-tiz" firstAttribute="leading" secondItem="dtA-VW-nUx" secondAttribute="leading" constant="20" id="bPH-Pd-ftF"/>
+                            <constraint firstItem="dtA-VW-nUx" firstAttribute="trailing" secondItem="df3-tJ-tiz" secondAttribute="trailing" constant="20" id="hIy-MA-Koi"/>
+                            <constraint firstItem="dtA-VW-nUx" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="df3-tJ-tiz" secondAttribute="bottom" constant="20" id="skx-r3-AFZ"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="dtA-VW-nUx"/>
                     </view>
                     <connections>
                         <outlet property="favoriteImageView" destination="kVQ-Pk-Bu6" id="0Sz-Xx-0tv"/>

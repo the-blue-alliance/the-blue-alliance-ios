@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BY6-SJ-b86">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BY6-SJ-b86">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -90,7 +92,7 @@
             <objects>
                 <tableViewController id="gY3-yx-S9x" customClass="MatchesTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="BgR-UF-r3A">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <connections>
@@ -107,11 +109,7 @@
         <scene sceneID="Csm-BX-pdF">
             <objects>
                 <viewController storyboardIdentifier="MatchViewController" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Eer-R7-yJV" customClass="MatchViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="9sx-MV-l5z"/>
-                        <viewControllerLayoutGuide type="bottom" id="aHW-HZ-tOw"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="O5L-ME-N4D">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="O5L-ME-N4D">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -175,11 +173,12 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="aHW-HZ-tOw" firstAttribute="top" secondItem="Fb0-1o-jgn" secondAttribute="bottom" id="827-ZL-Mub"/>
-                            <constraint firstItem="Fb0-1o-jgn" firstAttribute="leading" secondItem="O5L-ME-N4D" secondAttribute="leading" id="Lwp-VR-hLF"/>
-                            <constraint firstItem="Fb0-1o-jgn" firstAttribute="top" secondItem="9sx-MV-l5z" secondAttribute="bottom" id="Ntn-0D-u4P"/>
-                            <constraint firstAttribute="trailing" secondItem="Fb0-1o-jgn" secondAttribute="trailing" id="tXH-Pd-BgZ"/>
+                            <constraint firstItem="Fb0-1o-jgn" firstAttribute="leading" secondItem="rq5-7W-NTt" secondAttribute="leading" id="Lwp-VR-hLF"/>
+                            <constraint firstItem="Fb0-1o-jgn" firstAttribute="top" secondItem="rq5-7W-NTt" secondAttribute="top" id="Ntn-0D-u4P"/>
+                            <constraint firstItem="rq5-7W-NTt" firstAttribute="trailing" secondItem="Fb0-1o-jgn" secondAttribute="trailing" id="tXH-Pd-BgZ"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="Fb0-1o-jgn" secondAttribute="bottom" id="whS-s0-bcr"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="rq5-7W-NTt"/>
                     </view>
                     <navigationItem key="navigationItem" id="4jr-JX-LLE">
                         <view key="titleView" contentMode="scaleToFill" id="kve-P1-l2Z">
@@ -230,25 +229,22 @@
         <scene sceneID="u7t-Lp-cFc">
             <objects>
                 <viewController id="1Me-02-2cf" customClass="MatchBreakdownViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="zYo-yQ-QcQ"/>
-                        <viewControllerLayoutGuide type="bottom" id="ptu-aV-dKg"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="CFF-64-pS0">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="CFF-64-pS0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DP6-K4-aR6">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DP6-K4-aR6">
                                 <rect key="frame" x="0.0" y="20" width="375" height="539"/>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="ptu-aV-dKg" firstAttribute="top" secondItem="DP6-K4-aR6" secondAttribute="bottom" id="ba3-Rn-iUL"/>
-                            <constraint firstAttribute="trailing" secondItem="DP6-K4-aR6" secondAttribute="trailing" id="ic0-VD-iWy"/>
-                            <constraint firstItem="DP6-K4-aR6" firstAttribute="leading" secondItem="CFF-64-pS0" secondAttribute="leading" id="o4i-jo-rNK"/>
-                            <constraint firstItem="DP6-K4-aR6" firstAttribute="top" secondItem="zYo-yQ-QcQ" secondAttribute="bottom" id="pSK-0Y-Sw3"/>
+                            <constraint firstItem="T6z-ge-u0i" firstAttribute="trailing" secondItem="DP6-K4-aR6" secondAttribute="trailing" id="ic0-VD-iWy"/>
+                            <constraint firstItem="DP6-K4-aR6" firstAttribute="leading" secondItem="T6z-ge-u0i" secondAttribute="leading" id="o4i-jo-rNK"/>
+                            <constraint firstItem="DP6-K4-aR6" firstAttribute="top" secondItem="T6z-ge-u0i" secondAttribute="top" id="pSK-0Y-Sw3"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="DP6-K4-aR6" secondAttribute="bottom" id="vMm-kb-eJv"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="T6z-ge-u0i"/>
                     </view>
                     <connections>
                         <outlet property="scrollView" destination="DP6-K4-aR6" id="rGK-Tx-aYk"/>
@@ -262,15 +258,11 @@
         <scene sceneID="n21-RS-3GU">
             <objects>
                 <viewController id="ljv-wV-xYX" customClass="MatchInfoViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="DjB-uW-Ekz"/>
-                        <viewControllerLayoutGuide type="bottom" id="49n-5i-scY"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="p7w-F0-HZ1">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="p7w-F0-HZ1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4db-aK-ApV">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" alwaysBounceVertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4db-aK-ApV">
                                 <rect key="frame" x="0.0" y="20" width="375" height="539"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="749" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="5g5-Xk-pLX">
@@ -415,11 +407,12 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="4db-aK-ApV" firstAttribute="top" secondItem="DjB-uW-Ekz" secondAttribute="bottom" id="25p-9N-ans"/>
-                            <constraint firstAttribute="trailing" secondItem="4db-aK-ApV" secondAttribute="trailing" id="ogP-Yt-Vj7"/>
-                            <constraint firstItem="4db-aK-ApV" firstAttribute="leading" secondItem="p7w-F0-HZ1" secondAttribute="leading" id="opM-1q-yTu"/>
+                            <constraint firstItem="4db-aK-ApV" firstAttribute="top" secondItem="HZR-cI-IiB" secondAttribute="top" id="25p-9N-ans"/>
+                            <constraint firstItem="HZR-cI-IiB" firstAttribute="trailing" secondItem="4db-aK-ApV" secondAttribute="trailing" id="ogP-Yt-Vj7"/>
+                            <constraint firstItem="4db-aK-ApV" firstAttribute="leading" secondItem="HZR-cI-IiB" secondAttribute="leading" id="opM-1q-yTu"/>
                             <constraint firstAttribute="bottom" secondItem="4db-aK-ApV" secondAttribute="bottom" id="pQN-3Z-i4V"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="HZR-cI-IiB"/>
                     </view>
                     <connections>
                         <outlet property="blueContainerView" destination="4Uk-yH-aoe" id="adc-7P-aG7"/>
@@ -443,7 +436,7 @@
             <objects>
                 <tableViewController id="CvT-u0-qAP" customClass="EventRankingsTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="qSk-IJ-lzD">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <connections>
@@ -460,11 +453,7 @@
         <scene sceneID="dha-2i-TWe">
             <objects>
                 <viewController storyboardIdentifier="EventViewController" hidesBottomBarWhenPushed="YES" id="V9g-ZF-4u7" customClass="EventViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="e3G-KZ-clu"/>
-                        <viewControllerLayoutGuide type="bottom" id="0ON-FW-wcF"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="ohx-IE-DGa">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ohx-IE-DGa">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -493,26 +482,26 @@
                                     <constraint firstAttribute="height" constant="44" id="fE4-91-gW8"/>
                                 </constraints>
                             </view>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oHM-kT-1iW">
+                            <containerView opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oHM-kT-1iW">
                                 <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <connections>
                                     <segue destination="kDW-bq-kXI" kind="embed" identifier="EventInfoEmbed" id="aZN-5q-BzU"/>
                                 </connections>
                             </containerView>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tQG-h2-47D">
+                            <containerView opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tQG-h2-47D">
                                 <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <connections>
                                     <segue destination="qeS-dp-Oga" kind="embed" identifier="EventTeamsEmbed" id="D4r-QY-GLP"/>
                                 </connections>
                             </containerView>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1my-hd-O5i">
-                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
+                            <containerView opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1my-hd-O5i">
+                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <connections>
                                     <segue destination="gY3-yx-S9x" kind="embed" identifier="EventMatchesEmbed" id="QS9-LC-vAs"/>
                                 </connections>
                             </containerView>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oxj-Ro-GMf" userLabel="Rankings View">
-                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
+                            <containerView opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oxj-Ro-GMf" userLabel="Rankings View">
+                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <connections>
                                     <segue destination="CvT-u0-qAP" kind="embed" identifier="EventRankingsEmbed" id="v1c-s6-m76"/>
                                 </connections>
@@ -521,27 +510,29 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="oxj-Ro-GMf" firstAttribute="top" secondItem="oHM-kT-1iW" secondAttribute="top" id="0hh-ag-tMs"/>
-                            <constraint firstAttribute="bottom" secondItem="tQG-h2-47D" secondAttribute="bottom" id="28k-ot-jLF"/>
-                            <constraint firstItem="tQG-h2-47D" firstAttribute="leading" secondItem="ohx-IE-DGa" secondAttribute="leading" id="4Da-Bu-1dO"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="tQG-h2-47D" secondAttribute="bottom" id="1lS-oC-zp3"/>
+                            <constraint firstItem="tQG-h2-47D" firstAttribute="leading" secondItem="lht-BN-U3b" secondAttribute="leading" id="4Da-Bu-1dO"/>
                             <constraint firstItem="1my-hd-O5i" firstAttribute="top" secondItem="voy-KV-LhW" secondAttribute="bottom" id="7Td-rE-ijK"/>
-                            <constraint firstItem="voy-KV-LhW" firstAttribute="leading" secondItem="ohx-IE-DGa" secondAttribute="leading" id="8dU-fe-BsV"/>
+                            <constraint firstItem="voy-KV-LhW" firstAttribute="leading" secondItem="lht-BN-U3b" secondAttribute="leading" id="8dU-fe-BsV"/>
                             <constraint firstItem="tQG-h2-47D" firstAttribute="top" secondItem="voy-KV-LhW" secondAttribute="bottom" id="8fP-GG-wfS"/>
                             <constraint firstItem="oxj-Ro-GMf" firstAttribute="trailing" secondItem="tQG-h2-47D" secondAttribute="trailing" id="AmR-eM-LFm"/>
-                            <constraint firstItem="oxj-Ro-GMf" firstAttribute="bottom" secondItem="0ON-FW-wcF" secondAttribute="top" id="H4O-rt-8sS"/>
-                            <constraint firstAttribute="trailing" secondItem="tQG-h2-47D" secondAttribute="trailing" id="K2F-Sv-yFL"/>
-                            <constraint firstAttribute="trailing" secondItem="oHM-kT-1iW" secondAttribute="trailing" id="Uuq-oD-g26"/>
-                            <constraint firstItem="1my-hd-O5i" firstAttribute="leading" secondItem="ohx-IE-DGa" secondAttribute="leading" id="au5-Hn-3yQ"/>
-                            <constraint firstItem="voy-KV-LhW" firstAttribute="top" secondItem="e3G-KZ-clu" secondAttribute="bottom" id="dfU-Y2-Sry"/>
+                            <constraint firstItem="lht-BN-U3b" firstAttribute="trailing" secondItem="tQG-h2-47D" secondAttribute="trailing" id="K2F-Sv-yFL"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="1my-hd-O5i" secondAttribute="bottom" id="RQX-I2-Sw3"/>
+                            <constraint firstItem="lht-BN-U3b" firstAttribute="trailing" secondItem="oHM-kT-1iW" secondAttribute="trailing" id="Uuq-oD-g26"/>
+                            <constraint firstItem="1my-hd-O5i" firstAttribute="leading" secondItem="lht-BN-U3b" secondAttribute="leading" id="au5-Hn-3yQ"/>
+                            <constraint firstItem="voy-KV-LhW" firstAttribute="top" secondItem="lht-BN-U3b" secondAttribute="top" id="dfU-Y2-Sry"/>
                             <constraint firstItem="oHM-kT-1iW" firstAttribute="top" secondItem="voy-KV-LhW" secondAttribute="bottom" id="dnn-Hr-cT6"/>
-                            <constraint firstAttribute="trailing" secondItem="1my-hd-O5i" secondAttribute="trailing" id="fby-qV-XzS"/>
-                            <constraint firstItem="oHM-kT-1iW" firstAttribute="leading" secondItem="ohx-IE-DGa" secondAttribute="leading" id="n0H-Uq-ogo"/>
+                            <constraint firstItem="lht-BN-U3b" firstAttribute="trailing" secondItem="1my-hd-O5i" secondAttribute="trailing" id="fby-qV-XzS"/>
+                            <constraint firstItem="oHM-kT-1iW" firstAttribute="leading" secondItem="lht-BN-U3b" secondAttribute="leading" id="n0H-Uq-ogo"/>
                             <constraint firstAttribute="bottom" secondItem="oHM-kT-1iW" secondAttribute="bottom" id="ogl-xs-ae8"/>
                             <constraint firstItem="oxj-Ro-GMf" firstAttribute="leading" secondItem="oHM-kT-1iW" secondAttribute="leading" id="oph-ZV-oBJ"/>
-                            <constraint firstAttribute="trailing" secondItem="voy-KV-LhW" secondAttribute="trailing" id="p5h-Nb-70f"/>
-                            <constraint firstItem="0ON-FW-wcF" firstAttribute="top" secondItem="1my-hd-O5i" secondAttribute="bottom" id="ybV-rI-Gsi"/>
+                            <constraint firstItem="lht-BN-U3b" firstAttribute="trailing" secondItem="voy-KV-LhW" secondAttribute="trailing" id="p5h-Nb-70f"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="oxj-Ro-GMf" secondAttribute="bottom" id="snc-xE-GvF"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="lht-BN-U3b"/>
                     </view>
                     <navigationItem key="navigationItem" title="2015 Kettering University District" id="xo0-27-Bfw"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="infoView" destination="oHM-kT-1iW" id="A0H-il-OCI"/>
                         <outlet property="matchesView" destination="1my-hd-O5i" id="Mwl-yM-Fhn"/>
@@ -583,15 +574,11 @@
         <scene sceneID="eUR-KO-g1l">
             <objects>
                 <viewController hidesBottomBarWhenPushed="YES" id="Qcp-lW-mIJ" customClass="EventStatsContainerViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="biu-Fl-Tm6"/>
-                        <viewControllerLayoutGuide type="bottom" id="o2l-hG-ZqZ"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="KXx-me-VIV">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="KXx-me-VIV">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ch0-T2-tbi">
+                            <stackView opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ch0-T2-tbi">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oq3-MQ-D1s" userLabel="Segmented Control View">
@@ -652,11 +639,12 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="o2l-hG-ZqZ" firstAttribute="top" secondItem="ch0-T2-tbi" secondAttribute="bottom" id="H0b-XZ-rma"/>
-                            <constraint firstItem="ch0-T2-tbi" firstAttribute="leading" secondItem="KXx-me-VIV" secondAttribute="leading" id="Pi8-u2-7Ux"/>
-                            <constraint firstAttribute="trailing" secondItem="ch0-T2-tbi" secondAttribute="trailing" id="bvK-IL-WD8"/>
-                            <constraint firstItem="ch0-T2-tbi" firstAttribute="top" secondItem="biu-Fl-Tm6" secondAttribute="bottom" id="z4O-la-EXp"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="ch0-T2-tbi" secondAttribute="bottom" id="HaJ-U3-Qh9"/>
+                            <constraint firstItem="ch0-T2-tbi" firstAttribute="leading" secondItem="rfj-jP-yzH" secondAttribute="leading" id="Pi8-u2-7Ux"/>
+                            <constraint firstItem="rfj-jP-yzH" firstAttribute="trailing" secondItem="ch0-T2-tbi" secondAttribute="trailing" id="bvK-IL-WD8"/>
+                            <constraint firstItem="ch0-T2-tbi" firstAttribute="top" secondItem="rfj-jP-yzH" secondAttribute="top" id="z4O-la-EXp"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="rfj-jP-yzH"/>
                     </view>
                     <navigationItem key="navigationItem" id="tzT-KY-fIm">
                         <view key="titleView" contentMode="scaleToFill" id="6dl-rc-P09">
@@ -715,11 +703,7 @@
         <scene sceneID="gBG-rk-j7X">
             <objects>
                 <viewController hidesBottomBarWhenPushed="YES" id="OPq-JY-pBU" customClass="EventDistrictPointsViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="8Nu-Lp-riT"/>
-                        <viewControllerLayoutGuide type="bottom" id="OEY-Yc-3PN"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="U1J-YX-KJr">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="U1J-YX-KJr">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -732,11 +716,12 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="WO3-PB-QQx" secondAttribute="trailing" id="AvK-b5-Cuw"/>
-                            <constraint firstItem="OEY-Yc-3PN" firstAttribute="top" secondItem="WO3-PB-QQx" secondAttribute="bottom" id="LGT-pL-TgG"/>
-                            <constraint firstItem="WO3-PB-QQx" firstAttribute="leading" secondItem="U1J-YX-KJr" secondAttribute="leading" id="ldD-av-ftq"/>
-                            <constraint firstItem="WO3-PB-QQx" firstAttribute="top" secondItem="8Nu-Lp-riT" secondAttribute="bottom" id="xvl-P3-BgR"/>
+                            <constraint firstItem="jKj-Od-Zgg" firstAttribute="trailing" secondItem="WO3-PB-QQx" secondAttribute="trailing" id="AvK-b5-Cuw"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="WO3-PB-QQx" secondAttribute="bottom" id="e4g-63-n86"/>
+                            <constraint firstItem="WO3-PB-QQx" firstAttribute="leading" secondItem="jKj-Od-Zgg" secondAttribute="leading" id="ldD-av-ftq"/>
+                            <constraint firstItem="WO3-PB-QQx" firstAttribute="top" secondItem="jKj-Od-Zgg" secondAttribute="top" id="xvl-P3-BgR"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="jKj-Od-Zgg"/>
                     </view>
                     <navigationItem key="navigationItem" id="WA9-eV-v7F">
                         <nil key="title"/>
@@ -804,11 +789,7 @@
         <scene sceneID="PFz-7Y-0sp">
             <objects>
                 <viewController storyboardIdentifier="EventAwardsViewController" hidesBottomBarWhenPushed="YES" id="FeZ-ho-5g5" customClass="EventAwardsViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="C5x-Vd-exA"/>
-                        <viewControllerLayoutGuide type="bottom" id="Pfu-nY-OeB"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="lGh-P7-ndH">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="lGh-P7-ndH">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -821,11 +802,12 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="b4s-36-Irq" firstAttribute="top" secondItem="C5x-Vd-exA" secondAttribute="bottom" id="11D-1T-pWW"/>
-                            <constraint firstAttribute="trailing" secondItem="b4s-36-Irq" secondAttribute="trailing" id="Cfb-rk-Pd8"/>
-                            <constraint firstItem="b4s-36-Irq" firstAttribute="leading" secondItem="lGh-P7-ndH" secondAttribute="leading" id="OjM-JT-ebh"/>
-                            <constraint firstItem="Pfu-nY-OeB" firstAttribute="top" secondItem="b4s-36-Irq" secondAttribute="bottom" id="UQM-TA-qoB"/>
+                            <constraint firstItem="b4s-36-Irq" firstAttribute="top" secondItem="jYE-Ug-J7C" secondAttribute="top" id="11D-1T-pWW"/>
+                            <constraint firstItem="jYE-Ug-J7C" firstAttribute="trailing" secondItem="b4s-36-Irq" secondAttribute="trailing" id="Cfb-rk-Pd8"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="b4s-36-Irq" secondAttribute="bottom" id="EhP-0Q-rdN"/>
+                            <constraint firstItem="b4s-36-Irq" firstAttribute="leading" secondItem="jYE-Ug-J7C" secondAttribute="leading" id="OjM-JT-ebh"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="jYE-Ug-J7C"/>
                     </view>
                     <navigationItem key="navigationItem" id="auT-Fz-1LU">
                         <nil key="title"/>
@@ -912,10 +894,6 @@
         <scene sceneID="bhK-em-3bi">
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="z91-7t-C9z" customClass="EventsContainerViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="UOG-6y-CdD"/>
-                        <viewControllerLayoutGuide type="bottom" id="ITX-hW-zbi"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Yah-8P-k2n">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -929,11 +907,12 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="baq-Dy-a8s" firstAttribute="top" secondItem="UOG-6y-CdD" secondAttribute="bottom" id="Bah-R8-iRh"/>
-                            <constraint firstItem="baq-Dy-a8s" firstAttribute="leading" secondItem="Yah-8P-k2n" secondAttribute="leading" id="JeM-G3-I0Z"/>
-                            <constraint firstAttribute="trailing" secondItem="baq-Dy-a8s" secondAttribute="trailing" id="RME-Yd-W0u"/>
-                            <constraint firstItem="ITX-hW-zbi" firstAttribute="top" secondItem="baq-Dy-a8s" secondAttribute="bottom" id="c3L-3f-ADC"/>
+                            <constraint firstItem="baq-Dy-a8s" firstAttribute="top" secondItem="BOK-Yc-1z5" secondAttribute="top" id="Bah-R8-iRh"/>
+                            <constraint firstItem="baq-Dy-a8s" firstAttribute="leading" secondItem="BOK-Yc-1z5" secondAttribute="leading" id="JeM-G3-I0Z"/>
+                            <constraint firstItem="BOK-Yc-1z5" firstAttribute="trailing" secondItem="baq-Dy-a8s" secondAttribute="trailing" id="RME-Yd-W0u"/>
+                            <constraint firstItem="BOK-Yc-1z5" firstAttribute="bottom" secondItem="baq-Dy-a8s" secondAttribute="bottom" id="c3L-3f-ADC"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="BOK-Yc-1z5"/>
                     </view>
                     <navigationItem key="navigationItem" id="6wM-oZ-YWx">
                         <nil key="title"/>
@@ -1046,11 +1025,7 @@
         <scene sceneID="uVQ-WN-IJZ">
             <objects>
                 <viewController id="oyp-Ey-4v7" customClass="EventStatsViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="0ex-LI-Lac"/>
-                        <viewControllerLayoutGuide type="bottom" id="Mk1-rE-gsF"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="EDA-1b-nob">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="EDA-1b-nob">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -1061,10 +1036,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="JdN-Tm-Wtz" secondAttribute="bottom" id="DCO-5u-kC2"/>
-                            <constraint firstItem="JdN-Tm-Wtz" firstAttribute="leading" secondItem="EDA-1b-nob" secondAttribute="leading" id="Ovu-nU-hk2"/>
+                            <constraint firstItem="JdN-Tm-Wtz" firstAttribute="leading" secondItem="hKJ-aO-QYV" secondAttribute="leading" id="Ovu-nU-hk2"/>
                             <constraint firstItem="JdN-Tm-Wtz" firstAttribute="top" secondItem="EDA-1b-nob" secondAttribute="top" id="nQC-j4-fol"/>
-                            <constraint firstAttribute="trailing" secondItem="JdN-Tm-Wtz" secondAttribute="trailing" id="tDr-bs-Xt8"/>
+                            <constraint firstItem="hKJ-aO-QYV" firstAttribute="trailing" secondItem="JdN-Tm-Wtz" secondAttribute="trailing" id="tDr-bs-Xt8"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="hKJ-aO-QYV"/>
                     </view>
                     <connections>
                         <outlet property="scrollView" destination="JdN-Tm-Wtz" id="gAj-gN-hCR"/>
@@ -1078,11 +1054,7 @@
         <scene sceneID="tWj-SR-xgS">
             <objects>
                 <viewController hidesBottomBarWhenPushed="YES" id="i3E-mQ-cUN" customClass="EventAlliancesViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="7cJ-vI-vqt"/>
-                        <viewControllerLayoutGuide type="bottom" id="9aN-TR-q0t"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="XhF-rS-YfI">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="XhF-rS-YfI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -1095,11 +1067,12 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="hEp-ir-wHm" firstAttribute="top" secondItem="7cJ-vI-vqt" secondAttribute="bottom" id="Dan-dr-d6j"/>
-                            <constraint firstItem="hEp-ir-wHm" firstAttribute="leading" secondItem="XhF-rS-YfI" secondAttribute="leading" id="ZQ9-cV-PEu"/>
-                            <constraint firstAttribute="trailing" secondItem="hEp-ir-wHm" secondAttribute="trailing" id="mCb-LM-15i"/>
-                            <constraint firstItem="9aN-TR-q0t" firstAttribute="top" secondItem="hEp-ir-wHm" secondAttribute="bottom" id="uyy-1T-aiO"/>
+                            <constraint firstItem="hEp-ir-wHm" firstAttribute="top" secondItem="P4Y-Gh-9MA" secondAttribute="top" id="Dan-dr-d6j"/>
+                            <constraint firstItem="hEp-ir-wHm" firstAttribute="leading" secondItem="P4Y-Gh-9MA" secondAttribute="leading" id="ZQ9-cV-PEu"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="hEp-ir-wHm" secondAttribute="bottom" id="e0Y-2C-YiC"/>
+                            <constraint firstItem="P4Y-Gh-9MA" firstAttribute="trailing" secondItem="hEp-ir-wHm" secondAttribute="trailing" id="mCb-LM-15i"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="P4Y-Gh-9MA"/>
                     </view>
                     <navigationItem key="navigationItem" id="Ab2-XB-BJ1">
                         <nil key="title"/>
@@ -1169,7 +1142,7 @@
         <image name="ic_sort_white" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="trB-a5-4Ei"/>
+        <segue reference="mZl-Oj-qX6"/>
         <segue reference="oO5-aj-OQj"/>
     </inferredMetricsTieBreakers>
 </document>
