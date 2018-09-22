@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="u6V-K2-Air">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="u6V-K2-Air">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -30,10 +32,6 @@
         <scene sceneID="3XI-za-SVW">
             <objects>
                 <viewController id="tDg-RY-g1m" customClass="DistrictsContainerViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="UtB-cs-iUY"/>
-                        <viewControllerLayoutGuide type="bottom" id="yvO-RM-v95"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="cgc-aL-3ic">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -47,11 +45,12 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Eai-1W-hxz" firstAttribute="top" secondItem="UtB-cs-iUY" secondAttribute="bottom" id="4dP-eN-SPS"/>
-                            <constraint firstAttribute="trailing" secondItem="Eai-1W-hxz" secondAttribute="trailing" id="HUH-KR-1Ev"/>
-                            <constraint firstItem="Eai-1W-hxz" firstAttribute="leading" secondItem="cgc-aL-3ic" secondAttribute="leading" id="TQQ-Hd-Tzg"/>
-                            <constraint firstItem="yvO-RM-v95" firstAttribute="top" secondItem="Eai-1W-hxz" secondAttribute="bottom" id="iYY-nb-Jr9"/>
+                            <constraint firstItem="Eai-1W-hxz" firstAttribute="top" secondItem="2RL-Ns-C4s" secondAttribute="top" id="4dP-eN-SPS"/>
+                            <constraint firstItem="2RL-Ns-C4s" firstAttribute="trailing" secondItem="Eai-1W-hxz" secondAttribute="trailing" id="HUH-KR-1Ev"/>
+                            <constraint firstItem="Eai-1W-hxz" firstAttribute="leading" secondItem="2RL-Ns-C4s" secondAttribute="leading" id="TQQ-Hd-Tzg"/>
+                            <constraint firstItem="2RL-Ns-C4s" firstAttribute="bottom" secondItem="Eai-1W-hxz" secondAttribute="bottom" id="iYY-nb-Jr9"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="2RL-Ns-C4s"/>
                     </view>
                     <navigationItem key="navigationItem" id="d0e-VT-oMz">
                         <nil key="title"/>
@@ -156,11 +155,7 @@
         <scene sceneID="eU1-4M-quR">
             <objects>
                 <viewController hidesBottomBarWhenPushed="YES" id="Nch-Fk-SUm" customClass="DistrictViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Dyk-xy-Pg6"/>
-                        <viewControllerLayoutGuide type="bottom" id="wVa-eo-PoC"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="jQs-jk-tcp">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="jQs-jk-tcp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -188,13 +183,13 @@
                                 </constraints>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b0F-rX-fZp">
-                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <connections>
                                     <segue destination="nkq-y1-HHW" kind="embed" identifier="DistrictRankingsEmbed" id="rq2-Hx-SoT"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="skS-fS-apA">
-                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <connections>
                                     <segue destination="k5f-av-hFH" kind="embed" identifier="DistrictEventsEmbed" id="Fc4-vB-AMO"/>
                                 </connections>
@@ -202,20 +197,22 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="wVa-eo-PoC" firstAttribute="top" secondItem="b0F-rX-fZp" secondAttribute="bottom" id="3lb-CC-SeR"/>
-                            <constraint firstAttribute="trailing" secondItem="b0F-rX-fZp" secondAttribute="trailing" id="5K7-mh-e9e"/>
-                            <constraint firstItem="n6X-A7-Tem" firstAttribute="leading" secondItem="jQs-jk-tcp" secondAttribute="leading" id="FGh-PT-BK0"/>
-                            <constraint firstAttribute="trailing" secondItem="n6X-A7-Tem" secondAttribute="trailing" id="FUU-Cr-Gxr"/>
+                            <constraint firstItem="rNq-kv-J0s" firstAttribute="trailing" secondItem="b0F-rX-fZp" secondAttribute="trailing" id="5K7-mh-e9e"/>
+                            <constraint firstItem="n6X-A7-Tem" firstAttribute="leading" secondItem="rNq-kv-J0s" secondAttribute="leading" id="FGh-PT-BK0"/>
+                            <constraint firstItem="rNq-kv-J0s" firstAttribute="trailing" secondItem="n6X-A7-Tem" secondAttribute="trailing" id="FUU-Cr-Gxr"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="skS-fS-apA" secondAttribute="bottom" id="Ie4-hQ-pOH"/>
                             <constraint firstItem="skS-fS-apA" firstAttribute="top" secondItem="n6X-A7-Tem" secondAttribute="bottom" id="Iwe-tW-SY0"/>
-                            <constraint firstItem="n6X-A7-Tem" firstAttribute="top" secondItem="Dyk-xy-Pg6" secondAttribute="bottom" id="LIA-m9-FG2"/>
+                            <constraint firstItem="n6X-A7-Tem" firstAttribute="top" secondItem="rNq-kv-J0s" secondAttribute="top" id="LIA-m9-FG2"/>
                             <constraint firstItem="b0F-rX-fZp" firstAttribute="top" secondItem="n6X-A7-Tem" secondAttribute="bottom" id="N56-3C-mvY"/>
-                            <constraint firstItem="wVa-eo-PoC" firstAttribute="top" secondItem="skS-fS-apA" secondAttribute="bottom" id="T3O-iS-Dfi"/>
-                            <constraint firstItem="skS-fS-apA" firstAttribute="leading" secondItem="jQs-jk-tcp" secondAttribute="leading" id="Vdi-2f-ekr"/>
-                            <constraint firstItem="b0F-rX-fZp" firstAttribute="leading" secondItem="jQs-jk-tcp" secondAttribute="leading" id="lDI-3D-QMl"/>
-                            <constraint firstAttribute="trailing" secondItem="skS-fS-apA" secondAttribute="trailing" id="mdx-0h-RY4"/>
+                            <constraint firstItem="skS-fS-apA" firstAttribute="leading" secondItem="rNq-kv-J0s" secondAttribute="leading" id="Vdi-2f-ekr"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="b0F-rX-fZp" secondAttribute="bottom" id="ha5-FC-Ahc"/>
+                            <constraint firstItem="b0F-rX-fZp" firstAttribute="leading" secondItem="rNq-kv-J0s" secondAttribute="leading" id="lDI-3D-QMl"/>
+                            <constraint firstItem="rNq-kv-J0s" firstAttribute="trailing" secondItem="skS-fS-apA" secondAttribute="trailing" id="mdx-0h-RY4"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="rNq-kv-J0s"/>
                     </view>
                     <navigationItem key="navigationItem" id="zc9-zE-0GN"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="eventsView" destination="skS-fS-apA" id="dkx-U1-f03"/>
                         <outlet property="rankingsView" destination="b0F-rX-fZp" id="WC3-56-N6Q"/>
@@ -258,7 +255,7 @@
             <objects>
                 <tableViewController id="nkq-y1-HHW" customClass="DistrictRankingsTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="zQ6-fT-9Ff">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <connections>
@@ -275,11 +272,7 @@
         <scene sceneID="Ft2-kb-bcZ">
             <objects>
                 <viewController id="azs-wX-jbc" customClass="TeamAtDistrictViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Z0f-CY-fAt"/>
-                        <viewControllerLayoutGuide type="bottom" id="d4v-6p-wUC"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="5sg-8V-Qn2">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="5sg-8V-Qn2">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -307,13 +300,13 @@
                                 </constraints>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IBM-P8-GXJ">
-                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <connections>
                                     <segue destination="OQz-8Z-Alm" kind="embed" identifier="DistrictTeamSummaryEmbed" id="Mle-Ab-BSC"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WVg-fj-obT">
-                                <rect key="frame" x="0.0" y="108" width="375" height="510"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <connections>
                                     <segue destination="Zux-bS-7g3" kind="embed" identifier="DistrictBreakdownEmbed" id="NMJ-Wf-lVh"/>
                                 </connections>
@@ -322,17 +315,18 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="IBM-P8-GXJ" firstAttribute="top" secondItem="T1q-et-ijI" secondAttribute="bottom" id="2Gy-d5-4Ie"/>
-                            <constraint firstItem="WVg-fj-obT" firstAttribute="leading" secondItem="5sg-8V-Qn2" secondAttribute="leading" id="38u-fE-dgb"/>
-                            <constraint firstItem="T1q-et-ijI" firstAttribute="leading" secondItem="5sg-8V-Qn2" secondAttribute="leading" id="A9b-kZ-wts"/>
-                            <constraint firstItem="T1q-et-ijI" firstAttribute="top" secondItem="Z0f-CY-fAt" secondAttribute="bottom" id="Gvh-tt-Tf6"/>
-                            <constraint firstItem="d4v-6p-wUC" firstAttribute="top" secondItem="WVg-fj-obT" secondAttribute="bottom" id="HTm-rv-ulU"/>
-                            <constraint firstAttribute="trailing" secondItem="T1q-et-ijI" secondAttribute="trailing" id="N4M-mr-zAu"/>
-                            <constraint firstItem="d4v-6p-wUC" firstAttribute="top" secondItem="IBM-P8-GXJ" secondAttribute="bottom" id="cgI-qw-yj0"/>
-                            <constraint firstAttribute="trailing" secondItem="WVg-fj-obT" secondAttribute="trailing" id="mu3-2U-yAU"/>
+                            <constraint firstItem="WVg-fj-obT" firstAttribute="leading" secondItem="rBe-Pc-msO" secondAttribute="leading" id="38u-fE-dgb"/>
+                            <constraint firstItem="T1q-et-ijI" firstAttribute="leading" secondItem="rBe-Pc-msO" secondAttribute="leading" id="A9b-kZ-wts"/>
+                            <constraint firstItem="T1q-et-ijI" firstAttribute="top" secondItem="rBe-Pc-msO" secondAttribute="top" id="Gvh-tt-Tf6"/>
+                            <constraint firstItem="rBe-Pc-msO" firstAttribute="trailing" secondItem="T1q-et-ijI" secondAttribute="trailing" id="N4M-mr-zAu"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="WVg-fj-obT" secondAttribute="bottom" id="QJe-s0-HWH"/>
+                            <constraint firstItem="rBe-Pc-msO" firstAttribute="trailing" secondItem="WVg-fj-obT" secondAttribute="trailing" id="mu3-2U-yAU"/>
                             <constraint firstItem="WVg-fj-obT" firstAttribute="top" secondItem="T1q-et-ijI" secondAttribute="bottom" id="qCx-tL-wqI"/>
-                            <constraint firstItem="IBM-P8-GXJ" firstAttribute="leading" secondItem="5sg-8V-Qn2" secondAttribute="leading" id="uWT-Kc-fm5"/>
-                            <constraint firstAttribute="trailing" secondItem="IBM-P8-GXJ" secondAttribute="trailing" id="vno-8j-B0w"/>
+                            <constraint firstItem="IBM-P8-GXJ" firstAttribute="leading" secondItem="rBe-Pc-msO" secondAttribute="leading" id="uWT-Kc-fm5"/>
+                            <constraint firstItem="rBe-Pc-msO" firstAttribute="trailing" secondItem="IBM-P8-GXJ" secondAttribute="trailing" id="vno-8j-B0w"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="IBM-P8-GXJ" secondAttribute="bottom" id="yOw-17-eZx"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="rBe-Pc-msO"/>
                     </view>
                     <navigationItem key="navigationItem" id="kPO-iE-LsK">
                         <nil key="title"/>
@@ -341,16 +335,16 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="E0q-Q2-76l">
-                                    <rect key="frame" x="-0.5" y="-0.5" width="150.5" height="34"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="150" height="33"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="749" text="Team 2337" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ItF-dC-WHy">
-                                            <rect key="frame" x="32.5" y="0.0" width="86" height="20.5"/>
+                                            <rect key="frame" x="32" y="0.0" width="86" height="19.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="@ 2015 FiM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YSF-5D-TsJ">
-                                            <rect key="frame" x="44.5" y="20.5" width="61.5" height="13.5"/>
+                                            <rect key="frame" x="44.5" y="19.5" width="61.5" height="13.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -391,7 +385,7 @@
             <objects>
                 <tableViewController id="OQz-8Z-Alm" customClass="DistrictTeamSummaryTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="1TX-iE-vO1">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <connections>
@@ -409,7 +403,7 @@
             <objects>
                 <tableViewController id="Zux-bS-7g3" customClass="DistrictBreakdownTableViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="5v1-lg-ry9">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <connections>
