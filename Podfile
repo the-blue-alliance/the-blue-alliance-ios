@@ -1,4 +1,6 @@
-platform :ios, '11.0'
+platform :ios, '12.0'
+
+inhibit_all_warnings!
 
 target 'The Blue Alliance' do
   use_frameworks!
