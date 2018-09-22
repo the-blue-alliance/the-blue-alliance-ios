@@ -1,44 +1,37 @@
 import XCTest
 import Foundation
 import CoreData
-import The_Blue_Alliance
+@testable import The_Blue_Alliance
 
 class CoreDataTestCase: XCTestCase {
 
-    var managedObjectContext: NSManagedObjectContext!
+    var persistentContainer: NSPersistentContainer!
+
+    static let managedObjectModel: NSManagedObjectModel = {
+        return NSManagedObjectModel.mergedModel(from: [Bundle.main])!
+    } ()
 
     override func setUp() {
         super.setUp()
 
-        managedObjectContext = setUpInMemoryManagedObjectContext()
-    }
+        persistentContainer = NSPersistentContainer(name: "TBA", managedObjectModel: CoreDataTestCase.managedObjectModel)
 
-    override func tearDown() {
-        managedObjectContext = nil
+        let description = NSPersistentStoreDescription()
+        description.type = NSInMemoryStoreType
+        description.shouldAddStoreAsynchronously = false
+        description.configuration = "Default"
+        persistentContainer.persistentStoreDescriptions = [description]
 
-        super.tearDown()
-    }
+        let persistentContainerSetupExpectation = XCTestExpectation()
+        persistentContainer.loadPersistentStores(completionHandler: { (persistentStoreDescription, error) in
+            XCTAssertNotNil(persistentStoreDescription)
+            XCTAssertNil(error)
 
-    func setUpInMemoryManagedObjectContext() -> NSManagedObjectContext {
-        let managedObjectModel = NSManagedObjectModel.mergedModel(from: [.main])
+            self.persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
 
-        let persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel!)
-        try! persistentStoreCoordinator.addPersistentStore(ofType: NSInMemoryStoreType, configurationName: nil, at: nil, options: nil)
-
-        let managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        managedObjectContext.persistentStoreCoordinator = persistentStoreCoordinator
-
-        return managedObjectContext
-    }
-
-}
-
-extension Managed where Self: NSManagedObject {
-
-    public static func testInsert(in context: NSManagedObjectContext) -> Self {
-        // TODO: This isn't great, but entity() is crashing and saying it's uninitlized
-        let entityName = String(describing: Self.self)
-        return NSEntityDescription.insertNewObject(forEntityName: entityName, into: context) as! Self
+            persistentContainerSetupExpectation.fulfill()
+        })
+        wait(for: [persistentContainerSetupExpectation], timeout: 10.0)
     }
 
 }
