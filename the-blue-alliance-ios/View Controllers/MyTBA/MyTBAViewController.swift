@@ -139,28 +139,11 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     }
 
     private func removeMyTBAData() {
-        let favoritesFetchRequest: NSFetchRequest<Favorite> = Favorite.fetchRequest()
-        let deleteFavorites = NSBatchDeleteRequest(fetchRequest: favoritesFetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-        deleteFavorites.resultType = .resultTypeObjectIDs
-
-        let subscriptionsFetchRequest: NSFetchRequest<Subscription> = Subscription.fetchRequest()
-        let deleteSubscriptions = NSBatchDeleteRequest(fetchRequest: subscriptionsFetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-        deleteSubscriptions.resultType = .resultTypeObjectIDs
-
-        for (viewController, deleteRequest) in zip([favoritesViewController, subscriptionsViewController], [deleteFavorites, deleteSubscriptions]) {
-            let result = try! self.persistentContainer.persistentStoreCoordinator.execute(deleteRequest, with: persistentContainer.viewContext) as? NSBatchDeleteResult
-            let objectIDArray = result?.result as? [NSManagedObjectID] ?? []
-            let changes = [NSDeletedObjectsKey: objectIDArray]
-            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [persistentContainer.viewContext])
-
-            persistentContainer.viewContext.saveContext()
-
-            DispatchQueue.main.async {
-                viewController.tableView.reloadData()
-            }
-        }
+        persistentContainer.viewContext.deleteAllObjectsForEntity(entity: Favorite.entity())
+        persistentContainer.viewContext.deleteAllObjectsForEntity(entity: Subscription.entity())
 
         // Clear notifications
+        persistentContainer.viewContext.saveContext()
     }
 
     private func pushMyTBAObject(_ myTBAObject: MyTBAEntity) {

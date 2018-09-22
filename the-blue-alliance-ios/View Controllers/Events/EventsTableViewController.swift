@@ -244,7 +244,7 @@ extension EventsTableViewController: TableViewDataSourceDelegate {
         if isRefreshing {
             return
         }
-        showNoDataView(with: "Unable to load events")
+        showNoDataView(with: "No events (Pull to refresh)")
     }
 
     func hideNoDataView() {

@@ -205,6 +205,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarController.viewControllers = rootStoryboards.compactMap({ (storyboard) -> UIViewController? in
             return storyboard.instantiateInitialViewController()
         })
+
         tabBarController.viewControllers?.forEach({ (viewController) in
             guard let navigationController = viewController as? UINavigationController else {
                 fatalError("Root VC in controller should be a navigation controller")
@@ -214,6 +215,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             dataViewController.persistentContainer = self.persistentContainer
         })
+
+        // Moving to a world where storyboards don't exist
+        let rootViewControllers = [SettingsViewController(persistentContainer: self.persistentContainer,
+                                                          urlOpener: UIApplication.shared)]
+        for rootViewController in rootViewControllers {
+            let navigationController = UINavigationController(rootViewController: rootViewController)
+            tabBarController.viewControllers?.append(navigationController)
+        }
+
         splitViewController.viewControllers = [tabBarController, emptyNavigationController]
 
         splitViewController.preferredDisplayMode = .allVisible

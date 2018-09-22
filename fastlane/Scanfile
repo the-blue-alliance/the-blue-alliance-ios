@@ -1,6 +1,6 @@
 workspace("the-blue-alliance-ios.xcworkspace")
 scheme("The Blue Alliance")
-devices(["iPhone 8 Plus", "iPad Pro (12.9-inch)"])
+devices(["iPhone 8 Plus", "iPhone X", "iPad Pro (12.9-inch)"])
 disable_concurrent_testing(true)
 skip_build(true)
 skip_slack(true)

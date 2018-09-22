@@ -46,6 +46,10 @@ target 'The Blue Alliance' do
   target 'tba-unit-tests' do
     inherit! :search_paths
   end
+
+  target 'tba-ui-tests' do
+    inherit! :search_paths
+  end
 end
 
 post_install do | installer |
