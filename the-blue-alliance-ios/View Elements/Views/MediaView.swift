@@ -19,7 +19,7 @@ class MediaView: UIView {
     var imageDownloaded: ((UIImage) -> Void)?
 
     private var loadingActivityIndicator: UIActivityIndicatorView = {
-        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        let activityIndicator = UIActivityIndicatorView(style: .gray)
         activityIndicator.hidesWhenStopped = true
         return activityIndicator
     }()

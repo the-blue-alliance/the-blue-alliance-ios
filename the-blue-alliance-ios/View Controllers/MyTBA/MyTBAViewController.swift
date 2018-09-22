@@ -19,7 +19,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     @IBOutlet internal var signInView: UIView!
     @IBOutlet internal var signOutBarButtonItem: UIBarButtonItem!
     internal var signOutActivityIndicatorBarButtonItem: UIBarButtonItem = {
-        let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        let activityIndicatorView = UIActivityIndicatorView(style: .white)
         activityIndicatorView.startAnimating()
         return UIBarButtonItem(customView: activityIndicatorView)
     }()

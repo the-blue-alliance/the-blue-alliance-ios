@@ -352,7 +352,7 @@ class TeamSummaryTableViewController: TBATableViewController {
         if (rowType == .nextMatch && rowValue is String) || (rowType == .lastMatch && rowValue is String) {
             return 44.0
         }
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
 
 }

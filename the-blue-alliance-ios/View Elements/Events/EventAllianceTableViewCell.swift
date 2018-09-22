@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 class EventAllianceTableViewCell: UITableViewCell {
-    private let underlineAttribute = [NSAttributedStringKey.underlineStyle: NSUnderlineStyle.styleSingle.rawValue]
+    private let underlineAttribute = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue]
 
     static let reuseIdentifier = "EventAllianceCell"
     public var alliance: EventAlliance? {
