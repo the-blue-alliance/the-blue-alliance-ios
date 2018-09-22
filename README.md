@@ -11,7 +11,7 @@ Install Build Tool Dependencies
 The Blue Alliance for iOS has a few build tool dependencies. Here's how to install those, if you need them. The commands below suggest [Homebrew](https://brew.sh/) to install the dependencies. If you're on Windows or Linux, follow the links to find platform-specific setup instructions.
 
 1. Install [Xcode](https://developer.apple.com/xcode/)
-	* The Blue Alliance for iOS is written in Swift 4.1, which comes with Xcode 9.3+
+	* The Blue Alliance for iOS is written in Swift 4.2, which comes with Xcode 10
 2. Install [Ruby](https://www.ruby-lang.org/en/) (if it's not already installed on your system) and [Bundler](https://bundler.io/)
 	* `brew install ruby`
 	* `gem install bundler`

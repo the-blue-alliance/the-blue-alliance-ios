@@ -3,7 +3,7 @@
 # All available actions: https://docs.fastlane.tools/actions
 # can also be listed using the `fastlane actions` command
 
-# setup_travis
+setup_travis
 
 # If you want to automatically update fastlane if a new version is available:
 # update_fastlane
