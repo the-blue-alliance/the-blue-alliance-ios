@@ -18,6 +18,7 @@ platform :ios do
     test_ui
   end
 
+  desc "Run only the unit tests"
   lane :test_unit do
     # Run unit tests
     run_tests(
@@ -25,6 +26,7 @@ platform :ios do
     )
   end
 
+  desc "Run only the UI tests on 3 devices (square device, notch device, and iPad)"
   lane :test_ui do
     # Run UI tests
     run_tests(
