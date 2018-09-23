@@ -63,8 +63,8 @@ class EventViewController: ContainerViewController {
         } else if segue.identifier == "EventRankingsEmbed" {
            rankingsViewController = segue.destination as! EventRankingsTableViewController
             rankingsViewController.event = event
-            rankingsViewController.rankingSelected = { [weak self] team in
-                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
+            rankingsViewController.rankingSelected = { [weak self] eventRanking in
+                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: eventRanking.team)
             }
         } else if segue.identifier == "EventAlliancesSegue" {
             let eventAlliancesViewController = segue.destination as! EventAlliancesViewController
