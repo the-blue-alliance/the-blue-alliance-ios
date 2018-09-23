@@ -26,4 +26,24 @@ extension NSManagedObjectContext {
         }
     }
 
+    func deleteAllObjects() {
+        for entity in persistentStoreCoordinator?.managedObjectModel.entities ?? [] {
+            deleteAllObjectsForEntity(entity: entity)
+        }
+    }
+
+    func deleteAllObjectsForEntity(entity: NSEntityDescription) {
+        let fetchRequest = NSFetchRequest<NSManagedObject>()
+        fetchRequest.entity = entity
+
+        let objects = try! fetch(fetchRequest)
+        deleteObjects(objects)
+    }
+
+    private func deleteObjects(_ objects: [NSManagedObject]) {
+        for object in objects {
+            delete(object)
+        }
+    }
+
 }

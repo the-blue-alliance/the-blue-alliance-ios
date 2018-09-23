@@ -9,7 +9,7 @@ class EventTestCase: CoreDataTestCase {
     override func setUp() {
         super.setUp()
 
-        event = Event.testInsert(in: managedObjectContext)
+        event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
     }
 
     override func tearDown() {

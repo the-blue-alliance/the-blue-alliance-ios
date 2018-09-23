@@ -1,4 +1,6 @@
-platform :ios, '11.0'
+platform :ios, '11.4'
+
+inhibit_all_warnings!
 
 target 'The Blue Alliance' do
   use_frameworks!
@@ -44,6 +46,10 @@ target 'The Blue Alliance' do
   pod 'Crashlytics', '~> 3.10.1'
 
   target 'tba-unit-tests' do
+    inherit! :search_paths
+  end
+
+  target 'tba-ui-tests' do
     inherit! :search_paths
   end
 end
