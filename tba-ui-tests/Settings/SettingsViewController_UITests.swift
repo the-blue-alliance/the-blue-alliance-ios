@@ -44,18 +44,4 @@ class SettingsViewController_UITestCase: TBAUITestCase {
         XCTAssertFalse(deleteNetworkCacheAlert.exists)
     }
 
-    func test_deleteAppData() {
-        let tablesQuery = XCUIApplication().tables
-        let deleteAppDataStaticText = tablesQuery.cells.staticTexts["Delete app data"]
-        deleteAppDataStaticText.tap()
-
-        let deleteAppDataAlert = XCUIApplication().alerts["Delete App Data"]
-        deleteAppDataAlert.buttons["Cancel"].tap()
-        XCTAssertFalse(deleteAppDataAlert.exists)
-
-        deleteAppDataStaticText.tap()
-        deleteAppDataAlert.buttons["Delete"].tap()
-        XCTAssertFalse(deleteAppDataAlert.exists)
-    }
-
 }

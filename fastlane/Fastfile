@@ -31,7 +31,7 @@ platform :ios do
     # Run UI tests
     run_tests(
       scheme: "tba-ui-tests",
-      # devices: ["iPhone 8 Plus", "iPhone X", "iPad Pro (12.9-inch)"],
+      devices: ["iPhone 8 Plus", "iPhone X", "iPad Pro (12.9-inch)"],
     )
   end
 

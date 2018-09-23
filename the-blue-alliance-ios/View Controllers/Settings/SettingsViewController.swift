@@ -22,7 +22,6 @@ enum InfoRow: Int {
 
 enum DebugRow: Int {
     case deleteNetworkCache
-    case deleteAppData
     case max
 }
 
@@ -94,8 +93,6 @@ class SettingsViewController: UITableViewController, Persistable {
             switch indexPath.row {
             case DebugRow.deleteNetworkCache.rawValue:
                 titleString = "Delete network cache"
-            case DebugRow.deleteAppData.rawValue:
-                titleString = "Delete app data"
             default:
                 fatalError("This row does not exist")
             }
@@ -129,24 +126,12 @@ class SettingsViewController: UITableViewController, Persistable {
             case DebugRow.deleteNetworkCache.rawValue:
                 let alertController = UIAlertController(title: "Delete Network Cache", message: "Are you sure you want to delete all the network cache data?", preferredStyle: .alert)
 
-                let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] (deleteAction) in
-                    self?.deleteNetworkCache()
+                let deleteCacheAction = UIAlertAction(title: "Delete", style: .destructive) { [unowned self] (deleteAction) in
+                    self.deleteNetworkCache()
                 }
                 let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 
                 alertController.addAction(deleteCacheAction)
-                alertController.addAction(cancelAction)
-
-                self.present(alertController, animated: true, completion: nil)
-            case DebugRow.deleteAppData.rawValue:
-                let alertController = UIAlertController(title: "Delete App Data", message: "Are you sure you want to delete local app data?", preferredStyle: .alert)
-
-                let deleteDataAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] (deleteAction) in
-                    self?.deleteAppData()
-                }
-                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-
-                alertController.addAction(deleteDataAction)
                 alertController.addAction(cancelAction)
 
                 self.present(alertController, animated: true, completion: nil)
@@ -182,11 +167,6 @@ class SettingsViewController: UITableViewController, Persistable {
 
     internal func deleteNetworkCache() {
         TBAKit.clearLastModified()
-    }
-
-    internal func deleteAppData() {
-        persistentContainer.viewContext.deleteAllObjects()
-        persistentContainer.viewContext.saveContext()
     }
 
 }
