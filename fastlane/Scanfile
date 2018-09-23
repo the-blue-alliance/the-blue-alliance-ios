@@ -1,3 +1,4 @@
 workspace("the-blue-alliance-ios.xcworkspace")
+disable_concurrent_testing(true)
 skip_build(true)
 skip_slack(true)
