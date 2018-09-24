@@ -112,7 +112,7 @@ PODS:
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
   - Protobuf (3.5.0)
-  - PureLayout (3.0.2)
+  - PureLayout (3.1.2)
   - React/Core (0.57.1):
     - yoga (= 0.57.1.React)
   - React/CxxBridge (0.57.1):
@@ -242,13 +242,13 @@ SPEC CHECKSUMS:
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
-  PureLayout: 4d550abe49a94f24c2808b9b95db9131685fe4cd
+  PureLayout: 4634d0b61e3b5021166e8ec7c18e9e0ca0720c8b
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
   TBAKit: 43455b6f1defc5e5edd268e58ca94894ae3123e1
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
   ZIPFoundation: 68c35eb2637c21abe56dc60b3277636443bc1501
 
-PODFILE CHECKSUM: 804932a7854c0348a28331a2c63e0e0421c765ca
+PODFILE CHECKSUM: 60f4d6e6533e903ec40882749bf807102e3e0b4c
 
 COCOAPODS: 1.5.3

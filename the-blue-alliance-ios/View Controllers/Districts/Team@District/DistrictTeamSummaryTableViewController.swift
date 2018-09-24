@@ -5,15 +5,13 @@ import TBAKit
 
 class DistrictTeamSummaryTableViewController: TBATableViewController {
 
-    public var ranking: DistrictRanking!
-    private var sortedEventPoints: [DistrictEventPoints] {
-        return (ranking!.eventPoints?.sortedArray(using: [NSSortDescriptor(key: "event.startDate", ascending: true)]) as? [DistrictEventPoints]) ?? []
-    }
-    var eventPointsSelected: ((DistrictEventPoints) -> Void)?
+    let ranking: DistrictRanking
+    let eventPointsSelected: ((DistrictEventPoints) -> ())
+    private let sortedEventPoints: [DistrictEventPoints]
 
     // MARK: - Persistable
 
-    override var persistentContainer: NSPersistentContainer! {
+    override var persistentContainer: NSPersistentContainer {
         didSet {
             contextObserver.observeObject(object: ranking, state: .updated) { [weak self] (_, _) in
                 DispatchQueue.main.async {
@@ -29,6 +27,21 @@ class DistrictTeamSummaryTableViewController: TBATableViewController {
     lazy var contextObserver: CoreDataContextObserver<DistrictRanking> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
+
+    // MARK: Init
+
+    init(ranking: DistrictRanking, eventPointsSelected: @escaping ((DistrictEventPoints) -> ()), persistentContainer: NSPersistentContainer) {
+        self.ranking = ranking
+        self.eventPointsSelected = eventPointsSelected
+
+        sortedEventPoints = ranking.eventPoints?.sortedArray(using: [NSSortDescriptor(key: "event.startDate", ascending: true)]) as? [DistrictEventPoints] ?? []
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -50,7 +63,7 @@ class DistrictTeamSummaryTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundDistrict = backgroundContext.object(with: self.ranking.district!.objectID) as! District
 
                 let localRankings = rankings?.compactMap({ (modelRanking) -> DistrictRanking? in
@@ -107,7 +120,7 @@ class DistrictTeamSummaryTableViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        if isEventPointsRow(row: indexPath.row), let eventPointsSelected = eventPointsSelected {
+        if isEventPointsRow(row: indexPath.row) {
             eventPointsSelected(sortedEventPoints[indexPath.row - 1])
         }
     }

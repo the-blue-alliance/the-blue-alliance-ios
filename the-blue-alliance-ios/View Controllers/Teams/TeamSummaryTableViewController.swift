@@ -18,10 +18,11 @@ enum TeamSummaryRow: Int {
 
 class TeamSummaryTableViewController: TBATableViewController {
 
-    var team: Team!
-    var event: Event!
+    var team: Team
+    var event: Event
+
     var teamAwards: Set<Award> {
-        guard let team = team, let event = event, let awards = event.awards else {
+        guard let awards = event.awards else {
             return []
         }
         return awards.filtered(using: NSPredicate(format: "event == %@ AND (ANY recipients.team == %@)", event, team)) as? Set<Award> ?? []
@@ -43,16 +44,8 @@ class TeamSummaryTableViewController: TBATableViewController {
         }
     }
 
-    var awardsSelected: (() -> Void)?
-    var matchSelected: ((Match) -> Void)?
-
-    // MARK: - Persistable
-
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            eventStatus = EventStatus.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
-        }
-    }
+    var awardsSelected: (() -> ())?
+    var matchSelected: ((Match) -> ())?
 
     // MARK: - Observable
 
@@ -68,6 +61,21 @@ class TeamSummaryTableViewController: TBATableViewController {
     var backgroundFetchKeys: Set<String> = []
     var summaryRows: [TeamSummaryRow] = []
     var summaryValues: [Any] = []
+
+    init(team: Team, event: Event, awardsSelected: (() -> ())?, matchSelected: ((Match) -> ())?, persistentContainer: NSPersistentContainer) {
+        self.team = team
+        self.event = event
+        self.awardsSelected = awardsSelected
+        self.matchSelected = matchSelected
+
+        super.init(persistentContainer: persistentContainer)
+
+        eventStatus = EventStatus.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -104,7 +112,7 @@ class TeamSummaryTableViewController: TBATableViewController {
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/163
 
         // Record
-        if let record = eventStatus?.qual?.ranking?.record, let event = event, event.year != 2015 {
+        if let record = eventStatus?.qual?.ranking?.record, event.year != 2015 {
             summaryRows.append(TeamSummaryRow.record)
             summaryValues.append(record)
         }
@@ -141,7 +149,7 @@ class TeamSummaryTableViewController: TBATableViewController {
                     summaryValues.append(key)
                     if !backgroundFetchKeys.contains(key) {
                         backgroundFetchKeys.insert(key)
-                        self.persistentContainer?.performBackgroundTask({ [weak self] (backgroundContext) in
+                        self.persistentContainer.performBackgroundTask({ [weak self] (backgroundContext) in
                             TBABackgroundService.backgroundFetchMatch(key, in: backgroundContext) { [weak self] (_, _) in
                                 self?.backgroundFetchKeys.remove(key)
                                 self?.updateSummaryInfo()
@@ -169,7 +177,7 @@ class TeamSummaryTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
 
@@ -190,7 +198,7 @@ class TeamSummaryTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh event awards for \(self.team.key!) - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
 
                 let localAwards = awards?.map({ (modelAward) -> Award in

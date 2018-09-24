@@ -27,14 +27,14 @@ enum DebugRow: Int {
 
 class SettingsViewController: UITableViewController, Persistable {
 
-    var persistentContainer: NSPersistentContainer!
     var urlOpener: URLOpener
+    var persistentContainer: NSPersistentContainer
 
     // MARK: - Init
 
-    init(persistentContainer: NSPersistentContainer, urlOpener: URLOpener) {
-        self.persistentContainer = persistentContainer
+    init(urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
         self.urlOpener = urlOpener
+        self.persistentContainer = persistentContainer
 
         super.init(style: .grouped)
 

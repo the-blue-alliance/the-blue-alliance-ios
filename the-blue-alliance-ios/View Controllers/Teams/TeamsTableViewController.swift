@@ -4,14 +4,21 @@ import CoreData
 
 class TeamsTableViewController: TBATableViewController {
 
-    var event: Event?
-    var teamSelected: ((Team) -> Void)?
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            updateDataSource()
-        }
-    }
+    let event: Event?
+    let teamSelected: ((Team) -> ())
+
     let searchController = UISearchController(searchResultsController: nil)
+
+    init(teamSelected: @escaping ((Team) -> ()), event: Event? = nil, persistentContainer: NSPersistentContainer) {
+        self.teamSelected = teamSelected
+        self.event = event
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -28,6 +35,8 @@ class TeamsTableViewController: TBATableViewController {
         definesPresentationContext = true
 
         tableView.register(UINib(nibName: String(describing: TeamTableViewCell.self), bundle: nil), forCellReuseIdentifier: TeamTableViewCell.reuseIdentifier)
+
+        updateDataSource()
     }
 
     // MARK: - Refreshing
@@ -57,7 +66,7 @@ class TeamsTableViewController: TBATableViewController {
             let previousRequest = request
             request = task
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 teams.forEach({ (modelTeam) in
                     Team.insert(with: modelTeam, in: backgroundContext)
                 })
@@ -86,7 +95,7 @@ class TeamsTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to teams events - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: event.objectID) as! Event
                 let localTeams = teams?.map({ (modelTeam) -> Team in
                     return Team.insert(with: modelTeam, in: backgroundContext)
@@ -104,7 +113,7 @@ class TeamsTableViewController: TBATableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let team = dataSource?.object(at: indexPath)
-        if let team = team, let teamSelected = teamSelected {
+        if let team = team {
             teamSelected(team)
         }
     }

@@ -13,8 +13,9 @@ public enum EventTeamStatFilter: Int {
 
 class EventTeamStatsTableViewController: TBATableViewController {
 
-    var event: Event!
-    public var filter: EventTeamStatFilter {
+    let event: Event
+    let teamSelected: ((Team) -> ())
+    var filter: EventTeamStatFilter {
         didSet {
             UserDefaults.standard.set(filter.rawValue, forKey: "EventTeamStatFilter")
             UserDefaults.standard.synchronize()
@@ -22,25 +23,31 @@ class EventTeamStatsTableViewController: TBATableViewController {
             updateDataSource()
         }
     }
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            updateDataSource()
-        }
-    }
-    var teamSelected: ((Team) -> Void)?
 
-    // MARK: - View Lifecycle
+    // MARK: - Init
 
-    required init?(coder aDecoder: NSCoder) {
+    init(event: Event, teamSelected: @escaping ((Team) -> ()), persistentContainer: NSPersistentContainer) {
+        self.event = event
+        self.teamSelected = teamSelected
+
+        // TODO: Pass a UserDefaults probably
         filter = EventTeamStatFilter(rawValue: UserDefaults.standard.integer(forKey: "EventTeamStatFilter"))!
 
-        super.init(coder: aDecoder)
+        super.init(persistentContainer: persistentContainer)
     }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
+
+        updateDataSource()
     }
 
     // MARK: - Refreshing
@@ -54,7 +61,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh event team stats - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
 
                 let localStats = stats?.map({ (modelStat) -> EventTeamStat in
@@ -80,7 +87,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let eventTeamStats = dataSource?.object(at: indexPath)
-        if let team = eventTeamStats?.team, let teamSelected = teamSelected {
+        if let team = eventTeamStats?.team {
             teamSelected(team)
         }
     }
@@ -90,10 +97,6 @@ class EventTeamStatsTableViewController: TBATableViewController {
     fileprivate var dataSource: TableViewDataSource<EventTeamStat, EventTeamStatsTableViewController>?
 
     fileprivate func setupDataSource() {
-        guard let persistentContainer = persistentContainer else {
-            return
-        }
-
         let fetchRequest: NSFetchRequest<EventTeamStat> = EventTeamStat.fetchRequest()
 
         setupFetchRequest(fetchRequest)

@@ -24,12 +24,6 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         return UIBarButtonItem(customView: activityIndicatorView)
     }()
 
-    internal var favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>
-    internal var favoritesView: UIView
-
-    internal var subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>
-    internal var subscriptionsView: UIView
-
     private var isLoggingOut: Bool = false {
         didSet {
             DispatchQueue.main.async {
@@ -41,23 +35,25 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         return MyTBA.shared.isAuthenticated
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>()
-        favoritesView = favoritesViewController.view
+    init(persistentContainer: NSPersistentContainer) {
+        super.init(segmentedControlTitles: ["Favorites", "Subscriptions"],
+                   persistentContainer: persistentContainer)
 
-        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>()
-        subscriptionsView = subscriptionsViewController.view
+        let favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBAObjectSelected: { [unowned self] (myTBAObj) in
+            self.pushMyTBAObject(myTBAObj)
+            }, persistentContainer: persistentContainer)
 
-        super.init(coder: aDecoder)
+        let subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(myTBAObjectSelected: { [unowned self] (myTBAObj) in
+            self.pushMyTBAObject(myTBAObj)
+            }, persistentContainer: persistentContainer)
 
-        favoritesViewController.myTBAObjectSelected = { [weak self] (myTBAObj) in
-            self?.pushMyTBAObject(myTBAObj)
-        }
-        subscriptionsViewController.myTBAObjectSelected = { [weak self] (myTBAObj) in
-            self?.pushMyTBAObject(myTBAObj)
-        }
+        viewControllers = [favoritesViewController, subscriptionsViewController]
     }
-
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
@@ -66,9 +62,6 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         // TODO: Fix the white status bar/white UINavigationController during sign in
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/180
         // modalPresentationCapturesStatusBarAppearance = true
-
-        viewControllers = [favoritesViewController, subscriptionsViewController]
-        containerViews = [favoritesView, subscriptionsView]
 
         GIDSignIn.sharedInstance().uiDelegate = self
         MyTBA.shared.authenticationProvider.add(observer: self)
@@ -79,13 +72,6 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     // MARK: - Private Methods
 
     private func styleInterface() {
-        for dataView in [favoritesView, subscriptionsView] {
-            view.insertSubview(dataView, belowSubview: signInView)
-            dataView.autoPinEdge(toSuperviewEdge: .leading)
-            dataView.autoPinEdge(toSuperviewEdge: .trailing)
-            dataView.autoPin(toBottomLayoutGuideOf: self, withInset: 0)
-            dataView.autoPinEdge(.top, to: .bottom, of: segmentedControlView!)
-        }
         signInView.isHidden = isLoggedIn
 
         updateInterface()
@@ -130,7 +116,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         try! Auth.auth().signOut()
 
         // Cancel any ongoing requests
-        for vc in [favoritesViewController, subscriptionsViewController] {
+        for vc in viewControllers {
             vc.cancelRefresh()
         }
 
@@ -174,6 +160,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
     // MARK: - Navigation
 
+    /*
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let key = sender as? String ?? ""
         let predicate = NSPredicate(format: "key == %@", key)
@@ -202,12 +189,14 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
             // TODO: Handle passing a key
         }
     }
+    */
+
 }
 
 extension MyTBAViewController: MyTBAAuthenticationObservable {
 
     func authenticated() {
-        if let segmentedControl = segmentedControl, segmentedControl.selectedSegmentIndex < viewControllers.count {
+        if segmentedControl.selectedSegmentIndex < viewControllers.count {
             viewControllers[segmentedControl.selectedSegmentIndex].refresh()
         }
 
@@ -219,8 +208,8 @@ extension MyTBAViewController: MyTBAAuthenticationObservable {
     }
 
     func updateInterfaceMain() {
-        DispatchQueue.main.async { [weak self] in
-            self?.updateInterface()
+        DispatchQueue.main.async { [unowned self] in
+            self.updateInterface()
         }
     }
 

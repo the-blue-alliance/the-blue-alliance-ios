@@ -5,15 +5,28 @@ import CoreData
 
 class MatchesTableViewController: TBATableViewController {
 
-    var event: Event!
+    var event: Event
     var team: Team?
 
-    override var persistentContainer: NSPersistentContainer! {
+    var matchSelected: ((Match) -> ())
+
+    override var persistentContainer: NSPersistentContainer {
         didSet {
             updateDataSource()
         }
     }
-    var matchSelected: ((Match) -> Void)?
+
+    init(event: Event, team: Team? = nil, matchSelected: @escaping ((Match) -> ()), persistentContainer: NSPersistentContainer) {
+        self.event = event
+        self.team = team
+        self.matchSelected = matchSelected
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -34,7 +47,7 @@ class MatchesTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh event matches - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
 
                 let localMatches = matches?.map({ (modelMatch) -> Match in
@@ -61,10 +74,6 @@ class MatchesTableViewController: TBATableViewController {
     fileprivate var dataSource: TableViewDataSource<Match, MatchesTableViewController>?
 
     fileprivate func setupDataSource() {
-        guard let persistentContainer = persistentContainer else {
-            return
-        }
-
         let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "compLevelInt", ascending: true),
@@ -98,7 +107,7 @@ class MatchesTableViewController: TBATableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let match = dataSource?.object(at: indexPath)
-        if let match = match, let matchSelected = matchSelected {
+        if let match = match {
             matchSelected(match)
         }
     }

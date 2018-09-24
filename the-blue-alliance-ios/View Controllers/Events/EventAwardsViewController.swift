@@ -4,47 +4,41 @@ import TBAKit
 
 class EventAwardsViewController: ContainerViewController {
 
-    public var event: Event!
-    public var team: Team?
+    let event: Event
+    let team: Team?
 
-    internal var awardsViewController: EventAwardsTableViewController!
-    @IBOutlet internal var awardsView: UIView!
+    init(event: Event, team: Team?, persistentContainer: NSPersistentContainer) {
+        self.event = event
+        self.team = team
+
+        super.init(persistentContainer: persistentContainer)
+
+        // TODO: Think about... making these factories. These inline blocks blow
+        let awardsViewController = EventAwardsTableViewController(event: event, team: team, teamSelected: { (selectedTeam) in
+            if team == selectedTeam {
+                return
+            }
+            let teamAtEventViewController = TeamAtEventViewController(team: selectedTeam,
+                                                                      event: self.event,
+                                                                      persistentContainer: persistentContainer)
+            self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
+        }, persistentContainer: persistentContainer)
+
+        viewControllers = [awardsViewController]
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationTitleLabel?.text = "Awards"
+        navigationTitleLabel.text = "Awards"
         if let team = team {
-            navigationDetailLabel?.text = "Team \(team.teamNumber) @ \(event.friendlyNameWithYear)"
+            navigationDetailLabel.text = "Team \(team.teamNumber) @ \(event.friendlyNameWithYear)"
         } else {
-            navigationDetailLabel?.text = "@ \(event.friendlyNameWithYear)"
-        }
-
-        viewControllers = [awardsViewController]
-        containerViews = [awardsView]
-    }
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "EventAwardsEmbed" {
-            awardsViewController = segue.destination as! EventAwardsTableViewController
-            awardsViewController.event = event
-            awardsViewController.team = team
-            awardsViewController.persistentContainer = persistentContainer
-            awardsViewController.teamSelected = { [weak self] team in
-                // Don't push to team@event for team we're already showing team@event for
-                guard let localTeam = self?.team, team != localTeam else {
-                    return
-                }
-                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
-            }
-        } else if segue.identifier == "TeamAtEventSegue" {
-            let team = sender as! Team
-            let teamAtEventViewController = segue.destination as! TeamAtEventViewController
-            teamAtEventViewController.team = team
-            teamAtEventViewController.event = event
-            teamAtEventViewController.persistentContainer = persistentContainer
+            navigationDetailLabel.text = "@ \(event.friendlyNameWithYear)"
         }
     }
 
@@ -52,17 +46,29 @@ class EventAwardsViewController: ContainerViewController {
 
 class EventAwardsTableViewController: TBATableViewController {
 
-    var event: Event!
-    var team: Team?
+    let event: Event
+    let team: Team?
+    let teamSelected: ((Team) -> ())?
 
-    override var persistentContainer: NSPersistentContainer! {
+    override var persistentContainer: NSPersistentContainer {
         didSet {
             updateDataSource()
         }
     }
-    var teamSelected: ((Team) -> Void)?
 
     // MARK: - View Lifecycle
+
+    init(event: Event, team: Team? = nil, teamSelected: ((Team) -> ())? = nil, persistentContainer: NSPersistentContainer) {
+        self.event = event
+        self.team = team
+        self.teamSelected = teamSelected
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +87,7 @@ class EventAwardsTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh event awards - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
 
                 let localAwards = awards?.map({ (modelAward) -> Award in
@@ -108,10 +114,6 @@ class EventAwardsTableViewController: TBATableViewController {
     fileprivate var dataSource: TableViewDataSource<Award, EventAwardsTableViewController>?
 
     fileprivate func setupDataSource() {
-        guard let persistentContainer = persistentContainer else {
-            return
-        }
-
         let fetchRequest: NSFetchRequest<Award> = Award.fetchRequest()
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "awardType", ascending: true)]

@@ -5,13 +5,21 @@ import CoreData
 
 class EventRankingsTableViewController: TBATableViewController {
 
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            updateDataSource()
-        }
+    let event: Event
+    let rankingSelected: ((EventRanking) -> ())
+
+    // MARK: - Init
+
+    init(event: Event, rankingSelected: @escaping ((EventRanking) -> ()), persistentContainer: NSPersistentContainer) {
+        self.event = event
+        self.rankingSelected = rankingSelected
+
+        super.init(persistentContainer: persistentContainer)
     }
-    var event: Event!
-    var rankingSelected: ((EventRanking) -> Void)?
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -19,6 +27,8 @@ class EventRankingsTableViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
+
+        updateDataSource()
     }
 
     // MARK: - Refreshing
@@ -32,7 +42,7 @@ class EventRankingsTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh event rankings - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
 
                 let localRankings = rankings?.compactMap({ (modelRanking) -> EventRanking? in
@@ -60,7 +70,7 @@ class EventRankingsTableViewController: TBATableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let ranking = dataSource?.object(at: indexPath)
-        if let ranking = ranking, let rankingSelected = rankingSelected {
+        if let ranking = ranking {
             rankingSelected(ranking)
         }
     }
@@ -70,10 +80,6 @@ class EventRankingsTableViewController: TBATableViewController {
     fileprivate var dataSource: TableViewDataSource<EventRanking, EventRankingsTableViewController>?
 
     fileprivate func setupDataSource() {
-        guard let persistentContainer = persistentContainer else {
-            return
-        }
-
         let fetchRequest: NSFetchRequest<EventRanking> = EventRanking.fetchRequest()
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]

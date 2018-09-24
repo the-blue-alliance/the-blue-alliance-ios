@@ -5,13 +5,21 @@ import CoreData
 
 class DistrictRankingsTableViewController: TBATableViewController {
 
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            updateDataSource()
-        }
+    let district: District
+    let rankingSelected: ((DistrictRanking) -> ())
+
+    // MARK: - Init
+
+    init(district: District, rankingSelected: @escaping ((DistrictRanking) -> ()), persistentContainer: NSPersistentContainer) {
+        self.district = district
+        self.rankingSelected = rankingSelected
+
+        super.init(persistentContainer: persistentContainer)
     }
-    var district: District!
-    var rankingSelected: ((DistrictRanking) -> Void)?
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -19,6 +27,8 @@ class DistrictRankingsTableViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
+
+        updateDataSource()
     }
 
     // MARK: - Refreshing
@@ -71,7 +81,7 @@ class DistrictRankingsTableViewController: TBATableViewController {
                 return
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 backgroundContext.performAndWait {
                     events?.forEach({ (modelEvent) in
                         Event.insert(with: modelEvent, in: backgroundContext)
@@ -91,7 +101,7 @@ class DistrictRankingsTableViewController: TBATableViewController {
                 return
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 backgroundContext.performAndWait {
                     teams?.forEach({ (modelTeam) in
                         Team.insert(with: modelTeam, in: backgroundContext)
@@ -111,7 +121,7 @@ class DistrictRankingsTableViewController: TBATableViewController {
                 return
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundDistrict = backgroundContext.object(with: self.district.objectID) as! District
 
                 let localRankings = rankings?.compactMap({ (modelRanking) -> DistrictRanking? in
@@ -137,7 +147,7 @@ class DistrictRankingsTableViewController: TBATableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let ranking = dataSource?.object(at: indexPath)
-        if let ranking = ranking, let rankingSelected = rankingSelected {
+        if let ranking = ranking {
             rankingSelected(ranking)
         }
     }
@@ -147,10 +157,6 @@ class DistrictRankingsTableViewController: TBATableViewController {
     fileprivate var dataSource: TableViewDataSource<DistrictRanking, DistrictRankingsTableViewController>?
 
     fileprivate func setupDataSource() {
-        guard let persistentContainer = persistentContainer else {
-            return
-        }
-
         let fetchRequest: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]

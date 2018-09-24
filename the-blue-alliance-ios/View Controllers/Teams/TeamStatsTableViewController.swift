@@ -5,8 +5,8 @@ import TBAKit
 
 class TeamStatsTableViewController: TBATableViewController, Observable {
 
-    var event: Event!
-    var team: Team!
+    let event: Event
+    let team: Team
 
     private var teamStat: EventTeamStat? {
         didSet {
@@ -26,7 +26,7 @@ class TeamStatsTableViewController: TBATableViewController, Observable {
 
     // MARK: - Persistable
 
-    override var persistentContainer: NSPersistentContainer! {
+    override var persistentContainer: NSPersistentContainer {
         didSet {
             teamStat = EventTeamStat.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
         }
@@ -42,6 +42,19 @@ class TeamStatsTableViewController: TBATableViewController, Observable {
     lazy var contextObserver: CoreDataContextObserver<EventTeamStat> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
+
+    // MARK: - Init
+
+    init(persistentContainer: NSPersistentContainer, team: Team, event: Event) {
+        self.team = team
+        self.event = event
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -62,7 +75,7 @@ class TeamStatsTableViewController: TBATableViewController, Observable {
                 self.showErrorAlert(with: "Unable to refresh team stats - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 let localStats = stats?.map({ (modelStat) -> EventTeamStat in
                     return EventTeamStat.insert(with: modelStat, for: backgroundEvent, in: backgroundContext)

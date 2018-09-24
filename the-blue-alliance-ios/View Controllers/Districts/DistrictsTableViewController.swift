@@ -5,20 +5,34 @@ import TBAKit
 
 class DistrictsTableViewController: TBATableViewController {
 
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            updateDataSource()
-        }
-    }
-
-    internal var year: Int! {
+    var year: Int {
         didSet {
             cancelRefresh()
             updateDataSource()
         }
     }
+    let districtSelected: ((District) -> ())
 
-    var districtSelected: ((District) -> Void)?
+    // MARK: - Init
+
+    init(year: Int, districtSelected: @escaping ((District) -> ()), persistentContainer: NSPersistentContainer) {
+        self.year = year
+        self.districtSelected = districtSelected
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        updateDataSource()
+    }
 
     // MARK: - Refreshing
 
@@ -31,7 +45,7 @@ class DistrictsTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh districts - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 districts?.forEach({ (modelDistrict) in
                     District.insert(with: modelDistrict, in: backgroundContext)
                 })
@@ -54,7 +68,7 @@ class DistrictsTableViewController: TBATableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let district = dataSource?.object(at: indexPath)
-        if let district = district, let districtSelected = districtSelected {
+        if let district = district {
             districtSelected(district)
         }
     }
@@ -64,10 +78,6 @@ class DistrictsTableViewController: TBATableViewController {
     fileprivate var dataSource: TableViewDataSource<District, DistrictsTableViewController>?
 
     fileprivate func setupDataSource() {
-        guard let persistentContainer = persistentContainer else {
-            return
-        }
-
         let fetchRequest: NSFetchRequest<District> = District.fetchRequest()
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
@@ -88,9 +98,6 @@ class DistrictsTableViewController: TBATableViewController {
     }
 
     fileprivate func setupFetchRequest(_ request: NSFetchRequest<District>) {
-        guard let year = year else {
-            return
-        }
         request.predicate = NSPredicate(format: "year == %ld", year)
     }
 

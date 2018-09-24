@@ -6,10 +6,10 @@ import CoreData
 
 class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
 
-    public var match: Match!
+    let match: Match
 
     // MARK: - React Native
-
+    
     lazy internal var reactBridge: RCTBridge = {
         return RCTBridge(delegate: self, launchOptions: [:])
     }()
@@ -17,7 +17,7 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
 
     // MARK: - Persistable
 
-    override var persistentContainer: NSPersistentContainer! {
+    override var persistentContainer: NSPersistentContainer {
         didSet {
             contextObserver.observeObject(object: match, state: .updated) { [weak self] (_, _) in
                 DispatchQueue.main.async {
@@ -33,6 +33,20 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
     lazy var contextObserver: CoreDataContextObserver<Match> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
+
+    // MARK: - Init
+
+    init(match: Match, persistentContainer: NSPersistentContainer) {
+        self.match = match
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -143,7 +157,7 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
                 self.showErrorAlert(with: "Unable to refresh match breakdown - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.match.event!.objectID) as! Event
 
                 if let modelMatch = modelMatch {

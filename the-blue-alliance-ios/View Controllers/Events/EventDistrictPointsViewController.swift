@@ -3,51 +3,59 @@ import CoreData
 import TBAKit
 
 class EventDistrictPointsViewController: ContainerViewController {
-    public var event: Event!
+
+    var event: Event
 
     internal var districtPointsViewController: EventDistrictPointsTableViewController!
     @IBOutlet internal var districtPointsView: UIView!
 
+    init(event: Event, persistentContainer: NSPersistentContainer) {
+        self.event = event
+
+        super.init(persistentContainer: persistentContainer)
+
+        let districtPointsTableViewController = EventDistrictPointsTableViewController(event: event, teamSelected: { [unowned self] (team) in
+            let teamAtEventViewController = TeamAtEventViewController(team: team, event: self.event, persistentContainer: persistentContainer)
+            self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
+            }, persistentContainer: persistentContainer)
+
+        viewControllers = [districtPointsTableViewController]
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationTitleLabel?.text = "District Points"
-        navigationDetailLabel?.text = "@ \(event.friendlyNameWithYear)"
-
-        viewControllers = [districtPointsViewController]
-        containerViews = [districtPointsView]
+        navigationTitleLabel.text = "District Points"
+        navigationDetailLabel.text = "@ \(event.friendlyNameWithYear)"
     }
 
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "EventPointsEmbed" {
-            districtPointsViewController = segue.destination as! EventDistrictPointsTableViewController
-            districtPointsViewController.event = event
-            districtPointsViewController.persistentContainer = persistentContainer
-            districtPointsViewController.teamSelected = { [weak self] team in
-                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
-            }
-        } else if segue.identifier == "TeamAtEventSegue" {
-            let team = sender as! Team
-            let teamAtEventViewController = segue.destination as! TeamAtEventViewController
-            teamAtEventViewController.team = team
-            teamAtEventViewController.event = event
-            teamAtEventViewController.persistentContainer = persistentContainer
-        }
-    }
 }
 
 class EventDistrictPointsTableViewController: TBATableViewController {
 
-    var event: Event!
+    let event: Event
+    let teamSelected: ((Team) -> Void)
 
-    override var persistentContainer: NSPersistentContainer! {
+    override var persistentContainer: NSPersistentContainer {
         didSet {
             updateDataSource()
         }
     }
-    var teamSelected: ((Team) -> Void)?
+
+    init(event: Event, teamSelected: @escaping ((Team) -> Void), persistentContainer: NSPersistentContainer) {
+        self.event = event
+        self.teamSelected = teamSelected
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -68,7 +76,7 @@ class EventDistrictPointsTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh event district points - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
 
                 let localPoints = eventPoints?.map({ (modelPoints) -> DistrictEventPoints in
@@ -94,7 +102,7 @@ class EventDistrictPointsTableViewController: TBATableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let eventPoints = dataSource?.object(at: indexPath)
-        if let team = eventPoints?.team, let teamSelected = teamSelected {
+        if let team = eventPoints?.team {
             teamSelected(team)
         }
     }
@@ -104,10 +112,6 @@ class EventDistrictPointsTableViewController: TBATableViewController {
     fileprivate var dataSource: TableViewDataSource<DistrictEventPoints, EventDistrictPointsTableViewController>?
 
     fileprivate func setupDataSource() {
-        guard let persistentContainer = persistentContainer else {
-            return
-        }
-
         let fetchRequest: NSFetchRequest<DistrictEventPoints> = DistrictEventPoints.fetchRequest()
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "total", ascending: false)]

@@ -24,8 +24,18 @@ enum TeamLinkRow: Int {
 
 class TeamInfoTableViewController: TBATableViewController {
 
-    var team: Team!
+    var team: Team
     var sponsorsExpanded: Bool = false
+
+    init(team: Team, persistentContainer: NSPersistentContainer) {
+        self.team = team
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +55,7 @@ class TeamInfoTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh team - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 if let modelTeam = modelTeam {
                     Team.insert(with: modelTeam, in: backgroundContext)
                 }

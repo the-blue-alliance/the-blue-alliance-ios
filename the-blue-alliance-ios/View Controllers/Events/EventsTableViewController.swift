@@ -4,29 +4,50 @@ import CoreData
 
 class EventsTableViewController: TBATableViewController {
 
-    var team: Team?
-    var district: District?
-
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            updateDataSource()
-        }
-    }
-    // The selected Event from the weekEvents array to represent the Week to show
-    // We need a full object as opposed to a number because of CMP, off-season, etc.
-    internal var weekEvent: Event? {
-        didSet {
-            updateDataSource()
-        }
-    }
-    internal var year: Int? {
+    let team: Team?
+    let district: District?
+    var year: Int? {
         didSet {
             cancelRefresh()
             updateDataSource()
         }
     }
+    let eventSelected: ((Event) -> ())
 
-    var eventSelected: ((Event) -> Void)?
+    // The selected Event from the weekEvents array to represent the Week to show
+    // We need a full object as opposed to a number because of CMP, off-season, etc.
+    var weekEvent: Event? {
+        didSet {
+            updateDataSource()
+        }
+    }
+
+    // MARK: Init
+
+    convenience init(year: Int, eventSelected: @escaping ((Event) -> ()), persistentContainer: NSPersistentContainer) {
+        self.init(year: year, team: nil, district: nil, eventSelected: eventSelected, persistentContainer: persistentContainer)
+    }
+
+    convenience init(team: Team, eventSelected: @escaping ((Event) -> ()), persistentContainer: NSPersistentContainer) {
+        self.init(year: nil, team: team, district: nil, eventSelected: eventSelected, persistentContainer: persistentContainer)
+    }
+
+    convenience init(district: District, eventSelected: @escaping ((Event) -> ()), persistentContainer: NSPersistentContainer) {
+        self.init(year: nil, team: nil, district: district, eventSelected: eventSelected, persistentContainer: persistentContainer)
+    }
+
+    private init(year: Int?, team: Team?, district: District?, eventSelected: @escaping ((Event) -> ()), persistentContainer: NSPersistentContainer) {
+        self.year = year
+        self.team = team
+        self.district = district
+        self.eventSelected = eventSelected
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -34,6 +55,8 @@ class EventsTableViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.register(UINib(nibName: String(describing: EventTableViewCell.self), bundle: nil), forCellReuseIdentifier: EventTableViewCell.reuseIdentifier)
+
+        updateDataSource()
     }
 
     // MARK: - Refreshing
@@ -68,7 +91,7 @@ class EventsTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 events?.forEach({ (modelEvent) in
                     Event.insert(with: modelEvent, in: backgroundContext)
                 })
@@ -91,7 +114,7 @@ class EventsTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: team.objectID) as! Team
                 let localEvents = events?.map({ (modelEvent) -> Event in
                     return Event.insert(with: modelEvent, in: backgroundContext)
@@ -116,7 +139,7 @@ class EventsTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundDistrict = backgroundContext.object(with: district.objectID) as! District
                 let localEvents = events?.map({ (modelEvent) -> Event in
                     return Event.insert(with: modelEvent, in: backgroundContext)
@@ -134,7 +157,7 @@ class EventsTableViewController: TBATableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let event = dataSource?.object(at: indexPath)
-        if let event = event, let eventSelected = eventSelected {
+        if let event = event {
             eventSelected(event)
         }
     }
@@ -144,10 +167,6 @@ class EventsTableViewController: TBATableViewController {
     fileprivate var dataSource: TableViewDataSource<Event, EventsTableViewController>?
 
     fileprivate func setupDataSource() {
-        guard let persistentContainer = persistentContainer else {
-            return
-        }
-
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
 
         var firstSortDescriptor = NSSortDescriptor(key: "hybridType", ascending: true)

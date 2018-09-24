@@ -9,13 +9,20 @@ import UIKit
  */
 class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TBATableViewController, NSFetchedResultsControllerDelegate {
 
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            setupFetchedResultsController()
-        }
+    let myTBAObjectSelected: ((T) -> ())
+    private var backgroundFetchKeys: Set<String> = []
+
+    // MARK: - Init
+
+    init(myTBAObjectSelected: @escaping ((T) -> ()), persistentContainer: NSPersistentContainer) {
+        self.myTBAObjectSelected = myTBAObjectSelected
+
+        super.init(persistentContainer: persistentContainer)
     }
-    var backgroundFetchKeys: Set<String> = []
-    var myTBAObjectSelected: ((T) -> Void)?
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -30,6 +37,8 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                            forCellReuseIdentifier: TeamTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: String(describing: MatchTableViewCell.self), bundle: nil),
                            forCellReuseIdentifier: MatchTableViewCell.reuseIdentifier)
+
+        setupFetchedResultsController()
     }
 
     // MARK: - Public methods
@@ -63,7 +72,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 }
             }
 
-            self.persistentContainer?.performBackgroundTask({ [weak self] (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ [weak self] (backgroundContext) in
                 let models = models as? [T.RemoteType]
                 let bgctx = backgroundContext
                 for model in models ?? [] {
@@ -123,10 +132,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     fileprivate var fetchedResultsController: NSFetchedResultsController<T>?
 
     fileprivate func setupFetchedResultsController() {
-        guard let persistentContainer = persistentContainer else {
-            return
-        }
-
         let fetchRequest = NSFetchRequest<T>(entityName: T.entityName)
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "modelType", ascending: true), NSSortDescriptor(key: "modelKey", ascending: true)]
@@ -262,7 +267,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let obj = fetchedResultsController?.object(at: indexPath)
-        if let obj = obj, let myTBAObjectSelected = myTBAObjectSelected {
+        if let obj = obj {
             myTBAObjectSelected(obj)
         }
         tableView.deselectRow(at: indexPath, animated: true)

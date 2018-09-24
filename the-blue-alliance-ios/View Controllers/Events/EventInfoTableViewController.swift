@@ -27,8 +27,9 @@ enum EventLinkRow: Int {
 
 class EventInfoTableViewController: TBATableViewController, Observable {
 
-    public var event: Event!
+    let event: Event
 
+    // TODO: Let's get rid of these...
     public var showAlliances: (() -> Void)?
     public var showDistrictPoints: (() -> Void)?
     public var showStats: (() -> Void)?
@@ -36,7 +37,7 @@ class EventInfoTableViewController: TBATableViewController, Observable {
 
     // MARK: - Persistable
 
-    override var persistentContainer: NSPersistentContainer! {
+    override var persistentContainer: NSPersistentContainer {
         didSet {
             contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
                 DispatchQueue.main.async {
@@ -52,6 +53,18 @@ class EventInfoTableViewController: TBATableViewController, Observable {
     lazy var contextObserver: CoreDataContextObserver<Event> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
+
+    // MARK: - Init
+
+    init(event: Event, persistentContainer: NSPersistentContainer) {
+        self.event = event
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -73,7 +86,7 @@ class EventInfoTableViewController: TBATableViewController, Observable {
                 self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 if let modelEvent = modelEvent {
                     Event.insert(with: modelEvent, in: backgroundContext)
                 }

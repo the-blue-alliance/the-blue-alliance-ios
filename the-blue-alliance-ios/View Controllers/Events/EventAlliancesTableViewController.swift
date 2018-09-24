@@ -5,51 +5,55 @@ import CoreData
 
 class EventAlliancesViewController: ContainerViewController {
 
-    public var event: Event!
+    let event: Event
 
-    internal var alliancesViewController: EventAlliancesTableViewController!
-    @IBOutlet internal var alliancesView: UIView!
+    // MARK: - Init
+
+    init(event: Event, persistentContainer: NSPersistentContainer) {
+        self.event = event
+
+        super.init(persistentContainer: persistentContainer)
+
+        let alliancesViewController = EventAlliancesTableViewController(event: event, teamSelected: { [unowned self] (team) in
+            let teamAtEventViewController = TeamAtEventViewController(team: team, event: self.event, persistentContainer: persistentContainer)
+            self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
+            }, persistentContainer: persistentContainer)
+
+        viewControllers = [alliancesViewController]
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationTitleLabel?.text = "Alliances"
-        navigationDetailLabel?.text = "@ \(event.friendlyNameWithYear)"
-
-        viewControllers = [alliancesViewController]
-        containerViews = [alliancesView]
-    }
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "EventAlliancesEmbed" {
-            alliancesViewController = segue.destination as! EventAlliancesTableViewController
-            alliancesViewController.event = event
-            alliancesViewController.persistentContainer = persistentContainer
-            alliancesViewController.teamSelected = { [weak self] team in
-                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
-            }
-        } else if segue.identifier == "TeamAtEventSegue" {
-            let team = sender as! Team
-            let teamAtEventViewController = segue.destination as! TeamAtEventViewController
-            teamAtEventViewController.team = team
-            teamAtEventViewController.event = event
-            teamAtEventViewController.persistentContainer = persistentContainer
-        }
+        navigationTitleLabel.text = "Alliances"
+        navigationDetailLabel.text = "@ \(event.friendlyNameWithYear)"
     }
 
 }
 
 class EventAlliancesTableViewController: TBATableViewController {
 
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            updateDataSource()
-        }
+    let event: Event
+    let teamSelected: ((Team) -> ())
+
+    // MARK: - Init
+
+    init(event: Event, teamSelected: @escaping ((Team) -> ()), persistentContainer: NSPersistentContainer) {
+        self.event = event
+        self.teamSelected = teamSelected
+
+        super.init(persistentContainer: persistentContainer)
     }
-    var event: Event!
-    var teamSelected: ((Team) -> Void)?
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -59,6 +63,8 @@ class EventAlliancesTableViewController: TBATableViewController {
         // Override automatic rowHeight - these will be smaller than 44 by default, and we want to open them up
         tableView.rowHeight = 44
         tableView.register(UINib(nibName: String(describing: EventAllianceTableViewCell.self), bundle: nil), forCellReuseIdentifier: EventAllianceTableViewCell.reuseIdentifier)
+
+        updateDataSource()
     }
     // MARK: - Refreshing
 
@@ -71,7 +77,7 @@ class EventAlliancesTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh event alliances - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
 
                 let localAlliances = alliances?.map({ (modelAlliance) -> EventAlliance in
@@ -98,10 +104,6 @@ class EventAlliancesTableViewController: TBATableViewController {
     fileprivate var dataSource: TableViewDataSource<EventAlliance, EventAlliancesTableViewController>?
 
     fileprivate func setupDataSource() {
-        guard let persistentContainer = persistentContainer else {
-            return
-        }
-
         let fetchRequest: NSFetchRequest<EventAlliance> = EventAlliance.fetchRequest()
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]

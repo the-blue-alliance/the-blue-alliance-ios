@@ -6,7 +6,8 @@ typealias DataController = Persistable & Refreshable & Alertable & Stateful
 
 class TBAViewController: UIViewController, DataController {
 
-    var persistentContainer: NSPersistentContainer!
+    var persistentContainer: NSPersistentContainer
+
     var requests: [URLSessionDataTask] = []
     var dataView: UIView {
         return view
@@ -20,6 +21,16 @@ class TBAViewController: UIViewController, DataController {
         didSet {
             scrollView.refreshControl = refreshControl
         }
+    }
+
+    init(persistentContainer: NSPersistentContainer) {
+        self.persistentContainer = persistentContainer
+
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {

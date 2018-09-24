@@ -4,45 +4,93 @@ import CoreData
 
 class ContainerViewController: UIViewController, Persistable, Alertable {
 
-    var persistentContainer: NSPersistentContainer!
-    var dataView: UIView {
-        return view
-    }
-    var noDataViewController: NoDataViewController?
-    private lazy var setupSegmentedControlViews: Void = { [weak self] in
-        self?.updateSegmentedControlViews()
+    var persistentContainer: NSPersistentContainer
+
+    var navigationTitleLabel: UILabel
+    var navigationDetailLabel: UILabel
+
+    let segmentedControl: UISegmentedControl?
+    private lazy var setupSegmentedControlViews: Void = { [unowned self] in
+        self.updateSegmentedControlViews()
     }()
 
-    var viewControllers: [Persistable & Refreshable] = [] {
+    let containerView: UIView = UIView()
+
+    var viewControllers: [Stateful & Persistable & Refreshable] = [] {
+        willSet {
+            for subview in containerView.subviews {
+                subview.removeFromSuperview()
+            }
+        }
         didSet {
-            if let persistentContainer = persistentContainer {
-                for controller in viewControllers {
-                    let c = controller
-                    c.persistentContainer = persistentContainer
-                }
+            // Add subviews to view hiearchy in reverse order, so first one is showing automatically
+            for viewController in viewControllers.reversed() {
+                containerView.addSubview(viewController.dataView)
             }
         }
     }
-    var containerViews: [UIView] = []
 
-    @IBOutlet var navigationTitleLabel: UILabel? {
-        didSet {
-            navigationTitleLabel?.textColor = .white
-        }
-    }
-    @IBOutlet var navigationDetailLabel: UILabel? {
-        didSet {
-            navigationDetailLabel?.textColor = .white
-        }
-    }
+    /*
+    var noDataViewController: NoDataViewController?
+    */
 
+    /*
     @IBOutlet var segmentedControl: UISegmentedControl?
     @IBOutlet var segmentedControlView: UIView? {
         didSet {
             segmentedControlView?.backgroundColor = .primaryBlue
         }
     }
+    */
 
+    init(segmentedControlTitles: [String]? = nil, persistentContainer: NSPersistentContainer) {
+        self.persistentContainer = persistentContainer
+
+        if let segmentedControlTitles = segmentedControlTitles {
+            let segmentedControl = UISegmentedControl(items: segmentedControlTitles)
+            segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+            segmentedControl.autoSetDimension(.height, toSize: 44.0)
+            self.segmentedControl = segmentedControl
+        }
+
+        navigationTitleLabel = UILabel(forAutoLayout: ())
+        navigationTitleLabel.font = UIFont.systemFont(ofSize: 17)
+
+        navigationDetailLabel = UILabel(forAutoLayout: ())
+        navigationDetailLabel.font = UIFont.systemFont(ofSize: 11)
+
+        for label in [navigationTitleLabel, navigationDetailLabel] {
+            label.textColor = .white
+            label.textAlignment = .center
+        }
+
+        super.init(nibName: nil, bundle: nil)
+
+        let navigationStackView = UIStackView(arrangedSubviews: [navigationTitleLabel, navigationDetailLabel])
+        navigationStackView.axis = .vertical
+        navigationStackView.translatesAutoresizingMaskIntoConstraints = false
+
+        navigationItem.titleView = navigationStackView
+
+        segmentedControl?.addTarget(self, action: #selector(updateSegmentedControlViews), for: .valueChanged)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func loadView() {
+        // Remove segmentedControl if we don't need one
+        let arrangedSubviews = [segmentedControl, containerView].compactMap({ $0 })
+        let stackView = UIStackView(arrangedSubviews: arrangedSubviews)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+
+        view = UIView(forAutoLayout: ())
+        view.addSubview(stackView)
+        stackView.autoPinEdgesToSuperviewEdges()
+    }
+
+    // TODO: Do we still need this???
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -70,17 +118,17 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         cancelRefreshes()
     }
 
-    func updateSegmentedControlViews() {
-        if segmentedControl == nil, containerViews.count == 1 {
-            show(view: containerViews.first!)
-        } else if let segmentedControl = segmentedControl, containerViews.count > segmentedControl.selectedSegmentIndex {
-            show(view: containerViews[segmentedControl.selectedSegmentIndex])
+    @objc func updateSegmentedControlViews() {
+        if viewControllers.count == 1, let viewController = viewControllers.first {
+            show(view: viewController.dataView)
+        } else if viewControllers.count > segmentedControl.selectedSegmentIndex {
+            show(view: viewControllers[segmentedControl.selectedSegmentIndex].dataView)
         }
     }
 
     private func show(view showView: UIView) {
         var switchedIndex = 0
-        for (index, containerView) in containerViews.enumerated() {
+        for (index, containerView) in containerView.subviews.enumerated() {
             let shouldHide = !(containerView == showView)
             if !shouldHide {
                 let refreshViewController = viewControllers[index]

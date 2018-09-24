@@ -5,15 +5,15 @@ import TBAKit
 
 class MatchInfoViewController: TBAViewController, Observable {
 
-    public var match: Match!
-    public var team: Team?
+    let match: Match
+    let team: Team?
 
-    let winnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
-    let notWinnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
+    private let winnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
+    private let notWinnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
 
     // MARK: - Persistable
 
-    override var persistentContainer: NSPersistentContainer! {
+    override var persistentContainer: NSPersistentContainer {
         didSet {
             contextObserver.observeObject(object: match, state: .updated) { [weak self] (_, _) in
                 DispatchQueue.main.async {
@@ -59,6 +59,19 @@ class MatchInfoViewController: TBAViewController, Observable {
         playerView.autoConstrainAttribute(.width, to: .height, of: playerView, withMultiplier: (16.0/9.0))
 
         return playerView
+    }
+
+    // MARK: Init
+
+    init(match: Match, team: Team? = nil, persistentContainer: NSPersistentContainer) {
+        self.match = match
+        self.team = team
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: View Lifecycle
@@ -114,10 +127,10 @@ class MatchInfoViewController: TBAViewController, Observable {
             blueScoreLabel.text = blueScore.stringValue
         }
 
-        if match?.blueScore == nil && match?.redScore == nil {
+        if match.blueScore == nil && match.redScore == nil {
             timeLabel.isHidden = false
 
-            if let timeString = match?.timeString {
+            if let timeString = match.timeString {
                 timeLabel.text = timeString
             } else {
                 timeLabel.text = "No Time Yet"
@@ -128,22 +141,22 @@ class MatchInfoViewController: TBAViewController, Observable {
             scoreTitleLabel.text = "Score"
         }
 
-        if let compLevelString = match?.compLevel,
+        if let compLevelString = match.compLevel,
             let compLevel = MatchCompLevel(rawValue: compLevelString),
-            match?.event?.year == Int16(2015),
+            match.event?.year == Int16(2015),
             compLevel != MatchCompLevel.final {
             redContainerView.layer.borderWidth = 0.0
             blueContainerView.layer.borderWidth = 0.0
 
             redScoreLabel.font = notWinnerFont
             blueScoreLabel.font = notWinnerFont
-        } else if match?.winningAlliance == "red" {
+        } else if match.winningAlliance == "red" {
             redContainerView.layer.borderWidth = 2.0
             blueContainerView.layer.borderWidth = 0.0
 
             redScoreLabel.font = winnerFont
             blueScoreLabel.font = notWinnerFont
-        } else if match?.winningAlliance == "blue" {
+        } else if match.winningAlliance == "blue" {
             blueContainerView.layer.borderWidth = 2.0
             redContainerView.layer.borderWidth = 0.0
 
@@ -190,7 +203,7 @@ class MatchInfoViewController: TBAViewController, Observable {
                 self.showErrorAlert(with: "Unable to refresh match - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.match.event!.objectID) as! Event
 
                 if let modelMatch = modelMatch {

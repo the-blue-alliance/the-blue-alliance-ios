@@ -6,7 +6,7 @@ import React
 
 class EventStatsViewController: TBAViewController, Observable, ReactNative {
 
-    var event: Event!
+    var event: Event
 
     // MARK: - React Native
 
@@ -17,7 +17,7 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
 
     // MARK: - Persistable
 
-    override var persistentContainer: NSPersistentContainer! {
+    override var persistentContainer: NSPersistentContainer {
         didSet {
             contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
                 DispatchQueue.main.async {
@@ -33,6 +33,18 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
     lazy var contextObserver: CoreDataContextObserver<Event> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
+
+    // MARK: - Init
+
+    init(event: Event, persistentContainer: NSPersistentContainer) {
+        self.event = event
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -69,7 +81,7 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
             return
         }
 
-        let moduleName = "EventInsights\(event!.year)"
+        let moduleName = "EventInsights\(event.year)"
 
         guard let eventStatsView = RCTRootView(bridge: reactBridge, moduleName: moduleName, initialProperties: insights) else {
             showErrorView()
@@ -121,7 +133,7 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
                 self.showErrorAlert(with: "Unable to refresh event stats - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 backgroundEvent.insights = insights
 

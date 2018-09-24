@@ -4,16 +4,28 @@ import CoreData
 
 class TeamMediaCollectionViewController: TBACollectionViewController {
 
-    internal var year: Int? {
+    let team: Team
+    var year: Int? {
         didSet {
             cancelRefresh()
             updateDataSource()
         }
     }
-    var team: Team!
 
-    var playerViews: [String: PlayerView] = [:]
-    var downloadedImages: [String: UIImage] = [:]
+    private var playerViews: [String: PlayerView] = [:]
+    private var downloadedImages: [String: UIImage] = [:]
+
+    // MARK: Init
+
+    init(team: Team, persistentContainer: NSPersistentContainer) {
+        self.team = team
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -45,7 +57,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
                 self.showErrorAlert(with: "Unable to refresh team media - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
 
                 // Fetch all old media for team for year
@@ -110,7 +122,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     fileprivate func setupDataSource() {
         // TODO: This seems like a weird place to check if we need a year, then not use the year
-        guard let persistentContainer = persistentContainer, year != nil else {
+        if year == nil {
             return
         }
 

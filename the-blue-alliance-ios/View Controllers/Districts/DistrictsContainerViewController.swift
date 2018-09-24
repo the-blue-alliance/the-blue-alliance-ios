@@ -1,33 +1,50 @@
+import CoreData
 import Foundation
 import UIKit
 import TBAKit
 import FirebaseRemoteConfig
 
-private let SelectYearSegue = "SelectYearSegue"
-
 class DistrictsContainerViewController: ContainerViewController {
 
-    var maxYear: Int = RemoteConfig.remoteConfig().maxSeason
+    let maxYear: Int
     var year: Int = RemoteConfig.remoteConfig().currentSeason {
         didSet {
-            if let districtsViewController = districtsViewController {
-                districtsViewController.year = year
-            }
+            districtsViewController!.year = year
 
             DispatchQueue.main.async {
                 self.updateInterface()
             }
         }
     }
+    private var districtsViewController: DistrictsTableViewController?
 
-    internal var districtsViewController: DistrictsTableViewController!
-    @IBOutlet internal var districtsView: UIView!
+    // MARK: - Init
+
+    init(remoteConfig: RemoteConfig, persistentContainer: NSPersistentContainer) {
+        maxYear = remoteConfig.maxSeason
+        year = remoteConfig.currentSeason
+
+        super.init(persistentContainer: persistentContainer)
+
+        title = "Districts"
+        tabBarItem.image = UIImage(named: "ic_assignment")
+
+        districtsViewController = DistrictsTableViewController(year: year, districtSelected: { [unowned self] (district) in
+            let districtViewController = DistrictViewController(district: district, persistentContainer: persistentContainer)
+            self.navigationController?.pushViewController(districtViewController, animated: true)
+            }, persistentContainer: persistentContainer)
+
+        viewControllers = [districtsViewController!]
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        viewControllers = [districtsViewController]
-        containerViews = [districtsView]
 
         updateInterface()
     }
@@ -35,37 +52,25 @@ class DistrictsContainerViewController: ContainerViewController {
     // MARK: - Private Methods
 
     func updateInterface() {
-        navigationTitleLabel?.text = "Districts"
-        navigationDetailLabel?.text = "▾ \(year)"
+        navigationTitleLabel.text = "Districts"
+        navigationDetailLabel.text = "▾ \(year)"
     }
 
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == SelectYearSegue {
-            let nav = segue.destination as! UINavigationController
-            let selectTableViewController = SelectTableViewController<Int>()
-            selectTableViewController.title = "Select Year"
-            selectTableViewController.current = year
-            selectTableViewController.options = Array(2009...maxYear).reversed()
-            selectTableViewController.optionSelected = { [weak self] year in
-                self?.year = year
-            }
-            selectTableViewController.optionString = { year in
-                return String(year)
-            }
-            nav.viewControllers = [selectTableViewController]
-        } else if segue.identifier == "DistrictsEmbed" {
-            districtsViewController = segue.destination as? DistrictsTableViewController
-            districtsViewController.year = year
-            districtsViewController.districtSelected = { [weak self] district in
-                self?.performSegue(withIdentifier: "DistrictSegue", sender: district)
-            }
-        } else if segue.identifier == "DistrictSegue" {
-            let districtViewController = (segue.destination as! UINavigationController).topViewController as! DistrictViewController
-            districtViewController.district = sender as? District
-            // TODO: Find a way to pass these down automagically like we did in the Obj-C version
-            districtViewController.persistentContainer = persistentContainer
+    func selectYear() {
+        // TODO: Rework this SelectTableViewController so we pass this stuff in...
+        let selectTableViewController = SelectTableViewController<Int>()
+        selectTableViewController.title = "Select Year"
+        selectTableViewController.current = year
+        selectTableViewController.options = Array(2009...maxYear).reversed()
+        selectTableViewController.optionSelected = { [unowned self] year in
+            self.year = year
         }
+        selectTableViewController.optionString = { year in
+            return String(year)
+        }
+
+        let navigationController = UINavigationController(rootViewController: selectTableViewController)
+        self.navigationController?.present(navigationController, animated: true, completion: nil)
     }
+
 }

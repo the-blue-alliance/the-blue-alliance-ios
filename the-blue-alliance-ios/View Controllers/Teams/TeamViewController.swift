@@ -6,7 +6,7 @@ private let SelectYearSegue = "SelectYearSegue"
 
 class TeamViewController: ContainerViewController, Observable {
 
-    public var team: Team! {
+    public var team: Team {
         didSet {
             updateYear()
         }
@@ -33,17 +33,12 @@ class TeamViewController: ContainerViewController, Observable {
     }()
 
     internal var infoViewController: TeamInfoTableViewController!
-    @IBOutlet internal var infoView: UIView!
-
     internal var eventsViewController: EventsTableViewController!
-    @IBOutlet internal var eventsView: UIView!
-
     internal var mediaViewController: TeamMediaCollectionViewController!
-    @IBOutlet internal var mediaView: UIView!
 
     // MARK: - Persistable
 
-    override var persistentContainer: NSPersistentContainer! {
+    override var persistentContainer: NSPersistentContainer {
         didSet {
             contextObserver.observeObject(object: team, state: .updated) { [weak self] (_, _) in
                 self?.updateYear()
@@ -62,6 +57,30 @@ class TeamViewController: ContainerViewController, Observable {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
 
+    // MARK: Init
+
+    init(team: Team, persistentContainer: NSPersistentContainer) {
+        self.team = team
+
+        super.init(segmentedControlTitles: ["Info", "Events", "Media"],
+                   persistentContainer: persistentContainer)
+
+        let infoViewController = TeamInfoTableViewController(team: team, persistentContainer: persistentContainer)
+
+        let eventsViewController = EventsTableViewController(team: team, eventSelected: { [unowned self] (event) in
+            let teamAtEventViewController = TeamAtEventViewController(team: self.team, event: event, persistentContainer: persistentContainer)
+            self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
+            }, persistentContainer: persistentContainer)
+
+        let mediaViewController = TeamMediaCollectionViewController(team: team, persistentContainer: persistentContainer)
+
+        viewControllers = [infoViewController, eventsViewController, mediaViewController]
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
@@ -69,9 +88,7 @@ class TeamViewController: ContainerViewController, Observable {
 
         title = "Team \(team.teamNumber)"
 
-        viewControllers = [infoViewController, eventsViewController, mediaViewController]
-        containerViews = [infoView, eventsView, mediaView]
-
+        // TODO: Why the fuck do we have this again?
         if navigationController?.viewControllers.index(of: self) == 0 {
             navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
             navigationItem.leftItemsSupplementBackButton = true
@@ -96,12 +113,12 @@ class TeamViewController: ContainerViewController, Observable {
     }
 
     func updateInterface() {
-        navigationTitleLabel?.text = "Team \(team.teamNumber)"
+        navigationTitleLabel.text = "Team \(team.teamNumber)"
 
         if let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty, let year = year {
-            navigationDetailLabel?.text = "▾ \(year)"
+            navigationDetailLabel.text = "▾ \(year)"
         } else {
-            navigationDetailLabel?.text = "▾ ----"
+            navigationDetailLabel.text = "▾ ----"
         }
     }
 
@@ -111,7 +128,7 @@ class TeamViewController: ContainerViewController, Observable {
                 self.showErrorAlert(with: "Unable to fetch years participated - \(error.localizedDescription)")
                 return
             }
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
 
                 if let years = years {
@@ -135,40 +152,4 @@ class TeamViewController: ContainerViewController, Observable {
         return true
     }
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == SelectYearSegue {
-            let nav = segue.destination as! UINavigationController
-            let selectTableViewController = SelectTableViewController<Int>()
-            selectTableViewController.title = "Select Year"
-            selectTableViewController.current = year
-            selectTableViewController.options = team.yearsParticipated
-            selectTableViewController.optionSelected = { [weak self] year in
-                self?.year = year
-            }
-            selectTableViewController.optionString = { year in
-                return String(year)
-            }
-            nav.viewControllers = [selectTableViewController]
-        } else if segue.identifier == "TeamInfoEmbed" {
-            infoViewController = segue.destination as? TeamInfoTableViewController
-            infoViewController.team = team
-        } else if segue.identifier == "TeamEventsEmbed" {
-            eventsViewController = segue.destination as? EventsTableViewController
-            eventsViewController.team = team
-            eventsViewController.year = year
-            eventsViewController.eventSelected = { [weak self] event in
-                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: event)
-            }
-        } else if segue.identifier == "TeamMediaEmbed" {
-            mediaViewController = segue.destination as? TeamMediaCollectionViewController
-            mediaViewController.team = team
-            mediaViewController.year = year
-        } else if segue.identifier == "TeamAtEventSegue" {
-            let event = sender as! Event
-            let teamAtEventViewController = segue.destination as! TeamAtEventViewController
-            teamAtEventViewController.team = team
-            teamAtEventViewController.event = event
-            teamAtEventViewController.persistentContainer = persistentContainer
-        }
-    }
 }

@@ -4,9 +4,10 @@ import CoreData
 
 class TBATableViewController: UITableViewController, DataController {
 
+    var persistentContainer: NSPersistentContainer
+
     let basicCellReuseIdentifier = "BasicCell"
 
-    var persistentContainer: NSPersistentContainer!
     var requests: [URLSessionDataTask] = []
     var dataView: UIView {
         return tableView
@@ -16,6 +17,16 @@ class TBATableViewController: UITableViewController, DataController {
     }
     var noDataViewController: NoDataViewController?
 
+    init(persistentContainer: NSPersistentContainer) {
+        self.persistentContainer = persistentContainer
+
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {

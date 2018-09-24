@@ -1,45 +1,41 @@
 import Foundation
+import CoreData
 import UIKit
 
 class TeamAtDistrictViewController: ContainerViewController {
 
-    public var ranking: DistrictRanking!
+    let ranking: DistrictRanking
 
-    internal var summaryViewController: DistrictTeamSummaryTableViewController!
-    @IBOutlet internal var summaryView: UIView!
+    // MARK: Init
 
-    internal var breakdownViewController: DistrictBreakdownTableViewController!
-    @IBOutlet internal var breakdownView: UIView!
+    init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer) {
+        self.ranking = ranking
+
+        super.init(segmentedControlTitles: ["Summary", "Breakdown"],
+                   persistentContainer: persistentContainer)
+
+        let summaryViewController = DistrictTeamSummaryTableViewController(ranking: ranking, eventPointsSelected: { [unowned self] (eventPoints) in
+            // TODO: Let's see what we can to do not force-unwrap these from Core Data
+            let teamAtEventViewController = TeamAtEventViewController(team: eventPoints.team!, event: eventPoints.event!, persistentContainer: persistentContainer)
+            self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
+            }, persistentContainer: persistentContainer)
+
+        let breakdownViewController = DistrictBreakdownTableViewController(ranking: ranking, persistentContainer: persistentContainer)
+
+        viewControllers = [summaryViewController, breakdownViewController]
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationTitleLabel?.text = "Team \(ranking.team!.teamNumber)"
-        navigationDetailLabel?.text = "@ \(ranking.district!.abbreviationWithYear)"
-
-        viewControllers = [summaryViewController, breakdownViewController]
-        containerViews = [summaryView, breakdownView]
-    }
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "DistrictTeamSummaryEmbed" {
-            summaryViewController = segue.destination as! DistrictTeamSummaryTableViewController
-            summaryViewController.ranking = ranking
-            summaryViewController.eventPointsSelected = { [weak self] eventPoints in
-                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: eventPoints)
-            }
-        } else if segue.identifier == "DistrictBreakdownEmbed" {
-            breakdownViewController = segue.destination as! DistrictBreakdownTableViewController
-            breakdownViewController.ranking = ranking
-        } else if segue.identifier == "TeamAtEventSegue" {
-            let eventPoints = sender as! DistrictEventPoints
-            let teamAtEventViewController = segue.destination as! TeamAtEventViewController
-            teamAtEventViewController.team = eventPoints.team!
-            teamAtEventViewController.event = eventPoints.event!
-            teamAtEventViewController.persistentContainer = persistentContainer
-        }
+        navigationTitleLabel.text = "Team \(ranking.team!.teamNumber)"
+        navigationDetailLabel.text = "@ \(ranking.district!.abbreviationWithYear)"
     }
 
 }

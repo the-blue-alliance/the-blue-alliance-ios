@@ -5,14 +5,12 @@ import TBAKit
 
 class DistrictBreakdownTableViewController: TBATableViewController, Observable {
 
-    public var ranking: DistrictRanking!
-    private var sortedEventPoints: [DistrictEventPoints] {
-        return (ranking!.eventPoints?.sortedArray(using: [NSSortDescriptor(key: "event.startDate", ascending: true)]) as? [DistrictEventPoints]) ?? []
-    }
+    let ranking: DistrictRanking
+    private let sortedEventPoints: [DistrictEventPoints]
 
     // MARK: - Persistable
 
-    override var persistentContainer: NSPersistentContainer! {
+    override var persistentContainer: NSPersistentContainer {
         didSet {
             contextObserver.observeObject(object: ranking, state: .updated) { [weak self] (_, _) in
                 DispatchQueue.main.async {
@@ -28,6 +26,20 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
     lazy var contextObserver: CoreDataContextObserver<DistrictRanking> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
+
+    // MARK: - Init
+
+    init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer) {
+        self.ranking = ranking
+
+        sortedEventPoints = (ranking.eventPoints?.sortedArray(using: [NSSortDescriptor(key: "event.startDate", ascending: true)]) as? [DistrictEventPoints]) ?? []
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -51,12 +63,12 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
             }
 
             // Might as well insert them all... we just need to only fetch
-            guard let ranking = rankings?.first(where: { $0.teamKey == self.ranking!.team!.key! }) else {
+            guard let ranking = rankings?.first(where: { $0.teamKey == self.ranking.team!.key! }) else {
                 self.removeRequest(request: rankingsRequest!)
                 return
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let eventKeys = Set(ranking.eventPoints.map({ $0.eventKey! }))
                 let eventlessKeys = Set(eventKeys.compactMap({ (eventKey) -> String? in
                     let predicate = NSPredicate(format: "key == %@", eventKey)
@@ -75,7 +87,7 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
                 }
                 dispatchGroup.wait()
 
-                let backgroundDistrict = backgroundContext.object(with: self.ranking!.district!.objectID) as! District
+                let backgroundDistrict = backgroundContext.object(with: self.ranking.district!.objectID) as! District
 
                 let localRankings = rankings?.compactMap({ (modelRanking) -> DistrictRanking? in
                     let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
@@ -98,8 +110,8 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
                 return
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
-                let backgroundTeam = backgroundContext.object(with: self.ranking!.team!.objectID) as! Team
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                let backgroundTeam = backgroundContext.object(with: self.ranking.team!.objectID) as! Team
                 if let modelEvent = modelEvent {
                     backgroundTeam.addToEvents(Event.insert(with: modelEvent, in: backgroundContext))
                 }

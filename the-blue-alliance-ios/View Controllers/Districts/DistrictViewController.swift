@@ -1,57 +1,47 @@
+import CoreData
 import Foundation
 import UIKit
 
-private let TeamAtDistrictSegue = "TeamAtDistrictSegue"
-private let EventSegue = "EventSegue"
-
 class DistrictViewController: ContainerViewController {
 
-    public var district: District!
+    let district: District
 
-    internal var eventsViewController: EventsTableViewController!
-    @IBOutlet internal var eventsView: UIView!
+    // MARK: - Init
 
-    internal var rankingsViewController: DistrictRankingsTableViewController!
-    @IBOutlet internal var rankingsView: UIView!
+    init(district: District, persistentContainer: NSPersistentContainer) {
+        self.district = district
+
+        super.init(segmentedControlTitles: ["Events", "Rankings"],
+                   persistentContainer: persistentContainer)
+
+        let eventsViewController = EventsTableViewController(district: district, eventSelected: { [unowned self] (event) in
+            let eventViewController = EventViewController(event: event, persistentContainer: persistentContainer)
+            self.navigationController?.pushViewController(eventViewController, animated: true)
+            }, persistentContainer: persistentContainer)
+
+        let rankingsViewController = DistrictRankingsTableViewController(district: district, rankingSelected: { [unowned self] (ranking) in
+            let teamAtDistrictViewController = TeamAtDistrictViewController(ranking: ranking, persistentContainer: persistentContainer)
+            self.navigationController?.pushViewController(teamAtDistrictViewController, animated: true)
+            }, persistentContainer: persistentContainer)
+
+        viewControllers = [eventsViewController, rankingsViewController]
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = "\(district.year) \(district.name!) Districts"
 
-        viewControllers = [eventsViewController, rankingsViewController]
-        containerViews = [eventsView, rankingsView]
-
+        // TODO: Why do we do this? Has to do with the split view I know
         if navigationController?.viewControllers.index(of: self) == 0 {
             navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
             navigationItem.leftItemsSupplementBackButton = true
-        }
-    }
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "DistrictEventsEmbed" {
-            eventsViewController = segue.destination as! EventsTableViewController
-            eventsViewController.district = district
-            eventsViewController.eventSelected = { [weak self] event in
-                self?.performSegue(withIdentifier: EventSegue, sender: event)
-            }
-        } else if segue.identifier == "DistrictRankingsEmbed" {
-            rankingsViewController = segue.destination as! DistrictRankingsTableViewController
-            rankingsViewController.district = district
-            rankingsViewController.rankingSelected = { [weak self] ranking in
-                self?.performSegue(withIdentifier: TeamAtDistrictSegue, sender: ranking)
-            }
-        } else if segue.identifier == EventSegue {
-            let eventViewController = segue.destination as! EventViewController
-            eventViewController.event = sender as? Event
-            // TODO: Find a way to pass these down automagically like we did in the Obj-C version
-            eventViewController.persistentContainer = persistentContainer
-        } else if segue.identifier == TeamAtDistrictSegue {
-            let teamAtDistrictViewController = segue.destination as! TeamAtDistrictViewController
-            teamAtDistrictViewController.ranking = sender as! DistrictRanking
-            teamAtDistrictViewController.persistentContainer = persistentContainer
         }
     }
 

@@ -89,7 +89,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     rootSplitViewController.view.addSubview(snapshot)
                     window.rootViewController = rootSplitViewController
 
-                    if RemoteConfig.remoteConfig().myTBAEnabled {
+                    if remoteConfigService.remoteConfig.myTBAEnabled {
                         self?.setupMyTBA()
                     }
 
@@ -196,33 +196,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Root VC is a split view controller, with the left side being a tab bar,
         // and the right side being a navigation controller
         let splitViewController = UISplitViewController()
-
-        let mainBundle = Bundle.main
         let tabBarController = UITabBarController()
-        let rootStoryboards = [UIStoryboard(name: "EventsStoryboard", bundle: mainBundle),
-                               UIStoryboard(name: "TeamsStoryboard", bundle: mainBundle),
-                               UIStoryboard(name: "DistrictsStoryboard", bundle: mainBundle)]
-        tabBarController.viewControllers = rootStoryboards.compactMap({ (storyboard) -> UIViewController? in
-            return storyboard.instantiateInitialViewController()
-        })
 
-        tabBarController.viewControllers?.forEach({ (viewController) in
-            guard let navigationController = viewController as? UINavigationController else {
-                fatalError("Root VC in controller should be a navigation controller")
-            }
-            guard let dataViewController = navigationController.topViewController as? Persistable else {
-                fatalError("Root view controller in navigation controller should be data vc")
-            }
-            dataViewController.persistentContainer = self.persistentContainer
+        // TODO: We need to pull this RemoteConfig as an instance, please (not off a singleton)
+        let eventsViewController = EventsContainerViewController(remoteConfig: RemoteConfig.remoteConfig(),
+                                                                 persistentContainer: persistentContainer)
+        let teamsViewController = TeamsContainerViewController(persistentContainer: persistentContainer)
+        let districtsViewController = DistrictsContainerViewController(remoteConfig: RemoteConfig.remoteConfig(),
+                                                                       persistentContainer: persistentContainer)
+        let settingsViewController = SettingsViewController(urlOpener: UIApplication.shared,
+                                                            persistentContainer: self.persistentContainer)
+        let rootViewControllers: [UIViewController] = [eventsViewController, teamsViewController, districtsViewController, settingsViewController]
+        tabBarController.viewControllers = rootViewControllers.compactMap({ (viewController) -> UIViewController? in
+            return UINavigationController(rootViewController: viewController)
         })
-
-        // Moving to a world where storyboards don't exist
-        let rootViewControllers = [SettingsViewController(persistentContainer: self.persistentContainer,
-                                                          urlOpener: UIApplication.shared)]
-        for rootViewController in rootViewControllers {
-            let navigationController = UINavigationController(rootViewController: rootViewController)
-            tabBarController.viewControllers?.append(navigationController)
-        }
 
         splitViewController.viewControllers = [tabBarController, emptyNavigationController]
 
