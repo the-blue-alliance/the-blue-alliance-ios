@@ -48,8 +48,8 @@ class EventStatsContainerViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationTitleLabel.text = "Stats"
-        navigationDetailLabel.text = "@ \(event.friendlyNameWithYear)"
+        navigationTitle = "Stats"
+        navigationSubtitle = "@ \(event.friendlyNameWithYear)"
     }
 
     // MARK: - Interface Actions

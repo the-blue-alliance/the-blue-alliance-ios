@@ -39,8 +39,8 @@ class TeamAtEventViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationTitleLabel.text = "Team \(team.teamNumber)"
-        navigationDetailLabel.text = "@ \(event.friendlyNameWithYear)"
+        navigationTitle = "Team \(team.teamNumber)"
+        navigationSubtitle = "@ \(event.friendlyNameWithYear)"
     }
 
 }

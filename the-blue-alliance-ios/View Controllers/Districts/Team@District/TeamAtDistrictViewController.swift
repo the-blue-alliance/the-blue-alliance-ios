@@ -34,8 +34,8 @@ class TeamAtDistrictViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationTitleLabel.text = "Team \(ranking.team!.teamNumber)"
-        navigationDetailLabel.text = "@ \(ranking.district!.abbreviationWithYear)"
+        navigationTitle = "Team \(ranking.team!.teamNumber)"
+        navigationSubtitle = "@ \(ranking.district!.abbreviationWithYear)"
     }
 
 }

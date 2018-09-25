@@ -32,8 +32,8 @@ class EventAlliancesContainerViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationTitleLabel.text = "Alliances"
-        navigationDetailLabel.text = "@ \(event.friendlyNameWithYear)"
+        navigationTitle = "Alliances"
+        navigationSubtitle = "@ \(event.friendlyNameWithYear)"
     }
 
 }

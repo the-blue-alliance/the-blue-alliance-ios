@@ -42,8 +42,8 @@ class MatchViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationTitleLabel.text = "\(match.friendlyMatchName())"
-        navigationDetailLabel.text = "@ \(match.event!.friendlyNameWithYear)"
+        navigationTitle = "\(match.friendlyMatchName())"
+        navigationSubtitle = "@ \(match.event!.friendlyNameWithYear)"
     }
 
 }

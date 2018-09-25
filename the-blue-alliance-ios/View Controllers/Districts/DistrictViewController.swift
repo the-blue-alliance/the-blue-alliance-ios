@@ -21,8 +21,6 @@ class DistrictViewController: ContainerViewController {
         super.init(segmentedControlTitles: ["Events", "Rankings"],
                    persistentContainer: persistentContainer)
 
-        hidesBottomBarWhenPushed = true
-
         eventsViewController = EventsViewController(district: district, delegate: self, persistentContainer: persistentContainer)
         rankingsViewController = DistrictRankingsViewController(district: district, delegate: self, persistentContainer: persistentContainer)
     }

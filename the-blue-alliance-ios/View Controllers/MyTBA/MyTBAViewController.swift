@@ -196,7 +196,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 extension MyTBAViewController: MyTBAAuthenticationObservable {
 
     func authenticated() {
-        if let segmentedControl = segmentedControl, segmentedControl.selectedSegmentIndex < viewControllers.count {
+        if segmentedControl.selectedSegmentIndex < viewControllers.count {
             viewControllers[segmentedControl.selectedSegmentIndex].refresh()
         }
 

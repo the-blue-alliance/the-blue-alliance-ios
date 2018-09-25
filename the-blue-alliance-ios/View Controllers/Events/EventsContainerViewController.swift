@@ -103,11 +103,11 @@ class EventsContainerViewController: ContainerViewController, Observable {
 
     private func updateInterface() {
         if let weekEvent = weekEvent {
-            navigationTitleLabel.text = "\(weekEvent.weekString) Events"
+            navigationTitle = "\(weekEvent.weekString) Events"
         } else {
-            navigationTitleLabel.text = "---- Events"
+            navigationTitle = "---- Events"
         }
-        navigationDetailLabel.text = "▾ \(year)"
+        navigationSubtitle = "▾ \(year)"
 
         if weekEvents.isEmpty {
             weeksButton.title = "----"

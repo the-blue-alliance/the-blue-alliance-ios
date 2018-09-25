@@ -33,11 +33,11 @@ class EventAwardsContainerViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationTitleLabel.text = "Awards"
+        navigationTitle = "Awards"
         if let team = team {
-            navigationDetailLabel.text = "Team \(team.teamNumber) @ \(event.friendlyNameWithYear)"
+            navigationSubtitle = "Team \(team.teamNumber) @ \(event.friendlyNameWithYear)"
         } else {
-            navigationDetailLabel.text = "@ \(event.friendlyNameWithYear)"
+            navigationSubtitle = "@ \(event.friendlyNameWithYear)"
         }
     }
 

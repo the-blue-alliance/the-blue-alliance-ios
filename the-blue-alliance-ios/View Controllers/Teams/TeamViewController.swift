@@ -65,8 +65,6 @@ class TeamViewController: ContainerViewController, Observable {
         // TODO: We should be able to do this before init, but we can't
         updateYear()
 
-        hidesBottomBarWhenPushed = true
-
         infoViewController = TeamInfoViewController(team: team, persistentContainer: persistentContainer)
         eventsViewController = EventsViewController(team: team, delegate: self, persistentContainer: persistentContainer)
         mediaViewController = TeamMediaCollectionViewController(team: team, persistentContainer: persistentContainer)
@@ -97,12 +95,12 @@ class TeamViewController: ContainerViewController, Observable {
     }
 
     func updateInterface() {
-        navigationTitleLabel.text = "Team \(team.teamNumber)"
+        navigationTitle = "Team \(team.teamNumber)"
 
         if let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty, let year = year {
-            navigationDetailLabel.text = "▾ \(year)"
+            navigationSubtitle = "▾ \(year)"
         } else {
-            navigationDetailLabel.text = "▾ ----"
+            navigationSubtitle = "▾ ----"
         }
     }
 

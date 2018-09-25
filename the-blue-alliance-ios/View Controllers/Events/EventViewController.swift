@@ -22,8 +22,6 @@ class EventViewController: ContainerViewController {
         super.init(segmentedControlTitles: ["Info", "Teams", "Rankings", "Matches"],
                    persistentContainer: persistentContainer)
 
-        hidesBottomBarWhenPushed = true
-
         infoViewController = EventInfoViewController(event: event, delegate: self, persistentContainer: persistentContainer)
         teamsViewController = TeamsViewController(delegate: self, persistentContainer: persistentContainer)
         rankingsViewController = EventRankingsViewController(event: event, delegate: self, persistentContainer: persistentContainer)

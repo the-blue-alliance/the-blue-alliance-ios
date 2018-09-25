@@ -6,27 +6,56 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
     var persistentContainer: NSPersistentContainer
 
-    private let navigationStackView: UIStackView
-    var navigationTitleLabel: UILabel {
-        didSet {
-            navigationStackView.isHidden = false
+    /*
+    override var hidesBottomBarWhenPushed: Bool {
+        get {
+            return navigationController?.topViewController == self
+        }
+        set {
+            super.hidesBottomBarWhenPushed = newValue
         }
     }
-    var navigationDetailLabel: UILabel {
+    */
+
+    private lazy var navigationStackView: UIStackView = {
+        let navigationStackView = UIStackView(arrangedSubviews: [navigationTitleLabel, navigationDetailLabel])
+        navigationStackView.translatesAutoresizingMaskIntoConstraints = false
+        navigationStackView.axis = .vertical
+        return navigationStackView
+    }()
+    private lazy var navigationTitleLabel: UILabel = {
+        let navigationTitleLabel = ContainerViewController.createNavigationLabel()
+        navigationTitleLabel.font = UIFont.systemFont(ofSize: 17)
+        return navigationTitleLabel
+    }()
+    private lazy var navigationDetailLabel: UILabel = {
+        let navigationDetailLabel = ContainerViewController.createNavigationLabel()
+        navigationDetailLabel.font = UIFont.systemFont(ofSize: 11)
+        return navigationDetailLabel
+    }()
+
+    var navigationTitle: String? {
         didSet {
-            navigationStackView.isHidden = false
+            navigationTitleLabel.text = navigationTitle
+        }
+    }
+    var navigationSubtitle: String? {
+        didSet {
+            navigationDetailLabel.text = navigationSubtitle
         }
     }
 
-    override var title: String? {
-        didSet {
-            if title != nil {
-                navigationStackView.isHidden = true
-            }
-        }
-    }
-
-    var segmentedControl: UISegmentedControl?
+    private let shouldShowSegmentedControl: Bool = false
+    private lazy var segmentedControlView: UIView = {
+        let segmentedControlView = UIView(forAutoLayout: ())
+        segmentedControlView.backgroundColor = .primaryBlue
+        segmentedControlView.addSubview(segmentedControl)
+        segmentedControl.autoAlignAxis(toSuperviewAxis: .horizontal)
+        segmentedControl.autoPinEdge(toSuperviewEdge: .leading, withInset: 16.0)
+        segmentedControl.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16.0)
+        return segmentedControlView
+    }()
+    let segmentedControl: UISegmentedControl
 
     private let containerView: UIView = UIView()
     var viewControllers: [Refreshable & Stateful] {
@@ -36,34 +65,16 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     init(segmentedControlTitles: [String]? = nil, persistentContainer: NSPersistentContainer) {
         self.persistentContainer = persistentContainer
 
-        if let segmentedControlTitles = segmentedControlTitles {
-            let segmentedControl = UISegmentedControl(items: segmentedControlTitles)
-            segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-            segmentedControl.backgroundColor = .primaryBlue
-            segmentedControl.tintColor = .white
-            self.segmentedControl = segmentedControl
-        }
-
-        navigationTitleLabel = UILabel(forAutoLayout: ())
-        navigationTitleLabel.font = UIFont.systemFont(ofSize: 17)
-
-        navigationDetailLabel = UILabel(forAutoLayout: ())
-        navigationDetailLabel.font = UIFont.systemFont(ofSize: 11)
-
-        for label in [navigationTitleLabel, navigationDetailLabel] {
-            label.textColor = .white
-            label.textAlignment = .center
-        }
-
-        navigationStackView = UIStackView(arrangedSubviews: [navigationTitleLabel, navigationDetailLabel])
-        navigationStackView.axis = .vertical
-        navigationStackView.translatesAutoresizingMaskIntoConstraints = false
+        segmentedControl = UISegmentedControl(items: segmentedControlTitles)
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        segmentedControl.backgroundColor = .primaryBlue
+        segmentedControl.tintColor = .white
 
         super.init(nibName: nil, bundle: nil)
 
         navigationItem.titleView = navigationStackView
-
-        segmentedControl?.addTarget(self, action: #selector(updateSegmentedControlViews), for: .valueChanged)
+        segmentedControl.addTarget(self, action: #selector(updateSegmentedControlViews), for: .valueChanged)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -72,13 +83,16 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
     override func viewDidLoad() {
         // Remove segmentedControl if we don't need one
-        let arrangedSubviews = [segmentedControl, containerView].compactMap({ $0 })
+        var arrangedSubviews = [containerView]
+        if segmentedControl.numberOfSegments > 1 {
+            arrangedSubviews.insert(segmentedControlView, at: 0)
+        }
+
         let stackView = UIStackView(arrangedSubviews: arrangedSubviews)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
 
-        segmentedControl?.autoSetDimension(.height, toSize: 44.0)
-        // segmentedControl?.autoPinEdges(toSuperviewMarginsExcludingEdge: .bottom)
+        segmentedControlView.autoSetDimension(.height, toSize: 44.0)
 
         // Add subviews to view hiearchy in reverse order, so first one is showing automatically
         for viewController in viewControllers.reversed() {
@@ -88,7 +102,10 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         }
 
         view.addSubview(stackView)
-        stackView.autoPinEdgesToSuperviewSafeArea()
+        view.insetsLayoutMarginsFromSafeArea = false
+        stackView.autoPinEdgesToSuperviewSafeArea(with: .zero, excludingEdge: .bottom)
+        // Pin our stack view underneath the safe area to extend underneath the home bar on notch phones
+        stackView.autoPinEdge(toSuperviewEdge: .bottom)
     }
 
     @IBAction func segmentedControlValueChanged(sender: Any) {
@@ -113,7 +130,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     @objc func updateSegmentedControlViews() {
         if viewControllers.count == 1, let viewController = viewControllers.first {
             show(view: viewController.dataView)
-        } else if let segmentedControl = segmentedControl, viewControllers.count > segmentedControl.selectedSegmentIndex {
+        } else if viewControllers.count > segmentedControl.selectedSegmentIndex {
             show(view: viewControllers[segmentedControl.selectedSegmentIndex].dataView)
         }
     }
@@ -138,6 +155,15 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         viewControllers.forEach {
             $0.cancelRefresh()
         }
+    }
+
+    // MARK: - Helper Methods
+
+    static func createNavigationLabel() -> UILabel {
+        let label = UILabel(forAutoLayout: ())
+        label.textColor = .white
+        label.textAlignment = .center
+        return label
     }
 
 }

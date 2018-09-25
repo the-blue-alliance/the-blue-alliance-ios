@@ -31,8 +31,8 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationTitleLabel.text = "District Points"
-        navigationDetailLabel.text = "@ \(event.friendlyNameWithYear)"
+        navigationTitle = "District Points"
+        navigationSubtitle = "@ \(event.friendlyNameWithYear)"
     }
 
 }

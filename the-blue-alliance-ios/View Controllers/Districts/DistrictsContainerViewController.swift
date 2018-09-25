@@ -32,7 +32,6 @@ class DistrictsContainerViewController: ContainerViewController {
 
         title = "Districts"
         tabBarItem.image = UIImage(named: "ic_assignment")
-        hidesBottomBarWhenPushed = true
 
         districtsViewController = DistrictsViewController(year: year, delegate: self, persistentContainer: persistentContainer)
     }
@@ -48,14 +47,14 @@ class DistrictsContainerViewController: ContainerViewController {
 
         // TODO: Shouldn't this have the same split view controller code the other root views do?
 
+        navigationTitle = "Districts"
         updateInterface()
     }
 
     // MARK: - Private Methods
 
     func updateInterface() {
-        navigationTitleLabel.text = "Districts"
-        navigationDetailLabel.text = "▾ \(year)"
+        navigationSubtitle = "▾ \(year)"
     }
 
     func selectYear() {
