@@ -17,10 +17,10 @@ class TBATableViewController: UITableViewController, DataController {
     }
     var noDataViewController: NoDataViewController?
 
-    init(persistentContainer: NSPersistentContainer) {
+    init(style: UITableView.Style = .plain, persistentContainer: NSPersistentContainer) {
         self.persistentContainer = persistentContainer
 
-        super.init(nibName: nil, bundle: nil)
+        super.init(style: style)
     }
     
     required init?(coder aDecoder: NSCoder) {

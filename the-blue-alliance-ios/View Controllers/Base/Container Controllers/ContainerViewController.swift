@@ -2,20 +2,23 @@ import Foundation
 import UIKit
 import CoreData
 
+typealias ContainableViewController = UIViewController & Refreshable & Persistable
+
 class ContainerViewController: UIViewController, Persistable, Alertable {
 
     var persistentContainer: NSPersistentContainer
 
-    /*
+    private var isRootContainerViewController: Bool {
+        return navigationController?.topViewController != self
+    }
     override var hidesBottomBarWhenPushed: Bool {
         get {
-            return navigationController?.topViewController == self
+            return isRootContainerViewController
         }
         set {
             super.hidesBottomBarWhenPushed = newValue
         }
     }
-    */
 
     private lazy var navigationStackView: UIStackView = {
         let navigationStackView = UIStackView(arrangedSubviews: [navigationTitleLabel, navigationDetailLabel])
@@ -48,6 +51,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     private let shouldShowSegmentedControl: Bool = false
     private lazy var segmentedControlView: UIView = {
         let segmentedControlView = UIView(forAutoLayout: ())
+        segmentedControlView.autoSetDimension(.height, toSize: 44.0)
         segmentedControlView.backgroundColor = .primaryBlue
         segmentedControlView.addSubview(segmentedControl)
         segmentedControl.autoAlignAxis(toSuperviewAxis: .horizontal)
@@ -55,14 +59,14 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         segmentedControl.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16.0)
         return segmentedControlView
     }()
-    let segmentedControl: UISegmentedControl
+    private let segmentedControl: UISegmentedControl
 
     private let containerView: UIView = UIView()
-    var viewControllers: [Refreshable & Stateful] {
+    var viewControllers: [ContainableViewController] {
         fatalError("Override viewControllers in subclass - \(String(describing: type(of: self)))")
     }
 
-    init(segmentedControlTitles: [String]? = nil, persistentContainer: NSPersistentContainer) {
+    init(segmentedControlTitles: [String]? = nil, showCustomNavigationLables: Bool = true, persistentContainer: NSPersistentContainer) {
         self.persistentContainer = persistentContainer
 
         segmentedControl = UISegmentedControl(items: segmentedControlTitles)
@@ -73,7 +77,9 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
         super.init(nibName: nil, bundle: nil)
 
-        navigationItem.titleView = navigationStackView
+        if showCustomNavigationLables {
+            navigationItem.titleView = navigationStackView
+        }
         segmentedControl.addTarget(self, action: #selector(updateSegmentedControlViews), for: .valueChanged)
     }
 
@@ -91,18 +97,15 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         let stackView = UIStackView(arrangedSubviews: arrangedSubviews)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-
-        segmentedControlView.autoSetDimension(.height, toSize: 44.0)
+        view.addSubview(stackView)
 
         // Add subviews to view hiearchy in reverse order, so first one is showing automatically
         for viewController in viewControllers.reversed() {
-            let containedView = viewController.dataView
-            containerView.addSubview(containedView)
-            containedView.autoPinEdgesToSuperviewSafeArea()
+            addChild(viewController)
+            containerView.addSubview(viewController.view)
+            viewController.view.autoPinEdgesToSuperviewEdges()
         }
 
-        view.addSubview(stackView)
-        view.insetsLayoutMarginsFromSafeArea = false
         stackView.autoPinEdgesToSuperviewSafeArea(with: .zero, excludingEdge: .bottom)
         // Pin our stack view underneath the safe area to extend underneath the home bar on notch phones
         stackView.autoPinEdge(toSuperviewEdge: .bottom)
@@ -127,18 +130,27 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         cancelRefreshes()
     }
 
-    @objc func updateSegmentedControlViews() {
+    // MARK: - Public Methods
+
+    func currentViewController() -> ContainableViewController? {
         if viewControllers.count == 1, let viewController = viewControllers.first {
-            show(view: viewController.dataView)
+            return viewController
         } else if viewControllers.count > segmentedControl.selectedSegmentIndex {
-            show(view: viewControllers[segmentedControl.selectedSegmentIndex].dataView)
+            return viewControllers[segmentedControl.selectedSegmentIndex]
+        }
+        return nil
+    }
+
+    @objc private func updateSegmentedControlViews() {
+        if let viewController = currentViewController() {
+            show(view: viewController.view)
         }
     }
 
     private func show(view showView: UIView) {
         var switchedIndex = 0
-        for (index, containerView) in containerView.subviews.enumerated() {
-            let shouldHide = !(containerView == showView)
+        for (index, containedView) in viewControllers.compactMap({ $0.view }).enumerated() {
+            let shouldHide = !(containedView == showView)
             if !shouldHide {
                 let refreshViewController = viewControllers[index]
                 if refreshViewController.shouldRefresh() {
@@ -146,12 +158,12 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
                 }
                 switchedIndex = index
             }
-            containerView.isHidden = shouldHide
+            containedView.isHidden = shouldHide
         }
         switchedToIndex(switchedIndex)
     }
 
-    func cancelRefreshes() {
+    private func cancelRefreshes() {
         viewControllers.forEach {
             $0.cancelRefresh()
         }
@@ -159,7 +171,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
     // MARK: - Helper Methods
 
-    static func createNavigationLabel() -> UILabel {
+    private static func createNavigationLabel() -> UILabel {
         let label = UILabel(forAutoLayout: ())
         label.textColor = .white
         label.textAlignment = .center

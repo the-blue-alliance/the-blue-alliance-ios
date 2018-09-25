@@ -8,7 +8,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
 
     private var eventsViewController: EventsViewController!
 
-    override var viewControllers: [Refreshable & Stateful] {
+    override var viewControllers: [ContainableViewController] {
         return [eventsViewController]
     }
 

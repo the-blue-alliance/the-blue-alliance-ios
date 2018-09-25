@@ -18,7 +18,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     private var favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>!
     private var subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>!
 
-    override var viewControllers: [Refreshable & Stateful] {
+    override var viewControllers: [ContainableViewController] {
         return [favoritesViewController, subscriptionsViewController]
     }
 
@@ -196,10 +196,9 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 extension MyTBAViewController: MyTBAAuthenticationObservable {
 
     func authenticated() {
-        if segmentedControl.selectedSegmentIndex < viewControllers.count {
-            viewControllers[segmentedControl.selectedSegmentIndex].refresh()
+        if let viewController = currentViewController() {
+            viewController.refresh()
         }
-
         updateInterfaceMain()
     }
 

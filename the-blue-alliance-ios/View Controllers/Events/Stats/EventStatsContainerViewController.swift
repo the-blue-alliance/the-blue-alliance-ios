@@ -10,7 +10,7 @@ class EventStatsContainerViewController: ContainerViewController {
     private var teamStatsViewController: EventTeamStatsTableViewController!
     private var eventStatsViewController: EventStatsViewController?
 
-    override var viewControllers: [Refreshable & Stateful] {
+    override var viewControllers: [ContainableViewController] {
         return [teamStatsViewController, eventStatsViewController].compactMap({ $0 })
     }
 

@@ -9,7 +9,7 @@ class DistrictViewController: ContainerViewController {
     private var eventsViewController: EventsViewController!
     private var rankingsViewController: DistrictRankingsViewController!
 
-    override var viewControllers: [Refreshable & Stateful] {
+    override var viewControllers: [ContainableViewController] {
         return [eventsViewController, rankingsViewController]
     }
 
@@ -19,6 +19,7 @@ class DistrictViewController: ContainerViewController {
         self.district = district
 
         super.init(segmentedControlTitles: ["Events", "Rankings"],
+                   showCustomNavigationLables: false,
                    persistentContainer: persistentContainer)
 
         eventsViewController = EventsViewController(district: district, delegate: self, persistentContainer: persistentContainer)

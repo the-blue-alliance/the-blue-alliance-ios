@@ -9,7 +9,7 @@ class EventAlliancesContainerViewController: ContainerViewController {
 
     private var alliancesViewController: EventAlliancesViewController!
 
-    override var viewControllers: [Refreshable & Stateful] {
+    override var viewControllers: [ContainableViewController] {
         return [alliancesViewController]
     }
 

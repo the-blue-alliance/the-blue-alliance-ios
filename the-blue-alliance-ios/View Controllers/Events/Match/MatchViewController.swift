@@ -10,7 +10,7 @@ class MatchViewController: ContainerViewController {
     private var infoViewController: MatchInfoViewController?
     private var breakdownViewController: MatchBreakdownViewController?
 
-    override var viewControllers: [Refreshable & Stateful] {
+    override var viewControllers: [ContainableViewController] {
         return [infoViewController, breakdownViewController].compactMap({ $0 })
     }
 

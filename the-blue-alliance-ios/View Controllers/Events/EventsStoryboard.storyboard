@@ -457,7 +457,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="voy-KV-LhW" userLabel="Segmented Control View">
+                            <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="voy-KV-LhW" userLabel="Segmented Control View">
                                 <rect key="frame" x="0.0" y="64" width="375" height="44"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="f16-3v-WkT">
@@ -894,7 +894,7 @@
         <scene sceneID="bhK-em-3bi">
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="z91-7t-C9z" customClass="EventsContainerViewController" customModule="The_Blue_Alliance" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Yah-8P-k2n">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Yah-8P-k2n">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -1142,7 +1142,7 @@
         <image name="ic_sort_white" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="zPi-cg-PVX"/>
+        <segue reference="Xij-X1-snp"/>
         <segue reference="oO5-aj-OQj"/>
     </inferredMetricsTieBreakers>
 </document>

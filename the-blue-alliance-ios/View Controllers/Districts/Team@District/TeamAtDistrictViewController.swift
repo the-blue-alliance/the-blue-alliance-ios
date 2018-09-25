@@ -9,7 +9,7 @@ class TeamAtDistrictViewController: ContainerViewController {
     private var summaryViewController: DistrictTeamSummaryViewController!
     private var breakdownViewController: DistrictBreakdownViewController!
 
-    override var viewControllers: [Refreshable & Stateful] {
+    override var viewControllers: [ContainableViewController] {
         return [summaryViewController, breakdownViewController]
     }
 

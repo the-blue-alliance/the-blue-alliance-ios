@@ -61,8 +61,8 @@ class EventInfoViewController: TBATableViewController, Observable {
     init(event: Event, delegate: EventInfoViewControllerDelegate, persistentContainer: NSPersistentContainer) {
         self.event = event
         self.delegate = delegate
-        
-        super.init(persistentContainer: persistentContainer)
+
+        super.init(style: .grouped, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {

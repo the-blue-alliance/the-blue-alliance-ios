@@ -14,7 +14,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     // MARK: - Init
 
-    override init(persistentContainer: NSPersistentContainer) {
+    init(persistentContainer: NSPersistentContainer) {
         super.init(persistentContainer: persistentContainer)
     }
 

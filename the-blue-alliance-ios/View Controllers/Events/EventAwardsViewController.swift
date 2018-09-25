@@ -9,7 +9,7 @@ class EventAwardsContainerViewController: ContainerViewController {
 
     private var awardsViewController: EventAwardsViewController!
 
-    override var viewControllers: [Refreshable & Stateful] {
+    override var viewControllers: [ContainableViewController] {
         return [awardsViewController]
     }
 

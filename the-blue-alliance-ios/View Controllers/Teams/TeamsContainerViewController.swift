@@ -9,14 +9,14 @@ class TeamsContainerViewController: ContainerViewController {
 
     private var teamsViewController: TeamsViewController!
 
-    override var viewControllers: [Refreshable & Stateful] {
+    override var viewControllers: [ContainableViewController] {
         return [teamsViewController]
     }
 
     // MARK: - Init
 
     init(persistentContainer: NSPersistentContainer) {
-        super.init(persistentContainer: persistentContainer)
+        super.init(showCustomNavigationLables: false, persistentContainer: persistentContainer)
 
         title = "Teams"
         tabBarItem.image = UIImage(named: "ic_people")

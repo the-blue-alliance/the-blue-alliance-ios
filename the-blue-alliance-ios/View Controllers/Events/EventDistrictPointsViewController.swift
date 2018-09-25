@@ -8,7 +8,7 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
     private var event: Event
     private var districtPointsViewController: EventDistrictPointsViewController!
 
-    override var viewControllers: [Refreshable & Stateful] {
+    override var viewControllers: [ContainableViewController] {
         return [districtPointsViewController]
     }
 

@@ -29,7 +29,7 @@ class TeamViewController: ContainerViewController, Observable {
     private var eventsViewController: EventsViewController!
     private var mediaViewController: TeamMediaCollectionViewController!
 
-    override var viewControllers: [Refreshable & Stateful] {
+    override var viewControllers: [ContainableViewController] {
         return [infoViewController, eventsViewController, mediaViewController]
     }
 

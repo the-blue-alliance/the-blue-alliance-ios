@@ -18,7 +18,7 @@ class DistrictsContainerViewController: ContainerViewController {
     }
     private var districtsViewController: DistrictsViewController!
 
-    override var viewControllers: [Refreshable & Stateful] {
+    override var viewControllers: [ContainableViewController] {
         return [districtsViewController]
     }
 

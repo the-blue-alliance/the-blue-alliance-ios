@@ -10,7 +10,7 @@ class EventViewController: ContainerViewController {
     private var rankingsViewController: EventRankingsViewController!
     private var matchesViewController: MatchesViewController!
 
-    override var viewControllers: [Refreshable & Stateful] {
+    override var viewControllers: [ContainableViewController] {
         return [infoViewController, teamsViewController, rankingsViewController, matchesViewController]
     }
 
@@ -20,10 +20,11 @@ class EventViewController: ContainerViewController {
         self.event = event
 
         super.init(segmentedControlTitles: ["Info", "Teams", "Rankings", "Matches"],
+                   showCustomNavigationLables: false,
                    persistentContainer: persistentContainer)
 
         infoViewController = EventInfoViewController(event: event, delegate: self, persistentContainer: persistentContainer)
-        teamsViewController = TeamsViewController(delegate: self, persistentContainer: persistentContainer)
+        teamsViewController = TeamsViewController(delegate: self, event: event, persistentContainer: persistentContainer)
         rankingsViewController = EventRankingsViewController(event: event, delegate: self, persistentContainer: persistentContainer)
         matchesViewController = MatchesViewController(event: event, delegate: self, persistentContainer: persistentContainer)
     }

@@ -12,7 +12,7 @@ class TeamAtEventViewController: ContainerViewController {
     private var statsViewController: TeamStatsViewController!
     private var awardsViewController: EventAwardsViewController!
 
-    override var viewControllers: [Refreshable & Stateful] {
+    override var viewControllers: [ContainableViewController] {
         return [summaryViewController, matchesViewController, statsViewController, awardsViewController]
     }
 
@@ -28,6 +28,7 @@ class TeamAtEventViewController: ContainerViewController {
         summaryViewController = TeamSummaryViewController(team: team, event: event, delegate: self, persistentContainer: persistentContainer)
         matchesViewController = MatchesViewController(event: event, team: team, delegate: self, persistentContainer: persistentContainer)
         statsViewController = TeamStatsViewController(team: team, event: event, persistentContainer: persistentContainer)
+        awardsViewController = EventAwardsViewController(event: event, team: team, delegate: self, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {
