@@ -9,14 +9,12 @@ import UIKit
  */
 class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TBATableViewController, NSFetchedResultsControllerDelegate {
 
-    let myTBAObjectSelected: ((T) -> ())
+    // let myTBAObjectSelected: ((T) -> ())
     private var backgroundFetchKeys: Set<String> = []
 
     // MARK: - Init
 
-    init(myTBAObjectSelected: @escaping ((T) -> ()), persistentContainer: NSPersistentContainer) {
-        self.myTBAObjectSelected = myTBAObjectSelected
-
+    override init(persistentContainer: NSPersistentContainer) {
         super.init(persistentContainer: persistentContainer)
     }
 
@@ -267,9 +265,11 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let obj = fetchedResultsController?.object(at: indexPath)
+        /*
         if let obj = obj {
             myTBAObjectSelected(obj)
         }
+        */
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

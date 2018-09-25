@@ -2,14 +2,21 @@ import UIKit
 import TBAKit
 import CoreData
 
-enum EventInfoSection: Int {
+protocol EventInfoViewControllerDelegate: AnyObject {
+    func showAlliances()
+    func showAwards()
+    func showDistrictPoints()
+    func showStats()
+}
+
+private enum EventInfoSection: Int {
     case title
     case detail
     case link
     case max
 }
 
-enum EventDetailRow: Int {
+private enum EventDetailRow: Int {
     case alliances
     case districtPoints
     case stats
@@ -17,7 +24,7 @@ enum EventDetailRow: Int {
     case max
 }
 
-enum EventLinkRow: Int {
+private enum EventLinkRow: Int {
     case website
     case twitter
     case youtube
@@ -25,15 +32,10 @@ enum EventLinkRow: Int {
     case max
 }
 
-class EventInfoTableViewController: TBATableViewController, Observable {
+class EventInfoViewController: TBATableViewController, Observable {
 
-    let event: Event
-
-    // TODO: Let's get rid of these...
-    public var showAlliances: (() -> Void)?
-    public var showDistrictPoints: (() -> Void)?
-    public var showStats: (() -> Void)?
-    public var showAwards: (() -> Void)?
+    private let event: Event
+    private weak var delegate: EventInfoViewControllerDelegate?
 
     // MARK: - Persistable
 
@@ -56,9 +58,10 @@ class EventInfoTableViewController: TBATableViewController, Observable {
 
     // MARK: - Init
 
-    init(event: Event, persistentContainer: NSPersistentContainer) {
+    init(event: Event, delegate: EventInfoViewControllerDelegate, persistentContainer: NSPersistentContainer) {
         self.event = event
-
+        self.delegate = delegate
+        
         super.init(persistentContainer: persistentContainer)
     }
 
@@ -212,21 +215,13 @@ class EventInfoTableViewController: TBATableViewController, Observable {
 
             switch row {
             case EventDetailRow.alliances.rawValue:
-                if let showAlliances = showAlliances {
-                    showAlliances()
-                }
+                delegate?.showAlliances()
             case EventDetailRow.districtPoints.rawValue:
-                if let showDistrictPoints = showDistrictPoints {
-                    showDistrictPoints()
-                }
+                delegate?.showDistrictPoints()
             case EventDetailRow.stats.rawValue:
-                if let showStats = showStats {
-                    showStats()
-                }
+                delegate?.showStats()
             case EventDetailRow.awards.rawValue:
-                if let showAwards = showAwards {
-                    showAwards()
-                }
+                delegate?.showAwards()
             default:
                 break
             }

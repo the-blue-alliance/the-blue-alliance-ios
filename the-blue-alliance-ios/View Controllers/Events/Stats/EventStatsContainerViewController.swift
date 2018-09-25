@@ -5,11 +5,16 @@ import UIKit
 
 class EventStatsContainerViewController: ContainerViewController {
 
-    let event: Event
+    private let event: Event
 
-    private var teamStatsViewController: EventTeamStatsTableViewController?
+    private var teamStatsViewController: EventTeamStatsTableViewController!
+    private var eventStatsViewController: EventStatsViewController?
 
-    private let filerBarButtonItem: UIBarButtonItem = {
+    override var viewControllers: [Refreshable & Stateful] {
+        return [teamStatsViewController, eventStatsViewController].compactMap({ $0 })
+    }
+
+    lazy private var filerBarButtonItem: UIBarButtonItem = { [unowned self] in
         return UIBarButtonItem(image: UIImage(named: "ic_sort_white"),
                                style: .plain,
                                target: self,
@@ -21,23 +26,17 @@ class EventStatsContainerViewController: ContainerViewController {
     init(event: Event, persistentContainer: NSPersistentContainer) {
         self.event = event
 
-        super.init(segmentedControlTitles: ["Team Stats", "Event Stats"],
-                   persistentContainer: persistentContainer)
-
-        teamStatsViewController = EventTeamStatsTableViewController(event: event, teamSelected: { [unowned self] (team) in
-            let teamAtEventViewController = TeamAtEventViewController(team: team, event: self.event, persistentContainer: persistentContainer)
-            self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
-            }, persistentContainer: persistentContainer)
-
-        var viewControllers: [Persistable & Refreshable & Stateful] = [teamStatsViewController!]
-
         // Only show event stats if year is 2016 or onward
+        var titles = ["Team Stats"]
         if Int(event.year) >= 2016 {
-            let eventStatsViewController = EventStatsViewController(event: event, persistentContainer: persistentContainer)
-            viewControllers.append(eventStatsViewController)
+            titles.append("Event Stats")
         }
 
-        self.viewControllers = viewControllers
+        super.init(segmentedControlTitles: titles,
+                   persistentContainer: persistentContainer)
+
+        eventStatsViewController = EventStatsViewController(event: event, persistentContainer: persistentContainer)
+        teamStatsViewController = EventTeamStatsTableViewController(event: event, delegate: self, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -98,6 +97,15 @@ class EventStatsContainerViewController: ContainerViewController {
         } else {
             navigationItem.rightBarButtonItem = nil
         }
+    }
+
+}
+
+extension EventStatsContainerViewController: EventTeamStatsSelectionDelegate {
+
+    func eventTeamStatSelected(_ eventTeamStat: EventTeamStat) {
+        let teamAtEventViewController = TeamAtEventViewController(team: eventTeamStat.team!, event: event, persistentContainer: persistentContainer)
+        self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
 }

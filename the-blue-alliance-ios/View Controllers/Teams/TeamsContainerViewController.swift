@@ -7,22 +7,34 @@ private let TeamSegue = "TeamSegue"
 
 class TeamsContainerViewController: ContainerViewController {
 
+    private var teamsViewController: TeamsViewController!
+
+    override var viewControllers: [Refreshable & Stateful] {
+        return [teamsViewController]
+    }
+
+    // MARK: - Init
+
     init(persistentContainer: NSPersistentContainer) {
         super.init(persistentContainer: persistentContainer)
 
         title = "Teams"
         tabBarItem.image = UIImage(named: "ic_people")
 
-        let teamsViewController = TeamsTableViewController(teamSelected: { [unowned self] (team) in
-            let teamViewController = TeamViewController(team: team, persistentContainer: persistentContainer)
-            self.navigationController?.pushViewController(teamViewController, animated: true)
-            }, persistentContainer: persistentContainer)
-
-        viewControllers = [teamsViewController]
+        teamsViewController = TeamsViewController(delegate: self, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+}
+
+extension TeamsContainerViewController: TeamsViewControllerDelegate {
+
+    func teamSelected(_ team: Team) {
+        let teamViewController = TeamViewController(team: team, persistentContainer: persistentContainer)
+        self.navigationController?.pushViewController(teamViewController, animated: true)
     }
 
 }

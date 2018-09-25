@@ -3,16 +3,20 @@ import TBAKit
 import UIKit
 import CoreData
 
-class DistrictRankingsTableViewController: TBATableViewController {
+protocol DistrictRankingsViewControllerDelegate: AnyObject {
+    func districtRankingSelected(_ districtRanking: DistrictRanking)
+}
 
-    let district: District
-    let rankingSelected: ((DistrictRanking) -> ())
+class DistrictRankingsViewController: TBATableViewController {
+
+    private let district: District
+    private weak var delegate: DistrictRankingsViewControllerDelegate?
 
     // MARK: - Init
 
-    init(district: District, rankingSelected: @escaping ((DistrictRanking) -> ()), persistentContainer: NSPersistentContainer) {
+    init(district: District, delegate: DistrictRankingsViewControllerDelegate, persistentContainer: NSPersistentContainer) {
         self.district = district
-        self.rankingSelected = rankingSelected
+        self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
     }
@@ -148,13 +152,13 @@ class DistrictRankingsTableViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let ranking = dataSource?.object(at: indexPath)
         if let ranking = ranking {
-            rankingSelected(ranking)
+            delegate?.districtRankingSelected(ranking)
         }
     }
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<DistrictRanking, DistrictRankingsTableViewController>?
+    fileprivate var dataSource: TableViewDataSource<DistrictRanking, DistrictRankingsViewController>?
 
     fileprivate func setupDataSource() {
         let fetchRequest: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
@@ -182,7 +186,7 @@ class DistrictRankingsTableViewController: TBATableViewController {
 
 }
 
-extension DistrictRankingsTableViewController: TableViewDataSourceDelegate {
+extension DistrictRankingsViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: RankingTableViewCell, for object: DistrictRanking, at indexPath: IndexPath) {
         cell.districtRanking = object

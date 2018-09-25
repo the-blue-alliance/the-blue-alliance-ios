@@ -3,7 +3,11 @@ import UIKit
 import CoreData
 import TBAKit
 
-class DistrictsTableViewController: TBATableViewController {
+protocol DistrictsViewControllerDelegate: AnyObject {
+    func districtSelected(_ district: District)
+}
+
+class DistrictsViewController: TBATableViewController {
 
     var year: Int {
         didSet {
@@ -11,13 +15,13 @@ class DistrictsTableViewController: TBATableViewController {
             updateDataSource()
         }
     }
-    let districtSelected: ((District) -> ())
+    private weak var delegate: DistrictsViewControllerDelegate?
 
     // MARK: - Init
 
-    init(year: Int, districtSelected: @escaping ((District) -> ()), persistentContainer: NSPersistentContainer) {
+    init(year: Int, delegate: DistrictsViewControllerDelegate, persistentContainer: NSPersistentContainer) {
         self.year = year
-        self.districtSelected = districtSelected
+        self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
     }
@@ -69,13 +73,13 @@ class DistrictsTableViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let district = dataSource?.object(at: indexPath)
         if let district = district {
-            districtSelected(district)
+            delegate?.districtSelected(district)
         }
     }
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<District, DistrictsTableViewController>?
+    fileprivate var dataSource: TableViewDataSource<District, DistrictsViewController>?
 
     fileprivate func setupDataSource() {
         let fetchRequest: NSFetchRequest<District> = District.fetchRequest()
@@ -103,7 +107,7 @@ class DistrictsTableViewController: TBATableViewController {
 
 }
 
-extension DistrictsTableViewController: TableViewDataSourceDelegate {
+extension DistrictsViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: UITableViewCell, for object: District, at indexPath: IndexPath) {
         cell.textLabel?.text = object.name

@@ -15,6 +15,13 @@ private let MatchSegue = "MatchSegue"
 
 class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
+    private var favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>!
+    private var subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>!
+
+    override var viewControllers: [Refreshable & Stateful] {
+        return [favoritesViewController, subscriptionsViewController]
+    }
+
     internal var signInViewController: MyTBASignInViewController!
     @IBOutlet internal var signInView: UIView!
     @IBOutlet internal var signOutBarButtonItem: UIBarButtonItem!
@@ -39,15 +46,8 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         super.init(segmentedControlTitles: ["Favorites", "Subscriptions"],
                    persistentContainer: persistentContainer)
 
-        let favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBAObjectSelected: { [unowned self] (myTBAObj) in
-            self.pushMyTBAObject(myTBAObj)
-            }, persistentContainer: persistentContainer)
-
-        let subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(myTBAObjectSelected: { [unowned self] (myTBAObj) in
-            self.pushMyTBAObject(myTBAObj)
-            }, persistentContainer: persistentContainer)
-
-        viewControllers = [favoritesViewController, subscriptionsViewController]
+        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(persistentContainer: persistentContainer)
+        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(persistentContainer: persistentContainer)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -196,7 +196,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 extension MyTBAViewController: MyTBAAuthenticationObservable {
 
     func authenticated() {
-        if segmentedControl.selectedSegmentIndex < viewControllers.count {
+        if let segmentedControl = segmentedControl, segmentedControl.selectedSegmentIndex < viewControllers.count {
             viewControllers[segmentedControl.selectedSegmentIndex].refresh()
         }
 

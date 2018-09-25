@@ -6,8 +6,8 @@ import FirebaseRemoteConfig
 
 class DistrictsContainerViewController: ContainerViewController {
 
-    let maxYear: Int
-    var year: Int = RemoteConfig.remoteConfig().currentSeason {
+    private let remoteConfig: RemoteConfig
+    private var year: Int {
         didSet {
             districtsViewController!.year = year
 
@@ -16,25 +16,25 @@ class DistrictsContainerViewController: ContainerViewController {
             }
         }
     }
-    private var districtsViewController: DistrictsTableViewController?
+    private var districtsViewController: DistrictsViewController!
+
+    override var viewControllers: [Refreshable & Stateful] {
+        return [districtsViewController]
+    }
 
     // MARK: - Init
 
     init(remoteConfig: RemoteConfig, persistentContainer: NSPersistentContainer) {
-        maxYear = remoteConfig.maxSeason
+        self.remoteConfig = remoteConfig
         year = remoteConfig.currentSeason
 
         super.init(persistentContainer: persistentContainer)
 
         title = "Districts"
         tabBarItem.image = UIImage(named: "ic_assignment")
+        hidesBottomBarWhenPushed = true
 
-        districtsViewController = DistrictsTableViewController(year: year, districtSelected: { [unowned self] (district) in
-            let districtViewController = DistrictViewController(district: district, persistentContainer: persistentContainer)
-            self.navigationController?.pushViewController(districtViewController, animated: true)
-            }, persistentContainer: persistentContainer)
-
-        viewControllers = [districtsViewController!]
+        districtsViewController = DistrictsViewController(year: year, delegate: self, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -45,6 +45,8 @@ class DistrictsContainerViewController: ContainerViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // TODO: Shouldn't this have the same split view controller code the other root views do?
 
         updateInterface()
     }
@@ -61,7 +63,7 @@ class DistrictsContainerViewController: ContainerViewController {
         let selectTableViewController = SelectTableViewController<Int>()
         selectTableViewController.title = "Select Year"
         selectTableViewController.current = year
-        selectTableViewController.options = Array(2009...maxYear).reversed()
+        selectTableViewController.options = Array(2009...remoteConfig.maxSeason).reversed()
         selectTableViewController.optionSelected = { [unowned self] year in
             self.year = year
         }
@@ -71,6 +73,15 @@ class DistrictsContainerViewController: ContainerViewController {
 
         let navigationController = UINavigationController(rootViewController: selectTableViewController)
         self.navigationController?.present(navigationController, animated: true, completion: nil)
+    }
+
+}
+
+extension DistrictsContainerViewController: DistrictsViewControllerDelegate {
+
+    func districtSelected(_ district: District) {
+        let districtViewController = DistrictViewController(district: district, persistentContainer: persistentContainer)
+        self.navigationController?.pushViewController(districtViewController, animated: true)
     }
 
 }

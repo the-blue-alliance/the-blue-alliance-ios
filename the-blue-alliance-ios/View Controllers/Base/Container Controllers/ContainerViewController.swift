@@ -6,42 +6,32 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
     var persistentContainer: NSPersistentContainer
 
-    var navigationTitleLabel: UILabel
-    var navigationDetailLabel: UILabel
-
-    let segmentedControl: UISegmentedControl?
-    private lazy var setupSegmentedControlViews: Void = { [unowned self] in
-        self.updateSegmentedControlViews()
-    }()
-
-    let containerView: UIView = UIView()
-
-    var viewControllers: [Stateful & Persistable & Refreshable] = [] {
-        willSet {
-            for subview in containerView.subviews {
-                subview.removeFromSuperview()
-            }
-        }
+    private let navigationStackView: UIStackView
+    var navigationTitleLabel: UILabel {
         didSet {
-            // Add subviews to view hiearchy in reverse order, so first one is showing automatically
-            for viewController in viewControllers.reversed() {
-                containerView.addSubview(viewController.dataView)
+            navigationStackView.isHidden = false
+        }
+    }
+    var navigationDetailLabel: UILabel {
+        didSet {
+            navigationStackView.isHidden = false
+        }
+    }
+
+    override var title: String? {
+        didSet {
+            if title != nil {
+                navigationStackView.isHidden = true
             }
         }
     }
 
-    /*
-    var noDataViewController: NoDataViewController?
-    */
+    var segmentedControl: UISegmentedControl?
 
-    /*
-    @IBOutlet var segmentedControl: UISegmentedControl?
-    @IBOutlet var segmentedControlView: UIView? {
-        didSet {
-            segmentedControlView?.backgroundColor = .primaryBlue
-        }
+    private let containerView: UIView = UIView()
+    var viewControllers: [Refreshable & Stateful] {
+        fatalError("Override viewControllers in subclass - \(String(describing: type(of: self)))")
     }
-    */
 
     init(segmentedControlTitles: [String]? = nil, persistentContainer: NSPersistentContainer) {
         self.persistentContainer = persistentContainer
@@ -49,7 +39,8 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         if let segmentedControlTitles = segmentedControlTitles {
             let segmentedControl = UISegmentedControl(items: segmentedControlTitles)
             segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-            segmentedControl.autoSetDimension(.height, toSize: 44.0)
+            segmentedControl.backgroundColor = .primaryBlue
+            segmentedControl.tintColor = .white
             self.segmentedControl = segmentedControl
         }
 
@@ -64,11 +55,11 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
             label.textAlignment = .center
         }
 
-        super.init(nibName: nil, bundle: nil)
-
-        let navigationStackView = UIStackView(arrangedSubviews: [navigationTitleLabel, navigationDetailLabel])
+        navigationStackView = UIStackView(arrangedSubviews: [navigationTitleLabel, navigationDetailLabel])
         navigationStackView.axis = .vertical
         navigationStackView.translatesAutoresizingMaskIntoConstraints = false
+
+        super.init(nibName: nil, bundle: nil)
 
         navigationItem.titleView = navigationStackView
 
@@ -79,24 +70,25 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func loadView() {
+    override func viewDidLoad() {
         // Remove segmentedControl if we don't need one
         let arrangedSubviews = [segmentedControl, containerView].compactMap({ $0 })
         let stackView = UIStackView(arrangedSubviews: arrangedSubviews)
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
 
-        view = UIView(forAutoLayout: ())
+        segmentedControl?.autoSetDimension(.height, toSize: 44.0)
+        // segmentedControl?.autoPinEdges(toSuperviewMarginsExcludingEdge: .bottom)
+
+        // Add subviews to view hiearchy in reverse order, so first one is showing automatically
+        for viewController in viewControllers.reversed() {
+            let containedView = viewController.dataView
+            containerView.addSubview(containedView)
+            containedView.autoPinEdgesToSuperviewSafeArea()
+        }
+
         view.addSubview(stackView)
-        stackView.autoPinEdgesToSuperviewEdges()
-    }
-
-    // TODO: Do we still need this???
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        // Equlivent of doing a dispatch_once in Obj-C
-        // Only setup the segmented control views on view did appear the first time
-        _ = setupSegmentedControlViews
+        stackView.autoPinEdgesToSuperviewSafeArea()
     }
 
     @IBAction func segmentedControlValueChanged(sender: Any) {
@@ -121,7 +113,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     @objc func updateSegmentedControlViews() {
         if viewControllers.count == 1, let viewController = viewControllers.first {
             show(view: viewController.dataView)
-        } else if viewControllers.count > segmentedControl.selectedSegmentIndex {
+        } else if let segmentedControl = segmentedControl, viewControllers.count > segmentedControl.selectedSegmentIndex {
             show(view: viewControllers[segmentedControl.selectedSegmentIndex].dataView)
         }
     }

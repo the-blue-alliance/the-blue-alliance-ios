@@ -3,10 +3,10 @@ import UIKit
 import CoreData
 import TBAKit
 
-class TeamStatsTableViewController: TBATableViewController, Observable {
+class TeamStatsViewController: TBATableViewController, Observable {
 
-    let event: Event
-    let team: Team
+    private let event: Event
+    private let team: Team
 
     private var teamStat: EventTeamStat? {
         didSet {
@@ -24,14 +24,6 @@ class TeamStatsTableViewController: TBATableViewController, Observable {
         }
     }
 
-    // MARK: - Persistable
-
-    override var persistentContainer: NSPersistentContainer {
-        didSet {
-            teamStat = EventTeamStat.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
-        }
-    }
-
     // MARK: - Observable
 
     typealias ManagedType = EventTeamStat
@@ -45,11 +37,13 @@ class TeamStatsTableViewController: TBATableViewController, Observable {
 
     // MARK: - Init
 
-    init(persistentContainer: NSPersistentContainer, team: Team, event: Event) {
+    init(team: Team, event: Event, persistentContainer: NSPersistentContainer) {
         self.team = team
         self.event = event
 
         super.init(persistentContainer: persistentContainer)
+
+        teamStat = EventTeamStat.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
     }
 
     required init?(coder aDecoder: NSCoder) {

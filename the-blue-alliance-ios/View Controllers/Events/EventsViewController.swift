@@ -2,17 +2,21 @@ import UIKit
 import TBAKit
 import CoreData
 
-class EventsTableViewController: TBATableViewController {
+protocol EventsViewControllerDelegate: AnyObject {
+    func eventSelected(_ event: Event)
+}
 
-    let team: Team?
-    let district: District?
+class EventsViewController: TBATableViewController {
+
+    private let team: Team?
+    private let district: District?
     var year: Int? {
         didSet {
             cancelRefresh()
             updateDataSource()
         }
     }
-    let eventSelected: ((Event) -> ())
+    private weak var delegate: EventsViewControllerDelegate?
 
     // The selected Event from the weekEvents array to represent the Week to show
     // We need a full object as opposed to a number because of CMP, off-season, etc.
@@ -24,23 +28,23 @@ class EventsTableViewController: TBATableViewController {
 
     // MARK: Init
 
-    convenience init(year: Int, eventSelected: @escaping ((Event) -> ()), persistentContainer: NSPersistentContainer) {
-        self.init(year: year, team: nil, district: nil, eventSelected: eventSelected, persistentContainer: persistentContainer)
+    convenience init(year: Int, delegate: EventsViewControllerDelegate, persistentContainer: NSPersistentContainer) {
+        self.init(year: year, team: nil, district: nil, delegate: delegate, persistentContainer: persistentContainer)
     }
 
-    convenience init(team: Team, eventSelected: @escaping ((Event) -> ()), persistentContainer: NSPersistentContainer) {
-        self.init(year: nil, team: team, district: nil, eventSelected: eventSelected, persistentContainer: persistentContainer)
+    convenience init(team: Team, delegate: EventsViewControllerDelegate, persistentContainer: NSPersistentContainer) {
+        self.init(year: nil, team: team, district: nil, delegate: delegate, persistentContainer: persistentContainer)
     }
 
-    convenience init(district: District, eventSelected: @escaping ((Event) -> ()), persistentContainer: NSPersistentContainer) {
-        self.init(year: nil, team: nil, district: district, eventSelected: eventSelected, persistentContainer: persistentContainer)
+    convenience init(district: District, delegate: EventsViewControllerDelegate, persistentContainer: NSPersistentContainer) {
+        self.init(year: nil, team: nil, district: district, delegate: delegate, persistentContainer: persistentContainer)
     }
 
-    private init(year: Int?, team: Team?, district: District?, eventSelected: @escaping ((Event) -> ()), persistentContainer: NSPersistentContainer) {
+    private init(year: Int?, team: Team?, district: District?, delegate: EventsViewControllerDelegate, persistentContainer: NSPersistentContainer) {
         self.year = year
         self.team = team
         self.district = district
-        self.eventSelected = eventSelected
+        self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
     }
@@ -158,13 +162,13 @@ class EventsTableViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let event = dataSource?.object(at: indexPath)
         if let event = event {
-            eventSelected(event)
+            delegate?.eventSelected(event)
         }
     }
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<Event, EventsTableViewController>?
+    fileprivate var dataSource: TableViewDataSource<Event, EventsViewController>?
 
     fileprivate func setupDataSource() {
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
@@ -221,7 +225,7 @@ class EventsTableViewController: TBATableViewController {
 
 }
 
-extension EventsTableViewController: TableViewDataSourceDelegate {
+extension EventsViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: EventTableViewCell, for object: Event, at indexPath: IndexPath) {
         cell.event = object

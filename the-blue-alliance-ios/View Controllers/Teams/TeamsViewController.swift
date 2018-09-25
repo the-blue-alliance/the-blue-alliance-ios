@@ -2,15 +2,25 @@ import Foundation
 import TBAKit
 import CoreData
 
-class TeamsTableViewController: TBATableViewController {
+protocol TeamsViewControllerDelegate: AnyObject {
+    func teamSelected(_ team: Team)
+}
 
-    let event: Event?
-    let teamSelected: ((Team) -> ())
+class TeamsViewController: TBATableViewController {
 
-    let searchController = UISearchController(searchResultsController: nil)
+    private let event: Event?
+    private var delegate: TeamsViewControllerDelegate?
 
-    init(teamSelected: @escaping ((Team) -> ()), event: Event? = nil, persistentContainer: NSPersistentContainer) {
-        self.teamSelected = teamSelected
+    lazy private var searchController: UISearchController = { [unowned self] in
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        return searchController
+    }()
+
+    init(delegate: TeamsViewControllerDelegate, event: Event? = nil, persistentContainer: NSPersistentContainer) {
+        self.delegate = delegate
         self.event = event
 
         super.init(persistentContainer: persistentContainer)
@@ -24,10 +34,6 @@ class TeamsTableViewController: TBATableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = false
 
         tableView.tableHeaderView = searchController.searchBar
 
@@ -114,7 +120,7 @@ class TeamsTableViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let team = dataSource?.object(at: indexPath)
         if let team = team {
-            teamSelected(team)
+            delegate?.teamSelected(team)
         }
     }
 
@@ -126,7 +132,7 @@ class TeamsTableViewController: TBATableViewController {
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<Team, TeamsTableViewController>?
+    fileprivate var dataSource: TableViewDataSource<Team, TeamsViewController>?
 
     fileprivate func setupDataSource() {
         let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
@@ -163,7 +169,7 @@ class TeamsTableViewController: TBATableViewController {
 
 }
 
-extension TeamsTableViewController: TableViewDataSourceDelegate {
+extension TeamsViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: TeamTableViewCell, for object: Team, at indexPath: IndexPath) {
         cell.team = object
@@ -182,7 +188,7 @@ extension TeamsTableViewController: TableViewDataSourceDelegate {
 
 }
 
-extension TeamsTableViewController: UISearchResultsUpdating {
+extension TeamsViewController: UISearchResultsUpdating {
 
     public func updateSearchResults(for searchController: UISearchController) {
         updateDataSource()

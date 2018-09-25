@@ -3,6 +3,11 @@ import UIKit
 import TBAKit
 import CoreData
 
+protocol TeamSummaryViewControllerDelegate: AnyObject {
+    func awardsSelected()
+    func matchSelected(_ match: Match)
+}
+
 enum TeamSummaryRow: Int {
     case rank
     case awards
@@ -16,10 +21,12 @@ enum TeamSummaryRow: Int {
     case max
 }
 
-class TeamSummaryTableViewController: TBATableViewController {
+class TeamSummaryViewController: TBATableViewController {
 
-    var team: Team
-    var event: Event
+    private let team: Team
+    private let event: Event
+
+    private weak var delegate: TeamSummaryViewControllerDelegate?
 
     var teamAwards: Set<Award> {
         guard let awards = event.awards else {
@@ -44,9 +51,6 @@ class TeamSummaryTableViewController: TBATableViewController {
         }
     }
 
-    var awardsSelected: (() -> ())?
-    var matchSelected: ((Match) -> ())?
-
     // MARK: - Observable
 
     typealias ManagedType = EventStatus
@@ -58,15 +62,14 @@ class TeamSummaryTableViewController: TBATableViewController {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
 
-    var backgroundFetchKeys: Set<String> = []
-    var summaryRows: [TeamSummaryRow] = []
-    var summaryValues: [Any] = []
+    private var backgroundFetchKeys: Set<String> = []
+    private var summaryRows: [TeamSummaryRow] = []
+    private var summaryValues: [Any] = []
 
-    init(team: Team, event: Event, awardsSelected: (() -> ())?, matchSelected: ((Match) -> ())?, persistentContainer: NSPersistentContainer) {
+    init(team: Team, event: Event, delegate: TeamSummaryViewControllerDelegate, persistentContainer: NSPersistentContainer) {
         self.team = team
         self.event = event
-        self.awardsSelected = awardsSelected
-        self.matchSelected = matchSelected
+        self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
 
@@ -342,12 +345,10 @@ class TeamSummaryTableViewController: TBATableViewController {
         let rowValue = summaryValues[indexPath.row]
         switch rowType {
         case .awards:
-            if let awardsSelected = awardsSelected {
-                awardsSelected()
-            }
+            delegate?.awardsSelected()
         case .nextMatch, .lastMatch:
-            if let matchSelected = matchSelected {
-                matchSelected(rowValue as! Match)
+            if let match = rowValue as? Match {
+                delegate?.matchSelected(match)
             }
         default:
             break

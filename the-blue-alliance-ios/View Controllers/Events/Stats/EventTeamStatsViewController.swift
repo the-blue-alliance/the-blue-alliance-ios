@@ -3,6 +3,10 @@ import UIKit
 import TBAKit
 import CoreData
 
+protocol EventTeamStatsSelectionDelegate: AnyObject {
+    func eventTeamStatSelected(_ eventTeamStat: EventTeamStat)
+}
+
 public enum EventTeamStatFilter: Int {
     case opr
     case dpr
@@ -13,8 +17,10 @@ public enum EventTeamStatFilter: Int {
 
 class EventTeamStatsTableViewController: TBATableViewController {
 
-    let event: Event
-    let teamSelected: ((Team) -> ())
+    private let event: Event
+    private weak var delegate: EventTeamStatsSelectionDelegate?
+
+    // TODO: Pass in a UserDefaults guy here
     var filter: EventTeamStatFilter {
         didSet {
             UserDefaults.standard.set(filter.rawValue, forKey: "EventTeamStatFilter")
@@ -26,9 +32,9 @@ class EventTeamStatsTableViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, teamSelected: @escaping ((Team) -> ()), persistentContainer: NSPersistentContainer) {
+    init(event: Event, delegate: EventTeamStatsSelectionDelegate, persistentContainer: NSPersistentContainer) {
         self.event = event
-        self.teamSelected = teamSelected
+        self.delegate = delegate
 
         // TODO: Pass a UserDefaults probably
         filter = EventTeamStatFilter(rawValue: UserDefaults.standard.integer(forKey: "EventTeamStatFilter"))!
@@ -87,8 +93,8 @@ class EventTeamStatsTableViewController: TBATableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let eventTeamStats = dataSource?.object(at: indexPath)
-        if let team = eventTeamStats?.team {
-            teamSelected(team)
+        if let eventTeamStats = eventTeamStats {
+            delegate?.eventTeamStatSelected(eventTeamStats)
         }
     }
 

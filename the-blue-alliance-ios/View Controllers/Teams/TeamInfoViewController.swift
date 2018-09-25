@@ -22,7 +22,7 @@ enum TeamLinkRow: Int {
     case max
 }
 
-class TeamInfoTableViewController: TBATableViewController {
+class TeamInfoViewController: TBATableViewController {
 
     var team: Team
     var sponsorsExpanded: Bool = false

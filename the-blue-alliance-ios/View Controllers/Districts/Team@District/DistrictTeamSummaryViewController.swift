@@ -3,10 +3,15 @@ import UIKit
 import CoreData
 import TBAKit
 
-class DistrictTeamSummaryTableViewController: TBATableViewController {
+protocol DistrictTeamSummaryViewControllerDelegate: AnyObject {
+    func eventPointsSelected(_ eventPoints: DistrictEventPoints)
+}
 
-    let ranking: DistrictRanking
-    let eventPointsSelected: ((DistrictEventPoints) -> ())
+class DistrictTeamSummaryViewController: TBATableViewController {
+
+    private let ranking: DistrictRanking
+    private weak var delegate: DistrictTeamSummaryViewControllerDelegate?
+
     private let sortedEventPoints: [DistrictEventPoints]
 
     // MARK: - Persistable
@@ -30,9 +35,9 @@ class DistrictTeamSummaryTableViewController: TBATableViewController {
 
     // MARK: Init
 
-    init(ranking: DistrictRanking, eventPointsSelected: @escaping ((DistrictEventPoints) -> ()), persistentContainer: NSPersistentContainer) {
+    init(ranking: DistrictRanking, delegate: DistrictTeamSummaryViewControllerDelegate, persistentContainer: NSPersistentContainer) {
         self.ranking = ranking
-        self.eventPointsSelected = eventPointsSelected
+        self.delegate = delegate
 
         sortedEventPoints = ranking.eventPoints?.sortedArray(using: [NSSortDescriptor(key: "event.startDate", ascending: true)]) as? [DistrictEventPoints] ?? []
 
@@ -121,7 +126,7 @@ class DistrictTeamSummaryTableViewController: TBATableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
 
         if isEventPointsRow(row: indexPath.row) {
-            eventPointsSelected(sortedEventPoints[indexPath.row - 1])
+            delegate?.eventPointsSelected(sortedEventPoints[indexPath.row - 1])
         }
     }
 

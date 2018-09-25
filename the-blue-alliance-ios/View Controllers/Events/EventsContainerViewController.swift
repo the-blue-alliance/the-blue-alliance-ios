@@ -6,8 +6,13 @@ import FirebaseRemoteConfig
 
 class EventsContainerViewController: ContainerViewController, Observable {
 
-    private var eventsViewController: EventsTableViewController?
-    private let weeksButton: UIBarButtonItem = {
+    private var eventsViewController: EventsViewController!
+
+    override var viewControllers: [Refreshable & Stateful] {
+        return [eventsViewController]
+    }
+
+    private lazy var weeksButton: UIBarButtonItem = { [unowned self] in
         return UIBarButtonItem(title: "Weeks",
                                style: .plain,
                                target: self,
@@ -74,13 +79,9 @@ class EventsContainerViewController: ContainerViewController, Observable {
 
         title = "Events"
         tabBarItem.image = UIImage(named: "ic_event")
+        navigationItem.rightBarButtonItem = weeksButton
 
-        eventsViewController = EventsTableViewController(year: year, eventSelected: { [unowned self] (event) in
-            let eventViewController = EventViewController(event: event, persistentContainer: persistentContainer)
-            self.navigationController?.pushViewController(eventViewController, animated: true)
-            }, persistentContainer: persistentContainer)
-
-        viewControllers = [eventsViewController!]
+        eventsViewController = EventsViewController(year: year, delegate: self, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -100,7 +101,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
 
     // MARK: - Private Methods
 
-    func updateInterface() {
+    private func updateInterface() {
         if let weekEvent = weekEvent {
             navigationTitleLabel.text = "\(weekEvent.weekString) Events"
         } else {
@@ -222,7 +223,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
         }
     }
 
-    @objc func showSelectWeek() {
+    func showSelectYear() {
         let selectTableViewController = SelectTableViewController<Int>()
         selectTableViewController.title = "Select Year"
         selectTableViewController.current = year
@@ -238,7 +239,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
         self.navigationController?.present(navigationController, animated: true, completion: nil)
     }
 
-    func showSelectYear() {
+    @objc func showSelectWeek() {
         if weekEvents.isEmpty || weekEvent == nil {
             return
         }
@@ -270,6 +271,15 @@ class EventsContainerViewController: ContainerViewController, Observable {
 
         let navigationController = UINavigationController(rootViewController: selectTableViewController)
         self.navigationController?.present(navigationController, animated: true, completion: nil)
+    }
+
+}
+
+extension EventsContainerViewController: EventsViewControllerDelegate {
+
+    func eventSelected(_ event: Event) {
+        let eventViewController = EventViewController(event: event, persistentContainer: persistentContainer)
+        self.navigationController?.pushViewController(eventViewController, animated: true)
     }
 
 }

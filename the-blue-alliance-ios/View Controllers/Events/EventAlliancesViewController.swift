@@ -3,9 +3,15 @@ import TBAKit
 import UIKit
 import CoreData
 
-class EventAlliancesViewController: ContainerViewController {
+class EventAlliancesContainerViewController: ContainerViewController {
 
-    let event: Event
+    private let event: Event
+
+    private var alliancesViewController: EventAlliancesViewController!
+
+    override var viewControllers: [Refreshable & Stateful] {
+        return [alliancesViewController]
+    }
 
     // MARK: - Init
 
@@ -14,12 +20,7 @@ class EventAlliancesViewController: ContainerViewController {
 
         super.init(persistentContainer: persistentContainer)
 
-        let alliancesViewController = EventAlliancesTableViewController(event: event, teamSelected: { [unowned self] (team) in
-            let teamAtEventViewController = TeamAtEventViewController(team: team, event: self.event, persistentContainer: persistentContainer)
-            self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
-            }, persistentContainer: persistentContainer)
-
-        viewControllers = [alliancesViewController]
+        alliancesViewController = EventAlliancesViewController(event: event, delegate: self, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -37,16 +38,29 @@ class EventAlliancesViewController: ContainerViewController {
 
 }
 
-class EventAlliancesTableViewController: TBATableViewController {
+extension EventAlliancesContainerViewController: EventAlliancesViewControllerDelegate {
 
-    let event: Event
-    let teamSelected: ((Team) -> ())
+    func teamSelected(_ team: Team) {
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: self.event, persistentContainer: persistentContainer)
+        self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
+    }
+
+}
+
+protocol EventAlliancesViewControllerDelegate: AnyObject {
+    func teamSelected(_ team: Team)
+}
+
+private class EventAlliancesViewController: TBATableViewController {
+
+    private let event: Event
+    private weak var delegate: EventAlliancesViewControllerDelegate?
 
     // MARK: - Init
 
-    init(event: Event, teamSelected: @escaping ((Team) -> ()), persistentContainer: NSPersistentContainer) {
+    init(event: Event, delegate: EventAlliancesViewControllerDelegate, persistentContainer: NSPersistentContainer) {
         self.event = event
-        self.teamSelected = teamSelected
+        self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
     }
@@ -101,7 +115,7 @@ class EventAlliancesTableViewController: TBATableViewController {
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<EventAlliance, EventAlliancesTableViewController>?
+    fileprivate var dataSource: TableViewDataSource<EventAlliance, EventAlliancesViewController>?
 
     fileprivate func setupDataSource() {
         let fetchRequest: NSFetchRequest<EventAlliance> = EventAlliance.fetchRequest()
@@ -129,12 +143,14 @@ class EventAlliancesTableViewController: TBATableViewController {
 
 }
 
-extension EventAlliancesTableViewController: TableViewDataSourceDelegate {
+extension EventAlliancesViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: EventAllianceTableViewCell, for object: EventAlliance, at indexPath: IndexPath) {
         cell.selectionStyle = .none
         cell.alliance = object
-        cell.teamSelected = teamSelected
+        cell.teamSelected = { [unowned self] (team) in
+            self.delegate?.teamSelected(team)
+        }
     }
 
     func showNoDataView() {

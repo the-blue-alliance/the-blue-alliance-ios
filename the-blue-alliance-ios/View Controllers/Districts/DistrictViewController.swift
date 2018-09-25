@@ -4,7 +4,14 @@ import UIKit
 
 class DistrictViewController: ContainerViewController {
 
-    let district: District
+    private let district: District
+
+    private var eventsViewController: EventsViewController!
+    private var rankingsViewController: DistrictRankingsViewController!
+
+    override var viewControllers: [Refreshable & Stateful] {
+        return [eventsViewController, rankingsViewController]
+    }
 
     // MARK: - Init
 
@@ -14,17 +21,10 @@ class DistrictViewController: ContainerViewController {
         super.init(segmentedControlTitles: ["Events", "Rankings"],
                    persistentContainer: persistentContainer)
 
-        let eventsViewController = EventsTableViewController(district: district, eventSelected: { [unowned self] (event) in
-            let eventViewController = EventViewController(event: event, persistentContainer: persistentContainer)
-            self.navigationController?.pushViewController(eventViewController, animated: true)
-            }, persistentContainer: persistentContainer)
+        hidesBottomBarWhenPushed = true
 
-        let rankingsViewController = DistrictRankingsTableViewController(district: district, rankingSelected: { [unowned self] (ranking) in
-            let teamAtDistrictViewController = TeamAtDistrictViewController(ranking: ranking, persistentContainer: persistentContainer)
-            self.navigationController?.pushViewController(teamAtDistrictViewController, animated: true)
-            }, persistentContainer: persistentContainer)
-
-        viewControllers = [eventsViewController, rankingsViewController]
+        eventsViewController = EventsViewController(district: district, delegate: self, persistentContainer: persistentContainer)
+        rankingsViewController = DistrictRankingsViewController(district: district, delegate: self, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -43,6 +43,24 @@ class DistrictViewController: ContainerViewController {
             navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
             navigationItem.leftItemsSupplementBackButton = true
         }
+    }
+
+}
+
+extension DistrictViewController: EventsViewControllerDelegate {
+
+    func eventSelected(_ event: Event) {
+        let eventViewController = EventViewController(event: event, persistentContainer: persistentContainer)
+        self.navigationController?.pushViewController(eventViewController, animated: true)
+    }
+
+}
+
+extension DistrictViewController: DistrictRankingsViewControllerDelegate {
+
+    func districtRankingSelected(_ districtRanking: DistrictRanking) {
+        let teamAtDistrictViewController = TeamAtDistrictViewController(ranking: districtRanking, persistentContainer: persistentContainer)
+        self.navigationController?.pushViewController(teamAtDistrictViewController, animated: true)
     }
 
 }

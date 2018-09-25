@@ -3,23 +3,22 @@ import UIKit
 import TBAKit
 import CoreData
 
-class MatchesTableViewController: TBATableViewController {
+protocol MatchesViewControllerDelegate: AnyObject {
+    func matchSelected(_ match: Match)
+}
 
-    var event: Event
-    var team: Team?
+class MatchesViewController: TBATableViewController {
 
-    var matchSelected: ((Match) -> ())
+    private let event: Event
+    private let team: Team?
+    private weak var delegate: MatchesViewControllerDelegate?
 
-    override var persistentContainer: NSPersistentContainer {
-        didSet {
-            updateDataSource()
-        }
-    }
+    // MARK: - Init
 
-    init(event: Event, team: Team? = nil, matchSelected: @escaping ((Match) -> ()), persistentContainer: NSPersistentContainer) {
+    init(event: Event, team: Team? = nil, delegate: MatchesViewControllerDelegate, persistentContainer: NSPersistentContainer) {
         self.event = event
         self.team = team
-        self.matchSelected = matchSelected
+        self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
     }
@@ -34,6 +33,8 @@ class MatchesTableViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.register(UINib(nibName: String(describing: MatchTableViewCell.self), bundle: nil), forCellReuseIdentifier: MatchTableViewCell.reuseIdentifier)
+
+        updateDataSource()
     }
 
     // MARK: - Refreshing
@@ -71,7 +72,7 @@ class MatchesTableViewController: TBATableViewController {
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<Match, MatchesTableViewController>?
+    fileprivate var dataSource: TableViewDataSource<Match, MatchesViewController>?
 
     fileprivate func setupDataSource() {
         let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
@@ -108,7 +109,7 @@ class MatchesTableViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let match = dataSource?.object(at: indexPath)
         if let match = match {
-            matchSelected(match)
+            delegate?.matchSelected(match)
         }
     }
 
@@ -118,7 +119,7 @@ class MatchesTableViewController: TBATableViewController {
 
 }
 
-extension MatchesTableViewController: TableViewDataSourceDelegate {
+extension MatchesViewController: TableViewDataSourceDelegate {
 
     func title(for section: Int) -> String? {
         guard let dataSource = dataSource else {

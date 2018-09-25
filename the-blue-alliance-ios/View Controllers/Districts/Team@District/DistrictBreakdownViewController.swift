@@ -3,9 +3,9 @@ import UIKit
 import CoreData
 import TBAKit
 
-class DistrictBreakdownTableViewController: TBATableViewController, Observable {
+class DistrictBreakdownViewController: TBATableViewController, Observable {
 
-    let ranking: DistrictRanking
+    private let ranking: DistrictRanking
     private let sortedEventPoints: [DistrictEventPoints]
 
     // MARK: - Persistable

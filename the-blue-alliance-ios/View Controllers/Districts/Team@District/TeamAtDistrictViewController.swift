@@ -4,7 +4,14 @@ import UIKit
 
 class TeamAtDistrictViewController: ContainerViewController {
 
-    let ranking: DistrictRanking
+    private let ranking: DistrictRanking
+
+    private var summaryViewController: DistrictTeamSummaryViewController!
+    private var breakdownViewController: DistrictBreakdownViewController!
+
+    override var viewControllers: [Refreshable & Stateful] {
+        return [summaryViewController, breakdownViewController]
+    }
 
     // MARK: Init
 
@@ -14,15 +21,8 @@ class TeamAtDistrictViewController: ContainerViewController {
         super.init(segmentedControlTitles: ["Summary", "Breakdown"],
                    persistentContainer: persistentContainer)
 
-        let summaryViewController = DistrictTeamSummaryTableViewController(ranking: ranking, eventPointsSelected: { [unowned self] (eventPoints) in
-            // TODO: Let's see what we can to do not force-unwrap these from Core Data
-            let teamAtEventViewController = TeamAtEventViewController(team: eventPoints.team!, event: eventPoints.event!, persistentContainer: persistentContainer)
-            self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
-            }, persistentContainer: persistentContainer)
-
-        let breakdownViewController = DistrictBreakdownTableViewController(ranking: ranking, persistentContainer: persistentContainer)
-
-        viewControllers = [summaryViewController, breakdownViewController]
+        summaryViewController = DistrictTeamSummaryViewController(ranking: ranking, delegate: self, persistentContainer: persistentContainer)
+        breakdownViewController = DistrictBreakdownViewController(ranking: ranking, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -36,6 +36,16 @@ class TeamAtDistrictViewController: ContainerViewController {
 
         navigationTitleLabel.text = "Team \(ranking.team!.teamNumber)"
         navigationDetailLabel.text = "@ \(ranking.district!.abbreviationWithYear)"
+    }
+
+}
+
+extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegate {
+
+    func eventPointsSelected(_ eventPoints: DistrictEventPoints) {
+        // TODO: Let's see what we can to do not force-unwrap these from Core Data
+        let teamAtEventViewController = TeamAtEventViewController(team: eventPoints.team!, event: eventPoints.event!, persistentContainer: persistentContainer)
+        self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
 }

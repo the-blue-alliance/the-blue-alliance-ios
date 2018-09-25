@@ -1,35 +1,34 @@
-import UIKit
 import CoreData
 import TBAKit
+import UIKit
 
-class EventAwardsViewController: ContainerViewController {
+class EventAwardsContainerViewController: ContainerViewController {
 
-    let event: Event
-    let team: Team?
+    private let event: Event
+    private let team: Team?
 
-    init(event: Event, team: Team?, persistentContainer: NSPersistentContainer) {
+    private var awardsViewController: EventAwardsViewController!
+
+    override var viewControllers: [Refreshable & Stateful] {
+        return [awardsViewController]
+    }
+
+    // MARK: - Init
+
+    init(event: Event, team: Team? = nil, persistentContainer: NSPersistentContainer) {
         self.event = event
         self.team = team
 
         super.init(persistentContainer: persistentContainer)
 
-        // TODO: Think about... making these factories. These inline blocks blow
-        let awardsViewController = EventAwardsTableViewController(event: event, team: team, teamSelected: { (selectedTeam) in
-            if team == selectedTeam {
-                return
-            }
-            let teamAtEventViewController = TeamAtEventViewController(team: selectedTeam,
-                                                                      event: self.event,
-                                                                      persistentContainer: persistentContainer)
-            self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
-        }, persistentContainer: persistentContainer)
-
-        viewControllers = [awardsViewController]
+        awardsViewController = EventAwardsViewController(event: event, team: team, delegate: self, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,24 +43,36 @@ class EventAwardsViewController: ContainerViewController {
 
 }
 
-class EventAwardsTableViewController: TBATableViewController {
+extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate {
 
-    let event: Event
-    let team: Team?
-    let teamSelected: ((Team) -> ())?
-
-    override var persistentContainer: NSPersistentContainer {
-        didSet {
-            updateDataSource()
+    func teamSelected(_ team: Team) {
+        if team == self.team {
+            return
         }
+        let teamAtEventViewController = TeamAtEventViewController(team: team,
+                                                                  event: event,
+                                                                  persistentContainer: persistentContainer)
+        self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
-    // MARK: - View Lifecycle
+}
 
-    init(event: Event, team: Team? = nil, teamSelected: ((Team) -> ())? = nil, persistentContainer: NSPersistentContainer) {
+protocol EventAwardsViewControllerDelegate: AnyObject {
+    func teamSelected(_ team: Team)
+}
+
+class EventAwardsViewController: TBATableViewController {
+
+    private let event: Event
+    private let team: Team?
+    private weak var delegate: EventAwardsViewControllerDelegate?
+
+    // MARK: - Init
+
+    init(event: Event, team: Team? = nil, delegate: EventAwardsViewControllerDelegate, persistentContainer: NSPersistentContainer) {
         self.event = event
         self.team = team
-        self.teamSelected = teamSelected
+        self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
     }
@@ -70,10 +81,14 @@ class EventAwardsTableViewController: TBATableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - View Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.register(UINib(nibName: String(describing: AwardTableViewCell.self), bundle: nil), forCellReuseIdentifier: AwardTableViewCell.reuseIdentifier)
+
+        updateDataSource()
     }
 
     // MARK: - Refreshing
@@ -111,7 +126,7 @@ class EventAwardsTableViewController: TBATableViewController {
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<Award, EventAwardsTableViewController>?
+    fileprivate var dataSource: TableViewDataSource<Award, EventAwardsViewController>?
 
     fileprivate func setupDataSource() {
         let fetchRequest: NSFetchRequest<Award> = Award.fetchRequest()
@@ -143,12 +158,14 @@ class EventAwardsTableViewController: TBATableViewController {
 
 }
 
-extension EventAwardsTableViewController: TableViewDataSourceDelegate {
+extension EventAwardsViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: AwardTableViewCell, for object: Award, at indexPath: IndexPath) {
         cell.selectionStyle = .none
         cell.award = object
-        cell.teamSelected = teamSelected
+        cell.teamSelected = { [unowned self] (team) in
+            self.delegate?.teamSelected(team)
+        }
     }
 
     func showNoDataView() {

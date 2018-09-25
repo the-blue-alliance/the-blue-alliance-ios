@@ -2,24 +2,21 @@ import UIKit
 import TBAKit
 import CoreData
 
-private let SelectYearSegue = "SelectYearSegue"
-
+// TODO: This has a lot of modified functionality and needs a shit load of tests
 class TeamViewController: ContainerViewController, Observable {
 
-    public var team: Team {
-        didSet {
-            updateYear()
-        }
-    }
+    private let team: Team
     var year: Int? {
         didSet {
-            // These need to be optional since we might not have our views setup when hitting this
-            // if we're being called from updateYear from TeamsContainerViewController segue (storyboards suck)
-            if let year = year, eventsViewController?.year != year {
-                eventsViewController?.year = year
+            guard let year = year else {
+                return
             }
-            if let year = year, mediaViewController?.year != year {
-                mediaViewController?.year = year
+
+            if eventsViewController.year != year {
+                eventsViewController.year = year
+            }
+            if mediaViewController.year != year {
+                mediaViewController.year = year
             }
 
             DispatchQueue.main.async {
@@ -27,14 +24,14 @@ class TeamViewController: ContainerViewController, Observable {
             }
         }
     }
-    // Only refresh years participated once on appear
-    private lazy var refreshYearsParticipatedOnce: Void = { [weak self] in
-        self?.refreshYearsParticipated()
-    }()
 
-    internal var infoViewController: TeamInfoTableViewController!
-    internal var eventsViewController: EventsTableViewController!
-    internal var mediaViewController: TeamMediaCollectionViewController!
+    private var infoViewController: TeamInfoViewController!
+    private var eventsViewController: EventsViewController!
+    private var mediaViewController: TeamMediaCollectionViewController!
+
+    override var viewControllers: [Refreshable & Stateful] {
+        return [infoViewController, eventsViewController, mediaViewController]
+    }
 
     // MARK: - Persistable
 
@@ -65,16 +62,14 @@ class TeamViewController: ContainerViewController, Observable {
         super.init(segmentedControlTitles: ["Info", "Events", "Media"],
                    persistentContainer: persistentContainer)
 
-        let infoViewController = TeamInfoTableViewController(team: team, persistentContainer: persistentContainer)
+        // TODO: We should be able to do this before init, but we can't
+        updateYear()
 
-        let eventsViewController = EventsTableViewController(team: team, eventSelected: { [unowned self] (event) in
-            let teamAtEventViewController = TeamAtEventViewController(team: self.team, event: event, persistentContainer: persistentContainer)
-            self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
-            }, persistentContainer: persistentContainer)
+        hidesBottomBarWhenPushed = true
 
-        let mediaViewController = TeamMediaCollectionViewController(team: team, persistentContainer: persistentContainer)
-
-        viewControllers = [infoViewController, eventsViewController, mediaViewController]
+        infoViewController = TeamInfoViewController(team: team, persistentContainer: persistentContainer)
+        eventsViewController = EventsViewController(team: team, delegate: self, persistentContainer: persistentContainer)
+        mediaViewController = TeamMediaCollectionViewController(team: team, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -88,19 +83,8 @@ class TeamViewController: ContainerViewController, Observable {
 
         title = "Team \(team.teamNumber)"
 
-        // TODO: Why the fuck do we have this again?
-        if navigationController?.viewControllers.index(of: self) == 0 {
-            navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            navigationItem.leftItemsSupplementBackButton = true
-        }
-
+        refreshYearsParticipated()
         updateInterface()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        _ = refreshYearsParticipatedOnce
     }
 
     // MARK: - Private
@@ -140,7 +124,7 @@ class TeamViewController: ContainerViewController, Observable {
         })
     }
 
-    // MARK: - Navigation
+    /*
 
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if identifier == SelectYearSegue {
@@ -150,6 +134,17 @@ class TeamViewController: ContainerViewController, Observable {
             return false
         }
         return true
+    }
+
+    */
+
+}
+
+extension TeamViewController: EventsViewControllerDelegate {
+
+    func eventSelected(_ event: Event) {
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, persistentContainer: persistentContainer)
+        self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
 }
