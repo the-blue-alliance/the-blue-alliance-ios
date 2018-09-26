@@ -15,6 +15,7 @@ private let MatchSegue = "MatchSegue"
 
 class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
+    private let signInViewController: MyTBASignInViewController
     private var favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>!
     private var subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>!
 
@@ -22,10 +23,9 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         return [favoritesViewController, subscriptionsViewController]
     }
 
-    internal var signInViewController: MyTBASignInViewController!
     @IBOutlet internal var signInView: UIView!
     @IBOutlet internal var signOutBarButtonItem: UIBarButtonItem!
-    internal var signOutActivityIndicatorBarButtonItem: UIBarButtonItem = {
+    private var signOutActivityIndicatorBarButtonItem: UIBarButtonItem = {
         let activityIndicatorView = UIActivityIndicatorView(style: .white)
         activityIndicatorView.startAnimating()
         return UIBarButtonItem(customView: activityIndicatorView)
@@ -43,6 +43,8 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     }
 
     init(persistentContainer: NSPersistentContainer) {
+        signInViewController = MyTBASignInViewController()
+
         super.init(segmentedControlTitles: ["Favorites", "Subscriptions"],
                    persistentContainer: persistentContainer)
 

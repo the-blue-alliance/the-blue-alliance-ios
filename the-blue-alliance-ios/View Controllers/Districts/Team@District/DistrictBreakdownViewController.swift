@@ -103,7 +103,7 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
     }
 
     @discardableResult
-    func fetchEvent(eventKey: String, completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
+    private func fetchEvent(eventKey: String, completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
         return TBAKit.sharedKit.fetchEvent(key: eventKey, completion: { (modelEvent, error) in
             if error != nil {
                 completion(false)

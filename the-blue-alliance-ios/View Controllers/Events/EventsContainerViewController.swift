@@ -15,7 +15,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
         return [eventsViewController]
     }
 
-    private lazy var weeksButton: UIBarButtonItem = { [unowned self] in
+    private lazy var weeksButton: UIBarButtonItem = {
         return UIBarButtonItem(title: "Weeks",
                                style: .plain,
                                target: self,
@@ -57,7 +57,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
     private var weekEvent: Event? {
         didSet {
             // Pass down weekEvent change so it can update it's FRC predicate
-            eventsViewController!.weekEvent = weekEvent
+            eventsViewController.weekEvent = weekEvent
 
             DispatchQueue.main.async {
                 self.updateInterface()

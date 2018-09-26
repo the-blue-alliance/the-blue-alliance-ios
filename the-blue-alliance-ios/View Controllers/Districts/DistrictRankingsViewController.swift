@@ -11,6 +11,7 @@ class DistrictRankingsViewController: TBATableViewController {
 
     private let district: District
     private weak var delegate: DistrictRankingsViewControllerDelegate?
+    private var dataSource: TableViewDataSource<DistrictRanking, DistrictRankingsViewController>!
 
     // MARK: - Init
 
@@ -19,6 +20,8 @@ class DistrictRankingsViewController: TBATableViewController {
         self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -31,8 +34,6 @@ class DistrictRankingsViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
-
-        updateDataSource()
     }
 
     // MARK: - Refreshing
@@ -77,7 +78,7 @@ class DistrictRankingsViewController: TBATableViewController {
         addRequest(request: eventRequest!)
     }
 
-    func refreshEvents(completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
+    private func refreshEvents(completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
         return TBAKit.sharedKit.fetchDistrictEvents(key: district.key!, completion: { (events, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
@@ -97,7 +98,7 @@ class DistrictRankingsViewController: TBATableViewController {
         })
     }
 
-    func refreshTeams(completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
+    private func refreshTeams(completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
         return TBAKit.sharedKit.fetchDistrictTeams(key: district.key!, completion: { (teams, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
@@ -117,7 +118,7 @@ class DistrictRankingsViewController: TBATableViewController {
         })
     }
 
-    func refreshRankings(completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
+    private func refreshRankings(completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
         return TBAKit.sharedKit.fetchDistrictRankings(key: district.key!, completion: { (rankings, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
@@ -141,7 +142,7 @@ class DistrictRankingsViewController: TBATableViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
-        if let rankings = dataSource?.fetchedResultsController.fetchedObjects, rankings.isEmpty {
+        if let rankings = dataSource.fetchedResultsController.fetchedObjects, rankings.isEmpty {
             return true
         }
         return false
@@ -150,17 +151,13 @@ class DistrictRankingsViewController: TBATableViewController {
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let ranking = dataSource?.object(at: indexPath)
-        if let ranking = ranking {
-            delegate?.districtRankingSelected(ranking)
-        }
+        let ranking = dataSource.object(at: indexPath)
+        delegate?.districtRankingSelected(ranking)
     }
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<DistrictRanking, DistrictRankingsViewController>?
-
-    fileprivate func setupDataSource() {
+    private func setupDataSource() {
         let fetchRequest: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]
@@ -172,15 +169,11 @@ class DistrictRankingsViewController: TBATableViewController {
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
-    fileprivate func updateDataSource() {
-        if let dataSource = dataSource {
-            dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-        } else {
-            setupDataSource()
-        }
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
-    fileprivate func setupFetchRequest(_ request: NSFetchRequest<DistrictRanking>) {
+    private func setupFetchRequest(_ request: NSFetchRequest<DistrictRanking>) {
         request.predicate = NSPredicate(format: "district == %@", district)
     }
 

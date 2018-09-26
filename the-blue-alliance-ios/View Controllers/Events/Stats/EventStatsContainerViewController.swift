@@ -16,7 +16,7 @@ class EventStatsContainerViewController: ContainerViewController {
         return [teamStatsViewController, eventStatsViewController].compactMap({ $0 })
     }
 
-    lazy private var filerBarButtonItem: UIBarButtonItem = { [unowned self] in
+    lazy private var filerBarButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(image: UIImage(named: "ic_sort_white"),
                                style: .plain,
                                target: self,

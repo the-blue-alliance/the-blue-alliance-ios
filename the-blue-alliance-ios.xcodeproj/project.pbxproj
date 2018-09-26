@@ -118,6 +118,7 @@
 		92B076F120FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B076F020FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift */; };
 		92B076F320FF948D00F9B2D7 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */; };
 		92B0AA3B20CB837A0074FDF1 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0AA3A20CB837A0074FDF1 /* main.swift */; };
+		92B5561F215C459400C1D9A3 /* MyTBASignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B5561E215C459400C1D9A3 /* MyTBASignInViewController.xib */; };
 		92B5DAC61EE4CE7C00B0A8F3 /* EventTeamStat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B5DAC51EE4CE7C00B0A8F3 /* EventTeamStat.swift */; };
 		92B7372F20996F25009A7784 /* MyTBAPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B7372E20996F25009A7784 /* MyTBAPreferences.swift */; };
 		92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */; };
@@ -294,6 +295,7 @@
 		92B076F020FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignOutOperation_Tests.swift; sourceTree = "<group>"; };
 		92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppDelegate.swift; sourceTree = "<group>"; };
 		92B0AA3A20CB837A0074FDF1 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		92B5561E215C459400C1D9A3 /* MyTBASignInViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyTBASignInViewController.xib; sourceTree = "<group>"; };
 		92B5DAC51EE4CE7C00B0A8F3 /* EventTeamStat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTeamStat.swift; sourceTree = "<group>"; };
 		92B7372E20996F25009A7784 /* MyTBAPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferences.swift; sourceTree = "<group>"; };
 		92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetupOperation.swift; sourceTree = "<group>"; };
@@ -703,6 +705,7 @@
 				92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */,
 				92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */,
 				928018F32096431200693447 /* MyTBASignInViewController.swift */,
+				92B5561E215C459400C1D9A3 /* MyTBASignInViewController.xib */,
 			);
 			path = MyTBA;
 			sourceTree = "<group>";
@@ -1200,6 +1203,7 @@
 				92D855D91EC695CE00572F27 /* TeamTableViewCell.xib in Resources */,
 				9287013E20CD72EC0077D6DA /* RemoteConfigDefaults.plist in Resources */,
 				92BB718920D216D50081F4E5 /* EmptyViewController.xib in Resources */,
+				92B5561F215C459400C1D9A3 /* MyTBASignInViewController.xib in Resources */,
 				925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */,
 				929DB38E2095640C00FB575F /* ReverseSubtitleTableViewCell.xib in Resources */,
 				92D8CD1320C2634200777D93 /* GoogleService-Info.plist in Resources */,

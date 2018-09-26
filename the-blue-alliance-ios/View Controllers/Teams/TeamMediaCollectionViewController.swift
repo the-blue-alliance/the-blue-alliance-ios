@@ -4,13 +4,14 @@ import CoreData
 
 class TeamMediaCollectionViewController: TBACollectionViewController {
 
-    let team: Team
+    private let team: Team
     var year: Int? {
         didSet {
             cancelRefresh()
             updateDataSource()
         }
     }
+    private var dataSource: CollectionViewDataSource<Media, TeamMediaCollectionViewController>!
 
     private var playerViews: [String: PlayerView] = [:]
     private var downloadedImages: [String: UIImage] = [:]
@@ -21,6 +22,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         self.team = team
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -45,7 +48,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     override func refresh() {
         guard let year = year else {
             showNoDataView(with: "No year selected")
-            refreshControl!.endRefreshing()
+            refreshControl?.endRefreshing()
             return
         }
 
@@ -85,7 +88,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
-        if let media = dataSource?.fetchedResultsController.fetchedObjects, media.isEmpty {
+        if let media = dataSource.fetchedResultsController.fetchedObjects, media.isEmpty {
             return true
         }
         return false
@@ -105,12 +108,11 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // TODO: Eventually show the full image inside the app
-        guard let media = dataSource?.object(at: indexPath) else {
-            return
-        }
+        let media = dataSource.object(at: indexPath)
         guard let url = media.viewImageURL else {
             return
         }
+        // TODO: Use URLOpener
         if UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
@@ -118,14 +120,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: CollectionViewDataSource<Media, TeamMediaCollectionViewController>?
-
-    fileprivate func setupDataSource() {
-        // TODO: This seems like a weird place to check if we need a year, then not use the year
-        if year == nil {
-            return
-        }
-
+    private func setupDataSource() {
         let fetchRequest: NSFetchRequest<Media> = Media.fetchRequest()
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "type", ascending: true)]
@@ -138,26 +133,22 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         dataSource = CollectionViewDataSource(collectionView: collectionView!, cellIdentifier: basicCellReuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
-    fileprivate func updateDataSource() {
-        if let dataSource = dataSource {
-            dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-        } else {
-            setupDataSource()
-        }
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
-    fileprivate func setupFetchRequest(_ request: NSFetchRequest<Media>) {
-        guard let year = year else {
-            return
+    private func setupFetchRequest(_ request: NSFetchRequest<Media>) {
+        if let year = year {
+            request.predicate = NSPredicate(format: "team == %@ AND year == %ld AND type in %@", team, year, MediaType.imageTypes)
+        } else {
+            // Match none by passing a bosus year
+            request.predicate = NSPredicate(format: "team == %@ AND year == 0", team)
         }
-        // TODO: Seems like if we don't have a year, we should just load all, right? Depends on when this gets set up
-        // TODO: We could support GrabCAD here too if we wanted to
-        request.predicate = NSPredicate(format: "team == %@ AND year == %ld AND type in %@", team, year, MediaType.imageTypes)
     }
 
     // MARK: - Private
 
-    fileprivate func playerViewForMedia(_ media: Media) -> PlayerView {
+    private func playerViewForMedia(_ media: Media) -> PlayerView {
         guard let foreignKey = media.foreignKey else {
             fatalError("Cannot load media")
         }
@@ -171,7 +162,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         return playerView!
     }
 
-    fileprivate func mediaViewForMedia(_ media: Media) -> MediaView? {
+    private func mediaViewForMedia(_ media: Media) -> MediaView? {
         guard let foreignKey = media.foreignKey else {
             fatalError("Cannot load media")
         }

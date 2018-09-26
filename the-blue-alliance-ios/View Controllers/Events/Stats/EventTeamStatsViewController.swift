@@ -24,6 +24,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
     private let event: Event
     private let userDefaults: UserDefaults
     private weak var delegate: EventTeamStatsSelectionDelegate?
+    private var dataSource: TableViewDataSource<EventTeamStat, EventTeamStatsTableViewController>!
 
     var filter: EventTeamStatFilter {
         didSet {
@@ -48,6 +49,8 @@ class EventTeamStatsTableViewController: TBATableViewController {
         }
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -60,8 +63,6 @@ class EventTeamStatsTableViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
-
-        updateDataSource()
     }
 
     // MARK: - Refreshing
@@ -91,8 +92,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
-        // TODO: Make this data source non-optional
-        if let stats = dataSource?.fetchedResultsController.fetchedObjects, stats.isEmpty {
+        if let stats = dataSource.fetchedResultsController.fetchedObjects, stats.isEmpty {
             return true
         }
         return false
@@ -101,17 +101,13 @@ class EventTeamStatsTableViewController: TBATableViewController {
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let eventTeamStats = dataSource?.object(at: indexPath)
-        if let eventTeamStats = eventTeamStats {
-            delegate?.eventTeamStatSelected(eventTeamStats)
-        }
+        let eventTeamStats = dataSource.object(at: indexPath)
+        delegate?.eventTeamStatSelected(eventTeamStats)
     }
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<EventTeamStat, EventTeamStatsTableViewController>?
-
-    fileprivate func setupDataSource() {
+    private func setupDataSource() {
         let fetchRequest: NSFetchRequest<EventTeamStat> = EventTeamStat.fetchRequest()
 
         setupFetchRequest(fetchRequest)
@@ -121,15 +117,11 @@ class EventTeamStatsTableViewController: TBATableViewController {
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
-    fileprivate func updateDataSource() {
-        if let dataSource = dataSource {
-            dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-        } else {
-            setupDataSource()
-        }
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
-    fileprivate func setupFetchRequest(_ request: NSFetchRequest<EventTeamStat>) {
+    private func setupFetchRequest(_ request: NSFetchRequest<EventTeamStat>) {
         request.predicate = NSPredicate(format: "event == %@", event)
 
         // Switch based on user prefs

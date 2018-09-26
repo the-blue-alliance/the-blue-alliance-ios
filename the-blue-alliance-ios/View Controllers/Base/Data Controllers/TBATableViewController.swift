@@ -9,13 +9,16 @@ class TBATableViewController: UITableViewController, DataController {
     let basicCellReuseIdentifier = "BasicCell"
 
     var requests: [URLSessionDataTask] = []
-    var dataView: UIView {
-        return tableView
-    }
     var refreshView: UIScrollView {
         return tableView
     }
     var noDataViewController: NoDataViewController?
+
+    private var _refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        return refreshControl
+    }()
 
     init(style: UITableView.Style = .plain, persistentContainer: NSPersistentContainer) {
         self.persistentContainer = persistentContainer
@@ -63,12 +66,11 @@ class TBATableViewController: UITableViewController, DataController {
     }
 
     func enableRefreshing() {
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        tableView.refreshControl = _refreshControl
     }
 
     func disableRefreshing() {
-        refreshControl = nil
+        tableView.refreshControl = nil
     }
 
 }

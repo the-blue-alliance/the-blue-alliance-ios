@@ -10,8 +10,9 @@ class TeamsViewController: TBATableViewController {
 
     private let event: Event?
     private var delegate: TeamsViewControllerDelegate?
+    private var dataSource: TableViewDataSource<Team, TeamsViewController>!
 
-    lazy private var searchController: UISearchController = { [unowned self] in
+    lazy private var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
@@ -19,11 +20,15 @@ class TeamsViewController: TBATableViewController {
         return searchController
     }()
 
+    // MARK: - Init
+
     init(delegate: TeamsViewControllerDelegate, event: Event? = nil, persistentContainer: NSPersistentContainer) {
         self.delegate = delegate
         self.event = event
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -41,8 +46,6 @@ class TeamsViewController: TBATableViewController {
         definesPresentationContext = true
 
         tableView.register(UINib(nibName: String(describing: TeamTableViewCell.self), bundle: nil), forCellReuseIdentifier: TeamTableViewCell.reuseIdentifier)
-
-        updateDataSource()
     }
 
     // MARK: - Refreshing
@@ -58,13 +61,13 @@ class TeamsViewController: TBATableViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
-        if let teams = dataSource?.fetchedResultsController.fetchedObjects, teams.isEmpty {
+        if let teams = dataSource.fetchedResultsController.fetchedObjects, teams.isEmpty {
             return true
         }
         return false
     }
 
-    func refreshTeams() {
+    private func refreshTeams() {
         var request: URLSessionDataTask?
         request = Team.fetchAllTeams(taskChanged: { (task, teams) in
             self.addRequest(request: task)
@@ -90,7 +93,7 @@ class TeamsViewController: TBATableViewController {
         addRequest(request: request!)
     }
 
-    func refreshEventTeams() {
+    private func refreshEventTeams() {
         guard let event = event, let eventKey = event.key else {
             return
         }
@@ -118,10 +121,8 @@ class TeamsViewController: TBATableViewController {
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let team = dataSource?.object(at: indexPath)
-        if let team = team {
-            delegate?.teamSelected(team)
-        }
+        let team = dataSource.object(at: indexPath)
+        delegate?.teamSelected(team)
     }
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -132,9 +133,7 @@ class TeamsViewController: TBATableViewController {
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<Team, TeamsViewController>?
-
-    fileprivate func setupDataSource() {
+    private func setupDataSource() {
         let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "teamNumber", ascending: true)]
 
@@ -145,15 +144,11 @@ class TeamsViewController: TBATableViewController {
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: TeamTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
-    fileprivate func updateDataSource() {
-        if let dataSource = dataSource {
-            dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-        } else {
-            setupDataSource()
-        }
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
-    fileprivate func setupFetchRequest(_ request: NSFetchRequest<Team>) {
+    private func setupFetchRequest(_ request: NSFetchRequest<Team>) {
         if let searchText = searchController.searchBar.text, !searchText.isEmpty {
             if let event = event {
                 request.predicate = NSPredicate(format: "ANY events = %@ AND (nickname contains[cd] %@ OR teamNumber.stringValue beginswith[cd] %@)", event, searchText, searchText)

@@ -6,7 +6,7 @@ import React
 
 class EventStatsViewController: TBAViewController, Observable, ReactNative {
 
-    var event: Event
+    private let event: Event
 
     // MARK: - React Native
 
@@ -89,7 +89,7 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
         }
         self.eventStatsView = eventStatsView
 
-        // breakdownView.loadingView
+        // eventStatsView.loadingView
         eventStatsView.delegate = self
         eventStatsView.sizeFlexibility = .height
 

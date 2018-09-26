@@ -66,6 +66,7 @@ class EventAwardsViewController: TBATableViewController {
     private let event: Event
     private let team: Team?
     private weak var delegate: EventAwardsViewControllerDelegate?
+    private var dataSource: TableViewDataSource<Award, EventAwardsViewController>!
 
     // MARK: - Init
 
@@ -75,6 +76,8 @@ class EventAwardsViewController: TBATableViewController {
         self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -87,8 +90,6 @@ class EventAwardsViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.register(UINib(nibName: String(describing: AwardTableViewCell.self), bundle: nil), forCellReuseIdentifier: AwardTableViewCell.reuseIdentifier)
-
-        updateDataSource()
     }
 
     // MARK: - Refreshing
@@ -118,7 +119,7 @@ class EventAwardsViewController: TBATableViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
-        if let awards = dataSource?.fetchedResultsController.fetchedObjects, awards.isEmpty {
+        if let awards = dataSource.fetchedResultsController.fetchedObjects, awards.isEmpty {
             return true
         }
         return false
@@ -126,9 +127,7 @@ class EventAwardsViewController: TBATableViewController {
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<Award, EventAwardsViewController>?
-
-    fileprivate func setupDataSource() {
+    private func setupDataSource() {
         let fetchRequest: NSFetchRequest<Award> = Award.fetchRequest()
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "awardType", ascending: true)]
@@ -140,15 +139,11 @@ class EventAwardsViewController: TBATableViewController {
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: AwardTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
-    fileprivate func updateDataSource() {
-        if let dataSource = dataSource {
-            dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-        } else {
-            setupDataSource()
-        }
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
-    fileprivate func setupFetchRequest(_ request: NSFetchRequest<Award>) {
+    private func setupFetchRequest(_ request: NSFetchRequest<Award>) {
         if let team = team {
             request.predicate = NSPredicate(format: "event == %@ AND (ANY recipients.team == %@)", event, team)
         } else {

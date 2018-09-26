@@ -14,18 +14,6 @@ class DistrictTeamSummaryViewController: TBATableViewController {
 
     private let sortedEventPoints: [DistrictEventPoints]
 
-    // MARK: - Persistable
-
-    override var persistentContainer: NSPersistentContainer {
-        didSet {
-            contextObserver.observeObject(object: ranking, state: .updated) { [weak self] (_, _) in
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                }
-            }
-        }
-    }
-
     // MARK: - Observable
 
     typealias ManagedType = DistrictRanking
@@ -42,6 +30,12 @@ class DistrictTeamSummaryViewController: TBATableViewController {
         sortedEventPoints = ranking.eventPoints?.sortedArray(using: [NSSortDescriptor(key: "event.startDate", ascending: true)]) as? [DistrictEventPoints] ?? []
 
         super.init(persistentContainer: persistentContainer)
+
+        contextObserver.observeObject(object: ranking, state: .updated) { [unowned self] (_, _) in
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {

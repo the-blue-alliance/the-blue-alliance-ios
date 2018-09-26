@@ -5,23 +5,11 @@ import TBAKit
 
 class MatchInfoViewController: TBAViewController, Observable {
 
-    let match: Match
-    let team: Team?
+    private let match: Match
+    private let team: Team?
 
     private let winnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
     private let notWinnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
-
-    // MARK: - Persistable
-
-    override var persistentContainer: NSPersistentContainer {
-        didSet {
-            contextObserver.observeObject(object: match, state: .updated) { [weak self] (_, _) in
-                DispatchQueue.main.async {
-                    self?.styleInterface()
-                }
-            }
-        }
-    }
 
     // MARK: - Observable
 
@@ -68,6 +56,12 @@ class MatchInfoViewController: TBAViewController, Observable {
         self.team = team
 
         super.init(persistentContainer: persistentContainer)
+
+        contextObserver.observeObject(object: match, state: .updated) { [weak self] (_, _) in
+            DispatchQueue.main.async {
+                self?.styleInterface()
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {

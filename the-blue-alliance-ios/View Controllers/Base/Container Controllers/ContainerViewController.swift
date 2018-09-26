@@ -85,7 +85,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
         super.init(nibName: nil, bundle: nil)
 
-        segmentedControl.addTarget(self, action: #selector(updateSegmentedControlViews), for: .valueChanged)
+        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -116,12 +116,11 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         stackView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
     }
 
-    @IBAction func segmentedControlValueChanged(sender: Any) {
-        cancelRefreshes()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
         updateSegmentedControlViews()
     }
-
-    func switchedToIndex(_ index: Int) {}
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -137,6 +136,8 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
     // MARK: - Public Methods
 
+    func switchedToIndex(_ index: Int) {}
+
     func currentViewController() -> ContainableViewController? {
         if viewControllers.count == 1, let viewController = viewControllers.first {
             return viewController
@@ -146,7 +147,14 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         return nil
     }
 
-    @objc private func updateSegmentedControlViews() {
+    // MARK: - Private Methods
+
+    @objc private func segmentedControlValueChanged() {
+        cancelRefreshes()
+        updateSegmentedControlViews()
+    }
+
+    private func updateSegmentedControlViews() {
         if let viewController = currentViewController() {
             show(view: viewController.view)
         }

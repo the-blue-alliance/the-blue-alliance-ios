@@ -11,6 +11,7 @@ class EventRankingsViewController: TBATableViewController {
 
     private let event: Event
     private weak var delegate: EventRankingsViewControllerDelegate?
+    private var dataSource: TableViewDataSource<EventRanking, EventRankingsViewController>!
 
     // MARK: - Init
 
@@ -20,7 +21,7 @@ class EventRankingsViewController: TBATableViewController {
 
         super.init(persistentContainer: persistentContainer)
 
-        // TODO: Why not setup Data Source stuff here too, right!?!?
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -34,8 +35,6 @@ class EventRankingsViewController: TBATableViewController {
 
         // TODO: See what we can do to cut down on this code... do something inside TBATableViewController
         tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
-
-        updateDataSource()
     }
 
     // MARK: - Refreshing
@@ -67,7 +66,7 @@ class EventRankingsViewController: TBATableViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
-        if let rankings = dataSource?.fetchedResultsController.fetchedObjects, rankings.isEmpty {
+        if let rankings = dataSource.fetchedResultsController.fetchedObjects, rankings.isEmpty {
             return true
         }
         return false
@@ -76,17 +75,13 @@ class EventRankingsViewController: TBATableViewController {
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let ranking = dataSource?.object(at: indexPath)
-        if let ranking = ranking {
-            delegate?.rankingSelected(ranking)
-        }
+        let ranking = dataSource.object(at: indexPath)
+        delegate?.rankingSelected(ranking)
     }
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<EventRanking, EventRankingsViewController>?
-
-    fileprivate func setupDataSource() {
+    private func setupDataSource() {
         let fetchRequest: NSFetchRequest<EventRanking> = EventRanking.fetchRequest()
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]
@@ -98,15 +93,11 @@ class EventRankingsViewController: TBATableViewController {
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
-    fileprivate func updateDataSource() {
-        if let dataSource = dataSource {
-            dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-        } else {
-            setupDataSource()
-        }
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
-    fileprivate func setupFetchRequest(_ request: NSFetchRequest<EventRanking>) {
+    private func setupFetchRequest(_ request: NSFetchRequest<EventRanking>) {
         request.predicate = NSPredicate(format: "event == %@", event)
     }
 

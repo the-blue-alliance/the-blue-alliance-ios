@@ -6,7 +6,7 @@ import CoreData
 
 class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
 
-    let match: Match
+    private let match: Match
 
     // MARK: - React Native
     
@@ -14,18 +14,6 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
         return RCTBridge(delegate: self, launchOptions: [:])
     }()
     private var breakdownView: RCTRootView?
-
-    // MARK: - Persistable
-
-    override var persistentContainer: NSPersistentContainer {
-        didSet {
-            contextObserver.observeObject(object: match, state: .updated) { [weak self] (_, _) in
-                DispatchQueue.main.async {
-                    self?.updateBreakdownView()
-                }
-            }
-        }
-    }
 
     // MARK: - Observable
 
@@ -40,6 +28,12 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
         self.match = match
 
         super.init(persistentContainer: persistentContainer)
+
+        contextObserver.observeObject(object: match, state: .updated) { [unowned self] (_, _) in
+            DispatchQueue.main.async {
+                self.updateBreakdownView()
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {

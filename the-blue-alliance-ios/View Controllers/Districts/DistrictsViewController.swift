@@ -16,6 +16,7 @@ class DistrictsViewController: TBATableViewController {
         }
     }
     private weak var delegate: DistrictsViewControllerDelegate?
+    private var dataSource: TableViewDataSource<District, DistrictsViewController>!
 
     // MARK: - Init
 
@@ -24,18 +25,12 @@ class DistrictsViewController: TBATableViewController {
         self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        updateDataSource()
     }
 
     // MARK: - Refreshing
@@ -62,7 +57,7 @@ class DistrictsViewController: TBATableViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
-        if let districts = dataSource?.fetchedResultsController.fetchedObjects, districts.isEmpty {
+        if let districts = dataSource.fetchedResultsController.fetchedObjects, districts.isEmpty {
             return true
         }
         return false
@@ -71,17 +66,13 @@ class DistrictsViewController: TBATableViewController {
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let district = dataSource?.object(at: indexPath)
-        if let district = district {
-            delegate?.districtSelected(district)
-        }
+        let district = dataSource.object(at: indexPath)
+        delegate?.districtSelected(district)
     }
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<District, DistrictsViewController>?
-
-    fileprivate func setupDataSource() {
+    private func setupDataSource() {
         let fetchRequest: NSFetchRequest<District> = District.fetchRequest()
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
@@ -93,15 +84,11 @@ class DistrictsViewController: TBATableViewController {
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: basicCellReuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
-    fileprivate func updateDataSource() {
-        if let dataSource = dataSource {
-            dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-        } else {
-            setupDataSource()
-        }
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
-    fileprivate func setupFetchRequest(_ request: NSFetchRequest<District>) {
+    private func setupFetchRequest(_ request: NSFetchRequest<District>) {
         request.predicate = NSPredicate(format: "year == %ld", year)
     }
 

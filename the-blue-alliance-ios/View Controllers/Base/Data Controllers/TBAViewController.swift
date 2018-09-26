@@ -6,22 +6,35 @@ typealias DataController = Persistable & Refreshable & Alertable & Stateful
 
 class TBAViewController: UIViewController, DataController {
 
+    let scrollView: UIScrollView = {
+        let scrollView = UIScrollView(forAutoLayout: ())
+        scrollView.backgroundColor = .clear
+        return scrollView
+    }()
+
+    // MARK: - Persistable
+
     var persistentContainer: NSPersistentContainer
 
+    // MARK: - Refreshable
+
     var requests: [URLSessionDataTask] = []
-    var dataView: UIView {
-        return view
-    }
+
     var refreshView: UIScrollView {
         return scrollView
     }
+
+    var refreshControl: UIRefreshControl? = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        return refreshControl
+    }()
+
+    // MARK: - Stateful
+
     var noDataViewController: NoDataViewController?
-    @IBOutlet var scrollView: UIScrollView!
-    var refreshControl: UIRefreshControl? {
-        didSet {
-            scrollView.refreshControl = refreshControl
-        }
-    }
+
+    // MARK: - Init
 
     init(persistentContainer: NSPersistentContainer) {
         self.persistentContainer = persistentContainer
@@ -33,12 +46,14 @@ class TBAViewController: UIViewController, DataController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - View Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // This allows us to see the no data view
-        scrollView.backgroundColor = .clear
         view.backgroundColor = .backgroundGray
+        view.addSubview(scrollView)
+        scrollView.autoPinEdgesToSuperviewEdges()
 
         enableRefreshing()
     }
@@ -57,11 +72,11 @@ class TBAViewController: UIViewController, DataController {
     }
 
     func enableRefreshing() {
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        scrollView.refreshControl = refreshControl
     }
 
     func disableRefreshing() {
-        refreshControl = nil
+        scrollView.refreshControl = nil
     }
+
 }

@@ -17,6 +17,7 @@ class EventsViewController: TBATableViewController {
         }
     }
     private weak var delegate: EventsViewControllerDelegate?
+    private var dataSource: TableViewDataSource<Event, EventsViewController>!
 
     // The selected Event from the weekEvents array to represent the Week to show
     // We need a full object as opposed to a number because of CMP, off-season, etc.
@@ -47,6 +48,8 @@ class EventsViewController: TBATableViewController {
         self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -78,7 +81,7 @@ class EventsViewController: TBATableViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
-        if let events = dataSource?.fetchedResultsController.fetchedObjects, events.isEmpty {
+        if let events = dataSource.fetchedResultsController.fetchedObjects, events.isEmpty {
             return true
         }
         return false
@@ -160,17 +163,13 @@ class EventsViewController: TBATableViewController {
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let event = dataSource?.object(at: indexPath)
-        if let event = event {
-            delegate?.eventSelected(event)
-        }
+        let event = dataSource.object(at: indexPath)
+        delegate?.eventSelected(event)
     }
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<Event, EventsViewController>?
-
-    fileprivate func setupDataSource() {
+    private func setupDataSource() {
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
 
         var firstSortDescriptor = NSSortDescriptor(key: "hybridType", ascending: true)
@@ -191,15 +190,11 @@ class EventsViewController: TBATableViewController {
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: EventTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
-    fileprivate func updateDataSource() {
-        if let dataSource = dataSource {
-            dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-        } else {
-            setupDataSource()
-        }
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
-    fileprivate func setupFetchRequest(_ request: NSFetchRequest<Event>) {
+    private func setupFetchRequest(_ request: NSFetchRequest<Event>) {
         if let year = year, let weekEvent = weekEvent {
             if let week = weekEvent.week {
                 // Event has a week - filter based on the week
@@ -232,9 +227,7 @@ extension EventsViewController: TableViewDataSourceDelegate {
     }
 
     func title(for section: Int) -> String? {
-        guard let event = dataSource?.object(at: IndexPath(item: 0, section: section)) else {
-            return nil
-        }
+        let event = dataSource.object(at: IndexPath(item: 0, section: section))
 
         if district != nil {
             return "\(event.weekString) Events"

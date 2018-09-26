@@ -27,6 +27,8 @@ class TeamInfoViewController: TBATableViewController {
     var team: Team
     var sponsorsExpanded: Bool = false
 
+    // MARK: - Init
+
     init(team: Team, persistentContainer: NSPersistentContainer) {
         self.team = team
 
@@ -36,6 +38,8 @@ class TeamInfoViewController: TBATableViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +72,7 @@ class TeamInfoViewController: TBATableViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
-        // TODO: This is always goign to exist... check on something else?
+        // TODO: This is always going to exist... check on something else?
         return team.name == nil
     }
 
@@ -111,7 +115,7 @@ class TeamInfoViewController: TBATableViewController {
         return cell
     }
 
-    func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    private func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: InfoTableViewCell.reuseIdentifier, for: indexPath) as! InfoTableViewCell
 
         cell.team = team
@@ -122,7 +126,7 @@ class TeamInfoViewController: TBATableViewController {
         return cell
     }
 
-    func tableView(_ tableView: UITableView, sponsorCellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    private func tableView(_ tableView: UITableView, sponsorCellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
 
         cell.textLabel?.text = team.name
@@ -141,7 +145,7 @@ class TeamInfoViewController: TBATableViewController {
         return cell
     }
 
-    func tableView(_ tableView: UITableView, linkCellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    private func tableView(_ tableView: UITableView, linkCellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
 
         var row = indexPath.row

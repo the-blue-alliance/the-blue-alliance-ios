@@ -55,6 +55,7 @@ private class EventAlliancesViewController: TBATableViewController {
 
     private let event: Event
     private weak var delegate: EventAlliancesViewControllerDelegate?
+    private var dataSource: TableViewDataSource<EventAlliance, EventAlliancesViewController>!
 
     // MARK: - Init
 
@@ -63,6 +64,8 @@ private class EventAlliancesViewController: TBATableViewController {
         self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -115,9 +118,7 @@ private class EventAlliancesViewController: TBATableViewController {
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<EventAlliance, EventAlliancesViewController>?
-
-    fileprivate func setupDataSource() {
+    private func setupDataSource() {
         let fetchRequest: NSFetchRequest<EventAlliance> = EventAlliance.fetchRequest()
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
@@ -129,15 +130,11 @@ private class EventAlliancesViewController: TBATableViewController {
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: EventAllianceTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
-    fileprivate func updateDataSource() {
-        if let dataSource = dataSource {
-            dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-        } else {
-            setupDataSource()
-        }
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
-    fileprivate func setupFetchRequest(_ request: NSFetchRequest<EventAlliance>) {
+    private func setupFetchRequest(_ request: NSFetchRequest<EventAlliance>) {
         request.predicate = NSPredicate(format: "event == %@", event)
     }
 

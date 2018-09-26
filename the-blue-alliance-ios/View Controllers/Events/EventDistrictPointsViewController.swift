@@ -54,6 +54,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
 
     private let event: Event
     private weak var delegate: EventDistrictPointsViewControllerDelegate?
+    private var dataSource: TableViewDataSource<DistrictEventPoints, EventDistrictPointsViewController>!
 
     // MARK: - Init
 
@@ -62,6 +63,8 @@ private class EventDistrictPointsViewController: TBATableViewController {
         self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -74,8 +77,6 @@ private class EventDistrictPointsViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
-
-        updateDataSource()
     }
 
     // MARK: - Refreshing
@@ -114,17 +115,13 @@ private class EventDistrictPointsViewController: TBATableViewController {
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let eventPoints = dataSource?.object(at: indexPath)
-        if let eventPoints = eventPoints {
-            delegate?.districtEventPointsSelected(eventPoints)
-        }
+        let eventPoints = dataSource.object(at: indexPath)
+        delegate?.districtEventPointsSelected(eventPoints)
     }
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<DistrictEventPoints, EventDistrictPointsViewController>?
-
-    fileprivate func setupDataSource() {
+    private func setupDataSource() {
         let fetchRequest: NSFetchRequest<DistrictEventPoints> = DistrictEventPoints.fetchRequest()
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "total", ascending: false)]
@@ -136,7 +133,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
-    fileprivate func updateDataSource() {
+    private func updateDataSource() {
         if let dataSource = dataSource {
             dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
         } else {
@@ -144,7 +141,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
         }
     }
 
-    fileprivate func setupFetchRequest(_ request: NSFetchRequest<DistrictEventPoints>) {
+    private func setupFetchRequest(_ request: NSFetchRequest<DistrictEventPoints>) {
         request.predicate = NSPredicate(format: "event == %@", event)
     }
 

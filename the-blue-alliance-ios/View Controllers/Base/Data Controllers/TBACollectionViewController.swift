@@ -8,14 +8,17 @@ class TBACollectionViewController: UICollectionViewController, DataController {
 
     let basicCellReuseIdentifier = "BasicCell"
     var requests: [URLSessionDataTask] = []
-    var dataView: UIView {
-        return collectionView!
-    }
+
     var refreshView: UIScrollView {
         return collectionView!
     }
     var noDataViewController: NoDataViewController?
-    var refreshControl: UIRefreshControl?
+
+    var refreshControl: UIRefreshControl? = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        return refreshControl
+    }()
 
     init(persistentContainer: NSPersistentContainer) {
         self.persistentContainer = persistentContainer
@@ -46,12 +49,11 @@ class TBACollectionViewController: UICollectionViewController, DataController {
     }
 
     func enableRefreshing() {
-        collectionView!.refreshControl = UIRefreshControl()
-        collectionView!.refreshControl!.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        refreshControl = collectionView!.refreshControl
+        collectionView.refreshControl = refreshControl
     }
+
     func disableRefreshing() {
-        refreshControl = nil
+        collectionView.refreshControl = nil
     }
 
 }

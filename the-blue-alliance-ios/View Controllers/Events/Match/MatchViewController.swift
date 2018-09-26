@@ -4,8 +4,8 @@ import UIKit
 
 class MatchViewController: ContainerViewController {
 
-    let match: Match
-    let team: Team?
+    private let match: Match
+    private let team: Team?
 
     private var infoViewController: MatchInfoViewController?
     private var breakdownViewController: MatchBreakdownViewController?

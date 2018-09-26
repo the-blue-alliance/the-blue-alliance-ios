@@ -12,6 +12,7 @@ class MatchesViewController: TBATableViewController {
     private let event: Event
     private let team: Team?
     private weak var delegate: MatchesViewControllerDelegate?
+    private var dataSource: TableViewDataSource<Match, MatchesViewController>!
 
     // MARK: - Init
 
@@ -21,6 +22,8 @@ class MatchesViewController: TBATableViewController {
         self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -33,8 +36,6 @@ class MatchesViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.register(UINib(nibName: String(describing: MatchTableViewCell.self), bundle: nil), forCellReuseIdentifier: MatchTableViewCell.reuseIdentifier)
-
-        updateDataSource()
     }
 
     // MARK: - Refreshing
@@ -64,7 +65,7 @@ class MatchesViewController: TBATableViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
-        if let matches = dataSource?.fetchedResultsController.fetchedObjects, matches.isEmpty {
+        if let matches = dataSource.fetchedResultsController.fetchedObjects, matches.isEmpty {
             return true
         }
         return false
@@ -72,9 +73,7 @@ class MatchesViewController: TBATableViewController {
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<Match, MatchesViewController>?
-
-    fileprivate func setupDataSource() {
+    private func setupDataSource() {
         let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "compLevelInt", ascending: true),
@@ -88,15 +87,11 @@ class MatchesViewController: TBATableViewController {
         dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: MatchTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }
 
-    fileprivate func updateDataSource() {
-        if let dataSource = dataSource {
-            dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-        } else {
-            setupDataSource()
-        }
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
-    fileprivate func setupFetchRequest(_ request: NSFetchRequest<Match>) {
+    private func setupFetchRequest(_ request: NSFetchRequest<Match>) {
         if let team = team {
             request.predicate = NSPredicate(format: "event == %@ AND (ANY redAlliance == %@ OR ANY blueAlliance == %@)", event, team, team)
         } else {
@@ -107,10 +102,8 @@ class MatchesViewController: TBATableViewController {
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let match = dataSource?.object(at: indexPath)
-        if let match = match {
-            delegate?.matchSelected(match)
-        }
+        let match = dataSource.object(at: indexPath)
+        delegate?.matchSelected(match)
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -122,9 +115,6 @@ class MatchesViewController: TBATableViewController {
 extension MatchesViewController: TableViewDataSourceDelegate {
 
     func title(for section: Int) -> String? {
-        guard let dataSource = dataSource else {
-            return nil
-        }
         let firstMatch = dataSource.object(at: IndexPath(row: 0, section: section))
         return "\(firstMatch.compLevelString) Matches"
     }
