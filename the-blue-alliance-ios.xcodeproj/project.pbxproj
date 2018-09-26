@@ -88,10 +88,6 @@
 		92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 92942DAE1E2158EC008E79CA /* Settings.bundle */; };
 		92942DB11E215B06008E79CA /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DB01E215B06008E79CA /* EventsViewController.swift */; };
 		92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */; };
-		92942DBD1E215BA6008E79CA /* EventsStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942DBC1E215BA6008E79CA /* EventsStoryboard.storyboard */; };
-		92942DBF1E215BEF008E79CA /* TeamsStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942DBE1E215BEF008E79CA /* TeamsStoryboard.storyboard */; };
-		92942DC11E215C0D008E79CA /* DistrictsStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942DC01E215C0D008E79CA /* DistrictsStoryboard.storyboard */; };
-		92942DC31E215C37008E79CA /* MyTBAStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92942DC21E215C37008E79CA /* MyTBAStoryboard.storyboard */; };
 		92942DDF1E21D2EB008E79CA /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DDE1E21D2EB008E79CA /* EventViewController.swift */; };
 		92942E331E2303A5008E79CA /* Calendar+Year.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942E321E2303A5008E79CA /* Calendar+Year.swift */; };
 		92942E361E2A81E8008E79CA /* EventInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942E351E2A81E8008E79CA /* EventInfoViewController.swift */; };
@@ -266,10 +262,6 @@
 		92942DAE1E2158EC008E79CA /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		92942DB01E215B06008E79CA /* EventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBAViewController.swift; sourceTree = "<group>"; };
-		92942DBC1E215BA6008E79CA /* EventsStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EventsStoryboard.storyboard; sourceTree = "<group>"; };
-		92942DBE1E215BEF008E79CA /* TeamsStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TeamsStoryboard.storyboard; sourceTree = "<group>"; };
-		92942DC01E215C0D008E79CA /* DistrictsStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = DistrictsStoryboard.storyboard; sourceTree = "<group>"; };
-		92942DC21E215C37008E79CA /* MyTBAStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MyTBAStoryboard.storyboard; sourceTree = "<group>"; };
 		92942DDE1E21D2EB008E79CA /* EventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		92942E321E2303A5008E79CA /* Calendar+Year.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Calendar+Year.swift"; path = "Extensions/Calendar+Year.swift"; sourceTree = "<group>"; };
 		92942E351E2A81E8008E79CA /* EventInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventInfoViewController.swift; sourceTree = "<group>"; };
@@ -678,7 +670,6 @@
 		92942DB21E215B08008E79CA /* Events */ = {
 			isa = PBXGroup;
 			children = (
-				92942DBC1E215BA6008E79CA /* EventsStoryboard.storyboard */,
 				92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */,
 				92942DB01E215B06008E79CA /* EventsViewController.swift */,
 				92D855DA1EC6B8F100572F27 /* Event */,
@@ -689,7 +680,6 @@
 		92942DB31E215B0E008E79CA /* Teams */ = {
 			isa = PBXGroup;
 			children = (
-				92942DBE1E215BEF008E79CA /* TeamsStoryboard.storyboard */,
 				92D855D11EC68F3800572F27 /* TeamsContainerViewController.swift */,
 				92D855D31EC68F4200572F27 /* TeamsViewController.swift */,
 				924602A81ECE85920030EDBF /* Team */,
@@ -700,7 +690,6 @@
 		92942DB41E215B1F008E79CA /* Districts */ = {
 			isa = PBXGroup;
 			children = (
-				92942DC01E215C0D008E79CA /* DistrictsStoryboard.storyboard */,
 				929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */,
 				929FCD991EC7F52700A38E46 /* DistrictsViewController.swift */,
 				929FCDA01EC8066800A38E46 /* District */,
@@ -711,7 +700,6 @@
 		92942DB51E215B34008E79CA /* MyTBA */ = {
 			isa = PBXGroup;
 			children = (
-				92942DC21E215C37008E79CA /* MyTBAStoryboard.storyboard */,
 				92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */,
 				92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */,
 				928018F32096431200693447 /* MyTBASignInViewController.swift */,
@@ -1200,11 +1188,8 @@
 			files = (
 				924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */,
 				145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */,
-				92942DBD1E215BA6008E79CA /* EventsStoryboard.storyboard in Resources */,
-				92942DC11E215C0D008E79CA /* DistrictsStoryboard.storyboard in Resources */,
 				92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */,
 				304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */,
-				92942DBF1E215BEF008E79CA /* TeamsStoryboard.storyboard in Resources */,
 				92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */,
 				929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */,
 				9221C618209BFF8700477DE2 /* LoadingTableViewCell.xib in Resources */,
@@ -1218,7 +1203,6 @@
 				925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */,
 				929DB38E2095640C00FB575F /* ReverseSubtitleTableViewCell.xib in Resources */,
 				92D8CD1320C2634200777D93 /* GoogleService-Info.plist in Resources */,
-				92942DC31E215C37008E79CA /* MyTBAStoryboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

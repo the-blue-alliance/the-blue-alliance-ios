@@ -64,10 +64,18 @@ class DistrictsContainerViewController: ContainerViewController {
     }
 
     private func showSelectYear() {
-        let selectViewController = SelectViewController<DistrictsContainerViewController>(current: year, options: Array(2009...remoteConfig.maxSeason).reversed())
-        selectViewController.title = "Select Year"
-        selectViewController.selectTableViewControllerDelegate = self
-        navigationController?.present(selectViewController, animated: true, completion: nil)
+        let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(current: year, options: Array(2009...remoteConfig.maxSeason).reversed())
+        selectTableViewController.title = "Select Year"
+        selectTableViewController.delegate = self
+
+        let nav = UINavigationController(rootViewController: selectTableViewController)
+        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSelectYear))
+
+        navigationController?.present(nav, animated: true, completion: nil)
+    }
+
+    @objc private func dismissSelectYear() {
+        navigationController?.dismiss(animated: true, completion: nil)
     }
 
 }
@@ -87,7 +95,7 @@ extension DistrictsContainerViewController: SelectTableViewControllerDelegate {
     }
 
     func titleForOption(_ option: OptionType) -> String {
-        return String(year)
+        return String(option)
     }
 
 }

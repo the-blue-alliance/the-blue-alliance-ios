@@ -57,10 +57,18 @@ class EventStatsContainerViewController: ContainerViewController {
     // MARK: - Interface Actions
 
     @objc private func showFilter() {
-        let selectViewController = SelectViewController<EventStatsContainerViewController>(current: teamStatsViewController.filter, options: EventTeamStatFilter.allCases)
-        selectViewController.title = "Sort stats by"
-        selectViewController.selectTableViewControllerDelegate = self
-        navigationController?.present(selectViewController, animated: true, completion: nil)
+        let selectTableViewController = SelectTableViewController<EventStatsContainerViewController>(current: teamStatsViewController.filter, options: EventTeamStatFilter.allCases)
+        selectTableViewController.title = "Sort stats by"
+        selectTableViewController.delegate = self
+
+        let nav = UINavigationController(rootViewController: selectTableViewController)
+        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissFilter))
+
+        navigationController?.present(nav, animated: true, completion: nil)
+    }
+
+    @objc private func dismissFilter() {
+        navigationController?.dismiss(animated: true, completion: nil)
     }
 
     // MARK: - Container

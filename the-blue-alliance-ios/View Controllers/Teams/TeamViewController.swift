@@ -131,12 +131,20 @@ class TeamViewController: ContainerViewController, Observable {
             return
         }
 
-        let selectViewController = SelectViewController<TeamViewController>(current: year, options: yearsParticipated)
-        selectViewController.title = "Select Year"
-        selectViewController.selectTableViewControllerDelegate = self
+        let selectTableViewController = SelectTableViewController<TeamViewController>(current: year, options: yearsParticipated)
+        selectTableViewController.title = "Select Year"
+        selectTableViewController.delegate = self
 
-        navigationController?.present(selectViewController, animated: true, completion: nil)
+        let nav = UINavigationController(rootViewController: selectTableViewController)
+        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSelectYear))
+
+        navigationController?.present(nav, animated: true, completion: nil)
     }
+
+    @objc private func dismissSelectYear() {
+        navigationController?.dismiss(animated: true, completion: nil)
+    }
+
 }
 
 extension TeamViewController: NavigationTitleDelegate {

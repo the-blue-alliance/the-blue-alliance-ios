@@ -1,25 +1,5 @@
 import UIKit
 
-class SelectViewController<T: SelectTableViewControllerDelegate>: UINavigationController {
-
-    private let selectTableViewController: SelectTableViewController<T>
-    weak var selectTableViewControllerDelegate: T? {
-        didSet {
-            selectTableViewController.delegate = selectTableViewControllerDelegate
-        }
-    }
-
-    init(current: T.OptionType?, options: [T.OptionType]) {
-        selectTableViewController = SelectTableViewController<T>(current: current, options: options)
-        super.init(rootViewController: selectTableViewController)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-}
-
 protocol SelectTableViewControllerDelegate: AnyObject {
 
     associatedtype OptionType: Comparable
@@ -29,7 +9,7 @@ protocol SelectTableViewControllerDelegate: AnyObject {
 
 }
 
-private class SelectTableViewController<T: SelectTableViewControllerDelegate>: UITableViewController {
+class SelectTableViewController<T: SelectTableViewControllerDelegate>: UITableViewController {
 
     private let current: T.OptionType?
     private let options: [T.OptionType]
