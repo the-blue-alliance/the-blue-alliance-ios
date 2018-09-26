@@ -2,19 +2,19 @@ import UIKit
 import TBAKit
 import CoreData
 
-enum TeamInfoSection: Int {
+private enum TeamInfoSection: Int {
     case title
     case link
     case max
 }
 
-enum TeamTitleRow: Int {
+private enum TeamTitleRow: Int {
     case nickname
     case sponsors
     case max
 }
 
-enum TeamLinkRow: Int {
+private enum TeamLinkRow: Int {
     case website
     case twitter
     case youtube

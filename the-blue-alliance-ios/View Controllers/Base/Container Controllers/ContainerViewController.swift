@@ -2,6 +2,10 @@ import Foundation
 import UIKit
 import CoreData
 
+protocol NavigationTitleDelegate: AnyObject {
+    func navigationTitleTapped()
+}
+
 typealias ContainableViewController = UIViewController & Refreshable & Persistable
 
 class ContainerViewController: UIViewController, Persistable, Alertable {
@@ -24,6 +28,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         let navigationStackView = UIStackView(arrangedSubviews: [navigationTitleLabel, navigationDetailLabel])
         navigationStackView.translatesAutoresizingMaskIntoConstraints = false
         navigationStackView.axis = .vertical
+        navigationStackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(navigationTitleTapped)))
         return navigationStackView
     }()
     private lazy var navigationTitleLabel: UILabel = {
@@ -36,15 +41,18 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         navigationDetailLabel.font = UIFont.systemFont(ofSize: 11)
         return navigationDetailLabel
     }()
+    weak var navigationTitleDelegate: NavigationTitleDelegate?
 
     var navigationTitle: String? {
         didSet {
             navigationTitleLabel.text = navigationTitle
+            navigationItem.titleView = navigationStackView
         }
     }
     var navigationSubtitle: String? {
         didSet {
             navigationDetailLabel.text = navigationSubtitle
+            navigationItem.titleView = navigationStackView
         }
     }
 
@@ -66,7 +74,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         fatalError("Override viewControllers in subclass - \(String(describing: type(of: self)))")
     }
 
-    init(segmentedControlTitles: [String]? = nil, showCustomNavigationLables: Bool = true, persistentContainer: NSPersistentContainer) {
+    init(segmentedControlTitles: [String]? = nil, persistentContainer: NSPersistentContainer) {
         self.persistentContainer = persistentContainer
 
         segmentedControl = UISegmentedControl(items: segmentedControlTitles)
@@ -77,9 +85,6 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
         super.init(nibName: nil, bundle: nil)
 
-        if showCustomNavigationLables {
-            navigationItem.titleView = navigationStackView
-        }
         segmentedControl.addTarget(self, action: #selector(updateSegmentedControlViews), for: .valueChanged)
     }
 
@@ -106,9 +111,9 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
             viewController.view.autoPinEdgesToSuperviewEdges()
         }
 
-        stackView.autoPinEdgesToSuperviewSafeArea(with: .zero, excludingEdge: .bottom)
+        stackView.autoPinEdge(toSuperviewSafeArea: .top)
         // Pin our stack view underneath the safe area to extend underneath the home bar on notch phones
-        stackView.autoPinEdge(toSuperviewEdge: .bottom)
+        stackView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
     }
 
     @IBAction func segmentedControlValueChanged(sender: Any) {
@@ -167,6 +172,10 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         viewControllers.forEach {
             $0.cancelRefresh()
         }
+    }
+
+    @objc private func navigationTitleTapped() {
+        navigationTitleDelegate?.navigationTitleTapped()
     }
 
     // MARK: - Helper Methods

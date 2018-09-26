@@ -5,6 +5,8 @@ import CoreData
 // TODO: This has a lot of modified functionality and needs a shit load of tests
 class TeamViewController: ContainerViewController, Observable {
 
+    typealias OptionType = Int
+
     private let team: Team
     var year: Int? {
         didSet {
@@ -62,6 +64,8 @@ class TeamViewController: ContainerViewController, Observable {
         super.init(segmentedControlTitles: ["Info", "Events", "Media"],
                    persistentContainer: persistentContainer)
 
+        navigationTitleDelegate = self
+
         // TODO: We should be able to do this before init, but we can't
         updateYear()
 
@@ -87,14 +91,14 @@ class TeamViewController: ContainerViewController, Observable {
 
     // MARK: - Private
 
-    func updateYear() {
+    private func updateYear() {
         guard let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty, year == nil else {
             return
         }
         year = yearsParticipated.first
     }
 
-    func updateInterface() {
+    private func updateInterface() {
         navigationTitle = "Team \(team.teamNumber)"
 
         if let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty, let year = year {
@@ -104,7 +108,7 @@ class TeamViewController: ContainerViewController, Observable {
         }
     }
 
-    func refreshYearsParticipated() {
+    private func refreshYearsParticipated() {
         _ = TBAKit.sharedKit.fetchTeamYearsParticipated(key: team.key!, completion: { (years, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to fetch years participated - \(error.localizedDescription)")
@@ -122,19 +126,36 @@ class TeamViewController: ContainerViewController, Observable {
         })
     }
 
-    /*
-
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if identifier == SelectYearSegue {
-            if let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty {
-                return true
-            }
-            return false
+    private func showSelectYear() {
+        guard let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty else {
+            return
         }
-        return true
+
+        let selectViewController = SelectViewController<TeamViewController>(current: year, options: yearsParticipated)
+        selectViewController.title = "Select Year"
+        selectViewController.selectTableViewControllerDelegate = self
+
+        navigationController?.present(selectViewController, animated: true, completion: nil)
+    }
+}
+
+extension TeamViewController: NavigationTitleDelegate {
+
+    func navigationTitleTapped() {
+        showSelectYear()
     }
 
-    */
+}
+
+extension TeamViewController: SelectTableViewControllerDelegate {
+
+    func optionSelected(_ option: Int) {
+        year = option
+    }
+
+    func titleForOption(_ option: Int) -> String {
+        return String(option)
+    }
 
 }
 

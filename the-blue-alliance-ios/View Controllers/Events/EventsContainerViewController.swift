@@ -6,6 +6,9 @@ import FirebaseRemoteConfig
 
 class EventsContainerViewController: ContainerViewController, Observable {
 
+    private let remoteConfig: RemoteConfig
+    private let userDefaults: UserDefaults
+
     private var eventsViewController: EventsViewController!
 
     override var viewControllers: [ContainableViewController] {
@@ -16,7 +19,8 @@ class EventsContainerViewController: ContainerViewController, Observable {
         return UIBarButtonItem(title: "Weeks",
                                style: .plain,
                                target: self,
-                               action: #selector(showSelectWeek))
+                               // action: #selector(showSelectWeek))
+                               action: nil)
     }()
 
     // TODO: Is this still true.....?
@@ -36,7 +40,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
 
             // Pass down year change so it can update it's FRC predicate
             // Remove weekEvent before year on Events TVC - it's safer that way
-            eventsViewController!.year = year
+            eventsViewController.year = year
 
             // Update available weeks for the year
             DispatchQueue.main.async {
@@ -60,7 +64,6 @@ class EventsContainerViewController: ContainerViewController, Observable {
             }
         }
     }
-    let remoteConfig: RemoteConfig
 
     // MARK: - Observable
 
@@ -71,8 +74,10 @@ class EventsContainerViewController: ContainerViewController, Observable {
 
     // MARK: - Init
 
-    init(remoteConfig: RemoteConfig, persistentContainer: NSPersistentContainer) {
+    init(remoteConfig: RemoteConfig, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
         self.remoteConfig = remoteConfig
+        self.userDefaults = userDefaults
+
         year = remoteConfig.currentSeason
 
         super.init(persistentContainer: persistentContainer)
@@ -80,6 +85,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
         title = "Events"
         tabBarItem.image = UIImage(named: "ic_event")
         navigationItem.rightBarButtonItem = weeksButton
+        navigationTitleDelegate = self
 
         eventsViewController = EventsViewController(year: year, delegate: self, persistentContainer: persistentContainer)
     }
@@ -92,8 +98,6 @@ class EventsContainerViewController: ContainerViewController, Observable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        updateEventObserver()
 
         setupWeeks()
         updateInterface()
@@ -139,7 +143,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
 
         if events.isEmpty && !hasRefreshed {
             // Initial load of events for eventsVC
-            if eventsViewController!.shouldRefresh() {
+            if eventsViewController.shouldRefresh() {
                 hasRefreshed = true
                 eventsViewController!.refresh()
             }
@@ -223,6 +227,7 @@ class EventsContainerViewController: ContainerViewController, Observable {
         }
     }
 
+    /*
     func showSelectYear() {
         let selectTableViewController = SelectTableViewController<Int>()
         selectTableViewController.title = "Select Year"
@@ -272,13 +277,22 @@ class EventsContainerViewController: ContainerViewController, Observable {
         let navigationController = UINavigationController(rootViewController: selectTableViewController)
         self.navigationController?.present(navigationController, animated: true, completion: nil)
     }
+    */
+
+}
+
+extension EventsContainerViewController: NavigationTitleDelegate {
+
+    func navigationTitleTapped() {
+        // showSelectYear()
+    }
 
 }
 
 extension EventsContainerViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let eventViewController = EventViewController(event: event, persistentContainer: persistentContainer)
+        let eventViewController = EventViewController(event: event, userDefaults: userDefaults, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(eventViewController, animated: true)
     }
 

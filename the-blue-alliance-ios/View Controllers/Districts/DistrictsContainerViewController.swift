@@ -6,7 +6,10 @@ import FirebaseRemoteConfig
 
 class DistrictsContainerViewController: ContainerViewController {
 
+    typealias OptionType = Int
+
     private let remoteConfig: RemoteConfig
+    private let userDefaults: UserDefaults
     private var year: Int {
         didSet {
             districtsViewController!.year = year
@@ -24,14 +27,17 @@ class DistrictsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(remoteConfig: RemoteConfig, persistentContainer: NSPersistentContainer) {
+    init(remoteConfig: RemoteConfig, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
         self.remoteConfig = remoteConfig
+        self.userDefaults = userDefaults
+
         year = remoteConfig.currentSeason
 
         super.init(persistentContainer: persistentContainer)
 
         title = "Districts"
         tabBarItem.image = UIImage(named: "ic_assignment")
+        navigationTitleDelegate = self
 
         districtsViewController = DistrictsViewController(year: year, delegate: self, persistentContainer: persistentContainer)
     }
@@ -53,25 +59,35 @@ class DistrictsContainerViewController: ContainerViewController {
 
     // MARK: - Private Methods
 
-    func updateInterface() {
+    private func updateInterface() {
         navigationSubtitle = "▾ \(year)"
     }
 
-    func selectYear() {
-        // TODO: Rework this SelectTableViewController so we pass this stuff in...
-        let selectTableViewController = SelectTableViewController<Int>()
-        selectTableViewController.title = "Select Year"
-        selectTableViewController.current = year
-        selectTableViewController.options = Array(2009...remoteConfig.maxSeason).reversed()
-        selectTableViewController.optionSelected = { [unowned self] year in
-            self.year = year
-        }
-        selectTableViewController.optionString = { year in
-            return String(year)
-        }
+    private func showSelectYear() {
+        let selectViewController = SelectViewController<DistrictsContainerViewController>(current: year, options: Array(2009...remoteConfig.maxSeason).reversed())
+        selectViewController.title = "Select Year"
+        selectViewController.selectTableViewControllerDelegate = self
+        navigationController?.present(selectViewController, animated: true, completion: nil)
+    }
 
-        let navigationController = UINavigationController(rootViewController: selectTableViewController)
-        self.navigationController?.present(navigationController, animated: true, completion: nil)
+}
+
+extension DistrictsContainerViewController: NavigationTitleDelegate {
+
+    func navigationTitleTapped() {
+        showSelectYear()
+    }
+
+}
+
+extension DistrictsContainerViewController: SelectTableViewControllerDelegate {
+
+    func optionSelected(_ option: OptionType) {
+        year = option
+    }
+
+    func titleForOption(_ option: OptionType) -> String {
+        return String(year)
     }
 
 }
@@ -79,7 +95,7 @@ class DistrictsContainerViewController: ContainerViewController {
 extension DistrictsContainerViewController: DistrictsViewControllerDelegate {
 
     func districtSelected(_ district: District) {
-        let districtViewController = DistrictViewController(district: district, persistentContainer: persistentContainer)
+        let districtViewController = DistrictViewController(district: district, userDefaults: userDefaults, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(districtViewController, animated: true)
     }
 

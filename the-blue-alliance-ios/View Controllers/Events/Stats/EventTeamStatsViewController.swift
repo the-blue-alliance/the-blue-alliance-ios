@@ -7,24 +7,28 @@ protocol EventTeamStatsSelectionDelegate: AnyObject {
     func eventTeamStatSelected(_ eventTeamStat: EventTeamStat)
 }
 
-public enum EventTeamStatFilter: Int {
-    case opr
-    case dpr
-    case ccwm
-    case teamNumber
-    case max
+enum EventTeamStatFilter: String, Comparable, CaseIterable {
+
+    static func < (lhs: EventTeamStatFilter, rhs: EventTeamStatFilter) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+
+    case opr = "OPR"
+    case dpr = "DPR"
+    case ccwm = "CCWM"
+    case teamNumber = "Team Number"
 }
 
 class EventTeamStatsTableViewController: TBATableViewController {
 
     private let event: Event
+    private let userDefaults: UserDefaults
     private weak var delegate: EventTeamStatsSelectionDelegate?
 
-    // TODO: Pass in a UserDefaults guy here
     var filter: EventTeamStatFilter {
         didSet {
-            UserDefaults.standard.set(filter.rawValue, forKey: "EventTeamStatFilter")
-            UserDefaults.standard.synchronize()
+            userDefaults.set(filter.rawValue, forKey: "EventTeamStatFilter")
+            userDefaults.synchronize()
 
             updateDataSource()
         }
@@ -32,12 +36,16 @@ class EventTeamStatsTableViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, delegate: EventTeamStatsSelectionDelegate, persistentContainer: NSPersistentContainer) {
+    init(event: Event, delegate: EventTeamStatsSelectionDelegate, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
         self.event = event
+        self.userDefaults = userDefaults
         self.delegate = delegate
 
-        // TODO: Pass a UserDefaults probably
-        filter = EventTeamStatFilter(rawValue: UserDefaults.standard.integer(forKey: "EventTeamStatFilter"))!
+        if let savedFilter = userDefaults.string(forKey: "EventTeamStatFilter"), !savedFilter.isEmpty, let filter = EventTeamStatFilter(rawValue: savedFilter) {
+            self.filter = filter
+        } else {
+            self.filter = EventTeamStatFilter.opr
+        }
 
         super.init(persistentContainer: persistentContainer)
     }
@@ -83,6 +91,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
+        // TODO: Make this data source non-optional
         if let stats = dataSource?.fetchedResultsController.fetchedObjects, stats.isEmpty {
             return true
         }
@@ -134,8 +143,6 @@ class EventTeamStatsTableViewController: TBATableViewController {
             sortDescriptor = NSSortDescriptor(key: "ccwm", ascending: true)
         case .teamNumber:
             sortDescriptor = NSSortDescriptor(key: "team.teamNumber", ascending: true)
-        default:
-            sortDescriptor = nil
         }
         request.sortDescriptors = [sortDescriptor!]
     }

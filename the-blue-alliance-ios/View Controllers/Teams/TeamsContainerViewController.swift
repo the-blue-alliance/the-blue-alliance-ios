@@ -16,7 +16,7 @@ class TeamsContainerViewController: ContainerViewController {
     // MARK: - Init
 
     init(persistentContainer: NSPersistentContainer) {
-        super.init(showCustomNavigationLables: false, persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer)
 
         title = "Teams"
         tabBarItem.image = UIImage(named: "ic_people")

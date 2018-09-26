@@ -5,6 +5,7 @@ import UIKit
 class DistrictViewController: ContainerViewController {
 
     private let district: District
+    private let userDefaults: UserDefaults
 
     private var eventsViewController: EventsViewController!
     private var rankingsViewController: DistrictRankingsViewController!
@@ -15,11 +16,11 @@ class DistrictViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(district: District, persistentContainer: NSPersistentContainer) {
+    init(district: District, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
         self.district = district
+        self.userDefaults = userDefaults
 
         super.init(segmentedControlTitles: ["Events", "Rankings"],
-                   showCustomNavigationLables: false,
                    persistentContainer: persistentContainer)
 
         eventsViewController = EventsViewController(district: district, delegate: self, persistentContainer: persistentContainer)
@@ -49,7 +50,7 @@ class DistrictViewController: ContainerViewController {
 extension DistrictViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let eventViewController = EventViewController(event: event, persistentContainer: persistentContainer)
+        let eventViewController = EventViewController(event: event, userDefaults: userDefaults, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(eventViewController, animated: true)
     }
 

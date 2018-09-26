@@ -46,9 +46,9 @@ class TBATableViewController: UITableViewController, DataController {
 
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let headerView = view as? UITableViewHeaderFooterView {
-            headerView.contentView.backgroundColor = UIColor.primaryDarkBlue
-            headerView.textLabel?.textColor = UIColor.white
+            headerView.textLabel?.textColor = .white
             headerView.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+            headerView.backgroundView?.backgroundColor = .primaryDarkBlue
         }
     }
 

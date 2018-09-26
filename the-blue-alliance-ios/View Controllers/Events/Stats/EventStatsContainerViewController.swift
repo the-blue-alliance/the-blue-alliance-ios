@@ -5,6 +5,8 @@ import UIKit
 
 class EventStatsContainerViewController: ContainerViewController {
 
+    typealias OptionType = EventTeamStatFilter
+
     private let event: Event
 
     private var teamStatsViewController: EventTeamStatsTableViewController!
@@ -23,7 +25,7 @@ class EventStatsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, persistentContainer: NSPersistentContainer) {
+    init(event: Event, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
         self.event = event
 
         // Only show event stats if year is 2016 or onward
@@ -36,7 +38,7 @@ class EventStatsContainerViewController: ContainerViewController {
                    persistentContainer: persistentContainer)
 
         eventStatsViewController = EventStatsViewController(event: event, persistentContainer: persistentContainer)
-        teamStatsViewController = EventTeamStatsTableViewController(event: event, delegate: self, persistentContainer: persistentContainer)
+        teamStatsViewController = EventTeamStatsTableViewController(event: event, delegate: self, userDefaults: userDefaults, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -55,36 +57,10 @@ class EventStatsContainerViewController: ContainerViewController {
     // MARK: - Interface Actions
 
     @objc private func showFilter() {
-        let selectTableViewController = SelectTableViewController<Int>()
-        selectTableViewController.title = "Sort stats by"
-        selectTableViewController.current = teamStatsViewController!.filter.rawValue
-        selectTableViewController.compareCurrent = { current, option in
-            return current == option
-        }
-        selectTableViewController.options = Array(EventTeamStatFilter.opr.rawValue..<EventTeamStatFilter.max.rawValue)
-        selectTableViewController.optionSelected = { [unowned self] filter in
-            guard let filterType = EventTeamStatFilter(rawValue: filter) else {
-                fatalError("Invalid filter")
-            }
-            self.teamStatsViewController!.filter = filterType
-        }
-        selectTableViewController.optionString = { filter in
-            switch filter {
-            case EventTeamStatFilter.opr.rawValue:
-                return "OPR"
-            case EventTeamStatFilter.dpr.rawValue:
-                return "DPR"
-            case EventTeamStatFilter.ccwm.rawValue:
-                return "CCWM"
-            case EventTeamStatFilter.teamNumber.rawValue:
-                return "Team #"
-            default:
-                return ""
-            }
-        }
-
-        let navigationController = UINavigationController(rootViewController: selectTableViewController)
-        self.navigationController?.present(navigationController, animated: true, completion: nil)
+        let selectViewController = SelectViewController<EventStatsContainerViewController>(current: teamStatsViewController.filter, options: EventTeamStatFilter.allCases)
+        selectViewController.title = "Sort stats by"
+        selectViewController.selectTableViewControllerDelegate = self
+        navigationController?.present(selectViewController, animated: true, completion: nil)
     }
 
     // MARK: - Container
@@ -97,6 +73,18 @@ class EventStatsContainerViewController: ContainerViewController {
         } else {
             navigationItem.rightBarButtonItem = nil
         }
+    }
+
+}
+
+extension EventStatsContainerViewController: SelectTableViewControllerDelegate {
+
+    func optionSelected(_ option: OptionType) {
+        teamStatsViewController.filter = option
+    }
+
+    func titleForOption(_ option: OptionType) -> String {
+        return option.rawValue
     }
 
 }

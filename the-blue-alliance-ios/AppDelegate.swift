@@ -23,9 +23,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let splitViewController = UISplitViewController()
 
         let eventsViewController = EventsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
+                                                                 userDefaults: userDefaults,
                                                                  persistentContainer: persistentContainer)
         let teamsViewController = TeamsContainerViewController(persistentContainer: persistentContainer)
         let districtsViewController = DistrictsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
+                                                                       userDefaults: userDefaults,
                                                                        persistentContainer: persistentContainer)
         let settingsViewController = SettingsViewController(urlOpener: UIApplication.shared,
                                                             persistentContainer: self.persistentContainer)
@@ -63,8 +65,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var persistentContainer: NSPersistentContainer = {
         return NSPersistentContainer(name: "TBA")
     }()
+    let userDefaults: UserDefaults = UserDefaults.standard
+    let tbaKit: TBAKit = TBAKit.sharedKit
+
     lazy var pushService: PushService = {
-        return PushService(userDefaults: UserDefaults.standard,
+        return PushService(userDefaults: userDefaults,
                            myTBA: MyTBA.shared,
                            retryService: RetryService())
     }()
@@ -76,7 +81,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                    retryService: RetryService())
     }()
     lazy var reactNativeService: ReactNativeService = {
-        return ReactNativeService(userDefaults: UserDefaults.standard,
+        return ReactNativeService(userDefaults: userDefaults,
                                   fileManager: FileManager.default,
                                   firebaseStorage: Storage.storage(),
                                   firebaseOptions: FirebaseOptions.defaultOptions(),
@@ -101,7 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
 
         // TODO: Load this from some secrets file
-        TBAKit.sharedKit.apiKey = "OHBBu0QbDiIJYKhAedTfkTxdrkXde1C21Sr90L1f1Pac4ahl4FJbNptNiXbCSCfH"
+        tbaKit.apiKey = "OHBBu0QbDiIJYKhAedTfkTxdrkXde1C21Sr90L1f1Pac4ahl4FJbNptNiXbCSCfH"
 
         // Setup our React Native service
         reactNativeService.registerRetryable(initiallyRetry: true)

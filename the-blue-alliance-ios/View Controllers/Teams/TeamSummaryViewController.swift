@@ -8,7 +8,7 @@ protocol TeamSummaryViewControllerDelegate: AnyObject {
     func matchSelected(_ match: Match)
 }
 
-enum TeamSummaryRow: Int {
+private enum TeamSummaryRow: Int {
     case rank
     case awards
     case pit // only during CMP, and if they exist

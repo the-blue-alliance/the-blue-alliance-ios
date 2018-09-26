@@ -3,7 +3,7 @@ import TBAKit
 import CoreData
 
 // TODO: LocalizedError
-enum BackgroundFetchError: Error {
+private enum BackgroundFetchError: Error {
     case message(String)
     case error(Error)
 }

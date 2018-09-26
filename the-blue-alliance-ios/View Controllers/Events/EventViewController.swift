@@ -4,6 +4,7 @@ import UIKit
 class EventViewController: ContainerViewController {
 
     private let event: Event
+    private let userDefaults: UserDefaults
 
     private var infoViewController: EventInfoViewController!
     private var teamsViewController: TeamsViewController!
@@ -16,11 +17,11 @@ class EventViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, persistentContainer: NSPersistentContainer) {
+    init(event: Event, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
         self.event = event
+        self.userDefaults = userDefaults
 
         super.init(segmentedControlTitles: ["Info", "Teams", "Rankings", "Matches"],
-                   showCustomNavigationLables: false,
                    persistentContainer: persistentContainer)
 
         infoViewController = EventInfoViewController(event: event, delegate: self, persistentContainer: persistentContainer)
@@ -68,7 +69,7 @@ extension EventViewController: EventInfoViewControllerDelegate {
     }
 
     func showStats() {
-        let eventStatsContainerViewController = EventStatsContainerViewController(event: event, persistentContainer: persistentContainer)
+        let eventStatsContainerViewController = EventStatsContainerViewController(event: event, userDefaults: userDefaults, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(eventStatsContainerViewController, animated: true)
     }
 
