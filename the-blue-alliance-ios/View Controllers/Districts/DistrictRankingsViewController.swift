@@ -12,7 +12,14 @@ class DistrictRankingsViewController: TBATableViewController {
     private let district: District
 
     weak var delegate: DistrictRankingsViewControllerDelegate?
-    private var dataSource: TableViewDataSource<DistrictRanking, DistrictRankingsViewController>!
+    private lazy var dataSource: TableViewDataSource<DistrictRanking, DistrictRankingsViewController> = {
+        let fetchRequest: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        return TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+    }()
 
     // MARK: - Init
 
@@ -20,8 +27,6 @@ class DistrictRankingsViewController: TBATableViewController {
         self.district = district
 
         super.init(persistentContainer: persistentContainer)
-
-        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -156,18 +161,6 @@ class DistrictRankingsViewController: TBATableViewController {
     }
 
     // MARK: Table View Data Source
-
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
-
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]
-
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
-    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))

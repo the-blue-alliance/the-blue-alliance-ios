@@ -4,8 +4,10 @@ import CoreData
 // Pattern from: https://github.com/objcio/core-data
 
 protocol TableViewDataSourceDelegate: class {
+
     associatedtype Object
     associatedtype Cell: UITableViewCell
+
     func configure(_ cell: Cell, for object: Object, at indexPath: IndexPath)
     func title(for section: Int) -> String?
 
@@ -14,9 +16,11 @@ protocol TableViewDataSourceDelegate: class {
 }
 
 extension TableViewDataSourceDelegate {
+
     func title(for section: Int) -> String? {
         return nil
     }
+
 }
 
 class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataSourceDelegate>: NSObject, UITableViewDataSource, NSFetchedResultsControllerDelegate {
@@ -31,6 +35,7 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         self.delegate = delegate
 
         super.init()
+
         fetchedResultsController.delegate = self
         try! fetchedResultsController.performFetch()
 
@@ -62,7 +67,7 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
 
     fileprivate let tableView: UITableView
     public let fetchedResultsController: NSFetchedResultsController<Result>
-    fileprivate weak var delegate: Delegate!
+    fileprivate weak var delegate: Delegate?
     fileprivate let cellIdentifier: String
 
     // MARK: UITableViewDataSource
@@ -70,7 +75,7 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
     func numberOfSections(in tableView: UITableView) -> Int {
         let sections = fetchedResultsController.sections?.count ?? 0
         if sections == 0 {
-            delegate.showNoDataView()
+            delegate?.showNoDataView()
         }
         return sections
     }
@@ -80,12 +85,12 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         if let sections = fetchedResultsController.sections {
             rows = sections[section].numberOfObjects
             if rows == 0 {
-                delegate.showNoDataView()
+                delegate?.showNoDataView()
             } else {
-                delegate.hideNoDataView()
+                delegate?.hideNoDataView()
             }
         } else {
-            delegate.showNoDataView()
+            delegate?.showNoDataView()
         }
         return rows
     }
@@ -94,12 +99,12 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         let object = self.object(at: indexPath)
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? Cell
             else { fatalError("Unexpected cell type at \(indexPath)") }
-        delegate.configure(cell, for: object, at: indexPath)
+        delegate?.configure(cell, for: object, at: indexPath)
         return cell
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return delegate.title(for: section)
+        return delegate?.title(for: section)
     }
 
     // MARK: NSFetchedResultsControllerDelegate

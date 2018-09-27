@@ -13,7 +13,16 @@ class MatchesViewController: TBATableViewController {
     private let team: Team?
 
     weak var delegate: MatchesViewControllerDelegate?
-    private var dataSource: TableViewDataSource<Match, MatchesViewController>!
+    private lazy var dataSource: TableViewDataSource<Match, MatchesViewController> = {
+        let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "compLevelInt", ascending: true),
+                                        NSSortDescriptor(key: "setNumber", ascending: true),
+                                        NSSortDescriptor(key: "matchNumber", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "compLevelInt", cacheName: nil)
+        return TableViewDataSource(tableView: tableView, cellIdentifier: MatchTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+    }()
 
     // MARK: - Init
 
@@ -22,8 +31,6 @@ class MatchesViewController: TBATableViewController {
         self.team = team
 
         super.init(persistentContainer: persistentContainer)
-
-        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -72,20 +79,6 @@ class MatchesViewController: TBATableViewController {
     }
 
     // MARK: Table View Data Source
-
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
-
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "compLevelInt", ascending: true),
-                                        NSSortDescriptor(key: "setNumber", ascending: true),
-                                        NSSortDescriptor(key: "matchNumber", ascending: true)]
-
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "compLevelInt", cacheName: nil)
-
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: MatchTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
-    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))

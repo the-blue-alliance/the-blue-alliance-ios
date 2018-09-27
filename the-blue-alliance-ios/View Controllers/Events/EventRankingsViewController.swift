@@ -12,7 +12,14 @@ class EventRankingsViewController: TBATableViewController {
     private let event: Event
 
     weak var delegate: EventRankingsViewControllerDelegate?
-    private var dataSource: TableViewDataSource<EventRanking, EventRankingsViewController>!
+    private lazy var dataSource: TableViewDataSource<EventRanking, EventRankingsViewController> = {
+        let fetchRequest: NSFetchRequest<EventRanking> = EventRanking.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        return TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+    }()
 
     // MARK: - Init
 
@@ -20,8 +27,6 @@ class EventRankingsViewController: TBATableViewController {
         self.event = event
 
         super.init(persistentContainer: persistentContainer)
-
-        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -80,18 +85,6 @@ class EventRankingsViewController: TBATableViewController {
     }
 
     // MARK: Table View Data Source
-
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<EventRanking> = EventRanking.fetchRequest()
-
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]
-
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
-    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))

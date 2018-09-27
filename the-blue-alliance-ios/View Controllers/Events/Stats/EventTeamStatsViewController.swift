@@ -25,7 +25,13 @@ class EventTeamStatsTableViewController: TBATableViewController {
     private let userDefaults: UserDefaults
 
     weak var delegate: EventTeamStatsSelectionDelegate?
-    private var dataSource: TableViewDataSource<EventTeamStat, EventTeamStatsTableViewController>!
+    private lazy var dataSource: TableViewDataSource<EventTeamStat, EventTeamStatsTableViewController> = {
+        let fetchRequest: NSFetchRequest<EventTeamStat> = EventTeamStat.fetchRequest()
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        return TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+    }()
 
     var filter: EventTeamStatFilter {
         didSet {
@@ -49,8 +55,6 @@ class EventTeamStatsTableViewController: TBATableViewController {
         }
 
         super.init(persistentContainer: persistentContainer)
-
-        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -106,16 +110,6 @@ class EventTeamStatsTableViewController: TBATableViewController {
     }
 
     // MARK: Table View Data Source
-
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<EventTeamStat> = EventTeamStat.fetchRequest()
-
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
-    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))

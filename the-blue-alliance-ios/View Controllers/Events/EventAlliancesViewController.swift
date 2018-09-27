@@ -55,7 +55,14 @@ private class EventAlliancesViewController: TBATableViewController {
     private let event: Event
 
     weak var delegate: EventAlliancesViewControllerDelegate?
-    private var dataSource: TableViewDataSource<EventAlliance, EventAlliancesViewController>!
+    private lazy var dataSource: TableViewDataSource<EventAlliance, EventAlliancesViewController> = {
+        let fetchRequest: NSFetchRequest<EventAlliance> = EventAlliance.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        return TableViewDataSource(tableView: tableView, cellIdentifier: EventAllianceTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+    }()
 
     // MARK: - Init
 
@@ -63,8 +70,6 @@ private class EventAlliancesViewController: TBATableViewController {
         self.event = event
 
         super.init(persistentContainer: persistentContainer)
-
-        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -107,25 +112,13 @@ private class EventAlliancesViewController: TBATableViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
-        if let alliances = dataSource?.fetchedResultsController.fetchedObjects, alliances.isEmpty {
+        if let alliances = dataSource.fetchedResultsController.fetchedObjects, alliances.isEmpty {
             return true
         }
         return false
     }
 
     // MARK: Table View Data Source
-
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<EventAlliance> = EventAlliance.fetchRequest()
-
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: EventAllianceTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
-    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))

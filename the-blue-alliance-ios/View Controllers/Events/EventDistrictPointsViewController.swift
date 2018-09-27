@@ -53,7 +53,14 @@ private class EventDistrictPointsViewController: TBATableViewController {
     private let event: Event
 
     weak var delegate: EventDistrictPointsViewControllerDelegate?
-    private var dataSource: TableViewDataSource<DistrictEventPoints, EventDistrictPointsViewController>!
+    private lazy var dataSource: TableViewDataSource<DistrictEventPoints, EventDistrictPointsViewController> = {
+        let fetchRequest: NSFetchRequest<DistrictEventPoints> = DistrictEventPoints.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "total", ascending: false)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        return TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+    }()
 
     // MARK: - Init
 
@@ -61,8 +68,6 @@ private class EventDistrictPointsViewController: TBATableViewController {
         self.event = event
 
         super.init(persistentContainer: persistentContainer)
-
-        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -104,7 +109,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
-        if let points = dataSource?.fetchedResultsController.fetchedObjects, points.isEmpty {
+        if let points = dataSource.fetchedResultsController.fetchedObjects, points.isEmpty {
             return true
         }
         return false
@@ -118,18 +123,6 @@ private class EventDistrictPointsViewController: TBATableViewController {
     }
 
     // MARK: Table View Data Source
-
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<DistrictEventPoints> = DistrictEventPoints.fetchRequest()
-
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "total", ascending: false)]
-
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
-    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))

@@ -11,7 +11,14 @@ class TeamsViewController: TBATableViewController {
     private let event: Event?
 
     var delegate: TeamsViewControllerDelegate?
-    private var dataSource: TableViewDataSource<Team, TeamsViewController>!
+    private lazy var dataSource: TableViewDataSource<Team, TeamsViewController> = {
+        let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "teamNumber", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        return TableViewDataSource(tableView: tableView, cellIdentifier: TeamTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+    }()
 
     lazy private var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
@@ -27,8 +34,6 @@ class TeamsViewController: TBATableViewController {
         self.event = event
 
         super.init(persistentContainer: persistentContainer)
-
-        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -132,17 +137,6 @@ class TeamsViewController: TBATableViewController {
     }
 
     // MARK: Table View Data Source
-
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "teamNumber", ascending: true)]
-
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: TeamTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
-    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))

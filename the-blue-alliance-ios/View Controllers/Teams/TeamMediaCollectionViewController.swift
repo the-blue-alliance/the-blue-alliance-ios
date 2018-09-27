@@ -12,7 +12,15 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             updateDataSource()
         }
     }
-    private var dataSource: CollectionViewDataSource<Media, TeamMediaCollectionViewController>!
+    private lazy var dataSource: CollectionViewDataSource<Media, TeamMediaCollectionViewController> = {
+        let fetchRequest: NSFetchRequest<Media> = Media.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "type", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        // TODO: Split section by photos/videos like we do on the web
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        return CollectionViewDataSource(collectionView: collectionView!, cellIdentifier: basicCellReuseIdentifier, fetchedResultsController: frc, delegate: self)
+    }()
 
     private var playerViews: [String: PlayerView] = [:]
     private var downloadedImages: [String: UIImage] = [:]
@@ -25,8 +33,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         self.urlOpener = urlOpener
 
         super.init(persistentContainer: persistentContainer)
-
-        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -123,19 +129,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     }
 
     // MARK: Table View Data Source
-
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<Media> = Media.fetchRequest()
-
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "type", ascending: true)]
-
-        setupFetchRequest(fetchRequest)
-
-        // TODO: Split section by photos/videos like we do on the web
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-
-        dataSource = CollectionViewDataSource(collectionView: collectionView!, cellIdentifier: basicCellReuseIdentifier, fetchedResultsController: frc, delegate: self)
-    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))

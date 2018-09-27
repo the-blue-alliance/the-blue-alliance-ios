@@ -30,20 +30,17 @@ extension EventsViewControllerDelegate {
 class EventsViewController: TBATableViewController, EventsViewControllerDataSourceConfiguration {
 
     weak var delegate: EventsViewControllerDelegate?
-    lazy var dataSource: TableViewDataSource<Event, EventsViewController> = {
+    private lazy var dataSource: TableViewDataSource<Event, EventsViewController> = {
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
-
         fetchRequest.sortDescriptors = [firstSortDescriptor,
                                         NSSortDescriptor(key: "startDate", ascending: true),
                                         NSSortDescriptor(key: "name", ascending: true)]
-
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
                                              managedObjectContext: persistentContainer.viewContext,
                                              sectionNameKeyPath: sectionNameKeyPath,
                                              cacheName: nil)
-
         return TableViewDataSource(tableView: tableView, cellIdentifier: EventTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
     }()
 

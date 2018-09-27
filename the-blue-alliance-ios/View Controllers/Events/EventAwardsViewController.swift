@@ -64,7 +64,14 @@ class EventAwardsViewController: TBATableViewController {
     private let team: Team?
 
     weak var delegate: EventAwardsViewControllerDelegate?
-    private var dataSource: TableViewDataSource<Award, EventAwardsViewController>!
+    private lazy var dataSource: TableViewDataSource<Award, EventAwardsViewController> = {
+        let fetchRequest: NSFetchRequest<Award> = Award.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "awardType", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        return TableViewDataSource(tableView: tableView, cellIdentifier: AwardTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+    }()
 
     // MARK: - Init
 
@@ -73,8 +80,6 @@ class EventAwardsViewController: TBATableViewController {
         self.team = team
 
         super.init(persistentContainer: persistentContainer)
-
-        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -123,18 +128,6 @@ class EventAwardsViewController: TBATableViewController {
     }
 
     // MARK: Table View Data Source
-
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<Award> = Award.fetchRequest()
-
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "awardType", ascending: true)]
-
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: AwardTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
-    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
