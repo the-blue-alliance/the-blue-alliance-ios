@@ -6,8 +6,6 @@ import FirebaseRemoteConfig
 
 class DistrictsContainerViewController: ContainerViewController {
 
-    typealias OptionType = Int
-
     private let remoteConfig: RemoteConfig
     private let urlOpener: URLOpener
     private let userDefaults: UserDefaults
@@ -66,7 +64,7 @@ class DistrictsContainerViewController: ContainerViewController {
     }
 
     private func showSelectYear() {
-        let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(current: year, options: Array(2009...remoteConfig.maxSeason).reversed())
+        let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(current: year, options: Array(2009...remoteConfig.maxSeason).reversed(), persistentContainer: persistentContainer)
         selectTableViewController.title = "Select Year"
         selectTableViewController.delegate = self
 
@@ -91,6 +89,8 @@ extension DistrictsContainerViewController: NavigationTitleDelegate {
 }
 
 extension DistrictsContainerViewController: SelectTableViewControllerDelegate {
+
+    typealias OptionType = Int
 
     func optionSelected(_ option: OptionType) {
         year = option

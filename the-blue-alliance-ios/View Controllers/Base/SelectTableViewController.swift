@@ -1,3 +1,4 @@
+import CoreData
 import UIKit
 
 protocol SelectTableViewControllerDelegate: AnyObject {
@@ -7,19 +8,36 @@ protocol SelectTableViewControllerDelegate: AnyObject {
     func optionSelected(_ option: OptionType)
     func titleForOption(_ option: OptionType) -> String
 
+    func refresh()
+    func shouldNoDataRefresh() -> Bool
 }
 
-class SelectTableViewController<T: SelectTableViewControllerDelegate>: UITableViewController {
+extension SelectTableViewControllerDelegate {
 
-    private let current: T.OptionType?
-    private let options: [T.OptionType]
-    weak var delegate: T?
+    func refresh() {
+        // NOP
+    }
 
-    init(current: T.OptionType?, options: [T.OptionType]) {
+    func shouldNoDataRefresh() -> Bool {
+        return false
+    }
+}
+
+class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TBATableViewController {
+
+    private let current: Delegate.OptionType?
+    var options: [Delegate.OptionType]
+    private let willPush: Bool
+    weak var delegate: Delegate?
+
+    init(current: Delegate.OptionType?, options: [Delegate.OptionType], willPush: Bool = false, persistentContainer: NSPersistentContainer) {
         self.current = current
         self.options = options
+        self.willPush = willPush
 
-        super.init(style: .plain)
+        super.init(persistentContainer: persistentContainer)
+
+        disableRefreshing()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -52,7 +70,9 @@ class SelectTableViewController<T: SelectTableViewControllerDelegate>: UITableVi
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
         let option = options[indexPath.row]
-        if current == option {
+        if willPush {
+            cell.accessoryType = .disclosureIndicator
+        } else if current == option {
             cell.accessoryType = .checkmark
         } else {
             cell.accessoryType = .none
@@ -69,7 +89,19 @@ class SelectTableViewController<T: SelectTableViewControllerDelegate>: UITableVi
         let option = options[indexPath.row]
         delegate?.optionSelected(option)
 
-        dismiss(animated: true, completion: nil)
+        if !willPush {
+            dismiss(animated: true, completion: nil)
+        }
+    }
+
+    // MARK: - Refreshable
+
+    @objc override func refresh() {
+        delegate?.refresh()
+    }
+
+    override func shouldNoDataRefresh() -> Bool {
+        return delegate?.shouldNoDataRefresh() ?? false
     }
 
     // MARK: - Private Methods

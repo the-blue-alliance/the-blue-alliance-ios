@@ -5,8 +5,6 @@ import UIKit
 
 class EventStatsContainerViewController: ContainerViewController {
 
-    typealias OptionType = EventTeamStatFilter
-
     private let event: Event
 
     private var teamStatsViewController: EventTeamStatsTableViewController!
@@ -57,7 +55,7 @@ class EventStatsContainerViewController: ContainerViewController {
     // MARK: - Interface Actions
 
     @objc private func showFilter() {
-        let selectTableViewController = SelectTableViewController<EventStatsContainerViewController>(current: teamStatsViewController.filter, options: EventTeamStatFilter.allCases)
+        let selectTableViewController = SelectTableViewController<EventStatsContainerViewController>(current: teamStatsViewController.filter, options: EventTeamStatFilter.allCases, persistentContainer: persistentContainer)
         selectTableViewController.title = "Sort stats by"
         selectTableViewController.delegate = self
 
@@ -86,6 +84,8 @@ class EventStatsContainerViewController: ContainerViewController {
 }
 
 extension EventStatsContainerViewController: SelectTableViewControllerDelegate {
+
+    typealias OptionType = EventTeamStatFilter
 
     func optionSelected(_ option: OptionType) {
         teamStatsViewController.filter = option

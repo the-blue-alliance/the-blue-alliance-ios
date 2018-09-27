@@ -5,8 +5,6 @@ import CoreData
 // TODO: This has a lot of modified functionality and needs a shit load of tests
 class TeamViewController: ContainerViewController, Observable {
 
-    typealias OptionType = Int
-
     private let team: Team
     var year: Int? {
         didSet {
@@ -28,7 +26,7 @@ class TeamViewController: ContainerViewController, Observable {
     }
 
     private var infoViewController: TeamInfoViewController!
-    private var eventsViewController: EventsViewController!
+    private var eventsViewController: TeamEventsViewController!
     private var mediaViewController: TeamMediaCollectionViewController!
 
     override var viewControllers: [ContainableViewController] {
@@ -67,7 +65,10 @@ class TeamViewController: ContainerViewController, Observable {
         }
 
         infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer)
-        eventsViewController = EventsViewController(team: team, delegate: self, persistentContainer: persistentContainer)
+
+        eventsViewController = TeamEventsViewController(team: team, persistentContainer: persistentContainer)
+        eventsViewController.delegate = self
+
         mediaViewController = TeamMediaCollectionViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer)
     }
 
@@ -121,7 +122,7 @@ class TeamViewController: ContainerViewController, Observable {
             return
         }
 
-        let selectTableViewController = SelectTableViewController<TeamViewController>(current: year, options: yearsParticipated)
+        let selectTableViewController = SelectTableViewController<TeamViewController>(current: year, options: yearsParticipated, persistentContainer: persistentContainer)
         selectTableViewController.title = "Select Year"
         selectTableViewController.delegate = self
 
@@ -146,6 +147,8 @@ extension TeamViewController: NavigationTitleDelegate {
 }
 
 extension TeamViewController: SelectTableViewControllerDelegate {
+
+    typealias OptionType = Int
 
     func optionSelected(_ option: Int) {
         year = option

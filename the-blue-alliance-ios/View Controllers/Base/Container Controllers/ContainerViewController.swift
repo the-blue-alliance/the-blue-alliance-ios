@@ -93,6 +93,8 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
+
         // Remove segmentedControl if we don't need one
         var arrangedSubviews = [containerView]
         if segmentedControl.numberOfSegments > 1 {

@@ -40,6 +40,8 @@ class TBAViewController: UIViewController, DataController {
         self.persistentContainer = persistentContainer
 
         super.init(nibName: nil, bundle: nil)
+
+        enableRefreshing()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -54,8 +56,6 @@ class TBAViewController: UIViewController, DataController {
         view.backgroundColor = .backgroundGray
         view.addSubview(scrollView)
         scrollView.autoPinEdgesToSuperviewEdges()
-
-        enableRefreshing()
     }
 
     @objc func refresh() {

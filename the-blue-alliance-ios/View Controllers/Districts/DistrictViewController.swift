@@ -8,7 +8,7 @@ class DistrictViewController: ContainerViewController {
     private let urlOpener: URLOpener
     private let userDefaults: UserDefaults
 
-    private var eventsViewController: EventsViewController!
+    private var eventsViewController: DistrictEventsViewController!
     private var rankingsViewController: DistrictRankingsViewController!
 
     override var viewControllers: [ContainableViewController] {
@@ -25,7 +25,9 @@ class DistrictViewController: ContainerViewController {
         super.init(segmentedControlTitles: ["Events", "Rankings"],
                    persistentContainer: persistentContainer)
 
-        eventsViewController = EventsViewController(district: district, delegate: self, persistentContainer: persistentContainer)
+        eventsViewController = DistrictEventsViewController(district: district, persistentContainer: persistentContainer)
+        eventsViewController.delegate = self
+
         rankingsViewController = DistrictRankingsViewController(district: district, delegate: self, persistentContainer: persistentContainer)
     }
 
@@ -54,6 +56,10 @@ extension DistrictViewController: EventsViewControllerDelegate {
     func eventSelected(_ event: Event) {
         let eventViewController = EventViewController(event: event, urlOpener: urlOpener, userDefaults: userDefaults, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(eventViewController, animated: true)
+    }
+
+    func title(for event: Event) -> String? {
+        return "\(event.weekString) Events"
     }
 
 }

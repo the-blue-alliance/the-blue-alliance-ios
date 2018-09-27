@@ -24,6 +24,8 @@ class TBACollectionViewController: UICollectionViewController, DataController {
         self.persistentContainer = persistentContainer
 
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
+
+        enableRefreshing()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -36,8 +38,6 @@ class TBACollectionViewController: UICollectionViewController, DataController {
         collectionView?.backgroundColor = .backgroundGray
         collectionView?.delegate = self
         collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: basicCellReuseIdentifier)
-
-        enableRefreshing()
     }
 
     @objc func refresh() {

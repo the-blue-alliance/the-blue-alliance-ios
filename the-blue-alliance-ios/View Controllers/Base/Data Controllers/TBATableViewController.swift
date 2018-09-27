@@ -24,6 +24,8 @@ class TBATableViewController: UITableViewController, DataController {
         self.persistentContainer = persistentContainer
 
         super.init(style: style)
+
+        enableRefreshing()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -41,8 +43,6 @@ class TBATableViewController: UITableViewController, DataController {
         tableView.tableFooterView = UIView.init(frame: .zero)
         tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: basicCellReuseIdentifier)
-
-        enableRefreshing()
     }
 
     // MARK: - UITableViewDelegate
