@@ -82,6 +82,8 @@ class EventsContainerViewController: ContainerViewController, Observable {
 
         super.init(persistentContainer: persistentContainer)
 
+        updateEventObserver()
+
         title = "Events"
         tabBarItem.image = UIImage(named: "ic_event")
         navigationItem.rightBarButtonItem = weeksButton

@@ -27,7 +27,7 @@ private enum DebugRow: Int {
 
 class SettingsViewController: UITableViewController, Persistable {
 
-    var urlOpener: URLOpener
+    private var urlOpener: URLOpener
     var persistentContainer: NSPersistentContainer
 
     // MARK: - Init
