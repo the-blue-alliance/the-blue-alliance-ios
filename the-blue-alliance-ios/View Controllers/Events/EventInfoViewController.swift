@@ -36,18 +36,7 @@ class EventInfoViewController: TBATableViewController, Observable {
 
     private let event: Event
     private weak var delegate: EventInfoViewControllerDelegate?
-
-    // MARK: - Persistable
-
-    override var persistentContainer: NSPersistentContainer {
-        didSet {
-            contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                }
-            }
-        }
-    }
+    private let urlOpener: URLOpener
 
     // MARK: - Observable
 
@@ -58,11 +47,18 @@ class EventInfoViewController: TBATableViewController, Observable {
 
     // MARK: - Init
 
-    init(event: Event, delegate: EventInfoViewControllerDelegate, persistentContainer: NSPersistentContainer) {
+    init(event: Event, delegate: EventInfoViewControllerDelegate, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
         self.event = event
         self.delegate = delegate
+        self.urlOpener = urlOpener
 
         super.init(style: .grouped, persistentContainer: persistentContainer)
+
+        contextObserver.observeObject(object: event, state: .updated) { [unowned self] (_, _) in
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -245,11 +241,8 @@ class EventInfoViewController: TBATableViewController, Observable {
                 break
             }
 
-            if let urlString = urlString {
-                let url = URL(string: urlString)
-                if let url = url, UIApplication.shared.canOpenURL(url) {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                }
+            if let urlString = urlString, let url = URL(string: urlString), urlOpener.canOpenURL(url) {
+                urlOpener.open(url, options: [:], completionHandler: nil)
             }
 
             tableView.deselectRow(at: indexPath, animated: true)

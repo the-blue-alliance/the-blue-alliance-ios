@@ -44,7 +44,7 @@ class TeamViewController: ContainerViewController, Observable {
 
     // MARK: Init
 
-    init(team: Team, persistentContainer: NSPersistentContainer) {
+    init(team: Team, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
         self.team = team
 
         if let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty {
@@ -66,9 +66,9 @@ class TeamViewController: ContainerViewController, Observable {
             }
         }
 
-        infoViewController = TeamInfoViewController(team: team, persistentContainer: persistentContainer)
+        infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer)
         eventsViewController = EventsViewController(team: team, delegate: self, persistentContainer: persistentContainer)
-        mediaViewController = TeamMediaCollectionViewController(team: team, persistentContainer: persistentContainer)
+        mediaViewController = TeamMediaCollectionViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -15,18 +15,6 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
     }()
     private var eventStatsView: RCTRootView?
 
-    // MARK: - Persistable
-
-    override var persistentContainer: NSPersistentContainer {
-        didSet {
-            contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
-                DispatchQueue.main.async {
-                    self?.updateEventStatsView()
-                }
-            }
-        }
-    }
-
     // MARK: - Observable
 
     typealias ManagedType = Event
@@ -40,6 +28,12 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
         self.event = event
 
         super.init(persistentContainer: persistentContainer)
+
+        contextObserver.observeObject(object: event, state: .updated) { [unowned self] (_, _) in
+            DispatchQueue.main.async {
+                self.updateEventStatsView()
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {

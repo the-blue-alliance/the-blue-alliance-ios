@@ -40,12 +40,12 @@ class TeamSummaryViewController: TBATableViewController {
             if let eventStatus = eventStatus {
                 updateSummaryInfo()
 
-                contextObserver.observeObject(object: eventStatus, state: .updated) { [weak self] (_, _) in
-                    self?.updateSummaryInfo()
+                contextObserver.observeObject(object: eventStatus, state: .updated) { [unowned self] (_, _) in
+                    self.updateSummaryInfo()
                 }
             } else {
-                contextObserver.observeInsertions { [weak self] (eventStatuses) in
-                    self?.eventStatus = eventStatuses.first
+                contextObserver.observeInsertions { [unowned self] (eventStatuses) in
+                    self.eventStatus = eventStatuses.first
                 }
             }
         }

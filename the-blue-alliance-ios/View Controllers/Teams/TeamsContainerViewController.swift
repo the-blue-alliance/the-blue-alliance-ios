@@ -7,6 +7,7 @@ private let TeamSegue = "TeamSegue"
 
 class TeamsContainerViewController: ContainerViewController {
 
+    private let urlOpener: URLOpener
     private var teamsViewController: TeamsViewController!
 
     override var viewControllers: [ContainableViewController] {
@@ -15,7 +16,9 @@ class TeamsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(persistentContainer: NSPersistentContainer) {
+    init(urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
+        self.urlOpener = urlOpener
+
         super.init(persistentContainer: persistentContainer)
 
         title = "Teams"
@@ -33,7 +36,7 @@ class TeamsContainerViewController: ContainerViewController {
 extension TeamsContainerViewController: TeamsViewControllerDelegate {
 
     func teamSelected(_ team: Team) {
-        let teamViewController = TeamViewController(team: team, persistentContainer: persistentContainer)
+        let teamViewController = TeamViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(teamViewController, animated: true)
     }
 

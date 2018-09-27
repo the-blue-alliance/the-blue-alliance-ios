@@ -7,6 +7,7 @@ import FirebaseRemoteConfig
 class EventsContainerViewController: ContainerViewController, Observable {
 
     private let remoteConfig: RemoteConfig
+    private let urlOpener: URLOpener
     private let userDefaults: UserDefaults
 
     private var eventsViewController: EventsViewController!
@@ -74,8 +75,9 @@ class EventsContainerViewController: ContainerViewController, Observable {
 
     // MARK: - Init
 
-    init(remoteConfig: RemoteConfig, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
+    init(remoteConfig: RemoteConfig, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
         self.remoteConfig = remoteConfig
+        self.urlOpener = urlOpener
         self.userDefaults = userDefaults
 
         year = remoteConfig.currentSeason
@@ -294,7 +296,7 @@ extension EventsContainerViewController: NavigationTitleDelegate {
 extension EventsContainerViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let eventViewController = EventViewController(event: event, userDefaults: userDefaults, persistentContainer: persistentContainer)
+        let eventViewController = EventViewController(event: event, urlOpener: urlOpener, userDefaults: userDefaults, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(eventViewController, animated: true)
     }
 

@@ -11,14 +11,14 @@ class TeamStatsViewController: TBATableViewController, Observable {
     private var teamStat: EventTeamStat? {
         didSet {
             if let teamStat = teamStat {
-                contextObserver.observeObject(object: teamStat, state: .updated) { [weak self] (_, _) in
+                contextObserver.observeObject(object: teamStat, state: .updated) { [unowned self] (_, _) in
                     DispatchQueue.main.async {
-                        self?.tableView.reloadData()
+                        self.tableView.reloadData()
                     }
                 }
             } else {
-                contextObserver.observeInsertions { [weak self] (teamStats) in
-                    self?.teamStat = teamStats.first
+                contextObserver.observeInsertions { [unowned self] (teamStats) in
+                    self.teamStat = teamStats.first
                 }
             }
         }

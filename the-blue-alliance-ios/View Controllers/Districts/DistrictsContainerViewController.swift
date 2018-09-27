@@ -9,6 +9,7 @@ class DistrictsContainerViewController: ContainerViewController {
     typealias OptionType = Int
 
     private let remoteConfig: RemoteConfig
+    private let urlOpener: URLOpener
     private let userDefaults: UserDefaults
     private var year: Int {
         didSet {
@@ -27,8 +28,9 @@ class DistrictsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(remoteConfig: RemoteConfig, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
+    init(remoteConfig: RemoteConfig, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
         self.remoteConfig = remoteConfig
+        self.urlOpener = urlOpener
         self.userDefaults = userDefaults
 
         year = remoteConfig.currentSeason
@@ -103,7 +105,7 @@ extension DistrictsContainerViewController: SelectTableViewControllerDelegate {
 extension DistrictsContainerViewController: DistrictsViewControllerDelegate {
 
     func districtSelected(_ district: District) {
-        let districtViewController = DistrictViewController(district: district, userDefaults: userDefaults, persistentContainer: persistentContainer)
+        let districtViewController = DistrictViewController(district: district, urlOpener: urlOpener, userDefaults: userDefaults, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(districtViewController, animated: true)
     }
 

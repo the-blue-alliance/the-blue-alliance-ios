@@ -17,14 +17,14 @@ class EventViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
+    init(event: Event, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
         self.event = event
         self.userDefaults = userDefaults
 
         super.init(segmentedControlTitles: ["Info", "Teams", "Rankings", "Matches"],
                    persistentContainer: persistentContainer)
 
-        infoViewController = EventInfoViewController(event: event, delegate: self, persistentContainer: persistentContainer)
+        infoViewController = EventInfoViewController(event: event, delegate: self, urlOpener: urlOpener, persistentContainer: persistentContainer)
         teamsViewController = TeamsViewController(delegate: self, event: event, persistentContainer: persistentContainer)
         rankingsViewController = EventRankingsViewController(event: event, delegate: self, persistentContainer: persistentContainer)
         matchesViewController = MatchesViewController(event: event, delegate: self, persistentContainer: persistentContainer)

@@ -23,14 +23,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let splitViewController = UISplitViewController()
 
         let eventsViewController = EventsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
+                                                                 urlOpener: urlOpener,
                                                                  userDefaults: userDefaults,
                                                                  persistentContainer: persistentContainer)
-        let teamsViewController = TeamsContainerViewController(persistentContainer: persistentContainer)
+        let teamsViewController = TeamsContainerViewController(urlOpener: urlOpener,
+                                                               persistentContainer: persistentContainer)
         let districtsViewController = DistrictsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
+                                                                       urlOpener: urlOpener,
                                                                        userDefaults: userDefaults,
                                                                        persistentContainer: persistentContainer)
-        let settingsViewController = SettingsViewController(urlOpener: UIApplication.shared,
-                                                            persistentContainer: self.persistentContainer)
+        let settingsViewController = SettingsViewController(urlOpener: urlOpener,
+                                                            persistentContainer: persistentContainer)
         let rootViewControllers: [UIViewController] = [eventsViewController, teamsViewController, districtsViewController, settingsViewController]
         tabBarController.viewControllers = rootViewControllers.compactMap({ (viewController) -> UIViewController? in
             let navigationController = UINavigationController(rootViewController: viewController)
@@ -67,6 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     let userDefaults: UserDefaults = UserDefaults.standard
     let tbaKit: TBAKit = TBAKit.sharedKit
+    let urlOpener: URLOpener = UIApplication.shared
 
     lazy var pushService: PushService = {
         return PushService(userDefaults: userDefaults,

@@ -5,6 +5,7 @@ import CoreData
 class TeamMediaCollectionViewController: TBACollectionViewController {
 
     private let team: Team
+    private let urlOpener: URLOpener
     var year: Int? {
         didSet {
             cancelRefresh()
@@ -18,8 +19,9 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     // MARK: Init
 
-    init(team: Team, persistentContainer: NSPersistentContainer) {
+    init(team: Team, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
         self.team = team
+        self.urlOpener = urlOpener
 
         super.init(persistentContainer: persistentContainer)
 
@@ -112,9 +114,9 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         guard let url = media.viewImageURL else {
             return
         }
-        // TODO: Use URLOpener
-        if UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+
+        if urlOpener.canOpenURL(url) {
+            urlOpener.open(url, options: [:], completionHandler: nil)
         }
     }
 

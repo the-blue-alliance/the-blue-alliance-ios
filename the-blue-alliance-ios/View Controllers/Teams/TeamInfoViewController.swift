@@ -24,13 +24,16 @@ private enum TeamLinkRow: Int {
 
 class TeamInfoViewController: TBATableViewController {
 
-    var team: Team
-    var sponsorsExpanded: Bool = false
+    private var team: Team
+    private let urlOpener: URLOpener
+
+    private var sponsorsExpanded: Bool = false
 
     // MARK: - Init
 
-    init(team: Team, persistentContainer: NSPersistentContainer) {
+    init(team: Team, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
         self.team = team
+        self.urlOpener = urlOpener
 
         super.init(style: .grouped, persistentContainer: persistentContainer)
     }
@@ -198,9 +201,8 @@ class TeamInfoViewController: TBATableViewController {
             }
 
             if let urlString = urlString {
-                let url = URL(string: urlString)
-                if let url = url, UIApplication.shared.canOpenURL(url) {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                if let url = URL(string: urlString), urlOpener.canOpenURL(url) {
+                    urlOpener.open(url, options: [:], completionHandler: nil)
                 }
             }
         }
