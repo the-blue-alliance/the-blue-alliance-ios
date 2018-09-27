@@ -1,8 +1,12 @@
 import UIKit
 
+protocol MediaViewDelegate: AnyObject {
+    func imageDownloaded(_ image: UIImage, media: Media)
+}
+
 class MediaView: UIView {
 
-    public var media: Media {
+    private var media: Media {
         didSet {
             if let dataTask = dataTask {
                 dataTask.cancel()
@@ -16,7 +20,7 @@ class MediaView: UIView {
             configureView()
         }
     }
-    var imageDownloaded: ((UIImage) -> Void)?
+    private weak var delegate: MediaViewDelegate?
 
     private var loadingActivityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(style: .gray)
@@ -33,10 +37,12 @@ class MediaView: UIView {
     private var noDataLabel: UILabel?
     private var noDataView: UIView?
 
-    init(media: Media) {
+    init(media: Media, delegate: MediaViewDelegate) {
         self.media = media
+        self.delegate = delegate
 
         super.init(frame: .zero)
+
         backgroundColor = .white
     }
 
@@ -114,9 +120,8 @@ class MediaView: UIView {
                     self.showNoDataView(text: "Error loading media - invalid data from request")
                     return
                 }
-                if let imageDownloaded = self.imageDownloaded {
-                    imageDownloaded(image)
-                }
+                self.delegate?.imageDownloaded(image, media: self.media)
+
                 DispatchQueue.main.async {
                     self.imageView.image = image
                 }

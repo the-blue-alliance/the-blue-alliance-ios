@@ -163,18 +163,19 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     }
 
     private func mediaViewForMedia(_ media: Media) -> MediaView? {
-        guard let foreignKey = media.foreignKey else {
-            fatalError("Cannot load media")
-        }
-        let downloadedImage = downloadedImages[foreignKey]
+        let downloadedImage = downloadedImages[media.foreignKey!]
 
-        let mediaView = MediaView(media: media)
+        let mediaView = MediaView(media: media, delegate: self)
         mediaView.downloadedImage = downloadedImage
-        mediaView.imageDownloaded = { [weak self] in
-            self?.downloadedImages[foreignKey] = $0
-        }
-
         return mediaView
+    }
+
+}
+
+extension TeamMediaCollectionViewController: MediaViewDelegate {
+
+    func imageDownloaded(_ image: UIImage, media: Media) {
+        self.downloadedImages[media.foreignKey!] = image
     }
 
 }

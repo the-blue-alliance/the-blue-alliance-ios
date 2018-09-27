@@ -32,7 +32,7 @@ class TeamInfoViewController: TBATableViewController {
     init(team: Team, persistentContainer: NSPersistentContainer) {
         self.team = team
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(style: .grouped, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {

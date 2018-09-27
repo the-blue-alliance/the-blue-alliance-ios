@@ -23,7 +23,7 @@ class TBACollectionViewController: UICollectionViewController, DataController {
     init(persistentContainer: NSPersistentContainer) {
         self.persistentContainer = persistentContainer
 
-        super.init(nibName: nil, bundle: nil)
+        super.init(collectionViewLayout: UICollectionViewFlowLayout())
     }
 
     required init?(coder aDecoder: NSCoder) {

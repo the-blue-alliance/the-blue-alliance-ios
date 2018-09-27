@@ -35,20 +35,6 @@ class TeamViewController: ContainerViewController, Observable {
         return [infoViewController, eventsViewController, mediaViewController]
     }
 
-    // MARK: - Persistable
-
-    override var persistentContainer: NSPersistentContainer {
-        didSet {
-            contextObserver.observeObject(object: team, state: .updated) { [weak self] (_, _) in
-                self?.updateYear()
-
-                DispatchQueue.main.async {
-                    self?.updateInterface()
-                }
-            }
-        }
-    }
-
     // MARK: - Observable
 
     typealias ManagedType = Team
@@ -61,13 +47,24 @@ class TeamViewController: ContainerViewController, Observable {
     init(team: Team, persistentContainer: NSPersistentContainer) {
         self.team = team
 
+        if let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty {
+            year = yearsParticipated.first
+        }
+
         super.init(segmentedControlTitles: ["Info", "Events", "Media"],
                    persistentContainer: persistentContainer)
 
         navigationTitleDelegate = self
 
-        // TODO: We should be able to do this before init, but we can't
-        updateYear()
+        contextObserver.observeObject(object: team, state: .updated) { [unowned self] (team, _) in
+            if let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty {
+                self.year = yearsParticipated.first
+            }
+
+            DispatchQueue.main.async {
+                self.updateInterface()
+            }
+        }
 
         infoViewController = TeamInfoViewController(team: team, persistentContainer: persistentContainer)
         eventsViewController = EventsViewController(team: team, delegate: self, persistentContainer: persistentContainer)
@@ -90,13 +87,6 @@ class TeamViewController: ContainerViewController, Observable {
     }
 
     // MARK: - Private
-
-    private func updateYear() {
-        guard let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty, year == nil else {
-            return
-        }
-        year = yearsParticipated.first
-    }
 
     private func updateInterface() {
         navigationTitle = "Team \(team.teamNumber)"
