@@ -6,31 +6,24 @@ import CoreData
 class TeamViewController: ContainerViewController, Observable {
 
     private let team: Team
+    private let eventsViewController: TeamEventsViewController
+    private let mediaViewController: TeamMediaCollectionViewController
+
     var year: Int? {
         didSet {
-            guard let year = year else {
-                return
-            }
-
-            if eventsViewController.year != year {
-                eventsViewController.year = year
-            }
-            if mediaViewController.year != year {
-                mediaViewController.year = year
+            if let year = year {
+                if eventsViewController.year != year {
+                    eventsViewController.year = year
+                }
+                if mediaViewController.year != year {
+                    mediaViewController.year = year
+                }
             }
 
             DispatchQueue.main.async {
                 self.updateInterface()
             }
         }
-    }
-
-    private var infoViewController: TeamInfoViewController!
-    private var eventsViewController: TeamEventsViewController!
-    private var mediaViewController: TeamMediaCollectionViewController!
-
-    override var viewControllers: [ContainableViewController] {
-        return [infoViewController, eventsViewController, mediaViewController]
     }
 
     // MARK: - Observable
@@ -49,10 +42,16 @@ class TeamViewController: ContainerViewController, Observable {
             year = yearsParticipated.first
         }
 
-        super.init(segmentedControlTitles: ["Info", "Events", "Media"],
+        let infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer)
+        eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer)
+        mediaViewController = TeamMediaCollectionViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer)
+
+        super.init(viewControllers: [infoViewController, eventsViewController, mediaViewController],
+                   segmentedControlTitles: ["Info", "Events", "Media"],
                    persistentContainer: persistentContainer)
 
         navigationTitleDelegate = self
+        eventsViewController.delegate = self
 
         contextObserver.observeObject(object: team, state: .updated) { [unowned self] (team, _) in
             if let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty {
@@ -63,13 +62,6 @@ class TeamViewController: ContainerViewController, Observable {
                 self.updateInterface()
             }
         }
-
-        infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer)
-
-        eventsViewController = TeamEventsViewController(team: team, persistentContainer: persistentContainer)
-        eventsViewController.delegate = self
-
-        mediaViewController = TeamMediaCollectionViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {

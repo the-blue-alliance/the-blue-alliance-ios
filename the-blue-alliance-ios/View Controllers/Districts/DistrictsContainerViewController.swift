@@ -11,18 +11,14 @@ class DistrictsContainerViewController: ContainerViewController {
     private let userDefaults: UserDefaults
     private var year: Int {
         didSet {
-            districtsViewController!.year = year
+            districtsViewController.year = year
 
             DispatchQueue.main.async {
                 self.updateInterface()
             }
         }
     }
-    private var districtsViewController: DistrictsViewController!
-
-    override var viewControllers: [ContainableViewController] {
-        return [districtsViewController]
-    }
+    private var districtsViewController: DistrictsViewController
 
     // MARK: - Init
 
@@ -32,14 +28,16 @@ class DistrictsContainerViewController: ContainerViewController {
         self.userDefaults = userDefaults
 
         year = remoteConfig.currentSeason
+        districtsViewController = DistrictsViewController(year: year, persistentContainer: persistentContainer)
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(viewControllers: [districtsViewController],
+                   persistentContainer: persistentContainer)
 
         title = "Districts"
         tabBarItem.image = UIImage(named: "ic_assignment")
-        navigationTitleDelegate = self
 
-        districtsViewController = DistrictsViewController(year: year, delegate: self, persistentContainer: persistentContainer)
+        navigationTitleDelegate = self
+        districtsViewController.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {

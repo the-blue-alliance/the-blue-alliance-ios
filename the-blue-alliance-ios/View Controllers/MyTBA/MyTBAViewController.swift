@@ -16,12 +16,8 @@ private let MatchSegue = "MatchSegue"
 class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
     private let signInViewController: MyTBASignInViewController
-    private var favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>!
-    private var subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>!
-
-    override var viewControllers: [ContainableViewController] {
-        return [favoritesViewController, subscriptionsViewController]
-    }
+    private let favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>
+    private let subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>
 
     @IBOutlet internal var signInView: UIView!
     @IBOutlet internal var signOutBarButtonItem: UIBarButtonItem!
@@ -45,11 +41,12 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     init(persistentContainer: NSPersistentContainer) {
         signInViewController = MyTBASignInViewController()
 
-        super.init(segmentedControlTitles: ["Favorites", "Subscriptions"],
-                   persistentContainer: persistentContainer)
-
         favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(persistentContainer: persistentContainer)
         subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(persistentContainer: persistentContainer)
+
+        super.init(viewControllers: [favoritesViewController, subscriptionsViewController],
+                   segmentedControlTitles: ["Favorites", "Subscriptions"],
+                   persistentContainer: persistentContainer)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -118,7 +115,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         try! Auth.auth().signOut()
 
         // Cancel any ongoing requests
-        for vc in viewControllers {
+        for vc in [favoritesViewController, subscriptionsViewController] {
             vc.cancelRefresh()
         }
 

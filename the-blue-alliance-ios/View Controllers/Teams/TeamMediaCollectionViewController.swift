@@ -19,8 +19,9 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     // MARK: Init
 
-    init(team: Team, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
+    init(team: Team, year: Int? = nil, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
         self.team = team
+        self.year = year
         self.urlOpener = urlOpener
 
         super.init(persistentContainer: persistentContainer)
@@ -62,6 +63,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
                 self.showErrorAlert(with: "Unable to refresh team media - \(error.localizedDescription)")
             }
 
+            // TODO: This idea of deleting old and inserting new should be a pattern... basically everywhere
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
 

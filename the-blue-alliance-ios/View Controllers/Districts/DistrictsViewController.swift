@@ -15,14 +15,14 @@ class DistrictsViewController: TBATableViewController {
             updateDataSource()
         }
     }
-    private weak var delegate: DistrictsViewControllerDelegate?
+
+    weak var delegate: DistrictsViewControllerDelegate?
     private var dataSource: TableViewDataSource<District, DistrictsViewController>!
 
     // MARK: - Init
 
-    init(year: Int, delegate: DistrictsViewControllerDelegate, persistentContainer: NSPersistentContainer) {
+    init(year: Int, persistentContainer: NSPersistentContainer) {
         self.year = year
-        self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
 

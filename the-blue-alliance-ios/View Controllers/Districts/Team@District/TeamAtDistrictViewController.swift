@@ -7,22 +7,20 @@ class TeamAtDistrictViewController: ContainerViewController {
     private let ranking: DistrictRanking
 
     private var summaryViewController: DistrictTeamSummaryViewController!
-    private var breakdownViewController: DistrictBreakdownViewController!
-
-    override var viewControllers: [ContainableViewController] {
-        return [summaryViewController, breakdownViewController]
-    }
 
     // MARK: Init
 
     init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer) {
         self.ranking = ranking
 
-        super.init(segmentedControlTitles: ["Summary", "Breakdown"],
+        let summaryViewController = DistrictTeamSummaryViewController(ranking: ranking, persistentContainer: persistentContainer)
+        let breakdownViewController = DistrictBreakdownViewController(ranking: ranking, persistentContainer: persistentContainer)
+
+        super.init(viewControllers: [summaryViewController, breakdownViewController],
+                   segmentedControlTitles: ["Summary", "Breakdown"],
                    persistentContainer: persistentContainer)
 
-        summaryViewController = DistrictTeamSummaryViewController(ranking: ranking, delegate: self, persistentContainer: persistentContainer)
-        breakdownViewController = DistrictBreakdownViewController(ranking: ranking, persistentContainer: persistentContainer)
+        summaryViewController.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {

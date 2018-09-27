@@ -9,18 +9,17 @@ class EventAlliancesContainerViewController: ContainerViewController {
 
     private var alliancesViewController: EventAlliancesViewController!
 
-    override var viewControllers: [ContainableViewController] {
-        return [alliancesViewController]
-    }
-
     // MARK: - Init
 
     init(event: Event, persistentContainer: NSPersistentContainer) {
         self.event = event
 
-        super.init(persistentContainer: persistentContainer)
+        let alliancesViewController = EventAlliancesViewController(event: event, persistentContainer: persistentContainer)
 
-        alliancesViewController = EventAlliancesViewController(event: event, delegate: self, persistentContainer: persistentContainer)
+        super.init(viewControllers: [alliancesViewController],
+                   persistentContainer: persistentContainer)
+
+        alliancesViewController.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -54,14 +53,14 @@ protocol EventAlliancesViewControllerDelegate: AnyObject {
 private class EventAlliancesViewController: TBATableViewController {
 
     private let event: Event
-    private weak var delegate: EventAlliancesViewControllerDelegate?
+
+    weak var delegate: EventAlliancesViewControllerDelegate?
     private var dataSource: TableViewDataSource<EventAlliance, EventAlliancesViewController>!
 
     // MARK: - Init
 
-    init(event: Event, delegate: EventAlliancesViewControllerDelegate, persistentContainer: NSPersistentContainer) {
+    init(event: Event, persistentContainer: NSPersistentContainer) {
         self.event = event
-        self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
 

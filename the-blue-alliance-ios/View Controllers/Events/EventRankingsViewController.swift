@@ -10,14 +10,14 @@ protocol EventRankingsViewControllerDelegate: AnyObject {
 class EventRankingsViewController: TBATableViewController {
 
     private let event: Event
-    private weak var delegate: EventRankingsViewControllerDelegate?
+
+    weak var delegate: EventRankingsViewControllerDelegate?
     private var dataSource: TableViewDataSource<EventRanking, EventRankingsViewController>!
 
     // MARK: - Init
 
-    init(event: Event, delegate: EventRankingsViewControllerDelegate, persistentContainer: NSPersistentContainer) {
+    init(event: Event, persistentContainer: NSPersistentContainer) {
         self.event = event
-        self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
 

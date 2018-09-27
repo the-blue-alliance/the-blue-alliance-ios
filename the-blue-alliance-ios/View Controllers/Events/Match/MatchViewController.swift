@@ -7,30 +7,25 @@ class MatchViewController: ContainerViewController {
     private let match: Match
     private let team: Team?
 
-    private var infoViewController: MatchInfoViewController?
-    private var breakdownViewController: MatchBreakdownViewController?
-
-    override var viewControllers: [ContainableViewController] {
-        return [infoViewController, breakdownViewController].compactMap({ $0 })
-    }
-
     // MARK: Init
 
     init(match: Match, team: Team? = nil, persistentContainer: NSPersistentContainer) {
         self.match = match
         self.team = team
 
+        let infoViewController = MatchInfoViewController(match: match, team: team, persistentContainer: persistentContainer)
+
         // Only show match breakdown if year is 2015 or onward
+        var breakdownViewController: MatchBreakdownViewController?
         var titles: [String]  = ["Info"]
         if Int(match.event!.year) >= 2015 {
             titles.append("Breakdown")
+            breakdownViewController = MatchBreakdownViewController(match: match, persistentContainer: persistentContainer)
         }
 
-        super.init(segmentedControlTitles: titles,
+        super.init(viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }),
+                   segmentedControlTitles: titles,
                    persistentContainer: persistentContainer)
-
-        infoViewController = MatchInfoViewController(match: match, team: team, persistentContainer: persistentContainer)
-        breakdownViewController = MatchBreakdownViewController(match: match, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {

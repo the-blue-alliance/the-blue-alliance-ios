@@ -6,20 +6,18 @@ import TBAKit
 class EventDistrictPointsContainerViewController: ContainerViewController {
 
     private var event: Event
-    private var districtPointsViewController: EventDistrictPointsViewController!
-
-    override var viewControllers: [ContainableViewController] {
-        return [districtPointsViewController]
-    }
 
     // MARK: - Init
 
     init(event: Event, persistentContainer: NSPersistentContainer) {
         self.event = event
 
-        super.init(persistentContainer: persistentContainer)
+        let districtPointsViewController = EventDistrictPointsViewController(event: event, persistentContainer: persistentContainer)
 
-        districtPointsViewController = EventDistrictPointsViewController(event: event, delegate: self, persistentContainer: persistentContainer)
+        super.init(viewControllers: [districtPointsViewController],
+                   persistentContainer: persistentContainer)
+
+        districtPointsViewController.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -53,14 +51,14 @@ protocol EventDistrictPointsViewControllerDelegate: AnyObject {
 private class EventDistrictPointsViewController: TBATableViewController {
 
     private let event: Event
-    private weak var delegate: EventDistrictPointsViewControllerDelegate?
+
+    weak var delegate: EventDistrictPointsViewControllerDelegate?
     private var dataSource: TableViewDataSource<DistrictEventPoints, EventDistrictPointsViewController>!
 
     // MARK: - Init
 
-    init(event: Event, delegate: EventDistrictPointsViewControllerDelegate, persistentContainer: NSPersistentContainer) {
+    init(event: Event, persistentContainer: NSPersistentContainer) {
         self.event = event
-        self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
 

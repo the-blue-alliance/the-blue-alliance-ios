@@ -11,16 +11,14 @@ class YearSelectViewController: ContainerViewController {
 
     private let year: Int
     private let week: Event?
+
     private let selectViewController: SelectTableViewController<YearSelectViewController>
     private var eventWeekSelectViewController: EventWeekSelectViewController?
+
     weak var delegate: YearSelectViewControllerDelegate? {
         didSet {
             eventWeekSelectViewController?.delegate = delegate
         }
-    }
-
-    override var viewControllers: [ContainableViewController] {
-        return [selectViewController]
     }
 
     // MARK: - Init
@@ -34,7 +32,8 @@ class YearSelectViewController: ContainerViewController {
                                                                                    willPush: true,
                                                                                    persistentContainer: persistentContainer)
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(viewControllers: [selectViewController],
+                   persistentContainer: persistentContainer)
 
         title = "Years"
         selectViewController.delegate = self
@@ -95,11 +94,8 @@ private class EventWeekSelectViewController: ContainerViewController {
     }
     private var hasRefreshed: Bool = false
     private let selectViewController: SelectTableViewController<EventWeekSelectViewController>
-    weak var delegate: YearSelectViewControllerDelegate?
 
-    override var viewControllers: [ContainableViewController] {
-        return [selectViewController]
-    }
+    weak var delegate: YearSelectViewControllerDelegate?
 
     init(year: Int, week: Event?, persistentContainer: NSPersistentContainer) {
         self.year = year
@@ -108,7 +104,8 @@ private class EventWeekSelectViewController: ContainerViewController {
                                                                                         options: weeks,
                                                                                         persistentContainer: persistentContainer)
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(viewControllers: [selectViewController],
+                   persistentContainer: persistentContainer)
 
         title = "\(year) Weeks"
         selectViewController.delegate = self

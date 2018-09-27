@@ -11,15 +11,15 @@ class MatchesViewController: TBATableViewController {
 
     private let event: Event
     private let team: Team?
-    private weak var delegate: MatchesViewControllerDelegate?
+
+    weak var delegate: MatchesViewControllerDelegate?
     private var dataSource: TableViewDataSource<Match, MatchesViewController>!
 
     // MARK: - Init
 
-    init(event: Event, team: Team? = nil, delegate: MatchesViewControllerDelegate, persistentContainer: NSPersistentContainer) {
+    init(event: Event, team: Team? = nil, persistentContainer: NSPersistentContainer) {
         self.event = event
         self.team = team
-        self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
 

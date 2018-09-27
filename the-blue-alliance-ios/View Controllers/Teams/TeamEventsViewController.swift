@@ -12,8 +12,9 @@ class TeamEventsViewController: EventsViewController {
         }
     }
 
-    init(team: Team, persistentContainer: NSPersistentContainer) {
+    init(team: Team, year: Int? = nil, persistentContainer: NSPersistentContainer) {
         self.team = team
+        self.year = year
 
         super.init(persistentContainer: persistentContainer)
     }

@@ -26,7 +26,7 @@ class TeamSummaryViewController: TBATableViewController {
     private let team: Team
     private let event: Event
 
-    private weak var delegate: TeamSummaryViewControllerDelegate?
+    weak var delegate: TeamSummaryViewControllerDelegate?
 
     var teamAwards: Set<Award> {
         guard let awards = event.awards else {
@@ -66,10 +66,9 @@ class TeamSummaryViewController: TBATableViewController {
     private var summaryRows: [TeamSummaryRow] = []
     private var summaryValues: [Any] = []
 
-    init(team: Team, event: Event, delegate: TeamSummaryViewControllerDelegate, persistentContainer: NSPersistentContainer) {
+    init(team: Team, event: Event, persistentContainer: NSPersistentContainer) {
         self.team = team
         self.event = event
-        self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
 

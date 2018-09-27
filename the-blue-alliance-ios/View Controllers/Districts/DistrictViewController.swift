@@ -8,13 +8,6 @@ class DistrictViewController: ContainerViewController {
     private let urlOpener: URLOpener
     private let userDefaults: UserDefaults
 
-    private var eventsViewController: DistrictEventsViewController!
-    private var rankingsViewController: DistrictRankingsViewController!
-
-    override var viewControllers: [ContainableViewController] {
-        return [eventsViewController, rankingsViewController]
-    }
-
     // MARK: - Init
 
     init(district: District, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
@@ -22,13 +15,15 @@ class DistrictViewController: ContainerViewController {
         self.urlOpener = urlOpener
         self.userDefaults = userDefaults
 
-        super.init(segmentedControlTitles: ["Events", "Rankings"],
+        let eventsViewController = DistrictEventsViewController(district: district, persistentContainer: persistentContainer)
+        let rankingsViewController = DistrictRankingsViewController(district: district, persistentContainer: persistentContainer)
+
+        super.init(viewControllers: [eventsViewController, rankingsViewController],
+                   segmentedControlTitles: ["Events", "Rankings"],
                    persistentContainer: persistentContainer)
 
-        eventsViewController = DistrictEventsViewController(district: district, persistentContainer: persistentContainer)
         eventsViewController.delegate = self
-
-        rankingsViewController = DistrictRankingsViewController(district: district, delegate: self, persistentContainer: persistentContainer)
+        rankingsViewController.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {

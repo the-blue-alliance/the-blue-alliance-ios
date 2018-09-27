@@ -70,11 +70,10 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     private let segmentedControl: UISegmentedControl
 
     private let containerView: UIView = UIView()
-    var viewControllers: [ContainableViewController] {
-        fatalError("Override viewControllers in subclass - \(String(describing: type(of: self)))")
-    }
+    private let viewControllers: [ContainableViewController]
 
-    init(segmentedControlTitles: [String]? = nil, persistentContainer: NSPersistentContainer) {
+    init(viewControllers: [ContainableViewController], segmentedControlTitles: [String]? = nil, persistentContainer: NSPersistentContainer) {
+        self.viewControllers = viewControllers
         self.persistentContainer = persistentContainer
 
         segmentedControl = UISegmentedControl(items: segmentedControlTitles)

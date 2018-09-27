@@ -23,7 +23,8 @@ class EventTeamStatsTableViewController: TBATableViewController {
 
     private let event: Event
     private let userDefaults: UserDefaults
-    private weak var delegate: EventTeamStatsSelectionDelegate?
+
+    weak var delegate: EventTeamStatsSelectionDelegate?
     private var dataSource: TableViewDataSource<EventTeamStat, EventTeamStatsTableViewController>!
 
     var filter: EventTeamStatFilter {
@@ -37,10 +38,9 @@ class EventTeamStatsTableViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, delegate: EventTeamStatsSelectionDelegate, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
+    init(event: Event, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
         self.event = event
         self.userDefaults = userDefaults
-        self.delegate = delegate
 
         if let savedFilter = userDefaults.string(forKey: "EventTeamStatFilter"), !savedFilter.isEmpty, let filter = EventTeamStatFilter(rawValue: savedFilter) {
             self.filter = filter

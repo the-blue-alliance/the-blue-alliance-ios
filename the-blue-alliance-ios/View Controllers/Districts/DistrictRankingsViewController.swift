@@ -10,14 +10,14 @@ protocol DistrictRankingsViewControllerDelegate: AnyObject {
 class DistrictRankingsViewController: TBATableViewController {
 
     private let district: District
-    private weak var delegate: DistrictRankingsViewControllerDelegate?
+
+    weak var delegate: DistrictRankingsViewControllerDelegate?
     private var dataSource: TableViewDataSource<DistrictRanking, DistrictRankingsViewController>!
 
     // MARK: - Init
 
-    init(district: District, delegate: DistrictRankingsViewControllerDelegate, persistentContainer: NSPersistentContainer) {
+    init(district: District, persistentContainer: NSPersistentContainer) {
         self.district = district
-        self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
 

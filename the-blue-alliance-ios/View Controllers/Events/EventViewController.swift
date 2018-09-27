@@ -6,28 +6,25 @@ class EventViewController: ContainerViewController {
     private let event: Event
     private let userDefaults: UserDefaults
 
-    private var infoViewController: EventInfoViewController!
-    private var teamsViewController: TeamsViewController!
-    private var rankingsViewController: EventRankingsViewController!
-    private var matchesViewController: MatchesViewController!
-
-    override var viewControllers: [ContainableViewController] {
-        return [infoViewController, teamsViewController, rankingsViewController, matchesViewController]
-    }
-
     // MARK: - Init
 
     init(event: Event, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
         self.event = event
         self.userDefaults = userDefaults
 
-        super.init(segmentedControlTitles: ["Info", "Teams", "Rankings", "Matches"],
+        let infoViewController = EventInfoViewController(event: event, urlOpener: urlOpener, persistentContainer: persistentContainer)
+        let teamsViewController = TeamsViewController(event: event, persistentContainer: persistentContainer)
+        let rankingsViewController = EventRankingsViewController(event: event, persistentContainer: persistentContainer)
+        let matchesViewController = MatchesViewController(event: event, persistentContainer: persistentContainer)
+
+        super.init(viewControllers: [infoViewController, teamsViewController, rankingsViewController, matchesViewController],
+                   segmentedControlTitles: ["Info", "Teams", "Rankings", "Matches"],
                    persistentContainer: persistentContainer)
 
-        infoViewController = EventInfoViewController(event: event, delegate: self, urlOpener: urlOpener, persistentContainer: persistentContainer)
-        teamsViewController = TeamsViewController(delegate: self, event: event, persistentContainer: persistentContainer)
-        rankingsViewController = EventRankingsViewController(event: event, delegate: self, persistentContainer: persistentContainer)
-        matchesViewController = MatchesViewController(event: event, delegate: self, persistentContainer: persistentContainer)
+        infoViewController.delegate = self
+        teamsViewController.delegate = self
+        rankingsViewController.delegate = self
+        matchesViewController.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {

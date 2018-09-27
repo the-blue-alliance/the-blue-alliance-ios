@@ -7,28 +7,24 @@ class TeamAtEventViewController: ContainerViewController {
     private let team: Team
     private let event: Event
 
-    private var summaryViewController: TeamSummaryViewController!
-    private var matchesViewController: MatchesViewController!
-    private var statsViewController: TeamStatsViewController!
-    private var awardsViewController: EventAwardsViewController!
-
-    override var viewControllers: [ContainableViewController] {
-        return [summaryViewController, matchesViewController, statsViewController, awardsViewController]
-    }
-
     // MARK: - Init
 
     init(team: Team, event: Event, persistentContainer: NSPersistentContainer) {
         self.team = team
         self.event = event
 
-        super.init(segmentedControlTitles: ["Summary", "Matches", "Stats", "Awards"],
+        let summaryViewController: TeamSummaryViewController = TeamSummaryViewController(team: team, event: event, persistentContainer: persistentContainer)
+        let matchesViewController: MatchesViewController = MatchesViewController(event: event, team: team, persistentContainer: persistentContainer)
+        let statsViewController: TeamStatsViewController = TeamStatsViewController(team: team, event: event, persistentContainer: persistentContainer)
+        let awardsViewController: EventAwardsViewController = EventAwardsViewController(event: event, team: team, persistentContainer: persistentContainer)
+
+        super.init(viewControllers: [summaryViewController, matchesViewController, statsViewController, awardsViewController],
+                   segmentedControlTitles: ["Summary", "Matches", "Stats", "Awards"],
                    persistentContainer: persistentContainer)
 
-        summaryViewController = TeamSummaryViewController(team: team, event: event, delegate: self, persistentContainer: persistentContainer)
-        matchesViewController = MatchesViewController(event: event, team: team, delegate: self, persistentContainer: persistentContainer)
-        statsViewController = TeamStatsViewController(team: team, event: event, persistentContainer: persistentContainer)
-        awardsViewController = EventAwardsViewController(event: event, team: team, delegate: self, persistentContainer: persistentContainer)
+        summaryViewController.delegate = self
+        matchesViewController.delegate = self
+        awardsViewController.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {

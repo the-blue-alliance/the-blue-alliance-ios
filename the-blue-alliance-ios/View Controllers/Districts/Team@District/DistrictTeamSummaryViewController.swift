@@ -10,7 +10,8 @@ protocol DistrictTeamSummaryViewControllerDelegate: AnyObject {
 class DistrictTeamSummaryViewController: TBATableViewController {
 
     private let ranking: DistrictRanking
-    private weak var delegate: DistrictTeamSummaryViewControllerDelegate?
+
+    weak var delegate: DistrictTeamSummaryViewControllerDelegate?
 
     private let sortedEventPoints: [DistrictEventPoints]
 
@@ -23,9 +24,8 @@ class DistrictTeamSummaryViewController: TBATableViewController {
 
     // MARK: Init
 
-    init(ranking: DistrictRanking, delegate: DistrictTeamSummaryViewControllerDelegate, persistentContainer: NSPersistentContainer) {
+    init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer) {
         self.ranking = ranking
-        self.delegate = delegate
 
         sortedEventPoints = ranking.eventPoints?.sortedArray(using: [NSSortDescriptor(key: "event.startDate", ascending: true)]) as? [DistrictEventPoints] ?? []
 

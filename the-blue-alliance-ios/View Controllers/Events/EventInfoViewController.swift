@@ -35,8 +35,9 @@ private enum EventLinkRow: Int {
 class EventInfoViewController: TBATableViewController, Observable {
 
     private let event: Event
-    private weak var delegate: EventInfoViewControllerDelegate?
     private let urlOpener: URLOpener
+
+    weak var delegate: EventInfoViewControllerDelegate?
 
     // MARK: - Observable
 
@@ -47,9 +48,8 @@ class EventInfoViewController: TBATableViewController, Observable {
 
     // MARK: - Init
 
-    init(event: Event, delegate: EventInfoViewControllerDelegate, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
+    init(event: Event, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
         self.event = event
-        self.delegate = delegate
         self.urlOpener = urlOpener
 
         super.init(style: .grouped, persistentContainer: persistentContainer)

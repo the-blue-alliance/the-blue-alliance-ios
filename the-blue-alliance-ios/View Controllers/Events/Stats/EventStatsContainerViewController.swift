@@ -7,12 +7,7 @@ class EventStatsContainerViewController: ContainerViewController {
 
     private let event: Event
 
-    private var teamStatsViewController: EventTeamStatsTableViewController!
-    private var eventStatsViewController: EventStatsViewController?
-
-    override var viewControllers: [ContainableViewController] {
-        return [teamStatsViewController, eventStatsViewController].compactMap({ $0 })
-    }
+    private let teamStatsViewController: EventTeamStatsTableViewController
 
     lazy private var filerBarButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(image: UIImage(named: "ic_sort_white"),
@@ -26,17 +21,21 @@ class EventStatsContainerViewController: ContainerViewController {
     init(event: Event, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
         self.event = event
 
+        teamStatsViewController = EventTeamStatsTableViewController(event: event, userDefaults: userDefaults, persistentContainer: persistentContainer)
+
+        var eventStatsViewController: EventStatsViewController?
         // Only show event stats if year is 2016 or onward
         var titles = ["Team Stats"]
         if Int(event.year) >= 2016 {
             titles.append("Event Stats")
+            eventStatsViewController = EventStatsViewController(event: event, persistentContainer: persistentContainer)
         }
 
-        super.init(segmentedControlTitles: titles,
+        super.init(viewControllers: [teamStatsViewController, eventStatsViewController].compactMap({ $0 }),
+                   segmentedControlTitles: titles,
                    persistentContainer: persistentContainer)
 
-        eventStatsViewController = EventStatsViewController(event: event, persistentContainer: persistentContainer)
-        teamStatsViewController = EventTeamStatsTableViewController(event: event, delegate: self, userDefaults: userDefaults, persistentContainer: persistentContainer)
+        teamStatsViewController.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {

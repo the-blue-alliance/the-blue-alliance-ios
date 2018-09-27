@@ -11,11 +11,7 @@ class EventsContainerViewController: ContainerViewController {
     private let userDefaults: UserDefaults
 
     private var year: Int
-    private var eventsViewController: WeekEventsViewController!
-
-    override var viewControllers: [ContainableViewController] {
-        return [eventsViewController]
-    }
+    private var eventsViewController: WeekEventsViewController
 
     // MARK: - Init
 
@@ -25,14 +21,15 @@ class EventsContainerViewController: ContainerViewController {
         self.userDefaults = userDefaults
 
         year = remoteConfig.currentSeason
+        eventsViewController = WeekEventsViewController(year: year, persistentContainer: persistentContainer)
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(viewControllers: [eventsViewController],
+                   persistentContainer: persistentContainer)
 
         title = "Events"
         tabBarItem.image = UIImage(named: "ic_event")
-        navigationTitleDelegate = self
 
-        eventsViewController = WeekEventsViewController(year: year, persistentContainer: persistentContainer)
+        navigationTitleDelegate = self
         eventsViewController.delegate = self
         eventsViewController.weekEventsDelegate = self
     }

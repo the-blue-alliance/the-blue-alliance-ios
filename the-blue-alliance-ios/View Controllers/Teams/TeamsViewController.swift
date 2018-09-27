@@ -9,7 +9,8 @@ protocol TeamsViewControllerDelegate: AnyObject {
 class TeamsViewController: TBATableViewController {
 
     private let event: Event?
-    private var delegate: TeamsViewControllerDelegate?
+
+    var delegate: TeamsViewControllerDelegate?
     private var dataSource: TableViewDataSource<Team, TeamsViewController>!
 
     lazy private var searchController: UISearchController = {
@@ -22,8 +23,7 @@ class TeamsViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(delegate: TeamsViewControllerDelegate, event: Event? = nil, persistentContainer: NSPersistentContainer) {
-        self.delegate = delegate
+    init(event: Event? = nil, persistentContainer: NSPersistentContainer) {
         self.event = event
 
         super.init(persistentContainer: persistentContainer)

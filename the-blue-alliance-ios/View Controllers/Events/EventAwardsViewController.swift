@@ -7,21 +7,18 @@ class EventAwardsContainerViewController: ContainerViewController {
     private let event: Event
     private let team: Team?
 
-    private var awardsViewController: EventAwardsViewController!
-
-    override var viewControllers: [ContainableViewController] {
-        return [awardsViewController]
-    }
-
     // MARK: - Init
 
     init(event: Event, team: Team? = nil, persistentContainer: NSPersistentContainer) {
         self.event = event
         self.team = team
 
-        super.init(persistentContainer: persistentContainer)
+        let awardsViewController = EventAwardsViewController(event: event, team: team, persistentContainer: persistentContainer)
 
-        awardsViewController = EventAwardsViewController(event: event, team: team, delegate: self, persistentContainer: persistentContainer)
+        super.init(viewControllers: [awardsViewController],
+                   persistentContainer: persistentContainer)
+
+        awardsViewController.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -65,15 +62,15 @@ class EventAwardsViewController: TBATableViewController {
 
     private let event: Event
     private let team: Team?
-    private weak var delegate: EventAwardsViewControllerDelegate?
+
+    weak var delegate: EventAwardsViewControllerDelegate?
     private var dataSource: TableViewDataSource<Award, EventAwardsViewController>!
 
     // MARK: - Init
 
-    init(event: Event, team: Team? = nil, delegate: EventAwardsViewControllerDelegate, persistentContainer: NSPersistentContainer) {
+    init(event: Event, team: Team? = nil, persistentContainer: NSPersistentContainer) {
         self.event = event
         self.team = team
-        self.delegate = delegate
 
         super.init(persistentContainer: persistentContainer)
 

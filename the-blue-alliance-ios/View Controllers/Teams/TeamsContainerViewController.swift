@@ -8,23 +8,21 @@ private let TeamSegue = "TeamSegue"
 class TeamsContainerViewController: ContainerViewController {
 
     private let urlOpener: URLOpener
-    private var teamsViewController: TeamsViewController!
-
-    override var viewControllers: [ContainableViewController] {
-        return [teamsViewController]
-    }
 
     // MARK: - Init
 
     init(urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
         self.urlOpener = urlOpener
 
-        super.init(persistentContainer: persistentContainer)
+        let teamsViewController = TeamsViewController(persistentContainer: persistentContainer)
+
+        super.init(viewControllers: [teamsViewController],
+                   persistentContainer: persistentContainer)
+
+        teamsViewController.delegate = self
 
         title = "Teams"
         tabBarItem.image = UIImage(named: "ic_people")
-
-        teamsViewController = TeamsViewController(delegate: self, persistentContainer: persistentContainer)
     }
 
     required init?(coder aDecoder: NSCoder) {
