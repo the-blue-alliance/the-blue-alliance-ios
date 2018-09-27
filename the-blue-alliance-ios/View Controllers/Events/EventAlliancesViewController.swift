@@ -80,8 +80,6 @@ private class EventAlliancesViewController: TBATableViewController {
         // Override automatic rowHeight - these will be smaller than 44 by default, and we want to open them up
         tableView.rowHeight = 44
         tableView.register(UINib(nibName: String(describing: EventAllianceTableViewCell.self), bundle: nil), forCellReuseIdentifier: EventAllianceTableViewCell.reuseIdentifier)
-
-        updateDataSource()
     }
     // MARK: - Refreshing
 

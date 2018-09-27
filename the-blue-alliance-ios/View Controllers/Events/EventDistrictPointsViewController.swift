@@ -134,11 +134,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
     }
 
     private func updateDataSource() {
-        if let dataSource = dataSource {
-            dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-        } else {
-            setupDataSource()
-        }
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<DistrictEventPoints>) {
