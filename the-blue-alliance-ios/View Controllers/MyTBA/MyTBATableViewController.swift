@@ -256,8 +256,8 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     }
 
     func tableView(_ tableView: UITableView, for match: Match) -> MatchTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: MatchTableViewCell.reuseIdentifier) as? MatchTableViewCell ?? MatchTableViewCell(style: .default, reuseIdentifier: MatchTableViewCell.reuseIdentifier)
-        cell.match = match
+        let cell = tableView.dequeueReusableCell(withIdentifier: MatchTableViewCell.reuseIdentifier) as! MatchTableViewCell
+        cell.matchViewModel = MatchCellViewModel(match: match)
         return cell
     }
 

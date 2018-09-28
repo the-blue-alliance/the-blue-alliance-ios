@@ -16,6 +16,7 @@
 		145C57B91ED3C166004955B2 /* MatchInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57B81ED3C166004955B2 /* MatchInfoViewController.swift */; };
 		145C57BB1ED3C178004955B2 /* MatchBreakdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57BA1ED3C178004955B2 /* MatchBreakdownViewController.swift */; };
 		145C57BD1ED3C3AA004955B2 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57BC1ED3C3AA004955B2 /* PlayerView.swift */; };
+		14796940215E9A590075AF4E /* MatchCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1479693F215E9A580075AF4E /* MatchCellViewModel.swift */; };
 		14B6726A21517A7E00FDDAB2 /* RealtimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B6726921517A7E00FDDAB2 /* RealtimeDatabaseService.swift */; };
 		14B6726C21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B6726B21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift */; };
 		14B6727321529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B6727221529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift */; };
@@ -193,6 +194,7 @@
 		145C57B81ED3C166004955B2 /* MatchInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchInfoViewController.swift; sourceTree = "<group>"; };
 		145C57BA1ED3C178004955B2 /* MatchBreakdownViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchBreakdownViewController.swift; sourceTree = "<group>"; };
 		145C57BC1ED3C3AA004955B2 /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		1479693F215E9A580075AF4E /* MatchCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchCellViewModel.swift; sourceTree = "<group>"; };
 		14B6726921517A7E00FDDAB2 /* RealtimeDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeDatabaseService.swift; sourceTree = "<group>"; };
 		14B6726B21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeDatabaseService_Tests.swift; sourceTree = "<group>"; };
 		14B6727221529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRealtimeDatabaseService.swift; sourceTree = "<group>"; };
@@ -416,6 +418,7 @@
 			children = (
 				145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */,
 				145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */,
+				1479693F215E9A580075AF4E /* MatchCellViewModel.swift */,
 			);
 			path = Match;
 			sourceTree = "<group>";
@@ -1421,6 +1424,7 @@
 				92BB8B64214F17440035AF28 /* URLOpener.swift in Sources */,
 				1405237F1ED3524C0072FB91 /* Match.swift in Sources */,
 				9272924D1EE4A0FC0027CE7C /* EventStatsViewController.swift in Sources */,
+				14796940215E9A590075AF4E /* MatchCellViewModel.swift in Sources */,
 				9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */,
 				9274A3F81F3520B900FAADF0 /* TeamSummaryViewController.swift in Sources */,
 				92FE68BB20D8A1E8004A1481 /* MyTBASignOutOperation.swift in Sources */,

@@ -15,6 +15,9 @@ class WeekEventsViewController: EventsViewController {
     var weekEvent: Event? {
         didSet {
             updateDataSource()
+            DispatchQueue.main.async {
+                // TODO: Scroll to top
+            }
             weekEventsDelegate?.weekEventUpdated()
         }
     }

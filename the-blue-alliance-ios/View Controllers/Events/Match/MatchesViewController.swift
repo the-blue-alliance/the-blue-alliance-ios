@@ -113,8 +113,7 @@ extension MatchesViewController: TableViewDataSourceDelegate {
     }
 
     func configure(_ cell: MatchTableViewCell, for object: Match, at indexPath: IndexPath) {
-        cell.team = team
-        cell.match = object
+        cell.matchViewModel = MatchCellViewModel(match: object, team: team)
     }
 
     func showNoDataView() {

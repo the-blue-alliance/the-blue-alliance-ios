@@ -328,11 +328,10 @@ class TeamSummaryViewController: TBATableViewController {
     }
 
     private func tableView(_ tableView: UITableView, matchCellForRowAt indexPath: IndexPath) -> MatchTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: MatchTableViewCell.reuseIdentifier) as? MatchTableViewCell ?? MatchTableViewCell(style: .default, reuseIdentifier: MatchTableViewCell.reuseIdentifier)
+        let cell = tableView.dequeueReusableCell(withIdentifier: MatchTableViewCell.reuseIdentifier) as! MatchTableViewCell
 
         let match = summaryValues[indexPath.row] as! Match
-        cell.match = match
-        cell.team = team
+        cell.matchViewModel = MatchCellViewModel(match: match, team: team)
 
         return cell
     }

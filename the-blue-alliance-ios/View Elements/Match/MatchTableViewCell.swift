@@ -3,20 +3,17 @@ import UIKit
 
 class MatchTableViewCell: UITableViewCell {
     static let reuseIdentifier = "MatchCell"
-    public var match: Match? {
+
+    var matchViewModel: MatchCellViewModel? {
         didSet {
             configureCell()
         }
     }
-    public var team: Team? {
-        didSet {
-            if match != nil {
-                configureCell()
-            }
-        }
-    }
-    let winnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
-    let notWinnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
+
+    // MARK: - Interface Builder
+
+    private let winnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
+    private let notWinnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
 
     @IBOutlet private var matchNumberLabel: UILabel!
 
@@ -34,6 +31,8 @@ class MatchTableViewCell: UITableViewCell {
     private var coloredViews: [UIView] {
         return [redContainerView, redScoreLabel, blueContainerView, blueScoreLabel, timeLabel]
     }
+
+    // MARK: - View Methods
 
     override func awakeFromNib() {
         redContainerView.layer.borderColor = UIColor.red.cgColor
@@ -58,79 +57,28 @@ class MatchTableViewCell: UITableViewCell {
         }
     }
 
-    private func configureCell() {
-        matchNumberLabel.text = match?.friendlyMatchName()
-        playIconImageView.isHidden = (match?.videos?.count == 0)
+    override func prepareForReuse() {
+        super.prepareForReuse()
 
-        for view in redStackView.arrangedSubviews {
-            if view == redScoreLabel {
-                continue
+        for stackView in [redStackView, blueStackView] as [UIStackView] {
+            for view in stackView.arrangedSubviews {
+                if [redScoreLabel, blueScoreLabel].contains(view) {
+                    continue
+                }
+                view.removeFromSuperview()
             }
-            view.removeFromSuperview()
         }
 
-        for team in (match?.redAlliance?.reversed() ?? []) as! [Team] {
-            let teamLabel = MatchTableViewCell.label(for: team, baseTeam: self.team)
-            redStackView.insertArrangedSubview(teamLabel, at: 0)
-        }
-        redScoreLabel.text = match?.redScore?.stringValue
+        redContainerView.layer.borderWidth = 0.0
+        blueContainerView.layer.borderWidth = 0.0
 
-        for view in blueStackView.arrangedSubviews {
-            if view == blueScoreLabel {
-                continue
-            }
-            view.removeFromSuperview()
-        }
-
-        for team in (match?.blueAlliance?.reversed() ?? []) as! [Team] {
-            let teamLabel = MatchTableViewCell.label(for: team, baseTeam: self.team)
-            blueStackView.insertArrangedSubview(teamLabel, at: 0)
-        }
-        blueScoreLabel.text = match?.blueScore?.stringValue
-
-        if match?.blueScore == nil && match?.redScore == nil {
-            timeLabel.isHidden = false
-
-            if let timeString = match?.timeString {
-                timeLabel.text = timeString
-            } else {
-                timeLabel.text = "No Time Yet"
-            }
-        } else {
-            timeLabel.isHidden = true
-        }
-
-        // Everyone is a winner in 2015 ╮ (. ❛ ᴗ ❛.) ╭
-        if let compLevelString = match?.compLevel,
-            let compLevel = MatchCompLevel(rawValue: compLevelString),
-            match?.event?.year == Int16(2015),
-            compLevel != MatchCompLevel.final {
-            redContainerView.layer.borderWidth = 0.0
-            blueContainerView.layer.borderWidth = 0.0
-
-            redScoreLabel.font = notWinnerFont
-            blueScoreLabel.font = notWinnerFont
-        } else if match?.winningAlliance == "red" {
-            redContainerView.layer.borderWidth = 2.0
-            blueContainerView.layer.borderWidth = 0.0
-
-            redScoreLabel.font = winnerFont
-            blueScoreLabel.font = notWinnerFont
-        } else if match?.winningAlliance == "blue" {
-            blueContainerView.layer.borderWidth = 2.0
-            redContainerView.layer.borderWidth = 0.0
-
-            redScoreLabel.font = notWinnerFont
-            blueScoreLabel.font = winnerFont
-        } else {
-            redContainerView.layer.borderWidth = 0.0
-            blueContainerView.layer.borderWidth = 0.0
-
-            redScoreLabel.font = notWinnerFont
-            blueScoreLabel.font = notWinnerFont
-        }
+        redScoreLabel.font = notWinnerFont
+        blueScoreLabel.font = notWinnerFont
     }
 
+    // MARK: - Public Methods
+
+    // TODO: For the love of god, move this literally anywhere else
     public static func label(for team: Team, baseTeam: Team?) -> UILabel {
         let label = UILabel()
         label.text = "\(team.teamNumber)"
@@ -143,7 +91,41 @@ class MatchTableViewCell: UITableViewCell {
         return label
     }
 
-    func storeBaseColors(for views: [UIView]) -> [UIColor] {
+    // MARK: - Private Methods
+
+    private func configureCell() {
+        guard let matchViewModel = matchViewModel else {
+            return
+        }
+
+        matchNumberLabel.text = matchViewModel.matchName
+        playIconImageView.isHidden = matchViewModel.hasVideos
+
+        for team in matchViewModel.redAlliance {
+            let teamLabel = MatchTableViewCell.label(for: team, baseTeam: matchViewModel.team)
+            redStackView.insertArrangedSubview(teamLabel, at: 0)
+        }
+        redScoreLabel.text = matchViewModel.redScore
+
+        for team in matchViewModel.blueAlliance {
+            let teamLabel = MatchTableViewCell.label(for: team, baseTeam: matchViewModel.team)
+            blueStackView.insertArrangedSubview(teamLabel, at: 0)
+        }
+        blueScoreLabel.text = matchViewModel.blueScore
+
+        timeLabel.isHidden = matchViewModel.hasScores
+        timeLabel.text = matchViewModel.timeString
+
+        if matchViewModel.redAllianceWon {
+            redContainerView.layer.borderWidth = 2.0
+            redScoreLabel.font = winnerFont
+        } else if matchViewModel.blueAllianceWon {
+            blueContainerView.layer.borderWidth = 2.0
+            blueScoreLabel.font = winnerFont
+        }
+    }
+
+    private func storeBaseColors(for views: [UIView]) -> [UIColor] {
         var colors: [UIColor] = []
         for view in views {
             colors.append(view.backgroundColor!)
@@ -151,7 +133,7 @@ class MatchTableViewCell: UITableViewCell {
         return colors
     }
 
-    func restoreBaseColors(_ colors: [UIColor], for views: [UIView]) {
+    private func restoreBaseColors(_ colors: [UIColor], for views: [UIView]) {
         if colors.count != views.count {
             return
         }
