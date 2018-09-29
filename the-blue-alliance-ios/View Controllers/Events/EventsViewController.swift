@@ -59,7 +59,7 @@ class EventsViewController: TBATableViewController, EventsViewControllerDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView!.registerReusableCell(EventTableViewCell.self)
+        tableView.registerReusableCell(EventTableViewCell.self)
     }
 
     // MARK: - Refreshing
