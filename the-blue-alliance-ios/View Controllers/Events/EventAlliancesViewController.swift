@@ -61,7 +61,7 @@ private class EventAlliancesViewController: TBATableViewController {
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        return TableViewDataSource(tableView: tableView, cellIdentifier: EventAllianceTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
     }()
 
     // MARK: - Init
@@ -83,7 +83,6 @@ private class EventAlliancesViewController: TBATableViewController {
 
         // Override automatic rowHeight - these will be smaller than 44 by default, and we want to open them up
         tableView.rowHeight = 44
-        tableView.register(UINib(nibName: String(describing: EventAllianceTableViewCell.self), bundle: nil), forCellReuseIdentifier: EventAllianceTableViewCell.reuseIdentifier)
     }
     // MARK: - Refreshing
 
@@ -104,7 +103,7 @@ private class EventAlliancesViewController: TBATableViewController {
                 })
                 backgroundEvent.alliances = Set(localAlliances ?? []) as NSSet
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: alliancesRequest!)
             })
         })

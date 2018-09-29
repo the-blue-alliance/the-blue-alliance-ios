@@ -41,7 +41,7 @@ class TeamEventsViewController: EventsViewController {
                 })
                 backgroundTeam.addToEvents(Set(localEvents ?? []) as NSSet)
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })

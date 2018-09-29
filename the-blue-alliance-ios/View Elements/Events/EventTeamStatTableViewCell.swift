@@ -1,12 +1,17 @@
 import UIKit
 
-class EventTeamStatTableViewCell: UITableViewCell {
-    static let reuseIdentifier = "EventTeamStatCell"
+class EventTeamStatTableViewCell: UITableViewCell, Reusable {
 
     var viewModel: EventTeamStatCellViewModel? {
         didSet {
             configureCell()
         }
+    }
+
+    // MARK: - Reusable
+
+    static var nib: UINib? {
+        return UINib(nibName: String(describing: self), bundle: nil)
     }
 
     // MARK: - Interface Builder

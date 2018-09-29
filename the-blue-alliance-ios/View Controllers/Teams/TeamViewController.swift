@@ -104,7 +104,7 @@ class TeamViewController: ContainerViewController, Observable {
                     backgroundTeam.yearsParticipated = years.sorted().reversed()
                 }
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
             })
         })
     }

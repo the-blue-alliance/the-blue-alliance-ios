@@ -1,9 +1,7 @@
 import Foundation
 import UIKit
 
-class EventAllianceTableViewCell: UITableViewCell {
-
-    static let reuseIdentifier = "EventAllianceCell"
+class EventAllianceTableViewCell: UITableViewCell, Reusable {
 
     var viewModel: EventAllianceCellViewModel? {
         didSet {
@@ -11,6 +9,12 @@ class EventAllianceTableViewCell: UITableViewCell {
         }
     }
     var teamSelected: ((_ teamKey: String) -> Void)?
+
+    // MARK: - Reusable
+
+    static var nib: UINib? {
+        return UINib(nibName: String(describing: self), bundle: nil)
+    }
 
     // MARK: - Interface Builder
 

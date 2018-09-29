@@ -47,8 +47,7 @@ class DistrictTeamSummaryViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(UINib(nibName: String(describing: ReverseSubtitleTableViewCell.self), bundle: nil),
-                           forCellReuseIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier)
+        tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
     }
 
     // MARK: - Refresh
@@ -71,7 +70,7 @@ class DistrictTeamSummaryViewController: TBATableViewController {
                 })
                 backgroundDistrict.rankings = Set(localRankings ?? []) as NSSet
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })
@@ -111,9 +110,7 @@ class DistrictTeamSummaryViewController: TBATableViewController {
     }
 
     private func tableView(_ tableView: UITableView, reverseSubtitleCellAt indexPath: IndexPath) -> ReverseSubtitleTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier) as? ReverseSubtitleTableViewCell ?? ReverseSubtitleTableViewCell(style: .default, reuseIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier)
-        cell.selectionStyle = .none
-        return cell
+        return tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

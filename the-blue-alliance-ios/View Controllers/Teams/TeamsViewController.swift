@@ -18,7 +18,7 @@ class TeamsViewController: TBATableViewController {
         fetchRequest.fetchBatchSize = 50
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        return TableViewDataSource(tableView: tableView, cellIdentifier: TeamTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
     }()
 
     lazy private var searchController: UISearchController = {
@@ -50,8 +50,6 @@ class TeamsViewController: TBATableViewController {
 
         // Used to make sure the UISearchBar stays in our root VC (this VC) when presented and doesn't overlay in push
         definesPresentationContext = true
-
-        tableView.register(UINib(nibName: String(describing: TeamTableViewCell.self), bundle: nil), forCellReuseIdentifier: TeamTableViewCell.reuseIdentifier)
     }
 
     // MARK: - Refreshing
@@ -86,7 +84,7 @@ class TeamsViewController: TBATableViewController {
                     Team.insert(with: modelTeam, in: backgroundContext)
                 })
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: previousRequest!)
             })
         }) { (error) in
@@ -117,7 +115,7 @@ class TeamsViewController: TBATableViewController {
                 })
                 backgroundEvent.teams = Set(localTeams ?? []) as NSSet
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })

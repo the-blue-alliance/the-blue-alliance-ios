@@ -128,7 +128,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         persistentContainer.viewContext.deleteAllObjectsForEntity(entity: Subscription.entity())
 
         // Clear notifications
-        persistentContainer.viewContext.saveContext()
+        persistentContainer.viewContext.performSaveOrRollback()
     }
 
     private func pushMyTBAObject(_ myTBAObject: MyTBAEntity) {

@@ -6,8 +6,6 @@ class TBATableViewController: UITableViewController, DataController {
 
     var persistentContainer: NSPersistentContainer
 
-    let basicCellReuseIdentifier = "BasicCell"
-
     var requests: [URLSessionDataTask] = []
     var refreshView: UIScrollView {
         return tableView
@@ -42,7 +40,7 @@ class TBATableViewController: UITableViewController, DataController {
         tableView.backgroundColor = .backgroundGray
         tableView.tableFooterView = UIView.init(frame: .zero)
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: basicCellReuseIdentifier)
+        tableView.registerReusableCell(BasicTableViewCell.self)
     }
 
     // MARK: - UITableViewDelegate

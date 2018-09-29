@@ -40,7 +40,7 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(UINib(nibName: String(describing: ReverseSubtitleTableViewCell.self), bundle: nil), forCellReuseIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier)
+        tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
     }
 
     // MARK: - Refreshing
@@ -89,7 +89,7 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
                 })
                 backgroundDistrict.rankings = Set(localRankings ?? []) as NSSet
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: rankingsRequest!)
             })
         })
@@ -109,7 +109,7 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
                 if let modelEvent = modelEvent {
                     backgroundTeam.addToEvents(Event.insert(with: modelEvent, in: backgroundContext))
                 }
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 completion(true)
             })
         })
@@ -136,9 +136,7 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> ReverseSubtitleTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier, for: indexPath) as! ReverseSubtitleTableViewCell
-        cell.selectionStyle = .none
-
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
         let eventPoints = sortedEventPoints[indexPath.section]
 
         var pointsType: String = ""

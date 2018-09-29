@@ -131,6 +131,9 @@
 		92B55623215D688600C1D9A3 /* TeamEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55622215D688600C1D9A3 /* TeamEventsViewController.swift */; };
 		92B55625215D69DE00C1D9A3 /* WeekEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55624215D69DE00C1D9A3 /* WeekEventsViewController.swift */; };
 		92B55627215D6A9B00C1D9A3 /* DistrictEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55626215D6A9B00C1D9A3 /* DistrictEventsViewController.swift */; };
+		92B5562A215FCB1300C1D9A3 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55629215FCB1300C1D9A3 /* Reusable.swift */; };
+		92B55631215FDA9000C1D9A3 /* BasicTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55630215FDA9000C1D9A3 /* BasicTableViewCell.swift */; };
+		92B55633215FDB5300C1D9A3 /* BasicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55632215FDB5300C1D9A3 /* BasicCollectionViewCell.swift */; };
 		92B5DAC61EE4CE7C00B0A8F3 /* EventTeamStat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B5DAC51EE4CE7C00B0A8F3 /* EventTeamStat.swift */; };
 		92B7372F20996F25009A7784 /* MyTBAPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B7372E20996F25009A7784 /* MyTBAPreferences.swift */; };
 		92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */; };
@@ -320,6 +323,9 @@
 		92B55622215D688600C1D9A3 /* TeamEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamEventsViewController.swift; sourceTree = "<group>"; };
 		92B55624215D69DE00C1D9A3 /* WeekEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekEventsViewController.swift; sourceTree = "<group>"; };
 		92B55626215D6A9B00C1D9A3 /* DistrictEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictEventsViewController.swift; sourceTree = "<group>"; };
+		92B55629215FCB1300C1D9A3 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
+		92B55630215FDA9000C1D9A3 /* BasicTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTableViewCell.swift; sourceTree = "<group>"; };
+		92B55632215FDB5300C1D9A3 /* BasicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicCollectionViewCell.swift; sourceTree = "<group>"; };
 		92B5DAC51EE4CE7C00B0A8F3 /* EventTeamStat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTeamStat.swift; sourceTree = "<group>"; };
 		92B7372E20996F25009A7784 /* MyTBAPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferences.swift; sourceTree = "<group>"; };
 		92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetupOperation.swift; sourceTree = "<group>"; };
@@ -794,6 +800,8 @@
 		929DB38A209563E800FB575F /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				92B55630215FDA9000C1D9A3 /* BasicTableViewCell.swift */,
+				92B55632215FDB5300C1D9A3 /* BasicCollectionViewCell.swift */,
 				9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */,
 				9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */,
 				929DB38D2095640C00FB575F /* ReverseSubtitleTableViewCell.xib */,
@@ -904,6 +912,14 @@
 				92B076F020FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift */,
 			);
 			path = myTBA;
+			sourceTree = "<group>";
+		};
+		92B55628215FCB0900C1D9A3 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				92B55629215FCB1300C1D9A3 /* Reusable.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		92BB717920CE05770081F4E5 /* App Setup */ = {
@@ -1052,6 +1068,7 @@
 		92FFE5221E7C994B0037E48C /* View Elements */ = {
 			isa = PBXGroup;
 			children = (
+				92B55628215FCB0900C1D9A3 /* Protocols */,
 				929DB38A209563E800FB575F /* Base */,
 				9223AC861EE7214F00F54F93 /* Views */,
 				145C57B31ED377DE004955B2 /* Match */,
@@ -1440,8 +1457,10 @@
 				92F8E358209AB3B50094213F /* Provider.swift in Sources */,
 				92D855D41EC68F4200572F27 /* TeamsViewController.swift in Sources */,
 				1479694C215EC1670075AF4E /* EventTeamStatCellViewModel.swift in Sources */,
+				92B55633215FDB5300C1D9A3 /* BasicCollectionViewCell.swift in Sources */,
 				92D855E01EC6BA3900572F27 /* TeamViewController.swift in Sources */,
 				92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */,
+				92B5562A215FCB1300C1D9A3 /* Reusable.swift in Sources */,
 				92F8E356209AAE890094213F /* PushService.swift in Sources */,
 				92BB8B64214F17440035AF28 /* URLOpener.swift in Sources */,
 				1405237F1ED3524C0072FB91 /* Match.swift in Sources */,
@@ -1518,6 +1537,7 @@
 				924F8C871EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift in Sources */,
 				14796948215EBD6C0075AF4E /* EventCellViewModel.swift in Sources */,
 				92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */,
+				92B55631215FDA9000C1D9A3 /* BasicTableViewCell.swift in Sources */,
 				92B0AA3B20CB837A0074FDF1 /* main.swift in Sources */,
 				92FFE52A1E7CB1550037E48C /* Webcast.swift in Sources */,
 				92AF4D0C1E330790007E967D /* SelectTableViewController.swift in Sources */,

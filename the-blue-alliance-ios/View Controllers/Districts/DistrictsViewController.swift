@@ -23,7 +23,7 @@ class DistrictsViewController: TBATableViewController {
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        return TableViewDataSource(tableView: tableView, cellIdentifier: basicCellReuseIdentifier, fetchedResultsController: frc, delegate: self)
+        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
     }()
 
     // MARK: - Init
@@ -54,7 +54,7 @@ class DistrictsViewController: TBATableViewController {
                     District.insert(with: modelDistrict, in: backgroundContext)
                 })
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })
@@ -89,7 +89,7 @@ class DistrictsViewController: TBATableViewController {
 
 extension DistrictsViewController: TableViewDataSourceDelegate {
 
-    func configure(_ cell: UITableViewCell, for object: District, at indexPath: IndexPath) {
+    func configure(_ cell: BasicTableViewCell, for object: District, at indexPath: IndexPath) {
         cell.textLabel?.text = object.name
         cell.accessoryType = .disclosureIndicator
         // TODO: Convert to some custom cell... show # of events if non-zero

@@ -48,7 +48,7 @@ class TeamInfoViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.sectionFooterHeight = 0
-        tableView.register(UINib(nibName: String(describing: InfoTableViewCell.self), bundle: nil), forCellReuseIdentifier: InfoTableViewCell.reuseIdentifier)
+        tableView.registerReusableCell(InfoTableViewCell.self)
     }
 
     // MARK: - Refresh
@@ -67,7 +67,7 @@ class TeamInfoViewController: TBATableViewController {
                     Team.insert(with: modelTeam, in: backgroundContext)
                 }
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })
@@ -119,8 +119,7 @@ class TeamInfoViewController: TBATableViewController {
     }
 
     private func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: InfoTableViewCell.reuseIdentifier, for: indexPath) as! InfoTableViewCell
-
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as InfoTableViewCell
         cell.viewModel = InfoCellViewModel(team: team)
 
         cell.accessoryType = .none
@@ -130,7 +129,7 @@ class TeamInfoViewController: TBATableViewController {
     }
 
     private func tableView(_ tableView: UITableView, sponsorCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
 
         cell.textLabel?.text = team.name
         cell.textLabel?.textColor = .darkGray
@@ -149,7 +148,7 @@ class TeamInfoViewController: TBATableViewController {
     }
 
     private func tableView(_ tableView: UITableView, linkCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
 
         var row = indexPath.row
         if team.website == nil, row >= TeamLinkRow.website.rawValue {

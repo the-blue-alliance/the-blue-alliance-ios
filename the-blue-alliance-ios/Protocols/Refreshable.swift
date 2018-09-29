@@ -70,7 +70,7 @@ extension Refreshable {
             if let tableViewController = self as? UITableViewController {
                 tableViewController.tableView.reloadData()
             } else if let collectionViewController = self as? UICollectionViewController {
-                collectionViewController.collectionView?.reloadData()
+                collectionViewController.collectionView.reloadData()
             } else if let viewController = self as? TBAViewController {
                 // TODO: https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/133
                 viewController.reloadViewAfterRefresh()

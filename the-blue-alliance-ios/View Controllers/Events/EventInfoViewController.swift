@@ -71,7 +71,7 @@ class EventInfoViewController: TBATableViewController, Observable {
         super.viewDidLoad()
 
         tableView.sectionFooterHeight = 0
-        tableView.register(UINib(nibName: String(describing: InfoTableViewCell.self), bundle: nil), forCellReuseIdentifier: InfoTableViewCell.reuseIdentifier)
+        tableView.registerReusableCell(InfoTableViewCell.self)
     }
 
     // MARK: - Refresh
@@ -90,7 +90,7 @@ class EventInfoViewController: TBATableViewController, Observable {
                     Event.insert(with: modelEvent, in: backgroundContext)
                 }
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })
@@ -140,8 +140,7 @@ class EventInfoViewController: TBATableViewController, Observable {
     }
 
     func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: InfoTableViewCell.reuseIdentifier, for: indexPath) as! InfoTableViewCell
-
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as InfoTableViewCell
         cell.viewModel = InfoCellViewModel(event: event)
 
         cell.accessoryType = .none
@@ -151,7 +150,7 @@ class EventInfoViewController: TBATableViewController, Observable {
     }
 
     func tableView(_ tableView: UITableView, detailCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
 
         var row = indexPath.row
         if event.district == nil, row >= EventDetailRow.districtPoints.rawValue {
@@ -177,7 +176,7 @@ class EventInfoViewController: TBATableViewController, Observable {
     }
 
     func tableView(_ tableView: UITableView, linkCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
 
         var row = indexPath.row
         if event.website == nil, row >= EventLinkRow.website.rawValue {

@@ -30,7 +30,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        return TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
     }()
 
     var filter: EventTeamStatFilter {
@@ -61,14 +61,6 @@ class EventTeamStatsTableViewController: TBATableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
-    }
-
     // MARK: - Refreshing
 
     override func refresh() {
@@ -88,7 +80,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
                 })
                 backgroundEvent.stats = Set(localStats ?? []) as NSSet
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })

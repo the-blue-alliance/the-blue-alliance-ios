@@ -131,7 +131,7 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 backgroundEvent.insights = insights
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })

@@ -1,13 +1,18 @@
 import Foundation
 import UIKit
 
-class RankingTableViewCell: UITableViewCell {
-    static let reuseIdentifier = "RankingCell"
+class RankingTableViewCell: UITableViewCell, Reusable {
 
     var viewModel: RankingCellViewModel? {
         didSet {
             configureCell()
         }
+    }
+
+    // MARK: - Reusable
+
+    static var nib: UINib? {
+        return UINib(nibName: String(describing: self), bundle: nil)
     }
 
     // MARK: - Interface Builder

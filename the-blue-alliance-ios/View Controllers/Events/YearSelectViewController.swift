@@ -153,7 +153,7 @@ extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
                     Event.insert(with: modelEvent, in: backgroundContext)
                 })
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
 
                 self.hasRefreshed = true
                 self.updateWeeks()

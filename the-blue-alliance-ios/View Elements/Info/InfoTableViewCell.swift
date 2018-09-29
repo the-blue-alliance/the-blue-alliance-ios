@@ -1,12 +1,17 @@
 import UIKit
 
-class InfoTableViewCell: UITableViewCell {
-    static let reuseIdentifier = "InfoCell"
+class InfoTableViewCell: UITableViewCell, Reusable {
 
     var viewModel: InfoCellViewModel? {
         didSet {
             configureCell()
         }
+    }
+
+    // MARK: - Reusable
+
+    static var nib: UINib? {
+        return UINib(nibName: String(describing: self), bundle: nil)
     }
 
     // MARK: - Interface Builder

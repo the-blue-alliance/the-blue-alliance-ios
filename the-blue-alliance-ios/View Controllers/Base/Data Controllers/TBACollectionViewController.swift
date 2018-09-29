@@ -6,11 +6,10 @@ class TBACollectionViewController: UICollectionViewController, DataController {
 
     var persistentContainer: NSPersistentContainer
 
-    let basicCellReuseIdentifier = "BasicCell"
     var requests: [URLSessionDataTask] = []
 
     var refreshView: UIScrollView {
-        return collectionView!
+        return collectionView
     }
     var noDataViewController: NoDataViewController?
 
@@ -35,9 +34,9 @@ class TBACollectionViewController: UICollectionViewController, DataController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView?.backgroundColor = .backgroundGray
-        collectionView?.delegate = self
-        collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: basicCellReuseIdentifier)
+        collectionView.backgroundColor = .backgroundGray
+        collectionView.delegate = self
+        collectionView.registerReusableCell(BasicCollectionViewCell.self)
     }
 
     @objc func refresh() {

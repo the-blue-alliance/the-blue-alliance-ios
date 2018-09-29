@@ -18,7 +18,7 @@ class EventRankingsViewController: TBATableViewController {
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        return TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
     }()
 
     // MARK: - Init
@@ -31,15 +31,6 @@ class EventRankingsViewController: TBATableViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // TODO: See what we can do to cut down on this code... do something inside TBATableViewController
-        tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
     }
 
     // MARK: - Refreshing
@@ -62,7 +53,7 @@ class EventRankingsViewController: TBATableViewController {
                 })
                 backgroundEvent.rankings = Set(localRankings ?? []) as NSSet
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: rankingsRequest!)
             })
         })

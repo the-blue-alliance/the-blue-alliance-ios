@@ -9,20 +9,26 @@ extension NSManagedObjectContext {
         return obj
     }
 
-    public func saveContext() {
-        try! save()
+    public func saveOrRollback() {
+        do {
+            try save()
+        } catch {
+            print(error)
+            Crashlytics.sharedInstance().recordError(error)
+            rollback()
+        }
     }
 
-    public func performSaveContext() {
+    public func performSaveOrRollback() {
         perform {
-            self.saveContext()
+            _ = self.saveOrRollback()
         }
     }
 
     public func performChanges(block: @escaping () -> Void) {
         perform {
             block()
-            self.saveContext()
+            _ = self.saveOrRollback()
         }
     }
 

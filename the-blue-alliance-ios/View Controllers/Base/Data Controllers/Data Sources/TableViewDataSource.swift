@@ -6,7 +6,7 @@ import CoreData
 protocol TableViewDataSourceDelegate: class {
 
     associatedtype Object
-    associatedtype Cell: UITableViewCell
+    associatedtype Cell: UITableViewCell, Reusable
 
     func configure(_ cell: Cell, for object: Object, at indexPath: IndexPath)
     func title(for section: Int) -> String?
@@ -28,9 +28,8 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
     typealias Object = Delegate.Object
     typealias Cell = Delegate.Cell
 
-    required init(tableView: UITableView, cellIdentifier: String, fetchedResultsController: NSFetchedResultsController<Result>, delegate: Delegate) {
+    required init(tableView: UITableView, fetchedResultsController: NSFetchedResultsController<Result>, delegate: Delegate) {
         self.tableView = tableView
-        self.cellIdentifier = cellIdentifier
         self.fetchedResultsController = fetchedResultsController
         self.delegate = delegate
 
@@ -40,6 +39,7 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         try! fetchedResultsController.performFetch()
 
         DispatchQueue.main.async {
+            tableView.registerReusableCell(Cell.self)
             tableView.dataSource = self
             tableView.reloadData()
         }
@@ -68,7 +68,6 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
     fileprivate let tableView: UITableView
     public let fetchedResultsController: NSFetchedResultsController<Result>
     fileprivate weak var delegate: Delegate?
-    fileprivate let cellIdentifier: String
 
     // MARK: UITableViewDataSource
 
@@ -96,9 +95,8 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as Cell
         let object = self.object(at: indexPath)
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? Cell
-            else { fatalError("Unexpected cell type at \(indexPath)") }
         delegate?.configure(cell, for: object, at: indexPath)
         return cell
     }

@@ -55,8 +55,7 @@ class TeamStatsViewController: TBATableViewController, Observable {
 
         // TODO: Since we leverage didSet, we need to do this *after* initilization
         teamStat = EventTeamStat.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
-
-        tableView.register(UINib(nibName: String(describing: EventTeamStatTableViewCell.self), bundle: nil), forCellReuseIdentifier: EventTeamStatTableViewCell.reuseIdentifier)
+        tableView.registerReusableCell(EventTeamStatTableViewCell.self)
     }
 
     // MARK: - Refresh
@@ -77,7 +76,7 @@ class TeamStatsViewController: TBATableViewController, Observable {
                 })
                 backgroundEvent.stats = Set(localStats ?? []) as NSSet
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })
@@ -101,7 +100,7 @@ class TeamStatsViewController: TBATableViewController, Observable {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> EventTeamStatTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: EventTeamStatTableViewCell.reuseIdentifier, for: indexPath) as! EventTeamStatTableViewCell
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTeamStatTableViewCell
         cell.selectionStyle = .none
 
         let statName: String = {

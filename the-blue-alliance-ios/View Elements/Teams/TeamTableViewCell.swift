@@ -1,13 +1,18 @@
 import Foundation
 import UIKit
 
-class TeamTableViewCell: UITableViewCell {
-    static let reuseIdentifier = "TeamCell"
+class TeamTableViewCell: UITableViewCell, Reusable {
 
     var viewModel: TeamCellViewModel? {
         didSet {
             configureCell()
         }
+    }
+
+    // MARK: - Reusable
+
+    static var nib: UINib? {
+        return UINib(nibName: String(describing: self), bundle: nil)
     }
 
     // MARK: - Interface Builder

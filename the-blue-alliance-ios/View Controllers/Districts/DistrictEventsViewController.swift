@@ -34,7 +34,7 @@ class DistrictEventsViewController: EventsViewController {
                 })
                 backgroundDistrict.events = Set(localEvents ?? []) as NSSet
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })

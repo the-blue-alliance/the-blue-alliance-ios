@@ -1,12 +1,17 @@
 import UIKit
 
-class EventTableViewCell: UITableViewCell {
-    static let reuseIdentifier = "EventCell"
+class EventTableViewCell: UITableViewCell, Reusable {
 
     var viewModel: EventCellViewModel? {
         didSet {
             configureCell()
         }
+    }
+
+    // MARK: - Reusable
+
+    static var nib: UINib? {
+        return UINib(nibName: String(describing: self), bundle: nil)
     }
 
     // MARK: - Interface Builder

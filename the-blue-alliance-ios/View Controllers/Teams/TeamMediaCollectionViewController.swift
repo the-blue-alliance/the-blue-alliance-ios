@@ -19,7 +19,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
         // TODO: Split section by photos/videos like we do on the web
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        return CollectionViewDataSource(collectionView: collectionView!, cellIdentifier: basicCellReuseIdentifier, fetchedResultsController: frc, delegate: self)
+        return CollectionViewDataSource(collectionView: collectionView, fetchedResultsController: frc, delegate: self)
     }()
 
     private var playerViews: [String: PlayerView] = [:]
@@ -48,7 +48,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     override func viewWillLayoutSubviews() {
         // When the VC changes sizes, make sure we invalidate our layout to adjust the sizes of the cells
         DispatchQueue.main.async {
-            self.collectionView?.collectionViewLayout.invalidateLayout()
+            self.collectionView.collectionViewLayout.invalidateLayout()
         }
     }
 
@@ -90,7 +90,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
                     backgroundContext.delete($0)
                 }
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })
@@ -110,7 +110,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         super.viewWillTransition(to: size, with: coordinator)
 
         DispatchQueue.main.async {
-            self.collectionView?.collectionViewLayout.invalidateLayout()
+            self.collectionView.collectionViewLayout.invalidateLayout()
         }
     }
 
@@ -200,13 +200,14 @@ extension TeamMediaCollectionViewController: UICollectionViewDelegateFlowLayout 
 
 extension TeamMediaCollectionViewController: CollectionViewDataSourceDelegate {
 
-    func configure(_ cell: UICollectionViewCell, for object: Media, at indexPath: IndexPath) {
+    func configure(_ cell: BasicCollectionViewCell, for object: Media, at indexPath: IndexPath) {
         var mediaView: UIView?
         if object.type == MediaType.youtubeVideo.rawValue {
             mediaView = playerViewForMedia(object)
         } else {
             mediaView = mediaViewForMedia(object)
         }
+
         cell.contentView.addSubview(mediaView!)
         mediaView!.autoPinEdgesToSuperviewEdges()
     }

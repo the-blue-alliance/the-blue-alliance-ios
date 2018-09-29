@@ -18,7 +18,7 @@ class DistrictRankingsViewController: TBATableViewController {
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        return TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
     }()
 
     // MARK: - Init
@@ -31,14 +31,6 @@ class DistrictRankingsViewController: TBATableViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
     }
 
     // MARK: - Refreshing
@@ -97,7 +89,7 @@ class DistrictRankingsViewController: TBATableViewController {
                         Event.insert(with: modelEvent, in: backgroundContext)
                     })
                 }
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 completion(true)
             })
         })
@@ -117,7 +109,7 @@ class DistrictRankingsViewController: TBATableViewController {
                         Team.insert(with: modelTeam, in: backgroundContext)
                     })
                 }
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 completion(true)
             })
         })
@@ -140,7 +132,7 @@ class DistrictRankingsViewController: TBATableViewController {
                 })
                 backgroundDistrict.rankings = Set(localRankings ?? []) as NSSet
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 completion(true)
             })
         })

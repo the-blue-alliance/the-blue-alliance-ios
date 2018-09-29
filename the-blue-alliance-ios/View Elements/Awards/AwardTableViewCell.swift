@@ -1,8 +1,7 @@
 import Foundation
 import UIKit
 
-class AwardTableViewCell: UITableViewCell {
-    static let reuseIdentifier = "AwardCell"
+class AwardTableViewCell: UITableViewCell, Reusable {
 
     var viewModel: AwardCellViewModel? {
         didSet {
@@ -10,6 +9,12 @@ class AwardTableViewCell: UITableViewCell {
         }
     }
     var teamSelected: ((_ teamKey: String) -> Void)?
+
+    // MARK: - Reusable
+
+    static var nib: UINib? {
+        return UINib(nibName: String(describing: self), bundle: nil)
+    }
 
     // MARK: - Interface Builder
 

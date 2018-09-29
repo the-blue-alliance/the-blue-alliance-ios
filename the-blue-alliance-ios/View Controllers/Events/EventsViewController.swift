@@ -41,7 +41,7 @@ class EventsViewController: TBATableViewController, EventsViewControllerDataSour
                                              managedObjectContext: persistentContainer.viewContext,
                                              sectionNameKeyPath: sectionNameKeyPath,
                                              cacheName: nil)
-        return TableViewDataSource(tableView: tableView, cellIdentifier: EventTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
     }()
 
     // MARK: Init
@@ -59,7 +59,7 @@ class EventsViewController: TBATableViewController, EventsViewControllerDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(UINib(nibName: String(describing: EventTableViewCell.self), bundle: nil), forCellReuseIdentifier: EventTableViewCell.reuseIdentifier)
+        tableView!.registerReusableCell(EventTableViewCell.self)
     }
 
     // MARK: - Refreshing

@@ -85,12 +85,9 @@ class TeamSummaryViewController: TBATableViewController {
         // TODO: Since we leverage didSet, we need to do this *after* initilization
         eventStatus = EventStatus.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
 
-        tableView.register(UINib(nibName: String(describing: ReverseSubtitleTableViewCell.self), bundle: nil),
-                           forCellReuseIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier)
-        tableView.register(UINib(nibName: String(describing: LoadingTableViewCell.self), bundle: nil),
-                           forCellReuseIdentifier: LoadingTableViewCell.reuseIdentifier)
-        tableView.register(UINib(nibName: String(describing: MatchTableViewCell.self), bundle: nil),
-                           forCellReuseIdentifier: MatchTableViewCell.reuseIdentifier)
+        tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
+        tableView.registerReusableCell(LoadingTableViewCell.self)
+        tableView.registerReusableCell(MatchTableViewCell.self)
     }
 
     // MARK: - Private
@@ -188,7 +185,7 @@ class TeamSummaryViewController: TBATableViewController {
                     EventStatus.insert(with: modelStatus, team: backgroundTeam, event: backgroundEvent, in: backgroundContext)
                 }
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: teamStatusRequest!)
             })
         })
@@ -209,7 +206,7 @@ class TeamSummaryViewController: TBATableViewController {
                 })
                 backgroundEvent.addToAwards(Set(localAwards ?? []) as NSSet)
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: awardsRequest!)
             })
         })
@@ -310,18 +307,14 @@ class TeamSummaryViewController: TBATableViewController {
     }
 
     private func tableView(_ tableView: UITableView, reverseSubtitleCellWithTitle title: String, subtitle: String, at indexPath: IndexPath) -> ReverseSubtitleTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier) as? ReverseSubtitleTableViewCell ?? ReverseSubtitleTableViewCell(style: .default, reuseIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier)
-
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
         cell.titleLabel.text = title
         cell.subtitleLabel.text = subtitle
-
-        cell.selectionStyle = .none
-
         return cell
     }
 
     private func tableView(_ tableView: UITableView, loadingCellAt indexPath: IndexPath) -> LoadingTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: LoadingTableViewCell.reuseIdentifier) as? LoadingTableViewCell ?? LoadingTableViewCell(style: .default, reuseIdentifier: LoadingTableViewCell.reuseIdentifier)
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as LoadingTableViewCell
         cell.keyLabel.text = summaryValues[indexPath.row] as? String
         cell.backgroundFetchActivityIndicator.isHidden = false
         cell.selectionStyle = .none
@@ -329,11 +322,9 @@ class TeamSummaryViewController: TBATableViewController {
     }
 
     private func tableView(_ tableView: UITableView, matchCellForRowAt indexPath: IndexPath) -> MatchTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: MatchTableViewCell.reuseIdentifier) as! MatchTableViewCell
-
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
         let match = summaryValues[indexPath.row] as! Match
         cell.viewModel = MatchCellViewModel(match: match, team: team)
-
         return cell
     }
 
