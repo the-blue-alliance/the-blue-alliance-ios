@@ -138,7 +138,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
 extension EventTeamStatsTableViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: RankingTableViewCell, for object: EventTeamStat, at indexPath: IndexPath) {
-        cell.teamStat = object
+        cell.viewModel = RankingCellViewModel(eventTeamStat: object)
     }
 
     func showNoDataView() {

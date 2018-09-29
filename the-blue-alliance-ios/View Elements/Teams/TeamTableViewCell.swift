@@ -3,19 +3,28 @@ import UIKit
 
 class TeamTableViewCell: UITableViewCell {
     static let reuseIdentifier = "TeamCell"
-    public var team: Team? {
-        didSet {
-            guard let team = team else {
-                return
-            }
-            numberLabel?.text = "\(team.teamNumber)"
-            nameLabel?.text = team.nickname ?? team.fallbackNickname
-            locationLabel?.text = team.locationString
-        }
 
+    var viewModel: TeamCellViewModel? {
+        didSet {
+            configureCell()
+        }
     }
 
-    @IBOutlet private var numberLabel: UILabel?
-    @IBOutlet private var nameLabel: UILabel?
-    @IBOutlet private var locationLabel: UILabel?
+    // MARK: - Interface Builder
+
+    @IBOutlet private weak var numberLabel: UILabel!
+    @IBOutlet private weak var nameLabel: UILabel!
+    @IBOutlet private weak var locationLabel: UILabel!
+
+    // MARK: - Private Methods
+
+    private func configureCell() {
+        guard let viewModel = viewModel else {
+            return
+        }
+
+        numberLabel.text = viewModel.teamNumber
+        nameLabel.text = viewModel.teamNickname
+        locationLabel.text = viewModel.teamLocation
+    }
 }

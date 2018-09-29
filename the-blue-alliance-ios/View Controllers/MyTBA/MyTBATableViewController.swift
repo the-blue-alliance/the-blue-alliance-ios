@@ -244,20 +244,20 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     }
 
     func tableView(_ tableView: UITableView, for event: Event) -> EventTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: EventTableViewCell.reuseIdentifier) as? EventTableViewCell ?? EventTableViewCell(style: .default, reuseIdentifier: EventTableViewCell.reuseIdentifier)
-        cell.event = event
+        let cell = tableView.dequeueReusableCell(withIdentifier: EventTableViewCell.reuseIdentifier) as! EventTableViewCell
+        cell.viewModel = EventCellViewModel(event: event)
         return cell
     }
 
     func tableView(_ tableView: UITableView, for team: Team) -> TeamTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TeamTableViewCell.reuseIdentifier) as? TeamTableViewCell ?? TeamTableViewCell(style: .default, reuseIdentifier: TeamTableViewCell.reuseIdentifier)
-        cell.team = team
+        let cell = tableView.dequeueReusableCell(withIdentifier: TeamTableViewCell.reuseIdentifier) as! TeamTableViewCell
+        cell.viewModel = TeamCellViewModel(team: team)
         return cell
     }
 
     func tableView(_ tableView: UITableView, for match: Match) -> MatchTableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MatchTableViewCell.reuseIdentifier) as! MatchTableViewCell
-        cell.matchViewModel = MatchCellViewModel(match: match)
+        cell.viewModel = MatchCellViewModel(match: match)
         return cell
     }
 

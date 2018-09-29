@@ -42,8 +42,6 @@ class TeamStatsViewController: TBATableViewController, Observable {
         self.event = event
 
         super.init(persistentContainer: persistentContainer)
-
-        teamStat = EventTeamStat.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -54,6 +52,9 @@ class TeamStatsViewController: TBATableViewController, Observable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // TODO: Since we leverage didSet, we need to do this *after* initilization
+        teamStat = EventTeamStat.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
 
         tableView.register(UINib(nibName: String(describing: EventTeamStatTableViewCell.self), bundle: nil), forCellReuseIdentifier: EventTeamStatTableViewCell.reuseIdentifier)
     }
@@ -103,16 +104,19 @@ class TeamStatsViewController: TBATableViewController, Observable {
         let cell = tableView.dequeueReusableCell(withIdentifier: EventTeamStatTableViewCell.reuseIdentifier, for: indexPath) as! EventTeamStatTableViewCell
         cell.selectionStyle = .none
 
-        switch indexPath.row {
-        case 0:
-            cell.statName = "opr"
-        case 1:
-            cell.statName = "dpr"
-        case 2:
-            cell.statName = "ccwm"
-        default: break
-        }
-        cell.eventTeamStat = teamStat
+        let statName: String = {
+            switch indexPath.row {
+            case 0:
+                return "opr"
+            case 1:
+                return "dpr"
+            case 2:
+                return "ccwm"
+            default:
+                return ""
+            }
+        }()
+        cell.viewModel = EventTeamStatCellViewModel(eventTeamStat: teamStat, statName: statName)
 
         return cell
     }

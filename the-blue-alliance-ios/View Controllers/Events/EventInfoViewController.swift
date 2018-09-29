@@ -142,7 +142,7 @@ class EventInfoViewController: TBATableViewController, Observable {
     func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: InfoTableViewCell.reuseIdentifier, for: indexPath) as! InfoTableViewCell
 
-        cell.event = event
+        cell.viewModel = InfoCellViewModel(event: event)
 
         cell.accessoryType = .none
         cell.selectionStyle = .none

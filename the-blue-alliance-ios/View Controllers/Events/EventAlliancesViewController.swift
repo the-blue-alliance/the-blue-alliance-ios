@@ -134,8 +134,9 @@ extension EventAlliancesViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: EventAllianceTableViewCell, for object: EventAlliance, at indexPath: IndexPath) {
         cell.selectionStyle = .none
-        cell.alliance = object
-        cell.teamSelected = { [unowned self] (team) in
+        cell.viewModel = EventAllianceCellViewModel(alliance: object)
+        cell.teamSelected = { [unowned self] (teamKey) in
+            let team = Team.insert(withKey: teamKey, in: self.persistentContainer.viewContext)
             self.delegate?.teamSelected(team)
         }
     }

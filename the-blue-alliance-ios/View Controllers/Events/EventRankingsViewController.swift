@@ -99,7 +99,7 @@ class EventRankingsViewController: TBATableViewController {
 extension EventRankingsViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: RankingTableViewCell, for object: EventRanking, at indexPath: IndexPath) {
-        cell.eventRanking = object
+        cell.viewModel = RankingCellViewModel(eventRanking: object)
     }
 
     func showNoDataView() {

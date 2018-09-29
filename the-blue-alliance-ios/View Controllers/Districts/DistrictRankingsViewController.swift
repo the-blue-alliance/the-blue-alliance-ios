@@ -175,7 +175,7 @@ class DistrictRankingsViewController: TBATableViewController {
 extension DistrictRankingsViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: RankingTableViewCell, for object: DistrictRanking, at indexPath: IndexPath) {
-        cell.districtRanking = object
+        cell.viewModel = RankingCellViewModel(districtRanking: object)
     }
 
     func showNoDataView() {

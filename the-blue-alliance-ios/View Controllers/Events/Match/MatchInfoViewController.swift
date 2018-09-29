@@ -96,7 +96,7 @@ class MatchInfoViewController: TBAViewController, Observable {
 
         if let redAlliance = match.redAlliance?.reversed() as? [Team] {
             for team in redAlliance {
-                let teamLabel = MatchTableViewCell.label(for: team, baseTeam: self.team)
+                let teamLabel = MatchTableViewCell.label(for: team.key!, baseTeamKey: self.team?.key)
                 redStackView.insertArrangedSubview(teamLabel, at: 0)
             }
         }
@@ -113,7 +113,7 @@ class MatchInfoViewController: TBAViewController, Observable {
 
         if let blueAlliance = match.blueAlliance?.reversed() as? [Team] {
             for team in blueAlliance {
-                let teamLabel = MatchTableViewCell.label(for: team, baseTeam: self.team)
+                let teamLabel = MatchTableViewCell.label(for: team.key!, baseTeamKey: self.team?.key)
                 blueStackView.insertArrangedSubview(teamLabel, at: 0)
             }
         }

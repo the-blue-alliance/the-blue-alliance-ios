@@ -71,8 +71,6 @@ class TeamSummaryViewController: TBATableViewController {
         self.event = event
 
         super.init(persistentContainer: persistentContainer)
-
-        eventStatus = EventStatus.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -83,6 +81,9 @@ class TeamSummaryViewController: TBATableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // TODO: Since we leverage didSet, we need to do this *after* initilization
+        eventStatus = EventStatus.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
 
         tableView.register(UINib(nibName: String(describing: ReverseSubtitleTableViewCell.self), bundle: nil),
                            forCellReuseIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier)
@@ -331,7 +332,7 @@ class TeamSummaryViewController: TBATableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: MatchTableViewCell.reuseIdentifier) as! MatchTableViewCell
 
         let match = summaryValues[indexPath.row] as! Match
-        cell.matchViewModel = MatchCellViewModel(match: match, team: team)
+        cell.viewModel = MatchCellViewModel(match: match, team: team)
 
         return cell
     }

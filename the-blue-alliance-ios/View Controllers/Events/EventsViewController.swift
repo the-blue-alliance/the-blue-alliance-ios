@@ -107,7 +107,7 @@ class EventsViewController: TBATableViewController, EventsViewControllerDataSour
 extension EventsViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: EventTableViewCell, for object: Event, at indexPath: IndexPath) {
-        cell.event = object
+        cell.viewModel = EventCellViewModel(event: object)
     }
 
     func title(for section: Int) -> String? {

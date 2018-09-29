@@ -2,23 +2,43 @@ import Foundation
 import UIKit
 
 class EventAllianceTableViewCell: UITableViewCell {
-    private let underlineAttribute = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue]
 
     static let reuseIdentifier = "EventAllianceCell"
-    public var alliance: EventAlliance? {
+
+    var viewModel: EventAllianceCellViewModel? {
         didSet {
             configureCell()
         }
     }
-    var teamSelected: ((Team) -> Void)?
+    var teamSelected: ((_ teamKey: String) -> Void)?
 
-    @IBOutlet private var levelLabel: UILabel!
-    @IBOutlet private var nameLabel: UILabel!
-    @IBOutlet private var allianceTeamsStackView: UIStackView!
+    // MARK: - Interface Builder
+
+    @IBOutlet private weak var levelLabel: UILabel!
+    @IBOutlet private weak var nameLabel: UILabel!
+    @IBOutlet private weak var allianceTeamsStackView: UIStackView!
+
+    // MARK: - UI
+
+    private let underlineAttribute = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue]
+
+    // MARK: - View Methods
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        for view in allianceTeamsStackView.arrangedSubviews {
+            view.removeFromSuperview()
+        }
+    }
+
+    // MARK: - Private Methods
 
     private func labelWithText(_ text: String) -> UILabel {
         let label = UILabel()
         label.text = text
+        label.textAlignment = .center
+        label.isUserInteractionEnabled = true
         return label
     }
 
@@ -30,39 +50,19 @@ class EventAllianceTableViewCell: UITableViewCell {
     }
 
     private func configureCell() {
-        for view in allianceTeamsStackView.arrangedSubviews {
-            view.removeFromSuperview()
-        }
-
-        guard let alliance = alliance else {
+        guard let viewModel = viewModel else {
             return
         }
 
-        if let status = alliance.status, let allianceLevel = status.allianceLevel {
-            levelLabel.text = allianceLevel
-            levelLabel.isHidden = false
-        } else {
-            levelLabel.isHidden = true
-        }
+        levelLabel.isHidden = !viewModel.hasAllianceLevel
+        levelLabel.text = viewModel.allianceLevel
 
-        if let name = alliance.name {
-            nameLabel.text = name
-            nameLabel.isHidden = false
-        } else {
-            nameLabel.isHidden = true
-        }
-
-        // TODO: Find a way to type these sorts of to-many relationships in Swift/Core Data
-        guard let picks = alliance.picks as? NSMutableOrderedSet else {
-            return
-        }
+        nameLabel.isHidden = !viewModel.hasAllianceName
+        nameLabel.text = viewModel.allianceName
 
         // OH PICK BOY http://photos.prnewswire.com/prnvar/20140130/NY56077
-        for (index, team) in picks.enumerated() {
-            guard let team = team as? Team else {
-                continue
-            }
-            let teamNumber = "\(team.teamNumber)"
+        for (index, teamKey) in viewModel.picks.enumerated() {
+            let teamNumber = Team.trimFRCPrefix(teamKey)
 
             var label: UILabel
             if index == 0 {
@@ -70,9 +70,7 @@ class EventAllianceTableViewCell: UITableViewCell {
             } else {
                 label = labelWithText(teamNumber)
             }
-            label.textAlignment = .center
             label.tag = index
-            label.isUserInteractionEnabled = true
 
             label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(teamTapped(gesture:))))
             allianceTeamsStackView.addArrangedSubview(label)
@@ -80,15 +78,12 @@ class EventAllianceTableViewCell: UITableViewCell {
     }
 
     @objc private func teamTapped(gesture: UITapGestureRecognizer) {
-        guard let teamSelected = teamSelected else {
+        guard let index = gesture.view?.tag, let picks = viewModel?.picks, index < picks.count else {
             return
         }
 
-        guard let index = gesture.view?.tag, let picks = alliance?.picks?.array as? [Team], index < picks.count else {
-            return
-        }
-
-        let team = picks[index]
-        teamSelected(team)
+        let teamKey = picks[index]
+        teamSelected?(teamKey)
     }
+
 }

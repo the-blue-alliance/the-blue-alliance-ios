@@ -137,8 +137,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
 extension EventDistrictPointsViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: RankingTableViewCell, for object: DistrictEventPoints, at indexPath: IndexPath) {
-        cell.points = object
-        cell.rankLabel?.text = "Rank \(indexPath.row + 1)"
+        cell.viewModel = RankingCellViewModel(rank: "Rank \(indexPath.row + 1)", districtEventPoints: object)
     }
 
     func showNoDataView() {

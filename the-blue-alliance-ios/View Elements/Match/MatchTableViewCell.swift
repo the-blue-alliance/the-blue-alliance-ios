@@ -4,7 +4,7 @@ import UIKit
 class MatchTableViewCell: UITableViewCell {
     static let reuseIdentifier = "MatchCell"
 
-    var matchViewModel: MatchCellViewModel? {
+    var viewModel: MatchCellViewModel? {
         didSet {
             configureCell()
         }
@@ -15,18 +15,18 @@ class MatchTableViewCell: UITableViewCell {
     private let winnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
     private let notWinnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
 
-    @IBOutlet private var matchNumberLabel: UILabel!
+    @IBOutlet private weak var matchNumberLabel: UILabel!
 
-    @IBOutlet private var redStackView: UIStackView!
-    @IBOutlet private var redContainerView: UIView!
-    @IBOutlet private var redScoreLabel: UILabel!
+    @IBOutlet private weak var redStackView: UIStackView!
+    @IBOutlet private weak var redContainerView: UIView!
+    @IBOutlet private weak var redScoreLabel: UILabel!
 
-    @IBOutlet private var blueStackView: UIStackView!
-    @IBOutlet private var blueContainerView: UIView!
-    @IBOutlet private var blueScoreLabel: UILabel!
+    @IBOutlet private weak var blueStackView: UIStackView!
+    @IBOutlet private weak var blueContainerView: UIView!
+    @IBOutlet private weak var blueScoreLabel: UILabel!
 
-    @IBOutlet private var timeLabel: UILabel!
-    @IBOutlet private var playIconImageView: UIImageView!
+    @IBOutlet private weak var timeLabel: UILabel!
+    @IBOutlet private weak var playIconImageView: UIImageView!
 
     private var coloredViews: [UIView] {
         return [redContainerView, redScoreLabel, blueContainerView, blueScoreLabel, timeLabel]
@@ -79,11 +79,11 @@ class MatchTableViewCell: UITableViewCell {
     // MARK: - Public Methods
 
     // TODO: For the love of god, move this literally anywhere else
-    public static func label(for team: Team, baseTeam: Team?) -> UILabel {
+    public static func label(for teamKey: String, baseTeamKey: String?) -> UILabel {
         let label = UILabel()
-        label.text = "\(team.teamNumber)"
+        label.text = "\(Team.trimFRCPrefix(teamKey))"
         var font: UIFont = .systemFont(ofSize: 14)
-        if team.teamNumber == baseTeam?.teamNumber {
+        if teamKey == baseTeamKey {
             font = .boldSystemFont(ofSize: 14)
         }
         label.font = font
@@ -94,32 +94,32 @@ class MatchTableViewCell: UITableViewCell {
     // MARK: - Private Methods
 
     private func configureCell() {
-        guard let matchViewModel = matchViewModel else {
+        guard let viewModel = viewModel else {
             return
         }
 
-        matchNumberLabel.text = matchViewModel.matchName
-        playIconImageView.isHidden = matchViewModel.hasVideos
+        matchNumberLabel.text = viewModel.matchName
+        playIconImageView.isHidden = viewModel.hasVideos
 
-        for team in matchViewModel.redAlliance {
-            let teamLabel = MatchTableViewCell.label(for: team, baseTeam: matchViewModel.team)
+        for teamKey in viewModel.redAlliance {
+            let teamLabel = MatchTableViewCell.label(for: teamKey, baseTeamKey: viewModel.baseTeamKey)
             redStackView.insertArrangedSubview(teamLabel, at: 0)
         }
-        redScoreLabel.text = matchViewModel.redScore
+        redScoreLabel.text = viewModel.redScore
 
-        for team in matchViewModel.blueAlliance {
-            let teamLabel = MatchTableViewCell.label(for: team, baseTeam: matchViewModel.team)
+        for teamKey in viewModel.blueAlliance {
+            let teamLabel = MatchTableViewCell.label(for: teamKey, baseTeamKey: viewModel.baseTeamKey)
             blueStackView.insertArrangedSubview(teamLabel, at: 0)
         }
-        blueScoreLabel.text = matchViewModel.blueScore
+        blueScoreLabel.text = viewModel.blueScore
 
-        timeLabel.isHidden = matchViewModel.hasScores
-        timeLabel.text = matchViewModel.timeString
+        timeLabel.isHidden = viewModel.hasScores
+        timeLabel.text = viewModel.timeString
 
-        if matchViewModel.redAllianceWon {
+        if viewModel.redAllianceWon {
             redContainerView.layer.borderWidth = 2.0
             redScoreLabel.font = winnerFont
-        } else if matchViewModel.blueAllianceWon {
+        } else if viewModel.blueAllianceWon {
             blueContainerView.layer.borderWidth = 2.0
             blueScoreLabel.font = winnerFont
         }

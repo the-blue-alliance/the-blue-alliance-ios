@@ -1,81 +1,62 @@
 import Foundation
 
-class MatchCellViewModel {
+struct MatchCellViewModel {
 
-    private let match: Match
-    let team: Team?
+    let matchName: String
+
+    let hasVideos: Bool
+
+    let redAlliance: [String]
+    let redScore: String?
+
+    let blueAlliance: [String]
+    let blueScore: String?
+
+    let timeString: String
+
+    let redAllianceWon: Bool
+    let blueAllianceWon: Bool
+
+    let baseTeamKey: String?
 
     init(match: Match, team: Team? = nil) {
-        self.match = match
-        self.team = team
-    }
+        matchName = match.friendlyMatchName()
 
-    // MARK: - Public Methods
+        hasVideos = match.videos?.count == 0
 
-    var matchName: String {
-        return match.friendlyMatchName()
-    }
+        redAlliance = (match.redAlliance?.array as? [Team])?.reversed().map({ $0.key! }) ?? []
+        redScore = match.redScore?.stringValue
 
-    var hasVideos: Bool {
-        return match.videos?.count == 0
-    }
+        blueAlliance = (match.blueAlliance?.array as? [Team])?.reversed().map({ $0.key! }) ?? []
+        blueScore = match.blueScore?.stringValue
 
-    var redAlliance: [Team] {
-        guard let redAlliance = match.redAlliance?.array as? [Team] else {
-            return []
-        }
-        return redAlliance.reversed()
-    }
+        timeString = match.timeString ?? "No Time Yet"
 
-    var redScore: String? {
-        return match.redScore?.stringValue
-    }
+        // Everyone is a winner in 2015 ╮ (. ❛ ᴗ ❛.) ╭
+        // Except in the Finals, where there is a winner
+        // If we can't figure out a piece of information, default to yes, the match is a regular match,
+        // where someone wins, and someone loses
+        let hasWinnersAndLosers: Bool = {
+            guard let compLevelAbbrev = match.compLevel, let compLevel = MatchCompLevel(rawValue: compLevelAbbrev) else {
+                return true
+            }
+            guard let year16 = match.event?.year else {
+                return true
+            }
+            if Int(year16) == 2015 && compLevel != MatchCompLevel.final {
+                return false
+            }
+            return true
+        }()
 
-    var blueAlliance: [Team] {
-        guard let blueAlliance = match.blueAlliance?.array as? [Team] else {
-            return []
-        }
-        return blueAlliance.reversed()
-    }
+        redAllianceWon = hasWinnersAndLosers && match.winningAlliance == "red"
+        blueAllianceWon = hasWinnersAndLosers && match.winningAlliance == "blue"
 
-    var blueScore: String? {
-        return match.blueScore?.stringValue
+        baseTeamKey = team?.key
     }
 
     var hasScores: Bool {
         return blueScore != nil && redScore != nil
-    }
-
-    var timeString: String {
-        guard let timeString = match.timeString else {
-            return "No Time Yet"
-        }
-        return timeString
-    }
-
-    // Everyone is a winner in 2015 ╮ (. ❛ ᴗ ❛.) ╭
-    // Except in the Finals, where there is a winner
-    private var hasWinnersAndLosers: Bool {
-        // If we can't figure out a piece of information, default to yes, the match is a regular match,
-        // where someone wins, and someone loses
-        guard let compLevelAbbrev = match.compLevel, let compLevel = MatchCompLevel(rawValue: compLevelAbbrev) else {
-            return true
-        }
-        guard let year16 = match.event?.year else {
-            return true
-        }
-        if Int(year16) == 2015 && compLevel != MatchCompLevel.final {
-            return false
-        }
-        return true
-    }
-
-    var redAllianceWon: Bool {
-        return hasWinnersAndLosers && match.winningAlliance == "red"
-    }
-
-    var blueAllianceWon: Bool {
-        return hasWinnersAndLosers && match.winningAlliance == "blue"
     }
 
 }

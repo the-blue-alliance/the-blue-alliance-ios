@@ -15,6 +15,7 @@ class TeamsViewController: TBATableViewController {
         let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "teamNumber", ascending: true)]
         setupFetchRequest(fetchRequest)
+        fetchRequest.fetchBatchSize = 50
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         return TableViewDataSource(tableView: tableView, cellIdentifier: TeamTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
@@ -161,7 +162,7 @@ class TeamsViewController: TBATableViewController {
 extension TeamsViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: TeamTableViewCell, for object: Team, at indexPath: IndexPath) {
-        cell.team = object
+        cell.viewModel = TeamCellViewModel(team: object)
     }
 
     func showNoDataView() {

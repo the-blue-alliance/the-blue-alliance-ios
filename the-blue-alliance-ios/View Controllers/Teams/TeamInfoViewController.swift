@@ -121,7 +121,7 @@ class TeamInfoViewController: TBATableViewController {
     private func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: InfoTableViewCell.reuseIdentifier, for: indexPath) as! InfoTableViewCell
 
-        cell.team = team
+        cell.viewModel = InfoCellViewModel(team: team)
 
         cell.accessoryType = .none
         cell.selectionStyle = .none

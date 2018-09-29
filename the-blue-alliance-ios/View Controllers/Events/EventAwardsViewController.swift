@@ -147,8 +147,9 @@ extension EventAwardsViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: AwardTableViewCell, for object: Award, at indexPath: IndexPath) {
         cell.selectionStyle = .none
-        cell.award = object
-        cell.teamSelected = { [unowned self] (team) in
+        cell.viewModel = AwardCellViewModel(award: object)
+        cell.teamSelected = { [unowned self] (teamKey) in
+            let team = Team.insert(withKey: teamKey, in: self.persistentContainer.viewContext)
             self.delegate?.teamSelected(team)
         }
     }
