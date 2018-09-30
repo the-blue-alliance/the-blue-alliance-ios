@@ -9,11 +9,25 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
     private let match: Match
 
     // MARK: - React Native
-    
-    lazy internal var reactBridge: RCTBridge = {
-        return RCTBridge(delegate: self, launchOptions: [:])
+
+    private lazy var breakdownView: RCTRootView? = {
+        // Match breakdowns only exist for 2015 and onward
+        if Int(match.event!.year) < 2015 {
+            return nil
+        }
+        guard let breakdownData = dataForBreakdown() else {
+            return nil
+        }
+        let moduleName = "MatchBreakdown\(match.event!.year)"
+        let breakdownView = RCTRootView(bundleURL: sourceURL,
+                                        moduleName: moduleName,
+                                        initialProperties: breakdownData,
+                                        launchOptions: [:])
+        breakdownView!.delegate = self
+        breakdownView!.sizeFlexibility = .height
+        // TODO: loadingView
+        return breakdownView
     }()
-    private var breakdownView: RCTRootView?
 
     // MARK: - Observable
 
@@ -62,43 +76,24 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
     func styleInterface() {
         // Override our default background color to match the match breakdown background color
         view.backgroundColor = UIColor.colorWithRGB(rgbValue: 0xdddddd)
-    }
 
-    func updateBreakdownView() {
-        // Match breakdowns only exist for 2015 and onward
-        if Int(match.event!.year) < 2015 {
-            return
-        }
-
-        guard let breadownData = dataForBreakdown() else {
-            showNoDataView()
-            return
-        }
-
-        // If the breakdown view already exists, don't set it up again
-        // Only update the properties for the view
-        if let breakdownView = breakdownView {
-            breakdownView.appProperties = breadownData
-            return
-        }
-
-        let moduleName = "MatchBreakdown\(match.event!.year)"
-
-        guard let breakdownView = RCTRootView(bridge: reactBridge, moduleName: moduleName, initialProperties: breadownData) else {
+        guard let breakdownView = breakdownView else {
             showErrorView()
             return
         }
-        self.breakdownView = breakdownView
-
-        // breakdownView.loadingView
-        breakdownView.delegate = self
-        breakdownView.sizeFlexibility = .height
 
         removeNoDataView()
         scrollView.addSubview(breakdownView)
 
         breakdownView.autoMatch(.width, to: .width, of: scrollView)
         breakdownView.autoPinEdgesToSuperviewEdges()
+        print("breakdownView.reactViewController: \(breakdownView.reactViewController)")
+    }
+
+    func updateBreakdownView() {
+        if let breakdownView = breakdownView, let breakdownData = dataForBreakdown() {
+            breakdownView.appProperties = breakdownData
+        }
     }
 
     // MARK: Private
@@ -127,14 +122,6 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
                 "blueBreakdown": blueBreakdown,
                 "compLevel": match.compLevel!]
     }
-
-    // MARK: - RCTBridgeDelegate
-
-    func sourceURL(for bridge: RCTBridge!) -> URL! {
-        // Fetch our downloaded JS bundle (or our loctaal packager, if we're running in debug mode)
-        return sourceURL
-    }
-    // fallbackSourceURL
 
     // MARK: Refresh
 

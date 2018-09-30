@@ -4,10 +4,7 @@ import Firebase
 import ZIPFoundation
 import Crashlytics
 
-// TODO: I can't seem to implement sourceURLForBridge: and fallbackSourceURLForBridge: in a protocol extension...
-protocol ReactNative: RCTBridgeDelegate {
-    var reactBridge: RCTBridge { get }
-
+protocol ReactNative {
     func showErrorView()
 }
 

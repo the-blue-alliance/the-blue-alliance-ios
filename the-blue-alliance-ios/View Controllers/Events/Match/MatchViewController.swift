@@ -2,7 +2,7 @@ import CoreData
 import Foundation
 import UIKit
 
-class MatchViewController: ContainerViewController {
+class MatchContainerViewController: ContainerViewController {
 
     private let match: Match
     private let team: Team?

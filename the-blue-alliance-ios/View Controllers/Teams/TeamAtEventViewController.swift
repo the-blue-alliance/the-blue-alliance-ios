@@ -50,7 +50,7 @@ extension TeamAtEventViewController: MatchesViewControllerDelegate, TeamSummaryV
     }
 
     func matchSelected(_ match: Match) {
-        let matchViewController = MatchViewController(match: match, team: team, persistentContainer: persistentContainer)
+        let matchViewController = MatchContainerViewController(match: match, team: team, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(matchViewController, animated: true)
     }
 

@@ -253,7 +253,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, for match: Match) -> MatchTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
-        cell.viewModel = MatchCellViewModel(match: match)
+        cell.viewModel = MatchViewModel(match: match)
         return cell
     }
 

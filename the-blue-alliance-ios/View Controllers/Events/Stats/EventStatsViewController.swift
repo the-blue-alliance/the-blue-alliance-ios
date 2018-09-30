@@ -10,10 +10,25 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
 
     // MARK: - React Native
 
-    lazy internal var reactBridge: RCTBridge = {
-        return RCTBridge(delegate: self, launchOptions: [:])
+    private lazy var eventStatsView: RCTRootView? = {
+        // Event stats only exist for 2016 and onward
+        if Int(event.year) < 2016 {
+            return nil
+        }
+        guard let insights = event.insights else {
+            return nil
+        }
+
+        let moduleName = "EventInsights\(event.year)"
+        let eventStatsView = RCTRootView(bundleURL: sourceURL,
+                                         moduleName: moduleName,
+                                         initialProperties: insights,
+                                         launchOptions: [:])
+        // TODO: eventStatsView.loadingView
+        eventStatsView!.delegate = self
+        eventStatsView!.sizeFlexibility = .height
+        return eventStatsView
     }()
-    private var eventStatsView: RCTRootView?
 
     // MARK: - Observable
 
@@ -57,35 +72,11 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
 
     // MARK: Interface Methods
 
-    func updateEventStatsView() {
-        // Event stats only exist for 2016 and onward
-        if Int(event.year) < 2016 {
-            return
-        }
-
-        guard let insights = event.insights else {
-            showNoDataView()
-            return
-        }
-
-        // If the event stats view already exists, don't set it up again
-        // Only update the properties for the view
-        if let eventStatsView = eventStatsView {
-            eventStatsView.appProperties = insights
-            return
-        }
-
-        let moduleName = "EventInsights\(event.year)"
-
-        guard let eventStatsView = RCTRootView(bridge: reactBridge, moduleName: moduleName, initialProperties: insights) else {
+    func styleInterface() {
+        guard let eventStatsView = eventStatsView else {
             showErrorView()
             return
         }
-        self.eventStatsView = eventStatsView
-
-        // eventStatsView.loadingView
-        eventStatsView.delegate = self
-        eventStatsView.sizeFlexibility = .height
 
         removeNoDataView()
         scrollView.addSubview(eventStatsView)
@@ -94,17 +85,15 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
         eventStatsView.autoPinEdgesToSuperviewEdges()
     }
 
+    func updateEventStatsView() {
+        if let eventStatsView = eventStatsView, let insights = event.insights {
+            eventStatsView.appProperties = insights
+        }
+    }
+
     func showNoDataView() {
         showNoDataView(with: "No stats for event")
     }
-
-    // MARK: - RCTBridgeDelegate
-
-    func sourceURL(for bridge: RCTBridge!) -> URL! {
-        // Fetch our downloaded JS bundle (or our local packager, if we're running in debug mode)
-        return sourceURL
-    }
-    // fallbackSourceURL
 
     // MARK: Refresh
 

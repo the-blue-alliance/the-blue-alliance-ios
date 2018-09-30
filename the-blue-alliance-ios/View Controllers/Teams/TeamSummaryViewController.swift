@@ -324,7 +324,7 @@ class TeamSummaryViewController: TBATableViewController {
     private func tableView(_ tableView: UITableView, matchCellForRowAt indexPath: IndexPath) -> MatchTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
         let match = summaryValues[indexPath.row] as! Match
-        cell.viewModel = MatchCellViewModel(match: match, team: team)
+        cell.viewModel = MatchViewModel(match: match, team: team)
         return cell
     }
 

@@ -1,6 +1,6 @@
 import Foundation
 
-struct MatchCellViewModel {
+struct MatchViewModel {
 
     let matchName: String
 

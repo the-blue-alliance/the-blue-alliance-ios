@@ -8,6 +8,7 @@ class TBAViewController: UIViewController, DataController {
 
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView(forAutoLayout: ())
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.backgroundColor = .clear
         return scrollView
     }()
