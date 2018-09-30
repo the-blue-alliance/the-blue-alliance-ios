@@ -2,7 +2,7 @@ import CoreData
 import TBAKit
 import UIKit
 
-private enum InfoURL: String {
+enum InfoURL: String {
     case website = "https://www.thebluealliance.com"
     case github = "https://github.com/the-blue-alliance/the-blue-alliance-ios"
 }

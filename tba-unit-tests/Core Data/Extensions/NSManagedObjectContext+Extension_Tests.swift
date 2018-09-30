@@ -32,7 +32,7 @@ class NSManagedObjectContextExtensionTestCase: CoreDataTestCase {
         let saveExpectation = XCTestExpectation(description: "managedObjectContext save called")
         managedObjectContext.saveExpectation = saveExpectation
 
-        managedObjectContext.saveContext()
+        managedObjectContext.performSaveOrRollback()
         wait(for: [saveExpectation], timeout: 1.0)
     }
 

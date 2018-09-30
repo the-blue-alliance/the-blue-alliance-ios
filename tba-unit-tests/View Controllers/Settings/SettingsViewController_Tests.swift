@@ -15,8 +15,8 @@ class SettingsViewControllerTestCase: XCTestCase {
         persistentContainer = MockPersistentContainer(name: "Test")
         mockURLOpener = MockURLOpener()
 
-        settingsViewController = SettingsViewController(persistentContainer: persistentContainer,
-                                                        urlOpener: mockURLOpener)
+        settingsViewController = SettingsViewController(urlOpener: mockURLOpener,
+                                                        persistentContainer: persistentContainer)
     }
 
     override func tearDown() {
