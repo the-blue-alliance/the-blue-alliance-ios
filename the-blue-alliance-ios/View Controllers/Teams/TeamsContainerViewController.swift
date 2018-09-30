@@ -3,8 +3,6 @@ import UIKit
 import CoreData
 import TBAKit
 
-private let TeamSegue = "TeamSegue"
-
 class TeamsContainerViewController: ContainerViewController {
 
     private let urlOpener: URLOpener

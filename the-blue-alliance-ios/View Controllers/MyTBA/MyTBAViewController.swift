@@ -6,13 +6,6 @@ import GoogleSignIn
 import UIKit
 import UserNotifications
 
-private let MyTBAFavoritesEmbed = "MyTBAFavoritesEmbed"
-private let MyTBASubscriptionsEmbed = "MyTBASubscriptionsEmbed"
-
-private let EventSegue = "EventSegue"
-private let TeamSegue = "TeamSegue"
-private let MatchSegue = "MatchSegue"
-
 class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
     private let signInViewController: MyTBASignInViewController
@@ -136,6 +129,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
             return
         }
 
+        /*
         switch modelType {
         case .event:
             performSegue(withIdentifier: EventSegue, sender: myTBAObject.modelKey!)
@@ -144,6 +138,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         case .match:
             performSegue(withIdentifier: MatchSegue, sender: myTBAObject.modelKey!)
         }
+        */
     }
 
     // MARK: - Interface Methods
