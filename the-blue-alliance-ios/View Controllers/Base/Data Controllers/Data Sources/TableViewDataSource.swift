@@ -67,14 +67,14 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
 
     fileprivate let tableView: UITableView
     public let fetchedResultsController: NSFetchedResultsController<Result>
-    fileprivate weak var delegate: Delegate?
+    fileprivate weak var delegate: Delegate!
 
     // MARK: UITableViewDataSource
 
     func numberOfSections(in tableView: UITableView) -> Int {
         let sections = fetchedResultsController.sections?.count ?? 0
         if sections == 0 {
-            delegate?.showNoDataView()
+            delegate.showNoDataView()
         }
         return sections
     }
@@ -84,12 +84,12 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         if let sections = fetchedResultsController.sections {
             rows = sections[section].numberOfObjects
             if rows == 0 {
-                delegate?.showNoDataView()
+                delegate.showNoDataView()
             } else {
-                delegate?.hideNoDataView()
+                delegate.hideNoDataView()
             }
         } else {
-            delegate?.showNoDataView()
+            delegate.showNoDataView()
         }
         return rows
     }
@@ -97,12 +97,12 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as Cell
         let object = self.object(at: indexPath)
-        delegate?.configure(cell, for: object, at: indexPath)
+        delegate.configure(cell, for: object, at: indexPath)
         return cell
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return delegate?.title(for: section)
+        return delegate.title(for: section)
     }
 
     // MARK: NSFetchedResultsControllerDelegate
