@@ -1,8 +1,23 @@
 import Foundation
 import UIKit
 
-class ReverseSubtitleTableViewCell: UITableViewCell {
-    static let reuseIdentifier = "ReverseSubtitleCell"
+class ReverseSubtitleTableViewCell: UITableViewCell, Reusable {
+
+    // MARK: - Init
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+
+        selectionStyle = .none
+    }
+
+    // MARK: - Reusable
+
+    static var nib: UINib? {
+        return UINib(nibName: String(describing: self), bundle: nil)
+    }
+
+    // MARK: - Interface Builder
 
     @IBOutlet public var titleLabel: UILabel! {
         didSet {
@@ -18,6 +33,8 @@ class ReverseSubtitleTableViewCell: UITableViewCell {
             subtitleLabel.textColor = UIColor.black
         }
     }
+
+    // MARK: - Public Methods
 
     public func setHTMLSubtitle(text: String) {
         guard let data = text.data(using: String.Encoding.unicode) else { return }

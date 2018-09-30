@@ -3,24 +3,10 @@ import UIKit
 import CoreData
 import TBAKit
 
-class DistrictBreakdownTableViewController: TBATableViewController, Observable {
+class DistrictBreakdownViewController: TBATableViewController, Observable {
 
-    public var ranking: DistrictRanking!
-    private var sortedEventPoints: [DistrictEventPoints] {
-        return (ranking!.eventPoints?.sortedArray(using: [NSSortDescriptor(key: "event.startDate", ascending: true)]) as? [DistrictEventPoints]) ?? []
-    }
-
-    // MARK: - Persistable
-
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            contextObserver.observeObject(object: ranking, state: .updated) { [weak self] (_, _) in
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                }
-            }
-        }
-    }
+    private let ranking: DistrictRanking
+    private let sortedEventPoints: [DistrictEventPoints]
 
     // MARK: - Observable
 
@@ -29,12 +15,32 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
 
+    // MARK: - Init
+
+    init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer) {
+        self.ranking = ranking
+
+        sortedEventPoints = (ranking.eventPoints?.sortedArray(using: [NSSortDescriptor(key: "event.startDate", ascending: true)]) as? [DistrictEventPoints]) ?? []
+
+        super.init(persistentContainer: persistentContainer)
+
+        contextObserver.observeObject(object: ranking, state: .updated) { [unowned self] (_, _) in
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(UINib(nibName: String(describing: ReverseSubtitleTableViewCell.self), bundle: nil), forCellReuseIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier)
+        tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
     }
 
     // MARK: - Refreshing
@@ -51,12 +57,12 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
             }
 
             // Might as well insert them all... we just need to only fetch
-            guard let ranking = rankings?.first(where: { $0.teamKey == self.ranking!.team!.key! }) else {
+            guard let ranking = rankings?.first(where: { $0.teamKey == self.ranking.team!.key! }) else {
                 self.removeRequest(request: rankingsRequest!)
                 return
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let eventKeys = Set(ranking.eventPoints.map({ $0.eventKey! }))
                 let eventlessKeys = Set(eventKeys.compactMap({ (eventKey) -> String? in
                     let predicate = NSPredicate(format: "key == %@", eventKey)
@@ -75,7 +81,7 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
                 }
                 dispatchGroup.wait()
 
-                let backgroundDistrict = backgroundContext.object(with: self.ranking!.district!.objectID) as! District
+                let backgroundDistrict = backgroundContext.object(with: self.ranking.district!.objectID) as! District
 
                 let localRankings = rankings?.compactMap({ (modelRanking) -> DistrictRanking? in
                     let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
@@ -83,7 +89,7 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
                 })
                 backgroundDistrict.rankings = Set(localRankings ?? []) as NSSet
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: rankingsRequest!)
             })
         })
@@ -91,19 +97,19 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
     }
 
     @discardableResult
-    func fetchEvent(eventKey: String, completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
+    private func fetchEvent(eventKey: String, completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
         return TBAKit.sharedKit.fetchEvent(key: eventKey, completion: { (modelEvent, error) in
             if error != nil {
                 completion(false)
                 return
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
-                let backgroundTeam = backgroundContext.object(with: self.ranking!.team!.objectID) as! Team
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                let backgroundTeam = backgroundContext.object(with: self.ranking.team!.objectID) as! Team
                 if let modelEvent = modelEvent {
                     backgroundTeam.addToEvents(Event.insert(with: modelEvent, in: backgroundContext))
                 }
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 completion(true)
             })
         })
@@ -130,9 +136,7 @@ class DistrictBreakdownTableViewController: TBATableViewController, Observable {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> ReverseSubtitleTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier, for: indexPath) as! ReverseSubtitleTableViewCell
-        cell.selectionStyle = .none
-
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
         let eventPoints = sortedEventPoints[indexPath.section]
 
         var pointsType: String = ""

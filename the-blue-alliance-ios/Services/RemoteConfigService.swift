@@ -4,8 +4,8 @@ import Foundation
 
 class RemoteConfigService {
 
-    private var remoteConfig: RemoteConfig
-    internal var retryService: RetryService
+    var remoteConfig: RemoteConfig
+    var retryService: RetryService
 
     init(remoteConfig: RemoteConfig, retryService: RetryService) {
         self.remoteConfig = remoteConfig

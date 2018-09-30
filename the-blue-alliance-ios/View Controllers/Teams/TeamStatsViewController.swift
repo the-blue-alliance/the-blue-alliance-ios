@@ -3,32 +3,24 @@ import UIKit
 import CoreData
 import TBAKit
 
-class TeamStatsTableViewController: TBATableViewController, Observable {
+class TeamStatsViewController: TBATableViewController, Observable {
 
-    var event: Event!
-    var team: Team!
+    private let event: Event
+    private let team: Team
 
     private var teamStat: EventTeamStat? {
         didSet {
             if let teamStat = teamStat {
-                contextObserver.observeObject(object: teamStat, state: .updated) { [weak self] (_, _) in
+                contextObserver.observeObject(object: teamStat, state: .updated) { [unowned self] (_, _) in
                     DispatchQueue.main.async {
-                        self?.tableView.reloadData()
+                        self.tableView.reloadData()
                     }
                 }
             } else {
-                contextObserver.observeInsertions { [weak self] (teamStats) in
-                    self?.teamStat = teamStats.first
+                contextObserver.observeInsertions { [unowned self] (teamStats) in
+                    self.teamStat = teamStats.first
                 }
             }
-        }
-    }
-
-    // MARK: - Persistable
-
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            teamStat = EventTeamStat.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
         }
     }
 
@@ -43,12 +35,27 @@ class TeamStatsTableViewController: TBATableViewController, Observable {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
 
+    // MARK: - Init
+
+    init(team: Team, event: Event, persistentContainer: NSPersistentContainer) {
+        self.team = team
+        self.event = event
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(UINib(nibName: String(describing: EventTeamStatTableViewCell.self), bundle: nil), forCellReuseIdentifier: EventTeamStatTableViewCell.reuseIdentifier)
+        // TODO: Since we leverage didSet, we need to do this *after* initilization
+        teamStat = EventTeamStat.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
+        tableView.registerReusableCell(EventTeamStatTableViewCell.self)
     }
 
     // MARK: - Refresh
@@ -62,14 +69,14 @@ class TeamStatsTableViewController: TBATableViewController, Observable {
                 self.showErrorAlert(with: "Unable to refresh team stats - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 let localStats = stats?.map({ (modelStat) -> EventTeamStat in
                     return EventTeamStat.insert(with: modelStat, for: backgroundEvent, in: backgroundContext)
                 })
                 backgroundEvent.stats = Set(localStats ?? []) as NSSet
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })
@@ -93,19 +100,22 @@ class TeamStatsTableViewController: TBATableViewController, Observable {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> EventTeamStatTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: EventTeamStatTableViewCell.reuseIdentifier, for: indexPath) as! EventTeamStatTableViewCell
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTeamStatTableViewCell
         cell.selectionStyle = .none
 
-        switch indexPath.row {
-        case 0:
-            cell.statName = "opr"
-        case 1:
-            cell.statName = "dpr"
-        case 2:
-            cell.statName = "ccwm"
-        default: break
-        }
-        cell.eventTeamStat = teamStat
+        let statName: String = {
+            switch indexPath.row {
+            case 0:
+                return "opr"
+            case 1:
+                return "dpr"
+            case 2:
+                return "ccwm"
+            default:
+                return ""
+            }
+        }()
+        cell.viewModel = EventTeamStatCellViewModel(eventTeamStat: teamStat, statName: statName)
 
         return cell
     }

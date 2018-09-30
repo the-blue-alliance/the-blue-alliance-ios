@@ -4,33 +4,68 @@ import TBAKit
 import UIKit
 
 class EventStatsContainerViewController: ContainerViewController {
-    public var event: Event!
 
-    internal var teamStatsViewController: EventTeamStatsTableViewController!
-    @IBOutlet internal var teamStatsView: UIView!
+    private let event: Event
 
-    internal var eventStatsViewController: EventStatsViewController!
-    @IBOutlet internal var eventStatsView: UIView!
+    private let teamStatsViewController: EventTeamStatsTableViewController
 
-    @IBOutlet internal var filerBarButtonItem: UIBarButtonItem!
+    lazy private var filerBarButtonItem: UIBarButtonItem = {
+        return UIBarButtonItem(image: UIImage(named: "ic_sort_white"),
+                               style: .plain,
+                               target: self,
+                               action: #selector(showFilter))
+    }()
+
+    // MARK: - Init
+
+    init(event: Event, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
+        self.event = event
+
+        teamStatsViewController = EventTeamStatsTableViewController(event: event, userDefaults: userDefaults, persistentContainer: persistentContainer)
+
+        var eventStatsViewController: EventStatsViewController?
+        // Only show event stats if year is 2016 or onward
+        var titles = ["Team Stats"]
+        if Int(event.year) >= 2016 {
+            titles.append("Event Stats")
+            eventStatsViewController = EventStatsViewController(event: event, persistentContainer: persistentContainer)
+        }
+
+        super.init(viewControllers: [teamStatsViewController, eventStatsViewController].compactMap({ $0 }),
+                   segmentedControlTitles: titles,
+                   persistentContainer: persistentContainer)
+
+        teamStatsViewController.delegate = self
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationTitleLabel?.text = "Stats"
-        navigationDetailLabel?.text = "@ \(event.friendlyNameWithYear)"
+        navigationTitle = "Stats"
+        navigationSubtitle = "@ \(event.friendlyNameWithYear)"
+    }
 
-        // Only show event stats if year is 2016 or onward
-        if Int(event.year) >= 2016 {
-            viewControllers = [teamStatsViewController, eventStatsViewController]
-            containerViews = [teamStatsView, eventStatsView]
-        } else {
-            segmentedControlView?.isHidden = true
-            eventStatsView.isHidden = true
+    // MARK: - Interface Actions
 
-            viewControllers = [teamStatsViewController]
-            containerViews = [teamStatsView]
-        }
+    @objc private func showFilter() {
+        let selectTableViewController = SelectTableViewController<EventStatsContainerViewController>(current: teamStatsViewController.filter, options: EventTeamStatFilter.allCases, persistentContainer: persistentContainer)
+        selectTableViewController.title = "Sort stats by"
+        selectTableViewController.delegate = self
+
+        let nav = UINavigationController(rootViewController: selectTableViewController)
+        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissFilter))
+
+        navigationController?.present(nav, animated: true, completion: nil)
+    }
+
+    @objc private func dismissFilter() {
+        navigationController?.dismiss(animated: true, completion: nil)
     }
 
     // MARK: - Container
@@ -45,56 +80,27 @@ class EventStatsContainerViewController: ContainerViewController {
         }
     }
 
-    // MARK: - Navigation
+}
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "TeamStatsEmbed" {
-            teamStatsViewController = segue.destination as! EventTeamStatsTableViewController
-            teamStatsViewController.event = event
-            teamStatsViewController.persistentContainer = persistentContainer
-            teamStatsViewController.teamSelected = { [weak self] team in
-                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
-            }
-        } else if segue.identifier == "EventStatsEmbed" {
-            eventStatsViewController = segue.destination as! EventStatsViewController
-            eventStatsViewController.event = event
-            eventStatsViewController.persistentContainer = persistentContainer
-        } else if segue.identifier == "SelectFilterSegue" {
-            let nav = segue.destination as! UINavigationController
-            let selectTableViewController = SelectTableViewController<Int>()
-            selectTableViewController.title = "Sort stats by"
-            selectTableViewController.current = teamStatsViewController.filter.rawValue
-            selectTableViewController.compareCurrent = { current, option in
-                return current == option
-            }
-            selectTableViewController.options = Array(EventTeamStatFilter.opr.rawValue..<EventTeamStatFilter.max.rawValue)
-            selectTableViewController.optionSelected = { [weak self] filter in
-                guard let filterType = EventTeamStatFilter(rawValue: filter) else {
-                    fatalError("Invalid filter")
-                }
-                self?.teamStatsViewController.filter = filterType
-            }
-            selectTableViewController.optionString = { filter in
-                switch filter {
-                case EventTeamStatFilter.opr.rawValue:
-                    return "OPR"
-                case EventTeamStatFilter.dpr.rawValue:
-                    return "DPR"
-                case EventTeamStatFilter.ccwm.rawValue:
-                    return "CCWM"
-                case EventTeamStatFilter.teamNumber.rawValue:
-                    return "Team #"
-                default:
-                    return ""
-                }
-            }
-            nav.viewControllers = [selectTableViewController]
-        } else if segue.identifier == "TeamAtEventSegue" {
-            let team = sender as! Team
-            let teamAtEventViewController = segue.destination as! TeamAtEventViewController
-            teamAtEventViewController.team = team
-            teamAtEventViewController.event = event
-            teamAtEventViewController.persistentContainer = persistentContainer
-        }
+extension EventStatsContainerViewController: SelectTableViewControllerDelegate {
+
+    typealias OptionType = EventTeamStatFilter
+
+    func optionSelected(_ option: OptionType) {
+        teamStatsViewController.filter = option
     }
+
+    func titleForOption(_ option: OptionType) -> String {
+        return option.rawValue
+    }
+
+}
+
+extension EventStatsContainerViewController: EventTeamStatsSelectionDelegate {
+
+    func eventTeamStatSelected(_ eventTeamStat: EventTeamStat) {
+        let teamAtEventViewController = TeamAtEventViewController(team: eventTeamStat.team!, event: event, persistentContainer: persistentContainer)
+        self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
+    }
+
 }

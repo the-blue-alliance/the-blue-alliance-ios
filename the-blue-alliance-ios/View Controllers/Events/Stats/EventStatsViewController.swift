@@ -6,26 +6,29 @@ import React
 
 class EventStatsViewController: TBAViewController, Observable, ReactNative {
 
-    var event: Event!
+    private let event: Event
 
     // MARK: - React Native
 
-    lazy internal var reactBridge: RCTBridge = {
-        return RCTBridge(delegate: self, launchOptions: [:])
-    }()
-    private var eventStatsView: RCTRootView?
-
-    // MARK: - Persistable
-
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
-                DispatchQueue.main.async {
-                    self?.updateEventStatsView()
-                }
-            }
+    private lazy var eventStatsView: RCTRootView? = {
+        // Event stats only exist for 2016 and onward
+        if Int(event.year) < 2016 {
+            return nil
         }
-    }
+        guard let insights = event.insights else {
+            return nil
+        }
+
+        let moduleName = "EventInsights\(event.year)"
+        let eventStatsView = RCTRootView(bundleURL: sourceURL,
+                                         moduleName: moduleName,
+                                         initialProperties: insights,
+                                         launchOptions: [:])
+        // TODO: eventStatsView.loadingView
+        eventStatsView!.delegate = self
+        eventStatsView!.sizeFlexibility = .height
+        return eventStatsView
+    }()
 
     // MARK: - Observable
 
@@ -33,6 +36,24 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
     lazy var contextObserver: CoreDataContextObserver<Event> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
+
+    // MARK: - Init
+
+    init(event: Event, persistentContainer: NSPersistentContainer) {
+        self.event = event
+
+        super.init(persistentContainer: persistentContainer)
+
+        contextObserver.observeObject(object: event, state: .updated) { [unowned self] (_, _) in
+            DispatchQueue.main.async {
+                self.updateEventStatsView()
+            }
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -51,35 +72,11 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
 
     // MARK: Interface Methods
 
-    func updateEventStatsView() {
-        // Event stats only exist for 2016 and onward
-        if Int(event.year) < 2016 {
-            return
-        }
-
-        guard let insights = event.insights else {
-            showNoDataView()
-            return
-        }
-
-        // If the event stats view already exists, don't set it up again
-        // Only update the properties for the view
-        if let eventStatsView = eventStatsView {
-            eventStatsView.appProperties = insights
-            return
-        }
-
-        let moduleName = "EventInsights\(event!.year)"
-
-        guard let eventStatsView = RCTRootView(bridge: reactBridge, moduleName: moduleName, initialProperties: insights) else {
+    func styleInterface() {
+        guard let eventStatsView = eventStatsView else {
             showErrorView()
             return
         }
-        self.eventStatsView = eventStatsView
-
-        // breakdownView.loadingView
-        eventStatsView.delegate = self
-        eventStatsView.sizeFlexibility = .height
 
         removeNoDataView()
         scrollView.addSubview(eventStatsView)
@@ -88,17 +85,15 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
         eventStatsView.autoPinEdgesToSuperviewEdges()
     }
 
+    func updateEventStatsView() {
+        if let eventStatsView = eventStatsView, let insights = event.insights {
+            eventStatsView.appProperties = insights
+        }
+    }
+
     func showNoDataView() {
         showNoDataView(with: "No stats for event")
     }
-
-    // MARK: - RCTBridgeDelegate
-
-    func sourceURL(for bridge: RCTBridge!) -> URL! {
-        // Fetch our downloaded JS bundle (or our local packager, if we're running in debug mode)
-        return sourceURL
-    }
-    // fallbackSourceURL
 
     // MARK: Refresh
 
@@ -121,11 +116,11 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
                 self.showErrorAlert(with: "Unable to refresh event stats - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 backgroundEvent.insights = insights
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })

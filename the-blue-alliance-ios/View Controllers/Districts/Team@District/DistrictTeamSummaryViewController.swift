@@ -3,25 +3,17 @@ import UIKit
 import CoreData
 import TBAKit
 
-class DistrictTeamSummaryTableViewController: TBATableViewController {
+protocol DistrictTeamSummaryViewControllerDelegate: AnyObject {
+    func eventPointsSelected(_ eventPoints: DistrictEventPoints)
+}
 
-    public var ranking: DistrictRanking!
-    private var sortedEventPoints: [DistrictEventPoints] {
-        return (ranking!.eventPoints?.sortedArray(using: [NSSortDescriptor(key: "event.startDate", ascending: true)]) as? [DistrictEventPoints]) ?? []
-    }
-    var eventPointsSelected: ((DistrictEventPoints) -> Void)?
+class DistrictTeamSummaryViewController: TBATableViewController {
 
-    // MARK: - Persistable
+    private let ranking: DistrictRanking
 
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            contextObserver.observeObject(object: ranking, state: .updated) { [weak self] (_, _) in
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                }
-            }
-        }
-    }
+    weak var delegate: DistrictTeamSummaryViewControllerDelegate?
+
+    private let sortedEventPoints: [DistrictEventPoints]
 
     // MARK: - Observable
 
@@ -30,13 +22,32 @@ class DistrictTeamSummaryTableViewController: TBATableViewController {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
 
+    // MARK: Init
+
+    init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer) {
+        self.ranking = ranking
+
+        sortedEventPoints = ranking.eventPoints?.sortedArray(using: [NSSortDescriptor(key: "event.startDate", ascending: true)]) as? [DistrictEventPoints] ?? []
+
+        super.init(persistentContainer: persistentContainer)
+
+        contextObserver.observeObject(object: ranking, state: .updated) { [unowned self] (_, _) in
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(UINib(nibName: String(describing: ReverseSubtitleTableViewCell.self), bundle: nil),
-                           forCellReuseIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier)
+        tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
     }
 
     // MARK: - Refresh
@@ -50,7 +61,7 @@ class DistrictTeamSummaryTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundDistrict = backgroundContext.object(with: self.ranking.district!.objectID) as! District
 
                 let localRankings = rankings?.compactMap({ (modelRanking) -> DistrictRanking? in
@@ -59,7 +70,7 @@ class DistrictTeamSummaryTableViewController: TBATableViewController {
                 })
                 backgroundDistrict.rankings = Set(localRankings ?? []) as NSSet
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })
@@ -99,16 +110,14 @@ class DistrictTeamSummaryTableViewController: TBATableViewController {
     }
 
     private func tableView(_ tableView: UITableView, reverseSubtitleCellAt indexPath: IndexPath) -> ReverseSubtitleTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier) as? ReverseSubtitleTableViewCell ?? ReverseSubtitleTableViewCell(style: .default, reuseIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier)
-        cell.selectionStyle = .none
-        return cell
+        return tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        if isEventPointsRow(row: indexPath.row), let eventPointsSelected = eventPointsSelected {
-            eventPointsSelected(sortedEventPoints[indexPath.row - 1])
+        if isEventPointsRow(row: indexPath.row) {
+            delegate?.eventPointsSelected(sortedEventPoints[indexPath.row - 1])
         }
     }
 

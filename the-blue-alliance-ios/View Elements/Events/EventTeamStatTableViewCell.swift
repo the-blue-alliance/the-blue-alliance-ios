@@ -1,27 +1,33 @@
 import UIKit
 
-class EventTeamStatTableViewCell: UITableViewCell {
-    static let reuseIdentifier = "EventTeamStatCell"
+class EventTeamStatTableViewCell: UITableViewCell, Reusable {
 
-    // Set statName before setting eventTeamStat
-    public var statName = "opr"
-    public var eventTeamStat: EventTeamStat? {
+    var viewModel: EventTeamStatCellViewModel? {
         didSet {
-            guard let eventTeamStat = eventTeamStat else {
-                return
-            }
-
-            nameLabel?.text = statName.uppercased()
-
-            if let stat = eventTeamStat.value(forKey: statName) as? Double {
-                statLabel?.text = String(format: "%.2f", stat)
-            } else {
-                statLabel?.text = "---"
-            }
+            configureCell()
         }
     }
 
-    @IBOutlet private var nameLabel: UILabel?
-    @IBOutlet private var statLabel: UILabel?
+    // MARK: - Reusable
+
+    static var nib: UINib? {
+        return UINib(nibName: String(describing: self), bundle: nil)
+    }
+
+    // MARK: - Interface Builder
+
+    @IBOutlet private weak var nameLabel: UILabel!
+    @IBOutlet private weak var statLabel: UILabel!
+
+    // MARK: - Private Methods
+
+    private func configureCell() {
+        guard let viewModel = viewModel else {
+            return
+        }
+
+        nameLabel.text = viewModel.statName
+        statLabel.text = viewModel.statValue
+    }
 
 }

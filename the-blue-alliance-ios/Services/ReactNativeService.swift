@@ -4,10 +4,7 @@ import Firebase
 import ZIPFoundation
 import Crashlytics
 
-// TODO: I can't seem to implement sourceURLForBridge: and fallbackSourceURLForBridge: in a protocol extension...
-protocol ReactNative: RCTBridgeDelegate {
-    var reactBridge: RCTBridge { get }
-
+protocol ReactNative {
     func showErrorView()
 }
 
@@ -90,10 +87,10 @@ class ReactNativeService {
     private var userDefaults: UserDefaults
     private var fileManager: FileManager
     private var firebaseStorage: Storage
-    private var firebaseOptions: FirebaseOptions
+    private var firebaseOptions: FirebaseOptions?
     internal var retryService: RetryService
 
-    init(userDefaults: UserDefaults, fileManager: FileManager,  firebaseStorage: Storage, firebaseOptions: FirebaseOptions, retryService: RetryService) {
+    init(userDefaults: UserDefaults, fileManager: FileManager,  firebaseStorage: Storage, firebaseOptions: FirebaseOptions?, retryService: RetryService) {
         self.userDefaults = userDefaults
         self.fileManager = fileManager
         self.firebaseStorage = firebaseStorage
@@ -102,7 +99,7 @@ class ReactNativeService {
     }
 
     private var remoteBundleReference: StorageReference? {
-        guard let storageBucket = firebaseOptions.storageBucket else {
+        guard let storageBucket = firebaseOptions?.storageBucket else {
             assertionFailure("Storage bucket nil - check GoogleService-Info.plist")
             return nil
         }

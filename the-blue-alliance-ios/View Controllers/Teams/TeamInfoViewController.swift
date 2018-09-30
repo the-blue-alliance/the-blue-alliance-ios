@@ -2,19 +2,19 @@ import UIKit
 import TBAKit
 import CoreData
 
-enum TeamInfoSection: Int {
+private enum TeamInfoSection: Int {
     case title
     case link
     case max
 }
 
-enum TeamTitleRow: Int {
+private enum TeamTitleRow: Int {
     case nickname
     case sponsors
     case max
 }
 
-enum TeamLinkRow: Int {
+private enum TeamLinkRow: Int {
     case website
     case twitter
     case youtube
@@ -22,16 +22,33 @@ enum TeamLinkRow: Int {
     case max
 }
 
-class TeamInfoTableViewController: TBATableViewController {
+class TeamInfoViewController: TBATableViewController {
 
-    var team: Team!
-    var sponsorsExpanded: Bool = false
+    private var team: Team
+    private let urlOpener: URLOpener
+
+    private var sponsorsExpanded: Bool = false
+
+    // MARK: - Init
+
+    init(team: Team, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
+        self.team = team
+        self.urlOpener = urlOpener
+
+        super.init(style: .grouped, persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.sectionFooterHeight = 0
-        tableView.register(UINib(nibName: String(describing: InfoTableViewCell.self), bundle: nil), forCellReuseIdentifier: InfoTableViewCell.reuseIdentifier)
+        tableView.registerReusableCell(InfoTableViewCell.self)
     }
 
     // MARK: - Refresh
@@ -45,12 +62,12 @@ class TeamInfoTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh team - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 if let modelTeam = modelTeam {
                     Team.insert(with: modelTeam, in: backgroundContext)
                 }
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })
@@ -58,7 +75,7 @@ class TeamInfoTableViewController: TBATableViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
-        // TODO: This is always goign to exist... check on something else?
+        // TODO: This is always going to exist... check on something else?
         return team.name == nil
     }
 
@@ -101,10 +118,9 @@ class TeamInfoTableViewController: TBATableViewController {
         return cell
     }
 
-    func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: InfoTableViewCell.reuseIdentifier, for: indexPath) as! InfoTableViewCell
-
-        cell.team = team
+    private func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as InfoTableViewCell
+        cell.viewModel = InfoCellViewModel(team: team)
 
         cell.accessoryType = .none
         cell.selectionStyle = .none
@@ -112,8 +128,8 @@ class TeamInfoTableViewController: TBATableViewController {
         return cell
     }
 
-    func tableView(_ tableView: UITableView, sponsorCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
+    private func tableView(_ tableView: UITableView, sponsorCellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
 
         cell.textLabel?.text = team.name
         cell.textLabel?.textColor = .darkGray
@@ -131,8 +147,8 @@ class TeamInfoTableViewController: TBATableViewController {
         return cell
     }
 
-    func tableView(_ tableView: UITableView, linkCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
+    private func tableView(_ tableView: UITableView, linkCellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
 
         var row = indexPath.row
         if team.website == nil, row >= TeamLinkRow.website.rawValue {
@@ -184,9 +200,8 @@ class TeamInfoTableViewController: TBATableViewController {
             }
 
             if let urlString = urlString {
-                let url = URL(string: urlString)
-                if let url = url, UIApplication.shared.canOpenURL(url) {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                if let url = URL(string: urlString), urlOpener.canOpenURL(url) {
+                    urlOpener.open(url, options: [:], completionHandler: nil)
                 }
             }
         }

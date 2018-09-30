@@ -1,86 +1,71 @@
 import Foundation
+import CoreData
 import UIKit
 
 class TeamAtEventViewController: ContainerViewController {
 
-    public var team: Team!
-    public var event: Event!
+    private let team: Team
+    private let event: Event
 
-    internal var summaryViewController: TeamSummaryTableViewController!
-    @IBOutlet internal var summaryView: UIView!
+    // MARK: - Init
 
-    internal var matchesViewController: MatchesTableViewController!
-    @IBOutlet internal var matchesView: UIView!
+    init(team: Team, event: Event, persistentContainer: NSPersistentContainer) {
+        self.team = team
+        self.event = event
 
-    internal var statsViewController: TeamStatsTableViewController!
-    @IBOutlet internal var statsView: UIView!
+        let summaryViewController: TeamSummaryViewController = TeamSummaryViewController(team: team, event: event, persistentContainer: persistentContainer)
+        let matchesViewController: MatchesViewController = MatchesViewController(event: event, team: team, persistentContainer: persistentContainer)
+        let statsViewController: TeamStatsViewController = TeamStatsViewController(team: team, event: event, persistentContainer: persistentContainer)
+        let awardsViewController: EventAwardsViewController = EventAwardsViewController(event: event, team: team, persistentContainer: persistentContainer)
 
-    internal var awardsViewController: EventAwardsTableViewController!
-    @IBOutlet internal var awardsView: UIView!
+        super.init(viewControllers: [summaryViewController, matchesViewController, statsViewController, awardsViewController],
+                   segmentedControlTitles: ["Summary", "Matches", "Stats", "Awards"],
+                   persistentContainer: persistentContainer)
+
+        summaryViewController.delegate = self
+        matchesViewController.delegate = self
+        awardsViewController.delegate = self
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationTitleLabel?.text = "Team \(team.teamNumber)"
-        navigationDetailLabel?.text = "@ \(event.friendlyNameWithYear)"
-
-        viewControllers = [summaryViewController, matchesViewController, statsViewController, awardsViewController]
-        containerViews = [summaryView, matchesView, statsView, awardsView]
+        navigationTitle = "Team \(team.teamNumber)"
+        navigationSubtitle = "@ \(event.friendlyNameWithYear)"
     }
 
-    // MARK: - Navigation
+}
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "TeamAtEventSummaryEmbed" {
-            summaryViewController = segue.destination as! TeamSummaryTableViewController
-            summaryViewController.event = event
-            summaryViewController.team = team
-            summaryViewController.awardsSelected = { [weak self] in
-                self?.performSegue(withIdentifier: "AwardsSegue", sender: nil)
-            }
-            summaryViewController.matchSelected = { [weak self] match in
-                self?.performSegue(withIdentifier: "MatchSegue", sender: match)
-            }
-        } else if segue.identifier == "TeamAtEventMatchesEmbed" {
-            matchesViewController = segue.destination as! MatchesTableViewController
-            matchesViewController.event = event
-            matchesViewController.team = team
-            matchesViewController.matchSelected = { [weak self] match in
-                self?.performSegue(withIdentifier: "MatchSegue", sender: match)
-            }
-        } else if segue.identifier == "TeamAtEventStatsEmbed" {
-            statsViewController = segue.destination as! TeamStatsTableViewController
-            statsViewController.event = event
-            statsViewController.team = team
-        } else if segue.identifier == "TeamAtEventAwardsEmbed" {
-            awardsViewController = segue.destination as! EventAwardsTableViewController
-            awardsViewController.event = event
-            awardsViewController.team = team
-            awardsViewController.teamSelected = { [weak self] team in
-                // Don't push to team@event for team we're already showing team@event for
-                guard let localTeam = self?.team, team != localTeam else {
-                    return
-                }
-                self?.performSegue(withIdentifier: "TeamAtEventSegue", sender: team)
-            }
-        } else if segue.identifier == "MatchSegue" {
-            let match = sender as! Match
-            let matchViewController = segue.destination as! MatchViewController
-            matchViewController.match = match
-            matchViewController.team = team
-            matchViewController.persistentContainer = persistentContainer
-        } else if segue.identifier == "AwardsSegue" {
-            let awardsViewController = segue.destination as! EventAwardsViewController
-            awardsViewController.event = event
-            awardsViewController.team = team
-            awardsViewController.persistentContainer = persistentContainer
-        } else if segue.identifier == "TeamAtEventSegue" {
-            let team = sender as! Team
-            let teamAtEventViewController = segue.destination as! TeamAtEventViewController
-            teamAtEventViewController.team = team
-            teamAtEventViewController.event = event
-            teamAtEventViewController.persistentContainer = persistentContainer
+extension TeamAtEventViewController: MatchesViewControllerDelegate, TeamSummaryViewControllerDelegate {
+
+    func awardsSelected() {
+        let awardsViewController = EventAwardsContainerViewController(event: event, team: team, persistentContainer: persistentContainer)
+        self.navigationController?.pushViewController(awardsViewController, animated: true)
+    }
+
+    func matchSelected(_ match: Match) {
+        let matchViewController = MatchContainerViewController(match: match, team: team, persistentContainer: persistentContainer)
+        self.navigationController?.pushViewController(matchViewController, animated: true)
+    }
+
+}
+
+extension TeamAtEventViewController: EventAwardsViewControllerDelegate {
+
+    func teamSelected(_ team: Team) {
+        // Don't push to team@event for team we're already showing team@event for
+        if self.team == team {
+            return
         }
+
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, persistentContainer: persistentContainer)
+        self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
 }

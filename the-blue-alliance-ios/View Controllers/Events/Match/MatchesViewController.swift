@@ -3,24 +3,38 @@ import UIKit
 import TBAKit
 import CoreData
 
-class MatchesTableViewController: TBATableViewController {
+protocol MatchesViewControllerDelegate: AnyObject {
+    func matchSelected(_ match: Match)
+}
 
-    var event: Event!
-    var team: Team?
+class MatchesViewController: TBATableViewController {
 
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            updateDataSource()
-        }
+    private let event: Event
+    private let team: Team?
+
+    weak var delegate: MatchesViewControllerDelegate?
+    private lazy var dataSource: TableViewDataSource<Match, MatchesViewController> = {
+        let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "compLevelInt", ascending: true),
+                                        NSSortDescriptor(key: "setNumber", ascending: true),
+                                        NSSortDescriptor(key: "matchNumber", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "compLevelInt", cacheName: nil)
+        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
+    }()
+
+    // MARK: - Init
+
+    init(event: Event, team: Team? = nil, persistentContainer: NSPersistentContainer) {
+        self.event = event
+        self.team = team
+
+        super.init(persistentContainer: persistentContainer)
     }
-    var matchSelected: ((Match) -> Void)?
 
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        tableView.register(UINib(nibName: String(describing: MatchTableViewCell.self), bundle: nil), forCellReuseIdentifier: MatchTableViewCell.reuseIdentifier)
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: - Refreshing
@@ -34,7 +48,7 @@ class MatchesTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh event matches - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
 
                 let localMatches = matches?.map({ (modelMatch) -> Match in
@@ -42,7 +56,7 @@ class MatchesTableViewController: TBATableViewController {
                 })
                 backgroundEvent.matches = Set(localMatches ?? []) as NSSet
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })
@@ -50,7 +64,7 @@ class MatchesTableViewController: TBATableViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
-        if let matches = dataSource?.fetchedResultsController.fetchedObjects, matches.isEmpty {
+        if let matches = dataSource.fetchedResultsController.fetchedObjects, matches.isEmpty {
             return true
         }
         return false
@@ -58,35 +72,11 @@ class MatchesTableViewController: TBATableViewController {
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<Match, MatchesTableViewController>?
-
-    fileprivate func setupDataSource() {
-        guard let persistentContainer = persistentContainer else {
-            return
-        }
-
-        let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
-
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "compLevelInt", ascending: true),
-                                        NSSortDescriptor(key: "setNumber", ascending: true),
-                                        NSSortDescriptor(key: "matchNumber", ascending: true)]
-
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "compLevelInt", cacheName: nil)
-
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: MatchTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
-    fileprivate func updateDataSource() {
-        if let dataSource = dataSource {
-            dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-        } else {
-            setupDataSource()
-        }
-    }
-
-    fileprivate func setupFetchRequest(_ request: NSFetchRequest<Match>) {
+    private func setupFetchRequest(_ request: NSFetchRequest<Match>) {
         if let team = team {
             request.predicate = NSPredicate(format: "event == %@ AND (ANY redAlliance == %@ OR ANY blueAlliance == %@)", event, team, team)
         } else {
@@ -97,10 +87,8 @@ class MatchesTableViewController: TBATableViewController {
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let match = dataSource?.object(at: indexPath)
-        if let match = match, let matchSelected = matchSelected {
-            matchSelected(match)
-        }
+        let match = dataSource.object(at: indexPath)
+        delegate?.matchSelected(match)
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -109,19 +97,15 @@ class MatchesTableViewController: TBATableViewController {
 
 }
 
-extension MatchesTableViewController: TableViewDataSourceDelegate {
+extension MatchesViewController: TableViewDataSourceDelegate {
 
     func title(for section: Int) -> String? {
-        guard let dataSource = dataSource else {
-            return nil
-        }
         let firstMatch = dataSource.object(at: IndexPath(row: 0, section: section))
         return "\(firstMatch.compLevelString) Matches"
     }
 
     func configure(_ cell: MatchTableViewCell, for object: Match, at indexPath: IndexPath) {
-        cell.team = team
-        cell.match = object
+        cell.viewModel = MatchViewModel(match: object, team: team)
     }
 
     func showNoDataView() {

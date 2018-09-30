@@ -15,6 +15,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    // MARK: - View Hiearchy
+
+    // Root VC is a split view controller, with the left side being a tab bar,
+    // and the right side being a navigation controller
+    lazy private var rootSplitViewController: UISplitViewController = { [unowned self] in
+        let splitViewController = UISplitViewController()
+
+        let eventsViewController = EventsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
+                                                                 urlOpener: urlOpener,
+                                                                 userDefaults: userDefaults,
+                                                                 persistentContainer: persistentContainer)
+        let teamsViewController = TeamsContainerViewController(urlOpener: urlOpener,
+                                                               persistentContainer: persistentContainer)
+        let districtsViewController = DistrictsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
+                                                                       urlOpener: urlOpener,
+                                                                       userDefaults: userDefaults,
+                                                                       persistentContainer: persistentContainer)
+        let settingsViewController = SettingsViewController(urlOpener: urlOpener,
+                                                            persistentContainer: persistentContainer)
+        let rootViewControllers: [UIViewController] = [eventsViewController, teamsViewController, districtsViewController, settingsViewController]
+        tabBarController.viewControllers = rootViewControllers.compactMap({ (viewController) -> UIViewController? in
+            let navigationController = UINavigationController(rootViewController: viewController)
+            return navigationController
+        })
+
+        splitViewController.viewControllers = [tabBarController, emptyNavigationController]
+
+        splitViewController.preferredDisplayMode = .allVisible
+        splitViewController.delegate = self
+
+        return splitViewController
+    }()
+    private let tabBarController: UITabBarController = {
+        let tabBarController = UITabBarController()
+        tabBarController.tabBar.barTintColor = .white
+        return tabBarController
+    }()
     lazy var emptyNavigationController: UINavigationController = {
         guard let emptyViewController = Bundle.main.loadNibNamed("EmptyViewController", owner: nil, options: nil)?.first as? UIViewController else {
             fatalError("Unable to load empty view controller")
@@ -25,17 +62,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         return navigationController
     }()
+
+    // MARK: - Services
+
     lazy var persistentContainer: NSPersistentContainer = {
         return NSPersistentContainer(name: "TBA")
     }()
+    let userDefaults: UserDefaults = UserDefaults.standard
+    let tbaKit: TBAKit = TBAKit.sharedKit
+    let urlOpener: URLOpener = UIApplication.shared
+
     lazy var pushService: PushService = {
-        return PushService(userDefaults: UserDefaults.standard,
+        return PushService(userDefaults: userDefaults,
                            myTBA: MyTBA.shared,
                            retryService: RetryService())
     }()
     lazy var realtimeDatabaseService: RealtimeDatabaseService = {
         return RealtimeDatabaseService(databaseReference: Database.database().reference())
     }()
+    lazy var remoteConfigService: RemoteConfigService = {
+        return RemoteConfigService(remoteConfig: RemoteConfig.remoteConfig(),
+                                   retryService: RetryService())
+    }()
+    lazy var reactNativeService: ReactNativeService = {
+        return ReactNativeService(userDefaults: userDefaults,
+                                  fileManager: FileManager.default,
+                                  firebaseStorage: Storage.storage(),
+                                  firebaseOptions: FirebaseOptions.defaultOptions(),
+                                  retryService: RetryService())
+    }()
+
+
+    // MARK: - UIApplicationDelegate
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         AppDelegate.setupAppearance()
@@ -52,15 +110,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
 
         // TODO: Load this from some secrets file
-        TBAKit.sharedKit.apiKey = "OHBBu0QbDiIJYKhAedTfkTxdrkXde1C21Sr90L1f1Pac4ahl4FJbNptNiXbCSCfH"
+        tbaKit.apiKey = "OHBBu0QbDiIJYKhAedTfkTxdrkXde1C21Sr90L1f1Pac4ahl4FJbNptNiXbCSCfH"
 
         // Setup our React Native service
-        AppDelegate.setupReactNativeService()
-
-        // Setup our remote config - to be used by our app setup operation
-        let remoteConfigService = RemoteConfigService(remoteConfig: RemoteConfig.remoteConfig(),
-                                                      retryService: RetryService())
-        remoteConfigService.registerRetryable()
+        reactNativeService.registerRetryable(initiallyRetry: true)
 
         // Listen for changes to FMS availability
         registerForFMSStatusChanges()
@@ -69,28 +122,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer,
                                                   remoteConfigService: remoteConfigService)
         weak var weakAppSetupOperation = appSetupOperation
-        appSetupOperation.completionBlock = { [weak self] in
+        appSetupOperation.completionBlock = { [unowned self] in
             if let error = weakAppSetupOperation?.completionError as NSError? {
                 Crashlytics.sharedInstance().recordError(error)
                 DispatchQueue.main.async {
                     AppDelegate.showFatalError(error, in: window)
                 }
             } else {
+                self.remoteConfigService.registerRetryable()
+
                 DispatchQueue.main.async {
-                    guard let rootSplitViewController = self?.rootSplitViewController else {
-                        fatalError("Unable to setup rootSplitViewController")
-                    }
-                    guard let window = self?.window else {
+                    guard let window = self.window else {
                         fatalError("Window not setup when setting root vc")
                     }
                     guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
                         fatalError("Unable to snapshot root view controller")
                     }
-                    rootSplitViewController.view.addSubview(snapshot)
-                    window.rootViewController = rootSplitViewController
+                    self.rootSplitViewController.view.addSubview(snapshot)
+                    window.rootViewController = self.rootSplitViewController
 
-                    if RemoteConfig.remoteConfig().myTBAEnabled {
-                        self?.setupMyTBA()
+                    if self.remoteConfigService.remoteConfig.myTBAEnabled {
+                        self.setupMyTBA()
                     }
 
                     // 0.35 is an iOS animation magic number... for now
@@ -153,15 +205,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         MyTBA.shared.authenticationProvider.add(observer: pushService)
     }
 
-    private static func setupReactNativeService() {
-        let reactNativeService = ReactNativeService(userDefaults: UserDefaults.standard,
-                                                    fileManager: FileManager.default,
-                                                    firebaseStorage: Storage.storage(),
-                                                    firebaseOptions: FirebaseOptions.defaultOptions()!,
-                                                    retryService: RetryService())
-        reactNativeService.registerRetryable(initiallyRetry: true)
-    }
-
     private func setupGoogleAuthentication() {
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
@@ -170,6 +213,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if GIDSignIn.sharedInstance().hasAuthInKeychain() && Auth.auth().currentUser == nil {
             GIDSignIn.sharedInstance().signInSilently()
         }
+    }
+
+    private var launchViewController: UIViewController {
+        let launchStoryboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
+        guard let launchViewController = launchStoryboard.instantiateInitialViewController() else {
+            fatalError("Unable to load launch view controller")
+        }
+        return launchViewController
+    }
+
+    private func setupMyTBA() {
+        let myTBAViewController = MyTBAViewController(persistentContainer: persistentContainer)
+        tabBarController.viewControllers?.append(myTBAViewController)
+
+        // Assign our Push Service as a delegate to all push-related classes
+        AppDelegate.setupPushServiceDelegates(with: pushService)
+        // Kickoff background myTBA/Google sign in, along with setting up delegates
+        setupGoogleAuthentication()
     }
 
     private static func setupAppearance() {
@@ -182,74 +243,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationBarAppearance.setBackgroundImage(UIImage(), for: .default)
         navigationBarAppearance.isTranslucent = false
         navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-    }
-
-    private var launchViewController: UIViewController {
-        let launchStoryboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
-        guard let launchViewController = launchStoryboard.instantiateInitialViewController() else {
-            fatalError("Unable to load launch view controller")
-        }
-        return launchViewController
-    }
-
-    private var rootSplitViewController: UISplitViewController {
-        // Root VC is a split view controller, with the left side being a tab bar,
-        // and the right side being a navigation controller
-        let splitViewController = UISplitViewController()
-
-        let mainBundle = Bundle.main
-        let tabBarController = UITabBarController()
-        let rootStoryboards = [UIStoryboard(name: "EventsStoryboard", bundle: mainBundle),
-                               UIStoryboard(name: "TeamsStoryboard", bundle: mainBundle),
-                               UIStoryboard(name: "DistrictsStoryboard", bundle: mainBundle)]
-        tabBarController.viewControllers = rootStoryboards.compactMap({ (storyboard) -> UIViewController? in
-            return storyboard.instantiateInitialViewController()
-        })
-
-        tabBarController.viewControllers?.forEach({ (viewController) in
-            guard let navigationController = viewController as? UINavigationController else {
-                fatalError("Root VC in controller should be a navigation controller")
-            }
-            guard let dataViewController = navigationController.topViewController as? Persistable else {
-                fatalError("Root view controller in navigation controller should be data vc")
-            }
-            dataViewController.persistentContainer = self.persistentContainer
-        })
-
-        // Moving to a world where storyboards don't exist
-        let rootViewControllers = [SettingsViewController(persistentContainer: self.persistentContainer,
-                                                          urlOpener: UIApplication.shared)]
-        for rootViewController in rootViewControllers {
-            let navigationController = UINavigationController(rootViewController: rootViewController)
-            tabBarController.viewControllers?.append(navigationController)
-        }
-
-        splitViewController.viewControllers = [tabBarController, emptyNavigationController]
-
-        splitViewController.preferredDisplayMode = .allVisible
-        splitViewController.delegate = self
-
-        return splitViewController
-    }
-
-    func setupMyTBA() {
-        guard let rootSplitViewController = window?.rootViewController as? UISplitViewController else {
-            return
-        }
-        guard let tabBarController = rootSplitViewController.viewControllers.first as? UITabBarController else {
-            return
-        }
-
-        let myTBAStoryboard = UIStoryboard(name: "MyTBAStoryboard", bundle: nil)
-        guard let myTBAViewController = myTBAStoryboard.instantiateInitialViewController() else {
-            return
-        }
-        tabBarController.viewControllers?.append(myTBAViewController)
-
-        // Assign our Push Service as a delegate to all push-related classes
-        AppDelegate.setupPushServiceDelegates(with: pushService)
-        // Kickoff background myTBA/Google sign in, along with setting up delegates
-        setupGoogleAuthentication()
     }
 
 }
@@ -315,9 +308,8 @@ extension AppDelegate: UISplitViewControllerDelegate {
         // If our split view controller is collapsed and we're trying to show a detail view,
         // push it on the master navigation stack
         if splitViewController.isCollapsed,
-            let masterTabBarController = splitViewController.viewControllers.first as? UITabBarController,
             // Need to get the VC for the currently selected tab...
-            let masterNavigationController = masterTabBarController.selectedViewController as? UINavigationController {
+            let masterNavigationController = tabBarController.selectedViewController as? UINavigationController {
             // We want to push the view controller, but make sure we're not pushing something in a nav controller
             guard let detailNavigationController = vc as? UINavigationController else {
                 return false
@@ -342,11 +334,10 @@ extension AppDelegate: UISplitViewControllerDelegate {
         if let detailNavigationController = splitViewController.viewControllers.last as? UINavigationController,
             detailNavigationController.restorationIdentifier != kNoSelectionNavigationController {
             // This is a view controller we want to push
-            if let masterTabBarController = splitViewController.viewControllers.first as? UITabBarController,
-                let masterNavigationController = masterTabBarController.selectedViewController as? UINavigationController {
+            if let masterNavigationController = tabBarController.selectedViewController as? UINavigationController {
                 // Add the detail navigation controller stack to our root navigation controller
                 masterNavigationController.viewControllers += detailNavigationController.viewControllers
-                return masterTabBarController
+                return tabBarController
             }
         }
 
@@ -358,14 +349,13 @@ extension AppDelegate: UISplitViewControllerDelegate {
         // and setup the detail view controller to be the primary view controller
         //
         // Otherwise, return our detail
-        if let masterTabViewController = splitViewController.viewControllers.first as? UITabBarController,
-            let masterNavigationController = masterTabViewController.selectedViewController as? UINavigationController,
+        if let masterNavigationController = tabBarController.selectedViewController as? UINavigationController,
             masterNavigationController.topViewController?.restorationIdentifier != kNoSelectionNavigationController {
             // We want to seperate this event view controller in to the detail view controller
             if let detailViewControllers = masterNavigationController.popToRootViewController(animated: true) {
                 let detailNavigationController = UINavigationController()
                 detailNavigationController.viewControllers = detailViewControllers
-                splitViewController.viewControllers = [masterTabViewController, detailNavigationController]
+                splitViewController.viewControllers = [tabBarController, detailNavigationController]
 
                 return detailNavigationController
             }

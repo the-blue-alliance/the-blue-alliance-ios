@@ -86,12 +86,6 @@ extension Event: Locatable, Managed {
 
     // hybridType is used a mechanism for sorting Events properly in fetch result controllers... they use a variety
     // of event data to kinda "move around" events in our data model to get groups/order right
-    // Caution: Here be dragons...
-    // Preseason < Regionals < Districts (sorted alphabetically by abbrev), DCMP Divisions, DCMP Finals, CMP Divisions, CMP Finals, Offseason, others
-    // District events will be sorted together based on their district
-    // NOTE: THIS IS NOT A PERFECT SORT OF EVENTS - since we use a string, things get sorted based on string sorting logic
-    // Ex: 1 is a district, and 100 is a preseason event, but 1 gets put before 100 which gets put before 2 (DCMPs)
-    // We can work on exanding this if it becomes a problem, but with the currenting filtering for the Events FRC it's not a problem
     private func calculateHybridType() -> String {
         var hybridType = String(eventType)
         // Group districts together, group district CMPs together
@@ -160,7 +154,10 @@ extension Event: Locatable, Managed {
             case EventType.preseason.rawValue:
                 weekString = "Preseason"
             case EventType.offseason.rawValue:
-                weekString = "Offseason"
+                guard let month = month else {
+                    return "Offseason"
+                }
+                return "\(month) Offseason"
             case EventType.festivalOfChampions.rawValue:
                 weekString = "Festival of Champions"
             default:
@@ -228,6 +225,64 @@ extension Event: Locatable, Managed {
             return false
         }
         return Date().isBetween(date: startDate, andDate: endDate)
+    }
+
+    public var month: String? {
+        guard let startDate = startDate else {
+            return nil
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM"
+        return dateFormatter.string(from: startDate)
+    }
+
+    // An array of events that are used to represent their corresponding week in the Week selector
+    // We need a full object as opposed to a number because of CMP, off-season, etc.
+    // TODO: Convert this to a data model that uses a Core Data model for init but isn't a Core Data model
+    static func weekEvents(for year: Int, in managedObjectContext: NSManagedObjectContext) -> [Event] {
+        let events = Event.fetch(in: managedObjectContext) { (fetchRequest) in
+            // Filter out CMP divisions - we don't want them below for our weeks calculation
+            fetchRequest.predicate = NSPredicate(format: "year == %ld && eventType != %ld", year, EventType.championshipDivision.rawValue)
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true), NSSortDescriptor(key: "eventType", ascending: true), NSSortDescriptor(key: "endDate", ascending: true)]
+        }
+
+        // Take one event for each week(type) to use for our weekEvents array
+        // ex: one Preseason, one Week 1, one Week 2..., one CMP #1, one CMP #2, one Offseason for each month
+        // Jesus, take the wheel
+        var handledWeeks: Set<Int> = []
+        var handledTypes: Set<Int> = []
+        var handledOffseasonMonths: Set<String> = []
+        return Array(events.compactMap({ (event) -> Event? in
+            let eventType = Int(event.eventType)
+            if let week = event.week {
+                // Make sure each week only shows up once
+                if handledWeeks.contains(week.intValue) {
+                    return nil
+                }
+                handledWeeks.insert(week.intValue)
+                return event
+            } else if eventType == EventType.championshipFinals.rawValue {
+                // Always add all CMP finals
+                return event
+            } else if eventType == EventType.offseason.rawValue {
+                // Split all off-season events in to individual month sections
+                guard let month = event.month else {
+                    return nil
+                }
+                if handledOffseasonMonths.contains(month) {
+                    return nil
+                }
+                handledOffseasonMonths.insert(month)
+                return event
+            } else {
+                // Make sure we only have preseason, unlabeled once
+                if handledTypes.contains(eventType) {
+                    return nil
+                }
+                handledTypes.insert(eventType)
+                return event
+            }
+        })).sorted()
     }
 
 }

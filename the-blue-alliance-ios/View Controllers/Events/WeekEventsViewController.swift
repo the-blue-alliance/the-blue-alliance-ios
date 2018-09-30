@@ -1,0 +1,146 @@
+import CoreData
+import TBAKit
+
+protocol WeekEventsDelegate: AnyObject {
+    func weekEventUpdated()
+}
+
+class WeekEventsViewController: EventsViewController {
+
+    private let year: Int
+    weak var weekEventsDelegate: WeekEventsDelegate?
+
+    // The selected Event from the weekEvents array to represent the Week to show
+    // We need a full object as opposed to a number because of CMP, off-season, etc.
+    var weekEvent: Event? {
+        didSet {
+            updateDataSource()
+            DispatchQueue.main.async {
+                // TODO: Scroll to top
+            }
+            weekEventsDelegate?.weekEventUpdated()
+        }
+    }
+    var weeks: [Event] = []
+
+    init(year: Int, persistentContainer: NSPersistentContainer) {
+        self.year = year
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Refreshable
+
+    override func refresh() {
+        removeNoDataView()
+
+        // Default to refreshing the currently selected year
+        // Fall back to the init'd year (used during initial refresh)
+        var year = self.year
+        if let weekEventYear = weekEvent?.year {
+            year = Int(weekEventYear)
+        }
+
+        var request: URLSessionDataTask?
+        request = TBAKit.sharedKit.fetchEvents(year: year, completion: { (events, error) in
+            if let error = error {
+                self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
+            }
+
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                events?.forEach({ (modelEvent) in
+                    Event.insert(with: modelEvent, in: backgroundContext)
+                })
+
+                backgroundContext.saveOrRollback()
+                self.removeRequest(request: request!)
+
+                self.setupWeeks()
+            })
+        })
+        addRequest(request: request!)
+    }
+
+    // MARK: - EventsViewControllerDataSourceConfiguration
+
+    override var fetchRequestPredicate: NSPredicate {
+        if let weekEvent = weekEvent {
+            if let week = weekEvent.week {
+                // Event has a week - filter based on the week
+                return NSPredicate(format: "week == %ld && year == %ld", week.intValue, weekEvent.year)
+            } else {
+                if Int(weekEvent.eventType) == EventType.championshipFinals.rawValue {
+                    // 2017 and onward - handle multiple CMPs
+                    return NSPredicate(format: "(eventType == %ld || eventType == %ld) && year == %ld && (key == %@ || parentEventKey == %@)", EventType.championshipFinals.rawValue, EventType.championshipDivision.rawValue, weekEvent.year, weekEvent.key!, weekEvent.key!)
+                } else if Int(weekEvent.eventType) == EventType.offseason.rawValue {
+                    // Get all off season events for selected month
+                    // Conversion stuff, since Core Data still uses NSDate's
+                    let firstDayOfMonth = NSDate(timeIntervalSince1970: weekEvent.startDate!.startOfMonth().timeIntervalSince1970)
+                    let lastDayOfMonth = NSDate(timeIntervalSince1970: weekEvent.startDate!.endOfMonth().timeIntervalSince1970)
+                    return NSPredicate(format: "eventType == %ld && year == %ld && (startDate > %@) AND (startDate <= %@)", EventType.offseason.rawValue, weekEvent.year, firstDayOfMonth, lastDayOfMonth)
+                } else {
+                    return NSPredicate(format: "eventType == %ld && year == %ld", weekEvent.eventType, weekEvent.year)
+                }
+            }
+        }
+        return NSPredicate(format: "year == -1")
+    }
+
+    // MARK: - Private
+
+    func setupWeeks() {
+        // Only setup weeks if we don't have a currently selected week
+        if weekEvent != nil {
+            return
+        }
+
+        let weekEvents = Event.weekEvents(for: year, in: persistentContainer.viewContext)
+
+        if year == Calendar.current.year {
+            // If it's the current year, setup the current week for this year
+            setupCurrentSeasonWeek()
+        } else if let firstWeekEvent = weekEvents.first {
+            // Otherwise, default to the first week for this years
+            weekEvent = firstWeekEvent
+        }
+    }
+
+    func setupCurrentSeasonWeek() {
+        // Fetch all events where endDate is today or after today
+        let date = Date()
+
+        // Remove time from date - we only care about the day
+        // We don't want to be too granular, or we bump forward too fast
+        let components = Calendar.current.dateComponents([.day, .month, .year], from: date)
+
+        // Conversion stuff because Core Data still uses NSDates
+        guard let swiftDate = Calendar.current.date(from: components) else {
+            showErrorAlert(with: "Unable to setup current season week - datetime conversion failed")
+            return
+        }
+        let coreDataDate = NSDate(timeIntervalSince1970: swiftDate.timeIntervalSince1970)
+
+        // Find the first non-finished event for the selected year
+        let event = Event.fetchSingleObject(in: persistentContainer.viewContext) { (fetchRequest) in
+            fetchRequest.predicate = NSPredicate(format: "year == %ld && endDate >= %@ && eventType != %ld", year, coreDataDate, EventType.championshipDivision.rawValue)
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "endDate", ascending: true)]
+        }
+        // Find the first overall event for the selected year
+        let firstEvent = Event.fetchSingleObject(in: persistentContainer.viewContext) { (fetchRequest) in
+            fetchRequest.predicate = NSPredicate(format: "year == %ld", year)
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
+        }
+
+        if let event = event {
+            weekEvent = event
+        } else if let firstEvent = firstEvent {
+            weekEvent = firstEvent
+        }
+    }
+
+
+}

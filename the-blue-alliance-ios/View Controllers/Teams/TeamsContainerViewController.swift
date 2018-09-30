@@ -3,34 +3,37 @@ import UIKit
 import CoreData
 import TBAKit
 
-private let TeamsEmbed = "TeamsEmbed"
-private let TeamSegue = "TeamSegue"
-
 class TeamsContainerViewController: ContainerViewController {
-    internal var teamsViewController: TeamsTableViewController!
-    @IBOutlet internal var teamsView: UIView!
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    private let urlOpener: URLOpener
 
-        viewControllers = [teamsViewController]
-        containerViews = [teamsView]
+    // MARK: - Init
+
+    init(urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
+        self.urlOpener = urlOpener
+
+        let teamsViewController = TeamsViewController(persistentContainer: persistentContainer)
+
+        super.init(viewControllers: [teamsViewController],
+                   persistentContainer: persistentContainer)
+
+        teamsViewController.delegate = self
+
+        title = "Teams"
+        tabBarItem.image = UIImage(named: "ic_people")
     }
 
-    // MARK: - Navigation
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == TeamSegue {
-            let teamViewController = (segue.destination as! UINavigationController).topViewController as! TeamViewController
-            teamViewController.team = sender as? Team
-            // TODO: Find a way to pass these down automagically like we did in the Obj-C version
-            teamViewController.persistentContainer = persistentContainer
-        } else if segue.identifier == TeamsEmbed {
-            teamsViewController = segue.destination as? TeamsTableViewController
-            teamsViewController?.teamSelected = { [weak self] team in
-                self?.performSegue(withIdentifier: TeamSegue, sender: team)
-            }
-        }
+}
+
+extension TeamsContainerViewController: TeamsViewControllerDelegate {
+
+    func teamSelected(_ team: Team) {
+        let teamViewController = TeamViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer)
+        self.navigationController?.pushViewController(teamViewController, animated: true)
     }
 
 }

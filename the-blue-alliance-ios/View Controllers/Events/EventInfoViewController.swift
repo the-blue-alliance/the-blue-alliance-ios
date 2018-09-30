@@ -2,14 +2,21 @@ import UIKit
 import TBAKit
 import CoreData
 
-enum EventInfoSection: Int {
+protocol EventInfoViewControllerDelegate: AnyObject {
+    func showAlliances()
+    func showAwards()
+    func showDistrictPoints()
+    func showStats()
+}
+
+private enum EventInfoSection: Int {
     case title
     case detail
     case link
     case max
 }
 
-enum EventDetailRow: Int {
+private enum EventDetailRow: Int {
     case alliances
     case districtPoints
     case stats
@@ -17,7 +24,7 @@ enum EventDetailRow: Int {
     case max
 }
 
-enum EventLinkRow: Int {
+private enum EventLinkRow: Int {
     case website
     case twitter
     case youtube
@@ -25,26 +32,12 @@ enum EventLinkRow: Int {
     case max
 }
 
-class EventInfoTableViewController: TBATableViewController, Observable {
+class EventInfoViewController: TBATableViewController, Observable {
 
-    public var event: Event!
+    private let event: Event
+    private let urlOpener: URLOpener
 
-    public var showAlliances: (() -> Void)?
-    public var showDistrictPoints: (() -> Void)?
-    public var showStats: (() -> Void)?
-    public var showAwards: (() -> Void)?
-
-    // MARK: - Persistable
-
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                }
-            }
-        }
-    }
+    weak var delegate: EventInfoViewControllerDelegate?
 
     // MARK: - Observable
 
@@ -53,13 +46,32 @@ class EventInfoTableViewController: TBATableViewController, Observable {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
 
+    // MARK: - Init
+
+    init(event: Event, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
+        self.event = event
+        self.urlOpener = urlOpener
+
+        super.init(style: .grouped, persistentContainer: persistentContainer)
+
+        contextObserver.observeObject(object: event, state: .updated) { [unowned self] (_, _) in
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.sectionFooterHeight = 0
-        tableView.register(UINib(nibName: String(describing: InfoTableViewCell.self), bundle: nil), forCellReuseIdentifier: InfoTableViewCell.reuseIdentifier)
+        tableView.registerReusableCell(InfoTableViewCell.self)
     }
 
     // MARK: - Refresh
@@ -73,12 +85,12 @@ class EventInfoTableViewController: TBATableViewController, Observable {
                 self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 if let modelEvent = modelEvent {
                     Event.insert(with: modelEvent, in: backgroundContext)
                 }
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })
@@ -128,9 +140,8 @@ class EventInfoTableViewController: TBATableViewController, Observable {
     }
 
     func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: InfoTableViewCell.reuseIdentifier, for: indexPath) as! InfoTableViewCell
-
-        cell.event = event
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as InfoTableViewCell
+        cell.viewModel = InfoCellViewModel(event: event)
 
         cell.accessoryType = .none
         cell.selectionStyle = .none
@@ -139,7 +150,7 @@ class EventInfoTableViewController: TBATableViewController, Observable {
     }
 
     func tableView(_ tableView: UITableView, detailCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
 
         var row = indexPath.row
         if event.district == nil, row >= EventDetailRow.districtPoints.rawValue {
@@ -165,7 +176,7 @@ class EventInfoTableViewController: TBATableViewController, Observable {
     }
 
     func tableView(_ tableView: UITableView, linkCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: basicCellReuseIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
 
         var row = indexPath.row
         if event.website == nil, row >= EventLinkRow.website.rawValue {
@@ -199,21 +210,13 @@ class EventInfoTableViewController: TBATableViewController, Observable {
 
             switch row {
             case EventDetailRow.alliances.rawValue:
-                if let showAlliances = showAlliances {
-                    showAlliances()
-                }
+                delegate?.showAlliances()
             case EventDetailRow.districtPoints.rawValue:
-                if let showDistrictPoints = showDistrictPoints {
-                    showDistrictPoints()
-                }
+                delegate?.showDistrictPoints()
             case EventDetailRow.stats.rawValue:
-                if let showStats = showStats {
-                    showStats()
-                }
+                delegate?.showStats()
             case EventDetailRow.awards.rawValue:
-                if let showAwards = showAwards {
-                    showAwards()
-                }
+                delegate?.showAwards()
             default:
                 break
             }
@@ -237,11 +240,8 @@ class EventInfoTableViewController: TBATableViewController, Observable {
                 break
             }
 
-            if let urlString = urlString {
-                let url = URL(string: urlString)
-                if let url = url, UIApplication.shared.canOpenURL(url) {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                }
+            if let urlString = urlString, let url = URL(string: urlString), urlOpener.canOpenURL(url) {
+                urlOpener.open(url, options: [:], completionHandler: nil)
             }
 
             tableView.deselectRow(at: indexPath, animated: true)

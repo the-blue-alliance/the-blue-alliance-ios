@@ -1,7 +1,6 @@
 import Foundation
 import UIKit
 
-// TODO: For UI testing, check command line args to see if we're UI testing and need our host app
 private func delegateClassName() -> String? {
     return NSClassFromString("XCTestCase") == nil ? NSStringFromClass(AppDelegate.self) : NSStringFromClass(TestAppDelegate.self)
 }

@@ -3,44 +3,62 @@ import UIKit
 import TBAKit
 import CoreData
 
-public enum EventTeamStatFilter: Int {
-    case opr
-    case dpr
-    case ccwm
-    case teamNumber
-    case max
+protocol EventTeamStatsSelectionDelegate: AnyObject {
+    func eventTeamStatSelected(_ eventTeamStat: EventTeamStat)
+}
+
+enum EventTeamStatFilter: String, Comparable, CaseIterable {
+
+    static func < (lhs: EventTeamStatFilter, rhs: EventTeamStatFilter) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+
+    case opr = "OPR"
+    case dpr = "DPR"
+    case ccwm = "CCWM"
+    case teamNumber = "Team Number"
 }
 
 class EventTeamStatsTableViewController: TBATableViewController {
 
-    var event: Event!
-    public var filter: EventTeamStatFilter {
+    private let event: Event
+    private let userDefaults: UserDefaults
+
+    weak var delegate: EventTeamStatsSelectionDelegate?
+    private lazy var dataSource: TableViewDataSource<EventTeamStat, EventTeamStatsTableViewController> = {
+        let fetchRequest: NSFetchRequest<EventTeamStat> = EventTeamStat.fetchRequest()
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
+    }()
+
+    var filter: EventTeamStatFilter {
         didSet {
-            UserDefaults.standard.set(filter.rawValue, forKey: "EventTeamStatFilter")
-            UserDefaults.standard.synchronize()
+            userDefaults.set(filter.rawValue, forKey: "EventTeamStatFilter")
+            userDefaults.synchronize()
 
             updateDataSource()
         }
     }
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            updateDataSource()
-        }
-    }
-    var teamSelected: ((Team) -> Void)?
 
-    // MARK: - View Lifecycle
+    // MARK: - Init
+
+    init(event: Event, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
+        self.event = event
+        self.userDefaults = userDefaults
+
+        if let savedFilter = userDefaults.string(forKey: "EventTeamStatFilter"), !savedFilter.isEmpty, let filter = EventTeamStatFilter(rawValue: savedFilter) {
+            self.filter = filter
+        } else {
+            self.filter = EventTeamStatFilter.opr
+        }
+
+        super.init(persistentContainer: persistentContainer)
+    }
 
     required init?(coder aDecoder: NSCoder) {
-        filter = EventTeamStatFilter(rawValue: UserDefaults.standard.integer(forKey: "EventTeamStatFilter"))!
-
-        super.init(coder: aDecoder)
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        tableView.register(UINib(nibName: String(describing: RankingTableViewCell.self), bundle: nil), forCellReuseIdentifier: RankingTableViewCell.reuseIdentifier)
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: - Refreshing
@@ -54,7 +72,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh event team stats - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
 
                 let localStats = stats?.map({ (modelStat) -> EventTeamStat in
@@ -62,7 +80,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
                 })
                 backgroundEvent.stats = Set(localStats ?? []) as NSSet
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })
@@ -70,7 +88,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
-        if let stats = dataSource?.fetchedResultsController.fetchedObjects, stats.isEmpty {
+        if let stats = dataSource.fetchedResultsController.fetchedObjects, stats.isEmpty {
             return true
         }
         return false
@@ -79,39 +97,17 @@ class EventTeamStatsTableViewController: TBATableViewController {
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let eventTeamStats = dataSource?.object(at: indexPath)
-        if let team = eventTeamStats?.team, let teamSelected = teamSelected {
-            teamSelected(team)
-        }
+        let eventTeamStats = dataSource.object(at: indexPath)
+        delegate?.eventTeamStatSelected(eventTeamStats)
     }
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: TableViewDataSource<EventTeamStat, EventTeamStatsTableViewController>?
-
-    fileprivate func setupDataSource() {
-        guard let persistentContainer = persistentContainer else {
-            return
-        }
-
-        let fetchRequest: NSFetchRequest<EventTeamStat> = EventTeamStat.fetchRequest()
-
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-
-        dataSource = TableViewDataSource(tableView: tableView, cellIdentifier: RankingTableViewCell.reuseIdentifier, fetchedResultsController: frc, delegate: self)
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
-    fileprivate func updateDataSource() {
-        if let dataSource = dataSource {
-            dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-        } else {
-            setupDataSource()
-        }
-    }
-
-    fileprivate func setupFetchRequest(_ request: NSFetchRequest<EventTeamStat>) {
+    private func setupFetchRequest(_ request: NSFetchRequest<EventTeamStat>) {
         request.predicate = NSPredicate(format: "event == %@", event)
 
         // Switch based on user prefs
@@ -125,8 +121,6 @@ class EventTeamStatsTableViewController: TBATableViewController {
             sortDescriptor = NSSortDescriptor(key: "ccwm", ascending: true)
         case .teamNumber:
             sortDescriptor = NSSortDescriptor(key: "team.teamNumber", ascending: true)
-        default:
-            sortDescriptor = nil
         }
         request.sortDescriptors = [sortDescriptor!]
     }
@@ -136,7 +130,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
 extension EventTeamStatsTableViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: RankingTableViewCell, for object: EventTeamStat, at indexPath: IndexPath) {
-        cell.teamStat = object
+        cell.viewModel = RankingCellViewModel(eventTeamStat: object)
     }
 
     func showNoDataView() {

@@ -2,11 +2,10 @@ import Foundation
 import UIKit
 
 protocol Stateful: AnyObject {
-    var dataView: UIView { get }
     var noDataViewController: NoDataViewController? { get set }
 }
 
-extension Stateful {
+extension Stateful where Self: UIViewController {
 
     func showNoDataView(with text: String?) {
         if noDataViewController == nil {
@@ -27,12 +26,12 @@ extension Stateful {
         }
 
         noDataView.alpha = 0
-        if let tableView = dataView as? UITableView {
+        if let tableView = view as? UITableView {
             tableView.backgroundView = noDataView
-        } else if let collectionView = dataView as? UICollectionView {
+        } else if let collectionView = view as? UICollectionView {
             collectionView.backgroundView = noDataView
-        } else if self is UIViewController, noDataViewController.view.superview == nil {
-            dataView.insertSubview(noDataViewController.view, at: 0)
+        } else if noDataViewController.view.superview == nil {
+            view.insertSubview(noDataViewController.view, at: 0)
             DispatchQueue.main.async {
                 noDataView.autoPinEdgesToSuperviewEdges()
             }
@@ -44,11 +43,11 @@ extension Stateful {
     }
 
     func removeNoDataView() {
-        if let tableView = dataView as? UITableView {
+        if let tableView = view as? UITableView {
             DispatchQueue.main.async {
                 tableView.backgroundView = nil
             }
-        } else if let collectionView = dataView as? UICollectionView {
+        } else if let collectionView = view as? UICollectionView {
             DispatchQueue.main.async {
                 collectionView.backgroundView = nil
             }

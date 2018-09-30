@@ -2,39 +2,39 @@ import CoreData
 import TBAKit
 import UIKit
 
-internal enum InfoURL: String {
+enum InfoURL: String {
     case website = "https://www.thebluealliance.com"
     case github = "https://github.com/the-blue-alliance/the-blue-alliance-ios"
 }
 
-enum SettingsSection: Int {
+private enum SettingsSection: Int {
     case info
     case debug
     case max
 }
 
-enum InfoRow: Int {
+private enum InfoRow: Int {
     case website
     case repo
     // case changelog TODO: https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/193
     case max
 }
 
-enum DebugRow: Int {
+private enum DebugRow: Int {
     case deleteNetworkCache
     case max
 }
 
 class SettingsViewController: UITableViewController, Persistable {
 
-    var persistentContainer: NSPersistentContainer!
-    var urlOpener: URLOpener
+    private var urlOpener: URLOpener
+    var persistentContainer: NSPersistentContainer
 
     // MARK: - Init
 
-    init(persistentContainer: NSPersistentContainer, urlOpener: URLOpener) {
-        self.persistentContainer = persistentContainer
+    init(urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
         self.urlOpener = urlOpener
+        self.persistentContainer = persistentContainer
 
         super.init(style: .grouped)
 

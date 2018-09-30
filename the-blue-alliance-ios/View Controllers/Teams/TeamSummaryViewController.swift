@@ -3,7 +3,12 @@ import UIKit
 import TBAKit
 import CoreData
 
-enum TeamSummaryRow: Int {
+protocol TeamSummaryViewControllerDelegate: AnyObject {
+    func awardsSelected()
+    func matchSelected(_ match: Match)
+}
+
+private enum TeamSummaryRow: Int {
     case rank
     case awards
     case pit // only during CMP, and if they exist
@@ -16,12 +21,15 @@ enum TeamSummaryRow: Int {
     case max
 }
 
-class TeamSummaryTableViewController: TBATableViewController {
+class TeamSummaryViewController: TBATableViewController {
 
-    var team: Team!
-    var event: Event!
+    private let team: Team
+    private let event: Event
+
+    weak var delegate: TeamSummaryViewControllerDelegate?
+
     var teamAwards: Set<Award> {
-        guard let team = team, let event = event, let awards = event.awards else {
+        guard let awards = event.awards else {
             return []
         }
         return awards.filtered(using: NSPredicate(format: "event == %@ AND (ANY recipients.team == %@)", event, team)) as? Set<Award> ?? []
@@ -32,25 +40,14 @@ class TeamSummaryTableViewController: TBATableViewController {
             if let eventStatus = eventStatus {
                 updateSummaryInfo()
 
-                contextObserver.observeObject(object: eventStatus, state: .updated) { [weak self] (_, _) in
-                    self?.updateSummaryInfo()
+                contextObserver.observeObject(object: eventStatus, state: .updated) { [unowned self] (_, _) in
+                    self.updateSummaryInfo()
                 }
             } else {
-                contextObserver.observeInsertions { [weak self] (eventStatuses) in
-                    self?.eventStatus = eventStatuses.first
+                contextObserver.observeInsertions { [unowned self] (eventStatuses) in
+                    self.eventStatus = eventStatuses.first
                 }
             }
-        }
-    }
-
-    var awardsSelected: (() -> Void)?
-    var matchSelected: ((Match) -> Void)?
-
-    // MARK: - Persistable
-
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            eventStatus = EventStatus.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
         }
     }
 
@@ -65,21 +62,32 @@ class TeamSummaryTableViewController: TBATableViewController {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
 
-    var backgroundFetchKeys: Set<String> = []
-    var summaryRows: [TeamSummaryRow] = []
-    var summaryValues: [Any] = []
+    private var backgroundFetchKeys: Set<String> = []
+    private var summaryRows: [TeamSummaryRow] = []
+    private var summaryValues: [Any] = []
+
+    init(team: Team, event: Event, persistentContainer: NSPersistentContainer) {
+        self.team = team
+        self.event = event
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(UINib(nibName: String(describing: ReverseSubtitleTableViewCell.self), bundle: nil),
-                           forCellReuseIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier)
-        tableView.register(UINib(nibName: String(describing: LoadingTableViewCell.self), bundle: nil),
-                           forCellReuseIdentifier: LoadingTableViewCell.reuseIdentifier)
-        tableView.register(UINib(nibName: String(describing: MatchTableViewCell.self), bundle: nil),
-                           forCellReuseIdentifier: MatchTableViewCell.reuseIdentifier)
+        // TODO: Since we leverage didSet, we need to do this *after* initilization
+        eventStatus = EventStatus.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
+
+        tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
+        tableView.registerReusableCell(LoadingTableViewCell.self)
+        tableView.registerReusableCell(MatchTableViewCell.self)
     }
 
     // MARK: - Private
@@ -104,7 +112,7 @@ class TeamSummaryTableViewController: TBATableViewController {
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/163
 
         // Record
-        if let record = eventStatus?.qual?.ranking?.record, let event = event, event.year != 2015 {
+        if let record = eventStatus?.qual?.ranking?.record, event.year != 2015 {
             summaryRows.append(TeamSummaryRow.record)
             summaryValues.append(record)
         }
@@ -141,7 +149,7 @@ class TeamSummaryTableViewController: TBATableViewController {
                     summaryValues.append(key)
                     if !backgroundFetchKeys.contains(key) {
                         backgroundFetchKeys.insert(key)
-                        self.persistentContainer?.performBackgroundTask({ [weak self] (backgroundContext) in
+                        self.persistentContainer.performBackgroundTask({ [weak self] (backgroundContext) in
                             TBABackgroundService.backgroundFetchMatch(key, in: backgroundContext) { [weak self] (_, _) in
                                 self?.backgroundFetchKeys.remove(key)
                                 self?.updateSummaryInfo()
@@ -169,7 +177,7 @@ class TeamSummaryTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
 
@@ -177,7 +185,7 @@ class TeamSummaryTableViewController: TBATableViewController {
                     EventStatus.insert(with: modelStatus, team: backgroundTeam, event: backgroundEvent, in: backgroundContext)
                 }
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: teamStatusRequest!)
             })
         })
@@ -190,7 +198,7 @@ class TeamSummaryTableViewController: TBATableViewController {
                 self.showErrorAlert(with: "Unable to refresh event awards for \(self.team.key!) - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
 
                 let localAwards = awards?.map({ (modelAward) -> Award in
@@ -198,7 +206,7 @@ class TeamSummaryTableViewController: TBATableViewController {
                 })
                 backgroundEvent.addToAwards(Set(localAwards ?? []) as NSSet)
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: awardsRequest!)
             })
         })
@@ -299,18 +307,14 @@ class TeamSummaryTableViewController: TBATableViewController {
     }
 
     private func tableView(_ tableView: UITableView, reverseSubtitleCellWithTitle title: String, subtitle: String, at indexPath: IndexPath) -> ReverseSubtitleTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier) as? ReverseSubtitleTableViewCell ?? ReverseSubtitleTableViewCell(style: .default, reuseIdentifier: ReverseSubtitleTableViewCell.reuseIdentifier)
-
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
         cell.titleLabel.text = title
         cell.subtitleLabel.text = subtitle
-
-        cell.selectionStyle = .none
-
         return cell
     }
 
     private func tableView(_ tableView: UITableView, loadingCellAt indexPath: IndexPath) -> LoadingTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: LoadingTableViewCell.reuseIdentifier) as? LoadingTableViewCell ?? LoadingTableViewCell(style: .default, reuseIdentifier: LoadingTableViewCell.reuseIdentifier)
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as LoadingTableViewCell
         cell.keyLabel.text = summaryValues[indexPath.row] as? String
         cell.backgroundFetchActivityIndicator.isHidden = false
         cell.selectionStyle = .none
@@ -318,12 +322,9 @@ class TeamSummaryTableViewController: TBATableViewController {
     }
 
     private func tableView(_ tableView: UITableView, matchCellForRowAt indexPath: IndexPath) -> MatchTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: MatchTableViewCell.reuseIdentifier) as? MatchTableViewCell ?? MatchTableViewCell(style: .default, reuseIdentifier: MatchTableViewCell.reuseIdentifier)
-
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
         let match = summaryValues[indexPath.row] as! Match
-        cell.match = match
-        cell.team = team
-
+        cell.viewModel = MatchViewModel(match: match, team: team)
         return cell
     }
 
@@ -334,12 +335,10 @@ class TeamSummaryTableViewController: TBATableViewController {
         let rowValue = summaryValues[indexPath.row]
         switch rowType {
         case .awards:
-            if let awardsSelected = awardsSelected {
-                awardsSelected()
-            }
+            delegate?.awardsSelected()
         case .nextMatch, .lastMatch:
-            if let matchSelected = matchSelected {
-                matchSelected(rowValue as! Match)
+            if let match = rowValue as? Match {
+                delegate?.matchSelected(match)
             }
         default:
             break

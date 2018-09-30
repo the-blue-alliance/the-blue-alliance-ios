@@ -3,7 +3,7 @@ import TBAKit
 import CoreData
 
 // TODO: LocalizedError
-enum BackgroundFetchError: Error {
+private enum BackgroundFetchError: Error {
     case message(String)
     case error(Error)
 }
@@ -26,7 +26,7 @@ class TBABackgroundService {
                 }
 
                 let team = Team.insert(with: modelTeam, in: context)
-                context.saveContext()
+                context.performSaveOrRollback()
 
                 completion(team, nil)
             }
@@ -45,7 +45,7 @@ class TBABackgroundService {
                 }
 
                 let event = Event.insert(with: modelEvent, in: context)
-                context.saveContext()
+                context.performSaveOrRollback()
 
                 completion(event, nil)
             }
@@ -92,7 +92,7 @@ class TBABackgroundService {
                 }
 
                 let match = Match.insert(with: modelMatch, for: event, in: context)
-                context.saveContext()
+                context.performSaveOrRollback()
 
                 completion(match, nil)
             }

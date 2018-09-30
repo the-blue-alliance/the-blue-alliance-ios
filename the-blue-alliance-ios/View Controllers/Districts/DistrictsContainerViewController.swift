@@ -1,71 +1,110 @@
+import CoreData
 import Foundation
 import UIKit
 import TBAKit
 import FirebaseRemoteConfig
 
-private let SelectYearSegue = "SelectYearSegue"
-
 class DistrictsContainerViewController: ContainerViewController {
 
-    var maxYear: Int = RemoteConfig.remoteConfig().maxSeason
-    var year: Int = RemoteConfig.remoteConfig().currentSeason {
+    private let remoteConfig: RemoteConfig
+    private let urlOpener: URLOpener
+    private let userDefaults: UserDefaults
+    private var year: Int {
         didSet {
-            if let districtsViewController = districtsViewController {
-                districtsViewController.year = year
-            }
+            districtsViewController.year = year
 
             DispatchQueue.main.async {
                 self.updateInterface()
             }
         }
     }
+    private var districtsViewController: DistrictsViewController
 
-    internal var districtsViewController: DistrictsTableViewController!
-    @IBOutlet internal var districtsView: UIView!
+    // MARK: - Init
+
+    init(remoteConfig: RemoteConfig, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
+        self.remoteConfig = remoteConfig
+        self.urlOpener = urlOpener
+        self.userDefaults = userDefaults
+
+        year = remoteConfig.currentSeason
+        districtsViewController = DistrictsViewController(year: year, persistentContainer: persistentContainer)
+
+        super.init(viewControllers: [districtsViewController],
+                   persistentContainer: persistentContainer)
+
+        title = "Districts"
+        tabBarItem.image = UIImage(named: "ic_assignment")
+
+        navigationTitleDelegate = self
+        districtsViewController.delegate = self
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        viewControllers = [districtsViewController]
-        containerViews = [districtsView]
+        // TODO: Shouldn't this have the same split view controller code the other root views do?
 
+        navigationTitle = "Districts"
         updateInterface()
     }
 
     // MARK: - Private Methods
 
-    func updateInterface() {
-        navigationTitleLabel?.text = "Districts"
-        navigationDetailLabel?.text = "▾ \(year)"
+    private func updateInterface() {
+        navigationSubtitle = "▾ \(year)"
     }
 
-    // MARK: - Navigation
+    private func showSelectYear() {
+        let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(current: year, options: Array(2009...remoteConfig.maxSeason).reversed(), persistentContainer: persistentContainer)
+        selectTableViewController.title = "Select Year"
+        selectTableViewController.delegate = self
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == SelectYearSegue {
-            let nav = segue.destination as! UINavigationController
-            let selectTableViewController = SelectTableViewController<Int>()
-            selectTableViewController.title = "Select Year"
-            selectTableViewController.current = year
-            selectTableViewController.options = Array(2009...maxYear).reversed()
-            selectTableViewController.optionSelected = { [weak self] year in
-                self?.year = year
-            }
-            selectTableViewController.optionString = { year in
-                return String(year)
-            }
-            nav.viewControllers = [selectTableViewController]
-        } else if segue.identifier == "DistrictsEmbed" {
-            districtsViewController = segue.destination as? DistrictsTableViewController
-            districtsViewController.year = year
-            districtsViewController.districtSelected = { [weak self] district in
-                self?.performSegue(withIdentifier: "DistrictSegue", sender: district)
-            }
-        } else if segue.identifier == "DistrictSegue" {
-            let districtViewController = (segue.destination as! UINavigationController).topViewController as! DistrictViewController
-            districtViewController.district = sender as? District
-            // TODO: Find a way to pass these down automagically like we did in the Obj-C version
-            districtViewController.persistentContainer = persistentContainer
-        }
+        let nav = UINavigationController(rootViewController: selectTableViewController)
+        nav.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSelectYear))
+
+        navigationController?.present(nav, animated: true, completion: nil)
     }
+
+    @objc private func dismissSelectYear() {
+        navigationController?.dismiss(animated: true, completion: nil)
+    }
+
+}
+
+extension DistrictsContainerViewController: NavigationTitleDelegate {
+
+    func navigationTitleTapped() {
+        showSelectYear()
+    }
+
+}
+
+extension DistrictsContainerViewController: SelectTableViewControllerDelegate {
+
+    typealias OptionType = Int
+
+    func optionSelected(_ option: OptionType) {
+        year = option
+    }
+
+    func titleForOption(_ option: OptionType) -> String {
+        return String(option)
+    }
+
+}
+
+extension DistrictsContainerViewController: DistrictsViewControllerDelegate {
+
+    func districtSelected(_ district: District) {
+        let districtViewController = DistrictViewController(district: district, urlOpener: urlOpener, userDefaults: userDefaults, persistentContainer: persistentContainer)
+        self.navigationController?.pushViewController(districtViewController, animated: true)
+    }
+
 }

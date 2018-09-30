@@ -9,27 +9,30 @@ import UIKit
  */
 class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TBATableViewController, NSFetchedResultsControllerDelegate {
 
-    override var persistentContainer: NSPersistentContainer! {
-        didSet {
-            setupFetchedResultsController()
-        }
+    // let myTBAObjectSelected: ((T) -> ())
+    private var backgroundFetchKeys: Set<String> = []
+
+    // MARK: - Init
+
+    init(persistentContainer: NSPersistentContainer) {
+        super.init(persistentContainer: persistentContainer)
     }
-    var backgroundFetchKeys: Set<String> = []
-    var myTBAObjectSelected: ((T) -> Void)?
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(UINib(nibName: String(describing: LoadingTableViewCell.self), bundle: nil),
-                           forCellReuseIdentifier: LoadingTableViewCell.reuseIdentifier)
-        tableView.register(UINib(nibName: String(describing: EventTableViewCell.self), bundle: nil),
-                           forCellReuseIdentifier: EventTableViewCell.reuseIdentifier)
-        tableView.register(UINib(nibName: String(describing: TeamTableViewCell.self), bundle: nil),
-                           forCellReuseIdentifier: TeamTableViewCell.reuseIdentifier)
-        tableView.register(UINib(nibName: String(describing: MatchTableViewCell.self), bundle: nil),
-                           forCellReuseIdentifier: MatchTableViewCell.reuseIdentifier)
+        tableView.registerReusableCell(LoadingTableViewCell.self)
+        tableView.registerReusableCell(EventTableViewCell.self)
+        tableView.registerReusableCell(TeamTableViewCell.self)
+        tableView.registerReusableCell(MatchTableViewCell.self)
+
+        setupFetchedResultsController()
     }
 
     // MARK: - Public methods
@@ -63,7 +66,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 }
             }
 
-            self.persistentContainer?.performBackgroundTask({ [weak self] (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ [weak self] (backgroundContext) in
                 let models = models as? [T.RemoteType]
                 let bgctx = backgroundContext
                 for model in models ?? [] {
@@ -104,7 +107,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                     }
                 }
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self?.removeRequest(request: request!)
             })
         }
@@ -123,10 +126,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     fileprivate var fetchedResultsController: NSFetchedResultsController<T>?
 
     fileprivate func setupFetchedResultsController() {
-        guard let persistentContainer = persistentContainer else {
-            return
-        }
-
         let fetchRequest = NSFetchRequest<T>(entityName: T.entityName)
 
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "modelType", ascending: true), NSSortDescriptor(key: "modelKey", ascending: true)]
@@ -151,7 +150,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             return fallbackCell
         }
 
-        let myTBACell = self.tableView(tableView, for: obj)
+        let myTBACell = self.tableView(tableView, cellForRowAt: indexPath, for: obj)
 
         guard let modelType = MyTBAModelType(rawValue: obj.modelType!) else {
             return myTBACell
@@ -167,17 +166,17 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             guard let event = Event.findOrFetch(in: persistentContainer.viewContext, matching: predicate) else {
                 return myTBACell
             }
-            return self.tableView(tableView, for: event)
+            return self.tableView(tableView, cellForRowAt: indexPath, for: event)
         case .team:
             guard let team = Team.findOrFetch(in: persistentContainer.viewContext, matching: predicate) else {
                 return myTBACell
             }
-            return self.tableView(tableView, for: team)
+            return self.tableView(tableView, cellForRowAt: indexPath, for: team)
         case .match:
             guard let match = Match.findOrFetch(in: persistentContainer.viewContext, matching: predicate) else {
                 return myTBACell
             }
-            return self.tableView(tableView, for: match)
+            return self.tableView(tableView, cellForRowAt: indexPath, for: match)
         }
     }
 
@@ -233,28 +232,28 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     // MARK: - Table Views
 
-    func tableView(_ tableView: UITableView, for myTBA: MyTBAEntity) -> LoadingTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: LoadingTableViewCell.reuseIdentifier) as? LoadingTableViewCell ?? LoadingTableViewCell(style: .default, reuseIdentifier: LoadingTableViewCell.reuseIdentifier)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, for myTBA: MyTBAEntity) -> LoadingTableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as LoadingTableViewCell
         cell.keyLabel.text = myTBA.modelKey
         cell.backgroundFetchActivityIndicator.isHidden = !backgroundFetchKeys.contains(myTBA.modelKey!)
         return cell
     }
 
-    func tableView(_ tableView: UITableView, for event: Event) -> EventTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: EventTableViewCell.reuseIdentifier) as? EventTableViewCell ?? EventTableViewCell(style: .default, reuseIdentifier: EventTableViewCell.reuseIdentifier)
-        cell.event = event
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, for event: Event) -> EventTableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
+        cell.viewModel = EventCellViewModel(event: event)
         return cell
     }
 
-    func tableView(_ tableView: UITableView, for team: Team) -> TeamTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TeamTableViewCell.reuseIdentifier) as? TeamTableViewCell ?? TeamTableViewCell(style: .default, reuseIdentifier: TeamTableViewCell.reuseIdentifier)
-        cell.team = team
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, for team: Team) -> TeamTableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as TeamTableViewCell
+        cell.viewModel = TeamCellViewModel(team: team)
         return cell
     }
 
-    func tableView(_ tableView: UITableView, for match: Match) -> MatchTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: MatchTableViewCell.reuseIdentifier) as? MatchTableViewCell ?? MatchTableViewCell(style: .default, reuseIdentifier: MatchTableViewCell.reuseIdentifier)
-        cell.match = match
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, for match: Match) -> MatchTableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
+        cell.viewModel = MatchViewModel(match: match)
         return cell
     }
 
@@ -262,9 +261,11 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let obj = fetchedResultsController?.object(at: indexPath)
-        if let obj = obj, let myTBAObjectSelected = myTBAObjectSelected {
+        /*
+        if let obj = obj {
             myTBAObjectSelected(obj)
         }
+        */
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

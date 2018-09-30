@@ -16,4 +16,5 @@ extension Observable {
     var observerPredicate: NSPredicate {
         return NSPredicate()
     }
+
 }

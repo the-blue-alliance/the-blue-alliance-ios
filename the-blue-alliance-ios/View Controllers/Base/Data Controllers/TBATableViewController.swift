@@ -4,18 +4,32 @@ import CoreData
 
 class TBATableViewController: UITableViewController, DataController {
 
-    let basicCellReuseIdentifier = "BasicCell"
+    var persistentContainer: NSPersistentContainer
 
-    var persistentContainer: NSPersistentContainer!
     var requests: [URLSessionDataTask] = []
-    var dataView: UIView {
-        return tableView
-    }
     var refreshView: UIScrollView {
         return tableView
     }
     var noDataViewController: NoDataViewController?
 
+    private var _refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        return refreshControl
+    }()
+
+    init(style: UITableView.Style = .plain, persistentContainer: NSPersistentContainer) {
+        self.persistentContainer = persistentContainer
+
+        super.init(style: style)
+
+        enableRefreshing()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
@@ -26,18 +40,16 @@ class TBATableViewController: UITableViewController, DataController {
         tableView.backgroundColor = .backgroundGray
         tableView.tableFooterView = UIView.init(frame: .zero)
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: basicCellReuseIdentifier)
-
-        enableRefreshing()
+        tableView.registerReusableCell(BasicTableViewCell.self)
     }
 
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let headerView = view as? UITableViewHeaderFooterView {
-            headerView.contentView.backgroundColor = UIColor.primaryDarkBlue
-            headerView.textLabel?.textColor = UIColor.white
+            headerView.textLabel?.textColor = .white
             headerView.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+            headerView.backgroundView?.backgroundColor = .primaryDarkBlue
         }
     }
 
@@ -52,12 +64,11 @@ class TBATableViewController: UITableViewController, DataController {
     }
 
     func enableRefreshing() {
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        tableView.refreshControl = _refreshControl
     }
 
     func disableRefreshing() {
-        refreshControl = nil
+        tableView.refreshControl = nil
     }
 
 }

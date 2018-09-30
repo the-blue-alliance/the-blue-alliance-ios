@@ -6,29 +6,19 @@ import GoogleSignIn
 import UIKit
 import UserNotifications
 
-private let MyTBAFavoritesEmbed = "MyTBAFavoritesEmbed"
-private let MyTBASubscriptionsEmbed = "MyTBASubscriptionsEmbed"
-
-private let EventSegue = "EventSegue"
-private let TeamSegue = "TeamSegue"
-private let MatchSegue = "MatchSegue"
-
 class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
-    internal var signInViewController: MyTBASignInViewController!
+    private let signInViewController: MyTBASignInViewController
+    private let favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>
+    private let subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>
+
     @IBOutlet internal var signInView: UIView!
     @IBOutlet internal var signOutBarButtonItem: UIBarButtonItem!
-    internal var signOutActivityIndicatorBarButtonItem: UIBarButtonItem = {
+    private var signOutActivityIndicatorBarButtonItem: UIBarButtonItem = {
         let activityIndicatorView = UIActivityIndicatorView(style: .white)
         activityIndicatorView.startAnimating()
         return UIBarButtonItem(customView: activityIndicatorView)
     }()
-
-    internal var favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>
-    internal var favoritesView: UIView
-
-    internal var subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>
-    internal var subscriptionsView: UIView
 
     private var isLoggingOut: Bool = false {
         didSet {
@@ -41,23 +31,21 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         return MyTBA.shared.isAuthenticated
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>()
-        favoritesView = favoritesViewController.view
+    init(persistentContainer: NSPersistentContainer) {
+        signInViewController = MyTBASignInViewController()
 
-        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>()
-        subscriptionsView = subscriptionsViewController.view
+        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(persistentContainer: persistentContainer)
+        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(persistentContainer: persistentContainer)
 
-        super.init(coder: aDecoder)
-
-        favoritesViewController.myTBAObjectSelected = { [weak self] (myTBAObj) in
-            self?.pushMyTBAObject(myTBAObj)
-        }
-        subscriptionsViewController.myTBAObjectSelected = { [weak self] (myTBAObj) in
-            self?.pushMyTBAObject(myTBAObj)
-        }
+        super.init(viewControllers: [favoritesViewController, subscriptionsViewController],
+                   segmentedControlTitles: ["Favorites", "Subscriptions"],
+                   persistentContainer: persistentContainer)
     }
-
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
@@ -66,9 +54,6 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         // TODO: Fix the white status bar/white UINavigationController during sign in
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/180
         // modalPresentationCapturesStatusBarAppearance = true
-
-        viewControllers = [favoritesViewController, subscriptionsViewController]
-        containerViews = [favoritesView, subscriptionsView]
 
         GIDSignIn.sharedInstance().uiDelegate = self
         MyTBA.shared.authenticationProvider.add(observer: self)
@@ -79,13 +64,6 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     // MARK: - Private Methods
 
     private func styleInterface() {
-        for dataView in [favoritesView, subscriptionsView] {
-            view.insertSubview(dataView, belowSubview: signInView)
-            dataView.autoPinEdge(toSuperviewEdge: .leading)
-            dataView.autoPinEdge(toSuperviewEdge: .trailing)
-            dataView.autoPin(toBottomLayoutGuideOf: self, withInset: 0)
-            dataView.autoPinEdge(.top, to: .bottom, of: segmentedControlView!)
-        }
         signInView.isHidden = isLoggedIn
 
         updateInterface()
@@ -143,7 +121,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         persistentContainer.viewContext.deleteAllObjectsForEntity(entity: Subscription.entity())
 
         // Clear notifications
-        persistentContainer.viewContext.saveContext()
+        persistentContainer.viewContext.performSaveOrRollback()
     }
 
     private func pushMyTBAObject(_ myTBAObject: MyTBAEntity) {
@@ -151,6 +129,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
             return
         }
 
+        /*
         switch modelType {
         case .event:
             performSegue(withIdentifier: EventSegue, sender: myTBAObject.modelKey!)
@@ -159,6 +138,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         case .match:
             performSegue(withIdentifier: MatchSegue, sender: myTBAObject.modelKey!)
         }
+        */
     }
 
     // MARK: - Interface Methods
@@ -174,6 +154,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
     // MARK: - Navigation
 
+    /*
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let key = sender as? String ?? ""
         let predicate = NSPredicate(format: "key == %@", key)
@@ -202,15 +183,16 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
             // TODO: Handle passing a key
         }
     }
+    */
+
 }
 
 extension MyTBAViewController: MyTBAAuthenticationObservable {
 
     func authenticated() {
-        if let segmentedControl = segmentedControl, segmentedControl.selectedSegmentIndex < viewControllers.count {
-            viewControllers[segmentedControl.selectedSegmentIndex].refresh()
+        if let viewController = currentViewController() {
+            viewController.refresh()
         }
-
         updateInterfaceMain()
     }
 
@@ -219,8 +201,8 @@ extension MyTBAViewController: MyTBAAuthenticationObservable {
     }
 
     func updateInterfaceMain() {
-        DispatchQueue.main.async { [weak self] in
-            self?.updateInterface()
+        DispatchQueue.main.async { [unowned self] in
+            self.updateInterface()
         }
     }
 

@@ -4,16 +4,40 @@ import CoreData
 
 class TeamMediaCollectionViewController: TBACollectionViewController {
 
-    internal var year: Int? {
+    private let team: Team
+    private let urlOpener: URLOpener
+    var year: Int? {
         didSet {
             cancelRefresh()
             updateDataSource()
         }
     }
-    var team: Team!
+    private lazy var dataSource: CollectionViewDataSource<Media, TeamMediaCollectionViewController> = {
+        let fetchRequest: NSFetchRequest<Media> = Media.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "type", ascending: true)]
+        setupFetchRequest(fetchRequest)
 
-    var playerViews: [String: PlayerView] = [:]
-    var downloadedImages: [String: UIImage] = [:]
+        // TODO: Split section by photos/videos like we do on the web
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        return CollectionViewDataSource(collectionView: collectionView, fetchedResultsController: frc, delegate: self)
+    }()
+
+    private var playerViews: [String: PlayerView] = [:]
+    private var downloadedImages: [String: UIImage] = [:]
+
+    // MARK: Init
+
+    init(team: Team, year: Int? = nil, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
+        self.team = team
+        self.year = year
+        self.urlOpener = urlOpener
+
+        super.init(persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
@@ -24,7 +48,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     override func viewWillLayoutSubviews() {
         // When the VC changes sizes, make sure we invalidate our layout to adjust the sizes of the cells
         DispatchQueue.main.async {
-            self.collectionView?.collectionViewLayout.invalidateLayout()
+            self.collectionView.collectionViewLayout.invalidateLayout()
         }
     }
 
@@ -33,7 +57,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     override func refresh() {
         guard let year = year else {
             showNoDataView(with: "No year selected")
-            refreshControl!.endRefreshing()
+            refreshControl?.endRefreshing()
             return
         }
 
@@ -45,7 +69,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
                 self.showErrorAlert(with: "Unable to refresh team media - \(error.localizedDescription)")
             }
 
-            self.persistentContainer?.performBackgroundTask({ (backgroundContext) in
+            // TODO: This idea of deleting old and inserting new should be a pattern... basically everywhere
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
 
                 // Fetch all old media for team for year
@@ -65,7 +90,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
                     backgroundContext.delete($0)
                 }
 
-                backgroundContext.saveContext()
+                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })
@@ -73,7 +98,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     }
 
     override func shouldNoDataRefresh() -> Bool {
-        if let media = dataSource?.fetchedResultsController.fetchedObjects, media.isEmpty {
+        if let media = dataSource.fetchedResultsController.fetchedObjects, media.isEmpty {
             return true
         }
         return false
@@ -85,7 +110,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         super.viewWillTransition(to: size, with: coordinator)
 
         DispatchQueue.main.async {
-            self.collectionView?.collectionViewLayout.invalidateLayout()
+            self.collectionView.collectionViewLayout.invalidateLayout()
         }
     }
 
@@ -93,59 +118,34 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // TODO: Eventually show the full image inside the app
-        guard let media = dataSource?.object(at: indexPath) else {
-            return
-        }
+        let media = dataSource.object(at: indexPath)
         guard let url = media.viewImageURL else {
             return
         }
-        if UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+
+        if urlOpener.canOpenURL(url) {
+            urlOpener.open(url, options: [:], completionHandler: nil)
         }
     }
 
     // MARK: Table View Data Source
 
-    fileprivate var dataSource: CollectionViewDataSource<Media, TeamMediaCollectionViewController>?
-
-    fileprivate func setupDataSource() {
-        // TODO: This seems like a weird place to check if we need a year, then not use the year
-        guard let persistentContainer = persistentContainer, year != nil else {
-            return
-        }
-
-        let fetchRequest: NSFetchRequest<Media> = Media.fetchRequest()
-
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "type", ascending: true)]
-
-        setupFetchRequest(fetchRequest)
-
-        // TODO: Split section by photos/videos like we do on the web
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-
-        dataSource = CollectionViewDataSource(collectionView: collectionView!, cellIdentifier: basicCellReuseIdentifier, fetchedResultsController: frc, delegate: self)
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
-    fileprivate func updateDataSource() {
-        if let dataSource = dataSource {
-            dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
+    private func setupFetchRequest(_ request: NSFetchRequest<Media>) {
+        if let year = year {
+            request.predicate = NSPredicate(format: "team == %@ AND year == %ld AND type in %@", team, year, MediaType.imageTypes)
         } else {
-            setupDataSource()
+            // Match none by passing a bosus year
+            request.predicate = NSPredicate(format: "team == %@ AND year == 0", team)
         }
-    }
-
-    fileprivate func setupFetchRequest(_ request: NSFetchRequest<Media>) {
-        guard let year = year else {
-            return
-        }
-        // TODO: Seems like if we don't have a year, we should just load all, right? Depends on when this gets set up
-        // TODO: We could support GrabCAD here too if we wanted to
-        request.predicate = NSPredicate(format: "team == %@ AND year == %ld AND type in %@", team, year, MediaType.imageTypes)
     }
 
     // MARK: - Private
 
-    fileprivate func playerViewForMedia(_ media: Media) -> PlayerView {
+    private func playerViewForMedia(_ media: Media) -> PlayerView {
         guard let foreignKey = media.foreignKey else {
             fatalError("Cannot load media")
         }
@@ -159,19 +159,20 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         return playerView!
     }
 
-    fileprivate func mediaViewForMedia(_ media: Media) -> MediaView? {
-        guard let foreignKey = media.foreignKey else {
-            fatalError("Cannot load media")
-        }
-        let downloadedImage = downloadedImages[foreignKey]
+    private func mediaViewForMedia(_ media: Media) -> MediaView? {
+        let downloadedImage = downloadedImages[media.foreignKey!]
 
-        let mediaView = MediaView(media: media)
+        let mediaView = MediaView(media: media, delegate: self)
         mediaView.downloadedImage = downloadedImage
-        mediaView.imageDownloaded = { [weak self] in
-            self?.downloadedImages[foreignKey] = $0
-        }
-
         return mediaView
+    }
+
+}
+
+extension TeamMediaCollectionViewController: MediaViewDelegate {
+
+    func imageDownloaded(_ image: UIImage, media: Media) {
+        self.downloadedImages[media.foreignKey!] = image
     }
 
 }
@@ -199,13 +200,14 @@ extension TeamMediaCollectionViewController: UICollectionViewDelegateFlowLayout 
 
 extension TeamMediaCollectionViewController: CollectionViewDataSourceDelegate {
 
-    func configure(_ cell: UICollectionViewCell, for object: Media, at indexPath: IndexPath) {
+    func configure(_ cell: BasicCollectionViewCell, for object: Media, at indexPath: IndexPath) {
         var mediaView: UIView?
         if object.type == MediaType.youtubeVideo.rawValue {
             mediaView = playerViewForMedia(object)
         } else {
             mediaView = mediaViewForMedia(object)
         }
+
         cell.contentView.addSubview(mediaView!)
         mediaView!.autoPinEdgesToSuperviewEdges()
     }

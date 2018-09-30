@@ -1,36 +1,44 @@
 import Foundation
 import UIKit
 
-class AwardTableViewCell: UITableViewCell {
-    static let reuseIdentifier = "AwardCell"
-    public var award: Award? {
+class AwardTableViewCell: UITableViewCell, Reusable {
+
+    var viewModel: AwardCellViewModel? {
         didSet {
-            recipients = award?.recipients?.allObjects as? [AwardRecipient]
             configureCell()
         }
     }
-    private var recipients: [AwardRecipient]?
+    var teamSelected: ((_ teamKey: String) -> Void)?
 
-    var teamSelected: ((Team) -> Void)?
+    // MARK: - Reusable
+
+    static var nib: UINib? {
+        return UINib(nibName: String(describing: self), bundle: nil)
+    }
+
+    // MARK: - Interface Builder
+
     @IBOutlet private weak var awardNameLabel: UILabel!
     @IBOutlet private weak var awardInfoStackView: UIStackView!
 
-    private func configureCell() {
-        awardNameLabel.text = award?.name
+    // MARK: - View Methods
 
+    override func prepareForReuse() {
         for view in awardInfoStackView.arrangedSubviews {
             view.removeFromSuperview()
         }
+    }
 
-        guard let recipients = recipients else {
+    // MARK: - Private Methods
+
+    private func configureCell() {
+        guard let viewModel = viewModel else {
             return
         }
 
-        for (index, recipient) in recipients.enumerated() {
-            if recipient.awardText.count == 0 {
-                continue
-            }
+        awardNameLabel.text = viewModel.awardName
 
+        for (index, recipient) in viewModel.recipients.enumerated() {
             let stackView = UIStackView()
             stackView.axis = .vertical
             stackView.tag = index
@@ -53,12 +61,10 @@ class AwardTableViewCell: UITableViewCell {
     }
 
     @objc private func recipientTapped(gesture: UITapGestureRecognizer) {
-        guard let tag = gesture.view?.tag, let recipient = recipients?[tag], let team = recipient.team else {
+        guard let tag = gesture.view?.tag, let recipient = viewModel?.recipients[tag], let team = recipient.teamKey else {
             return
         }
-        if let teamSelected = teamSelected {
-            teamSelected(team)
-        }
+        teamSelected?(team)
     }
 
 }

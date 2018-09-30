@@ -5,8 +5,10 @@ import CoreData
 // Pattern from: https://github.com/objcio/core-data
 
 protocol CollectionViewDataSourceDelegate: class {
+
     associatedtype Object: NSFetchRequestResult
-    associatedtype Cell: UICollectionViewCell
+    associatedtype Cell: UICollectionViewCell, Reusable
+
     func configure(_ cell: Cell, for object: Object, at indexPath: IndexPath)
 
     func showNoDataView()
@@ -18,9 +20,8 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
     typealias Object = Delegate.Object
     typealias Cell = Delegate.Cell
 
-    required init(collectionView: UICollectionView, cellIdentifier: String, fetchedResultsController: NSFetchedResultsController<Result>, delegate: Delegate) {
+    required init(collectionView: UICollectionView, fetchedResultsController: NSFetchedResultsController<Result>, delegate: Delegate) {
         self.collectionView = collectionView
-        self.cellIdentifier = cellIdentifier
         self.fetchedResultsController = fetchedResultsController
         self.delegate = delegate
         super.init()
@@ -28,6 +29,7 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
         try! fetchedResultsController.performFetch()
 
         DispatchQueue.main.async {
+            collectionView.registerReusableCell(Cell.self)
             collectionView.dataSource = self
             self.collectionView.reloadData()
         }
@@ -54,7 +56,6 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
     // MARK: Private
 
     fileprivate let collectionView: UICollectionView
-    fileprivate let cellIdentifier: String
     public let fetchedResultsController: NSFetchedResultsController<Result>
     fileprivate weak var delegate: Delegate!
 
@@ -84,10 +85,8 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(indexPath: indexPath) as Cell
         let object = self.object(at: indexPath)
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as? Cell else {
-            fatalError("Unexpected cell type at \(indexPath)")
-        }
         delegate.configure(cell, for: object, at: indexPath)
         return cell
 

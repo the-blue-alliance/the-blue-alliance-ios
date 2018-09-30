@@ -11,23 +11,17 @@ class SettingsViewController_UITestCase: TBAUITestCase {
     }
 
     func test_openWebiste() {
-        let tba = XCUIApplication(bundleIdentifier: "com.the-blue-alliance.the-blue-alliance")
         let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
 
         app.tables.cells.staticTexts["The Blue Alliance Website"].tap()
         _ = safari.wait(for: .runningForeground, timeout: 10)
-        tba.activate()
-        _ = tba.wait(for: .runningForeground, timeout: 10)
     }
 
     func test_openGitHub() {
-        let tba = XCUIApplication(bundleIdentifier: "com.the-blue-alliance.the-blue-alliance")
         let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
 
         app.tables.cells.staticTexts["The Blue Alliance for iOS is open source"].tap()
         _ = safari.wait(for: .runningForeground, timeout: 10)
-        tba.activate()
-        _ = tba.wait(for: .runningForeground, timeout: 10)
     }
 
     func test_deleteNetworkCache() {

@@ -1,47 +1,44 @@
+import CoreData
 import Foundation
 import UIKit
 
-class MatchViewController: ContainerViewController {
+class MatchContainerViewController: ContainerViewController {
 
-    public var match: Match!
-    public var team: Team?
+    private let match: Match
+    private let team: Team?
 
-    internal var matchInfoViewController: MatchInfoViewController!
-    @IBOutlet internal var infoView: UIView!
+    // MARK: Init
 
-    internal var matchBreakdownViewController: MatchBreakdownViewController!
-    @IBOutlet internal var breakdownView: UIView!
+    init(match: Match, team: Team? = nil, persistentContainer: NSPersistentContainer) {
+        self.match = match
+        self.team = team
+
+        let infoViewController = MatchInfoViewController(match: match, team: team, persistentContainer: persistentContainer)
+
+        // Only show match breakdown if year is 2015 or onward
+        var breakdownViewController: MatchBreakdownViewController?
+        var titles: [String]  = ["Info"]
+        if Int(match.event!.year) >= 2015 {
+            titles.append("Breakdown")
+            breakdownViewController = MatchBreakdownViewController(match: match, persistentContainer: persistentContainer)
+        }
+
+        super.init(viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }),
+                   segmentedControlTitles: titles,
+                   persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationTitleLabel?.text = "\(match.friendlyMatchName())"
-        navigationDetailLabel?.text = "@ \(match.event!.friendlyNameWithYear)"
-
-        // Only show match breakdown if year is 2015 or onward
-        if Int(match.event!.year) >= 2015 {
-            viewControllers = [matchInfoViewController, matchBreakdownViewController]
-            containerViews = [infoView, breakdownView]
-        } else {
-            segmentedControlView?.isHidden = true
-            breakdownView.isHidden = true
-
-            viewControllers = [matchInfoViewController]
-            containerViews = [infoView]
-        }
-    }
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "MatchInfoEmbed" {
-            matchInfoViewController = segue.destination as! MatchInfoViewController
-            matchInfoViewController.match = match
-            matchInfoViewController.team = team
-        } else if segue.identifier == "MatchBreakdownEmbed" {
-            matchBreakdownViewController = segue.destination as! MatchBreakdownViewController
-            matchBreakdownViewController.match = match
-        }
+        navigationTitle = "\(match.friendlyMatchName())"
+        navigationSubtitle = "@ \(match.event!.friendlyNameWithYear)"
     }
 
 }

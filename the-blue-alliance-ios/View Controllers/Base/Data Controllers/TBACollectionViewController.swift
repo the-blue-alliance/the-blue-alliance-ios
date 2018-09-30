@@ -4,26 +4,39 @@ import CoreData
 
 class TBACollectionViewController: UICollectionViewController, DataController {
 
-    let basicCellReuseIdentifier = "BasicCell"
-    var persistentContainer: NSPersistentContainer!
+    var persistentContainer: NSPersistentContainer
+
     var requests: [URLSessionDataTask] = []
-    var dataView: UIView {
-        return collectionView!
-    }
+
     var refreshView: UIScrollView {
-        return collectionView!
+        return collectionView
     }
     var noDataViewController: NoDataViewController?
-    var refreshControl: UIRefreshControl?
+
+    var refreshControl: UIRefreshControl? = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        return refreshControl
+    }()
+
+    init(persistentContainer: NSPersistentContainer) {
+        self.persistentContainer = persistentContainer
+
+        super.init(collectionViewLayout: UICollectionViewFlowLayout())
+
+        enableRefreshing()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView?.backgroundColor = .backgroundGray
-        collectionView?.delegate = self
-        collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: basicCellReuseIdentifier)
-
-        enableRefreshing()
+        collectionView.backgroundColor = .backgroundGray
+        collectionView.delegate = self
+        collectionView.registerReusableCell(BasicCollectionViewCell.self)
     }
 
     @objc func refresh() {
@@ -35,12 +48,11 @@ class TBACollectionViewController: UICollectionViewController, DataController {
     }
 
     func enableRefreshing() {
-        collectionView!.refreshControl = UIRefreshControl()
-        collectionView!.refreshControl!.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        refreshControl = collectionView!.refreshControl
+        collectionView.refreshControl = refreshControl
     }
+
     func disableRefreshing() {
-        refreshControl = nil
+        collectionView.refreshControl = nil
     }
 
 }
