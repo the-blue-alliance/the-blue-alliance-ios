@@ -1,15 +1,18 @@
-import Foundation
-import UIKit
 import CoreData
+import FirebaseRemoteConfig
+import Foundation
 import TBAKit
+import UIKit
 
 class TeamsContainerViewController: ContainerViewController {
 
+    private let remoteConfig: RemoteConfig
     private let urlOpener: URLOpener
 
     // MARK: - Init
 
-    init(urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
+    init(remoteConfig: RemoteConfig, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
+        self.remoteConfig = remoteConfig
         self.urlOpener = urlOpener
 
         let teamsViewController = TeamsViewController(persistentContainer: persistentContainer)
@@ -32,7 +35,7 @@ class TeamsContainerViewController: ContainerViewController {
 extension TeamsContainerViewController: TeamsViewControllerDelegate {
 
     func teamSelected(_ team: Team) {
-        let teamViewController = TeamViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer)
+        let teamViewController = TeamViewController(team: team, remoteConfig: remoteConfig, urlOpener: urlOpener, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(teamViewController, animated: true)
     }
 
