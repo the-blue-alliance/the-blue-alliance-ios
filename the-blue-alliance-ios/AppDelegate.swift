@@ -109,8 +109,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Setup our Firebase app - make sure this is called before other Firebase setup
         FirebaseApp.configure()
 
-        // TODO: Load this from some secrets file
-        tbaKit.apiKey = "OHBBu0QbDiIJYKhAedTfkTxdrkXde1C21Sr90L1f1Pac4ahl4FJbNptNiXbCSCfH"
+        let secrets = Secrets()
+        tbaKit.apiKey = secrets.tbaAPIKey
 
         // Setup our React Native service
         reactNativeService.registerRetryable(initiallyRetry: true)

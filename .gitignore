@@ -48,3 +48,6 @@ fastlane/screenshots
 
 # scan temporary files
 fastlane/test_output
+
+# ejson files
+ejson/*
