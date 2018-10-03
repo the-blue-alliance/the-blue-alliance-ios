@@ -1,15 +1,16 @@
 import UIKit
 import TBAKit
 import CoreData
+import FirebaseRemoteConfig
 
-// TODO: This has a lot of modified functionality and needs a shit load of tests
 class TeamViewController: ContainerViewController, Observable {
 
     private let team: Team
+
     private let eventsViewController: TeamEventsViewController
     private let mediaViewController: TeamMediaCollectionViewController
 
-    var year: Int? {
+    private var year: Int? {
         didSet {
             if let year = year {
                 if eventsViewController.year != year {
@@ -35,27 +36,25 @@ class TeamViewController: ContainerViewController, Observable {
 
     // MARK: Init
 
-    init(team: Team, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
+    init(team: Team, remoteConfig: RemoteConfig, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
         self.team = team
-
-        if let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty {
-            year = yearsParticipated.first
-        }
+        self.year = TeamViewController.latestYear(remoteConfig: remoteConfig, years: team.yearsParticipated)
 
         let infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer)
         eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer)
-        mediaViewController = TeamMediaCollectionViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer)
+        mediaViewController = TeamMediaCollectionViewController(team: team, year: year, urlOpener: urlOpener, persistentContainer: persistentContainer)
 
         super.init(viewControllers: [infoViewController, eventsViewController, mediaViewController],
                    segmentedControlTitles: ["Info", "Events", "Media"],
                    persistentContainer: persistentContainer)
 
+        title = "Team \(team.teamNumber)"
         navigationTitleDelegate = self
         eventsViewController.delegate = self
 
         contextObserver.observeObject(object: team, state: .updated) { [unowned self] (team, _) in
-            if let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty {
-                self.year = yearsParticipated.first
+            if self.year == nil {
+                self.year = TeamViewController.latestYear(remoteConfig: remoteConfig, years: team.yearsParticipated)
             }
 
             DispatchQueue.main.async {
@@ -73,18 +72,31 @@ class TeamViewController: ContainerViewController, Observable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Team \(team.teamNumber)"
-
-        refreshYearsParticipated()
         updateInterface()
+        refreshYearsParticipated()
     }
 
     // MARK: - Private
 
+    private static func latestYear(remoteConfig: RemoteConfig, years: [Int]?) -> Int? {
+        if let years = years, !years.isEmpty {
+            // Limit default year set to be <= currentSeason
+            let latestYear = years.first!
+            if latestYear > remoteConfig.currentSeason, years.count > 1 {
+                // Find the next year before the current season
+                return years.first(where: { $0 <= remoteConfig.currentSeason })
+            } else {
+                // Otherwise, the first year is fine (for new teams)
+                return years.first
+            }
+        }
+        return nil
+    }
+
     private func updateInterface() {
         navigationTitle = "Team \(team.teamNumber)"
 
-        if let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty, let year = year {
+        if let year = year {
             navigationSubtitle = "▾ \(year)"
         } else {
             navigationSubtitle = "▾ ----"

@@ -26,7 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                  urlOpener: urlOpener,
                                                                  userDefaults: userDefaults,
                                                                  persistentContainer: persistentContainer)
-        let teamsViewController = TeamsContainerViewController(urlOpener: urlOpener,
+        let teamsViewController = TeamsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
+                                                               urlOpener: urlOpener,
                                                                persistentContainer: persistentContainer)
         let districtsViewController = DistrictsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
                                                                        urlOpener: urlOpener,
