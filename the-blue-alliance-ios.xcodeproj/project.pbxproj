@@ -61,6 +61,10 @@
 		925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 925471F8208CC73F00AD3204 /* EventAllianceTableViewCell.xib */; };
 		9255EB6D209AC9760006A745 /* RetryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9255EB6C209AC9760006A745 /* RetryService.swift */; };
 		9255EB6F209ACB1D0006A745 /* TBABackgroundService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9255EB6E209ACB1D0006A745 /* TBABackgroundService.swift */; };
+		92564C6B21644AA30047917F /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92564C6A21644AA30047917F /* Secrets.swift */; };
+		92564C6D21644ACA0047917F /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C6C21644ACA0047917F /* Secrets.plist */; };
+		92564C70216456800047917F /* Secrets_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92564C6F216456800047917F /* Secrets_Tests.swift */; };
+		92564C72216457060047917F /* TestSecrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C71216457060047917F /* TestSecrets.plist */; };
 		9257DF46208BDCBF00F7E2BA /* MatchVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9257DF45208BDCBF00F7E2BA /* MatchVideo.swift */; };
 		9257DF48208BDEE200F7E2BA /* Playable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9257DF47208BDEE200F7E2BA /* Playable.swift */; };
 		9257DF4A208BFC4400F7E2BA /* EventAlliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9257DF49208BFC4400F7E2BA /* EventAlliance.swift */; };
@@ -251,6 +255,10 @@
 		925471F8208CC73F00AD3204 /* EventAllianceTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventAllianceTableViewCell.xib; sourceTree = "<group>"; };
 		9255EB6C209AC9760006A745 /* RetryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryService.swift; sourceTree = "<group>"; };
 		9255EB6E209ACB1D0006A745 /* TBABackgroundService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBABackgroundService.swift; sourceTree = "<group>"; };
+		92564C6A21644AA30047917F /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		92564C6C21644ACA0047917F /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
+		92564C6F216456800047917F /* Secrets_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets_Tests.swift; sourceTree = "<group>"; };
+		92564C71216457060047917F /* TestSecrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestSecrets.plist; sourceTree = "<group>"; };
 		9257DF45208BDCBF00F7E2BA /* MatchVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchVideo.swift; sourceTree = "<group>"; };
 		9257DF47208BDEE200F7E2BA /* Playable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playable.swift; sourceTree = "<group>"; };
 		9257DF49208BFC4400F7E2BA /* EventAlliance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAlliance.swift; sourceTree = "<group>"; };
@@ -532,6 +540,7 @@
 			children = (
 				924459C720CB797E0007570D /* RetryService_Tests.swift */,
 				14B6726B21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift */,
+				92564C6F216456800047917F /* Secrets_Tests.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -664,6 +673,7 @@
 				92942DA31E2154DA008E79CA /* Info.plist */,
 				92D8CD1220C2634200777D93 /* GoogleService-Info.plist */,
 				9287013D20CD72EC0077D6DA /* RemoteConfigDefaults.plist */,
+				92564C6C21644ACA0047917F /* Secrets.plist */,
 				92942DAE1E2158EC008E79CA /* Settings.bundle */,
 				9287014320CD8BF60077D6DA /* Operations */,
 				92F8E354209AAE400094213F /* Services */,
@@ -1000,6 +1010,7 @@
 				92BB8B60214F165A0035AF28 /* View Controllers */,
 				924459BF20CB796B0007570D /* Core Data */,
 				92D6483E20BE4CB8008F0DB3 /* Info.plist */,
+				92564C71216457060047917F /* TestSecrets.plist */,
 			);
 			path = "tba-unit-tests";
 			sourceTree = "<group>";
@@ -1059,6 +1070,7 @@
 				9287013B20CD70CF0077D6DA /* RemoteConfigService.swift */,
 				9255EB6E209ACB1D0006A745 /* TBABackgroundService.swift */,
 				92F8E357209AB3B50094213F /* Provider.swift */,
+				92564C6A21644AA30047917F /* Secrets.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1141,6 +1153,7 @@
 				924E826C208FE7D20053247C /* Run Fabric */,
 				6D02EECF657E8A3F9121C002 /* [CP] Embed Pods Frameworks */,
 				E7F2F429133ED67EFC850346 /* [CP] Copy Pods Resources */,
+				92564C6E21644CC50047917F /* Decrypt Secrets */,
 			);
 			buildRules = (
 			);
@@ -1264,6 +1277,7 @@
 				9287013E20CD72EC0077D6DA /* RemoteConfigDefaults.plist in Resources */,
 				92BB718920D216D50081F4E5 /* EmptyViewController.xib in Resources */,
 				92B5561F215C459400C1D9A3 /* MyTBASignInViewController.xib in Resources */,
+				92564C6D21644ACA0047917F /* Secrets.plist in Resources */,
 				925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */,
 				929DB38E2095640C00FB575F /* ReverseSubtitleTableViewCell.xib in Resources */,
 				92D8CD1320C2634200777D93 /* GoogleService-Info.plist in Resources */,
@@ -1281,6 +1295,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92564C72216457060047917F /* TestSecrets.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1393,7 +1408,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\"";
+			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n";
+		};
+		92564C6E21644CC50047917F /* Decrypt Secrets */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Decrypt Secrets";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export EJSON_KEYDIR=ejson\n./bin/secrets.rb\n";
 		};
 		92E624CE208E8D1600DF58C0 /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1556,6 +1589,7 @@
 				92D5A1221EE48EC700EBFC6F /* EventDistrictPointsViewController.swift in Sources */,
 				924602A41ECD27CE0030EDBF /* EventAwardsViewController.swift in Sources */,
 				92942DDF1E21D2EB008E79CA /* EventViewController.swift in Sources */,
+				92564C6B21644AA30047917F /* Secrets.swift in Sources */,
 				303F824A1EF593BE007CADA1 /* EventRankingsViewController.swift in Sources */,
 				929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */,
 				14796944215EAF7A0075AF4E /* TeamCellViewModel.swift in Sources */,
@@ -1615,6 +1649,7 @@
 				924459C520CB796B0007570D /* CoreDataTestCase.swift in Sources */,
 				14B6727321529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift in Sources */,
 				9287014220CD7CCB0077D6DA /* RemoteConfig+TBA_Tests.swift in Sources */,
+				92564C70216456800047917F /* Secrets_Tests.swift in Sources */,
 				92BB718120CE1A000081F4E5 /* RemoteConfigServiceOperation_Tests.swift in Sources */,
 				92A2F5542156BD4B00267C63 /* NSManagedObjectContext+Extension_Tests.swift in Sources */,
 				92BB717C20CE116C0081F4E5 /* TBAOperation_Tests.swift in Sources */,

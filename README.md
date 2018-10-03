@@ -58,9 +58,38 @@ Here’s an example of a configuration a Realtime Database where the FMS data fe
 
 ![realtime-database-example](screenshots/realtime-database-example.png)
 
+Setup TBA API
+---
+The Blue Alliance's mobile apps depend on The Blue Alliance's API for providing data. You'll need an API key to develop with when testing/building.
+
+1. Navigate to [The Blue Alliance's Account page](https://www.thebluealliance.com/account) (sign in if prompted)
+2. Scroll down to `Read API Keys`
+3. Enter a locally namespaced description (ex: `zach-tba-ios-dev`)
+4. Click `+ Add New Key` to generate a new API key
+
+We'll use this key in the [Setup Secrets](#setup-secrets) step when setting up local secrets in the The Blue Alliance for iOS project.
+
+Setup Secrets
+---
+The Blue Alliance for iOS uses Shopify's [ejson](https://github.com/Shopify/ejson) library to encrypt/decrypt secrets used for configuration within the app. Generate a ejson key locally to use.
+
+```
+$ bundle exec ejson --keydir=ejson keygen -w
+```
+
+Replace the `_public_key` field in in the `secrets.ejson` file with the public key for your ejson key. Additionally, replace all of the currently-encrypted fields with your own secrets. `tba_api_key` should be the TBA API key you generated in the [Setup TBA API](#setup-tba-api) step.
+
+Encrypt your modified `secrets.ejson` file using your private key.
+
+```
+$ bundle exec ejson --keydir=ejson encrypt ejson/secrets.ejson
+```
+
+A `Secrets.plist` file will be generated when building The Blue Alliance for iOS using your `secrets.ejson` file. This `Secrets.plist` is loaded dynamically at runtime as a dictionary to be used in the app.
+
 Building in Xcode
 ---
-Before bulding in Xcode, make sure you've setup a Firebase project, as described in the [Setup Firebase](#setup-firebase) section
+Before building in Xcode, make sure you've setup a Firebase project, as described in the [Setup Firebase](#setup-firebase) section
 
 1. Be sure you have all required build tools, as described in the [Install Build Tool Dependencies](#install-build-tool-dependencies) section
 2. Install project dependencies, as described in the [Install Project Dependencies](#install-project-dependencies) section
