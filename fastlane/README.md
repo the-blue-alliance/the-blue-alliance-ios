@@ -21,16 +21,6 @@ or alternatively using `brew cask install fastlane`
 fastlane ios test
 ```
 Runs all the tests
-### ios test_unit
-```
-fastlane ios test_unit
-```
-Run only the unit tests
-### ios test_ui
-```
-fastlane ios test_ui
-```
-Run only the UI tests on 3 devices (square device, notch device, and iPad) and two platforms (iOS 11.4 and iOS 12)
 
 ----
 
