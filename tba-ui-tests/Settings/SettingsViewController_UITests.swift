@@ -10,6 +10,12 @@ class SettingsViewController_UITestCase: TBAUITestCase {
         settingsButton.tap()
     }
 
+    func test_showsAppVersion() {
+        let predicate = NSPredicate(format: "label CONTAINS[c] 'The Blue Alliance for iOS - v'")
+        let appVersionTexts = app.tables.staticTexts.containing(predicate)
+        XCTAssertEqual(appVersionTexts.count, 1)
+    }
+
     func test_openWebiste() {
         let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
 

@@ -70,7 +70,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return NSPersistentContainer(name: "TBA")
     }()
     let userDefaults: UserDefaults = UserDefaults.standard
-    let tbaKit: TBAKit = TBAKit.sharedKit
     let urlOpener: URLOpener = UIApplication.shared
 
     lazy var pushService: PushService = {
@@ -93,10 +92,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                   retryService: RetryService())
     }()
 
-
     // MARK: - UIApplicationDelegate
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // print(launchOptions)
         AppDelegate.setupAppearance()
 
         // Setup a dummy launch screen in our window while we're doing setup tasks
@@ -111,7 +110,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
 
         let secrets = Secrets()
-        tbaKit.apiKey = secrets.tbaAPIKey
 
         // Setup our React Native service
         reactNativeService.registerRetryable(initiallyRetry: true)
@@ -129,8 +127,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 DispatchQueue.main.async {
                     AppDelegate.showFatalError(error, in: window)
                 }
+            } else if let buildVersionNumber = Bundle.main.buildVersionNumber,
+                !self.isAppVersionSupported(buildVersionNumber, remoteConfig: self.remoteConfigService.remoteConfig) {
+                // App build is less than minimum app version - abort
+                let appStoreID = self.remoteConfigService.remoteConfig.appStoreID
+                DispatchQueue.main.async {
+                    AppDelegate.showMinimumAppAlert(appStoreID: appStoreID,
+                                                    currentAppVersion: buildVersionNumber,
+                                                    in: window)
+                }
             } else {
                 self.remoteConfigService.registerRetryable()
+                TBAKit.sharedKit.apiKey = secrets.tbaAPIKey
 
                 DispatchQueue.main.async {
                     guard let window = self.window else {
@@ -190,13 +198,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: Private
 
+    private func isAppVersionSupported(_ version: Int, remoteConfig: RemoteConfig) -> Bool {
+        if ProcessInfo.processInfo.arguments.contains("-testUnsupportedVersion") {
+            return false
+        }
+        return version >= self.remoteConfigService.remoteConfig.minimumAppVersion
+    }
+
     private static func showFatalError(_ error: NSError, in window: UIWindow) {
-        let alertController = UIAlertController(title: "Error Loading Data",
-                                                message: "There was an error loading local data - try reinstalling The Blue Alliance",
+        showRootAlertView(title: "Error Loading Data",
+                          message: "There was an error loading local data - try reinstalling The Blue Alliance",
+                          in: window) { (_) in
+                            fatalError("Unresolved error \(error), \(error.userInfo)")
+        }
+    }
+
+    private static func showMinimumAppAlert(appStoreID: String, currentAppVersion: Int, in window: UIWindow) {
+        showRootAlertView(title: "Unsupported App Version",
+                          message: "Your version (\(currentAppVersion)) of The Blue Alliance for iOS is no longer supported - please visit the App Store to update to the latest version",
+                          in: window) { (_) in
+                            if let url = URL(string: "https://itunes.apple.com/app/id\(appStoreID)") {
+                                UIApplication.shared.open(url, options: [:], completionHandler: { (_) in
+                                    fatalError("Unsupported app version \(currentAppVersion)")
+                                })
+                            } else {
+                                fatalError("Unsupported app version \(currentAppVersion)")
+                            }
+        }
+    }
+
+    private static func showRootAlertView(title: String, message: String, in window: UIWindow, handler: ((UIAlertAction) -> Void)?) {
+        let alertController = UIAlertController(title: title,
+                                                message: message,
                                                 preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "Close", style: .default, handler: { (_) in
-            fatalError("Unresolved error \(error), \(error.userInfo)")
-        }))
+        alertController.addAction(UIAlertAction(title: "Close", style: .default, handler: handler))
         window.rootViewController?.present(alertController, animated: true, completion: nil)
     }
 

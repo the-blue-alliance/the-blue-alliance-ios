@@ -10,6 +10,8 @@
 	<integer>-1</integer>
 	<key>mytba_enabled</key>
 	<string>0</string>
+	<key>app_store_id</key>
+	<string>abcd123</string>
 	<key>current_season</key>
 	<real>2018</real>
 </dict>
