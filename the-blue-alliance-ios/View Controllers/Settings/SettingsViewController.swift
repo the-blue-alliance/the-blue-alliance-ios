@@ -74,6 +74,13 @@ class SettingsViewController: UITableViewController, Persistable {
         }
     }
 
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        if section == SettingsSection.max.rawValue - 1 {
+            return "The Blue Alliance for iOS - \(Bundle.main.displayVersionString)"
+        }
+        return nil
+    }
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
 
