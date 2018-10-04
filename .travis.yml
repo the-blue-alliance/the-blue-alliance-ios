@@ -16,7 +16,7 @@ install:
   - bundle install
   - bundle exec pod install --repo-update
   - cp mock-GoogleService-Info.plist the-blue-alliance-ios/GoogleService-Info.plist
-  - ./bin/setup_ejson.sh
+  - cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
 
 script:
   - bundle exec fastlane test
