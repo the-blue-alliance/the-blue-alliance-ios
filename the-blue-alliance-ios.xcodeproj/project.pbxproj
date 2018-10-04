@@ -1178,7 +1178,6 @@
 				924E826C208FE7D20053247C /* Run Fabric */,
 				6D02EECF657E8A3F9121C002 /* [CP] Embed Pods Frameworks */,
 				E7F2F429133ED67EFC850346 /* [CP] Copy Pods Resources */,
-				92564C6E21644CC50047917F /* Decrypt Secrets */,
 			);
 			buildRules = (
 			);
@@ -1422,20 +1421,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n";
-		};
-		92564C6E21644CC50047917F /* Decrypt Secrets */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Decrypt Secrets";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export EJSON_KEYDIR=ejson\n./bin/secrets.rb\n";
 		};
 		92E624CE208E8D1600DF58C0 /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;

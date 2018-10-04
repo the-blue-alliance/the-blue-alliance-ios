@@ -71,21 +71,13 @@ We'll use this key in the [Setup Secrets](#setup-secrets) step when setting up l
 
 Setup Secrets
 ---
-The Blue Alliance for iOS uses Shopify's [ejson](https://github.com/Shopify/ejson) library to encrypt/decrypt secrets used for configuration within the app. Generate a ejson key locally to use.
+The Blue Alliance for iOS stores secrets locally in a `Secrets.plist` file, which is loaded dynamically at runtime as a dictionary to be used in the app. Create a `Secrets.plist` file from the template `mock-Secrets.plist`
 
 ```
-$ bundle exec ejson --keydir=ejson keygen -w
+$ cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
 ```
 
-Replace the `_public_key` field in in the `secrets.ejson` file with the public key for your ejson key. Additionally, replace all of the currently-encrypted fields with your own secrets. `tba_api_key` should be the TBA API key you generated in the [Setup TBA API](#setup-tba-api) step.
-
-Encrypt your modified `secrets.ejson` file using your private key.
-
-```
-$ bundle exec ejson --keydir=ejson encrypt ejson/secrets.ejson
-```
-
-A `Secrets.plist` file will be generated when building The Blue Alliance for iOS using your `secrets.ejson` file. This `Secrets.plist` is loaded dynamically at runtime as a dictionary to be used in the app.
+If linked properly, the `Secrets.plist` file in the Xcode project navigation should go from being red to being black. Click `Secrets.plist` to edit it, and fill out the secret values. `tba_api_key` should be the TBA API key you generated in the [Setup TBA API](#setup-tba-api) step.
 
 Building in Xcode
 ---
