@@ -110,7 +110,7 @@ class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TB
         return delegate?.isDataSourceEmpty ?? false
     }
 
-    func refresh() {
+    @objc func refresh() {
         delegate?.refresh()
     }
 

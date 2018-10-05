@@ -155,8 +155,11 @@ extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
             } else {
-                // TODO: Fix this
-                // self.markRefreshSuccessful()
+                // TODO: Use markRefreshSuccessful from Refreshable
+                if let initialRefreshKey = self.initialRefreshKey {
+                    UserDefaults.standard.set(true, forKey: initialRefreshKey)
+                    UserDefaults.standard.synchronize()
+                }
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
