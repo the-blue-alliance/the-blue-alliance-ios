@@ -48,19 +48,12 @@ protocol EventDistrictPointsViewControllerDelegate: AnyObject {
     func districtEventPointsSelected(_ districtEventPoints: DistrictEventPoints)
 }
 
-private class EventDistrictPointsViewController: TBATableViewController {
+private class EventDistrictPointsViewController: TBATableViewController, Refreshable {
 
     private let event: Event
 
     weak var delegate: EventDistrictPointsViewControllerDelegate?
-    private lazy var dataSource: TableViewDataSource<DistrictEventPoints, EventDistrictPointsViewController> = {
-        let fetchRequest: NSFetchRequest<DistrictEventPoints> = DistrictEventPoints.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "total", ascending: false)]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
-    }()
+    private var dataSource: TableViewDataSource<DistrictEventPoints, EventDistrictPointsViewController>!
 
     // MARK: - Init
 
@@ -68,21 +61,36 @@ private class EventDistrictPointsViewController: TBATableViewController {
         self.event = event
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Refreshing
+    // MARK: - Refreshable
 
-    override func refresh() {
+    var initialRefreshKey: String? {
+        return "\(event.key!)_district_points"
+    }
+
+    var isDataSourceEmpty: Bool {
+        if let points = dataSource.fetchedResultsController.fetchedObjects, points.isEmpty {
+            return true
+        }
+        return false
+    }
+
+    @objc func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchEventDistrictPoints(key: event.key!, completion: { (eventPoints, _, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event district points - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
@@ -100,13 +108,6 @@ private class EventDistrictPointsViewController: TBATableViewController {
         addRequest(request: request!)
     }
 
-    override func shouldNoDataRefresh() -> Bool {
-        if let points = dataSource.fetchedResultsController.fetchedObjects, points.isEmpty {
-            return true
-        }
-        return false
-    }
-
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -115,6 +116,15 @@ private class EventDistrictPointsViewController: TBATableViewController {
     }
 
     // MARK: Table View Data Source
+
+    private func setupDataSource() {
+        let fetchRequest: NSFetchRequest<DistrictEventPoints> = DistrictEventPoints.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "total", ascending: false)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))

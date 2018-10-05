@@ -18,13 +18,19 @@ class DistrictEventsViewController: EventsViewController {
 
     // MARK: - Refreshable
 
-    override func refresh() {
+    override var initialRefreshKey: String? {
+        return "\(district.key!)_events"
+    }
+
+    @objc override func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchDistrictEvents(key: district.key!, completion: { (events, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in

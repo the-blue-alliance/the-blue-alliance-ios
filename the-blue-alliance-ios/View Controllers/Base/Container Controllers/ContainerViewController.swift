@@ -110,6 +110,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
             addChild(viewController)
             containerView.addSubview(viewController.view)
             viewController.view.autoPinEdgesToSuperviewEdges()
+            viewController.enableRefreshing()
         }
 
         stackView.autoPinEdge(toSuperviewSafeArea: .top)

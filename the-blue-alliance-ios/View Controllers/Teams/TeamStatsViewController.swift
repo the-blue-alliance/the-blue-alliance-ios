@@ -3,7 +3,7 @@ import UIKit
 import CoreData
 import TBAKit
 
-class TeamStatsViewController: TBATableViewController, Observable {
+class TeamStatsViewController: TBATableViewController, Refreshable, Observable {
 
     private let event: Event
     private let team: Team
@@ -60,13 +60,23 @@ class TeamStatsViewController: TBATableViewController, Observable {
 
     // MARK: - Refresh
 
-    override func refresh() {
+    var initialRefreshKey: String? {
+        return "\(event.key!)_team_stats"
+    }
+
+    var isDataSourceEmpty: Bool {
+        return teamStat == nil
+    }
+
+    @objc func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchEventTeamStats(key: event.key!, completion: { (stats, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh team stats - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
@@ -81,10 +91,6 @@ class TeamStatsViewController: TBATableViewController, Observable {
             })
         })
         addRequest(request: request!)
-    }
-
-    override func shouldNoDataRefresh() -> Bool {
-        return teamStat == nil
     }
 
     // MARK: Table View Data Source

@@ -12,11 +12,17 @@ protocol Refreshable: AnyObject {
     var refreshControl: UIRefreshControl? { get set }
     var refreshView: UIScrollView { get }
 
-    func refresh()
-    func shouldNoDataRefresh() -> Bool
+    /**
+     Identifier that reflects type of data used during refresh, and if we've fetched it before - used to calculate if we should refresh
+     */
+    var initialRefreshKey: String? { get }
 
-    func enableRefreshing()
-    func disableRefreshing()
+    /**
+     If the data source for the given view controller is empty - used to calculate if we should refresh
+     */
+    var isDataSourceEmpty: Bool { get }
+
+    func refresh()
 }
 
 extension Refreshable {
@@ -27,7 +33,20 @@ extension Refreshable {
     }
 
     func shouldRefresh() -> Bool {
-        return shouldNoDataRefresh() && !isRefreshing
+        var hasRefreshed = true
+        if let initialRefreshKey = initialRefreshKey {
+            hasRefreshed = UserDefaults.standard.bool(forKey: initialRefreshKey)
+        }
+        return (!hasRefreshed || isDataSourceEmpty) && !isRefreshing
+    }
+
+    func markRefreshSuccessful() {
+        guard let initialRefreshKey = initialRefreshKey else {
+            return
+        }
+
+        UserDefaults.standard.set(true, forKey: initialRefreshKey)
+        UserDefaults.standard.synchronize()
     }
 
     // TODO: Add a method to add an observer on a single core data object for changes
@@ -88,6 +107,17 @@ extension Refreshable {
                 self.refreshControl?.endRefreshing()
             }
         }
+    }
+
+    func enableRefreshing() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: Selector(("refresh")), for: .valueChanged)
+
+        self.refreshControl = refreshControl
+    }
+
+    func disableRefreshing() {
+        refreshControl = nil
     }
 
 }

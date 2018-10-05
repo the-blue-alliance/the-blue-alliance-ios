@@ -7,22 +7,13 @@ protocol MatchesViewControllerDelegate: AnyObject {
     func matchSelected(_ match: Match)
 }
 
-class MatchesViewController: TBATableViewController {
+class MatchesViewController: TBATableViewController, Refreshable {
 
     private let event: Event
     private let team: Team?
 
     weak var delegate: MatchesViewControllerDelegate?
-    private lazy var dataSource: TableViewDataSource<Match, MatchesViewController> = {
-        let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "compLevelInt", ascending: true),
-                                        NSSortDescriptor(key: "setNumber", ascending: true),
-                                        NSSortDescriptor(key: "matchNumber", ascending: true)]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "compLevelInt", cacheName: nil)
-        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
-    }()
+    private var dataSource: TableViewDataSource<Match, MatchesViewController>!
 
     // MARK: - Init
 
@@ -31,21 +22,36 @@ class MatchesViewController: TBATableViewController {
         self.team = team
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Refreshing
+    // MARK: - Refreshable
 
-    override func refresh() {
+    var initialRefreshKey: String? {
+        return "\(event.key!)_matches"
+    }
+
+    var isDataSourceEmpty: Bool {
+        if let matches = dataSource.fetchedResultsController.fetchedObjects, matches.isEmpty {
+            return true
+        }
+        return false
+    }
+
+    @objc func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchEventMatches(key: event.key!, completion: { (matches, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event matches - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
@@ -63,14 +69,18 @@ class MatchesViewController: TBATableViewController {
         addRequest(request: request!)
     }
 
-    override func shouldNoDataRefresh() -> Bool {
-        if let matches = dataSource.fetchedResultsController.fetchedObjects, matches.isEmpty {
-            return true
-        }
-        return false
-    }
-
     // MARK: Table View Data Source
+
+    private func setupDataSource() {
+        let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "compLevelInt", ascending: true),
+                                        NSSortDescriptor(key: "setNumber", ascending: true),
+                                        NSSortDescriptor(key: "matchNumber", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "compLevelInt", cacheName: nil)
+        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))

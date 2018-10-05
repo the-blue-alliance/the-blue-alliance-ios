@@ -8,6 +8,8 @@ protocol TableViewDataSourceDelegate: class {
     associatedtype Object
     associatedtype Cell: UITableViewCell, Reusable
 
+    var tableView: UITableView! { get }
+
     func configure(_ cell: Cell, for object: Object, at indexPath: IndexPath)
     func title(for section: Int) -> String?
 
@@ -28,8 +30,7 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
     typealias Object = Delegate.Object
     typealias Cell = Delegate.Cell
 
-    required init(tableView: UITableView, fetchedResultsController: NSFetchedResultsController<Result>, delegate: Delegate) {
-        self.tableView = tableView
+    required init(fetchedResultsController: NSFetchedResultsController<Result>, delegate: Delegate) {
         self.fetchedResultsController = fetchedResultsController
         self.delegate = delegate
 
@@ -39,15 +40,10 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         try! fetchedResultsController.performFetch()
 
         DispatchQueue.main.async {
-            tableView.registerReusableCell(Cell.self)
-            tableView.dataSource = self
-            tableView.reloadData()
+            delegate.tableView.registerReusableCell(Cell.self)
+            delegate.tableView.dataSource = self
+            delegate.tableView.reloadData()
         }
-    }
-
-    var selectedObject: Object? {
-        guard let indexPath = tableView.indexPathForSelectedRow else { return nil }
-        return object(at: indexPath)
     }
 
     func object(at indexPath: IndexPath) -> Object {
@@ -59,13 +55,12 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         configure(fetchedResultsController.fetchRequest)
         try! fetchedResultsController.performFetch()
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+            self.delegate.tableView.reloadData()
         }
     }
 
     // MARK: Private
 
-    fileprivate let tableView: UITableView
     public let fetchedResultsController: NSFetchedResultsController<Result>
     fileprivate weak var delegate: Delegate!
 
@@ -108,7 +103,7 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
     // MARK: NSFetchedResultsControllerDelegate
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.reloadData()
+        delegate.tableView.reloadData()
     }
 
 }

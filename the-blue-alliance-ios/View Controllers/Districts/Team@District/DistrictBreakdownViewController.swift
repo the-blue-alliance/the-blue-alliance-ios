@@ -3,7 +3,7 @@ import UIKit
 import CoreData
 import TBAKit
 
-class DistrictBreakdownViewController: TBATableViewController, Observable {
+class DistrictBreakdownViewController: TBATableViewController, Refreshable, Observable {
 
     private let ranking: DistrictRanking
     private let sortedEventPoints: [DistrictEventPoints]
@@ -43,9 +43,18 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
     }
 
-    // MARK: - Refreshing
+    // MARK: - Refreshable
 
-    override func refresh() {
+    var initialRefreshKey: String? {
+        return "\(ranking.district!.key!)_breakdown"
+    }
+
+    var isDataSourceEmpty: Bool {
+        // This should never fire
+        return sortedEventPoints.count == 0
+    }
+
+    @objc func refresh() {
         removeNoDataView()
 
         var rankingsRequest: URLSessionDataTask?
@@ -54,6 +63,8 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
                 self.showErrorAlert(with: "Unable to refresh team district breakdown - \(error.localizedDescription)")
                 self.removeRequest(request: rankingsRequest!)
                 return
+            } else {
+                self.markRefreshSuccessful()
             }
 
             // Might as well insert them all... we just need to only fetch
@@ -113,11 +124,6 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
                 completion(true)
             })
         })
-    }
-
-    override func shouldNoDataRefresh() -> Bool {
-        // This should never fire
-        return sortedEventPoints.count == 0
     }
 
     // MARK: Table View Data Source

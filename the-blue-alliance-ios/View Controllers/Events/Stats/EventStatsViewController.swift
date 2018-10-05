@@ -4,7 +4,7 @@ import TBAKit
 import UIKit
 import React
 
-class EventStatsViewController: TBAViewController, Observable, ReactNative {
+class EventStatsViewController: TBAViewController, Refreshable, Observable, ReactNative {
 
     private let event: Event
 
@@ -95,9 +95,13 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
         showNoDataView(with: "No stats for event")
     }
 
-    // MARK: Refresh
+    // MARK: - Refreshable
 
-    override func shouldNoDataRefresh() -> Bool {
+    var initialRefreshKey: String? {
+        return "\(event.key!)_insights"
+    }
+
+    var isDataSourceEmpty: Bool {
         guard let insights = event.insights else {
             return true
         }
@@ -107,13 +111,15 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
         return qual == nil || playoff == nil
     }
 
-    override func refresh() {
+    @objc func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchEventInsights(key: event.key!, completion: { (insights, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event stats - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
@@ -128,7 +134,7 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
     }
 
     override func reloadViewAfterRefresh() {
-        if shouldNoDataRefresh() {
+        if isDataSourceEmpty {
             showNoDataView()
         } else {
             updateEventStatsView()

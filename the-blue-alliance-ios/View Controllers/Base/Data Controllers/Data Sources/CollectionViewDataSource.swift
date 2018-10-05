@@ -9,6 +9,8 @@ protocol CollectionViewDataSourceDelegate: class {
     associatedtype Object: NSFetchRequestResult
     associatedtype Cell: UICollectionViewCell, Reusable
 
+    var collectionView: UICollectionView! { get }
+
     func configure(_ cell: Cell, for object: Object, at indexPath: IndexPath)
 
     func showNoDataView()
@@ -20,24 +22,19 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
     typealias Object = Delegate.Object
     typealias Cell = Delegate.Cell
 
-    required init(collectionView: UICollectionView, fetchedResultsController: NSFetchedResultsController<Result>, delegate: Delegate) {
-        self.collectionView = collectionView
+    required init(fetchedResultsController: NSFetchedResultsController<Result>, delegate: Delegate) {
         self.fetchedResultsController = fetchedResultsController
         self.delegate = delegate
+
         super.init()
         fetchedResultsController.delegate = self
         try! fetchedResultsController.performFetch()
 
         DispatchQueue.main.async {
-            collectionView.registerReusableCell(Cell.self)
-            collectionView.dataSource = self
-            self.collectionView.reloadData()
+            delegate.collectionView.registerReusableCell(Cell.self)
+            delegate.collectionView.dataSource = self
+            delegate.collectionView.reloadData()
         }
-    }
-
-    var selectedObject: Object? {
-        guard let indexPath = collectionView.indexPathsForSelectedItems?.first else { return nil }
-        return object(at: indexPath)
     }
 
     func object(at indexPath: IndexPath) -> Object {
@@ -49,13 +46,12 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
         configure(fetchedResultsController.fetchRequest)
         try! fetchedResultsController.performFetch()
         DispatchQueue.main.async {
-            self.collectionView.reloadData()
+            self.delegate.collectionView.reloadData()
         }
     }
 
     // MARK: Private
 
-    fileprivate let collectionView: UICollectionView
     public let fetchedResultsController: NSFetchedResultsController<Result>
     fileprivate weak var delegate: Delegate!
 
@@ -95,7 +91,7 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
     // MARK: NSFetchedResultsControllerDelegate
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        collectionView.reloadData()
+        delegate.collectionView.reloadData()
     }
 
 }

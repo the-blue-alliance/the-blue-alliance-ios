@@ -10,8 +10,18 @@ private struct Constants {
     }
 }
 
-public enum APIError: Error {
+public enum MyTBAError: Error {
     case error(String)
+}
+
+extension MyTBAError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .error(message: let message):
+            // TODO: This, unlike the name says, isn't localized
+            return message
+        }
+    }
 }
 
 class MyTBA {
@@ -103,7 +113,7 @@ class MyTBA {
                 let response = try! MyTBA.jsonDecoder.decode(T.self, from: data)
                 completion(response, nil)
             } else {
-                completion(nil, APIError.error("Unexpected response from myTBA API"))
+                completion(nil, MyTBAError.error("Unexpected response from myTBA API"))
             }
         }
         task.resume()

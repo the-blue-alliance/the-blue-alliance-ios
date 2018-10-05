@@ -4,7 +4,7 @@ import CoreData
 import TBAKit
 import PureLayout
 
-class MatchInfoViewController: TBAViewController, Observable {
+class MatchInfoViewController: TBAViewController, Refreshable, Observable {
 
     private let match: Match
     private let team: Team?
@@ -176,19 +176,25 @@ class MatchInfoViewController: TBAViewController, Observable {
 
     // MARK: Refresh
 
-    override func shouldNoDataRefresh() -> Bool {
+    var initialRefreshKey: String? {
+        return match.key!
+    }
+
+    var isDataSourceEmpty: Bool {
         // TODO: Think about doing a quiet refresh in the background for match videos on initial load...
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/135
         return (match.videos?.count ?? 0) == 0
     }
 
-    override func refresh() {
+    @objc func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchMatch(key: match.key!, { (modelMatch, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh match - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in

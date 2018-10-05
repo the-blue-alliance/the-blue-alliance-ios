@@ -2,9 +2,14 @@ import Foundation
 import UIKit
 import CoreData
 
-typealias DataController = Persistable & Refreshable & Alertable & Stateful
+typealias DataController = Persistable & Alertable & Stateful
 
 class TBAViewController: UIViewController, DataController {
+
+    var persistentContainer: NSPersistentContainer
+    var noDataViewController: NoDataViewController?
+
+    var requestsArray: [URLSessionDataTask] = []
 
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView(forAutoLayout: ())
@@ -13,36 +18,12 @@ class TBAViewController: UIViewController, DataController {
         return scrollView
     }()
 
-    // MARK: - Persistable
-
-    var persistentContainer: NSPersistentContainer
-
-    // MARK: - Refreshable
-
-    var requests: [URLSessionDataTask] = []
-
-    var refreshView: UIScrollView {
-        return scrollView
-    }
-
-    var refreshControl: UIRefreshControl? = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        return refreshControl
-    }()
-
-    // MARK: - Stateful
-
-    var noDataViewController: NoDataViewController?
-
     // MARK: - Init
 
     init(persistentContainer: NSPersistentContainer) {
         self.persistentContainer = persistentContainer
 
         super.init(nibName: nil, bundle: nil)
-
-        enableRefreshing()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -59,25 +40,35 @@ class TBAViewController: UIViewController, DataController {
         scrollView.autoPinEdgesToSuperviewEdges()
     }
 
-    @objc func refresh() {
-        fatalError("Implement this downstream")
-    }
-
-    func shouldNoDataRefresh() -> Bool {
-        fatalError("Implement this downstream")
-    }
-
     // TODO: https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/133
     func reloadViewAfterRefresh() {
         fatalError("Implement this downstream")
     }
 
-    func enableRefreshing() {
-        scrollView.refreshControl = refreshControl
+}
+
+extension Refreshable where Self: TBAViewController {
+
+    var refreshControl: UIRefreshControl? {
+        get {
+            return scrollView.refreshControl
+        }
+        set {
+            scrollView.refreshControl = newValue
+        }
     }
 
-    func disableRefreshing() {
-        scrollView.refreshControl = nil
+    var requests: [URLSessionDataTask] {
+        get {
+            return requestsArray
+        }
+        set {
+            requestsArray = newValue
+        }
+    }
+
+    var refreshView: UIScrollView {
+        return scrollView
     }
 
 }

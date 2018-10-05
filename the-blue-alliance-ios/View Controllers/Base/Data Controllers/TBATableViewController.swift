@@ -5,25 +5,16 @@ import CoreData
 class TBATableViewController: UITableViewController, DataController {
 
     var persistentContainer: NSPersistentContainer
-
-    var requests: [URLSessionDataTask] = []
-    var refreshView: UIScrollView {
-        return tableView
-    }
     var noDataViewController: NoDataViewController?
 
-    private var _refreshControl: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        return refreshControl
-    }()
+    var requestsArray: [URLSessionDataTask] = []
+
+    // MARK: - Init
 
     init(style: UITableView.Style = .plain, persistentContainer: NSPersistentContainer) {
         self.persistentContainer = persistentContainer
 
         super.init(style: style)
-
-        enableRefreshing()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -53,22 +44,30 @@ class TBATableViewController: UITableViewController, DataController {
         }
     }
 
-    // MARK: - Refreshable
+}
 
-    @objc func refresh() {
-        fatalError("Implement this downstream")
+extension Refreshable where Self: TBATableViewController {
+
+    var refreshControl: UIRefreshControl? {
+        get {
+            return tableView.refreshControl
+        }
+        set {
+            tableView.refreshControl = newValue
+        }
     }
 
-    func shouldNoDataRefresh() -> Bool {
-        fatalError("Implement this downstream")
+    var requests: [URLSessionDataTask] {
+        get {
+            return requestsArray
+        }
+        set {
+            requestsArray = newValue
+        }
     }
 
-    func enableRefreshing() {
-        tableView.refreshControl = _refreshControl
-    }
-
-    func disableRefreshing() {
-        tableView.refreshControl = nil
+    var refreshView: UIScrollView {
+        return tableView
     }
 
 }

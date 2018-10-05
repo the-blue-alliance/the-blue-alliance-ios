@@ -7,7 +7,7 @@ protocol DistrictTeamSummaryViewControllerDelegate: AnyObject {
     func eventPointsSelected(_ eventPoints: DistrictEventPoints)
 }
 
-class DistrictTeamSummaryViewController: TBATableViewController {
+class DistrictTeamSummaryViewController: TBATableViewController, Refreshable {
 
     private let ranking: DistrictRanking
 
@@ -52,13 +52,23 @@ class DistrictTeamSummaryViewController: TBATableViewController {
 
     // MARK: - Refresh
 
-    override func refresh() {
+    var initialRefreshKey: String? {
+        return "\(ranking.district!.key!)_rankings"
+    }
+
+    var isDataSourceEmpty: Bool {
+        return sortedEventPoints.count == 0
+    }
+
+    @objc func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchDistrictRankings(key: ranking.district!.key!, completion: { (rankings, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
@@ -75,10 +85,6 @@ class DistrictTeamSummaryViewController: TBATableViewController {
             })
         })
         addRequest(request: request!)
-    }
-
-    override func shouldNoDataRefresh() -> Bool {
-        return sortedEventPoints.count == 0
     }
 
     // MARK: - Table view data source

@@ -35,7 +35,11 @@ class WeekEventsViewController: EventsViewController {
 
     // MARK: - Refreshable
 
-    override func refresh() {
+    override var initialRefreshKey: String? {
+        return "\(year)_events"
+    }
+
+    @objc override func refresh() {
         removeNoDataView()
 
         // Default to refreshing the currently selected year
@@ -49,6 +53,8 @@ class WeekEventsViewController: EventsViewController {
         request = TBAKit.sharedKit.fetchEvents(year: year, completion: { (events, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in

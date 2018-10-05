@@ -2,10 +2,21 @@ import Foundation
 import TBAKit
 import CoreData
 
-// TODO: LocalizedError
-private enum BackgroundFetchError: Error {
+enum BackgroundFetchError: Error {
     case message(String)
     case error(Error)
+}
+
+extension BackgroundFetchError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .message(message: let message):
+            // TODO: This, unlike the name says, isn't localized
+            return message
+        case .error(error: let error):
+            return error.localizedDescription
+        }
+    }
 }
 
 // Manage background fetches of information, such as teams (used in a handful of places), events, and matches
@@ -15,7 +26,7 @@ class TBABackgroundService {
     // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/183
 
     static func backgroundFetchTeam(_ key: String, in context: NSManagedObjectContext, completion: @escaping (Team?, Error?) -> Void) {
-        _ = TBAKit.sharedKit.fetchTeam(key: key) { (modelTeam, error) in
+        TBAKit.sharedKit.fetchTeam(key: key) { (modelTeam, error) in
             if let error = error {
                 print("Error in background fetch of team \(key) - \(error.localizedDescription)")
                 completion(nil, BackgroundFetchError.error(error))
@@ -34,7 +45,7 @@ class TBABackgroundService {
     }
 
     static func backgroundFetchEvent(_ key: String, in context: NSManagedObjectContext, completion: @escaping (Event?, Error?) -> Void) {
-        _ = TBAKit.sharedKit.fetchEvent(key: key) { (modelEvent, error) in
+        TBAKit.sharedKit.fetchEvent(key: key) { (modelEvent, error) in
             if let error = error {
                 print("Error in background fetch of event \(key) - \(error.localizedDescription)")
                 completion(nil, BackgroundFetchError.error(error))
@@ -81,7 +92,7 @@ class TBABackgroundService {
     }
 
     private static func backgroundFetchMatch(_ key: String, for event: Event, in context: NSManagedObjectContext, completion: @escaping (Match?, Error?) -> Void) {
-        _ = TBAKit.sharedKit.fetchMatch(key: key) { (modelMatch, error) in
+        TBAKit.sharedKit.fetchMatch(key: key) { (modelMatch, error) in
             if let error = error {
                 print("Error in background fetch of match \(key) - \(error.localizedDescription)")
                 completion(nil, BackgroundFetchError.error(error))

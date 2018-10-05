@@ -8,22 +8,28 @@ protocol SelectTableViewControllerDelegate: AnyObject {
     func optionSelected(_ option: OptionType)
     func titleForOption(_ option: OptionType) -> String
 
+    var initialRefreshKey: String? { get }
+    var isDataSourceEmpty: Bool { get }
     func refresh()
-    func shouldNoDataRefresh() -> Bool
 }
 
 extension SelectTableViewControllerDelegate {
+
+    var initialRefreshKey: String? {
+        return nil
+    }
+
+    var isDataSourceEmpty: Bool {
+        return false
+    }
 
     func refresh() {
         // NOP
     }
 
-    func shouldNoDataRefresh() -> Bool {
-        return false
-    }
 }
 
-class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TBATableViewController {
+class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TBATableViewController, Refreshable {
 
     private let current: Delegate.OptionType?
     var options: [Delegate.OptionType]
@@ -36,8 +42,6 @@ class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TB
         self.willPush = willPush
 
         super.init(persistentContainer: persistentContainer)
-
-        disableRefreshing()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -49,6 +53,8 @@ class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TB
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        disableRefreshing()
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         tableView.tableFooterView = UIView()
@@ -96,12 +102,16 @@ class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TB
 
     // MARK: - Refreshable
 
-    @objc override func refresh() {
-        delegate?.refresh()
+    var initialRefreshKey: String? {
+        return delegate?.initialRefreshKey
     }
 
-    override func shouldNoDataRefresh() -> Bool {
-        return delegate?.shouldNoDataRefresh() ?? false
+    var isDataSourceEmpty: Bool {
+        return delegate?.isDataSourceEmpty ?? false
+    }
+
+    @objc func refresh() {
+        delegate?.refresh()
     }
 
     // MARK: - Private Methods

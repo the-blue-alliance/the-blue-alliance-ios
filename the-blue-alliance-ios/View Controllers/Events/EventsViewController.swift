@@ -27,27 +27,17 @@ extension EventsViewControllerDelegate {
 
  See: TeamEventsViewController, DistrictEventsViewController, etc.
  */
-class EventsViewController: TBATableViewController, EventsViewControllerDataSourceConfiguration {
+class EventsViewController: TBATableViewController, Refreshable, EventsViewControllerDataSourceConfiguration {
 
     weak var delegate: EventsViewControllerDelegate?
-    private lazy var dataSource: TableViewDataSource<Event, EventsViewController> = {
-        let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
-        fetchRequest.sortDescriptors = [firstSortDescriptor,
-                                        NSSortDescriptor(key: "startDate", ascending: true),
-                                        NSSortDescriptor(key: "name", ascending: true)]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                             managedObjectContext: persistentContainer.viewContext,
-                                             sectionNameKeyPath: sectionNameKeyPath,
-                                             cacheName: nil)
-        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
-    }()
+    private var dataSource: TableViewDataSource<Event, EventsViewController>!
 
     // MARK: Init
 
     init(persistentContainer: NSPersistentContainer) {
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -62,13 +52,21 @@ class EventsViewController: TBATableViewController, EventsViewControllerDataSour
         tableView.registerReusableCell(EventTableViewCell.self)
     }
 
-    // MARK: - Refreshing
+    // MARK: - Refreshable
 
-    override func shouldNoDataRefresh() -> Bool {
+    var initialRefreshKey: String? {
+        fatalError("implement in subclass")
+    }
+
+    var isDataSourceEmpty: Bool {
         if let events = dataSource.fetchedResultsController.fetchedObjects, events.isEmpty {
             return true
         }
         return false
+    }
+
+    func refresh() {
+        fatalError("implement in subclass")
     }
 
     // MARK: UITableView Delegate
@@ -79,6 +77,20 @@ class EventsViewController: TBATableViewController, EventsViewControllerDataSour
     }
 
     // MARK: Table View Data Source
+
+    private func setupDataSource() {
+        let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
+        fetchRequest.sortDescriptors = [firstSortDescriptor,
+                                        NSSortDescriptor(key: "startDate", ascending: true),
+                                        NSSortDescriptor(key: "name", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                             managedObjectContext: persistentContainer.viewContext,
+                                             sectionNameKeyPath: sectionNameKeyPath,
+                                             cacheName: nil)
+        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
 
     func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
