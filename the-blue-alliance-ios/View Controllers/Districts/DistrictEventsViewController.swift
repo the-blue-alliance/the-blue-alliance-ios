@@ -22,7 +22,7 @@ class DistrictEventsViewController: EventsViewController {
         return "\(district.key!)_events"
     }
 
-    override func refresh() {
+    @objc override func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?

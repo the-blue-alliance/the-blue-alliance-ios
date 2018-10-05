@@ -29,7 +29,7 @@ class TeamEventsViewController: EventsViewController {
         return "\(team.key!)_events"
     }
 
-    override func refresh() {
+    @objc override func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?

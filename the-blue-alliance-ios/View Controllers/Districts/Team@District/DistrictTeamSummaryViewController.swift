@@ -60,7 +60,7 @@ class DistrictTeamSummaryViewController: TBATableViewController, Refreshable {
         return sortedEventPoints.count == 0
     }
 
-    func refresh() {
+    @objc func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?

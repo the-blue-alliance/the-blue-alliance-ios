@@ -186,7 +186,7 @@ class MatchInfoViewController: TBAViewController, Refreshable, Observable {
         return (match.videos?.count ?? 0) == 0
     }
 
-    func refresh() {
+    @objc func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?

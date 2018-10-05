@@ -111,7 +111,6 @@ extension Refreshable {
 
     func enableRefreshing() {
         let refreshControl = UIRefreshControl()
-        // TODO: THIS IS STILL FUCKING BROKEN
         refreshControl.addTarget(self, action: Selector(("refresh")), for: .valueChanged)
 
         self.refreshControl = refreshControl

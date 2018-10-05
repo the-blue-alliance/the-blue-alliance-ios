@@ -111,7 +111,7 @@ class EventStatsViewController: TBAViewController, Refreshable, Observable, Reac
         return qual == nil || playoff == nil
     }
 
-    func refresh() {
+    @objc func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?

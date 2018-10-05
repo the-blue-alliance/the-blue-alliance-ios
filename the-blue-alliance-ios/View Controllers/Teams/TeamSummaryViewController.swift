@@ -175,7 +175,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable {
         return eventStatus == nil || teamAwards.count == 0
     }
 
-    func refresh() {
+    @objc func refresh() {
         removeNoDataView()
 
         // Refresh team status

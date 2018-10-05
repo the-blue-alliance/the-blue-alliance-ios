@@ -68,7 +68,7 @@ class TeamStatsViewController: TBATableViewController, Refreshable, Observable {
         return teamStat == nil
     }
 
-    func refresh() {
+    @objc func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?

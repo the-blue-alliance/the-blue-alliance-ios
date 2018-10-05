@@ -39,7 +39,7 @@ class WeekEventsViewController: EventsViewController {
         return "\(year)_events"
     }
 
-    override func refresh() {
+    @objc override func refresh() {
         removeNoDataView()
 
         // Default to refreshing the currently selected year

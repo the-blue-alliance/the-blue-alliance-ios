@@ -54,7 +54,7 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Obse
         return sortedEventPoints.count == 0
     }
 
-    func refresh() {
+    @objc func refresh() {
         removeNoDataView()
 
         var rankingsRequest: URLSessionDataTask?

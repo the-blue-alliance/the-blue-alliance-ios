@@ -62,7 +62,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController, Refreshabl
         return false
     }
 
-    func refresh() {
+    @objc func refresh() {
         guard let year = year else {
             showNoDataView(with: "No year selected")
             refreshControl?.endRefreshing()

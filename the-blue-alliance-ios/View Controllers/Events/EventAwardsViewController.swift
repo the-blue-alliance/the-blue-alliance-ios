@@ -94,7 +94,7 @@ class EventAwardsViewController: TBATableViewController, Refreshable {
         return false
     }
 
-    func refresh() {
+    @objc func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?

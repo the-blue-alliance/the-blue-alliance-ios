@@ -133,7 +133,7 @@ class MatchBreakdownViewController: TBAViewController, Refreshable, Observable, 
         return match.redBreakdown == nil || match.blueBreakdown == nil
     }
 
-    func refresh() {
+    @objc func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?

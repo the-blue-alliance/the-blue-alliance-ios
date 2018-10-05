@@ -93,7 +93,7 @@ private class EventAlliancesViewController: TBATableViewController, Refreshable 
         return false
     }
 
-    func refresh() {
+    @objc func refresh() {
         removeNoDataView()
 
         var alliancesRequest: URLSessionDataTask?

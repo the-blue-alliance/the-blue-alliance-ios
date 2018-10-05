@@ -84,7 +84,7 @@ class EventInfoViewController: TBATableViewController, Refreshable, Observable {
         return event.name == nil
     }
 
-    func refresh() {
+    @objc func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?

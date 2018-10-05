@@ -149,7 +149,7 @@ extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
         return weeks.isEmpty
     }
 
-    func refresh() {
+    @objc func refresh() {
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchEvents(year: year, completion: { (events, error) in
             if let error = error {

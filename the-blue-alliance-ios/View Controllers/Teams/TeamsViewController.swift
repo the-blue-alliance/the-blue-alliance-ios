@@ -62,7 +62,7 @@ class TeamsViewController: TBATableViewController, Refreshable {
         return false
     }
 
-    func refresh() {
+    @objc func refresh() {
         removeNoDataView()
 
         if event != nil {

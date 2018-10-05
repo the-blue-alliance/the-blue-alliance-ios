@@ -42,7 +42,7 @@ class DistrictRankingsViewController: TBATableViewController, Refreshable {
     }
 
     // TODO: Think about building a way to "chain" requests together for a refresh...
-    func refresh() {
+    @objc func refresh() {
         removeNoDataView()
 
         // First, fetch events

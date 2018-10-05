@@ -59,7 +59,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         return false
     }
 
-    func refresh() {
+    @objc func refresh() {
         removeNoDataView()
 
         // I'd love to use MyTBAManaged's RemoteType here, but it doesn't seem like I can get it
