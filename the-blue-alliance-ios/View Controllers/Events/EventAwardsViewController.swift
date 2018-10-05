@@ -58,20 +58,13 @@ protocol EventAwardsViewControllerDelegate: AnyObject {
     func teamSelected(_ team: Team)
 }
 
-class EventAwardsViewController: TBATableViewController {
+class EventAwardsViewController: TBATableViewController, Refreshable {
 
     private let event: Event
     private let team: Team?
 
     weak var delegate: EventAwardsViewControllerDelegate?
-    private lazy var dataSource: TableViewDataSource<Award, EventAwardsViewController> = {
-        let fetchRequest: NSFetchRequest<Award> = Award.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "awardType", ascending: true)]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
-    }()
+    private var dataSource: TableViewDataSource<Award, EventAwardsViewController>!
 
     // MARK: - Init
 
@@ -80,21 +73,36 @@ class EventAwardsViewController: TBATableViewController {
         self.team = team
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Refreshing
+    // MARK: - Refreshable
 
-    override func refresh() {
+    var initialRefreshKey: String? {
+        return "\(event.key!)_awards"
+    }
+
+    var isDataSourceEmpty: Bool {
+        if let awards = dataSource.fetchedResultsController.fetchedObjects, awards.isEmpty {
+            return true
+        }
+        return false
+    }
+
+    func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchEventAwards(key: event.key!, completion: { (awards, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event awards - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
@@ -112,14 +120,16 @@ class EventAwardsViewController: TBATableViewController {
         addRequest(request: request!)
     }
 
-    override func shouldNoDataRefresh() -> Bool {
-        if let awards = dataSource.fetchedResultsController.fetchedObjects, awards.isEmpty {
-            return true
-        }
-        return false
-    }
-
     // MARK: Table View Data Source
+
+    private func setupDataSource() {
+        let fetchRequest: NSFetchRequest<Award> = Award.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "awardType", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))

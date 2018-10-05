@@ -4,7 +4,7 @@ import React
 import TBAKit
 import CoreData
 
-class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
+class MatchBreakdownViewController: TBAViewController, Refreshable, Observable, ReactNative {
 
     private let match: Match
 
@@ -123,19 +123,25 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
                 "compLevel": match.compLevel!]
     }
 
-    // MARK: Refresh
+    // MARK: - Refreshable
 
-    override func shouldNoDataRefresh() -> Bool {
+    var initialRefreshKey: String? {
+        return match.key!
+    }
+
+    var isDataSourceEmpty: Bool {
         return match.redBreakdown == nil || match.blueBreakdown == nil
     }
 
-    override func refresh() {
+    func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchMatch(key: match.key!, { (modelMatch, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh match breakdown - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
@@ -153,7 +159,7 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
     }
 
     override func reloadViewAfterRefresh() {
-        if shouldNoDataRefresh() {
+        if isDataSourceEmpty {
             showNoDataView()
         } else {
             updateBreakdownView()

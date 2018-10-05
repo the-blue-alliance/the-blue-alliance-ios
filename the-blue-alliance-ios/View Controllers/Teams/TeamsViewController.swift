@@ -6,20 +6,12 @@ protocol TeamsViewControllerDelegate: AnyObject {
     func teamSelected(_ team: Team)
 }
 
-class TeamsViewController: TBATableViewController {
+class TeamsViewController: TBATableViewController, Refreshable {
 
     private let event: Event?
 
     var delegate: TeamsViewControllerDelegate?
-    private lazy var dataSource: TableViewDataSource<Team, TeamsViewController> = {
-        let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "teamNumber", ascending: true)]
-        setupFetchRequest(fetchRequest)
-        fetchRequest.fetchBatchSize = 50
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
-    }()
+    private var dataSource: TableViewDataSource<Team, TeamsViewController>!
 
     lazy private var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
@@ -35,6 +27,8 @@ class TeamsViewController: TBATableViewController {
         self.event = event
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -52,9 +46,23 @@ class TeamsViewController: TBATableViewController {
         definesPresentationContext = true
     }
 
-    // MARK: - Refreshing
+    // MARK: - Refreshable
 
-    override func refresh() {
+    var initialRefreshKey: String? {
+        if let event = event {
+            return "\(event.key!)_teams"
+        }
+        return "teams"
+    }
+
+    var isDataSourceEmpty: Bool {
+        if let teams = dataSource.fetchedResultsController.fetchedObjects, teams.isEmpty {
+            return true
+        }
+        return false
+    }
+
+    func refresh() {
         removeNoDataView()
 
         if event != nil {
@@ -64,16 +72,9 @@ class TeamsViewController: TBATableViewController {
         }
     }
 
-    override func shouldNoDataRefresh() -> Bool {
-        if let teams = dataSource.fetchedResultsController.fetchedObjects, teams.isEmpty {
-            return true
-        }
-        return false
-    }
-
     private func refreshTeams() {
         var request: URLSessionDataTask?
-        request = Team.fetchAllTeams(taskChanged: { (task, teams) in
+        request = Team.fetchAllTeams(taskChanged: { [unowned self] (task, teams) in
             self.addRequest(request: task)
 
             let previousRequest = request
@@ -92,6 +93,8 @@ class TeamsViewController: TBATableViewController {
 
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh teams - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
         }
         addRequest(request: request!)
@@ -106,6 +109,8 @@ class TeamsViewController: TBATableViewController {
         request = TBAKit.sharedKit.fetchEventTeams(key: eventKey, completion: { (teams, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to teams events - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
@@ -136,6 +141,16 @@ class TeamsViewController: TBATableViewController {
     }
 
     // MARK: Table View Data Source
+
+    private func setupDataSource() {
+        let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "teamNumber", ascending: true)]
+        setupFetchRequest(fetchRequest)
+        fetchRequest.fetchBatchSize = 50
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))

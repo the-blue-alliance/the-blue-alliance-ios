@@ -7,19 +7,12 @@ protocol DistrictRankingsViewControllerDelegate: AnyObject {
     func districtRankingSelected(_ districtRanking: DistrictRanking)
 }
 
-class DistrictRankingsViewController: TBATableViewController {
+class DistrictRankingsViewController: TBATableViewController, Refreshable {
 
     private let district: District
 
     weak var delegate: DistrictRankingsViewControllerDelegate?
-    private lazy var dataSource: TableViewDataSource<DistrictRanking, DistrictRankingsViewController> = {
-        let fetchRequest: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
-    }()
+    private var dataSource: TableViewDataSource<DistrictRanking, DistrictRankingsViewController>!
 
     // MARK: - Init
 
@@ -27,16 +20,29 @@ class DistrictRankingsViewController: TBATableViewController {
         self.district = district
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Refreshing
+    // MARK: - Refreshable
+
+    var initialRefreshKey: String? {
+        return "\(district.key!)_rankings"
+    }
+
+    var isDataSourceEmpty: Bool {
+        if let rankings = dataSource.fetchedResultsController.fetchedObjects, rankings.isEmpty {
+            return true
+        }
+        return false
+    }
 
     // TODO: Think about building a way to "chain" requests together for a refresh...
-    override func refresh() {
+    func refresh() {
         removeNoDataView()
 
         // First, fetch events
@@ -62,6 +68,8 @@ class DistrictRankingsViewController: TBATableViewController {
                 rankingsRequest = self.refreshRankings(completion: { (success) in
                     if !success {
                         self.showErrorAlert(with: "Unable to refresh district rankings - database error")
+                    } else {
+                        self.markRefreshSuccessful()
                     }
 
                     self.removeRequest(request: rankingsRequest!)
@@ -138,13 +146,6 @@ class DistrictRankingsViewController: TBATableViewController {
         })
     }
 
-    override func shouldNoDataRefresh() -> Bool {
-        if let rankings = dataSource.fetchedResultsController.fetchedObjects, rankings.isEmpty {
-            return true
-        }
-        return false
-    }
-
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -153,6 +154,15 @@ class DistrictRankingsViewController: TBATableViewController {
     }
 
     // MARK: Table View Data Source
+
+    private func setupDataSource() {
+        let fetchRequest: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))

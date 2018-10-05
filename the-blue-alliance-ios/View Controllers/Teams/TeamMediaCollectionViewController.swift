@@ -2,7 +2,7 @@ import UIKit
 import TBAKit
 import CoreData
 
-class TeamMediaCollectionViewController: TBACollectionViewController {
+class TeamMediaCollectionViewController: TBACollectionViewController, Refreshable {
 
     private let team: Team
     private let urlOpener: URLOpener
@@ -12,15 +12,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             updateDataSource()
         }
     }
-    private lazy var dataSource: CollectionViewDataSource<Media, TeamMediaCollectionViewController> = {
-        let fetchRequest: NSFetchRequest<Media> = Media.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "type", ascending: true)]
-        setupFetchRequest(fetchRequest)
-
-        // TODO: Split section by photos/videos like we do on the web
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        return CollectionViewDataSource(collectionView: collectionView, fetchedResultsController: frc, delegate: self)
-    }()
+    private var dataSource: CollectionViewDataSource<Media, TeamMediaCollectionViewController>!
 
     private var playerViews: [String: PlayerView] = [:]
     private var downloadedImages: [String: UIImage] = [:]
@@ -33,6 +25,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         self.urlOpener = urlOpener
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -52,9 +46,23 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         }
     }
 
-    // MARK: - Refreshing
+    // MARK: - Refreshable
 
-    override func refresh() {
+    var initialRefreshKey: String? {
+        guard let year = year else {
+            return nil
+        }
+        return "\(year)_\(team.key!)_media"
+    }
+
+    var isDataSourceEmpty: Bool {
+        if let media = dataSource.fetchedResultsController.fetchedObjects, media.isEmpty {
+            return true
+        }
+        return false
+    }
+
+    func refresh() {
         guard let year = year else {
             showNoDataView(with: "No year selected")
             refreshControl?.endRefreshing()
@@ -67,6 +75,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         request = TBAKit.sharedKit.fetchTeamMedia(key: team.key!, year: year, completion: { (media, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh team media - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             // TODO: This idea of deleting old and inserting new should be a pattern... basically everywhere
@@ -97,13 +107,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         addRequest(request: request!)
     }
 
-    override func shouldNoDataRefresh() -> Bool {
-        if let media = dataSource.fetchedResultsController.fetchedObjects, media.isEmpty {
-            return true
-        }
-        return false
-    }
-
     // MARK: Rotation
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -129,6 +132,16 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     }
 
     // MARK: Table View Data Source
+
+    private func setupDataSource() {
+        let fetchRequest: NSFetchRequest<Media> = Media.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "type", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        // TODO: Split section by photos/videos like we do on the web
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        dataSource = CollectionViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))

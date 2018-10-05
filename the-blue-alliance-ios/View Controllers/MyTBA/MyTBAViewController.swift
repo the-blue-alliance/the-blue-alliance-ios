@@ -108,7 +108,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         try! Auth.auth().signOut()
 
         // Cancel any ongoing requests
-        for vc in [favoritesViewController, subscriptionsViewController] {
+        for vc in [favoritesViewController, subscriptionsViewController] as! [Refreshable] {
             vc.cancelRefresh()
         }
 

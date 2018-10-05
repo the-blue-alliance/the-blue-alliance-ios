@@ -23,7 +23,11 @@ class TeamEventsViewController: EventsViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Refreshing
+    // MARK: - Refreshable
+
+    override var initialRefreshKey: String? {
+        return "\(team.key!)_events"
+    }
 
     override func refresh() {
         removeNoDataView()
@@ -32,6 +36,8 @@ class TeamEventsViewController: EventsViewController {
         request = TBAKit.sharedKit.fetchTeamEvents(key: team.key!, completion: { (events, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in

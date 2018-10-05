@@ -31,7 +31,7 @@ extension MyTBA {
 
     private func registerUnregister(_ method: String, token: String, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTask? {
         guard let uuid = UIDevice.current.identifierForVendor?.uuidString else {
-            completion(APIError.error("Unable to update myTBA registration - no UUID"))
+            completion(MyTBAError.error("Unable to update myTBA registration - no UUID"))
             return nil
         }
 
@@ -40,13 +40,13 @@ extension MyTBA {
                                                 name: UIDevice.current.name)
 
         guard let encodedRegistration = try? MyTBA.jsonEncoder.encode(registration) else {
-            completion(APIError.error("Unable to update myTBA registration - invalid data"))
+            completion(MyTBAError.error("Unable to update myTBA registration - invalid data"))
             return nil
         }
 
         return callApi(method: method, bodyData: encodedRegistration, completion: { (registerResponse: MyTBARegisterResponse?, error: Error?) in
             if let registerResponse = registerResponse, let code = Int(registerResponse.code), code >= 400 {
-                completion(APIError.error(registerResponse.message))
+                completion(MyTBAError.error(registerResponse.message))
             } else {
                 completion(error)
             }

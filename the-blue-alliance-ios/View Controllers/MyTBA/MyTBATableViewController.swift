@@ -7,7 +7,7 @@ import UIKit
  won't work for this case, since we need to show one of three different types of cells (as opposed to a single
  type of cell, which TableViewDataSource *will* do for us)
  */
-class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TBATableViewController, NSFetchedResultsControllerDelegate {
+class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TBATableViewController, Refreshable, NSFetchedResultsControllerDelegate {
 
     // let myTBAObjectSelected: ((T) -> ())
     private var backgroundFetchKeys: Set<String> = []
@@ -46,9 +46,20 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         }
     }
 
-    // MARK: - Refreshing
+    // MARK: - Refreshable
 
-    override func refresh() {
+    var initialRefreshKey: String? {
+        return J.arrayKey
+    }
+
+    var isDataSourceEmpty: Bool {
+        if MyTBA.shared.isAuthenticated, let objs = fetchedResultsController?.fetchedObjects, objs.isEmpty {
+            return true
+        }
+        return false
+    }
+
+    func refresh() {
         removeNoDataView()
 
         // I'd love to use MyTBAManaged's RemoteType here, but it doesn't seem like I can get it
@@ -58,6 +69,8 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh \(modelName) - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             let reloadTableViewCompletion = {
@@ -112,13 +125,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             })
         }
         addRequest(request: request!)
-    }
-
-    override func shouldNoDataRefresh() -> Bool {
-        if MyTBA.shared.isAuthenticated, let objs = fetchedResultsController?.fetchedObjects, objs.isEmpty {
-            return true
-        }
-        return false
     }
 
     // MARK: FRC

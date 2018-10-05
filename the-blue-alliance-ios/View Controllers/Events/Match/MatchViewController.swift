@@ -23,7 +23,7 @@ class MatchContainerViewController: ContainerViewController {
             breakdownViewController = MatchBreakdownViewController(match: match, persistentContainer: persistentContainer)
         }
 
-        super.init(viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }),
+        super.init(viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }) as! [ContainableViewController],
                    segmentedControlTitles: titles,
                    persistentContainer: persistentContainer)
     }

@@ -32,7 +32,7 @@ private enum EventLinkRow: Int {
     case max
 }
 
-class EventInfoViewController: TBATableViewController, Observable {
+class EventInfoViewController: TBATableViewController, Refreshable, Observable {
 
     private let event: Event
     private let urlOpener: URLOpener
@@ -74,15 +74,25 @@ class EventInfoViewController: TBATableViewController, Observable {
         tableView.registerReusableCell(InfoTableViewCell.self)
     }
 
-    // MARK: - Refresh
+    // MARK: - Refreshable
 
-    override func refresh() {
+    var initialRefreshKey: String? {
+        return event.key!
+    }
+
+    var isDataSourceEmpty: Bool {
+        return event.name == nil
+    }
+
+    func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchEvent(key: event.key!, completion: { (modelEvent, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
@@ -95,10 +105,6 @@ class EventInfoViewController: TBATableViewController, Observable {
             })
         })
         addRequest(request: request!)
-    }
-
-    override func shouldNoDataRefresh() -> Bool {
-        return event.name == nil
     }
 
     // MARK: - Table view data source

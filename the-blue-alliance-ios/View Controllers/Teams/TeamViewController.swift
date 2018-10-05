@@ -104,7 +104,7 @@ class TeamViewController: ContainerViewController, Observable {
     }
 
     private func refreshYearsParticipated() {
-        _ = TBAKit.sharedKit.fetchTeamYearsParticipated(key: team.key!, completion: { (years, error) in
+        TBAKit.sharedKit.fetchTeamYearsParticipated(key: team.key!, completion: { (years, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to fetch years participated - \(error.localizedDescription)")
                 return

@@ -50,19 +50,12 @@ protocol EventAlliancesViewControllerDelegate: AnyObject {
     func teamSelected(_ team: Team)
 }
 
-private class EventAlliancesViewController: TBATableViewController {
+private class EventAlliancesViewController: TBATableViewController, Refreshable {
 
     private let event: Event
 
     weak var delegate: EventAlliancesViewControllerDelegate?
-    private lazy var dataSource: TableViewDataSource<EventAlliance, EventAlliancesViewController> = {
-        let fetchRequest: NSFetchRequest<EventAlliance> = EventAlliance.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
-    }()
+    private var dataSource: TableViewDataSource<EventAlliance, EventAlliancesViewController>!
 
     // MARK: - Init
 
@@ -70,6 +63,8 @@ private class EventAlliancesViewController: TBATableViewController {
         self.event = event
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -84,15 +79,29 @@ private class EventAlliancesViewController: TBATableViewController {
         // Override automatic rowHeight - these will be smaller than 44 by default, and we want to open them up
         tableView.rowHeight = 44
     }
-    // MARK: - Refreshing
 
-    override func refresh() {
+    // MARK: - Refreshable
+
+    var initialRefreshKey: String? {
+        return "\(event.key!)_alliances"
+    }
+
+    var isDataSourceEmpty: Bool {
+        if let alliances = dataSource.fetchedResultsController.fetchedObjects, alliances.isEmpty {
+            return true
+        }
+        return false
+    }
+
+    func refresh() {
         removeNoDataView()
 
         var alliancesRequest: URLSessionDataTask?
         alliancesRequest = TBAKit.sharedKit.fetchEventAlliances(key: event.key!, completion: { (alliances, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event alliances - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
@@ -110,14 +119,16 @@ private class EventAlliancesViewController: TBATableViewController {
         self.addRequest(request: alliancesRequest!)
     }
 
-    override func shouldNoDataRefresh() -> Bool {
-        if let alliances = dataSource.fetchedResultsController.fetchedObjects, alliances.isEmpty {
-            return true
-        }
-        return false
-    }
-
     // MARK: Table View Data Source
+
+    private func setupDataSource() {
+        let fetchRequest: NSFetchRequest<EventAlliance> = EventAlliance.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))

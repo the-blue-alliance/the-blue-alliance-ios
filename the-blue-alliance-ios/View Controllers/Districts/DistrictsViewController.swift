@@ -7,7 +7,7 @@ protocol DistrictsViewControllerDelegate: AnyObject {
     func districtSelected(_ district: District)
 }
 
-class DistrictsViewController: TBATableViewController {
+class DistrictsViewController: TBATableViewController, Refreshable {
 
     var year: Int {
         didSet {
@@ -17,14 +17,7 @@ class DistrictsViewController: TBATableViewController {
     }
 
     weak var delegate: DistrictsViewControllerDelegate?
-    private lazy var dataSource: TableViewDataSource<District, DistrictsViewController> = {
-        let fetchRequest: NSFetchRequest<District> = District.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        return TableViewDataSource(tableView: tableView, fetchedResultsController: frc, delegate: self)
-    }()
+    private var dataSource: TableViewDataSource<District, DistrictsViewController>!
 
     // MARK: - Init
 
@@ -32,21 +25,36 @@ class DistrictsViewController: TBATableViewController {
         self.year = year
 
         super.init(persistentContainer: persistentContainer)
+
+        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Refreshing
+    // MARK: - Refreshable
 
-    override func refresh() {
+    var initialRefreshKey: String? {
+        return "\(year)_districts"
+    }
+
+    var isDataSourceEmpty: Bool {
+        if let districts = dataSource.fetchedResultsController.fetchedObjects, districts.isEmpty {
+            return true
+        }
+        return false
+    }
+
+    func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchDistricts(year: year, completion: { (districts, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh districts - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
@@ -61,13 +69,6 @@ class DistrictsViewController: TBATableViewController {
         addRequest(request: request!)
     }
 
-    override func shouldNoDataRefresh() -> Bool {
-        if let districts = dataSource.fetchedResultsController.fetchedObjects, districts.isEmpty {
-            return true
-        }
-        return false
-    }
-
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -76,6 +77,15 @@ class DistrictsViewController: TBATableViewController {
     }
 
     // MARK: Table View Data Source
+
+    private func setupDataSource () {
+        let fetchRequest: NSFetchRequest<District> = District.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
 
     private func updateDataSource() {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))

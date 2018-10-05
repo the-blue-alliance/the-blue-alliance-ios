@@ -21,7 +21,7 @@ private enum TeamSummaryRow: Int {
     case max
 }
 
-class TeamSummaryViewController: TBATableViewController {
+class TeamSummaryViewController: TBATableViewController, Refreshable {
 
     private let team: Team
     private let event: Event
@@ -167,7 +167,15 @@ class TeamSummaryViewController: TBATableViewController {
 
     // MARK: - Refresh
 
-    override func refresh() {
+    var initialRefreshKey: String? {
+        return "\(team.key!)@\(event.key!)_status"
+    }
+
+    var isDataSourceEmpty: Bool {
+        return eventStatus == nil || teamAwards.count == 0
+    }
+
+    func refresh() {
         removeNoDataView()
 
         // Refresh team status
@@ -175,6 +183,8 @@ class TeamSummaryViewController: TBATableViewController {
         teamStatusRequest = TBAKit.sharedKit.fetchTeamStatus(key: team.key!, eventKey: event.key!, completion: { (modelStatus, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
@@ -211,10 +221,6 @@ class TeamSummaryViewController: TBATableViewController {
             })
         })
         addRequest(request: awardsRequest!)
-    }
-
-    override func shouldNoDataRefresh() -> Bool {
-        return eventStatus == nil || teamAwards.count == 0
     }
 
     // MARK: - Table view data source

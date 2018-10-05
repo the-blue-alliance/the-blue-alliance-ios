@@ -22,7 +22,7 @@ private enum TeamLinkRow: Int {
     case max
 }
 
-class TeamInfoViewController: TBATableViewController {
+class TeamInfoViewController: TBATableViewController, Refreshable {
 
     private var team: Team
     private let urlOpener: URLOpener
@@ -53,13 +53,23 @@ class TeamInfoViewController: TBATableViewController {
 
     // MARK: - Refresh
 
-    override func refresh() {
+    var initialRefreshKey: String? {
+        return team.key!
+    }
+
+    var isDataSourceEmpty: Bool {
+        return team.name == nil
+    }
+
+    func refresh() {
         removeNoDataView()
 
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchTeam(key: team.key!, completion: { (modelTeam, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh team - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
@@ -72,11 +82,6 @@ class TeamInfoViewController: TBATableViewController {
             })
         })
         addRequest(request: request!)
-    }
-
-    override func shouldNoDataRefresh() -> Bool {
-        // TODO: This is always going to exist... check on something else?
-        return team.name == nil
     }
 
     // MARK: - Table view data source

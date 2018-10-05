@@ -122,7 +122,7 @@ private class EventWeekSelectViewController: ContainerViewController {
 
     private func updateWeeks() {
         weeks = Event.weekEvents(for: year, in: persistentContainer.viewContext)
-        if shouldNoDataRefresh() && hasRefreshed {
+        if isDataSourceEmpty && hasRefreshed {
             selectViewController.showNoDataView(with: "No weeks for \(year)")
         }
     }
@@ -141,11 +141,22 @@ extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
         return option.weekString
     }
 
+    var initialRefreshKey: String? {
+        return "\(year)_events"
+    }
+
+    var isDataSourceEmpty: Bool {
+        return weeks.isEmpty
+    }
+
     func refresh() {
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchEvents(year: year, completion: { (events, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
+            } else {
+                // TODO: Fix this
+                // self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
@@ -161,10 +172,6 @@ extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
             })
         })
         selectViewController.addRequest(request: request!)
-    }
-
-    func shouldNoDataRefresh() -> Bool {
-        return weeks.isEmpty
     }
 
 }

@@ -45,6 +45,8 @@
 		923AEE87216583CA00EF50C8 /* Bundle+Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923AEE86216583CA00EF50C8 /* Bundle+Version.swift */; };
 		923AEE8A21658BC400EF50C8 /* Launch_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923AEE8921658BC400EF50C8 /* Launch_UITests.swift */; };
 		923AEE8C21658C5800EF50C8 /* Bundle+Version_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923AEE8B21658C5800EF50C8 /* Bundle+Version_Tests.swift */; };
+		923AEE952167012000EF50C8 /* TBABackgroundService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923AEE942167012000EF50C8 /* TBABackgroundService_Tests.swift */; };
+		923AEE99216703CB00EF50C8 /* MyTBA_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923AEE98216703CB00EF50C8 /* MyTBA_Tests.swift */; };
 		924459C320CB796B0007570D /* Date+TBA_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924459BD20CB796A0007570D /* Date+TBA_Tests.swift */; };
 		924459C420CB796B0007570D /* Int16+Suffix_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924459BE20CB796A0007570D /* Int16+Suffix_Tests.swift */; };
 		924459C520CB796B0007570D /* CoreDataTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924459C020CB796B0007570D /* CoreDataTestCase.swift */; };
@@ -242,6 +244,8 @@
 		923AEE86216583CA00EF50C8 /* Bundle+Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Bundle+Version.swift"; path = "Extensions/Bundle+Version.swift"; sourceTree = "<group>"; };
 		923AEE8921658BC400EF50C8 /* Launch_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Launch_UITests.swift; sourceTree = "<group>"; };
 		923AEE8B21658C5800EF50C8 /* Bundle+Version_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Version_Tests.swift"; sourceTree = "<group>"; };
+		923AEE942167012000EF50C8 /* TBABackgroundService_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBABackgroundService_Tests.swift; sourceTree = "<group>"; };
+		923AEE98216703CB00EF50C8 /* MyTBA_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBA_Tests.swift; sourceTree = "<group>"; };
 		924459BD20CB796A0007570D /* Date+TBA_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+TBA_Tests.swift"; sourceTree = "<group>"; };
 		924459BE20CB796A0007570D /* Int16+Suffix_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int16+Suffix_Tests.swift"; sourceTree = "<group>"; };
 		924459C020CB796B0007570D /* CoreDataTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataTestCase.swift; sourceTree = "<group>"; };
@@ -539,6 +543,22 @@
 			path = "App Delegate";
 			sourceTree = "<group>";
 		};
+		923AEE962167038000EF50C8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				923AEE972167038B00EF50C8 /* MyTBAKit */,
+			);
+			path = Frameworks;
+			sourceTree = "<group>";
+		};
+		923AEE972167038B00EF50C8 /* MyTBAKit */ = {
+			isa = PBXGroup;
+			children = (
+				923AEE98216703CB00EF50C8 /* MyTBA_Tests.swift */,
+			);
+			path = MyTBAKit;
+			sourceTree = "<group>";
+		};
 		924459BC20CB796A0007570D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -566,6 +586,7 @@
 				924459C720CB797E0007570D /* RetryService_Tests.swift */,
 				14B6726B21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift */,
 				92564C6F216456800047917F /* Secrets_Tests.swift */,
+				923AEE942167012000EF50C8 /* TBABackgroundService_Tests.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1034,6 +1055,7 @@
 				924459BC20CB796A0007570D /* Extensions */,
 				92BB8B60214F165A0035AF28 /* View Controllers */,
 				924459BF20CB796B0007570D /* Core Data */,
+				923AEE962167038000EF50C8 /* Frameworks */,
 				92D6483E20BE4CB8008F0DB3 /* Info.plist */,
 				92564C71216457060047917F /* TestSecrets.plist */,
 			);
@@ -1631,6 +1653,7 @@
 				924459C620CB796B0007570D /* Event_Tests.swift in Sources */,
 				14B6726C21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift in Sources */,
 				92BB718420CE1E310081F4E5 /* Test.xcdatamodeld in Sources */,
+				923AEE99216703CB00EF50C8 /* MyTBA_Tests.swift in Sources */,
 				92B076F120FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift in Sources */,
 				924459C320CB796B0007570D /* Date+TBA_Tests.swift in Sources */,
 				923AEE8C21658C5800EF50C8 /* Bundle+Version_Tests.swift in Sources */,
@@ -1644,6 +1667,7 @@
 				92BB717C20CE116C0081F4E5 /* TBAOperation_Tests.swift in Sources */,
 				924459C420CB796B0007570D /* Int16+Suffix_Tests.swift in Sources */,
 				924459C820CB797E0007570D /* RetryService_Tests.swift in Sources */,
+				923AEE952167012000EF50C8 /* TBABackgroundService_Tests.swift in Sources */,
 				92BB8B62214F16710035AF28 /* SettingsViewController_Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
