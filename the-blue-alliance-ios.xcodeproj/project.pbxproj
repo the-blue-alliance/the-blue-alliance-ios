@@ -11,6 +11,7 @@
 		1405237C1ED33F500072FB91 /* MatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1405237B1ED33F500072FB91 /* MatchViewController.swift */; };
 		1405237F1ED3524C0072FB91 /* Match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1405237E1ED3524C0072FB91 /* Match.swift */; };
 		140523821ED352570072FB91 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140523811ED352570072FB91 /* Media.swift */; };
+		14472BB72168487F00E0AE72 /* District_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14472BB62168487F00E0AE72 /* District_Tests.swift */; };
 		145C57B51ED377EB004955B2 /* MatchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */; };
 		145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */; };
 		145C57B91ED3C166004955B2 /* MatchInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57B81ED3C166004955B2 /* MatchInfoViewController.swift */; };
@@ -24,6 +25,7 @@
 		1479694A215EBE460075AF4E /* EventAllianceCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14796949215EBE460075AF4E /* EventAllianceCellViewModel.swift */; };
 		1479694C215EC1670075AF4E /* EventTeamStatCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1479694B215EC1660075AF4E /* EventTeamStatCellViewModel.swift */; };
 		1479694E215EC4B60075AF4E /* InfoCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1479694D215EC4B60075AF4E /* InfoCellViewModel.swift */; };
+		14B424F62167B01700E1904C /* Calendar+TBA_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B424F52167B01700E1904C /* Calendar+TBA_Tests.swift */; };
 		14B6726A21517A7E00FDDAB2 /* RealtimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B6726921517A7E00FDDAB2 /* RealtimeDatabaseService.swift */; };
 		14B6726C21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B6726B21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift */; };
 		14B6727321529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B6727221529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift */; };
@@ -106,7 +108,7 @@
 		92942DB11E215B06008E79CA /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DB01E215B06008E79CA /* EventsViewController.swift */; };
 		92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */; };
 		92942DDF1E21D2EB008E79CA /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DDE1E21D2EB008E79CA /* EventViewController.swift */; };
-		92942E331E2303A5008E79CA /* Calendar+Year.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942E321E2303A5008E79CA /* Calendar+Year.swift */; };
+		92942E331E2303A5008E79CA /* Calendar+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942E321E2303A5008E79CA /* Calendar+TBA.swift */; };
 		92942E361E2A81E8008E79CA /* EventInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942E351E2A81E8008E79CA /* EventInfoViewController.swift */; };
 		929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929BBB041EC55742006D3854 /* InfoTableViewCell.swift */; };
 		929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 929BBB071EC55A22006D3854 /* InfoTableViewCell.xib */; };
@@ -210,6 +212,7 @@
 		1405237B1ED33F500072FB91 /* MatchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchViewController.swift; sourceTree = "<group>"; };
 		1405237E1ED3524C0072FB91 /* Match.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Match.swift; sourceTree = "<group>"; };
 		140523811ED352570072FB91 /* Media.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
+		14472BB62168487F00E0AE72 /* District_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = District_Tests.swift; sourceTree = "<group>"; };
 		145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchTableViewCell.swift; sourceTree = "<group>"; };
 		145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MatchTableViewCell.xib; sourceTree = "<group>"; };
 		145C57B81ED3C166004955B2 /* MatchInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchInfoViewController.swift; sourceTree = "<group>"; };
@@ -223,6 +226,7 @@
 		14796949215EBE460075AF4E /* EventAllianceCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceCellViewModel.swift; sourceTree = "<group>"; };
 		1479694B215EC1660075AF4E /* EventTeamStatCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatCellViewModel.swift; sourceTree = "<group>"; };
 		1479694D215EC4B60075AF4E /* InfoCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCellViewModel.swift; sourceTree = "<group>"; };
+		14B424F52167B01700E1904C /* Calendar+TBA_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+TBA_Tests.swift"; sourceTree = "<group>"; };
 		14B6726921517A7E00FDDAB2 /* RealtimeDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeDatabaseService.swift; sourceTree = "<group>"; };
 		14B6726B21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeDatabaseService_Tests.swift; sourceTree = "<group>"; };
 		14B6727221529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRealtimeDatabaseService.swift; sourceTree = "<group>"; };
@@ -307,7 +311,7 @@
 		92942DB01E215B06008E79CA /* EventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBAViewController.swift; sourceTree = "<group>"; };
 		92942DDE1E21D2EB008E79CA /* EventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
-		92942E321E2303A5008E79CA /* Calendar+Year.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Calendar+Year.swift"; path = "Extensions/Calendar+Year.swift"; sourceTree = "<group>"; };
+		92942E321E2303A5008E79CA /* Calendar+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Calendar+TBA.swift"; path = "Extensions/Calendar+TBA.swift"; sourceTree = "<group>"; };
 		92942E351E2A81E8008E79CA /* EventInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventInfoViewController.swift; sourceTree = "<group>"; };
 		929BBB041EC55742006D3854 /* InfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoTableViewCell.swift; sourceTree = "<group>"; };
 		929BBB071EC55A22006D3854 /* InfoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoTableViewCell.xib; sourceTree = "<group>"; };
@@ -562,10 +566,11 @@
 		924459BC20CB796A0007570D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				923AEE8B21658C5800EF50C8 /* Bundle+Version_Tests.swift */,
+				14B424F52167B01700E1904C /* Calendar+TBA_Tests.swift */,
 				924459BD20CB796A0007570D /* Date+TBA_Tests.swift */,
 				924459BE20CB796A0007570D /* Int16+Suffix_Tests.swift */,
 				9287014120CD7CCB0077D6DA /* RemoteConfig+TBA_Tests.swift */,
-				923AEE8B21658C5800EF50C8 /* Bundle+Version_Tests.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -630,6 +635,7 @@
 			isa = PBXGroup;
 			children = (
 				924459C120CB796B0007570D /* Event_Tests.swift */,
+				14472BB62168487F00E0AE72 /* District_Tests.swift */,
 			);
 			path = Event;
 			sourceTree = "<group>";
@@ -835,15 +841,15 @@
 		92942E341E2303AB008E79CA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				923AEE86216583CA00EF50C8 /* Bundle+Version.swift */,
+				92942E321E2303A5008E79CA /* Calendar+TBA.swift */,
+				9249206E20BB0455001CAC5E /* Date+TBA.swift */,
 				924C0E8F20BA18C5009066ED /* Int16+Suffix.swift */,
 				924602B61ECE99F50030EDBF /* String+Prefix.swift */,
 				92FFE52B1E7CC60F0037E48C /* UIColor+TBA.swift */,
-				92942E321E2303A5008E79CA /* Calendar+Year.swift */,
 				929F57192092AAF000E5313A /* URL+Reachable.swift */,
-				9249206E20BB0455001CAC5E /* Date+TBA.swift */,
 				9287013F20CD7C790077D6DA /* RemoteConfig+TBA.swift */,
 				92BB8B65214F177B0035AF28 /* UIApplication+URLOpener.swift */,
-				923AEE86216583CA00EF50C8 /* Bundle+Version.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1621,7 +1627,7 @@
 				303F82481EF59253007CADA1 /* EventRanking.swift in Sources */,
 				92942DB11E215B06008E79CA /* EventsViewController.swift in Sources */,
 				92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */,
-				92942E331E2303A5008E79CA /* Calendar+Year.swift in Sources */,
+				92942E331E2303A5008E79CA /* Calendar+TBA.swift in Sources */,
 				929F571E2092B7A400E5313A /* TBACollectionViewController.swift in Sources */,
 				92B55621215D37C900C1D9A3 /* YearSelectViewController.swift in Sources */,
 				929FCD9A1EC7F52700A38E46 /* DistrictsViewController.swift in Sources */,
@@ -1661,12 +1667,14 @@
 				924459C520CB796B0007570D /* CoreDataTestCase.swift in Sources */,
 				14B6727321529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift in Sources */,
 				9287014220CD7CCB0077D6DA /* RemoteConfig+TBA_Tests.swift in Sources */,
+				14472BB72168487F00E0AE72 /* District_Tests.swift in Sources */,
 				92564C70216456800047917F /* Secrets_Tests.swift in Sources */,
 				92BB718120CE1A000081F4E5 /* RemoteConfigServiceOperation_Tests.swift in Sources */,
 				92A2F5542156BD4B00267C63 /* NSManagedObjectContext+Extension_Tests.swift in Sources */,
 				92BB717C20CE116C0081F4E5 /* TBAOperation_Tests.swift in Sources */,
 				924459C420CB796B0007570D /* Int16+Suffix_Tests.swift in Sources */,
 				924459C820CB797E0007570D /* RetryService_Tests.swift in Sources */,
+				14B424F62167B01700E1904C /* Calendar+TBA_Tests.swift in Sources */,
 				923AEE952167012000EF50C8 /* TBABackgroundService_Tests.swift in Sources */,
 				92BB8B62214F16710035AF28 /* SettingsViewController_Tests.swift in Sources */,
 			);

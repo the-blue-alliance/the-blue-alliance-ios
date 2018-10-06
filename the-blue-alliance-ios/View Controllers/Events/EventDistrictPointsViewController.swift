@@ -71,7 +71,7 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
 
     // MARK: - Refreshable
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         return "\(event.key!)_district_points"
     }
 

@@ -7,26 +7,6 @@ protocol SelectTableViewControllerDelegate: AnyObject {
 
     func optionSelected(_ option: OptionType)
     func titleForOption(_ option: OptionType) -> String
-
-    var initialRefreshKey: String? { get }
-    var isDataSourceEmpty: Bool { get }
-    func refresh()
-}
-
-extension SelectTableViewControllerDelegate {
-
-    var initialRefreshKey: String? {
-        return nil
-    }
-
-    var isDataSourceEmpty: Bool {
-        return false
-    }
-
-    func refresh() {
-        // NOP
-    }
-
 }
 
 class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TBATableViewController, Refreshable {
@@ -102,16 +82,16 @@ class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TB
 
     // MARK: - Refreshable
 
-    var initialRefreshKey: String? {
-        return delegate?.initialRefreshKey
+    var refreshKey: String {
+        fatalError("implement in subclass")
     }
 
     var isDataSourceEmpty: Bool {
-        return delegate?.isDataSourceEmpty ?? false
+        return false
     }
 
     @objc func refresh() {
-        delegate?.refresh()
+        fatalError("implement in subclass")
     }
 
     // MARK: - Private Methods

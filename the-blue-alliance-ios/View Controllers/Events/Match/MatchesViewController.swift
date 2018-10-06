@@ -32,8 +32,17 @@ class MatchesViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refreshable
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         return "\(event.key!)_matches"
+    }
+
+    var automaticallyRefreshAfter: DateComponents? {
+        return DateComponents(hour: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Automatically refresh event matches until the event is over
+        return event.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {

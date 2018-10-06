@@ -54,7 +54,7 @@ class EventsViewController: TBATableViewController, Refreshable, EventsViewContr
 
     // MARK: - Refreshable
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         fatalError("implement in subclass")
     }
 
@@ -129,7 +129,7 @@ extension EventsViewController: TableViewDataSourceDelegate {
             return title
         }
 
-        if event.isDistrictChampionship {
+        if event.isDistrictChampionshipEvent {
             guard let district = event.district, let eventTypeString = event.eventTypeString else {
                 return nil
             }

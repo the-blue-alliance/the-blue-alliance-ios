@@ -35,8 +35,18 @@ class DistrictsViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refreshable
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         return "\(year)_districts"
+    }
+
+    var automaticallyRefreshAfter: DateComponents? {
+        return DateComponents(day: 7)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Automatically refresh districts until the start of the year
+        // Ex: 2019 Districts will automatically refresh until Jan 1st, 2019 (when districts should be all set)
+        return Calendar.current.date(from: DateComponents(year: year))
     }
 
     var isDataSourceEmpty: Bool {

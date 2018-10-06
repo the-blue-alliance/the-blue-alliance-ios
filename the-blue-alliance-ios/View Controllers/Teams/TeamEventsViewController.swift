@@ -25,8 +25,21 @@ class TeamEventsViewController: EventsViewController {
 
     // MARK: - Refreshable
 
-    override var initialRefreshKey: String? {
+    override var refreshKey: String {
         return "\(team.key!)_events"
+    }
+
+    var automaticallyRefreshAfter: DateComponents? {
+        return DateComponents(day: 7)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        guard let year = year else {
+            return nil
+        }
+        // Automatically refresh team events until the year is over
+        // Ex: Team events for 2018 will stop refreshing on Jan 1st, 2019
+        return Calendar.current.date(from: DateComponents(year: year + 1))
     }
 
     @objc override func refresh() {

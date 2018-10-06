@@ -167,8 +167,17 @@ class TeamSummaryViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refresh
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         return "\(team.key!)@\(event.key!)_status"
+    }
+
+    var automaticallyRefreshAfter: DateComponents? {
+        return DateComponents(hour: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Automatically refresh team summary until the event is over
+        return event.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {

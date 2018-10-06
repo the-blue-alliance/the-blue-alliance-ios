@@ -35,8 +35,18 @@ class WeekEventsViewController: EventsViewController {
 
     // MARK: - Refreshable
 
-    override var initialRefreshKey: String? {
+    override var refreshKey: String {
         return "\(year)_events"
+    }
+
+    var automaticallyRefreshAfter: DateComponents? {
+        return DateComponents(day: 7)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Automatically refresh the events for the duration of the year
+        // Ex: 2019 events will stop automatically refreshing on Jan 1st, 2020
+        return Calendar.current.date(from: DateComponents(year: year + 1))
     }
 
     @objc override func refresh() {
@@ -117,18 +127,7 @@ class WeekEventsViewController: EventsViewController {
 
     func setupCurrentSeasonWeek() {
         // Fetch all events where endDate is today or after today
-        let date = Date()
-
-        // Remove time from date - we only care about the day
-        // We don't want to be too granular, or we bump forward too fast
-        let components = Calendar.current.dateComponents([.day, .month, .year], from: date)
-
-        // Conversion stuff because Core Data still uses NSDates
-        guard let swiftDate = Calendar.current.date(from: components) else {
-            showErrorAlert(with: "Unable to setup current season week - datetime conversion failed")
-            return
-        }
-        let coreDataDate = NSDate(timeIntervalSince1970: swiftDate.timeIntervalSince1970)
+        let coreDataDate = NSDate(timeIntervalSince1970: Date().endOfDay().timeIntervalSince1970)
 
         // Find the first non-finished event for the selected year
         let event = Event.fetchSingleObject(in: persistentContainer.viewContext) { (fetchRequest) in

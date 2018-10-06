@@ -89,7 +89,7 @@ extension Event: Locatable, Managed {
     private func calculateHybridType() -> String {
         var hybridType = String(eventType)
         // Group districts together, group district CMPs together
-        if isDistrictChampionship {
+        if isDistrictChampionshipEvent {
             // Due to how DCMP divisions come *after* everything else if sorted by default
             // This is a bit of a hack to get them to show up before DCMPs
             // Future-proofing - group DCMP divisions together based on district
@@ -98,7 +98,7 @@ extension Event: Locatable, Managed {
             } else {
                 hybridType = "\(hybridType).dcmp"
             }
-        } else if let district = district, !isDistrictChampionship {
+        } else if let district = district, !isDistrictChampionshipEvent {
             hybridType = "\(hybridType).\(district.abbreviation!)"
         }
         return hybridType
@@ -200,11 +200,22 @@ extension Event: Locatable, Managed {
         return type == EventType.championshipDivision.rawValue || type == EventType.championshipFinals.rawValue
     }
 
-    public var isDistrictChampionship: Bool {
+    /**
+     If the event is a district championship or a district championship division.
+     */
+    public var isDistrictChampionshipEvent: Bool {
         let type = Int(eventType)
         return type == EventType.districtChampionshipDivision.rawValue || type == EventType.districtChampionship.rawValue
     }
-    
+
+    /**
+     If the event is a district championship.
+     */
+    public var isDistrictChampionship: Bool {
+        let type = Int(eventType)
+        return type == EventType.districtChampionship.rawValue
+    }
+
     public var isFoC: Bool {
         let type = Int(eventType)
         return type == EventType.festivalOfChampions.rawValue;
@@ -220,11 +231,14 @@ extension Event: Locatable, Managed {
         return type == EventType.offseason.rawValue;
     }
 
+    /**
+     If the event is currently going, based on it's start and end dates.
+     */
     public var isHappeningNow: Bool {
         guard let startDate = startDate, let endDate = endDate else {
             return false
         }
-        return Date().isBetween(date: startDate, andDate: endDate)
+        return Date().isBetween(date: startDate, andDate: endDate.endOfDay())
     }
 
     public var month: String? {

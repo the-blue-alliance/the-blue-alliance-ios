@@ -48,13 +48,29 @@ class TeamsViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refreshable
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         if let event = event {
             return "\(event.key!)_teams"
         }
         return "teams"
     }
 
+    var automaticallyRefreshAfter: DateComponents? {
+        if event != nil {
+            return DateComponents(day: 1)
+        }
+        return DateComponents(month: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Refresh event teams until the event is over
+        if let event = event {
+            return event.endDate?.endOfDay()
+        }
+        // Always periodically refresh teams
+        return nil
+    }
+    
     var isDataSourceEmpty: Bool {
         if let teams = dataSource.fetchedResultsController.fetchedObjects, teams.isEmpty {
             return true

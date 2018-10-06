@@ -97,8 +97,17 @@ class EventStatsViewController: TBAViewController, Refreshable, Observable, Reac
 
     // MARK: - Refreshable
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         return "\(event.key!)_insights"
+    }
+
+    var automaticallyRefreshAfter: DateComponents? {
+        return DateComponents(hour: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Automatically refresh event stats until the event is over
+        return event.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {

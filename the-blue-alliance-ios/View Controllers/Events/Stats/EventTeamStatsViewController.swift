@@ -59,8 +59,17 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refreshable
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         return "\(event.key!)_team_stats"
+    }
+
+    var automaticallyRefreshAfter: DateComponents? {
+        return DateComponents(hour: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Automatically refresh team stats until the event is over
+        return event.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {

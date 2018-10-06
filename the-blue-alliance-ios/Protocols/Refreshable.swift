@@ -13,12 +13,26 @@ protocol Refreshable: AnyObject {
     var refreshView: UIScrollView { get }
 
     /**
-     Identifier that reflects type of data used during refresh, and if we've fetched it before - used to calculate if we should refresh
+     Identifier that reflects type of data used during refresh, and if we've fetched it before - used to calculate if we should refresh.
      */
-    var initialRefreshKey: String? { get }
+    var refreshKey: String { get }
 
     /**
-     If the data source for the given view controller is empty - used to calculate if we should refresh
+     DateComponents to be added to the last refresh date to determine if we should refresh stale data now.
+
+     Return nil if we should not automatically refresh for stale date.
+     */
+    var automaticallyRefreshAfter: DateComponents? { get }
+    
+    /**
+     The last day we should check if a view should automatically refresh.
+
+     Return nil if we should always automatically refresh the data after automaticallyRefreshAfter has ellapsed.
+     */
+    var automaticRefreshEndDate: Date? { get }
+
+    /**
+     If the data source for the given view controller is empty - used to calculate if we should refresh.
      */
     var isDataSourceEmpty: Bool { get }
 
@@ -27,26 +41,62 @@ protocol Refreshable: AnyObject {
 
 extension Refreshable {
 
+    var automaticallyRefreshAfter: DateComponents? {
+        return nil
+    }
+
+    var automaticRefreshEndDate: Date? {
+        return nil
+    }
+
+    private var lastRefresh: Date? {
+        get {
+            return UserDefaults.standard.object(forKey: refreshKey) as? Date
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: refreshKey)
+            UserDefaults.standard.synchronize()
+        }
+    }
+
     var isRefreshing: Bool {
         // We're not refreshing if our requests array is empty
         return !requests.isEmpty
     }
 
+    // TODO: For the love of god Zach please write tests for this shit
     func shouldRefresh() -> Bool {
-        var hasRefreshed = true
-        if let initialRefreshKey = initialRefreshKey {
-            hasRefreshed = UserDefaults.standard.bool(forKey: initialRefreshKey)
+        let hasDataBeenRefreshed = lastRefresh != nil
+
+        var isDataStale = false
+        if let lastRefresh = lastRefresh, let automaticallyRefreshAfter = automaticallyRefreshAfter {
+            let now = Date()
+            let nextRefresh = Calendar.current.date(byAdding: automaticallyRefreshAfter, to: lastRefresh)!
+
+            if nextRefresh.isBetween(date: lastRefresh, andDate: now) {
+                if let automaticRefreshEndDate = automaticRefreshEndDate {
+                    // Respect end refresh date
+                    if now < automaticRefreshEndDate {
+                        // If the given amount of time has ellapsed since we refreshed last,
+                        // but we haven't hit our automaticRefreshEndDate
+                        isDataStale = true
+                    } else if now > automaticRefreshEndDate, lastRefresh < automaticRefreshEndDate {
+                        // If the last time we refreshed was before our automaticRefreshEndDate
+                        // but it's currently past our automaticRefreshEndDate
+                        isDataStale = true
+                    }
+                } else {
+                    // End refresh date not set - reload stale data
+                    isDataStale = true
+                }
+            }
         }
-        return (!hasRefreshed || isDataSourceEmpty) && !isRefreshing
+
+        return (!hasDataBeenRefreshed || isDataStale || isDataSourceEmpty) && !isRefreshing
     }
 
     func markRefreshSuccessful() {
-        guard let initialRefreshKey = initialRefreshKey else {
-            return
-        }
-
-        UserDefaults.standard.set(true, forKey: initialRefreshKey)
-        UserDefaults.standard.synchronize()
+        lastRefresh = Date()
     }
 
     // TODO: Add a method to add an observer on a single core data object for changes

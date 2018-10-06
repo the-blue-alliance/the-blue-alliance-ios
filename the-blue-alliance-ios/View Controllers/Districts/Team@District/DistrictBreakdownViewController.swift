@@ -45,8 +45,17 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Obse
 
     // MARK: - Refreshable
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         return "\(ranking.district!.key!)_breakdown"
+    }
+
+    var automaticallyRefreshAfter: DateComponents? {
+        return DateComponents(day: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Automatically refresh team's district breakdown until district is over
+        return ranking.district?.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {

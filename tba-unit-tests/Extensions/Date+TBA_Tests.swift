@@ -1,28 +1,55 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-internal struct KDate {
-    static let secondsInAnHour = 3600.0
-}
-
 class DateTBATestCase: XCTestCase {
 
-    func test_isBetween_true() {
-        let oneHourAgo = Date(timeIntervalSinceNow: (-1 * KDate.secondsInAnHour))
+    let calendar: Calendar = Calendar.current
+
+    func test_isBetween_inclusive() {
         let now = Date()
-        let halfHourAgo = Date(timeIntervalSinceNow: (-0.5 * KDate.secondsInAnHour))
+        let oneHourAgo = calendar.date(byAdding: DateComponents(hour: -1), to: now)!
+
+        XCTAssert(oneHourAgo.isBetween(date: oneHourAgo, andDate: now))
+        XCTAssert(oneHourAgo.isBetween(date: now, andDate: oneHourAgo))
+        XCTAssert(now.isBetween(date: now, andDate: oneHourAgo))
+        XCTAssert(now.isBetween(date: oneHourAgo, andDate: now))
+    }
+
+    func test_isBetween_true() {
+        let now = Date()
+        let oneHourAgo = calendar.date(byAdding: DateComponents(hour: -1), to: now)!
+        let halfHourAgo = calendar.date(byAdding: DateComponents(minute: -30), to: now)!
 
         XCTAssert(halfHourAgo.isBetween(date: oneHourAgo, andDate: now))
         XCTAssert(halfHourAgo.isBetween(date: now, andDate: oneHourAgo))
     }
 
     func test_isBetween_false() {
-        let oneHourAgo = Date(timeIntervalSinceNow: (-1 * KDate.secondsInAnHour))
         let now = Date()
+        let oneHourAgo = calendar.date(byAdding: DateComponents(hour: -1), to: now)!
         let epoch = Date(timeIntervalSince1970: 0)
 
         XCTAssertFalse(epoch.isBetween(date: oneHourAgo, andDate: now))
         XCTAssertFalse(epoch.isBetween(date: now, andDate: oneHourAgo))
+    }
+
+    func test_endOfDay() {
+        let calendar = Calendar.current
+        let today = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
+        let tomorrow = calendar.date(byAdding: DateComponents(day: 1), to: today)!
+        XCTAssertEqual(today.endOfDay(), calendar.date(byAdding: DateComponents(second: -1), to: tomorrow))
+    }
+
+    func test_next() {
+        let calendar = Calendar.current
+        let monday = calendar.date(from: DateComponents(weekday: Weekday.Monday.rawValue))!
+        let wednesday = calendar.date(byAdding: DateComponents(day: 2), to: monday)!
+        XCTAssertEqual(monday.next(.Wednesday), wednesday)
+    }
+
+    func test_next_exclusive() {
+        let monday = Calendar.current.date(from: DateComponents(weekday: 2))!
+        XCTAssertNotEqual(monday.next(.Monday), monday)
     }
 
 }
