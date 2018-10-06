@@ -18,8 +18,18 @@ class DistrictEventsViewController: EventsViewController {
 
     // MARK: - Refreshable
 
-    override var initialRefreshKey: String? {
+    override var refreshKey: String {
         return "\(district.key!)_events"
+    }
+
+    var automaticRefreshInterval: DateComponents? {
+        return DateComponents(day: 7)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Automatically refresh event districts during the year before the selected year (when events are rolling in)
+        // Ex: Districts for 2019 will stop automatically refreshing on January 1st, 2019 (should all be set by then)
+        return Calendar.current.date(from: DateComponents(year: Int(district.year)))
     }
 
     @objc override func refresh() {

@@ -71,4 +71,11 @@ extension Refreshable where Self: TBAViewController {
         return scrollView
     }
 
+    func noDataReload() {
+        // TODO: https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/133
+        DispatchQueue.main.async {
+            self.reloadViewAfterRefresh()
+        }
+    }
+
 }

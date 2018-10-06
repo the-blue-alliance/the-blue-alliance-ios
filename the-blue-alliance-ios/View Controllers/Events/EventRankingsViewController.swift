@@ -30,8 +30,17 @@ class EventRankingsViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refreshable
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         return "\(event.key!)_rankings"
+    }
+
+    var automaticRefreshInterval: DateComponents? {
+        return DateComponents(hour: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Automatically refresh event rankings until the event is over
+        return event.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {

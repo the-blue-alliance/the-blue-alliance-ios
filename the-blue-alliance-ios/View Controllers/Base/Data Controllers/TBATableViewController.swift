@@ -70,4 +70,10 @@ extension Refreshable where Self: TBATableViewController {
         return tableView
     }
 
+    func noDataReload() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
+
 }

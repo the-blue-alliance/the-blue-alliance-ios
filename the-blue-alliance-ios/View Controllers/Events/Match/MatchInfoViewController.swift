@@ -176,8 +176,18 @@ class MatchInfoViewController: TBAViewController, Refreshable, Observable {
 
     // MARK: Refresh
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         return match.key!
+    }
+
+    var automaticRefreshInterval: DateComponents? {
+        return DateComponents(day: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Automatically refresh the match info until a few days after the match has been played
+        // (Mostly looking for new videos)
+        return Calendar.current.date(byAdding: DateComponents(day: 7), to: match.event!.endDate!)!
     }
 
     var isDataSourceEmpty: Bool {

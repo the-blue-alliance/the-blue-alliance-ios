@@ -53,7 +53,7 @@ class TeamInfoViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refresh
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         return team.key!
     }
 

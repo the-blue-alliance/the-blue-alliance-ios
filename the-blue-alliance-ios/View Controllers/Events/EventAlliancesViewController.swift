@@ -82,7 +82,7 @@ private class EventAlliancesViewController: TBATableViewController, Refreshable 
 
     // MARK: - Refreshable
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         return "\(event.key!)_alliances"
     }
 

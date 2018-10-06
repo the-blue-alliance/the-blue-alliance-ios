@@ -125,7 +125,7 @@ class MatchBreakdownViewController: TBAViewController, Refreshable, Observable, 
 
     // MARK: - Refreshable
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         return match.key!
     }
 

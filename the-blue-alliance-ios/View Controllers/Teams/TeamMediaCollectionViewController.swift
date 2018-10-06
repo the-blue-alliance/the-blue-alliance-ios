@@ -55,6 +55,25 @@ class TeamMediaCollectionViewController: TBACollectionViewController, Refreshabl
         return "\(year)_\(team.key!)_media"
     }
 
+    var refreshKey: String {
+        // TODO: This is going to crash, for sure. Show loading spinner and avoid methods until we have years
+        return "\(year!)_\(team.key!)_media"
+    }
+
+    var automaticRefreshInterval: DateComponents? {
+        return DateComponents(month: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // TODO: Show loading spinner and avoid methods until we have years
+        guard let year = year else {
+            return nil
+        }
+        // Automatically refresh team media until the year is over
+        // Ex: Team media for 2018 will stop refreshing on Jan 1st, 2019
+        return Calendar.current.date(from: DateComponents(year: year + 1))
+    }
+
     var isDataSourceEmpty: Bool {
         if let media = dataSource.fetchedResultsController.fetchedObjects, media.isEmpty {
             return true

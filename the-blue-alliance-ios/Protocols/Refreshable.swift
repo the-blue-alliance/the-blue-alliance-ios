@@ -13,19 +13,57 @@ protocol Refreshable: AnyObject {
     var refreshView: UIScrollView { get }
 
     /**
-     Identifier that reflects type of data used during refresh, and if we've fetched it before - used to calculate if we should refresh
+     Identifier that reflects type of data used during refresh, and if we've fetched it before - used to calculate if we should refresh.
      */
-    var initialRefreshKey: String? { get }
+    var refreshKey: String { get }
 
     /**
-     If the data source for the given view controller is empty - used to calculate if we should refresh
+     DateComponents to be added to the last refresh date to determine if we should refresh stale data now.
+
+     Return nil if we should not automatically refresh for stale date.
+     */
+    var automaticRefreshInterval: DateComponents? { get }
+    
+    /**
+     The last day we should check if a view should automatically refresh.
+
+     Return nil if we should always automatically refresh the data after automaticRefreshInterval has ellapsed.
+     */
+    var automaticRefreshEndDate: Date? { get }
+
+    /**
+     If the data source for the given view controller is empty - used to calculate if we should refresh.
      */
     var isDataSourceEmpty: Bool { get }
 
     func refresh()
+
+    func updateRefresh()
+    func noDataReload()
 }
 
 extension Refreshable {
+
+    var automaticRefreshInterval: DateComponents? {
+        return nil
+    }
+
+    var automaticRefreshEndDate: Date? {
+        return nil
+    }
+
+    /**
+     WARNING: This method should not be called directly - exposed for testing, used internally
+     */
+    var lastRefresh: Date? {
+        get {
+            return UserDefaults.standard.object(forKey: refreshKey) as? Date
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: refreshKey)
+            UserDefaults.standard.synchronize()
+        }
+    }
 
     var isRefreshing: Bool {
         // We're not refreshing if our requests array is empty
@@ -33,20 +71,37 @@ extension Refreshable {
     }
 
     func shouldRefresh() -> Bool {
-        var hasRefreshed = true
-        if let initialRefreshKey = initialRefreshKey {
-            hasRefreshed = UserDefaults.standard.bool(forKey: initialRefreshKey)
+        let hasDataBeenRefreshed = lastRefresh != nil
+
+        var isDataStale = false
+        if let lastRefresh = lastRefresh, let automaticRefreshInterval = automaticRefreshInterval {
+            let now = Date()
+            let nextRefresh = Calendar.current.date(byAdding: automaticRefreshInterval, to: lastRefresh)!
+
+            if nextRefresh.isBetween(date: lastRefresh, andDate: now) {
+                if let automaticRefreshEndDate = automaticRefreshEndDate {
+                    // Respect end refresh date
+                    if now < automaticRefreshEndDate {
+                        // If the given amount of time has ellapsed since we refreshed last,
+                        // but we haven't hit our automaticRefreshEndDate
+                        isDataStale = true
+                    } else if now > automaticRefreshEndDate, lastRefresh < automaticRefreshEndDate {
+                        // If the last time we refreshed was before our automaticRefreshEndDate
+                        // but it's currently past our automaticRefreshEndDate
+                        isDataStale = true
+                    }
+                } else {
+                    // End refresh date not set - reload stale data
+                    isDataStale = true
+                }
+            }
         }
-        return (!hasRefreshed || isDataSourceEmpty) && !isRefreshing
+
+        return (!hasDataBeenRefreshed || isDataStale || isDataSourceEmpty) && !isRefreshing
     }
 
     func markRefreshSuccessful() {
-        guard let initialRefreshKey = initialRefreshKey else {
-            return
-        }
-
-        UserDefaults.standard.set(true, forKey: initialRefreshKey)
-        UserDefaults.standard.synchronize()
+        lastRefresh = Date()
     }
 
     // TODO: Add a method to add an observer on a single core data object for changes
@@ -84,20 +139,10 @@ extension Refreshable {
         }
     }
 
-    private func noDataReload() {
-        DispatchQueue.main.async {
-            if let tableViewController = self as? UITableViewController {
-                tableViewController.tableView.reloadData()
-            } else if let collectionViewController = self as? UICollectionViewController {
-                collectionViewController.collectionView.reloadData()
-            } else if let viewController = self as? TBAViewController {
-                // TODO: https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/133
-                viewController.reloadViewAfterRefresh()
-            }
-        }
-    }
-
-    private func updateRefresh() {
+    /**
+     WARNING: This method should not be called directly - exposed for testing, used internally
+     */
+    func updateRefresh() {
         DispatchQueue.main.async {
             if self.isRefreshing {
                 let refreshControlHeight = self.refreshControl?.frame.size.height ?? 0

@@ -52,8 +52,17 @@ class DistrictTeamSummaryViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refresh
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         return "\(ranking.district!.key!)_rankings"
+    }
+
+    var automaticRefreshInterval: DateComponents? {
+        return DateComponents(day: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Automatically refresh district team summary until the district is over
+        return ranking.district?.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {

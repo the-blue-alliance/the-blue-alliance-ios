@@ -48,8 +48,12 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     // MARK: - Refreshable
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         return J.arrayKey
+    }
+
+    var automaticRefreshInterval: DateComponents? {
+        return DateComponents(day: 1)
     }
 
     var isDataSourceEmpty: Bool {

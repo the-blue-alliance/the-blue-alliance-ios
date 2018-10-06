@@ -83,7 +83,7 @@ class EventAwardsViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refreshable
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         return "\(event.key!)_awards"
     }
 

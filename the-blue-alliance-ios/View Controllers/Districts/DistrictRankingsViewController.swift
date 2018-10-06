@@ -30,8 +30,17 @@ class DistrictRankingsViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refreshable
 
-    var initialRefreshKey: String? {
+    var refreshKey: String {
         return "\(district.key!)_rankings"
+    }
+
+    var automaticRefreshInterval: DateComponents? {
+        return DateComponents(day: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Automatically refresh district rankings until DCMP is over
+        return district.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {

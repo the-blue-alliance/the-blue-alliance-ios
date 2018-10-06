@@ -57,4 +57,10 @@ extension Refreshable where Self: TBACollectionViewController {
         return collectionView
     }
 
+    func noDataReload() {
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+    }
+
 }
