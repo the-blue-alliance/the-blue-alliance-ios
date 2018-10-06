@@ -42,9 +42,10 @@ class DateTBATestCase: XCTestCase {
 
     func test_next() {
         let calendar = Calendar.current
-        let monday = calendar.date(from: DateComponents(weekday: Weekday.Monday.rawValue))!
+        let monday = calendar.date(from: DateComponents(weekday: Weekday.Monday.rawValue, weekdayOrdinal: 1))!
         let wednesday = calendar.date(byAdding: DateComponents(day: 2), to: monday)!
         XCTAssertEqual(monday.next(.Wednesday), wednesday)
+        print(monday.next(.Wednesday))
     }
 
     func test_next_exclusive() {
