@@ -49,7 +49,7 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Obse
         return "\(ranking.district!.key!)_breakdown"
     }
 
-    var automaticallyRefreshAfter: DateComponents? {
+    var automaticRefreshInterval: DateComponents? {
         return DateComponents(day: 1)
     }
 

@@ -64,7 +64,7 @@ class TeamStatsViewController: TBATableViewController, Refreshable, Observable {
         return "\(event.key!)_team_stats"
     }
 
-    var automaticallyRefreshAfter: DateComponents? {
+    var automaticRefreshInterval: DateComponents? {
         return DateComponents(hour: 1)
     }
 

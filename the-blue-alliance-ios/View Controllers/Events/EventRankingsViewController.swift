@@ -34,7 +34,7 @@ class EventRankingsViewController: TBATableViewController, Refreshable {
         return "\(event.key!)_rankings"
     }
 
-    var automaticallyRefreshAfter: DateComponents? {
+    var automaticRefreshInterval: DateComponents? {
         return DateComponents(hour: 1)
     }
 

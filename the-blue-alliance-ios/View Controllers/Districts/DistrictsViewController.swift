@@ -39,7 +39,7 @@ class DistrictsViewController: TBATableViewController, Refreshable {
         return "\(year)_districts"
     }
 
-    var automaticallyRefreshAfter: DateComponents? {
+    var automaticRefreshInterval: DateComponents? {
         return DateComponents(day: 7)
     }
 

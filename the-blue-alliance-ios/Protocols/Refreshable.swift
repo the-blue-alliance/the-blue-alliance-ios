@@ -22,12 +22,12 @@ protocol Refreshable: AnyObject {
 
      Return nil if we should not automatically refresh for stale date.
      */
-    var automaticallyRefreshAfter: DateComponents? { get }
+    var automaticRefreshInterval: DateComponents? { get }
     
     /**
      The last day we should check if a view should automatically refresh.
 
-     Return nil if we should always automatically refresh the data after automaticallyRefreshAfter has ellapsed.
+     Return nil if we should always automatically refresh the data after automaticRefreshInterval has ellapsed.
      */
     var automaticRefreshEndDate: Date? { get }
 
@@ -37,11 +37,14 @@ protocol Refreshable: AnyObject {
     var isDataSourceEmpty: Bool { get }
 
     func refresh()
+
+    func updateRefresh()
+    func noDataReload()
 }
 
 extension Refreshable {
 
-    var automaticallyRefreshAfter: DateComponents? {
+    var automaticRefreshInterval: DateComponents? {
         return nil
     }
 
@@ -49,7 +52,10 @@ extension Refreshable {
         return nil
     }
 
-    private var lastRefresh: Date? {
+    /**
+     WARNING: This method should not be called directly - exposed for testing, used internally
+     */
+    var lastRefresh: Date? {
         get {
             return UserDefaults.standard.object(forKey: refreshKey) as? Date
         }
@@ -64,14 +70,13 @@ extension Refreshable {
         return !requests.isEmpty
     }
 
-    // TODO: For the love of god Zach please write tests for this shit
     func shouldRefresh() -> Bool {
         let hasDataBeenRefreshed = lastRefresh != nil
 
         var isDataStale = false
-        if let lastRefresh = lastRefresh, let automaticallyRefreshAfter = automaticallyRefreshAfter {
+        if let lastRefresh = lastRefresh, let automaticRefreshInterval = automaticRefreshInterval {
             let now = Date()
-            let nextRefresh = Calendar.current.date(byAdding: automaticallyRefreshAfter, to: lastRefresh)!
+            let nextRefresh = Calendar.current.date(byAdding: automaticRefreshInterval, to: lastRefresh)!
 
             if nextRefresh.isBetween(date: lastRefresh, andDate: now) {
                 if let automaticRefreshEndDate = automaticRefreshEndDate {
@@ -134,20 +139,10 @@ extension Refreshable {
         }
     }
 
-    private func noDataReload() {
-        DispatchQueue.main.async {
-            if let tableViewController = self as? UITableViewController {
-                tableViewController.tableView.reloadData()
-            } else if let collectionViewController = self as? UICollectionViewController {
-                collectionViewController.collectionView.reloadData()
-            } else if let viewController = self as? TBAViewController {
-                // TODO: https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/133
-                viewController.reloadViewAfterRefresh()
-            }
-        }
-    }
-
-    private func updateRefresh() {
+    /**
+     WARNING: This method should not be called directly - exposed for testing, used internally
+     */
+    func updateRefresh() {
         DispatchQueue.main.async {
             if self.isRefreshing {
                 let refreshControlHeight = self.refreshControl?.frame.size.height ?? 0

@@ -22,7 +22,7 @@ class DistrictEventsViewController: EventsViewController {
         return "\(district.key!)_events"
     }
 
-    var automaticallyRefreshAfter: DateComponents? {
+    var automaticRefreshInterval: DateComponents? {
         return DateComponents(day: 7)
     }
 

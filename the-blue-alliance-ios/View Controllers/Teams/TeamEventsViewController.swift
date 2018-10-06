@@ -29,7 +29,7 @@ class TeamEventsViewController: EventsViewController {
         return "\(team.key!)_events"
     }
 
-    var automaticallyRefreshAfter: DateComponents? {
+    var automaticRefreshInterval: DateComponents? {
         return DateComponents(day: 7)
     }
 

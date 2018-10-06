@@ -34,7 +34,7 @@ class DistrictRankingsViewController: TBATableViewController, Refreshable {
         return "\(district.key!)_rankings"
     }
 
-    var automaticallyRefreshAfter: DateComponents? {
+    var automaticRefreshInterval: DateComponents? {
         return DateComponents(day: 1)
     }
 

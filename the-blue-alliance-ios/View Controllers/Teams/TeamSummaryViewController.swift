@@ -171,7 +171,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable {
         return "\(team.key!)@\(event.key!)_status"
     }
 
-    var automaticallyRefreshAfter: DateComponents? {
+    var automaticRefreshInterval: DateComponents? {
         return DateComponents(hour: 1)
     }
 

@@ -55,7 +55,7 @@ class TeamsViewController: TBATableViewController, Refreshable {
         return "teams"
     }
 
-    var automaticallyRefreshAfter: DateComponents? {
+    var automaticRefreshInterval: DateComponents? {
         if event != nil {
             return DateComponents(day: 1)
         }

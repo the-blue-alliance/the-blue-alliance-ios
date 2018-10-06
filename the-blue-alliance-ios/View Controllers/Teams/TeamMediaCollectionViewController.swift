@@ -60,7 +60,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController, Refreshabl
         return "\(year!)_\(team.key!)_media"
     }
 
-    var automaticallyRefreshAfter: DateComponents? {
+    var automaticRefreshInterval: DateComponents? {
         return DateComponents(month: 1)
     }
 

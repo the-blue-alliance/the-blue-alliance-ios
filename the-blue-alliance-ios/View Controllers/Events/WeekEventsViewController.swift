@@ -39,7 +39,7 @@ class WeekEventsViewController: EventsViewController {
         return "\(year)_events"
     }
 
-    var automaticallyRefreshAfter: DateComponents? {
+    var automaticRefreshInterval: DateComponents? {
         return DateComponents(day: 7)
     }
 

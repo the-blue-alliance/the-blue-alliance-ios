@@ -90,6 +90,7 @@
 		928018F42096431200693447 /* MyTBASignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928018F32096431200693447 /* MyTBASignInViewController.swift */; };
 		928018F820964DB500693447 /* MyTBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928018F720964DB500693447 /* MyTBA.swift */; };
 		928018FA20964E7A00693447 /* MyTBAFavorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928018F920964E7A00693447 /* MyTBAFavorite.swift */; };
+		9280EAED21685F310016621D /* Refreshable_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9280EAEC21685F310016621D /* Refreshable_Tests.swift */; };
 		92858F27208D444700811614 /* CoreDataContextObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92858F26208D444700811614 /* CoreDataContextObserver.swift */; };
 		92858F2B208D783300811614 /* EventTeamStatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92858F2A208D783300811614 /* EventTeamStatTableViewCell.xib */; };
 		92858F2D208D783E00811614 /* EventTeamStatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92858F2C208D783E00811614 /* EventTeamStatTableViewCell.swift */; };
@@ -291,6 +292,7 @@
 		928018F32096431200693447 /* MyTBASignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignInViewController.swift; sourceTree = "<group>"; };
 		928018F720964DB500693447 /* MyTBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBA.swift; sourceTree = "<group>"; };
 		928018F920964E7A00693447 /* MyTBAFavorite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAFavorite.swift; sourceTree = "<group>"; };
+		9280EAEC21685F310016621D /* Refreshable_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Refreshable_Tests.swift; sourceTree = "<group>"; };
 		92858F26208D444700811614 /* CoreDataContextObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataContextObserver.swift; sourceTree = "<group>"; };
 		92858F2A208D783300811614 /* EventTeamStatTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventTeamStatTableViewCell.xib; sourceTree = "<group>"; };
 		92858F2C208D783E00811614 /* EventTeamStatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatTableViewCell.swift; sourceTree = "<group>"; };
@@ -681,6 +683,14 @@
 			path = "the-blue-alliance-ios/Frameworks/MyTBAKit";
 			sourceTree = "<group>";
 		};
+		9280EAEB21685F100016621D /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				9280EAEC21685F310016621D /* Refreshable_Tests.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		9287014320CD8BF60077D6DA /* Operations */ = {
 			isa = PBXGroup;
 			children = (
@@ -1059,6 +1069,7 @@
 				92BB717A20CE115D0081F4E5 /* Operations */,
 				924459C220CB796B0007570D /* Services */,
 				924459BC20CB796A0007570D /* Extensions */,
+				9280EAEB21685F100016621D /* Protocols */,
 				92BB8B60214F165A0035AF28 /* View Controllers */,
 				924459BF20CB796B0007570D /* Core Data */,
 				923AEE962167038000EF50C8 /* Frameworks */,
@@ -1667,6 +1678,7 @@
 				924459C520CB796B0007570D /* CoreDataTestCase.swift in Sources */,
 				14B6727321529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift in Sources */,
 				9287014220CD7CCB0077D6DA /* RemoteConfig+TBA_Tests.swift in Sources */,
+				9280EAED21685F310016621D /* Refreshable_Tests.swift in Sources */,
 				14472BB72168487F00E0AE72 /* District_Tests.swift in Sources */,
 				92564C70216456800047917F /* Secrets_Tests.swift in Sources */,
 				92BB718120CE1A000081F4E5 /* RemoteConfigServiceOperation_Tests.swift in Sources */,

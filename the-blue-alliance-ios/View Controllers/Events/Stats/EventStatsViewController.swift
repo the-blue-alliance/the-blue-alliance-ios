@@ -101,7 +101,7 @@ class EventStatsViewController: TBAViewController, Refreshable, Observable, Reac
         return "\(event.key!)_insights"
     }
 
-    var automaticallyRefreshAfter: DateComponents? {
+    var automaticRefreshInterval: DateComponents? {
         return DateComponents(hour: 1)
     }
 

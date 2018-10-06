@@ -36,7 +36,7 @@ class MatchesViewController: TBATableViewController, Refreshable {
         return "\(event.key!)_matches"
     }
 
-    var automaticallyRefreshAfter: DateComponents? {
+    var automaticRefreshInterval: DateComponents? {
         return DateComponents(hour: 1)
     }
 

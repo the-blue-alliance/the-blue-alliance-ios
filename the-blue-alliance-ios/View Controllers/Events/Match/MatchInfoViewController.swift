@@ -180,7 +180,7 @@ class MatchInfoViewController: TBAViewController, Refreshable, Observable {
         return match.key!
     }
 
-    var automaticallyRefreshAfter: DateComponents? {
+    var automaticRefreshInterval: DateComponents? {
         return DateComponents(day: 1)
     }
 
