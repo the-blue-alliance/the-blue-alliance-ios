@@ -68,6 +68,9 @@ class MatchInfoViewController: TBAViewController, Refreshable, Observable {
     lazy var contextObserver: CoreDataContextObserver<Match> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
+    lazy var observerPredicate: NSPredicate = {
+        return NSPredicate()
+    }()
 
     // MARK: Class Methods
 
