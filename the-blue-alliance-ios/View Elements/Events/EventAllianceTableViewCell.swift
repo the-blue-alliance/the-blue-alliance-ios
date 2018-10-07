@@ -26,17 +26,13 @@ class EventAllianceTableViewCell: UITableViewCell, Reusable {
 
     private let underlineAttribute = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue]
 
-    // MARK: - View Methods
+    // MARK: - Private Methods
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-
+    private func removeAllianceTeams() {
         for view in allianceTeamsStackView.arrangedSubviews {
             view.removeFromSuperview()
         }
     }
-
-    // MARK: - Private Methods
 
     private func labelWithText(_ text: String) -> UILabel {
         let label = UILabel()
@@ -63,6 +59,8 @@ class EventAllianceTableViewCell: UITableViewCell, Reusable {
 
         nameLabel.isHidden = !viewModel.hasAllianceName
         nameLabel.text = viewModel.allianceName
+
+        removeAllianceTeams()
 
         // OH PICK BOY http://photos.prnewswire.com/prnvar/20140130/NY56077
         for (index, teamKey) in viewModel.picks.enumerated() {

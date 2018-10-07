@@ -18,17 +18,13 @@ class InfoTableViewCell: UITableViewCell, Reusable {
 
     @IBOutlet private weak var infoStackView: UIStackView!
 
-    // MARK: - View Methods
+    // MARK: - Private Methods
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-
+    private func removeInfo() {
         for view in infoStackView.arrangedSubviews {
             view.removeFromSuperview()
         }
     }
-
-    // MARK: - Private Methods
 
     private func labelWithText(_ text: String) -> UILabel {
         let label = UILabel()
@@ -54,6 +50,8 @@ class InfoTableViewCell: UITableViewCell, Reusable {
         guard let viewModel = viewModel else {
             return
         }
+
+        removeInfo()
 
         let nameLabel = titleLabelWithText(viewModel.nameString)
         infoStackView.addArrangedSubview(nameLabel)

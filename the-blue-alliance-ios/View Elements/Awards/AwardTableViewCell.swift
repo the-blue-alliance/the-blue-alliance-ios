@@ -21,15 +21,13 @@ class AwardTableViewCell: UITableViewCell, Reusable {
     @IBOutlet private weak var awardNameLabel: UILabel!
     @IBOutlet private weak var awardInfoStackView: UIStackView!
 
-    // MARK: - View Methods
+    // MARK: - Private Methods
 
-    override func prepareForReuse() {
+    private func removeAwards() {
         for view in awardInfoStackView.arrangedSubviews {
             view.removeFromSuperview()
         }
     }
-
-    // MARK: - Private Methods
 
     private func configureCell() {
         guard let viewModel = viewModel else {
@@ -37,6 +35,8 @@ class AwardTableViewCell: UITableViewCell, Reusable {
         }
 
         awardNameLabel.text = viewModel.awardName
+
+        removeAwards()
 
         for (index, recipient) in viewModel.recipients.enumerated() {
             let stackView = UIStackView()

@@ -62,15 +62,6 @@ class MatchView: UIView {
     // MARK: - Public Methods
 
     func resetView() {
-        for stackView in [redStackView, blueStackView] as [UIStackView] {
-            for view in stackView.arrangedSubviews {
-                if [redScoreLabel, blueScoreLabel].contains(view) {
-                    continue
-                }
-                view.removeFromSuperview()
-            }
-        }
-
         redContainerView.layer.borderWidth = 0.0
         blueContainerView.layer.borderWidth = 0.0
 
@@ -80,6 +71,17 @@ class MatchView: UIView {
 
     // MARK: - Private Methods
 
+    private func removeTeams() {
+        for stackView in [redStackView, blueStackView] as [UIStackView] {
+            for view in stackView.arrangedSubviews {
+                if [redScoreLabel, blueScoreLabel].contains(view) {
+                    continue
+                }
+                view.removeFromSuperview()
+            }
+        }
+    }
+
     private func configureView() {
         guard let viewModel = viewModel else {
             return
@@ -87,6 +89,8 @@ class MatchView: UIView {
 
         matchNumberLabel.text = viewModel.matchName
         playIconImageView.isHidden = viewModel.hasVideos
+
+        removeTeams()
 
         for teamKey in viewModel.redAlliance {
             let teamLabel = label(for: teamKey, baseTeamKey: viewModel.baseTeamKey)
