@@ -26,9 +26,7 @@ class RemoteConfigService {
             }
             self.remoteConfig.activateFetched()
 
-            if let completion = completion {
-                completion(error)
-            }
+            completion?(error)
         }
     }
 

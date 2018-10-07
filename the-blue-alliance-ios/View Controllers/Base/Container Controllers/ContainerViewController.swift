@@ -45,14 +45,18 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
     var navigationTitle: String? {
         didSet {
-            navigationTitleLabel.text = navigationTitle
-            navigationItem.titleView = navigationStackView
+            DispatchQueue.main.async {
+                self.navigationTitleLabel.text = self.navigationTitle
+                self.navigationItem.titleView = self.navigationStackView
+            }
         }
     }
     var navigationSubtitle: String? {
         didSet {
-            navigationDetailLabel.text = navigationSubtitle
-            navigationItem.titleView = navigationStackView
+            DispatchQueue.main.async {
+                self.navigationDetailLabel.text = self.navigationSubtitle
+                self.navigationItem.titleView = self.navigationStackView
+            }
         }
     }
 

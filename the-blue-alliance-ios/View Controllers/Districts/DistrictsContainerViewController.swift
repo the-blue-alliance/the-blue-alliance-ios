@@ -9,16 +9,15 @@ class DistrictsContainerViewController: ContainerViewController {
     private let remoteConfig: RemoteConfig
     private let urlOpener: URLOpener
     private let userDefaults: UserDefaults
-    private var year: Int {
+
+    private(set) var year: Int {
         didSet {
             districtsViewController.year = year
 
-            DispatchQueue.main.async {
-                self.updateInterface()
-            }
+            updateInterface()
         }
     }
-    private var districtsViewController: DistrictsViewController
+    private(set) var districtsViewController: DistrictsViewController
 
     // MARK: - Init
 
@@ -61,7 +60,11 @@ class DistrictsContainerViewController: ContainerViewController {
         navigationSubtitle = "▾ \(year)"
     }
 
-    private func showSelectYear() {
+}
+
+extension DistrictsContainerViewController: NavigationTitleDelegate {
+
+    func navigationTitleTapped() {
         let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(current: year, options: Array(2009...remoteConfig.maxSeason).reversed(), persistentContainer: persistentContainer)
         selectTableViewController.title = "Select Year"
         selectTableViewController.delegate = self
@@ -74,14 +77,6 @@ class DistrictsContainerViewController: ContainerViewController {
 
     @objc private func dismissSelectYear() {
         navigationController?.dismiss(animated: true, completion: nil)
-    }
-
-}
-
-extension DistrictsContainerViewController: NavigationTitleDelegate {
-
-    func navigationTitleTapped() {
-        showSelectYear()
     }
 
 }
@@ -103,8 +98,10 @@ extension DistrictsContainerViewController: SelectTableViewControllerDelegate {
 extension DistrictsContainerViewController: DistrictsViewControllerDelegate {
 
     func districtSelected(_ district: District) {
+        // Show detail wrapped in a UINavigationController for our split view controller
         let districtViewController = DistrictViewController(district: district, urlOpener: urlOpener, userDefaults: userDefaults, persistentContainer: persistentContainer)
-        self.navigationController?.pushViewController(districtViewController, animated: true)
+        let nav = UINavigationController(rootViewController: districtViewController)
+        navigationController?.showDetailViewController(nav, sender: nil)
     }
 
 }

@@ -10,8 +10,8 @@ class EventsContainerViewController: ContainerViewController {
     private let urlOpener: URLOpener
     private let userDefaults: UserDefaults
 
-    private var year: Int
-    private var eventsViewController: WeekEventsViewController
+    private(set) var year: Int
+    private(set) var eventsViewController: WeekEventsViewController
 
     // MARK: - Init
 
@@ -43,7 +43,6 @@ class EventsContainerViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // setupWeeks()
         updateInterface()
     }
 
@@ -52,10 +51,11 @@ class EventsContainerViewController: ContainerViewController {
     private func updateInterface() {
         if let weekEvent = eventsViewController.weekEvent {
             navigationTitle = "\(weekEvent.weekString) Events"
+            navigationSubtitle = "▾ \(weekEvent.year)"
         } else {
             navigationTitle = "---- Events"
+            navigationSubtitle = "▾ \(year)"
         }
-        navigationSubtitle = "▾ \(year)"
     }
 
 }
@@ -87,9 +87,7 @@ extension EventsContainerViewController: YearSelectViewControllerDelegate {
 extension EventsContainerViewController: WeekEventsDelegate {
 
     func weekEventUpdated() {
-        DispatchQueue.main.async {
-            self.updateInterface()
-        }
+        updateInterface()
     }
 
 }
@@ -97,8 +95,10 @@ extension EventsContainerViewController: WeekEventsDelegate {
 extension EventsContainerViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
+        // Show detail wrapped in a UINavigationController for our split view controller
         let eventViewController = EventViewController(event: event, urlOpener: urlOpener, userDefaults: userDefaults, persistentContainer: persistentContainer)
-        self.navigationController?.pushViewController(eventViewController, animated: true)
+        let nav = UINavigationController(rootViewController: eventViewController)
+        navigationController?.showDetailViewController(nav, sender: nil)
     }
 
 }
