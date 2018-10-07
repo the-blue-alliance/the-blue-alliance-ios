@@ -12,7 +12,13 @@ protocol SelectTableViewControllerDelegate: AnyObject {
 class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TBATableViewController, Refreshable {
 
     private let current: Delegate.OptionType?
-    var options: [Delegate.OptionType]
+    var options: [Delegate.OptionType] {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
     private let willPush: Bool
     weak var delegate: Delegate?
 
@@ -82,8 +88,16 @@ class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TB
 
     // MARK: - Refreshable
 
-    var refreshKey: String {
-        fatalError("implement in subclass")
+    var refreshKey: String? {
+        return nil
+    }
+
+    var automaticRefreshInterval: DateComponents? {
+        return nil
+    }
+
+    var automaticRefreshEndDate: Date? {
+        return nil
     }
 
     var isDataSourceEmpty: Bool {
@@ -91,7 +105,7 @@ class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TB
     }
 
     @objc func refresh() {
-        fatalError("implement in subclass")
+        // NOP
     }
 
     // MARK: - Private Methods

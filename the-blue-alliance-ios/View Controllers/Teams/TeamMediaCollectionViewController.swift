@@ -48,16 +48,11 @@ class TeamMediaCollectionViewController: TBACollectionViewController, Refreshabl
 
     // MARK: - Refreshable
 
-    var initialRefreshKey: String? {
+    var refreshKey: String? {
         guard let year = year else {
             return nil
         }
         return "\(year)_\(team.key!)_media"
-    }
-
-    var refreshKey: String {
-        // TODO: This is going to crash, for sure. Show loading spinner and avoid methods until we have years
-        return "\(year!)_\(team.key!)_media"
     }
 
     var automaticRefreshInterval: DateComponents? {

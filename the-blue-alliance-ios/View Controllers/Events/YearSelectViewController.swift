@@ -87,22 +87,19 @@ extension YearSelectViewController: SelectTableViewControllerDelegate {
 private class EventWeekSelectViewController: ContainerViewController {
 
     private let year: Int
-    private var weeks: [Event] = [] {
-        didSet {
-            selectViewController.options = weeks
-        }
-    }
-    private var hasRefreshed: Bool = false
-    private let selectViewController: SelectTableViewController<EventWeekSelectViewController>
+    private let selectViewController: WeeksSelectTableViewController
 
     weak var delegate: YearSelectViewControllerDelegate?
 
     init(year: Int, week: Event?, persistentContainer: NSPersistentContainer) {
         self.year = year
 
-        selectViewController = SelectTableViewController<EventWeekSelectViewController>(current: week,
-                                                                                        options: weeks,
-                                                                                        persistentContainer: persistentContainer)
+        let weeks = Event.weekEvents(for: year, in: persistentContainer.viewContext)
+
+        selectViewController = WeeksSelectTableViewController(year: year,
+                                                              current: week,
+                                                              options: weeks,
+                                                              persistentContainer: persistentContainer)
 
         super.init(viewControllers: [selectViewController],
                    persistentContainer: persistentContainer)
@@ -110,21 +107,10 @@ private class EventWeekSelectViewController: ContainerViewController {
         title = "\(year) Weeks"
         selectViewController.delegate = self
         selectViewController.enableRefreshing()
-
-        updateWeeks()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - Private
-
-    private func updateWeeks() {
-        weeks = Event.weekEvents(for: year, in: persistentContainer.viewContext)
-        if isDataSourceEmpty && hasRefreshed {
-            selectViewController.showNoDataView(with: "No weeks for \(year)")
-        }
     }
 
 }
@@ -141,25 +127,43 @@ extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
         return option.weekString
     }
 
-    var initialRefreshKey: String? {
+}
+
+private class WeeksSelectTableViewController: SelectTableViewController<EventWeekSelectViewController> {
+
+    private let year: Int
+
+    fileprivate var hasRefreshed: Bool = false
+
+    init(year: Int, current: Event?, options: [Event], persistentContainer: NSPersistentContainer) {
+        self.year = year
+
+        super.init(current: current, options: options, persistentContainer: persistentContainer)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Refreshable
+
+    override var refreshKey: String? {
         return "\(year)_events"
     }
 
-    var isDataSourceEmpty: Bool {
-        return weeks.isEmpty
+    override var isDataSourceEmpty: Bool {
+        return options.isEmpty
     }
 
-    @objc func refresh() {
+    @objc override func refresh() {
+        removeNoDataView()
+
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchEvents(year: year, completion: { (events, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
             } else {
-                // TODO: Use markRefreshSuccessful from Refreshable
-                if let initialRefreshKey = self.initialRefreshKey {
-                    UserDefaults.standard.set(true, forKey: initialRefreshKey)
-                    UserDefaults.standard.synchronize()
-                }
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
@@ -168,13 +172,20 @@ extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
                 })
 
                 backgroundContext.saveOrRollback()
+                self.removeRequest(request: request!)
 
                 self.hasRefreshed = true
                 self.updateWeeks()
-                self.selectViewController.removeRequest(request: request!)
             })
         })
-        selectViewController.addRequest(request: request!)
+        addRequest(request: request!)
     }
 
+    func updateWeeks() {
+        options = Event.weekEvents(for: year, in: persistentContainer.viewContext)
+        if isDataSourceEmpty && hasRefreshed {
+            showNoDataView(with: "No weeks for \(year)")
+        }
+    }
+    
 }

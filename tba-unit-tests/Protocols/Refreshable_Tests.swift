@@ -9,6 +9,8 @@ class MockRefreshable: Refreshable {
 
     var noDataReloadExpectation: XCTestExpectation?
 
+    var mockRefreshKey: String?
+
     var mockAutomaticRefreshInterval: DateComponents?
 
     var mockAutomaticRefreshEndDate: Date?
@@ -23,7 +25,9 @@ class MockRefreshable: Refreshable {
         return UIScrollView()
     }
 
-    var refreshKey: String = ""
+    var refreshKey: String? {
+        return mockRefreshKey ?? "test_refresh_key"
+    }
 
     var automaticRefreshInterval: DateComponents? {
         return mockAutomaticRefreshInterval
@@ -60,6 +64,7 @@ class Refreshable_TestCase: XCTestCase {
     }
 
     override func tearDown() {
+        clearSuccessfulRefreshes()
         refreshable = nil
 
         super.tearDown()
@@ -72,80 +77,61 @@ class Refreshable_TestCase: XCTestCase {
     }
 
     func test_shouldRefresh_hasDataBeenRefreshed() {
-        refreshable.lastRefresh = nil
         XCTAssert(refreshable.shouldRefresh())
     }
 
     func test_shouldRefresh_isDataSourceEmpty() {
-        refreshable.lastRefresh = Date()
+        refreshable.markRefreshSuccessful()
         refreshable.isDataSourceEmpty = true
         XCTAssert(refreshable.shouldRefresh())
-
-        addTeardownBlock {
-            self.refreshable.lastRefresh = nil
-        }
     }
 
     func test_shouldRefresh_dataNotStale() {
-        refreshable.lastRefresh = Date()
+        refreshable.markRefreshSuccessful()
         refreshable.mockAutomaticRefreshInterval = DateComponents(hour: 1)
         XCTAssertFalse(refreshable.shouldRefresh())
     }
 
     func test_shouldRefresh_noEndDate() {
-        refreshable.lastRefresh = Calendar.current.date(byAdding: DateComponents(hour: -1, minute: -1), to: Date())
+        refreshable.markRefreshSuccessful(Calendar.current.date(byAdding: DateComponents(hour: -1, minute: -1), to: Date())!)
         refreshable.mockAutomaticRefreshInterval = DateComponents(hour: 1)
         XCTAssert(refreshable.shouldRefresh())
     }
 
     func test_shouldRefresh_beforeEndDate() {
-        refreshable.lastRefresh = Calendar.current.date(byAdding: DateComponents(hour: -1, minute: -1), to: Date())
+        refreshable.markRefreshSuccessful(Calendar.current.date(byAdding: DateComponents(hour: -1, minute: -1), to: Date())!)
         refreshable.mockAutomaticRefreshInterval = DateComponents(hour: 1)
         refreshable.mockAutomaticRefreshEndDate = Calendar.current.date(byAdding: DateComponents(hour: 1), to: Date())
         XCTAssert(refreshable.shouldRefresh())
     }
 
     func test_shouldRefresh_afterEndDate() {
-        refreshable.lastRefresh = Calendar.current.date(byAdding: DateComponents(hour: -1, minute: -1), to: Date())
+        refreshable.markRefreshSuccessful(Calendar.current.date(byAdding: DateComponents(hour: -1, minute: -1), to: Date())!)
         refreshable.mockAutomaticRefreshInterval = DateComponents(hour: 1)
         refreshable.mockAutomaticRefreshEndDate = Calendar.current.date(byAdding: DateComponents(hour: -1), to: Date())
         XCTAssert(refreshable.shouldRefresh())
     }
 
     func test_shouldRefresh_afterEndDate_lastRefreshBeforeEndDate() {
-        refreshable.lastRefresh = Calendar.current.date(byAdding: DateComponents(hour: -1), to: Date())
+        refreshable.markRefreshSuccessful(Calendar.current.date(byAdding: DateComponents(hour: -1), to: Date())!)
         refreshable.mockAutomaticRefreshInterval = DateComponents(minute: 30)
         refreshable.mockAutomaticRefreshEndDate = Calendar.current.date(byAdding: DateComponents(hour: -1, minute: -1), to: Date())
         XCTAssertFalse(refreshable.shouldRefresh())
     }
 
-    func test_lastRefresh() {
-        let testRefreshKey = "test_refresh_key"
-        refreshable.refreshKey = testRefreshKey
-
-        XCTAssertNil(refreshable.lastRefresh)
-
-        let now = Date()
-        refreshable.lastRefresh = now
-        XCTAssertEqual(refreshable.lastRefresh, now)
-
-        addTeardownBlock {
-            self.refreshable.lastRefresh = nil
-        }
-    }
-
     func test_markRefreshSuccessful() {
-        let testRefreshKey = "test_refresh_key"
-        refreshable.refreshKey = testRefreshKey
-
-        XCTAssertNil(refreshable.lastRefresh)
+        XCTAssert(refreshable.shouldRefresh())
 
         refreshable.markRefreshSuccessful()
-        XCTAssertNotNil(refreshable.lastRefresh)
+        XCTAssertFalse(refreshable.shouldRefresh())
+    }
 
-        addTeardownBlock {
-            self.refreshable.lastRefresh = nil
-        }
+    func test_clearSuccessfulRefreshes() {
+        XCTAssert(refreshable.shouldRefresh())
+        refreshable.markRefreshSuccessful()
+        XCTAssertFalse(refreshable.shouldRefresh())
+        clearSuccessfulRefreshes()
+        XCTAssert(refreshable.shouldRefresh())
     }
 
     func test_isRefreshing() {

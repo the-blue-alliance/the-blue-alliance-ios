@@ -30,7 +30,7 @@ class EventRankingsViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refreshable
 
-    var refreshKey: String {
+    var refreshKey: String? {
         return "\(event.key!)_rankings"
     }
 

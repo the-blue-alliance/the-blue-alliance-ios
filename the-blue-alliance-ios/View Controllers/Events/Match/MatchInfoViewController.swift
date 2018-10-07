@@ -176,8 +176,8 @@ class MatchInfoViewController: TBAViewController, Refreshable, Observable {
 
     // MARK: Refresh
 
-    var refreshKey: String {
-        return match.key!
+    var refreshKey: String? {
+        return match.key
     }
 
     var automaticRefreshInterval: DateComponents? {

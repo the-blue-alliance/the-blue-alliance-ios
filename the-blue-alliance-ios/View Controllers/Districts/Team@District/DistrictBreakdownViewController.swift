@@ -45,7 +45,7 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Obse
 
     // MARK: - Refreshable
 
-    var refreshKey: String {
+    var refreshKey: String? {
         return "\(ranking.district!.key!)_breakdown"
     }
 

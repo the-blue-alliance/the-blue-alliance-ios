@@ -14,8 +14,10 @@ protocol Refreshable: AnyObject {
 
     /**
      Identifier that reflects type of data used during refresh, and if we've fetched it before - used to calculate if we should refresh.
+
+     Should return nil if the view cannot be refreshed.
      */
-    var refreshKey: String { get }
+    var refreshKey: String? { get }
 
     /**
      DateComponents to be added to the last refresh date to determine if we should refresh stale data now.
@@ -42,25 +44,29 @@ protocol Refreshable: AnyObject {
     func noDataReload()
 }
 
+private let kSuccessfulRefreshKeys = "successful_refresh_keys"
+
 extension Refreshable {
 
-    var automaticRefreshInterval: DateComponents? {
-        return nil
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
-
-    /**
-     WARNING: This method should not be called directly - exposed for testing, used internally
-     */
-    var lastRefresh: Date? {
+    private var lastRefresh: Date? {
         get {
-            return UserDefaults.standard.object(forKey: refreshKey) as? Date
+            guard let refreshKey = refreshKey else {
+                return nil
+            }
+            let successfulRefreshes = UserDefaults.standard.dictionary(forKey: kSuccessfulRefreshKeys) ?? [:]
+            if let lastRefreshDate = successfulRefreshes[refreshKey] as? Date {
+                return lastRefreshDate
+            }
+            return nil
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: refreshKey)
+            guard let refreshKey = refreshKey else {
+                return
+            }
+            var successfulRefreshes = UserDefaults.standard.dictionary(forKey: kSuccessfulRefreshKeys) ?? [:]
+            successfulRefreshes[refreshKey] = newValue
+
+            UserDefaults.standard.set(successfulRefreshes, forKey: kSuccessfulRefreshKeys)
             UserDefaults.standard.synchronize()
         }
     }
@@ -100,8 +106,8 @@ extension Refreshable {
         return (!hasDataBeenRefreshed || isDataStale || isDataSourceEmpty) && !isRefreshing
     }
 
-    func markRefreshSuccessful() {
-        lastRefresh = Date()
+    func markRefreshSuccessful(_ lastRefresh: Date = Date()) {
+        self.lastRefresh = lastRefresh
     }
 
     // TODO: Add a method to add an observer on a single core data object for changes
@@ -165,4 +171,9 @@ extension Refreshable {
         refreshControl = nil
     }
 
+}
+
+func clearSuccessfulRefreshes() {
+    UserDefaults.standard.removeObject(forKey: kSuccessfulRefreshKeys)
+    UserDefaults.standard.synchronize()
 }

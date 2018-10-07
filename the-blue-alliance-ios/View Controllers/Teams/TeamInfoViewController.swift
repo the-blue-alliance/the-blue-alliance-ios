@@ -53,8 +53,16 @@ class TeamInfoViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refresh
 
-    var refreshKey: String {
-        return team.key!
+    var refreshKey: String? {
+        return team.key
+    }
+
+    var automaticRefreshInterval: DateComponents? {
+        return nil
+    }
+
+    var automaticRefreshEndDate: Date? {
+        return nil
     }
 
     var isDataSourceEmpty: Bool {

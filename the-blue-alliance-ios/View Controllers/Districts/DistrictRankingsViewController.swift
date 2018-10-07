@@ -30,7 +30,7 @@ class DistrictRankingsViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refreshable
 
-    var refreshKey: String {
+    var refreshKey: String? {
         return "\(district.key!)_rankings"
     }
 

@@ -76,8 +76,16 @@ class EventInfoViewController: TBATableViewController, Refreshable, Observable {
 
     // MARK: - Refreshable
 
-    var refreshKey: String {
-        return event.key!
+    var refreshKey: String? {
+        return event.key
+    }
+
+    var automaticRefreshInterval: DateComponents? {
+        return nil
+    }
+
+    var automaticRefreshEndDate: Date? {
+        return nil
     }
 
     var isDataSourceEmpty: Bool {

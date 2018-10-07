@@ -48,7 +48,7 @@ class TeamsViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refreshable
 
-    var refreshKey: String {
+    var refreshKey: String? {
         if let event = event {
             return "\(event.key!)_teams"
         }
