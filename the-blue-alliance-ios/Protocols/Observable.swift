@@ -9,12 +9,3 @@ protocol Observable: Persistable {
     var contextObserver: CoreDataContextObserver<ManagedType> { get }
     var observerPredicate: NSPredicate { get }
 }
-
-extension Observable {
-
-    // Make observerPredicate optional
-    var observerPredicate: NSPredicate {
-        return NSPredicate()
-    }
-
-}
