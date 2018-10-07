@@ -14,8 +14,8 @@ class TBATestCase: CoreDataTestCase {
         userDefaults = UserDefaults.standard
         urlOpener = MockURLOpener()
         remoteConfig = MockRemoteConfig(config: [
-            "max_season": "2016",
-            "current_season": "2015"
+            "max_season": NSNumber(value: 2016),
+            "current_season": NSNumber(value: 2015)
         ])
     }
 
@@ -32,61 +32,64 @@ class TBATestCase: CoreDataTestCase {
 
 class MockRemoteConfig: RemoteConfig {
 
-    let config: [String: String]
+    let config: [String: NSObject]?
+    var defaults: [String: NSObject]?
 
-    init(config: [String: String]) {
+    init(config: [String: NSObject]? = nil) {
         self.config = config
+    }
+
+    override func setDefaults(_ defaults: [String : NSObject]?) {
+        self.defaults = defaults
     }
 
     override func configValue(forKey key: String?) -> RemoteConfigValue {
         guard let key = key else {
             return MockRemoteConfigValue(nil)
         }
-        return MockRemoteConfigValue(config[key])
+        // Check live data first
+        if let liveValue = config?[key] {
+            return MockRemoteConfigValue(liveValue)
+        }
+        // Then check defaults
+        if let defaultValue = defaults?[key] {
+            return MockRemoteConfigValue(defaultValue)
+        }
+        return MockRemoteConfigValue(nil)
     }
 
 }
 
 class MockRemoteConfigValue: RemoteConfigValue {
 
-    let mockValue: String?
+    let mockValue: NSObject?
     let numberFormatter = NumberFormatter()
 
-    init(_ mockValue: String?) {
+    init(_ mockValue: NSObject?) {
         self.mockValue = mockValue
 
         super.init()
     }
 
     override var stringValue: String? {
-        guard let mockValue = mockValue else {
-            return nil
+        if let mockValue = mockValue as? String {
+            return mockValue
         }
-        return mockValue
+        return nil
     }
 
     override var numberValue: NSNumber? {
-        guard let mockValue = mockValue else {
-            return nil
+        if let mockValue = mockValue as? NSNumber {
+            return mockValue
         }
-        return numberFormatter.number(from: mockValue)
-    }
-
-    override var dataValue: Data {
-        guard let mockValue = mockValue else {
-            return Data()
-        }
-        guard let data = mockValue.data(using: .utf8) else {
-            return Data()
-        }
-        return data
+        return nil
     }
 
     override var boolValue: Bool {
-        guard let mockValue = mockValue else {
-            return false
+        if let mockValue = mockValue as? NSNumber {
+            return mockValue.boolValue
         }
-        return Bool(mockValue) ?? false
+        return false
     }
 
     // source has not been overridden

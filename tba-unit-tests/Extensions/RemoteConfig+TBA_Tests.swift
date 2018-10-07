@@ -1,12 +1,9 @@
 import XCTest
-import FirebaseRemoteConfig
 @testable import The_Blue_Alliance
 
-// NOTE: These tests will fail locally, since Firebase will pull from production
-// These tests will pass on CI, because our Firebase is a dummy setup upstream
 class RemoteConfigTBATestCase: XCTestCase {
 
-    var remoteConfig: RemoteConfig!
+    var remoteConfig: MockRemoteConfig!
     var remoteConfigTesting: [String: NSObject] = [
         "current_season": NSNumber(value: 2015),
         "ios_latest_app_version": NSNumber(value: -1),
@@ -19,7 +16,7 @@ class RemoteConfigTBATestCase: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        remoteConfig = RemoteConfig.remoteConfig()
+        remoteConfig = MockRemoteConfig()
         remoteConfig.setDefaults(remoteConfigTesting)
     }
 

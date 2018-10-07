@@ -52,7 +52,7 @@ class DistrictsContainerViewController_TestCase: TBATestCase {
         navigationController.presentCalled = { (vc) in
             XCTAssert(vc is UINavigationController)
             let nav = vc as! UINavigationController
-            XCTAssert(nav.viewControllers.first is YearSelectViewController)
+            XCTAssert(nav.viewControllers.first is SelectTableViewController<DistrictsContainerViewController>)
 
             presentExpectation.fulfill()
         }
@@ -77,7 +77,7 @@ class DistrictsContainerViewController_TestCase: TBATestCase {
         navigationController.showDetailViewControllerCalled = { (vc) in
             XCTAssert(vc is UINavigationController)
             let nav = vc as! UINavigationController
-            XCTAssert(nav.viewControllers.first is TeamViewController)
+            XCTAssert(nav.viewControllers.first is DistrictViewController)
 
             showDetailViewControllerExpectation.fulfill()
         }
