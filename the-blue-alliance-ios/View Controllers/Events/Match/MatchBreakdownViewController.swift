@@ -125,8 +125,16 @@ class MatchBreakdownViewController: TBAViewController, Refreshable, Observable, 
 
     // MARK: - Refreshable
 
-    var refreshKey: String {
-        return match.key!
+    var refreshKey: String? {
+        return match.key
+    }
+
+    var automaticRefreshInterval: DateComponents? {
+        return nil
+    }
+
+    var automaticRefreshEndDate: Date? {
+        return nil
     }
 
     var isDataSourceEmpty: Bool {

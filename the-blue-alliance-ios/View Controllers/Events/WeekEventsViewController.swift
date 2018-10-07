@@ -35,15 +35,15 @@ class WeekEventsViewController: EventsViewController {
 
     // MARK: - Refreshable
 
-    override var refreshKey: String {
+    override var refreshKey: String? {
         return "\(year)_events"
     }
 
-    var automaticRefreshInterval: DateComponents? {
+    override var automaticRefreshInterval: DateComponents? {
         return DateComponents(day: 7)
     }
 
-    var automaticRefreshEndDate: Date? {
+    override var automaticRefreshEndDate: Date? {
         // Automatically refresh the events for the duration of the year
         // Ex: 2019 events will stop automatically refreshing on Jan 1st, 2020
         return Calendar.current.date(from: DateComponents(year: year + 1))

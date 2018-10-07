@@ -32,7 +32,7 @@ class MatchesViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refreshable
 
-    var refreshKey: String {
+    var refreshKey: String? {
         return "\(event.key!)_matches"
     }
 

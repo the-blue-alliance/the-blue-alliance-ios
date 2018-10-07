@@ -60,7 +60,7 @@ class TeamStatsViewController: TBATableViewController, Refreshable, Observable {
 
     // MARK: - Refresh
 
-    var refreshKey: String {
+    var refreshKey: String? {
         return "\(event.key!)_team_stats"
     }
 

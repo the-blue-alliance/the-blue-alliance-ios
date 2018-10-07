@@ -167,7 +167,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refresh
 
-    var refreshKey: String {
+    var refreshKey: String? {
         return "\(team.key!)@\(event.key!)_status"
     }
 

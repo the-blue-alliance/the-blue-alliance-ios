@@ -52,7 +52,7 @@ class DistrictTeamSummaryViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refresh
 
-    var refreshKey: String {
+    var refreshKey: String? {
         return "\(ranking.district!.key!)_rankings"
     }
 

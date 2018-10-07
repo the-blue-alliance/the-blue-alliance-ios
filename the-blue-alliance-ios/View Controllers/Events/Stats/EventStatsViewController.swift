@@ -97,7 +97,7 @@ class EventStatsViewController: TBAViewController, Refreshable, Observable, Reac
 
     // MARK: - Refreshable
 
-    var refreshKey: String {
+    var refreshKey: String? {
         return "\(event.key!)_insights"
     }
 

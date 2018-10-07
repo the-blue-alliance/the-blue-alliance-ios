@@ -54,8 +54,16 @@ class EventsViewController: TBATableViewController, Refreshable, EventsViewContr
 
     // MARK: - Refreshable
 
-    var refreshKey: String {
+    var refreshKey: String? {
         fatalError("implement in subclass")
+    }
+
+    var automaticRefreshInterval: DateComponents? {
+        return nil
+    }
+
+    var automaticRefreshEndDate: Date? {
+        return nil
     }
 
     var isDataSourceEmpty: Bool {

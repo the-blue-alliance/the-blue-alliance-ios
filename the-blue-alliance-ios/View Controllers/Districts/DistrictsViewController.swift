@@ -35,7 +35,7 @@ class DistrictsViewController: TBATableViewController, Refreshable {
 
     // MARK: - Refreshable
 
-    var refreshKey: String {
+    var refreshKey: String? {
         return "\(year)_districts"
     }
 

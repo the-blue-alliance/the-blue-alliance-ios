@@ -173,6 +173,7 @@ class SettingsViewController: UITableViewController, Persistable {
     }
 
     internal func deleteNetworkCache() {
+        clearSuccessfulRefreshes()
         TBAKit.clearLastModified()
     }
 
