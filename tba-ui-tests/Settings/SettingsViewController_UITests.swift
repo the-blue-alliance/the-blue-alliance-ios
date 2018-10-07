@@ -16,20 +16,6 @@ class SettingsViewController_UITestCase: TBAUITestCase {
         XCTAssertEqual(appVersionTexts.count, 1)
     }
 
-    func test_openWebiste() {
-        let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
-
-        app.tables.cells.staticTexts["The Blue Alliance Website"].tap()
-        _ = safari.wait(for: .runningForeground, timeout: 10)
-    }
-
-    func test_openGitHub() {
-        let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
-
-        app.tables.cells.staticTexts["The Blue Alliance for iOS is open source"].tap()
-        _ = safari.wait(for: .runningForeground, timeout: 10)
-    }
-
     func test_deleteNetworkCache() {
         let tablesQuery = XCUIApplication().tables
         let deleteNetworkCacheStaticText = tablesQuery.cells.staticTexts["Delete network cache"]
