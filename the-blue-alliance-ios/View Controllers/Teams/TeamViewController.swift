@@ -8,7 +8,7 @@ class TeamViewController: ContainerViewController, Observable {
     private let team: Team
 
     private let eventsViewController: TeamEventsViewController
-    private let mediaViewController: TeamMediaCollectionViewController
+    // private let mediaViewController: TeamMediaCollectionViewController
 
     private var year: Int? {
         didSet {
@@ -16,9 +16,11 @@ class TeamViewController: ContainerViewController, Observable {
                 if eventsViewController.year != year {
                     eventsViewController.year = year
                 }
+                /*
                 if mediaViewController.year != year {
                     mediaViewController.year = year
                 }
+                */
             }
 
             DispatchQueue.main.async {
@@ -45,10 +47,10 @@ class TeamViewController: ContainerViewController, Observable {
 
         let infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer)
         eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer)
-        mediaViewController = TeamMediaCollectionViewController(team: team, year: year, urlOpener: urlOpener, persistentContainer: persistentContainer)
+        // mediaViewController = TeamMediaCollectionViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer)
 
-        super.init(viewControllers: [infoViewController, eventsViewController, mediaViewController],
-                   segmentedControlTitles: ["Info", "Events", "Media"],
+        super.init(viewControllers: [infoViewController, eventsViewController],
+                   segmentedControlTitles: ["Info", "Events"],
                    persistentContainer: persistentContainer)
 
         title = "Team \(team.teamNumber)"
