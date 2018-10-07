@@ -27,6 +27,8 @@ class WeekEventsViewController: EventsViewController {
         self.year = year
 
         super.init(persistentContainer: persistentContainer)
+
+        setupWeeks()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -108,7 +110,7 @@ class WeekEventsViewController: EventsViewController {
 
     // MARK: - Private
 
-    func setupWeeks() {
+    private func setupWeeks() {
         // Only setup weeks if we don't have a currently selected week
         if weekEvent != nil {
             return
