@@ -5,8 +5,8 @@ extension RemoteConfig {
 
     private struct TBARemoteConfigKeys {
         static let currentSeason = "current_season"
-        static let latestAppVersion = "latest_app_version"
-        static let minimumAppVersion = "min_app_version"
+        static let latestAppVersion = "ios_latest_app_version"
+        static let minimumAppVersion = "ios_min_app_version"
         static let maxSeason = "max_season"
         static let myTBAEnabled = "mytba_enabled"
         static let appStoreID = "app_store_id"

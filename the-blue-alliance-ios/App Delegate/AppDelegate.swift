@@ -48,11 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         return splitViewController
     }()
-    private let tabBarController: UITabBarController = {
-        let tabBarController = UITabBarController()
-        tabBarController.tabBar.barTintColor = .white
-        return tabBarController
-    }()
+    private let tabBarController = UITabBarController()
     lazy var emptyNavigationController: UINavigationController = {
         guard let emptyViewController = Bundle.main.loadNibNamed("EmptyViewController", owner: nil, options: nil)?.first as? UIViewController else {
             fatalError("Unable to load empty view controller")
@@ -95,7 +91,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - UIApplicationDelegate
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // print(launchOptions)
         AppDelegate.setupAppearance()
 
         // Setup a dummy launch screen in our window while we're doing setup tasks
@@ -279,6 +274,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationBarAppearance.setBackgroundImage(UIImage(), for: .default)
         navigationBarAppearance.isTranslucent = false
         navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+
+        let tabBarAppearance = UITabBar.appearance()
+        tabBarAppearance.barTintColor = .white
     }
 
 }

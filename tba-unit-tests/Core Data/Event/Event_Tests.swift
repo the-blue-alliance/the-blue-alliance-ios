@@ -1,5 +1,4 @@
 import XCTest
-import CoreData
 @testable import The_Blue_Alliance
 
 class Event_TestCase: CoreDataTestCase {

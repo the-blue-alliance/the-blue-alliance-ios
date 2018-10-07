@@ -1,5 +1,4 @@
 import XCTest
-import TBAKit
 @testable import The_Blue_Alliance
 
 class SettingsViewControllerTestCase: XCTestCase {

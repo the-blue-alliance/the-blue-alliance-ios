@@ -9,8 +9,8 @@ class RemoteConfigTBATestCase: XCTestCase {
     var remoteConfig: RemoteConfig!
     var remoteConfigTesting: [String: NSObject] = [
         "current_season": NSNumber(value: 2015),
-        "latest_app_version": NSNumber(value: -1),
-        "min_app_version": NSNumber(value: -1),
+        "ios_latest_app_version": NSNumber(value: -1),
+        "ios_min_app_version": NSNumber(value: -1),
         "max_season": NSNumber(value: 2015),
         "mytba_enabled": NSNumber(value: 1),
         "app_store_id": NSString(string: "tba_testing_id")
