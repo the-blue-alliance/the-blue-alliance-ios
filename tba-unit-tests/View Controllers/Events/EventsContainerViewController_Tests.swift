@@ -39,7 +39,7 @@ class EventsContainerViewController_TestCase: TBATestCase {
     }
 
     func test_tabBar() {
-        XCTAssertNotNil(eventsContainerViewController.tabBarItem.image)
+        XCTAssertEqual(eventsContainerViewController.tabBarItem.title, "Events")
     }
 
     func test_showsWeekEvents() {

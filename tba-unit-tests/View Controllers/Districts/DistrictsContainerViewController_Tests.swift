@@ -38,7 +38,7 @@ class DistrictsContainerViewController_TestCase: TBATestCase {
     }
 
     func test_tabBar() {
-        XCTAssertNotNil(districtsContainerViewController.tabBarItem.image)
+        XCTAssertEqual(districtsContainerViewController.tabBarItem.title, "Districts")
     }
 
     func test_showsTeams() {

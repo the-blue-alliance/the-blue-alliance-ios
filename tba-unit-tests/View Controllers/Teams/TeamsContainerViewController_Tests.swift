@@ -33,7 +33,7 @@ class TeamsContainerViewController_TestCase: TBATestCase {
     }
 
     func test_tabBar() {
-        XCTAssertNotNil(teamsContainerViewController.tabBarItem.image)
+        XCTAssertEqual(teamsContainerViewController.tabBarItem.title, "Teams")
     }
 
     func test_showsTeams() {
