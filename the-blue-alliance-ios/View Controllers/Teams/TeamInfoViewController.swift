@@ -90,6 +90,8 @@ class TeamInfoViewController: TBATableViewController, Refreshable {
             })
         })
         addRequest(request: request!)
+
+        // TODO: Refresh years participated?
     }
 
     // MARK: - Table view data source

@@ -22,6 +22,9 @@ class TeamAtEventViewController: ContainerViewController {
                    segmentedControlTitles: ["Summary", "Matches", "Stats", "Awards"],
                    persistentContainer: persistentContainer)
 
+        navigationTitle = "Team \(team.teamNumber)"
+        navigationSubtitle = "@ \(event.friendlyNameWithYear)"
+
         summaryViewController.delegate = self
         matchesViewController.delegate = self
         awardsViewController.delegate = self
@@ -29,15 +32,6 @@ class TeamAtEventViewController: ContainerViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        navigationTitle = "Team \(team.teamNumber)"
-        navigationSubtitle = "@ \(event.friendlyNameWithYear)"
     }
 
 }

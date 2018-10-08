@@ -5,7 +5,7 @@ class SettingsViewController_UITestCase: TBAUITestCase {
     override func setUp() {
         super.setUp()
 
-        let settingsButton = XCUIApplication().tabBars.buttons["Settings"]
+        let settingsButton = app.tabBars.buttons["Settings"]
         XCTAssert(settingsButton.waitForExistence(timeout: 10))
         settingsButton.tap()
     }
@@ -13,15 +13,15 @@ class SettingsViewController_UITestCase: TBAUITestCase {
     func test_showsAppVersion() {
         let predicate = NSPredicate(format: "label CONTAINS[c] 'The Blue Alliance for iOS - v'")
         let appVersionTexts = app.tables.staticTexts.containing(predicate)
-        XCTAssertEqual(appVersionTexts.count, 1)
+        XCTAssert(appVersionTexts.firstMatch.exists)
     }
 
     func test_deleteNetworkCache() {
-        let tablesQuery = XCUIApplication().tables
+        let tablesQuery = app.tables
         let deleteNetworkCacheStaticText = tablesQuery.cells.staticTexts["Delete network cache"]
         deleteNetworkCacheStaticText.tap()
 
-        let deleteNetworkCacheAlert = XCUIApplication().alerts["Delete Network Cache"]
+        let deleteNetworkCacheAlert = app.alerts["Delete Network Cache"]
         deleteNetworkCacheAlert.buttons["Cancel"].tap()
         XCTAssertFalse(deleteNetworkCacheAlert.exists)
 

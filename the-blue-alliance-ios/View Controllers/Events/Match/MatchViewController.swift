@@ -26,19 +26,13 @@ class MatchContainerViewController: ContainerViewController {
         super.init(viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }) as! [ContainableViewController],
                    segmentedControlTitles: titles,
                    persistentContainer: persistentContainer)
+
+        navigationTitle = "\(match.friendlyMatchName())"
+        navigationSubtitle = "@ \(match.event!.friendlyNameWithYear)"
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        navigationTitle = "\(match.friendlyMatchName())"
-        navigationSubtitle = "@ \(match.event!.friendlyNameWithYear)"
     }
 
 }

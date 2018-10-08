@@ -34,6 +34,8 @@ class DistrictsContainerViewController: ContainerViewController {
 
         title = "Districts"
         tabBarItem.image = UIImage(named: "ic_assignment")
+        navigationTitle = "Districts"
+        updateInterface()
 
         navigationTitleDelegate = self
         districtsViewController.delegate = self
@@ -49,9 +51,6 @@ class DistrictsContainerViewController: ContainerViewController {
         super.viewDidLoad()
 
         // TODO: Shouldn't this have the same split view controller code the other root views do?
-
-        navigationTitle = "Districts"
-        updateInterface()
     }
 
     // MARK: - Private Methods

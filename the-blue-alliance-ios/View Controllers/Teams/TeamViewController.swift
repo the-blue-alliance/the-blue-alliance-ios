@@ -23,9 +23,7 @@ class TeamViewController: ContainerViewController, Observable {
                 */
             }
 
-            DispatchQueue.main.async {
-                self.updateInterface()
-            }
+            updateInterface()
         }
     }
 
@@ -53,16 +51,15 @@ class TeamViewController: ContainerViewController, Observable {
                    segmentedControlTitles: ["Info", "Events"],
                    persistentContainer: persistentContainer)
 
-        title = "Team \(team.teamNumber)"
+        updateInterface()
+
         navigationTitleDelegate = self
         eventsViewController.delegate = self
 
         contextObserver.observeObject(object: team, state: .updated) { [unowned self] (team, _) in
             if self.year == nil {
                 self.year = TeamViewController.latestYear(remoteConfig: remoteConfig, years: team.yearsParticipated)
-            }
-
-            DispatchQueue.main.async {
+            } else {
                 self.updateInterface()
             }
         }
@@ -77,7 +74,6 @@ class TeamViewController: ContainerViewController, Observable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        updateInterface()
         refreshYearsParticipated()
     }
 
