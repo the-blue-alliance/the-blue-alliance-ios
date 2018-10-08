@@ -133,11 +133,11 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable {
         var sortDescriptor: NSSortDescriptor?
         switch filter {
         case .opr:
-            sortDescriptor = NSSortDescriptor(key: "opr", ascending: true)
+            sortDescriptor = NSSortDescriptor(key: "opr", ascending: false)
         case .dpr:
-            sortDescriptor = NSSortDescriptor(key: "dpr", ascending: true)
+            sortDescriptor = NSSortDescriptor(key: "dpr", ascending: false)
         case .ccwm:
-            sortDescriptor = NSSortDescriptor(key: "ccwm", ascending: true)
+            sortDescriptor = NSSortDescriptor(key: "ccwm", ascending: false)
         case .teamNumber:
             sortDescriptor = NSSortDescriptor(key: "team.teamNumber", ascending: true)
         }
