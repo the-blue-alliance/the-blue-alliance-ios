@@ -79,7 +79,7 @@ extension Team: Locatable, Managed {
             }
 
             guard let teams = teams else {
-                completion(APIError.error("No teams for page \(page)"))
+                completion(nil)
                 return
             }
 
