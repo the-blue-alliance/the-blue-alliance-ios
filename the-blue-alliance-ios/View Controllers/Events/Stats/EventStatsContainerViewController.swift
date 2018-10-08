@@ -35,20 +35,14 @@ class EventStatsContainerViewController: ContainerViewController {
                    segmentedControlTitles: titles,
                    persistentContainer: persistentContainer)
 
+        navigationTitle = "Stats"
+        navigationSubtitle = "@ \(event.friendlyNameWithYear)"
+
         teamStatsViewController.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        navigationTitle = "Stats"
-        navigationSubtitle = "@ \(event.friendlyNameWithYear)"
     }
 
     // MARK: - Interface Actions

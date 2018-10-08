@@ -17,20 +17,14 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
         super.init(viewControllers: [districtPointsViewController],
                    persistentContainer: persistentContainer)
 
+        navigationTitle = "District Points"
+        navigationSubtitle = "@ \(event.friendlyNameWithYear)"
+
         districtPointsViewController.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        navigationTitle = "District Points"
-        navigationSubtitle = "@ \(event.friendlyNameWithYear)"
     }
 
 }

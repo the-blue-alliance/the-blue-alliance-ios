@@ -47,7 +47,6 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         didSet {
             DispatchQueue.main.async {
                 self.navigationTitleLabel.text = self.navigationTitle
-                self.navigationItem.titleView = self.navigationStackView
             }
         }
     }
@@ -55,7 +54,6 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         didSet {
             DispatchQueue.main.async {
                 self.navigationDetailLabel.text = self.navigationSubtitle
-                self.navigationItem.titleView = self.navigationStackView
             }
         }
     }
@@ -120,6 +118,10 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         stackView.autoPinEdge(toSuperviewSafeArea: .top)
         // Pin our stack view underneath the safe area to extend underneath the home bar on notch phones
         stackView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
+
+        if navigationTitle != nil, navigationSubtitle != nil {
+            navigationItem.titleView = navigationStackView
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {

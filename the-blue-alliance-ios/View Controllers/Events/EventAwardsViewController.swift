@@ -18,24 +18,18 @@ class EventAwardsContainerViewController: ContainerViewController {
         super.init(viewControllers: [awardsViewController],
                    persistentContainer: persistentContainer)
 
-        awardsViewController.delegate = self
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
         navigationTitle = "Awards"
         if let team = team {
             navigationSubtitle = "Team \(team.teamNumber) @ \(event.friendlyNameWithYear)"
         } else {
             navigationSubtitle = "@ \(event.friendlyNameWithYear)"
         }
+
+        awardsViewController.delegate = self
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
 }
