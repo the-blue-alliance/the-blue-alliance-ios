@@ -15,14 +15,11 @@ class EventStatsViewController: TBAViewController, Refreshable, Observable, Reac
         if Int(event.year) < 2016 {
             return nil
         }
-        guard let insights = event.insights else {
-            return nil
-        }
 
         let moduleName = "EventInsights\(event.year)"
         let eventStatsView = RCTRootView(bundleURL: sourceURL,
                                          moduleName: moduleName,
-                                         initialProperties: insights,
+                                         initialProperties: event.insights ?? [:],
                                          launchOptions: [:])
         // TODO: eventStatsView.loadingView
         eventStatsView!.delegate = self
@@ -47,6 +44,8 @@ class EventStatsViewController: TBAViewController, Refreshable, Observable, Reac
 
         super.init(persistentContainer: persistentContainer)
 
+        styleInterface()
+
         contextObserver.observeObject(object: event, state: .updated) { [unowned self] (_, _) in
             DispatchQueue.main.async {
                 self.updateEventStatsView()
@@ -67,12 +66,6 @@ class EventStatsViewController: TBAViewController, Refreshable, Observable, Reac
         NotificationCenter.default.addObserver(self, selector: #selector(handleReactNativeErrorNotification(_:)), name: NSNotification.Name.RCTJavaScriptDidFailToLoad, object: nil)
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        updateEventStatsView()
-    }
-
     // MARK: Interface Methods
 
     func styleInterface() {
@@ -81,9 +74,7 @@ class EventStatsViewController: TBAViewController, Refreshable, Observable, Reac
             return
         }
 
-        removeNoDataView()
         scrollView.addSubview(eventStatsView)
-
         eventStatsView.autoMatch(.width, to: .width, of: scrollView)
         eventStatsView.autoPinEdgesToSuperviewEdges()
     }
@@ -118,9 +109,13 @@ class EventStatsViewController: TBAViewController, Refreshable, Observable, Reac
             return true
         }
         // https://github.com/ZachOrr/TBAKit/issues/11
-        let qual = insights["qual"]
-        let playoff = insights["playoff"]
-        return qual == nil || playoff == nil
+        guard let qual = insights["qual"] else {
+            return true
+        }
+        guard let playoff = insights["playoff"] else {
+            return true
+        }
+        return qual is NSNull || playoff is NSNull
     }
 
     @objc func refresh() {

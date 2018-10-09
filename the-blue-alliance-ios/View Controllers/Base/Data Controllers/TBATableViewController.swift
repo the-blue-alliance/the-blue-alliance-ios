@@ -7,7 +7,9 @@ class TBATableViewController: UITableViewController, DataController {
     var persistentContainer: NSPersistentContainer
     var noDataViewController: NoDataViewController?
 
-    var requestsArray: [URLSessionDataTask] = []
+    // MARK: - Refreshable
+
+    var _requestsArray: [URLSessionDataTask] = []
 
     // MARK: - Init
 
@@ -48,21 +50,21 @@ class TBATableViewController: UITableViewController, DataController {
 
 extension Refreshable where Self: TBATableViewController {
 
+    var requests: [URLSessionDataTask] {
+        get {
+            return _requestsArray
+        }
+        set {
+            _requestsArray = newValue
+        }
+    }
+
     var refreshControl: UIRefreshControl? {
         get {
             return tableView.refreshControl
         }
         set {
             tableView.refreshControl = newValue
-        }
-    }
-
-    var requests: [URLSessionDataTask] {
-        get {
-            return requestsArray
-        }
-        set {
-            requestsArray = newValue
         }
     }
 

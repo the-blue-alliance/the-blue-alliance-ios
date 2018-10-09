@@ -3,6 +3,6 @@ import UIKit
 
 class NoDataViewController: UIViewController {
 
-    @IBOutlet var textLabel: UILabel?
+    @IBOutlet weak var textLabel: UILabel!
 
 }
