@@ -28,12 +28,20 @@ private enum DebugRow: Int {
 class SettingsViewController: UITableViewController, Persistable {
 
     private var urlOpener: URLOpener
+    private var reactNativeService: ReactNativeService
     var persistentContainer: NSPersistentContainer
+
+    private let reactNativeDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yyyy HH:mm"
+        return dateFormatter
+    }()
 
     // MARK: - Init
 
-    init(urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
+    init(urlOpener: URLOpener, reactNativeService: ReactNativeService, persistentContainer: NSPersistentContainer) {
         self.urlOpener = urlOpener
+        self.reactNativeService = reactNativeService
         self.persistentContainer = persistentContainer
 
         super.init(style: .grouped)
@@ -76,7 +84,17 @@ class SettingsViewController: UITableViewController, Persistable {
 
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         if section == SettingsSection.max.rawValue - 1 {
-            return "The Blue Alliance for iOS - \(Bundle.main.displayVersionString)"
+            let reactNativeVersion: String = {
+                if let bundleCreated = reactNativeService.bundleCreated {
+                    return "\(reactNativeDateFormatter.string(from: bundleCreated)) (\(reactNativeService.bundleGeneration))"
+                } else {
+                    return "Local Version"
+                }
+            }()
+            return [
+                "The Blue Alliance for iOS - \(Bundle.main.displayVersionString)",
+                "TBA RN - \(reactNativeVersion)"
+            ].joined(separator: "\n")
         }
         return nil
     }

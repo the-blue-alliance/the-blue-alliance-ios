@@ -9,14 +9,16 @@ class TBAViewController: UIViewController, DataController {
     var persistentContainer: NSPersistentContainer
     var noDataViewController: NoDataViewController?
 
-    var requestsArray: [URLSessionDataTask] = []
-
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView(forAutoLayout: ())
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.backgroundColor = .clear
         return scrollView
     }()
+
+    // MARK: - Refreshable
+
+    var _requestsArray: [URLSessionDataTask] = []
 
     // MARK: - Init
 
@@ -49,21 +51,21 @@ class TBAViewController: UIViewController, DataController {
 
 extension Refreshable where Self: TBAViewController {
 
+    var requests: [URLSessionDataTask] {
+        get {
+            return _requestsArray
+        }
+        set {
+            _requestsArray = newValue
+        }
+    }
+
     var refreshControl: UIRefreshControl? {
         get {
             return scrollView.refreshControl
         }
         set {
             scrollView.refreshControl = newValue
-        }
-    }
-
-    var requests: [URLSessionDataTask] {
-        get {
-            return requestsArray
-        }
-        set {
-            requestsArray = newValue
         }
     }
 

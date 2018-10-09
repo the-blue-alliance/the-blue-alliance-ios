@@ -7,7 +7,9 @@ class TBACollectionViewController: UICollectionViewController, DataController {
     var persistentContainer: NSPersistentContainer
     var noDataViewController: NoDataViewController?
 
-    var requestsArray: [URLSessionDataTask] = []
+    // MARK: - Refreshable
+
+    var _requestsArray: [URLSessionDataTask] = []
 
     // MARK: - Init
 
@@ -37,10 +39,10 @@ extension Refreshable where Self: TBACollectionViewController {
 
     var requests: [URLSessionDataTask] {
         get {
-            return requestsArray
+            return _requestsArray
         }
         set {
-            requestsArray = newValue
+            _requestsArray = newValue
         }
     }
 

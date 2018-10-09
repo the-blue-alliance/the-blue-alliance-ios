@@ -59,14 +59,25 @@ class ReactNativeService {
 
     private enum DefaultKeys: String {
         case bundleGeneration = "kReactNativeBundleGenerationKey"
+        case bundleCreated = "kReactNativeBundleCreatedKey"
     }
 
-    fileprivate var bundleGeneration: Int {
+    fileprivate(set) var bundleGeneration: Int {
         get {
             return userDefaults.integer(forKey: DefaultKeys.bundleGeneration.rawValue)
         }
         set {
             userDefaults.set(newValue, forKey: DefaultKeys.bundleGeneration.rawValue)
+            userDefaults.synchronize()
+        }
+    }
+
+    fileprivate(set) var bundleCreated: Date? {
+        get {
+            return userDefaults.object(forKey: DefaultKeys.bundleCreated.rawValue) as? Date
+        }
+        set {
+            userDefaults.set(newValue, forKey: DefaultKeys.bundleCreated.rawValue)
             userDefaults.synchronize()
         }
     }
@@ -126,6 +137,7 @@ class ReactNativeService {
                 self.downloadReactNativeBundle(completion: { (error) in
                     if error == nil {
                         self.bundleGeneration = Int(metadata.generation)
+                        self.bundleCreated = metadata.timeCreated
                     }
                 })
             }

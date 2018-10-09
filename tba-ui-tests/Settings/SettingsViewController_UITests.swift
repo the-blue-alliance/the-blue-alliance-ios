@@ -11,9 +11,13 @@ class SettingsViewController_UITestCase: TBAUITestCase {
     }
 
     func test_showsAppVersion() {
-        let predicate = NSPredicate(format: "label CONTAINS[c] 'The Blue Alliance for iOS - v'")
-        let appVersionTexts = app.tables.staticTexts.containing(predicate)
+        let appVersionPredicate = NSPredicate(format: "label CONTAINS[c] 'The Blue Alliance for iOS - v'")
+        let appVersionTexts = app.tables.staticTexts.containing(appVersionPredicate)
         XCTAssert(appVersionTexts.firstMatch.exists)
+
+        let reactNativeVersionPredicate = NSPredicate(format: "label CONTAINS[c] 'TBA RN -'")
+        let reactNativeVersionTexts = app.tables.staticTexts.containing(reactNativeVersionPredicate)
+        XCTAssert(reactNativeVersionTexts.firstMatch.exists)
     }
 
     func test_deleteNetworkCache() {

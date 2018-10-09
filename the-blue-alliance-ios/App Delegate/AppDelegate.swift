@@ -34,6 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                        userDefaults: userDefaults,
                                                                        persistentContainer: persistentContainer)
         let settingsViewController = SettingsViewController(urlOpener: urlOpener,
+                                                            reactNativeService: reactNativeService,
                                                             persistentContainer: persistentContainer)
         let rootViewControllers: [UIViewController] = [eventsViewController, teamsViewController, districtsViewController, settingsViewController]
         tabBarController.viewControllers = rootViewControllers.compactMap({ (viewController) -> UIViewController? in
