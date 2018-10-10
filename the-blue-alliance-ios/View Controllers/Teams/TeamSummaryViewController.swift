@@ -54,12 +54,12 @@ class TeamSummaryViewController: TBATableViewController, Refreshable {
     // MARK: - Observable
 
     typealias ManagedType = EventStatus
+    lazy var contextObserver: CoreDataContextObserver<EventStatus> = {
+        return CoreDataContextObserver(context: persistentContainer.viewContext)
+    }()
     lazy var observerPredicate: NSPredicate = {
         return NSPredicate(format: "%K == %@ AND %K == %@",
                            #keyPath(EventStatus.event), event, #keyPath(EventStatus.team), team)
-    }()
-    lazy var contextObserver: CoreDataContextObserver<EventStatus> = {
-        return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
 
     private var backgroundFetchKeys: Set<String> = []
