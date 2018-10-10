@@ -147,7 +147,7 @@ class DistrictRankingsViewController: TBATableViewController, Refreshable {
                     let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
                     return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, for: backgroundTeam, in: backgroundContext)
                 })
-                backgroundDistrict.rankings = Set(localRankings ?? []) as NSSet
+                backgroundDistrict.addToRankings(Set(localRankings ?? []) as NSSet)
 
                 backgroundContext.saveOrRollback()
                 completion(true)

@@ -68,7 +68,7 @@ class EventRankingsViewController: TBATableViewController, Refreshable {
                     let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
                     return EventRanking.insert(with: modelRanking, for: backgroundEvent, for: backgroundTeam, for: sortOrder!, in: backgroundContext)
                 })
-                backgroundEvent.rankings = Set(localRankings ?? []) as NSSet
+                backgroundEvent.addToRankings(Set(localRankings ?? []) as NSSet)
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: rankingsRequest!)

@@ -48,7 +48,7 @@ class DistrictEventsViewController: EventsViewController {
                 let localEvents = events?.map({ (modelEvent) -> Event in
                     return Event.insert(with: modelEvent, in: backgroundContext)
                 })
-                backgroundDistrict.events = Set(localEvents ?? []) as NSSet
+                backgroundDistrict.addToEvents(Set(localEvents ?? []) as NSSet)
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)

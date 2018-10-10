@@ -101,7 +101,7 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
                 let localPoints = eventPoints?.map({ (modelPoints) -> DistrictEventPoints in
                     return DistrictEventPoints.insert(with: modelPoints, for: backgroundEvent, in: backgroundContext)
                 })
-                backgroundEvent.points = Set(localPoints ?? []) as NSSet
+                backgroundEvent.addToPoints(Set(localPoints ?? []) as NSSet)
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)

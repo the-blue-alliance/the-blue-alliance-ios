@@ -69,7 +69,7 @@ class MatchesViewController: TBATableViewController, Refreshable {
                 let localMatches = matches?.map({ (modelMatch) -> Match in
                     return Match.insert(with: modelMatch, for: backgroundEvent, in: backgroundContext)
                 })
-                backgroundEvent.matches = Set(localMatches ?? []) as NSSet
+                backgroundEvent.addToMatches(Set(localMatches ?? []) as NSSet)
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)

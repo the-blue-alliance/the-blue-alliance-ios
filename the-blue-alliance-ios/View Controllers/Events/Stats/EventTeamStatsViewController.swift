@@ -96,7 +96,7 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable {
                 let localStats = stats?.map({ (modelStat) -> EventTeamStat in
                     return EventTeamStat.insert(with: modelStat, for: backgroundEvent, in: backgroundContext)
                 })
-                backgroundEvent.stats = Set(localStats ?? []) as NSSet
+                backgroundEvent.addToStats(Set(localStats ?? []) as NSSet)
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
