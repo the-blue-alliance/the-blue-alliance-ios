@@ -95,10 +95,9 @@ class TeamMediaCollectionViewController: TBACollectionViewController, Refreshabl
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
-                let localMedia = media?.map({ (modelMedia) -> Media in
-                    return Media.insert(with: modelMedia, for: year, in: backgroundContext)
+                media?.forEach({ (modelMedia) in
+                    Media.insert(with: modelMedia, in: year, for: backgroundTeam, in: backgroundContext)
                 })
-                backgroundTeam.addToMedia(Set(localMedia ?? []) as NSSet)
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)

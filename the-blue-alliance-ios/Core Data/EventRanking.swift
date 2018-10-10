@@ -17,6 +17,7 @@ extension EventRanking: Managed {
         }
     }
 
+    @discardableResult
     static func insert(with model: TBAEventRanking, for event: Event, for team: Team, for sortOrderInfo: [TBAEventRankingSortOrder], in context: NSManagedObjectContext) -> EventRanking {
         let predicate = NSPredicate(format: "event == %@ AND team == %@", event, team)
         return findOrCreate(in: context, matching: predicate, configure: { (ranking) in

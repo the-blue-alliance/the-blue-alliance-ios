@@ -4,6 +4,7 @@ import CoreData
 
 extension DistrictRanking: Managed {
 
+    @discardableResult
     static func insert(with model: TBADistrictRanking, for district: District, for team: Team, in context: NSManagedObjectContext) -> DistrictRanking {
         let predicate = NSPredicate(format: "district == %@ AND team == %@", district, team)
         return findOrCreate(in: context, matching: predicate, configure: { (ranking) in

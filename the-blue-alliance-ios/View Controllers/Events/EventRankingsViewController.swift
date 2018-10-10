@@ -63,12 +63,10 @@ class EventRankingsViewController: TBATableViewController, Refreshable {
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
-
-                let localRankings = rankings?.compactMap({ (modelRanking) -> EventRanking? in
+                rankings?.forEach({ (modelRanking) in
                     let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
-                    return EventRanking.insert(with: modelRanking, for: backgroundEvent, for: backgroundTeam, for: sortOrder!, in: backgroundContext)
+                    EventRanking.insert(with: modelRanking, for: backgroundEvent, for: backgroundTeam, for: sortOrder!, in: backgroundContext)
                 })
-                backgroundEvent.addToRankings(Set(localRankings ?? []) as NSSet)
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: rankingsRequest!)

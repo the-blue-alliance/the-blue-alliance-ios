@@ -97,11 +97,9 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
-
-                let localPoints = eventPoints?.map({ (modelPoints) -> DistrictEventPoints in
-                    return DistrictEventPoints.insert(with: modelPoints, for: backgroundEvent, in: backgroundContext)
+                eventPoints?.forEach({ (modelPoints) in
+                    DistrictEventPoints.insert(with: modelPoints, for: backgroundEvent, in: backgroundContext)
                 })
-                backgroundEvent.addToPoints(Set(localPoints ?? []) as NSSet)
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)

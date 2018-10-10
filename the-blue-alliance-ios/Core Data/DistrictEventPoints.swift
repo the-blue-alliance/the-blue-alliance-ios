@@ -4,6 +4,7 @@ import TBAKit
 
 extension DistrictEventPoints: Managed {
 
+    @discardableResult
     static func insert(with model: TBADistrictEventPoints, for event: Event, in context: NSManagedObjectContext) -> DistrictEventPoints {
         guard let teamKey = model.teamKey else {
             fatalError("Need team key")
