@@ -7,6 +7,7 @@ class TBATestCase: CoreDataTestCase {
     var userDefaults: UserDefaults! // TODO: Mock this...
     var urlOpener: MockURLOpener!
     var remoteConfig: MockRemoteConfig!
+    var reactNativeMetadata: ReactNativeMetadata!
 
     override func setUp() {
         super.setUp()
