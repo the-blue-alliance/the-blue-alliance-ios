@@ -27,12 +27,12 @@ class TeamStatsViewController: TBATableViewController, Refreshable, Observable {
     // MARK: - Observable
 
     typealias ManagedType = EventTeamStat
+    lazy var contextObserver: CoreDataContextObserver<EventTeamStat> = {
+        return CoreDataContextObserver(context: persistentContainer.viewContext)
+    }()
     lazy var observerPredicate: NSPredicate = {
         return NSPredicate(format: "%K == %@ AND %K == %@",
                            #keyPath(EventTeamStat.event), event, #keyPath(EventTeamStat.team), team)
-    }()
-    lazy var contextObserver: CoreDataContextObserver<EventTeamStat> = {
-        return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
 
     // MARK: - Init

@@ -7,5 +7,4 @@ protocol Observable: Persistable {
     associatedtype ManagedType: NSManagedObject
 
     var contextObserver: CoreDataContextObserver<ManagedType> { get }
-    var observerPredicate: NSPredicate { get }
 }

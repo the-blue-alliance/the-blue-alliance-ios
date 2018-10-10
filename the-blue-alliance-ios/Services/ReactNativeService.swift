@@ -49,12 +49,18 @@ extension ReactNative {
 
 }
 
-class ReactNativeService {
+protocol ReactNativeMetadataObservable {
+    func metadataUpdated()
+}
 
-    fileprivate enum BundleName: String {
-        case assets = "ios/assets"
-        case downloaded = "ios/main.jsbundle"
-        case compressed = "ios.zip"
+class ReactNativeMetadata {
+
+    private var userDefaults: UserDefaults
+
+    var metadataProvider = Provider<ReactNativeMetadataObservable>()
+
+    init(userDefaults: UserDefaults) {
+        self.userDefaults = userDefaults
     }
 
     private enum DefaultKeys: String {
@@ -62,24 +68,38 @@ class ReactNativeService {
         case bundleCreated = "kReactNativeBundleCreatedKey"
     }
 
-    fileprivate(set) var bundleGeneration: Int {
+    var bundleGeneration: Int {
         get {
             return userDefaults.integer(forKey: DefaultKeys.bundleGeneration.rawValue)
         }
         set {
             userDefaults.set(newValue, forKey: DefaultKeys.bundleGeneration.rawValue)
             userDefaults.synchronize()
+
+            metadataProvider.post(block: { $0.metadataUpdated() })
         }
     }
 
-    fileprivate(set) var bundleCreated: Date? {
+    var bundleCreated: Date? {
         get {
             return userDefaults.object(forKey: DefaultKeys.bundleCreated.rawValue) as? Date
         }
         set {
             userDefaults.set(newValue, forKey: DefaultKeys.bundleCreated.rawValue)
             userDefaults.synchronize()
+
+            metadataProvider.post(block: { $0.metadataUpdated() })
         }
+    }
+
+}
+
+class ReactNativeService {
+
+    fileprivate enum BundleName: String {
+        case assets = "ios/assets"
+        case downloaded = "ios/main.jsbundle"
+        case compressed = "ios.zip"
     }
 
     fileprivate var documentDirectory: URL {
@@ -95,17 +115,17 @@ class ReactNativeService {
         return documentDirectory.appendingPathComponent(BundleName.compressed.rawValue)
     }
 
-    private var userDefaults: UserDefaults
     private var fileManager: FileManager
     private var firebaseStorage: Storage
     private var firebaseOptions: FirebaseOptions?
+    private var metadata: ReactNativeMetadata
     internal var retryService: RetryService
 
-    init(userDefaults: UserDefaults, fileManager: FileManager,  firebaseStorage: Storage, firebaseOptions: FirebaseOptions?, retryService: RetryService) {
-        self.userDefaults = userDefaults
+    init(fileManager: FileManager,  firebaseStorage: Storage, firebaseOptions: FirebaseOptions?, metadata: ReactNativeMetadata, retryService: RetryService) {
         self.fileManager = fileManager
         self.firebaseStorage = firebaseStorage
         self.firebaseOptions = firebaseOptions
+        self.metadata = metadata
         self.retryService = retryService
     }
 
@@ -132,12 +152,12 @@ class ReactNativeService {
         remoteBundleReference.getMetadata { [unowned self] (metadata, error) in
             if let error = error {
                 print("Unable to fetch metadata for compressed React Native bundle: \(error.localizedDescription)")
-            } else if let metadata = metadata, Int(metadata.generation) > self.bundleGeneration {
+            } else if let metadata = metadata, Int(metadata.generation) > self.metadata.bundleGeneration {
                 // Download the newest React Native bundle
                 self.downloadReactNativeBundle(completion: { (error) in
                     if error == nil {
-                        self.bundleGeneration = Int(metadata.generation)
-                        self.bundleCreated = metadata.timeCreated
+                        self.metadata.bundleGeneration = Int(metadata.generation)
+                        self.metadata.bundleCreated = metadata.timeCreated
                     }
                 })
             }

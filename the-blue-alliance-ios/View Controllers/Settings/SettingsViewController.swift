@@ -28,7 +28,7 @@ private enum DebugRow: Int {
 class SettingsViewController: UITableViewController, Persistable {
 
     private var urlOpener: URLOpener
-    private var reactNativeService: ReactNativeService
+    private var metadata: ReactNativeMetadata
     var persistentContainer: NSPersistentContainer
 
     private let reactNativeDateFormatter: DateFormatter = {
@@ -39,15 +39,17 @@ class SettingsViewController: UITableViewController, Persistable {
 
     // MARK: - Init
 
-    init(urlOpener: URLOpener, reactNativeService: ReactNativeService, persistentContainer: NSPersistentContainer) {
+    init(urlOpener: URLOpener, metadata: ReactNativeMetadata, persistentContainer: NSPersistentContainer) {
         self.urlOpener = urlOpener
-        self.reactNativeService = reactNativeService
+        self.metadata = metadata
         self.persistentContainer = persistentContainer
 
         super.init(style: .grouped)
 
         title = "Settings"
         tabBarItem.image = UIImage(named: "ic_settings")
+
+        metadata.metadataProvider.add(observer: self)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -85,8 +87,8 @@ class SettingsViewController: UITableViewController, Persistable {
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         if section == SettingsSection.max.rawValue - 1 {
             let reactNativeVersion: String = {
-                if let bundleCreated = reactNativeService.bundleCreated {
-                    return "\(reactNativeDateFormatter.string(from: bundleCreated)) (\(reactNativeService.bundleGeneration))"
+                if let bundleCreated = metadata.bundleCreated {
+                    return "\(reactNativeDateFormatter.string(from: bundleCreated)) (\(metadata.bundleGeneration))"
                 } else {
                     return "Local Version"
                 }
@@ -193,6 +195,16 @@ class SettingsViewController: UITableViewController, Persistable {
     internal func deleteNetworkCache() {
         clearSuccessfulRefreshes()
         TBAKit.clearLastModified()
+    }
+
+}
+
+extension SettingsViewController: ReactNativeMetadataObservable {
+
+    func metadataUpdated() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 
 }

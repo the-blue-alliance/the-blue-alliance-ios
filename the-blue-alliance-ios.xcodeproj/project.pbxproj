@@ -133,6 +133,7 @@
 		929FCDAA1EC8BFB000A38E46 /* DistrictRanking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCDA91EC8BFB000A38E46 /* DistrictRanking.swift */; };
 		92A2F5542156BD4B00267C63 /* NSManagedObjectContext+Extension_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A2F5532156BD4B00267C63 /* NSManagedObjectContext+Extension_Tests.swift */; };
 		92A321C7214EF83800FDADFB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A321C6214EF83800FDADFB /* SettingsViewController.swift */; };
+		92A4147C216DA76400E459A5 /* ReactNativeService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A4147B216DA76400E459A5 /* ReactNativeService_Tests.swift */; };
 		92AAC69720967EC20076B977 /* MyTBAModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AAC69620967EC20076B977 /* MyTBAModel.swift */; };
 		92AAC69A209681400076B977 /* MyTBASubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AAC699209681400076B977 /* MyTBASubscription.swift */; };
 		92AF4D0C1E330790007E967D /* SelectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectTableViewController.swift */; };
@@ -344,6 +345,7 @@
 		92A321C6214EF83800FDADFB /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		92A321CC214F029400FDADFB /* tba-ui-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tba-ui-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92A321D0214F029400FDADFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		92A4147B216DA76400E459A5 /* ReactNativeService_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeService_Tests.swift; sourceTree = "<group>"; };
 		92AAC69620967EC20076B977 /* MyTBAModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAModel.swift; sourceTree = "<group>"; };
 		92AAC699209681400076B977 /* MyTBASubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASubscription.swift; sourceTree = "<group>"; };
 		92AF4D0B1E330790007E967D /* SelectTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectTableViewController.swift; sourceTree = "<group>"; };
@@ -606,6 +608,7 @@
 				14B6726B21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift */,
 				92564C6F216456800047917F /* Secrets_Tests.swift */,
 				923AEE942167012000EF50C8 /* TBABackgroundService_Tests.swift */,
+				92A4147B216DA76400E459A5 /* ReactNativeService_Tests.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1708,6 +1711,7 @@
 			files = (
 				924459C620CB796B0007570D /* Event_Tests.swift in Sources */,
 				929820CD216966890080C1C8 /* EventsContainerViewController_Tests.swift in Sources */,
+				92A4147C216DA76400E459A5 /* ReactNativeService_Tests.swift in Sources */,
 				14B6726C21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift in Sources */,
 				92BB718420CE1E310081F4E5 /* Test.xcdatamodeld in Sources */,
 				923AEE99216703CB00EF50C8 /* MyTBA_Tests.swift in Sources */,

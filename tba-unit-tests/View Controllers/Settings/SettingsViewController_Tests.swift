@@ -1,25 +1,19 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-class SettingsViewControllerTestCase: XCTestCase {
-
-    var mockURLOpener: MockURLOpener!
-    var persistentContainer: MockPersistentContainer!
+class SettingsViewControllerTestCase: TBATestCase {
 
     var settingsViewController: SettingsViewController!
 
     override func setUp() {
         super.setUp()
 
-        persistentContainer = MockPersistentContainer(name: "Test")
-        mockURLOpener = MockURLOpener()
-
-        settingsViewController = SettingsViewController(urlOpener: mockURLOpener,
+        settingsViewController = SettingsViewController(urlOpener: urlOpener,
+                                                        metadata: ReactNativeMetadata(userDefaults: userDefaults),
                                                         persistentContainer: persistentContainer)
     }
 
     override func tearDown() {
-        mockURLOpener = nil
         settingsViewController = nil
 
         super.tearDown()
@@ -31,8 +25,8 @@ class SettingsViewControllerTestCase: XCTestCase {
             XCTFail()
             return
         }
-        mockURLOpener.mockURL = url
-        mockURLOpener.openAssert = expectation
+        urlOpener.mockURL = url
+        urlOpener.openAssert = expectation
 
         settingsViewController.openTBAWebsite()
 
@@ -45,8 +39,8 @@ class SettingsViewControllerTestCase: XCTestCase {
             XCTFail()
             return
         }
-        mockURLOpener.mockURL = url
-        mockURLOpener.openAssert = expectation
+        urlOpener.mockURL = url
+        urlOpener.openAssert = expectation
 
         settingsViewController.openGitHub()
 

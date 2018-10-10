@@ -33,9 +33,6 @@ class TeamViewController: ContainerViewController, Observable {
     lazy var contextObserver: CoreDataContextObserver<Team> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
-    lazy var observerPredicate: NSPredicate = {
-        return NSPredicate()
-    }()
 
     // MARK: Init
 

@@ -45,9 +45,6 @@ class EventInfoViewController: TBATableViewController, Refreshable, Observable {
     lazy var contextObserver: CoreDataContextObserver<Event> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
-    lazy var observerPredicate: NSPredicate = {
-        return NSPredicate()
-    }()
 
     // MARK: - Init
 

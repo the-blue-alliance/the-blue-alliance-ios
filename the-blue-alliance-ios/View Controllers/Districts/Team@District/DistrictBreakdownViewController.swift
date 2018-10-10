@@ -14,9 +14,6 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Obse
     lazy var contextObserver: CoreDataContextObserver<DistrictRanking> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
-    lazy var observerPredicate: NSPredicate = {
-        return NSPredicate()
-    }()
 
     // MARK: - Init
 

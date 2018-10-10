@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                        userDefaults: userDefaults,
                                                                        persistentContainer: persistentContainer)
         let settingsViewController = SettingsViewController(urlOpener: urlOpener,
-                                                            reactNativeService: reactNativeService,
+                                                            metadata: reactNativeMetadata,
                                                             persistentContainer: persistentContainer)
         let rootViewControllers: [UIViewController] = [eventsViewController, teamsViewController, districtsViewController, settingsViewController]
         tabBarController.viewControllers = rootViewControllers.compactMap({ (viewController) -> UIViewController? in
@@ -82,13 +82,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                    retryService: RetryService())
     }()
     lazy var reactNativeService: ReactNativeService = {
-        return ReactNativeService(userDefaults: userDefaults,
-                                  fileManager: FileManager.default,
+        return ReactNativeService(fileManager: FileManager.default,
                                   firebaseStorage: Storage.storage(),
                                   firebaseOptions: FirebaseOptions.defaultOptions(),
+                                  metadata: reactNativeMetadata,
                                   retryService: RetryService())
     }()
-
+    lazy var reactNativeMetadata: ReactNativeMetadata = {
+        return ReactNativeMetadata(userDefaults: userDefaults)
+    }()
     // MARK: - UIApplicationDelegate
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
