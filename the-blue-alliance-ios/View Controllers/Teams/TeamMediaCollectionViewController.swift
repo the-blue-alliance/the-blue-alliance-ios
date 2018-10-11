@@ -93,26 +93,11 @@ class TeamMediaCollectionViewController: TBACollectionViewController, Refreshabl
                 self.markRefreshSuccessful()
             }
 
-            // TODO: This idea of deleting old and inserting new should be a pattern... basically everywhere
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
-
-                // Fetch all old media for team for year
-                let existingMedia = Media.fetch(in: backgroundContext, configurationBlock: { (request) in
-                    self.setupFetchRequest(request)
+                media?.forEach({ (modelMedia) in
+                    Media.insert(with: modelMedia, in: year, for: backgroundTeam, in: backgroundContext)
                 })
-                backgroundTeam.removeFromMedia(Set(existingMedia) as NSSet)
-
-                // Add/insert new media
-                let localMedia = media?.map({ (modelMedia) -> Media in
-                    return Media.insert(with: modelMedia, for: year, in: backgroundContext)
-                })
-                backgroundTeam.addToMedia(Set(localMedia ?? []) as NSSet)
-
-                // Cleanup orphaned media
-                existingMedia.filter({ $0.team == nil }).forEach {
-                    backgroundContext.delete($0)
-                }
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)

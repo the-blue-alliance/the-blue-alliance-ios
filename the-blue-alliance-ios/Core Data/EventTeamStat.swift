@@ -4,6 +4,7 @@ import CoreData
 
 extension EventTeamStat: Managed {
 
+    @discardableResult
     static func insert(with model: TBAStat, for event: Event, in context: NSManagedObjectContext) -> EventTeamStat {
         let team = Team.insert(withKey: model.teamKey, in: context)
         return insert(with: model, for: event, and: team, in: context)

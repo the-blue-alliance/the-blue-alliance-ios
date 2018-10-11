@@ -4,6 +4,7 @@ import TBAKit
 
 extension Award: Managed {
 
+    @discardableResult
     static func insert(with model: TBAAward, for event: Event, in context: NSManagedObjectContext) -> Award {
         let predicate = NSPredicate(format: "awardType == %ld && year == %ld && event == %@", model.awardType, model.year, event)
         return findOrCreate(in: context, matching: predicate) { (award) in

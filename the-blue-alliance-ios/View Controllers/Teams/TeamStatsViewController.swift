@@ -90,10 +90,9 @@ class TeamStatsViewController: TBATableViewController, Refreshable, Observable {
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
-                let localStats = stats?.map({ (modelStat) -> EventTeamStat in
-                    return EventTeamStat.insert(with: modelStat, for: backgroundEvent, in: backgroundContext)
+                stats?.forEach({ (modelStat) in
+                    EventTeamStat.insert(with: modelStat, for: backgroundEvent, in: backgroundContext)
                 })
-                backgroundEvent.stats = Set(localStats ?? []) as NSSet
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)

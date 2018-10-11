@@ -65,11 +65,9 @@ class MatchesViewController: TBATableViewController, Refreshable {
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
-
-                let localMatches = matches?.map({ (modelMatch) -> Match in
-                    return Match.insert(with: modelMatch, for: backgroundEvent, in: backgroundContext)
+                matches?.forEach({ (modelMatch) in
+                    Match.insert(with: modelMatch, for: backgroundEvent, in: backgroundContext)
                 })
-                backgroundEvent.matches = Set(localMatches ?? []) as NSSet
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
