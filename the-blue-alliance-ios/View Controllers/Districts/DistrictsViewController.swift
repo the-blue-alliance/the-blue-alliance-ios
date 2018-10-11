@@ -68,6 +68,7 @@ class DistrictsViewController: TBATableViewController, Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                // TODO: Delete old districts
                 districts?.forEach({ (modelDistrict) in
                     District.insert(with: modelDistrict, in: backgroundContext)
                 })

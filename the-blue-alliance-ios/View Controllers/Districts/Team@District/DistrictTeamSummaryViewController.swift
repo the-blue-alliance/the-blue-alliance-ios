@@ -82,12 +82,13 @@ class DistrictTeamSummaryViewController: TBATableViewController, Refreshable {
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundDistrict = backgroundContext.object(with: self.ranking.district!.objectID) as! District
-
-                let localRankings = rankings?.compactMap({ (modelRanking) -> DistrictRanking? in
-                    let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
-                    return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, for: backgroundTeam, in: backgroundContext)
-                })
-                backgroundDistrict.rankings = Set(localRankings ?? []) as NSSet
+                if let rankings = rankings {
+                    let localRankings = rankings.map({ (modelRanking) -> DistrictRanking in
+                        let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
+                        return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, for: backgroundTeam, in: backgroundContext)
+                    })
+                    backgroundDistrict.rankings = Set(localRankings) as NSSet
+                }
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)

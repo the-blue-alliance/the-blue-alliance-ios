@@ -167,6 +167,7 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                // TODO: Delete old events for year?
                 events?.forEach({ (modelEvent) in
                     Event.insert(with: modelEvent, in: backgroundContext)
                 })

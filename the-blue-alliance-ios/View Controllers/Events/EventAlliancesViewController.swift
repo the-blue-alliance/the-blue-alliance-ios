@@ -108,11 +108,12 @@ private class EventAlliancesViewController: TBATableViewController, Refreshable 
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
-
-                let localAlliances = alliances?.map({ (modelAlliance) -> EventAlliance in
-                    return EventAlliance.insert(with: modelAlliance, for: backgroundEvent, in: backgroundContext)
-                })
-                backgroundEvent.alliances = Set(localAlliances ?? []) as NSSet
+                if let alliances = alliances {
+                    let localAlliances = alliances.map({ (modelAlliance) -> EventAlliance in
+                        return EventAlliance.insert(with: modelAlliance, for: backgroundEvent, in: backgroundContext)
+                    })
+                    backgroundEvent.alliances = Set(localAlliances) as NSSet
+                }
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: alliancesRequest!)

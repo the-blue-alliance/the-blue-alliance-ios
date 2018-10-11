@@ -55,10 +55,12 @@ class TeamEventsViewController: EventsViewController {
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
-                let localEvents = events?.map({ (modelEvent) -> Event in
-                    return Event.insert(with: modelEvent, in: backgroundContext)
-                })
-                backgroundTeam.addToEvents(Set(localEvents ?? []) as NSSet)
+                if let events = events {
+                    let localEvents = events.map({ (modelEvent) -> Event in
+                        return Event.insert(with: modelEvent, in: backgroundContext)
+                    })
+                    backgroundTeam.events = Set(localEvents) as NSSet
+                }
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
