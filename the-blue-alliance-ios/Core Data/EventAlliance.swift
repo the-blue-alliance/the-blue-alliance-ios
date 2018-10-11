@@ -4,7 +4,6 @@ import CoreData
 
 extension EventAlliance: Managed {
 
-    @discardableResult
     static func insert(with model: TBAAlliance, for event: Event, in context: NSManagedObjectContext) -> EventAlliance {
         // Kill.... me.....
         let predicate = NSPredicate(format: "event == %@ AND (SUBQUERY(picks, $pick, $pick.key IN %@) .@count == %d)", event, model.picks, model.picks.count)

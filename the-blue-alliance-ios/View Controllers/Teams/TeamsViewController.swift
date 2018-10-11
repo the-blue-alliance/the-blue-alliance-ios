@@ -134,7 +134,7 @@ class TeamsViewController: TBATableViewController, Refreshable {
                 let localTeams = teams?.map({ (modelTeam) -> Team in
                     return Team.insert(with: modelTeam, in: backgroundContext)
                 })
-                backgroundEvent.addToTeams(Set(localTeams ?? []) as NSSet)
+                backgroundEvent.teams = Set(localTeams ?? []) as NSSet
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)

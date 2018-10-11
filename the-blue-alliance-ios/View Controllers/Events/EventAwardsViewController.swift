@@ -109,9 +109,11 @@ class EventAwardsViewController: TBATableViewController, Refreshable {
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
-                awards?.forEach({ (modelAward) in
-                    Award.insert(with: modelAward, for: backgroundEvent, in: backgroundContext)
+
+                let localAwards = awards?.map({ (modelAward) -> Award in
+                    return Award.insert(with: modelAward, for: backgroundEvent, in: backgroundContext)
                 })
+                backgroundEvent.awards = Set(localAwards ?? []) as NSSet
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
