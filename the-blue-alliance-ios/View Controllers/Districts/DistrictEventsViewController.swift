@@ -45,10 +45,12 @@ class DistrictEventsViewController: EventsViewController {
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundDistrict = backgroundContext.object(with: self.district.objectID) as! District
-                let localEvents = events?.map({ (modelEvent) -> Event in
-                    return Event.insert(with: modelEvent, in: backgroundContext)
-                })
-                backgroundDistrict.events = Set(localEvents ?? []) as NSSet
+                if let events = events {
+                    let localEvents = events.map({ (modelEvent) -> Event in
+                        return Event.insert(with: modelEvent, in: backgroundContext)
+                    })
+                    backgroundDistrict.events = Set(localEvents) as NSSet
+                }
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)

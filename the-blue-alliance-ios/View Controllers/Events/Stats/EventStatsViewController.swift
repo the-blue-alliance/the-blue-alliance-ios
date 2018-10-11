@@ -128,6 +128,7 @@ class EventStatsViewController: TBAViewController, Refreshable, Observable, Reac
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
+                // TODO: If we get a 304 these insights will be deleted incorrectly
                 backgroundEvent.insights = insights
 
                 backgroundContext.saveOrRollback()

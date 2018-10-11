@@ -201,6 +201,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable {
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
 
                 if let modelStatus = modelStatus {
+                    // TODO: EventStatus can never be removed if it's invalid
                     EventStatus.insert(with: modelStatus, team: backgroundTeam, event: backgroundEvent, in: backgroundContext)
                 }
 
@@ -219,11 +220,12 @@ class TeamSummaryViewController: TBATableViewController, Refreshable {
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
-
-                let localAwards = awards?.map({ (modelAward) -> Award in
-                    return Award.insert(with: modelAward, for: backgroundEvent, in: backgroundContext)
-                })
-                backgroundEvent.addToAwards(Set(localAwards ?? []) as NSSet)
+                if let awards = awards {
+                    let localAwards = awards.map({ (modelAward) -> Award in
+                        return Award.insert(with: modelAward, for: backgroundEvent, in: backgroundContext)
+                    })
+                    backgroundEvent.awards = Set(localAwards)
+                }
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: awardsRequest!)

@@ -101,6 +101,7 @@ class DistrictRankingsViewController: TBATableViewController, Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                // TODO: Delete old teams
                 backgroundContext.performAndWait {
                     events?.forEach({ (modelEvent) in
                         Event.insert(with: modelEvent, in: backgroundContext)
@@ -121,6 +122,7 @@ class DistrictRankingsViewController: TBATableViewController, Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                // TODO: Delete old teams
                 backgroundContext.performAndWait {
                     teams?.forEach({ (modelTeam) in
                         Team.insert(with: modelTeam, in: backgroundContext)
@@ -142,12 +144,13 @@ class DistrictRankingsViewController: TBATableViewController, Refreshable {
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundDistrict = backgroundContext.object(with: self.district.objectID) as! District
-
-                let localRankings = rankings?.compactMap({ (modelRanking) -> DistrictRanking? in
-                    let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
-                    return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, for: backgroundTeam, in: backgroundContext)
-                })
-                backgroundDistrict.rankings = Set(localRankings ?? []) as NSSet
+                if let rankings = rankings {
+                    let localRankings = rankings.map({ (modelRanking) -> DistrictRanking in
+                        let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
+                        return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, for: backgroundTeam, in: backgroundContext)
+                    })
+                    backgroundDistrict.rankings = Set(localRankings) as NSSet
+                }
 
                 backgroundContext.saveOrRollback()
                 completion(true)

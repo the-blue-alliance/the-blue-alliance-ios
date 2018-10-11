@@ -156,6 +156,7 @@ class MatchBreakdownViewController: TBAViewController, Refreshable, Observable, 
                 let backgroundEvent = backgroundContext.object(with: self.match.event!.objectID) as! Event
 
                 if let modelMatch = modelMatch {
+                    // TODO: Match can never be deleted
                     backgroundEvent.addToMatches(Match.insert(with: modelMatch, for: backgroundEvent, in: backgroundContext))
                 }
 
