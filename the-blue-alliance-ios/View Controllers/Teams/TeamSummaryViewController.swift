@@ -224,7 +224,7 @@ class TeamSummaryViewController: TBATableViewController, Refreshable {
                     let localAwards = awards.map({ (modelAward) -> Award in
                         return Award.insert(with: modelAward, for: backgroundEvent, in: backgroundContext)
                     })
-                    backgroundEvent.awards = Set(localAwards)
+                    backgroundEvent.awards = Set(localAwards) as NSSet
                 }
 
                 backgroundContext.saveOrRollback()
