@@ -129,12 +129,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController, Refreshabl
             })
         })
         addRequest(request: request!)
-
-        if let teamMedia = self.team.media?.allObjects as? [Media] {
-            teamMedia.forEach({ (media) in
-                self.fetchMedia(media)
-            })
-        }
     }
 
     // MARK: Rotation
