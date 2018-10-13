@@ -59,6 +59,7 @@
 		924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924602AE1ECE8B580030EDBF /* AwardTableViewCell.xib */; };
 		924602B71ECE99F50030EDBF /* String+Prefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924602B61ECE99F50030EDBF /* String+Prefix.swift */; };
 		9249206F20BB0455001CAC5E /* Date+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9249206E20BB0455001CAC5E /* Date+TBA.swift */; };
+		924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924AFD782171AB1A00D7BE7E /* NoDataView.xib */; };
 		924C0E9020BA18C5009066ED /* Int16+Suffix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924C0E8F20BA18C5009066ED /* Int16+Suffix.swift */; };
 		924F8C851EC8C5F200F7447A /* Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924F8C841EC8C5F200F7447A /* Managed.swift */; };
 		924F8C871EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924F8C861EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift */; };
@@ -267,6 +268,7 @@
 		924602AE1ECE8B580030EDBF /* AwardTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AwardTableViewCell.xib; sourceTree = "<group>"; };
 		924602B61ECE99F50030EDBF /* String+Prefix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Prefix.swift"; path = "Extensions/String+Prefix.swift"; sourceTree = "<group>"; };
 		9249206E20BB0455001CAC5E /* Date+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Date+TBA.swift"; path = "Extensions/Date+TBA.swift"; sourceTree = "<group>"; };
+		924AFD782171AB1A00D7BE7E /* NoDataView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoDataView.xib; sourceTree = "<group>"; };
 		924C0E8F20BA18C5009066ED /* Int16+Suffix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Int16+Suffix.swift"; path = "Extensions/Int16+Suffix.swift"; sourceTree = "<group>"; };
 		924F8C841EC8C5F200F7447A /* Managed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Managed.swift; sourceTree = "<group>"; };
 		924F8C861EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+Extension.swift"; sourceTree = "<group>"; };
@@ -530,8 +532,8 @@
 			children = (
 				92942DA01E2154DA008E79CA /* LaunchScreen.storyboard */,
 				92BB718820D216D50081F4E5 /* EmptyViewController.xib */,
-				923A0D7420D2176500BF5E31 /* NoDataViewController.xib */,
 				92E9F0AA216C439700C1F916 /* NoDataViewController.swift */,
+				924AFD782171AB1A00D7BE7E /* NoDataView.xib */,
 			);
 			path = "Launch Views";
 			sourceTree = "<group>";
@@ -1372,10 +1374,10 @@
 				304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */,
 				92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */,
 				929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */,
+				924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */,
 				9221C618209BFF8700477DE2 /* LoadingTableViewCell.xib in Resources */,
 				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
 				92B5566021601D9B00C1D9A3 /* MatchView.xib in Resources */,
-				923A0D7520D2176500BF5E31 /* NoDataViewController.xib in Resources */,
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
 				92858F2B208D783300811614 /* EventTeamStatTableViewCell.xib in Resources */,
 				92D855D91EC695CE00572F27 /* TeamTableViewCell.xib in Resources */,

@@ -3,7 +3,7 @@ import UIKit
 import CoreData
 import TBAKit
 
-class TeamStatsViewController: TBATableViewController, Refreshable, Observable {
+class TeamStatsViewController: TBATableViewController, Observable {
 
     private let event: Event
     private let team: Team
@@ -58,7 +58,41 @@ class TeamStatsViewController: TBATableViewController, Refreshable, Observable {
         tableView.registerReusableCell(EventTeamStatTableViewCell.self)
     }
 
-    // MARK: - Refresh
+    // MARK: Table View Data Source
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if teamStat == nil {
+            showNoDataView()
+            return 0
+        }
+        removeNoDataView()
+        return 3
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> EventTeamStatTableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTeamStatTableViewCell
+        cell.selectionStyle = .none
+
+        let statName: String = {
+            switch indexPath.row {
+            case 0:
+                return "opr"
+            case 1:
+                return "dpr"
+            case 2:
+                return "ccwm"
+            default:
+                return ""
+            }
+        }()
+        cell.viewModel = EventTeamStatCellViewModel(eventTeamStat: teamStat, statName: statName)
+
+        return cell
+    }
+
+}
+
+extension TeamStatsViewController: Refreshable {
 
     var refreshKey: String? {
         return "\(event.key!)_team_stats"
@@ -104,37 +138,12 @@ class TeamStatsViewController: TBATableViewController, Refreshable, Observable {
         addRequest(request: request!)
     }
 
-    // MARK: Table View Data Source
+}
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if teamStat == nil {
-            showNoDataView(with: "No team stats for event")
-            return 0
-        } else {
-            removeNoDataView()
-            return 3
-        }
-    }
+extension TeamStatsViewController: Stateful {
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> EventTeamStatTableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTeamStatTableViewCell
-        cell.selectionStyle = .none
-
-        let statName: String = {
-            switch indexPath.row {
-            case 0:
-                return "opr"
-            case 1:
-                return "dpr"
-            case 2:
-                return "ccwm"
-            default:
-                return ""
-            }
-        }()
-        cell.viewModel = EventTeamStatCellViewModel(eventTeamStat: teamStat, statName: statName)
-
-        return cell
+    var noDataText: String {
+        return "No stats for team at event"
     }
 
 }

@@ -4,7 +4,7 @@ import TBAKit
 import UIKit
 import React
 
-class EventStatsViewController: TBAViewController, Refreshable, Observable, ReactNative {
+class EventStatsViewController: TBAViewController, Observable, ReactNative {
 
     private let event: Event
 
@@ -82,11 +82,39 @@ class EventStatsViewController: TBAViewController, Refreshable, Observable, Reac
         }
     }
 
-    func showNoDataView() {
-        showNoDataView(with: "No stats for event")
+    override func reloadViewAfterRefresh() {
+        if isDataSourceEmpty {
+            showNoDataView()
+        } else {
+            updateEventStatsView()
+        }
     }
 
-    // MARK: - Refreshable
+    // MARK: - ReactNative
+    // MARK: - Notifications
+
+    // TODO: This sucks, but also, we can't have @objc in a protocol extension so
+    @objc func handleReactNativeErrorNotification(_ sender: NSNotification) {
+        reactNativeError(sender)
+    }
+
+    func showErrorView() {
+        showNoDataView()
+        // Disable refreshing if we hit an error
+        disableRefreshing()
+    }
+
+}
+
+extension EventStatsViewController: RCTRootViewDelegate {
+
+    func rootViewDidChangeIntrinsicSize(_ rootView: RCTRootView!) {
+        rootView.autoSetDimension(.height, toSize: rootView.intrinsicContentSize.height)
+    }
+
+}
+
+extension EventStatsViewController: Refreshable {
 
     var refreshKey: String? {
         return "\(event.key!)_insights"
@@ -138,34 +166,12 @@ class EventStatsViewController: TBAViewController, Refreshable, Observable, Reac
         addRequest(request: request!)
     }
 
-    override func reloadViewAfterRefresh() {
-        if isDataSourceEmpty {
-            showNoDataView()
-        } else {
-            updateEventStatsView()
-        }
-    }
-
-    // MARK: - ReactNative
-    // MARK: - Notifications
-
-    // TODO: This sucks, but also, we can't have @objc in a protocol extension so
-    @objc func handleReactNativeErrorNotification(_ sender: NSNotification) {
-        reactNativeError(sender)
-    }
-
-    func showErrorView() {
-        showNoDataView(with: "Unable to load event stats")
-        // Disable refreshing if we hit an error
-        disableRefreshing()
-    }
-
 }
 
-extension EventStatsViewController: RCTRootViewDelegate {
+extension EventStatsViewController: Stateful {
 
-    func rootViewDidChangeIntrinsicSize(_ rootView: RCTRootView!) {
-        rootView.autoSetDimension(.height, toSize: rootView.intrinsicContentSize.height)
+    var noDataText: String {
+        return "No stats for event"
     }
 
 }

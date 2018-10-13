@@ -5,11 +5,14 @@ import CoreData
 class TBATableViewController: UITableViewController, DataController {
 
     var persistentContainer: NSPersistentContainer
-    var noDataViewController: NoDataViewController?
 
     // MARK: - Refreshable
 
-    var _requestsArray: [URLSessionDataTask] = []
+    var requests: [URLSessionDataTask] = []
+
+    // MARK: - Stateful
+
+    var noDataViewController: NoDataViewController = NoDataViewController()
 
     // MARK: - Init
 
@@ -50,15 +53,6 @@ class TBATableViewController: UITableViewController, DataController {
 
 extension Refreshable where Self: TBATableViewController {
 
-    var requests: [URLSessionDataTask] {
-        get {
-            return _requestsArray
-        }
-        set {
-            _requestsArray = newValue
-        }
-    }
-
     var refreshControl: UIRefreshControl? {
         get {
             return tableView.refreshControl
@@ -75,6 +69,22 @@ extension Refreshable where Self: TBATableViewController {
     func noDataReload() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
+        }
+    }
+
+}
+
+extension Stateful where Self: TBATableViewController {
+
+    func addNoDataView(_ view: UIView) {
+        DispatchQueue.main.async {
+            self.tableView.backgroundView = view
+        }
+    }
+
+    func removeNoDataView(_ view: UIView) {
+        DispatchQueue.main.async {
+            self.tableView.backgroundView = nil
         }
     }
 

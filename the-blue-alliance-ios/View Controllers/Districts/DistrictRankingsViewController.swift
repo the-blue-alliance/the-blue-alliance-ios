@@ -7,7 +7,7 @@ protocol DistrictRankingsViewControllerDelegate: AnyObject {
     func districtRankingSelected(_ districtRanking: DistrictRanking)
 }
 
-class DistrictRankingsViewController: TBATableViewController, Refreshable {
+class DistrictRankingsViewController: TBATableViewController {
 
     private let district: District
 
@@ -28,7 +28,43 @@ class DistrictRankingsViewController: TBATableViewController, Refreshable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Refreshable
+    // MARK: UITableView Delegate
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let ranking = dataSource.object(at: indexPath)
+        delegate?.districtRankingSelected(ranking)
+    }
+
+    // MARK: Table View Data Source
+
+    private func setupDataSource() {
+        let fetchRequest: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
+
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
+    }
+
+    private func setupFetchRequest(_ request: NSFetchRequest<DistrictRanking>) {
+        request.predicate = NSPredicate(format: "district == %@", district)
+    }
+
+}
+
+extension DistrictRankingsViewController: TableViewDataSourceDelegate {
+
+    func configure(_ cell: RankingTableViewCell, for object: DistrictRanking, at indexPath: IndexPath) {
+        cell.viewModel = RankingCellViewModel(districtRanking: object)
+    }
+
+}
+
+extension DistrictRankingsViewController: Refreshable {
 
     var refreshKey: String? {
         return "\(district.key!)_rankings"
@@ -158,49 +194,12 @@ class DistrictRankingsViewController: TBATableViewController, Refreshable {
         })
     }
 
-    // MARK: UITableView Delegate
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let ranking = dataSource.object(at: indexPath)
-        delegate?.districtRankingSelected(ranking)
-    }
-
-    // MARK: Table View Data Source
-
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
-    }
-
-    private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
-
-    private func setupFetchRequest(_ request: NSFetchRequest<DistrictRanking>) {
-        request.predicate = NSPredicate(format: "district == %@", district)
-    }
-
 }
 
-extension DistrictRankingsViewController: TableViewDataSourceDelegate {
+extension DistrictRankingsViewController: Stateful {
 
-    func configure(_ cell: RankingTableViewCell, for object: DistrictRanking, at indexPath: IndexPath) {
-        cell.viewModel = RankingCellViewModel(districtRanking: object)
-    }
-
-    func showNoDataView() {
-        if isRefreshing {
-            return
-        }
-        showNoDataView(with: "Unable to load district rankings")
-    }
-
-    func hideNoDataView() {
-        removeNoDataView()
+    var noDataText: String {
+        return "No rankings for district"
     }
 
 }

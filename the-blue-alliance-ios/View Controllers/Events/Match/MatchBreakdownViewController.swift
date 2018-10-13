@@ -4,7 +4,7 @@ import React
 import TBAKit
 import CoreData
 
-class MatchBreakdownViewController: TBAViewController, Refreshable, Observable, ReactNative {
+class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
 
     private let match: Match
 
@@ -123,7 +123,40 @@ class MatchBreakdownViewController: TBAViewController, Refreshable, Observable, 
                 "compLevel": match.compLevel!]
     }
 
-    // MARK: - Refreshable
+
+    override func reloadViewAfterRefresh() {
+        if isDataSourceEmpty {
+            showNoDataView()
+        } else {
+            updateBreakdownView()
+        }
+    }
+
+    // MARK: - ReactNative
+    // MARK: - Notifications
+
+    // TODO: This sucks, but also, we can't have @objc in a protocol extension so
+    @objc func handleReactNativeErrorNotification(_ sender: NSNotification) {
+        reactNativeError(sender)
+    }
+
+    func showErrorView() {
+        showNoDataView()
+        // Disable refreshing if we hit an error
+        disableRefreshing()
+    }
+
+}
+
+extension MatchBreakdownViewController: RCTRootViewDelegate {
+
+    func rootViewDidChangeIntrinsicSize(_ rootView: RCTRootView!) {
+        rootView.autoSetDimension(.height, toSize: rootView.intrinsicContentSize.height)
+    }
+
+}
+
+extension MatchBreakdownViewController: Refreshable {
 
     var refreshKey: String? {
         return match.key
@@ -167,38 +200,12 @@ class MatchBreakdownViewController: TBAViewController, Refreshable, Observable, 
         addRequest(request: request!)
     }
 
-    override func reloadViewAfterRefresh() {
-        if isDataSourceEmpty {
-            showNoDataView()
-        } else {
-            updateBreakdownView()
-        }
-    }
-
-    // MARK: - ReactNative
-    // MARK: - Notifications
-
-    // TODO: This sucks, but also, we can't have @objc in a protocol extension so
-    @objc func handleReactNativeErrorNotification(_ sender: NSNotification) {
-        reactNativeError(sender)
-    }
-
-    func showNoDataView() {
-        showNoDataView(with: "No breakdown for match")
-    }
-
-    func showErrorView() {
-        showNoDataView(with: "Unable to load event stats")
-        // Disable refreshing if we hit an error
-        disableRefreshing()
-    }
-
 }
 
-extension MatchBreakdownViewController: RCTRootViewDelegate {
+extension MatchBreakdownViewController: Stateful {
 
-    func rootViewDidChangeIntrinsicSize(_ rootView: RCTRootView!) {
-        rootView.autoSetDimension(.height, toSize: rootView.intrinsicContentSize.height)
+    var noDataText: String {
+        return "No breakdown for match"
     }
 
 }

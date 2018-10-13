@@ -12,9 +12,6 @@ protocol TableViewDataSourceDelegate: class {
 
     func configure(_ cell: Cell, for object: Object, at indexPath: IndexPath)
     func title(for section: Int) -> String?
-
-    func showNoDataView()
-    func hideNoDataView()
 }
 
 extension TableViewDataSourceDelegate {
@@ -25,7 +22,7 @@ extension TableViewDataSourceDelegate {
 
 }
 
-class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataSourceDelegate>: NSObject, UITableViewDataSource, NSFetchedResultsControllerDelegate {
+class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataSourceDelegate & Stateful & Refreshable>: NSObject, UITableViewDataSource, NSFetchedResultsControllerDelegate {
 
     typealias Object = Delegate.Object
     typealias Cell = Delegate.Cell
@@ -81,7 +78,7 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
             if rows == 0 {
                 delegate.showNoDataView()
             } else {
-                delegate.hideNoDataView()
+                delegate.removeNoDataView()
             }
         } else {
             delegate.showNoDataView()

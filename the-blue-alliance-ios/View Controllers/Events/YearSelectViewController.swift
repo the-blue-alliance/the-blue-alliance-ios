@@ -185,8 +185,16 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
     func updateWeeks() {
         options = Event.weekEvents(for: year, in: persistentContainer.viewContext)
         if isDataSourceEmpty && hasRefreshed {
-            showNoDataView(with: "No weeks for \(year)")
+            showNoDataView()
         }
     }
     
+}
+
+extension WeeksSelectTableViewController: Stateful {
+
+    var noDataText: String {
+        return "No weeks for year"
+    }
+
 }

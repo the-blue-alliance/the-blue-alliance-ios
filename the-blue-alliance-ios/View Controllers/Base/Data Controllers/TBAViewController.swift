@@ -2,12 +2,11 @@ import Foundation
 import UIKit
 import CoreData
 
-typealias DataController = Persistable & Alertable & Stateful
+typealias DataController = Persistable & Alertable
 
 class TBAViewController: UIViewController, DataController {
 
     var persistentContainer: NSPersistentContainer
-    var noDataViewController: NoDataViewController?
 
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView(forAutoLayout: ())
@@ -18,7 +17,11 @@ class TBAViewController: UIViewController, DataController {
 
     // MARK: - Refreshable
 
-    var _requestsArray: [URLSessionDataTask] = []
+    var requests: [URLSessionDataTask] = []
+
+    // MARK: - Stateful
+
+    var noDataViewController: NoDataViewController = NoDataViewController()
 
     // MARK: - Init
 
@@ -51,15 +54,6 @@ class TBAViewController: UIViewController, DataController {
 
 extension Refreshable where Self: TBAViewController {
 
-    var requests: [URLSessionDataTask] {
-        get {
-            return _requestsArray
-        }
-        set {
-            _requestsArray = newValue
-        }
-    }
-
     var refreshControl: UIRefreshControl? {
         get {
             return scrollView.refreshControl
@@ -77,6 +71,23 @@ extension Refreshable where Self: TBAViewController {
         // TODO: https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/133
         DispatchQueue.main.async {
             self.reloadViewAfterRefresh()
+        }
+    }
+
+}
+
+extension Stateful where Self: TBAViewController {
+
+    func addNoDataView(_ view: UIView) {
+        DispatchQueue.main.async {
+            view.insertSubview(view, at: 0)
+            view.autoPinEdgesToSuperviewEdges()
+        }
+    }
+
+    func removeNoDataView(_ view: UIView) {
+        DispatchQueue.main.async {
+            view.removeFromSuperview()
         }
     }
 

@@ -6,7 +6,7 @@ protocol TeamsViewControllerDelegate: AnyObject {
     func teamSelected(_ team: Team)
 }
 
-class TeamsViewController: TBATableViewController, Refreshable {
+class TeamsViewController: TBATableViewController {
 
     private let event: Event?
 
@@ -46,7 +46,69 @@ class TeamsViewController: TBATableViewController, Refreshable {
         definesPresentationContext = true
     }
 
-    // MARK: - Refreshable
+
+    // MARK: UITableView Delegate
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let team = dataSource.object(at: indexPath)
+        delegate?.teamSelected(team)
+    }
+
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if let text = searchController.searchBar.text, text.isEmpty, searchController.isActive {
+            searchController.isActive = false
+        }
+    }
+
+    // MARK: Table View Data Source
+
+    private func setupDataSource() {
+        let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "teamNumber", ascending: true)]
+        setupFetchRequest(fetchRequest)
+        fetchRequest.fetchBatchSize = 50
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
+
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
+    }
+
+    private func setupFetchRequest(_ request: NSFetchRequest<Team>) {
+        if let searchText = searchController.searchBar.text, !searchText.isEmpty {
+            if let event = event {
+                request.predicate = NSPredicate(format: "ANY events = %@ AND (nickname contains[cd] %@ OR teamNumber.stringValue beginswith[cd] %@)", event, searchText, searchText)
+            } else {
+                request.predicate = NSPredicate(format: "(nickname contains[cd] %@ OR teamNumber.stringValue beginswith[cd] %@)", searchText, searchText)
+            }
+        } else if let event = event {
+            request.predicate = NSPredicate(format: "ANY events = %@", event)
+        } else {
+            request.predicate = nil
+        }
+    }
+
+}
+
+extension TeamsViewController: TableViewDataSourceDelegate {
+
+    func configure(_ cell: TeamTableViewCell, for object: Team, at indexPath: IndexPath) {
+        cell.viewModel = TeamCellViewModel(team: object)
+    }
+
+}
+
+extension TeamsViewController: UISearchResultsUpdating {
+
+    public func updateSearchResults(for searchController: UISearchController) {
+        updateDataSource()
+    }
+
+}
+
+extension TeamsViewController: Refreshable {
 
     var refreshKey: String? {
         if let event = event {
@@ -70,7 +132,7 @@ class TeamsViewController: TBATableViewController, Refreshable {
         // Always periodically refresh teams
         return nil
     }
-    
+
     var isDataSourceEmpty: Bool {
         if let teams = dataSource.fetchedResultsController.fetchedObjects, teams.isEmpty {
             return true
@@ -146,74 +208,12 @@ class TeamsViewController: TBATableViewController, Refreshable {
         addRequest(request: request!)
     }
 
-    // MARK: UITableView Delegate
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let team = dataSource.object(at: indexPath)
-        delegate?.teamSelected(team)
-    }
-
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if let text = searchController.searchBar.text, text.isEmpty, searchController.isActive {
-            searchController.isActive = false
-        }
-    }
-
-    // MARK: Table View Data Source
-
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "teamNumber", ascending: true)]
-        setupFetchRequest(fetchRequest)
-        fetchRequest.fetchBatchSize = 50
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
-    }
-
-    private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
-
-    private func setupFetchRequest(_ request: NSFetchRequest<Team>) {
-        if let searchText = searchController.searchBar.text, !searchText.isEmpty {
-            if let event = event {
-                request.predicate = NSPredicate(format: "ANY events = %@ AND (nickname contains[cd] %@ OR teamNumber.stringValue beginswith[cd] %@)", event, searchText, searchText)
-            } else {
-                request.predicate = NSPredicate(format: "(nickname contains[cd] %@ OR teamNumber.stringValue beginswith[cd] %@)", searchText, searchText)
-            }
-        } else if let event = event {
-            request.predicate = NSPredicate(format: "ANY events = %@", event)
-        } else {
-            request.predicate = nil
-        }
-    }
-
 }
 
-extension TeamsViewController: TableViewDataSourceDelegate {
+extension TeamsViewController: Stateful {
 
-    func configure(_ cell: TeamTableViewCell, for object: Team, at indexPath: IndexPath) {
-        cell.viewModel = TeamCellViewModel(team: object)
-    }
-
-    func showNoDataView() {
-        if isRefreshing {
-            return
-        }
-        showNoDataView(with: "No teams found")
-    }
-
-    func hideNoDataView() {
-        removeNoDataView()
-    }
-
-}
-
-extension TeamsViewController: UISearchResultsUpdating {
-
-    public func updateSearchResults(for searchController: UISearchController) {
-        updateDataSource()
+    var noDataText: String {
+        return "No teams"
     }
 
 }

@@ -161,16 +161,12 @@ extension EventsViewController: TableViewDataSourceDelegate {
         }
     }
 
-    func showNoDataView() {
-        // Only show no data if we've loaded data once
-        if isRefreshing {
-            return
-        }
-        showNoDataView(with: "No events (Pull to refresh)")
-    }
+}
 
-    func hideNoDataView() {
-        removeNoDataView()
+extension EventsViewController: Stateful {
+
+    var noDataText: String {
+        return "No events for year"
     }
 
 }

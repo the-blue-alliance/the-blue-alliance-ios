@@ -4,7 +4,7 @@ import CoreData
 import TBAKit
 import PureLayout
 
-class MatchInfoViewController: TBAViewController, Refreshable, Observable {
+class MatchInfoViewController: TBAViewController, Observable {
 
     private let match: Match
     private let team: Team?
@@ -174,7 +174,13 @@ class MatchInfoViewController: TBAViewController, Refreshable, Observable {
         }
     }
 
-    // MARK: Refresh
+    override func reloadViewAfterRefresh() {
+        // We'll always have a match, so we shouldn't need to show a no data state
+    }
+
+}
+
+extension MatchInfoViewController: Refreshable {
 
     var refreshKey: String? {
         return match.key
@@ -197,8 +203,6 @@ class MatchInfoViewController: TBAViewController, Refreshable, Observable {
     }
 
     @objc func refresh() {
-        removeNoDataView()
-
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchMatch(key: match.key!, { (modelMatch, error) in
             if let error = error {
@@ -220,10 +224,6 @@ class MatchInfoViewController: TBAViewController, Refreshable, Observable {
             })
         })
         addRequest(request: request!)
-    }
-
-    override func reloadViewAfterRefresh() {
-        // We'll always have a match, so we shouldn't need to show a no data state
     }
 
 }

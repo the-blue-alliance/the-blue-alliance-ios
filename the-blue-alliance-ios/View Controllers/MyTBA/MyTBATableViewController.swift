@@ -7,7 +7,7 @@ import UIKit
  won't work for this case, since we need to show one of three different types of cells (as opposed to a single
  type of cell, which TableViewDataSource *will* do for us)
  */
-class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TBATableViewController, Refreshable, NSFetchedResultsControllerDelegate {
+class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TBATableViewController, NSFetchedResultsControllerDelegate {
 
     // let myTBAObjectSelected: ((T) -> ())
     private var backgroundFetchKeys: Set<String> = []
@@ -46,94 +46,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         }
     }
 
-    // MARK: - Refreshable
-
-    var refreshKey: String? {
-        return J.arrayKey
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
-
-    var isDataSourceEmpty: Bool {
-        if MyTBA.shared.isAuthenticated, let objs = fetchedResultsController?.fetchedObjects, objs.isEmpty {
-            return true
-        }
-        return false
-    }
-
-    @objc func refresh() {
-        removeNoDataView()
-
-        // I'd love to use MyTBAManaged's RemoteType here, but it doesn't seem like I can get it
-        var request: URLSessionDataTask?
-        request = J.fetch { (models, error) in
-            let modelName = T.entityName.lowercased()
-
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh \(modelName) - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            let reloadTableViewCompletion = {
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
-
-            self.persistentContainer.performBackgroundTask({ [weak self] (backgroundContext) in
-                let models = models as? [T.RemoteType]
-                let bgctx = backgroundContext
-                for model in models ?? [] {
-                    if self?.backgroundFetchKeys.contains(model.modelKey) ?? false {
-                        continue
-                    }
-
-                    T.insert(with: model, in: bgctx)
-
-                    let predicate = NSPredicate(format: "key == %@", model.modelKey)
-                    switch model.modelType {
-                    case .event:
-                        if Event.findOrFetch(in: backgroundContext, matching: predicate) == nil {
-                            self?.backgroundFetchKeys.insert(model.modelKey)
-                            TBABackgroundService.backgroundFetchEvent(model.modelKey, in: backgroundContext, completion: { (_, _) in
-                                self?.backgroundFetchKeys.remove(model.modelKey)
-                                reloadTableViewCompletion()
-                            })
-                        }
-                    case .team:
-                        if Team.findOrFetch(in: backgroundContext, matching: predicate) == nil {
-                            self?.backgroundFetchKeys.insert(model.modelKey)
-                            TBABackgroundService.backgroundFetchTeam(model.modelKey, in: backgroundContext, completion: { (_, _) in
-                                self?.backgroundFetchKeys.remove(model.modelKey)
-                                reloadTableViewCompletion()
-                            })
-                        }
-                    case .match:
-                        let match = Match.findOrFetch(in: backgroundContext, matching: predicate)
-                        // Fetch our match if it doesn't exist or we don't have scores
-                        if match?.redScore == nil || match?.blueScore == nil {
-                            self?.backgroundFetchKeys.insert(model.modelKey)
-                            TBABackgroundService.backgroundFetchMatch(model.modelKey, in: backgroundContext, completion: { (_, _) in
-                                self?.backgroundFetchKeys.remove(model.modelKey)
-                                reloadTableViewCompletion()
-                            })
-                        }
-                    }
-                }
-
-                backgroundContext.saveOrRollback()
-                self?.removeRequest(request: request!)
-            })
-        }
-        addRequest(request: request!)
-    }
 
     // MARK: FRC
 
@@ -209,7 +121,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             if rows == 0 {
                 showNoDataView()
             } else {
-                hideNoDataView()
+                removeNoDataView()
             }
         } else {
             showNoDataView()
@@ -289,17 +201,103 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         tableView.reloadData()
     }
 
-    // MARK: No Data methods
+}
 
-    func showNoDataView() {
-        if isRefreshing {
-            return
-        }
-        showNoDataView(with: "No myTBA \(J.arrayKey)")
+extension MyTBATableViewController: Refreshable {
+
+    var refreshKey: String? {
+        return J.arrayKey
     }
 
-    func hideNoDataView() {
+    var automaticRefreshInterval: DateComponents? {
+        return DateComponents(day: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        return nil
+    }
+
+    var isDataSourceEmpty: Bool {
+        if MyTBA.shared.isAuthenticated, let objs = fetchedResultsController?.fetchedObjects, objs.isEmpty {
+            return true
+        }
+        return false
+    }
+
+    func refresh() {
         removeNoDataView()
+
+        // I'd love to use MyTBAManaged's RemoteType here, but it doesn't seem like I can get it
+        var request: URLSessionDataTask?
+        request = J.fetch { (models, error) in
+            let modelName = T.entityName.lowercased()
+
+            if let error = error {
+                self.showErrorAlert(with: "Unable to refresh \(modelName) - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
+            }
+
+            let reloadTableViewCompletion = {
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+
+            self.persistentContainer.performBackgroundTask({ [weak self] (backgroundContext) in
+                let models = models as? [T.RemoteType]
+                let bgctx = backgroundContext
+                for model in models ?? [] {
+                    if self?.backgroundFetchKeys.contains(model.modelKey) ?? false {
+                        continue
+                    }
+
+                    T.insert(with: model, in: bgctx)
+
+                    let predicate = NSPredicate(format: "key == %@", model.modelKey)
+                    switch model.modelType {
+                    case .event:
+                        if Event.findOrFetch(in: backgroundContext, matching: predicate) == nil {
+                            self?.backgroundFetchKeys.insert(model.modelKey)
+                            TBABackgroundService.backgroundFetchEvent(model.modelKey, in: backgroundContext, completion: { (_, _) in
+                                self?.backgroundFetchKeys.remove(model.modelKey)
+                                reloadTableViewCompletion()
+                            })
+                        }
+                    case .team:
+                        if Team.findOrFetch(in: backgroundContext, matching: predicate) == nil {
+                            self?.backgroundFetchKeys.insert(model.modelKey)
+                            TBABackgroundService.backgroundFetchTeam(model.modelKey, in: backgroundContext, completion: { (_, _) in
+                                self?.backgroundFetchKeys.remove(model.modelKey)
+                                reloadTableViewCompletion()
+                            })
+                        }
+                    case .match:
+                        let match = Match.findOrFetch(in: backgroundContext, matching: predicate)
+                        // Fetch our match if it doesn't exist or we don't have scores
+                        if match?.redScore == nil || match?.blueScore == nil {
+                            self?.backgroundFetchKeys.insert(model.modelKey)
+                            TBABackgroundService.backgroundFetchMatch(model.modelKey, in: backgroundContext, completion: { (_, _) in
+                                self?.backgroundFetchKeys.remove(model.modelKey)
+                                reloadTableViewCompletion()
+                            })
+                        }
+                    }
+                }
+
+                backgroundContext.saveOrRollback()
+                self?.removeRequest(request: request!)
+            })
+        }
+        addRequest(request: request!)
+    }
+
+}
+
+extension MyTBATableViewController: Stateful {
+
+    var noDataText: String {
+        return "No myTBA \(J.arrayKey)"
     }
 
 }

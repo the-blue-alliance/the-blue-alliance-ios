@@ -19,7 +19,7 @@ enum EventTeamStatFilter: String, Comparable, CaseIterable {
     case teamNumber = "Team Number"
 }
 
-class EventTeamStatsTableViewController: TBATableViewController, Refreshable {
+class EventTeamStatsTableViewController: TBATableViewController {
 
     private let event: Event
     private let userDefaults: UserDefaults
@@ -55,55 +55,6 @@ class EventTeamStatsTableViewController: TBATableViewController, Refreshable {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - Refreshable
-
-    var refreshKey: String? {
-        return "\(event.key!)_team_stats"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(hour: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh team stats until the event is over
-        return event.endDate?.endOfDay()
-    }
-
-    var isDataSourceEmpty: Bool {
-        if let stats = dataSource.fetchedResultsController.fetchedObjects, stats.isEmpty {
-            return true
-        }
-        return false
-    }
-
-    @objc func refresh() {
-        removeNoDataView()
-
-        var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchEventTeamStats(key: event.key!, completion: { (stats, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh event team stats - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
-                if let stats = stats {
-                    let localStats = stats.map({ (modelStat) -> EventTeamStat in
-                        return EventTeamStat.insert(with: modelStat, for: backgroundEvent, in: backgroundContext)
-                    })
-                    backgroundEvent.stats = Set(localStats) as NSSet
-                }
-
-                backgroundContext.saveOrRollback()
-                self.removeRequest(request: request!)
-            })
-        })
-        addRequest(request: request!)
     }
 
     // MARK: UITableView Delegate
@@ -153,15 +104,63 @@ extension EventTeamStatsTableViewController: TableViewDataSourceDelegate {
         cell.viewModel = RankingCellViewModel(eventTeamStat: object)
     }
 
-    func showNoDataView() {
-        if isRefreshing {
-            return
-        }
-        showNoDataView(with: "Unable to load event team stats")
+}
+
+extension EventTeamStatsTableViewController: Refreshable {
+
+    var refreshKey: String? {
+        return "\(event.key!)_team_stats"
     }
 
-    func hideNoDataView() {
+    var automaticRefreshInterval: DateComponents? {
+        return DateComponents(hour: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Automatically refresh team stats until the event is over
+        return event.endDate?.endOfDay()
+    }
+
+    var isDataSourceEmpty: Bool {
+        if let stats = dataSource.fetchedResultsController.fetchedObjects, stats.isEmpty {
+            return true
+        }
+        return false
+    }
+
+    @objc func refresh() {
         removeNoDataView()
+
+        var request: URLSessionDataTask?
+        request = TBAKit.sharedKit.fetchEventTeamStats(key: event.key!, completion: { (stats, error) in
+            if let error = error {
+                self.showErrorAlert(with: "Unable to refresh event team stats - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
+            }
+
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
+                if let stats = stats {
+                    let localStats = stats.map({ (modelStat) -> EventTeamStat in
+                        return EventTeamStat.insert(with: modelStat, for: backgroundEvent, in: backgroundContext)
+                    })
+                    backgroundEvent.stats = Set(localStats) as NSSet
+                }
+
+                backgroundContext.saveOrRollback()
+                self.removeRequest(request: request!)
+            })
+        })
+        addRequest(request: request!)
+    }
+
+}
+
+extension EventTeamStatsTableViewController: Stateful {
+
+    var noDataText: String {
+        return "No team stats for event"
     }
 
 }

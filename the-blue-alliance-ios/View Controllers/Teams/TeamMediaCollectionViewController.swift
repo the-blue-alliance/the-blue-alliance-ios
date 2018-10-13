@@ -15,7 +15,7 @@ extension MediaError: LocalizedError {
     }
 }
 
-class TeamMediaCollectionViewController: TBACollectionViewController, Refreshable {
+class TeamMediaCollectionViewController: TBACollectionViewController {
 
     private let spacerSize: CGFloat = 3.0
 
@@ -54,81 +54,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController, Refreshabl
         super.viewDidLoad()
 
         collectionView.registerReusableCell(MediaCollectionViewCell.self)
-    }
-
-    // MARK: - Refreshable
-
-    var refreshKey: String? {
-        guard let year = year else {
-            return nil
-        }
-        return "\(year)_\(team.key!)_media"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(month: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // TODO: Show loading spinner and avoid methods until we have years
-        guard let year = year else {
-            return nil
-        }
-        // Automatically refresh team media until the year is over
-        // Ex: Team media for 2018 will stop refreshing on Jan 1st, 2019
-        return Calendar.current.date(from: DateComponents(year: year + 1))
-    }
-
-    var isDataSourceEmpty: Bool {
-        if let media = dataSource.fetchedResultsController.fetchedObjects, media.isEmpty {
-            return true
-        }
-        return false
-    }
-
-    @objc func refresh() {
-        guard let year = year else {
-            showNoDataView(with: "No year selected")
-            refreshControl?.endRefreshing()
-            return
-        }
-
-        removeNoDataView()
-
-        let fetchTeamMedia: () -> () = { [unowned self] in
-            if let teamMedia = self.team.media?.allObjects as? [Media] {
-                teamMedia.forEach({ (media) in
-                    self.fetchMedia(media)
-                })
-            }
-        }
-
-        var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchTeamMedia(key: team.key!, year: year, completion: { (media, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh team media - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
-                if let media = media {
-                    let localMedia = media.map({ (modelMedia) -> Media in
-                        return Media.insert(with: modelMedia, in: year, for: backgroundTeam, in: backgroundContext)
-                    })
-                    backgroundTeam.media = Set(localMedia) as NSSet
-                }
-
-                backgroundContext.saveOrRollback()
-                self.removeRequest(request: request!)
-
-                DispatchQueue.main.async {
-                    fetchTeamMedia()
-                }
-            })
-        })
-        addRequest(request: request!)
     }
 
     // MARK: Rotation
@@ -279,15 +204,89 @@ extension TeamMediaCollectionViewController: CollectionViewDataSourceDelegate {
         }
     }
 
-    func showNoDataView() {
-        if isRefreshing {
-            return
+}
+
+extension TeamMediaCollectionViewController: Refreshable {
+
+    var refreshKey: String? {
+        guard let year = year else {
+            return nil
         }
-        showNoDataView(with: "No media for team")
+        return "\(year)_\(team.key!)_media"
     }
 
-    func hideNoDataView() {
+    var automaticRefreshInterval: DateComponents? {
+        return DateComponents(month: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // TODO: Show loading spinner and avoid methods until we have years
+        guard let year = year else {
+            return nil
+        }
+        // Automatically refresh team media until the year is over
+        // Ex: Team media for 2018 will stop refreshing on Jan 1st, 2019
+        return Calendar.current.date(from: DateComponents(year: year + 1))
+    }
+
+    var isDataSourceEmpty: Bool {
+        if let media = dataSource.fetchedResultsController.fetchedObjects, media.isEmpty {
+            return true
+        }
+        return false
+    }
+
+    @objc func refresh() {
+        guard let year = year else {
+            showNoDataView()
+            refreshControl?.endRefreshing()
+            return
+        }
+
         removeNoDataView()
+
+        let fetchTeamMedia: () -> () = { [unowned self] in
+            if let teamMedia = self.team.media?.allObjects as? [Media] {
+                teamMedia.forEach({ (media) in
+                    self.fetchMedia(media)
+                })
+            }
+        }
+
+        var request: URLSessionDataTask?
+        request = TBAKit.sharedKit.fetchTeamMedia(key: team.key!, year: year, completion: { (media, error) in
+            if let error = error {
+                self.showErrorAlert(with: "Unable to refresh team media - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
+            }
+
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
+                if let media = media {
+                    let localMedia = media.map({ (modelMedia) -> Media in
+                        return Media.insert(with: modelMedia, in: year, for: backgroundTeam, in: backgroundContext)
+                    })
+                    backgroundTeam.media = Set(localMedia) as NSSet
+                }
+
+                backgroundContext.saveOrRollback()
+                self.removeRequest(request: request!)
+
+                DispatchQueue.main.async {
+                    fetchTeamMedia()
+                }
+            })
+        })
+        addRequest(request: request!)
+    }
+
+}
+
+extension TeamMediaCollectionViewController: Stateful {
+
+    var noDataText: String {
+        return "No media for team"
     }
 
 }

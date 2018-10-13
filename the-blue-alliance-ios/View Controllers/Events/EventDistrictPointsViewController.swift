@@ -42,7 +42,7 @@ protocol EventDistrictPointsViewControllerDelegate: AnyObject {
     func districtEventPointsSelected(_ districtEventPoints: DistrictEventPoints)
 }
 
-private class EventDistrictPointsViewController: TBATableViewController, Refreshable {
+private class EventDistrictPointsViewController: TBATableViewController {
 
     private let event: Event
 
@@ -63,7 +63,44 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Refreshable
+
+    // MARK: UITableView Delegate
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let eventPoints = dataSource.object(at: indexPath)
+        delegate?.districtEventPointsSelected(eventPoints)
+    }
+
+    // MARK: Table View Data Source
+
+    private func setupDataSource() {
+        let fetchRequest: NSFetchRequest<DistrictEventPoints> = DistrictEventPoints.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "total", ascending: false)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
+
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
+    }
+
+    private func setupFetchRequest(_ request: NSFetchRequest<DistrictEventPoints>) {
+        request.predicate = NSPredicate(format: "event == %@", event)
+    }
+
+}
+
+extension EventDistrictPointsViewController: TableViewDataSourceDelegate {
+
+    func configure(_ cell: RankingTableViewCell, for object: DistrictEventPoints, at indexPath: IndexPath) {
+        cell.viewModel = RankingCellViewModel(rank: "Rank \(indexPath.row + 1)", districtEventPoints: object)
+    }
+
+}
+
+extension EventDistrictPointsViewController: Refreshable {
 
     var refreshKey: String? {
         return "\(event.key!)_district_points"
@@ -111,49 +148,12 @@ private class EventDistrictPointsViewController: TBATableViewController, Refresh
         addRequest(request: request!)
     }
 
-    // MARK: UITableView Delegate
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let eventPoints = dataSource.object(at: indexPath)
-        delegate?.districtEventPointsSelected(eventPoints)
-    }
-
-    // MARK: Table View Data Source
-
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<DistrictEventPoints> = DistrictEventPoints.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "total", ascending: false)]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
-    }
-
-    private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
-
-    private func setupFetchRequest(_ request: NSFetchRequest<DistrictEventPoints>) {
-        request.predicate = NSPredicate(format: "event == %@", event)
-    }
-
 }
 
-extension EventDistrictPointsViewController: TableViewDataSourceDelegate {
+extension EventDistrictPointsViewController: Stateful {
 
-    func configure(_ cell: RankingTableViewCell, for object: DistrictEventPoints, at indexPath: IndexPath) {
-        cell.viewModel = RankingCellViewModel(rank: "Rank \(indexPath.row + 1)", districtEventPoints: object)
-    }
-
-    func showNoDataView() {
-        if isRefreshing {
-            return
-        }
-        showNoDataView(with: "Unable to load event district points")
-    }
-
-    func hideNoDataView() {
-        removeNoDataView()
+    var noDataText: String {
+        return "No district points for event"
     }
 
 }
