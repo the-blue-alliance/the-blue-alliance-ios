@@ -59,6 +59,12 @@ class DistrictEventsViewController: EventsViewController {
         addRequest(request: request!)
     }
 
+    // MARK: - Stateful
+
+    override var noDataText: String {
+        return "No events for district"
+    }
+
     // MARK: - EventsViewControllerDataSourceConfiguration
 
     override var firstSortDescriptor: NSSortDescriptor {

@@ -27,7 +27,7 @@ extension EventsViewControllerDelegate {
 
  See: TeamEventsViewController, DistrictEventsViewController, etc.
  */
-class EventsViewController: TBATableViewController, Refreshable, EventsViewControllerDataSourceConfiguration {
+class EventsViewController: TBATableViewController, Refreshable, Stateful, EventsViewControllerDataSourceConfiguration {
 
     weak var delegate: EventsViewControllerDelegate?
     private var dataSource: TableViewDataSource<Event, EventsViewController>!
@@ -75,6 +75,12 @@ class EventsViewController: TBATableViewController, Refreshable, EventsViewContr
 
     func refresh() {
         fatalError("implement in subclass")
+    }
+
+    // MARK: - Stateful
+
+    var noDataText: String {
+        fatalError("Implement in a subclass")
     }
 
     // MARK: UITableView Delegate
@@ -159,14 +165,6 @@ extension EventsViewController: TableViewDataSourceDelegate {
         } else {
             return "Regional Events"
         }
-    }
-
-}
-
-extension EventsViewController: Stateful {
-
-    var noDataText: String {
-        return "No events for year"
     }
 
 }

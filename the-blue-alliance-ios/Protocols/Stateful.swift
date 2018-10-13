@@ -10,12 +10,12 @@ protocol Stateful: AnyObject {
     var noDataText: String { get }
 
     /**
-     Add the no data view to the view hiearchy.
+     Add the no data view to the view hiearchy. This method should not be called directly - you probably want showNoDataView.
      */
     func addNoDataView(_ view: UIView)
 
     /**
-     Remove the no data view from the view hiearchy.
+     Remove the no data view from the view hiearchy. This method should not be called directly - you probably want removeNoDataView.
      */
     func removeNoDataView(_ view: UIView)
 }
