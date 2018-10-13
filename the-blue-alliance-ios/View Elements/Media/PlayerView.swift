@@ -5,7 +5,6 @@ import PureLayout
 
 class PlayerView: UIView {
 
-    // TODO: Refactor this too...
     public var playable: Playable {
         didSet {
             configureView()

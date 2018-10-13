@@ -95,6 +95,14 @@ class TeamMediaCollectionViewController: TBACollectionViewController, Refreshabl
 
         removeNoDataView()
 
+        let fetchTeamMedia: () -> () = { [unowned self] in
+            if let teamMedia = self.team.media?.allObjects as? [Media] {
+                teamMedia.forEach({ (media) in
+                    self.fetchMedia(media)
+                })
+            }
+        }
+
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchTeamMedia(key: team.key!, year: year, completion: { (media, error) in
             if let error = error {
@@ -114,12 +122,15 @@ class TeamMediaCollectionViewController: TBACollectionViewController, Refreshabl
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
+
+                DispatchQueue.main.async {
+                    fetchTeamMedia()
+                }
             })
         })
         addRequest(request: request!)
 
-        // TODO: We really need to do this... *after*, our inserts are done
-        if let teamMedia = team.media?.allObjects as? [Media] {
+        if let teamMedia = self.team.media?.allObjects as? [Media] {
             teamMedia.forEach({ (media) in
                 self.fetchMedia(media)
             })
@@ -209,7 +220,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController, Refreshabl
             self.fetchingMedia.remove(media)
 
             if let error = error {
-                media.mediaError = error
+                media.mediaError = MediaError.error(error.localizedDescription)
             } else if let data = data {
                 if let image = UIImage(data: data) {
                     media.image = image
