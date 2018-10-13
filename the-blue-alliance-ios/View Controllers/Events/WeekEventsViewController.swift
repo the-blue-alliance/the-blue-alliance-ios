@@ -87,7 +87,7 @@ class WeekEventsViewController: EventsViewController {
     // MARK: - Stateful
 
     override var noDataText: String {
-        fatalError("No events for year")
+        return "No events for year"
     }
 
     // MARK: - EventsViewControllerDataSourceConfiguration
