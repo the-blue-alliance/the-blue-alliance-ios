@@ -22,6 +22,7 @@ class PersistentContainerOperation: TBAOperation {
              Check the error message to determine what the actual problem was.
              */
             self.persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
+            self.persistentContainer.viewContext.mergePolicy = NSMergePolicy(merge: .mergeByPropertyStoreTrumpMergePolicyType)
             self.completionError = error
             self.finish()
         })
