@@ -12,12 +12,12 @@ protocol Stateful: AnyObject {
     /**
      Add the no data view to the view hiearchy. This method should not be called directly - you probably want showNoDataView.
      */
-    func addNoDataView(_ view: UIView)
+    func addNoDataView(_ noDataView: UIView)
 
     /**
      Remove the no data view from the view hiearchy. This method should not be called directly - you probably want removeNoDataView.
      */
-    func removeNoDataView(_ view: UIView)
+    func removeNoDataView(_ noDataView: UIView)
 }
 
 extension Stateful where Self: Refreshable {

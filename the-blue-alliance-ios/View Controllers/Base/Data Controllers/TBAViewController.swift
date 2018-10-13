@@ -78,16 +78,16 @@ extension Refreshable where Self: TBAViewController {
 
 extension Stateful where Self: TBAViewController {
 
-    func addNoDataView(_ view: UIView) {
+    func addNoDataView(_ noDataView: UIView) {
         DispatchQueue.main.async {
-            view.insertSubview(view, at: 0)
-            view.autoPinEdgesToSuperviewEdges()
+            self.view.insertSubview(noDataView, at: 0)
+            self.view.autoPinEdgesToSuperviewEdges()
         }
     }
 
-    func removeNoDataView(_ view: UIView) {
+    func removeNoDataView(_ noDataView: UIView) {
         DispatchQueue.main.async {
-            view.removeFromSuperview()
+            noDataView.removeFromSuperview()
         }
     }
 
