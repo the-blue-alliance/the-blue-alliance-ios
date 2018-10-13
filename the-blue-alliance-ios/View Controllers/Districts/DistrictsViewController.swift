@@ -7,7 +7,7 @@ protocol DistrictsViewControllerDelegate: AnyObject {
     func districtSelected(_ district: District)
 }
 
-class DistrictsViewController: TBATableViewController, Refreshable {
+class DistrictsViewController: TBATableViewController {
 
     var year: Int {
         didSet {
@@ -33,7 +33,45 @@ class DistrictsViewController: TBATableViewController, Refreshable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Refreshable
+    // MARK: UITableView Delegate
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let district = dataSource.object(at: indexPath)
+        delegate?.districtSelected(district)
+    }
+
+    // MARK: Table View Data Source
+
+    private func setupDataSource () {
+        let fetchRequest: NSFetchRequest<District> = District.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
+
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
+    }
+
+    private func setupFetchRequest(_ request: NSFetchRequest<District>) {
+        request.predicate = NSPredicate(format: "year == %ld", year)
+    }
+
+}
+
+extension DistrictsViewController: TableViewDataSourceDelegate {
+
+    func configure(_ cell: BasicTableViewCell, for object: District, at indexPath: IndexPath) {
+        cell.textLabel?.text = object.name
+        cell.accessoryType = .disclosureIndicator
+        // TODO: Convert to some custom cell... show # of events if non-zero
+    }
+
+}
+
+extension DistrictsViewController: Refreshable {
 
     var refreshKey: String? {
         return "\(year)_districts"
@@ -80,51 +118,12 @@ class DistrictsViewController: TBATableViewController, Refreshable {
         addRequest(request: request!)
     }
 
-    // MARK: UITableView Delegate
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let district = dataSource.object(at: indexPath)
-        delegate?.districtSelected(district)
-    }
-
-    // MARK: Table View Data Source
-
-    private func setupDataSource () {
-        let fetchRequest: NSFetchRequest<District> = District.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
-    }
-
-    private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
-
-    private func setupFetchRequest(_ request: NSFetchRequest<District>) {
-        request.predicate = NSPredicate(format: "year == %ld", year)
-    }
-
 }
 
-extension DistrictsViewController: TableViewDataSourceDelegate {
+extension DistrictsViewController: Stateful {
 
-    func configure(_ cell: BasicTableViewCell, for object: District, at indexPath: IndexPath) {
-        cell.textLabel?.text = object.name
-        cell.accessoryType = .disclosureIndicator
-        // TODO: Convert to some custom cell... show # of events if non-zero
-    }
-
-    func showNoDataView() {
-        if isRefreshing {
-            return
-        }
-        showNoDataView(with: "Unable to load districts")
-    }
-
-    func hideNoDataView() {
-        removeNoDataView()
+    var noDataText: String {
+        return "No districts for year"
     }
 
 }

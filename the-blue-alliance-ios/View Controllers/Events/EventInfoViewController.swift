@@ -32,7 +32,7 @@ private enum EventLinkRow: Int {
     case max
 }
 
-class EventInfoViewController: TBATableViewController, Refreshable, Observable {
+class EventInfoViewController: TBATableViewController, Observable {
 
     private let event: Event
     private let urlOpener: URLOpener
@@ -72,47 +72,6 @@ class EventInfoViewController: TBATableViewController, Refreshable, Observable {
 
         tableView.sectionFooterHeight = 0
         tableView.registerReusableCell(InfoTableViewCell.self)
-    }
-
-    // MARK: - Refreshable
-
-    var refreshKey: String? {
-        return event.key
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return nil
-    }
-
-    var automaticRefreshEndDate: Date? {
-        return nil
-    }
-
-    var isDataSourceEmpty: Bool {
-        return event.name == nil
-    }
-
-    @objc func refresh() {
-        removeNoDataView()
-
-        var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchEvent(key: event.key!, completion: { (modelEvent, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                if let modelEvent = modelEvent {
-                    Event.insert(with: modelEvent, in: backgroundContext)
-                }
-
-                backgroundContext.saveOrRollback()
-                self.removeRequest(request: request!)
-            })
-        })
-        addRequest(request: request!)
     }
 
     // MARK: - Table view data source
@@ -260,6 +219,47 @@ class EventInfoViewController: TBATableViewController, Refreshable, Observable {
 
             tableView.deselectRow(at: indexPath, animated: true)
         }
+    }
+
+}
+
+extension EventInfoViewController: Refreshable {
+
+    var refreshKey: String? {
+        return event.key
+    }
+
+    var automaticRefreshInterval: DateComponents? {
+        return nil
+    }
+
+    var automaticRefreshEndDate: Date? {
+        return nil
+    }
+
+    var isDataSourceEmpty: Bool {
+        return event.name == nil
+    }
+
+    @objc func refresh() {
+        var request: URLSessionDataTask?
+        request = TBAKit.sharedKit.fetchEvent(key: event.key!, completion: { (modelEvent, error) in
+            if let error = error {
+                self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
+            }
+
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                if let modelEvent = modelEvent {
+                    Event.insert(with: modelEvent, in: backgroundContext)
+                }
+
+                backgroundContext.saveOrRollback()
+                self.removeRequest(request: request!)
+            })
+        })
+        addRequest(request: request!)
     }
 
 }

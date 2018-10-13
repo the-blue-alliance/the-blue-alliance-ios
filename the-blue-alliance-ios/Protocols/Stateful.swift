@@ -2,58 +2,56 @@ import Foundation
 import UIKit
 
 protocol Stateful: AnyObject {
-    var noDataViewController: NoDataViewController? { get set }
+    var noDataViewController: NoDataViewController { get set }
+
+    /**
+     The string to dispaly in the no data view.
+    */
+    var noDataText: String { get }
+
+    /**
+     Add the no data view to the view hiearchy. This method should not be called directly - you probably want showNoDataView.
+     */
+    func addNoDataView(_ noDataView: UIView)
+
+    /**
+     Remove the no data view from the view hiearchy. This method should not be called directly - you probably want removeNoDataView.
+     */
+    func removeNoDataView(_ noDataView: UIView)
 }
 
-extension Stateful where Self: UIViewController {
+extension Stateful where Self: Refreshable {
 
-    func showNoDataView(with text: String?) {
-        if noDataViewController == nil {
-            guard let noDataVC = Bundle.main.loadNibNamed("NoDataViewController", owner: nil, options: nil)?.first as? NoDataViewController else {
-                fatalError("Unable to load no data view controller")
-            }
-            noDataViewController = noDataVC
-        }
-        guard let noDataViewController = noDataViewController, let noDataView = noDataViewController.view else {
+    /**
+     Show the no data view in the view hiearchy.
+     */
+    func showNoDataView() {
+        if isRefreshing {
             return
         }
-        noDataView.backgroundColor = .clear
 
-        if let text = text {
-            noDataViewController.textLabel?.text = text
-        } else {
-            noDataViewController.textLabel?.text = "No data to display"
+        noDataViewController.textLabel?.text = noDataText
+
+        let noDataView = noDataViewController.view as UIView
+
+        // If the no data view is already in our view hiearchy, don't animate in
+        if noDataView.superview != nil {
+            return
         }
 
         noDataView.alpha = 0
-        if let tableView = view as? UITableView {
-            tableView.backgroundView = noDataView
-        } else if let collectionView = view as? UICollectionView {
-            collectionView.backgroundView = noDataView
-        } else if noDataViewController.view.superview == nil {
-            view.insertSubview(noDataViewController.view, at: 0)
-            DispatchQueue.main.async {
-                noDataView.autoPinEdgesToSuperviewEdges()
-            }
-        }
+        addNoDataView(noDataView)
 
         UIView.animate(withDuration: 0.25, animations: {
             noDataView.alpha = 1.0
         })
     }
 
+    /**
+     Remove the no data view from the view hiearchy.
+     */
     func removeNoDataView() {
-        if let tableView = view as? UITableView {
-            DispatchQueue.main.async {
-                tableView.backgroundView = nil
-            }
-        } else if let collectionView = view as? UICollectionView {
-            DispatchQueue.main.async {
-                collectionView.backgroundView = nil
-            }
-        } else {
-            noDataViewController?.view.removeFromSuperview()
-        }
+        removeNoDataView(noDataViewController.view)
     }
 
 }

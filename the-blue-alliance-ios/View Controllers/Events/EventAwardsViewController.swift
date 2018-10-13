@@ -52,7 +52,7 @@ protocol EventAwardsViewControllerDelegate: AnyObject {
     func teamSelected(_ team: Team)
 }
 
-class EventAwardsViewController: TBATableViewController, Refreshable {
+class EventAwardsViewController: TBATableViewController {
 
     private let event: Event
     private let team: Team?
@@ -75,7 +75,45 @@ class EventAwardsViewController: TBATableViewController, Refreshable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Refreshable
+    // MARK: Table View Data Source
+
+    private func setupDataSource() {
+        let fetchRequest: NSFetchRequest<Award> = Award.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "awardType", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
+
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
+    }
+
+    private func setupFetchRequest(_ request: NSFetchRequest<Award>) {
+        if let team = team {
+            request.predicate = NSPredicate(format: "event == %@ AND (ANY recipients.team == %@)", event, team)
+        } else {
+            request.predicate = NSPredicate(format: "event == %@", event)
+        }
+    }
+
+}
+
+extension EventAwardsViewController: TableViewDataSourceDelegate {
+
+    func configure(_ cell: AwardTableViewCell, for object: Award, at indexPath: IndexPath) {
+        cell.selectionStyle = .none
+        cell.viewModel = AwardCellViewModel(award: object)
+        cell.teamSelected = { [unowned self] (teamKey) in
+            let team = Team.insert(withKey: teamKey, in: self.persistentContainer.viewContext)
+            self.delegate?.teamSelected(team)
+        }
+    }
+
+}
+
+extension EventAwardsViewController: Refreshable {
 
     var refreshKey: String? {
         return "\(event.key!)_awards"
@@ -123,51 +161,12 @@ class EventAwardsViewController: TBATableViewController, Refreshable {
         addRequest(request: request!)
     }
 
-    // MARK: Table View Data Source
-
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<Award> = Award.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "awardType", ascending: true)]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
-    }
-
-    private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
-
-    private func setupFetchRequest(_ request: NSFetchRequest<Award>) {
-        if let team = team {
-            request.predicate = NSPredicate(format: "event == %@ AND (ANY recipients.team == %@)", event, team)
-        } else {
-            request.predicate = NSPredicate(format: "event == %@", event)
-        }
-    }
-
 }
 
-extension EventAwardsViewController: TableViewDataSourceDelegate {
+extension EventAwardsViewController: Stateful {
 
-    func configure(_ cell: AwardTableViewCell, for object: Award, at indexPath: IndexPath) {
-        cell.selectionStyle = .none
-        cell.viewModel = AwardCellViewModel(award: object)
-        cell.teamSelected = { [unowned self] (teamKey) in
-            let team = Team.insert(withKey: teamKey, in: self.persistentContainer.viewContext)
-            self.delegate?.teamSelected(team)
-        }
-    }
-
-    func showNoDataView() {
-        if isRefreshing {
-            return
-        }
-        showNoDataView(with: String(format: "No awards for %@", team != nil ? "team at event" : "event"))
-    }
-
-    func hideNoDataView() {
-        removeNoDataView()
+    var noDataText: String {
+        return "No awards for \(team != nil ? "team at event" : "event")"
     }
 
 }

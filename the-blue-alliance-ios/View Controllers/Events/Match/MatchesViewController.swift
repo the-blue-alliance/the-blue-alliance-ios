@@ -7,7 +7,7 @@ protocol MatchesViewControllerDelegate: AnyObject {
     func matchSelected(_ match: Match)
 }
 
-class MatchesViewController: TBATableViewController, Refreshable {
+class MatchesViewController: TBATableViewController {
 
     private let event: Event
     private let team: Team?
@@ -28,55 +28,6 @@ class MatchesViewController: TBATableViewController, Refreshable {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - Refreshable
-
-    var refreshKey: String? {
-        return "\(event.key!)_matches"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(hour: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh event matches until the event is over
-        return event.endDate?.endOfDay()
-    }
-
-    var isDataSourceEmpty: Bool {
-        if let matches = dataSource.fetchedResultsController.fetchedObjects, matches.isEmpty {
-            return true
-        }
-        return false
-    }
-
-    @objc func refresh() {
-        removeNoDataView()
-
-        var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchEventMatches(key: event.key!, completion: { (matches, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh event matches - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
-                if let matches = matches {
-                    let localMatches = matches.map({ (modelMatch) -> Match in
-                        return Match.insert(with: modelMatch, for: backgroundEvent, in: backgroundContext)
-                    })
-                    backgroundEvent.matches = Set(localMatches) as NSSet
-                }
-
-                backgroundContext.saveOrRollback()
-                self.removeRequest(request: request!)
-            })
-        })
-        addRequest(request: request!)
     }
 
     // MARK: Table View Data Source
@@ -128,15 +79,65 @@ extension MatchesViewController: TableViewDataSourceDelegate {
         cell.viewModel = MatchViewModel(match: object, team: team)
     }
 
-    func showNoDataView() {
-        if isRefreshing {
-            return
-        }
-        showNoDataView(with: "No matches for event")
+}
+
+extension MatchesViewController: Refreshable {
+
+    // MARK: - Refreshable
+
+    var refreshKey: String? {
+        return "\(event.key!)_matches"
     }
 
-    func hideNoDataView() {
+    var automaticRefreshInterval: DateComponents? {
+        return DateComponents(hour: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Automatically refresh event matches until the event is over
+        return event.endDate?.endOfDay()
+    }
+
+    var isDataSourceEmpty: Bool {
+        if let matches = dataSource.fetchedResultsController.fetchedObjects, matches.isEmpty {
+            return true
+        }
+        return false
+    }
+
+    @objc func refresh() {
         removeNoDataView()
+
+        var request: URLSessionDataTask?
+        request = TBAKit.sharedKit.fetchEventMatches(key: event.key!, completion: { (matches, error) in
+            if let error = error {
+                self.showErrorAlert(with: "Unable to refresh event matches - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
+            }
+
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
+                if let matches = matches {
+                    let localMatches = matches.map({ (modelMatch) -> Match in
+                        return Match.insert(with: modelMatch, for: backgroundEvent, in: backgroundContext)
+                    })
+                    backgroundEvent.matches = Set(localMatches) as NSSet
+                }
+
+                backgroundContext.saveOrRollback()
+                self.removeRequest(request: request!)
+            })
+        })
+        addRequest(request: request!)
+    }
+
+}
+
+extension MatchesViewController: Stateful {
+
+    var noDataText: String {
+        return "No matches for event"
     }
 
 }

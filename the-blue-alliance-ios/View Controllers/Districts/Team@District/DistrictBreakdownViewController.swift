@@ -3,7 +3,7 @@ import UIKit
 import CoreData
 import TBAKit
 
-class DistrictBreakdownViewController: TBATableViewController, Refreshable, Observable {
+class DistrictBreakdownViewController: TBATableViewController, Observable {
 
     private let ranking: DistrictRanking
     private let sortedEventPoints: [DistrictEventPoints]
@@ -43,7 +43,64 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Obse
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
     }
 
-    // MARK: - Refreshable
+
+    // MARK: Table View Data Source
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        let sections = sortedEventPoints.count
+        if sections == 0 {
+            showNoDataView()
+        }
+        return sections
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // Qual Points, Elim Points, Alliance Points, Award Points, Total Points
+        return 5
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> ReverseSubtitleTableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
+        let eventPoints = sortedEventPoints[indexPath.section]
+
+        var pointsType: String = ""
+        var points: Int16 = 0
+
+        switch indexPath.row {
+        case 0:
+            pointsType = "Qualification"
+            points = eventPoints.qualPoints
+        case 1:
+            pointsType = "Elimination"
+            points = eventPoints.elimPoints
+        case 2:
+            pointsType = "Alliance"
+            points = eventPoints.alliancePoints
+        case 3:
+            pointsType = "Award"
+            points = eventPoints.awardPoints
+        case 4:
+            pointsType = "Total"
+            points = eventPoints.total
+        default: break
+        }
+
+        cell.titleLabel.text = "\(pointsType) Points"
+        cell.subtitleLabel.text = "\(points) Points"
+
+        return cell
+    }
+
+    // MARK: - UITableViewDelegate
+
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let eventPoints = sortedEventPoints[section]
+        return eventPoints.event!.name
+    }
+
+}
+
+extension DistrictBreakdownViewController: Refreshable {
 
     var refreshKey: String? {
         return "\(ranking.district!.key!)_breakdown"
@@ -136,67 +193,12 @@ class DistrictBreakdownViewController: TBATableViewController, Refreshable, Obse
         })
     }
 
-    // MARK: Table View Data Source
+}
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        let sections = sortedEventPoints.count
-        if sections == 0 {
-            showNoDataView()
-        }
-        return sections
-    }
+extension DistrictBreakdownViewController: Stateful {
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // Qual Points, Elim Points, Alliance Points, Award Points, Total Points
-        return 5
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> ReverseSubtitleTableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
-        let eventPoints = sortedEventPoints[indexPath.section]
-
-        var pointsType: String = ""
-        var points: Int16 = 0
-
-        switch indexPath.row {
-        case 0:
-            pointsType = "Qualification"
-            points = eventPoints.qualPoints
-        case 1:
-            pointsType = "Elimination"
-            points = eventPoints.elimPoints
-        case 2:
-            pointsType = "Alliance"
-            points = eventPoints.alliancePoints
-        case 3:
-            pointsType = "Award"
-            points = eventPoints.awardPoints
-        case 4:
-            pointsType = "Total"
-            points = eventPoints.total
-        default: break
-        }
-
-        cell.titleLabel.text = "\(pointsType) Points"
-        cell.subtitleLabel.text = "\(points) Points"
-
-        return cell
-    }
-
-    // MARK: - UITableViewDelegate
-
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let eventPoints = sortedEventPoints[section]
-        return eventPoints.event!.name
-    }
-
-    // MARK: - Private Methods
-
-    func showNoDataView() {
-        if isRefreshing {
-            return
-        }
-        showNoDataView(with: "No district points for team")
+    var noDataText: String {
+        return "No district points for team"
     }
 
 }

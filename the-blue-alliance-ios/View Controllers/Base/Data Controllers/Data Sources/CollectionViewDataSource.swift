@@ -12,9 +12,6 @@ protocol CollectionViewDataSourceDelegate: class {
     var collectionView: UICollectionView! { get }
 
     func configure(_ cell: Cell, for object: Object, at indexPath: IndexPath)
-
-    func showNoDataView()
-    func hideNoDataView()
 }
 
 fileprivate enum Update<Object> {
@@ -24,7 +21,7 @@ fileprivate enum Update<Object> {
     case delete(IndexPath)
 }
 
-class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: CollectionViewDataSourceDelegate>: NSObject, UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
+class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: CollectionViewDataSourceDelegate & Stateful & Refreshable>: NSObject, UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
 
     typealias Object = Delegate.Object
     typealias Cell = Delegate.Cell
@@ -100,7 +97,7 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
             if rows == 0 {
                 delegate.showNoDataView()
             } else {
-                delegate.hideNoDataView()
+                delegate.removeNoDataView()
             }
         } else {
             delegate.showNoDataView()
@@ -144,4 +141,5 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         processUpdates(updates)
     }
+
 }

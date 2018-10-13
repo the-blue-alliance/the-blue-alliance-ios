@@ -21,7 +21,7 @@ private enum TeamSummaryRow: Int {
     case max
 }
 
-class TeamSummaryViewController: TBATableViewController, Refreshable {
+class TeamSummaryViewController: TBATableViewController {
 
     private let team: Team
     private let event: Event
@@ -165,81 +165,12 @@ class TeamSummaryViewController: TBATableViewController, Refreshable {
         }
     }
 
-    // MARK: - Refresh
-
-    var refreshKey: String? {
-        return "\(team.key!)@\(event.key!)_status"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(hour: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh team summary until the event is over
-        return event.endDate?.endOfDay()
-    }
-
-    var isDataSourceEmpty: Bool {
-        return eventStatus == nil || teamAwards.count == 0
-    }
-
-    @objc func refresh() {
-        removeNoDataView()
-
-        // Refresh team status
-        var teamStatusRequest: URLSessionDataTask?
-        teamStatusRequest = TBAKit.sharedKit.fetchTeamStatus(key: team.key!, eventKey: event.key!, completion: { (modelStatus, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
-
-                if let modelStatus = modelStatus {
-                    // TODO: EventStatus can never be removed if it's invalid
-                    EventStatus.insert(with: modelStatus, team: backgroundTeam, event: backgroundEvent, in: backgroundContext)
-                }
-
-                backgroundContext.saveOrRollback()
-                self.removeRequest(request: teamStatusRequest!)
-            })
-        })
-        addRequest(request: teamStatusRequest!)
-
-        // Refresh awards
-        var awardsRequest: URLSessionDataTask?
-        awardsRequest = TBAKit.sharedKit.fetchTeamAwards(key: team.key!, eventKey: event.key!, completion: { (awards, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh event awards for \(self.team.key!) - \(error.localizedDescription)")
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
-                if let awards = awards {
-                    let localAwards = awards.map({ (modelAward) -> Award in
-                        return Award.insert(with: modelAward, for: backgroundEvent, in: backgroundContext)
-                    })
-                    backgroundEvent.awards = Set(localAwards) as NSSet
-                }
-
-                backgroundContext.saveOrRollback()
-                self.removeRequest(request: awardsRequest!)
-            })
-        })
-        addRequest(request: awardsRequest!)
-    }
-
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let rows: Int = summaryRows.count
         if rows == 0 {
-            showNoDataView(with: "No event status for Team \(team.teamNumber) at \(event.friendlyNameWithYear)")
+            showNoDataView()
         } else {
             removeNoDataView()
         }
@@ -369,6 +300,85 @@ class TeamSummaryViewController: TBATableViewController, Refreshable {
             return 44.0
         }
         return UITableView.automaticDimension
+    }
+
+}
+
+extension TeamSummaryViewController: Refreshable {
+
+    var refreshKey: String? {
+        return "\(team.key!)@\(event.key!)_status"
+    }
+
+    var automaticRefreshInterval: DateComponents? {
+        return DateComponents(hour: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Automatically refresh team summary until the event is over
+        return event.endDate?.endOfDay()
+    }
+
+    var isDataSourceEmpty: Bool {
+        return eventStatus == nil || teamAwards.count == 0
+    }
+
+    @objc func refresh() {
+        removeNoDataView()
+
+        // Refresh team status
+        var teamStatusRequest: URLSessionDataTask?
+        teamStatusRequest = TBAKit.sharedKit.fetchTeamStatus(key: team.key!, eventKey: event.key!, completion: { (modelStatus, error) in
+            if let error = error {
+                self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
+            }
+
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
+                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
+
+                if let modelStatus = modelStatus {
+                    // TODO: EventStatus can never be removed if it's invalid
+                    EventStatus.insert(with: modelStatus, team: backgroundTeam, event: backgroundEvent, in: backgroundContext)
+                }
+
+                backgroundContext.saveOrRollback()
+                self.removeRequest(request: teamStatusRequest!)
+            })
+        })
+        addRequest(request: teamStatusRequest!)
+
+        // Refresh awards
+        var awardsRequest: URLSessionDataTask?
+        awardsRequest = TBAKit.sharedKit.fetchTeamAwards(key: team.key!, eventKey: event.key!, completion: { (awards, error) in
+            if let error = error {
+                self.showErrorAlert(with: "Unable to refresh event awards for \(self.team.key!) - \(error.localizedDescription)")
+            }
+
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
+                if let awards = awards {
+                    let localAwards = awards.map({ (modelAward) -> Award in
+                        return Award.insert(with: modelAward, for: backgroundEvent, in: backgroundContext)
+                    })
+                    backgroundEvent.awards = Set(localAwards) as NSSet
+                }
+
+                backgroundContext.saveOrRollback()
+                self.removeRequest(request: awardsRequest!)
+            })
+        })
+        addRequest(request: awardsRequest!)
+    }
+
+}
+
+extension TeamSummaryViewController: Stateful {
+
+    var noDataText: String {
+        return "No status for team at event"
     }
 
 }

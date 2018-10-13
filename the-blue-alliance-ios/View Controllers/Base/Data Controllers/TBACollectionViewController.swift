@@ -5,11 +5,14 @@ import CoreData
 class TBACollectionViewController: UICollectionViewController, DataController {
 
     var persistentContainer: NSPersistentContainer
-    var noDataViewController: NoDataViewController?
 
     // MARK: - Refreshable
 
-    var _requestsArray: [URLSessionDataTask] = []
+    var requests: [URLSessionDataTask] = []
+
+    // MARK: - Stateful
+
+    var noDataViewController: NoDataViewController = NoDataViewController()
 
     // MARK: - Init
 
@@ -37,15 +40,6 @@ class TBACollectionViewController: UICollectionViewController, DataController {
 
 extension Refreshable where Self: TBACollectionViewController {
 
-    var requests: [URLSessionDataTask] {
-        get {
-            return _requestsArray
-        }
-        set {
-            _requestsArray = newValue
-        }
-    }
-
     var refreshControl: UIRefreshControl? {
         get {
             return collectionView.refreshControl
@@ -62,6 +56,22 @@ extension Refreshable where Self: TBACollectionViewController {
     func noDataReload() {
         DispatchQueue.main.async {
             self.collectionView.reloadData()
+        }
+    }
+
+}
+
+extension Stateful where Self: TBACollectionViewController {
+
+    func addNoDataView(_ noDataView: UIView) {
+        DispatchQueue.main.async {
+            self.collectionView.backgroundView = noDataView
+        }
+    }
+
+    func removeNoDataView(_ view: UIView) {
+        DispatchQueue.main.async {
+            self.collectionView.backgroundView = nil
         }
     }
 

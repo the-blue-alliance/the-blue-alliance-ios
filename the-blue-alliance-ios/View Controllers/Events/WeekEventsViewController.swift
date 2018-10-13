@@ -84,6 +84,12 @@ class WeekEventsViewController: EventsViewController {
         addRequest(request: request!)
     }
 
+    // MARK: - Stateful
+
+    override var noDataText: String {
+        return "No events for year"
+    }
+
     // MARK: - EventsViewControllerDataSourceConfiguration
 
     override var fetchRequestPredicate: NSPredicate {

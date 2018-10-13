@@ -69,6 +69,12 @@ class TeamEventsViewController: EventsViewController {
         addRequest(request: request!)
     }
 
+    // MARK: - Stateful
+
+    override var noDataText: String {
+        return "No events for team"
+    }
+
     // MARK: - EventsViewControllerDataSourceConfiguration
 
     override var fetchRequestPredicate: NSPredicate {

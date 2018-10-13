@@ -7,7 +7,7 @@ protocol EventRankingsViewControllerDelegate: AnyObject {
     func rankingSelected(_ ranking: EventRanking)
 }
 
-class EventRankingsViewController: TBATableViewController, Refreshable {
+class EventRankingsViewController: TBATableViewController {
 
     private let event: Event
 
@@ -28,7 +28,43 @@ class EventRankingsViewController: TBATableViewController, Refreshable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Refreshable
+    // MARK: UITableView Delegate
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let ranking = dataSource.object(at: indexPath)
+        delegate?.rankingSelected(ranking)
+    }
+
+    // MARK: Table View Data Source
+
+    private func setupDataSource() {
+        let fetchRequest: NSFetchRequest<EventRanking> = EventRanking.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
+
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
+    }
+
+    private func setupFetchRequest(_ request: NSFetchRequest<EventRanking>) {
+        request.predicate = NSPredicate(format: "event == %@", event)
+    }
+
+}
+
+extension EventRankingsViewController: TableViewDataSourceDelegate {
+
+    func configure(_ cell: RankingTableViewCell, for object: EventRanking, at indexPath: IndexPath) {
+        cell.viewModel = RankingCellViewModel(eventRanking: object)
+    }
+
+}
+
+extension EventRankingsViewController: Refreshable {
 
     var refreshKey: String? {
         return "\(event.key!)_rankings"
@@ -79,49 +115,12 @@ class EventRankingsViewController: TBATableViewController, Refreshable {
         self.addRequest(request: rankingsRequest!)
     }
 
-    // MARK: UITableView Delegate
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let ranking = dataSource.object(at: indexPath)
-        delegate?.rankingSelected(ranking)
-    }
-
-    // MARK: Table View Data Source
-
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<EventRanking> = EventRanking.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
-    }
-
-    private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
-
-    private func setupFetchRequest(_ request: NSFetchRequest<EventRanking>) {
-        request.predicate = NSPredicate(format: "event == %@", event)
-    }
-
 }
 
-extension EventRankingsViewController: TableViewDataSourceDelegate {
+extension EventRankingsViewController: Stateful {
 
-    func configure(_ cell: RankingTableViewCell, for object: EventRanking, at indexPath: IndexPath) {
-        cell.viewModel = RankingCellViewModel(eventRanking: object)
-    }
-
-    func showNoDataView() {
-        if isRefreshing {
-            return
-        }
-        showNoDataView(with: "No rankings for event")
-    }
-
-    func hideNoDataView() {
-        removeNoDataView()
+    var noDataText: String {
+        return "No rankings for event"
     }
 
 }

@@ -7,7 +7,7 @@ protocol DistrictTeamSummaryViewControllerDelegate: AnyObject {
     func eventPointsSelected(_ eventPoints: DistrictEventPoints)
 }
 
-class DistrictTeamSummaryViewController: TBATableViewController, Refreshable {
+class DistrictTeamSummaryViewController: TBATableViewController {
 
     private let ranking: DistrictRanking
 
@@ -48,53 +48,6 @@ class DistrictTeamSummaryViewController: TBATableViewController, Refreshable {
         super.viewDidLoad()
 
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
-    }
-
-    // MARK: - Refresh
-
-    var refreshKey: String? {
-        return "\(ranking.district!.key!)_rankings"
-    }
-
-    var automaticRefreshInterval: DateComponents? {
-        return DateComponents(day: 1)
-    }
-
-    var automaticRefreshEndDate: Date? {
-        // Automatically refresh district team summary until the district is over
-        return ranking.district?.endDate?.endOfDay()
-    }
-
-    var isDataSourceEmpty: Bool {
-        return sortedEventPoints.count == 0
-    }
-
-    @objc func refresh() {
-        removeNoDataView()
-
-        var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchDistrictRankings(key: ranking.district!.key!, completion: { (rankings, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundDistrict = backgroundContext.object(with: self.ranking.district!.objectID) as! District
-                if let rankings = rankings {
-                    let localRankings = rankings.map({ (modelRanking) -> DistrictRanking in
-                        let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
-                        return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, for: backgroundTeam, in: backgroundContext)
-                    })
-                    backgroundDistrict.rankings = Set(localRankings) as NSSet
-                }
-
-                backgroundContext.saveOrRollback()
-                self.removeRequest(request: request!)
-            })
-        })
-        addRequest(request: request!)
     }
 
     // MARK: - Table view data source
@@ -143,6 +96,53 @@ class DistrictTeamSummaryViewController: TBATableViewController, Refreshable {
         // If the row is less than the last event points row, it's an events points row
         // +1 for the ranking row
         return row > 0 && row < (sortedEventPoints.count + 1)
+    }
+
+}
+
+extension DistrictTeamSummaryViewController: Refreshable {
+
+    var refreshKey: String? {
+        return "\(ranking.district!.key!)_rankings"
+    }
+
+    var automaticRefreshInterval: DateComponents? {
+        return DateComponents(day: 1)
+    }
+
+    var automaticRefreshEndDate: Date? {
+        // Automatically refresh district team summary until the district is over
+        return ranking.district?.endDate?.endOfDay()
+    }
+
+    var isDataSourceEmpty: Bool {
+        return sortedEventPoints.count == 0
+    }
+
+    @objc func refresh() {
+        var request: URLSessionDataTask?
+        request = TBAKit.sharedKit.fetchDistrictRankings(key: ranking.district!.key!, completion: { (rankings, error) in
+            if let error = error {
+                self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
+            } else {
+                self.markRefreshSuccessful()
+            }
+
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                let backgroundDistrict = backgroundContext.object(with: self.ranking.district!.objectID) as! District
+                if let rankings = rankings {
+                    let localRankings = rankings.map({ (modelRanking) -> DistrictRanking in
+                        let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
+                        return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, for: backgroundTeam, in: backgroundContext)
+                    })
+                    backgroundDistrict.rankings = Set(localRankings) as NSSet
+                }
+
+                backgroundContext.saveOrRollback()
+                self.removeRequest(request: request!)
+            })
+        })
+        addRequest(request: request!)
     }
 
 }

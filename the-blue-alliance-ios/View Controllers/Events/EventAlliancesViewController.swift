@@ -44,7 +44,7 @@ protocol EventAlliancesViewControllerDelegate: AnyObject {
     func teamSelected(_ team: Team)
 }
 
-private class EventAlliancesViewController: TBATableViewController, Refreshable {
+private class EventAlliancesViewController: TBATableViewController {
 
     private let event: Event
 
@@ -74,7 +74,41 @@ private class EventAlliancesViewController: TBATableViewController, Refreshable 
         tableView.rowHeight = 44
     }
 
-    // MARK: - Refreshable
+    // MARK: Table View Data Source
+
+    private func setupDataSource() {
+        let fetchRequest: NSFetchRequest<EventAlliance> = EventAlliance.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
+
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
+    }
+
+    private func setupFetchRequest(_ request: NSFetchRequest<EventAlliance>) {
+        request.predicate = NSPredicate(format: "event == %@", event)
+    }
+
+}
+
+extension EventAlliancesViewController: TableViewDataSourceDelegate {
+
+    func configure(_ cell: EventAllianceTableViewCell, for object: EventAlliance, at indexPath: IndexPath) {
+        cell.selectionStyle = .none
+        cell.viewModel = EventAllianceCellViewModel(alliance: object)
+        cell.teamSelected = { [unowned self] (teamKey) in
+            let team = Team.insert(withKey: teamKey, in: self.persistentContainer.viewContext)
+            self.delegate?.teamSelected(team)
+        }
+    }
+
+}
+
+extension EventAlliancesViewController: Refreshable {
 
     var refreshKey: String? {
         return "\(event.key!)_alliances"
@@ -122,47 +156,13 @@ private class EventAlliancesViewController: TBATableViewController, Refreshable 
         self.addRequest(request: alliancesRequest!)
     }
 
-    // MARK: Table View Data Source
-
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<EventAlliance> = EventAlliance.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
-    }
-
-    private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
-
-    private func setupFetchRequest(_ request: NSFetchRequest<EventAlliance>) {
-        request.predicate = NSPredicate(format: "event == %@", event)
-    }
 
 }
 
-extension EventAlliancesViewController: TableViewDataSourceDelegate {
+extension EventAlliancesViewController: Stateful {
 
-    func configure(_ cell: EventAllianceTableViewCell, for object: EventAlliance, at indexPath: IndexPath) {
-        cell.selectionStyle = .none
-        cell.viewModel = EventAllianceCellViewModel(alliance: object)
-        cell.teamSelected = { [unowned self] (teamKey) in
-            let team = Team.insert(withKey: teamKey, in: self.persistentContainer.viewContext)
-            self.delegate?.teamSelected(team)
-        }
-    }
-
-    func showNoDataView() {
-        if isRefreshing {
-            return
-        }
-        showNoDataView(with: "No alliances for event")
-    }
-
-    func hideNoDataView() {
-        removeNoDataView()
+    var noDataText: String {
+        return "No alliances for event"
     }
 
 }
