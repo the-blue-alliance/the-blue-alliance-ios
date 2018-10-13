@@ -91,7 +91,25 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
     // MARK: NSFetchedResultsControllerDelegate
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        delegate.collectionView.reloadData()
+        switch type {
+        case .delete:
+            if let deleteIndexPath = indexPath {
+                delegate.collectionView.deleteItems(at: [deleteIndexPath])
+            }
+        case .insert:
+            if let insertIndexPath = newIndexPath {
+                delegate.collectionView.insertItems(at: [insertIndexPath])
+            }
+        case .move:
+            if let old = indexPath, let new = newIndexPath {
+                delegate.collectionView.deleteItems(at: [old])
+                delegate.collectionView.insertItems(at: [new])
+            }
+        case .update:
+            if let indexPath = indexPath {
+                delegate.collectionView.reloadItems(at: [indexPath])
+            }
+        }
     }
 
 }

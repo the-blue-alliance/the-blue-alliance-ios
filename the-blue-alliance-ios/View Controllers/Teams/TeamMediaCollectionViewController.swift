@@ -30,8 +30,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController, Refreshabl
     }
     private var dataSource: CollectionViewDataSource<Media, TeamMediaCollectionViewController>!
 
-    let imageCache = NSCache<NSURL, UIImage>()
-    var mediaErrors: NSMapTable<Media, NSError> = NSMapTable.weakToStrongObjects()
     var fetchingMedia: NSHashTable<Media> = NSHashTable.weakObjects()
 
     // MARK: Init
@@ -95,12 +93,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController, Refreshabl
             return
         }
 
-        // TODO: Move this `removeNoDataView` call to superclass, have classes call super.refresh to get that
         removeNoDataView()
-
-        // Remove old cached data
-        // Purposely don't remove cached images, since we're not storing images in Core Data yet
-        mediaErrors.removeAllObjects()
 
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchTeamMedia(key: team.key!, year: year, completion: { (media, error) in
@@ -124,6 +117,13 @@ class TeamMediaCollectionViewController: TBACollectionViewController, Refreshabl
             })
         })
         addRequest(request: request!)
+
+        // TODO: We really need to do this... *after*, our inserts are done
+        if let teamMedia = team.media?.allObjects as? [Media] {
+            teamMedia.forEach({ (media) in
+                self.fetchMedia(media)
+            })
+        }
     }
 
     // MARK: Rotation
@@ -190,21 +190,11 @@ class TeamMediaCollectionViewController: TBACollectionViewController, Refreshabl
         return dataSource.fetchedResultsController.indexPath(forObject: media)
     }
 
-    // TODO: Store this shit in Core Data - can we ?
     private func fetchMedia(_ media: Media) {
         // Make sure we can attempt to fetch our media
         guard let url = media.imageDirectURL else {
-            mediaErrors.setObject(MediaError.error("No url for media") as NSError, forKey: media)
-            return
-        }
-
-        // If we already have a cached image, don't fetch again
-        if let _ = imageCache.object(forKey: url as NSURL) {
-            // Reload the cell in question, since it's confused about it's data
-            if let mediaIndexPath = self.indexPath(for: media) {
-                DispatchQueue.main.async {
-                    self.collectionView.reloadItems(at: [mediaIndexPath])
-                }
+            self.persistentContainer.viewContext.performChanges {
+                media.mediaError = MediaError.error("No url for media")
             }
             return
         }
@@ -219,26 +209,21 @@ class TeamMediaCollectionViewController: TBACollectionViewController, Refreshabl
             self.fetchingMedia.remove(media)
 
             if let error = error {
-                self.mediaErrors.setObject(error as NSError, forKey: media)
+                media.mediaError = error
             } else if let data = data {
                 if let image = UIImage(data: data) {
-                    self.imageCache.setObject(image, forKey: url as NSURL)
+                    media.image = image
                 } else {
-                    self.mediaErrors.setObject(MediaError.error("Invalid data for request") as NSError, forKey: media)
+                    media.mediaError = MediaError.error("Invalid data for request")
                 }
             } else {
-                self.mediaErrors.setObject(MediaError.error("No data for request") as NSError, forKey: media)
+                media.mediaError = MediaError.error("No data for request")
             }
 
-            if let mediaIndexPath = self.indexPath(for: media) {
-                DispatchQueue.main.async {
-                    self.collectionView.reloadItems(at: [mediaIndexPath])
-                }
-            }
+            self.persistentContainer.viewContext.saveOrRollback()
         })
         dataTask.resume()
     }
-
 
 }
 
@@ -278,18 +263,14 @@ extension TeamMediaCollectionViewController: UICollectionViewDelegateFlowLayout 
 extension TeamMediaCollectionViewController: CollectionViewDataSourceDelegate {
 
     func configure(_ cell: MediaCollectionViewCell, for object: Media, at indexPath: IndexPath) {
-        // Make sure we can attempt to fetch our media
-        guard let url = object.imageDirectURL else {
-            fatalError("Attempting to load media without url")
-        }
-
-        if let image = imageCache.object(forKey: url as NSURL) {
+        if fetchingMedia.contains(object) {
+            cell.state = .loading
+        } else if let image = object.image {
             cell.state = .loaded(image)
-        } else if let error = mediaErrors.object(forKey: object) {
+        } else if let error = object.mediaError {
             cell.state = .error("Error loading media - \(error.localizedDescription)")
         } else {
-            cell.state = .loading
-            fetchMedia(object)
+            cell.state = .error("Error loading media - unknown error")
         }
     }
 

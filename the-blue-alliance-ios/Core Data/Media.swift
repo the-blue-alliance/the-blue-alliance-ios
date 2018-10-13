@@ -42,6 +42,29 @@ public enum MediaType: String {
 
 extension Media: Managed, Playable {
 
+    var image: UIImage? {
+        get {
+            if let mediaData = mediaData {
+                return UIImage(data: mediaData)
+            }
+            return nil
+        }
+        set {
+            mediaData = newValue?.pngData()
+            mediaError = nil
+        }
+    }
+
+    var imageError: Error? {
+        get {
+            return mediaError
+        }
+        set {
+            mediaError = newValue
+            mediaData = nil
+        }
+    }
+
     var youtubeKey: String? {
         if type == MediaType.youtubeVideo.rawValue {
             return foreignKey

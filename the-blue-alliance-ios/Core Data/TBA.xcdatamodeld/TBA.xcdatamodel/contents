@@ -189,6 +189,8 @@
         <attribute name="details" optional="YES" attributeType="Transformable" customClassName="[String: Any]" syncable="YES"/>
         <attribute name="foreignKey" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mediaData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="mediaError" optional="YES" attributeType="Transformable" customClassName="Error" syncable="YES"/>
         <attribute name="preferred" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="type" attributeType="String" syncable="YES"/>
         <attribute name="year" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
@@ -264,7 +266,7 @@
         <element name="Favorite" positionX="45" positionY="135" width="128" height="45"/>
         <element name="Match" positionX="-54" positionY="135" width="128" height="30"/>
         <element name="MatchVideo" positionX="45" positionY="135" width="128" height="90"/>
-        <element name="Media" positionX="-45" positionY="144" width="128" height="30"/>
+        <element name="Media" positionX="-45" positionY="144" width="128" height="180"/>
         <element name="MyTBAEntity" positionX="45" positionY="135" width="128" height="75"/>
         <element name="Subscription" positionX="54" positionY="144" width="128" height="60"/>
         <element name="Team" positionX="-54" positionY="135" width="128" height="540"/>
