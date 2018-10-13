@@ -42,7 +42,7 @@
 		9221C616209BFF7D00477DE2 /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */; };
 		9221C618209BFF8700477DE2 /* LoadingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */; };
 		9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */; };
-		9223AC851EE7214A00F54F93 /* MediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC841EE7214A00F54F93 /* MediaView.swift */; };
+		9223AC851EE7214A00F54F93 /* MediaCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */; };
 		923A0D7520D2176500BF5E31 /* NoDataViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 923A0D7420D2176500BF5E31 /* NoDataViewController.xib */; };
 		923AEE87216583CA00EF50C8 /* Bundle+Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923AEE86216583CA00EF50C8 /* Bundle+Version.swift */; };
 		923AEE8A21658BC400EF50C8 /* Launch_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923AEE8921658BC400EF50C8 /* Launch_UITests.swift */; };
@@ -250,7 +250,7 @@
 		9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingTableViewCell.xib; sourceTree = "<group>"; };
 		9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
-		9223AC841EE7214A00F54F93 /* MediaView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaView.swift; sourceTree = "<group>"; };
+		9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCollectionViewCell.swift; sourceTree = "<group>"; };
 		923A0D7420D2176500BF5E31 /* NoDataViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoDataViewController.xib; sourceTree = "<group>"; };
 		923AEE86216583CA00EF50C8 /* Bundle+Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Bundle+Version.swift"; path = "Extensions/Bundle+Version.swift"; sourceTree = "<group>"; };
 		923AEE8921658BC400EF50C8 /* Launch_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Launch_UITests.swift; sourceTree = "<group>"; };
@@ -525,15 +525,6 @@
 			path = "Team@District";
 			sourceTree = "<group>";
 		};
-		9223AC861EE7214F00F54F93 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				9223AC841EE7214A00F54F93 /* MediaView.swift */,
-				145C57BC1ED3C3AA004955B2 /* PlayerView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		923A0D7620D21D3800BF5E31 /* Launch Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -646,6 +637,15 @@
 				924F8C861EC8C71C00F7447A /* NSManagedObjectContext+Extension.swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		92564C69216180470047917F /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */,
+				145C57BC1ED3C3AA004955B2 /* PlayerView.swift */,
+			);
+			path = Media;
 			sourceTree = "<group>";
 		};
 		926652622156C55C000E4F4F /* Event */ = {
@@ -1194,7 +1194,7 @@
 			children = (
 				92B55628215FCB0900C1D9A3 /* Protocols */,
 				929DB38A209563E800FB575F /* Base */,
-				9223AC861EE7214F00F54F93 /* Views */,
+				92564C69216180470047917F /* Media */,
 				145C57B31ED377DE004955B2 /* Match */,
 				924602A91ECE89C40030EDBF /* Awards */,
 				92D855D51EC695AE00572F27 /* Teams */,
@@ -1687,7 +1687,7 @@
 				1479694A215EBE460075AF4E /* EventAllianceCellViewModel.swift in Sources */,
 				1405237A1ED33E040072FB91 /* MatchesViewController.swift in Sources */,
 				9249206F20BB0455001CAC5E /* Date+TBA.swift in Sources */,
-				9223AC851EE7214A00F54F93 /* MediaView.swift in Sources */,
+				9223AC851EE7214A00F54F93 /* MediaCollectionViewCell.swift in Sources */,
 				92B076F320FF948D00F9B2D7 /* TestAppDelegate.swift in Sources */,
 				926A8EEA20B9B6BB00A25563 /* EventStatusAlliance.swift in Sources */,
 				929F571A2092AAF000E5313A /* URL+Reachable.swift in Sources */,

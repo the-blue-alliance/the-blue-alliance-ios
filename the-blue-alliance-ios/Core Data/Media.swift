@@ -20,8 +20,9 @@ public enum MediaType: String {
 
     static var imageTypes: [String] {
         return [MediaType.cdPhotoThread.rawValue,
-                MediaType.imgur.rawValue,
-                MediaType.instagramImage.rawValue]
+                MediaType.imgur.rawValue]
+                // Instagram is broken upstream https://github.com/the-blue-alliance/the-blue-alliance/issues/2297
+                // MediaType.instagramImage.rawValue
     }
 
     static var socialTypes: [String] {
@@ -41,6 +42,29 @@ public enum MediaType: String {
 }
 
 extension Media: Managed, Playable {
+
+    var image: UIImage? {
+        get {
+            if let mediaData = mediaData {
+                return UIImage(data: mediaData)
+            }
+            return nil
+        }
+        set {
+            mediaData = newValue?.pngData()
+            mediaError = nil
+        }
+    }
+
+    var imageError: Error? {
+        get {
+            return mediaError
+        }
+        set {
+            mediaError = newValue
+            mediaData = nil
+        }
+    }
 
     var youtubeKey: String? {
         if type == MediaType.youtubeVideo.rawValue {

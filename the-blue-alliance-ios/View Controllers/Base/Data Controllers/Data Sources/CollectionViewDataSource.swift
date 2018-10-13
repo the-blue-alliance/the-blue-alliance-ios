@@ -17,6 +17,13 @@ protocol CollectionViewDataSourceDelegate: class {
     func hideNoDataView()
 }
 
+fileprivate enum Update<Object> {
+    case insert(IndexPath)
+    case update(IndexPath, Object)
+    case move(IndexPath, IndexPath)
+    case delete(IndexPath)
+}
+
 class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: CollectionViewDataSourceDelegate>: NSObject, UICollectionViewDataSource, NSFetchedResultsControllerDelegate {
 
     typealias Object = Delegate.Object
@@ -54,6 +61,27 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
 
     public let fetchedResultsController: NSFetchedResultsController<Result>
     fileprivate weak var delegate: Delegate!
+    fileprivate var updates: [Update<Object>] = []
+
+    fileprivate func processUpdates(_ updates: [Update<Object>]?) {
+        guard let updates = updates else { return delegate.collectionView.reloadData() }
+        delegate.collectionView.performBatchUpdates({
+            for update in updates {
+                switch update {
+                case .insert(let indexPath):
+                    self.delegate.collectionView.insertItems(at: [indexPath])
+                case .update(let indexPath, let object):
+                    guard let cell = self.delegate.collectionView.cellForItem(at: indexPath) as? Cell else { fatalError("wrong cell type") }
+                    self.delegate.configure(cell, for: object, at: indexPath)
+                case .move(let indexPath, let newIndexPath):
+                    self.delegate.collectionView.deleteItems(at: [indexPath])
+                    self.delegate.collectionView.insertItems(at: [newIndexPath])
+                case .delete(let indexPath):
+                    self.delegate.collectionView.deleteItems(at: [indexPath])
+                }
+            }
+        }, completion: nil)
+    }
 
     // MARK: UICollectionViewDataSource
 
@@ -90,8 +118,30 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
 
     // MARK: NSFetchedResultsControllerDelegate
 
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        delegate.collectionView.reloadData()
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        updates = []
     }
 
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            guard let indexPath = newIndexPath else { fatalError("Index path should be not nil") }
+            updates.append(.insert(indexPath))
+        case .update:
+            guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
+            let object = self.object(at: indexPath)
+            updates.append(.update(indexPath, object))
+        case .move:
+            guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
+            guard let newIndexPath = newIndexPath else { fatalError("New index path should be not nil") }
+            updates.append(.move(indexPath, newIndexPath))
+        case .delete:
+            guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
+            updates.append(.delete(indexPath))
+        }
+    }
+
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        processUpdates(updates)
+    }
 }

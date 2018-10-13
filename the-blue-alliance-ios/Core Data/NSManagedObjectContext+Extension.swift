@@ -32,6 +32,13 @@ extension NSManagedObjectContext {
         }
     }
 
+    public func performChangesAndWait(block: @escaping () -> Void) {
+        performAndWait {
+            block()
+            _ = self.saveOrRollback()
+        }
+    }
+
     func deleteAllObjects() {
         for entity in persistentStoreCoordinator?.managedObjectModel.entities ?? [] {
             deleteAllObjectsForEntity(entity: entity)
