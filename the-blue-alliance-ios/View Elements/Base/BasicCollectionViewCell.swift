@@ -1,5 +1,3 @@
 import UIKit
 
-class BasicCollectionViewCell: UICollectionViewCell, Reusable {
-
-}
+class BasicCollectionViewCell: UICollectionViewCell, Reusable {}
