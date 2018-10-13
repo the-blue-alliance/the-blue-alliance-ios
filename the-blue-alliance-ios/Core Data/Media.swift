@@ -20,8 +20,9 @@ public enum MediaType: String {
 
     static var imageTypes: [String] {
         return [MediaType.cdPhotoThread.rawValue,
-                MediaType.imgur.rawValue,
-                MediaType.instagramImage.rawValue]
+                MediaType.imgur.rawValue]
+                // Instagram is broken upstream https://github.com/the-blue-alliance/the-blue-alliance/issues/2297
+                // MediaType.instagramImage.rawValue
     }
 
     static var socialTypes: [String] {
