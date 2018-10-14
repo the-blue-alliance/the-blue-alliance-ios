@@ -135,6 +135,13 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         }
         fetchingMedia.add(media)
 
+        // Reload our cell, so we can show a loading spinner
+        if let indexPath = indexPath(for: media) {
+            DispatchQueue.main.async {
+                self.collectionView.reloadItems(at: [indexPath])
+            }
+        }
+
         let dataTask = URLSession.shared.dataTask(with: url, completionHandler: { [unowned self] (data, _, error) in
             self.fetchingMedia.remove(media)
 
