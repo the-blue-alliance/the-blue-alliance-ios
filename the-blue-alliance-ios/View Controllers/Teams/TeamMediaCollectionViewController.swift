@@ -15,12 +15,17 @@ extension MediaError: LocalizedError {
     }
 }
 
+protocol TeamMediaCollectionViewControllerDelegate: AnyObject {
+
+    func mediaSelected(_ media: Media)
+
+}
+
 class TeamMediaCollectionViewController: TBACollectionViewController {
 
     private let spacerSize: CGFloat = 3.0
 
     private let team: Team
-    private let urlOpener: URLOpener
 
     var year: Int? {
         didSet {
@@ -28,16 +33,16 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             updateDataSource()
         }
     }
-    private var dataSource: CollectionViewDataSource<Media, TeamMediaCollectionViewController>!
+    var dataSource: CollectionViewDataSource<Media, TeamMediaCollectionViewController>!
+    weak var delegate: TeamMediaCollectionViewControllerDelegate?
 
     var fetchingMedia: NSHashTable<Media> = NSHashTable.weakObjects()
 
     // MARK: Init
 
-    init(team: Team, year: Int? = nil, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
+    init(team: Team, year: Int? = nil, persistentContainer: NSPersistentContainer) {
         self.team = team
         self.year = year
-        self.urlOpener = urlOpener
 
         super.init(persistentContainer: persistentContainer)
 
@@ -69,16 +74,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     // MARK: UICollectionView Delegate
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // TODO: Eventually show the full image inside the app
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/43
         let media = dataSource.object(at: indexPath)
-        guard let url = media.viewImageURL else {
-            return
-        }
-
-        if urlOpener.canOpenURL(url) {
-            urlOpener.open(url, options: [:], completionHandler: nil)
-        }
+        delegate?.mediaSelected(media)
     }
 
     // MARK: Table View Data Source
