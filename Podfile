@@ -24,8 +24,9 @@ target 'The Blue Alliance' do
   pod 'Folly', :podspec => 'subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   # Deps
-  pod "youtube-ios-player-helper", "~> 0.1.4"
+  pod 'BFRImageViewer'
   pod 'PureLayout'
+  pod 'youtube-ios-player-helper'
   pod 'ZIPFoundation'
   
   # Firebase
