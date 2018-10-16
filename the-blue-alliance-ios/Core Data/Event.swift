@@ -86,7 +86,7 @@ extension Event: Locatable, Managed {
 
     // hybridType is used a mechanism for sorting Events properly in fetch result controllers... they use a variety
     // of event data to kinda "move around" events in our data model to get groups/order right
-    private func calculateHybridType() -> String {
+    func calculateHybridType() -> String {
         var hybridType = String(eventType)
         // Group districts together, group district CMPs together
         if isDistrictChampionshipEvent {
@@ -100,6 +100,10 @@ extension Event: Locatable, Managed {
             }
         } else if let district = district, !isDistrictChampionshipEvent {
             hybridType = "\(hybridType).\(district.abbreviation!)"
+        } else if Int(eventType) == EventType.offseason.rawValue, let startDate = startDate {
+            // Group offseason events together by month
+            let month = Calendar.current.component(.month, from: startDate)
+            hybridType = "\(hybridType).\(month)"
         }
         return hybridType
     }
