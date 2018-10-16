@@ -98,6 +98,10 @@ class Event_TestCase: CoreDataTestCase {
         districtChampionshipDivision.district = district
 
         XCTAssertEqual(districtChampionshipDivision.calculateHybridType(), "2..fim.dcmpd")
+
+        let districtChampionship = event(type: EventType.districtChampionship)
+        // Ensure district championship divisions appear before district championships
+        XCTAssert(districtChampionshipDivision.calculateHybridType() < districtChampionship.calculateHybridType())
     }
 
     func test_hybridType_festivalOfChampions() {
@@ -108,16 +112,23 @@ class Event_TestCase: CoreDataTestCase {
 
     func test_hybridType_offseason() {
         let eventType = EventType.offseason
-        let offseason = event(type: eventType)
-        offseason.startDate = Calendar.current.date(from: DateComponents(year: 2015, month: 10, day: 1))
-        XCTAssertEqual(offseason.calculateHybridType(), "99.10")
+
+        let novermberOffseason = event(type: eventType)
+        novermberOffseason.startDate = Calendar.current.date(from: DateComponents(year: 2015, month: 11, day: 1))
+        XCTAssertEqual(novermberOffseason.calculateHybridType(), "99.11")
+
+        let septemberOffseason = event(type: eventType)
+        septemberOffseason.startDate = Calendar.current.date(from: DateComponents(year: 2015, month: 9, day: 1))
+        XCTAssertEqual(septemberOffseason.calculateHybridType(), "99.9")
+
+        // Ensure single-digit month offseason events show up before double-digit month offseason events
+        XCTAssert(septemberOffseason.calculateHybridType() > novermberOffseason.calculateHybridType())
     }
 
     func test_hybridType_preseason() {
         let eventType = EventType.preseason
         let preseason = event(type: eventType)
         XCTAssertEqual(preseason.calculateHybridType(), "100")
-
     }
 
     func test_hybridType_unlabeled() {
