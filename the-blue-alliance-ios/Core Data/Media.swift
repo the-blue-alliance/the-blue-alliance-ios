@@ -99,13 +99,17 @@ extension Media: Managed, Playable {
     // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/models/media.py#L92
 
     public var viewImageURL: URL? {
-        if type! == MediaType.cdPhotoThread.rawValue {
+        guard let type = type else {
+            return nil
+        }
+
+        if type == MediaType.cdPhotoThread.rawValue {
             return cdphotothreadThreadURL
-        } else if type! == MediaType.imgur.rawValue {
+        } else if type == MediaType.imgur.rawValue {
             return imgurURL
-        } else if type! == MediaType.grabcad.rawValue {
+        } else if type == MediaType.grabcad.rawValue {
             return grabcadURL
-        } else if type! == MediaType.instagramImage.rawValue {
+        } else if type == MediaType.instagramImage.rawValue {
             return instagramURL
         } else {
             return nil
@@ -113,14 +117,18 @@ extension Media: Managed, Playable {
     }
 
     public var imageDirectURL: URL? {
+        guard let type = type else {
+            return nil
+        }
+
         // Largest image that isn't max resolution (which can be arbitrarily huge)
-        if type! == MediaType.cdPhotoThread.rawValue {
+        if type == MediaType.cdPhotoThread.rawValue {
             return cdphotothreadImageSize(.medium)
-        } else if type! == MediaType.imgur.rawValue {
+        } else if type == MediaType.imgur.rawValue {
             return imgurImageSize(.direct)
-        } else if type! == MediaType.grabcad.rawValue {
+        } else if type == MediaType.grabcad.rawValue {
             return grabcadDirectURL
-        } else if type! == MediaType.instagramImage.rawValue {
+        } else if type == MediaType.instagramImage.rawValue {
             return instagramDirectURL(.large)
         } else {
             return nil
