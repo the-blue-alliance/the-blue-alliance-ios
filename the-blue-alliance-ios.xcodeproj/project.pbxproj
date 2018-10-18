@@ -1267,9 +1267,9 @@
 				92942D8F1E2154DA008E79CA /* Frameworks */,
 				92942D901E2154DA008E79CA /* Resources */,
 				92E624CE208E8D1600DF58C0 /* Bundle React Native code and images */,
-				924E826C208FE7D20053247C /* Run Fabric */,
 				6D02EECF657E8A3F9121C002 /* [CP] Embed Pods Frameworks */,
 				E7F2F429133ED67EFC850346 /* [CP] Copy Pods Resources */,
+				924E826C208FE7D20053247C /* Run Fabric */,
 			);
 			buildRules = (
 			);
@@ -1516,6 +1516,7 @@
 			files = (
 			);
 			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
 			);
 			name = "Run Fabric";
 			outputPaths = (
