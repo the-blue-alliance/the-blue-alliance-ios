@@ -20,9 +20,9 @@ public enum MediaType: String {
 
     static var imageTypes: [String] {
         return [MediaType.cdPhotoThread.rawValue,
-                MediaType.imgur.rawValue]
-                // Instagram is broken upstream https://github.com/the-blue-alliance/the-blue-alliance/issues/2297
-                // MediaType.instagramImage.rawValue
+                MediaType.imgur.rawValue,
+                MediaType.instagramImage.rawValue,
+                MediaType.grabcad.rawValue]
     }
 
     static var socialTypes: [String] {
@@ -100,7 +100,7 @@ extension Media: Managed, Playable {
 
     public var viewImageURL: URL? {
         if type! == MediaType.cdPhotoThread.rawValue {
-            return cdphotothreadImageURL
+            return cdphotothreadThreadURL
         } else if type! == MediaType.imgur.rawValue {
             return imgurURL
         } else if type! == MediaType.grabcad.rawValue {
@@ -115,13 +115,13 @@ extension Media: Managed, Playable {
     public var imageDirectURL: URL? {
         // Largest image that isn't max resolution (which can be arbitrarily huge)
         if type! == MediaType.cdPhotoThread.rawValue {
-            return cdphotothreadImageURLMed
+            return cdphotothreadImageSize(.medium)
         } else if type! == MediaType.imgur.rawValue {
-            return imgurDirectURL
+            return imgurImageSize(.direct)
         } else if type! == MediaType.grabcad.rawValue {
             return grabcadDirectURL
         } else if type! == MediaType.instagramImage.rawValue {
-            return instagramDirectURL
+            return instagramDirectURL(.large)
         } else {
             return nil
         }
@@ -150,14 +150,6 @@ extension Media {
             return nil
         }
         return URL(string: url.absoluteString.replacingOccurrences(of: CDPhotoTreadSize.large.rawValue, with: size.rawValue))
-    }
-
-    fileprivate var cdphotothreadImageURLMed: URL? {
-        return cdphotothreadImageSize(.medium)
-    }
-
-    private var cdphotothreadImageURLSm: URL? {
-        return cdphotothreadImageSize(.medium)
     }
 
     private var cdphotothreadThreadURL: URL? {
@@ -192,22 +184,16 @@ extension Media {
         return URL(string: "https://i.imgur.com/\(foreignKey)\(size.rawValue).jpg")
     }
 
-    private var imgurDirectURLSm: URL? {
-        return imgurImageSize(.small)
-    }
-
-    private var imgurDirectURLMed: URL? {
-        return imgurImageSize(.medium)
-    }
-
-    fileprivate var imgurDirectURL: URL? {
-        return imgurImageSize(.direct)
-    }
-
 }
 
 // Instagram URLs
 extension Media {
+
+    public enum InstagramImageSize: String {
+        case thumbnail = "t"
+        case medium = "m"
+        case large = "l"
+    }
 
     fileprivate var instagramURL: URL? {
         guard let foreignKey = foreignKey else {
@@ -216,11 +202,12 @@ extension Media {
         return URL(string: "https://www.instagram.com/p/\(foreignKey)")
     }
 
-    fileprivate var instagramDirectURL: URL? {
-        guard let thumbnail = details?["thumbnail_url"] as? String else {
+    // https://github.com/the-blue-alliance/the-blue-alliance/blob/fe43a0ce3b1bf2f74de945765f4e04f37eb6112d/models/media.py#L158
+    private func instagramDirectURL(_ size: InstagramImageSize) -> URL? {
+        guard let instagramURL = instagramURL else {
             return nil
         }
-        return URL(string: thumbnail)
+        return URL(string: "\(instagramURL)/media/?size=\(size.rawValue)")
     }
 
 }
