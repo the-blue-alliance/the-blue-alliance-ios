@@ -20,15 +20,16 @@ struct MatchViewModel {
     let baseTeamKey: String?
 
     init(match: Match, team: Team? = nil) {
+        // TODO: This isn't very robust - only supports red/blue
         matchName = match.friendlyMatchName()
 
         hasVideos = match.videos?.count == 0
 
-        redAlliance = (match.redAlliance?.array as? [Team])?.reversed().map({ $0.key! }) ?? []
-        redScore = match.redScore?.stringValue
+        redAlliance = match.redAllianceTeamNumbers
+        redScore = match.redAlliance?.score?.stringValue
 
-        blueAlliance = (match.blueAlliance?.array as? [Team])?.reversed().map({ $0.key! }) ?? []
-        blueScore = match.blueScore?.stringValue
+        blueAlliance = match.blueAllianceTeamNumbers
+        blueScore = match.blueAlliance?.score?.stringValue
 
         timeString = match.timeString ?? "No Time Yet"
 

@@ -79,6 +79,38 @@ extension Match: Managed {
         return dateFormatter.string(from: date)
     }
 
+    /**
+     Returns the alliance with an allianceKey of 'red'.
+    */
+    var redAlliance: MatchAlliance? {
+        return alliance(with: "red")
+    }
+
+    /**
+     Returns the trimmed team keys for the red alliance.
+     */
+    var redAllianceTeamNumbers: [String] {
+        return redAlliance?.teams.map({ Team.trimFRCPrefix($0) }).reversed() ?? []
+    }
+
+    /**
+     Returns the alliance with an allianceKey of 'blue'.
+     */
+    var blueAlliance: MatchAlliance? {
+        return alliance(with: "blue")
+    }
+
+    /**
+     Returns the trimmed team keys for the blue alliance.
+     */
+    var blueAllianceTeamNumbers: [String] {
+        return blueAlliance?.teams.map({ Team.trimFRCPrefix($0) }).reversed() ?? []
+    }
+
+    private func alliance(with allianceKey: String) -> MatchAlliance? {
+        return (alliances?.allObjects as? [MatchAlliance])?.first(where: { $0.allianceKey == allianceKey })
+    }
+
     @discardableResult
     static func insert(with model: TBAMatch, for event: Event, in context: NSManagedObjectContext) -> Match {
         let predicate = NSPredicate(format: "key == %@", model.key)
@@ -93,55 +125,49 @@ extension Match: Managed {
             match.setNumber = Int16(model.setNumber)
             match.matchNumber = Int16(model.matchNumber)
 
-            // TODO: Think about converting this Alliance stuff in to an Alliance object, like we do in the API
-            // It might actually make sense - we can store an `MatchAlliance` that can have a key associated with it too
-            // That way, when we pull `winningAlliance`, it can be more dynamic
-            if let redAlliance = model.redAlliance {
-                match.redAlliance = NSMutableOrderedSet(array: redAlliance.teams.map({ (teamKey) -> Team in
-                    return Team.insert(withKey: teamKey, in: context)
-                }))
-                if redAlliance.score > -1 {
-                    match.redScore = NSNumber(value: redAlliance.score)
-                }
-                // TODO: Make these reference Team objects
-                match.redSurrogateTeamKeys = redAlliance.surrogateTeams
-                match.redDQTeamKeys = redAlliance.dqTeams
-            }
-
-            if let blueAlliance = model.blueAlliance {
-                match.blueAlliance = NSMutableOrderedSet(array: blueAlliance.teams.map({ (teamKey) -> Team in
-                    return Team.insert(withKey: teamKey, in: context)
-                }))
-                if blueAlliance.score > -1 {
-                    match.blueScore = NSNumber(value: blueAlliance.score)
-                }
-                // TODO: Make these reference Team objects
-                match.blueSurrogateTeamKeys = blueAlliance.surrogateTeams
-                match.blueDQTeamKeys = blueAlliance.dqTeams
+            if let alliances = model.alliances {
+                match.alliances = Set(alliances.map({ (key: String, value: TBAMatchAlliance) -> MatchAlliance in
+                    return MatchAlliance.insert(with: value, allianceKey: key, for: match, in: context)
+                })) as NSSet
+            } else {
+                match.alliances = nil
             }
 
             match.winningAlliance = model.winningAlliance
             match.event = event
+
             if let time = model.time {
                 match.time = NSNumber(value: time)
-            }
-            if let actualTime = model.actualTime {
-                match.actualTime = NSNumber(value: actualTime)
-            }
-            if let predictedTime = model.predictedTime {
-                match.predictedTime = NSNumber(value: predictedTime)
-            }
-            if let postResultTime = model.postResultTime {
-                match.postResultTime = NSNumber(value: postResultTime)
+            } else {
+                match.time = nil
             }
 
-            match.redBreakdown = model.redBreakdown
-            match.blueBreakdown = model.blueBreakdown
+            if let actualTime = model.actualTime {
+                match.actualTime = NSNumber(value: actualTime)
+            } else {
+                match.actualTime = nil
+            }
+
+            if let predictedTime = model.predictedTime {
+                match.predictedTime = NSNumber(value: predictedTime)
+            } else {
+                match.predictedTime = nil
+            }
+
+            if let postResultTime = model.postResultTime {
+                match.postResultTime = NSNumber(value: postResultTime)
+            } else {
+                match.postResultTime = nil
+            }
+
+            match.breakdown = model.breakdown
 
             if let videos = model.videos {
                 match.videos = Set(videos.map({ (modelVideo) -> MatchVideo in
                     return MatchVideo.insert(with: modelVideo, for: match, in: context)
                 })) as NSSet
+            } else {
+                match.videos = nil
             }
         }
     }
