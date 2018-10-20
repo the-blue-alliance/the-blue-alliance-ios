@@ -21,7 +21,11 @@ class Match_TestCase: CoreDataTestCase {
     func alliance(allianceKey: String) -> MatchAlliance {
         let alliance = MatchAlliance(entity: MatchAlliance.entity(), insertInto: persistentContainer.viewContext)
         alliance.allianceKey = allianceKey
-        alliance.teamsJoined = "frc3333,frc7332,frc2337"
+        alliance.teams = NSOrderedSet(array: ["frc3333", "frc7332", "frc2337"].map({ (key) -> TeamKey in
+            let teamKey = TeamKey.init(entity: TeamKey.entity(), insertInto: persistentContainer.viewContext)
+            teamKey.key = key
+            return teamKey
+        }))
         return alliance
     }
 

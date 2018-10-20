@@ -97,7 +97,7 @@ extension Match: Managed {
      Returns the trimmed team keys for the red alliance.
      */
     var redAllianceTeamNumbers: [String] {
-        return redAlliance?.teams.map({ Team.trimFRCPrefix($0) }).reversed() ?? []
+        return (redAlliance?.teams?.array as? [TeamKey])?.map({ Team.trimFRCPrefix($0.key!) }).reversed() ?? []
     }
 
     /**
@@ -111,7 +111,7 @@ extension Match: Managed {
      Returns the trimmed team keys for the blue alliance.
      */
     var blueAllianceTeamNumbers: [String] {
-        return blueAlliance?.teams.map({ Team.trimFRCPrefix($0) }).reversed() ?? []
+        return (blueAlliance?.teams!.array as? [TeamKey])?.map({ Team.trimFRCPrefix($0.key!) }).reversed() ?? []
     }
 
     private func alliance(with allianceKey: String) -> MatchAlliance? {

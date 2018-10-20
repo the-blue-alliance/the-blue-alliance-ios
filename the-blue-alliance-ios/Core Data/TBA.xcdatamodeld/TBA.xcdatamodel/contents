@@ -171,11 +171,11 @@
     </entity>
     <entity name="MatchAlliance" representedClassName="MatchAlliance" syncable="YES" codeGenerationType="class">
         <attribute name="allianceKey" attributeType="String" syncable="YES"/>
-        <attribute name="dqTeamsJoined" optional="YES" attributeType="String" customClassName="[String]" syncable="YES"/>
         <attribute name="score" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="surrogateTeamsJoined" optional="YES" attributeType="String" customClassName="[String]" syncable="YES"/>
-        <attribute name="teamsJoined" optional="YES" attributeType="String" customClassName="[String]" syncable="YES"/>
-        <relationship name="match" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Match" inverseName="alliances" inverseEntity="Match" syncable="YES"/>
+        <relationship name="dqTeams" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="TeamKey" inverseName="dqAlliances" inverseEntity="TeamKey" syncable="YES"/>
+        <relationship name="match" optional="YES" maxCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="Match" inverseName="alliances" inverseEntity="Match" syncable="YES"/>
+        <relationship name="surrogateTeams" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="TeamKey" inverseName="surrogateAlliances" inverseEntity="TeamKey" syncable="YES"/>
+        <relationship name="teams" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="TeamKey" inverseName="alliances" inverseEntity="TeamKey" syncable="YES"/>
     </entity>
     <entity name="MatchVideo" representedClassName="MatchVideo" syncable="YES" codeGenerationType="class">
         <attribute name="key" attributeType="String" syncable="YES"/>
@@ -236,6 +236,12 @@
             <fetchIndexElement property="key" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
+    <entity name="TeamKey" representedClassName="TeamKey" syncable="YES" codeGenerationType="class">
+        <attribute name="key" attributeType="String" syncable="YES"/>
+        <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MatchAlliance" inverseName="teams" inverseEntity="MatchAlliance" syncable="YES"/>
+        <relationship name="dqAlliances" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MatchAlliance" inverseName="dqTeams" inverseEntity="MatchAlliance" syncable="YES"/>
+        <relationship name="surrogateAlliances" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MatchAlliance" inverseName="surrogateTeams" inverseEntity="MatchAlliance" syncable="YES"/>
+    </entity>
     <entity name="Webcast" representedClassName="Webcast" syncable="YES" codeGenerationType="class">
         <attribute name="channel" attributeType="String" syncable="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
@@ -267,5 +273,6 @@
         <element name="Subscription" positionX="54" positionY="144" width="128" height="60"/>
         <element name="Team" positionX="-54" positionY="135" width="128" height="510"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
+        <element name="TeamKey" positionX="45" positionY="135" width="128" height="105"/>
     </elements>
 </model>

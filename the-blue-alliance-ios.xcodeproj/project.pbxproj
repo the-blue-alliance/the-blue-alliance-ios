@@ -43,6 +43,8 @@
 		9221C618209BFF8700477DE2 /* LoadingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */; };
 		9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */; };
 		9223AC851EE7214A00F54F93 /* MediaCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */; };
+		922E907D217BCE3700E81447 /* TeamKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922E907C217BCE3700E81447 /* TeamKey.swift */; };
+		922E9080217BD18400E81447 /* TeamKey_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922E907F217BD18400E81447 /* TeamKey_Tests.swift */; };
 		9236101F2178245C000CC5E9 /* Media_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9236101E2178245C000CC5E9 /* Media_Tests.swift */; };
 		9236102221795796000CC5E9 /* MatchAlliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9236102121795796000CC5E9 /* MatchAlliance.swift */; };
 		9236102521798655000CC5E9 /* Match_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9236102421798655000CC5E9 /* Match_Tests.swift */; };
@@ -256,6 +258,8 @@
 		9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingTableViewCell.xib; sourceTree = "<group>"; };
 		9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
 		9223AC841EE7214A00F54F93 /* MediaCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCollectionViewCell.swift; sourceTree = "<group>"; };
+		922E907C217BCE3700E81447 /* TeamKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamKey.swift; sourceTree = "<group>"; };
+		922E907F217BD18400E81447 /* TeamKey_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamKey_Tests.swift; sourceTree = "<group>"; };
 		9236101E2178245C000CC5E9 /* Media_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media_Tests.swift; sourceTree = "<group>"; };
 		9236102121795796000CC5E9 /* MatchAlliance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchAlliance.swift; sourceTree = "<group>"; };
 		9236102421798655000CC5E9 /* Match_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Match_Tests.swift; sourceTree = "<group>"; };
@@ -536,6 +540,14 @@
 			path = "Team@District";
 			sourceTree = "<group>";
 		};
+		922E907E217BD17C00E81447 /* Team */ = {
+			isa = PBXGroup;
+			children = (
+				922E907F217BD18400E81447 /* TeamKey_Tests.swift */,
+			);
+			path = Team;
+			sourceTree = "<group>";
+		};
 		9236101D217823F1000CC5E9 /* Media */ = {
 			isa = PBXGroup;
 			children = (
@@ -614,10 +626,11 @@
 		924459BF20CB796B0007570D /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
+				926652622156C55C000E4F4F /* Event */,
 				9236102321798647000CC5E9 /* Match */,
 				9236101D217823F1000CC5E9 /* Media */,
+				922E907E217BD17C00E81447 /* Team */,
 				92C1F2DD216994CF00BD8445 /* CoreDataTestCase.swift */,
-				926652622156C55C000E4F4F /* Event */,
 				92A2F5522156BD4B00267C63 /* Extensions */,
 			);
 			path = "Core Data";
@@ -1156,6 +1169,7 @@
 			isa = PBXGroup;
 			children = (
 				92D855CE1EC68ACE00572F27 /* Team.swift */,
+				922E907C217BCE3700E81447 /* TeamKey.swift */,
 			);
 			name = Team;
 			sourceTree = "<group>";
@@ -1622,6 +1636,7 @@
 				929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */,
 				92C9BD3120968FAC007FB9C8 /* Favorite.swift in Sources */,
 				926A8EE620B9B55100A25563 /* EventStatus.swift in Sources */,
+				922E907D217BCE3700E81447 /* TeamKey.swift in Sources */,
 				92D855E21EC755D000572F27 /* TeamInfoViewController.swift in Sources */,
 				1405237C1ED33F500072FB91 /* MatchViewController.swift in Sources */,
 				92C9BD3320968FB3007FB9C8 /* Subscription.swift in Sources */,
@@ -1760,6 +1775,7 @@
 				923AEE99216703CB00EF50C8 /* MyTBA_Tests.swift in Sources */,
 				92B076F120FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift in Sources */,
 				92C2E939217B92C500004B9E /* MatchVideo_Tests.swift in Sources */,
+				922E9080217BD18400E81447 /* TeamKey_Tests.swift in Sources */,
 				924459C320CB796B0007570D /* Date+TBA_Tests.swift in Sources */,
 				92C1F2E02169A3B800BD8445 /* MockNavigationController.swift in Sources */,
 				9236102521798655000CC5E9 /* Match_Tests.swift in Sources */,
