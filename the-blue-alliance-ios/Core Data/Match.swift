@@ -2,14 +2,15 @@ import Foundation
 import TBAKit
 import CoreData
 
-public enum MatchCompLevel: String {
+// https://github.com/the-blue-alliance/the-blue-alliance/blob/1324e9e5b7c4ab21315bd00a768112991bada108/models/match.py#L25
+public enum MatchCompLevel: String, CaseIterable {
     case qualification = "qm"
     case eightfinal = "ef"
     case quarterfinal = "qf"
     case semifinal = "sf"
     case final = "f"
 
-    var intVal: Int16 {
+    var sortOrder: Int {
         switch self {
         case .qualification:
             return 0
@@ -23,48 +24,54 @@ public enum MatchCompLevel: String {
             return 4
         }
     }
+
+    // https://github.com/the-blue-alliance/the-blue-alliance/blob/1324e9e5b7c4ab21315bd00a768112991bada108/models/match.py#L34
+    /**
+     Human readable string representing the compLevel for the match.
+     */
+    var level: String {
+        switch self {
+        case .qualification:
+            return "Qualification"
+        case .eightfinal:
+            return "Octofinal"
+        case .quarterfinal:
+            return "Quarterfinal"
+        case .semifinal:
+            return "Semifinal"
+        case .final:
+            return "Finals"
+        }
+    }
+
+    // https://github.com/the-blue-alliance/the-blue-alliance/blob/1324e9e5b7c4ab21315bd00a768112991bada108/models/match.py#L27
+    /**
+     Abbreviated human readable string representing the compLevel for the match.
+     */
+    var levelShort: String {
+        switch self {
+        case .qualification:
+            return "Quals"
+        case .eightfinal:
+            return "Eighths"
+        case .quarterfinal:
+            return "Quarters"
+        case .semifinal:
+            return "Semis"
+        case .final:
+            return "Finals"
+        }
+    }
+
 }
 
 extension Match: Managed {
 
-    var compLevelString: String {
-        guard let compLevel = compLevel else {
-            return ""
+    var compLevel: MatchCompLevel? {
+        guard let compLevelString = compLevelString else {
+            return nil
         }
-        switch compLevel {
-        case MatchCompLevel.qualification.rawValue:
-            return "Qualification"
-        case MatchCompLevel.eightfinal.rawValue:
-            return "Octofinal"
-        case MatchCompLevel.quarterfinal.rawValue:
-            return "Quarterfinal"
-        case MatchCompLevel.semifinal.rawValue:
-            return "Semifinal"
-        case MatchCompLevel.final.rawValue:
-            return "Finals"
-        default:
-            return ""
-        }
-    }
-
-    var shortCompLevelString: String {
-        guard let compLevel = compLevel else {
-            return ""
-        }
-        switch compLevel {
-        case MatchCompLevel.qualification.rawValue:
-            return "Quals"
-        case MatchCompLevel.eightfinal.rawValue:
-            return "Eighths"
-        case MatchCompLevel.quarterfinal.rawValue:
-            return "Quarters"
-        case MatchCompLevel.semifinal.rawValue:
-            return "Semis"
-        case MatchCompLevel.final.rawValue:
-            return "Finals"
-        default:
-            return ""
-        }
+        return MatchCompLevel(rawValue: compLevelString)
     }
 
     var timeString: String? {
@@ -79,91 +86,111 @@ extension Match: Managed {
         return dateFormatter.string(from: date)
     }
 
+    /**
+     Returns the alliance with an allianceKey of 'red'.
+    */
+    var redAlliance: MatchAlliance? {
+        return alliance(with: "red")
+    }
+
+    /**
+     Returns the trimmed team keys for the red alliance.
+     */
+    var redAllianceTeamNumbers: [String] {
+        return (redAlliance?.teams?.array as? [TeamKey])?.map({ Team.trimFRCPrefix($0.key!) }).reversed() ?? []
+    }
+
+    /**
+     Returns the alliance with an allianceKey of 'blue'.
+     */
+    var blueAlliance: MatchAlliance? {
+        return alliance(with: "blue")
+    }
+
+    /**
+     Returns the trimmed team keys for the blue alliance.
+     */
+    var blueAllianceTeamNumbers: [String] {
+        return (blueAlliance?.teams!.array as? [TeamKey])?.map({ Team.trimFRCPrefix($0.key!) }).reversed() ?? []
+    }
+
+    private func alliance(with allianceKey: String) -> MatchAlliance? {
+        return (alliances?.allObjects as? [MatchAlliance])?.first(where: { $0.allianceKey == allianceKey })
+    }
+
     @discardableResult
     static func insert(with model: TBAMatch, for event: Event, in context: NSManagedObjectContext) -> Match {
         let predicate = NSPredicate(format: "key == %@", model.key)
         return findOrCreate(in: context, matching: predicate) { (match) in
             // Required: compLevel, eventKey, key, matchNumber, setNumber
             match.key = model.key
-            match.compLevel = model.compLevel
+            match.compLevelString = model.compLevel
 
-            let compLevelStruct = MatchCompLevel(rawValue: match.compLevel!)
-            match.compLevelInt = compLevelStruct!.intVal
+            // When adding a new MatchCompLevel, models will need a migration to update this
+            if let compLevel = MatchCompLevel(rawValue: model.compLevel) {
+                match.compLevelSortOrder = Int16(compLevel.sortOrder)
+            }
 
             match.setNumber = Int16(model.setNumber)
             match.matchNumber = Int16(model.matchNumber)
 
-            // TODO: Think about converting this Alliance stuff in to an Alliance object, like we do in the API
-            // It might actually make sense - we can store an `MatchAlliance` that can have a key associated with it too
-            // That way, when we pull `winningAlliance`, it can be more dynamic
-            if let redAlliance = model.redAlliance {
-                match.redAlliance = NSMutableOrderedSet(array: redAlliance.teams.map({ (teamKey) -> Team in
-                    return Team.insert(withKey: teamKey, in: context)
-                }))
-                if redAlliance.score > -1 {
-                    match.redScore = NSNumber(value: redAlliance.score)
-                }
-                // TODO: Make these reference Team objects
-                match.redSurrogateTeamKeys = redAlliance.surrogateTeams
-                match.redDQTeamKeys = redAlliance.dqTeams
-            }
-
-            if let blueAlliance = model.blueAlliance {
-                match.blueAlliance = NSMutableOrderedSet(array: blueAlliance.teams.map({ (teamKey) -> Team in
-                    return Team.insert(withKey: teamKey, in: context)
-                }))
-                if blueAlliance.score > -1 {
-                    match.blueScore = NSNumber(value: blueAlliance.score)
-                }
-                // TODO: Make these reference Team objects
-                match.blueSurrogateTeamKeys = blueAlliance.surrogateTeams
-                match.blueDQTeamKeys = blueAlliance.dqTeams
+            if let alliances = model.alliances {
+                match.alliances = Set(alliances.map({ (key: String, value: TBAMatchAlliance) -> MatchAlliance in
+                    return MatchAlliance.insert(with: value, allianceKey: key, for: match, in: context)
+                })) as NSSet
+            } else {
+                match.alliances = nil
             }
 
             match.winningAlliance = model.winningAlliance
             match.event = event
+
             if let time = model.time {
                 match.time = NSNumber(value: time)
-            }
-            if let actualTime = model.actualTime {
-                match.actualTime = NSNumber(value: actualTime)
-            }
-            if let predictedTime = model.predictedTime {
-                match.predictedTime = NSNumber(value: predictedTime)
-            }
-            if let postResultTime = model.postResultTime {
-                match.postResultTime = NSNumber(value: postResultTime)
+            } else {
+                match.time = nil
             }
 
-            match.redBreakdown = model.redBreakdown
-            match.blueBreakdown = model.blueBreakdown
+            if let actualTime = model.actualTime {
+                match.actualTime = NSNumber(value: actualTime)
+            } else {
+                match.actualTime = nil
+            }
+
+            if let predictedTime = model.predictedTime {
+                match.predictedTime = NSNumber(value: predictedTime)
+            } else {
+                match.predictedTime = nil
+            }
+
+            if let postResultTime = model.postResultTime {
+                match.postResultTime = NSNumber(value: postResultTime)
+            } else {
+                match.postResultTime = nil
+            }
+
+            match.breakdown = model.breakdown
 
             if let videos = model.videos {
                 match.videos = Set(videos.map({ (modelVideo) -> MatchVideo in
-                    return MatchVideo.insert(with: modelVideo, for: match, in: context)
+                    return MatchVideo.insert(with: modelVideo, in: context)
                 })) as NSSet
+            } else {
+                match.videos = nil
             }
         }
     }
 
-    public func friendlyMatchName() -> String {
-        guard let compLevel = compLevel else {
-            return ""
-        }
-
-        let matchName = shortCompLevelString
-
+    var friendlyName: String {
         switch compLevel {
-        case MatchCompLevel.qualification.rawValue:
-            return "\(matchName) \(matchNumber)"
-        case MatchCompLevel.eightfinal.rawValue,
-             MatchCompLevel.quarterfinal.rawValue,
-             MatchCompLevel.semifinal.rawValue,
-             MatchCompLevel.final.rawValue:
-            return "\(matchName) \(setNumber) - \(matchNumber)"
-
-        default:
-            return matchName
+        case .none:
+            return "Match \(matchNumber)"
+        case .some(let compLevel):
+            if compLevel == .qualification {
+                return "\(compLevel.levelShort) \(matchNumber)"
+            } else {
+                return "\(compLevel.levelShort) \(setNumber) - \(matchNumber)"
+            }
         }
     }
 

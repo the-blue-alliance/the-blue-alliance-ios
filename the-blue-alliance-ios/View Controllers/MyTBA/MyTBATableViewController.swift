@@ -275,7 +275,7 @@ extension MyTBATableViewController: Refreshable {
                     case .match:
                         let match = Match.findOrFetch(in: backgroundContext, matching: predicate)
                         // Fetch our match if it doesn't exist or we don't have scores
-                        if match?.redScore == nil || match?.blueScore == nil {
+                        if match?.redAlliance?.score == nil || match?.blueAlliance?.score == nil {
                             self?.backgroundFetchKeys.insert(model.modelKey)
                             TBABackgroundService.backgroundFetchMatch(model.modelKey, in: backgroundContext, completion: { (_, _) in
                                 self?.backgroundFetchKeys.remove(model.modelKey)

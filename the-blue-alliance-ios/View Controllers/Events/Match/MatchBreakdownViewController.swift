@@ -99,28 +99,30 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
     // MARK: Private
 
     func dataForBreakdown() -> [String: Any]? {
-        guard let redBreakdown = match.redBreakdown else {
+        // TODO: Support all alliances
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/273
+        guard var redBreakdown = match.breakdown?["red"] as? [String: Any] else {
             return nil
         }
-        guard let blueBreakdown = match.blueBreakdown else {
+        guard var blueBreakdown = match.breakdown?["blue"] as? [String: Any] else {
             return nil
         }
 
-        let redAllianceTeams = match.redAlliance?.array as? [Team]
-        let redAlliance = redAllianceTeams?.map({ (team) -> String in
-            return "\(team.teamNumber)"
-        })
+        // For 2015 - map `coopertition` and `coopertition_points` points in to each breakdown dictionary
+        if let coopertition = match.breakdown?["coopertition"] as? String, let coopertitionPoints = match.breakdown?["coopertition_points"] as? Int {
+            // Setting these individually, since I can't seem to do a 'for in' to modify the above maps
+            redBreakdown["coopertition"] = coopertition
+            redBreakdown["coopertition_points"] = coopertitionPoints
 
-        let blueAllianceTeams = match.blueAlliance?.array as? [Team]
-        let blueAlliance = blueAllianceTeams?.map({ (team) -> String in
-            return "\(team.teamNumber)"
-        })
+            blueBreakdown["coopertition"] = coopertition
+            blueBreakdown["coopertition_points"] = coopertitionPoints
+        }
 
-        return ["redTeams": redAlliance ?? [],
+        return ["redTeams": match.redAllianceTeamNumbers,
                 "redBreakdown": redBreakdown,
-                "blueTeams": blueAlliance ?? [],
+                "blueTeams": match.blueAllianceTeamNumbers,
                 "blueBreakdown": blueBreakdown,
-                "compLevel": match.compLevel!]
+                "compLevel": match.compLevelString!]
     }
 
 
@@ -171,7 +173,7 @@ extension MatchBreakdownViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        return match.redBreakdown == nil || match.blueBreakdown == nil
+        return match.breakdown == nil
     }
 
     @objc func refresh() {

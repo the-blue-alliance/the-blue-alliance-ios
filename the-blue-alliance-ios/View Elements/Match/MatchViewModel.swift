@@ -20,15 +20,17 @@ struct MatchViewModel {
     let baseTeamKey: String?
 
     init(match: Match, team: Team? = nil) {
-        matchName = match.friendlyMatchName()
+        // TODO: Support all alliances
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/274
+        matchName = match.friendlyName
 
         hasVideos = match.videos?.count == 0
 
-        redAlliance = (match.redAlliance?.array as? [Team])?.reversed().map({ $0.key! }) ?? []
-        redScore = match.redScore?.stringValue
+        redAlliance = match.redAllianceTeamNumbers
+        redScore = match.redAlliance?.score?.stringValue
 
-        blueAlliance = (match.blueAlliance?.array as? [Team])?.reversed().map({ $0.key! }) ?? []
-        blueScore = match.blueScore?.stringValue
+        blueAlliance = match.blueAllianceTeamNumbers
+        blueScore = match.blueAlliance?.score?.stringValue
 
         timeString = match.timeString ?? "No Time Yet"
 
@@ -37,13 +39,7 @@ struct MatchViewModel {
         // If we can't figure out a piece of information, default to yes, the match is a regular match,
         // where someone wins, and someone loses
         let hasWinnersAndLosers: Bool = {
-            guard let compLevelAbbrev = match.compLevel, let compLevel = MatchCompLevel(rawValue: compLevelAbbrev) else {
-                return true
-            }
-            guard let year16 = match.event?.year else {
-                return true
-            }
-            if Int(year16) == 2015 && compLevel != MatchCompLevel.final {
+            if Int(match.event!.year) == 2015 && match.compLevel != .final {
                 return false
             }
             return true
