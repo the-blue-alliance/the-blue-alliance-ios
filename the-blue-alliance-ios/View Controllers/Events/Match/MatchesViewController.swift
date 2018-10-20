@@ -49,7 +49,7 @@ class MatchesViewController: TBATableViewController {
 
     private func setupFetchRequest(_ request: NSFetchRequest<Match>) {
         if let team = team {
-            request.predicate = NSPredicate(format: "event == %@ AND SUBQUERY(alliances, $a, SUBQUERY($a.teams, $t, $t.key == %@).@count > 0).@count > 0", event, team.key!)
+            request.predicate = NSPredicate(format: "event == %@ AND SUBQUERY(alliances, $a, ANY $a.teams.key == %@).@count > 0", event, team.key!)
         } else {
             request.predicate = NSPredicate(format: "event == %@", event)
         }
