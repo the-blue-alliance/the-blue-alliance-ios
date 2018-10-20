@@ -20,7 +20,8 @@ struct MatchViewModel {
     let baseTeamKey: String?
 
     init(match: Match, team: Team? = nil) {
-        // TODO: This isn't very robust - only supports red/blue
+        // TODO: Support all alliances
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/274
         matchName = match.friendlyName
 
         hasVideos = match.videos?.count == 0

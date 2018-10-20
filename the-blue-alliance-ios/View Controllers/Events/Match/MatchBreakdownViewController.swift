@@ -99,7 +99,8 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
     // MARK: Private
 
     func dataForBreakdown() -> [String: Any]? {
-        // TODO: This isn't very robust, and only supports red/blue
+        // TODO: Support all alliances
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/273
         guard var redBreakdown = match.breakdown?["red"] as? [String: Any] else {
             return nil
         }
