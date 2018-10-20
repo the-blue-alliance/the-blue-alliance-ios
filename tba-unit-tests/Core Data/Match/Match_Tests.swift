@@ -1,3 +1,4 @@
+import Foundation
 import XCTest
 @testable import The_Blue_Alliance
 
@@ -100,10 +101,18 @@ class Match_TestCase: CoreDataTestCase {
     }
 
     func test_timeString() {
+        let defaultTimeZone = NSTimeZone.default
+
+        NSTimeZone.default = TimeZone(abbreviation: "EST")!
         XCTAssertNil(match.timeString)
 
+        // Set default time zone for this test
         match.time = NSNumber(value: 1425764880)
         XCTAssertEqual(match.timeString, "Sat 4:48 PM")
+
+        addTeardownBlock {
+            NSTimeZone.default = defaultTimeZone
+        }
     }
 
     func test_redAlliance() {
