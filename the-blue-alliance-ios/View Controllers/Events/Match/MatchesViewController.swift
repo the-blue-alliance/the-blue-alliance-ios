@@ -34,12 +34,12 @@ class MatchesViewController: TBATableViewController {
 
     private func setupDataSource() {
         let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "compLevelInt", ascending: true),
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "compLevelSortOrder", ascending: true),
                                         NSSortDescriptor(key: "setNumber", ascending: true),
                                         NSSortDescriptor(key: "matchNumber", ascending: true)]
         setupFetchRequest(fetchRequest)
 
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "compLevelInt", cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "compLevelSortOrder", cacheName: nil)
         dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
     }
 
@@ -72,7 +72,7 @@ extension MatchesViewController: TableViewDataSourceDelegate {
 
     func title(for section: Int) -> String? {
         let firstMatch = dataSource.object(at: IndexPath(row: 0, section: section))
-        return "\(firstMatch.compLevelString) Matches"
+        return "\(firstMatch.compLevel?.level ?? firstMatch.compLevelString!) Matches"
     }
 
     func configure(_ cell: MatchTableViewCell, for object: Match, at indexPath: IndexPath) {

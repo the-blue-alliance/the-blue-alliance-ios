@@ -2,14 +2,15 @@ import Foundation
 import TBAKit
 import CoreData
 
-public enum MatchCompLevel: String {
+// https://github.com/the-blue-alliance/the-blue-alliance/blob/1324e9e5b7c4ab21315bd00a768112991bada108/models/match.py#L25
+public enum MatchCompLevel: String, CaseIterable {
     case qualification = "qm"
     case eightfinal = "ef"
     case quarterfinal = "qf"
     case semifinal = "sf"
     case final = "f"
 
-    var intVal: Int16 {
+    var sortOrder: Int {
         switch self {
         case .qualification:
             return 0
@@ -23,48 +24,54 @@ public enum MatchCompLevel: String {
             return 4
         }
     }
+
+    // https://github.com/the-blue-alliance/the-blue-alliance/blob/1324e9e5b7c4ab21315bd00a768112991bada108/models/match.py#L34
+    /**
+     Human readable string representing the compLevel for the match.
+     */
+    var level: String {
+        switch self {
+        case .qualification:
+            return "Qualification"
+        case .eightfinal:
+            return "Octofinal"
+        case .quarterfinal:
+            return "Quarterfinal"
+        case .semifinal:
+            return "Semifinal"
+        case .final:
+            return "Finals"
+        }
+    }
+
+    // https://github.com/the-blue-alliance/the-blue-alliance/blob/1324e9e5b7c4ab21315bd00a768112991bada108/models/match.py#L27
+    /**
+     Abbreviated human readable string representing the compLevel for the match.
+     */
+    var levelShort: String {
+        switch self {
+        case .qualification:
+            return "Quals"
+        case .eightfinal:
+            return "Eighths"
+        case .quarterfinal:
+            return "Quarters"
+        case .semifinal:
+            return "Semis"
+        case .final:
+            return "Finals"
+        }
+    }
+
 }
 
 extension Match: Managed {
 
-    var compLevelString: String {
-        guard let compLevel = compLevel else {
-            return ""
+    var compLevel: MatchCompLevel? {
+        guard let compLevelString = compLevelString else {
+            return nil
         }
-        switch compLevel {
-        case MatchCompLevel.qualification.rawValue:
-            return "Qualification"
-        case MatchCompLevel.eightfinal.rawValue:
-            return "Octofinal"
-        case MatchCompLevel.quarterfinal.rawValue:
-            return "Quarterfinal"
-        case MatchCompLevel.semifinal.rawValue:
-            return "Semifinal"
-        case MatchCompLevel.final.rawValue:
-            return "Finals"
-        default:
-            return ""
-        }
-    }
-
-    var shortCompLevelString: String {
-        guard let compLevel = compLevel else {
-            return ""
-        }
-        switch compLevel {
-        case MatchCompLevel.qualification.rawValue:
-            return "Quals"
-        case MatchCompLevel.eightfinal.rawValue:
-            return "Eighths"
-        case MatchCompLevel.quarterfinal.rawValue:
-            return "Quarters"
-        case MatchCompLevel.semifinal.rawValue:
-            return "Semis"
-        case MatchCompLevel.final.rawValue:
-            return "Finals"
-        default:
-            return ""
-        }
+        return MatchCompLevel(rawValue: compLevelString)
     }
 
     var timeString: String? {
@@ -117,10 +124,12 @@ extension Match: Managed {
         return findOrCreate(in: context, matching: predicate) { (match) in
             // Required: compLevel, eventKey, key, matchNumber, setNumber
             match.key = model.key
-            match.compLevel = model.compLevel
+            match.compLevelString = model.compLevel
 
-            let compLevelStruct = MatchCompLevel(rawValue: match.compLevel!)
-            match.compLevelInt = compLevelStruct!.intVal
+            // When adding a new MatchCompLevel, models will need a migration to update this
+            if let compLevel = MatchCompLevel(rawValue: model.compLevel) {
+                match.compLevelSortOrder = Int16(compLevel.sortOrder)
+            }
 
             match.setNumber = Int16(model.setNumber)
             match.matchNumber = Int16(model.matchNumber)
@@ -164,7 +173,7 @@ extension Match: Managed {
 
             if let videos = model.videos {
                 match.videos = Set(videos.map({ (modelVideo) -> MatchVideo in
-                    return MatchVideo.insert(with: modelVideo, for: match, in: context)
+                    return MatchVideo.insert(with: modelVideo, in: context)
                 })) as NSSet
             } else {
                 match.videos = nil
@@ -172,24 +181,16 @@ extension Match: Managed {
         }
     }
 
-    public func friendlyMatchName() -> String {
-        guard let compLevel = compLevel else {
-            return ""
-        }
-
-        let matchName = shortCompLevelString
-
+    var friendlyName: String {
         switch compLevel {
-        case MatchCompLevel.qualification.rawValue:
-            return "\(matchName) \(matchNumber)"
-        case MatchCompLevel.eightfinal.rawValue,
-             MatchCompLevel.quarterfinal.rawValue,
-             MatchCompLevel.semifinal.rawValue,
-             MatchCompLevel.final.rawValue:
-            return "\(matchName) \(setNumber) - \(matchNumber)"
-
-        default:
-            return matchName
+        case .none:
+            return "Match \(matchNumber)"
+        case .some(let compLevel):
+            if compLevel == .qualification {
+                return "\(compLevel.levelShort) \(matchNumber)"
+            } else {
+                return "\(compLevel.levelShort) \(setNumber) - \(matchNumber)"
+            }
         }
     }
 

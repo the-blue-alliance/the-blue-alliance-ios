@@ -21,7 +21,7 @@ struct MatchViewModel {
 
     init(match: Match, team: Team? = nil) {
         // TODO: This isn't very robust - only supports red/blue
-        matchName = match.friendlyMatchName()
+        matchName = match.friendlyName
 
         hasVideos = match.videos?.count == 0
 
@@ -38,13 +38,7 @@ struct MatchViewModel {
         // If we can't figure out a piece of information, default to yes, the match is a regular match,
         // where someone wins, and someone loses
         let hasWinnersAndLosers: Bool = {
-            guard let compLevelAbbrev = match.compLevel, let compLevel = MatchCompLevel(rawValue: compLevelAbbrev) else {
-                return true
-            }
-            guard let year16 = match.event?.year else {
-                return true
-            }
-            if Int(year16) == 2015 && compLevel != MatchCompLevel.final {
+            if Int(match.event!.year) == 2015 && match.compLevel != .final {
                 return false
             }
             return true

@@ -121,7 +121,7 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
                 "redBreakdown": redBreakdown,
                 "blueTeams": match.blueAllianceTeamNumbers,
                 "blueBreakdown": blueBreakdown,
-                "compLevel": match.compLevel!]
+                "compLevel": match.compLevelString!]
     }
 
 

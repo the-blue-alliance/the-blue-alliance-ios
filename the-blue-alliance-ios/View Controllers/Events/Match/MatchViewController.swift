@@ -27,7 +27,7 @@ class MatchContainerViewController: ContainerViewController {
                    segmentedControlTitles: titles,
                    persistentContainer: persistentContainer)
 
-        navigationTitle = "\(match.friendlyMatchName())"
+        navigationTitle = "\(match.friendlyName)"
         navigationSubtitle = "@ \(match.event!.friendlyNameWithYear)"
     }
 
