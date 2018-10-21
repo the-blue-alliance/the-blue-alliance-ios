@@ -5,8 +5,7 @@ import CoreData
 extension EventAlliance: Managed {
 
     static func insert(with model: TBAAlliance, for event: Event, in context: NSManagedObjectContext) -> EventAlliance {
-        // Kill.... me.....
-        let predicate = NSPredicate(format: "event == %@ AND (SUBQUERY(picks, $pick, $pick.key IN %@) .@count == %d)", event, model.picks, model.picks.count)
+        let predicate = NSPredicate(format: "event == %@ AND (SUBQUERY(picks, $pick, $pick.key IN %@).@count == %d)", event, model.picks, model.picks.count)
         return findOrCreate(in: context, matching: predicate, configure: { (alliance) in
             // Required: picks, eventKey
             alliance.event = event
@@ -17,12 +16,12 @@ extension EventAlliance: Managed {
                 alliance.backup = EventAllianceBackup.insert(with: backup, for: alliance, in: context)
             }
 
-            alliance.picks = NSMutableOrderedSet(array: model.picks.map({ (teamKey) -> Team in
-                return Team.insert(withKey: teamKey, in: context)
+            alliance.picks = NSMutableOrderedSet(array: model.picks.map({ (teamKey) -> TeamKey in
+                return TeamKey.insert(withKey: teamKey, in: context)
             }))
 
-            alliance.declines = NSMutableOrderedSet(array: model.declines.map({ (teamKey) -> Team in
-                return Team.insert(withKey: teamKey, in: context)
+            alliance.declines = NSMutableOrderedSet(array: model.declines.map({ (teamKey) -> TeamKey in
+                return TeamKey.insert(withKey: teamKey, in: context)
             }))
 
             if let status = model.status {
@@ -51,8 +50,8 @@ extension EventAllianceBackup: Managed {
     }
 
     private func setupTeams(with model: TBAAllianceBackup, in context: NSManagedObjectContext) {
-        inTeam = Team.insert(withKey: model.teamIn, in: context)
-        outTeam = Team.insert(withKey: model.teamOut, in: context)
+        inTeam = TeamKey.insert(withKey: model.teamIn, in: context)
+        outTeam = TeamKey.insert(withKey: model.teamOut, in: context)
     }
 
 }

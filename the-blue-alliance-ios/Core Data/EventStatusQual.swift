@@ -14,8 +14,8 @@ extension EventStatusQual: Managed {
             }
             eventStatusQual.status = model.status
 
-            if let event = eventStatus.event, let team = eventStatus.team, let ranking = model.ranking, let sortOrder = model.sortOrder {
-                eventStatusQual.ranking = EventRanking.insert(with: ranking, for: event, for: team, for: sortOrder, in: context)
+            if let event = eventStatus.event, let ranking = model.ranking, let sortOrder = model.sortOrder {
+                eventStatusQual.ranking = EventRanking.insert(with: ranking, for: event, for: sortOrder, in: context)
             }
         })
     }

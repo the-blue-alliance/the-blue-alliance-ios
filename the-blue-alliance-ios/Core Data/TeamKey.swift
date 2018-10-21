@@ -13,6 +13,14 @@ extension TeamKey: Managed {
         return Team.findOrFetch(in: managedObjectContext!, matching: NSPredicate(format: "key == %@", key!))
     }
 
+    var teamNumber: String {
+        return Team.trimFRCPrefix(key!)
+    }
+
+    var name: String {
+        return "Team \(teamNumber)"
+    }
+
     static func insert(withKey key: String, in context: NSManagedObjectContext) -> TeamKey {
         let predicate = NSPredicate(format: "key == %@", key)
         return findOrCreate(in: context, matching: predicate) { (teamKey) in

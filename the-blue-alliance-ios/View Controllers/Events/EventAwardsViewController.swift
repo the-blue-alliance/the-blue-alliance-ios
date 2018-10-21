@@ -5,22 +5,22 @@ import UIKit
 class EventAwardsContainerViewController: ContainerViewController {
 
     private let event: Event
-    private let team: Team?
+    private let teamKey: TeamKey?
 
     // MARK: - Init
 
-    init(event: Event, team: Team? = nil, persistentContainer: NSPersistentContainer) {
+    init(event: Event, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer) {
         self.event = event
-        self.team = team
+        self.teamKey = teamKey
 
-        let awardsViewController = EventAwardsViewController(event: event, team: team, persistentContainer: persistentContainer)
+        let awardsViewController = EventAwardsViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer)
 
         super.init(viewControllers: [awardsViewController],
                    persistentContainer: persistentContainer)
 
         navigationTitle = "Awards"
-        if let team = team {
-            navigationSubtitle = "Team \(team.teamNumber) @ \(event.friendlyNameWithYear)"
+        if let teamKey = teamKey {
+            navigationSubtitle = "Team \(teamKey.teamNumber) @ \(event.friendlyNameWithYear)"
         } else {
             navigationSubtitle = "@ \(event.friendlyNameWithYear)"
         }
@@ -36,11 +36,11 @@ class EventAwardsContainerViewController: ContainerViewController {
 
 extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate {
 
-    func teamSelected(_ team: Team) {
-        if team == self.team {
+    func teamKeySelected(_ teamKey: TeamKey) {
+        if teamKey == self.teamKey {
             return
         }
-        let teamAtEventViewController = TeamAtEventViewController(team: team,
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey,
                                                                   event: event,
                                                                   persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
@@ -49,22 +49,22 @@ extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate 
 }
 
 protocol EventAwardsViewControllerDelegate: AnyObject {
-    func teamSelected(_ team: Team)
+    func teamKeySelected(_ teamKey: TeamKey)
 }
 
 class EventAwardsViewController: TBATableViewController {
 
     private let event: Event
-    private let team: Team?
+    private let teamKey: TeamKey?
 
     weak var delegate: EventAwardsViewControllerDelegate?
     private var dataSource: TableViewDataSource<Award, EventAwardsViewController>!
 
     // MARK: - Init
 
-    init(event: Event, team: Team? = nil, persistentContainer: NSPersistentContainer) {
+    init(event: Event, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer) {
         self.event = event
-        self.team = team
+        self.teamKey = teamKey
 
         super.init(persistentContainer: persistentContainer)
 
@@ -91,8 +91,8 @@ class EventAwardsViewController: TBATableViewController {
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<Award>) {
-        if let team = team {
-            request.predicate = NSPredicate(format: "event == %@ AND (ANY recipients.team == %@)", event, team)
+        if let teamKey = teamKey {
+            request.predicate = NSPredicate(format: "event == %@ AND (ANY recipients.teamKey == %@)", event, teamKey)
         } else {
             request.predicate = NSPredicate(format: "event == %@", event)
         }
@@ -105,9 +105,9 @@ extension EventAwardsViewController: TableViewDataSourceDelegate {
     func configure(_ cell: AwardTableViewCell, for object: Award, at indexPath: IndexPath) {
         cell.selectionStyle = .none
         cell.viewModel = AwardCellViewModel(award: object)
-        cell.teamSelected = { [unowned self] (teamKey) in
-            let team = Team.insert(withKey: teamKey, in: self.persistentContainer.viewContext)
-            self.delegate?.teamSelected(team)
+        cell.teamKeySelected = { [unowned self] (teamKey) in
+            let teamKey = TeamKey.insert(withKey: teamKey, in: self.persistentContainer.viewContext)
+            self.delegate?.teamKeySelected(teamKey)
         }
     }
 
@@ -166,7 +166,7 @@ extension EventAwardsViewController: Refreshable {
 extension EventAwardsViewController: Stateful {
 
     var noDataText: String {
-        return "No awards for \(team != nil ? "team at event" : "event")"
+        return "No awards for \(teamKey != nil ? "team at event" : "event")"
     }
 
 }

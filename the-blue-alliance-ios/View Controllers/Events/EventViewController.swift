@@ -75,7 +75,7 @@ extension EventViewController: EventInfoViewControllerDelegate {
 extension EventViewController: TeamsViewControllerDelegate {
 
     func teamSelected(_ team: Team) {
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, persistentContainer: persistentContainer)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -84,7 +84,7 @@ extension EventViewController: TeamsViewControllerDelegate {
 extension EventViewController: EventRankingsViewControllerDelegate {
 
     func rankingSelected(_ ranking: EventRanking) {
-        let teamAtEventViewController = TeamAtEventViewController(team: ranking.team!, event: event, persistentContainer: persistentContainer)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: ranking.teamKey!, event: event, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

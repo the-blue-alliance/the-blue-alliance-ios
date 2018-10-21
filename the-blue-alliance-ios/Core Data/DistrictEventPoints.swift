@@ -8,14 +8,14 @@ extension DistrictEventPoints: Managed {
         guard let teamKey = model.teamKey else {
             fatalError("Need team key")
         }
-        let team = Team.insert(withKey: teamKey, in: context)
+        let team = TeamKey.insert(withKey: teamKey, in: context)
         return insert(with: model, for: event, and: team, in: context)
     }
 
-    static func insert(with model: TBADistrictEventPoints, for event: Event, and team: Team, in context: NSManagedObjectContext) -> DistrictEventPoints {
-        let predicate = NSPredicate(format: "team == %@ AND event == %@", team, event)
+    static func insert(with model: TBADistrictEventPoints, for event: Event, and teamKey: TeamKey, in context: NSManagedObjectContext) -> DistrictEventPoints {
+        let predicate = NSPredicate(format: "teamKey == %@ AND event == %@", teamKey, event)
         return findOrCreate(in: context, matching: predicate) { (eventPoints) in
-            eventPoints.team = team
+            eventPoints.teamKey = teamKey
             eventPoints.event = event
 
             eventPoints.alliancePoints = Int16(model.alliancePoints)

@@ -8,7 +8,7 @@ class AwardTableViewCell: UITableViewCell, Reusable {
             configureCell()
         }
     }
-    var teamSelected: ((_ teamKey: String) -> Void)?
+    var teamKeySelected: ((_ teamKey: String) -> Void)?
 
     // MARK: - Reusable
 
@@ -61,10 +61,10 @@ class AwardTableViewCell: UITableViewCell, Reusable {
     }
 
     @objc private func recipientTapped(gesture: UITapGestureRecognizer) {
-        guard let tag = gesture.view?.tag, let recipient = viewModel?.recipients[tag], let team = recipient.teamKey else {
+        guard let tag = gesture.view?.tag, let recipient = viewModel?.recipients[tag], let teamKey = recipient.teamKey else {
             return
         }
-        teamSelected?(team)
+        teamKeySelected?(teamKey)
     }
 
 }

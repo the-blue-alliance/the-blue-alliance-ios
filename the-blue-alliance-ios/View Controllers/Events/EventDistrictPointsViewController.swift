@@ -32,7 +32,7 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
 extension EventDistrictPointsContainerViewController: EventDistrictPointsViewControllerDelegate {
 
     func districtEventPointsSelected(_ districtEventPoints: DistrictEventPoints) {
-        let teamAtEventViewController = TeamAtEventViewController(team: districtEventPoints.team!, event: event, persistentContainer: persistentContainer)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: districtEventPoints.teamKey!, event: event, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

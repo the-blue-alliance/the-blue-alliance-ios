@@ -4,11 +4,12 @@ import CoreData
 
 extension DistrictRanking: Managed {
 
-    static func insert(with model: TBADistrictRanking, for district: District, for team: Team, in context: NSManagedObjectContext) -> DistrictRanking {
-        let predicate = NSPredicate(format: "district == %@ AND team == %@", district, team)
+    static func insert(with model: TBADistrictRanking, for district: District, in context: NSManagedObjectContext) -> DistrictRanking {
+        let teamKey = TeamKey.insert(withKey: model.teamKey, in: context)
+        let predicate = NSPredicate(format: "district == %@ AND teamKey == %@", district, teamKey)
         return findOrCreate(in: context, matching: predicate, configure: { (ranking) in
             ranking.district = district
-            ranking.team = team
+            ranking.teamKey = teamKey
 
             ranking.pointTotal = Int16(model.pointTotal)
             ranking.rank = Int16(model.rank)
@@ -27,7 +28,7 @@ extension DistrictRanking: Managed {
                     return nil
                 }
 
-                return DistrictEventPoints.insert(with: modelPoints, for: event, and: team, in: context)
+                return DistrictEventPoints.insert(with: modelPoints, for: event, and: teamKey, in: context)
             })) as NSSet
         })
     }

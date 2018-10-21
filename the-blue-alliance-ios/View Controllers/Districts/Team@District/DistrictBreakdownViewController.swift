@@ -134,7 +134,7 @@ extension DistrictBreakdownViewController: Refreshable {
             }
 
             // Might as well insert them all... we just need to only fetch
-            guard let ranking = rankings?.first(where: { $0.teamKey == self.ranking.team!.key! }) else {
+            guard let ranking = rankings?.first(where: { $0.teamKey == self.ranking.teamKey!.key! }) else {
                 self.removeRequest(request: rankingsRequest!)
                 return
             }
@@ -161,8 +161,7 @@ extension DistrictBreakdownViewController: Refreshable {
                 let backgroundDistrict = backgroundContext.object(with: self.ranking.district!.objectID) as! District
                 if let rankings = rankings {
                     let localRankings = rankings.map({ (modelRanking) -> DistrictRanking in
-                        let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
-                        return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, for: backgroundTeam, in: backgroundContext)
+                        return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, in: backgroundContext)
                     })
                     backgroundDistrict.rankings = Set(localRankings) as NSSet
                 }
@@ -183,9 +182,8 @@ extension DistrictBreakdownViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundTeam = backgroundContext.object(with: self.ranking.team!.objectID) as! Team
                 if let modelEvent = modelEvent {
-                    backgroundTeam.addToEvents(Event.insert(with: modelEvent, in: backgroundContext))
+                    Event.insert(with: modelEvent, in: backgroundContext)
                 }
                 backgroundContext.saveOrRollback()
                 completion(true)

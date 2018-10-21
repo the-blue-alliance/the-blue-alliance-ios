@@ -25,12 +25,12 @@ extension AwardRecipient: Managed {
 
     static func insert(with model: TBAAwardRecipient, for award: Award, in context: NSManagedObjectContext) -> AwardRecipient {
         var predicate: NSPredicate?
-        var team: Team?
+        var team: TeamKey?
         if let awardee = model.awardee, let teamKey = model.teamKey {
-            team = Team.insert(withKey: teamKey, in: context)
+            team = TeamKey.insert(withKey: teamKey, in: context)
             predicate = NSPredicate(format: "awardee == %@ AND award == %@ AND team == %@", awardee, award, team!)
         } else if let teamKey = model.teamKey {
-            team = Team.insert(withKey: teamKey, in: context)
+            team = TeamKey.insert(withKey: teamKey, in: context)
             predicate = NSPredicate(format: "team == %@ AND award == %@", team!, award)
         } else if let awardee = model.awardee {
             predicate = NSPredicate(format: "awardee == %@ AND award == %@", awardee, award)
@@ -39,7 +39,7 @@ extension AwardRecipient: Managed {
         }
 
         return findOrCreate(in: context, matching: predicate!) { (awardRecipient) in
-            awardRecipient.team = team
+            awardRecipient.teamKey = team
             awardRecipient.awardee = model.awardee
             awardRecipient.award = award
         }
@@ -47,14 +47,15 @@ extension AwardRecipient: Managed {
 
     public var awardText: [String] {
         var awardText: [String] = []
-        if let team = team, let awardee = awardee {
+        if let teamKey = teamKey, let awardee = awardee {
             awardText.append(awardee)
-            awardText.append(team.nickname ?? team.fallbackNickname)
-        } else if let team = team {
-            if team.nickname != nil {
-                awardText.append("\(team.teamNumber)")
+            awardText.append(teamKey.team?.nickname ?? teamKey.name)
+        } else if let teamKey = teamKey {
+            // TODO: Check this... this logic doesn't make sense
+            if teamKey.team?.nickname != nil {
+                awardText.append("\(teamKey.teamNumber)")
             }
-            awardText.append(team.nickname ?? team.fallbackNickname)
+            awardText.append(teamKey.team?.nickname ?? teamKey.name)
         } else if let awardee = awardee {
             awardText.append(awardee)
         }

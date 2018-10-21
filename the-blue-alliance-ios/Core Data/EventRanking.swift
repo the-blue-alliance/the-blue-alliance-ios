@@ -17,11 +17,12 @@ extension EventRanking: Managed {
         }
     }
 
-    static func insert(with model: TBAEventRanking, for event: Event, for team: Team, for sortOrderInfo: [TBAEventRankingSortOrder], in context: NSManagedObjectContext) -> EventRanking {
-        let predicate = NSPredicate(format: "event == %@ AND team == %@", event, team)
+    static func insert(with model: TBAEventRanking, for event: Event, for sortOrderInfo: [TBAEventRankingSortOrder], in context: NSManagedObjectContext) -> EventRanking {
+        let teamKey = TeamKey.insert(withKey: model.teamKey, in: context)
+        let predicate = NSPredicate(format: "event == %@ AND teamKey == %@", event, teamKey)
         return findOrCreate(in: context, matching: predicate, configure: { (ranking) in
             ranking.event = event
-            ranking.team = team
+            ranking.teamKey = teamKey
 
             if let qualAverage = model.qualAverage {
                 ranking.qualAverage = NSNumber(value: qualAverage)

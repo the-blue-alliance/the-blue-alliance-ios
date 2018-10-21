@@ -101,8 +101,7 @@ extension EventRankingsViewController: Refreshable {
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 if let rankings = rankings {
                     let localRankings = rankings.compactMap({ (modelRanking) -> EventRanking? in
-                        let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
-                        return EventRanking.insert(with: modelRanking, for: backgroundEvent, for: backgroundTeam, for: sortOrder!, in: backgroundContext)
+                        return EventRanking.insert(with: modelRanking, for: backgroundEvent, for: sortOrder!, in: backgroundContext)
                     })
                     backgroundEvent.rankings = Set(localRankings) as NSSet
                 }

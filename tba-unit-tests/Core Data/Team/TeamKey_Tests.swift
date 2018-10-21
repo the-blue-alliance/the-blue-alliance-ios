@@ -26,4 +26,16 @@ class TeamKey_TestCase: CoreDataTestCase {
         XCTAssertEqual(teamKey_first, teamKey_second)
     }
 
+    func test_teamNumber() {
+        let teamKey = TeamKey.init(entity: TeamKey.entity(), insertInto: persistentContainer.viewContext)
+        teamKey.key = "frc7332"
+        XCTAssertEqual(teamKey.teamNumber, "7332")
+    }
+
+    func test_name() {
+        let teamKey = TeamKey.init(entity: TeamKey.entity(), insertInto: persistentContainer.viewContext)
+        teamKey.key = "frc7332"
+        XCTAssertEqual(teamKey.name, "Team 7332")
+    }
+
 }

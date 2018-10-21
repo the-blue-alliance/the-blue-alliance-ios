@@ -7,7 +7,7 @@ import PureLayout
 class MatchInfoViewController: TBAViewController, Observable {
 
     private let match: Match
-    private let team: Team?
+    private let teamKey: TeamKey?
 
     // MARK: - UI
 
@@ -79,9 +79,9 @@ class MatchInfoViewController: TBAViewController, Observable {
 
     // MARK: Init
 
-    init(match: Match, team: Team? = nil, persistentContainer: NSPersistentContainer) {
+    init(match: Match, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer) {
         self.match = match
-        self.team = team
+        self.teamKey = teamKey
 
         super.init(persistentContainer: persistentContainer)
 
@@ -139,7 +139,7 @@ class MatchInfoViewController: TBAViewController, Observable {
     func updateMatchView() {
         matchView.resetView()
 
-        let viewModel = MatchViewModel(match: match, team: team)
+        let viewModel = MatchViewModel(match: match, teamKey: teamKey)
         matchView.viewModel = viewModel
 
         if !viewModel.hasScores {

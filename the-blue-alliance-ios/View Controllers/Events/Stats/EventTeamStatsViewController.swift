@@ -62,6 +62,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let eventTeamStats = dataSource.object(at: indexPath)
         delegate?.eventTeamStatSelected(eventTeamStats)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
     // MARK: Table View Data Source

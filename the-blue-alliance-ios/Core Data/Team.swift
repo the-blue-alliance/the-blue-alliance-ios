@@ -12,22 +12,8 @@ extension Team: Locatable, Managed {
         return key.prefixTrim("frc")
     }
 
-    static func insert(withKey key: String, in context: NSManagedObjectContext) -> Team {
-        let predicate = NSPredicate(format: "key == %@", key)
-        // Let's not *overwrite* shit we already have
-        // TODO: Check if our Team object has a name... if it doesn't, go fetch from the web in the background
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/184
-        if let team = findOrFetch(in: context, matching: predicate) {
-            return team
-        }
-        return findOrCreate(in: context, matching: predicate) { (team) in
-            // Required: key, name, teamNumber
-            team.key = key
-
-            let teamNumber = Int32(trimFRCPrefix(key))!
-            team.name = "Team \(teamNumber)"
-            team.teamNumber = teamNumber
-        }
+    var teamKey: TeamKey {
+        return TeamKey.insert(withKey: key!, in: managedObjectContext!)
     }
 
     @discardableResult

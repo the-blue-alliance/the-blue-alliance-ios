@@ -182,8 +182,7 @@ extension DistrictRankingsViewController: Refreshable {
                 let backgroundDistrict = backgroundContext.object(with: self.district.objectID) as! District
                 if let rankings = rankings {
                     let localRankings = rankings.map({ (modelRanking) -> DistrictRanking in
-                        let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
-                        return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, for: backgroundTeam, in: backgroundContext)
+                        return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, in: backgroundContext)
                     })
                     backgroundDistrict.rankings = Set(localRankings) as NSSet
                 }

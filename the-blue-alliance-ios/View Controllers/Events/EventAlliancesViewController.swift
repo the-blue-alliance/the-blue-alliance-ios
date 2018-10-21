@@ -33,15 +33,15 @@ class EventAlliancesContainerViewController: ContainerViewController {
 
 extension EventAlliancesContainerViewController: EventAlliancesViewControllerDelegate {
 
-    func teamSelected(_ team: Team) {
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: self.event, persistentContainer: persistentContainer)
+    func teamKeySelected(_ teamKey: TeamKey) {
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: self.event, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
 }
 
 protocol EventAlliancesViewControllerDelegate: AnyObject {
-    func teamSelected(_ team: Team)
+    func teamKeySelected(_ teamKey: TeamKey)
 }
 
 private class EventAlliancesViewController: TBATableViewController {
@@ -100,9 +100,9 @@ extension EventAlliancesViewController: TableViewDataSourceDelegate {
     func configure(_ cell: EventAllianceTableViewCell, for object: EventAlliance, at indexPath: IndexPath) {
         cell.selectionStyle = .none
         cell.viewModel = EventAllianceCellViewModel(alliance: object)
-        cell.teamSelected = { [unowned self] (teamKey) in
-            let team = Team.insert(withKey: teamKey, in: self.persistentContainer.viewContext)
-            self.delegate?.teamSelected(team)
+        cell.teamKeySelected = { [unowned self] (teamKey) in
+            let teamKey = TeamKey.insert(withKey: teamKey, in: self.persistentContainer.viewContext)
+            self.delegate?.teamKeySelected(teamKey)
         }
     }
 
