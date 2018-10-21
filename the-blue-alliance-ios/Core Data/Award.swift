@@ -28,10 +28,10 @@ extension AwardRecipient: Managed {
         var team: TeamKey?
         if let awardee = model.awardee, let teamKey = model.teamKey {
             team = TeamKey.insert(withKey: teamKey, in: context)
-            predicate = NSPredicate(format: "awardee == %@ AND award == %@ AND team == %@", awardee, award, team!)
+            predicate = NSPredicate(format: "awardee == %@ AND award == %@ AND teamKey == %@", awardee, award, team!)
         } else if let teamKey = model.teamKey {
             team = TeamKey.insert(withKey: teamKey, in: context)
-            predicate = NSPredicate(format: "team == %@ AND award == %@", team!, award)
+            predicate = NSPredicate(format: "teamKey == %@ AND award == %@", team!, award)
         } else if let awardee = model.awardee {
             predicate = NSPredicate(format: "awardee == %@ AND award == %@", awardee, award)
         } else {
@@ -49,13 +49,17 @@ extension AwardRecipient: Managed {
         var awardText: [String] = []
         if let teamKey = teamKey, let awardee = awardee {
             awardText.append(awardee)
-            awardText.append(teamKey.team?.nickname ?? teamKey.name)
+            awardText.append(teamKey.name)
         } else if let teamKey = teamKey {
-            // TODO: Check this... this logic doesn't make sense
-            if teamKey.team?.nickname != nil {
-                awardText.append("\(teamKey.teamNumber)")
+            // If we have a nickname for the team, add the team number beforehand, so the cell reads as...
+            // Team 7332
+            // The Rawrbotz
+            if let nickname = teamKey.team?.nickname {
+                awardText.append("\(teamKey.name)")
+                awardText.append(nickname)
+            } else {
+                awardText.append(teamKey.name)
             }
-            awardText.append(teamKey.team?.nickname ?? teamKey.name)
         } else if let awardee = awardee {
             awardText.append(awardee)
         }

@@ -365,6 +365,7 @@ extension TeamSummaryViewController: Refreshable {
                     backgroundEvent.awards = Set(localAwards) as NSSet
                 }
 
+                // Somehow, this Event is ending up being nil, which isn't cool....
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: awardsRequest!)
             })
