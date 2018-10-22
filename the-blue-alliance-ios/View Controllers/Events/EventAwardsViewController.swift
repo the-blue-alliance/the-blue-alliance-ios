@@ -146,13 +146,9 @@ extension EventAwardsViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
-                if let awards = awards {
-                    let localAwards = awards.map({ (modelAward) -> Award in
-                        return Award.insert(with: modelAward, for: backgroundEvent, in: backgroundContext)
-                    })
-                    backgroundEvent.awards = Set(localAwards) as NSSet
-                }
+                awards?.forEach({
+                    Award.insert($0, event: self.event, in: backgroundContext)
+                })
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)

@@ -52,9 +52,6 @@ extension Managed where Self: NSManagedObject {
         return nil
     }
 
-}
-
-extension Managed where Self: NSManagedObject {
     public static func fetchSingleObject(in context: NSManagedObjectContext, configure: (NSFetchRequest<Self>) -> Void) -> Self? {
         let result = fetch(in: context) { request in
             configure(request)
@@ -66,4 +63,28 @@ extension Managed where Self: NSManagedObject {
         default: fatalError("Returned multiple objects, expected max 1")
         }
     }
+
+    public static func updateToOneRelationship<J: Any, T: NSManagedObject>(relationship: inout T?, newValue: J?, newObject: (J) -> T) {
+        if let newValue = newValue {
+            relationship = newObject(newValue)
+        } else {
+            relationship = nil
+        }
+    }
+
+    public static func updateToManyRelationship<T: NSManagedObject>(relationship: inout NSSet?, newValues new: [T], matchingOrphans: @escaping (T) -> Bool, in context: NSManagedObjectContext) {
+        // Store our old values so we can reference them later
+        let oldValues = relationship?.allObjects as? [T]
+
+        // The ol' switcharoo
+        let newSet = Set(new)
+        relationship = newSet as NSSet
+
+        // Clean up orphans, if applicable
+        if let oldValues = oldValues {
+            let oldSet = Set(oldValues)
+            oldSet.subtracting(newSet).filter(matchingOrphans).forEach({ context.delete($0) })
+        }
+    }
+
 }

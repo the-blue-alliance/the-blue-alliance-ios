@@ -63,17 +63,17 @@ class DistrictTeamSummaryViewController: TBATableViewController {
             // Event Points row
             let eventPoints = sortedEventPoints[indexPath.row - 1]
             cell.titleLabel.text = "\(eventPoints.event!.safeShortName)"
-            cell.subtitleLabel.text = "\(eventPoints.total) Points"
+            cell.subtitleLabel.text = "\(eventPoints.total!.stringValue) Points"
             cell.selectionStyle = .default
             cell.accessoryType = .disclosureIndicator
         } else if indexPath.row == 0 {
             // Rank row
             cell.titleLabel.text = "District Rank"
-            cell.subtitleLabel.text = "\(ranking.rank)\(ranking.rank.suffix())"
+            cell.subtitleLabel.text = "\(ranking.rank!.stringValue)\(ranking.rank!.intValue.suffix)"
         } else {
             // Total Points row
             cell.titleLabel.text = "Total Points"
-            cell.subtitleLabel.text = "\(ranking.pointTotal) Points"
+            cell.subtitleLabel.text = "\(ranking.pointTotal!.stringValue) Points"
         }
         return cell
     }
@@ -129,13 +129,9 @@ extension DistrictTeamSummaryViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundDistrict = backgroundContext.object(with: self.ranking.district!.objectID) as! District
-                if let rankings = rankings {
-                    let localRankings = rankings.map({ (modelRanking) -> DistrictRanking in
-                        return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, in: backgroundContext)
-                    })
-                    backgroundDistrict.rankings = Set(localRankings) as NSSet
-                }
+                rankings?.forEach({
+                    return DistrictRanking.insert($0, district: self.ranking.district!, in: backgroundContext)
+                })
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)

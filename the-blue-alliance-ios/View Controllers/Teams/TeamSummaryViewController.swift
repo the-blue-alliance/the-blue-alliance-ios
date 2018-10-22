@@ -214,8 +214,8 @@ class TeamSummaryViewController: TBATableViewController {
     }
 
     private func tableView(_ tableView: UITableView, rankCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let rank = summaryValues[indexPath.row] as! Int16
-        return self.tableView(tableView, reverseSubtitleCellWithTitle: "Rank", subtitle: "\(rank)\(rank.suffix())", at: indexPath)
+        let rank = summaryValues[indexPath.row] as! NSNumber
+        return self.tableView(tableView, reverseSubtitleCellWithTitle: "Rank", subtitle: "\(rank.stringValue)\(rank.intValue.suffix)", at: indexPath)
     }
 
     private func tableView(_ tableView: UITableView, awardsCellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -357,13 +357,9 @@ extension TeamSummaryViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
-                if let awards = awards {
-                    let localAwards = awards.map({ (modelAward) -> Award in
-                        return Award.insert(with: modelAward, for: backgroundEvent, in: backgroundContext)
-                    })
-                    backgroundEvent.awards = Set(localAwards) as NSSet
-                }
+                awards?.forEach({
+                    Award.insert($0, event: self.event, in: backgroundContext)
+                })
 
                 // Somehow, this Event is ending up being nil, which isn't cool....
                 backgroundContext.saveOrRollback()

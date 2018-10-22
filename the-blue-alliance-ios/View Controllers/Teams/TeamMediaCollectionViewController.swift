@@ -269,7 +269,7 @@ extension TeamMediaCollectionViewController: Refreshable {
                 let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
                 if let media = media {
                     let localMedia = media.map({ (modelMedia) -> Media in
-                        return Media.insert(with: modelMedia, in: year, for: backgroundTeam, in: backgroundContext)
+                        return Media.insert(modelMedia, year: year, in: backgroundContext)
                     })
                     backgroundTeam.media = Set(localMedia) as NSSet
                 }

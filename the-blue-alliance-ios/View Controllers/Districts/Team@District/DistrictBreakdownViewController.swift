@@ -63,25 +63,25 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
         let eventPoints = sortedEventPoints[indexPath.section]
 
-        var pointsType: String = ""
-        var points: Int16 = 0
+        var pointsType = ""
+        var points = 0
 
         switch indexPath.row {
         case 0:
             pointsType = "Qualification"
-            points = eventPoints.qualPoints
+            points = eventPoints.qualPoints!.intValue
         case 1:
             pointsType = "Elimination"
-            points = eventPoints.elimPoints
+            points = eventPoints.elimPoints!.intValue
         case 2:
             pointsType = "Alliance"
-            points = eventPoints.alliancePoints
+            points = eventPoints.alliancePoints!.intValue
         case 3:
             pointsType = "Award"
-            points = eventPoints.awardPoints
+            points = eventPoints.awardPoints!.intValue
         case 4:
             pointsType = "Total"
-            points = eventPoints.total
+            points = eventPoints.total!.intValue
         default: break
         }
 
@@ -140,7 +140,7 @@ extension DistrictBreakdownViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let eventKeys = Set(ranking.eventPoints.map({ $0.eventKey! }))
+                let eventKeys = Set(ranking.eventPoints.map({ $0.eventKey }))
                 let eventlessKeys = Set(eventKeys.compactMap({ (eventKey) -> String? in
                     let predicate = NSPredicate(format: "key == %@", eventKey)
                     let event = Event.findOrFetch(in: backgroundContext, matching: predicate)
@@ -158,13 +158,9 @@ extension DistrictBreakdownViewController: Refreshable {
                 }
                 dispatchGroup.wait()
 
-                let backgroundDistrict = backgroundContext.object(with: self.ranking.district!.objectID) as! District
-                if let rankings = rankings {
-                    let localRankings = rankings.map({ (modelRanking) -> DistrictRanking in
-                        return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, in: backgroundContext)
-                    })
-                    backgroundDistrict.rankings = Set(localRankings) as NSSet
-                }
+                rankings?.forEach({
+                    return DistrictRanking.insert($0, district: self.ranking.district!, in: backgroundContext)
+                })
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: rankingsRequest!)

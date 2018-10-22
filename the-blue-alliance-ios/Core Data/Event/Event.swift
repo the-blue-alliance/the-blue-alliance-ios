@@ -27,7 +27,7 @@ extension Event: Locatable, Managed {
             event.country = model.country
 
             if let district = model.district {
-                event.district = District.insert(with: district, in: context)
+                event.district = District.insert(district, in: context)
             }
 
             event.divisionKeys = model.divisionKeys

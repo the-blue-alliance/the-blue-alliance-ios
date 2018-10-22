@@ -1,8 +1,8 @@
 import Foundation
 
-extension Int16 {
+extension Int {
 
-    func suffix() -> String {
+    var suffix: String {
         let positive = abs(self)
 
         let lastTwo = positive % 100

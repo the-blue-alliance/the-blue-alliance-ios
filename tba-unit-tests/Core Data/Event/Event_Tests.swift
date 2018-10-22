@@ -17,7 +17,7 @@ class Event_TestCase: CoreDataTestCase {
 
         super.tearDown()
     }
-
+    
     func event(type eventType: EventType) -> Event {
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         event.eventType = Int16(eventType.rawValue)

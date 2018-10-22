@@ -29,7 +29,7 @@ class DistrictEventsViewController: EventsViewController {
     override var automaticRefreshEndDate: Date? {
         // Automatically refresh event districts during the year before the selected year (when events are rolling in)
         // Ex: Districts for 2019 will stop automatically refreshing on January 1st, 2019 (should all be set by then)
-        return Calendar.current.date(from: DateComponents(year: Int(district.year)))
+        return Calendar.current.date(from: DateComponents(year: district.year!.intValue))
     }
 
     @objc override func refresh() {

@@ -179,13 +179,9 @@ extension DistrictRankingsViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundDistrict = backgroundContext.object(with: self.district.objectID) as! District
-                if let rankings = rankings {
-                    let localRankings = rankings.map({ (modelRanking) -> DistrictRanking in
-                        return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, in: backgroundContext)
-                    })
-                    backgroundDistrict.rankings = Set(localRankings) as NSSet
-                }
+                rankings?.forEach({
+                    DistrictRanking.insert($0, district: self.district, in: backgroundContext)
+                })
 
                 backgroundContext.saveOrRollback()
                 completion(true)

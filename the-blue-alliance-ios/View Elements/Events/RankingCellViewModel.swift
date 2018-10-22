@@ -11,12 +11,12 @@ struct RankingCellViewModel {
     let wltText: String?
 
     init(districtRanking: DistrictRanking) {
-        rankText = "Rank \(districtRanking.rank)"
+        rankText = "Rank \(districtRanking.rank!.stringValue)"
 
         teamNumber = String(describing: districtRanking.teamKey!.teamNumber)
         teamName = districtRanking.teamKey!.team?.nickname ?? districtRanking.teamKey!.name
 
-        detailText = "\(districtRanking.pointTotal) Points"
+        detailText = "\(districtRanking.pointTotal!.stringValue) Points"
         wltText = nil
     }
 
@@ -26,7 +26,7 @@ struct RankingCellViewModel {
         teamNumber = String(describing: districtEventPoints.teamKey!.teamNumber)
         teamName = districtEventPoints.teamKey!.team?.nickname ?? districtEventPoints.teamKey!.name
 
-        detailText = "\(districtEventPoints.total) Points"
+        detailText = "\(districtEventPoints.total!.stringValue) Points"
         wltText = nil
     }
 

@@ -73,7 +73,7 @@ extension Media: Managed, Playable {
         return nil
     }
 
-    static func insert(with model: TBAMedia, in year: Int, for team: Team, in context: NSManagedObjectContext) -> Media {
+    static func insert(_ model: TBAMedia, year: Int, in context: NSManagedObjectContext) -> Media {
         var mediaPredicate: NSPredicate?
         if let key = model.key {
             mediaPredicate = NSPredicate(format: "key == %@ AND type == %@", key, model.type)
@@ -91,8 +91,6 @@ extension Media: Managed, Playable {
             media.foreignKey = model.foreignKey
             media.details = model.details
             media.preferred = model.preferred ?? false
-
-            media.team = team
         }
     }
 

@@ -47,6 +47,7 @@ extension Team: Locatable, Managed {
             team.postalCode = model.postalCode
             team.rookieYear = Int16(model.rookieYear)
             team.stateProv = model.stateProv
+            // TODO: Store teamNumber as Int32/64 (64 is fine I think)
             team.teamNumber = Int32(model.teamNumber)
             team.website = model.website
             team.homeChampionship = model.homeChampionship

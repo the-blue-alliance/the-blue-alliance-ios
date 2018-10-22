@@ -157,7 +157,8 @@ extension EventStatsViewController: Refreshable {
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 // TODO: If we get a 304 these insights will be deleted incorrectly
-                backgroundEvent.insights = insights
+                // TODO: Re-enable insights
+                // backgroundEvent.insights = insights
 
                 backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
