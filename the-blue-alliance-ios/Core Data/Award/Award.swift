@@ -22,7 +22,7 @@ extension Award: Managed {
                 return AwardRecipient.insert(recipient, award: award, in: context)
             })
             updateToManyRelationship(relationship: &award.recipients, newValues: recipients, matchingOrphans: {
-                return $0.award == award
+                return $0.awards == Set([award]) as NSSet
             }, in: context)
         }
     }

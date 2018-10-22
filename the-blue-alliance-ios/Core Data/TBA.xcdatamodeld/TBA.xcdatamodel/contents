@@ -5,11 +5,11 @@
         <attribute name="name" attributeType="String" syncable="YES"/>
         <attribute name="year" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="awards" inverseEntity="Event" syncable="YES"/>
-        <relationship name="recipients" toMany="YES" deletionRule="Cascade" destinationEntity="AwardRecipient" inverseName="award" inverseEntity="AwardRecipient" syncable="YES"/>
+        <relationship name="recipients" toMany="YES" deletionRule="Cascade" destinationEntity="AwardRecipient" inverseName="awards" inverseEntity="AwardRecipient" syncable="YES"/>
     </entity>
     <entity name="AwardRecipient" representedClassName="AwardRecipient" syncable="YES" codeGenerationType="class">
         <attribute name="awardee" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="award" maxCount="1" deletionRule="Nullify" destinationEntity="Award" inverseName="recipients" inverseEntity="Award" syncable="YES"/>
+        <relationship name="awards" toMany="YES" deletionRule="Nullify" destinationEntity="Award" inverseName="recipients" inverseEntity="Award" syncable="YES"/>
         <relationship name="teamKey" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TeamKey" inverseName="awards" inverseEntity="TeamKey" syncable="YES"/>
     </entity>
     <entity name="District" representedClassName="District" syncable="YES" codeGenerationType="class">

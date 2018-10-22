@@ -61,12 +61,56 @@ class Award_TestCase: CoreDataTestCase {
         try! persistentContainer.viewContext.save()
 
         // Recipient should be deleted
-        XCTAssertNil(recipient.award)
+        XCTAssertNil(recipient.awards)
         XCTAssertNil(recipient.managedObjectContext)
 
         // Event should not be deleted
         XCTAssertEqual(event.awards?.count, 0)
         XCTAssertNotNil(event.managedObjectContext)
+    }
+
+    func test_delete_orphans() {
+        let event = districtEvent()
+
+        let modelAwardRecipientOne = TBAAwardRecipient(teamKey: "frc7332")
+        let modelAwardRecipientTwo = TBAAwardRecipient(teamKey: "frc2337")
+        let modelAwardOne = TBAAward(name: "The Fake Award",
+                                  awardType: 2,
+                                  eventKey: event.key!,
+                                  recipients: [modelAwardRecipientOne, modelAwardRecipientTwo],
+                                  year: 2018)
+        let modelAwardTwo = TBAAward(name: "The Fake Award Two",
+                                     awardType: 3,
+                                     eventKey: event.key!,
+                                     recipients: [modelAwardRecipientTwo],
+                                     year: 2018)
+        let modelAwardOneUpdated = TBAAward(name: "The Fake Award",
+                                            awardType: 2,
+                                            eventKey: event.key!,
+                                            recipients: [modelAwardRecipientOne],
+                                            year: 2018)
+
+        let awardOne = Award.insert(modelAwardOne, event: event, in: persistentContainer.viewContext)
+        let awardTwo = Award.insert(modelAwardTwo, event: event, in: persistentContainer.viewContext)
+        let recipientTwo = awardTwo.recipients!.allObjects.first! as! AwardRecipient
+        let awardOneUpdated = Award.insert(modelAwardOneUpdated, event: event, in: persistentContainer.viewContext)
+        let recipientOne = awardOneUpdated.recipients!.allObjects.first! as! AwardRecipient
+        XCTAssertEqual(awardOne, awardOneUpdated)
+        XCTAssertNotEqual(awardOne, awardTwo)
+
+        // Neither recipient should be deleted - they both refer to one award
+        XCTAssertEqual(awardOne.recipients?.count, 1)
+        XCTAssert(awardOne.recipients!.contains(recipientOne))
+        XCTAssertFalse(awardOne.recipients!.contains(recipientTwo))
+
+        XCTAssertEqual(awardTwo.recipients?.count, 1)
+        XCTAssert(awardTwo.recipients!.contains(recipientTwo))
+        XCTAssertFalse(awardTwo.recipients!.contains(recipientOne))
+
+        XCTAssertNotNil(recipientOne.managedObjectContext)
+        XCTAssertNotNil(recipientTwo.managedObjectContext)
+
+        // TODO: Add full delete - see how cascade works.... I don't think it will
     }
 
 }

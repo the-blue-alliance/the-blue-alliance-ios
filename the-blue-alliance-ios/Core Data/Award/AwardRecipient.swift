@@ -39,18 +39,15 @@ extension AwardRecipient: Managed {
     static func insert(_ model: TBAAwardRecipient, award: Award, in context: NSManagedObjectContext) -> AwardRecipient {
         var predicate: NSPredicate {
             if let awardee = model.awardee, let teamKey = model.teamKey {
-                return NSPredicate(format: "%K == %@ AND %K == %@ AND %K == %@",
+                return NSPredicate(format: "%K == %@ AND %K == %@",
                                    #keyPath(AwardRecipient.awardee), awardee,
-                                   #keyPath(AwardRecipient.teamKey.key), teamKey,
-                                   #keyPath(AwardRecipient.award), award)
+                                   #keyPath(AwardRecipient.teamKey.key), teamKey)
             } else if let teamKey = model.teamKey {
-                return NSPredicate(format: "%K == %@ AND %K == %@",
-                                   #keyPath(AwardRecipient.teamKey.key), teamKey,
-                                   #keyPath(AwardRecipient.award), award)
+                return NSPredicate(format: "%K == %@",
+                                   #keyPath(AwardRecipient.teamKey.key), teamKey)
             } else if let awardee = model.awardee {
-                return NSPredicate(format: "%K == %@ AND %K == %@",
-                                   #keyPath(AwardRecipient.awardee), awardee,
-                                   #keyPath(AwardRecipient.award), award)
+                return NSPredicate(format: "%K == %@",
+                                   #keyPath(AwardRecipient.awardee), awardee)
             } else {
                 fatalError("Award has no info")
             }
@@ -61,7 +58,6 @@ extension AwardRecipient: Managed {
                 return TeamKey.insert(withKey: $0, in: context)
             }
             awardRecipient.awardee = model.awardee
-            awardRecipient.award = award
         }
     }
 
