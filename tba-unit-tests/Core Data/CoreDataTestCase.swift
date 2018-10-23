@@ -75,15 +75,6 @@ class CoreDataTestCase: XCTestCase {
         return Event.insert(with: model, in: persistentContainer.viewContext)
     }
 
-    func award(event: Event) -> Award {
-        let modelAward = TBAAward(name: "The Fake Award",
-                                  awardType: 2,
-                                  eventKey: event.key!,
-                                  recipients: [],
-                                  year: 2018)
-        return Award.insert(modelAward, event: event, in: persistentContainer.viewContext)
-    }
-
     // TODO: We for sure need some sort of tear down to blow our Core Data stack away
 
     /*

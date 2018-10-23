@@ -146,11 +146,10 @@ extension EventAwardsViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                awards?.forEach({
-                    Award.insert($0, event: self.event, in: backgroundContext)
-                })
-
-                backgroundContext.saveOrRollback()
+                if let awards = awards {
+                    Award.insert(awards, event: self.event, in: backgroundContext)
+                    backgroundContext.saveOrRollback()
+                }
                 self.removeRequest(request: request!)
             })
         })

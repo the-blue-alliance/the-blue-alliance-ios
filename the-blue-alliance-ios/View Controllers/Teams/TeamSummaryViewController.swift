@@ -357,12 +357,10 @@ extension TeamSummaryViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                awards?.forEach({
-                    Award.insert($0, event: self.event, in: backgroundContext)
-                })
-
-                // Somehow, this Event is ending up being nil, which isn't cool....
-                backgroundContext.saveOrRollback()
+                if let awards = awards {
+                    Award.insert(awards, event: self.event, in: backgroundContext)
+                    backgroundContext.saveOrRollback()
+                }
                 self.removeRequest(request: awardsRequest!)
             })
         })

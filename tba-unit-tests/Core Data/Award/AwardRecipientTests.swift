@@ -2,7 +2,7 @@ import TBAKit
 import XCTest
 @testable import The_Blue_Alliance
 
-class AwardRecipient_TestCase: CoreDataTestCase {
+class AwardRecipientTestCase: AwardTestCase {
 
     func test_insert_awardee_team() {
         let award = self.award(event: districtEvent())

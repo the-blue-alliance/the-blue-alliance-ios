@@ -83,7 +83,9 @@ extension Managed where Self: NSManagedObject {
         // Clean up orphans, if applicable
         if let oldValues = oldValues {
             let oldSet = Set(oldValues)
-            oldSet.subtracting(newSet).filter(matchingOrphans).forEach({ context.delete($0) })
+            oldSet.subtracting(newSet).filter(matchingOrphans).forEach({
+                context.delete($0)
+            })
         }
     }
 
