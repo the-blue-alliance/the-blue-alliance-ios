@@ -24,7 +24,6 @@ extension Award: Managed {
         }
     }
 
-    // TODO: THIS needs some tests.... I'm pretty sure we never check the orphan bullshit for Awards
     @discardableResult
     static func insert(_ awards: [TBAAward], event: Event, in context: NSManagedObjectContext) -> [Award] {
         let e = context.object(with: event.objectID) as! Event
@@ -41,8 +40,13 @@ extension Award: Managed {
     override public func prepareForDeletion() {
         super.prepareForDeletion()
 
-        (recipients?.allObjects as? [AwardRecipient])?.filter({ $0.awards == (Set([self]) as NSSet) }).forEach({
-            managedObjectContext?.delete($0)
+        (recipients?.allObjects as? [AwardRecipient])?.forEach({
+            if $0.awards == (Set([self]) as NSSet) {
+                // Recipient will become an orphan - delete
+                managedObjectContext?.delete($0)
+            } else {
+                $0.removeFromAwards(self)
+            }
         })
     }
 
