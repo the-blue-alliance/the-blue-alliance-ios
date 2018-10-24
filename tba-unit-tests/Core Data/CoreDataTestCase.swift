@@ -75,13 +75,4 @@ class CoreDataTestCase: XCTestCase {
         return Event.insert(with: model, in: persistentContainer.viewContext)
     }
 
-    // TODO: We for sure need some sort of tear down to blow our Core Data stack away
-
-    /*
-    func testDistrict() -> District {
-        let model = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
-        return District.insert(model, in: persistentContainer.viewContext)
-    }
-    */
-
 }
