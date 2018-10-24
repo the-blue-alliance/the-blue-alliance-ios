@@ -117,15 +117,11 @@ extension MatchesViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 if let matches = matches {
-                    let localMatches = matches.map({ (modelMatch) -> Match in
-                        return Match.insert(with: modelMatch, for: backgroundEvent, in: backgroundContext)
-                    })
-                    backgroundEvent.matches = Set(localMatches) as NSSet
+                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    Match.insert(matches, event: event, in: backgroundContext)
+                    backgroundContext.saveOrRollback()
                 }
-
-                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })

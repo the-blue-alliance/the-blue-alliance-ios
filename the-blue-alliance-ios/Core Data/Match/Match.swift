@@ -142,8 +142,10 @@ extension Match {
 extension Match: Managed {
 
     @discardableResult
-    static func insert(with model: TBAMatch, for event: Event, in context: NSManagedObjectContext) -> Match {
-        let predicate = NSPredicate(format: "key == %@", model.key)
+    static func insert(_ model: TBAMatch, event: Event, in context: NSManagedObjectContext) -> Match {
+        let predicate = NSPredicate(format: "%K == %@",
+                                    #keyPath(Match.key),
+                                    model.key)
         return findOrCreate(in: context, matching: predicate) { (match) in
             // Required: compLevel, eventKey, key, matchNumber, setNumber
             match.key = model.key
@@ -167,6 +169,7 @@ extension Match: Managed {
             }, in: context)
 
             match.winningAlliance = model.winningAlliance
+            // This is safe to be used alone, since we take care of the Event <-> Match relationship
             match.event = event
 
             match.time = model.time as NSNumber?
@@ -184,6 +187,16 @@ extension Match: Managed {
         }
     }
 
-    // TODO: Probably a method to insert Match on Event
+    @discardableResult
+    static func insert(_ matches: [TBAMatch], event: Event, in context: NSManagedObjectContext) -> [Match] {
+        let matches = matches.map({
+            return Match.insert($0, event: event, in: context)
+        })
+        updateToManyRelationship(relationship: &event.matches, newValues: matches, matchingOrphans: { _ in
+            // Matches will never belong to more than one Event, so this should always be true
+            return true
+        }, in: context)
+        return matches
+    }
 
 }

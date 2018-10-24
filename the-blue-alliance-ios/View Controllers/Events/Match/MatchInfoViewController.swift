@@ -212,14 +212,12 @@ extension MatchInfoViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.match.event!.objectID) as! Event
-
                 if let modelMatch = modelMatch {
                     // TODO: Match can never be deleted
-                    backgroundEvent.addToMatches(Match.insert(with: modelMatch, for: backgroundEvent, in: backgroundContext))
+                    let event = backgroundContext.object(with: self.match.event!.objectID) as! Event
+                    Match.insert(modelMatch, event: event, in: backgroundContext)
+                    backgroundContext.saveOrRollback()
                 }
-
-                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })

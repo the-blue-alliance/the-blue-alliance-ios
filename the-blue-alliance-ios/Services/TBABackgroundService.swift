@@ -97,15 +97,16 @@ class TBABackgroundService {
                 print("Error in background fetch of match \(key) - \(error.localizedDescription)")
                 completion(nil, BackgroundFetchError.error(error))
             } else {
-                guard let modelMatch = modelMatch else {
+                // TODO: This logic doesn't seem right - it seems like we'll return an error for a 304, which isn't
+                // great, but also I'm planning on killing (or reworking) this background service
+                if let modelMatch = modelMatch {
+                    let match = Match.insert(modelMatch, event: event, in: context)
+                    context.performSaveOrRollback()
+
+                    completion(match, nil)
+                } else {
                     completion(nil, BackgroundFetchError.message("No model for background fetch of match \(key)"))
-                    return
                 }
-
-                let match = Match.insert(with: modelMatch, for: event, in: context)
-                context.performSaveOrRollback()
-
-                completion(match, nil)
             }
         }
     }

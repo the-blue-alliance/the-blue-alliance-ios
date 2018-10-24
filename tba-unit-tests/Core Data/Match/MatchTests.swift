@@ -1,3 +1,4 @@
+import TBAKit
 import Foundation
 import XCTest
 @testable import The_Blue_Alliance
@@ -13,6 +14,206 @@ class MatchTestCase: CoreDataTestCase {
             return teamKey
         }))
         return alliance
+    }
+
+    func test_insert() {
+        let event = districtEvent()
+        let redAlliance = TBAMatchAlliance(score: 200, teams: ["frc7332"])
+        let blueAlliance = TBAMatchAlliance(score: 300, teams: ["frc3333"])
+        let model = TBAMatch(key: "\(event.key!)_sf2m3",
+                             compLevel: "sf",
+                             setNumber: 2,
+                             matchNumber: 3,
+                             alliances: ["red": redAlliance, "blue": blueAlliance],
+                             winningAlliance: "blue",
+                             eventKey: event.key!,
+                             time: 1520109780,
+                             actualTime: 1520090745,
+                             predictedTime: 1520109780,
+                             postResultTime: 1520090929,
+                             breakdown: ["red": [:], "blue": [:]],
+                             videos: [TBAMatchVideo(key: "G-pq01gqMTw", type: "youtube")])
+
+        let match = Match.insert(model, event: event, in: persistentContainer.viewContext)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        XCTAssertEqual(match.key, "2018miket_sf2m3")
+        XCTAssertEqual(match.compLevelString, "sf")
+        XCTAssertEqual(match.setNumber, 2)
+        XCTAssertEqual(match.matchNumber, 3)
+        XCTAssertEqual(match.alliances?.count, 2)
+        XCTAssertEqual(match.winningAlliance, "blue")
+        XCTAssertEqual(match.event, event)
+        XCTAssertEqual(match.time, 1520109780)
+        XCTAssertEqual(match.actualTime, 1520090745)
+        XCTAssertEqual(match.predictedTime, 1520109780)
+        XCTAssertEqual(match.postResultTime, 1520090929)
+        XCTAssertEqual(match.videos?.count, 1)
+    }
+
+    func test_insert_orphans() {
+        let event = districtEvent()
+        let redAlliance = TBAMatchAlliance(score: 200, teams: ["frc7332"])
+        let blueAlliance = TBAMatchAlliance(score: 300, teams: ["frc3333"])
+        let modelOne = TBAMatch(key: "\(event.key!)_sf2m3",
+            compLevel: "sf",
+            setNumber: 2,
+            matchNumber: 3,
+            alliances: ["red": redAlliance, "blue": blueAlliance],
+            winningAlliance: "blue",
+            eventKey: event.key!,
+            time: 1520109780,
+            actualTime: 1520090745,
+            predictedTime: 1520109780,
+            postResultTime: 1520090929,
+            breakdown: ["red": [:], "blue": [:]],
+            videos: [TBAMatchVideo(key: "G-pq01gqMTw", type: "youtube")])
+
+        let matchOne = Match.insert([modelOne], event: event, in: persistentContainer.viewContext).first!
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        let modelTwo = TBAMatch(key: "\(event.key!)_f1m1",
+            compLevel: "f",
+            setNumber: 1,
+            matchNumber: 1,
+            alliances: ["red": redAlliance, "blue": blueAlliance],
+            winningAlliance: "blue",
+            eventKey: event.key!,
+            time: 1520109780,
+            actualTime: 1520090745,
+            predictedTime: 1520109780,
+            postResultTime: 1520090929,
+            breakdown: ["red": [:], "blue": [:]],
+            videos: [TBAMatchVideo(key: "G-pq01gqMTw", type: "youtube")])
+
+        let matchTwo = Match.insert([modelTwo], event: event, in: persistentContainer.viewContext).first!
+
+        // Sanity check
+        XCTAssertNotEqual(matchOne, matchTwo)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // Ensure our Event/Match updates it's relationships properly
+        XCTAssertFalse(event.matches!.contains(matchOne))
+        XCTAssert(event.matches!.contains(matchTwo))
+
+        // MatchOne should be deleted
+        XCTAssertNil(matchOne.managedObjectContext)
+
+        // MatchTwo should not be deleted
+        XCTAssertNotNil(matchTwo.managedObjectContext)
+    }
+
+    func test_update() {
+        let event = districtEvent()
+        let redAllianceModel = TBAMatchAlliance(score: 200, teams: ["frc7332"])
+        let blueAllianceModel = TBAMatchAlliance(score: 300, teams: ["frc3333"])
+        let orangeAllianceModel = TBAMatchAlliance(score: 100, teams: ["frc1111"])
+        let modelOne = TBAMatch(key: "\(event.key!)_sf2m3",
+            compLevel: "sf",
+            setNumber: 2,
+            matchNumber: 3,
+            alliances: ["red": redAllianceModel, "blue": blueAllianceModel, "orange": orangeAllianceModel],
+            winningAlliance: "blue",
+            eventKey: event.key!,
+            time: 1520109780,
+            actualTime: 1520090745,
+            predictedTime: 1520109780,
+            postResultTime: 1520090929,
+            breakdown: ["red": [:], "blue": [:]],
+            videos: [TBAMatchVideo(key: "G-pq01gqMTw", type: "youtube")])
+
+        let matchOne = Match.insert(modelOne, event: event, in: persistentContainer.viewContext)
+        let blueAlliance = (matchOne.alliances!.allObjects as! [MatchAlliance]).first(where: { $0.allianceKey == "blue" })!
+        let orangeAlliance = (matchOne.alliances!.allObjects as! [MatchAlliance]).first(where: { $0.allianceKey == "orange" })!
+        let redAllianceOne = (matchOne.alliances!.allObjects as! [MatchAlliance]).first(where: { $0.allianceKey == "red" })!
+        let video = matchOne.videos!.allObjects.first as! MatchVideo
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        let redAllianceModelTwo = TBAMatchAlliance(score: 200, teams: ["frc7777"])
+
+        let modelTwo = TBAMatch(key: "\(event.key!)_sf2m3",
+            compLevel: "sf",
+            setNumber: 2,
+            matchNumber: 3,
+            alliances: ["red": redAllianceModelTwo, "blue": blueAllianceModel],
+            winningAlliance: "red",
+            eventKey: event.key!,
+            time: 1520109781,
+            actualTime: 1520090745,
+            predictedTime: 1520109780,
+            postResultTime: 1520090929,
+            breakdown: ["red": [:], "blue": [:]],
+            videos: [])
+
+        let matchTwo = Match.insert(modelTwo, event: event, in: persistentContainer.viewContext)
+        let redAllianceTwo = (matchTwo.alliances!.allObjects as! [MatchAlliance]).first(where: { $0.allianceKey == "red" })!
+
+        // Sanity check
+        XCTAssertEqual(matchOne, matchTwo)
+        XCTAssertEqual(redAllianceOne, redAllianceTwo)
+
+        // Check that our values have been updated
+        XCTAssertEqual(matchOne.alliances?.count, 2)
+        XCTAssertEqual(matchOne.winningAlliance, "red")
+        XCTAssertEqual(matchOne.time, 1520109781)
+        XCTAssertEqual(matchOne.videos?.count, 0)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // Blue Alliance/Red Alliance should not be deleted, since it still refers to a Match
+        XCTAssertNotNil(blueAlliance.managedObjectContext)
+        XCTAssertNotNil(redAllianceOne.managedObjectContext)
+
+        // Orange Alliance should be deleted, since it no longer refers to a match
+        XCTAssertNil(orangeAlliance.managedObjectContext)
+
+        // Match Video should be deleted, since it's now an orphan
+        XCTAssertNil(video.managedObjectContext)
+    }
+
+    func test_delete() {
+        // Test cascades
+        let event = districtEvent()
+        let redAllianceModel = TBAMatchAlliance(score: 200, teams: ["frc7332"])
+        let blueAllianceModel = TBAMatchAlliance(score: 300, teams: ["frc3333"])
+        let model = TBAMatch(key: "\(event.key!)_sf2m3",
+            compLevel: "sf",
+            setNumber: 2,
+            matchNumber: 3,
+            alliances: ["red": redAllianceModel, "blue": blueAllianceModel],
+            winningAlliance: "blue",
+            eventKey: event.key!,
+            time: 1520109780,
+            actualTime: 1520090745,
+            predictedTime: 1520109780,
+            postResultTime: 1520090929,
+            breakdown: ["red": [:], "blue": [:]],
+            videos: [TBAMatchVideo(key: "G-pq01gqMTw", type: "youtube")])
+
+        let match = Match.insert(model, event: event, in: persistentContainer.viewContext)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        let blueAlliance = (match.alliances!.allObjects as! [MatchAlliance]).first(where: { $0.allianceKey == "blue" })!
+        let redAlliance = (match.alliances!.allObjects as! [MatchAlliance]).first(where: { $0.allianceKey == "red" })!
+        let video = match.videos!.allObjects.first as! MatchVideo
+
+        persistentContainer.viewContext.delete(match)
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // Sanity check
+        XCTAssertNil(match.managedObjectContext)
+
+        // Test that both of our alliances have been deleted
+        XCTAssertNil(blueAlliance.managedObjectContext)
+        XCTAssertNil(redAlliance.managedObjectContext)
+
+        // Test that our video has been deleted
+        XCTAssertNil(video.managedObjectContext)
     }
 
     func test_compLevel() {
