@@ -37,10 +37,13 @@ class DistrictEventPoints_TestCase: CoreDataTestCase {
         let event = districtEvent()
         let modelEventPoints = TBADistrictEventPoints(teamKey: "frc7332", eventKey: event.key!, alliancePoints: 10, awardPoints: 20, qualPoints: 30, elimPoints: 40, total: 50)
         let modelDistrictRanking = TBADistrictRanking(teamKey: "frc7332", rank: 1, rookieBonus: 10, pointTotal: 30, eventPoints: [modelEventPoints])
-        let districtRanking = DistrictRanking.insert(modelDistrictRanking, district: event.district!, in: persistentContainer.viewContext)
+        let districtRanking = DistrictRanking.insert([modelDistrictRanking], district: event.district!, in: persistentContainer.viewContext).first!
 
         let points = districtRanking.eventPoints!.allObjects.first! as! DistrictEventPoints
         let teamKey = points.teamKey!
+
+        // Manually remove our District Ranking -> District relationship so we can save
+        points.districtRanking = nil
 
         persistentContainer.viewContext.delete(points)
         try! persistentContainer.viewContext.save()
@@ -56,6 +59,18 @@ class DistrictEventPoints_TestCase: CoreDataTestCase {
         // Team key should not be deleted
         XCTAssertNotNil(teamKey.managedObjectContext)
         XCTAssertEqual(teamKey.eventPoints!.count, 0)
+    }
+
+    func test_delete_deny() {
+        let event = districtEvent()
+        let modelEventPoints = TBADistrictEventPoints(teamKey: "frc7332", eventKey: event.key!, alliancePoints: 10, awardPoints: 20, qualPoints: 30, elimPoints: 40, total: 50)
+        let modelDistrictRanking = TBADistrictRanking(teamKey: "frc7332", rank: 1, rookieBonus: 10, pointTotal: 30, eventPoints: [modelEventPoints])
+        let districtRanking = DistrictRanking.insert([modelDistrictRanking], district: event.district!, in: persistentContainer.viewContext).first!
+
+        let points = districtRanking.eventPoints!.allObjects.first! as! DistrictEventPoints
+
+        persistentContainer.viewContext.delete(points)
+        XCTAssertThrowsError(try persistentContainer.viewContext.save())
     }
 
 }

@@ -26,11 +26,11 @@ extension Award: Managed {
 
     @discardableResult
     static func insert(_ awards: [TBAAward], event: Event, in context: NSManagedObjectContext) -> [Award] {
-        let e = context.object(with: event.objectID) as! Event
+        let event = context.object(with: event.objectID) as! Event
         let awards = awards.map({
             return Award.insert($0, in: context)
         })
-        updateToManyRelationship(relationship: &e.awards, newValues: awards, matchingOrphans: { _ in
+        updateToManyRelationship(relationship: &event.awards, newValues: awards, matchingOrphans: { _ in
             // Awards will never belong to more than one event, so this should always be true
             return true
         }, in: context)

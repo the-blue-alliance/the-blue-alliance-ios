@@ -27,7 +27,7 @@
         <attribute name="elimPoints" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="qualPoints" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="total" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="districtRanking" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DistrictRanking" inverseName="eventPoints" inverseEntity="DistrictRanking" syncable="YES"/>
+        <relationship name="districtRanking" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="DistrictRanking" inverseName="eventPoints" inverseEntity="DistrictRanking" syncable="YES"/>
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="points" inverseEntity="Event" syncable="YES"/>
         <relationship name="teamKey" maxCount="1" deletionRule="Nullify" destinationEntity="TeamKey" inverseName="eventPoints" inverseEntity="TeamKey" syncable="YES"/>
     </entity>

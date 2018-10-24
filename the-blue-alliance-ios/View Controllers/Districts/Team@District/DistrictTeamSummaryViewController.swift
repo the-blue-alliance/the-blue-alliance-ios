@@ -129,11 +129,10 @@ extension DistrictTeamSummaryViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                rankings?.forEach({
-                    return DistrictRanking.insert($0, district: self.ranking.district!, in: backgroundContext)
-                })
-
-                backgroundContext.saveOrRollback()
+                if let rankings = rankings {
+                    DistrictRanking.insert(rankings, district: self.ranking.district!, in: backgroundContext)
+                    backgroundContext.saveOrRollback()
+                }
                 self.removeRequest(request: request!)
             })
         })

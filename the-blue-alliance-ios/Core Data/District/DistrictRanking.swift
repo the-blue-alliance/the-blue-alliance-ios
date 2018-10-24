@@ -4,8 +4,7 @@ import CoreData
 
 extension DistrictRanking: Managed {
 
-    @discardableResult
-    static func insert(_ model: TBADistrictRanking, district contextDistrict: District, in context: NSManagedObjectContext) -> DistrictRanking {
+    private static func insert(_ model: TBADistrictRanking, district contextDistrict: District, in context: NSManagedObjectContext) -> DistrictRanking {
         let district = context.object(with: contextDistrict.objectID) as! District
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
                                     #keyPath(DistrictRanking.district.key), district.key!,
@@ -27,10 +26,23 @@ extension DistrictRanking: Managed {
 
                 return DistrictEventPoints.insert(modelPoints, event: event, in: context)
             })
-            updateToManyRelationship(relationship: &ranking.eventPoints, newValues: eventPoints, matchingOrphans: {
-                return $0.districtRanking == ranking
+            updateToManyRelationship(relationship: &ranking.eventPoints, newValues: eventPoints, matchingOrphans: { (localRanking) in
+                return localRanking.districtRanking == ranking
             }, in: context)
         })
+    }
+
+    @discardableResult
+    static func insert(_ rankings: [TBADistrictRanking], district: District, in context: NSManagedObjectContext) -> [DistrictRanking] {
+        let district = context.object(with: district.objectID) as! District
+        let rankings = rankings.map({
+            return DistrictRanking.insert($0, district: district, in: context)
+        })
+        updateToManyRelationship(relationship: &district.rankings, newValues: rankings, matchingOrphans: { _ in
+            // Rankings will never belong to more than one district, so this should always be true
+            return true
+        }, in: context)
+        return rankings
     }
 
 }

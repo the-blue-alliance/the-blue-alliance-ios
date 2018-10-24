@@ -158,11 +158,10 @@ extension DistrictBreakdownViewController: Refreshable {
                 }
                 dispatchGroup.wait()
 
-                rankings?.forEach({
-                    return DistrictRanking.insert($0, district: self.ranking.district!, in: backgroundContext)
-                })
-
-                backgroundContext.saveOrRollback()
+                if let rankings = rankings {
+                    DistrictRanking.insert(rankings, district: self.ranking.district!, in: backgroundContext)
+                    backgroundContext.saveOrRollback()
+                }
                 self.removeRequest(request: rankingsRequest!)
             })
         })

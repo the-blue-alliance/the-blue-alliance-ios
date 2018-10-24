@@ -8,11 +8,13 @@ class District_TestCase: CoreDataTestCase {
     func test_insert() {
         let modelDistrict = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
         let district = District.insert(modelDistrict, in: persistentContainer.viewContext)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
         XCTAssertEqual(district.abbreviation, "fim")
         XCTAssertEqual(district.name, "FIRST In Michigan")
         XCTAssertEqual(district.key, "2018fim")
         XCTAssertEqual(district.year, 2018)
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
     func test_update() {
@@ -22,7 +24,12 @@ class District_TestCase: CoreDataTestCase {
         let duplicateModelDistrict = TBADistrict(abbreviation: "fim", name: "Michigan FIRST", key: "2018fim", year: 2018)
         let duplicateDistrict = District.insert(duplicateModelDistrict, in: persistentContainer.viewContext)
 
+        // Sanity check
         XCTAssertEqual(district, duplicateDistrict)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // Check that our District updates its values properly
         XCTAssertEqual(district.name, "Michigan FIRST")
     }
 
@@ -36,13 +43,15 @@ class District_TestCase: CoreDataTestCase {
         persistentContainer.viewContext.delete(district)
         try! persistentContainer.viewContext.save()
 
+        // Check that our District handles its relationships properly
+        XCTAssertNil(ranking.district)
+        XCTAssertNil(event.district)
+
         // Event should not be deleted
         XCTAssertNotNil(event.managedObjectContext)
-        XCTAssertNil(event.district)
 
         // Ranking should be deleted
         XCTAssertNil(ranking.managedObjectContext)
-        XCTAssertNil(ranking.district)
     }
 
     func test_abbreviationWithYear() {

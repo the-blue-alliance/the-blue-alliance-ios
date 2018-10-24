@@ -9,9 +9,11 @@ class AwardRecipientTestCase: AwardTestCase {
 
         let modelRecipient = TBAAwardRecipient(teamKey: "frc7332", awardee: "Zachary Orr")
         let recipient = AwardRecipient.insert(modelRecipient, award: award, in: persistentContainer.viewContext)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
         XCTAssertEqual(recipient.awardee, "Zachary Orr")
         XCTAssertEqual(recipient.teamKey?.key, "frc7332")
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
     func test_update_awardee_team() {
@@ -20,7 +22,11 @@ class AwardRecipientTestCase: AwardTestCase {
         let modelRecipient = TBAAwardRecipient(teamKey: "frc7332", awardee: "Zachary Orr")
         let recipientOne = AwardRecipient.insert(modelRecipient, award: award, in: persistentContainer.viewContext)
         let recipientTwo = AwardRecipient.insert(modelRecipient, award: award, in: persistentContainer.viewContext)
+
+        // Sanity check
         XCTAssertEqual(recipientOne, recipientTwo)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
     func test_insert_team() {
@@ -28,9 +34,11 @@ class AwardRecipientTestCase: AwardTestCase {
 
         let modelRecipient = TBAAwardRecipient(teamKey: "frc7332")
         let recipient = AwardRecipient.insert(modelRecipient, award: award, in: persistentContainer.viewContext)
-        XCTAssertEqual(recipient.teamKey?.key, "frc7332")
-        XCTAssertNil(recipient.awardee)
+
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        XCTAssertNil(recipient.awardee)
+        XCTAssertEqual(recipient.teamKey?.key, "frc7332")
     }
 
     func test_update_team() {
@@ -39,7 +47,11 @@ class AwardRecipientTestCase: AwardTestCase {
         let modelRecipient = TBAAwardRecipient(teamKey: "frc7332")
         let recipientOne = AwardRecipient.insert(modelRecipient, award: award, in: persistentContainer.viewContext)
         let recipientTwo = AwardRecipient.insert(modelRecipient, award: award, in: persistentContainer.viewContext)
+
+        // Sanity check
         XCTAssertEqual(recipientOne, recipientTwo)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
     func test_insert_awardee() {
@@ -47,9 +59,11 @@ class AwardRecipientTestCase: AwardTestCase {
 
         let modelRecipient = TBAAwardRecipient(awardee: "Zachary Orr")
         let recipient = AwardRecipient.insert(modelRecipient, award: award, in: persistentContainer.viewContext)
-        XCTAssertEqual(recipient.awardee, "Zachary Orr")
-        XCTAssertNil(recipient.teamKey)
+
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        XCTAssertNil(recipient.teamKey)
+        XCTAssertEqual(recipient.awardee, "Zachary Orr")
     }
 
     func test_update_awardee() {
@@ -58,7 +72,11 @@ class AwardRecipientTestCase: AwardTestCase {
         let modelRecipient = TBAAwardRecipient(awardee: "Zachary Orr")
         let recipientOne = AwardRecipient.insert(modelRecipient, award: award, in: persistentContainer.viewContext)
         let recipientTwo = AwardRecipient.insert(modelRecipient, award: award, in: persistentContainer.viewContext)
+
+        // Sanity check
         XCTAssertEqual(recipientOne, recipientTwo)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
     func test_delete() {
@@ -88,6 +106,8 @@ class AwardRecipientTestCase: AwardTestCase {
     func test_delete_deny() {
         let award = self.award(event: districtEvent())
         let recipient = award.recipients!.allObjects.first! as! AwardRecipient
+
+        // Sanity check
         XCTAssert(award.recipients!.contains(recipient))
 
         persistentContainer.viewContext.delete(recipient)
