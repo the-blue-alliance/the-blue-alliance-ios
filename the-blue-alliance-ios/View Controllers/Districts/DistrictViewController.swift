@@ -35,7 +35,7 @@ class DistrictViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "\(district.year) \(district.name!) Districts"
+        title = "\(district.year!.stringValue) \(district.name!) Districts"
 
         // TODO: Why do we do this? Has to do with the split view I know
         if navigationController?.viewControllers.index(of: self) == 0 {

@@ -67,6 +67,9 @@ public enum MatchCompLevel: String, CaseIterable {
 
 extension Match {
 
+    /**
+     Returns the MatchCompLevel for the Match's compLevelString.
+     */
     var compLevel: MatchCompLevel? {
         guard let compLevelString = compLevelString else {
             return nil
@@ -74,6 +77,9 @@ extension Match {
         return MatchCompLevel(rawValue: compLevelString)
     }
 
+    /**
+     The formatted Match time.
+     */
     var timeString: String? {
         guard let time = time else {
             return nil
@@ -118,6 +124,19 @@ extension Match {
         return (alliances?.allObjects as? [MatchAlliance])?.first(where: { $0.allianceKey == allianceKey })
     }
 
+    var friendlyName: String {
+        switch compLevel {
+        case .none:
+            return "Match \(matchNumber!.stringValue)"
+        case .some(let compLevel):
+            if compLevel == .qualification {
+                return "\(compLevel.levelShort) \(matchNumber!.stringValue)"
+            } else {
+                return "\(compLevel.levelShort) \(setNumber!.stringValue) - \(matchNumber!.stringValue)"
+            }
+        }
+    }
+
 }
 
 extension Match: Managed {
@@ -132,70 +151,39 @@ extension Match: Managed {
 
             // When adding a new MatchCompLevel, models will need a migration to update this
             if let compLevel = MatchCompLevel(rawValue: model.compLevel) {
-                match.compLevelSortOrder = Int16(compLevel.sortOrder)
-            }
-
-            match.setNumber = Int16(model.setNumber)
-            match.matchNumber = Int16(model.matchNumber)
-
-            if let alliances = model.alliances {
-                match.alliances = Set(alliances.map({ (key: String, value: TBAMatchAlliance) -> MatchAlliance in
-                    return MatchAlliance.insert(with: value, allianceKey: key, for: match, in: context)
-                })) as NSSet
+                match.compLevelSortOrder = compLevel.sortOrder as NSNumber
             } else {
-                match.alliances = nil
+                match.compLevelSortOrder = nil
             }
+
+            match.setNumber = model.setNumber as NSNumber
+            match.matchNumber = model.matchNumber as NSNumber
+
+            updateToManyRelationship(relationship: &match.alliances, newValues: model.alliances?.map({ (key: String, value: TBAMatchAlliance) -> MatchAlliance in
+                return MatchAlliance.insert(with: value, allianceKey: key, for: match, in: context)
+            }), matchingOrphans: { _ in
+                // Match Alliance will never belong to more than one Match, so this should always be true
+                return true
+            }, in: context)
 
             match.winningAlliance = model.winningAlliance
             match.event = event
 
-            if let time = model.time {
-                match.time = NSNumber(value: time)
-            } else {
-                match.time = nil
-            }
-
-            if let actualTime = model.actualTime {
-                match.actualTime = NSNumber(value: actualTime)
-            } else {
-                match.actualTime = nil
-            }
-
-            if let predictedTime = model.predictedTime {
-                match.predictedTime = NSNumber(value: predictedTime)
-            } else {
-                match.predictedTime = nil
-            }
-
-            if let postResultTime = model.postResultTime {
-                match.postResultTime = NSNumber(value: postResultTime)
-            } else {
-                match.postResultTime = nil
-            }
-
+            match.time = model.time as NSNumber?
+            match.actualTime = model.actualTime as NSNumber?
+            match.predictedTime = model.predictedTime as NSNumber?
+            match.postResultTime = model.postResultTime as NSNumber?
             match.breakdown = model.breakdown
 
-            if let videos = model.videos {
-                match.videos = Set(videos.map({ (modelVideo) -> MatchVideo in
-                    return MatchVideo.insert(with: modelVideo, in: context)
-                })) as NSSet
-            } else {
-                match.videos = nil
-            }
+            updateToManyRelationship(relationship: &match.videos, newValues: model.videos?.map({ (modelVideo) -> MatchVideo in
+                return MatchVideo.insert(with: modelVideo, in: context)
+            }), matchingOrphans: { _ in
+                // Match Video will never belong to more than one Match, so this should always be true
+                return true
+            }, in: context)
         }
     }
 
-    var friendlyName: String {
-        switch compLevel {
-        case .none:
-            return "Match \(matchNumber)"
-        case .some(let compLevel):
-            if compLevel == .qualification {
-                return "\(compLevel.levelShort) \(matchNumber)"
-            } else {
-                return "\(compLevel.levelShort) \(setNumber) - \(matchNumber)"
-            }
-        }
-    }
+    // TODO: Probably a method to insert Match on Event
 
 }

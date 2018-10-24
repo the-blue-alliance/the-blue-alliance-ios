@@ -2,21 +2,7 @@ import Foundation
 import XCTest
 @testable import The_Blue_Alliance
 
-class Match_TestCase: CoreDataTestCase {
-
-    var match: Match!
-
-    override func setUp() {
-        super.setUp()
-
-        match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
-    }
-
-    override func tearDown() {
-        match = nil
-
-        super.tearDown()
-    }
+class MatchTestCase: CoreDataTestCase {
 
     func alliance(allianceKey: String) -> MatchAlliance {
         let alliance = MatchAlliance(entity: MatchAlliance.entity(), insertInto: persistentContainer.viewContext)
@@ -30,6 +16,8 @@ class Match_TestCase: CoreDataTestCase {
     }
 
     func test_compLevel() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+
         // No compLevelString
         XCTAssertNil(match.compLevel)
 
@@ -54,6 +42,8 @@ class Match_TestCase: CoreDataTestCase {
     }
 
     func test_compLevel_sortOrder() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+
         match.compLevelString = "qm"
         XCTAssertEqual(match.compLevel?.sortOrder, 0)
 
@@ -71,6 +61,8 @@ class Match_TestCase: CoreDataTestCase {
     }
 
     func test_compLevel_level() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+
         match.compLevelString = "qm"
         XCTAssertEqual(match.compLevel?.level, "Qualification")
 
@@ -88,6 +80,8 @@ class Match_TestCase: CoreDataTestCase {
     }
 
     func test_compLevel_levelShort() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+
         match.compLevelString = "qm"
         XCTAssertEqual(match.compLevel?.levelShort, "Quals")
 
@@ -105,6 +99,8 @@ class Match_TestCase: CoreDataTestCase {
     }
 
     func test_timeString() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+
         let defaultTimeZone = NSTimeZone.default
 
         NSTimeZone.default = TimeZone(abbreviation: "EST")!
@@ -120,6 +116,7 @@ class Match_TestCase: CoreDataTestCase {
     }
 
     func test_redAlliance() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
         XCTAssertNil(match.redAlliance)
 
         match.alliances = Set([alliance(allianceKey: "red")]) as NSSet
@@ -127,11 +124,13 @@ class Match_TestCase: CoreDataTestCase {
     }
 
     func test_redAllianceTeamNumbers() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
         match.alliances = Set([alliance(allianceKey: "red")]) as NSSet
         XCTAssertEqual(match.redAllianceTeamNumbers, ["2337", "7332", "3333"])
     }
 
     func test_blueAlliance() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
         XCTAssertNil(match.blueAlliance)
 
         match.alliances = Set([alliance(allianceKey: "blue")]) as NSSet
@@ -139,11 +138,13 @@ class Match_TestCase: CoreDataTestCase {
     }
 
     func test_blueAllianceTeamNumbers() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
         match.alliances = Set([alliance(allianceKey: "blue")]) as NSSet
         XCTAssertEqual(match.blueAllianceTeamNumbers, ["2337", "7332", "3333"])
     }
 
     func test_friendlyName() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
         match.setNumber = 2
         match.matchNumber = 73
 

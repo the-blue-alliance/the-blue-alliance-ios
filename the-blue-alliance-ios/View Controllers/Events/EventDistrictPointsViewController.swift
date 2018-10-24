@@ -133,12 +133,10 @@ extension EventDistrictPointsViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                // TODO: One here
-                eventPoints?.forEach({
-                    DistrictEventPoints.insert($0, event: self.event, in: backgroundContext)
-                })
-
-                backgroundContext.saveOrRollback()
+                if let eventPoints = eventPoints {
+                    DistrictEventPoints.insert(eventPoints, event: self.event, in: backgroundContext)
+                    backgroundContext.saveOrRollback()
+                }
                 self.removeRequest(request: request!)
             })
         })

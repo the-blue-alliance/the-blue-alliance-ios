@@ -72,12 +72,12 @@ extension Managed where Self: NSManagedObject {
         }
     }
 
-    public static func updateToManyRelationship<T: NSManagedObject>(relationship: inout NSSet?, newValues new: [T], matchingOrphans: @escaping (T) -> Bool, in context: NSManagedObjectContext) {
+    public static func updateToManyRelationship<T: NSManagedObject>(relationship: inout NSSet?, newValues new: [T]?, matchingOrphans: @escaping (T) -> Bool, in context: NSManagedObjectContext) {
         // Store our old values so we can reference them later
         let oldValues = relationship?.allObjects as? [T]
 
         // The ol' switcharoo
-        let newSet = Set(new)
+        let newSet = Set(new ?? [])
         relationship = newSet as NSSet
 
         // Clean up orphans, if applicable
