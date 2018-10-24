@@ -3,7 +3,7 @@ import XCTest
 import CoreData
 @testable import The_Blue_Alliance
 
-class District_TestCase: CoreDataTestCase {
+class DistrictTestCase: CoreDataTestCase {
 
     func test_insert() {
         let modelDistrict = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)

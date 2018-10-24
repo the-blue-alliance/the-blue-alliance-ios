@@ -65,7 +65,7 @@ public enum MatchCompLevel: String, CaseIterable {
 
 }
 
-extension Match: Managed {
+extension Match {
 
     var compLevel: MatchCompLevel? {
         guard let compLevelString = compLevelString else {
@@ -88,7 +88,7 @@ extension Match: Managed {
 
     /**
      Returns the alliance with an allianceKey of 'red'.
-    */
+     */
     var redAlliance: MatchAlliance? {
         return alliance(with: "red")
     }
@@ -117,6 +117,10 @@ extension Match: Managed {
     private func alliance(with allianceKey: String) -> MatchAlliance? {
         return (alliances?.allObjects as? [MatchAlliance])?.first(where: { $0.allianceKey == allianceKey })
     }
+
+}
+
+extension Match: Managed {
 
     @discardableResult
     static func insert(with model: TBAMatch, for event: Event, in context: NSManagedObjectContext) -> Match {

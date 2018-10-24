@@ -3,7 +3,7 @@ import XCTest
 import CoreData
 @testable import The_Blue_Alliance
 
-class DistrictEventPoints_TestCase: CoreDataTestCase {
+class DistrictEventPointsTestCase: CoreDataTestCase {
 
     func test_insert() {
         let event = districtEvent()

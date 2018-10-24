@@ -1,14 +1,14 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-class Media_TestCase: CoreDataTestCase {
+class TeamMediaTestCase: CoreDataTestCase {
 
-    var media: Media!
+    var media: TeamMedia!
 
     override func setUp() {
         super.setUp()
 
-        media = Media.init(entity: Media.entity(), insertInto: persistentContainer.viewContext)
+        media = TeamMedia.init(entity: TeamMedia.entity(), insertInto: persistentContainer.viewContext)
     }
 
     override func tearDown() {
