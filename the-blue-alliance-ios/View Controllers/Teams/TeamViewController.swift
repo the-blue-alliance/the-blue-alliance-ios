@@ -143,7 +143,7 @@ class TeamViewController: ContainerViewController, Observable {
         navigationController?.dismiss(animated: true, completion: nil)
     }
 
-    private func imageViewController(media: Media, peek: Bool = false) -> TeamMediaImageViewController? {
+    private func imageViewController(media: TeamMedia, peek: Bool = false) -> TeamMediaImageViewController? {
         // TODO: Support showing multiple images
         var imageViewController: TeamMediaImageViewController?
         if let image = media.image {
@@ -197,7 +197,7 @@ extension TeamViewController: EventsViewControllerDelegate {
 
 extension TeamViewController: TeamMediaCollectionViewControllerDelegate {
 
-    func mediaSelected(_ media: Media) {
+    func mediaSelected(_ media: TeamMedia) {
         if let imageViewController = self.imageViewController(media: media) {
             DispatchQueue.main.async {
                 self.present(imageViewController, animated: true)

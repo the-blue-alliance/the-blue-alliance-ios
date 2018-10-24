@@ -41,7 +41,7 @@ public enum MediaType: String {
 
 }
 
-extension Media: Managed, Playable {
+extension TeamMedia: Managed, Playable {
 
     var image: UIImage? {
         get {
@@ -73,7 +73,7 @@ extension Media: Managed, Playable {
         return nil
     }
 
-    static func insert(_ model: TBAMedia, year: Int, in context: NSManagedObjectContext) -> Media {
+    static func insert(_ model: TBAMedia, year: Int, in context: NSManagedObjectContext) -> TeamMedia {
         var mediaPredicate: NSPredicate?
         if let key = model.key {
             mediaPredicate = NSPredicate(format: "key == %@ AND type == %@", key, model.type)
@@ -136,7 +136,7 @@ extension Media: Managed, Playable {
 }
 
 // CDPhotoThread URLs
-extension Media {
+extension TeamMedia {
 
     public enum CDPhotoTreadSize: String {
         case small = "_s"
@@ -168,7 +168,7 @@ extension Media {
 }
 
 // Instagram URLs
-extension Media {
+extension TeamMedia {
 
     public enum ImgurImageSize: String {
         case small = "s"
@@ -193,7 +193,7 @@ extension Media {
 }
 
 // Instagram URLs
-extension Media {
+extension TeamMedia {
 
     public enum InstagramImageSize: String {
         case thumbnail = "t"
@@ -219,7 +219,7 @@ extension Media {
 }
 
 // Grabcad URLs
-extension Media {
+extension TeamMedia {
 
     fileprivate var grabcadURL: URL? {
         guard let foreignKey = foreignKey else {

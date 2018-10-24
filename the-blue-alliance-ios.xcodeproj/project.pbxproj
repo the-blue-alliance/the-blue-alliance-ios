@@ -186,7 +186,7 @@
 		92DF35F9217D439500B5246B /* MatchAlliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF35F6217D439400B5246B /* MatchAlliance.swift */; };
 		92DF35FA217D439500B5246B /* MatchVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF35F7217D439400B5246B /* MatchVideo.swift */; };
 		92DF35FB217D439500B5246B /* Match.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF35F8217D439400B5246B /* Match.swift */; };
-		92DF35FE217D43A200B5246B /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF35FD217D43A200B5246B /* Media.swift */; };
+		92DF35FE217D43A200B5246B /* TeamMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF35FD217D43A200B5246B /* TeamMedia.swift */; };
 		92DF3602217D43B300B5246B /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF3600217D43B300B5246B /* Subscription.swift */; };
 		92DF3603217D43B300B5246B /* Favorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF3601217D43B300B5246B /* Favorite.swift */; };
 		92DF3607217D43CB00B5246B /* TeamKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF3605217D43CB00B5246B /* TeamKey.swift */; };
@@ -412,7 +412,7 @@
 		92DF35F6217D439400B5246B /* MatchAlliance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchAlliance.swift; sourceTree = "<group>"; };
 		92DF35F7217D439400B5246B /* MatchVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchVideo.swift; sourceTree = "<group>"; };
 		92DF35F8217D439400B5246B /* Match.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Match.swift; sourceTree = "<group>"; };
-		92DF35FD217D43A200B5246B /* Media.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
+		92DF35FD217D43A200B5246B /* TeamMedia.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamMedia.swift; sourceTree = "<group>"; };
 		92DF3600217D43B300B5246B /* Subscription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
 		92DF3601217D43B300B5246B /* Favorite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Favorite.swift; sourceTree = "<group>"; };
 		92DF3605217D43CB00B5246B /* TeamKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamKey.swift; sourceTree = "<group>"; };
@@ -1198,7 +1198,6 @@
 		92DF35FC217D43A200B5246B /* Media */ = {
 			isa = PBXGroup;
 			children = (
-				92DF35FD217D43A200B5246B /* Media.swift */,
 			);
 			path = Media;
 			sourceTree = "<group>";
@@ -1215,8 +1214,9 @@
 		92DF3604217D43CB00B5246B /* Team */ = {
 			isa = PBXGroup;
 			children = (
-				92DF3605217D43CB00B5246B /* TeamKey.swift */,
 				92DF3606217D43CB00B5246B /* Team.swift */,
+				92DF3605217D43CB00B5246B /* TeamKey.swift */,
+				92DF35FD217D43A200B5246B /* TeamMedia.swift */,
 			);
 			path = Team;
 			sourceTree = "<group>";
@@ -1705,7 +1705,7 @@
 				9291F7FC1EE6FC7D00EEB86B /* TeamMediaCollectionViewController.swift in Sources */,
 				92DF3610217D43EC00B5246B /* Playable.swift in Sources */,
 				924C0E9020BA18C5009066ED /* Int16+Suffix.swift in Sources */,
-				92DF35FE217D43A200B5246B /* Media.swift in Sources */,
+				92DF35FE217D43A200B5246B /* TeamMedia.swift in Sources */,
 				920DF7CF20954B5D0041B487 /* DistrictBreakdownViewController.swift in Sources */,
 				924602B71ECE99F50030EDBF /* String+Prefix.swift in Sources */,
 				92942E361E2A81E8008E79CA /* EventInfoViewController.swift in Sources */,

@@ -17,7 +17,7 @@ extension MediaError: LocalizedError {
 
 protocol TeamMediaCollectionViewControllerDelegate: AnyObject {
 
-    func mediaSelected(_ media: Media)
+    func mediaSelected(_ media: TeamMedia)
 
 }
 
@@ -33,10 +33,10 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             updateDataSource()
         }
     }
-    var dataSource: CollectionViewDataSource<Media, TeamMediaCollectionViewController>!
+    var dataSource: CollectionViewDataSource<TeamMedia, TeamMediaCollectionViewController>!
     weak var delegate: TeamMediaCollectionViewControllerDelegate?
 
-    var fetchingMedia: NSHashTable<Media> = NSHashTable.weakObjects()
+    var fetchingMedia: NSHashTable<TeamMedia> = NSHashTable.weakObjects()
 
     // MARK: Init
 
@@ -81,7 +81,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<Media> = Media.fetchRequest()
+        let fetchRequest: NSFetchRequest<TeamMedia> = TeamMedia.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "type", ascending: true)]
         setupFetchRequest(fetchRequest)
 
@@ -93,7 +93,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
-    private func setupFetchRequest(_ request: NSFetchRequest<Media>) {
+    private func setupFetchRequest(_ request: NSFetchRequest<TeamMedia>) {
         // TODO: Split section by photos/videos like we do on the web
         if let year = year {
             request.predicate = NSPredicate(format: "team == %@ AND year == %ld AND type in %@", team, year, MediaType.imageTypes)
@@ -113,11 +113,11 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     // MARK: - Private Methods
 
-    private func indexPath(for media: Media) -> IndexPath? {
+    private func indexPath(for media: TeamMedia) -> IndexPath? {
         return dataSource.fetchedResultsController.indexPath(forObject: media)
     }
 
-    private func fetchMedia(_ media: Media) {
+    private func fetchMedia(_ media: TeamMedia) {
         // Make sure we can attempt to fetch our media
         guard let url = media.imageDirectURL else {
             self.persistentContainer.viewContext.performChanges {
@@ -196,7 +196,7 @@ extension TeamMediaCollectionViewController: UICollectionViewDelegateFlowLayout 
 
 extension TeamMediaCollectionViewController: CollectionViewDataSourceDelegate {
 
-    func configure(_ cell: MediaCollectionViewCell, for object: Media, at indexPath: IndexPath) {
+    func configure(_ cell: MediaCollectionViewCell, for object: TeamMedia, at indexPath: IndexPath) {
         if fetchingMedia.contains(object) {
             cell.state = .loading
         } else if let image = object.image {
@@ -250,7 +250,7 @@ extension TeamMediaCollectionViewController: Refreshable {
         removeNoDataView()
 
         let fetchTeamMedia: () -> () = { [unowned self] in
-            if let teamMedia = self.team.media?.allObjects as? [Media] {
+            if let teamMedia = self.team.media?.allObjects as? [TeamMedia] {
                 teamMedia.forEach({ (media) in
                     self.fetchMedia(media)
                 })
@@ -268,8 +268,8 @@ extension TeamMediaCollectionViewController: Refreshable {
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
                 if let media = media {
-                    let localMedia = media.map({ (modelMedia) -> Media in
-                        return Media.insert(modelMedia, year: year, in: backgroundContext)
+                    let localMedia = media.map({ (modelMedia) -> TeamMedia in
+                        return TeamMedia.insert(modelMedia, year: year, in: backgroundContext)
                     })
                     backgroundTeam.media = Set(localMedia) as NSSet
                 }
