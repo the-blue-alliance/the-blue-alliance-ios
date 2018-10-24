@@ -70,6 +70,9 @@ class AwardRecipientTestCase: AwardTestCase {
 
         let teamKey = recipient.teamKey!
 
+        // Manually clear our Award Recipient -> Award relationship so we can save
+        recipient.removeFromAwards(award)
+
         persistentContainer.viewContext.delete(recipient)
         try! persistentContainer.viewContext.save()
 
@@ -80,6 +83,15 @@ class AwardRecipientTestCase: AwardTestCase {
         // Our team key shouldn't be deleted
         XCTAssertNotNil(teamKey.managedObjectContext)
         XCTAssertFalse(teamKey.awards!.contains(recipient))
+    }
+
+    func test_delete_deny() {
+        let award = self.award(event: districtEvent())
+        let recipient = award.recipients!.allObjects.first! as! AwardRecipient
+        XCTAssert(award.recipients!.contains(recipient))
+
+        persistentContainer.viewContext.delete(recipient)
+        XCTAssertThrowsError(try persistentContainer.viewContext.save())
     }
 
     func test_awardText_awardee_team() {
