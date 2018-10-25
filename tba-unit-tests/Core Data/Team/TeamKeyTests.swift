@@ -1,3 +1,4 @@
+import TBAKit
 import XCTest
 @testable import The_Blue_Alliance
 
@@ -19,6 +20,15 @@ class TeamKeyTestCase: CoreDataTestCase {
 
         let teamKey_second = TeamKey.insert(withKey: testTeamKey, in: persistentContainer.viewContext)
         XCTAssertEqual(teamKey_first, teamKey_second)
+    }
+
+    func test_team() {
+        let teamKey = TeamKey.insert(withKey: "frc7332", in: persistentContainer.viewContext)
+        XCTAssertNil(teamKey.team)
+
+        let model = TBATeam(key: "frc7332", teamNumber: 7332, name: "The Rawrbotz", rookieYear: 2010)
+        Team.insert(with: model, in: persistentContainer.viewContext)
+        XCTAssertNotNil(teamKey.team)
     }
 
     func test_teamNumber() {
