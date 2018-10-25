@@ -173,14 +173,14 @@
         <attribute name="allianceKey" attributeType="String" syncable="YES"/>
         <attribute name="score" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="dqTeams" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="TeamKey" inverseName="dqAlliances" inverseEntity="TeamKey" syncable="YES"/>
-        <relationship name="match" optional="YES" maxCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="Match" inverseName="alliances" inverseEntity="Match" syncable="YES"/>
+        <relationship name="match" maxCount="1" deletionRule="Deny" ordered="YES" destinationEntity="Match" inverseName="alliances" inverseEntity="Match" syncable="YES"/>
         <relationship name="surrogateTeams" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="TeamKey" inverseName="surrogateAlliances" inverseEntity="TeamKey" syncable="YES"/>
         <relationship name="teams" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="TeamKey" inverseName="alliances" inverseEntity="TeamKey" syncable="YES"/>
     </entity>
     <entity name="MatchVideo" representedClassName="MatchVideo" syncable="YES" codeGenerationType="class">
         <attribute name="key" attributeType="String" syncable="YES"/>
         <attribute name="typeString" attributeType="String" syncable="YES"/>
-        <relationship name="match" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Match" inverseName="videos" inverseEntity="Match" syncable="YES"/>
+        <relationship name="match" maxCount="1" deletionRule="Deny" destinationEntity="Match" inverseName="videos" inverseEntity="Match" syncable="YES"/>
     </entity>
     <entity name="MyTBAEntity" representedClassName="MyTBAEntity" syncable="YES" codeGenerationType="class">
         <attribute name="modelKey" attributeType="String" syncable="YES"/>

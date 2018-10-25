@@ -175,7 +175,7 @@ extension Match: Managed {
             match.matchNumber = model.matchNumber as NSNumber
 
             updateToManyRelationship(relationship: &match.alliances, newValues: model.alliances?.map({ (key: String, value: TBAMatchAlliance) -> MatchAlliance in
-                return MatchAlliance.insert(with: value, allianceKey: key, for: match, in: context)
+                return MatchAlliance.insert(value, allianceKey: key, matchKey: model.key, in: context)
             }), matchingOrphans: { _ in
                 // Match Alliance will never belong to more than one Match, so this should always be true
                 return true
