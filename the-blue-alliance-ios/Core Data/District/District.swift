@@ -53,10 +53,20 @@ extension District {
 
 extension District: Managed {
 
+    /**
+     Insert a District with values from a TBAKit District model in to the managed object context.
+
+     - Parameter model: The TBAKit District representation to set values from.
+
+     - Parameter context: The NSManagedContext to insert the District in to.
+
+     - Returns: The inserted District.
+     */
     @discardableResult
     static func insert(_ model: TBADistrict, in context: NSManagedObjectContext) -> District {
         let predicate = NSPredicate(format: "%K == %@",
                                     #keyPath(District.key), model.key)
+
         return findOrCreate(in: context, matching: predicate, configure: { (district) in
             // Required: abbreviation, name, key, year
             district.abbreviation = model.abbreviation

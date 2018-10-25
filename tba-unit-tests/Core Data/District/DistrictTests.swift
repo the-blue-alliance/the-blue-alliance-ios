@@ -9,12 +9,12 @@ class DistrictTestCase: CoreDataTestCase {
         let modelDistrict = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
         let district = District.insert(modelDistrict, in: persistentContainer.viewContext)
 
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
-
         XCTAssertEqual(district.abbreviation, "fim")
         XCTAssertEqual(district.name, "FIRST In Michigan")
         XCTAssertEqual(district.key, "2018fim")
         XCTAssertEqual(district.year, 2018)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
     func test_update() {
@@ -27,10 +27,10 @@ class DistrictTestCase: CoreDataTestCase {
         // Sanity check
         XCTAssertEqual(district, duplicateDistrict)
 
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
-
         // Check that our District updates its values properly
         XCTAssertEqual(district.name, "Michigan FIRST")
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
     func test_delete() {

@@ -5,24 +5,15 @@ import CoreData
 
 class AwardTestCase: CoreDataTestCase {
 
-    func award(event: Event) -> Award {
-        let modelAward = self.modelAward(eventKey: event.key!)
-        return Award.insert([modelAward], event: event, in: persistentContainer.viewContext).first!
-    }
-
-    private func modelAward(eventKey: String) -> TBAAward {
+    func test_insert() {
+        let event = districtEvent()
         let modelAwardRecipient = TBAAwardRecipient(teamKey: "frc7332")
         let modelAward = TBAAward(name: "The Fake Award",
                                   awardType: 2,
-                                  eventKey: eventKey,
+                                  eventKey: event.key!,
                                   recipients: [modelAwardRecipient],
                                   year: 2018)
-        return modelAward
-    }
-
-    func test_insert() {
-        let event = districtEvent()
-        let award = self.award(event: event)
+        let award = Award.insert([modelAward], event: event, in: persistentContainer.viewContext).first!
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
@@ -33,9 +24,35 @@ class AwardTestCase: CoreDataTestCase {
         XCTAssertNotNil(award.event)
     }
 
+    func test_insert_validate() {
+        let event = districtEvent()
+
+        let modelAward = TBAAward(name: "The Fake Award",
+                                  awardType: 2,
+                                  eventKey: event.key!,
+                                  recipients: [],
+                                  year: 2018)
+        let award = Award.insert([modelAward], event: event, in: persistentContainer.viewContext).first!
+
+        // Our Award shouldn't be able to be saved without an Award Recipient
+        XCTAssertThrowsError(try persistentContainer.viewContext.save())
+
+        let modelAwardRecipient = TBAAwardRecipient(teamKey: "frc7332")
+        let awardRecipient = AwardRecipient.insert(modelAwardRecipient, in: persistentContainer.viewContext)
+        award.addToRecipients(awardRecipient)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+    }
+
     func test_update() {
         let event = districtEvent()
-        let award = self.award(event: event)
+        let modelAwardRecipient = TBAAwardRecipient(teamKey: "frc7332")
+        let modelAward = TBAAward(name: "The Fake Award",
+                                  awardType: 2,
+                                  eventKey: event.key!,
+                                  recipients: [modelAwardRecipient],
+                                  year: 2018)
+        let award = Award.insert([modelAward], event: event, in: persistentContainer.viewContext).first!
         let recipients = award.recipients!.allObjects as! [AwardRecipient]
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
@@ -64,7 +81,13 @@ class AwardTestCase: CoreDataTestCase {
     func test_update_orphans() {
         // When updating Awards for an Event, orphaned Award Recipients should be deleted
         let event = districtEvent()
-        let awardOne = self.award(event: event)
+        let frc7332Model = TBAAwardRecipient(teamKey: "frc7332")
+        let modelAwardOne = TBAAward(name: "The Fake Award",
+                                  awardType: 2,
+                                  eventKey: event.key!,
+                                  recipients: [frc7332Model],
+                                  year: 2018)
+        let awardOne = Award.insert([modelAwardOne], event: event, in: persistentContainer.viewContext).first!
         let frc7332 = awardOne.recipients!.allObjects.first! as! AwardRecipient
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
@@ -251,6 +274,22 @@ class AwardTestCase: CoreDataTestCase {
         XCTAssertNil(frc7332.managedObjectContext)
         // frc3333 recipient should not be deleted
         XCTAssertNotNil(frc3333.managedObjectContext)
+    }
+
+    func test_delete() {
+        let event = districtEvent()
+        let modelAwardRecipient = TBAAwardRecipient(teamKey: "frc7332")
+        let modelAward = TBAAward(name: "The Fake Award",
+                                  awardType: 2,
+                                  eventKey: event.key!,
+                                  recipients: [modelAwardRecipient],
+                                  year: 2018)
+        let award = Award.insert([modelAward], event: event, in: persistentContainer.viewContext).first!
+        let recipient = (award.recipients!.allObjects as! [AwardRecipient]).first!
+
+        persistentContainer.viewContext.delete(award)
+        // Save should work fine - since Award propogates deletion of Award Recipients
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
 }

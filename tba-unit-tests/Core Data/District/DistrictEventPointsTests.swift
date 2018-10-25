@@ -18,6 +18,7 @@ class DistrictEventPointsTestCase: CoreDataTestCase {
         XCTAssertEqual(eventPoints.qualPoints, 30)
         XCTAssertEqual(eventPoints.elimPoints, 40)
         XCTAssertEqual(eventPoints.total, 50)
+
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
@@ -70,6 +71,7 @@ class DistrictEventPointsTestCase: CoreDataTestCase {
         let points = districtRanking.eventPoints!.allObjects.first! as! DistrictEventPoints
 
         persistentContainer.viewContext.delete(points)
+        // District Event Points should not be able to save while still attached to a District Ranking
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
     }
 

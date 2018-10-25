@@ -33,10 +33,20 @@ extension AwardRecipient {
 extension AwardRecipient: Managed {
 
     /**
-     As a note - these can't really be updated - they can be deleted from Award, but predicates for this
-     generally won't match new models for updates.
+     Insert an Award Recipient with values from a TBAKit Award Recipient model in to the managed object context.
+
+     Award Recipients will never be 'updated'. They can be deleted from Award, but the predicates for this
+      won't allow matching an existing Award Recipient for updates.
+
+     - Important: This method does not setup it's relationship to an Award.
+
+     - Parameter model: The TBAKit Award Recipient representation to set values from.
+
+     - Parameter context: The NSManagedContext to insert the Award in to.
+
+     - Returns: The inserted Award Recipient.
      */
-    static func insert(_ model: TBAAwardRecipient, award: Award, in context: NSManagedObjectContext) -> AwardRecipient {
+    static func insert(_ model: TBAAwardRecipient, in context: NSManagedObjectContext) -> AwardRecipient {
         var predicate: NSPredicate {
             if let awardee = model.awardee, let teamKey = model.teamKey {
                 return NSPredicate(format: "%K == %@ AND %K == %@",

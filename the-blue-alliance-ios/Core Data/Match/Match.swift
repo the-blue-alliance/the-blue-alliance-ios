@@ -141,6 +141,19 @@ extension Match {
 
 extension Match: Managed {
 
+    /**
+     Insert a Match with values from a TBAKit Match model in to the managed object context.
+
+     This method will manage setting up a Match's relationship to an Event and the deletion of oprhaned Match Alliances and Match Videos on a Match.
+
+     - Parameter model: The TBAKit Match representation to set values from.
+
+     - Parameter event: The Event the Matches belong to.
+
+     - Parameter context: The NSManagedContext to insert the Match in to.
+
+     - Returns: The inserted Match.
+     */
     @discardableResult
     static func insert(_ model: TBAMatch, event: Event, in context: NSManagedObjectContext) -> Match {
         let predicate = NSPredicate(format: "%K == %@",
@@ -187,6 +200,19 @@ extension Match: Managed {
         }
     }
 
+    /**
+     Insert Matches with values from TBAKit Match models in to the managed object context.
+
+     This method will manage setting up a Match's relationship to an Event and the deletion of oprhaned Matches on the Event.
+
+     - Parameter matches: The TBAKit Match representations to set values from.
+
+     - Parameter event: The Event the Matches belong to.
+
+     - Parameter context: The NSManagedContext to insert the Match in to.
+
+     - Returns: The inserted District Ranking.
+     */
     @discardableResult
     static func insert(_ matches: [TBAMatch], event: Event, in context: NSManagedObjectContext) -> [Match] {
         let matches = matches.map({
