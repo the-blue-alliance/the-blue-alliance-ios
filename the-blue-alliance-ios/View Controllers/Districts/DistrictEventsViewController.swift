@@ -35,6 +35,7 @@ class DistrictEventsViewController: EventsViewController {
     @objc override func refresh() {
         removeNoDataView()
 
+        /*
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchDistrictEvents(key: district.key!, completion: { (events, error) in
             if let error = error {
@@ -57,6 +58,7 @@ class DistrictEventsViewController: EventsViewController {
             })
         })
         addRequest(request: request!)
+        */
     }
 
     // MARK: - Stateful

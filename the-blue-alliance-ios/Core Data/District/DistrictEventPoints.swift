@@ -7,21 +7,20 @@ extension DistrictEventPoints: Managed {
     /**
      Insert a District Event Points with values from a TBAKit District Event Points model in to the managed object context.
 
-     - Important: This method does not manage setting up a District Event Points' relationship to an Event or District Ranking.
-
      - Parameter model: The TBAKit District Event Points representation to set values from.
 
      - Parameter context: The NSManagedContext to insert the District Event Points in to.
 
      - Returns: The inserted District Event Points.
      */
-    private static func insert(_ model: TBADistrictEventPoints, in context: NSManagedObjectContext) -> DistrictEventPoints {
+    static func insert(_ model: TBADistrictEventPoints, in context: NSManagedObjectContext) -> DistrictEventPoints {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(DistrictEventPoints.event.key), model.eventKey,
+                                    #keyPath(DistrictEventPoints.eventKey.key), model.eventKey,
                                     #keyPath(DistrictEventPoints.teamKey.key), model.teamKey)
 
         return findOrCreate(in: context, matching: predicate) { (eventPoints) in
             eventPoints.teamKey = TeamKey.insert(withKey: model.teamKey, in: context)
+            eventPoints.eventKey = EventKey.insert(withKey: model.eventKey, in: context)
 
             eventPoints.alliancePoints = model.alliancePoints as NSNumber
             eventPoints.awardPoints = model.awardPoints as NSNumber
@@ -32,47 +31,40 @@ extension DistrictEventPoints: Managed {
         }
     }
 
-    /**
-     Insert a District Event Points with values from a TBAKit District Event Points model in to the managed object context.
-
-     This method manages setting up a District Event Points' relationship to an Event. This method should be used when inserting District Event Points for an Event on District Rankings.
-
-     - Parameter model: The TBAKit District Event Points representation to set values from.
-
-     - Parameter context: The NSManagedContext to insert the Award in to.
-
-     - Returns: The inserted District Event Points.
-     */
-    @discardableResult
-    static func insert(_ model: TBADistrictEventPoints, event: Event, in context: NSManagedObjectContext) -> DistrictEventPoints {
-        let points = DistrictEventPoints.insert(model, in: context)
-        event.addToPoints(points)
-        return points
-    }
-
     // TODO: Insert for Event... (~this needs tests~)
     /**
-     Insert an array of District Event Points with values from TBAKit District Event Points models in to the managed object context.
+     Insert an array of District Event Points for an Event with values from TBAKit District Event Points models in to the managed object context.
 
-     This method manages setting up a District Event Points' relationship to an Event and deleting orphaned District Event Points.
+     This method manages deleting orphaned District Event Points for the Event.
 
      - Parameter points: The TBAKit District Event Points representations to set values from.
 
-     - Parameter event: The Event the District Event Points belong to.
+     - Parameter eventKey: The key for the Event the District Event Points belong to.
 
      - Parameter context: The NSManagedContext to insert the District Event Points in to.
 
      - Returns: An array of inserted District Event Points.
      */
     @discardableResult
-    static func insert(_ points: [TBADistrictEventPoints], event: Event, in context: NSManagedObjectContext) -> [DistrictEventPoints] {
+    static func insert(_ points: [TBADistrictEventPoints], eventKey: String, in context: NSManagedObjectContext) -> [DistrictEventPoints] {
+        // Fetch all of the previous DistrictEventPoints for this Event
+        let oldPoints = DistrictEventPoints.fetch(in: context) {
+            $0.predicate = NSPredicate(format: "%K == %@",
+                                       #keyPath(DistrictEventPoints.eventKey.key), eventKey)
+        }
+
+        // Insert new DistrictEventPoints for this Event
         let points = points.map({
             return DistrictEventPoints.insert($0, in: context)
         })
-        updateToManyRelationship(relationship: &event.points, newValues: points, matchingOrphans: { _ in
-            // Rankings will never belong to more than one district, so this should always be true
-            return true
-        }, in: context)
+
+        // Delete orphaned DistrictEventPoints for this Event
+        Set(oldPoints).subtracting(Set(points)).forEach({
+            // If they were previously attached to a District, the next refresh of the District Event Points should
+            // report that these points don't exist anymore
+            context.delete($0)
+        })
+
         return points
     }
 

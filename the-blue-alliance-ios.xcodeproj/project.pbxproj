@@ -13,6 +13,8 @@
 		1448DBA9218230D0008F542E /* MyTBAEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1448DBA8218230CF008F542E /* MyTBAEntity.swift */; };
 		1448DBAC21823148008F542E /* FavoriteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1448DBAB21823148008F542E /* FavoriteTests.swift */; };
 		1448DBAE21823178008F542E /* SubscriptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1448DBAD21823178008F542E /* SubscriptionTests.swift */; };
+		1450778D21824E2F00C61D2D /* EventKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1450778C21824E2F00C61D2D /* EventKey.swift */; };
+		1450778F218279BB00C61D2D /* EventKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1450778E218279BB00C61D2D /* EventKeyTests.swift */; };
 		145C57B51ED377EB004955B2 /* MatchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */; };
 		145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */; };
 		145C57B91ED3C166004955B2 /* MatchInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57B81ED3C166004955B2 /* MatchInfoViewController.swift */; };
@@ -236,6 +238,8 @@
 		1448DBA8218230CF008F542E /* MyTBAEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAEntity.swift; sourceTree = "<group>"; };
 		1448DBAB21823148008F542E /* FavoriteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteTests.swift; sourceTree = "<group>"; };
 		1448DBAD21823178008F542E /* SubscriptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionTests.swift; sourceTree = "<group>"; };
+		1450778C21824E2F00C61D2D /* EventKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventKey.swift; sourceTree = "<group>"; };
+		1450778E218279BB00C61D2D /* EventKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventKeyTests.swift; sourceTree = "<group>"; };
 		145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchTableViewCell.swift; sourceTree = "<group>"; };
 		145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MatchTableViewCell.xib; sourceTree = "<group>"; };
 		145C57B81ED3C166004955B2 /* MatchInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchInfoViewController.swift; sourceTree = "<group>"; };
@@ -691,6 +695,7 @@
 			isa = PBXGroup;
 			children = (
 				924459C120CB796B0007570D /* Event_Tests.swift */,
+				1450778E218279BB00C61D2D /* EventKeyTests.swift */,
 			);
 			path = Event;
 			sourceTree = "<group>";
@@ -1180,6 +1185,7 @@
 			isa = PBXGroup;
 			children = (
 				92DF35E3217D438400B5246B /* Event.swift */,
+				1450778C21824E2F00C61D2D /* EventKey.swift */,
 				92DF35E4217D438400B5246B /* EventStatusQual.swift */,
 				92DF35E5217D438400B5246B /* EventTeamStat.swift */,
 				92DF35E6217D438400B5246B /* EventRanking.swift */,
@@ -1701,6 +1707,7 @@
 				9255EB6F209ACB1D0006A745 /* TBABackgroundService.swift in Sources */,
 				92858F2D208D783E00811614 /* EventTeamStatTableViewCell.swift in Sources */,
 				145C57BD1ED3C3AA004955B2 /* PlayerView.swift in Sources */,
+				1450778D21824E2F00C61D2D /* EventKey.swift in Sources */,
 				928018F820964DB500693447 /* MyTBA.swift in Sources */,
 				14796942215EA5AE0075AF4E /* AwardCellViewModel.swift in Sources */,
 				9291F7FC1EE6FC7D00EEB86B /* TeamMediaCollectionViewController.swift in Sources */,
@@ -1821,6 +1828,7 @@
 				1448DBAC21823148008F542E /* FavoriteTests.swift in Sources */,
 				927C93B0217D4E350027ABEB /* DistrictRankingTests.swift in Sources */,
 				9287014220CD7CCB0077D6DA /* RemoteConfig+TBA_Tests.swift in Sources */,
+				1450778F218279BB00C61D2D /* EventKeyTests.swift in Sources */,
 				9280EAED21685F310016621D /* Refreshable_Tests.swift in Sources */,
 				14472BB72168487F00E0AE72 /* DistrictTests.swift in Sources */,
 				92564C70216456800047917F /* Secrets_Tests.swift in Sources */,

@@ -2,6 +2,23 @@ import Foundation
 import TBAKit
 import CoreData
 
+extension DistrictRanking {
+
+    var sortedEventPoints: [DistrictEventPoints] {
+        // TODO: This sort is going to be problematic if we don't have Event objects
+        return (eventPoints?.allObjects as? [DistrictEventPoints])?.sorted(by: { (lhs, rhs) -> Bool in
+            guard let lhsStartDate = lhs.eventKey?.event?.startDate else {
+                return false
+            }
+            guard let rhsStartDate = rhs.eventKey?.event?.startDate else {
+                return false
+            }
+            return rhsStartDate > lhsStartDate
+        }) ?? []
+    }
+
+}
+
 extension DistrictRanking: Managed {
 
     /**
@@ -31,17 +48,10 @@ extension DistrictRanking: Managed {
             ranking.rank = model.rank as NSNumber
             ranking.rookieBonus = model.rookieBonus as NSNumber?
 
-            let eventPoints = model.eventPoints.compactMap({ (modelPoints) -> DistrictEventPoints? in
-                let eventPredicate = NSPredicate(format: "%K == %@",
-                                                 #keyPath(Event.key), modelPoints.eventKey)
-
-                guard let event = Event.findOrFetch(in: context, matching: eventPredicate) else {
-                    return nil
-                }
-                return DistrictEventPoints.insert(modelPoints, event: event, in: context)
-            })
-            updateToManyRelationship(relationship: &ranking.eventPoints, newValues: eventPoints, matchingOrphans: { (localRanking) in
-                return localRanking.districtRanking == ranking
+            updateToManyRelationship(relationship: &ranking.eventPoints, newValues: model.eventPoints.compactMap({
+                return DistrictEventPoints.insert($0, in: context)
+            }), matchingOrphans: {
+                return $0.districtRanking == ranking
             }, in: context)
         })
     }

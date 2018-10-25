@@ -28,7 +28,7 @@
         <attribute name="qualPoints" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="total" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="districtRanking" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="DistrictRanking" inverseName="eventPoints" inverseEntity="DistrictRanking" syncable="YES"/>
-        <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="points" inverseEntity="Event" syncable="YES"/>
+        <relationship name="eventKey" maxCount="1" deletionRule="Nullify" destinationEntity="EventKey" inverseName="points" inverseEntity="EventKey" syncable="YES"/>
         <relationship name="teamKey" maxCount="1" deletionRule="Nullify" destinationEntity="TeamKey" inverseName="eventPoints" inverseEntity="TeamKey" syncable="YES"/>
     </entity>
     <entity name="DistrictRanking" representedClassName="DistrictRanking" syncable="YES" codeGenerationType="class">
@@ -74,7 +74,6 @@
         <relationship name="awards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Award" inverseName="event" inverseEntity="Award" syncable="YES"/>
         <relationship name="district" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="District" inverseName="events" inverseEntity="District" syncable="YES"/>
         <relationship name="matches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="event" inverseEntity="Match" syncable="YES"/>
-        <relationship name="points" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictEventPoints" inverseName="event" inverseEntity="DistrictEventPoints" syncable="YES"/>
         <relationship name="rankings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventRanking" inverseName="event" inverseEntity="EventRanking" syncable="YES"/>
         <relationship name="stats" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventTeamStat" inverseName="event" inverseEntity="EventTeamStat" syncable="YES"/>
         <relationship name="statuses" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventStatus" inverseName="event" inverseEntity="EventStatus" syncable="YES"/>
@@ -106,6 +105,10 @@
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="alliance" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EventAlliance" inverseName="status" inverseEntity="EventAlliance" syncable="YES"/>
         <relationship name="eventStatus" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EventStatus" inverseName="playoff" inverseEntity="EventStatus" syncable="YES"/>
+    </entity>
+    <entity name="EventKey" representedClassName="EventKey" syncable="YES" codeGenerationType="class">
+        <attribute name="key" attributeType="String" syncable="YES"/>
+        <relationship name="points" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictEventPoints" inverseName="eventKey" inverseEntity="DistrictEventPoints" syncable="YES"/>
     </entity>
     <entity name="EventRanking" representedClassName="EventRanking" syncable="YES" codeGenerationType="class">
         <attribute name="dq" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
@@ -255,7 +258,7 @@
         <element name="District" positionX="-63" positionY="135" width="128" height="135"/>
         <element name="DistrictEventPoints" positionX="-54" positionY="135" width="128" height="180"/>
         <element name="DistrictRanking" positionX="-54" positionY="135" width="128" height="135"/>
-        <element name="Event" positionX="-63" positionY="-18" width="128" height="645"/>
+        <element name="Event" positionX="-63" positionY="-18" width="128" height="630"/>
         <element name="EventAlliance" positionX="54" positionY="144" width="128" height="135"/>
         <element name="EventAllianceBackup" positionX="63" positionY="153" width="128" height="105"/>
         <element name="EventAllianceStatus" positionX="72" positionY="162" width="128" height="150"/>
@@ -274,5 +277,6 @@
         <element name="TeamKey" positionX="45" positionY="135" width="128" height="255"/>
         <element name="TeamMedia" positionX="-45" positionY="144" width="128" height="180"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
+        <element name="EventKey" positionX="45" positionY="135" width="128" height="75"/>
     </elements>
 </model>

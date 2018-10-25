@@ -6,12 +6,11 @@ import CoreData
 class DistrictEventPointsTestCase: CoreDataTestCase {
 
     func test_insert() {
-        let event = districtEvent()
-        let modelEventPoints = TBADistrictEventPoints(teamKey: "frc7332", eventKey: event.key!, alliancePoints: 10, awardPoints: 20, qualPoints: 30, elimPoints: 40, total: 50)
-        let eventPoints = DistrictEventPoints.insert(modelEventPoints, event: event, in: persistentContainer.viewContext)
+        let modelEventPoints = TBADistrictEventPoints(teamKey: "frc7332", eventKey: "2018miket", alliancePoints: 10, awardPoints: 20, qualPoints: 30, elimPoints: 40, total: 50)
+        let eventPoints = DistrictEventPoints.insert(modelEventPoints, in: persistentContainer.viewContext)
 
         XCTAssertEqual(eventPoints.teamKey?.key, "frc7332")
-        XCTAssertEqual(eventPoints.event, event)
+        XCTAssertEqual(eventPoints.eventKey?.key!, "2018miket")
         XCTAssertEqual(eventPoints.alliancePoints, 10)
         XCTAssertEqual(eventPoints.awardPoints, 20)
         XCTAssertNil(eventPoints.districtCMP)
@@ -22,13 +21,31 @@ class DistrictEventPointsTestCase: CoreDataTestCase {
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
-    func test_update() {
+    func test_insert_event() {
         let event = districtEvent()
-        let modelEventPoints = TBADistrictEventPoints(teamKey: "frc7332", eventKey: event.key!, alliancePoints: 10, awardPoints: 20, qualPoints: 30, elimPoints: 40, total: 50)
-        let eventPoints = DistrictEventPoints.insert(modelEventPoints, event: event, in: persistentContainer.viewContext)
+        let modelEventPointsOne = TBADistrictEventPoints(teamKey: "frc7332", eventKey: event.key!, alliancePoints: 10, awardPoints: 20, qualPoints: 30, elimPoints: 40, total: 50)
+        let eventPointsOne = DistrictEventPoints.insert([modelEventPointsOne], eventKey: event.key!, in: persistentContainer.viewContext)
+        let one = eventPointsOne.first!
 
-        let duplicateModelEventPoints = TBADistrictEventPoints(teamKey: "frc7332", eventKey: event.key!, alliancePoints: 50, awardPoints: 40, qualPoints: 30, elimPoints: 20, total: 10)
-        let duplicateEventPoints = DistrictEventPoints.insert(duplicateModelEventPoints, event: event, in: persistentContainer.viewContext)
+        XCTAssertFalse(one.isDeleted)
+
+        let modelEventPointsTwo = TBADistrictEventPoints(teamKey: "frc1", eventKey: event.key!, alliancePoints: 10, awardPoints: 20, qualPoints: 30, elimPoints: 40, total: 50)
+        let eventPointsTwo = DistrictEventPoints.insert([modelEventPointsTwo], eventKey: event.key!, in: persistentContainer.viewContext)
+        let two = eventPointsTwo.first!
+
+        // Sanity check
+        XCTAssertNotEqual(one, two)
+
+        XCTAssert(one.isDeleted)
+        XCTAssertFalse(two.isDeleted)
+    }
+
+    func test_update() {
+        let modelEventPoints = TBADistrictEventPoints(teamKey: "frc7332", eventKey: "2018miket", alliancePoints: 10, awardPoints: 20, qualPoints: 30, elimPoints: 40, total: 50)
+        let eventPoints = DistrictEventPoints.insert(modelEventPoints, in: persistentContainer.viewContext)
+
+        let duplicateModelEventPoints = TBADistrictEventPoints(teamKey: "frc7332", eventKey: "2018miket", alliancePoints: 50, awardPoints: 40, qualPoints: 30, elimPoints: 20, total: 10)
+        let duplicateEventPoints = DistrictEventPoints.insert(duplicateModelEventPoints, in: persistentContainer.viewContext)
 
         XCTAssertEqual(eventPoints, duplicateEventPoints)
         XCTAssertEqual(eventPoints.alliancePoints, 50)
@@ -42,6 +59,7 @@ class DistrictEventPointsTestCase: CoreDataTestCase {
 
         let points = districtRanking.eventPoints!.allObjects.first! as! DistrictEventPoints
         let teamKey = points.teamKey!
+        let eventKey = points.eventKey!
 
         // Manually remove our District Ranking -> District relationship so we can save
         points.districtRanking = nil
@@ -57,9 +75,13 @@ class DistrictEventPointsTestCase: CoreDataTestCase {
         XCTAssertNotNil(event.managedObjectContext)
         XCTAssertEqual(event.rankings!.count, 0)
 
-        // Team key should not be deleted
+        // TeamKey should not be deleted
         XCTAssertNotNil(teamKey.managedObjectContext)
         XCTAssertEqual(teamKey.eventPoints!.count, 0)
+
+        // EventKey should not be deleted
+        XCTAssertNotNil(eventKey.managedObjectContext)
+        XCTAssertEqual(eventKey.points!.count, 0)
     }
 
     func test_delete_deny() {
