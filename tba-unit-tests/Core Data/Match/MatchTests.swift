@@ -175,6 +175,60 @@ class MatchTestCase: CoreDataTestCase {
         XCTAssertNil(video.managedObjectContext)
     }
 
+    func test_update_orphans() {
+        let event = districtEvent()
+        let redAllianceModel = TBAMatchAlliance(score: 200, teams: ["frc1"])
+        let videoOneModel = TBAMatchVideo(key: "key_one", type: "youtube")
+        let videoTwoModel = TBAMatchVideo(key: "key_two", type: "youtube")
+        let modelOne = TBAMatch(key: "\(event.key!)_sf2m3",
+            compLevel: "sf",
+            setNumber: 2,
+            matchNumber: 3,
+            alliances: ["red": redAllianceModel],
+            winningAlliance: "red",
+            eventKey: event.key!,
+            time: nil,
+            actualTime: nil,
+            predictedTime: nil,
+            postResultTime: nil,
+            breakdown: nil,
+            videos: [videoOneModel, videoTwoModel])
+        let matchOne = Match.insert(modelOne, event: event, in: persistentContainer.viewContext)
+
+        let videoOne = (matchOne.videos!.allObjects as! [MatchVideo]).first(where: { $0.key == "key_one" })!
+        let videoTwo = (matchOne.videos!.allObjects as! [MatchVideo]).first(where: { $0.key == "key_two" })!
+
+        let modelTwo = TBAMatch(key: "\(event.key!)_sf2m3",
+            compLevel: "sf",
+            setNumber: 2,
+            matchNumber: 3,
+            alliances: ["red": redAllianceModel],
+            winningAlliance: "red",
+            eventKey: event.key!,
+            time: nil,
+            actualTime: nil,
+            predictedTime: nil,
+            postResultTime: nil,
+            breakdown: nil,
+            videos: [videoTwoModel])
+        let matchTwo = Match.insert(modelTwo, event: event, in: persistentContainer.viewContext)
+
+        // Sanity check
+        XCTAssertEqual(matchOne, matchTwo)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // Check that we've managed dropping Match Video relationships properly
+        XCTAssertFalse(matchOne.videos!.contains(videoOne))
+        XCTAssert(matchOne.videos!.contains(videoTwo))
+
+        // Video One should be deleted since it's an orphan
+        XCTAssertNil(videoOne.managedObjectContext)
+
+        // Video Two should not be deleted since it's attached to a Match
+        XCTAssertNotNil(videoTwo.managedObjectContext)
+    }
+
     func test_delete() {
         // Test cascades
         let event = districtEvent()
@@ -214,6 +268,61 @@ class MatchTestCase: CoreDataTestCase {
 
         // Test that our video has been deleted
         XCTAssertNil(video.managedObjectContext)
+    }
+
+    func test_delete_videoHasMatch() {
+        let event = districtEvent()
+        let redAllianceModel = TBAMatchAlliance(score: 200, teams: ["frc1"])
+        let videoOneModel = TBAMatchVideo(key: "key_one", type: "youtube")
+        let videoTwoModel = TBAMatchVideo(key: "key_two", type: "youtube")
+        let modelOne = TBAMatch(key: "\(event.key!)_sf2m3",
+            compLevel: "sf",
+            setNumber: 2,
+            matchNumber: 3,
+            alliances: ["red": redAllianceModel],
+            winningAlliance: "red",
+            eventKey: event.key!,
+            time: nil,
+            actualTime: nil,
+            predictedTime: nil,
+            postResultTime: nil,
+            breakdown: nil,
+            videos: [videoOneModel, videoTwoModel])
+        let matchOne = Match.insert(modelOne, event: event, in: persistentContainer.viewContext)
+
+        let videoOne = (matchOne.videos!.allObjects as! [MatchVideo]).first(where: { $0.key == "key_one" })!
+        let videoTwo = (matchOne.videos!.allObjects as! [MatchVideo]).first(where: { $0.key == "key_two" })!
+
+        let modelTwo = TBAMatch(key: "\(event.key!)_f1m1",
+            compLevel: "f",
+            setNumber: 1,
+            matchNumber: 1,
+            alliances: ["red": redAllianceModel],
+            winningAlliance: "red",
+            eventKey: event.key!,
+            time: nil,
+            actualTime: nil,
+            predictedTime: nil,
+            postResultTime: nil,
+            breakdown: nil,
+            videos: [videoTwoModel])
+        let matchTwo = Match.insert(modelTwo, event: event, in: persistentContainer.viewContext)
+
+        // Sanity check
+        XCTAssertNotEqual(matchOne, matchTwo)
+
+        persistentContainer.viewContext.delete(matchOne)
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // Check that we've managed dropping Match Video relationships properly
+        XCTAssert(matchTwo.videos!.contains(videoTwo))
+        XCTAssertEqual(videoTwo.matches?.count, 1)
+
+        // Video One should be deleted since it's an orphan
+        XCTAssertNil(videoOne.managedObjectContext)
+
+        // Video Two should not be deleted since it's attached to a Match
+        XCTAssertNotNil(videoTwo.managedObjectContext)
     }
 
     func test_compLevel() {

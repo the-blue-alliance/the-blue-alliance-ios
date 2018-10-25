@@ -192,10 +192,10 @@ extension Match: Managed {
             match.breakdown = model.breakdown
 
             updateToManyRelationship(relationship: &match.videos, newValues: model.videos?.map({ (modelVideo) -> MatchVideo in
-                return MatchVideo.insert(with: modelVideo, in: context)
-            }), matchingOrphans: { _ in
-                // Match Video will never belong to more than one Match, so this should always be true
-                return true
+                return MatchVideo.insert(modelVideo, in: context)
+            }), matchingOrphans: {
+                // If an Match Video's only Match is this Match, it's an orphan now
+                return $0.matches?.allObjects as? [Match] == [match]
             }, in: context)
         }
     }
@@ -223,6 +223,19 @@ extension Match: Managed {
             return true
         }, in: context)
         return matches
+    }
+
+    override public func prepareForDeletion() {
+        super.prepareForDeletion()
+
+        (videos?.allObjects as? [MatchVideo])?.forEach({
+            if $0.matches == (Set([self]) as NSSet) {
+                // Match Video will become an orphan - delete
+                managedObjectContext?.delete($0)
+            } else {
+                $0.removeFromMatches(self)
+            }
+        })
     }
 
 }

@@ -11,13 +11,13 @@ extension MatchAlliance: Managed {
 
      - Parameter model: The TBAKit Match Alliance representation to set values from.
 
-     - Parameter allianceKey: The `key` for the alliance - usually the alliance color (red, blue)
+     - Parameter allianceKey: The `key` for the alliance - usually the alliance color (red, blue).
 
-     - Parameter: matchKey: The `key` for the Match the Match Alliance belongs to.
+     - Parameter matchKey: The `key` for the Match the Match Alliance belongs to.
 
      - Parameter context: The NSManagedContext to insert the Match Alliance in to.
 
-     - Returns: The inserted District Ranking.
+     - Returns: The inserted Match Alliance.
      */
     static func insert(_ model: TBAMatchAlliance, allianceKey: String, matchKey: String, in context: NSManagedObjectContext) -> MatchAlliance {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",

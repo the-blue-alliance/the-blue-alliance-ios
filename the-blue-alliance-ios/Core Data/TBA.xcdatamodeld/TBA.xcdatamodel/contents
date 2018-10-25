@@ -167,7 +167,7 @@
         <attribute name="winningAlliance" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MatchAlliance" inverseName="match" inverseEntity="MatchAlliance" syncable="YES"/>
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="matches" inverseEntity="Event" syncable="YES"/>
-        <relationship name="videos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MatchVideo" inverseName="match" inverseEntity="MatchVideo" syncable="YES"/>
+        <relationship name="videos" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="MatchVideo" inverseName="matches" inverseEntity="MatchVideo" syncable="YES"/>
     </entity>
     <entity name="MatchAlliance" representedClassName="MatchAlliance" syncable="YES" codeGenerationType="class">
         <attribute name="allianceKey" attributeType="String" syncable="YES"/>
@@ -180,7 +180,7 @@
     <entity name="MatchVideo" representedClassName="MatchVideo" syncable="YES" codeGenerationType="class">
         <attribute name="key" attributeType="String" syncable="YES"/>
         <attribute name="typeString" attributeType="String" syncable="YES"/>
-        <relationship name="match" maxCount="1" deletionRule="Deny" destinationEntity="Match" inverseName="videos" inverseEntity="Match" syncable="YES"/>
+        <relationship name="matches" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="Match" inverseName="videos" inverseEntity="Match" syncable="YES"/>
     </entity>
     <entity name="MyTBAEntity" representedClassName="MyTBAEntity" syncable="YES" codeGenerationType="class">
         <attribute name="modelKey" attributeType="String" syncable="YES"/>
