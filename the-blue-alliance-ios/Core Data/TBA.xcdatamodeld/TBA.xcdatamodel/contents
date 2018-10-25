@@ -242,8 +242,8 @@
         <attribute name="mediaError" optional="YES" attributeType="Transformable" customClassName="Error" syncable="YES"/>
         <attribute name="preferred" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="type" attributeType="String" syncable="YES"/>
-        <attribute name="year" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="media" inverseEntity="Team" syncable="YES"/>
+        <attribute name="year" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="team" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="media" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Webcast" representedClassName="Webcast" syncable="YES" codeGenerationType="class">
         <attribute name="channel" attributeType="String" syncable="YES"/>

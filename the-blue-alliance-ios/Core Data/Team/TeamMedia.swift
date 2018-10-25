@@ -41,7 +41,7 @@ public enum MediaType: String {
 
 }
 
-extension TeamMedia: Managed, Playable {
+extension TeamMedia {
 
     var image: UIImage? {
         get {
@@ -66,36 +66,7 @@ extension TeamMedia: Managed, Playable {
         }
     }
 
-    var youtubeKey: String? {
-        if type == MediaType.youtubeVideo.rawValue {
-            return foreignKey
-        }
-        return nil
-    }
-
-    static func insert(_ model: TBAMedia, year: Int, in context: NSManagedObjectContext) -> TeamMedia {
-        var mediaPredicate: NSPredicate?
-        if let key = model.key {
-            mediaPredicate = NSPredicate(format: "key == %@ AND type == %@", key, model.type)
-        } else if let foreignKey = model.foreignKey {
-            mediaPredicate = NSPredicate(format: "foreignKey == %@ AND type == %@", foreignKey, model.type)
-        }
-        guard let predicate = mediaPredicate else {
-            fatalError("No way to filter media")
-        }
-        return findOrCreate(in: context, matching: predicate) { (media) in
-            // Required: type, year
-            media.key = model.key
-            media.type = model.type
-            media.year = Int16(year)
-            media.foreignKey = model.foreignKey
-            media.details = model.details
-            media.preferred = model.preferred ?? false
-        }
-    }
-
     // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/models/media.py#L92
-
     public var viewImageURL: URL? {
         guard let type = type else {
             return nil
@@ -131,6 +102,96 @@ extension TeamMedia: Managed, Playable {
         } else {
             return nil
         }
+    }
+
+}
+
+extension TeamMedia: Playable {
+
+    var youtubeKey: String? {
+        if type == MediaType.youtubeVideo.rawValue {
+            return foreignKey
+        }
+        return nil
+    }
+
+}
+
+extension TeamMedia: Managed {
+
+    /**
+     Insert a Team Media with values from a TBAKit Media model in to the managed object context.
+
+     - Parameter model: The TBAKit Team representation to set values from.
+
+     - Parameter year: The year the Team Media relates to.
+
+     - Parameter context: The NSManagedContext to insert the Team Media in to.
+
+     - Returns: The inserted Team Media.
+     */
+    static func insert(_ model: TBAMedia, year: Int, in context: NSManagedObjectContext) -> TeamMedia {
+        // Uhhh filter by Year too, right?
+        var mediaPredicate: NSPredicate?
+        if let key = model.key {
+            mediaPredicate = NSPredicate(format: "%K == %@ AND %K == %@",
+                                         #keyPath(TeamMedia.key), key,
+                                         #keyPath(TeamMedia.type), model.type)
+        } else if let foreignKey = model.foreignKey {
+            mediaPredicate = NSPredicate(format: "%K == %@ AND %K == %@",
+                                         #keyPath(TeamMedia.foreignKey), foreignKey,
+                                         #keyPath(TeamMedia.type), model.type)
+        }
+        guard let predicate = mediaPredicate else {
+            fatalError("No way to filter media")
+        }
+
+        let yearPredicate = NSPredicate(format: "%K == %ld",
+                                        #keyPath(TeamMedia.year), year)
+
+        return findOrCreate(in: context, matching: NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, yearPredicate])) { (media) in
+            // Required: type, year
+            media.key = model.key
+            media.type = model.type
+            media.year = year as NSNumber
+            media.foreignKey = model.foreignKey
+            media.details = model.details
+            media.preferred = model.preferred ?? false
+        }
+    }
+
+    /**
+     Insert an array of Team Medias with values from TBAKit Media models in to the managed object context. This method manages setting up a Team Media and Team relationship and deleting orphaned Team Media objects.
+
+     - Parameter media: The TBAKit Media representations to set values from.
+
+     - Parameter team: The Team to relate the Media too.
+
+     - Parameter year: The year the Team Media relates to.
+
+     - Parameter context: The NSManagedContext to insert the Team Media in to.
+
+     - Returns: The inserted Team Media.
+     */
+    static func insert(_ media: [TBAMedia], team: Team, year: Int, in context: NSManagedObjectContext) {
+        // Fetch all of the previous TeamMedia for this Team and year
+        let oldMedia = TeamMedia.fetch(in: context) {
+            $0.predicate = NSPredicate(format: "%K == %@ AND %K == %ld",
+                                       #keyPath(TeamMedia.team.key), team.key!,
+                                       #keyPath(TeamMedia.year), year)
+        }
+
+        // Insert new TeamMedia for this year
+        let media = media.map({ (model: TBAMedia) -> TeamMedia in
+            let m = TeamMedia.insert(model, year: year, in: context)
+            team.addToMedia(m)
+            return m
+        })
+
+        // Delete orphaned TeamMedia for this Event
+        Set(oldMedia).subtracting(Set(media)).forEach({
+            context.delete($0)
+        })
     }
 
 }

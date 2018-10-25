@@ -31,7 +31,6 @@ extension DistrictEventPoints: Managed {
         }
     }
 
-    // TODO: Insert for Event... (~this needs tests~)
     /**
      Insert an array of District Event Points for an Event with values from TBAKit District Event Points models in to the managed object context.
 

@@ -61,21 +61,18 @@ extension Team: Locatable, Managed {
     }
 
     /**
-     Insert an array of Teams with values from a TBAKit Team models in to the managed object context. This method manages setting up an Event and Team relationship.
+     Insert an array of Teams with values from TBAKit Team models in to the managed object context. This method manages setting up an Event and Team relationship.
 
      - Parameter teams: The TBAKit Team representations to set values from.
 
-     - Parameter context: The NSManagedContext to insert the Favorite in to.
+     - Parameter event: The Event the Teams belong to.
 
-     - Returns: The inserted Teams.
+     - Parameter context: The NSManagedContext to insert the Favorite in to.
      */
-    @discardableResult
-    static func insert(_ teams: [TBATeam], event: Event, in context: NSManagedObjectContext) -> [Team] {
-        let teams = teams.map({
+    static func insert(_ teams: [TBATeam], event: Event, in context: NSManagedObjectContext) {
+        event.teams = Set(teams.map({
             return Team.insert($0, in: context)
-        })
-        event.teams = Set(teams) as NSSet
-        return teams
+        })) as NSSet
     }
 
     static func fetchAllTeams(taskChanged: @escaping (URLSessionDataTask, [TBATeam]) -> Void, completion: @escaping (Error?) -> Void) -> URLSessionDataTask {

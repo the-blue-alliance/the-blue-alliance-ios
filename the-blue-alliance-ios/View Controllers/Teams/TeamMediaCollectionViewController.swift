@@ -266,15 +266,11 @@ extension TeamMediaCollectionViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
                 if let media = media {
-                    let localMedia = media.map({ (modelMedia) -> TeamMedia in
-                        return TeamMedia.insert(modelMedia, year: year, in: backgroundContext)
-                    })
-                    backgroundTeam.media = Set(localMedia) as NSSet
+                    let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
+                    TeamMedia.insert(media, team: backgroundTeam, year: year, in: backgroundContext)
+                    backgroundContext.saveOrRollback()
                 }
-
-                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
 
                 DispatchQueue.main.async {
