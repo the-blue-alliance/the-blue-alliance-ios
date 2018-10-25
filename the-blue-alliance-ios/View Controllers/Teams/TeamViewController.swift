@@ -97,7 +97,7 @@ class TeamViewController: ContainerViewController, Observable {
     }
 
     private func updateInterface() {
-        navigationTitle = "Team \(team.teamNumber)"
+        navigationTitle = "Team \(team.teamNumber!.stringValue)"
 
         if let year = year {
             navigationSubtitle = "▾ \(year)"

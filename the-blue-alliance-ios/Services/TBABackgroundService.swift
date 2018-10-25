@@ -31,15 +31,15 @@ class TBABackgroundService {
                 print("Error in background fetch of team \(key) - \(error.localizedDescription)")
                 completion(nil, BackgroundFetchError.error(error))
             } else {
-                guard let modelTeam = modelTeam else {
+                // TODO: Does not handle 304 properly
+                if let modelTeam = modelTeam {
+                    let team = Team.insert(modelTeam, in: context)
+                    context.performSaveOrRollback()
+
+                    completion(team, nil)
+                } else {
                     completion(nil, BackgroundFetchError.message("No model for background fetch of team \(key)"))
-                    return
                 }
-
-                let team = Team.insert(with: modelTeam, in: context)
-                context.performSaveOrRollback()
-
-                completion(team, nil)
             }
         }
     }

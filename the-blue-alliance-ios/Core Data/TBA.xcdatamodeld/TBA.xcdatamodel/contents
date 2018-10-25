@@ -207,9 +207,9 @@
         <attribute name="name" attributeType="String" syncable="YES"/>
         <attribute name="nickname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="postalCode" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="rookieYear" optional="YES" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="rookieYear" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="stateProv" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="teamNumber" attributeType="Integer 32" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="teamNumber" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="yearsParticipated" optional="YES" attributeType="Transformable" customClassName="[Int]" syncable="YES"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="teams" inverseEntity="Event" syncable="YES"/>
@@ -262,6 +262,7 @@
         <element name="EventAlliance" positionX="54" positionY="144" width="128" height="135"/>
         <element name="EventAllianceBackup" positionX="63" positionY="153" width="128" height="105"/>
         <element name="EventAllianceStatus" positionX="72" positionY="162" width="128" height="150"/>
+        <element name="EventKey" positionX="45" positionY="135" width="128" height="75"/>
         <element name="EventRanking" positionX="160" positionY="192" width="128" height="210"/>
         <element name="EventStatus" positionX="45" positionY="135" width="128" height="195"/>
         <element name="EventStatusAlliance" positionX="63" positionY="153" width="128" height="120"/>
@@ -277,6 +278,5 @@
         <element name="TeamKey" positionX="45" positionY="135" width="128" height="255"/>
         <element name="TeamMedia" positionX="-45" positionY="144" width="128" height="180"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
-        <element name="EventKey" positionX="45" positionY="135" width="128" height="75"/>
     </elements>
 </model>

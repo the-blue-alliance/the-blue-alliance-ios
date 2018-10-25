@@ -290,6 +290,8 @@ class AwardTestCase: CoreDataTestCase {
         persistentContainer.viewContext.delete(award)
         // Save should work fine - since Award propogates deletion of Award Recipients
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        XCTAssertNil(recipient.managedObjectContext)
     }
 
 }

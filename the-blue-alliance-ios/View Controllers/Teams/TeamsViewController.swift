@@ -160,11 +160,11 @@ extension TeamsViewController: Refreshable {
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 // TODO: Delete old teams for page? Kinda a problem but
-                teams.forEach({ (modelTeam) in
-                    Team.insert(with: modelTeam, in: backgroundContext)
+                teams.forEach({
+                    Team.insert($0, in: backgroundContext)
                 })
-
                 backgroundContext.saveOrRollback()
+
                 self.removeRequest(request: previousRequest!)
             })
         }) { (error) in
@@ -193,15 +193,11 @@ extension TeamsViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: event.objectID) as! Event
                 if let teams = teams {
-                    let localTeams = teams.map({ (modelTeam) -> Team in
-                        return Team.insert(with: modelTeam, in: backgroundContext)
-                    })
-                    backgroundEvent.teams = Set(localTeams) as NSSet
+                    let backgroundEvent = backgroundContext.object(with: event.objectID) as! Event
+                    Team.insert(teams, event: backgroundEvent, in: backgroundContext)
+                    backgroundContext.saveOrRollback()
                 }
-
-                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })

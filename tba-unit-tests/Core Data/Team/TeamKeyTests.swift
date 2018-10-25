@@ -22,12 +22,21 @@ class TeamKeyTestCase: CoreDataTestCase {
         XCTAssertEqual(teamKey_first, teamKey_second)
     }
 
+    func test_supportsOffSeason() {
+        let teamKey = TeamKey.insert(withKey: "frc7332B", in: persistentContainer.viewContext)
+        XCTAssertEqual(teamKey.key, "frc7332B")
+        XCTAssertEqual(teamKey.teamNumber, "7332B")
+        XCTAssertEqual(teamKey.name, "Team 7332B")
+        XCTAssertNil(teamKey.team)
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+    }
+
     func test_team() {
         let teamKey = TeamKey.insert(withKey: "frc7332", in: persistentContainer.viewContext)
         XCTAssertNil(teamKey.team)
 
         let model = TBATeam(key: "frc7332", teamNumber: 7332, name: "The Rawrbotz", rookieYear: 2010)
-        Team.insert(with: model, in: persistentContainer.viewContext)
+        Team.insert(model, in: persistentContainer.viewContext)
         XCTAssertNotNil(teamKey.team)
     }
 
