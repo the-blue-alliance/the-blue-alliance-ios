@@ -29,7 +29,7 @@ struct MyTBASubscriptionsResponse: MyTBAResponse, Codable {
 
 }
 
-struct MyTBASubscription: MyTBAModel, Codable {
+struct MyTBASubscription: MyTBAModel, Equatable, Codable {
 
     static var arrayKey: String {
         return "subscriptions"

@@ -12,7 +12,7 @@ struct MyTBAFavoritesResponse: MyTBAResponse, Codable {
 
 }
 
-struct MyTBAFavorite: MyTBAModel, Codable {
+struct MyTBAFavorite: MyTBAModel, Equatable, Codable {
 
     static var arrayKey: String {
         return "favorites"

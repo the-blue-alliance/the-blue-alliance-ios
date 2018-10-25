@@ -47,7 +47,7 @@ extension DistrictRanking: Managed {
     }
 
     /**
-     Insert an array of District Rankings with values from a TBAKit District Ranking models in to the managed object context.
+     Insert an array of District Rankings with values from TBAKit District Ranking models in to the managed object context.
 
      This method manages setting up a District Ranking's relationship to a District and deleting orphaned District Rankings.
 

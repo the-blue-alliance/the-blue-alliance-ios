@@ -252,7 +252,7 @@ extension MyTBATableViewController: Refreshable {
                         continue
                     }
 
-                    T.insert(with: model, in: bgctx)
+                    T.insert(model, in: bgctx)
 
                     let predicate = NSPredicate(format: "key == %@", model.modelKey)
                     switch model.modelType {
