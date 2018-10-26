@@ -147,15 +147,7 @@ class TeamSummaryViewController: TBATableViewController {
                     summaryValues.append(match)
                 } else {
                     summaryValues.append(key)
-                    if !backgroundFetchKeys.contains(key) {
-                        backgroundFetchKeys.insert(key)
-                        self.persistentContainer.performBackgroundTask({ [weak self] (backgroundContext) in
-                            TBABackgroundService.backgroundFetchMatch(key, in: backgroundContext) { [weak self] (_, _) in
-                                self?.backgroundFetchKeys.remove(key)
-                                self?.updateSummaryInfo()
-                            }
-                        })
-                    }
+                    // TODO: Fetch Match
                 }
             }
         }
@@ -359,7 +351,9 @@ extension TeamSummaryViewController: Refreshable {
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 if let awards = awards {
                     Award.insert(awards, event: self.event, in: backgroundContext)
-                    backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: awardsRequest!)
+                    }
                 }
                 self.removeRequest(request: awardsRequest!)
             })

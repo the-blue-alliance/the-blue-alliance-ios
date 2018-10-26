@@ -9,13 +9,15 @@ extension NSManagedObjectContext {
         return obj
     }
 
-    public func saveOrRollback() {
+    public func saveOrRollback() -> Bool {
         do {
             try save()
+            return true
         } catch {
             print(error)
             Crashlytics.sharedInstance().recordError(error)
             rollback()
+            return false
         }
     }
 

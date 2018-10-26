@@ -154,7 +154,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
                 media.mediaError = MediaError.error("No data for request")
             }
 
-            self.persistentContainer.viewContext.saveOrRollback()
+            _ = self.persistentContainer.viewContext.saveOrRollback()
         })
         dataTask.resume()
     }
@@ -269,7 +269,9 @@ extension TeamMediaCollectionViewController: Refreshable {
                 if let media = media {
                     let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
                     TeamMedia.insert(media, team: backgroundTeam, year: year, in: backgroundContext)
-                    backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
                 }
                 self.removeRequest(request: request!)
 

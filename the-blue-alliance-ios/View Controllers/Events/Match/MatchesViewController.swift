@@ -120,7 +120,9 @@ extension MatchesViewController: Refreshable {
                 if let matches = matches {
                     let event = backgroundContext.object(with: self.event.objectID) as! Event
                     Match.insert(matches, event: event, in: backgroundContext)
-                    backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
                 }
                 self.removeRequest(request: request!)
             })

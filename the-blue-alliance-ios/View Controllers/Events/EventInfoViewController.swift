@@ -253,9 +253,10 @@ extension EventInfoViewController: Refreshable {
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 if let modelEvent = modelEvent {
                     Event.insert(with: modelEvent, in: backgroundContext)
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
                 }
-
-                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })

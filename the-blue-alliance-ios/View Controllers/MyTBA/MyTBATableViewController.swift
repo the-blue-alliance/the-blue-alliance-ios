@@ -253,36 +253,7 @@ extension MyTBATableViewController: Refreshable {
                     }
 
                     T.insert(model, in: bgctx)
-
-                    let predicate = NSPredicate(format: "key == %@", model.modelKey)
-                    switch model.modelType {
-                    case .event:
-                        if Event.findOrFetch(in: backgroundContext, matching: predicate) == nil {
-                            self?.backgroundFetchKeys.insert(model.modelKey)
-                            TBABackgroundService.backgroundFetchEvent(model.modelKey, in: backgroundContext, completion: { (_, _) in
-                                self?.backgroundFetchKeys.remove(model.modelKey)
-                                reloadTableViewCompletion()
-                            })
-                        }
-                    case .team:
-                        if Team.findOrFetch(in: backgroundContext, matching: predicate) == nil {
-                            self?.backgroundFetchKeys.insert(model.modelKey)
-                            TBABackgroundService.backgroundFetchTeam(model.modelKey, in: backgroundContext, completion: { (_, _) in
-                                self?.backgroundFetchKeys.remove(model.modelKey)
-                                reloadTableViewCompletion()
-                            })
-                        }
-                    case .match:
-                        let match = Match.findOrFetch(in: backgroundContext, matching: predicate)
-                        // Fetch our match if it doesn't exist or we don't have scores
-                        if match?.redAlliance?.score == nil || match?.blueAlliance?.score == nil {
-                            self?.backgroundFetchKeys.insert(model.modelKey)
-                            TBABackgroundService.backgroundFetchMatch(model.modelKey, in: backgroundContext, completion: { (_, _) in
-                                self?.backgroundFetchKeys.remove(model.modelKey)
-                                reloadTableViewCompletion()
-                            })
-                        }
-                    }
+                    // TODO: Fetch
                 }
 
                 backgroundContext.saveOrRollback()

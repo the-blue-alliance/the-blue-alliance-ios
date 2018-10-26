@@ -128,7 +128,9 @@ extension DistrictTeamSummaryViewController: Refreshable {
                 if let rankings = rankings {
                     let backgroundDistrict = backgroundContext.object(with: self.ranking.district!.objectID) as! District
                     DistrictRanking.insert(rankings, district: backgroundDistrict, in: backgroundContext)
-                    backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
                 }
                 self.removeRequest(request: request!)
             })
