@@ -39,7 +39,6 @@ class CoreDataTestCase: XCTestCase {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
 
-        let webcast = TBAWebcast(type: "dacast", channel: "66716", file: "219330", date: nil)
         let district = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
         let model = TBAEvent(key: eventKey,
                              name: "FIM District Kettering University Event #1",
@@ -66,7 +65,7 @@ class CoreDataTestCase: XCTestCase {
                              website: "http://www.firstinmichigan.org",
                              firstEventID: "27941",
                              firstEventCode: "MIKET",
-                             webcasts: [webcast],
+                             webcasts: nil,
                              divisionKeys: [],
                              parentEventKey: nil,
                              playoffType: nil,

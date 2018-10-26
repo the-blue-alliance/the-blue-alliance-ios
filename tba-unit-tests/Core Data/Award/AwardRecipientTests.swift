@@ -102,11 +102,15 @@ class AwardRecipientTestCase: AwardTestCase {
                                   year: 2018)
         let award = Award.insert([modelAward], event: event, in: persistentContainer.viewContext).first!
         award.addToRecipients(recipient)
-        award.removeFromRecipients(recipient)
 
+        // Recipient can't be deleted while it's attached to an Award
         persistentContainer.viewContext.delete(recipient)
-        // Our Award should fail validation, because it can't exist without Recipients
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
+
+        // Our Award should fail validation, because it can't exist without Recipients
+        award.removeFromRecipients(recipient)
+        XCTAssertThrowsError(try persistentContainer.viewContext.save())
+
         persistentContainer.viewContext.delete(award)
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 

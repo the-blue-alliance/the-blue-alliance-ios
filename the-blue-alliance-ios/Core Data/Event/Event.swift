@@ -66,11 +66,7 @@ extension Event: Locatable, Managed {
             event.stateProv = model.stateProv
             event.timezone = model.timezone
 
-            if let webcasts = model.webcasts {
-                event.webcasts = Set(webcasts.map({ (modelWebcast) -> Webcast in
-                    return Webcast.insert(with: modelWebcast, for: event, in: context)
-                })) as NSSet
-            }
+            Webcast.insert(model.webcasts ?? [], event: event, in: context)
 
             event.website = model.website
 
@@ -375,6 +371,20 @@ extension Event: Comparable {
             }
         }
         return false
+    }
+
+    /// Event's shouldn't really be deleted, but sometimes they can be
+    public override func prepareForDeletion() {
+        super.prepareForDeletion()
+
+        (webcasts?.allObjects as? [Webcast])?.forEach({
+            if $0.events == (Set([self]) as NSSet) {
+                // Webcast will become an orphan - delete
+                managedObjectContext?.delete($0)
+            } else {
+                $0.removeFromEvents(self)
+            }
+        })
     }
 
 }
