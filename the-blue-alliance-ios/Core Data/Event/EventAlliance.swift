@@ -4,106 +4,68 @@ import CoreData
 
 extension EventAlliance: Managed {
 
-    static func insert(with model: TBAAlliance, for event: Event, in context: NSManagedObjectContext) -> EventAlliance {
-        let predicate = NSPredicate(format: "event == %@ AND (SUBQUERY(picks, $pick, $pick.key IN %@).@count == %d)", event, model.picks, model.picks.count)
-        return findOrCreate(in: context, matching: predicate, configure: { (alliance) in
-            // Required: picks, eventKey
-            alliance.event = event
+    /**
+     Insert an Event Alliance with values from a TBAKit Alliance model in to the managed object context.
 
+     This method manages deleting orphaned EventAllianceBackup and EventStatusPlayoff.
+
+     - Important: This method does not manage setting up an Event Alliance relationship to an Event.
+
+     - Parameter model: The TBAKit Alliance representation to set values from.
+
+     - Parameter eventKey: The Event key the Event Alliance belongs to.
+
+     - Parameter context: The NSManagedContext to insert the District Ranking in to.
+
+     - Returns: The inserted Event Alliance.
+     */
+    static func insert(_ model: TBAAlliance, eventKey: String, in context: NSManagedObjectContext) -> EventAlliance {
+        let predicate = NSPredicate(format: "%K == %@ AND (SUBQUERY(picks, $pick, $pick.key IN %@).@count == %d)",
+                                    #keyPath(EventAlliance.event.key), eventKey,
+                                    model.picks, model.picks.count)
+
+        return findOrCreate(in: context, matching: predicate, configure: { (alliance) in
+            // Required: picks
             alliance.name = model.name
 
-            if let backup = model.backup {
-                alliance.backup = EventAllianceBackup.insert(with: backup, for: alliance, in: context)
-            }
+            alliance.updateToOneRelationship(relationship: #keyPath(EventAlliance.backup), newValue: model.backup, newObject: {
+                return EventAllianceBackup.insert($0, in: context)
+            })
 
-            alliance.picks = NSMutableOrderedSet(array: model.picks.map({ (teamKey) -> TeamKey in
+            alliance.picks = NSOrderedSet(array: model.picks.map({ (teamKey) -> TeamKey in
                 return TeamKey.insert(withKey: teamKey, in: context)
             }))
 
-            alliance.declines = NSMutableOrderedSet(array: model.declines.map({ (teamKey) -> TeamKey in
-                return TeamKey.insert(withKey: teamKey, in: context)
-            }))
-
-            if let status = model.status {
-                alliance.status = EventAllianceStatus.insert(with: status, for: alliance, in: context)
+            if let declines = model.declines {
+                alliance.declines = NSOrderedSet(array: declines.map({ (teamKey) -> TeamKey in
+                    return TeamKey.insert(withKey: teamKey, in: context)
+                }))
+            } else {
+                alliance.declines = nil
             }
-        })
-    }
-}
 
-extension EventAllianceBackup: Managed {
-
-    static func insert(with model: TBAAllianceBackup, for alliance: EventAlliance, in context: NSManagedObjectContext) -> EventAllianceBackup {
-        let predicate = NSPredicate(format: "alliance == %@", alliance)
-        return findOrCreate(in: context, matching: predicate, configure: { (allianceBackup) in
-            allianceBackup.alliance = alliance
-            allianceBackup.setupTeams(with: model, in: context)
+            alliance.updateToOneRelationship(relationship: #keyPath(EventAlliance.status), newValue: model.status, newObject: {
+                return EventStatusPlayoff.insert($0, in: context)
+            })
         })
     }
 
-    static func insert(with model: TBAAllianceBackup, for allianceStatus: EventStatusAlliance, in context: NSManagedObjectContext) -> EventAllianceBackup {
-        let predicate = NSPredicate(format: "%K == %@", #keyPath(EventAllianceBackup.allianceStatus), allianceStatus)
-        return findOrCreate(in: context, matching: predicate, configure: { (allianceBackup) in
-            allianceBackup.allianceStatus = allianceStatus
-            allianceBackup.setupTeams(with: model, in: context)
-        })
+    var isOrphaned: Bool {
+        return event == nil
     }
 
-    private func setupTeams(with model: TBAAllianceBackup, in context: NSManagedObjectContext) {
-        inTeam = TeamKey.insert(withKey: model.teamIn, in: context)
-        outTeam = TeamKey.insert(withKey: model.teamOut, in: context)
+    public override func prepareForDeletion() {
+        super.prepareForDeletion()
+
+        if let backup = backup {
+            if backup.alliances!.onlyObject(self) {
+                // AllianceBackup will become an orphan - delete
+                managedObjectContext?.delete(backup)
+            } else {
+                backup.removeFromAlliances(self)
+            }
+        }
     }
 
 }
 
-extension EventAllianceStatus: Managed {
-
-    // Used in EventAllianceTableViewCell to show how far an alliance got in the eliminiations
-    var allianceLevel: String? {
-        get {
-            guard let level = level else {
-                return nil
-            }
-            if level == MatchCompLevel.final.rawValue, let status = status {
-                return status == "won" ? "W" : "F"
-            }
-            return level.uppercased()
-        }
-    }
-
-    // TODO: Consider combining these two in to a single insert using event/team to key these
-    static func insert(with model: TBAAllianceStatus, for alliance: EventAlliance, in context: NSManagedObjectContext) -> EventAllianceStatus {
-        let predicate = NSPredicate(format: "alliance == %@", alliance)
-        return findOrCreate(in: context, matching: predicate, configure: { (allianceStatus) in
-            allianceStatus.alliance = alliance
-            allianceStatus.setup(with: model, in: context)
-        })
-    }
-
-    static func insert(with model: TBAAllianceStatus, for eventStatus: EventStatus, in context: NSManagedObjectContext) -> EventAllianceStatus {
-        let predicate = NSPredicate(format: "%K == %@", #keyPath(EventAllianceStatus.eventStatus), eventStatus)
-        return findOrCreate(in: context, matching: predicate, configure: { (allianceStatus) in
-            allianceStatus.eventStatus = eventStatus
-            allianceStatus.setup(with: model, in: context)
-        })
-    }
-
-    private func setup(with model: TBAAllianceStatus, in context: NSManagedObjectContext) {
-        if let currentRecord = model.currentRecord {
-            self.currentRecord = WLT(wins: currentRecord.wins, losses: currentRecord.losses, ties: currentRecord.ties)
-        }
-
-        level = model.level
-
-        if let playoffAverage = model.playoffAverage {
-            self.playoffAverage = NSNumber(value: playoffAverage)
-        }
-
-        if let record = model.record {
-            self.record = WLT(wins: record.wins, losses: record.losses, ties: record.ties)
-        }
-
-        status = model.status
-    }
-
-}

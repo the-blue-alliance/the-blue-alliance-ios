@@ -66,7 +66,7 @@ extension Event: Locatable, Managed {
             event.stateProv = model.stateProv
             event.timezone = model.timezone
 
-            Webcast.insert(model.webcasts ?? [], event: event, in: context)
+            event.insert(model.webcasts ?? [])
 
             event.website = model.website
 
@@ -78,6 +78,122 @@ extension Event: Locatable, Managed {
 
             event.hybridType = event.calculateHybridType()
         }
+    }
+
+    /**
+     Insert Event Alliances with values from a TBAKit Alliance models in to the managed object context.
+
+     This method will manage setting up an Event Alliance's relationship to an Event and the deletion of oprhaned Event Alliances on the Event.
+
+     - Parameter alliances: The TBAKit Alliance representations to set values from.
+     */
+    func insert(_ alliances: [TBAAlliance]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        // Fetch all of the previous EventAlliances for this Event
+        let oldAlliances = self.alliances?.array as? [EventAlliance] ?? []
+
+        // Insert new EventAlliances for this year
+        let alliances = alliances.map({
+            return EventAlliance.insert($0, eventKey: key!, in: managedObjectContext)
+        })
+
+        // Delete orphaned EventAlliances for this Event
+        Set(oldAlliances).subtracting(Set(alliances)).forEach({
+            managedObjectContext.delete($0)
+        })
+        self.alliances = NSOrderedSet(array: alliances)
+    }
+
+    /**
+     Insert Awards with values from a TBAKit Award models in to the managed object context.
+
+     This method will manage setting up an Award's relationship to an Event and the deletion of oprhaned Awards on the Event.
+
+     - Parameter awards: The TBAKit Award representations to set values from.
+     */
+    func insert(_ awards: [TBAAward]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        updateToManyRelationship(relationship: #keyPath(Event.awards), newValues: awards.map({
+            return Award.insert($0, in: managedObjectContext)
+        }))
+    }
+
+    /**
+     Insert Matches with values from TBAKit Match models in to the managed object context.
+
+     This method will manage setting up a Match's relationship to an Event and the deletion of oprhaned Matches on the Event.
+
+     - Parameter matches: The TBAKit Match representations to set values from.
+     */
+    func insert(_ matches: [TBAMatch]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        updateToManyRelationship(relationship: #keyPath(Event.matches), newValues: matches.map({
+            return Match.insert($0, event: self, in: managedObjectContext)
+        }))
+    }
+
+    /**
+     Insert Teams with values from TBAKit Team models in to the managed object context.
+
+     This method manages setting up an Event's relationship to Teams.
+
+     - Parameter teams: The TBAKit Team representations to set values from.
+     */
+    func insert(_ teams: [TBATeam]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        self.teams = NSSet(array: teams.map({
+            return Team.insert($0, in: managedObjectContext)
+        }))
+    }
+
+    /**
+     Insert Webcasts with values from TBAKit Webcast models in to the managed object context.
+
+     This method manages setting up an Event's relationship to Webcasts and deleting orphaned Webcasts.
+
+     - Parameter webcasts: The TBAKit Webcast representations to set values from.
+     */
+    func insert(_ webcasts: [TBAWebcast]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        updateToManyRelationship(relationship: #keyPath(Event.webcasts), newValues: webcasts.map({
+            return Webcast.insert($0, in: managedObjectContext)
+        }))
+    }
+
+    var isOrphaned: Bool {
+        // Event is a root object, so it should never be an orphan
+        return false
+    }
+    
+    /// Event's shouldn't really be deleted, but sometimes they can be
+    public override func prepareForDeletion() {
+        super.prepareForDeletion()
+
+        // TODO: Handle EventAlliance deletion
+
+        (webcasts?.allObjects as? [Webcast])?.forEach({
+            if $0.events!.onlyObject(self) {
+                // Webcast will become an orphan - delete
+                managedObjectContext?.delete($0)
+            } else {
+                $0.removeFromEvents(self)
+            }
+        })
     }
 
     // hybridType is used a mechanism for sorting Events properly in fetch result controllers... they use a variety
@@ -371,20 +487,6 @@ extension Event: Comparable {
             }
         }
         return false
-    }
-
-    /// Event's shouldn't really be deleted, but sometimes they can be
-    public override func prepareForDeletion() {
-        super.prepareForDeletion()
-
-        (webcasts?.allObjects as? [Webcast])?.forEach({
-            if $0.events == (Set([self]) as NSSet) {
-                // Webcast will become an orphan - delete
-                managedObjectContext?.delete($0)
-            } else {
-                $0.removeFromEvents(self)
-            }
-        })
     }
 
 }

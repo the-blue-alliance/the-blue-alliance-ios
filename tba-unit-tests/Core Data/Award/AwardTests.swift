@@ -13,15 +13,20 @@ class AwardTestCase: CoreDataTestCase {
                                   eventKey: event.key!,
                                   recipients: [modelAwardRecipient],
                                   year: 2018)
-        let award = Award.insert([modelAward], event: event, in: persistentContainer.viewContext).first!
-
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+        let award = Award.insert(modelAward, in: persistentContainer.viewContext)
 
         XCTAssertEqual(award.name, "The Fake Award")
         XCTAssertEqual(award.awardType, 2)
         XCTAssertEqual(award.year, 2018)
         XCTAssertEqual(award.recipients?.count, 1)
+
+        XCTAssertThrowsError(try persistentContainer.viewContext.save())
+
+        // Award shouldn't be able to be saved without an Event
+        event.addToAwards(award)
         XCTAssertNotNil(award.event)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
     func test_insert_validate() {
@@ -32,7 +37,8 @@ class AwardTestCase: CoreDataTestCase {
                                   eventKey: event.key!,
                                   recipients: [],
                                   year: 2018)
-        let award = Award.insert([modelAward], event: event, in: persistentContainer.viewContext).first!
+        let award = Award.insert(modelAward, in: persistentContainer.viewContext)
+        event.addToAwards(award)
 
         // Our Award shouldn't be able to be saved without an Award Recipient
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
@@ -46,252 +52,124 @@ class AwardTestCase: CoreDataTestCase {
 
     func test_update() {
         let event = districtEvent()
-        let modelAwardRecipient = TBAAwardRecipient(teamKey: "frc7332")
-        let modelAward = TBAAward(name: "The Fake Award",
-                                  awardType: 2,
-                                  eventKey: event.key!,
-                                  recipients: [modelAwardRecipient],
-                                  year: 2018)
-        let award = Award.insert([modelAward], event: event, in: persistentContainer.viewContext).first!
-        let recipients = award.recipients!.allObjects as! [AwardRecipient]
+
+        let frc1Model = TBAAwardRecipient(teamKey: "frc1")
+        let frc2Model = TBAAwardRecipient(teamKey: "frc2")
+        let frc3Model = TBAAwardRecipient(teamKey: "frc3")
+
+        let modelOne = TBAAward(name: "The Fake Award",
+                                awardType: 2,
+                                eventKey: event.key!,
+                                recipients: [frc1Model, frc2Model, frc3Model],
+                                year: 2018)
+        let awardOne = Award.insert(modelOne, in: persistentContainer.viewContext)
+        let recipients = awardOne.recipients!.allObjects as! [AwardRecipient]
+        event.addToAwards(awardOne)
+
+        let frc1 = recipients.first(where: { $0.teamKey?.key == "frc1" })!
+        let frc2 = recipients.first(where: { $0.teamKey?.key == "frc2" })!
+        let frc3 = recipients.first(where: { $0.teamKey?.key == "frc3" })!
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
-        let modelNewRecipient = TBAAwardRecipient(teamKey: "frc3333")
-        let duplicateModelAward = TBAAward(name: "The Duplicate Award",
-                                           awardType: award.awardType!.intValue,
-                                           eventKey: award.event!.key!,
-                                           recipients: [modelNewRecipient],
-                                           year: award.year!.intValue)
+        let modelTwo = TBAAward(name: "Some New Award",
+                                awardType: 3,
+                                eventKey: event.key!,
+                                recipients: [frc1Model],
+                                year: 2018)
+        let awardTwo = Award.insert(modelTwo, in: persistentContainer.viewContext)
+        event.addToAwards(awardTwo)
 
-        let duplicateAward = Award.insert([duplicateModelAward], event: event, in: persistentContainer.viewContext).first!
+        XCTAssertNotEqual(awardOne, awardTwo)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        let modelThree = TBAAward(name: "The Duplicate Award",
+                                  awardType: awardOne.awardType!.intValue,
+                                  eventKey: event.key!,
+                                  recipients: [frc2Model],
+                                  year: awardOne.year!.intValue)
+        let awardThree = Award.insert(modelThree, in: persistentContainer.viewContext)
 
         // Sanity check
-        XCTAssertEqual(award, duplicateAward)
-
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+        XCTAssertEqual(awardOne, awardThree)
 
         // Check that the award updates it's values properly
-        XCTAssertEqual(award.name, "The Duplicate Award")
-        XCTAssertNotEqual(recipients, award.recipients!.allObjects as! [AwardRecipient])
-
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
-    }
-
-    func test_update_orphans() {
-        // When updating Awards for an Event, orphaned Award Recipients should be deleted
-        let event = districtEvent()
-        let frc7332Model = TBAAwardRecipient(teamKey: "frc7332")
-        let modelAwardOne = TBAAward(name: "The Fake Award",
-                                  awardType: 2,
-                                  eventKey: event.key!,
-                                  recipients: [frc7332Model],
-                                  year: 2018)
-        let awardOne = Award.insert([modelAwardOne], event: event, in: persistentContainer.viewContext).first!
-        let frc7332 = awardOne.recipients!.allObjects.first! as! AwardRecipient
+        XCTAssertEqual(awardOne.name, "The Duplicate Award")
+        XCTAssertEqual(awardOne.recipients?.count, 1)
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
-        let frc3333Model = TBAAwardRecipient(teamKey: "frc3333")
-        let modelAward = TBAAward(name: "The Duplicate Award",
-                                  awardType: awardOne.awardType!.intValue,
-                                  eventKey: awardOne.event!.key!,
-                                  recipients: [frc3333Model],
-                                  year: awardOne.year!.intValue)
-        let awardTwo = Award.insert([modelAward], event: event, in: persistentContainer.viewContext).first!
-        let frc3333 = awardTwo.recipients!.allObjects.first! as! AwardRecipient
+        // Check our Award's recipients look right
+        XCTAssert(awardOne.recipients!.onlyObject(frc2))
+        XCTAssert(awardTwo.recipients!.onlyObject(frc1))
 
-        // Sanity check - Awards should be qual
-        XCTAssertEqual(awardOne, awardTwo)
+        // frc1 and frc2 AwardRecipients should not be deleted - they're not orphans
+        XCTAssertNotNil(frc1.managedObjectContext)
+        XCTAssertNotNil(frc2.managedObjectContext)
 
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
-
-        // Ensure our Award has managed it's Award Recipient relationships properly
-        XCTAssertFalse(awardOne.recipients!.contains(frc7332))
-        XCTAssert(awardOne.recipients!.contains(frc3333))
-
-        // frc7332 should be deleted
-        XCTAssertNil(frc7332.managedObjectContext)
-
-        // frc3333 should not be deleted
-        XCTAssertNotNil(frc3333.managedObjectContext)
-    }
-
-    func test_update_no_orphans() {
-        // Given one Award with two Teams, a second Award with one Team from the first set,
-        // and then an update to the first Award which removes the other team from the first set,
-        // neither team should be deleted, since neither Team is an orphan - they both refer to at least one award
-        let event = districtEvent()
-
-        // Insert Two Awards - one with two Award Recipients, one with one Award Recipient
-        let frc7332Model = TBAAwardRecipient(teamKey: "frc7332")
-        let frc3333Model = TBAAwardRecipient(teamKey: "frc3333")
-        let modelAwardOne = TBAAward(name: "The Fake Award",
-                                     awardType: 2,
-                                     eventKey: event.key!,
-                                     recipients: [frc7332Model, frc3333Model],
-                                     year: 2018)
-        let modelAwardTwo = TBAAward(name: "The Fake Award Two",
-                                     awardType: 3,
-                                     eventKey: event.key!,
-                                     recipients: [frc3333Model],
-                                     year: 2018)
-
-        let awards = Award.insert([modelAwardOne, modelAwardTwo], event: event, in: persistentContainer.viewContext)
-        let awardOne = awards.first(where: { $0.awardType?.intValue == 2 })!
-        let awardTwo = awards.first(where: { $0.awardType?.intValue == 3 })!
-        let frc3333 = (awardOne.recipients!.allObjects as! [AwardRecipient]).first(where: { $0.teamKey?.key == "frc3333" })!
-        let frc7332 = (awardOne.recipients!.allObjects as! [AwardRecipient]).first(where: { $0.teamKey?.key == "frc7332" })!
-
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
-
-        // Update our first Award to only have one of the two recipients
-        let modelAwardOneUpdated = TBAAward(name: "The Fake Award",
-                                            awardType: 2,
-                                            eventKey: event.key!,
-                                            recipients: [frc7332Model],
-                                            year: 2018)
-        let awardOneUpdated = Award.insert([modelAwardOneUpdated, modelAwardTwo], event: event, in: persistentContainer.viewContext).first(where: { $0.awardType?.intValue == 2 })
-
-        // Sanity check
-        XCTAssertEqual(awardOne, awardOneUpdated)
-        XCTAssertNotEqual(awardOne, awardTwo)
-
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
-
-        // Ensure our Award has managed it's Award Recipient relationships properly
-        XCTAssert(awardOne.recipients!.contains(frc7332))
-        XCTAssertFalse(awardOne.recipients!.contains(frc3333))
-        XCTAssert(awardTwo.recipients!.contains(frc3333))
-        XCTAssertFalse(awardTwo.recipients!.contains(frc7332))
-
-        // Neither recipient should be deleted - they both refer to one award
-        XCTAssertNotNil(frc7332.managedObjectContext)
-        XCTAssertNotNil(frc3333.managedObjectContext)
-    }
-
-    func test_update_complexOrphans() {
-        // Given one Award with two Teams, a second Award with one Team from the first set,
-        // and then an update to the first Award to have the same Teams as the second Award,
-        // the first Team shoul be deleted - since it's an orphan
-        let event = districtEvent()
-
-        // Insert Two Awards - one with two Award Recipients, one with one Award Recipient
-        let frc7332Model = TBAAwardRecipient(teamKey: "frc7332")
-        let frc3333Model = TBAAwardRecipient(teamKey: "frc3333")
-        let modelAwardOne = TBAAward(name: "The Fake Award",
-                                     awardType: 2,
-                                     eventKey: event.key!,
-                                     recipients: [frc7332Model, frc3333Model],
-                                     year: 2018)
-        let modelAwardTwo = TBAAward(name: "The Fake Award Two",
-                                     awardType: 3,
-                                     eventKey: event.key!,
-                                     recipients: [frc3333Model],
-                                     year: 2018)
-
-        let awards = Award.insert([modelAwardOne, modelAwardTwo], event: event, in: persistentContainer.viewContext)
-        let awardOne = awards.first(where: { $0.awardType?.intValue == 2 })!
-        let awardTwo = awards.first(where: { $0.awardType?.intValue == 3 })!
-        let frc3333 = (awardOne.recipients!.allObjects as! [AwardRecipient]).first(where: { $0.teamKey?.key == "frc3333" })!
-        let frc7332 = (awardOne.recipients!.allObjects as! [AwardRecipient]).first(where: { $0.teamKey?.key == "frc7332" })!
-
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
-
-        // Update our first Award to only have one of the two recipients
-        let modelAwardOneUpdated = TBAAward(name: "The Fake Award",
-                                            awardType: 2,
-                                            eventKey: event.key!,
-                                            recipients: [frc3333Model],
-                                            year: 2018)
-        let awardOneUpdated = Award.insert([modelAwardOneUpdated, modelAwardTwo], event: event, in: persistentContainer.viewContext).first(where: { $0.awardType?.intValue == 2 })!
-
-        // Sanity check
-        XCTAssertEqual(awardOne, awardOneUpdated)
-        XCTAssertNotEqual(awardOne, awardTwo)
-
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
-
-        // Ensure our Award has managed it's Award Recipient relationships properly
-        XCTAssertFalse(awardOne.recipients!.contains(frc7332))
-        XCTAssert(awardOne.recipients!.contains(frc3333))
-        XCTAssertFalse(awardTwo.recipients!.contains(frc7332))
-        XCTAssert(awardTwo.recipients!.contains(frc3333))
-
-        // frc7332 recipient should be deleted
-        XCTAssertNil(frc7332.managedObjectContext)
-
-        // frc3333 recipient should not be deleted
-        XCTAssertNotNil(frc3333.managedObjectContext)
-    }
-
-    func test_insert_orphans() {
-        // Orphaned Awards and their relationships should be cleaned up
-        // We're going to assume this tests `insert` and `prepareForDeletion`
-        let event = districtEvent()
-
-        // Insert Two Awards - one with two Award Recipients, one with one Award Recipient
-        let frc7332Model = TBAAwardRecipient(teamKey: "frc7332")
-        let frc3333Model = TBAAwardRecipient(teamKey: "frc3333")
-        let modelAwardOne = TBAAward(name: "The Fake Award",
-                                     awardType: 2,
-                                     eventKey: event.key!,
-                                     recipients: [frc7332Model, frc3333Model],
-                                     year: 2018)
-        let modelAwardTwo = TBAAward(name: "The Fake Award Two",
-                                     awardType: 3,
-                                     eventKey: event.key!,
-                                     recipients: [frc3333Model],
-                                     year: 2018)
-
-        let awards = Award.insert([modelAwardOne, modelAwardTwo], event: event, in: persistentContainer.viewContext)
-        let awardOne = awards.first(where: { $0.awardType?.intValue == 2 })!
-        let awardTwo = awards.first(where: { $0.awardType?.intValue == 3 })!
-        let frc3333 = (awardOne.recipients!.allObjects as! [AwardRecipient]).first(where: { $0.teamKey?.key == "frc3333" })!
-        let frc7332 = (awardOne.recipients!.allObjects as! [AwardRecipient]).first(where: { $0.teamKey?.key == "frc7332" })!
-
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
-
-        // Remove the first Award from the Event - this should orphan the first Award and Award Recipient frc7332
-        Award.insert([modelAwardTwo], event: event, in: persistentContainer.viewContext)
-
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
-
-        // Ensure our Event has managed it's Award relationships properly
-        XCTAssertFalse(event.awards!.contains(awardOne))
-        XCTAssert(event.awards!.contains(awardTwo))
-
-        // First award should be deleted
-        XCTAssertNil(awardOne.managedObjectContext)
-        // Second award should not be deleted
-        XCTAssertNotNil(awardTwo.managedObjectContext)
-
-        // Ensure our Award has managed it's Award Recipient relationships properly
-        XCTAssertFalse(awardTwo.recipients!.contains(frc7332))
-        XCTAssert(awardTwo.recipients!.contains(frc3333))
-
-        // frc7332 recipient should be deleted
-        XCTAssertNil(frc7332.managedObjectContext)
-        // frc3333 recipient should not be deleted
-        XCTAssertNotNil(frc3333.managedObjectContext)
+        // frc3 AwardRecipient should be deleted - it's an orphan
+        XCTAssertNil(frc3.managedObjectContext)
     }
 
     func test_delete() {
         let event = districtEvent()
-        let modelAwardRecipient = TBAAwardRecipient(teamKey: "frc7332")
-        let modelAward = TBAAward(name: "The Fake Award",
+
+        let frc1Model = TBAAwardRecipient(teamKey: "frc1")
+        let frc2Model = TBAAwardRecipient(teamKey: "frc2")
+
+        let modelAwardOne = TBAAward(name: "The Fake Award",
                                   awardType: 2,
                                   eventKey: event.key!,
-                                  recipients: [modelAwardRecipient],
+                                  recipients: [frc1Model, frc2Model],
                                   year: 2018)
-        let award = Award.insert([modelAward], event: event, in: persistentContainer.viewContext).first!
-        let recipient = (award.recipients!.allObjects as! [AwardRecipient]).first!
+        let awardOne = Award.insert(modelAwardOne, in: persistentContainer.viewContext)
+        let recipients = awardOne.recipients!.allObjects as! [AwardRecipient]
 
-        persistentContainer.viewContext.delete(award)
+        event.addToAwards(awardOne)
+
+        let frc1 = recipients.first(where: { $0.teamKey?.key == "frc1" })!
+        let frc2 = recipients.first(where: { $0.teamKey?.key == "frc2" })!
+
+        let modelAwardTwo = TBAAward(name: "Some New Award",
+                                     awardType: 3,
+                                     eventKey: event.key!,
+                                     recipients: [frc2Model],
+                                     year: 2018)
+        let awardTwo = Award.insert(modelAwardTwo, in: persistentContainer.viewContext)
+        event.addToAwards(awardTwo)
+
+        persistentContainer.viewContext.delete(awardOne)
         // Save should work fine - since Award propogates deletion of Award Recipients
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
-        XCTAssertNil(recipient.managedObjectContext)
+        // Make sure our Event updated it's relationship properly
+        XCTAssertEqual(event.awards?.count, 1)
+
+        // Make sure our Awards look right
+        XCTAssertNil(awardOne.managedObjectContext)
+        XCTAssertNotNil(awardTwo.managedObjectContext)
+
+        // Make sure our Award Recipients got deleted properly
+        XCTAssert(awardTwo.recipients!.onlyObject(frc2))
+
+        XCTAssertNil(frc1.managedObjectContext)
+        XCTAssertNotNil(frc2.managedObjectContext)
+    }
+
+    func test_isOrphaned() {
+        let award = Award.init(entity: Award.entity(), insertInto: persistentContainer.viewContext)
+        // No Event - should be orphaned
+        XCTAssert(award.isOrphaned)
+
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.addToAwards(award)
+        // Attached to an Event - should not be orphaned
+        XCTAssertFalse(award.isOrphaned)
+
+        event.removeFromAwards(award)
+        // Removed from an Event - should be orphaned
+        XCTAssert(award.isOrphaned)
     }
 
 }

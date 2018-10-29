@@ -147,7 +147,9 @@ extension EventAwardsViewController: Refreshable {
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 if let awards = awards {
-                    Award.insert(awards, event: self.event, in: backgroundContext)
+                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    event.insert(awards)
+
                     if backgroundContext.saveOrRollback() {
                         TBAKit.setLastModified(for: request!)
                     }

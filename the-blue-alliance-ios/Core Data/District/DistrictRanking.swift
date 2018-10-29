@@ -36,7 +36,7 @@ extension DistrictRanking: Managed {
 
      - Returns: The inserted District Ranking.
      */
-    private static func insert(_ model: TBADistrictRanking, districtKey: String, in context: NSManagedObjectContext) -> DistrictRanking {
+    static func insert(_ model: TBADistrictRanking, districtKey: String, in context: NSManagedObjectContext) -> DistrictRanking {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
                                     #keyPath(DistrictRanking.district.key), districtKey,
                                     #keyPath(DistrictRanking.teamKey.key), model.teamKey)
@@ -48,37 +48,14 @@ extension DistrictRanking: Managed {
             ranking.rank = model.rank as NSNumber
             ranking.rookieBonus = model.rookieBonus as NSNumber?
 
-            updateToManyRelationship(relationship: &ranking.eventPoints, newValues: model.eventPoints.compactMap({
+            ranking.updateToManyRelationship(relationship: #keyPath(DistrictRanking.eventPoints), newValues: model.eventPoints.compactMap({
                 return DistrictEventPoints.insert($0, in: context)
-            }), matchingOrphans: {
-                return $0.districtRanking == ranking
-            }, in: context)
+            }))
         })
     }
 
-    /**
-     Insert an array of District Rankings with values from TBAKit District Ranking models in to the managed object context.
-
-     This method manages setting up a District Ranking's relationship to a District and deleting orphaned District Rankings.
-
-     - Parameter rankings: The TBAKit District Ranking representations to set values from.
-
-     - Parameter district: The District the District Rankings belong to.
-
-     - Parameter context: The NSManagedContext to insert the District Ranking in to.
-
-     - Returns: An array of inserted District Rankings.
-     */
-    @discardableResult
-    static func insert(_ rankings: [TBADistrictRanking], district: District, in context: NSManagedObjectContext) -> [DistrictRanking] {
-        let rankings = rankings.map({
-            return DistrictRanking.insert($0, districtKey: district.key!, in: context)
-        })
-        updateToManyRelationship(relationship: &district.rankings, newValues: rankings, matchingOrphans: { _ in
-            // Rankings will never belong to more than one district, so this should always be true
-            return true
-        }, in: context)
-        return rankings
+    var isOrphaned: Bool {
+        return district == nil
     }
 
 }

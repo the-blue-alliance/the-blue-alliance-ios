@@ -267,8 +267,9 @@ extension TeamMediaCollectionViewController: Refreshable {
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 if let media = media {
-                    let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
-                    TeamMedia.insert(media, team: backgroundTeam, year: year, in: backgroundContext)
+                    let team = backgroundContext.object(with: self.team.objectID) as! Team
+                    team.insert(media, year: year)
+
                     if backgroundContext.saveOrRollback() {
                         TBAKit.setLastModified(for: request!)
                     }

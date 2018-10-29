@@ -35,7 +35,6 @@ class DistrictEventsViewController: EventsViewController {
     @objc override func refresh() {
         removeNoDataView()
 
-        /*
         var request: URLSessionDataTask?
         request = TBAKit.sharedKit.fetchDistrictEvents(key: district.key!, completion: { (events, error) in
             if let error = error {
@@ -45,20 +44,19 @@ class DistrictEventsViewController: EventsViewController {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundDistrict = backgroundContext.object(with: self.district.objectID) as! District
                 if let events = events {
-                    let localEvents = events.map({ (modelEvent) -> Event in
-                        return Event.insert(with: modelEvent, in: backgroundContext)
-                    })
-                    backgroundDistrict.events = Set(localEvents) as NSSet
+                    let district = backgroundContext.object(with: self.district.objectID) as! District
+                    district.insert(events)
+
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
                 }
 
-                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })
         addRequest(request: request!)
-        */
     }
 
     // MARK: - Stateful

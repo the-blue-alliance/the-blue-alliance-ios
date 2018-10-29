@@ -1,18 +1,18 @@
 import CoreData
 
-public protocol Managed: class, NSFetchRequestResult {
+protocol Managed: class, NSFetchRequestResult {
     static var entity: NSEntityDescription { get }
     static var entityName: String { get }
-    var managedObjectContext: NSManagedObjectContext? { get }
+    var isOrphaned: Bool { get }
 }
 
 extension Managed where Self: NSManagedObject {
 
-    public static var entity: NSEntityDescription { return entity()  }
+    static var entity: NSEntityDescription { return entity()  }
 
-    public static var entityName: String { return entity.name!  }
+    static var entityName: String { return entity.name!  }
 
-    public static func findOrCreate(in context: NSManagedObjectContext, matching predicate: NSPredicate, configure: (Self) -> Void) -> Self {
+    static func findOrCreate(in context: NSManagedObjectContext, matching predicate: NSPredicate, configure: (Self) -> Void) -> Self {
         var object = findOrFetch(in: context, matching: predicate)
         if object == nil {
             object = context.insertObject()
@@ -21,7 +21,7 @@ extension Managed where Self: NSManagedObject {
         return object!
     }
 
-    public static func findOrFetch(in context: NSManagedObjectContext, matching predicate: NSPredicate) -> Self? {
+    static func findOrFetch(in context: NSManagedObjectContext, matching predicate: NSPredicate) -> Self? {
         guard let object = materializedObject(in: context, matching: predicate) else {
             return fetch(in: context) { request in
                 request.predicate = predicate
@@ -32,19 +32,19 @@ extension Managed where Self: NSManagedObject {
         return object
     }
 
-    public static func fetch(in context: NSManagedObjectContext, configurationBlock: (NSFetchRequest<Self>) -> Void = { _ in }) -> [Self] {
+    static func fetch(in context: NSManagedObjectContext, configurationBlock: (NSFetchRequest<Self>) -> Void = { _ in }) -> [Self] {
         let request = NSFetchRequest<Self>(entityName: Self.entityName)
         configurationBlock(request)
         return try! context.fetch(request)
     }
 
-    public static func count(in context: NSManagedObjectContext, configure: (NSFetchRequest<Self>) -> Void = { _ in }) -> Int {
+    static func count(in context: NSManagedObjectContext, configure: (NSFetchRequest<Self>) -> Void = { _ in }) -> Int {
         let request = NSFetchRequest<Self>(entityName: entityName)
         configure(request)
         return try! context.count(for: request)
     }
 
-    public static func materializedObject(in context: NSManagedObjectContext, matching predicate: NSPredicate) -> Self? {
+    static func materializedObject(in context: NSManagedObjectContext, matching predicate: NSPredicate) -> Self? {
         for object in context.registeredObjects where !object.isFault {
             guard let result = object as? Self, predicate.evaluate(with: result) else { continue }
             return result
@@ -52,7 +52,7 @@ extension Managed where Self: NSManagedObject {
         return nil
     }
 
-    public static func fetchSingleObject(in context: NSManagedObjectContext, configure: (NSFetchRequest<Self>) -> Void) -> Self? {
+    static func fetchSingleObject(in context: NSManagedObjectContext, configure: (NSFetchRequest<Self>) -> Void) -> Self? {
         let result = fetch(in: context) { request in
             configure(request)
             request.fetchLimit = 1
@@ -64,27 +64,37 @@ extension Managed where Self: NSManagedObject {
         }
     }
 
-    public static func updateToOneRelationship<J: Any, T: NSManagedObject>(relationship: inout T?, newValue: J?, newObject: (J) -> T) {
+    func updateToOneRelationship<J: Any, T: NSManagedObject & Managed>(relationship: String, newValue: J?, newObject: (J) -> T) {
+        // Store our old value so we can reference it later
+        let oldValue = value(forKeyPath: relationship) as? T
+
+        // The ol' switcharoo
         if let newValue = newValue {
-            relationship = newObject(newValue)
+            setValue(newObject(newValue), forKeyPath: relationship)
         } else {
-            relationship = nil
+            setValue(nil, forKeyPath: relationship)
+        }
+
+        // Clean up orphan, if applicable
+        if let oldValue = oldValue, oldValue.isOrphaned {
+            managedObjectContext?.delete(oldValue)
         }
     }
 
-    public static func updateToManyRelationship<T: NSManagedObject>(relationship: inout NSSet?, newValues new: [T]?, matchingOrphans: @escaping (T) -> Bool, in context: NSManagedObjectContext) {
+    func updateToManyRelationship<T: NSManagedObject & Managed>(relationship: String, newValues new: [T]?) {
         // Store our old values so we can reference them later
-        let oldValues = relationship?.allObjects as? [T]
+        let oldSet = value(forKeyPath: relationship) as? NSSet
+        let oldValues = oldSet?.allObjects as? [T]
 
         // The ol' switcharoo
         let newSet = Set(new ?? [])
-        relationship = newSet as NSSet
+        setValue(NSSet(set: newSet), forKeyPath: relationship)
 
         // Clean up orphans, if applicable
         if let oldValues = oldValues {
             let oldSet = Set(oldValues)
-            oldSet.subtracting(newSet).filter(matchingOrphans).forEach({
-                context.delete($0)
+            oldSet.subtracting(newSet).filter({ $0.isOrphaned }).forEach({
+                managedObjectContext?.delete($0)
             })
         }
     }

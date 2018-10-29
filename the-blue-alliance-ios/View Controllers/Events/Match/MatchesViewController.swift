@@ -119,7 +119,8 @@ extension MatchesViewController: Refreshable {
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 if let matches = matches {
                     let event = backgroundContext.object(with: self.event.objectID) as! Event
-                    Match.insert(matches, event: event, in: backgroundContext)
+                    event.insert(matches)
+
                     if backgroundContext.saveOrRollback() {
                         TBAKit.setLastModified(for: request!)
                     }

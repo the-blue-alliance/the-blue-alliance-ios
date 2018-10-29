@@ -49,9 +49,13 @@ class AwardRecipientTestCase: AwardTestCase {
                                   eventKey: event.key!,
                                   recipients: [],
                                   year: 2018)
-        let award = Award.insert([modelAward], event: event, in: persistentContainer.viewContext).first!
+        let award = Award.insert(modelAward, in: persistentContainer.viewContext)
         award.addToRecipients(awardRecipient)
 
+        // Our Award shouldn't be able to be saved without an Event
+        XCTAssertThrowsError(try persistentContainer.viewContext.save())
+
+        event.addToAwards(award)
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
@@ -100,7 +104,7 @@ class AwardRecipientTestCase: AwardTestCase {
                                   eventKey: event.key!,
                                   recipients: [],
                                   year: 2018)
-        let award = Award.insert([modelAward], event: event, in: persistentContainer.viewContext).first!
+        let award = Award.insert(modelAward, in: persistentContainer.viewContext)
         award.addToRecipients(recipient)
 
         // Recipient can't be deleted while it's attached to an Award
@@ -133,11 +137,26 @@ class AwardRecipientTestCase: AwardTestCase {
                                   eventKey: event.key!,
                                   recipients: [],
                                   year: 2018)
-        let award = Award.insert([modelAward], event: event, in: persistentContainer.viewContext).first!
+        let award = Award.insert(modelAward, in: persistentContainer.viewContext)
         award.addToRecipients(recipient)
 
         persistentContainer.viewContext.delete(recipient)
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
+    }
+
+    override func test_isOrphaned() {
+        let recipient = AwardRecipient.init(entity: AwardRecipient.entity(), insertInto: persistentContainer.viewContext)
+        // No Award - should be orphaned
+        XCTAssert(recipient.isOrphaned)
+
+        let award = Award.init(entity: Award.entity(), insertInto: persistentContainer.viewContext)
+        award.addToRecipients(recipient)
+        // Attached to an Award - should not be orphaned
+        XCTAssertFalse(recipient.isOrphaned)
+
+        award.removeFromRecipients(recipient)
+        // Removed from an Award - should be orphaned
+        XCTAssert(recipient.isOrphaned)
     }
 
     func test_awardText_awardee_team() {

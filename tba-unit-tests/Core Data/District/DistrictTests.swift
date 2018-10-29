@@ -17,6 +17,67 @@ class DistrictTestCase: CoreDataTestCase {
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
+    func test_insert_events() {
+        let modelDistrict = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
+        let district = District.insert(modelDistrict, in: persistentContainer.viewContext)
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        let modelEventOne = TBAEvent(key: "2018miket", name: "Event 1", eventCode: "miket", eventType: 1, startDate: dateFormatter.date(from: "2018-03-01")!, endDate: dateFormatter.date(from: "2018-03-03")!, year: 2018, eventTypeString: "District", divisionKeys: [])
+        let modelEventTwo = TBAEvent(key: "2018mike2", name: "Event 2", eventCode: "mike2", eventType: 1, startDate: dateFormatter.date(from: "2018-03-01")!, endDate: dateFormatter.date(from: "2018-03-03")!, year: 2018, eventTypeString: "District", divisionKeys: [])
+
+        district.insert([modelEventOne, modelEventTwo])
+
+        let events = district.events!.allObjects as! [Event]
+        let eventOne = events.first(where: { $0.key == "2018miket" })!
+        let eventTwo = events.first(where: { $0.key == "2018mike2" })!
+
+        // Sanity check
+        XCTAssertEqual(district.events?.count, 2)
+        XCTAssertNotEqual(eventOne, eventTwo)
+
+        district.insert([modelEventTwo])
+
+        // Sanity check
+        XCTAssert(district.events!.onlyObject(eventTwo))
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // No events, including orphans, should be deleted
+        XCTAssertNotNil(eventOne.managedObjectContext)
+        XCTAssertNotNil(eventTwo.managedObjectContext)
+    }
+
+    func test_insert_rankings() {
+        let modelDistrict = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
+        let district = District.insert(modelDistrict, in: persistentContainer.viewContext)
+
+        let modelRankingOne = TBADistrictRanking(teamKey: "frc1", rank: 1, pointTotal: 70, eventPoints: [])
+        let modelRankingTwo = TBADistrictRanking(teamKey: "frc2", rank: 2, pointTotal: 66, eventPoints: [])
+
+        district.insert([modelRankingOne, modelRankingTwo])
+
+        let rankings = district.rankings!.allObjects as! [DistrictRanking]
+        let rankingOne = rankings.first(where: { $0.teamKey?.key == "frc1" })!
+        let rankingTwo = rankings.first(where: { $0.teamKey?.key == "frc2" })!
+
+        // Sanity check
+        XCTAssertEqual(district.rankings?.count, 2)
+        XCTAssertNotEqual(rankingOne, rankingTwo)
+
+        district.insert([modelRankingTwo])
+
+        // Sanity check
+        XCTAssert(district.rankings!.onlyObject(rankingTwo))
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // Ranking One is an orphan, and should be deleted. Ranking Two should still exist.
+        XCTAssertNil(rankingOne.managedObjectContext)
+        XCTAssertNotNil(rankingTwo.managedObjectContext)
+    }
+
     func test_update() {
         let modelDistrict = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
         let district = District.insert(modelDistrict, in: persistentContainer.viewContext)
@@ -52,6 +113,12 @@ class DistrictTestCase: CoreDataTestCase {
 
         // Ranking should be deleted
         XCTAssertNil(ranking.managedObjectContext)
+    }
+
+    func test_isOrphaned() {
+        let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        // Should always be false
+        XCTAssertFalse(district.isOrphaned)
     }
 
     func test_abbreviationWithYear() {

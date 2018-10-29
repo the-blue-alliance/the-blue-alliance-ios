@@ -174,12 +174,9 @@ extension Match: Managed {
             match.setNumber = model.setNumber as NSNumber
             match.matchNumber = model.matchNumber as NSNumber
 
-            updateToManyRelationship(relationship: &match.alliances, newValues: model.alliances?.map({ (key: String, value: TBAMatchAlliance) -> MatchAlliance in
+            match.updateToManyRelationship(relationship: #keyPath(Match.alliances), newValues: model.alliances?.map({ (key: String, value: TBAMatchAlliance) -> MatchAlliance in
                 return MatchAlliance.insert(value, allianceKey: key, matchKey: model.key, in: context)
-            }), matchingOrphans: { _ in
-                // Match Alliance will never belong to more than one Match, so this should always be true
-                return true
-            }, in: context)
+            }))
 
             match.winningAlliance = model.winningAlliance
             // This is safe to be used alone, since we take care of the Event <-> Match relationship
@@ -191,45 +188,21 @@ extension Match: Managed {
             match.postResultTime = model.postResultTime as NSNumber?
             match.breakdown = model.breakdown
 
-            updateToManyRelationship(relationship: &match.videos, newValues: model.videos?.map({ (modelVideo) -> MatchVideo in
-                return MatchVideo.insert(modelVideo, in: context)
-            }), matchingOrphans: {
-                // If an Match Video's only Match is this Match, it's an orphan now
-                return $0.matches?.allObjects as? [Match] == [match]
-            }, in: context)
+            match.updateToManyRelationship(relationship: #keyPath(Match.videos), newValues: model.videos?.map({
+                return MatchVideo.insert($0, in: context)
+            }))
         }
     }
 
-    /**
-     Insert Matches with values from TBAKit Match models in to the managed object context.
-
-     This method will manage setting up a Match's relationship to an Event and the deletion of oprhaned Matches on the Event.
-
-     - Parameter matches: The TBAKit Match representations to set values from.
-
-     - Parameter event: The Event the Matches belong to.
-
-     - Parameter context: The NSManagedContext to insert the Match in to.
-
-     - Returns: The inserted District Ranking.
-     */
-    @discardableResult
-    static func insert(_ matches: [TBAMatch], event: Event, in context: NSManagedObjectContext) -> [Match] {
-        let matches = matches.map({
-            return Match.insert($0, event: event, in: context)
-        })
-        updateToManyRelationship(relationship: &event.matches, newValues: matches, matchingOrphans: { _ in
-            // Matches will never belong to more than one Event, so this should always be true
-            return true
-        }, in: context)
-        return matches
+    var isOrphaned: Bool {
+        return event == nil
     }
 
     override public func prepareForDeletion() {
         super.prepareForDeletion()
 
         (videos?.allObjects as? [MatchVideo])?.forEach({
-            if $0.matches == (Set([self]) as NSSet) {
+            if $0.matches!.onlyObject(self) {
                 // Match Video will become an orphan - delete
                 managedObjectContext?.delete($0)
             } else {

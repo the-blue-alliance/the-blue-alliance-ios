@@ -20,4 +20,9 @@ extension EventStatusQual: Managed {
         })
     }
 
+    var isOrphaned: Bool {
+        // TODO: Fix when we audit
+        return false
+    }
+
 }

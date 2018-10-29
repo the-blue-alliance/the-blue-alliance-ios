@@ -64,11 +64,15 @@ extension AwardRecipient: Managed {
         }
 
         return findOrCreate(in: context, matching: predicate) { (awardRecipient) in
-            updateToOneRelationship(relationship: &awardRecipient.teamKey, newValue: model.teamKey) {
+            awardRecipient.updateToOneRelationship(relationship: #keyPath(AwardRecipient.teamKey), newValue: model.teamKey, newObject: {
                 return TeamKey.insert(withKey: $0, in: context)
-            }
+            })
             awardRecipient.awardee = model.awardee
         }
+    }
+
+    var isOrphaned: Bool {
+        return awards?.count == 0
     }
 
 }

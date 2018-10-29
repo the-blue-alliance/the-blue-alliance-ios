@@ -45,10 +45,6 @@ extension District {
         return districtChampionship?.endDate
     }
 
-    public static func == (lhs: District, rhs: District) -> Bool {
-        return lhs.key == rhs.key
-    }
-
 }
 
 extension District: Managed {
@@ -74,6 +70,49 @@ extension District: Managed {
             district.key = model.key
             district.year = model.year as NSNumber
         })
+    }
+
+    /**
+     Insert Events with values from TBAKit Event models in to the managed object context.
+
+     This method manages setting up an District's relationship to Events.
+
+     - Parameter events: The TBAKit Event representations to set values from.
+     */
+    func insert(_ events: [TBAEvent]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        self.events = NSSet(array: events.map({
+            return Event.insert(with: $0, in: managedObjectContext)
+        }))
+    }
+
+    /**
+     Insert an array of District Rankings with values from TBAKit District Ranking models in to the managed object context for a District.
+
+     This method manages setting up a District Ranking's relationship to a District and deleting orphaned District Rankings.
+
+     - Parameter rankings: The TBAKit District Ranking representations to set values from.
+
+     - Parameter district: The District the District Rankings belong to.
+
+     - Parameter context: The NSManagedContext to insert the District Ranking in to.
+     */
+    func insert(_ rankings: [TBADistrictRanking]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        updateToManyRelationship(relationship: #keyPath(District.rankings), newValues: rankings.map({
+            return DistrictRanking.insert($0, districtKey: key!, in: managedObjectContext)
+        }))
+    }
+
+    var isOrphaned: Bool {
+        // District is a root object, so it should never be an orphan
+        return false
     }
 
 }

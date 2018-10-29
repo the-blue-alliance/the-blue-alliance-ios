@@ -4,12 +4,12 @@ import Crashlytics
 
 extension NSManagedObjectContext {
 
-    public func insertObject<A: NSManagedObject>() -> A where A: Managed {
+    func insertObject<A: NSManagedObject>() -> A where A: Managed {
         guard let obj = NSEntityDescription.insertNewObject(forEntityName: A.entityName, into: self) as? A else { fatalError("Wrong object type") }
         return obj
     }
 
-    public func saveOrRollback() -> Bool {
+    func saveOrRollback() -> Bool {
         do {
             try save()
             return true
@@ -21,20 +21,20 @@ extension NSManagedObjectContext {
         }
     }
 
-    public func performSaveOrRollback() {
+    func performSaveOrRollback() {
         perform {
             _ = self.saveOrRollback()
         }
     }
 
-    public func performChanges(block: @escaping () -> Void) {
+    func performChanges(block: @escaping () -> Void) {
         perform {
             block()
             _ = self.saveOrRollback()
         }
     }
 
-    public func performChangesAndWait(block: @escaping () -> Void) {
+    func performChangesAndWait(block: @escaping () -> Void) {
         performAndWait {
             block()
             _ = self.saveOrRollback()

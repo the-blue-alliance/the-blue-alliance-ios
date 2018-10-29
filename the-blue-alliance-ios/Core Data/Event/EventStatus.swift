@@ -26,10 +26,18 @@ extension EventStatus: Managed {
             if let alliance = model.alliance {
                 eventStatus.alliance = EventStatusAlliance.insert(with: alliance, eventStatus: eventStatus, in: context)
             }
+
+            /*
             if let playoff = model.playoff {
                 eventStatus.playoff = EventAllianceStatus.insert(with: playoff, for: eventStatus, in: context)
             }
+            */
         })
+    }
+
+    var isOrphaned: Bool {
+        // TODO: Fix when we audit
+        return false
     }
 
 }

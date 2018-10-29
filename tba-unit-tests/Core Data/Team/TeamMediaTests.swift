@@ -24,37 +24,6 @@ class TeamMediaTestCase: CoreDataTestCase {
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
-    func test_insert_team_orphans() {
-        let teamModel = TBATeam(key: "frc7332", teamNumber: 7332, name: "The Rawrbotz", rookieYear: 2010)
-        let team = Team.insert(teamModel, in: persistentContainer.viewContext)
-
-        let modelOne = TBAMedia(key: "key", type: "youtube", foreignKey: nil, details: nil, preferred: false)
-        let modelTwo = TBAMedia(key: "key", type: "youtube", foreignKey: nil, details: nil, preferred: false)
-        TeamMedia.insert([modelOne], team: team, year: 2010, in: persistentContainer.viewContext)
-        TeamMedia.insert([modelTwo], team: team, year: 2011, in: persistentContainer.viewContext)
-        let mediaOne = (team.media!.allObjects as! [TeamMedia]).first(where: { $0.year == 2010 })!
-        let mediaTwo = (team.media!.allObjects as! [TeamMedia]).first(where: { $0.year == 2011 })!
-
-        // Sanity check
-        XCTAssertNotEqual(mediaOne, mediaTwo)
-
-        let modelThree = TBAMedia(key: "new_key", type: "youtube", foreignKey: nil, details: nil, preferred: false)
-        TeamMedia.insert([modelThree], team: team, year: 2010, in: persistentContainer.viewContext)
-        let mediaThree = (team.media!.allObjects as! [TeamMedia]).first(where: { $0.key == "new_key" })!
-
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
-
-        // Check that our Team manged it's Media properly
-        XCTAssertEqual(team.media?.count, 2)
-
-        // Check that our Media One was deleted (since it was an orphan)
-        XCTAssertNil(mediaOne.managedObjectContext)
-
-        // Check that Media Two and Media Three weren't deleted, since they're not orphans
-        XCTAssertNotNil(mediaTwo.managedObjectContext)
-        XCTAssertNotNil(mediaThree.managedObjectContext)
-    }
-
     func test_update_key() {
         let modelOne = TBAMedia(key: "key", type: "youtube", foreignKey: nil, details: ["detail": "here"], preferred: true)
         let mediaOne = TeamMedia.insert(modelOne, year: 2010, in: persistentContainer.viewContext)

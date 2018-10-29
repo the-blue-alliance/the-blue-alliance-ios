@@ -62,4 +62,8 @@ extension MatchAlliance: Managed {
         }
     }
 
+    var isOrphaned: Bool {
+        return match == nil
+    }
+
 }

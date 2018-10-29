@@ -52,60 +52,6 @@ class MatchTestCase: CoreDataTestCase {
         XCTAssertEqual(match.videos?.count, 1)
     }
 
-    func test_insert_orphans() {
-        let event = districtEvent()
-        let redAlliance = TBAMatchAlliance(score: 200, teams: ["frc7332"])
-        let blueAlliance = TBAMatchAlliance(score: 300, teams: ["frc3333"])
-        let modelOne = TBAMatch(key: "\(event.key!)_sf2m3",
-            compLevel: "sf",
-            setNumber: 2,
-            matchNumber: 3,
-            alliances: ["red": redAlliance, "blue": blueAlliance],
-            winningAlliance: "blue",
-            eventKey: event.key!,
-            time: 1520109780,
-            actualTime: 1520090745,
-            predictedTime: 1520109780,
-            postResultTime: 1520090929,
-            breakdown: ["red": [:], "blue": [:]],
-            videos: [TBAMatchVideo(key: "G-pq01gqMTw", type: "youtube")])
-
-        let matchOne = Match.insert([modelOne], event: event, in: persistentContainer.viewContext).first!
-
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
-
-        let modelTwo = TBAMatch(key: "\(event.key!)_f1m1",
-            compLevel: "f",
-            setNumber: 1,
-            matchNumber: 1,
-            alliances: ["red": redAlliance, "blue": blueAlliance],
-            winningAlliance: "blue",
-            eventKey: event.key!,
-            time: 1520109780,
-            actualTime: 1520090745,
-            predictedTime: 1520109780,
-            postResultTime: 1520090929,
-            breakdown: ["red": [:], "blue": [:]],
-            videos: [TBAMatchVideo(key: "G-pq01gqMTw", type: "youtube")])
-
-        let matchTwo = Match.insert([modelTwo], event: event, in: persistentContainer.viewContext).first!
-
-        // Sanity check
-        XCTAssertNotEqual(matchOne, matchTwo)
-
-        XCTAssertNoThrow(try persistentContainer.viewContext.save())
-
-        // Ensure our Event/Match updates it's relationships properly
-        XCTAssertFalse(event.matches!.contains(matchOne))
-        XCTAssert(event.matches!.contains(matchTwo))
-
-        // MatchOne should be deleted
-        XCTAssertNil(matchOne.managedObjectContext)
-
-        // MatchTwo should not be deleted
-        XCTAssertNotNil(matchTwo.managedObjectContext)
-    }
-
     func test_update() {
         let event = districtEvent()
         let redAllianceModel = TBAMatchAlliance(score: 200, teams: ["frc7332"])

@@ -29,4 +29,9 @@ extension Favorite: MyTBAManaged {
         return MyTBAFavorite(modelKey: modelKey!, modelType: MyTBAModelType(rawValue: modelType!)!)
     }
 
+    var isOrphaned: Bool {
+        // We manage the deletion of these root objects ourselves
+        return false
+    }
+
 }

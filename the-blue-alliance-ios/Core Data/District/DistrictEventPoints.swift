@@ -36,6 +36,8 @@ extension DistrictEventPoints: Managed {
 
      This method manages deleting orphaned District Event Points for the Event.
 
+     This method works slightly differently from other insert array methods, since there's no relationship between an Event <-> DistrictEventPoints - we map to an EventKey, since we may not have an Event when inserting DistrictEventPoints in the case of DistrictEventPoints coming from DistrictRanking models.
+
      - Parameter points: The TBAKit District Event Points representations to set values from.
 
      - Parameter eventKey: The key for the Event the District Event Points belong to.
@@ -44,8 +46,7 @@ extension DistrictEventPoints: Managed {
 
      - Returns: An array of inserted District Event Points.
      */
-    @discardableResult
-    static func insert(_ points: [TBADistrictEventPoints], eventKey: String, in context: NSManagedObjectContext) -> [DistrictEventPoints] {
+    static func insert(_ points: [TBADistrictEventPoints], eventKey: String, in context: NSManagedObjectContext) {
         // Fetch all of the previous DistrictEventPoints for this Event
         let oldPoints = DistrictEventPoints.fetch(in: context) {
             $0.predicate = NSPredicate(format: "%K == %@",
@@ -59,12 +60,13 @@ extension DistrictEventPoints: Managed {
 
         // Delete orphaned DistrictEventPoints for this Event
         Set(oldPoints).subtracting(Set(points)).forEach({
-            // If they were previously attached to a District, the next refresh of the District Event Points should
-            // report that these points don't exist anymore
             context.delete($0)
         })
+    }
 
-        return points
+    var isOrphaned: Bool {
+        // If the Event doesn't exist and it's not attached to a District Ranking, it's an orphan
+        return districtRanking == nil && eventKey?.event == nil
     }
 
 }

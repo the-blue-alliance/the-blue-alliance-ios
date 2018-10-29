@@ -13,10 +13,15 @@ extension EventStatusAlliance: Managed {
             allianceStatus.pick = Int16(model.pick)
             allianceStatus.name = model.name
 
-            if let backup = model.backup {
-                allianceStatus.backup = EventAllianceBackup.insert(with: backup, for: allianceStatus, in: context)
-            }
+            allianceStatus.updateToOneRelationship(relationship: #keyPath(EventStatusAlliance.backup), newValue: model.backup, newObject: {
+                return EventAllianceBackup.insert($0, in: context)
+            })
         })
+    }
+
+    var isOrphaned: Bool {
+        // TODO: Fix when auditing
+        return false
     }
 
 }

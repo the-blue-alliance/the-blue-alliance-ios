@@ -130,8 +130,9 @@ extension DistrictBreakdownViewController: Refreshable {
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 if let rankings = rankings {
-                    let backgroundDistrict = backgroundContext.object(with: self.ranking.district!.objectID) as! District
-                    DistrictRanking.insert(rankings, district: backgroundDistrict, in: backgroundContext)
+                    let district = backgroundContext.object(with: self.ranking.district!.objectID) as! District
+                    district.insert(rankings)
+
                     if backgroundContext.saveOrRollback() {
                         TBAKit.setLastModified(for: request!)
                     }

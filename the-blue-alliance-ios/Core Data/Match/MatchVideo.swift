@@ -44,16 +44,18 @@ extension MatchVideo: Managed {
      */
     static func insert(_ model: TBAMatchVideo, in context: NSManagedObjectContext) -> MatchVideo {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(MatchVideo.key),
-                                    model.key,
-                                    #keyPath(MatchVideo.typeString),
-                                    model.type)
+                                    #keyPath(MatchVideo.key), model.key,
+                                    #keyPath(MatchVideo.typeString), model.type)
 
         return findOrCreate(in: context, matching: predicate) { (matchVideo) in
             // Required: key, type
             matchVideo.key = model.key
             matchVideo.typeString = model.type
         }
+    }
+
+    var isOrphaned: Bool {
+        return matches?.count == 0
     }
 
 }

@@ -5,7 +5,7 @@ import XCTest
 class WebcastTestCase: CoreDataTestCase {
 
     func test_insert() {
-        let model = TBAWebcast(type: "twitch", channel: "firstinmichigan", file: "filezor", date: nil)
+        let model = TBAWebcast(type: "twitch", channel: "firstinmichigan", file: "filezor")
         let webcast = Webcast.insert(model, in: persistentContainer.viewContext)
 
         XCTAssertEqual(webcast.type, "twitch")
@@ -25,7 +25,7 @@ class WebcastTestCase: CoreDataTestCase {
         let modelOne = TBAWebcast(type: "twitch", channel: "firstinmichigan")
         let webcastOne = Webcast.insert(modelOne, in: persistentContainer.viewContext)
 
-        let modelTwo = TBAWebcast(type: "twitch", channel: "firstinmichigan", file: "filezor", date: nil)
+        let modelTwo = TBAWebcast(type: "twitch", channel: "firstinmichigan", file: "filezor")
         let webcastTwo = Webcast.insert(modelTwo, in: persistentContainer.viewContext)
 
         // Sanity check

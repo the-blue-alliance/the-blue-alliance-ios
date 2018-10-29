@@ -61,20 +61,65 @@ extension Team: Locatable, Managed {
     }
 
     /**
-     Insert an array of Teams with values from TBAKit Team models in to the managed object context. This method manages setting up an Event and Team relationship.
+     Insert Events with values from TBAKit Event models in to the managed object context.
 
-     - Parameter teams: The TBAKit Team representations to set values from.
+     This method manages setting up an Team's relationship to Events.
 
-     - Parameter event: The Event the Teams belong to.
-
-     - Parameter context: The NSManagedContext to insert the Favorite in to.
+     - Parameter events: The TBAKit Event representations to set values from.
      */
-    static func insert(_ teams: [TBATeam], event: Event, in context: NSManagedObjectContext) {
-        event.teams = Set(teams.map({
-            return Team.insert($0, in: context)
-        })) as NSSet
+    func insert(_ events: [TBAEvent]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        self.events = NSSet(array: events.map({
+            return Event.insert(with: $0, in: managedObjectContext)
+        }))
     }
 
+    /**
+     Insert an array of Team Media with values from TBAKit Media models for a given year in to the managed object context.
+
+     This method manages setting up a Team Media and Team relationship and deleting orphaned Team Media objects.
+
+     This method works slightly differently from other insert array methods, since we need to filter by a Team's relationship to Team Media and the year. If we were to use updateToManyRelationship we would remove the relationship between other year's Team Media and this Team, without deleting the Team Media.
+
+     - Parameter media: The TBAKit Media representations to set values from.
+
+     - Parameter year: The year the Team Media relates to.
+     */
+    func insert(_ media: [TBAMedia], year: Int) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        // Fetch all of the previous TeamMedia for this Team and year
+        let oldMedia = TeamMedia.fetch(in: managedObjectContext) {
+            $0.predicate = NSPredicate(format: "%K == %@ AND %K == %ld",
+                                       #keyPath(TeamMedia.team.key), key!,
+                                       #keyPath(TeamMedia.year), year)
+        }
+
+
+        // Insert new TeamMedia for this year
+        let media = media.map({ (model: TBAMedia) -> TeamMedia in
+            let m = TeamMedia.insert(model, year: year, in: managedObjectContext)
+            addToMedia(m)
+            return m
+        })
+
+        // Delete orphaned TeamMedia for this Event
+        Set(oldMedia).subtracting(Set(media)).forEach({
+            managedObjectContext.delete($0)
+        })
+    }
+
+    var isOrphaned: Bool {
+        // Team is a root object, so it should never be an orphan
+        return false
+    }
+
+    // TODO: What the fuck move these methods OUT
     static func fetchAllTeams(taskChanged: @escaping (URLSessionDataTask, [TBATeam]) -> Void, completion: @escaping (Error?) -> Void) -> URLSessionDataTask {
         return fetchAllTeams(taskChanged: taskChanged, page: 0, completion: completion)
     }

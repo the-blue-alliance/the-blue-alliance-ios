@@ -9,7 +9,7 @@ extension Subscription: MyTBAManaged {
 
      - Parameter model: The MyTBA Subscription representation to set values from.
 
-     - Parameter context: The NSManagedContext to insert the Favorite in to.
+     - Parameter context: The NSManagedContext to insert the Subscription in to.
 
      - Returns: The inserted Subscription.
      */
@@ -29,6 +29,11 @@ extension Subscription: MyTBAManaged {
 
     func toRemoteModel() -> MyTBASubscription {
         return MyTBASubscription(modelKey: modelKey!, modelType: MyTBAModelType(rawValue: modelType!)!, notifications: notifications!.map({ NotificationType(rawValue: $0)! }))
+    }
+
+    var isOrphaned: Bool {
+        // We manage the deletion of these root objects ourselves
+        return false
     }
 
 }

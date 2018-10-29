@@ -47,6 +47,69 @@ class TeamTestCase: CoreDataTestCase {
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
+    func test_insert_events() {
+        let teamModel = TBATeam(key: "frc7332", teamNumber: 7332, name: "The Rawrbotz", rookieYear: 2010)
+        let team = Team.insert(teamModel, in: persistentContainer.viewContext)
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        let modelEventOne = TBAEvent(key: "2018miket", name: "Event 1", eventCode: "miket", eventType: 1, startDate: dateFormatter.date(from: "2018-03-01")!, endDate: dateFormatter.date(from: "2018-03-03")!, year: 2018, eventTypeString: "District", divisionKeys: [])
+        let modelEventTwo = TBAEvent(key: "2018mike2", name: "Event 2", eventCode: "mike2", eventType: 1, startDate: dateFormatter.date(from: "2018-03-01")!, endDate: dateFormatter.date(from: "2018-03-03")!, year: 2018, eventTypeString: "District", divisionKeys: [])
+
+        team.insert([modelEventOne, modelEventTwo])
+
+        let events = team.events!.allObjects as! [Event]
+        let eventOne = events.first(where: { $0.key == "2018miket" })!
+        let eventTwo = events.first(where: { $0.key == "2018mike2" })!
+
+        // Sanity check
+        XCTAssertEqual(team.events?.count, 2)
+        XCTAssertNotEqual(eventOne, eventTwo)
+
+        team.insert([modelEventTwo])
+
+        // Sanity check
+        XCTAssert(team.events!.onlyObject(eventTwo))
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // No events, including orphans, should be deleted
+        XCTAssertNotNil(eventOne.managedObjectContext)
+        XCTAssertNotNil(eventTwo.managedObjectContext)
+    }
+
+    func test_insert_media() {
+        let teamModel = TBATeam(key: "frc7332", teamNumber: 7332, name: "The Rawrbotz", rookieYear: 2010)
+        let team = Team.insert(teamModel, in: persistentContainer.viewContext)
+
+        let modelOne = TBAMedia(key: "key", type: "youtube", foreignKey: nil, details: nil, preferred: false)
+        let modelTwo = TBAMedia(key: "key", type: "youtube", foreignKey: nil, details: nil, preferred: false)
+        team.insert([modelOne], year: 2010)
+        team.insert([modelTwo], year: 2011)
+        let mediaOne = (team.media!.allObjects as! [TeamMedia]).first(where: { $0.year == 2010 })!
+        let mediaTwo = (team.media!.allObjects as! [TeamMedia]).first(where: { $0.year == 2011 })!
+
+        // Sanity check
+        XCTAssertNotEqual(mediaOne, mediaTwo)
+
+        let modelThree = TBAMedia(key: "new_key", type: "youtube", foreignKey: nil, details: nil, preferred: false)
+        team.insert([modelThree], year: 2010)
+        let mediaThree = (team.media!.allObjects as! [TeamMedia]).first(where: { $0.key == "new_key" })!
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // Check that our Team manged it's Media properly
+        XCTAssertEqual(team.media?.count, 2)
+
+        // Check that our Media One was deleted (since it was an orphan)
+        XCTAssertNil(mediaOne.managedObjectContext)
+
+        // Check that Media Two and Media Three weren't deleted, since they're not orphans
+        XCTAssertNotNil(mediaTwo.managedObjectContext)
+        XCTAssertNotNil(mediaThree.managedObjectContext)
+    }
+
     func test_insert_mimimum() {
         let model = TBATeam(key: "frc7332", teamNumber: 7332, name: "The Rawrbotz", rookieYear: 2010)
         Team.insert(model, in: persistentContainer.viewContext)

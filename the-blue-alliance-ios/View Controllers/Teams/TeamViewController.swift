@@ -112,6 +112,7 @@ class TeamViewController: ContainerViewController, Observable {
                 self.showErrorAlert(with: "Unable to fetch years participated - \(error.localizedDescription)")
                 return
             }
+
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
 

@@ -30,22 +30,8 @@ extension Webcast: Managed {
         })
     }
 
-    /**
-     Insert an array of Webcasts with values from TBAKit Webcast models in to the managed object context. This method manages setting up the relationship between a Webcast and an Event and deleting orphaned Webcasts.
-
-     - Parameter webcasts: The TBAKit Webcast representations to set values from.
-
-     - Parameter event: The Event the Webcasts belongs to.
-
-     - Parameter context: The NSManagedContext to insert the Webcasts in to.
-     */
-    static func insert(_ webcasts: [TBAWebcast], event: Event, in context: NSManagedObjectContext) {
-        updateToManyRelationship(relationship: &event.webcasts, newValues: webcasts.map({
-            return Webcast.insert($0, in: context)
-        }), matchingOrphans: {
-            // If an Webcast's only Event is this Webcast, it's an orphan now
-            return $0.events?.allObjects as? [Event] == [event]
-        }, in: context)
+    var isOrphaned: Bool {
+        return events?.count == 0
     }
 
 }

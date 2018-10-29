@@ -194,8 +194,9 @@ extension TeamsViewController: Refreshable {
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 if let teams = teams {
-                    let backgroundEvent = backgroundContext.object(with: event.objectID) as! Event
-                    Team.insert(teams, event: backgroundEvent, in: backgroundContext)
+                    let event = backgroundContext.object(with: event.objectID) as! Event
+                    event.insert(teams)
+
                     if backgroundContext.saveOrRollback() {
                         TBAKit.setLastModified(for: request!)
                     }

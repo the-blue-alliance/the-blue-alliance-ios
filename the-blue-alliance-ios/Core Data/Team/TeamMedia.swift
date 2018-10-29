@@ -131,7 +131,6 @@ extension TeamMedia: Managed {
      - Returns: The inserted Team Media.
      */
     static func insert(_ model: TBAMedia, year: Int, in context: NSManagedObjectContext) -> TeamMedia {
-        // Uhhh filter by Year too, right?
         var mediaPredicate: NSPredicate?
         if let key = model.key {
             mediaPredicate = NSPredicate(format: "%K == %@ AND %K == %@",
@@ -160,38 +159,8 @@ extension TeamMedia: Managed {
         }
     }
 
-    /**
-     Insert an array of Team Medias with values from TBAKit Media models in to the managed object context. This method manages setting up a Team Media and Team relationship and deleting orphaned Team Media objects.
-
-     - Parameter media: The TBAKit Media representations to set values from.
-
-     - Parameter team: The Team to relate the Media too.
-
-     - Parameter year: The year the Team Media relates to.
-
-     - Parameter context: The NSManagedContext to insert the Team Media in to.
-
-     - Returns: The inserted Team Media.
-     */
-    static func insert(_ media: [TBAMedia], team: Team, year: Int, in context: NSManagedObjectContext) {
-        // Fetch all of the previous TeamMedia for this Team and year
-        let oldMedia = TeamMedia.fetch(in: context) {
-            $0.predicate = NSPredicate(format: "%K == %@ AND %K == %ld",
-                                       #keyPath(TeamMedia.team.key), team.key!,
-                                       #keyPath(TeamMedia.year), year)
-        }
-
-        // Insert new TeamMedia for this year
-        let media = media.map({ (model: TBAMedia) -> TeamMedia in
-            let m = TeamMedia.insert(model, year: year, in: context)
-            team.addToMedia(m)
-            return m
-        })
-
-        // Delete orphaned TeamMedia for this Event
-        Set(oldMedia).subtracting(Set(media)).forEach({
-            context.delete($0)
-        })
+    var isOrphaned: Bool {
+        return team == nil
     }
 
 }

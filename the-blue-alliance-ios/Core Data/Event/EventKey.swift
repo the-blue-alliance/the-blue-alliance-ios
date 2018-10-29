@@ -38,4 +38,9 @@ extension EventKey: Managed {
         }
     }
 
+    var isOrphaned: Bool {
+        // EventKey should never be an orphan
+        return false
+    }
+
 }

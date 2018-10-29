@@ -52,4 +52,9 @@ extension TeamKey: Managed {
         }
     }
 
+    var isOrphaned: Bool {
+        // TeamKey should never be an orphan
+        return false
+    }
+
 }
