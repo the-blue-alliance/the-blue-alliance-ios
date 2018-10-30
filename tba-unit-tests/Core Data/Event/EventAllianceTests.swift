@@ -104,4 +104,19 @@ class EventAllianceTestCase: CoreDataTestCase {
         XCTAssertNil(backup.managedObjectContext)
     }
 
+    func test_isOrphaned() {
+        let alliance = EventAlliance.init(entity: EventAlliance.entity(), insertInto: persistentContainer.viewContext)
+        // No Event - should be orphaned
+        XCTAssert(alliance.isOrphaned)
+
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.addToAlliances(alliance)
+        // Attached to an Event - should not be orphaned
+        XCTAssertFalse(alliance.isOrphaned)
+
+        event.removeFromAlliances(alliance)
+        // Not attached to an Event - should be orphaned
+        XCTAssert(alliance.isOrphaned)
+    }
+
 }

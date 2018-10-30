@@ -271,6 +271,18 @@ class MatchTestCase: CoreDataTestCase {
         XCTAssertNotNil(videoTwo.managedObjectContext)
     }
 
+    func test_isOrphaned() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssert(match.isOrphaned)
+
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.addToMatches(match)
+        XCTAssertFalse(match.isOrphaned)
+
+        event.removeFromMatches(match)
+        XCTAssert(match.isOrphaned)
+    }
+
     func test_compLevel() {
         let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
 

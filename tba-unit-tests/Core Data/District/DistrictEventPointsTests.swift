@@ -121,6 +121,7 @@ class DistrictEventPointsTestCase: CoreDataTestCase {
         persistentContainer.viewContext.delete(event)
 
         // Not attached to either a Ranking or an Event - should be orphaned
+        XCTAssertFalse(eventPoints.isOrphaned)
     }
 
 }

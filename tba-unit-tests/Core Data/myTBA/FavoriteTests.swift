@@ -38,4 +38,10 @@ class FavoriteTestCase: CoreDataTestCase {
         XCTAssertEqual(model, favorite.toRemoteModel())
     }
 
+    func test_isOrphaned() {
+        let favorite = Favorite.init(entity: Favorite.entity(), insertInto: persistentContainer.viewContext)
+        // Favorite should never be orphaned
+        XCTAssertFalse(favorite.isOrphaned)
+    }
+
 }

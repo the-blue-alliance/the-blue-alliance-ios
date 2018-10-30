@@ -130,4 +130,19 @@ class DistrictRankingTestCase: CoreDataTestCase {
         XCTAssertEqual(sortedEventPoints.map({ $0.eventKey!.key! }), ["2018miket", "2018mike2", "2018mike3"])
     }
 
+    func test_isOrphaned() {
+        let ranking = DistrictRanking.init(entity: DistrictRanking.entity(), insertInto: persistentContainer.viewContext)
+        // No District - should be orphaned
+        XCTAssert(ranking.isOrphaned)
+
+        let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        district.addToRankings(ranking)
+        // Attached to a District - should not be orphaned
+        XCTAssertFalse(ranking.isOrphaned)
+
+        district.removeFromRankings(ranking)
+        // No District - should be orphaned
+        XCTAssert(ranking.isOrphaned)
+    }
+
 }

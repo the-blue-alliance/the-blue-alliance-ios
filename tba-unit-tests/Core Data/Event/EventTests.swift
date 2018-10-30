@@ -204,6 +204,12 @@ class EventTestCase: CoreDataTestCase {
         XCTAssertNotNil(webcastTwo.managedObjectContext)
     }
 
+    func test_isOrphaned() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        // Event should never be orphaned
+        XCTAssertFalse(event.isOrphaned)
+    }
+
     func event(type eventType: EventType) -> Event {
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         event.eventType = Int16(eventType.rawValue)

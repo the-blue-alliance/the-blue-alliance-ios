@@ -156,4 +156,10 @@ class TeamTestCase: CoreDataTestCase {
         XCTAssertNil(media.managedObjectContext)
     }
 
+    func test_isOrphaned() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        // Team should never be orphaned
+        XCTAssertFalse(team.isOrphaned)
+    }
+
 }

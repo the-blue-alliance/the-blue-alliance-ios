@@ -45,4 +45,10 @@ class SubscriptionTestCase: CoreDataTestCase {
         XCTAssertEqual(model, subscription.toRemoteModel())
     }
 
+    func test_isOrphaned() {
+        let subscription = Subscription.init(entity: Subscription.entity(), insertInto: persistentContainer.viewContext)
+        // Subscription should never be orphaned
+        XCTAssertFalse(subscription.isOrphaned)
+    }
+
 }

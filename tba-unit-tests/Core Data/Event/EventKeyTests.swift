@@ -31,4 +31,10 @@ class EventKeyTestCase: CoreDataTestCase {
         XCTAssertEqual(eventKey.event, event)
     }
 
+    func test_isOrphaned() {
+        let eventKey = EventKey.init(entity: EventKey.entity(), insertInto: persistentContainer.viewContext)
+        // EventKey should never be orphaned
+        XCTAssertFalse(eventKey.isOrphaned)
+    }
+
 }

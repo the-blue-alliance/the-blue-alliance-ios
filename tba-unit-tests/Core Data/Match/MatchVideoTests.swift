@@ -79,4 +79,16 @@ class MatchVideoTestCase: CoreDataTestCase {
         XCTAssertEqual(video.youtubeKey, youtubeKey)
     }
 
+    func test_isOrphaned() {
+        let video = MatchVideo.init(entity: MatchVideo.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssert(video.isOrphaned)
+
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        match.addToVideos(video)
+        XCTAssertFalse(video.isOrphaned)
+
+        match.removeFromVideos(video)
+        XCTAssert(video.isOrphaned)
+    }
+
 }

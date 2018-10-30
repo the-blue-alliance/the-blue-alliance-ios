@@ -86,4 +86,18 @@ class WebcastTestCase: CoreDataTestCase {
         XCTAssertNotNil(webcastTwo.managedObjectContext)
     }
 
+    func test_isOrphaned() {
+        let webcast = Webcast.init(entity: Webcast.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssert(webcast.isOrphaned)
+
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.addToWebcasts(webcast)
+        // Attached to Event - should not be orphaned
+        XCTAssertFalse(webcast.isOrphaned)
+
+        event.removeFromWebcasts(webcast)
+        // Not attached to Event - should be orphaned
+        XCTAssert(webcast.isOrphaned)
+    }
+
 }

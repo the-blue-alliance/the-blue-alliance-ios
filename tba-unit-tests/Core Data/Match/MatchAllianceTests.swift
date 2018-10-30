@@ -89,4 +89,16 @@ class MatchAllianceTestCase: CoreDataTestCase {
         })
     }
 
+    func test_isOrphaned() {
+        let alliance = MatchAlliance.init(entity: MatchAlliance.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssert(alliance.isOrphaned)
+
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        match.addToAlliances(alliance)
+        XCTAssertFalse(alliance.isOrphaned)
+
+        match.removeFromAlliances(alliance)
+        XCTAssert(alliance.isOrphaned)
+    }
+
 }

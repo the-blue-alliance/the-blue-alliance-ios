@@ -52,4 +52,10 @@ class TeamKeyTestCase: CoreDataTestCase {
         XCTAssertEqual(teamKey.name, "Team 7332")
     }
 
+    func test_isOrphaned() {
+        let teamKey = TeamKey.init(entity: TeamKey.entity(), insertInto: persistentContainer.viewContext)
+        // TeamKey should never be orphaned
+        XCTAssertFalse(teamKey.isOrphaned)
+    }
+
 }

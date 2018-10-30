@@ -75,6 +75,18 @@ class TeamMediaTestCase: CoreDataTestCase {
         XCTAssertNotNil(team.managedObjectContext)
     }
 
+    func test_isOrphaned() {
+        let media = TeamMedia.init(entity: TeamMedia.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssert(media.isOrphaned)
+
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        team.addToMedia(media)
+        XCTAssertFalse(media.isOrphaned)
+
+        team.removeFromMedia(media)
+        XCTAssert(media.isOrphaned)
+    }
+
     func test_image() {
         let media = TeamMedia.init(entity: TeamMedia.entity(), insertInto: persistentContainer.viewContext)
         let image = UIImage(data: Data(base64Encoded: "iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAIAAAADnC86AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwQAADsEBuJFr7QAAABl0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4yMfEgaZUAAAEYSURBVFhH7ZVLD8IgEIRXoxf//w/07Emj8eZj2qkbHraFhaoxfJkYspQZNlgqjV9j+9IjEutLcZ/TIgQZE6pJYJ2iCqjXRWTXDw5OnWOCWTwD8eEi6K5GDCasx/CZsdlUuN6wffPCjpLF9rUlqYDnTZM8SlKVFpwCUqsEW0wKg9c1tv5ZeELUTeQkcu5/j/7UhIwd411UAkdIufp1N8x1yAAWq2HoWVNKUNdgrDV2jC+Pbjlwh5SgjuNQ3G9XHjAirjWlBPX9UO7GdnQx714q7kOnIKVOsIGiYHRg/Gf63VuwrS9NJbkudVIJvDbDcIaaqSDd7l+CQcrrUfQKjfG1YDB999pv5hTQU3yKKC7Vq4t7b1ONxjtEngWF2v3/EmI7AAAAAElFTkSuQmCC")!)
