@@ -2,10 +2,13 @@ import CoreData
 import Foundation
 import TBAKit
 
-// EventAllianceStatus
 extension EventStatusPlayoff: Managed {
 
-    // Used in EventAllianceTableViewCell to show how far an alliance got in the eliminiations
+    /**
+     How far an alliance got in the eliminiations.
+
+     Used in EventAllianceTableViewCell.
+     */
     var allianceLevel: String? {
         get {
             guard let level = level else {
@@ -18,33 +21,38 @@ extension EventStatusPlayoff: Managed {
         }
     }
 
-    static func insert(_ model: TBAAllianceStatus, in context: NSManagedObjectContext) -> EventStatusPlayoff {
-        let predicate = NSPredicate()
+    static func insert(_ model: TBAAllianceStatus, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusPlayoff {
+        let predicate = NSPredicate(format: "(%K == %@ AND SUBQUERY(%K, $pick, $pick.key == %@).@count == 1) OR (%K == %@ AND %K == %@)",
+                                    #keyPath(EventStatusPlayoff.alliance.event.key), eventKey,
+                                    #keyPath(EventStatusPlayoff.alliance.picks), teamKey,
+                                    #keyPath(EventStatusPlayoff.eventStatus.event.key), eventKey,
+                                    #keyPath(EventStatusPlayoff.eventStatus.teamKey.key), teamKey)
+
         return findOrCreate(in: context, matching: predicate, configure: { (statusPlayoff) in
+            if let currentRecord = model.currentRecord {
+                statusPlayoff.currentRecord = WLT(wins: currentRecord.wins, losses: currentRecord.losses, ties: currentRecord.ties)
+            } else {
+                statusPlayoff.currentRecord = nil
+            }
 
+            statusPlayoff.level = model.level
+            statusPlayoff.playoffAverage = model.playoffAverage as NSNumber?
+
+            if let record = model.record {
+                statusPlayoff.record = WLT(wins: record.wins, losses: record.losses, ties: record.ties)
+            } else {
+                statusPlayoff.record = nil
+            }
+
+            statusPlayoff.status = model.status
         })
-        /*
-        if let currentRecord = model.currentRecord {
-            self.currentRecord = WLT(wins: currentRecord.wins, losses: currentRecord.losses, ties: currentRecord.ties)
-        }
-
-        level = model.level
-
-        if let playoffAverage = model.playoffAverage {
-            self.playoffAverage = NSNumber(value: playoffAverage)
-        }
-
-        if let record = model.record {
-            self.record = WLT(wins: record.wins, losses: record.losses, ties: record.ties)
-        }
-
-        status = model.status
-        */
     }
 
     var isOrphaned: Bool {
-        // TODO: Fix when we audit
-        return false
+        // An EventStatusPlayoff is an orphan if it isn't attached to any EventAlliance or an EventStatus.
+        let hasAlliance = (alliance != nil)
+        let hasStatus = (eventStatus != nil)
+        return !hasAlliance && !hasStatus
     }
 
 }

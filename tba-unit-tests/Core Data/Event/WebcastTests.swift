@@ -42,11 +42,6 @@ class WebcastTestCase: CoreDataTestCase {
         let event = districtEvent()
         event.addToWebcasts(webcast)
 
-        // Webcast cannot be deleted when it is attached to an Event
-        persistentContainer.viewContext.delete(webcast)
-        XCTAssertThrowsError(try persistentContainer.viewContext.save())
-
-        event.removeFromWebcasts(webcast)
         persistentContainer.viewContext.delete(webcast)
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 

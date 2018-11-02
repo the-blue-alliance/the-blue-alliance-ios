@@ -130,7 +130,7 @@ class TeamSummaryViewController: TBATableViewController {
         }
 
         // Breakdown
-        if let breakdown = eventStatus?.qual?.ranking?.infoString {
+        if let breakdown = eventStatus?.qual?.ranking?.tiebreakerInfoString {
             summaryRows.append(TeamSummaryRow.breakdown)
             summaryValues.append(breakdown)
         }
@@ -320,7 +320,7 @@ extension TeamSummaryViewController: Refreshable {
 
         // Refresh team status
         var teamStatusRequest: URLSessionDataTask?
-        teamStatusRequest = TBAKit.sharedKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!, completion: { (modelStatus, error) in
+        teamStatusRequest = TBAKit.sharedKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!, completion: { (status, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
             } else {
@@ -328,14 +328,14 @@ extension TeamSummaryViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
+                if let status = status {
+                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    event.insert(status)
 
-                if let modelStatus = modelStatus {
-                    // TODO: EventStatus can never be removed if it's invalid
-                    EventStatus.insert(with: modelStatus, event: backgroundEvent, in: backgroundContext)
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: teamStatusRequest!)
+                    }
                 }
-
-                backgroundContext.saveOrRollback()
                 self.removeRequest(request: teamStatusRequest!)
             })
         })

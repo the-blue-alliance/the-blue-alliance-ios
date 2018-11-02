@@ -4,13 +4,14 @@ import TBAKit
 
 extension EventStatusAlliance: Managed {
 
-    static func insert(with model: TBAEventStatusAlliance, eventStatus: EventStatus, in context: NSManagedObjectContext) -> EventStatusAlliance {
-        let predicate = NSPredicate(format: "%K == %@", #keyPath(EventStatusAlliance.eventStatus), eventStatus)
-        return findOrCreate(in: context, matching: predicate, configure: { (allianceStatus) in
-            allianceStatus.eventStatus = eventStatus
+    static func insert(_ model: TBAEventStatusAlliance, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusAlliance {
+        let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
+                                    #keyPath(EventStatusAlliance.eventStatus.event.key), eventKey,
+                                    #keyPath(EventStatusAlliance.eventStatus.teamKey.key), teamKey)
 
-            allianceStatus.number = Int16(model.number)
-            allianceStatus.pick = Int16(model.pick)
+        return findOrCreate(in: context, matching: predicate, configure: { (allianceStatus) in
+            allianceStatus.number = model.number as NSNumber
+            allianceStatus.pick = model.pick as NSNumber
             allianceStatus.name = model.name
 
             allianceStatus.updateToOneRelationship(relationship: #keyPath(EventStatusAlliance.backup), newValue: model.backup, newObject: {
@@ -20,8 +21,20 @@ extension EventStatusAlliance: Managed {
     }
 
     var isOrphaned: Bool {
-        // TODO: Fix when auditing
-        return false
+        return eventStatus == nil
+    }
+
+    public override func prepareForDeletion() {
+        super.prepareForDeletion()
+
+        if let backup = backup {
+            if backup.alliances?.count == 0 && backup.allianceStatus == self {
+                // AllianceBackup will become an orphan - delete
+                managedObjectContext?.delete(backup)
+            } else {
+                backup.allianceStatus = nil
+            }
+        }
     }
 
 }

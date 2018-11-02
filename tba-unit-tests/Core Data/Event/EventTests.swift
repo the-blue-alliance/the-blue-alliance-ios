@@ -6,6 +6,8 @@ class EventTestCase: CoreDataTestCase {
 
     let calendar: Calendar = Calendar.current
 
+    // TODO: We still need tests....
+
     func test_insert_alliances() {
         let event = districtEvent()
 
@@ -146,6 +148,68 @@ class EventTestCase: CoreDataTestCase {
 
         // MatchTwo should not be deleted
         XCTAssertNotNil(matchTwo.managedObjectContext)
+    }
+
+    func test_insert_rankings() {
+        let event = districtEvent()
+
+        let modelRankingOne = TBAEventRanking(teamKey: "frc1", rank: 1)
+        let modelRankingTwo = TBAEventRanking(teamKey: "frc2", rank: 2)
+
+        event.insert([modelRankingOne, modelRankingTwo], sortOrderInfo: nil, extraStatsInfo: nil)
+
+        let rankings = event.rankings?.allObjects as! [EventRanking]
+        let rankingOne = rankings.first(where: { $0.teamKey?.key == "frc1" })!
+        let rankingTwo = rankings.first(where: { $0.teamKey?.key == "frc2" })!
+
+        // Sanity check
+        XCTAssertEqual(event.rankings?.count, 2)
+        XCTAssertNotEqual(rankingOne, rankingTwo)
+
+        event.insert([modelRankingTwo], sortOrderInfo: nil, extraStatsInfo: nil)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // Ensure our Event/Match updates it's relationships properly
+        XCTAssert(event.rankings!.onlyObject(rankingTwo))
+
+        // RankingOne should be deleted
+        XCTAssertNil(rankingOne.managedObjectContext)
+
+        // RankingTwo should not be deleted
+        XCTAssertNotNil(rankingTwo.managedObjectContext)
+    }
+
+    func test_insert_status() {
+        let event = districtEvent()
+
+        let modelEventStatusOne = TBAEventStatus(teamKey: "frc1", eventKey: event.key!, qual: TBAEventStatusQual(numTeams: nil, status: nil, ranking: TBAEventRanking(teamKey: "frc1", rank: 3), sortOrder: nil), alliance: nil, playoff: nil, allianceStatusString: nil, playoffStatusString: nil, overallStatusString: nil, nextMatchKey: nil, lastMatchKey: nil)
+        let modelEventStatusTwo = TBAEventStatus(teamKey: "frc2", eventKey: event.key!)
+
+        event.insert(modelEventStatusOne)
+        event.insert(modelEventStatusTwo)
+
+        let statuses = event.statuses!.allObjects as! [EventStatus]
+        let eventStatusOne = statuses.first(where: { $0.teamKey?.key == "frc1" })!
+        let eventStatusTwo = statuses.first(where: { $0.teamKey?.key == "frc2" })!
+
+        // Ensure we setup a relationship to the ranking and the event properly
+        XCTAssertEqual(eventStatusOne.qual?.ranking?.event, event)
+
+        // Sanity check
+        XCTAssertEqual(event.statuses?.count, 2)
+        XCTAssertNotEqual(eventStatusOne, eventStatusTwo)
+
+        event.insert(modelEventStatusTwo)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // Neither team should be deleted
+        XCTAssertNotNil(eventStatusOne.managedObjectContext)
+        XCTAssertEqual(eventStatusOne.event, event)
+
+        XCTAssertNotNil(eventStatusTwo.managedObjectContext)
+        XCTAssertEqual(eventStatusTwo.event, event)
     }
 
     func test_insert_teams() {

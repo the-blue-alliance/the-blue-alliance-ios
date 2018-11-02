@@ -28,7 +28,12 @@
 		1479694A215EBE460075AF4E /* EventAllianceCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14796949215EBE460075AF4E /* EventAllianceCellViewModel.swift */; };
 		1479694C215EC1670075AF4E /* EventTeamStatCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1479694B215EC1660075AF4E /* EventTeamStatCellViewModel.swift */; };
 		1479694E215EC4B60075AF4E /* InfoCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1479694D215EC4B60075AF4E /* InfoCellViewModel.swift */; };
+		148FF626218B90AC006202E6 /* EventRankingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148FF625218B90AC006202E6 /* EventRankingTests.swift */; };
+		148FF628218BF42A006202E6 /* EventStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148FF627218BF42A006202E6 /* EventStatusTests.swift */; };
 		14B424F62167B01700E1904C /* Calendar+TBA_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B424F52167B01700E1904C /* Calendar+TBA_Tests.swift */; };
+		14B520F7218CA28B00F2EF4F /* EventStatusAllianceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B520F6218CA28B00F2EF4F /* EventStatusAllianceTests.swift */; };
+		14B520F9218CB19400F2EF4F /* EventStatusPlayoffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B520F8218CB19400F2EF4F /* EventStatusPlayoffTests.swift */; };
+		14B520FB218CB96400F2EF4F /* EventStatusQualTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B520FA218CB96400F2EF4F /* EventStatusQualTests.swift */; };
 		14B6726A21517A7E00FDDAB2 /* RealtimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B6726921517A7E00FDDAB2 /* RealtimeDatabaseService.swift */; };
 		14B6726C21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B6726B21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift */; };
 		14B6727321529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B6727221529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift */; };
@@ -259,7 +264,12 @@
 		14796949215EBE460075AF4E /* EventAllianceCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceCellViewModel.swift; sourceTree = "<group>"; };
 		1479694B215EC1660075AF4E /* EventTeamStatCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatCellViewModel.swift; sourceTree = "<group>"; };
 		1479694D215EC4B60075AF4E /* InfoCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCellViewModel.swift; sourceTree = "<group>"; };
+		148FF625218B90AC006202E6 /* EventRankingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRankingTests.swift; sourceTree = "<group>"; };
+		148FF627218BF42A006202E6 /* EventStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusTests.swift; sourceTree = "<group>"; };
 		14B424F52167B01700E1904C /* Calendar+TBA_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+TBA_Tests.swift"; sourceTree = "<group>"; };
+		14B520F6218CA28B00F2EF4F /* EventStatusAllianceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusAllianceTests.swift; sourceTree = "<group>"; };
+		14B520F8218CB19400F2EF4F /* EventStatusPlayoffTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusPlayoffTests.swift; sourceTree = "<group>"; };
+		14B520FA218CB96400F2EF4F /* EventStatusQualTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusQualTests.swift; sourceTree = "<group>"; };
 		14B6726921517A7E00FDDAB2 /* RealtimeDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeDatabaseService.swift; sourceTree = "<group>"; };
 		14B6726B21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeDatabaseService_Tests.swift; sourceTree = "<group>"; };
 		14B6727221529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRealtimeDatabaseService.swift; sourceTree = "<group>"; };
@@ -711,6 +721,11 @@
 				1450778E218279BB00C61D2D /* EventKeyTests.swift */,
 				925908B42185076100D7BFCE /* EventAllianceTests.swift */,
 				925908B621863C3E00D7BFCE /* EventAllianceBackupTests.swift */,
+				148FF625218B90AC006202E6 /* EventRankingTests.swift */,
+				148FF627218BF42A006202E6 /* EventStatusTests.swift */,
+				14B520FA218CB96400F2EF4F /* EventStatusQualTests.swift */,
+				14B520F6218CA28B00F2EF4F /* EventStatusAllianceTests.swift */,
+				14B520F8218CB19400F2EF4F /* EventStatusPlayoffTests.swift */,
 				925908AA21828CC300D7BFCE /* WebcastTests.swift */,
 			);
 			path = Event;
@@ -1205,12 +1220,12 @@
 				1450778C21824E2F00C61D2D /* EventKey.swift */,
 				92DF35E7217D438400B5246B /* EventAlliance.swift */,
 				925908AC2184CFA900D7BFCE /* EventAllianceBackup.swift */,
+				92DF35E6217D438400B5246B /* EventRanking.swift */,
+				92DF35E8217D438400B5246B /* EventStatus.swift */,
 				92DF35E4217D438400B5246B /* EventStatusQual.swift */,
 				92DF35E9217D438400B5246B /* EventStatusAlliance.swift */,
 				925908AE2184D32400D7BFCE /* EventStatusPlayoff.swift */,
 				92DF35E5217D438400B5246B /* EventTeamStat.swift */,
-				92DF35E6217D438400B5246B /* EventRanking.swift */,
-				92DF35E8217D438400B5246B /* EventStatus.swift */,
 				92DF35EA217D438400B5246B /* WLT.swift */,
 				92DF35EB217D438400B5246B /* Webcast.swift */,
 			);
@@ -1862,13 +1877,18 @@
 				92361028217D1175000CC5E9 /* AwardTests.swift in Sources */,
 				925908A921827B3A00D7BFCE /* TeamTests.swift in Sources */,
 				925908B721863C3E00D7BFCE /* EventAllianceBackupTests.swift in Sources */,
+				14B520F9218CB19400F2EF4F /* EventStatusPlayoffTests.swift in Sources */,
+				148FF628218BF42A006202E6 /* EventStatusTests.swift in Sources */,
 				924459C420CB796B0007570D /* Int16+Suffix_Tests.swift in Sources */,
 				92C2E937217B907900004B9E /* MatchAllianceTests.swift in Sources */,
+				14B520FB218CB96400F2EF4F /* EventStatusQualTests.swift in Sources */,
 				924459C820CB797E0007570D /* RetryService_Tests.swift in Sources */,
 				1448DBAE21823178008F542E /* SubscriptionTests.swift in Sources */,
+				148FF626218B90AC006202E6 /* EventRankingTests.swift in Sources */,
 				14B424F62167B01700E1904C /* Calendar+TBA_Tests.swift in Sources */,
 				9236101F2178245C000CC5E9 /* TeamMediaTests.swift in Sources */,
 				92C1F2E42169AA7200BD8445 /* TeamsContainerViewController_Tests.swift in Sources */,
+				14B520F7218CA28B00F2EF4F /* EventStatusAllianceTests.swift in Sources */,
 				92C1F2E62169AB9F00BD8445 /* DistrictsContainerViewController_Tests.swift in Sources */,
 				92C1F2DE216994CF00BD8445 /* CoreDataTestCase.swift in Sources */,
 				92BB8B62214F16710035AF28 /* SettingsViewController_Tests.swift in Sources */,

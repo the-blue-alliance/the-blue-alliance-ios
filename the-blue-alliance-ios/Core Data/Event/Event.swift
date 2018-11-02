@@ -142,6 +142,45 @@ extension Event: Locatable, Managed {
     }
 
     /**
+     Insert Rankings with values from TBAKit Event Ranking models in to the managed object context.
+
+     This method manages setting up an Event's relationship to Rankings.
+
+     - Parameter rankings: The TBAKit Event Ranking representations to set values from.
+
+     - Parameter sortOrderInfo: The TBA EventRankingSortOrder representations for this Ranking info
+
+     - Parameter extraStatsInfo: The TBA EventRankingSortOrder representations for this Ranking info
+     */
+    func insert(_ rankings: [TBAEventRanking], sortOrderInfo: [TBAEventRankingSortOrder]?, extraStatsInfo: [TBAEventRankingSortOrder]?) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        updateToManyRelationship(relationship: #keyPath(Event.rankings), newValues: rankings.map({
+            return EventRanking.insert($0, sortOrderInfo: sortOrderInfo, extraStatsInfo: extraStatsInfo, eventKey: key!, in: managedObjectContext)
+        }))
+    }
+
+    /**
+     Insert an Event Status with values from a TBAKit Event Status model in to the managed object context.
+
+     This method manages setting up an Event's relationship to an Event Status, as well as setting up an EventStatusQual's Ranking's relationship to the Event
+
+     - Parameter status: The TBAKit Event Status representation to set values from.
+     */
+    func insert(_ status: TBAEventStatus) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        let status = EventStatus.insert(status, in: managedObjectContext)
+        status.qual?.ranking?.event = self
+
+        addToStatuses(status)
+    }
+
+    /**
      Insert Teams with values from TBAKit Team models in to the managed object context.
 
      This method manages setting up an Event's relationship to Teams.
@@ -183,8 +222,6 @@ extension Event: Locatable, Managed {
     /// Event's shouldn't really be deleted, but sometimes they can be
     public override func prepareForDeletion() {
         super.prepareForDeletion()
-
-        // TODO: Handle EventAlliance deletion
 
         (webcasts?.allObjects as? [Webcast])?.forEach({
             if $0.events!.onlyObject(self) {

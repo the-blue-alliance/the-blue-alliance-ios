@@ -5,13 +5,13 @@ import TBAKit
 extension EventStatus: Managed {
 
     @discardableResult
-    static func insert(with model: TBAEventStatus, event: Event, in context: NSManagedObjectContext) -> EventStatus {
-        let teamKey = TeamKey.insert(withKey: model.teamKey, in: context)
+    static func insert(_ model: TBAEventStatus, in context: NSManagedObjectContext) -> EventStatus {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(EventStatus.event), event, #keyPath(EventStatus.teamKey), teamKey)
+                                    #keyPath(EventStatus.event.key), model.eventKey,
+                                    #keyPath(EventStatus.teamKey.key), model.teamKey)
+
         return findOrCreate(in: context, matching: predicate, configure: { (eventStatus) in
-            eventStatus.teamKey = teamKey
-            eventStatus.event = event
+            eventStatus.teamKey = TeamKey.insert(withKey: model.teamKey, in: context)
 
             eventStatus.allianceStatus = model.allianceStatusString
             eventStatus.playoffStatus = model.playoffStatusString
@@ -20,24 +20,42 @@ extension EventStatus: Managed {
             eventStatus.nextMatchKey = model.nextMatchKey
             eventStatus.lastMatchKey = model.lastMatchKey
 
-            if let qual = model.qual {
-                eventStatus.qual = EventStatusQual.insert(with: qual, eventStatus: eventStatus, in: context)
+            eventStatus.updateToOneRelationship(relationship: #keyPath(EventStatus.qual), newValue: model.qual) {
+                return EventStatusQual.insert($0, eventKey: model.eventKey, teamKey: model.teamKey, in: context)
             }
-            if let alliance = model.alliance {
-                eventStatus.alliance = EventStatusAlliance.insert(with: alliance, eventStatus: eventStatus, in: context)
+            eventStatus.updateToOneRelationship(relationship: #keyPath(EventStatus.alliance), newValue: model.alliance) {
+                return EventStatusAlliance.insert($0, eventKey: model.eventKey, teamKey: model.teamKey, in: context)
             }
-
-            /*
-            if let playoff = model.playoff {
-                eventStatus.playoff = EventAllianceStatus.insert(with: playoff, for: eventStatus, in: context)
+            eventStatus.updateToOneRelationship(relationship: #keyPath(EventStatus.playoff), newValue: model.playoff) {
+                return EventStatusPlayoff.insert($0, eventKey: model.eventKey, teamKey: model.teamKey, in: context)
             }
-            */
         })
     }
 
     var isOrphaned: Bool {
-        // TODO: Fix when we audit
-        return false
+        return event == nil
+    }
+
+    public override func prepareForDeletion() {
+        super.prepareForDeletion()
+
+        if let qual = qual {
+            if qual.ranking == nil {
+                // EventStatusQual will become an orphan - delete
+                managedObjectContext?.delete(qual)
+            } else {
+                qual.eventStatus = nil
+            }
+        }
+
+        if let playoff = playoff {
+            if playoff.alliance == nil {
+                // EventStatusPlayoff will become an orphan - delete
+                managedObjectContext?.delete(playoff)
+            } else {
+                playoff.eventStatus = nil
+            }
+        }
     }
 
 }

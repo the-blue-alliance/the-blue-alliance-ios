@@ -31,7 +31,7 @@ struct RankingCellViewModel {
     }
 
     init(eventRanking: EventRanking) {
-        rankText = "Rank \(eventRanking.rank)"
+        rankText = "Rank \(eventRanking.rank!.intValue)"
 
         teamNumber = String(describing: eventRanking.teamKey!.teamNumber)
         teamName = eventRanking.teamKey!.team?.nickname ?? eventRanking.teamKey!.name
@@ -39,8 +39,8 @@ struct RankingCellViewModel {
         detailText = {
             if let qualAverage = eventRanking.qualAverage {
                 return "Avg. \(qualAverage.doubleValue) Points"
-            } else if let rankingInfoString = eventRanking.infoString {
-                return rankingInfoString
+            } else if let tiebreakerInfoString = eventRanking.tiebreakerInfoString {
+                return tiebreakerInfoString
             }
             return nil
         }()

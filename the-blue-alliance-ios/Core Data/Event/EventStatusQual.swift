@@ -4,25 +4,28 @@ import TBAKit
 
 extension EventStatusQual: Managed {
 
-    static func insert(with model: TBAEventStatusQual, eventStatus: EventStatus, in context: NSManagedObjectContext) -> EventStatusQual {
-        let predicate = NSPredicate(format: "%K == %@", #keyPath(EventStatusQual.eventStatus), eventStatus)
-        return findOrCreate(in: context, matching: predicate, configure: { (eventStatusQual) in
-            eventStatusQual.eventStatus = eventStatus
+    static func insert(_ model: TBAEventStatusQual, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusQual {
+        let predicate = NSPredicate(format: "(%K == %@ AND %K == %@) OR (%K == %@ AND %K == %@)",
+                                    #keyPath(EventStatusQual.ranking.event.key), eventKey,
+                                    #keyPath(EventStatusQual.ranking.teamKey.key), teamKey,
+                                    #keyPath(EventStatusQual.eventStatus.event.key), eventKey,
+                                    #keyPath(EventStatusQual.eventStatus.teamKey.key), teamKey)
 
-            if let numTeams = model.numTeams {
-                eventStatusQual.numTeams = NSNumber(value: numTeams)
-            }
+        return findOrCreate(in: context, matching: predicate, configure: { (eventStatusQual) in
+            eventStatusQual.numTeams = model.numTeams as NSNumber?
             eventStatusQual.status = model.status
 
-            if let event = eventStatus.event, let ranking = model.ranking, let sortOrder = model.sortOrder {
-                eventStatusQual.ranking = EventRanking.insert(with: ranking, for: event, for: sortOrder, in: context)
+            eventStatusQual.updateToOneRelationship(relationship: #keyPath(EventStatusQual.ranking), newValue: model.ranking) {
+                return EventRanking.insert($0, sortOrderInfo: model.sortOrder, extraStatsInfo: nil, eventKey: eventKey, in: context)
             }
         })
     }
 
     var isOrphaned: Bool {
-        // TODO: Fix when we audit
-        return false
+        // EventStatusQual is an orphan if it's not attached to a Ranking or an EventStatus
+        let hasRanking = (ranking != nil)
+        let hasStatus = (eventStatus != nil)
+        return !hasRanking && !hasStatus
     }
 
 }
