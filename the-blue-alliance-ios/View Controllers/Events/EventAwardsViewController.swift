@@ -92,7 +92,7 @@ class EventAwardsViewController: TBATableViewController {
 
     private func setupFetchRequest(_ request: NSFetchRequest<Award>) {
         if let teamKey = teamKey {
-            request.predicate = NSPredicate(format: "event == %@ AND (ANY recipients.teamKey == %@)", event, teamKey)
+            request.predicate = NSPredicate(format: "event == %@ AND (ANY recipients.teamKey.key == %@)", event, teamKey.key!)
         } else {
             request.predicate = NSPredicate(format: "event == %@", event)
         }

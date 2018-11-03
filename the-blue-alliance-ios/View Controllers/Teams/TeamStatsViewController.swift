@@ -32,7 +32,8 @@ class TeamStatsViewController: TBATableViewController, Observable {
     }()
     lazy var observerPredicate: NSPredicate = {
         return NSPredicate(format: "%K == %@ AND %K == %@",
-                           #keyPath(EventTeamStat.event), event, #keyPath(EventTeamStat.teamKey), teamKey)
+                           #keyPath(EventTeamStat.event), event,
+                           #keyPath(EventTeamStat.teamKey), teamKey)
     }()
 
     // MARK: - Init

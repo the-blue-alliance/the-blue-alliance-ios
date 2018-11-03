@@ -188,8 +188,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let teamKey = TeamKey.insert(withKey: team.key!, in: persistentContainer.viewContext)
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, persistentContainer: persistentContainer)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

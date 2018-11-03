@@ -157,8 +157,8 @@ extension Match: Managed {
     @discardableResult
     static func insert(_ model: TBAMatch, event: Event, in context: NSManagedObjectContext) -> Match {
         let predicate = NSPredicate(format: "%K == %@",
-                                    #keyPath(Match.key),
-                                    model.key)
+                                    #keyPath(Match.key), model.key)
+
         return findOrCreate(in: context, matching: predicate) { (match) in
             // Required: compLevel, eventKey, key, matchNumber, setNumber
             match.key = model.key

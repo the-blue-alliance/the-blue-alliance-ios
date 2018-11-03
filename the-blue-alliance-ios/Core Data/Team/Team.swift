@@ -70,8 +70,7 @@ extension Team: Locatable, Managed {
     @discardableResult
     static func insert(_ model: TBATeam, in context: NSManagedObjectContext) -> Team {
         let predicate = NSPredicate(format: "%K == %@",
-                                    #keyPath(Team.key),
-                                    model.key)
+                                    #keyPath(Team.key), model.key)
 
         return findOrCreate(in: context, matching: predicate) { (team) in
             // Required: key, name, teamNumber, rookieYear

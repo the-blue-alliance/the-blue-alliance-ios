@@ -42,7 +42,7 @@ extension AwardRecipient: Managed {
 
      - Parameter model: The TBAKit Award Recipient representation to set values from.
 
-     - Parameter context: The NSManagedContext to insert the Award in to.
+     - Parameter context: The NSManagedContext to insert the Award Recipient in to.
 
      - Returns: The inserted Award Recipient.
      */

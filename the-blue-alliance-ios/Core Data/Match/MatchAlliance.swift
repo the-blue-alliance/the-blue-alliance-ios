@@ -21,10 +21,8 @@ extension MatchAlliance: Managed {
      */
     static func insert(_ model: TBAMatchAlliance, allianceKey: String, matchKey: String, in context: NSManagedObjectContext) -> MatchAlliance {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(MatchAlliance.allianceKey),
-                                    allianceKey,
-                                    #keyPath(MatchAlliance.match.key),
-                                    matchKey)
+                                    #keyPath(MatchAlliance.allianceKey), allianceKey,
+                                    #keyPath(MatchAlliance.match.key), matchKey)
 
         return findOrCreate(in: context, matching: predicate) { (matchAlliance) in
             // Required: allianceKey, score, teams

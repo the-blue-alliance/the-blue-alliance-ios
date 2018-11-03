@@ -32,7 +32,7 @@ class TeamSummaryViewController: TBATableViewController {
         guard let awards = event.awards else {
             return []
         }
-        return awards.filtered(using: NSPredicate(format: "event == %@ AND (ANY recipients.teamKey == %@)", event, teamKey)) as? Set<Award> ?? []
+        return awards.filtered(using: NSPredicate(format: "event == %@ AND (ANY recipients.teamKey.key == %@)", event, teamKey.key!)) as? Set<Award> ?? []
     }
 
     private var eventStatus: EventStatus? {

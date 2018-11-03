@@ -85,6 +85,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "type", ascending: true)]
         setupFetchRequest(fetchRequest)
 
+        // TODO: Why the fuck is this crashing?
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         dataSource = CollectionViewDataSource(fetchedResultsController: frc, delegate: self)
     }
@@ -96,10 +97,15 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     private func setupFetchRequest(_ request: NSFetchRequest<TeamMedia>) {
         // TODO: Split section by photos/videos like we do on the web
         if let year = year {
-            request.predicate = NSPredicate(format: "team == %@ AND year == %ld AND type in %@", team, year, MediaType.imageTypes)
+            request.predicate = NSPredicate(format: "%K == %@ AND %K == %ld AND %K in %@",
+                                            #keyPath(TeamMedia.team.key), team.key!,
+                                            #keyPath(TeamMedia.year), year,
+                                            #keyPath(TeamMedia.type), MediaType.imageTypes)
         } else {
             // Match none by passing a bosus year
-            request.predicate = NSPredicate(format: "team == %@ AND year == 0", team)
+            request.predicate = NSPredicate(format: "%K == %@ AND %K == 0",
+                                            #keyPath(TeamMedia.team.key), team.key!,
+                                            #keyPath(TeamMedia.type))
         }
 
         // Sort these by a lot of things, in an attempt to make sure that when refreshing,

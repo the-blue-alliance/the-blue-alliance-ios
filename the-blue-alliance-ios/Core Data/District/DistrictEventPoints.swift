@@ -7,6 +7,8 @@ extension DistrictEventPoints: Managed {
     /**
      Insert a District Event Points with values from a TBAKit District Event Points model in to the managed object context.
 
+     - Important: Method does not setup a relationship between a DistrictEventPoints and a DistrictRanking.
+
      - Parameter model: The TBAKit District Event Points representation to set values from.
 
      - Parameter context: The NSManagedContext to insert the District Event Points in to.
