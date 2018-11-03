@@ -152,19 +152,18 @@ extension TeamsViewController: Refreshable {
 
     private func refreshTeams() {
         var request: URLSessionDataTask?
-        request = Team.fetchAllTeams(taskChanged: { [unowned self] (task, teams) in
+        request = Team.fetchAllTeams(taskChanged: { [unowned self] (task, page, teams) in
             self.addRequest(request: task)
 
             let previousRequest = request
             request = task
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                // TODO: Delete old teams for page? Kinda a problem but
-                teams.forEach({
-                    Team.insert($0, in: backgroundContext)
-                })
-                backgroundContext.saveOrRollback()
+                Team.insert(teams, page: page, in: backgroundContext)
 
+                if backgroundContext.saveOrRollback() {
+                    TBAKit.setLastModified(for: previousRequest!)
+                }
                 self.removeRequest(request: previousRequest!)
             })
         }) { (error) in
