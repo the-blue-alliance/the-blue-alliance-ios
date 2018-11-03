@@ -18,6 +18,35 @@ public enum EventType: Int {
 extension Event: Locatable, Managed {
 
     /**
+     Insert Events for a year with values from TBAKit Event models in to the managed object context.
+
+     This method manages deleting orphaned Events for a year.
+
+     - Parameter events: The TBAKit Event representations to set values from.
+
+     - Parameter year: The year for the Events.
+
+     - Parameter context: The NSManagedContext to insert the Event in to.
+     */
+    static func insert(_ events: [TBAEvent], year: Int, in context: NSManagedObjectContext) {
+        // Fetch all of the previous Events for this year
+        let oldEvents = Event.fetch(in: context) {
+            $0.predicate = NSPredicate(format: "%K == %ld",
+                                       #keyPath(Event.year), year)
+        }
+
+        // Insert new Events for this year
+        let events = events.map({
+            return Event.insert($0, in: context)
+        })
+
+        // Delete orphaned Events for this year
+        Set(oldEvents).subtracting(Set(events)).forEach({
+            context.delete($0)
+        })
+    }
+
+    /**
      Insert an Event with values from a TBAKit Event model in to the managed object context.
 
      This method manages deleting orphaned Webcasts.

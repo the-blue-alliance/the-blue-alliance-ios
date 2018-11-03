@@ -6,6 +6,43 @@ class EventTestCase: CoreDataTestCase {
 
     let calendar: Calendar = Calendar.current
 
+    func test_insert_year() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        let modelEventOne = TBAEvent(key: "2018miket", name: "name", eventCode: "code", eventType: 1, startDate: dateFormatter.date(from: "2018-03-01")!, endDate: dateFormatter.date(from: "2018-03-03")!, year: 2018, eventTypeString: "District", divisionKeys: [])
+        let modelEventTwo = TBAEvent(key: "2018mike2", name: "name", eventCode: "code", eventType: 1, startDate: dateFormatter.date(from: "2018-03-01")!, endDate: dateFormatter.date(from: "2018-03-03")!, year: 2018, eventTypeString: "District", divisionKeys: [])
+
+        Event.insert([modelEventOne, modelEventTwo], year: 2018, in: persistentContainer.viewContext)
+        let eventsFirst = Event.fetch(in: persistentContainer.viewContext) {
+            $0.predicate = NSPredicate(format: "%K == %ld",
+                                       #keyPath(Event.year), 2018)
+        }
+
+        let eventOne = eventsFirst.first(where: { $0.key == "2018miket" })!
+        let eventTwo = eventsFirst.first(where: { $0.key == "2018mike2" })!
+
+        // Sanity check
+        XCTAssertNotEqual(eventOne, eventTwo)
+
+        Event.insert([modelEventTwo], year: 2018, in: persistentContainer.viewContext)
+        let eventsSecond = Event.fetch(in: persistentContainer.viewContext) {
+            $0.predicate = NSPredicate(format: "%K == %ld",
+                                       #keyPath(Event.year), 2018)
+        }
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        XCTAssertEqual(eventsSecond, [eventTwo])
+
+        // EventOne should be deleted
+        XCTAssertNil(eventOne.managedObjectContext)
+
+        // EventTwo should not be deleted
+        XCTAssertNotNil(eventTwo.managedObjectContext)
+
+    }
+
     func test_insert() {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"

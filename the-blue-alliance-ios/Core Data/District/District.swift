@@ -50,6 +50,35 @@ extension District {
 extension District: Managed {
 
     /**
+     Insert Districts for a year with values from TBAKit District models in to the managed object context.
+
+     This method manages deleting orphaned Districts for a year.
+
+     - Parameter districts: The TBAKit District representations to set values from.
+
+     - Parameter year: The year for the Districts.
+
+     - Parameter context: The NSManagedContext to insert the District in to.
+     */
+    static func insert(_ districts: [TBADistrict], year: Int, in context: NSManagedObjectContext) {
+        // Fetch all of the previous Districts for this year
+        let oldDistricts = District.fetch(in: context) {
+            $0.predicate = NSPredicate(format: "%K == %ld",
+                                       #keyPath(District.year), year)
+        }
+
+        // Insert new Districts for this year
+        let districts = districts.map({
+            return District.insert($0, in: context)
+        })
+
+        // Delete orphaned Districts for this year
+        Set(oldDistricts).subtracting(Set(districts)).forEach({
+            context.delete($0)
+        })
+    }
+
+    /**
      Insert a District with values from a TBAKit District model in to the managed object context.
 
      - Parameter model: The TBAKit District representation to set values from.

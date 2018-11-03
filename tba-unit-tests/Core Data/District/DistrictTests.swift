@@ -5,6 +5,39 @@ import CoreData
 
 class DistrictTestCase: CoreDataTestCase {
 
+    func test_insert_year() {
+        let modelDistrictOne = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
+        let modelDistrictTwo = TBADistrict(abbreviation: "zor", name: "FIRST In Zor", key: "2018zor", year: 2018)
+
+        District.insert([modelDistrictOne, modelDistrictTwo], year: 2018, in: persistentContainer.viewContext)
+        let districtsFirst = District.fetch(in: persistentContainer.viewContext) {
+            $0.predicate = NSPredicate(format: "%K == %ld",
+                                       #keyPath(District.year), 2018)
+        }
+
+        let districtOne = districtsFirst.first(where: { $0.key == "2018fim" })!
+        let districtTwo = districtsFirst.first(where: { $0.key == "2018zor" })!
+
+        // Sanity check
+        XCTAssertNotEqual(districtOne, districtTwo)
+
+        District.insert([modelDistrictTwo], year: 2018, in: persistentContainer.viewContext)
+        let districtsSecond = District.fetch(in: persistentContainer.viewContext) {
+            $0.predicate = NSPredicate(format: "%K == %ld",
+                                       #keyPath(District.year), 2018)
+        }
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        XCTAssertEqual(districtsSecond, [districtTwo])
+
+        // DistrictOne should be deleted
+        XCTAssertNil(districtOne.managedObjectContext)
+
+        // DistrictTwo should not be deleted
+        XCTAssertNotNil(districtTwo.managedObjectContext)
+    }
+
     func test_insert() {
         let modelDistrict = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
         let district = District.insert(modelDistrict, in: persistentContainer.viewContext)

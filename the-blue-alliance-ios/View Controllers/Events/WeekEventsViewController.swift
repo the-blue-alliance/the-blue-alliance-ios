@@ -70,14 +70,14 @@ class WeekEventsViewController: EventsViewController {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                // TODO: Delete old events for year?
-                events?.forEach({ (modelEvent) in
-                    Event.insert(modelEvent, in: backgroundContext)
-                })
+                if let events = events {
+                    Event.insert(events, year: year, in: backgroundContext)
 
-                backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
                 self.removeRequest(request: request!)
-
                 self.setupWeeks()
             })
         })

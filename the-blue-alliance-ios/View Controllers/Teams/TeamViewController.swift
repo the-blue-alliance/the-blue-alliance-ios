@@ -107,20 +107,19 @@ class TeamViewController: ContainerViewController, Observable {
     }
 
     private func refreshYearsParticipated() {
-        TBAKit.sharedKit.fetchTeamYearsParticipated(key: team.key!, completion: { (years, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to fetch years participated - \(error.localizedDescription)")
-                return
-            }
-
+        var request: URLSessionDataTask?
+        request = TBAKit.sharedKit.fetchTeamYearsParticipated(key: team.key!, completion: { (years, error) in
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
 
                 if let years = years {
-                    backgroundTeam.yearsParticipated = years.sorted().reversed()
-                }
+                    let team = backgroundContext.object(with: self.team.objectID) as! Team
+                    team.yearsParticipated = years.sorted().reversed()
 
-                backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
             })
         })
     }
