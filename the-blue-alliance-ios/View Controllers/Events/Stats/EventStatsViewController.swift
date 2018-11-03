@@ -156,7 +156,6 @@ extension EventStatsViewController: Refreshable {
                         TBAKit.setLastModified(for: request!)
                     }
                 }
-
                 self.removeRequest(request: request!)
             })
         })

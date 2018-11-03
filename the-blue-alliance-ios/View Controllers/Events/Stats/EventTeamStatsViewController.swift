@@ -149,7 +149,6 @@ extension EventTeamStatsTableViewController: Refreshable {
                         TBAKit.setLastModified(for: request!)
                     }
                 }
-
                 self.removeRequest(request: request!)
             })
         })

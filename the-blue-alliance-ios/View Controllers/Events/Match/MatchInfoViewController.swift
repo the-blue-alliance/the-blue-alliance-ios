@@ -216,6 +216,7 @@ extension MatchInfoViewController: Refreshable {
                     // TODO: Match can never be deleted
                     let event = backgroundContext.object(with: self.match.event!.objectID) as! Event
                     Match.insert(modelMatch, event: event, in: backgroundContext)
+
                     if backgroundContext.saveOrRollback() {
                         TBAKit.setLastModified(for: request!)
                     }

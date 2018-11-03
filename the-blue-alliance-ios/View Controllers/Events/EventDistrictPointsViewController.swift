@@ -135,6 +135,7 @@ extension EventDistrictPointsViewController: Refreshable {
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 if let eventPoints = eventPoints {
                     DistrictEventPoints.insert(eventPoints, eventKey: self.event.key!, in: backgroundContext)
+
                     if backgroundContext.saveOrRollback() {
                         TBAKit.setLastModified(for: request!)
                     }

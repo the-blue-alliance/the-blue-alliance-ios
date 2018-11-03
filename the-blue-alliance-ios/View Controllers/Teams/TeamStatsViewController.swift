@@ -131,7 +131,6 @@ extension TeamStatsViewController: Refreshable {
                         TBAKit.setLastModified(for: request!)
                     }
                 }
-
                 self.removeRequest(request: request!)
             })
         })

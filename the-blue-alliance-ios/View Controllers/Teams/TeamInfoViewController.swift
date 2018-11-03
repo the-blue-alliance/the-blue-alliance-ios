@@ -211,6 +211,7 @@ extension TeamInfoViewController: Refreshable {
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 if let modelTeam = modelTeam {
                     Team.insert(modelTeam, in: backgroundContext)
+
                     if backgroundContext.saveOrRollback() {
                         TBAKit.setLastModified(for: request!)
                     }

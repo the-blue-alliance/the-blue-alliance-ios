@@ -52,7 +52,6 @@ class DistrictEventsViewController: EventsViewController {
                         TBAKit.setLastModified(for: request!)
                     }
                 }
-
                 self.removeRequest(request: request!)
             })
         })
