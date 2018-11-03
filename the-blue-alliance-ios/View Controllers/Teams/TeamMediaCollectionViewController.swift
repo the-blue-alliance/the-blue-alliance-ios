@@ -85,7 +85,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "type", ascending: true)]
         setupFetchRequest(fetchRequest)
 
-        // TODO: Why the fuck is this crashing?
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         dataSource = CollectionViewDataSource(fetchedResultsController: frc, delegate: self)
     }

@@ -100,7 +100,7 @@ class WeekEventsViewController: EventsViewController {
             } else {
                 if weekEvent.eventType!.intValue == EventType.championshipFinals.rawValue {
                     // 2017 and onward - handle multiple CMPs
-                    return NSPredicate(format: "(eventType == %ld || eventType == %ld) && year == %ld && (key == %@ || parentEventKey == %@)", EventType.championshipFinals.rawValue, EventType.championshipDivision.rawValue, weekEvent.year!.intValue, weekEvent.key!, weekEvent.key!)
+                    return NSPredicate(format: "(eventType == %ld || eventType == %ld) && year == %ld && (key == %@ || parentEvent.key == %@)", EventType.championshipFinals.rawValue, EventType.championshipDivision.rawValue, weekEvent.year!.intValue, weekEvent.key!, weekEvent.key!)
                 } else if weekEvent.eventType!.intValue == EventType.offseason.rawValue {
                     // Get all off season events for selected month
                     // Conversion stuff, since Core Data still uses NSDate's
