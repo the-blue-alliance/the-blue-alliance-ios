@@ -128,6 +128,23 @@ extension Event: Locatable, Managed {
     }
 
     /**
+     Insert an EventInsight with values from TBAKit EventInsight model in to the managed object context.
+
+     This method will manage setting up an EventInsight's relationship to an Event.
+
+     - Parameter insights: The TBAKit EventInsights representations to set values from.
+     */
+    func insert(_ insights: TBAEventInsights) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        updateToOneRelationship(relationship: #keyPath(Event.insights), newValue: insights, newObject: {
+            return EventInsights.insert($0, eventKey: key!, in: managedObjectContext)
+        })
+    }
+
+    /**
      Insert Matches with values from TBAKit Match models in to the managed object context.
 
      This method will manage setting up a Match's relationship to an Event and the deletion of oprhaned Matches on the Event.

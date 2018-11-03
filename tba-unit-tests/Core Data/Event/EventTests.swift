@@ -163,6 +163,17 @@ class EventTestCase: CoreDataTestCase {
         XCTAssertNotNil(frc2.managedObjectContext)
     }
 
+    func test_insert_insights() {
+        let event = districtEvent()
+
+        let modelInsights = TBAEventInsights(qual: ["abc": 1], playoff: ["def": 2])
+        event.insert(modelInsights)
+
+        XCTAssertNotNil(event.insights)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+    }
+
     func test_insert_matches() {
         let event = districtEvent()
 

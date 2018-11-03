@@ -19,7 +19,7 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
         let moduleName = "EventInsights\(event.year!.stringValue)"
         let eventStatsView = RCTRootView(bundleURL: sourceURL,
                                          moduleName: moduleName,
-                                         initialProperties: event.insights ?? [:],
+                                         initialProperties: event.insights?.insightsDictionary ?? [:],
                                          launchOptions: [:])
         // TODO: eventStatsView.loadingView
         eventStatsView!.delegate = self
@@ -78,7 +78,7 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
 
     func updateEventStatsView() {
         if let eventStatsView = eventStatsView, let insights = event.insights {
-            eventStatsView.appProperties = insights
+            eventStatsView.appProperties = insights.insightsDictionary
         }
     }
 
@@ -133,14 +133,7 @@ extension EventStatsViewController: Refreshable {
         guard let insights = event.insights else {
             return true
         }
-        // https://github.com/ZachOrr/TBAKit/issues/11
-        guard let qual = insights["qual"] else {
-            return true
-        }
-        guard let playoff = insights["playoff"] else {
-            return true
-        }
-        return qual is NSNull || playoff is NSNull
+        return insights.qual == nil || insights.playoff == nil
     }
 
     @objc func refresh() {
@@ -155,12 +148,15 @@ extension EventStatsViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
-                // TODO: If we get a 304 these insights will be deleted incorrectly
-                // TODO: Re-enable insights
-                // backgroundEvent.insights = insights
+                if let insights = insights {
+                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    event.insert(insights)
 
-                backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
+
                 self.removeRequest(request: request!)
             })
         })

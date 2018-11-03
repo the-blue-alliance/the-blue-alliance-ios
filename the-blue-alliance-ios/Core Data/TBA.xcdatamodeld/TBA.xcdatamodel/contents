@@ -52,7 +52,6 @@
         <attribute name="gmapsPlaceID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gmapsURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="hybridType" attributeType="String" syncable="YES"/>
-        <attribute name="insights" optional="YES" attributeType="Transformable" customClassName="[String: Any]" syncable="YES"/>
         <attribute name="key" attributeType="String" syncable="YES"/>
         <attribute name="lat" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lng" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
@@ -72,6 +71,7 @@
         <relationship name="awards" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Award" inverseName="event" inverseEntity="Award" syncable="YES"/>
         <relationship name="district" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="District" inverseName="events" inverseEntity="District" syncable="YES"/>
         <relationship name="divisions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventKey" inverseName="parentDivision" inverseEntity="EventKey" syncable="YES"/>
+        <relationship name="insights" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="EventInsights" inverseName="event" inverseEntity="EventInsights" syncable="YES"/>
         <relationship name="matches" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Match" inverseName="event" inverseEntity="Match" syncable="YES"/>
         <relationship name="parentEvent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EventKey" inverseName="childEvents" inverseEntity="EventKey" syncable="YES"/>
         <relationship name="rankings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventRanking" inverseName="event" inverseEntity="EventRanking" syncable="YES"/>
@@ -96,6 +96,11 @@
         <relationship name="allianceStatus" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventStatusAlliance" inverseName="backup" inverseEntity="EventStatusAlliance" syncable="YES"/>
         <relationship name="inTeam" maxCount="1" deletionRule="Nullify" destinationEntity="TeamKey" inverseName="inBackupAlliances" inverseEntity="TeamKey" syncable="YES"/>
         <relationship name="outTeam" maxCount="1" deletionRule="Nullify" destinationEntity="TeamKey" inverseName="outBackupAlliances" inverseEntity="TeamKey" syncable="YES"/>
+    </entity>
+    <entity name="EventInsights" representedClassName="EventInsights" syncable="YES" codeGenerationType="class">
+        <attribute name="playoff" optional="YES" attributeType="Transformable" customClassName="[String: Any]" syncable="YES"/>
+        <attribute name="qual" optional="YES" attributeType="Transformable" customClassName="[String: Any]" syncable="YES"/>
+        <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="insights" inverseEntity="Event" syncable="YES"/>
     </entity>
     <entity name="EventKey" representedClassName="EventKey" syncable="YES" codeGenerationType="class">
         <attribute name="key" attributeType="String" syncable="YES"/>
@@ -281,5 +286,6 @@
         <element name="TeamKey" positionX="45" positionY="135" width="128" height="255"/>
         <element name="TeamMedia" positionX="-45" positionY="144" width="128" height="180"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
+        <element name="EventInsights" positionX="45" positionY="135" width="128" height="90"/>
     </elements>
 </model>
