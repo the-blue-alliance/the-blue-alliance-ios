@@ -53,4 +53,28 @@ class EventInsightsTestCase: CoreDataTestCase {
         XCTAssertNotNil(event.managedObjectContext)
     }
 
+    func test_isOrphaned() {
+        let insights = EventInsights.init(entity: EventInsights.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssert(insights.isOrphaned)
+
+        insights.event = districtEvent()
+        XCTAssertFalse(insights.isOrphaned)
+        insights.event = nil
+
+        XCTAssert(insights.isOrphaned)
+    }
+
+    func test_insightsDictionary() {
+        let insights = EventInsights.init(entity: EventInsights.entity(), insertInto: persistentContainer.viewContext)
+
+        insights.qual = ["abc": 1]
+        XCTAssertEqual(insights.insightsDictionary as! [String : [String : Int]], ["qual": ["abc": 1]])
+
+        insights.playoff = ["def": 2]
+        XCTAssertEqual(insights.insightsDictionary as! [String : [String : Int]], ["qual": ["abc": 1], "playoff": ["def": 2]])
+
+        insights.qual = nil
+        XCTAssertEqual(insights.insightsDictionary as! [String : [String : Int]], ["playoff": ["def": 2]])
+    }
+
 }

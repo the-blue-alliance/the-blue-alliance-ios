@@ -57,4 +57,15 @@ class EventTeamStatTestCase: CoreDataTestCase {
         XCTAssertNotNil(teamKey.managedObjectContext)
     }
 
+    func test_isOrphaned() {
+        let stat = EventTeamStat.init(entity: EventTeamStat.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssert(stat.isOrphaned)
+
+        stat.event = districtEvent()
+        XCTAssertFalse(stat.isOrphaned)
+        stat.event = nil
+
+        XCTAssert(stat.isOrphaned)
+    }
+
 }
