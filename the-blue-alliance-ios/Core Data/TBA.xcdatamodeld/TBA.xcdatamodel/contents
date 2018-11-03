@@ -157,9 +157,9 @@
         <relationship name="ranking" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventRanking" inverseName="qualStatus" inverseEntity="EventRanking" syncable="YES"/>
     </entity>
     <entity name="EventTeamStat" representedClassName="EventTeamStat" syncable="YES" codeGenerationType="class">
-        <attribute name="ccwm" attributeType="Double" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="dpr" attributeType="Double" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="opr" attributeType="Double" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="ccwm" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="dpr" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="opr" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="stats" inverseEntity="Event" syncable="YES"/>
         <relationship name="teamKey" maxCount="1" deletionRule="Nullify" destinationEntity="TeamKey" inverseName="stats" inverseEntity="TeamKey" syncable="YES"/>
     </entity>
@@ -275,7 +275,7 @@
         <element name="EventStatusAlliance" positionX="63" positionY="153" width="128" height="120"/>
         <element name="EventStatusPlayoff" positionX="72" positionY="162" width="128" height="150"/>
         <element name="EventStatusQual" positionX="54" positionY="144" width="128" height="105"/>
-        <element name="EventTeamStat" positionX="-54" positionY="135" width="128" height="120"/>
+        <element name="EventTeamStat" positionX="-54" positionY="135" width="128" height="30"/>
         <element name="Favorite" positionX="45" positionY="135" width="128" height="45"/>
         <element name="Match" positionX="-54" positionY="135" width="128" height="255"/>
         <element name="MatchAlliance" positionX="45" positionY="135" width="128" height="135"/>

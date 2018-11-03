@@ -53,7 +53,7 @@ struct RankingCellViewModel {
         teamNumber = eventTeamStat.teamKey!.teamNumber
         teamName = eventTeamStat.teamKey!.team?.nickname ?? eventTeamStat.teamKey!.name
 
-        detailText = String(format: "OPR: %.2f, DPR: %.2f, CCWM: %.2f", eventTeamStat.opr, eventTeamStat.dpr, eventTeamStat.ccwm)
+        detailText = String(format: "OPR: %.2f, DPR: %.2f, CCWM: %.2f", eventTeamStat.opr!.floatValue, eventTeamStat.dpr!.floatValue, eventTeamStat.ccwm!.floatValue)
         wltText = nil
     }
 

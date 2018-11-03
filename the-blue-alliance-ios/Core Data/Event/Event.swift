@@ -183,6 +183,23 @@ extension Event: Locatable, Managed {
     }
 
     /**
+     Insert EventTeamStats with values from a TBAKit Stat models in to the managed object context.
+
+     This method manages setting up an Event's relationship to an EventTeamStats as well as deleting orphaned EventTeamStats
+
+     - Parameter stats: The TBAKit Stat representation to set values from.
+     */
+    func insert(_ stats: [TBAStat]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        updateToManyRelationship(relationship: #keyPath(Event.stats), newValues: stats.map({
+            return EventTeamStat.insert($0, eventKey: key!, in: managedObjectContext)
+        }))
+    }
+
+    /**
      Insert an Event Status with values from a TBAKit Event Status model in to the managed object context.
 
      This method manages setting up an Event's relationship to an Event Status, as well as setting up an EventStatusQual's Ranking's relationship to the Event

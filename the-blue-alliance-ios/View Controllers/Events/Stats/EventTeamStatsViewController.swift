@@ -141,15 +141,15 @@ extension EventTeamStatsTableViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 if let stats = stats {
-                    let localStats = stats.map({ (modelStat) -> EventTeamStat in
-                        return EventTeamStat.insert(with: modelStat, for: backgroundEvent, in: backgroundContext)
-                    })
-                    backgroundEvent.stats = Set(localStats) as NSSet
+                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    event.insert(stats)
+
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
                 }
 
-                backgroundContext.saveOrRollback()
                 self.removeRequest(request: request!)
             })
         })

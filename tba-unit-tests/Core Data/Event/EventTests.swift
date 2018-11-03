@@ -261,6 +261,36 @@ class EventTestCase: CoreDataTestCase {
         XCTAssertNotNil(rankingTwo.managedObjectContext)
     }
 
+    func test_insert_stats() {
+        let event = districtEvent()
+
+        let modelStatsOne = TBAStat(teamKey: "frc1", ccwm: 2.2, dpr: 3.3, opr: 4.4)
+        let modelStatsTwo = TBAStat(teamKey: "frc2", ccwm: 2.2, dpr: 3.3, opr: 4.4)
+
+        event.insert([modelStatsOne, modelStatsTwo])
+
+        let stats = event.stats?.allObjects as! [EventTeamStat]
+        let statsOne = stats.first(where: { $0.teamKey?.key == "frc1" })!
+        let statsTwo = stats.first(where: { $0.teamKey?.key == "frc2" })!
+
+        // Sanity check
+        XCTAssertEqual(event.stats?.count, 2)
+        XCTAssertNotEqual(statsOne, statsTwo)
+
+        event.insert([modelStatsTwo])
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // Ensure our Event/Match updates it's relationships properly
+        XCTAssert(event.stats!.onlyObject(statsTwo))
+
+        // StatsOne should be deleted
+        XCTAssertNil(statsOne.managedObjectContext)
+
+        // StatsTwo should not be deleted
+        XCTAssertNotNil(statsTwo.managedObjectContext)
+    }
+
     func test_insert_status() {
         let event = districtEvent()
 
