@@ -134,7 +134,7 @@ class DistrictTestCase: CoreDataTestCase {
         district.year = 2011
 
         let dcmp = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        dcmp.eventType = Int16(EventType.districtChampionship.rawValue)
+        dcmp.eventType = EventType.districtChampionship.rawValue as NSNumber
         district.addToEvents(dcmp)
 
         XCTAssertFalse(district.isHappeningNow)
@@ -156,7 +156,7 @@ class DistrictTestCase: CoreDataTestCase {
         let today = Date()
         // To get our test to pass, we're going to set our districtChampionship.endDate to make sure it inclues today
         let dcmp = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        dcmp.eventType = Int16(EventType.districtChampionship.rawValue)
+        dcmp.eventType = EventType.districtChampionship.rawValue as NSNumber
         if stopBuildDay > today {
             dcmp.endDate = calendar.date(byAdding: DateComponents(day: -1), to: today)
         } else {

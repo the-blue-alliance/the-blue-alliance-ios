@@ -105,7 +105,7 @@ class EventsContainerViewController_TestCase: TBATestCase {
         event.name = "FIM District - Kettering University Event"
         event.endDate = Calendar.current.date(from: DateComponents(year: year, month: 3, day: 5))
         event.week = NSNumber(value: 1)
-        event.year = Int16(year)
+        event.year = year as NSNumber
         return event
     }
 

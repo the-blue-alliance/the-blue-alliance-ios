@@ -43,10 +43,9 @@
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="country" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="divisionKeys" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
         <attribute name="endDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="eventCode" attributeType="String" syncable="YES"/>
-        <attribute name="eventType" attributeType="Integer 16" minValueString="0" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="eventType" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="eventTypeString" attributeType="String" syncable="YES"/>
         <attribute name="firstEventCode" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstEventID" optional="YES" attributeType="String" syncable="YES"/>
@@ -59,8 +58,7 @@
         <attribute name="lng" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="locationName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" attributeType="String" spotlightIndexingEnabled="YES" syncable="YES"/>
-        <attribute name="parentEventKey" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="playoffType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="playoffType" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="playoffTypeString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="postalCode" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="shortName" optional="YES" attributeType="String" syncable="YES"/>
@@ -69,11 +67,13 @@
         <attribute name="timezone" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="week" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="year" attributeType="Integer 16" minValueString="1992" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="year" attributeType="Integer 16" minValueString="1992" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="EventAlliance" inverseName="event" inverseEntity="EventAlliance" syncable="YES"/>
         <relationship name="awards" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Award" inverseName="event" inverseEntity="Award" syncable="YES"/>
         <relationship name="district" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="District" inverseName="events" inverseEntity="District" syncable="YES"/>
+        <relationship name="divisions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventKey" inverseName="parentDivision" inverseEntity="EventKey" syncable="YES"/>
         <relationship name="matches" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Match" inverseName="event" inverseEntity="Match" syncable="YES"/>
+        <relationship name="parentEvent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EventKey" inverseName="childEvents" inverseEntity="EventKey" syncable="YES"/>
         <relationship name="rankings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventRanking" inverseName="event" inverseEntity="EventRanking" syncable="YES"/>
         <relationship name="stats" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventTeamStat" inverseName="event" inverseEntity="EventTeamStat" syncable="YES"/>
         <relationship name="statuses" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventStatus" inverseName="event" inverseEntity="EventStatus" syncable="YES"/>
@@ -99,6 +99,8 @@
     </entity>
     <entity name="EventKey" representedClassName="EventKey" syncable="YES" codeGenerationType="class">
         <attribute name="key" attributeType="String" syncable="YES"/>
+        <relationship name="childEvents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="parentEvent" inverseEntity="Event" syncable="YES"/>
+        <relationship name="parentDivision" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="divisions" inverseEntity="Event" syncable="YES"/>
         <relationship name="points" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictEventPoints" inverseName="eventKey" inverseEntity="DistrictEventPoints" syncable="YES"/>
     </entity>
     <entity name="EventRanking" representedClassName="EventRanking" syncable="YES" codeGenerationType="class">
@@ -262,7 +264,7 @@
         <element name="Event" positionX="-63" positionY="-18" width="128" height="630"/>
         <element name="EventAlliance" positionX="54" positionY="144" width="128" height="135"/>
         <element name="EventAllianceBackup" positionX="63" positionY="153" width="128" height="105"/>
-        <element name="EventKey" positionX="45" positionY="135" width="128" height="75"/>
+        <element name="EventKey" positionX="45" positionY="135" width="128" height="105"/>
         <element name="EventRanking" positionX="160" positionY="192" width="128" height="225"/>
         <element name="EventStatus" positionX="45" positionY="135" width="128" height="195"/>
         <element name="EventStatusAlliance" positionX="63" positionY="153" width="128" height="120"/>

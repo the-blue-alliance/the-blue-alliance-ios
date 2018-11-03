@@ -12,7 +12,7 @@ class MatchContainerViewController: ContainerViewController {
         // Only show match breakdown if year is 2015 or onward
         var breakdownViewController: MatchBreakdownViewController?
         var titles: [String]  = ["Info"]
-        if Int(match.event!.year) >= 2015 {
+        if match.event!.year!.intValue >= 2015 {
             titles.append("Breakdown")
             breakdownViewController = MatchBreakdownViewController(match: match, persistentContainer: persistentContainer)
         }

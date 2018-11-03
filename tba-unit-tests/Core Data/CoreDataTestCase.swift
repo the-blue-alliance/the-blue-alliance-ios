@@ -71,7 +71,7 @@ class CoreDataTestCase: XCTestCase {
                              playoffType: nil,
                              playoffTypeString: nil)
 
-        return Event.insert(with: model, in: persistentContainer.viewContext)
+        return Event.insert(model, in: persistentContainer.viewContext)
     }
 
 }

@@ -17,8 +17,19 @@ public enum EventType: Int {
 
 extension Event: Locatable, Managed {
 
+    /**
+     Insert an Event with values from a TBAKit Event model in to the managed object context.
+
+     This method manages deleting orphaned Webcasts.
+
+     - Parameter model: The TBAKit Event representation to set values from.
+
+     - Parameter context: The NSManagedContext to insert the Event in to.
+
+     - Returns: The inserted Event.
+     */
     @discardableResult
-    static func insert(with model: TBAEvent, in context: NSManagedObjectContext) -> Event {
+    static func insert(_ model: TBAEvent, in context: NSManagedObjectContext) -> Event {
         let predicate = NSPredicate(format: "key == %@", model.key)
         return findOrCreate(in: context, matching: predicate) { (event) in
             // Required: endDate, eventCode, eventType, key, name, startDate, year
@@ -26,15 +37,17 @@ extension Event: Locatable, Managed {
             event.city = model.city
             event.country = model.country
 
-            if let district = model.district {
-                event.district = District.insert(district, in: context)
-            }
+            event.updateToOneRelationship(relationship: #keyPath(Event.district), newValue: model.district, newObject: {
+                return District.insert($0, in: context)
+            })
 
-            event.divisionKeys = model.divisionKeys
+            event.updateToManyRelationship(relationship: #keyPath(Event.divisions), newValues: model.divisionKeys.map({
+                return EventKey.insert(withKey: $0, in: context)
+            }))
 
             event.endDate = model.endDate
             event.eventCode = model.eventCode
-            event.eventType = Int16(model.eventType)
+            event.eventType = model.eventType as NSNumber
             event.eventTypeString = model.eventTypeString
             event.firstEventID = model.firstEventID
             event.firstEventCode = model.firstEventCode
@@ -42,22 +55,16 @@ extension Event: Locatable, Managed {
             event.gmapsURL = model.gmapsURL
 
             event.key = model.key
-
-            if let lat = model.lat {
-                event.lat = NSNumber(value: lat)
-            }
-            if let lng = model.lng {
-                event.lng = NSNumber(value: lng)
-            }
+            event.lat = model.lat as NSNumber?
+            event.lng = model.lng as NSNumber?
 
             event.locationName = model.locationName
             event.name = model.name
 
-            // TODO: Can we convert this to a relationship?
-            event.parentEventKey = model.parentEventKey
-            if let playoffType = model.playoffType {
-                event.playoffType = Int16(playoffType)
-            }
+            event.updateToOneRelationship(relationship: #keyPath(Event.parentEvent), newValue: model.parentEventKey, newObject: {
+                return EventKey.insert(withKey: $0, in: context)
+            })
+            event.playoffType = model.playoffType as NSNumber?
             event.playoffTypeString = model.playoffTypeString
 
             event.postalCode = model.postalCode
@@ -69,12 +76,8 @@ extension Event: Locatable, Managed {
             event.insert(model.webcasts ?? [])
 
             event.website = model.website
-
-            if let week = model.week {
-                event.week = NSNumber(integerLiteral: week)
-            }
-
-            event.year = Int16(model.year)
+            event.week = model.week as NSNumber?
+            event.year = model.year as NSNumber
 
             event.hybridType = event.calculateHybridType()
         }
@@ -236,20 +239,20 @@ extension Event: Locatable, Managed {
     // hybridType is used a mechanism for sorting Events properly in fetch result controllers... they use a variety
     // of event data to kinda "move around" events in our data model to get groups/order right
     func calculateHybridType() -> String {
-        var hybridType = String(eventType)
+        var hybridType = eventType!.stringValue
         // Group districts together, group district CMPs together
         if isDistrictChampionshipEvent {
             // Due to how DCMP divisions come *after* everything else if sorted by default
             // This is a bit of a hack to get them to show up before DCMPs
             // Future-proofing - group DCMP divisions together based on district
-            if Int(eventType) == EventType.districtChampionshipDivision.rawValue, let district = district {
+            if eventType!.intValue == EventType.districtChampionshipDivision.rawValue, let district = district {
                 hybridType = "\(EventType.districtChampionship.rawValue)..\(district.abbreviation!).dcmpd"
             } else {
                 hybridType = "\(hybridType).dcmp"
             }
         } else if let district = district, !isDistrictChampionshipEvent {
             hybridType = "\(hybridType).\(district.abbreviation!)"
-        } else if Int(eventType) == EventType.offseason.rawValue, let startDate = startDate {
+        } else if eventType!.intValue == EventType.offseason.rawValue, let startDate = startDate {
             // Group offseason events together by month
             let month = Calendar.current.component(.month, from: startDate)
             hybridType = "\(hybridType).\(month)"
@@ -293,9 +296,9 @@ extension Event: Locatable, Managed {
 
     public var weekString: String {
         var weekString = "nil"
-        let eventType = Int(self.eventType)
+        let eventType = self.eventType!.intValue
         if eventType == EventType.championshipDivision.rawValue || eventType == EventType.championshipFinals.rawValue {
-            if year >= 2017, let city = city {
+            if year!.intValue >= 2017, let city = city {
                 weekString = "Championship - \(city)"
             } else {
                 weekString = "Championship"
@@ -345,11 +348,11 @@ extension Event: Locatable, Managed {
     }
 
     public var friendlyNameWithYear: String {
-        return "\(String(year)) \(safeShortName) \(eventTypeString ?? "Event")"
+        return "\(year!.stringValue) \(safeShortName) \(eventTypeString ?? "Event")"
     }
 
     public var isChampionship: Bool {
-        let type = Int(eventType)
+        let type = eventType!.intValue
         return type == EventType.championshipDivision.rawValue || type == EventType.championshipFinals.rawValue
     }
 
@@ -357,7 +360,7 @@ extension Event: Locatable, Managed {
      If the event is a district championship or a district championship division.
      */
     public var isDistrictChampionshipEvent: Bool {
-        let type = Int(eventType)
+        let type = eventType!.intValue
         return type == EventType.districtChampionshipDivision.rawValue || type == EventType.districtChampionship.rawValue
     }
 
@@ -365,23 +368,19 @@ extension Event: Locatable, Managed {
      If the event is a district championship.
      */
     public var isDistrictChampionship: Bool {
-        let type = Int(eventType)
-        return type == EventType.districtChampionship.rawValue
+        return eventType!.intValue == EventType.districtChampionship.rawValue
     }
 
     public var isFoC: Bool {
-        let type = Int(eventType)
-        return type == EventType.festivalOfChampions.rawValue;
+        return eventType!.intValue == EventType.festivalOfChampions.rawValue;
     }
     
     public var isPreseason: Bool {
-        let type = Int(eventType)
-        return type == EventType.preseason.rawValue;
+        return eventType!.intValue == EventType.preseason.rawValue;
     }
     
     public var isOffseason: Bool {
-        let type = Int(eventType)
-        return type == EventType.offseason.rawValue;
+        return eventType!.intValue == EventType.offseason.rawValue;
     }
 
     /**
@@ -420,7 +419,7 @@ extension Event: Locatable, Managed {
         var handledTypes: Set<Int> = []
         var handledOffseasonMonths: Set<String> = []
         return Array(events.compactMap({ (event) -> Event? in
-            let eventType = Int(event.eventType)
+            let eventType = event.eventType!.intValue
             if let week = event.week {
                 // Make sure each week only shows up once
                 if handledWeeks.contains(week.intValue) {
@@ -464,11 +463,11 @@ extension Event: Comparable {
 
     public static func <(lhs: Event, rhs: Event) -> Bool {
         if lhs.year != rhs.year {
-            return lhs.year < rhs.year
+            return lhs.year!.intValue < rhs.year!.intValue
         }
 
-        let lhsType = Int(lhs.eventType)
-        let rhsType = Int(rhs.eventType)
+        let lhsType = lhs.eventType!.intValue
+        let rhsType = rhs.eventType!.intValue
 
         // Preseason events should always come first
         if lhsType == EventType.preseason.rawValue || rhsType == EventType.preseason.rawValue {

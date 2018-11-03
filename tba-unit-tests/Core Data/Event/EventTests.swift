@@ -6,7 +6,77 @@ class EventTestCase: CoreDataTestCase {
 
     let calendar: Calendar = Calendar.current
 
-    // TODO: We still need tests....
+    func test_insert() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        let district = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
+        let eventModel = TBAEvent(key: "2018miket",
+                                  name: "Name",
+                                  eventCode: "miket",
+                                  eventType: 1,
+                                  district: district,
+                                  city: "city",
+                                  stateProv: "state",
+                                  country: "country",
+                                  startDate: dateFormatter.date(from: "2018-03-01")!,
+                                  endDate: dateFormatter.date(from: "2018-03-03")!,
+                                  year: 2018,
+                                  shortName: "short name",
+                                  eventTypeString: "District",
+                                  week: 2,
+                                  address: "address",
+                                  postalCode: "20202",
+                                  gmapsPlaceID: "id",
+                                  gmapsURL: "url",
+                                  lat: 2.22,
+                                  lng: 3.33,
+                                  locationName: "Location",
+                                  timezone: "EST",
+                                  website: "website",
+                                  firstEventID: "123",
+                                  firstEventCode: "something",
+                                  webcasts: [TBAWebcast(type: "twitch", channel: "channel")],
+                                  divisionKeys: ["2018mike1", "2018mike2", "2018mike3", "2018mike4"],
+                                  parentEventKey: "2018mike2",
+                                  playoffType: 1,
+                                  playoffTypeString: "playoff string")
+
+        let event = Event.insert(eventModel, in: persistentContainer.viewContext)
+
+        XCTAssertEqual(event.key, "2018miket")
+        XCTAssertEqual(event.name, "Name")
+        XCTAssertEqual(event.eventCode, "miket")
+        XCTAssertEqual(event.eventType, 1)
+        XCTAssertNotNil(event.district)
+        XCTAssertEqual(event.city, "city")
+        XCTAssertEqual(event.stateProv, "state")
+        XCTAssertEqual(event.country, "country")
+        XCTAssertNotNil(event.startDate)
+        XCTAssertNotNil(event.endDate)
+        XCTAssertEqual(event.year, 2018)
+        XCTAssertEqual(event.shortName, "short name")
+        XCTAssertEqual(event.eventTypeString, "District")
+        XCTAssertEqual(event.week, 2)
+        XCTAssertEqual(event.address, "address")
+        XCTAssertEqual(event.postalCode, "20202")
+        XCTAssertEqual(event.gmapsPlaceID, "id")
+        XCTAssertEqual(event.gmapsURL, "url")
+        XCTAssertEqual(event.lat, 2.22)
+        XCTAssertEqual(event.lng, 3.33)
+        XCTAssertEqual(event.locationName, "Location")
+        XCTAssertEqual(event.timezone, "EST")
+        XCTAssertEqual(event.website, "website")
+        XCTAssertEqual(event.firstEventID, "123")
+        XCTAssertEqual(event.firstEventCode, "something")
+        XCTAssertEqual(event.webcasts?.count, 1)
+        XCTAssertEqual(event.divisions?.count, 4)
+        XCTAssertEqual(event.parentEvent?.key, "2018mike2")
+        XCTAssertEqual(event.playoffType, 1)
+        XCTAssertEqual(event.playoffTypeString, "playoff string")
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+    }
 
     func test_insert_alliances() {
         let event = districtEvent()
@@ -276,7 +346,7 @@ class EventTestCase: CoreDataTestCase {
 
     func event(type eventType: EventType) -> Event {
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        event.eventType = Int16(eventType.rawValue)
+        event.eventType = eventType.rawValue as NSNumber
         return event
     }
 

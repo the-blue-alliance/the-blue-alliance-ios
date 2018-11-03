@@ -73,7 +73,7 @@ extension Team: Locatable, Managed {
         }
 
         self.events = NSSet(array: events.map({
-            return Event.insert(with: $0, in: managedObjectContext)
+            return Event.insert($0, in: managedObjectContext)
         }))
     }
 

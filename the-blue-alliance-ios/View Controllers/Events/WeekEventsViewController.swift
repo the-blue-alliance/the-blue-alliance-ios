@@ -58,7 +58,7 @@ class WeekEventsViewController: EventsViewController {
         // Fall back to the init'd year (used during initial refresh)
         var year = self.year
         if let weekEventYear = weekEvent?.year {
-            year = Int(weekEventYear)
+            year = weekEventYear.intValue
         }
 
         var request: URLSessionDataTask?
@@ -72,7 +72,7 @@ class WeekEventsViewController: EventsViewController {
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 // TODO: Delete old events for year?
                 events?.forEach({ (modelEvent) in
-                    Event.insert(with: modelEvent, in: backgroundContext)
+                    Event.insert(modelEvent, in: backgroundContext)
                 })
 
                 backgroundContext.saveOrRollback()
@@ -96,19 +96,19 @@ class WeekEventsViewController: EventsViewController {
         if let weekEvent = weekEvent {
             if let week = weekEvent.week {
                 // Event has a week - filter based on the week
-                return NSPredicate(format: "week == %ld && year == %ld", week.intValue, weekEvent.year)
+                return NSPredicate(format: "week == %ld && year == %ld", week.intValue, weekEvent.year!.intValue)
             } else {
-                if Int(weekEvent.eventType) == EventType.championshipFinals.rawValue {
+                if weekEvent.eventType!.intValue == EventType.championshipFinals.rawValue {
                     // 2017 and onward - handle multiple CMPs
-                    return NSPredicate(format: "(eventType == %ld || eventType == %ld) && year == %ld && (key == %@ || parentEventKey == %@)", EventType.championshipFinals.rawValue, EventType.championshipDivision.rawValue, weekEvent.year, weekEvent.key!, weekEvent.key!)
-                } else if Int(weekEvent.eventType) == EventType.offseason.rawValue {
+                    return NSPredicate(format: "(eventType == %ld || eventType == %ld) && year == %ld && (key == %@ || parentEventKey == %@)", EventType.championshipFinals.rawValue, EventType.championshipDivision.rawValue, weekEvent.year!.intValue, weekEvent.key!, weekEvent.key!)
+                } else if weekEvent.eventType!.intValue == EventType.offseason.rawValue {
                     // Get all off season events for selected month
                     // Conversion stuff, since Core Data still uses NSDate's
                     let firstDayOfMonth = NSDate(timeIntervalSince1970: weekEvent.startDate!.startOfMonth().timeIntervalSince1970)
                     let lastDayOfMonth = NSDate(timeIntervalSince1970: weekEvent.startDate!.endOfMonth().timeIntervalSince1970)
-                    return NSPredicate(format: "eventType == %ld && year == %ld && (startDate > %@) AND (startDate <= %@)", EventType.offseason.rawValue, weekEvent.year, firstDayOfMonth, lastDayOfMonth)
+                    return NSPredicate(format: "eventType == %ld && year == %ld && (startDate > %@) AND (startDate <= %@)", EventType.offseason.rawValue, weekEvent.year!.intValue, firstDayOfMonth, lastDayOfMonth)
                 } else {
-                    return NSPredicate(format: "eventType == %ld && year == %ld", weekEvent.eventType, weekEvent.year)
+                    return NSPredicate(format: "eventType == %ld && year == %ld", weekEvent.eventType!.intValue, weekEvent.year!.intValue)
                 }
             }
         }

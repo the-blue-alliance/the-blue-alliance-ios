@@ -12,13 +12,13 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
 
     private lazy var breakdownView: RCTRootView? = {
         // Match breakdowns only exist for 2015 and onward
-        if Int(match.event!.year) < 2015 {
+        if match.event!.year!.intValue < 2015 {
             return nil
         }
         guard let breakdownData = dataForBreakdown() else {
             return nil
         }
-        let moduleName = "MatchBreakdown\(match.event!.year)"
+        let moduleName = "MatchBreakdown\(match.event!.year!.stringValue)"
         let breakdownView = RCTRootView(bundleURL: sourceURL,
                                         moduleName: moduleName,
                                         initialProperties: breakdownData,

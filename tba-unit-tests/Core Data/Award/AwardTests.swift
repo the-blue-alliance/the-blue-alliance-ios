@@ -7,6 +7,7 @@ class AwardTestCase: CoreDataTestCase {
 
     func test_insert() {
         let event = districtEvent()
+
         let modelAwardRecipient = TBAAwardRecipient(teamKey: "frc7332")
         let modelAward = TBAAward(name: "The Fake Award",
                                   awardType: 2,

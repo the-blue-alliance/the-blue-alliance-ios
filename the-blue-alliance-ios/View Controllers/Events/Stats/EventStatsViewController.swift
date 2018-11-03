@@ -12,11 +12,11 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
 
     private lazy var eventStatsView: RCTRootView? = {
         // Event stats only exist for 2016 and onward
-        if Int(event.year) < 2016 {
+        if event.year!.intValue < 2016 {
             return nil
         }
 
-        let moduleName = "EventInsights\(event.year)"
+        let moduleName = "EventInsights\(event.year!.stringValue)"
         let eventStatsView = RCTRootView(bundleURL: sourceURL,
                                          moduleName: moduleName,
                                          initialProperties: event.insights ?? [:],
