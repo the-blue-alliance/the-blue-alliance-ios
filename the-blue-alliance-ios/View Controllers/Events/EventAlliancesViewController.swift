@@ -33,15 +33,15 @@ class EventAlliancesContainerViewController: ContainerViewController {
 
 extension EventAlliancesContainerViewController: EventAlliancesViewControllerDelegate {
 
-    func teamSelected(_ team: Team) {
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: self.event, persistentContainer: persistentContainer)
+    func teamKeySelected(_ teamKey: TeamKey) {
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: self.event, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
 }
 
 protocol EventAlliancesViewControllerDelegate: AnyObject {
-    func teamSelected(_ team: Team)
+    func teamKeySelected(_ teamKey: TeamKey)
 }
 
 private class EventAlliancesViewController: TBATableViewController {
@@ -78,6 +78,7 @@ private class EventAlliancesViewController: TBATableViewController {
 
     private func setupDataSource() {
         let fetchRequest: NSFetchRequest<EventAlliance> = EventAlliance.fetchRequest()
+        // This seems like a poor sort descriptor... since this could be nil
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         setupFetchRequest(fetchRequest)
 
@@ -100,9 +101,9 @@ extension EventAlliancesViewController: TableViewDataSourceDelegate {
     func configure(_ cell: EventAllianceTableViewCell, for object: EventAlliance, at indexPath: IndexPath) {
         cell.selectionStyle = .none
         cell.viewModel = EventAllianceCellViewModel(alliance: object)
-        cell.teamSelected = { [unowned self] (teamKey) in
-            let team = Team.insert(withKey: teamKey, in: self.persistentContainer.viewContext)
-            self.delegate?.teamSelected(team)
+        cell.teamKeySelected = { [unowned self] (teamKey) in
+            let teamKey = TeamKey.insert(withKey: teamKey, in: self.persistentContainer.viewContext)
+            self.delegate?.teamKeySelected(teamKey)
         }
     }
 
@@ -132,8 +133,8 @@ extension EventAlliancesViewController: Refreshable {
     @objc func refresh() {
         removeNoDataView()
 
-        var alliancesRequest: URLSessionDataTask?
-        alliancesRequest = TBAKit.sharedKit.fetchEventAlliances(key: event.key!, completion: { (alliances, error) in
+        var request: URLSessionDataTask?
+        request = TBAKit.sharedKit.fetchEventAlliances(key: event.key!, completion: { (alliances, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event alliances - \(error.localizedDescription)")
             } else {
@@ -141,21 +142,19 @@ extension EventAlliancesViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 if let alliances = alliances {
-                    let localAlliances = alliances.map({ (modelAlliance) -> EventAlliance in
-                        return EventAlliance.insert(with: modelAlliance, for: backgroundEvent, in: backgroundContext)
-                    })
-                    backgroundEvent.alliances = Set(localAlliances) as NSSet
-                }
+                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    event.insert(alliances)
 
-                backgroundContext.saveOrRollback()
-                self.removeRequest(request: alliancesRequest!)
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
+                self.removeRequest(request: request!)
             })
         })
-        self.addRequest(request: alliancesRequest!)
+        self.addRequest(request: request!)
     }
-
 
 }
 

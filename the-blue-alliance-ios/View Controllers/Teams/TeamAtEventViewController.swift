@@ -4,25 +4,25 @@ import UIKit
 
 class TeamAtEventViewController: ContainerViewController {
 
-    private let team: Team
+    private let teamKey: TeamKey
     private let event: Event
 
     // MARK: - Init
 
-    init(team: Team, event: Event, persistentContainer: NSPersistentContainer) {
-        self.team = team
+    init(teamKey: TeamKey, event: Event, persistentContainer: NSPersistentContainer) {
+        self.teamKey = teamKey
         self.event = event
 
-        let summaryViewController: TeamSummaryViewController = TeamSummaryViewController(team: team, event: event, persistentContainer: persistentContainer)
-        let matchesViewController: MatchesViewController = MatchesViewController(event: event, team: team, persistentContainer: persistentContainer)
-        let statsViewController: TeamStatsViewController = TeamStatsViewController(team: team, event: event, persistentContainer: persistentContainer)
-        let awardsViewController: EventAwardsViewController = EventAwardsViewController(event: event, team: team, persistentContainer: persistentContainer)
+        let summaryViewController: TeamSummaryViewController = TeamSummaryViewController(teamKey: teamKey, event: event, persistentContainer: persistentContainer)
+        let matchesViewController: MatchesViewController = MatchesViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer)
+        let statsViewController: TeamStatsViewController = TeamStatsViewController(teamKey: teamKey, event: event, persistentContainer: persistentContainer)
+        let awardsViewController: EventAwardsViewController = EventAwardsViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer)
 
         super.init(viewControllers: [summaryViewController, matchesViewController, statsViewController, awardsViewController],
                    segmentedControlTitles: ["Summary", "Matches", "Stats", "Awards"],
                    persistentContainer: persistentContainer)
 
-        navigationTitle = "Team \(team.teamNumber)"
+        navigationTitle = "Team \(teamKey.teamNumber)"
         navigationSubtitle = "@ \(event.friendlyNameWithYear)"
 
         summaryViewController.delegate = self
@@ -39,12 +39,12 @@ class TeamAtEventViewController: ContainerViewController {
 extension TeamAtEventViewController: MatchesViewControllerDelegate, TeamSummaryViewControllerDelegate {
 
     func awardsSelected() {
-        let awardsViewController = EventAwardsContainerViewController(event: event, team: team, persistentContainer: persistentContainer)
+        let awardsViewController = EventAwardsContainerViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(awardsViewController, animated: true)
     }
 
     func matchSelected(_ match: Match) {
-        let matchViewController = MatchContainerViewController(match: match, team: team, persistentContainer: persistentContainer)
+        let matchViewController = MatchContainerViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(matchViewController, animated: true)
     }
 
@@ -52,13 +52,13 @@ extension TeamAtEventViewController: MatchesViewControllerDelegate, TeamSummaryV
 
 extension TeamAtEventViewController: EventAwardsViewControllerDelegate {
 
-    func teamSelected(_ team: Team) {
+    func teamKeySelected(_ teamKey: TeamKey) {
         // Don't push to team@event for team we're already showing team@event for
-        if self.team == team {
+        if self.teamKey == teamKey {
             return
         }
 
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, persistentContainer: persistentContainer)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

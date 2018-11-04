@@ -32,7 +32,7 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
 extension EventDistrictPointsContainerViewController: EventDistrictPointsViewControllerDelegate {
 
     func districtEventPointsSelected(_ districtEventPoints: DistrictEventPoints) {
-        let teamAtEventViewController = TeamAtEventViewController(team: districtEventPoints.team!, event: event, persistentContainer: persistentContainer)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: districtEventPoints.teamKey!, event: event, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -133,15 +133,13 @@ extension EventDistrictPointsViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 if let eventPoints = eventPoints {
-                    let localPoints = eventPoints.map({ (modelPoints) -> DistrictEventPoints in
-                        return DistrictEventPoints.insert(with: modelPoints, for: backgroundEvent, in: backgroundContext)
-                    })
-                    backgroundEvent.points = Set(localPoints) as NSSet
-                }
+                    DistrictEventPoints.insert(eventPoints, eventKey: self.event.key!, in: backgroundContext)
 
-                backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
                 self.removeRequest(request: request!)
             })
         })

@@ -26,7 +26,7 @@ class EventStatsContainerViewController: ContainerViewController {
         var eventStatsViewController: EventStatsViewController?
         // Only show event stats if year is 2016 or onward
         var titles = ["Team Stats"]
-        if Int(event.year) >= 2016 {
+        if event.year!.intValue >= 2016 {
             titles.append("Event Stats")
             eventStatsViewController = EventStatsViewController(event: event, persistentContainer: persistentContainer)
         }
@@ -93,7 +93,7 @@ extension EventStatsContainerViewController: SelectTableViewControllerDelegate {
 extension EventStatsContainerViewController: EventTeamStatsSelectionDelegate {
 
     func eventTeamStatSelected(_ eventTeamStat: EventTeamStat) {
-        let teamAtEventViewController = TeamAtEventViewController(team: eventTeamStat.team!, event: event, persistentContainer: persistentContainer)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventTeamStat.teamKey!, event: event, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

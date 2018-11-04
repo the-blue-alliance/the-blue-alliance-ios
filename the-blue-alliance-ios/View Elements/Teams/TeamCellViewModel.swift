@@ -7,7 +7,7 @@ struct TeamCellViewModel {
     let teamLocation: String?
 
     init(team: Team) {
-        teamNumber = "\(team.teamNumber)"
+        teamNumber = "\(team.teamNumber!.stringValue)"
         teamNickname = team.nickname ?? team.fallbackNickname
         teamLocation = team.locationString
     }

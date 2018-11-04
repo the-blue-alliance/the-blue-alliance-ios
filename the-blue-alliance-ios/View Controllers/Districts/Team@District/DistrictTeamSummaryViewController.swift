@@ -13,8 +13,6 @@ class DistrictTeamSummaryViewController: TBATableViewController {
 
     weak var delegate: DistrictTeamSummaryViewControllerDelegate?
 
-    private let sortedEventPoints: [DistrictEventPoints]
-
     // MARK: - Observable
 
     typealias ManagedType = DistrictRanking
@@ -26,8 +24,6 @@ class DistrictTeamSummaryViewController: TBATableViewController {
 
     init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer) {
         self.ranking = ranking
-
-        sortedEventPoints = ranking.eventPoints?.sortedArray(using: [NSSortDescriptor(key: "event.startDate", ascending: true)]) as? [DistrictEventPoints] ?? []
 
         super.init(persistentContainer: persistentContainer)
 
@@ -54,26 +50,26 @@ class DistrictTeamSummaryViewController: TBATableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Ranking, all of the event points, and Total Points
-        return 2 + sortedEventPoints.count
+        return 2 + ranking.sortedEventPoints.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: ReverseSubtitleTableViewCell = self.tableView(tableView, reverseSubtitleCellAt: indexPath)
         if isEventPointsRow(row: indexPath.row) {
             // Event Points row
-            let eventPoints = sortedEventPoints[indexPath.row - 1]
-            cell.titleLabel.text = "\(eventPoints.event!.safeShortName)"
-            cell.subtitleLabel.text = "\(eventPoints.total) Points"
+            let eventPoints = ranking.sortedEventPoints[indexPath.row - 1]
+            cell.titleLabel.text = "\(eventPoints.eventKey!.event?.safeShortName ?? eventPoints.eventKey!.key!)"
+            cell.subtitleLabel.text = "\(eventPoints.total!.stringValue) Points"
             cell.selectionStyle = .default
             cell.accessoryType = .disclosureIndicator
         } else if indexPath.row == 0 {
             // Rank row
             cell.titleLabel.text = "District Rank"
-            cell.subtitleLabel.text = "\(ranking.rank)\(ranking.rank.suffix())"
+            cell.subtitleLabel.text = "\(ranking.rank!.stringValue)\(ranking.rank!.intValue.suffix)"
         } else {
             // Total Points row
             cell.titleLabel.text = "Total Points"
-            cell.subtitleLabel.text = "\(ranking.pointTotal) Points"
+            cell.subtitleLabel.text = "\(ranking.pointTotal!.stringValue) Points"
         }
         return cell
     }
@@ -86,7 +82,7 @@ class DistrictTeamSummaryViewController: TBATableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
 
         if isEventPointsRow(row: indexPath.row) {
-            delegate?.eventPointsSelected(sortedEventPoints[indexPath.row - 1])
+            delegate?.eventPointsSelected(ranking.sortedEventPoints[indexPath.row - 1])
         }
     }
 
@@ -95,7 +91,7 @@ class DistrictTeamSummaryViewController: TBATableViewController {
     private func isEventPointsRow(row: Int) -> Bool {
         // If the row is less than the last event points row, it's an events points row
         // +1 for the ranking row
-        return row > 0 && row < (sortedEventPoints.count + 1)
+        return row > 0 && row < (ranking.sortedEventPoints.count + 1)
     }
 
 }
@@ -116,7 +112,7 @@ extension DistrictTeamSummaryViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        return sortedEventPoints.count == 0
+        return ranking.sortedEventPoints.count == 0
     }
 
     @objc func refresh() {
@@ -129,16 +125,14 @@ extension DistrictTeamSummaryViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundDistrict = backgroundContext.object(with: self.ranking.district!.objectID) as! District
                 if let rankings = rankings {
-                    let localRankings = rankings.map({ (modelRanking) -> DistrictRanking in
-                        let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
-                        return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, for: backgroundTeam, in: backgroundContext)
-                    })
-                    backgroundDistrict.rankings = Set(localRankings) as NSSet
-                }
+                    let district = backgroundContext.object(with: self.ranking.district!.objectID) as! District
+                    district.insert(rankings)
 
-                backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
                 self.removeRequest(request: request!)
             })
         })

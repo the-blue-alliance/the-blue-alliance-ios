@@ -168,7 +168,7 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
-  - TBAKit (2.0.8)
+  - TBAKit (2.1.4)
   - yoga (0.57.1.React)
   - youtube-ios-player-helper (0.1.6)
   - ZIPFoundation (0.9.6)
@@ -277,7 +277,7 @@ SPEC CHECKSUMS:
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
   PureLayout: 4634d0b61e3b5021166e8ec7c18e9e0ca0720c8b
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
-  TBAKit: 6a59eb455ea498fb5e73ec0489293f01d8e099e2
+  TBAKit: d92926bc3c5d406607c4e93e10de57e56a5dcd76
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
   ZIPFoundation: 68c35eb2637c21abe56dc60b3277636443bc1501

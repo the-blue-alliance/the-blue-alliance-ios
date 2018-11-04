@@ -29,7 +29,7 @@ class DistrictEventsViewController: EventsViewController {
     override var automaticRefreshEndDate: Date? {
         // Automatically refresh event districts during the year before the selected year (when events are rolling in)
         // Ex: Districts for 2019 will stop automatically refreshing on January 1st, 2019 (should all be set by then)
-        return Calendar.current.date(from: DateComponents(year: Int(district.year)))
+        return Calendar.current.date(from: DateComponents(year: district.year!.intValue))
     }
 
     @objc override func refresh() {
@@ -44,15 +44,14 @@ class DistrictEventsViewController: EventsViewController {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundDistrict = backgroundContext.object(with: self.district.objectID) as! District
                 if let events = events {
-                    let localEvents = events.map({ (modelEvent) -> Event in
-                        return Event.insert(with: modelEvent, in: backgroundContext)
-                    })
-                    backgroundDistrict.events = Set(localEvents) as NSSet
-                }
+                    let district = backgroundContext.object(with: self.district.objectID) as! District
+                    district.insert(events)
 
-                backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
                 self.removeRequest(request: request!)
             })
         })

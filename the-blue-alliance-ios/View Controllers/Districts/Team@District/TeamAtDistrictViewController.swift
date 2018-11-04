@@ -20,7 +20,7 @@ class TeamAtDistrictViewController: ContainerViewController {
                    segmentedControlTitles: ["Summary", "Breakdown"],
                    persistentContainer: persistentContainer)
 
-        navigationTitle = "Team \(ranking.team!.teamNumber)"
+        navigationTitle = "Team \(ranking.teamKey!.teamNumber)"
         navigationSubtitle = "@ \(ranking.district!.abbreviationWithYear)"
 
         summaryViewController.delegate = self
@@ -35,8 +35,13 @@ class TeamAtDistrictViewController: ContainerViewController {
 extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegate {
 
     func eventPointsSelected(_ eventPoints: DistrictEventPoints) {
+        // TODO: Support Team@Event taking a EventKey
+        guard let event = eventPoints.eventKey?.event else {
+            return
+        }
+
         // TODO: Let's see what we can to do not force-unwrap these from Core Data
-        let teamAtEventViewController = TeamAtEventViewController(team: eventPoints.team!, event: eventPoints.event!, persistentContainer: persistentContainer)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventPoints.teamKey!, event: event, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

@@ -62,6 +62,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let eventTeamStats = dataSource.object(at: indexPath)
         delegate?.eventTeamStatSelected(eventTeamStats)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
     // MARK: Table View Data Source
@@ -140,15 +141,14 @@ extension EventTeamStatsTableViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 if let stats = stats {
-                    let localStats = stats.map({ (modelStat) -> EventTeamStat in
-                        return EventTeamStat.insert(with: modelStat, for: backgroundEvent, in: backgroundContext)
-                    })
-                    backgroundEvent.stats = Set(localStats) as NSSet
-                }
+                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    event.insert(stats)
 
-                backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
                 self.removeRequest(request: request!)
             })
         })

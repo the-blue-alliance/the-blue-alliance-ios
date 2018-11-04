@@ -10,16 +10,16 @@ protocol MatchesViewControllerDelegate: AnyObject {
 class MatchesViewController: TBATableViewController {
 
     private let event: Event
-    private let team: Team?
+    private let teamKey: TeamKey?
 
     weak var delegate: MatchesViewControllerDelegate?
     private var dataSource: TableViewDataSource<Match, MatchesViewController>!
 
     // MARK: - Init
 
-    init(event: Event, team: Team? = nil, persistentContainer: NSPersistentContainer) {
+    init(event: Event, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer) {
         self.event = event
-        self.team = team
+        self.teamKey = teamKey
 
         super.init(persistentContainer: persistentContainer)
 
@@ -48,8 +48,8 @@ class MatchesViewController: TBATableViewController {
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<Match>) {
-        if let team = team {
-            request.predicate = NSPredicate(format: "event == %@ AND SUBQUERY(alliances, $a, ANY $a.teams.key == %@).@count > 0", event, team.key!)
+        if let teamKey = teamKey {
+            request.predicate = NSPredicate(format: "event == %@ AND SUBQUERY(alliances, $a, ANY $a.teams.key == %@).@count > 0", event, teamKey.key!)
         } else {
             request.predicate = NSPredicate(format: "event == %@", event)
         }
@@ -76,7 +76,7 @@ extension MatchesViewController: TableViewDataSourceDelegate {
     }
 
     func configure(_ cell: MatchTableViewCell, for object: Match, at indexPath: IndexPath) {
-        cell.viewModel = MatchViewModel(match: object, team: team)
+        cell.viewModel = MatchViewModel(match: object, teamKey: teamKey)
     }
 
 }
@@ -117,15 +117,14 @@ extension MatchesViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 if let matches = matches {
-                    let localMatches = matches.map({ (modelMatch) -> Match in
-                        return Match.insert(with: modelMatch, for: backgroundEvent, in: backgroundContext)
-                    })
-                    backgroundEvent.matches = Set(localMatches) as NSSet
-                }
+                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    event.insert(matches)
 
-                backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
                 self.removeRequest(request: request!)
             })
         })

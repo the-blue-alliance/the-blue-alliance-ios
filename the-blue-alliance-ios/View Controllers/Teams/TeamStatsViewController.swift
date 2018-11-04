@@ -5,8 +5,8 @@ import TBAKit
 
 class TeamStatsViewController: TBATableViewController, Observable {
 
+    private let teamKey: TeamKey
     private let event: Event
-    private let team: Team
 
     private var teamStat: EventTeamStat? {
         didSet {
@@ -32,13 +32,14 @@ class TeamStatsViewController: TBATableViewController, Observable {
     }()
     lazy var observerPredicate: NSPredicate = {
         return NSPredicate(format: "%K == %@ AND %K == %@",
-                           #keyPath(EventTeamStat.event), event, #keyPath(EventTeamStat.team), team)
+                           #keyPath(EventTeamStat.event), event,
+                           #keyPath(EventTeamStat.teamKey), teamKey)
     }()
 
     // MARK: - Init
 
-    init(team: Team, event: Event, persistentContainer: NSPersistentContainer) {
-        self.team = team
+    init(teamKey: TeamKey, event: Event, persistentContainer: NSPersistentContainer) {
+        self.teamKey = teamKey
         self.event = event
 
         super.init(persistentContainer: persistentContainer)
@@ -123,15 +124,14 @@ extension TeamStatsViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 if let stats = stats {
-                    let localStats = stats.map({ (modelStat) -> EventTeamStat in
-                        return EventTeamStat.insert(with: modelStat, for: backgroundEvent, in: backgroundContext)
-                    })
-                    backgroundEvent.stats = Set(localStats) as NSSet
-                }
+                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    event.insert(stats)
 
-                backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
                 self.removeRequest(request: request!)
             })
         })

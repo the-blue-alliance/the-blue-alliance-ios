@@ -23,7 +23,7 @@ private enum TeamSummaryRow: Int {
 
 class TeamSummaryViewController: TBATableViewController {
 
-    private let team: Team
+    private let teamKey: TeamKey
     private let event: Event
 
     weak var delegate: TeamSummaryViewControllerDelegate?
@@ -32,7 +32,7 @@ class TeamSummaryViewController: TBATableViewController {
         guard let awards = event.awards else {
             return []
         }
-        return awards.filtered(using: NSPredicate(format: "event == %@ AND (ANY recipients.team == %@)", event, team)) as? Set<Award> ?? []
+        return awards.filtered(using: NSPredicate(format: "event == %@ AND (ANY recipients.teamKey.key == %@)", event, teamKey.key!)) as? Set<Award> ?? []
     }
 
     private var eventStatus: EventStatus? {
@@ -59,15 +59,15 @@ class TeamSummaryViewController: TBATableViewController {
     }()
     lazy var observerPredicate: NSPredicate = {
         return NSPredicate(format: "%K == %@ AND %K == %@",
-                           #keyPath(EventStatus.event), event, #keyPath(EventStatus.team), team)
+                           #keyPath(EventStatus.event), event, #keyPath(EventStatus.teamKey), teamKey)
     }()
 
     private var backgroundFetchKeys: Set<String> = []
     private var summaryRows: [TeamSummaryRow] = []
     private var summaryValues: [Any] = []
 
-    init(team: Team, event: Event, persistentContainer: NSPersistentContainer) {
-        self.team = team
+    init(teamKey: TeamKey, event: Event, persistentContainer: NSPersistentContainer) {
+        self.teamKey = teamKey
         self.event = event
 
         super.init(persistentContainer: persistentContainer)
@@ -130,7 +130,7 @@ class TeamSummaryViewController: TBATableViewController {
         }
 
         // Breakdown
-        if let breakdown = eventStatus?.qual?.ranking?.infoString {
+        if let breakdown = eventStatus?.qual?.ranking?.tiebreakerInfoString {
             summaryRows.append(TeamSummaryRow.breakdown)
             summaryValues.append(breakdown)
         }
@@ -147,15 +147,7 @@ class TeamSummaryViewController: TBATableViewController {
                     summaryValues.append(match)
                 } else {
                     summaryValues.append(key)
-                    if !backgroundFetchKeys.contains(key) {
-                        backgroundFetchKeys.insert(key)
-                        self.persistentContainer.performBackgroundTask({ [weak self] (backgroundContext) in
-                            TBABackgroundService.backgroundFetchMatch(key, in: backgroundContext) { [weak self] (_, _) in
-                                self?.backgroundFetchKeys.remove(key)
-                                self?.updateSummaryInfo()
-                            }
-                        })
-                    }
+                    // TODO: Fetch Match
                 }
             }
         }
@@ -214,8 +206,8 @@ class TeamSummaryViewController: TBATableViewController {
     }
 
     private func tableView(_ tableView: UITableView, rankCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let rank = summaryValues[indexPath.row] as! Int16
-        return self.tableView(tableView, reverseSubtitleCellWithTitle: "Rank", subtitle: "\(rank)\(rank.suffix())", at: indexPath)
+        let rank = summaryValues[indexPath.row] as! NSNumber
+        return self.tableView(tableView, reverseSubtitleCellWithTitle: "Rank", subtitle: "\(rank.stringValue)\(rank.intValue.suffix)", at: indexPath)
     }
 
     private func tableView(_ tableView: UITableView, awardsCellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -272,7 +264,7 @@ class TeamSummaryViewController: TBATableViewController {
     private func tableView(_ tableView: UITableView, matchCellForRowAt indexPath: IndexPath) -> MatchTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
         let match = summaryValues[indexPath.row] as! Match
-        cell.viewModel = MatchViewModel(match: match, team: team)
+        cell.viewModel = MatchViewModel(match: match, teamKey: teamKey)
         return cell
     }
 
@@ -307,7 +299,7 @@ class TeamSummaryViewController: TBATableViewController {
 extension TeamSummaryViewController: Refreshable {
 
     var refreshKey: String? {
-        return "\(team.key!)@\(event.key!)_status"
+        return "\(teamKey.key!)@\(event.key!)_status"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -328,7 +320,7 @@ extension TeamSummaryViewController: Refreshable {
 
         // Refresh team status
         var teamStatusRequest: URLSessionDataTask?
-        teamStatusRequest = TBAKit.sharedKit.fetchTeamStatus(key: team.key!, eventKey: event.key!, completion: { (modelStatus, error) in
+        teamStatusRequest = TBAKit.sharedKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!, completion: { (status, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
             } else {
@@ -336,15 +328,14 @@ extension TeamSummaryViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
+                if let status = status {
+                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    event.insert(status)
 
-                if let modelStatus = modelStatus {
-                    // TODO: EventStatus can never be removed if it's invalid
-                    EventStatus.insert(with: modelStatus, team: backgroundTeam, event: backgroundEvent, in: backgroundContext)
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: teamStatusRequest!)
+                    }
                 }
-
-                backgroundContext.saveOrRollback()
                 self.removeRequest(request: teamStatusRequest!)
             })
         })
@@ -352,21 +343,20 @@ extension TeamSummaryViewController: Refreshable {
 
         // Refresh awards
         var awardsRequest: URLSessionDataTask?
-        awardsRequest = TBAKit.sharedKit.fetchTeamAwards(key: team.key!, eventKey: event.key!, completion: { (awards, error) in
+        awardsRequest = TBAKit.sharedKit.fetchTeamAwards(key: teamKey.key!, eventKey: event.key!, completion: { (awards, error) in
             if let error = error {
-                self.showErrorAlert(with: "Unable to refresh event awards for \(self.team.key!) - \(error.localizedDescription)")
+                self.showErrorAlert(with: "Unable to refresh event awards for \(self.teamKey.key!) - \(error.localizedDescription)")
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 if let awards = awards {
-                    let localAwards = awards.map({ (modelAward) -> Award in
-                        return Award.insert(with: modelAward, for: backgroundEvent, in: backgroundContext)
-                    })
-                    backgroundEvent.awards = Set(localAwards) as NSSet
-                }
+                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    event.insert(awards)
 
-                backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: awardsRequest!)
+                    }
+                }
                 self.removeRequest(request: awardsRequest!)
             })
         })

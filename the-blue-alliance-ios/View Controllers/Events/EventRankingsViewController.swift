@@ -89,8 +89,8 @@ extension EventRankingsViewController: Refreshable {
     @objc func refresh() {
         removeNoDataView()
 
-        var rankingsRequest: URLSessionDataTask?
-        rankingsRequest = TBAKit.sharedKit.fetchEventRankings(key: event.key!, completion: { (rankings, sortOrder, _, error) in
+        var request: URLSessionDataTask?
+        request = TBAKit.sharedKit.fetchEventRankings(key: event.key!, completion: { (rankings, sortOrder, extraStats, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event rankings - \(error.localizedDescription)")
             } else {
@@ -98,21 +98,18 @@ extension EventRankingsViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: self.event.objectID) as! Event
                 if let rankings = rankings {
-                    let localRankings = rankings.compactMap({ (modelRanking) -> EventRanking? in
-                        let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
-                        return EventRanking.insert(with: modelRanking, for: backgroundEvent, for: backgroundTeam, for: sortOrder!, in: backgroundContext)
-                    })
-                    backgroundEvent.rankings = Set(localRankings) as NSSet
-                }
+                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    event.insert(rankings, sortOrderInfo: sortOrder, extraStatsInfo: extraStats)
 
-                backgroundContext.saveOrRollback()
-                self.removeRequest(request: rankingsRequest!)
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
+                self.removeRequest(request: request!)
             })
         })
-
-        self.addRequest(request: rankingsRequest!)
+        self.addRequest(request: request!)
     }
 
 }

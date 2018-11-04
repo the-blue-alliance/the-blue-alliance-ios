@@ -106,12 +106,13 @@ extension DistrictsViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                // TODO: Delete old districts
-                districts?.forEach({ (modelDistrict) in
-                    District.insert(with: modelDistrict, in: backgroundContext)
-                })
+                if let districts = districts {
+                    District.insert(districts, year: self.year, in: backgroundContext)
 
-                backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
                 self.removeRequest(request: request!)
             })
         })

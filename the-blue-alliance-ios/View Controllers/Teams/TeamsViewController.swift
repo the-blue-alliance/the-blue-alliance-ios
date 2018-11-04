@@ -152,19 +152,18 @@ extension TeamsViewController: Refreshable {
 
     private func refreshTeams() {
         var request: URLSessionDataTask?
-        request = Team.fetchAllTeams(taskChanged: { [unowned self] (task, teams) in
+        request = Team.fetchAllTeams(taskChanged: { [unowned self] (task, page, teams) in
             self.addRequest(request: task)
 
             let previousRequest = request
             request = task
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                // TODO: Delete old teams for page? Kinda a problem but
-                teams.forEach({ (modelTeam) in
-                    Team.insert(with: modelTeam, in: backgroundContext)
-                })
+                Team.insert(teams, page: page, in: backgroundContext)
 
-                backgroundContext.saveOrRollback()
+                if backgroundContext.saveOrRollback() {
+                    TBAKit.setLastModified(for: previousRequest!)
+                }
                 self.removeRequest(request: previousRequest!)
             })
         }) { (error) in
@@ -193,15 +192,14 @@ extension TeamsViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundEvent = backgroundContext.object(with: event.objectID) as! Event
                 if let teams = teams {
-                    let localTeams = teams.map({ (modelTeam) -> Team in
-                        return Team.insert(with: modelTeam, in: backgroundContext)
-                    })
-                    backgroundEvent.teams = Set(localTeams) as NSSet
-                }
+                    let event = backgroundContext.object(with: event.objectID) as! Event
+                    event.insert(teams)
 
-                backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
                 self.removeRequest(request: request!)
             })
         })

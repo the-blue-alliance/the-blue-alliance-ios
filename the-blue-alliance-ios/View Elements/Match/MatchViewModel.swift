@@ -19,7 +19,7 @@ struct MatchViewModel {
 
     let baseTeamKey: String?
 
-    init(match: Match, team: Team? = nil) {
+    init(match: Match, teamKey: TeamKey? = nil) {
         // TODO: Support all alliances
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/274
         matchName = match.friendlyName
@@ -39,7 +39,7 @@ struct MatchViewModel {
         // If we can't figure out a piece of information, default to yes, the match is a regular match,
         // where someone wins, and someone loses
         let hasWinnersAndLosers: Bool = {
-            if Int(match.event!.year) == 2015 && match.compLevel != .final {
+            if match.event!.year!.intValue == 2015 && match.compLevel != .final {
                 return false
             }
             return true
@@ -48,7 +48,7 @@ struct MatchViewModel {
         redAllianceWon = hasWinnersAndLosers && match.winningAlliance == "red"
         blueAllianceWon = hasWinnersAndLosers && match.winningAlliance == "blue"
 
-        baseTeamKey = team?.key
+        baseTeamKey = teamKey?.key
     }
 
     var hasScores: Bool {

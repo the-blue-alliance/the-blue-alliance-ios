@@ -44,7 +44,7 @@ class EventsContainerViewController: ContainerViewController {
     private func updateInterface() {
         if let weekEvent = eventsViewController.weekEvent {
             navigationTitle = "\(weekEvent.weekString) Events"
-            navigationSubtitle = "▾ \(weekEvent.year)"
+            navigationSubtitle = "▾ \(weekEvent.year!.intValue)"
         } else {
             navigationTitle = "---- Events"
             navigationSubtitle = "▾ \(year)"
@@ -71,7 +71,7 @@ extension EventsContainerViewController: NavigationTitleDelegate {
 extension EventsContainerViewController: YearSelectViewControllerDelegate {
 
     func weekEventSelected(_ weekEvent: Event) {
-        year = Int(weekEvent.year)
+        year = weekEvent.year!.intValue
         eventsViewController.weekEvent = weekEvent
     }
 

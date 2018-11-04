@@ -8,7 +8,7 @@ class EventAllianceTableViewCell: UITableViewCell, Reusable {
             configureCell()
         }
     }
-    var teamSelected: ((_ teamKey: String) -> Void)?
+    var teamKeySelected: ((_ teamKey: String) -> Void)?
 
     // MARK: - Reusable
 
@@ -85,7 +85,7 @@ class EventAllianceTableViewCell: UITableViewCell, Reusable {
         }
 
         let teamKey = picks[index]
-        teamSelected?(teamKey)
+        teamKeySelected?(teamKey)
     }
 
 }

@@ -97,7 +97,7 @@ class TeamViewController: ContainerViewController, Observable {
     }
 
     private func updateInterface() {
-        navigationTitle = "Team \(team.teamNumber)"
+        navigationTitle = "Team \(team.teamNumber!.stringValue)"
 
         if let year = year {
             navigationSubtitle = "▾ \(year)"
@@ -107,19 +107,19 @@ class TeamViewController: ContainerViewController, Observable {
     }
 
     private func refreshYearsParticipated() {
-        TBAKit.sharedKit.fetchTeamYearsParticipated(key: team.key!, completion: { (years, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to fetch years participated - \(error.localizedDescription)")
-                return
-            }
+        var request: URLSessionDataTask?
+        request = TBAKit.sharedKit.fetchTeamYearsParticipated(key: team.key!, completion: { (years, error) in
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundTeam = backgroundContext.object(with: self.team.objectID) as! Team
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
 
                 if let years = years {
-                    backgroundTeam.yearsParticipated = years.sorted().reversed()
-                }
+                    let team = backgroundContext.object(with: self.team.objectID) as! Team
+                    team.yearsParticipated = years.sorted().reversed()
 
-                backgroundContext.saveOrRollback()
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
             })
         })
     }
@@ -143,7 +143,7 @@ class TeamViewController: ContainerViewController, Observable {
         navigationController?.dismiss(animated: true, completion: nil)
     }
 
-    private func imageViewController(media: Media, peek: Bool = false) -> TeamMediaImageViewController? {
+    private func imageViewController(media: TeamMedia, peek: Bool = false) -> TeamMediaImageViewController? {
         // TODO: Support showing multiple images
         var imageViewController: TeamMediaImageViewController?
         if let image = media.image {
@@ -188,7 +188,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, persistentContainer: persistentContainer)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, persistentContainer: persistentContainer)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -196,7 +196,7 @@ extension TeamViewController: EventsViewControllerDelegate {
 
 extension TeamViewController: TeamMediaCollectionViewControllerDelegate {
 
-    func mediaSelected(_ media: Media) {
+    func mediaSelected(_ media: TeamMedia) {
         if let imageViewController = self.imageViewController(media: media) {
             DispatchQueue.main.async {
                 self.present(imageViewController, animated: true)

@@ -4,21 +4,15 @@ import UIKit
 
 class MatchContainerViewController: ContainerViewController {
 
-    private let match: Match
-    private let team: Team?
-
     // MARK: Init
 
-    init(match: Match, team: Team? = nil, persistentContainer: NSPersistentContainer) {
-        self.match = match
-        self.team = team
-
-        let infoViewController = MatchInfoViewController(match: match, team: team, persistentContainer: persistentContainer)
+    init(match: Match, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer) {
+        let infoViewController = MatchInfoViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer)
 
         // Only show match breakdown if year is 2015 or onward
         var breakdownViewController: MatchBreakdownViewController?
         var titles: [String]  = ["Info"]
-        if Int(match.event!.year) >= 2015 {
+        if match.event!.year!.intValue >= 2015 {
             titles.append("Breakdown")
             breakdownViewController = MatchBreakdownViewController(match: match, persistentContainer: persistentContainer)
         }

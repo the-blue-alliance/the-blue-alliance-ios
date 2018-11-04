@@ -90,108 +90,27 @@ extension DistrictRankingsViewController: Refreshable {
     @objc func refresh() {
         removeNoDataView()
 
-        // First, fetch events
-        var eventRequest: URLSessionDataTask?
-        eventRequest = refreshEvents { (success) in
-            if !success {
-                self.showErrorAlert(with: "Unable to refresh district rankings - database error")
-                self.removeRequest(request: eventRequest!)
-                return
-            }
-
-            // Fetch Teams
-            var teamRequest: URLSessionDataTask?
-            teamRequest = self.refreshTeams(completion: { (success) in
-                if !success {
-                    self.showErrorAlert(with: "Unable to refresh district rankings - database error")
-                    self.removeRequest(request: teamRequest!)
-                    return
-                }
-
-                // Fetch Rankings
-                var rankingsRequest: URLSessionDataTask?
-                rankingsRequest = self.refreshRankings(completion: { (success) in
-                    if !success {
-                        self.showErrorAlert(with: "Unable to refresh district rankings - database error")
-                    } else {
-                        self.markRefreshSuccessful()
-                    }
-
-                    self.removeRequest(request: rankingsRequest!)
-                })
-                self.addRequest(request: rankingsRequest!)
-                self.removeRequest(request: teamRequest!)
-            })
-            self.addRequest(request: teamRequest!)
-            self.removeRequest(request: eventRequest!)
-        }
-        addRequest(request: eventRequest!)
-    }
-
-    private func refreshEvents(completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
-        return TBAKit.sharedKit.fetchDistrictEvents(key: district.key!, completion: { (events, error) in
+        var request: URLSessionDataTask?
+        request = TBAKit.sharedKit.fetchDistrictRankings(key: district.key!, completion: { (rankings, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
-                completion(false)
-                return
+            } else {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                // TODO: Delete old teams
-                backgroundContext.performAndWait {
-                    events?.forEach({ (modelEvent) in
-                        Event.insert(with: modelEvent, in: backgroundContext)
-                    })
-                }
-                backgroundContext.saveOrRollback()
-                completion(true)
-            })
-        })
-    }
-
-    private func refreshTeams(completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
-        return TBAKit.sharedKit.fetchDistrictTeams(key: district.key!, completion: { (teams, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
-                completion(false)
-                return
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                // TODO: Delete old teams
-                backgroundContext.performAndWait {
-                    teams?.forEach({ (modelTeam) in
-                        Team.insert(with: modelTeam, in: backgroundContext)
-                    })
-                }
-                backgroundContext.saveOrRollback()
-                completion(true)
-            })
-        })
-    }
-
-    private func refreshRankings(completion: @escaping (_ success: Bool) -> Void) -> URLSessionDataTask {
-        return TBAKit.sharedKit.fetchDistrictRankings(key: district.key!, completion: { (rankings, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
-                completion(false)
-                return
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                let backgroundDistrict = backgroundContext.object(with: self.district.objectID) as! District
                 if let rankings = rankings {
-                    let localRankings = rankings.map({ (modelRanking) -> DistrictRanking in
-                        let backgroundTeam = Team.insert(withKey: modelRanking.teamKey, in: backgroundContext)
-                        return DistrictRanking.insert(with: modelRanking, for: backgroundDistrict, for: backgroundTeam, in: backgroundContext)
-                    })
-                    backgroundDistrict.rankings = Set(localRankings) as NSSet
-                }
+                    let district = backgroundContext.object(with: self.district.objectID) as! District
+                    district.insert(rankings)
 
-                backgroundContext.saveOrRollback()
-                completion(true)
+                    if backgroundContext.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
+                self.removeRequest(request: request!)
             })
         })
+        addRequest(request: request!)
     }
 
 }
