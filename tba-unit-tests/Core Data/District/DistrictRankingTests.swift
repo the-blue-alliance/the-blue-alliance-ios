@@ -122,10 +122,6 @@ class DistrictRankingTestCase: CoreDataTestCase {
             return DistrictEventPoints.insert($0, in: persistentContainer.viewContext)
         })))
 
-        // Sanity check - make sure points aren't necessairly coming back in the right order
-        let unsortedEventPoints = ranking.eventPoints!.allObjects as! [DistrictEventPoints]
-        XCTAssertNotEqual(unsortedEventPoints.map({ $0.eventKey!.key! }), ["2018miket", "2018mike2", "2018mike3"])
-
         let sortedEventPoints = ranking.sortedEventPoints
         XCTAssertEqual(sortedEventPoints.map({ $0.eventKey!.key! }), ["2018miket", "2018mike2", "2018mike3"])
     }
