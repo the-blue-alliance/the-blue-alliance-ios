@@ -159,6 +159,8 @@ extension TeamsViewController: Refreshable {
             request = task
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 Team.insert(teams, page: page, in: backgroundContext)
 
                 if backgroundContext.saveOrRollback() {
@@ -192,6 +194,8 @@ extension TeamsViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let teams = teams {
                     let event = backgroundContext.object(with: event.objectID) as! Event
                     event.insert(teams)

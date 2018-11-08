@@ -321,13 +321,14 @@ extension TeamSummaryViewController: Refreshable {
         // Refresh team status
         var teamStatusRequest: URLSessionDataTask?
         teamStatusRequest = TBAKit.sharedKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!, completion: { (status, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh event - \(error.localizedDescription)")
-            } else {
+            if error != nil {
                 self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
+                // TODO: We can never remove an Status
                 if let status = status {
                     let event = backgroundContext.object(with: self.event.objectID) as! Event
                     event.insert(status)
@@ -344,14 +345,19 @@ extension TeamSummaryViewController: Refreshable {
         // Refresh awards
         var awardsRequest: URLSessionDataTask?
         awardsRequest = TBAKit.sharedKit.fetchTeamAwards(key: teamKey.key!, eventKey: event.key!, completion: { (awards, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh event awards for \(self.teamKey.key!) - \(error.localizedDescription)")
+            if error != nil {
+                self.markRefreshSuccessful()
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let awards = awards {
                     let event = backgroundContext.object(with: self.event.objectID) as! Event
-                    event.insert(awards)
+                    let teamKey = backgroundContext.object(with: self.teamKey.objectID) as! TeamKey
+                    event.insert(awards, teamKey: teamKey)
+
+                    self.updateSummaryInfo()
 
                     if backgroundContext.saveOrRollback() {
                         TBAKit.setLastModified(for: awardsRequest!)

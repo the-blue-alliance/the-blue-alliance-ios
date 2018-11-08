@@ -44,6 +44,8 @@ class DistrictEventsViewController: EventsViewController {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let events = events {
                     let district = backgroundContext.object(with: self.district.objectID) as! District
                     district.insert(events)

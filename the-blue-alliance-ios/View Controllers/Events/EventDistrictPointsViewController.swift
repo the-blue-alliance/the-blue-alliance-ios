@@ -87,7 +87,8 @@ private class EventDistrictPointsViewController: TBATableViewController {
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<DistrictEventPoints>) {
-        request.predicate = NSPredicate(format: "event == %@", event)
+        request.predicate = NSPredicate(format: "%K == %@",
+                                        #keyPath(DistrictEventPoints.eventKey.key), event.key!)
     }
 
 }
@@ -133,6 +134,8 @@ extension EventDistrictPointsViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let eventPoints = eventPoints {
                     DistrictEventPoints.insert(eventPoints, eventKey: self.event.key!, in: backgroundContext)
 

@@ -271,6 +271,8 @@ extension TeamMediaCollectionViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let media = media {
                     let team = backgroundContext.object(with: self.team.objectID) as! Team
                     team.insert(media, year: year)

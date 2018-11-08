@@ -117,6 +117,8 @@ extension MatchesViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let matches = matches {
                     let event = backgroundContext.object(with: self.event.objectID) as! Event
                     event.insert(matches)
