@@ -15,7 +15,7 @@ platform :ios do
   desc "Runs all the tests"
   lane :test do
     test_unit
-    test_ui
+    # test_ui
   end
 
   desc "Run only the unit tests"
