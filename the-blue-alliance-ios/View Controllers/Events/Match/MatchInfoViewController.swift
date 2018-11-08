@@ -212,6 +212,8 @@ extension MatchInfoViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let modelMatch = modelMatch {
                     // TODO: Match can never be deleted
                     let event = backgroundContext.object(with: self.match.event!.objectID) as! Event

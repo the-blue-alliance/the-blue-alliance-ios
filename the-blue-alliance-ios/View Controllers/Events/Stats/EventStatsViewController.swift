@@ -148,6 +148,8 @@ extension EventStatsViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let insights = insights {
                     let event = backgroundContext.object(with: self.event.objectID) as! Event
                     event.insert(insights)

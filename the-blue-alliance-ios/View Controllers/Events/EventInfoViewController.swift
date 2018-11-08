@@ -251,6 +251,8 @@ extension EventInfoViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let modelEvent = modelEvent {
                     Event.insert(modelEvent, in: backgroundContext)
 

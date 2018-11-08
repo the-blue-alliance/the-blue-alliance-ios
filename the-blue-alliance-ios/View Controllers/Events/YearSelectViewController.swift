@@ -48,6 +48,8 @@ class YearSelectViewController: ContainerViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        selectViewController.disableRefreshing()
+
         eventWeekSelectViewController = EventWeekSelectViewController(year: year, week: week, persistentContainer: persistentContainer)
         eventWeekSelectViewController?.delegate = delegate
 
@@ -167,6 +169,8 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let events = events {
                     Event.insert(events, year: self.year, in: backgroundContext)
 

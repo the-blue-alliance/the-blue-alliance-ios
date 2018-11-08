@@ -112,6 +112,8 @@ class TeamViewController: ContainerViewController, Observable {
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
 
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let years = years {
                     let team = backgroundContext.object(with: self.team.objectID) as! Team
                     team.yearsParticipated = years.sorted().reversed()

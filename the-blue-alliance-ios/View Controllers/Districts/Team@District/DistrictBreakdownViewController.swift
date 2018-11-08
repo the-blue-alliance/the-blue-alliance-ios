@@ -129,6 +129,8 @@ extension DistrictBreakdownViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let rankings = rankings {
                     let district = backgroundContext.object(with: self.ranking.district!.objectID) as! District
                     district.insert(rankings)

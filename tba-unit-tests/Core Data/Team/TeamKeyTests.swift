@@ -18,8 +18,14 @@ class TeamKeyTestCase: CoreDataTestCase {
         XCTAssertNotNil(teamKey_first)
         XCTAssertEqual(teamKey_first.key, testTeamKey)
 
+        let alliance = MatchAlliance(entity: MatchAlliance.entity(), insertInto: persistentContainer.viewContext)
+        alliance.addToTeams(teamKey_first)
+
         let teamKey_second = TeamKey.insert(withKey: testTeamKey, in: persistentContainer.viewContext)
         XCTAssertEqual(teamKey_first, teamKey_second)
+
+        XCTAssertNotNil(teamKey_first.alliances)
+        XCTAssert(alliance.teams!.contains(teamKey_second))
     }
 
     func test_supportsOffSeason() {

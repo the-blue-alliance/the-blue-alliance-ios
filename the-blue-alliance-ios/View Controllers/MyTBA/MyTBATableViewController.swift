@@ -245,6 +245,8 @@ extension MyTBATableViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ [weak self] (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 let models = models as? [T.RemoteType]
                 let bgctx = backgroundContext
                 for model in models ?? [] {

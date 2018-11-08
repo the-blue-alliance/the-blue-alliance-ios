@@ -200,6 +200,72 @@ class EventTestCase: CoreDataTestCase {
         XCTAssertNotNil(frc2.managedObjectContext)
     }
 
+    func test_insert_awards_teamKey() {
+        let event = districtEvent()
+
+        let frc1Model = TBAAwardRecipient(teamKey: "frc1")
+        let frc2Model = TBAAwardRecipient(teamKey: "frc2")
+
+        let modelAwardOne = TBAAward(name: "The Fake Award",
+                                     awardType: 2,
+                                     eventKey: event.key!,
+                                     recipients: [frc1Model],
+                                     year: 2018)
+        let modelAwardTwo = TBAAward(name: "The Fake Award Two",
+                                     awardType: 3,
+                                     eventKey: event.key!,
+                                     recipients: [frc1Model],
+                                     year: 2018)
+        let modelAwardThree = TBAAward(name: "The Fake Award Three",
+                                       awardType: 4,
+                                       eventKey: event.key!,
+                                       recipients: [frc2Model],
+                                       year: 2018)
+
+        event.insert([modelAwardOne, modelAwardTwo, modelAwardThree])
+
+        let awards = event.awards!.allObjects as! [Award]
+        let awardOne = awards.first(where: { $0.awardType?.intValue == 2 })!
+        let awardTwo = awards.first(where: { $0.awardType?.intValue == 3 })!
+        let awardThree = awards.first(where: { $0.awardType?.intValue == 4 })!
+
+        let frc1TeamKey = TeamKey.findOrFetch(in: persistentContainer.viewContext, matching: NSPredicate(format: "%K == %@", #keyPath(TeamKey.key), frc1Model.teamKey!))!
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        let awardsFirst = Award.fetch(in: persistentContainer.viewContext) {
+            $0.predicate = NSPredicate(format: "SUBQUERY(%K, $r, $r.teamKey.key == %@).@count == 1",
+                                       #keyPath(Award.recipients), frc1TeamKey.key!)
+        }
+
+        // Sanity check
+        XCTAssertNotEqual(awardOne, awardTwo)
+        XCTAssertNotEqual(awardOne, awardThree)
+        XCTAssertNotEqual(awardTwo, awardThree)
+
+        XCTAssertEqual(event.awards?.count, 3)
+        XCTAssertEqual(awardsFirst.count, 2)
+
+        event.insert([modelAwardOne], teamKey: frc1TeamKey)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        let awardsSecond = Award.fetch(in: persistentContainer.viewContext) {
+            $0.predicate = NSPredicate(format: "SUBQUERY(%K, $r, $r.teamKey.key == %@).@count == 1",
+                                       #keyPath(Award.recipients), frc1TeamKey.key!)
+        }
+
+        XCTAssertEqual(event.awards?.count, 2)
+        XCTAssertEqual(awardsSecond.count, 1)
+
+        // First and Third Award should not be deleted
+        XCTAssertNotNil(awardOne.managedObjectContext)
+        XCTAssertNotNil(awardThree.managedObjectContext)
+
+        // Second Award should be deleted
+        XCTAssertNil(awardTwo.managedObjectContext)
+    }
+
     func test_insert_insights() {
         let event = districtEvent()
 

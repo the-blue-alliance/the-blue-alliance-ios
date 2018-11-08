@@ -157,6 +157,39 @@ extension Event: Locatable, Managed {
     }
 
     /**
+     Insert Awards for a given TeamKey with values from a TBAKit Award models in to the managed object context.
+
+     This method will manage setting up an Award's relationship to an Event and the deletion of oprhaned Awards for a TeamKey on the Event.
+
+     - Parameter awards: The TBAKit Award representations to set values from.
+
+     - Parameter teamKey: The TeamKey the Awards belong to.
+     */
+    func insert(_ awards: [TBAAward], teamKey: TeamKey) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        // Fetch all of the previous Awards for this Event/TeamKey
+        let oldAwards = Award.fetch(in: managedObjectContext) {
+            $0.predicate = NSPredicate(format: "SUBQUERY(%K, $r, $r.teamKey.key == %@).@count == 1",
+                                       #keyPath(Award.recipients), teamKey.key!)
+        }
+
+        // Insert new Awards
+        let awards = awards.map({ (model: TBAAward) -> Award in
+            let a = Award.insert(model, in: managedObjectContext)
+            addToAwards(a)
+            return a
+        })
+
+        // Delete orphaned Awards for this Event/TeamKey
+        Set(oldAwards).subtracting(Set(awards)).forEach({
+            managedObjectContext.delete($0)
+        })
+    }
+
+    /**
      Insert an EventInsight with values from TBAKit EventInsight model in to the managed object context.
 
      This method will manage setting up an EventInsight's relationship to an Event.

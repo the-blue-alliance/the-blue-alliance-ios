@@ -54,6 +54,8 @@ class TeamEventsViewController: EventsViewController {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let events = events {
                     let team = backgroundContext.object(with: self.team.objectID) as! Team
                     team.insert(events)

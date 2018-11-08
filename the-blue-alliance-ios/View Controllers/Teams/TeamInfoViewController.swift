@@ -209,6 +209,8 @@ extension TeamInfoViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let modelTeam = modelTeam {
                     Team.insert(modelTeam, in: backgroundContext)
 

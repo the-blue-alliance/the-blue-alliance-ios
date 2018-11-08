@@ -10,7 +10,7 @@ struct EventAllianceCellViewModel {
         allianceLevel = alliance.status?.allianceLevel
         allianceName = alliance.name
 
-        picks = (alliance.picks?.array as? [Team] ?? []).map({ $0.key! })
+        picks = (alliance.picks?.array as? [TeamKey] ?? []).map({ $0.key! })
     }
 
     var hasAllianceLevel: Bool {

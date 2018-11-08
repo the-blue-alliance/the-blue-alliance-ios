@@ -106,6 +106,8 @@ extension DistrictsViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let districts = districts {
                     District.insert(districts, year: self.year, in: backgroundContext)
 

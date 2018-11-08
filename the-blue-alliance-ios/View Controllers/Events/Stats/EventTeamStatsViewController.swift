@@ -16,7 +16,6 @@ enum EventTeamStatFilter: String, Comparable, CaseIterable {
     case opr = "OPR"
     case dpr = "DPR"
     case ccwm = "CCWM"
-    case teamNumber = "Team Number"
 }
 
 class EventTeamStatsTableViewController: TBATableViewController {
@@ -91,8 +90,8 @@ class EventTeamStatsTableViewController: TBATableViewController {
             sortDescriptor = NSSortDescriptor(key: "dpr", ascending: false)
         case .ccwm:
             sortDescriptor = NSSortDescriptor(key: "ccwm", ascending: false)
-        case .teamNumber:
-            sortDescriptor = NSSortDescriptor(key: "team.teamNumber", ascending: true)
+        // TODO: Add back in sorting by Team Number
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/279
         }
         request.sortDescriptors = [sortDescriptor!]
     }
@@ -141,6 +140,8 @@ extension EventTeamStatsTableViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let stats = stats {
                     let event = backgroundContext.object(with: self.event.objectID) as! Event
                     event.insert(stats)

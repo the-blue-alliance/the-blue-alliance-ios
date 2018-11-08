@@ -146,6 +146,8 @@ extension EventAwardsViewController: Refreshable {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+
                 if let awards = awards {
                     let event = backgroundContext.object(with: self.event.objectID) as! Event
                     event.insert(awards)
