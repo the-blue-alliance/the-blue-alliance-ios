@@ -354,8 +354,7 @@ extension TeamSummaryViewController: Refreshable {
 
                 if let awards = awards {
                     let event = backgroundContext.object(with: self.event.objectID) as! Event
-                    let teamKey = backgroundContext.object(with: self.teamKey.objectID) as! TeamKey
-                    event.insert(awards, teamKey: teamKey)
+                    event.insert(awards, teamKey: self.teamKey.key!)
 
                     self.updateSummaryInfo()
 

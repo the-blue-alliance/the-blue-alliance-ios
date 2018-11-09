@@ -165,7 +165,7 @@ extension Event: Locatable, Managed {
 
      - Parameter teamKey: The TeamKey the Awards belong to.
      */
-    func insert(_ awards: [TBAAward], teamKey: TeamKey) {
+    func insert(_ awards: [TBAAward], teamKey: String) {
         guard let managedObjectContext = managedObjectContext else {
             return
         }
@@ -173,7 +173,7 @@ extension Event: Locatable, Managed {
         // Fetch all of the previous Awards for this Event/TeamKey
         let oldAwards = Award.fetch(in: managedObjectContext) {
             $0.predicate = NSPredicate(format: "SUBQUERY(%K, $r, $r.teamKey.key == %@).@count == 1",
-                                       #keyPath(Award.recipients), teamKey.key!)
+                                       #keyPath(Award.recipients), teamKey)
         }
 
         // Insert new Awards

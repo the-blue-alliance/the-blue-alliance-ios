@@ -246,7 +246,7 @@ class EventTestCase: CoreDataTestCase {
         XCTAssertEqual(event.awards?.count, 3)
         XCTAssertEqual(awardsFirst.count, 2)
 
-        event.insert([modelAwardOne], teamKey: frc1TeamKey)
+        event.insert([modelAwardOne], teamKey: frc1TeamKey.key!)
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
