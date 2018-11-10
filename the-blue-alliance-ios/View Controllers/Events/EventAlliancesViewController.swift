@@ -99,8 +99,7 @@ private class EventAlliancesViewController: TBATableViewController {
 extension EventAlliancesViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: EventAllianceTableViewCell, for object: EventAlliance, at indexPath: IndexPath) {
-        cell.selectionStyle = .none
-        cell.viewModel = EventAllianceCellViewModel(alliance: object)
+        cell.viewModel = EventAllianceCellViewModel(alliance: object, allianceNumber: indexPath.row + 1)
         cell.teamKeySelected = { [unowned self] (teamKey) in
             let teamKey = TeamKey.insert(withKey: teamKey, in: self.persistentContainer.viewContext)
             self.delegate?.teamKeySelected(teamKey)

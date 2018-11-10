@@ -4,6 +4,11 @@ import XCTest
 
 class TeamTestCase: CoreDataTestCase {
 
+    func test_trimFRCPrefix() {
+        XCTAssertEqual(Team.trimFRCPrefix("frc2337"), "2337")
+        XCTAssertEqual(Team.trimFRCPrefix("frc2337b"), "2337B")
+    }
+
     func test_insert_page() {
         let modelOne = TBATeam(key: "frc1", teamNumber: 1, name: "1", rookieYear: 2008)
         let modelTwo = TBATeam(key: "frc2", teamNumber: 2, name: "2", rookieYear: 2008)

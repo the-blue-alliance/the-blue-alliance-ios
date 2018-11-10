@@ -2,9 +2,10 @@ import TBAKit
 import XCTest
 import Foundation
 import CoreData
+import FBSnapshotTestCase
 @testable import The_Blue_Alliance
 
-class CoreDataTestCase: XCTestCase {
+class CoreDataTestCase: FBSnapshotTestCase {
 
     var persistentContainer: NSPersistentContainer!
 
@@ -14,6 +15,8 @@ class CoreDataTestCase: XCTestCase {
 
     override func setUp() {
         super.setUp()
+
+        agnosticOptions = .OS
 
         persistentContainer = NSPersistentContainer(name: "TBA", managedObjectModel: CoreDataTestCase.managedObjectModel)
 
@@ -72,6 +75,12 @@ class CoreDataTestCase: XCTestCase {
                              playoffTypeString: nil)
 
         return Event.insert(model, in: persistentContainer.viewContext)
+    }
+
+    func verifyView(_ view: UIView, identifier: String) {
+        FBSnapshotVerifyView(view,
+                             identifier: identifier,
+                             suffixes: NSOrderedSet(array: [""]))
     }
 
 }

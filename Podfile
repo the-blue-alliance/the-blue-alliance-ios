@@ -48,6 +48,8 @@ target 'The Blue Alliance' do
 
   target 'tba-unit-tests' do
     inherit! :search_paths
+
+    pod 'iOSSnapshotTestCase'
   end
 
   target 'tba-ui-tests' do

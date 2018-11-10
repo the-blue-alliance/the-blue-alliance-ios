@@ -8,8 +8,11 @@ extension Team: Locatable, Managed {
         return "Team \(teamNumber!.stringValue)"
     }
 
+    /**
+     Returns an uppercased team number by removing the `frc` prefix on the key
+     */
     static func trimFRCPrefix(_ key: String) -> String {
-        return key.prefixTrim("frc")
+        return key.prefixTrim("frc").uppercased()
     }
 
     /**

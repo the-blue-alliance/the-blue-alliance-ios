@@ -10,6 +10,14 @@ class EventAllianceTableViewCell: UITableViewCell, Reusable {
     }
     var teamKeySelected: ((_ teamKey: String) -> Void)?
 
+    // MARK: - Init
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+
+        selectionStyle = .none
+    }
+
     // MARK: - Reusable
 
     static var nib: UINib? {
@@ -18,9 +26,9 @@ class EventAllianceTableViewCell: UITableViewCell, Reusable {
 
     // MARK: - Interface Builder
 
-    @IBOutlet private weak var levelLabel: UILabel!
-    @IBOutlet private weak var nameLabel: UILabel!
-    @IBOutlet private weak var allianceTeamsStackView: UIStackView!
+    @IBOutlet weak var levelLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var allianceTeamsStackView: UIStackView!
 
     // MARK: - UI
 
@@ -57,7 +65,6 @@ class EventAllianceTableViewCell: UITableViewCell, Reusable {
         levelLabel.isHidden = !viewModel.hasAllianceLevel
         levelLabel.text = viewModel.allianceLevel
 
-        nameLabel.isHidden = !viewModel.hasAllianceName
         nameLabel.text = viewModel.allianceName
 
         removeAllianceTeams()

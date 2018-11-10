@@ -108,6 +108,11 @@ PODS:
   - GTMSessionFetcher/Core (1.1.15)
   - GTMSessionFetcher/Full (1.1.15):
     - GTMSessionFetcher/Core (= 1.1.15)
+  - iOSSnapshotTestCase (4.0.0):
+    - iOSSnapshotTestCase/SwiftSupport (= 4.0.0)
+  - iOSSnapshotTestCase/Core (4.0.0)
+  - iOSSnapshotTestCase/SwiftSupport (4.0.0):
+    - iOSSnapshotTestCase/Core
   - leveldb-library (1.20)
   - nanopb (0.3.8):
     - nanopb/decode (= 0.3.8)
@@ -187,6 +192,7 @@ DEPENDENCIES:
   - Firebase/Storage
   - Folly (from `subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - GoogleSignIn
+  - iOSSnapshotTestCase
   - PureLayout
   - React/Core (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
   - React/CxxBridge (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
@@ -225,6 +231,7 @@ SPEC REPOS:
     - GoogleToolboxForMac
     - GTMOAuth2
     - GTMSessionFetcher
+    - iOSSnapshotTestCase
     - leveldb-library
     - nanopb
     - PINCache
@@ -269,6 +276,7 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
   GTMOAuth2: c77fe325e4acd453837e72d91e3b5f13116857b2
   GTMSessionFetcher: 5fa5b80fd20e439ef5f545fb2cb3ca6c6714caa2
+  iOSSnapshotTestCase: 711379b19f69a22c131527df862352c877c2773c
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   PINCache: d195fdba255283f7e9900a55e3cced377f431f9b
@@ -282,6 +290,6 @@ SPEC CHECKSUMS:
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
   ZIPFoundation: 68c35eb2637c21abe56dc60b3277636443bc1501
 
-PODFILE CHECKSUM: 1321a4cf3b97ce7572484fbf0127f21de6159522
+PODFILE CHECKSUM: 5c5963d2a87ca8071d63d92cf98f0c7e0ab38d2d
 
 COCOAPODS: 1.5.3
