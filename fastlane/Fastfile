@@ -29,7 +29,7 @@ platform :ios do
     # Run unit tests
     run_tests(
       scheme: "tba-unit-tests",
-      devices: ["iPhone X (11.4)", "iPhone X (12.0)"],
+      devices: ["iPhone X (11.4)", "iPhone X (12.1)"],
       derived_data_path: "fastlane/derived_data/derived_data_unit",
       test_without_building: true
     )
