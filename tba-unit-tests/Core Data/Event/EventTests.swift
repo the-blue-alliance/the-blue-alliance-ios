@@ -277,6 +277,35 @@ class EventTestCase: CoreDataTestCase {
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
+    func test_insert_match() {
+        let event = districtEvent()
+
+        let redAlliance = TBAMatchAlliance(score: 200, teams: ["frc7332"])
+        let blueAlliance = TBAMatchAlliance(score: 300, teams: ["frc3333"])
+        let model = TBAMatch(key: "\(event.key!)_sf2m3",
+            compLevel: "sf",
+            setNumber: 2,
+            matchNumber: 3,
+            alliances: ["red": redAlliance, "blue": blueAlliance],
+            winningAlliance: "blue",
+            eventKey: event.key!,
+            time: 1520109780,
+            actualTime: 1520090745,
+            predictedTime: 1520109780,
+            postResultTime: 1520090929,
+            breakdown: ["red": [:], "blue": [:]],
+            videos: [TBAMatchVideo(key: "G-pq01gqMTw", type: "youtube")])
+
+        event.insert(model)
+
+        let matches = event.matches!.allObjects as! [Match]
+        let match = matches.first(where: { $0.key == "2018miket_sf2m3" })!
+
+        // Sanity check
+        XCTAssertEqual(event.matches?.count, 1)
+        XCTAssertEqual(match.event, event)
+    }
+
     func test_insert_matches() {
         let event = districtEvent()
 

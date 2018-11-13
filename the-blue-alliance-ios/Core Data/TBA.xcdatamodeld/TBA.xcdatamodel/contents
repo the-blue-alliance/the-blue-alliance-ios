@@ -177,7 +177,7 @@
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="winningAlliance" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MatchAlliance" inverseName="match" inverseEntity="MatchAlliance" syncable="YES"/>
-        <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="matches" inverseEntity="Event" syncable="YES"/>
+        <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="matches" inverseEntity="Event" syncable="YES"/>
         <relationship name="videos" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="MatchVideo" inverseName="matches" inverseEntity="MatchVideo" syncable="YES"/>
     </entity>
     <entity name="MatchAlliance" representedClassName="MatchAlliance" syncable="YES" codeGenerationType="class">
@@ -269,6 +269,7 @@
         <element name="Event" positionX="-63" positionY="-18" width="128" height="630"/>
         <element name="EventAlliance" positionX="54" positionY="144" width="128" height="135"/>
         <element name="EventAllianceBackup" positionX="63" positionY="153" width="128" height="105"/>
+        <element name="EventInsights" positionX="45" positionY="135" width="128" height="90"/>
         <element name="EventKey" positionX="45" positionY="135" width="128" height="105"/>
         <element name="EventRanking" positionX="160" positionY="192" width="128" height="225"/>
         <element name="EventStatus" positionX="45" positionY="135" width="128" height="195"/>
@@ -286,6 +287,5 @@
         <element name="TeamKey" positionX="45" positionY="135" width="128" height="255"/>
         <element name="TeamMedia" positionX="-45" positionY="144" width="128" height="180"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
-        <element name="EventInsights" positionX="45" positionY="135" width="128" height="90"/>
     </elements>
 </model>

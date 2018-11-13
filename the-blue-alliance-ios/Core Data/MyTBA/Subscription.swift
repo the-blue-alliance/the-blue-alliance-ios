@@ -31,9 +31,4 @@ extension Subscription: MyTBAManaged {
         return MyTBASubscription(modelKey: modelKey!, modelType: MyTBAModelType(rawValue: modelType!)!, notifications: notifications!.map({ NotificationType(rawValue: $0)! }))
     }
 
-    var isOrphaned: Bool {
-        // We manage the deletion of these root objects ourselves
-        return false
-    }
-
 }

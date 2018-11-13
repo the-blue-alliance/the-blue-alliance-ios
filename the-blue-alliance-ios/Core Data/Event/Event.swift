@@ -207,6 +207,21 @@ extension Event: Locatable, Managed {
     }
 
     /**
+     Insert a Match with values from a TBAKit Match model in to the managed object context.
+
+     This method will manage setting up a Match's relationship to an Event.
+
+     - Parameter match: The TBAKit Match representation to set values from.
+     */
+    func insert(_ match: TBAMatch) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        addToMatches(Match.insert(match, in: managedObjectContext))
+    }
+
+    /**
      Insert Matches with values from TBAKit Match models in to the managed object context.
 
      This method will manage setting up a Match's relationship to an Event and the deletion of oprhaned Matches on the Event.
@@ -219,7 +234,7 @@ extension Event: Locatable, Managed {
         }
 
         updateToManyRelationship(relationship: #keyPath(Event.matches), newValues: matches.map({
-            return Match.insert($0, event: self, in: managedObjectContext)
+            return Match.insert($0, in: managedObjectContext)
         }))
     }
 
