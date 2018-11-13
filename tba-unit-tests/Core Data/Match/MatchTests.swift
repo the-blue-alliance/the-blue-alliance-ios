@@ -17,16 +17,15 @@ class MatchTestCase: CoreDataTestCase {
     }
 
     func test_insert() {
-        let event = districtEvent()
         let redAlliance = TBAMatchAlliance(score: 200, teams: ["frc7332"])
         let blueAlliance = TBAMatchAlliance(score: 300, teams: ["frc3333"])
-        let model = TBAMatch(key: "\(event.key!)_sf2m3",
+        let model = TBAMatch(key: "2018miket_sf2m3",
                              compLevel: "sf",
                              setNumber: 2,
                              matchNumber: 3,
                              alliances: ["red": redAlliance, "blue": blueAlliance],
                              winningAlliance: "blue",
-                             eventKey: event.key!,
+                             eventKey: "2018miket",
                              time: 1520109780,
                              actualTime: 1520090745,
                              predictedTime: 1520109780,
@@ -34,7 +33,7 @@ class MatchTestCase: CoreDataTestCase {
                              breakdown: ["red": [:], "blue": [:]],
                              videos: [TBAMatchVideo(key: "G-pq01gqMTw", type: "youtube")])
 
-        let match = Match.insert(model, event: event, in: persistentContainer.viewContext)
+        let match = Match.insert(model, in: persistentContainer.viewContext)
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
@@ -44,26 +43,31 @@ class MatchTestCase: CoreDataTestCase {
         XCTAssertEqual(match.matchNumber, 3)
         XCTAssertEqual(match.alliances?.count, 2)
         XCTAssertEqual(match.winningAlliance, "blue")
-        XCTAssertEqual(match.event, event)
         XCTAssertEqual(match.time, 1520109780)
         XCTAssertEqual(match.actualTime, 1520090745)
         XCTAssertEqual(match.predictedTime, 1520109780)
         XCTAssertEqual(match.postResultTime, 1520090929)
         XCTAssertEqual(match.videos?.count, 1)
+
+        // Ensure Match can have an Event
+        let event = districtEvent()
+        match.event = event
+
+        XCTAssertEqual(match.event, event)
+        XCTAssert(event.matches!.contains(match))
     }
 
     func test_update() {
-        let event = districtEvent()
         let redAllianceModel = TBAMatchAlliance(score: 200, teams: ["frc7332"])
         let blueAllianceModel = TBAMatchAlliance(score: 300, teams: ["frc3333"])
         let orangeAllianceModel = TBAMatchAlliance(score: 100, teams: ["frc1111"])
-        let modelOne = TBAMatch(key: "\(event.key!)_sf2m3",
+        let modelOne = TBAMatch(key: "2018miket_sf2m3",
             compLevel: "sf",
             setNumber: 2,
             matchNumber: 3,
             alliances: ["red": redAllianceModel, "blue": blueAllianceModel, "orange": orangeAllianceModel],
             winningAlliance: "blue",
-            eventKey: event.key!,
+            eventKey: "2018miket",
             time: 1520109780,
             actualTime: 1520090745,
             predictedTime: 1520109780,
@@ -71,7 +75,7 @@ class MatchTestCase: CoreDataTestCase {
             breakdown: ["red": [:], "blue": [:]],
             videos: [TBAMatchVideo(key: "G-pq01gqMTw", type: "youtube")])
 
-        let matchOne = Match.insert(modelOne, event: event, in: persistentContainer.viewContext)
+        let matchOne = Match.insert(modelOne, in: persistentContainer.viewContext)
         let blueAlliance = (matchOne.alliances!.allObjects as! [MatchAlliance]).first(where: { $0.allianceKey == "blue" })!
         let orangeAlliance = (matchOne.alliances!.allObjects as! [MatchAlliance]).first(where: { $0.allianceKey == "orange" })!
         let redAllianceOne = (matchOne.alliances!.allObjects as! [MatchAlliance]).first(where: { $0.allianceKey == "red" })!
@@ -81,13 +85,13 @@ class MatchTestCase: CoreDataTestCase {
 
         let redAllianceModelTwo = TBAMatchAlliance(score: 200, teams: ["frc7777"])
 
-        let modelTwo = TBAMatch(key: "\(event.key!)_sf2m3",
+        let modelTwo = TBAMatch(key: "2018miket_sf2m3",
             compLevel: "sf",
             setNumber: 2,
             matchNumber: 3,
             alliances: ["red": redAllianceModelTwo, "blue": blueAllianceModel],
             winningAlliance: "red",
-            eventKey: event.key!,
+            eventKey: "2018miket",
             time: 1520109781,
             actualTime: 1520090745,
             predictedTime: 1520109780,
@@ -95,7 +99,7 @@ class MatchTestCase: CoreDataTestCase {
             breakdown: ["red": [:], "blue": [:]],
             videos: [])
 
-        let matchTwo = Match.insert(modelTwo, event: event, in: persistentContainer.viewContext)
+        let matchTwo = Match.insert(modelTwo, in: persistentContainer.viewContext)
         let redAllianceTwo = (matchTwo.alliances!.allObjects as! [MatchAlliance]).first(where: { $0.allianceKey == "red" })!
 
         // Sanity check
@@ -122,42 +126,41 @@ class MatchTestCase: CoreDataTestCase {
     }
 
     func test_update_orphans() {
-        let event = districtEvent()
         let redAllianceModel = TBAMatchAlliance(score: 200, teams: ["frc1"])
         let videoOneModel = TBAMatchVideo(key: "key_one", type: "youtube")
         let videoTwoModel = TBAMatchVideo(key: "key_two", type: "youtube")
-        let modelOne = TBAMatch(key: "\(event.key!)_sf2m3",
+        let modelOne = TBAMatch(key: "2018miket_sf2m3",
             compLevel: "sf",
             setNumber: 2,
             matchNumber: 3,
             alliances: ["red": redAllianceModel],
             winningAlliance: "red",
-            eventKey: event.key!,
+            eventKey: "2018miket",
             time: nil,
             actualTime: nil,
             predictedTime: nil,
             postResultTime: nil,
             breakdown: nil,
             videos: [videoOneModel, videoTwoModel])
-        let matchOne = Match.insert(modelOne, event: event, in: persistentContainer.viewContext)
+        let matchOne = Match.insert(modelOne, in: persistentContainer.viewContext)
 
         let videoOne = (matchOne.videos!.allObjects as! [MatchVideo]).first(where: { $0.key == "key_one" })!
         let videoTwo = (matchOne.videos!.allObjects as! [MatchVideo]).first(where: { $0.key == "key_two" })!
 
-        let modelTwo = TBAMatch(key: "\(event.key!)_sf2m3",
+        let modelTwo = TBAMatch(key: "2018miket_sf2m3",
             compLevel: "sf",
             setNumber: 2,
             matchNumber: 3,
             alliances: ["red": redAllianceModel],
             winningAlliance: "red",
-            eventKey: event.key!,
+            eventKey: "2018miket",
             time: nil,
             actualTime: nil,
             predictedTime: nil,
             postResultTime: nil,
             breakdown: nil,
             videos: [videoTwoModel])
-        let matchTwo = Match.insert(modelTwo, event: event, in: persistentContainer.viewContext)
+        let matchTwo = Match.insert(modelTwo, in: persistentContainer.viewContext)
 
         // Sanity check
         XCTAssertEqual(matchOne, matchTwo)
@@ -177,16 +180,15 @@ class MatchTestCase: CoreDataTestCase {
 
     func test_delete() {
         // Test cascades
-        let event = districtEvent()
         let redAllianceModel = TBAMatchAlliance(score: 200, teams: ["frc7332"])
         let blueAllianceModel = TBAMatchAlliance(score: 300, teams: ["frc3333"])
-        let model = TBAMatch(key: "\(event.key!)_sf2m3",
+        let model = TBAMatch(key: "2018miket_sf2m3",
             compLevel: "sf",
             setNumber: 2,
             matchNumber: 3,
             alliances: ["red": redAllianceModel, "blue": blueAllianceModel],
             winningAlliance: "blue",
-            eventKey: event.key!,
+            eventKey: "2018miket",
             time: 1520109780,
             actualTime: 1520090745,
             predictedTime: 1520109780,
@@ -194,7 +196,7 @@ class MatchTestCase: CoreDataTestCase {
             breakdown: ["red": [:], "blue": [:]],
             videos: [TBAMatchVideo(key: "G-pq01gqMTw", type: "youtube")])
 
-        let match = Match.insert(model, event: event, in: persistentContainer.viewContext)
+        let match = Match.insert(model, in: persistentContainer.viewContext)
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
@@ -217,42 +219,41 @@ class MatchTestCase: CoreDataTestCase {
     }
 
     func test_delete_videoHasMatch() {
-        let event = districtEvent()
         let redAllianceModel = TBAMatchAlliance(score: 200, teams: ["frc1"])
         let videoOneModel = TBAMatchVideo(key: "key_one", type: "youtube")
         let videoTwoModel = TBAMatchVideo(key: "key_two", type: "youtube")
-        let modelOne = TBAMatch(key: "\(event.key!)_sf2m3",
+        let modelOne = TBAMatch(key: "2018miket_sf2m3",
             compLevel: "sf",
             setNumber: 2,
             matchNumber: 3,
             alliances: ["red": redAllianceModel],
             winningAlliance: "red",
-            eventKey: event.key!,
+            eventKey: "2018miket",
             time: nil,
             actualTime: nil,
             predictedTime: nil,
             postResultTime: nil,
             breakdown: nil,
             videos: [videoOneModel, videoTwoModel])
-        let matchOne = Match.insert(modelOne, event: event, in: persistentContainer.viewContext)
+        let matchOne = Match.insert(modelOne, in: persistentContainer.viewContext)
 
         let videoOne = (matchOne.videos!.allObjects as! [MatchVideo]).first(where: { $0.key == "key_one" })!
         let videoTwo = (matchOne.videos!.allObjects as! [MatchVideo]).first(where: { $0.key == "key_two" })!
 
-        let modelTwo = TBAMatch(key: "\(event.key!)_f1m1",
+        let modelTwo = TBAMatch(key: "2018miket_f1m1",
             compLevel: "f",
             setNumber: 1,
             matchNumber: 1,
             alliances: ["red": redAllianceModel],
             winningAlliance: "red",
-            eventKey: event.key!,
+            eventKey: "2018miket",
             time: nil,
             actualTime: nil,
             predictedTime: nil,
             postResultTime: nil,
             breakdown: nil,
             videos: [videoTwoModel])
-        let matchTwo = Match.insert(modelTwo, event: event, in: persistentContainer.viewContext)
+        let matchTwo = Match.insert(modelTwo, in: persistentContainer.viewContext)
 
         // Sanity check
         XCTAssertNotEqual(matchOne, matchTwo)
@@ -273,14 +274,21 @@ class MatchTestCase: CoreDataTestCase {
 
     func test_isOrphaned() {
         let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        match.key = "2018miket_qm1"
         XCTAssert(match.isOrphaned)
 
+        // Is not orphaned if attached to an Event
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         event.addToMatches(match)
         XCTAssertFalse(match.isOrphaned)
 
         event.removeFromMatches(match)
         XCTAssert(match.isOrphaned)
+
+        // Is not orphaned if attached to a myTBA object
+        let favorite = Favorite.init(entity: Favorite.entity(), insertInto: persistentContainer.viewContext)
+        favorite.modelKey = match.key
+        XCTAssertFalse(match.isOrphaned)
     }
 
     func test_compLevel() {

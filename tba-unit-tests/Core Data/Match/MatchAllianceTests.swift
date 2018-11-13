@@ -5,8 +5,7 @@ import XCTest
 class MatchAllianceTestCase: CoreDataTestCase {
 
     func test_insert() {
-        let event = districtEvent()
-        let matchModel = TBAMatch(key: "2018miket_f1m1", compLevel: "f", setNumber: 1, matchNumber: 1, eventKey: event.key!)
+        let matchModel = TBAMatch(key: "2018miket_f1m1", compLevel: "f", setNumber: 1, matchNumber: 1, eventKey: "2018miket")
 
         let model = TBAMatchAlliance(score: 200, teams: ["frc1", "frc2"], surrogateTeams: ["frc3", "frc4"], dqTeams: ["frc5", "frc6"])
         let alliance = MatchAlliance.insert(model, allianceKey: "red", matchKey: matchModel.key, in: persistentContainer.viewContext)
@@ -20,7 +19,7 @@ class MatchAllianceTestCase: CoreDataTestCase {
         // Should throw - needs to be attached to a Match
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
 
-        alliance.match = Match.insert(matchModel, event: event, in: persistentContainer.viewContext)
+        alliance.match = Match.insert(matchModel, in: persistentContainer.viewContext)
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
@@ -57,13 +56,12 @@ class MatchAllianceTestCase: CoreDataTestCase {
     }
 
     func test_delete() {
-        let event = districtEvent()
-        let matchModel = TBAMatch(key: "2018miket_f1m1", compLevel: "f", setNumber: 1, matchNumber: 1, eventKey: event.key!)
+        let matchModel = TBAMatch(key: "2018miket_f1m1", compLevel: "f", setNumber: 1, matchNumber: 1, eventKey: "2018miket")
 
         let model = TBAMatchAlliance(score: 200, teams: ["frc1", "frc2"], surrogateTeams: ["frc3", "frc4"], dqTeams: ["frc5", "frc6"])
         let alliance = MatchAlliance.insert(model, allianceKey: "red", matchKey: matchModel.key, in: persistentContainer.viewContext)
 
-        let match = Match.insert(matchModel, event: event, in: persistentContainer.viewContext)
+        let match = Match.insert(matchModel, in: persistentContainer.viewContext)
         alliance.match = match
 
         let teams = alliance.teams!.array as! [TeamKey]

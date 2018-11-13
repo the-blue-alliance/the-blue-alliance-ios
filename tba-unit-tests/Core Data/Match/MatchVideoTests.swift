@@ -5,8 +5,7 @@ import XCTest
 class MatchVideoTestCase: CoreDataTestCase {
 
     func test_insert() {
-        let event = districtEvent()
-        let matchModel = TBAMatch(key: "2018miket_f1m1", compLevel: "f", setNumber: 1, matchNumber: 1, eventKey: event.key!)
+        let matchModel = TBAMatch(key: "2018miket_f1m1", compLevel: "f", setNumber: 1, matchNumber: 1, eventKey: "2018miket")
 
         let model = TBAMatchVideo(key: "key", type: "youtube")
         let video = MatchVideo.insert(model, in: persistentContainer.viewContext)
@@ -17,21 +16,20 @@ class MatchVideoTestCase: CoreDataTestCase {
         // Should fail - needs to be related to a Match
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
 
-        let match = Match.insert(matchModel, event: event, in: persistentContainer.viewContext)
+        let match = Match.insert(matchModel, in: persistentContainer.viewContext)
         match.addToVideos(video)
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
     func test_insert_multiple() {
-        let event = districtEvent()
         let model = TBAMatchVideo(key: "key", type: "youtube")
         let video = MatchVideo.insert(model, in: persistentContainer.viewContext)
 
-        let matchModelOne = TBAMatch(key: "2018miket_f1m1", compLevel: "f", setNumber: 1, matchNumber: 1, eventKey: event.key!)
-        let matchModelTwo = TBAMatch(key: "2018miket_f1m2", compLevel: "f", setNumber: 1, matchNumber: 2, eventKey: event.key!)
-        let matchOne = Match.insert(matchModelOne, event: event, in: persistentContainer.viewContext)
-        let matchTwo = Match.insert(matchModelTwo, event: event, in: persistentContainer.viewContext)
+        let matchModelOne = TBAMatch(key: "2018miket_f1m1", compLevel: "f", setNumber: 1, matchNumber: 1, eventKey: "2018miket")
+        let matchModelTwo = TBAMatch(key: "2018miket_f1m2", compLevel: "f", setNumber: 1, matchNumber: 2, eventKey: "2018miket")
+        let matchOne = Match.insert(matchModelOne, in: persistentContainer.viewContext)
+        let matchTwo = Match.insert(matchModelTwo, in: persistentContainer.viewContext)
         matchOne.addToVideos(video)
         matchTwo.addToVideos(video)
 
@@ -41,13 +39,11 @@ class MatchVideoTestCase: CoreDataTestCase {
     }
 
     func test_delete() {
-        let event = districtEvent()
-
         let model = TBAMatchVideo(key: "key", type: "youtube")
         let video = MatchVideo.insert(model, in: persistentContainer.viewContext)
 
-        let matchModel = TBAMatch(key: "2018miket_f1m1", compLevel: "f", setNumber: 1, matchNumber: 1, eventKey: event.key!)
-        let match = Match.insert(matchModel, event: event, in: persistentContainer.viewContext)
+        let matchModel = TBAMatch(key: "2018miket_f1m1", compLevel: "f", setNumber: 1, matchNumber: 1, eventKey: "2018miket")
+        let match = Match.insert(matchModel, in: persistentContainer.viewContext)
         match.addToVideos(video)
 
         XCTAssertEqual(video.key, "key")

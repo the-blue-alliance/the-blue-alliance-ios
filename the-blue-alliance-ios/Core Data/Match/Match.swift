@@ -144,18 +144,16 @@ extension Match: Managed {
     /**
      Insert a Match with values from a TBAKit Match model in to the managed object context.
 
-     This method will manage setting up a Match's relationship to an Event and the deletion of oprhaned Match Alliances and Match Videos on a Match.
+     This method will manage the deletion of oprhaned Match Alliances and Match Videos on a Match.
 
      - Parameter model: The TBAKit Match representation to set values from.
-
-     - Parameter event: The Event the Matches belong to.
 
      - Parameter context: The NSManagedContext to insert the Match in to.
 
      - Returns: The inserted Match.
      */
     @discardableResult
-    static func insert(_ model: TBAMatch, event: Event, in context: NSManagedObjectContext) -> Match {
+    static func insert(_ model: TBAMatch, in context: NSManagedObjectContext) -> Match {
         let predicate = NSPredicate(format: "%K == %@",
                                     #keyPath(Match.key), model.key)
 
@@ -179,8 +177,6 @@ extension Match: Managed {
             }))
 
             match.winningAlliance = model.winningAlliance
-            // This is safe to be used alone, since we take care of the Event <-> Match relationship
-            match.event = event
 
             match.time = model.time as NSNumber?
             match.actualTime = model.actualTime as NSNumber?
@@ -195,7 +191,16 @@ extension Match: Managed {
     }
 
     var isOrphaned: Bool {
-        return event == nil
+        guard let managedObjectContext = managedObjectContext else {
+            return true
+        }
+
+        // Match is orphaned if it isn't associated with an Event and isn't associated with a myTBA object
+        let myTBAPredicate = NSPredicate(format: "%K == %@",
+                                         #keyPath(MyTBAEntity.modelKey), key!)
+        let myTBAObject = MyTBAEntity.findOrFetch(in: managedObjectContext, matching: myTBAPredicate)
+
+        return event == nil && myTBAObject == nil
     }
 
     override public func prepareForDeletion() {
