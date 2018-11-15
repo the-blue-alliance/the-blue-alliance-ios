@@ -141,6 +141,10 @@ extension Match {
 
 extension Match: Managed {
 
+    static func matchPredicate(key: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@", #keyPath(Match.key), key)
+    }
+
     /**
      Insert a Match with values from a TBAKit Match model in to the managed object context.
 
@@ -154,8 +158,7 @@ extension Match: Managed {
      */
     @discardableResult
     static func insert(_ model: TBAMatch, in context: NSManagedObjectContext) -> Match {
-        let predicate = NSPredicate(format: "%K == %@",
-                                    #keyPath(Match.key), model.key)
+        let predicate = matchPredicate(key: model.key)
 
         return findOrCreate(in: context, matching: predicate) { (match) in
             // Required: compLevel, eventKey, key, matchNumber, setNumber
@@ -214,6 +217,27 @@ extension Match: Managed {
                 $0.removeFromMatches(self)
             }
         })
+    }
+
+}
+
+
+extension Match: MyTBASubscribable {
+
+    var modelKey: String {
+        return key!
+    }
+
+    var modelType: MyTBAModelType {
+        return .match
+    }
+
+    static var notificationTypes: [NotificationType] {
+        return [
+            NotificationType.upcomingMatch,
+            NotificationType.matchScore,
+            NotificationType.matchVideo
+        ]
     }
 
 }
