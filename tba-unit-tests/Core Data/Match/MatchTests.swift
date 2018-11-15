@@ -5,6 +5,11 @@ import XCTest
 
 class MatchTestCase: CoreDataTestCase {
 
+    func test_predicate() {
+        let predicate = Match.matchPredicate(key: "2018miket_qm1")
+        XCTAssertEqual(predicate.predicateFormat, "key == \"2018miket_qm1\"")
+    }
+
     func alliance(allianceKey: String) -> MatchAlliance {
         let alliance = MatchAlliance(entity: MatchAlliance.entity(), insertInto: persistentContainer.viewContext)
         alliance.allianceKey = allianceKey
@@ -432,6 +437,15 @@ class MatchTestCase: CoreDataTestCase {
 
         match.compLevelString = MatchCompLevel.eightfinal.rawValue
         XCTAssertEqual(match.friendlyName, "Eighths 2 - 73")
+    }
+
+    func test_myTBASubscribable() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        match.key = "2018miket_qm1"
+
+        XCTAssertEqual(match.modelKey, "2018miket_qm1")
+        XCTAssertEqual(match.modelType, .match)
+        XCTAssertEqual(Match.notificationTypes.count, 3)
     }
 
 }

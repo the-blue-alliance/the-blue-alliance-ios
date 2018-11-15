@@ -40,7 +40,6 @@ class EventTestCase: CoreDataTestCase {
 
         // EventTwo should not be deleted
         XCTAssertNotNil(eventTwo.managedObjectContext)
-
     }
 
     func test_insert() {
@@ -638,6 +637,15 @@ class EventTestCase: CoreDataTestCase {
         let eventType = EventType.unlabeled
         let unlabeled = event(type: eventType)
         XCTAssertEqual(unlabeled.calculateHybridType(), "-1")
+    }
+
+    func test_myTBASubscribable() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.key = "2018miket"
+
+        XCTAssertEqual(event.modelKey, "2018miket")
+        XCTAssertEqual(event.modelType, .event)
+        XCTAssertEqual(Event.notificationTypes.count, 7)
     }
 
 }

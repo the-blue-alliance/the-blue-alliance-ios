@@ -210,4 +210,13 @@ class TeamTestCase: CoreDataTestCase {
         XCTAssertFalse(team.isOrphaned)
     }
 
+    func test_myTBASubscribable() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        team.key = "frc1"
+
+        XCTAssertEqual(team.modelKey, "frc1")
+        XCTAssertEqual(team.modelType, .team)
+        XCTAssertEqual(Team.notificationTypes.count, 5)
+    }
+
 }
