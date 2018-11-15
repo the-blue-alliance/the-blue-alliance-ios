@@ -39,7 +39,7 @@ The Blue Alliance's mobile apps depend on Firebase. We configure Firebase in The
 3. Enter a project name to work with - preferrably something namespaced to yourself (ex: `zach-tba-dev`)
 4. After your project is done setting up, click your newly created project
 5. On the landing page, click `Add Firebase to your iOS app`
-6. Enter a locally namespaced bundle identifier (ex: `com.the-blue-alliance.the-blue-alliance.zach-tba-dev`)
+6. Enter a locally namespaced bundle identifier (ex: `com.the-blue-alliance.tba.zach-tba-dev`)
 7. Click `Register App`
 8. Download the `GoogleService-Info.plist`
 

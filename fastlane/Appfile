@@ -1,4 +1,4 @@
-app_identifier "com.the-blue-alliance.the-blue-alliance" # The bundle identifier of your app
+app_identifier "com.the-blue-alliance.tba" # The bundle identifier of your app
 # apple_id "" # Your Apple email address
 
 team_id "[[DEV_PORTAL_TEAM_ID]]" # Developer Portal Team ID
