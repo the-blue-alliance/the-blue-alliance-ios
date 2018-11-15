@@ -195,10 +195,10 @@
     </entity>
     <entity name="MyTBAEntity" representedClassName="MyTBAEntity" syncable="YES" codeGenerationType="class">
         <attribute name="modelKey" attributeType="String" syncable="YES"/>
-        <attribute name="modelType" attributeType="String" syncable="YES"/>
+        <attribute name="modelTypeRaw" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
     </entity>
     <entity name="Subscription" representedClassName="Subscription" parentEntity="MyTBAEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="notifications" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
+        <attribute name="notificationsRaw" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
     </entity>
     <entity name="Team" representedClassName="Team" syncable="YES" codeGenerationType="class">
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>

@@ -4,29 +4,80 @@ import XCTest
 
 class SubscriptionTestCase: CoreDataTestCase {
 
-    func test_insert() {
+    func test_notifications() {
+        let subscription = Subscription.init(entity: Subscription.entity(), insertInto: persistentContainer.viewContext)
+
+        subscription.notificationsRaw = ["final_results"]
+        XCTAssertEqual(subscription.notifications, [.finalResults])
+
+        subscription.notifications = [.allianceSelection]
+        XCTAssertEqual(subscription.notificationsRaw, ["alliance_selection"])
+    }
+
+    func test_predicate() {
+        let predicate = Subscription.subscriptionPredicate(modelKey: "frc2337", modelType: .team)
+        XCTAssertEqual(predicate.predicateFormat, "modelKey == \"frc2337\" AND modelTypeRaw == 1")
+    }
+
+    func test_insert_array() {
+        let modelSubscriptionOne = MyTBASubscription(modelKey: "2018miket", modelType: .event, notifications: [.awards])
+        let modelSubscriptionTwo = MyTBASubscription(modelKey: "2017miket", modelType: .event, notifications: [.finalResults])
+
+        Subscription.insert([modelSubscriptionOne, modelSubscriptionTwo], in: persistentContainer.viewContext)
+        let subscriptions = Subscription.fetch(in: persistentContainer.viewContext)
+
+        let subscriptionOne = subscriptions.first(where: { $0.modelKey == "2018miket" })!
+        let subscriptionTwo = subscriptions.first(where: { $0.modelKey == "2017miket" })!
+
+        // Sanity check
+        XCTAssertNotEqual(subscriptionOne, subscriptionTwo)
+
+        Subscription.insert([modelSubscriptionTwo], in: persistentContainer.viewContext)
+        let subscriptionsSecond = Subscription.fetch(in: persistentContainer.viewContext)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        XCTAssertEqual(subscriptionsSecond, [subscriptionTwo])
+
+        // SubscriptionOne should be deleted
+        XCTAssertNil(subscriptionOne.managedObjectContext)
+
+        // SubscriptionTwo should not be deleted
+        XCTAssertNotNil(subscriptionTwo.managedObjectContext)
+    }
+
+    func test_insert_model() {
         let model = MyTBASubscription(modelKey: "2018miket", modelType: .event, notifications: [.awards])
         let subscription = Subscription.insert(model, in: persistentContainer.viewContext)
 
         XCTAssertEqual(subscription.modelKey, "2018miket")
-        XCTAssertEqual(subscription.modelType, "0")
-        XCTAssertEqual(subscription.notifications, ["awards_posted"])
+        XCTAssertEqual(subscription.modelType, .event)
+        XCTAssertEqual(subscription.notifications, [.awards])
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+    }
+
+    func test_insert_values() {
+        let subscription = Subscription.insert(modelKey: "2018miket", modelType: .event, notifications: [.awards], in: persistentContainer.viewContext)
+
+        XCTAssertEqual(subscription.modelKey, "2018miket")
+        XCTAssertEqual(subscription.modelType, .event)
+        XCTAssertEqual(subscription.notifications, [.awards])
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
     func test_update() {
-        let modelOne = MyTBASubscription(modelKey: "2018miket", modelType: .event, notifications: [.awards])
-        let subscriptionOne = Subscription.insert(modelOne, in: persistentContainer.viewContext)
+        let model = MyTBASubscription(modelKey: "2018miket", modelType: .event, notifications: [.awards])
+        let subscriptionOne = Subscription.insert(model, in: persistentContainer.viewContext)
 
         // Sanity check
-        XCTAssertEqual(subscriptionOne.notifications, ["awards_posted"])
+        XCTAssertEqual(subscriptionOne.notifications, [.awards])
 
-        let modelTwo = MyTBASubscription(modelKey: "2018miket", modelType: .event, notifications: [.finalResults])
-        let subscriptionTwo = Subscription.insert(modelTwo, in: persistentContainer.viewContext)
+        let subscriptionTwo = Subscription.insert(modelKey: model.modelKey, modelType: model.modelType, notifications: [.finalResults], in: persistentContainer.viewContext)
 
         XCTAssertEqual(subscriptionOne, subscriptionTwo)
-        XCTAssertEqual(subscriptionTwo.notifications, ["final_results"])
+        XCTAssertEqual(subscriptionOne.notifications, [.finalResults])
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
