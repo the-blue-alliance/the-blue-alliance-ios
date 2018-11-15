@@ -125,12 +125,8 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     }
 
     private func pushMyTBAObject(_ myTBAObject: MyTBAEntity) {
-        guard let modelType = MyTBAModelType(rawValue: myTBAObject.modelType!) else {
-            return
-        }
-
         /*
-        switch modelType {
+        switch myTBAObject.modelType {
         case .event:
             performSegue(withIdentifier: EventSegue, sender: myTBAObject.modelKey!)
         case .team:

@@ -78,16 +78,12 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
         let myTBACell = self.tableView(tableView, cellForRowAt: indexPath, for: obj)
 
-        guard let modelType = MyTBAModelType(rawValue: obj.modelType!) else {
-            return myTBACell
-        }
-
         let predicate = NSPredicate(format: "key == %@", obj.modelKey!)
 
         // TODO: All Cell subclasses need gear icons
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/179
 
-        switch modelType {
+        switch obj.modelType {
         case .event:
             guard let event = Event.findOrFetch(in: persistentContainer.viewContext, matching: predicate) else {
                 return myTBACell
@@ -143,10 +139,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             return nil
         }
 
-        guard let modelType = MyTBAModelType(rawValue: obj.modelType!) else {
-            return nil
-        }
-        switch modelType {
+        switch obj.modelType {
         case .event:
             return "Event"
         case .team:
@@ -238,28 +231,16 @@ extension MyTBATableViewController: Refreshable {
                 self.markRefreshSuccessful()
             }
 
-            let reloadTableViewCompletion = {
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
-
-            self.persistentContainer.performBackgroundTask({ [weak self] (backgroundContext) in
+            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
 
-                let models = models as? [T.RemoteType]
-                let bgctx = backgroundContext
-                for model in models ?? [] {
-                    if self?.backgroundFetchKeys.contains(model.modelKey) ?? false {
-                        continue
-                    }
+                if let models = models as? [T.RemoteType] {
+                    T.insert(models, in: backgroundContext)
 
-                    T.insert(model, in: bgctx)
-                    // TODO: Fetch
+                    // No `Last-Modified` for myTBA methods
+                    _ = backgroundContext.saveOrRollback()
                 }
-
-                backgroundContext.saveOrRollback()
-                self?.removeRequest(request: request!)
+                self.removeRequest(request: request!)
             })
         }
         addRequest(request: request!)

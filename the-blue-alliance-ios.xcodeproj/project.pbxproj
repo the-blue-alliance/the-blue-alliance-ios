@@ -13,6 +13,7 @@
 		1416D50C218E462500F1A4A3 /* EventInsightsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1416D50B218E462500F1A4A3 /* EventInsightsTests.swift */; };
 		1416D50E218E4B8200F1A4A3 /* EventTeamStatsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1416D50D218E4B8200F1A4A3 /* EventTeamStatsTests.swift */; };
 		1421ADF1219DF2E800118634 /* MyTBASubscribable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1421ADF0219DF2E700118634 /* MyTBASubscribable.swift */; };
+		1421ADF3219E040A00118634 /* MyTBAEntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1421ADF2219E040A00118634 /* MyTBAEntityTests.swift */; };
 		14472BB72168487F00E0AE72 /* DistrictTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14472BB62168487F00E0AE72 /* DistrictTests.swift */; };
 		1448DBA9218230D0008F542E /* MyTBAEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1448DBA8218230CF008F542E /* MyTBAEntity.swift */; };
 		1448DBAC21823148008F542E /* FavoriteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1448DBAB21823148008F542E /* FavoriteTests.swift */; };
@@ -255,6 +256,7 @@
 		1416D50B218E462500F1A4A3 /* EventInsightsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsTests.swift; sourceTree = "<group>"; };
 		1416D50D218E4B8200F1A4A3 /* EventTeamStatsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatsTests.swift; sourceTree = "<group>"; };
 		1421ADF0219DF2E700118634 /* MyTBASubscribable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBASubscribable.swift; sourceTree = "<group>"; };
+		1421ADF2219E040A00118634 /* MyTBAEntityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBAEntityTests.swift; sourceTree = "<group>"; };
 		14472BB62168487F00E0AE72 /* DistrictTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictTests.swift; sourceTree = "<group>"; };
 		1448DBA8218230CF008F542E /* MyTBAEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAEntity.swift; sourceTree = "<group>"; };
 		1448DBAB21823148008F542E /* FavoriteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteTests.swift; sourceTree = "<group>"; };
@@ -535,6 +537,7 @@
 		1448DBAA2182313B008F542E /* myTBA */ = {
 			isa = PBXGroup;
 			children = (
+				1421ADF2219E040A00118634 /* MyTBAEntityTests.swift */,
 				1448DBAB21823148008F542E /* FavoriteTests.swift */,
 				1448DBAD21823178008F542E /* SubscriptionTests.swift */,
 			);
@@ -1938,6 +1941,7 @@
 				9280EAED21685F310016621D /* Refreshable_Tests.swift in Sources */,
 				14472BB72168487F00E0AE72 /* DistrictTests.swift in Sources */,
 				925908AB21828CC400D7BFCE /* WebcastTests.swift in Sources */,
+				1421ADF3219E040A00118634 /* MyTBAEntityTests.swift in Sources */,
 				92564C70216456800047917F /* Secrets_Tests.swift in Sources */,
 				92BB718120CE1A000081F4E5 /* RemoteConfigServiceOperation_Tests.swift in Sources */,
 				92A2F5542156BD4B00267C63 /* NSManagedObjectContext+Extension_Tests.swift in Sources */,
