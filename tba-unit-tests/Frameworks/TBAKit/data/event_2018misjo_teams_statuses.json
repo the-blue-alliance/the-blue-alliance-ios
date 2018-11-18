@@ -1,0 +1,2658 @@
+{
+  "frc1254": {
+    "alliance": null,
+    "alliance_status_str": "--",
+    "last_match_key": "2018misjo_qm75",
+    "next_match_key": null,
+    "overall_status_str": "Team 1254 was <b>Rank 19/40</b> with a record of <b>6-6-0</b> in quals.",
+    "playoff": null,
+    "playoff_status_str": "--",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 19,
+        "record": {
+          "losses": 6,
+          "ties": 0,
+          "wins": 6
+        },
+        "sort_orders": [
+          1.4099999999999999,
+          570.0,
+          263.0,
+          2035.0,
+          295.0,
+          0.0
+        ],
+        "team_key": "frc1254"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc1940": {
+    "alliance": null,
+    "alliance_status_str": "--",
+    "last_match_key": "2018misjo_qm75",
+    "next_match_key": null,
+    "overall_status_str": "Team 1940 was <b>Rank 31/40</b> with a record of <b>5-7-0</b> in quals.",
+    "playoff": null,
+    "playoff_status_str": "--",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 31,
+        "record": {
+          "losses": 7,
+          "ties": 0,
+          "wins": 5
+        },
+        "sort_orders": [
+          1.0800000000000001,
+          550.0,
+          232.0,
+          1827.0,
+          280.0,
+          0.0
+        ],
+        "team_key": "frc1940"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc216": {
+    "alliance": null,
+    "alliance_status_str": "--",
+    "last_match_key": "2018misjo_qm80",
+    "next_match_key": null,
+    "overall_status_str": "Team 216 was <b>Rank 36/40</b> with a record of <b>5-7-0</b> in quals.",
+    "playoff": null,
+    "playoff_status_str": "--",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 36,
+        "record": {
+          "losses": 7,
+          "ties": 0,
+          "wins": 5
+        },
+        "sort_orders": [
+          0.91000000000000003,
+          295.0,
+          184.0,
+          2070.0,
+          170.0,
+          0.0
+        ],
+        "team_key": "frc216"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc2337": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 4",
+      "number": 4,
+      "pick": 0
+    },
+    "alliance_status_str": "<b>Captain</b> of <b>Alliance 4</b>",
+    "last_match_key": "2018misjo_sf1m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 2337 was <b>Rank 4/40</b> with a record of <b>9-3-0</b> in quals, competed in the playoffs as the <b>Captain</b> of <b>Alliance 4</b>, and was <b>eliminated in the Semifinals</b> with a playoff record of <b>2-2-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "level": "sf",
+      "playoff_average": null,
+      "record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 2
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Semifinals</b> with a playoff record of <b>2-2-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 4,
+        "record": {
+          "losses": 3,
+          "ties": 0,
+          "wins": 9
+        },
+        "sort_orders": [
+          2.25,
+          575.0,
+          427.0,
+          2940.0,
+          375.0,
+          0.0
+        ],
+        "team_key": "frc2337"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc244": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 3",
+      "number": 3,
+      "pick": 2
+    },
+    "alliance_status_str": "<b>2nd Pick</b> of <b>Alliance 3</b>",
+    "last_match_key": "2018misjo_sf2m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 244 was <b>Rank 17/40</b> with a record of <b>6-6-0</b> in quals, competed in the playoffs as the <b>2nd Pick</b> of <b>Alliance 3</b>, and was <b>eliminated in the Semifinals</b> with a playoff record of <b>2-3-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "level": "sf",
+      "playoff_average": null,
+      "record": {
+        "losses": 3,
+        "ties": 0,
+        "wins": 2
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Semifinals</b> with a playoff record of <b>2-3-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 17,
+        "record": {
+          "losses": 6,
+          "ties": 0,
+          "wins": 6
+        },
+        "sort_orders": [
+          1.4099999999999999,
+          630.0,
+          236.0,
+          2255.0,
+          285.0,
+          0.0
+        ],
+        "team_key": "frc244"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc2474": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 2",
+      "number": 2,
+      "pick": 0
+    },
+    "alliance_status_str": "<b>Captain</b> of <b>Alliance 2</b>",
+    "last_match_key": "2018misjo_f1m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 2474 was <b>Rank 2/40</b> with a record of <b>11-1-0</b> in quals, competed in the playoffs as the <b>Captain</b> of <b>Alliance 2</b>, and was <b>eliminated in the Finals</b> with a playoff record of <b>4-3-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "level": "f",
+      "playoff_average": null,
+      "record": {
+        "losses": 3,
+        "ties": 0,
+        "wins": 4
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Finals</b> with a playoff record of <b>4-3-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 2,
+        "record": {
+          "losses": 1,
+          "ties": 0,
+          "wins": 11
+        },
+        "sort_orders": [
+          2.75,
+          635.0,
+          394.0,
+          3005.0,
+          400.0,
+          0.0
+        ],
+        "team_key": "frc2474"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc2611": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 8",
+      "number": 8,
+      "pick": 2
+    },
+    "alliance_status_str": "<b>2nd Pick</b> of <b>Alliance 8</b>",
+    "last_match_key": "2018misjo_qf1m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 2611 was <b>Rank 25/40</b> with a record of <b>4-8-0</b> in quals, competed in the playoffs as the <b>2nd Pick</b> of <b>Alliance 8</b>, and was <b>eliminated in the Quarterfinals</b> with a playoff record of <b>0-2-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "level": "qf",
+      "playoff_average": null,
+      "record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Quarterfinals</b> with a playoff record of <b>0-2-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 25,
+        "record": {
+          "losses": 8,
+          "ties": 0,
+          "wins": 4
+        },
+        "sort_orders": [
+          1.25,
+          560.0,
+          245.0,
+          2036.0,
+          340.0,
+          0.0
+        ],
+        "team_key": "frc2611"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc2767": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 1",
+      "number": 1,
+      "pick": 0
+    },
+    "alliance_status_str": "<b>Captain</b> of <b>Alliance 1</b>",
+    "last_match_key": "2018misjo_f1m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 2767 was <b>Rank 1/40</b> with a record of <b>11-1-0</b> in quals, competed in the playoffs as the <b>Captain</b> of <b>Alliance 1</b>, and <b>won the event</b> with a playoff record of <b>6-0-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 0,
+        "ties": 0,
+        "wins": 2
+      },
+      "level": "f",
+      "playoff_average": null,
+      "record": {
+        "losses": 0,
+        "ties": 0,
+        "wins": 6
+      },
+      "status": "won"
+    },
+    "playoff_status_str": "<b>Won the event</b> with a playoff record of <b>6-0-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 1,
+        "record": {
+          "losses": 1,
+          "ties": 0,
+          "wins": 11
+        },
+        "sort_orders": [
+          3.1600000000000001,
+          900.0,
+          407.0,
+          3182.0,
+          400.0,
+          0.0
+        ],
+        "team_key": "frc2767"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc288": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 4",
+      "number": 4,
+      "pick": 2
+    },
+    "alliance_status_str": "<b>2nd Pick</b> of <b>Alliance 4</b>",
+    "last_match_key": "2018misjo_sf1m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 288 was <b>Rank 23/40</b> with a record of <b>6-6-0</b> in quals, competed in the playoffs as the <b>2nd Pick</b> of <b>Alliance 4</b>, and was <b>eliminated in the Semifinals</b> with a playoff record of <b>2-2-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "level": "sf",
+      "playoff_average": null,
+      "record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 2
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Semifinals</b> with a playoff record of <b>2-2-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 23,
+        "record": {
+          "losses": 6,
+          "ties": 0,
+          "wins": 6
+        },
+        "sort_orders": [
+          1.3300000000000001,
+          485.0,
+          263.0,
+          2336.0,
+          435.0,
+          0.0
+        ],
+        "team_key": "frc288"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc2959": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 5",
+      "number": 5,
+      "pick": 1
+    },
+    "alliance_status_str": "<b>1st Pick</b> of <b>Alliance 5</b>",
+    "last_match_key": "2018misjo_qf2m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 2959 was <b>Rank 24/40</b> with a record of <b>5-7-0</b> in quals, competed in the playoffs as the <b>1st Pick</b> of <b>Alliance 5</b>, and was <b>eliminated in the Quarterfinals</b> with a playoff record of <b>0-2-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "level": "qf",
+      "playoff_average": null,
+      "record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Quarterfinals</b> with a playoff record of <b>0-2-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 24,
+        "record": {
+          "losses": 7,
+          "ties": 0,
+          "wins": 5
+        },
+        "sort_orders": [
+          1.25,
+          805.0,
+          268.0,
+          2136.0,
+          410.0,
+          0.0
+        ],
+        "team_key": "frc2959"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc3452": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 1",
+      "number": 1,
+      "pick": 1
+    },
+    "alliance_status_str": "<b>1st Pick</b> of <b>Alliance 1</b>",
+    "last_match_key": "2018misjo_f1m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 3452 was <b>Rank 8/40</b> with a record of <b>9-3-0</b> in quals, competed in the playoffs as the <b>1st Pick</b> of <b>Alliance 1</b>, and <b>won the event</b> with a playoff record of <b>6-0-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 0,
+        "ties": 0,
+        "wins": 2
+      },
+      "level": "f",
+      "playoff_average": null,
+      "record": {
+        "losses": 0,
+        "ties": 0,
+        "wins": 6
+      },
+      "status": "won"
+    },
+    "playoff_status_str": "<b>Won the event</b> with a playoff record of <b>6-0-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 8,
+        "record": {
+          "losses": 3,
+          "ties": 0,
+          "wins": 9
+        },
+        "sort_orders": [
+          1.9099999999999999,
+          635.0,
+          263.0,
+          2658.0,
+          275.0,
+          0.0
+        ],
+        "team_key": "frc3452"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc3546": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 5",
+      "number": 5,
+      "pick": 0
+    },
+    "alliance_status_str": "<b>Captain</b> of <b>Alliance 5</b>",
+    "last_match_key": "2018misjo_qf2m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 3546 was <b>Rank 6/40</b> with a record of <b>8-4-0</b> in quals, competed in the playoffs as the <b>Captain</b> of <b>Alliance 5</b>, and was <b>eliminated in the Quarterfinals</b> with a playoff record of <b>0-2-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "level": "qf",
+      "playoff_average": null,
+      "record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Quarterfinals</b> with a playoff record of <b>0-2-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 6,
+        "record": {
+          "losses": 4,
+          "ties": 0,
+          "wins": 8
+        },
+        "sort_orders": [
+          2.0800000000000001,
+          540.0,
+          340.0,
+          2560.0,
+          395.0,
+          0.0
+        ],
+        "team_key": "frc3546"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc3620": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 2",
+      "number": 2,
+      "pick": 1
+    },
+    "alliance_status_str": "<b>1st Pick</b> of <b>Alliance 2</b>",
+    "last_match_key": "2018misjo_f1m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 3620 was <b>Rank 11/40</b> with a record of <b>8-4-0</b> in quals, competed in the playoffs as the <b>1st Pick</b> of <b>Alliance 2</b>, and was <b>eliminated in the Finals</b> with a playoff record of <b>4-3-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "level": "f",
+      "playoff_average": null,
+      "record": {
+        "losses": 3,
+        "ties": 0,
+        "wins": 4
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Finals</b> with a playoff record of <b>4-3-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 11,
+        "record": {
+          "losses": 4,
+          "ties": 0,
+          "wins": 8
+        },
+        "sort_orders": [
+          1.75,
+          460.0,
+          327.0,
+          2725.0,
+          300.0,
+          0.0
+        ],
+        "team_key": "frc3620"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc3658": {
+    "alliance": null,
+    "alliance_status_str": "--",
+    "last_match_key": "2018misjo_qm77",
+    "next_match_key": null,
+    "overall_status_str": "Team 3658 was <b>Rank 21/40</b> with a record of <b>6-6-0</b> in quals.",
+    "playoff": null,
+    "playoff_status_str": "--",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 21,
+        "record": {
+          "losses": 6,
+          "ties": 0,
+          "wins": 6
+        },
+        "sort_orders": [
+          1.4099999999999999,
+          505.0,
+          239.0,
+          2000.0,
+          210.0,
+          0.0
+        ],
+        "team_key": "frc3658"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc4237": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 4",
+      "number": 4,
+      "pick": 1
+    },
+    "alliance_status_str": "<b>1st Pick</b> of <b>Alliance 4</b>",
+    "last_match_key": "2018misjo_sf1m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 4237 was <b>Rank 12/40</b> with a record of <b>7-5-0</b> in quals, competed in the playoffs as the <b>1st Pick</b> of <b>Alliance 4</b>, and was <b>eliminated in the Semifinals</b> with a playoff record of <b>2-2-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "level": "sf",
+      "playoff_average": null,
+      "record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 2
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Semifinals</b> with a playoff record of <b>2-2-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 12,
+        "record": {
+          "losses": 5,
+          "ties": 0,
+          "wins": 7
+        },
+        "sort_orders": [
+          1.6599999999999999,
+          565.0,
+          267.0,
+          2398.0,
+          345.0,
+          0.0
+        ],
+        "team_key": "frc4237"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc4325": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 8",
+      "number": 8,
+      "pick": 1
+    },
+    "alliance_status_str": "<b>1st Pick</b> of <b>Alliance 8</b>",
+    "last_match_key": "2018misjo_qf1m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 4325 was <b>Rank 15/40</b> with a record of <b>7-5-0</b> in quals, competed in the playoffs as the <b>1st Pick</b> of <b>Alliance 8</b>, and was <b>eliminated in the Quarterfinals</b> with a playoff record of <b>0-2-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "level": "qf",
+      "playoff_average": null,
+      "record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Quarterfinals</b> with a playoff record of <b>0-2-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 15,
+        "record": {
+          "losses": 5,
+          "ties": 0,
+          "wins": 7
+        },
+        "sort_orders": [
+          1.5,
+          595.0,
+          203.0,
+          2538.0,
+          250.0,
+          0.0
+        ],
+        "team_key": "frc4325"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc4409": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 7",
+      "number": 7,
+      "pick": 0
+    },
+    "alliance_status_str": "<b>Captain</b> of <b>Alliance 7</b>",
+    "last_match_key": "2018misjo_qf3m3",
+    "next_match_key": null,
+    "overall_status_str": "Team 4409 was <b>Rank 9/40</b> with a record of <b>9-3-0</b> in quals, competed in the playoffs as the <b>Captain</b> of <b>Alliance 7</b>, and was <b>eliminated in the Quarterfinals</b> with a playoff record of <b>1-2-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 1
+      },
+      "level": "qf",
+      "playoff_average": null,
+      "record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 1
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Quarterfinals</b> with a playoff record of <b>1-2-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 9,
+        "record": {
+          "losses": 3,
+          "ties": 0,
+          "wins": 9
+        },
+        "sort_orders": [
+          1.9099999999999999,
+          565.0,
+          242.0,
+          2581.0,
+          305.0,
+          0.0
+        ],
+        "team_key": "frc4409"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc470": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 7",
+      "number": 7,
+      "pick": 1
+    },
+    "alliance_status_str": "<b>1st Pick</b> of <b>Alliance 7</b>",
+    "last_match_key": "2018misjo_qf3m3",
+    "next_match_key": null,
+    "overall_status_str": "Team 470 was <b>Rank 13/40</b> with a record of <b>7-5-0</b> in quals, competed in the playoffs as the <b>1st Pick</b> of <b>Alliance 7</b>, and was <b>eliminated in the Quarterfinals</b> with a playoff record of <b>1-2-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 1
+      },
+      "level": "qf",
+      "playoff_average": null,
+      "record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 1
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Quarterfinals</b> with a playoff record of <b>1-2-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 13,
+        "record": {
+          "losses": 5,
+          "ties": 0,
+          "wins": 7
+        },
+        "sort_orders": [
+          1.6599999999999999,
+          470.0,
+          243.0,
+          2028.0,
+          270.0,
+          0.0
+        ],
+        "team_key": "frc470"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc4988": {
+    "alliance": null,
+    "alliance_status_str": "--",
+    "last_match_key": "2018misjo_qm79",
+    "next_match_key": null,
+    "overall_status_str": "Team 4988 was <b>Rank 20/40</b> with a record of <b>6-6-0</b> in quals.",
+    "playoff": null,
+    "playoff_status_str": "--",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 20,
+        "record": {
+          "losses": 6,
+          "ties": 0,
+          "wins": 6
+        },
+        "sort_orders": [
+          1.4099999999999999,
+          535.0,
+          237.0,
+          2189.0,
+          240.0,
+          0.0
+        ],
+        "team_key": "frc4988"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc5056": {
+    "alliance": null,
+    "alliance_status_str": "--",
+    "last_match_key": "2018misjo_qm78",
+    "next_match_key": null,
+    "overall_status_str": "Team 5056 was <b>Rank 26/40</b> with a record of <b>4-8-0</b> in quals.",
+    "playoff": null,
+    "playoff_status_str": "--",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 26,
+        "record": {
+          "losses": 8,
+          "ties": 0,
+          "wins": 4
+        },
+        "sort_orders": [
+          1.25,
+          545.0,
+          240.0,
+          1828.0,
+          175.0,
+          0.0
+        ],
+        "team_key": "frc5056"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc5069": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 6",
+      "number": 6,
+      "pick": 2
+    },
+    "alliance_status_str": "<b>2nd Pick</b> of <b>Alliance 6</b>",
+    "last_match_key": "2018misjo_qf4m3",
+    "next_match_key": null,
+    "overall_status_str": "Team 5069 was <b>Rank 16/40</b> with a record of <b>5-7-0</b> in quals, competed in the playoffs as the <b>2nd Pick</b> of <b>Alliance 6</b>, and was <b>eliminated in the Quarterfinals</b> with a playoff record of <b>1-2-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 1
+      },
+      "level": "qf",
+      "playoff_average": null,
+      "record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 1
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Quarterfinals</b> with a playoff record of <b>1-2-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 16,
+        "record": {
+          "losses": 7,
+          "ties": 0,
+          "wins": 5
+        },
+        "sort_orders": [
+          1.5,
+          565.0,
+          292.0,
+          1826.0,
+          235.0,
+          0.0
+        ],
+        "team_key": "frc5069"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc5110": {
+    "alliance": null,
+    "alliance_status_str": "--",
+    "last_match_key": "2018misjo_qm79",
+    "next_match_key": null,
+    "overall_status_str": "Team 5110 was <b>Rank 34/40</b> with a record of <b>4-8-0</b> in quals.",
+    "playoff": null,
+    "playoff_status_str": "--",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 34,
+        "record": {
+          "losses": 8,
+          "ties": 0,
+          "wins": 4
+        },
+        "sort_orders": [
+          1.0,
+          425.0,
+          232.0,
+          1946.0,
+          220.0,
+          0.0
+        ],
+        "team_key": "frc5110"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc5152": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 6",
+      "number": 6,
+      "pick": 1
+    },
+    "alliance_status_str": "<b>1st Pick</b> of <b>Alliance 6</b>",
+    "last_match_key": "2018misjo_qf4m3",
+    "next_match_key": null,
+    "overall_status_str": "Team 5152 was <b>Rank 10/40</b> with a record of <b>7-5-0</b> in quals, competed in the playoffs as the <b>1st Pick</b> of <b>Alliance 6</b>, and was <b>eliminated in the Quarterfinals</b> with a playoff record of <b>1-2-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 1
+      },
+      "level": "qf",
+      "playoff_average": null,
+      "record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 1
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Quarterfinals</b> with a playoff record of <b>1-2-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 10,
+        "record": {
+          "losses": 5,
+          "ties": 0,
+          "wins": 7
+        },
+        "sort_orders": [
+          1.75,
+          670.0,
+          296.0,
+          2420.0,
+          335.0,
+          0.0
+        ],
+        "team_key": "frc5152"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc5182": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 5",
+      "number": 5,
+      "pick": 2
+    },
+    "alliance_status_str": "<b>2nd Pick</b> of <b>Alliance 5</b>",
+    "last_match_key": "2018misjo_qf2m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 5182 was <b>Rank 27/40</b> with a record of <b>4-8-0</b> in quals, competed in the playoffs as the <b>2nd Pick</b> of <b>Alliance 5</b>, and was <b>eliminated in the Quarterfinals</b> with a playoff record of <b>0-2-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "level": "qf",
+      "playoff_average": null,
+      "record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Quarterfinals</b> with a playoff record of <b>0-2-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 27,
+        "record": {
+          "losses": 8,
+          "ties": 0,
+          "wins": 4
+        },
+        "sort_orders": [
+          1.25,
+          500.0,
+          319.0,
+          2278.0,
+          235.0,
+          0.0
+        ],
+        "team_key": "frc5182"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc5204": {
+    "alliance": null,
+    "alliance_status_str": "--",
+    "last_match_key": "2018misjo_qm80",
+    "next_match_key": null,
+    "overall_status_str": "Team 5204 was <b>Rank 18/40</b> with a record of <b>5-7-0</b> in quals.",
+    "playoff": null,
+    "playoff_status_str": "--",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 18,
+        "record": {
+          "losses": 7,
+          "ties": 0,
+          "wins": 5
+        },
+        "sort_orders": [
+          1.4099999999999999,
+          600.0,
+          258.0,
+          1982.0,
+          275.0,
+          0.0
+        ],
+        "team_key": "frc5204"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc5227": {
+    "alliance": null,
+    "alliance_status_str": "--",
+    "last_match_key": "2018misjo_qm78",
+    "next_match_key": null,
+    "overall_status_str": "Team 5227 was <b>Rank 33/40</b> with a record of <b>5-7-0</b> in quals.",
+    "playoff": null,
+    "playoff_status_str": "--",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 33,
+        "record": {
+          "losses": 7,
+          "ties": 0,
+          "wins": 5
+        },
+        "sort_orders": [
+          1.0,
+          480.0,
+          190.0,
+          1919.0,
+          260.0,
+          0.0
+        ],
+        "team_key": "frc5227"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc5501": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 3",
+      "number": 3,
+      "pick": 0
+    },
+    "alliance_status_str": "<b>Captain</b> of <b>Alliance 3</b>",
+    "last_match_key": "2018misjo_sf2m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 5501 was <b>Rank 3/40</b> with a record of <b>9-3-0</b> in quals, competed in the playoffs as the <b>Captain</b> of <b>Alliance 3</b>, and was <b>eliminated in the Semifinals</b> with a playoff record of <b>2-3-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "level": "sf",
+      "playoff_average": null,
+      "record": {
+        "losses": 3,
+        "ties": 0,
+        "wins": 2
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Semifinals</b> with a playoff record of <b>2-3-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 3,
+        "record": {
+          "losses": 3,
+          "ties": 0,
+          "wins": 9
+        },
+        "sort_orders": [
+          2.25,
+          720.0,
+          277.0,
+          2546.0,
+          355.0,
+          0.0
+        ],
+        "team_key": "frc5501"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc5535": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 6",
+      "number": 6,
+      "pick": 0
+    },
+    "alliance_status_str": "<b>Captain</b> of <b>Alliance 6</b>",
+    "last_match_key": "2018misjo_qf4m3",
+    "next_match_key": null,
+    "overall_status_str": "Team 5535 was <b>Rank 7/40</b> with a record of <b>9-3-0</b> in quals, competed in the playoffs as the <b>Captain</b> of <b>Alliance 6</b>, and was <b>eliminated in the Quarterfinals</b> with a playoff record of <b>1-2-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 1
+      },
+      "level": "qf",
+      "playoff_average": null,
+      "record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 1
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Quarterfinals</b> with a playoff record of <b>1-2-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 7,
+        "record": {
+          "losses": 3,
+          "ties": 0,
+          "wins": 9
+        },
+        "sort_orders": [
+          2.0,
+          645.0,
+          266.0,
+          2290.0,
+          340.0,
+          0.0
+        ],
+        "team_key": "frc5535"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc5610": {
+    "alliance": null,
+    "alliance_status_str": "--",
+    "last_match_key": "2018misjo_qm78",
+    "next_match_key": null,
+    "overall_status_str": "Team 5610 was <b>Rank 28/40</b> with a record of <b>5-7-0</b> in quals.",
+    "playoff": null,
+    "playoff_status_str": "--",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 28,
+        "record": {
+          "losses": 7,
+          "ties": 0,
+          "wins": 5
+        },
+        "sort_orders": [
+          1.25,
+          485.0,
+          264.0,
+          1838.0,
+          230.0,
+          0.0
+        ],
+        "team_key": "frc5610"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc5676": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 8",
+      "number": 8,
+      "pick": 0
+    },
+    "alliance_status_str": "<b>Captain</b> of <b>Alliance 8</b>",
+    "last_match_key": "2018misjo_qf1m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 5676 was <b>Rank 14/40</b> with a record of <b>4-8-0</b> in quals, competed in the playoffs as the <b>Captain</b> of <b>Alliance 8</b>, and was <b>eliminated in the Quarterfinals</b> with a playoff record of <b>0-2-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "level": "qf",
+      "playoff_average": null,
+      "record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Quarterfinals</b> with a playoff record of <b>0-2-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 14,
+        "record": {
+          "losses": 8,
+          "ties": 0,
+          "wins": 4
+        },
+        "sort_orders": [
+          1.5,
+          645.0,
+          259.0,
+          2193.0,
+          185.0,
+          0.0
+        ],
+        "team_key": "frc5676"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc5927": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 2",
+      "number": 2,
+      "pick": 2
+    },
+    "alliance_status_str": "<b>2nd Pick</b> of <b>Alliance 2</b>",
+    "last_match_key": "2018misjo_f1m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 5927 was <b>Rank 37/40</b> with a record of <b>4-8-0</b> in quals, competed in the playoffs as the <b>2nd Pick</b> of <b>Alliance 2</b>, and was <b>eliminated in the Finals</b> with a playoff record of <b>4-3-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "level": "f",
+      "playoff_average": null,
+      "record": {
+        "losses": 3,
+        "ties": 0,
+        "wins": 4
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Finals</b> with a playoff record of <b>4-3-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 37,
+        "record": {
+          "losses": 8,
+          "ties": 0,
+          "wins": 4
+        },
+        "sort_orders": [
+          0.82999999999999996,
+          585.0,
+          208.0,
+          1729.0,
+          280.0,
+          0.0
+        ],
+        "team_key": "frc5927"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc5980": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 7",
+      "number": 7,
+      "pick": 2
+    },
+    "alliance_status_str": "<b>2nd Pick</b> of <b>Alliance 7</b>",
+    "last_match_key": "2018misjo_qf3m3",
+    "next_match_key": null,
+    "overall_status_str": "Team 5980 was <b>Rank 22/40</b> with a record of <b>5-7-0</b> in quals, competed in the playoffs as the <b>2nd Pick</b> of <b>Alliance 7</b>, and was <b>eliminated in the Quarterfinals</b> with a playoff record of <b>1-2-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 1
+      },
+      "level": "qf",
+      "playoff_average": null,
+      "record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 1
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Quarterfinals</b> with a playoff record of <b>1-2-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 22,
+        "record": {
+          "losses": 7,
+          "ties": 0,
+          "wins": 5
+        },
+        "sort_orders": [
+          1.3300000000000001,
+          580.0,
+          284.0,
+          2242.0,
+          370.0,
+          0.0
+        ],
+        "team_key": "frc5980"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc6128": {
+    "alliance": null,
+    "alliance_status_str": "--",
+    "last_match_key": "2018misjo_qm79",
+    "next_match_key": null,
+    "overall_status_str": "Team 6128 was <b>Rank 30/40</b> with a record of <b>6-6-0</b> in quals.",
+    "playoff": null,
+    "playoff_status_str": "--",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 30,
+        "record": {
+          "losses": 6,
+          "ties": 0,
+          "wins": 6
+        },
+        "sort_orders": [
+          1.25,
+          455.0,
+          274.0,
+          1707.0,
+          240.0,
+          0.0
+        ],
+        "team_key": "frc6128"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc6137": {
+    "alliance": null,
+    "alliance_status_str": "--",
+    "last_match_key": "2018misjo_qm77",
+    "next_match_key": null,
+    "overall_status_str": "Team 6137 was <b>Rank 38/40</b> with a record of <b>3-9-0</b> in quals.",
+    "playoff": null,
+    "playoff_status_str": "--",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 38,
+        "record": {
+          "losses": 9,
+          "ties": 0,
+          "wins": 3
+        },
+        "sort_orders": [
+          0.82999999999999996,
+          495.0,
+          222.0,
+          1479.0,
+          215.0,
+          0.0
+        ],
+        "team_key": "frc6137"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc6568": {
+    "alliance": null,
+    "alliance_status_str": "--",
+    "last_match_key": "2018misjo_qm80",
+    "next_match_key": null,
+    "overall_status_str": "Team 6568 was <b>Rank 32/40</b> with a record of <b>3-9-0</b> in quals.",
+    "playoff": null,
+    "playoff_status_str": "--",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 32,
+        "record": {
+          "losses": 9,
+          "ties": 0,
+          "wins": 3
+        },
+        "sort_orders": [
+          1.0,
+          515.0,
+          276.0,
+          1765.0,
+          260.0,
+          0.0
+        ],
+        "team_key": "frc6568"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc6615": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 1",
+      "number": 1,
+      "pick": 2
+    },
+    "alliance_status_str": "<b>2nd Pick</b> of <b>Alliance 1</b>",
+    "last_match_key": "2018misjo_f1m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 6615 was <b>Rank 29/40</b> with a record of <b>5-7-0</b> in quals, competed in the playoffs as the <b>2nd Pick</b> of <b>Alliance 1</b>, and <b>won the event</b> with a playoff record of <b>6-0-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 0,
+        "ties": 0,
+        "wins": 2
+      },
+      "level": "f",
+      "playoff_average": null,
+      "record": {
+        "losses": 0,
+        "ties": 0,
+        "wins": 6
+      },
+      "status": "won"
+    },
+    "playoff_status_str": "<b>Won the event</b> with a playoff record of <b>6-0-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 29,
+        "record": {
+          "losses": 7,
+          "ties": 0,
+          "wins": 5
+        },
+        "sort_orders": [
+          1.25,
+          470.0,
+          254.0,
+          2066.0,
+          260.0,
+          0.0
+        ],
+        "team_key": "frc6615"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc6627": {
+    "alliance": null,
+    "alliance_status_str": "--",
+    "last_match_key": "2018misjo_qm74",
+    "next_match_key": null,
+    "overall_status_str": "Team 6627 was <b>Rank 40/40</b> with a record of <b>3-9-0</b> in quals.",
+    "playoff": null,
+    "playoff_status_str": "--",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 40,
+        "record": {
+          "losses": 9,
+          "ties": 0,
+          "wins": 3
+        },
+        "sort_orders": [
+          0.75,
+          445.0,
+          220.0,
+          1681.0,
+          215.0,
+          0.0
+        ],
+        "team_key": "frc6627"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc7203": {
+    "alliance": null,
+    "alliance_status_str": "--",
+    "last_match_key": "2018misjo_qm77",
+    "next_match_key": null,
+    "overall_status_str": "Team 7203 was <b>Rank 39/40</b> with a record of <b>4-8-0</b> in quals.",
+    "playoff": null,
+    "playoff_status_str": "--",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 39,
+        "record": {
+          "losses": 8,
+          "ties": 0,
+          "wins": 4
+        },
+        "sort_orders": [
+          0.82999999999999996,
+          435.0,
+          208.0,
+          1431.0,
+          200.0,
+          0.0
+        ],
+        "team_key": "frc7203"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc7210": {
+    "alliance": null,
+    "alliance_status_str": "--",
+    "last_match_key": "2018misjo_qm77",
+    "next_match_key": null,
+    "overall_status_str": "Team 7210 was <b>Rank 35/40</b> with a record of <b>3-9-0</b> in quals.",
+    "playoff": null,
+    "playoff_status_str": "--",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 35,
+        "record": {
+          "losses": 9,
+          "ties": 0,
+          "wins": 3
+        },
+        "sort_orders": [
+          0.91000000000000003,
+          520.0,
+          239.0,
+          1437.0,
+          275.0,
+          0.0
+        ],
+        "team_key": "frc7210"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "frc85": {
+    "alliance": {
+      "backup": null,
+      "name": "Alliance 3",
+      "number": 3,
+      "pick": 1
+    },
+    "alliance_status_str": "<b>1st Pick</b> of <b>Alliance 3</b>",
+    "last_match_key": "2018misjo_sf2m2",
+    "next_match_key": null,
+    "overall_status_str": "Team 85 was <b>Rank 5/40</b> with a record of <b>8-4-0</b> in quals, competed in the playoffs as the <b>1st Pick</b> of <b>Alliance 3</b>, and was <b>eliminated in the Semifinals</b> with a playoff record of <b>2-3-0</b>.",
+    "playoff": {
+      "current_level_record": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 0
+      },
+      "level": "sf",
+      "playoff_average": null,
+      "record": {
+        "losses": 3,
+        "ties": 0,
+        "wins": 2
+      },
+      "status": "eliminated"
+    },
+    "playoff_status_str": "<b>Eliminated in the Semifinals</b> with a playoff record of <b>2-3-0</b>",
+    "qual": {
+      "num_teams": 40,
+      "ranking": {
+        "dq": 0,
+        "matches_played": 12,
+        "qual_average": null,
+        "rank": 5,
+        "record": {
+          "losses": 4,
+          "ties": 0,
+          "wins": 8
+        },
+        "sort_orders": [
+          2.1600000000000001,
+          725.0,
+          382.0,
+          2784.0,
+          335.0,
+          0.0
+        ],
+        "team_key": "frc85"
+      },
+      "sort_order_info": [
+        {
+          "name": "Ranking Score",
+          "precision": 2
+        },
+        {
+          "name": "Park/Climb Points",
+          "precision": 0
+        },
+        {
+          "name": "Auto",
+          "precision": 0
+        },
+        {
+          "name": "Ownership",
+          "precision": 0
+        },
+        {
+          "name": "Vault",
+          "precision": 0
+        }
+      ],
+      "status": "completed"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import Foundation
-import TBAKit
 import CoreData
+import UIKit
 
 public enum MediaType: String {
     case youtubeVideo = "youtube"

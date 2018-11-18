@@ -2,7 +2,6 @@ import BFRImageViewer
 import CoreData
 import FirebaseRemoteConfig
 import Photos
-import TBAKit
 import UIKit
 
 class TeamViewController: ContainerViewController, Observable {

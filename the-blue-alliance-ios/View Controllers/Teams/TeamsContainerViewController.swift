@@ -1,7 +1,6 @@
 import CoreData
 import FirebaseRemoteConfig
 import Foundation
-import TBAKit
 import UIKit
 
 class TeamsContainerViewController: ContainerViewController {

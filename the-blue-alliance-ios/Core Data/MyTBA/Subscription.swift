@@ -1,6 +1,5 @@
 import CoreData
 import Foundation
-import TBAKit
 
 extension Subscription: MyTBAManaged {
 

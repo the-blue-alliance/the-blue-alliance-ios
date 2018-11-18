@@ -1,7 +1,6 @@
 import Foundation
 import UIKit
 import CoreData
-import TBAKit
 
 class TeamStatsViewController: TBATableViewController, Observable {
 

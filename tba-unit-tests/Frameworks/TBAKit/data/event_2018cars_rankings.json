@@ -1,0 +1,26 @@
+{
+  "extra_stats_info": [],
+  "rankings": null,
+  "sort_order_info": [
+    {
+      "name": "Ranking Score",
+      "precision": 2
+    },
+    {
+      "name": "Park/Climb Points",
+      "precision": 0
+    },
+    {
+      "name": "Auto",
+      "precision": 0
+    },
+    {
+      "name": "Ownership",
+      "precision": 0
+    },
+    {
+      "name": "Vault",
+      "precision": 0
+    }
+  ]
+}

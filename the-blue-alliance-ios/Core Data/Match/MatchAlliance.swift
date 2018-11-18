@@ -1,5 +1,4 @@
 import Foundation
-import TBAKit
 import CoreData
 
 extension MatchAlliance: Managed {

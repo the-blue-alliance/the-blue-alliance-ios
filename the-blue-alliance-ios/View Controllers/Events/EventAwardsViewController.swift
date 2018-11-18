@@ -1,5 +1,4 @@
 import CoreData
-import TBAKit
 import UIKit
 
 class EventAwardsContainerViewController: ContainerViewController {

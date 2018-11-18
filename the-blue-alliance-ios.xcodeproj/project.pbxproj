@@ -12,7 +12,6 @@
 		1416D50A218E422400F1A4A3 /* EventInsights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1416D509218E422400F1A4A3 /* EventInsights.swift */; };
 		1416D50C218E462500F1A4A3 /* EventInsightsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1416D50B218E462500F1A4A3 /* EventInsightsTests.swift */; };
 		1416D50E218E4B8200F1A4A3 /* EventTeamStatsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1416D50D218E4B8200F1A4A3 /* EventTeamStatsTests.swift */; };
-		1421ADF1219DF2E800118634 /* MyTBASubscribable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1421ADF0219DF2E700118634 /* MyTBASubscribable.swift */; };
 		1421ADF3219E040A00118634 /* MyTBAEntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1421ADF2219E040A00118634 /* MyTBAEntityTests.swift */; };
 		14472BB72168487F00E0AE72 /* DistrictTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14472BB62168487F00E0AE72 /* DistrictTests.swift */; };
 		1448DBA9218230D0008F542E /* MyTBAEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1448DBA8218230CF008F542E /* MyTBAEntity.swift */; };
@@ -100,8 +99,6 @@
 		927C93B0217D4E350027ABEB /* DistrictRankingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */; };
 		927C93B2217D64300027ABEB /* DistrictEventPointsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */; };
 		928018F42096431200693447 /* MyTBASignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928018F32096431200693447 /* MyTBASignInViewController.swift */; };
-		928018F820964DB500693447 /* MyTBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928018F720964DB500693447 /* MyTBA.swift */; };
-		928018FA20964E7A00693447 /* MyTBAFavorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928018F920964E7A00693447 /* MyTBAFavorite.swift */; };
 		928030E4219780540099CB65 /* EventAllianceTableViewCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928030E3219780540099CB65 /* EventAllianceTableViewCellTests.swift */; };
 		928030E62197806A0099CB65 /* EventAllianceCellViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928030E52197806A0099CB65 /* EventAllianceCellViewModelTests.swift */; };
 		9280EAED21685F310016621D /* Refreshable_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9280EAEC21685F310016621D /* Refreshable_Tests.swift */; };
@@ -147,8 +144,87 @@
 		92A2F5542156BD4B00267C63 /* NSManagedObjectContext+Extension_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A2F5532156BD4B00267C63 /* NSManagedObjectContext+Extension_Tests.swift */; };
 		92A321C7214EF83800FDADFB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A321C6214EF83800FDADFB /* SettingsViewController.swift */; };
 		92A4147C216DA76400E459A5 /* ReactNativeService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A4147B216DA76400E459A5 /* ReactNativeService_Tests.swift */; };
-		92AAC69720967EC20076B977 /* MyTBAModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AAC69620967EC20076B977 /* MyTBAModel.swift */; };
-		92AAC69A209681400076B977 /* MyTBASubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AAC699209681400076B977 /* MyTBASubscription.swift */; };
+		92A5E51021A1B7470025CC85 /* MyTBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E4F921A1B7470025CC85 /* MyTBA.swift */; };
+		92A5E51121A1B7470025CC85 /* MyTBARegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E4FB21A1B7470025CC85 /* MyTBARegister.swift */; };
+		92A5E51221A1B7470025CC85 /* MyTBASubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E4FC21A1B7470025CC85 /* MyTBASubscription.swift */; };
+		92A5E51321A1B7470025CC85 /* MyTBAPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E4FD21A1B7470025CC85 /* MyTBAPreferences.swift */; };
+		92A5E51421A1B7470025CC85 /* MyTBAFavorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E4FE21A1B7470025CC85 /* MyTBAFavorite.swift */; };
+		92A5E51521A1B7470025CC85 /* MyTBAModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E4FF21A1B7470025CC85 /* MyTBAModel.swift */; };
+		92A5E51621A1B7470025CC85 /* MyTBASubscribable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E50121A1B7470025CC85 /* MyTBASubscribable.swift */; };
+		92A5E51921A1B7470025CC85 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E50621A1B7470025CC85 /* README.md */; };
+		92A5E51B21A1B7470025CC85 /* TBAKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E50921A1B7470025CC85 /* TBAKit.swift */; };
+		92A5E51C21A1B7470025CC85 /* TBATeam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E50A21A1B7470025CC85 /* TBATeam.swift */; };
+		92A5E51D21A1B7470025CC85 /* TBADistrict.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E50B21A1B7470025CC85 /* TBADistrict.swift */; };
+		92A5E51E21A1B7470025CC85 /* TBAMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E50C21A1B7470025CC85 /* TBAMatch.swift */; };
+		92A5E51F21A1B7470025CC85 /* TBAStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E50D21A1B7470025CC85 /* TBAStatus.swift */; };
+		92A5E52021A1B7470025CC85 /* TBAEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E50E21A1B7470025CC85 /* TBAEvent.swift */; };
+		92A5E56921A1B7830025CC85 /* TBATeamTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E52321A1B7830025CC85 /* TBATeamTests.swift */; };
+		92A5E56A21A1B7830025CC85 /* TBAMatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E52421A1B7830025CC85 /* TBAMatchTests.swift */; };
+		92A5E56B21A1B7830025CC85 /* TBAKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E52521A1B7830025CC85 /* TBAKitTests.swift */; };
+		92A5E56C21A1B7830025CC85 /* TBAStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E52621A1B7830025CC85 /* TBAStatusTests.swift */; };
+		92A5E56D21A1B7830025CC85 /* XCTestCase+Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E52921A1B7830025CC85 /* XCTestCase+Mock.swift */; };
+		92A5E56E21A1B7830025CC85 /* MockURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E52A21A1B7830025CC85 /* MockURLSession.swift */; };
+		92A5E56F21A1B7830025CC85 /* MockURLSessionDataTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E52B21A1B7830025CC85 /* MockURLSessionDataTask.swift */; };
+		92A5E57021A1B7830025CC85 /* team_frc2337.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E52D21A1B7830025CC85 /* team_frc2337.json */; };
+		92A5E57121A1B7830025CC85 /* team_frc20_event_1992cmp_status.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E52E21A1B7830025CC85 /* team_frc20_event_1992cmp_status.json */; };
+		92A5E57221A1B7830025CC85 /* team_frc2337_event_2017mike2_status.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E52F21A1B7830025CC85 /* team_frc2337_event_2017mike2_status.json */; };
+		92A5E57321A1B7830025CC85 /* event_2015miket_rankings.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E53021A1B7830025CC85 /* event_2015miket_rankings.json */; };
+		92A5E57421A1B7830025CC85 /* event_2018misjo_matches_timeseries.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E53121A1B7830025CC85 /* event_2018misjo_matches_timeseries.json */; };
+		92A5E57521A1B7830025CC85 /* event_2005ga_district_points.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E53221A1B7830025CC85 /* event_2005ga_district_points.json */; };
+		92A5E57621A1B7830025CC85 /* team_frc13.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E53321A1B7830025CC85 /* team_frc13.json */; };
+		92A5E57721A1B7830025CC85 /* team_frc2337_social_media.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E53421A1B7830025CC85 /* team_frc2337_social_media.json */; };
+		92A5E57821A1B7830025CC85 /* team_frc2337_events.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E53521A1B7830025CC85 /* team_frc2337_events.json */; };
+		92A5E57921A1B7830025CC85 /* event_2018micmp4_alliances.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E53621A1B7830025CC85 /* event_2018micmp4_alliances.json */; };
+		92A5E57A21A1B7830025CC85 /* team_frc2337_event_2017mike2_awards.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E53721A1B7830025CC85 /* team_frc2337_event_2017mike2_awards.json */; };
+		92A5E57B21A1B7830025CC85 /* event_2017mike2.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E53821A1B7830025CC85 /* event_2017mike2.json */; };
+		92A5E57C21A1B7830025CC85 /* team_frc2337_media_2017.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E53921A1B7830025CC85 /* team_frc2337_media_2017.json */; };
+		92A5E57D21A1B7830025CC85 /* event_2017mike2_rankings.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E53A21A1B7830025CC85 /* event_2017mike2_rankings.json */; };
+		92A5E57E21A1B7830025CC85 /* team_frc2337_event_2016micmp_status.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E53B21A1B7830025CC85 /* team_frc2337_event_2016micmp_status.json */; };
+		92A5E57F21A1B7830025CC85 /* unauthorized.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E53C21A1B7830025CC85 /* unauthorized.json */; };
+		92A5E58021A1B7830025CC85 /* team_frc2337_events_2017.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E53D21A1B7830025CC85 /* team_frc2337_events_2017.json */; };
+		92A5E58121A1B7830025CC85 /* event_2017mike2_teams.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E53E21A1B7830025CC85 /* event_2017mike2_teams.json */; };
+		92A5E58221A1B7830025CC85 /* teams_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E53F21A1B7830025CC85 /* teams_0.json */; };
+		92A5E58321A1B7830025CC85 /* team_frc2337_years_participated.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E54021A1B7830025CC85 /* team_frc2337_years_participated.json */; };
+		92A5E58421A1B7830025CC85 /* districts_2017.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E54121A1B7830025CC85 /* districts_2017.json */; };
+		92A5E58521A1B7830025CC85 /* event_2018misjo_teams_statuses.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E54221A1B7830025CC85 /* event_2018misjo_teams_statuses.json */; };
+		92A5E58621A1B7830025CC85 /* event_2017mike2_awards.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E54321A1B7830025CC85 /* event_2017mike2_awards.json */; };
+		92A5E58721A1B7830025CC85 /* team_frc2337_districts.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E54421A1B7830025CC85 /* team_frc2337_districts.json */; };
+		92A5E58821A1B7830025CC85 /* team_frc2337_events_2018_statuses.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E54521A1B7830025CC85 /* team_frc2337_events_2018_statuses.json */; };
+		92A5E58921A1B7830025CC85 /* teams_2017_100.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E54621A1B7830025CC85 /* teams_2017_100.json */; };
+		92A5E58A21A1B7830025CC85 /* event_2009gg_predictions.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E54721A1B7830025CC85 /* event_2009gg_predictions.json */; };
+		92A5E58B21A1B7830025CC85 /* event_2018cars_rankings.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E54821A1B7830025CC85 /* event_2018cars_rankings.json */; };
+		92A5E58C21A1B7830025CC85 /* team_frc2337_event_2017mike2_matches.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E54921A1B7830025CC85 /* team_frc2337_event_2017mike2_matches.json */; };
+		92A5E58D21A1B7830025CC85 /* district_2017fim_rankings.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E54A21A1B7830025CC85 /* district_2017fim_rankings.json */; };
+		92A5E58E21A1B7830025CC85 /* district_2017fim_events.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E54B21A1B7830025CC85 /* district_2017fim_events.json */; };
+		92A5E58F21A1B7830025CC85 /* event_2017mike2_oprs.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E54C21A1B7830025CC85 /* event_2017mike2_oprs.json */; };
+		92A5E59021A1B7830025CC85 /* event_2015miket_insights.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E54D21A1B7830025CC85 /* event_2015miket_insights.json */; };
+		92A5E59121A1B7830025CC85 /* events_2017.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E54E21A1B7830025CC85 /* events_2017.json */; };
+		92A5E59221A1B7830025CC85 /* team_frc2337_awards_2017.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E54F21A1B7830025CC85 /* team_frc2337_awards_2017.json */; };
+		92A5E59321A1B7830025CC85 /* match_2018misjo_sf1m2_timeseries.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E55021A1B7830025CC85 /* match_2018misjo_sf1m2_timeseries.json */; };
+		92A5E59421A1B7830025CC85 /* event_2017mike2_predictions.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E55121A1B7830025CC85 /* event_2017mike2_predictions.json */; };
+		92A5E59521A1B7830025CC85 /* match_2017mike2_qm1.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E55221A1B7830025CC85 /* match_2017mike2_qm1.json */; };
+		92A5E59621A1B7830025CC85 /* event_2017micmp3.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E55321A1B7830025CC85 /* event_2017micmp3.json */; };
+		92A5E59721A1B7830025CC85 /* team_frc2337_awards.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E55421A1B7830025CC85 /* team_frc2337_awards.json */; };
+		92A5E59821A1B7830025CC85 /* team_frc2337_matches_2017.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E55521A1B7830025CC85 /* team_frc2337_matches_2017.json */; };
+		92A5E59921A1B7830025CC85 /* teams_100.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E55621A1B7830025CC85 /* teams_100.json */; };
+		92A5E59A21A1B7830025CC85 /* event_2017mike2_district_points.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E55721A1B7830025CC85 /* event_2017mike2_district_points.json */; };
+		92A5E59B21A1B7830025CC85 /* event_1992cmp_rankings.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E55821A1B7830025CC85 /* event_1992cmp_rankings.json */; };
+		92A5E59C21A1B7830025CC85 /* event_2018carv_matches_timeseries.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E55921A1B7830025CC85 /* event_2018carv_matches_timeseries.json */; };
+		92A5E59D21A1B7830025CC85 /* event_2017mike2_insights.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E55A21A1B7830025CC85 /* event_2017mike2_insights.json */; };
+		92A5E59E21A1B7830025CC85 /* district_2017fim_teams.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E55B21A1B7830025CC85 /* district_2017fim_teams.json */; };
+		92A5E59F21A1B7830025CC85 /* event_2015micmp_awards.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E55C21A1B7830025CC85 /* event_2015micmp_awards.json */; };
+		92A5E5A021A1B7830025CC85 /* status.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E55D21A1B7830025CC85 /* status.json */; };
+		92A5E5A121A1B7830025CC85 /* event_2015mike2_alliances.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E55E21A1B7830025CC85 /* event_2015mike2_alliances.json */; };
+		92A5E5A221A1B7830025CC85 /* match_2014miket_qm1.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E55F21A1B7830025CC85 /* match_2014miket_qm1.json */; };
+		92A5E5A321A1B7830025CC85 /* team_frc2337_robots.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E56021A1B7830025CC85 /* team_frc2337_robots.json */; };
+		92A5E5A421A1B7830025CC85 /* event_2017mike2_matches.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E56121A1B7830025CC85 /* event_2017mike2_matches.json */; };
+		92A5E5A521A1B7830025CC85 /* event_2017mike2_alliances.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E56221A1B7830025CC85 /* event_2017mike2_alliances.json */; };
+		92A5E5A621A1B7830025CC85 /* event_1992cmp_oprs.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E56321A1B7830025CC85 /* event_1992cmp_oprs.json */; };
+		92A5E5A721A1B7830025CC85 /* event_2017micmp.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E56421A1B7830025CC85 /* event_2017micmp.json */; };
+		92A5E5A821A1B7830025CC85 /* match_2018carv_qm1_timeseries.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E56521A1B7830025CC85 /* match_2018carv_qm1_timeseries.json */; };
+		92A5E5A921A1B7830025CC85 /* teams_2017_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 92A5E56621A1B7830025CC85 /* teams_2017_0.json */; };
+		92A5E5AA21A1B7830025CC85 /* TBADistrictTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E56721A1B7830025CC85 /* TBADistrictTests.swift */; };
+		92A5E5AB21A1B7830025CC85 /* TBAEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E56821A1B7830025CC85 /* TBAEventTests.swift */; };
 		92AF4D0C1E330790007E967D /* SelectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectTableViewController.swift */; };
 		92B076F120FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B076F020FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift */; };
 		92B076F320FF948D00F9B2D7 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */; };
@@ -163,7 +239,6 @@
 		92B55633215FDB5300C1D9A3 /* BasicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55632215FDB5300C1D9A3 /* BasicCollectionViewCell.swift */; };
 		92B5565E21601D9000C1D9A3 /* MatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B5565D21601D9000C1D9A3 /* MatchView.swift */; };
 		92B5566021601D9B00C1D9A3 /* MatchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B5565F21601D9B00C1D9A3 /* MatchView.xib */; };
-		92B7372F20996F25009A7784 /* MyTBAPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B7372E20996F25009A7784 /* MyTBAPreferences.swift */; };
 		92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */; };
 		92BB717C20CE116C0081F4E5 /* TBAOperation_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB717B20CE116C0081F4E5 /* TBAOperation_Tests.swift */; };
 		92BB717F20CE19F40081F4E5 /* PersistentContainerOperation_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB717E20CE19F40081F4E5 /* PersistentContainerOperation_Tests.swift */; };
@@ -225,7 +300,6 @@
 		92F8E356209AAE890094213F /* PushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E355209AAE890094213F /* PushService.swift */; };
 		92F8E358209AB3B50094213F /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E357209AB3B50094213F /* Provider.swift */; };
 		92FE68BB20D8A1E8004A1481 /* MyTBASignOutOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FE68BA20D8A1E8004A1481 /* MyTBASignOutOperation.swift */; };
-		92FF4A2E2099616B006B99F5 /* MyTBARegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF4A2D2099616B006B99F5 /* MyTBARegister.swift */; };
 		92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */; };
 		92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */; };
 		92FFE52C1E7CC60F0037E48C /* UIColor+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE52B1E7CC60F0037E48C /* UIColor+TBA.swift */; };
@@ -255,7 +329,6 @@
 		1416D509218E422400F1A4A3 /* EventInsights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsights.swift; sourceTree = "<group>"; };
 		1416D50B218E462500F1A4A3 /* EventInsightsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsTests.swift; sourceTree = "<group>"; };
 		1416D50D218E4B8200F1A4A3 /* EventTeamStatsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatsTests.swift; sourceTree = "<group>"; };
-		1421ADF0219DF2E700118634 /* MyTBASubscribable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBASubscribable.swift; sourceTree = "<group>"; };
 		1421ADF2219E040A00118634 /* MyTBAEntityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBAEntityTests.swift; sourceTree = "<group>"; };
 		14472BB62168487F00E0AE72 /* DistrictTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictTests.swift; sourceTree = "<group>"; };
 		1448DBA8218230CF008F542E /* MyTBAEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAEntity.swift; sourceTree = "<group>"; };
@@ -343,8 +416,6 @@
 		927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictRankingTests.swift; sourceTree = "<group>"; };
 		927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictEventPointsTests.swift; sourceTree = "<group>"; };
 		928018F32096431200693447 /* MyTBASignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignInViewController.swift; sourceTree = "<group>"; };
-		928018F720964DB500693447 /* MyTBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBA.swift; sourceTree = "<group>"; };
-		928018F920964E7A00693447 /* MyTBAFavorite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAFavorite.swift; sourceTree = "<group>"; };
 		928030E3219780540099CB65 /* EventAllianceTableViewCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceTableViewCellTests.swift; sourceTree = "<group>"; };
 		928030E52197806A0099CB65 /* EventAllianceCellViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceCellViewModelTests.swift; sourceTree = "<group>"; };
 		9280EAEC21685F310016621D /* Refreshable_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Refreshable_Tests.swift; sourceTree = "<group>"; };
@@ -394,8 +465,87 @@
 		92A321CC214F029400FDADFB /* tba-ui-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tba-ui-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92A321D0214F029400FDADFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92A4147B216DA76400E459A5 /* ReactNativeService_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeService_Tests.swift; sourceTree = "<group>"; };
-		92AAC69620967EC20076B977 /* MyTBAModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAModel.swift; sourceTree = "<group>"; };
-		92AAC699209681400076B977 /* MyTBASubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASubscription.swift; sourceTree = "<group>"; };
+		92A5E4F921A1B7470025CC85 /* MyTBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBA.swift; sourceTree = "<group>"; };
+		92A5E4FB21A1B7470025CC85 /* MyTBARegister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBARegister.swift; sourceTree = "<group>"; };
+		92A5E4FC21A1B7470025CC85 /* MyTBASubscription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBASubscription.swift; sourceTree = "<group>"; };
+		92A5E4FD21A1B7470025CC85 /* MyTBAPreferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBAPreferences.swift; sourceTree = "<group>"; };
+		92A5E4FE21A1B7470025CC85 /* MyTBAFavorite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBAFavorite.swift; sourceTree = "<group>"; };
+		92A5E4FF21A1B7470025CC85 /* MyTBAModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBAModel.swift; sourceTree = "<group>"; };
+		92A5E50121A1B7470025CC85 /* MyTBASubscribable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBASubscribable.swift; sourceTree = "<group>"; };
+		92A5E50621A1B7470025CC85 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		92A5E50921A1B7470025CC85 /* TBAKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBAKit.swift; sourceTree = "<group>"; };
+		92A5E50A21A1B7470025CC85 /* TBATeam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBATeam.swift; sourceTree = "<group>"; };
+		92A5E50B21A1B7470025CC85 /* TBADistrict.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBADistrict.swift; sourceTree = "<group>"; };
+		92A5E50C21A1B7470025CC85 /* TBAMatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBAMatch.swift; sourceTree = "<group>"; };
+		92A5E50D21A1B7470025CC85 /* TBAStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBAStatus.swift; sourceTree = "<group>"; };
+		92A5E50E21A1B7470025CC85 /* TBAEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBAEvent.swift; sourceTree = "<group>"; };
+		92A5E52321A1B7830025CC85 /* TBATeamTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBATeamTests.swift; sourceTree = "<group>"; };
+		92A5E52421A1B7830025CC85 /* TBAMatchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBAMatchTests.swift; sourceTree = "<group>"; };
+		92A5E52521A1B7830025CC85 /* TBAKitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBAKitTests.swift; sourceTree = "<group>"; };
+		92A5E52621A1B7830025CC85 /* TBAStatusTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBAStatusTests.swift; sourceTree = "<group>"; };
+		92A5E52921A1B7830025CC85 /* XCTestCase+Mock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Mock.swift"; sourceTree = "<group>"; };
+		92A5E52A21A1B7830025CC85 /* MockURLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockURLSession.swift; sourceTree = "<group>"; };
+		92A5E52B21A1B7830025CC85 /* MockURLSessionDataTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockURLSessionDataTask.swift; sourceTree = "<group>"; };
+		92A5E52D21A1B7830025CC85 /* team_frc2337.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc2337.json; sourceTree = "<group>"; };
+		92A5E52E21A1B7830025CC85 /* team_frc20_event_1992cmp_status.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc20_event_1992cmp_status.json; sourceTree = "<group>"; };
+		92A5E52F21A1B7830025CC85 /* team_frc2337_event_2017mike2_status.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc2337_event_2017mike2_status.json; sourceTree = "<group>"; };
+		92A5E53021A1B7830025CC85 /* event_2015miket_rankings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2015miket_rankings.json; sourceTree = "<group>"; };
+		92A5E53121A1B7830025CC85 /* event_2018misjo_matches_timeseries.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2018misjo_matches_timeseries.json; sourceTree = "<group>"; };
+		92A5E53221A1B7830025CC85 /* event_2005ga_district_points.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2005ga_district_points.json; sourceTree = "<group>"; };
+		92A5E53321A1B7830025CC85 /* team_frc13.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc13.json; sourceTree = "<group>"; };
+		92A5E53421A1B7830025CC85 /* team_frc2337_social_media.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc2337_social_media.json; sourceTree = "<group>"; };
+		92A5E53521A1B7830025CC85 /* team_frc2337_events.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc2337_events.json; sourceTree = "<group>"; };
+		92A5E53621A1B7830025CC85 /* event_2018micmp4_alliances.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2018micmp4_alliances.json; sourceTree = "<group>"; };
+		92A5E53721A1B7830025CC85 /* team_frc2337_event_2017mike2_awards.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc2337_event_2017mike2_awards.json; sourceTree = "<group>"; };
+		92A5E53821A1B7830025CC85 /* event_2017mike2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2017mike2.json; sourceTree = "<group>"; };
+		92A5E53921A1B7830025CC85 /* team_frc2337_media_2017.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc2337_media_2017.json; sourceTree = "<group>"; };
+		92A5E53A21A1B7830025CC85 /* event_2017mike2_rankings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2017mike2_rankings.json; sourceTree = "<group>"; };
+		92A5E53B21A1B7830025CC85 /* team_frc2337_event_2016micmp_status.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc2337_event_2016micmp_status.json; sourceTree = "<group>"; };
+		92A5E53C21A1B7830025CC85 /* unauthorized.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = unauthorized.json; sourceTree = "<group>"; };
+		92A5E53D21A1B7830025CC85 /* team_frc2337_events_2017.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc2337_events_2017.json; sourceTree = "<group>"; };
+		92A5E53E21A1B7830025CC85 /* event_2017mike2_teams.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2017mike2_teams.json; sourceTree = "<group>"; };
+		92A5E53F21A1B7830025CC85 /* teams_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = teams_0.json; sourceTree = "<group>"; };
+		92A5E54021A1B7830025CC85 /* team_frc2337_years_participated.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc2337_years_participated.json; sourceTree = "<group>"; };
+		92A5E54121A1B7830025CC85 /* districts_2017.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = districts_2017.json; sourceTree = "<group>"; };
+		92A5E54221A1B7830025CC85 /* event_2018misjo_teams_statuses.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2018misjo_teams_statuses.json; sourceTree = "<group>"; };
+		92A5E54321A1B7830025CC85 /* event_2017mike2_awards.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2017mike2_awards.json; sourceTree = "<group>"; };
+		92A5E54421A1B7830025CC85 /* team_frc2337_districts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc2337_districts.json; sourceTree = "<group>"; };
+		92A5E54521A1B7830025CC85 /* team_frc2337_events_2018_statuses.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc2337_events_2018_statuses.json; sourceTree = "<group>"; };
+		92A5E54621A1B7830025CC85 /* teams_2017_100.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = teams_2017_100.json; sourceTree = "<group>"; };
+		92A5E54721A1B7830025CC85 /* event_2009gg_predictions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2009gg_predictions.json; sourceTree = "<group>"; };
+		92A5E54821A1B7830025CC85 /* event_2018cars_rankings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2018cars_rankings.json; sourceTree = "<group>"; };
+		92A5E54921A1B7830025CC85 /* team_frc2337_event_2017mike2_matches.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc2337_event_2017mike2_matches.json; sourceTree = "<group>"; };
+		92A5E54A21A1B7830025CC85 /* district_2017fim_rankings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = district_2017fim_rankings.json; sourceTree = "<group>"; };
+		92A5E54B21A1B7830025CC85 /* district_2017fim_events.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = district_2017fim_events.json; sourceTree = "<group>"; };
+		92A5E54C21A1B7830025CC85 /* event_2017mike2_oprs.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2017mike2_oprs.json; sourceTree = "<group>"; };
+		92A5E54D21A1B7830025CC85 /* event_2015miket_insights.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2015miket_insights.json; sourceTree = "<group>"; };
+		92A5E54E21A1B7830025CC85 /* events_2017.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = events_2017.json; sourceTree = "<group>"; };
+		92A5E54F21A1B7830025CC85 /* team_frc2337_awards_2017.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc2337_awards_2017.json; sourceTree = "<group>"; };
+		92A5E55021A1B7830025CC85 /* match_2018misjo_sf1m2_timeseries.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = match_2018misjo_sf1m2_timeseries.json; sourceTree = "<group>"; };
+		92A5E55121A1B7830025CC85 /* event_2017mike2_predictions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2017mike2_predictions.json; sourceTree = "<group>"; };
+		92A5E55221A1B7830025CC85 /* match_2017mike2_qm1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = match_2017mike2_qm1.json; sourceTree = "<group>"; };
+		92A5E55321A1B7830025CC85 /* event_2017micmp3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2017micmp3.json; sourceTree = "<group>"; };
+		92A5E55421A1B7830025CC85 /* team_frc2337_awards.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc2337_awards.json; sourceTree = "<group>"; };
+		92A5E55521A1B7830025CC85 /* team_frc2337_matches_2017.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc2337_matches_2017.json; sourceTree = "<group>"; };
+		92A5E55621A1B7830025CC85 /* teams_100.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = teams_100.json; sourceTree = "<group>"; };
+		92A5E55721A1B7830025CC85 /* event_2017mike2_district_points.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2017mike2_district_points.json; sourceTree = "<group>"; };
+		92A5E55821A1B7830025CC85 /* event_1992cmp_rankings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_1992cmp_rankings.json; sourceTree = "<group>"; };
+		92A5E55921A1B7830025CC85 /* event_2018carv_matches_timeseries.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2018carv_matches_timeseries.json; sourceTree = "<group>"; };
+		92A5E55A21A1B7830025CC85 /* event_2017mike2_insights.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2017mike2_insights.json; sourceTree = "<group>"; };
+		92A5E55B21A1B7830025CC85 /* district_2017fim_teams.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = district_2017fim_teams.json; sourceTree = "<group>"; };
+		92A5E55C21A1B7830025CC85 /* event_2015micmp_awards.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2015micmp_awards.json; sourceTree = "<group>"; };
+		92A5E55D21A1B7830025CC85 /* status.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = status.json; sourceTree = "<group>"; };
+		92A5E55E21A1B7830025CC85 /* event_2015mike2_alliances.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2015mike2_alliances.json; sourceTree = "<group>"; };
+		92A5E55F21A1B7830025CC85 /* match_2014miket_qm1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = match_2014miket_qm1.json; sourceTree = "<group>"; };
+		92A5E56021A1B7830025CC85 /* team_frc2337_robots.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = team_frc2337_robots.json; sourceTree = "<group>"; };
+		92A5E56121A1B7830025CC85 /* event_2017mike2_matches.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2017mike2_matches.json; sourceTree = "<group>"; };
+		92A5E56221A1B7830025CC85 /* event_2017mike2_alliances.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2017mike2_alliances.json; sourceTree = "<group>"; };
+		92A5E56321A1B7830025CC85 /* event_1992cmp_oprs.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_1992cmp_oprs.json; sourceTree = "<group>"; };
+		92A5E56421A1B7830025CC85 /* event_2017micmp.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = event_2017micmp.json; sourceTree = "<group>"; };
+		92A5E56521A1B7830025CC85 /* match_2018carv_qm1_timeseries.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = match_2018carv_qm1_timeseries.json; sourceTree = "<group>"; };
+		92A5E56621A1B7830025CC85 /* teams_2017_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = teams_2017_0.json; sourceTree = "<group>"; };
+		92A5E56721A1B7830025CC85 /* TBADistrictTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBADistrictTests.swift; sourceTree = "<group>"; };
+		92A5E56821A1B7830025CC85 /* TBAEventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBAEventTests.swift; sourceTree = "<group>"; };
 		92AF4D0B1E330790007E967D /* SelectTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectTableViewController.swift; sourceTree = "<group>"; };
 		92B076F020FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignOutOperation_Tests.swift; sourceTree = "<group>"; };
 		92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppDelegate.swift; sourceTree = "<group>"; };
@@ -410,7 +560,6 @@
 		92B55632215FDB5300C1D9A3 /* BasicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicCollectionViewCell.swift; sourceTree = "<group>"; };
 		92B5565D21601D9000C1D9A3 /* MatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchView.swift; sourceTree = "<group>"; };
 		92B5565F21601D9B00C1D9A3 /* MatchView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MatchView.xib; sourceTree = "<group>"; };
-		92B7372E20996F25009A7784 /* MyTBAPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferences.swift; sourceTree = "<group>"; };
 		92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetupOperation.swift; sourceTree = "<group>"; };
 		92BB717B20CE116C0081F4E5 /* TBAOperation_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAOperation_Tests.swift; sourceTree = "<group>"; };
 		92BB717E20CE19F40081F4E5 /* PersistentContainerOperation_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainerOperation_Tests.swift; sourceTree = "<group>"; };
@@ -475,7 +624,6 @@
 		92F8E355209AAE890094213F /* PushService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushService.swift; sourceTree = "<group>"; };
 		92F8E357209AB3B50094213F /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		92FE68BA20D8A1E8004A1481 /* MyTBASignOutOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignOutOperation.swift; sourceTree = "<group>"; };
-		92FF4A2D2099616B006B99F5 /* MyTBARegister.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBARegister.swift; sourceTree = "<group>"; };
 		92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewCell.xib; sourceTree = "<group>"; };
 		92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		92FFE52B1E7CC60F0037E48C /* UIColor+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+TBA.swift"; path = "Extensions/UIColor+TBA.swift"; sourceTree = "<group>"; };
@@ -524,14 +672,6 @@
 			);
 			name = Match;
 			path = Events/Match;
-			sourceTree = "<group>";
-		};
-		1421ADEF219DF2E700118634 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				1421ADF0219DF2E700118634 /* MyTBASubscribable.swift */,
-			);
-			path = Protocols;
 			sourceTree = "<group>";
 		};
 		1448DBAA2182313B008F542E /* myTBA */ = {
@@ -657,6 +797,7 @@
 		923AEE962167038000EF50C8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				92A5E52221A1B7830025CC85 /* TBAKit */,
 				923AEE972167038B00EF50C8 /* MyTBAKit */,
 			);
 			path = Frameworks;
@@ -797,17 +938,6 @@
 			path = District;
 			sourceTree = "<group>";
 		};
-		928018F620964D9A00693447 /* MyTBAKit */ = {
-			isa = PBXGroup;
-			children = (
-				928018F720964DB500693447 /* MyTBA.swift */,
-				92AAC69520967EAA0076B977 /* Models */,
-				1421ADEF219DF2E700118634 /* Protocols */,
-			);
-			name = MyTBAKit;
-			path = "the-blue-alliance-ios/Frameworks/MyTBAKit";
-			sourceTree = "<group>";
-		};
 		928030E12197802C0099CB65 /* View Elements */ = {
 			isa = PBXGroup;
 			children = (
@@ -883,6 +1013,7 @@
 				92942E341E2303AB008E79CA /* Extensions */,
 				92FFE5221E7C994B0037E48C /* View Elements */,
 				92942DAD1E215722008E79CA /* View Controllers */,
+				92A5E4F721A1B7470025CC85 /* Frameworks */,
 				92942DAC1E215718008E79CA /* Core Data */,
 			);
 			path = "the-blue-alliance-ios";
@@ -1086,16 +1217,163 @@
 			path = "tba-ui-tests";
 			sourceTree = "<group>";
 		};
-		92AAC69520967EAA0076B977 /* Models */ = {
+		92A5E4F721A1B7470025CC85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				92AAC69620967EC20076B977 /* MyTBAModel.swift */,
-				928018F920964E7A00693447 /* MyTBAFavorite.swift */,
-				92AAC699209681400076B977 /* MyTBASubscription.swift */,
-				92FF4A2D2099616B006B99F5 /* MyTBARegister.swift */,
-				92B7372E20996F25009A7784 /* MyTBAPreferences.swift */,
+				92A5E4F821A1B7470025CC85 /* MyTBAKit */,
+				92A5E50221A1B7470025CC85 /* TBAKit */,
+			);
+			path = Frameworks;
+			sourceTree = "<group>";
+		};
+		92A5E4F821A1B7470025CC85 /* MyTBAKit */ = {
+			isa = PBXGroup;
+			children = (
+				92A5E4F921A1B7470025CC85 /* MyTBA.swift */,
+				92A5E4FA21A1B7470025CC85 /* Models */,
+				92A5E50021A1B7470025CC85 /* Protocols */,
+			);
+			path = MyTBAKit;
+			sourceTree = "<group>";
+		};
+		92A5E4FA21A1B7470025CC85 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				92A5E4FB21A1B7470025CC85 /* MyTBARegister.swift */,
+				92A5E4FC21A1B7470025CC85 /* MyTBASubscription.swift */,
+				92A5E4FD21A1B7470025CC85 /* MyTBAPreferences.swift */,
+				92A5E4FE21A1B7470025CC85 /* MyTBAFavorite.swift */,
+				92A5E4FF21A1B7470025CC85 /* MyTBAModel.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		92A5E50021A1B7470025CC85 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				92A5E50121A1B7470025CC85 /* MyTBASubscribable.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		92A5E50221A1B7470025CC85 /* TBAKit */ = {
+			isa = PBXGroup;
+			children = (
+				92A5E50621A1B7470025CC85 /* README.md */,
+				92A5E50821A1B7470025CC85 /* Sources */,
+			);
+			path = TBAKit;
+			sourceTree = "<group>";
+		};
+		92A5E50821A1B7470025CC85 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				92A5E50921A1B7470025CC85 /* TBAKit.swift */,
+				92A5E50A21A1B7470025CC85 /* TBATeam.swift */,
+				92A5E50B21A1B7470025CC85 /* TBADistrict.swift */,
+				92A5E50C21A1B7470025CC85 /* TBAMatch.swift */,
+				92A5E50D21A1B7470025CC85 /* TBAStatus.swift */,
+				92A5E50E21A1B7470025CC85 /* TBAEvent.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		92A5E52221A1B7830025CC85 /* TBAKit */ = {
+			isa = PBXGroup;
+			children = (
+				92A5E52C21A1B7830025CC85 /* data */,
+				92A5E52721A1B7830025CC85 /* Testing */,
+				92A5E52321A1B7830025CC85 /* TBATeamTests.swift */,
+				92A5E52421A1B7830025CC85 /* TBAMatchTests.swift */,
+				92A5E52521A1B7830025CC85 /* TBAKitTests.swift */,
+				92A5E52621A1B7830025CC85 /* TBAStatusTests.swift */,
+				92A5E56721A1B7830025CC85 /* TBADistrictTests.swift */,
+				92A5E56821A1B7830025CC85 /* TBAEventTests.swift */,
+			);
+			path = TBAKit;
+			sourceTree = "<group>";
+		};
+		92A5E52721A1B7830025CC85 /* Testing */ = {
+			isa = PBXGroup;
+			children = (
+				92A5E52821A1B7830025CC85 /* Mocks */,
+			);
+			path = Testing;
+			sourceTree = "<group>";
+		};
+		92A5E52821A1B7830025CC85 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				92A5E52921A1B7830025CC85 /* XCTestCase+Mock.swift */,
+				92A5E52A21A1B7830025CC85 /* MockURLSession.swift */,
+				92A5E52B21A1B7830025CC85 /* MockURLSessionDataTask.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
+		92A5E52C21A1B7830025CC85 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				92A5E52D21A1B7830025CC85 /* team_frc2337.json */,
+				92A5E52E21A1B7830025CC85 /* team_frc20_event_1992cmp_status.json */,
+				92A5E52F21A1B7830025CC85 /* team_frc2337_event_2017mike2_status.json */,
+				92A5E53021A1B7830025CC85 /* event_2015miket_rankings.json */,
+				92A5E53121A1B7830025CC85 /* event_2018misjo_matches_timeseries.json */,
+				92A5E53221A1B7830025CC85 /* event_2005ga_district_points.json */,
+				92A5E53321A1B7830025CC85 /* team_frc13.json */,
+				92A5E53421A1B7830025CC85 /* team_frc2337_social_media.json */,
+				92A5E53521A1B7830025CC85 /* team_frc2337_events.json */,
+				92A5E53621A1B7830025CC85 /* event_2018micmp4_alliances.json */,
+				92A5E53721A1B7830025CC85 /* team_frc2337_event_2017mike2_awards.json */,
+				92A5E53821A1B7830025CC85 /* event_2017mike2.json */,
+				92A5E53921A1B7830025CC85 /* team_frc2337_media_2017.json */,
+				92A5E53A21A1B7830025CC85 /* event_2017mike2_rankings.json */,
+				92A5E53B21A1B7830025CC85 /* team_frc2337_event_2016micmp_status.json */,
+				92A5E53C21A1B7830025CC85 /* unauthorized.json */,
+				92A5E53D21A1B7830025CC85 /* team_frc2337_events_2017.json */,
+				92A5E53E21A1B7830025CC85 /* event_2017mike2_teams.json */,
+				92A5E53F21A1B7830025CC85 /* teams_0.json */,
+				92A5E54021A1B7830025CC85 /* team_frc2337_years_participated.json */,
+				92A5E54121A1B7830025CC85 /* districts_2017.json */,
+				92A5E54221A1B7830025CC85 /* event_2018misjo_teams_statuses.json */,
+				92A5E54321A1B7830025CC85 /* event_2017mike2_awards.json */,
+				92A5E54421A1B7830025CC85 /* team_frc2337_districts.json */,
+				92A5E54521A1B7830025CC85 /* team_frc2337_events_2018_statuses.json */,
+				92A5E54621A1B7830025CC85 /* teams_2017_100.json */,
+				92A5E54721A1B7830025CC85 /* event_2009gg_predictions.json */,
+				92A5E54821A1B7830025CC85 /* event_2018cars_rankings.json */,
+				92A5E54921A1B7830025CC85 /* team_frc2337_event_2017mike2_matches.json */,
+				92A5E54A21A1B7830025CC85 /* district_2017fim_rankings.json */,
+				92A5E54B21A1B7830025CC85 /* district_2017fim_events.json */,
+				92A5E54C21A1B7830025CC85 /* event_2017mike2_oprs.json */,
+				92A5E54D21A1B7830025CC85 /* event_2015miket_insights.json */,
+				92A5E54E21A1B7830025CC85 /* events_2017.json */,
+				92A5E54F21A1B7830025CC85 /* team_frc2337_awards_2017.json */,
+				92A5E55021A1B7830025CC85 /* match_2018misjo_sf1m2_timeseries.json */,
+				92A5E55121A1B7830025CC85 /* event_2017mike2_predictions.json */,
+				92A5E55221A1B7830025CC85 /* match_2017mike2_qm1.json */,
+				92A5E55321A1B7830025CC85 /* event_2017micmp3.json */,
+				92A5E55421A1B7830025CC85 /* team_frc2337_awards.json */,
+				92A5E55521A1B7830025CC85 /* team_frc2337_matches_2017.json */,
+				92A5E55621A1B7830025CC85 /* teams_100.json */,
+				92A5E55721A1B7830025CC85 /* event_2017mike2_district_points.json */,
+				92A5E55821A1B7830025CC85 /* event_1992cmp_rankings.json */,
+				92A5E55921A1B7830025CC85 /* event_2018carv_matches_timeseries.json */,
+				92A5E55A21A1B7830025CC85 /* event_2017mike2_insights.json */,
+				92A5E55B21A1B7830025CC85 /* district_2017fim_teams.json */,
+				92A5E55C21A1B7830025CC85 /* event_2015micmp_awards.json */,
+				92A5E55D21A1B7830025CC85 /* status.json */,
+				92A5E55E21A1B7830025CC85 /* event_2015mike2_alliances.json */,
+				92A5E55F21A1B7830025CC85 /* match_2014miket_qm1.json */,
+				92A5E56021A1B7830025CC85 /* team_frc2337_robots.json */,
+				92A5E56121A1B7830025CC85 /* event_2017mike2_matches.json */,
+				92A5E56221A1B7830025CC85 /* event_2017mike2_alliances.json */,
+				92A5E56321A1B7830025CC85 /* event_1992cmp_oprs.json */,
+				92A5E56421A1B7830025CC85 /* event_2017micmp.json */,
+				92A5E56521A1B7830025CC85 /* match_2018carv_qm1_timeseries.json */,
+				92A5E56621A1B7830025CC85 /* teams_2017_0.json */,
+			);
+			path = data;
 			sourceTree = "<group>";
 		};
 		92B076EF20FF8DDC00F9B2D7 /* myTBA */ = {
@@ -1397,7 +1675,6 @@
 		AB6808F14167475E1AE2783E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				928018F620964D9A00693447 /* MyTBAKit */,
 				FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */,
 				0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */,
 				52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */,
@@ -1535,6 +1812,7 @@
 				304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */,
 				92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */,
 				929BBB081EC55A22006D3854 /* InfoTableViewCell.xib in Resources */,
+				92A5E51921A1B7470025CC85 /* README.md in Resources */,
 				924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */,
 				9221C618209BFF8700477DE2 /* LoadingTableViewCell.xib in Resources */,
 				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
@@ -1563,7 +1841,65 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92A5E57821A1B7830025CC85 /* team_frc2337_events.json in Resources */,
+				92A5E5A021A1B7830025CC85 /* status.json in Resources */,
 				92564C72216457060047917F /* TestSecrets.plist in Resources */,
+				92A5E59721A1B7830025CC85 /* team_frc2337_awards.json in Resources */,
+				92A5E58521A1B7830025CC85 /* event_2018misjo_teams_statuses.json in Resources */,
+				92A5E58E21A1B7830025CC85 /* district_2017fim_events.json in Resources */,
+				92A5E5A321A1B7830025CC85 /* team_frc2337_robots.json in Resources */,
+				92A5E5A521A1B7830025CC85 /* event_2017mike2_alliances.json in Resources */,
+				92A5E58921A1B7830025CC85 /* teams_2017_100.json in Resources */,
+				92A5E58021A1B7830025CC85 /* team_frc2337_events_2017.json in Resources */,
+				92A5E57E21A1B7830025CC85 /* team_frc2337_event_2016micmp_status.json in Resources */,
+				92A5E57221A1B7830025CC85 /* team_frc2337_event_2017mike2_status.json in Resources */,
+				92A5E5A421A1B7830025CC85 /* event_2017mike2_matches.json in Resources */,
+				92A5E5A121A1B7830025CC85 /* event_2015mike2_alliances.json in Resources */,
+				92A5E5A221A1B7830025CC85 /* match_2014miket_qm1.json in Resources */,
+				92A5E58421A1B7830025CC85 /* districts_2017.json in Resources */,
+				92A5E58621A1B7830025CC85 /* event_2017mike2_awards.json in Resources */,
+				92A5E58F21A1B7830025CC85 /* event_2017mike2_oprs.json in Resources */,
+				92A5E57A21A1B7830025CC85 /* team_frc2337_event_2017mike2_awards.json in Resources */,
+				92A5E59321A1B7830025CC85 /* match_2018misjo_sf1m2_timeseries.json in Resources */,
+				92A5E59B21A1B7830025CC85 /* event_1992cmp_rankings.json in Resources */,
+				92A5E58D21A1B7830025CC85 /* district_2017fim_rankings.json in Resources */,
+				92A5E57421A1B7830025CC85 /* event_2018misjo_matches_timeseries.json in Resources */,
+				92A5E59A21A1B7830025CC85 /* event_2017mike2_district_points.json in Resources */,
+				92A5E57121A1B7830025CC85 /* team_frc20_event_1992cmp_status.json in Resources */,
+				92A5E59821A1B7830025CC85 /* team_frc2337_matches_2017.json in Resources */,
+				92A5E59121A1B7830025CC85 /* events_2017.json in Resources */,
+				92A5E5A921A1B7830025CC85 /* teams_2017_0.json in Resources */,
+				92A5E59621A1B7830025CC85 /* event_2017micmp3.json in Resources */,
+				92A5E58721A1B7830025CC85 /* team_frc2337_districts.json in Resources */,
+				92A5E59E21A1B7830025CC85 /* district_2017fim_teams.json in Resources */,
+				92A5E58121A1B7830025CC85 /* event_2017mike2_teams.json in Resources */,
+				92A5E58821A1B7830025CC85 /* team_frc2337_events_2018_statuses.json in Resources */,
+				92A5E5A621A1B7830025CC85 /* event_1992cmp_oprs.json in Resources */,
+				92A5E58321A1B7830025CC85 /* team_frc2337_years_participated.json in Resources */,
+				92A5E59921A1B7830025CC85 /* teams_100.json in Resources */,
+				92A5E57B21A1B7830025CC85 /* event_2017mike2.json in Resources */,
+				92A5E57D21A1B7830025CC85 /* event_2017mike2_rankings.json in Resources */,
+				92A5E57621A1B7830025CC85 /* team_frc13.json in Resources */,
+				92A5E58B21A1B7830025CC85 /* event_2018cars_rankings.json in Resources */,
+				92A5E59F21A1B7830025CC85 /* event_2015micmp_awards.json in Resources */,
+				92A5E59C21A1B7830025CC85 /* event_2018carv_matches_timeseries.json in Resources */,
+				92A5E57C21A1B7830025CC85 /* team_frc2337_media_2017.json in Resources */,
+				92A5E59521A1B7830025CC85 /* match_2017mike2_qm1.json in Resources */,
+				92A5E58221A1B7830025CC85 /* teams_0.json in Resources */,
+				92A5E57921A1B7830025CC85 /* event_2018micmp4_alliances.json in Resources */,
+				92A5E59221A1B7830025CC85 /* team_frc2337_awards_2017.json in Resources */,
+				92A5E5A721A1B7830025CC85 /* event_2017micmp.json in Resources */,
+				92A5E59021A1B7830025CC85 /* event_2015miket_insights.json in Resources */,
+				92A5E5A821A1B7830025CC85 /* match_2018carv_qm1_timeseries.json in Resources */,
+				92A5E57021A1B7830025CC85 /* team_frc2337.json in Resources */,
+				92A5E57F21A1B7830025CC85 /* unauthorized.json in Resources */,
+				92A5E58C21A1B7830025CC85 /* team_frc2337_event_2017mike2_matches.json in Resources */,
+				92A5E57521A1B7830025CC85 /* event_2005ga_district_points.json in Resources */,
+				92A5E57721A1B7830025CC85 /* team_frc2337_social_media.json in Resources */,
+				92A5E58A21A1B7830025CC85 /* event_2009gg_predictions.json in Resources */,
+				92A5E59421A1B7830025CC85 /* event_2017mike2_predictions.json in Resources */,
+				92A5E57321A1B7830025CC85 /* event_2015miket_rankings.json in Resources */,
+				92A5E59D21A1B7830025CC85 /* event_2017mike2_insights.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1626,7 +1962,6 @@
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/PureLayout/PureLayout.framework",
 				"${BUILT_PRODUCTS_DIR}/React/React.framework",
-				"${BUILT_PRODUCTS_DIR}/TBAKit/TBAKit.framework",
 				"${BUILT_PRODUCTS_DIR}/ZIPFoundation/ZIPFoundation.framework",
 				"${BUILT_PRODUCTS_DIR}/glog/glog.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
@@ -1649,7 +1984,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PureLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZIPFoundation.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/glog.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
@@ -1757,6 +2091,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92DF35DE217D435D00B5246B /* DistrictRanking.swift in Sources */,
+				92A5E51221A1B7470025CC85 /* MyTBASubscription.swift in Sources */,
 				929F57282092BA6500E5313A /* Observable.swift in Sources */,
 				92F8E358209AB3B50094213F /* Provider.swift in Sources */,
 				92D855D41EC68F4200572F27 /* TeamsViewController.swift in Sources */,
@@ -1791,16 +2126,19 @@
 				1405237C1ED33F500072FB91 /* MatchViewController.swift in Sources */,
 				145C57B51ED377EB004955B2 /* MatchTableViewCell.swift in Sources */,
 				929F571C2092B77300E5313A /* TBATableViewController.swift in Sources */,
-				92B7372F20996F25009A7784 /* MyTBAPreferences.swift in Sources */,
 				92BB8B66214F177B0035AF28 /* UIApplication+URLOpener.swift in Sources */,
 				924602AB1ECE8B1D0030EDBF /* AwardTableViewCell.swift in Sources */,
 				92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */,
+				92A5E51421A1B7470025CC85 /* MyTBAFavorite.swift in Sources */,
+				92A5E51B21A1B7470025CC85 /* TBAKit.swift in Sources */,
 				92942DAB1E215700008E79CA /* TBA.xcdatamodeld in Sources */,
 				929F572C2092BB1C00E5313A /* Alertable.swift in Sources */,
 				92DF35FB217D439500B5246B /* Match.swift in Sources */,
 				92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */,
+				92A5E51021A1B7470025CC85 /* MyTBA.swift in Sources */,
 				929FCDA21EC8068800A38E46 /* DistrictViewController.swift in Sources */,
 				92B5565E21601D9000C1D9A3 /* MatchView.swift in Sources */,
+				92A5E52021A1B7470025CC85 /* TBAEvent.swift in Sources */,
 				9287014020CD7C790077D6DA /* RemoteConfig+TBA.swift in Sources */,
 				14796946215EB0B90075AF4E /* RankingCellViewModel.swift in Sources */,
 				92DF35E1217D435D00B5246B /* AwardRecipient.swift in Sources */,
@@ -1813,7 +2151,6 @@
 				92858F2D208D783E00811614 /* EventTeamStatTableViewCell.swift in Sources */,
 				145C57BD1ED3C3AA004955B2 /* PlayerView.swift in Sources */,
 				1450778D21824E2F00C61D2D /* EventKey.swift in Sources */,
-				928018F820964DB500693447 /* MyTBA.swift in Sources */,
 				14796942215EA5AE0075AF4E /* AwardCellViewModel.swift in Sources */,
 				9291F7FC1EE6FC7D00EEB86B /* TeamMediaCollectionViewController.swift in Sources */,
 				92DF3610217D43EC00B5246B /* Playable.swift in Sources */,
@@ -1827,12 +2164,11 @@
 				92DF35F1217D438400B5246B /* EventStatus.swift in Sources */,
 				92B55623215D688600C1D9A3 /* TeamEventsViewController.swift in Sources */,
 				92B55625215D69DE00C1D9A3 /* WeekEventsViewController.swift in Sources */,
+				92A5E51D21A1B7470025CC85 /* TBADistrict.swift in Sources */,
 				929FCDA81EC8BE7200A38E46 /* DistrictRankingsViewController.swift in Sources */,
-				928018FA20964E7A00693447 /* MyTBAFavorite.swift in Sources */,
 				145C57B91ED3C166004955B2 /* MatchInfoViewController.swift in Sources */,
 				1448DBA9218230D0008F542E /* MyTBAEntity.swift in Sources */,
 				92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */,
-				92AAC69A209681400076B977 /* MyTBASubscription.swift in Sources */,
 				9272924B1EE4A0830027CE7C /* EventStatsContainerViewController.swift in Sources */,
 				929F57262092BA1C00E5313A /* Persistable.swift in Sources */,
 				929F572A2092BAFD00E5313A /* Refreshable.swift in Sources */,
@@ -1847,15 +2183,20 @@
 				92E6DB8B20C4609900396010 /* DistrictTeamSummaryViewController.swift in Sources */,
 				927292521EE4A48C0027CE7C /* EventTeamStatsViewController.swift in Sources */,
 				14796948215EBD6C0075AF4E /* EventCellViewModel.swift in Sources */,
+				92A5E51121A1B7470025CC85 /* MyTBARegister.swift in Sources */,
 				92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */,
 				92B55631215FDA9000C1D9A3 /* BasicTableViewCell.swift in Sources */,
 				92B0AA3B20CB837A0074FDF1 /* main.swift in Sources */,
+				92A5E51E21A1B7470025CC85 /* TBAMatch.swift in Sources */,
+				92A5E51F21A1B7470025CC85 /* TBAStatus.swift in Sources */,
 				92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */,
+				92A5E51321A1B7470025CC85 /* MyTBAPreferences.swift in Sources */,
 				92AF4D0C1E330790007E967D /* SelectTableViewController.swift in Sources */,
 				929F57202092B7D400E5313A /* TBAViewController.swift in Sources */,
 				929DB38C2095640000FB575F /* ReverseSubtitleTableViewCell.swift in Sources */,
 				1479694E215EC4B60075AF4E /* InfoCellViewModel.swift in Sources */,
 				92D5A1221EE48EC700EBFC6F /* EventDistrictPointsViewController.swift in Sources */,
+				92A5E51C21A1B7470025CC85 /* TBATeam.swift in Sources */,
 				92DF35F0217D438400B5246B /* EventAlliance.swift in Sources */,
 				924602A41ECD27CE0030EDBF /* EventAwardsViewController.swift in Sources */,
 				92942DDF1E21D2EB008E79CA /* EventViewController.swift in Sources */,
@@ -1868,19 +2209,18 @@
 				92DF3603217D43B300B5246B /* Favorite.swift in Sources */,
 				14796944215EAF7A0075AF4E /* TeamCellViewModel.swift in Sources */,
 				9274A3F51F35202200FAADF0 /* TeamAtEventViewController.swift in Sources */,
+				92A5E51521A1B7470025CC85 /* MyTBAModel.swift in Sources */,
 				92B55627215D6A9B00C1D9A3 /* DistrictEventsViewController.swift in Sources */,
 				92FFE52C1E7CC60F0037E48C /* UIColor+TBA.swift in Sources */,
 				9287013C20CD70CF0077D6DA /* RemoteConfigService.swift in Sources */,
 				925471F7208CC6F100AD3204 /* EventAllianceTableViewCell.swift in Sources */,
 				92DF35F3217D438400B5246B /* WLT.swift in Sources */,
-				92FF4A2E2099616B006B99F5 /* MyTBARegister.swift in Sources */,
 				9257DF4E208C0D1200F7E2BA /* EventAlliancesViewController.swift in Sources */,
 				92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */,
 				9287014820CD8C4A0077D6DA /* TBAOperation.swift in Sources */,
 				92858F27208D444700811614 /* CoreDataContextObserver.swift in Sources */,
 				928018F42096431200693447 /* MyTBASignInViewController.swift in Sources */,
 				9221C616209BFF7D00477DE2 /* LoadingTableViewCell.swift in Sources */,
-				92AAC69720967EC20076B977 /* MyTBAModel.swift in Sources */,
 				92942DB11E215B06008E79CA /* EventsViewController.swift in Sources */,
 				92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */,
 				92942E331E2303A5008E79CA /* Calendar+TBA.swift in Sources */,
@@ -1891,7 +2231,7 @@
 				1479694A215EBE460075AF4E /* EventAllianceCellViewModel.swift in Sources */,
 				1405237A1ED33E040072FB91 /* MatchesViewController.swift in Sources */,
 				9249206F20BB0455001CAC5E /* Date+TBA.swift in Sources */,
-				1421ADF1219DF2E800118634 /* MyTBASubscribable.swift in Sources */,
+				92A5E51621A1B7470025CC85 /* MyTBASubscribable.swift in Sources */,
 				92DF360F217D43EC00B5246B /* NSManagedObjectContext+Extension.swift in Sources */,
 				9223AC851EE7214A00F54F93 /* MediaCollectionViewCell.swift in Sources */,
 				92B076F320FF948D00F9B2D7 /* TestAppDelegate.swift in Sources */,
@@ -1920,6 +2260,7 @@
 				927C93B2217D64300027ABEB /* DistrictEventPointsTests.swift in Sources */,
 				14B6726C21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift in Sources */,
 				928030E62197806A0099CB65 /* EventAllianceCellViewModelTests.swift in Sources */,
+				92A5E56921A1B7830025CC85 /* TBATeamTests.swift in Sources */,
 				92BB718420CE1E310081F4E5 /* Test.xcdatamodeld in Sources */,
 				923AEE99216703CB00EF50C8 /* MyTBA_Tests.swift in Sources */,
 				92F38537217D31CE00A9AC02 /* AwardRecipientTests.swift in Sources */,
@@ -1932,14 +2273,17 @@
 				92C1F2E02169A3B800BD8445 /* MockNavigationController.swift in Sources */,
 				9236102521798655000CC5E9 /* MatchTests.swift in Sources */,
 				923AEE8C21658C5800EF50C8 /* Bundle+Version_Tests.swift in Sources */,
+				92A5E56C21A1B7830025CC85 /* TBAStatusTests.swift in Sources */,
 				92BB717F20CE19F40081F4E5 /* PersistentContainerOperation_Tests.swift in Sources */,
 				14B6727321529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift in Sources */,
+				92A5E56A21A1B7830025CC85 /* TBAMatchTests.swift in Sources */,
 				1448DBAC21823148008F542E /* FavoriteTests.swift in Sources */,
 				927C93B0217D4E350027ABEB /* DistrictRankingTests.swift in Sources */,
 				9287014220CD7CCB0077D6DA /* RemoteConfig+TBA_Tests.swift in Sources */,
 				1450778F218279BB00C61D2D /* EventKeyTests.swift in Sources */,
 				1416D50E218E4B8200F1A4A3 /* EventTeamStatsTests.swift in Sources */,
 				9280EAED21685F310016621D /* Refreshable_Tests.swift in Sources */,
+				92A5E56F21A1B7830025CC85 /* MockURLSessionDataTask.swift in Sources */,
 				14472BB72168487F00E0AE72 /* DistrictTests.swift in Sources */,
 				925908AB21828CC400D7BFCE /* WebcastTests.swift in Sources */,
 				1421ADF3219E040A00118634 /* MyTBAEntityTests.swift in Sources */,
@@ -1951,7 +2295,9 @@
 				925908B32184F86700D7BFCE /* NSSet+OnlyTests.swift in Sources */,
 				92361028217D1175000CC5E9 /* AwardTests.swift in Sources */,
 				925908A921827B3A00D7BFCE /* TeamTests.swift in Sources */,
+				92A5E5AA21A1B7830025CC85 /* TBADistrictTests.swift in Sources */,
 				925908B721863C3E00D7BFCE /* EventAllianceBackupTests.swift in Sources */,
+				92A5E5AB21A1B7830025CC85 /* TBAEventTests.swift in Sources */,
 				14B520F9218CB19400F2EF4F /* EventStatusPlayoffTests.swift in Sources */,
 				148FF628218BF42A006202E6 /* EventStatusTests.swift in Sources */,
 				924459C420CB796B0007570D /* Int16+Suffix_Tests.swift in Sources */,
@@ -1959,6 +2305,8 @@
 				14B520FB218CB96400F2EF4F /* EventStatusQualTests.swift in Sources */,
 				924459C820CB797E0007570D /* RetryService_Tests.swift in Sources */,
 				1448DBAE21823178008F542E /* SubscriptionTests.swift in Sources */,
+				92A5E56E21A1B7830025CC85 /* MockURLSession.swift in Sources */,
+				92A5E56D21A1B7830025CC85 /* XCTestCase+Mock.swift in Sources */,
 				148FF626218B90AC006202E6 /* EventRankingTests.swift in Sources */,
 				14B424F62167B01700E1904C /* Calendar+TBA_Tests.swift in Sources */,
 				928030E4219780540099CB65 /* EventAllianceTableViewCellTests.swift in Sources */,
@@ -1966,6 +2314,7 @@
 				92C1F2E42169AA7200BD8445 /* TeamsContainerViewController_Tests.swift in Sources */,
 				14B520F7218CA28B00F2EF4F /* EventStatusAllianceTests.swift in Sources */,
 				92C1F2E62169AB9F00BD8445 /* DistrictsContainerViewController_Tests.swift in Sources */,
+				92A5E56B21A1B7830025CC85 /* TBAKitTests.swift in Sources */,
 				92C1F2DE216994CF00BD8445 /* CoreDataTestCase.swift in Sources */,
 				92BB8B62214F16710035AF28 /* SettingsViewController_Tests.swift in Sources */,
 			);

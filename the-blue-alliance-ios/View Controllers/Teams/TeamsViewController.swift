@@ -1,6 +1,6 @@
 import Foundation
-import TBAKit
 import CoreData
+import UIKit
 
 protocol TeamsViewControllerDelegate: AnyObject {
     func teamSelected(_ team: Team)

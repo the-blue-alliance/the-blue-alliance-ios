@@ -5,8 +5,6 @@ inhibit_all_warnings!
 target 'The Blue Alliance' do
   use_frameworks!
 
-  pod 'TBAKit'
-  
   # React Native
   pod 'React', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native', :subspecs => [
     'Core',

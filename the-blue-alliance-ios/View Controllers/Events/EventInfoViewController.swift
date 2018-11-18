@@ -1,5 +1,4 @@
 import UIKit
-import TBAKit
 import CoreData
 
 protocol EventInfoViewControllerDelegate: AnyObject {

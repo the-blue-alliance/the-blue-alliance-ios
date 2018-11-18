@@ -1,7 +1,6 @@
 import Foundation
 import UIKit
 import CoreData
-import TBAKit
 
 protocol DistrictsViewControllerDelegate: AnyObject {
     func districtSelected(_ district: District)

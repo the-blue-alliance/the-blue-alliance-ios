@@ -1,7 +1,6 @@
 import Foundation
 import UIKit
 import CoreData
-import TBAKit
 
 protocol DistrictTeamSummaryViewControllerDelegate: AnyObject {
     func eventPointsSelected(_ eventPoints: DistrictEventPoints)
