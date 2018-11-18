@@ -8,13 +8,14 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, persistentContainer: NSPersistentContainer) {
+    init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.event = event
 
-        let districtPointsViewController = EventDistrictPointsViewController(event: event, persistentContainer: persistentContainer)
+        let districtPointsViewController = EventDistrictPointsViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         super.init(viewControllers: [districtPointsViewController],
-                   persistentContainer: persistentContainer)
+                   persistentContainer: persistentContainer,
+                   tbaKit: tbaKit)
 
         navigationTitle = "District Points"
         navigationSubtitle = "@ \(event.friendlyNameWithYear)"
@@ -31,7 +32,7 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
 extension EventDistrictPointsContainerViewController: EventDistrictPointsViewControllerDelegate {
 
     func districtEventPointsSelected(_ districtEventPoints: DistrictEventPoints) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: districtEventPoints.teamKey!, event: event, persistentContainer: persistentContainer)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: districtEventPoints.teamKey!, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -50,10 +51,10 @@ private class EventDistrictPointsViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, persistentContainer: NSPersistentContainer) {
+    init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.event = event
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         setupDataSource()
     }
@@ -125,7 +126,7 @@ extension EventDistrictPointsViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchEventDistrictPoints(key: event.key!, completion: { (eventPoints, _, error) in
+        request = tbaKit.fetchEventDistrictPoints(key: event.key!, completion: { (eventPoints, _, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event district points - \(error.localizedDescription)")
             } else {

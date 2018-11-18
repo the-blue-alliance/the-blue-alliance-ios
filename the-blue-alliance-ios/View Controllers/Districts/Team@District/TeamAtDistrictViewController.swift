@@ -10,15 +10,16 @@ class TeamAtDistrictViewController: ContainerViewController {
 
     // MARK: Init
 
-    init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer) {
+    init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.ranking = ranking
 
-        let summaryViewController = DistrictTeamSummaryViewController(ranking: ranking, persistentContainer: persistentContainer)
-        let breakdownViewController = DistrictBreakdownViewController(ranking: ranking, persistentContainer: persistentContainer)
+        let summaryViewController = DistrictTeamSummaryViewController(ranking: ranking, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let breakdownViewController = DistrictBreakdownViewController(ranking: ranking, persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         super.init(viewControllers: [summaryViewController, breakdownViewController],
                    segmentedControlTitles: ["Summary", "Breakdown"],
-                   persistentContainer: persistentContainer)
+                   persistentContainer: persistentContainer,
+                   tbaKit: tbaKit)
 
         navigationTitle = "Team \(ranking.teamKey!.teamNumber)"
         navigationSubtitle = "@ \(ranking.district!.abbreviationWithYear)"
@@ -41,7 +42,7 @@ extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegat
         }
 
         // TODO: Let's see what we can to do not force-unwrap these from Core Data
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventPoints.teamKey!, event: event, persistentContainer: persistentContainer)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventPoints.teamKey!, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

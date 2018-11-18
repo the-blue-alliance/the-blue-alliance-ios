@@ -1,15 +1,14 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-class TBAStatusTests: XCTestCase, TBAKitMockable {
+class TBAStatusTests: XCTestCase {
     
-    var kit: TBAKit!
-    var session: MockURLSession!
+    var kit: MockTBAKit!
     
     override func setUp() {
         super.setUp()
-        
-        setUpTBAKitMockable()
+
+        kit = MockTBAKit()
     }
     
     func test_status() {
@@ -37,7 +36,7 @@ class TBAStatusTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
 
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)

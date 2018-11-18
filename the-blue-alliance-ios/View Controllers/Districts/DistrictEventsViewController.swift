@@ -5,10 +5,10 @@ class DistrictEventsViewController: EventsViewController {
 
     private let district: District
 
-    init(district: District, persistentContainer: NSPersistentContainer) {
+    init(district: District, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.district = district
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -35,7 +35,7 @@ class DistrictEventsViewController: EventsViewController {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchDistrictEvents(key: district.key!, completion: { (events, error) in
+        request = tbaKit.fetchDistrictEvents(key: district.key!, completion: { (events, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
             } else {

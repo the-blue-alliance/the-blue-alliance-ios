@@ -24,14 +24,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let eventsViewController = EventsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
                                                                  urlOpener: urlOpener,
                                                                  userDefaults: userDefaults,
-                                                                 persistentContainer: persistentContainer)
+                                                                 persistentContainer: persistentContainer,
+                                                                 tbaKit: tbaKit)
         let teamsViewController = TeamsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
                                                                urlOpener: urlOpener,
-                                                               persistentContainer: persistentContainer)
+                                                               persistentContainer: persistentContainer,
+                                                               tbaKit: tbaKit)
         let districtsViewController = DistrictsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
                                                                        urlOpener: urlOpener,
                                                                        userDefaults: userDefaults,
-                                                                       persistentContainer: persistentContainer)
+                                                                       persistentContainer: persistentContainer,
+                                                                       tbaKit: tbaKit)
         let settingsViewController = SettingsViewController(urlOpener: urlOpener,
                                                             metadata: reactNativeMetadata,
                                                             persistentContainer: persistentContainer)
@@ -65,6 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var persistentContainer: NSPersistentContainer = {
         return NSPersistentContainer(name: "TBA")
     }()
+    var tbaKit: TBAKit!
     let userDefaults: UserDefaults = UserDefaults.standard
     let urlOpener: URLOpener = UIApplication.shared
 
@@ -107,6 +111,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
 
         let secrets = Secrets()
+        tbaKit = TBAKit(apiKey: secrets.tbaAPIKey)
 
         // Setup our React Native service
         reactNativeService.registerRetryable(initiallyRetry: true)
@@ -135,7 +140,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             } else {
                 self.remoteConfigService.registerRetryable()
-                TBAKit.sharedKit.apiKey = secrets.tbaAPIKey
 
                 DispatchQueue.main.async {
                     guard let window = self.window else {
@@ -257,7 +261,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func setupMyTBA() {
-        let myTBAViewController = MyTBAViewController(persistentContainer: persistentContainer)
+        let myTBAViewController = MyTBAViewController(persistentContainer: persistentContainer, tbaKit: tbaKit)
         tabBarController.viewControllers?.append(myTBAViewController)
 
         // Assign our Push Service as a delegate to all push-related classes

@@ -16,11 +16,11 @@ class MatchesViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer) {
+    init(event: Event, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.event = event
         self.teamKey = teamKey
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         setupDataSource()
     }
@@ -108,7 +108,7 @@ extension MatchesViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchEventMatches(key: event.key!, completion: { (matches, error) in
+        request = tbaKit.fetchEventMatches(key: event.key!, completion: { (matches, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event matches - \(error.localizedDescription)")
             } else {

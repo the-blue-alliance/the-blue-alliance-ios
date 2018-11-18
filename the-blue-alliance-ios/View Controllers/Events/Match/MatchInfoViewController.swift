@@ -78,11 +78,11 @@ class MatchInfoViewController: TBAViewController, Observable {
 
     // MARK: Init
 
-    init(match: Match, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer) {
+    init(match: Match, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.match = match
         self.teamKey = teamKey
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         contextObserver.observeObject(object: match, state: .updated) { [unowned self] (_, _) in
             DispatchQueue.main.async {
@@ -203,7 +203,7 @@ extension MatchInfoViewController: Refreshable {
 
     @objc func refresh() {
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchMatch(key: match.key!, { (modelMatch, error) in
+        request = tbaKit.fetchMatch(key: match.key!, { (modelMatch, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh match - \(error.localizedDescription)")
             } else {

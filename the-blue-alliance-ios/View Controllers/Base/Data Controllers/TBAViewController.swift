@@ -7,6 +7,7 @@ typealias DataController = Persistable & Alertable
 class TBAViewController: UIViewController, DataController {
 
     var persistentContainer: NSPersistentContainer
+    let tbaKit: TBAKit
 
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView(forAutoLayout: ())
@@ -25,8 +26,9 @@ class TBAViewController: UIViewController, DataController {
 
     // MARK: - Init
 
-    init(persistentContainer: NSPersistentContainer) {
+    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.persistentContainer = persistentContainer
+        self.tbaKit = tbaKit
 
         super.init(nibName: nil, bundle: nil)
     }

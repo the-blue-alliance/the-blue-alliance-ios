@@ -35,10 +35,10 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
 
     // MARK: - Init
 
-    init(event: Event, persistentContainer: NSPersistentContainer) {
+    init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.event = event
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         styleInterface()
 
@@ -139,7 +139,7 @@ extension EventStatsViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchEventInsights(key: event.key!, completion: { (insights, error) in
+        request = tbaKit.fetchEventInsights(key: event.key!, completion: { (insights, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event stats - \(error.localizedDescription)")
             } else {

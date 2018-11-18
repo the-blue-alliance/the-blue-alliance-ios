@@ -1,15 +1,14 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-class TBAEventTests: XCTestCase, TBAKitMockable {
+class TBAEventTests: XCTestCase {
     
-    var kit: TBAKit!
-    var session: MockURLSession!
+    var kit: MockTBAKit!
     
     override func setUp() {
         super.setUp()
-        
-        setUpTBAKitMockable()
+
+        kit = MockTBAKit()
     }
 
     func test_event_init() {
@@ -118,7 +117,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -141,7 +140,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -162,7 +161,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             parentEx.fulfill()
         }
-        sendSuccessStub(for: parentTask)
+        kit.sendSuccessStub(for: parentTask)
         
         let childEx = expectation(description: "event_child")
         let childTask = kit.fetchEvent(key: childEventKey) { (event, error) in
@@ -174,7 +173,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             childEx.fulfill()
         }
-        sendSuccessStub(for: childTask)
+        kit.sendSuccessStub(for: childTask)
 
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -209,7 +208,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -235,7 +234,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -259,7 +258,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -289,7 +288,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -316,7 +315,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -352,7 +351,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -370,7 +369,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -390,7 +389,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -406,7 +405,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
 
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -424,7 +423,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -448,7 +447,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -464,7 +463,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -480,7 +479,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -496,7 +495,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -535,7 +534,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -557,7 +556,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -581,7 +580,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -600,7 +599,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -618,7 +617,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -636,7 +635,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
 
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -654,7 +653,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -672,7 +671,7 @@ class TBAEventTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)

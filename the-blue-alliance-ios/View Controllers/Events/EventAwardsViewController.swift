@@ -8,14 +8,15 @@ class EventAwardsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer) {
+    init(event: Event, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.event = event
         self.teamKey = teamKey
 
-        let awardsViewController = EventAwardsViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer)
+        let awardsViewController = EventAwardsViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         super.init(viewControllers: [awardsViewController],
-                   persistentContainer: persistentContainer)
+                   persistentContainer: persistentContainer,
+                   tbaKit: tbaKit)
 
         navigationTitle = "Awards"
         if let teamKey = teamKey {
@@ -41,7 +42,8 @@ extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate 
         }
         let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey,
                                                                   event: event,
-                                                                  persistentContainer: persistentContainer)
+                                                                  persistentContainer: persistentContainer,
+                                                                  tbaKit: tbaKit)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -61,11 +63,11 @@ class EventAwardsViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer) {
+    init(event: Event, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.event = event
         self.teamKey = teamKey
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         setupDataSource()
     }
@@ -137,7 +139,7 @@ extension EventAwardsViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchEventAwards(key: event.key!, completion: { (awards, error) in
+        request = tbaKit.fetchEventAwards(key: event.key!, completion: { (awards, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event awards - \(error.localizedDescription)")
             } else {

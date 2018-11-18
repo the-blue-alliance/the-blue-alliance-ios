@@ -23,10 +23,10 @@ class TeamsViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event? = nil, persistentContainer: NSPersistentContainer) {
+    init(event: Event? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.event = event
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         setupDataSource()
     }
@@ -150,9 +150,34 @@ extension TeamsViewController: Refreshable {
         }
     }
 
+    func fetchAllTeams(taskChanged: @escaping (URLSessionDataTask, Int, [TBATeam]) -> Void, completion: @escaping (Error?) -> Void) -> URLSessionDataTask {
+        return fetchAllTeams(taskChanged: taskChanged, page: 0, completion: completion)
+    }
+
+    private func fetchAllTeams(taskChanged: @escaping (URLSessionDataTask, Int, [TBATeam]) -> Void, page: Int, completion: @escaping (Error?) -> Void) -> URLSessionDataTask {
+        // TODO: This is problematic, and doesn't handle 304's properly
+        return tbaKit.fetchTeams(page: page, completion: { (teams, error) in
+            if let error = error {
+                completion(error)
+                return
+            }
+
+            guard let teams = teams else {
+                completion(nil)
+                return
+            }
+
+            if teams.isEmpty {
+                completion(nil)
+            } else {
+                taskChanged(self.fetchAllTeams(taskChanged: taskChanged, page: page + 1, completion: completion), page, teams)
+            }
+        })
+    }
+
     private func refreshTeams() {
         var request: URLSessionDataTask?
-        request = Team.fetchAllTeams(taskChanged: { [unowned self] (task, page, teams) in
+        request = fetchAllTeams(taskChanged: { [unowned self] (task, page, teams) in
             self.addRequest(request: task)
 
             let previousRequest = request
@@ -186,7 +211,7 @@ extension TeamsViewController: Refreshable {
         }
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchEventTeams(key: eventKey, completion: { (teams, error) in
+        request = tbaKit.fetchEventTeams(key: eventKey, completion: { (teams, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to teams events - \(error.localizedDescription)")
             } else {

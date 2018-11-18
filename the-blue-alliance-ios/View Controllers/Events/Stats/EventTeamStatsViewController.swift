@@ -36,7 +36,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
+    init(event: Event, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.event = event
         self.userDefaults = userDefaults
 
@@ -46,7 +46,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
             self.filter = EventTeamStatFilter.opr
         }
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         setupDataSource()
     }
@@ -131,7 +131,7 @@ extension EventTeamStatsTableViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchEventTeamStats(key: event.key!, completion: { (stats, error) in
+        request = tbaKit.fetchEventTeamStats(key: event.key!, completion: { (stats, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event team stats - \(error.localizedDescription)")
             } else {

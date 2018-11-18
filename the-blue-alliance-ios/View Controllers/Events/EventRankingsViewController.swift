@@ -15,10 +15,10 @@ class EventRankingsViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, persistentContainer: NSPersistentContainer) {
+    init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.event = event
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         setupDataSource()
     }
@@ -89,7 +89,7 @@ extension EventRankingsViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchEventRankings(key: event.key!, completion: { (rankings, sortOrder, extraStats, error) in
+        request = tbaKit.fetchEventRankings(key: event.key!, completion: { (rankings, sortOrder, extraStats, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event rankings - \(error.localizedDescription)")
             } else {

@@ -4,6 +4,7 @@ import XCTest
 
 class TBATestCase: CoreDataTestCase {
 
+    var tbaKit: MockTBAKit!
     var userDefaults: UserDefaults! // TODO: Mock this...
     var urlOpener: MockURLOpener!
     var remoteConfig: MockRemoteConfig!
@@ -12,6 +13,7 @@ class TBATestCase: CoreDataTestCase {
     override func setUp() {
         super.setUp()
 
+        tbaKit = MockTBAKit()
         userDefaults = UserDefaults.standard
         urlOpener = MockURLOpener()
         remoteConfig = MockRemoteConfig(config: [

@@ -33,8 +33,8 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
 
     // MARK: Init
 
-    init(persistentContainer: NSPersistentContainer) {
-        super.init(persistentContainer: persistentContainer)
+    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         setupDataSource()
     }

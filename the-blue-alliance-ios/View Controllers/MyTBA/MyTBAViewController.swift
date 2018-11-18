@@ -31,15 +31,16 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         return MyTBA.shared.isAuthenticated
     }
 
-    init(persistentContainer: NSPersistentContainer) {
+    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         signInViewController = MyTBASignInViewController()
 
-        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(persistentContainer: persistentContainer)
-        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(persistentContainer: persistentContainer)
+        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(persistentContainer: persistentContainer, tbaKit: tbaKit)
+        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         super.init(viewControllers: [favoritesViewController, subscriptionsViewController],
                    segmentedControlTitles: ["Favorites", "Subscriptions"],
-                   persistentContainer: persistentContainer)
+                   persistentContainer: persistentContainer,
+                   tbaKit: tbaKit)
     }
     
     required init?(coder aDecoder: NSCoder) {

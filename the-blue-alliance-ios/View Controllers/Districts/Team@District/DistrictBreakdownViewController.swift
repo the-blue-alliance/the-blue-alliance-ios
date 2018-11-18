@@ -15,10 +15,10 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
 
     // MARK: - Init
 
-    init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer) {
+    init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.ranking = ranking
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         contextObserver.observeObject(object: ranking, state: .updated) { [unowned self] (_, _) in
             DispatchQueue.main.async {
@@ -120,7 +120,7 @@ extension DistrictBreakdownViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchDistrictRankings(key: ranking.district!.key!, completion: { (rankings, error) in
+        request = tbaKit.fetchDistrictRankings(key: ranking.district!.key!, completion: { (rankings, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh team district breakdown - \(error.localizedDescription)")
             } else {

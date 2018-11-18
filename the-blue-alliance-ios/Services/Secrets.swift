@@ -10,8 +10,11 @@ class Secrets {
         static let TBAAPIKey = "tba_api_key"
     }
 
-    var tbaAPIKey: String? {
-        return secrets?[SecretKeys.TBAAPIKey] as? String
+    var tbaAPIKey: String {
+        guard let secrets = secrets else {
+            return ""
+        }
+        return secrets[SecretKeys.TBAAPIKey] as! String
     }
 
     init(secrets: String = "Secrets", in bundle: Bundle = Bundle.main) {

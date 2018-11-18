@@ -11,6 +11,7 @@ typealias ContainableViewController = UIViewController & Refreshable & Persistab
 class ContainerViewController: UIViewController, Persistable, Alertable {
 
     var persistentContainer: NSPersistentContainer
+    let tbaKit: TBAKit
 
     private var isRootContainerViewController: Bool {
         return navigationController?.topViewController != self
@@ -74,9 +75,10 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     private let containerView: UIView = UIView()
     private let viewControllers: [ContainableViewController]
 
-    init(viewControllers: [ContainableViewController], segmentedControlTitles: [String]? = nil, persistentContainer: NSPersistentContainer) {
+    init(viewControllers: [ContainableViewController], segmentedControlTitles: [String]? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.viewControllers = viewControllers
         self.persistentContainer = persistentContainer
+        self.tbaKit = tbaKit
 
         segmentedControl = UISegmentedControl(items: segmentedControlTitles)
         segmentedControl.selectedSegmentIndex = 0

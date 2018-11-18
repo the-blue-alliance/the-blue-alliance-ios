@@ -157,32 +157,6 @@ extension Team: Locatable, Managed {
         return false
     }
 
-    // TODO: What the fuck move these methods OUT
-    static func fetchAllTeams(taskChanged: @escaping (URLSessionDataTask, Int, [TBATeam]) -> Void, completion: @escaping (Error?) -> Void) -> URLSessionDataTask {
-        return fetchAllTeams(taskChanged: taskChanged, page: 0, completion: completion)
-    }
-
-    static private func fetchAllTeams(taskChanged: @escaping (URLSessionDataTask, Int, [TBATeam]) -> Void, page: Int, completion: @escaping (Error?) -> Void) -> URLSessionDataTask {
-        // TODO: This is problematic, and doesn't handle 304's properly
-        return TBAKit.sharedKit.fetchTeams(page: page, completion: { (teams, error) in
-            if let error = error {
-                completion(error)
-                return
-            }
-
-            guard let teams = teams else {
-                completion(nil)
-                return
-            }
-
-            if teams.isEmpty {
-                completion(nil)
-            } else {
-                taskChanged(self.fetchAllTeams(taskChanged: taskChanged, page: page + 1, completion: completion), page, teams)
-            }
-        })
-    }
-
 }
 
 

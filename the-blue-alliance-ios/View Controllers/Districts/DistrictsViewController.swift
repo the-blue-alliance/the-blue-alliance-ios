@@ -20,10 +20,10 @@ class DistrictsViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(year: Int, persistentContainer: NSPersistentContainer) {
+    init(year: Int, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.year = year
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         setupDataSource()
     }
@@ -97,7 +97,7 @@ extension DistrictsViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchDistricts(year: year, completion: { (districts, error) in
+        request = tbaKit.fetchDistricts(year: year, completion: { (districts, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh districts - \(error.localizedDescription)")
             } else {
