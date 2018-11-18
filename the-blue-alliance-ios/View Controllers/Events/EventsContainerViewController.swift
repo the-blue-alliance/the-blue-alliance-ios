@@ -1,7 +1,6 @@
 import Foundation
 import UIKit
 import CoreData
-import TBAKit
 import FirebaseRemoteConfig
 
 class EventsContainerViewController: ContainerViewController {

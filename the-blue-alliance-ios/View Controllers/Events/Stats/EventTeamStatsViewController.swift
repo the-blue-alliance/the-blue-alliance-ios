@@ -1,6 +1,5 @@
 import Foundation
 import UIKit
-import TBAKit
 import CoreData
 
 protocol EventTeamStatsSelectionDelegate: AnyObject {

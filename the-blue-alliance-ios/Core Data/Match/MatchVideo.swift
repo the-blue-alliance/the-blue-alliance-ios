@@ -1,5 +1,4 @@
 import Foundation
-import TBAKit
 import CoreData
 
 public enum MatchVideoType: String {

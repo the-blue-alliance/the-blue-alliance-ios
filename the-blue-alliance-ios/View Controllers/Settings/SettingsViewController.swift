@@ -1,5 +1,5 @@
 import CoreData
-import TBAKit
+import Foundation
 import UIKit
 
 enum InfoURL: String {

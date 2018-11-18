@@ -1,5 +1,5 @@
+import Foundation
 import CoreData
-import TBAKit
 
 protocol WeekEventsDelegate: AnyObject {
     func weekEventUpdated()

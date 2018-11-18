@@ -1,4 +1,3 @@
-import TBAKit
 import XCTest
 import Foundation
 import CoreData

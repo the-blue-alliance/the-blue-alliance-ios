@@ -1,6 +1,5 @@
 import UIKit
 import CoreData
-import TBAKit
 
 // TODO: Eventually, this will be redundant, and will go away
 class EventDistrictPointsContainerViewController: ContainerViewController {

@@ -1,6 +1,5 @@
 import Foundation
 import CoreData
-import TBAKit
 import UIKit
 
 class EventStatsContainerViewController: ContainerViewController {
