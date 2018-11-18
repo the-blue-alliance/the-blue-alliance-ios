@@ -5,6 +5,7 @@ import CoreData
 class TBATableViewController: UITableViewController, DataController {
 
     var persistentContainer: NSPersistentContainer
+    let tbaKit: TBAKit
 
     // MARK: - Refreshable
 
@@ -16,8 +17,9 @@ class TBATableViewController: UITableViewController, DataController {
 
     // MARK: - Init
 
-    init(style: UITableView.Style = .plain, persistentContainer: NSPersistentContainer) {
+    init(style: UITableView.Style = .plain, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.persistentContainer = persistentContainer
+        self.tbaKit = tbaKit
 
         super.init(style: style)
     }

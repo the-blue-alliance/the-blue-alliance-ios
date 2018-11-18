@@ -10,17 +10,18 @@ class DistrictViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(district: District, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer) {
+    init(district: District, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.district = district
         self.urlOpener = urlOpener
         self.userDefaults = userDefaults
 
-        let eventsViewController = DistrictEventsViewController(district: district, persistentContainer: persistentContainer)
-        let rankingsViewController = DistrictRankingsViewController(district: district, persistentContainer: persistentContainer)
+        let eventsViewController = DistrictEventsViewController(district: district, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let rankingsViewController = DistrictRankingsViewController(district: district, persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         super.init(viewControllers: [eventsViewController, rankingsViewController],
                    segmentedControlTitles: ["Events", "Rankings"],
-                   persistentContainer: persistentContainer)
+                   persistentContainer: persistentContainer,
+                   tbaKit: tbaKit)
 
         eventsViewController.delegate = self
         rankingsViewController.delegate = self
@@ -49,7 +50,7 @@ class DistrictViewController: ContainerViewController {
 extension DistrictViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let eventViewController = EventViewController(event: event, urlOpener: urlOpener, userDefaults: userDefaults, persistentContainer: persistentContainer)
+        let eventViewController = EventViewController(event: event, urlOpener: urlOpener, userDefaults: userDefaults, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(eventViewController, animated: true)
     }
 
@@ -62,7 +63,7 @@ extension DistrictViewController: EventsViewControllerDelegate {
 extension DistrictViewController: DistrictRankingsViewControllerDelegate {
 
     func districtRankingSelected(_ districtRanking: DistrictRanking) {
-        let teamAtDistrictViewController = TeamAtDistrictViewController(ranking: districtRanking, persistentContainer: persistentContainer)
+        let teamAtDistrictViewController = TeamAtDistrictViewController(ranking: districtRanking, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(teamAtDistrictViewController, animated: true)
     }
 

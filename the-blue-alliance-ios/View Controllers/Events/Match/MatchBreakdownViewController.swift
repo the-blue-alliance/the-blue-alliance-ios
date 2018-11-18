@@ -37,10 +37,10 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
 
     // MARK: - Init
 
-    init(match: Match, persistentContainer: NSPersistentContainer) {
+    init(match: Match, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.match = match
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         contextObserver.observeObject(object: match, state: .updated) { [unowned self] (_, _) in
             DispatchQueue.main.async {
@@ -179,7 +179,7 @@ extension MatchBreakdownViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchMatch(key: match.key!, { (modelMatch, error) in
+        request = tbaKit.fetchMatch(key: match.key!, { (modelMatch, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh match breakdown - \(error.localizedDescription)")
             } else {

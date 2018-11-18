@@ -1,15 +1,14 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-class TBAMatchTests: XCTestCase, TBAKitMockable {
+class TBAMatchTests: XCTestCase {
     
-    var kit: TBAKit!
-    var session: MockURLSession!
+    var kit: MockTBAKit!
     
     override func setUp() {
         super.setUp()
         
-        setUpTBAKitMockable()
+        kit = MockTBAKit()
     }
 
     func test_match_init() {
@@ -74,7 +73,7 @@ class TBAMatchTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -93,7 +92,7 @@ class TBAMatchTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -111,7 +110,7 @@ class TBAMatchTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
@@ -129,7 +128,7 @@ class TBAMatchTests: XCTestCase, TBAKitMockable {
             
             ex.fulfill()
         }
-        sendSuccessStub(for: task)
+        kit.sendSuccessStub(for: task)
         
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)

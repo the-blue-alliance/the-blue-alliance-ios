@@ -65,11 +65,11 @@ class TeamSummaryViewController: TBATableViewController {
     private var summaryRows: [TeamSummaryRow] = []
     private var summaryValues: [Any] = []
 
-    init(teamKey: TeamKey, event: Event, persistentContainer: NSPersistentContainer) {
+    init(teamKey: TeamKey, event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.teamKey = teamKey
         self.event = event
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -319,7 +319,7 @@ extension TeamSummaryViewController: Refreshable {
 
         // Refresh team status
         var teamStatusRequest: URLSessionDataTask?
-        teamStatusRequest = TBAKit.sharedKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!, completion: { (status, error) in
+        teamStatusRequest = tbaKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!, completion: { (status, error) in
             if error != nil {
                 self.markRefreshSuccessful()
             }
@@ -343,7 +343,7 @@ extension TeamSummaryViewController: Refreshable {
 
         // Refresh awards
         var awardsRequest: URLSessionDataTask?
-        awardsRequest = TBAKit.sharedKit.fetchTeamAwards(key: teamKey.key!, eventKey: event.key!, completion: { (awards, error) in
+        awardsRequest = tbaKit.fetchTeamAwards(key: teamKey.key!, eventKey: event.key!, completion: { (awards, error) in
             if error != nil {
                 self.markRefreshSuccessful()
             }

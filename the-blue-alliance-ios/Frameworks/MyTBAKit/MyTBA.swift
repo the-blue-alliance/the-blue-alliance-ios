@@ -69,7 +69,7 @@ class MyTBA {
         }
     }
     var authenticationProvider = Provider<MyTBAAuthenticationObservable>()
-    private var urlSession: URLSession
+    var urlSession: URLSession
 
     static var jsonEncoder: JSONEncoder {
         let jsonEncoder = JSONEncoder()

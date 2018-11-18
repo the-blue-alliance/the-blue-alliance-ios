@@ -28,13 +28,13 @@ internal protocol TBAModel {
 }
 
 public class TBAKit: NSObject {
-    public static let sharedKit = TBAKit()
-    public var apiKey: String?
-    public var urlSession: URLSession
 
-    public init(apiKey: String? = nil) {
+    private let apiKey: String
+    let urlSession: URLSession
+
+    public init(apiKey: String, urlSession: URLSession? = nil) {
         self.apiKey = apiKey
-        self.urlSession = URLSession(configuration: .default)
+        self.urlSession = urlSession ?? URLSession(configuration: .default)
     }
     
     private static func lastModifiedURLString(for url: URL) -> String {
@@ -78,11 +78,8 @@ public class TBAKit: NSObject {
         let apiURL = URL(string: method, relativeTo: Constants.APIConstants.baseURL)!
         var request = URLRequest(url: apiURL)
         request.httpMethod = "GET"
-        
-        if let apiKey = apiKey {
-            request.addValue(apiKey, forHTTPHeaderField: "X-TBA-Auth-Key")
-        }
-        
+        request.addValue(apiKey, forHTTPHeaderField: "X-TBA-Auth-Key")
+
         if let lastModified = TBAKit.lastModified(for: apiURL) {
             request.addValue(lastModified, forHTTPHeaderField: "If-Modified-Since")
         }

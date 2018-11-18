@@ -30,11 +30,11 @@ class TeamInfoViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(team: Team, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
+    init(team: Team, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.team = team
         self.urlOpener = urlOpener
 
-        super.init(style: .grouped, persistentContainer: persistentContainer)
+        super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -200,7 +200,7 @@ extension TeamInfoViewController: Refreshable {
 
     @objc func refresh() {
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchTeam(key: team.key!, completion: { (modelTeam, error) in
+        request = tbaKit.fetchTeam(key: team.key!, completion: { (modelTeam, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh team - \(error.localizedDescription)")
             } else {

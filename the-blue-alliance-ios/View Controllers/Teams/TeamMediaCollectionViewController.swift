@@ -39,11 +39,11 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     // MARK: Init
 
-    init(team: Team, year: Int? = nil, persistentContainer: NSPersistentContainer) {
+    init(team: Team, year: Int? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.team = team
         self.year = year
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         setupDataSource()
     }
@@ -262,7 +262,7 @@ extension TeamMediaCollectionViewController: Refreshable {
         }
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchTeamMedia(key: team.key!, year: year, completion: { (media, error) in
+        request = tbaKit.fetchTeamMedia(key: team.key!, year: year, completion: { (media, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh team media - \(error.localizedDescription)")
             } else {

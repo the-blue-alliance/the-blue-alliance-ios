@@ -11,11 +11,11 @@ class TeamEventsViewController: EventsViewController {
         }
     }
 
-    init(team: Team, year: Int? = nil, persistentContainer: NSPersistentContainer) {
+    init(team: Team, year: Int? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.team = team
         self.year = year
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -45,7 +45,7 @@ class TeamEventsViewController: EventsViewController {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchTeamEvents(key: team.key!, completion: { (events, error) in
+        request = tbaKit.fetchTeamEvents(key: team.key!, completion: { (events, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
             } else {

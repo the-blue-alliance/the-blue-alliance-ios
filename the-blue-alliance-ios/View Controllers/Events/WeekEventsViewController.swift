@@ -23,10 +23,10 @@ class WeekEventsViewController: EventsViewController {
     }
     var weeks: [Event] = []
 
-    init(year: Int, persistentContainer: NSPersistentContainer) {
+    init(year: Int, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.year = year
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         setupWeeks()
     }
@@ -62,7 +62,7 @@ class WeekEventsViewController: EventsViewController {
         }
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchEvents(year: year, completion: { (events, error) in
+        request = tbaKit.fetchEvents(year: year, completion: { (events, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
             } else {

@@ -10,13 +10,14 @@ class EventAlliancesContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, persistentContainer: NSPersistentContainer) {
+    init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.event = event
 
-        let alliancesViewController = EventAlliancesViewController(event: event, persistentContainer: persistentContainer)
+        let alliancesViewController = EventAlliancesViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         super.init(viewControllers: [alliancesViewController],
-                   persistentContainer: persistentContainer)
+                   persistentContainer: persistentContainer,
+                   tbaKit: tbaKit)
 
         navigationTitle = "Alliances"
         navigationSubtitle = "@ \(event.friendlyNameWithYear)"
@@ -33,7 +34,7 @@ class EventAlliancesContainerViewController: ContainerViewController {
 extension EventAlliancesContainerViewController: EventAlliancesViewControllerDelegate {
 
     func teamKeySelected(_ teamKey: TeamKey) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: self.event, persistentContainer: persistentContainer)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: self.event, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -52,10 +53,10 @@ private class EventAlliancesViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, persistentContainer: NSPersistentContainer) {
+    init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.event = event
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         setupDataSource()
     }
@@ -132,7 +133,7 @@ extension EventAlliancesViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchEventAlliances(key: event.key!, completion: { (alliances, error) in
+        request = tbaKit.fetchEventAlliances(key: event.key!, completion: { (alliances, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh event alliances - \(error.localizedDescription)")
             } else {

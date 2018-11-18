@@ -5,6 +5,7 @@ import CoreData
 class TBACollectionViewController: UICollectionViewController, DataController {
 
     var persistentContainer: NSPersistentContainer
+    let tbaKit: TBAKit
 
     // MARK: - Refreshable
 
@@ -16,8 +17,9 @@ class TBACollectionViewController: UICollectionViewController, DataController {
 
     // MARK: - Init
 
-    init(persistentContainer: NSPersistentContainer) {
+    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.persistentContainer = persistentContainer
+        self.tbaKit = tbaKit
 
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
     }

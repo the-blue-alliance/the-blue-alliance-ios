@@ -12,7 +12,8 @@ class EventsContainerViewController_TestCase: TBATestCase {
         eventsContainerViewController = EventsContainerViewController(remoteConfig: remoteConfig,
                                                                       urlOpener: urlOpener,
                                                                       userDefaults: userDefaults,
-                                                                      persistentContainer: persistentContainer)
+                                                                      persistentContainer: persistentContainer,
+                                                                      tbaKit: tbaKit)
         navigationController = MockNavigationController(rootViewController: eventsContainerViewController)
 
         eventsContainerViewController.viewDidLoad()

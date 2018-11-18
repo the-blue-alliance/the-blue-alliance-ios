@@ -15,10 +15,10 @@ class DistrictRankingsViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(district: District, persistentContainer: NSPersistentContainer) {
+    init(district: District, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.district = district
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         setupDataSource()
     }
@@ -90,7 +90,7 @@ extension DistrictRankingsViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchDistrictRankings(key: district.key!, completion: { (rankings, error) in
+        request = tbaKit.fetchDistrictRankings(key: district.key!, completion: { (rankings, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
             } else {

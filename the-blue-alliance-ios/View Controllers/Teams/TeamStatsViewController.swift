@@ -37,11 +37,11 @@ class TeamStatsViewController: TBATableViewController, Observable {
 
     // MARK: - Init
 
-    init(teamKey: TeamKey, event: Event, persistentContainer: NSPersistentContainer) {
+    init(teamKey: TeamKey, event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.teamKey = teamKey
         self.event = event
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -115,7 +115,7 @@ extension TeamStatsViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchEventTeamStats(key: event.key!, completion: { (stats, error) in
+        request = tbaKit.fetchEventTeamStats(key: event.key!, completion: { (stats, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh team stats - \(error.localizedDescription)")
             } else {

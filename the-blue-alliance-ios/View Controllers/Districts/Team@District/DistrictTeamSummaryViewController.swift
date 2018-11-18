@@ -21,10 +21,10 @@ class DistrictTeamSummaryViewController: TBATableViewController {
 
     // MARK: Init
 
-    init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer) {
+    init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.ranking = ranking
 
-        super.init(persistentContainer: persistentContainer)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         contextObserver.observeObject(object: ranking, state: .updated) { [unowned self] (_, _) in
             DispatchQueue.main.async {
@@ -116,7 +116,7 @@ extension DistrictTeamSummaryViewController: Refreshable {
 
     @objc func refresh() {
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchDistrictRankings(key: ranking.district!.key!, completion: { (rankings, error) in
+        request = tbaKit.fetchDistrictRankings(key: ranking.district!.key!, completion: { (rankings, error) in
             if let error = error {
                 self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
             } else {

@@ -35,17 +35,18 @@ class TeamViewController: ContainerViewController, Observable {
 
     // MARK: Init
 
-    init(team: Team, remoteConfig: RemoteConfig, urlOpener: URLOpener, persistentContainer: NSPersistentContainer) {
+    init(team: Team, remoteConfig: RemoteConfig, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.team = team
         self.year = TeamViewController.latestYear(remoteConfig: remoteConfig, years: team.yearsParticipated)
 
-        let infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer)
-        eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer)
-        mediaViewController = TeamMediaCollectionViewController(team: team, year: year, persistentContainer: persistentContainer)
+        let infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        mediaViewController = TeamMediaCollectionViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         super.init(viewControllers: [infoViewController, eventsViewController, mediaViewController],
                    segmentedControlTitles: ["Info", "Events", "Media"],
-                   persistentContainer: persistentContainer)
+                   persistentContainer: persistentContainer,
+                   tbaKit: tbaKit)
 
         updateInterface()
 
@@ -107,7 +108,7 @@ class TeamViewController: ContainerViewController, Observable {
 
     private func refreshYearsParticipated() {
         var request: URLSessionDataTask?
-        request = TBAKit.sharedKit.fetchTeamYearsParticipated(key: team.key!, completion: { (years, error) in
+        request = tbaKit.fetchTeamYearsParticipated(key: team.key!, completion: { (years, error) in
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
                 backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
 
@@ -130,7 +131,7 @@ class TeamViewController: ContainerViewController, Observable {
             return
         }
 
-        let selectTableViewController = SelectTableViewController<TeamViewController>(current: year, options: yearsParticipated, persistentContainer: persistentContainer)
+        let selectTableViewController = SelectTableViewController<TeamViewController>(current: year, options: yearsParticipated, persistentContainer: persistentContainer, tbaKit: tbaKit)
         selectTableViewController.title = "Select Year"
         selectTableViewController.delegate = self
 
@@ -189,7 +190,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, persistentContainer: persistentContainer)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
