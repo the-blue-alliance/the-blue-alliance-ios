@@ -25,7 +25,7 @@ class EventKeyTestCase: CoreDataTestCase {
         let eventKey = EventKey.insert(withKey: "2018miket", in: persistentContainer.viewContext)
         XCTAssertNil(eventKey.event)
 
-        let event = districtEvent()
+        let event = insertDistrictEvent()
         XCTAssertNotNil(eventKey.event)
         XCTAssertEqual(eventKey.event, event)
     }

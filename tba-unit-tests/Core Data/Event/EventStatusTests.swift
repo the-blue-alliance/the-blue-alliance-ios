@@ -4,7 +4,7 @@ import XCTest
 class EventStatusTestCase: CoreDataTestCase {
 
     func test_insert() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let qual = TBAEventStatusQual(numTeams: nil, status: nil, ranking: nil, sortOrder: nil)
         let alliance = TBAEventStatusAlliance(number: 1, pick: 1)
@@ -31,7 +31,7 @@ class EventStatusTestCase: CoreDataTestCase {
     }
 
     func test_update() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let qualModel = TBAEventStatusQual(numTeams: nil, status: nil, ranking: nil, sortOrder: nil)
         let allianceModel = TBAEventStatusAlliance(number: 1, pick: 1)
@@ -71,7 +71,7 @@ class EventStatusTestCase: CoreDataTestCase {
     }
 
     func test_delete() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let qualModel = TBAEventStatusQual(numTeams: nil, status: nil, ranking: nil, sortOrder: nil)
         let allianceModel = TBAEventStatusAlliance(number: 1, pick: 1)
@@ -100,7 +100,7 @@ class EventStatusTestCase: CoreDataTestCase {
     }
 
     func test_delete_qual() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let qualModel = TBAEventStatusQual(numTeams: nil, status: nil, ranking: nil, sortOrder: nil)
 
@@ -130,7 +130,7 @@ class EventStatusTestCase: CoreDataTestCase {
     }
 
     func test_delete_playoff() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let playoffModel = TBAAllianceStatus(currentRecord: nil, level: nil, playoffAverage: nil, record: nil, status: nil)
 

@@ -1,10 +1,12 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-class TeamsContainerViewController_TestCase: TBATestCase {
+class TeamsContainerViewControllerTests: TBATestCase {
 
     var teamsContainerViewController: TeamsContainerViewController!
     var navigationController: MockNavigationController!
+
+    var viewControllerTester: TBAViewControllerTester!
 
     override func setUp() {
         super.setUp()
@@ -15,12 +17,13 @@ class TeamsContainerViewController_TestCase: TBATestCase {
                                                                     tbaKit: tbaKit)
         navigationController = MockNavigationController(rootViewController: teamsContainerViewController)
 
-        teamsContainerViewController.viewDidLoad()
+        viewControllerTester = TBAViewControllerTester(withViewController: teamsContainerViewController)
     }
 
     override func tearDown() {
         teamsContainerViewController = nil
         navigationController = nil
+        viewControllerTester = nil
 
         super.tearDown()
     }
@@ -43,30 +46,16 @@ class TeamsContainerViewController_TestCase: TBATestCase {
         }))
     }
 
-    func test_pushTeam() {
-        let team = insertTestTeam()
+    func test_teams_pushTeam() {
+        let team = insertTeam()
 
-        let showDetailViewControllerExpectation = XCTestExpectation(description: "showDetailViewController called")
-        navigationController.showDetailViewControllerCalled = { (vc) in
-            XCTAssert(vc is UINavigationController)
-            let nav = vc as! UINavigationController
-            XCTAssert(nav.viewControllers.first is TeamViewController)
-
-            showDetailViewControllerExpectation.fulfill()
-        }
         teamsContainerViewController.teamSelected(team)
 
-        wait(for: [showDetailViewControllerExpectation], timeout: 1.0)
-    }
-
-    func insertTestTeam() -> Team {
-        // Required: key, name, teamNumber, rookieYear
-        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
-        team.key = "frc2337"
-        team.name = "General Motors/Premier Tooling Systems/Microsoft/The Chrysler Foundation/Davison Tool & Engineering, L.L.C./The Robot Space/Michigan Department of Education/Kettering University/Taylor Steel/DXC Technology/Complete Scrap/ZF North America & Grand Blanc Community High School"
-        team.teamNumber = 2337
-        team.rookieYear = 2008
-        return team
+        XCTAssert(navigationController.detailViewController is UINavigationController)
+        let nav = navigationController.detailViewController as! UINavigationController
+        XCTAssert(nav.viewControllers.first is TeamViewController)
+        let teamViewController = nav.viewControllers.first as! TeamViewController
+        XCTAssertEqual(teamViewController.team, team)
     }
 
 }

@@ -4,7 +4,7 @@ import XCTest
 class EventStatusAllianceTestCase: CoreDataTestCase {
 
     func test_insert() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let backupModel = TBAAllianceBackup(teamIn: "frc3", teamOut: "frc2")
         let model = TBAEventStatusAlliance(number: 2, pick: 1, name: "Alliance One", backup: backupModel)
@@ -27,7 +27,7 @@ class EventStatusAllianceTestCase: CoreDataTestCase {
     }
 
     func test_update() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let backupModel = TBAAllianceBackup(teamIn: "frc3", teamOut: "frc2")
         let modelOne = TBAEventStatusAlliance(number: 2, pick: 1, name: "Alliance One", backup: backupModel)
@@ -59,7 +59,7 @@ class EventStatusAllianceTestCase: CoreDataTestCase {
     }
 
     func test_delete() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let backupModel = TBAAllianceBackup(teamIn: "frc3", teamOut: "frc2")
         let model = TBAEventStatusAlliance(number: 2, pick: 1, name: "Alliance One", backup: backupModel)
@@ -75,7 +75,7 @@ class EventStatusAllianceTestCase: CoreDataTestCase {
     }
 
     func test_delete_backup() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let backupModel = TBAAllianceBackup(teamIn: "frc3", teamOut: "frc2")
         let model = TBAEventStatusAlliance(number: 2, pick: 1, name: "Alliance One", backup: backupModel)

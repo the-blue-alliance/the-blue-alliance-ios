@@ -4,7 +4,7 @@ import UIKit
 
 class TeamAtDistrictViewController: ContainerViewController {
 
-    private let ranking: DistrictRanking
+    private(set) var ranking: DistrictRanking
 
     private var summaryViewController: DistrictTeamSummaryViewController!
 

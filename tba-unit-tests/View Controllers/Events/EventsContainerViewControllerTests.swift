@@ -1,10 +1,12 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-class EventsContainerViewController_TestCase: TBATestCase {
+class EventsContainerViewControllerTests: TBATestCase {
 
     var eventsContainerViewController: EventsContainerViewController!
     var navigationController: MockNavigationController!
+
+    var viewControllerTester: TBAViewControllerTester!
 
     override func setUp() {
         super.setUp()
@@ -16,12 +18,13 @@ class EventsContainerViewController_TestCase: TBATestCase {
                                                                       tbaKit: tbaKit)
         navigationController = MockNavigationController(rootViewController: eventsContainerViewController)
 
-        eventsContainerViewController.viewDidLoad()
+        viewControllerTester = TBAViewControllerTester(withViewController: eventsContainerViewController)
     }
 
     override func tearDown() {
         eventsContainerViewController = nil
         navigationController = nil
+        viewControllerTester = nil
 
         super.tearDown()
     }
@@ -49,22 +52,23 @@ class EventsContainerViewController_TestCase: TBATestCase {
         }))
     }
 
-    func test_showYearSelect() {
-        let presentExpectation = XCTestExpectation(description: "present called")
-        navigationController.presentCalled = { (vc) in
-            XCTAssert(vc is UINavigationController)
-            let nav = vc as! UINavigationController
-            XCTAssert(nav.viewControllers.first is YearSelectViewController)
-
-            presentExpectation.fulfill()
-        }
+    func test_years_showYearSelect() {
+        let event = insertEvent(year: 2014)
+        eventsContainerViewController.weekEventSelected(event)
         eventsContainerViewController.navigationTitleTapped()
 
-        wait(for: [presentExpectation], timeout: 1.0)
+        navigationController.presentCalled = {
+            XCTAssert($0 is UINavigationController)
+            let nav = $0 as! UINavigationController
+            XCTAssert(nav.viewControllers.first is YearSelectViewController)
+            let yearSelectViewController = nav.viewControllers.first as! YearSelectViewController
+            XCTAssertEqual(yearSelectViewController.year, 2014)
+            XCTAssertEqual(yearSelectViewController.week, event)
+        }
     }
 
-    func test_eventWeekSelected() {
-        let event = insertTestEvent(year: 2014)
+    func test_years_eventWeekSelected() {
+        let event = insertEvent(year: 2014)
         eventsContainerViewController.weekEventSelected(event)
 
         XCTAssertEqual(eventsContainerViewController.year, 2014)
@@ -72,42 +76,25 @@ class EventsContainerViewController_TestCase: TBATestCase {
     }
 
     func test_eventWeeksUpdated() {
-        let event = insertTestEvent(year: 2015)
+        let event = insertEvent()
+
         eventsContainerViewController.eventsViewController.weekEvent = event
         eventsContainerViewController.weekEventUpdated()
 
-        XCTAssertEqual(eventsContainerViewController.navigationTitle, "Week 2 Events")
+        XCTAssertEqual(eventsContainerViewController.navigationTitle, "Week 4 Events")
         XCTAssertEqual(eventsContainerViewController.navigationSubtitle, "▾ 2015")
     }
 
-    func test_pushEvent() {
-        let event = insertTestEvent(year: 2015)
+    func test_events_pushEvent() {
+        let event = insertEvent()
 
-        let showDetailViewControllerExpectation = XCTestExpectation(description: "showDetailViewController called")
-        navigationController.showDetailViewControllerCalled = { (vc) in
-            XCTAssert(vc is UINavigationController)
-            let nav = vc as! UINavigationController
-            XCTAssert(nav.viewControllers.first is EventViewController)
-
-            showDetailViewControllerExpectation.fulfill()
-        }
         eventsContainerViewController.eventSelected(event)
 
-        wait(for: [showDetailViewControllerExpectation], timeout: 1.0)
-    }
-
-    func insertTestEvent(year: Int) -> Event {
-        // Required: endDate, eventCode, eventType, key, name, startDate, year
-        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        event.endDate = Calendar.current.date(from: DateComponents(year: year, month: 3, day: 7))
-        event.eventCode = "miket"
-        event.eventType = 1
-        event.key = "2015miket"
-        event.name = "FIM District - Kettering University Event"
-        event.endDate = Calendar.current.date(from: DateComponents(year: year, month: 3, day: 5))
-        event.week = NSNumber(value: 1)
-        event.year = year as NSNumber
-        return event
+        XCTAssert(navigationController.detailViewController is UINavigationController)
+        let nav = navigationController.detailViewController as! UINavigationController
+        XCTAssert(nav.viewControllers.first is EventViewController)
+        let eventViewController = nav.viewControllers.first as! EventViewController
+        XCTAssertEqual(eventViewController.event, event)
     }
 
 }

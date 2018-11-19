@@ -270,7 +270,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupGoogleAuthentication()
     }
 
-    private static func setupAppearance() {
+    static func setupAppearance() {
         let navigationBarAppearance = UINavigationBar.appearance()
 
         navigationBarAppearance.barTintColor = UIColor.primaryBlue

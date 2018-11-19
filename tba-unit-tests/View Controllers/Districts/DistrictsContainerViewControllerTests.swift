@@ -1,10 +1,12 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-class DistrictsContainerViewController_TestCase: TBATestCase {
+class DistrictsContainerViewControllerTests: TBATestCase {
 
     var districtsContainerViewController: DistrictsContainerViewController!
     var navigationController: MockNavigationController!
+
+    var viewControllerTester: TBAViewControllerTester!
 
     override func setUp() {
         super.setUp()
@@ -16,12 +18,13 @@ class DistrictsContainerViewController_TestCase: TBATestCase {
                                                                             tbaKit: tbaKit)
         navigationController = MockNavigationController(rootViewController: districtsContainerViewController)
 
-        districtsContainerViewController.viewDidLoad()
+        viewControllerTester = TBAViewControllerTester(withViewController: districtsContainerViewController)
     }
 
     override func tearDown() {
         districtsContainerViewController = nil
         navigationController = nil
+        viewControllerTester = nil
 
         super.tearDown()
     }
@@ -48,53 +51,40 @@ class DistrictsContainerViewController_TestCase: TBATestCase {
         }))
     }
 
-    func test_showYearSelect() {
-        let presentExpectation = XCTestExpectation(description: "present called")
-        navigationController.presentCalled = { (vc) in
-            XCTAssert(vc is UINavigationController)
-            let nav = vc as! UINavigationController
-            XCTAssert(nav.viewControllers.first is SelectTableViewController<DistrictsContainerViewController>)
-
-            presentExpectation.fulfill()
-        }
+    func test_years_showYearSelect() {
         districtsContainerViewController.navigationTitleTapped()
 
-        wait(for: [presentExpectation], timeout: 1.0)
+        navigationController.presentCalled = {
+            XCTAssert($0 is UINavigationController)
+            let nav = $0 as! UINavigationController
+
+            XCTAssert(nav.viewControllers.first is SelectTableViewController<DistrictsContainerViewController>)
+            let selectViewController = nav.viewControllers.first as! SelectTableViewController<DistrictsContainerViewController>
+
+            XCTAssertEqual(selectViewController.current, 2015)
+            XCTAssertEqual(selectViewController.options, [2009, 2010, 2011, 2012, 2013, 2014, 2015])
+        }
     }
 
-    func test_selectYear() {
+    func test_years_selectYear() {
         districtsContainerViewController.optionSelected(2016)
         XCTAssertEqual(districtsContainerViewController.year, 2016)
     }
 
-    func test_selectYearTitle() {
+    func test_years_selectYearTitle() {
         XCTAssertEqual(districtsContainerViewController.titleForOption(2016), "2016")
     }
 
-    func test_pushDistrict() {
-        let district = insertTestDistrict()
+    func test_districts_pushDistrict() {
+        let district = insertDistrict()
 
-        let showDetailViewControllerExpectation = XCTestExpectation(description: "showDetailViewController called")
-        navigationController.showDetailViewControllerCalled = { (vc) in
-            XCTAssert(vc is UINavigationController)
-            let nav = vc as! UINavigationController
-            XCTAssert(nav.viewControllers.first is DistrictViewController)
-
-            showDetailViewControllerExpectation.fulfill()
-        }
         districtsContainerViewController.districtSelected(district)
 
-        wait(for: [showDetailViewControllerExpectation], timeout: 1.0)
-    }
-
-    func insertTestDistrict() -> District {
-        // Required: abbreviation, name, key, year
-        let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
-        district.abbreviation = "fim"
-        district.name = "FIRST In Michigan"
-        district.key = "2018fim"
-        district.year = 2015
-        return district
+        XCTAssert(navigationController.detailViewController is UINavigationController)
+        let nav = navigationController.detailViewController as! UINavigationController
+        XCTAssert(nav.viewControllers.first is DistrictViewController)
+        let districtViewController = nav.viewControllers.first as! DistrictViewController
+        XCTAssertEqual(districtViewController.district, district)
     }
 
 }

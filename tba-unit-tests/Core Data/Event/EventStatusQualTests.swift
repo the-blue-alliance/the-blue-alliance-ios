@@ -4,7 +4,7 @@ import XCTest
 class EventStatusQualTestCase: CoreDataTestCase {
 
     func test_insert() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let model = TBAEventStatusQual(numTeams: 3, status: "playing", ranking: nil, sortOrder: nil)
         let status = EventStatusQual.insert(model, eventKey: event.key!, teamKey: "frc1", in: persistentContainer.viewContext)
@@ -18,7 +18,7 @@ class EventStatusQualTestCase: CoreDataTestCase {
     }
 
     func test_insertPredicate() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
         let teamKey = "frc1"
 
         let model = TBAEventStatusQual(numTeams: nil, status: nil, ranking: nil, sortOrder: nil)
@@ -45,7 +45,7 @@ class EventStatusQualTestCase: CoreDataTestCase {
     }
 
     func test_update() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelOne = TBAEventStatusQual(numTeams: 3, status: "playing", ranking: TBAEventRanking(teamKey: "frc1", rank: 3), sortOrder: nil)
         let statusOne = EventStatusQual.insert(modelOne, eventKey: event.key!, teamKey: "frc1", in: persistentContainer.viewContext)
@@ -71,7 +71,7 @@ class EventStatusQualTestCase: CoreDataTestCase {
     }
 
     func test_delete() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let model = TBAEventStatusQual(numTeams: 3, status: "playing", ranking: TBAEventRanking(teamKey: "frc1", rank: 3), sortOrder: nil)
         let status = EventStatusQual.insert(model, eventKey: event.key!, teamKey: "frc1", in: persistentContainer.viewContext)

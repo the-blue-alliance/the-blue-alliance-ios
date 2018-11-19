@@ -11,7 +11,7 @@ protocol SelectTableViewControllerDelegate: AnyObject {
 
 class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TBATableViewController, Refreshable {
 
-    private let current: Delegate.OptionType?
+    private(set) var current: Delegate.OptionType?
     var options: [Delegate.OptionType] {
         didSet {
             DispatchQueue.main.async {

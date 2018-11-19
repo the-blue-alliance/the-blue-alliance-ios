@@ -19,12 +19,6 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
         self.ranking = ranking
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
-
-        contextObserver.observeObject(object: ranking, state: .updated) { [unowned self] (_, _) in
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -37,6 +31,12 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
         super.viewDidLoad()
 
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
+
+        contextObserver.observeObject(object: ranking, state: .updated) { [unowned self] (_, _) in
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
 
 

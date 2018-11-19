@@ -25,7 +25,7 @@ class EventAllianceBackupTestCase: CoreDataTestCase {
     }
 
     func test_delete() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelBackup = TBAAllianceBackup(teamIn: "frc1", teamOut: "frc2")
         let modelAlliance = TBAAlliance(name: "Alliance 1", backup: modelBackup, declines: ["frc5"], picks: ["frc1", "frc2", "frc3"], status: nil)

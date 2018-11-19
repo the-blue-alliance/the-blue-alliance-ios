@@ -126,7 +126,7 @@ class DistrictTestCase: CoreDataTestCase {
     }
 
     func test_delete() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
         let district = event.district!
 
         let ranking = DistrictRanking(entity: DistrictRanking.entity(), insertInto: persistentContainer.viewContext)

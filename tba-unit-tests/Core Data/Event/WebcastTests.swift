@@ -14,7 +14,7 @@ class WebcastTestCase: CoreDataTestCase {
         // Should fail - Webcasts need to be associated with at least one Event
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
 
-        let event = districtEvent()
+        let event = insertDistrictEvent()
         event.addToWebcasts(webcast)
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
@@ -38,7 +38,7 @@ class WebcastTestCase: CoreDataTestCase {
         let model = TBAWebcast(type: "twitch", channel: "firstinmichigan")
         let webcast = Webcast.insert(model, in: persistentContainer.viewContext)
 
-        let event = districtEvent()
+        let event = insertDistrictEvent()
         event.addToWebcasts(webcast)
 
         persistentContainer.viewContext.delete(webcast)
@@ -60,10 +60,10 @@ class WebcastTestCase: CoreDataTestCase {
         // Sanity check
         XCTAssertNotEqual(webcastOne, webcastTwo)
 
-        let eventOne = districtEvent()
+        let eventOne = insertDistrictEvent()
         eventOne.addToWebcasts(Set([webcastOne, webcastTwo]) as NSSet)
 
-        let eventTwo = districtEvent(eventKey: "2018mike2")
+        let eventTwo = insertDistrictEvent(eventKey: "2018mike2")
         eventTwo.addToWebcasts(webcastTwo)
 
         persistentContainer.viewContext.delete(eventOne)

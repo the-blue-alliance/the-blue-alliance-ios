@@ -41,7 +41,7 @@ class AwardRecipientTestCase: AwardTestCase {
         // Our Award Recipient shouldn't be able to be saved without an Award Recipient
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
 
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelAward = TBAAward(name: "The Fake Award",
                                   awardType: 2,
@@ -91,7 +91,7 @@ class AwardRecipientTestCase: AwardTestCase {
     }
 
     override func test_delete() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelRecipient = TBAAwardRecipient(teamKey: "frc7332")
         let recipient = AwardRecipient.insert(modelRecipient, in: persistentContainer.viewContext)
@@ -126,7 +126,7 @@ class AwardRecipientTestCase: AwardTestCase {
     }
 
     func test_delete_deny() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelRecipient = TBAAwardRecipient(awardee: "Zachary Orr")
         let recipient = AwardRecipient.insert(modelRecipient, in: persistentContainer.viewContext)
