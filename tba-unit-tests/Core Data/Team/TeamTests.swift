@@ -183,7 +183,7 @@ class TeamTestCase: CoreDataTestCase {
         let teamModel = TBATeam(key: "frc7332", teamNumber: 7332, name: "The Rawrbotz", rookieYear: 2010)
         let team = Team.insert(teamModel, in: persistentContainer.viewContext)
 
-        let event = districtEvent()
+        let event = insertDistrictEvent()
         team.addToEvents(event)
 
         let mediaModel = TBAMedia(key: "key", type: "youtube", foreignKey: nil, details: nil, preferred: nil)

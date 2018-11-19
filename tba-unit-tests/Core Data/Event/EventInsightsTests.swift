@@ -4,7 +4,7 @@ import XCTest
 class EventInsightsTestCase: CoreDataTestCase {
 
     func test_insert() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let model = TBAEventInsights(qual: ["abc": 2], playoff: ["def": 3])
         let insights = EventInsights.insert(model, eventKey: event.key!, in: persistentContainer.viewContext)
@@ -20,7 +20,7 @@ class EventInsightsTestCase: CoreDataTestCase {
     }
 
     func test_update() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelOne = TBAEventInsights(qual: ["abc": 2], playoff: ["def": 3])
         let insightsOne = EventInsights.insert(modelOne, eventKey: event.key!, in: persistentContainer.viewContext)
@@ -39,7 +39,7 @@ class EventInsightsTestCase: CoreDataTestCase {
     }
 
     func test_delete() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let model = TBAEventInsights(qual: ["abc": 2], playoff: ["def": 3])
         let insights = EventInsights.insert(model, eventKey: event.key!, in: persistentContainer.viewContext)
@@ -56,7 +56,7 @@ class EventInsightsTestCase: CoreDataTestCase {
         let insights = EventInsights.init(entity: EventInsights.entity(), insertInto: persistentContainer.viewContext)
         XCTAssert(insights.isOrphaned)
 
-        insights.event = districtEvent()
+        insights.event = insertDistrictEvent()
         XCTAssertFalse(insights.isOrphaned)
         insights.event = nil
 

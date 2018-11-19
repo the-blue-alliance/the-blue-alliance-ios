@@ -4,7 +4,7 @@ import XCTest
 class DistrictRankingTestCase: CoreDataTestCase {
 
     func test_insert() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let eventPoints = TBADistrictEventPoints(teamKey: "frc7332", eventKey: event.key!, alliancePoints: 10, awardPoints: 20, qualPoints: 30, elimPoints: 40, total: 50)
         let modelDistrictRanking = TBADistrictRanking(teamKey: "frc7332", rank: 1, rookieBonus: 10, pointTotal: 30, eventPoints: [eventPoints])
@@ -23,7 +23,7 @@ class DistrictRankingTestCase: CoreDataTestCase {
     }
 
     func test_update() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let eventPoints = TBADistrictEventPoints(teamKey: "frc7332", eventKey: event.key!, alliancePoints: 10, awardPoints: 20, qualPoints: 30, elimPoints: 40, total: 50)
         let modelDistrictRanking = TBADistrictRanking(teamKey: "frc7332", rank: 1, rookieBonus: 10, pointTotal: 30, eventPoints: [eventPoints])
@@ -33,7 +33,7 @@ class DistrictRankingTestCase: CoreDataTestCase {
         // Attach to a District so we can save
         event.district!.addToRankings(districtRanking)
 
-        let eventNew = districtEvent(eventKey: "2018mike2")
+        let eventNew = insertDistrictEvent(eventKey: "2018mike2")
 
         let eventPointsNew = TBADistrictEventPoints(teamKey: "frc7332", eventKey: eventNew.key!, alliancePoints: 10, awardPoints: 20, qualPoints: 30, elimPoints: 40, total: 50)
         let duplicateModelDistrictRanking = TBADistrictRanking(teamKey: "frc7332", rank: 2, rookieBonus: 10, pointTotal: 40, eventPoints: [eventPointsNew])
@@ -64,7 +64,7 @@ class DistrictRankingTestCase: CoreDataTestCase {
     }
 
     func test_delete() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
         let district = event.district!
 
         let eventPoints = TBADistrictEventPoints(teamKey: "frc7332", eventKey: event.key!, alliancePoints: 10, awardPoints: 20, qualPoints: 30, elimPoints: 40, total: 50)

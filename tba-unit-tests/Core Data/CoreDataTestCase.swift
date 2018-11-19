@@ -16,6 +16,8 @@ class CoreDataTestCase: FBSnapshotTestCase {
         super.setUp()
 
         agnosticOptions = .OS
+        // Uncomment to record all new snapshots
+        // recordMode = true
 
         persistentContainer = NSPersistentContainer(name: "TBA", managedObjectModel: CoreDataTestCase.managedObjectModel)
 
@@ -37,7 +39,45 @@ class CoreDataTestCase: FBSnapshotTestCase {
         wait(for: [persistentContainerSetupExpectation], timeout: 10.0)
     }
 
-    func districtEvent(eventKey: String = "2018miket") -> Event {
+    func insertEvent(year: Int = 2015) -> Event {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        let model = TBAEvent(key: "\(year)qcmo",
+                             name: "FRC Festival de Robotique - Montreal Regional",
+                             eventCode: "qcmo",
+                             eventType: 0,
+                             district: nil,
+                             city: nil,
+                             stateProv: nil,
+                             country: nil,
+                             startDate: dateFormatter.date(from: "\(year)-03-18")!,
+                             endDate: dateFormatter.date(from: "\(year)-03-21")!,
+                             year: year,
+                             shortName: "Festival de Robotique - Montreal",
+                             eventTypeString: "Reginal",
+                             week: 3,
+                             address: nil,
+                             postalCode: nil,
+                             gmapsPlaceID: nil,
+                             gmapsURL: nil,
+                             lat: nil,
+                             lng: nil,
+                             locationName: nil,
+                             timezone: nil,
+                             website: nil,
+                             firstEventID: nil,
+                             firstEventCode: nil,
+                             webcasts: nil,
+                             divisionKeys: [],
+                             parentEventKey: nil,
+                             playoffType: nil,
+                             playoffTypeString: nil)
+
+        return Event.insert(model, in: persistentContainer.viewContext)
+    }
+
+    func insertDistrictEvent(eventKey: String = "2018miket") -> Event {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
 
@@ -76,7 +116,34 @@ class CoreDataTestCase: FBSnapshotTestCase {
         return Event.insert(model, in: persistentContainer.viewContext)
     }
 
-    func verifyView(_ view: UIView, identifier: String) {
+    func insertTeam() -> Team {
+        let team = TBATeam(key: "frc7332",
+                           teamNumber: 7332,
+                           nickname: "The Rawrbotz",
+                           name: "General Motors/Premier Tooling Systems/Microsoft/The Chrysler Foundation/Davison Tool & Engineering, L.L.C./The Robot Space/Michigan Department of Education/Kettering University/Taylor Steel/DXC Technology/Complete Scrap/ZF North America & Grand Blanc Community High School",
+                           city: nil,
+                           stateProv: nil,
+                           country: nil,
+                           address: nil,
+                           postalCode: nil,
+                           gmapsPlaceID: nil,
+                           gmapsURL: nil,
+                           lat: nil,
+                           lng: nil,
+                           locationName: nil,
+                           website: nil,
+                           rookieYear: 2010,
+                           motto: nil,
+                           homeChampionship: nil)
+        return Team.insert(team, in: persistentContainer.viewContext)
+    }
+
+    func insertDistrict() -> District {
+        let district = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
+        return District.insert(district, in: persistentContainer.viewContext)
+    }
+
+    func verifyView(_ view: UIView, identifier: String = "") {
         FBSnapshotVerifyView(view,
                              identifier: identifier,
                              suffixes: NSOrderedSet(array: [""]))

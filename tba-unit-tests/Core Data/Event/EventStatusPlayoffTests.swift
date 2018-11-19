@@ -4,7 +4,7 @@ import XCTest
 class EventStatusPlayoffTestCase: CoreDataTestCase {
 
     func test_insert() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let model = TBAAllianceStatus(currentRecord: TBAWLT(wins: 1, losses: 2, ties: 3), level: "level", playoffAverage: 2.22, record: TBAWLT(wins: 2, losses: 2, ties: 3), status: "status")
         let status = EventStatusPlayoff.insert(model, eventKey: event.key!, teamKey: "frc1", in: persistentContainer.viewContext)
@@ -20,7 +20,7 @@ class EventStatusPlayoffTestCase: CoreDataTestCase {
     }
 
     func test_insertPredicate() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
         let teamKey = "frc1"
 
         let model = TBAAllianceStatus(currentRecord: nil, level: nil, playoffAverage: nil, record: nil, status: nil)
@@ -49,7 +49,7 @@ class EventStatusPlayoffTestCase: CoreDataTestCase {
     }
 
     func test_update() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelAlliance = TBAAlliance(name: nil, backup: nil, declines: nil, picks: ["frc1"], status: nil)
         let alliance = EventAlliance.insert(modelAlliance, eventKey: event.key!, in: persistentContainer.viewContext)
@@ -74,7 +74,7 @@ class EventStatusPlayoffTestCase: CoreDataTestCase {
 
     // This is a good example of how we should be testing deletes
     func test_delete() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let model = TBAAllianceStatus(currentRecord: nil, level: nil, playoffAverage: nil, record: nil, status: nil)
         let status = EventStatusPlayoff.insert(model, eventKey: event.key!, teamKey: "frc1", in: persistentContainer.viewContext)

@@ -4,7 +4,7 @@ import XCTest
 class AwardTestCase: CoreDataTestCase {
 
     func test_insert() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelAwardRecipient = TBAAwardRecipient(teamKey: "frc7332")
         let modelAward = TBAAward(name: "The Fake Award",
@@ -29,7 +29,7 @@ class AwardTestCase: CoreDataTestCase {
     }
 
     func test_insert_validate() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelAward = TBAAward(name: "The Fake Award",
                                   awardType: 2,
@@ -50,7 +50,7 @@ class AwardTestCase: CoreDataTestCase {
     }
 
     func test_update() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let frc1Model = TBAAwardRecipient(teamKey: "frc1")
         let frc2Model = TBAAwardRecipient(teamKey: "frc2")
@@ -112,7 +112,7 @@ class AwardTestCase: CoreDataTestCase {
     }
 
     func test_delete() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let frc1Model = TBAAwardRecipient(teamKey: "frc1")
         let frc2Model = TBAAwardRecipient(teamKey: "frc2")

@@ -4,7 +4,7 @@ import XCTest
 class EventAllianceTestCase: CoreDataTestCase {
 
     func test_insert() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let status = TBAAllianceStatus(currentRecord: nil, level: nil, playoffAverage: nil, record: nil, status: nil)
         let model = TBAAlliance(name: "Alliance 1", backup: nil, declines: ["frc5"], picks: ["frc1", "frc2", "frc3"], status: status)
@@ -29,7 +29,7 @@ class EventAllianceTestCase: CoreDataTestCase {
     }
 
     func test_update() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelBackup = TBAAllianceBackup(teamIn: "frc6", teamOut: "frc2")
         let modelStatus = TBAAllianceStatus(currentRecord: nil, level: nil, playoffAverage: nil, record: nil, status: nil)
@@ -65,7 +65,7 @@ class EventAllianceTestCase: CoreDataTestCase {
     }
 
     func test_delete() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelBackup = TBAAllianceBackup(teamIn: "frc2", teamOut: "frc3")
         let modelStatus = TBAAllianceStatus(currentRecord: nil, level: nil, playoffAverage: nil, record: nil, status: nil)
@@ -96,7 +96,7 @@ class EventAllianceTestCase: CoreDataTestCase {
     }
 
     func test_delete_backup() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelBackup = TBAAllianceBackup(teamIn: "frc2", teamOut: "frc3")
 
@@ -107,7 +107,7 @@ class EventAllianceTestCase: CoreDataTestCase {
         let backup = allianceOne.backup!
 
         // Attach our Backup to another alliance, so it's not an oprhan after AllianceOne is gone
-        let eventTwo = districtEvent(eventKey: "2018mike2")
+        let eventTwo = insertDistrictEvent(eventKey: "2018mike2")
         let modelTwo = TBAAlliance(name: "Alliance 1", backup: modelBackup, declines: nil, picks: ["frc1"], status: nil)
         let allianceTwo = EventAlliance.insert(modelTwo, eventKey: eventTwo.key!, in: persistentContainer.viewContext)
         eventTwo.addToAlliances(allianceTwo)
@@ -134,7 +134,7 @@ class EventAllianceTestCase: CoreDataTestCase {
     }
 
     func test_delete_backup_status() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelBackup = TBAAllianceBackup(teamIn: "frc2", teamOut: "frc3")
 
@@ -166,7 +166,7 @@ class EventAllianceTestCase: CoreDataTestCase {
 
     func test_delete_status() {
         // Should not delete status when still attached to an Event Status
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelStatus = TBAAllianceStatus(currentRecord: nil, level: nil, playoffAverage: nil, record: nil, status: nil)
 

@@ -3,7 +3,7 @@ import UIKit
 
 class EventViewController: ContainerViewController {
 
-    private let event: Event
+    private(set) var event: Event
     private let userDefaults: UserDefaults
 
     // MARK: - Init
@@ -39,12 +39,7 @@ class EventViewController: ContainerViewController {
 
         title = event.friendlyNameWithYear
 
-        // TODO: Document what this is, and see if we can move it... literally anywhere else
-        // Because, for what it's worth, I'm *pretty sure* this shouldn't be here, unless maybe iPad?
-        if navigationController?.viewControllers.index(of: self) == 0 {
-            navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            navigationItem.leftItemsSupplementBackButton = true
-        }
+        navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
     }
 
 }

@@ -4,9 +4,12 @@ import UIKit
 
 class DistrictViewController: ContainerViewController {
 
-    private let district: District
+    private(set) var district: District
     private let urlOpener: URLOpener
     private let userDefaults: UserDefaults
+
+    private(set) var eventsViewController: DistrictEventsViewController
+    private(set) var rankingsViewController: DistrictRankingsViewController
 
     // MARK: - Init
 
@@ -15,8 +18,8 @@ class DistrictViewController: ContainerViewController {
         self.urlOpener = urlOpener
         self.userDefaults = userDefaults
 
-        let eventsViewController = DistrictEventsViewController(district: district, persistentContainer: persistentContainer, tbaKit: tbaKit)
-        let rankingsViewController = DistrictRankingsViewController(district: district, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        eventsViewController = DistrictEventsViewController(district: district, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        rankingsViewController = DistrictRankingsViewController(district: district, persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         super.init(viewControllers: [eventsViewController, rankingsViewController],
                    segmentedControlTitles: ["Events", "Rankings"],
@@ -38,11 +41,7 @@ class DistrictViewController: ContainerViewController {
 
         title = "\(district.year!.stringValue) \(district.name!) Districts"
 
-        // TODO: Why do we do this? Has to do with the split view I know
-        if navigationController?.viewControllers.index(of: self) == 0 {
-            navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-            navigationItem.leftItemsSupplementBackButton = true
-        }
+        navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
     }
 
 }

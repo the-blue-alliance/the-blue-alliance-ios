@@ -68,15 +68,16 @@ class DistrictEventsViewController: EventsViewController {
     // MARK: - EventsViewControllerDataSourceConfiguration
 
     override var firstSortDescriptor: NSSortDescriptor {
-        return NSSortDescriptor(key: "week", ascending: true)
+        return NSSortDescriptor(key: #keyPath(Event.week), ascending: true)
     }
 
     override var sectionNameKeyPath: String {
-        return "week"
+        return #keyPath(Event.week)
     }
 
     override var fetchRequestPredicate: NSPredicate {
-        return NSPredicate(format: "district == %@", district)
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Event.district.key), district.key!)
     }
 
 }

@@ -114,7 +114,7 @@ class EventTestCase: CoreDataTestCase {
     }
 
     func test_insert_alliances() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelAllianceOne = TBAAlliance(name: "Alliance 1", picks: ["frc1"])
         let modelAllianceTwo = TBAAlliance(name: "Alliance 2", picks: ["frc2"])
@@ -148,7 +148,7 @@ class EventTestCase: CoreDataTestCase {
     func test_insert_awards() {
         // Orphaned Awards and their relationships should be cleaned up
         // We're going to assume this tests `insert` and `prepareForDeletion`
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         // Insert Two Awards - one with two Award Recipients, one with one Award Recipient
         let frc1Model = TBAAwardRecipient(teamKey: "frc1")
@@ -199,7 +199,7 @@ class EventTestCase: CoreDataTestCase {
     }
 
     func test_insert_awards_teamKey() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let frc1Model = TBAAwardRecipient(teamKey: "frc1")
         let frc2Model = TBAAwardRecipient(teamKey: "frc2")
@@ -265,7 +265,7 @@ class EventTestCase: CoreDataTestCase {
     }
 
     func test_insert_insights() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelInsights = TBAEventInsights(qual: ["abc": 1], playoff: ["def": 2])
         event.insert(modelInsights)
@@ -276,7 +276,7 @@ class EventTestCase: CoreDataTestCase {
     }
 
     func test_insert_match() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let redAlliance = TBAMatchAlliance(score: 200, teams: ["frc7332"])
         let blueAlliance = TBAMatchAlliance(score: 300, teams: ["frc3333"])
@@ -305,7 +305,7 @@ class EventTestCase: CoreDataTestCase {
     }
 
     func test_insert_matches() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let redAlliance = TBAMatchAlliance(score: 200, teams: ["frc7332"])
         let blueAlliance = TBAMatchAlliance(score: 300, teams: ["frc3333"])
@@ -362,7 +362,7 @@ class EventTestCase: CoreDataTestCase {
     }
 
     func test_insert_rankings() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelRankingOne = TBAEventRanking(teamKey: "frc1", rank: 1)
         let modelRankingTwo = TBAEventRanking(teamKey: "frc2", rank: 2)
@@ -392,7 +392,7 @@ class EventTestCase: CoreDataTestCase {
     }
 
     func test_insert_stats() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelStatsOne = TBAStat(teamKey: "frc1", ccwm: 2.2, dpr: 3.3, opr: 4.4)
         let modelStatsTwo = TBAStat(teamKey: "frc2", ccwm: 2.2, dpr: 3.3, opr: 4.4)
@@ -422,7 +422,7 @@ class EventTestCase: CoreDataTestCase {
     }
 
     func test_insert_status() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelEventStatusOne = TBAEventStatus(teamKey: "frc1", eventKey: event.key!, qual: TBAEventStatusQual(numTeams: nil, status: nil, ranking: TBAEventRanking(teamKey: "frc1", rank: 3), sortOrder: nil), alliance: nil, playoff: nil, allianceStatusString: nil, playoffStatusString: nil, overallStatusString: nil, nextMatchKey: nil, lastMatchKey: nil)
         let modelEventStatusTwo = TBAEventStatus(teamKey: "frc2", eventKey: event.key!)
@@ -454,7 +454,7 @@ class EventTestCase: CoreDataTestCase {
     }
 
     func test_insert_teams() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelTeamOne = TBATeam(key: "frc1", teamNumber: 1, name: "One", rookieYear: 2000)
         let modelTeamTwo = TBATeam(key: "frc2", teamNumber: 2, name: "Two", rookieYear: 2001)
@@ -482,7 +482,7 @@ class EventTestCase: CoreDataTestCase {
     }
 
     func test_insert_webcasts() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelWebcastOne = TBAWebcast(type: "twitch", channel: "firstinmichigan")
         let modelWebcastTwo = TBAWebcast(type: "twitch", channel: "firstinmichigan2")

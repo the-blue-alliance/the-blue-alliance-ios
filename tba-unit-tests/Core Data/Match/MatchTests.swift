@@ -53,7 +53,7 @@ class MatchTestCase: CoreDataTestCase {
         XCTAssertEqual(match.videos?.count, 1)
 
         // Ensure Match can have an Event
-        let event = districtEvent()
+        let event = insertDistrictEvent()
         match.event = event
 
         XCTAssertEqual(match.event, event)

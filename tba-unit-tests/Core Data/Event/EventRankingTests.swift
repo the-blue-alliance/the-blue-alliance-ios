@@ -4,7 +4,7 @@ import XCTest
 class EventRankingTestCase: CoreDataTestCase {
 
     func test_insert() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let extraStatsInfo = [TBAEventRankingSortOrder(name: "Total Ranking Points", precision: 0)]
         let sortOrderInfo = [
@@ -34,7 +34,7 @@ class EventRankingTestCase: CoreDataTestCase {
     }
 
     func test_insertPredicate() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
         let model = TBAEventRanking(teamKey: "frc1", rank: 2)
 
         let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
@@ -58,7 +58,7 @@ class EventRankingTestCase: CoreDataTestCase {
     }
 
     func test_update() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let extraStatsInfo = [TBAEventRankingSortOrder(name: "Total Ranking Points", precision: 0)]
         let sortOrderInfo = [
@@ -92,7 +92,7 @@ class EventRankingTestCase: CoreDataTestCase {
     }
 
     func test_delete_orphan() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
         let model = TBAEventRanking(teamKey: "frc1", rank: 2)
         let qualStatusModel = TBAEventStatusQual(numTeams: nil, status: nil, ranking: nil, sortOrder: nil)
 
@@ -117,7 +117,7 @@ class EventRankingTestCase: CoreDataTestCase {
     }
 
     func test_delete_qualStatus() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
         let model = TBAEventRanking(teamKey: "frc1", rank: 2)
         let eventStatusModel = TBAEventStatus(teamKey: "frc1", eventKey: event.key!)
         let qualStatusModel = TBAEventStatusQual(numTeams: nil, status: nil, ranking: nil, sortOrder: nil)

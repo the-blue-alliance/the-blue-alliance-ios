@@ -20,7 +20,7 @@ class DistrictEventPointsTestCase: CoreDataTestCase {
     }
 
     func test_insert_event() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelPointsOne = TBADistrictEventPoints(teamKey: "frc7332", eventKey: event.key!, alliancePoints: 10, awardPoints: 20, qualPoints: 30, elimPoints: 40, total: 50)
         DistrictEventPoints.insert([modelPointsOne], eventKey: event.key!, in: persistentContainer.viewContext)
@@ -60,7 +60,7 @@ class DistrictEventPointsTestCase: CoreDataTestCase {
     }
 
     func test_delete() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
         let modelEventPoints = TBADistrictEventPoints(teamKey: "frc7332", eventKey: event.key!, alliancePoints: 10, awardPoints: 20, qualPoints: 30, elimPoints: 40, total: 50)
         let modelDistrictRanking = TBADistrictRanking(teamKey: "frc7332", rank: 1, rookieBonus: 10, pointTotal: 30, eventPoints: [modelEventPoints])
         event.district!.insert([modelDistrictRanking])

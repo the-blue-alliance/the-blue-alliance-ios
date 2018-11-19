@@ -65,7 +65,7 @@ class MyTBAEntityTestCase: CoreDataTestCase {
     }
 
     func test_prepareForDeletion_match_event() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let redAlliance = TBAMatchAlliance(score: 200, teams: ["frc7332"])
         let blueAlliance = TBAMatchAlliance(score: 300, teams: ["frc3333"])

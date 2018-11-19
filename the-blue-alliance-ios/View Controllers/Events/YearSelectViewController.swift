@@ -8,8 +8,8 @@ protocol YearSelectViewControllerDelegate: AnyObject {
 
 class YearSelectViewController: ContainerViewController {
 
-    private let year: Int
-    private let week: Event?
+    private(set) var year: Int
+    private(set) var week: Event?
 
     private let selectViewController: SelectTableViewController<YearSelectViewController>
     private var eventWeekSelectViewController: EventWeekSelectViewController?

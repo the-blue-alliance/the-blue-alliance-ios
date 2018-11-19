@@ -4,7 +4,7 @@ import XCTest
 class EventTeamStatTestCase: CoreDataTestCase {
 
     func test_insert() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let model = TBAStat(teamKey: "frc1", ccwm: 2.2, dpr: 3.3, opr: 4.44)
         let stat = EventTeamStat.insert(model, eventKey: event.key!, in: persistentContainer.viewContext)
@@ -22,7 +22,7 @@ class EventTeamStatTestCase: CoreDataTestCase {
     }
 
     func test_update() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let modelOne = TBAStat(teamKey: "frc1", ccwm: 2.2, dpr: 3.3, opr: 4.44)
         let statOne = EventTeamStat.insert(modelOne, eventKey: event.key!, in: persistentContainer.viewContext)
@@ -40,7 +40,7 @@ class EventTeamStatTestCase: CoreDataTestCase {
     }
 
     func test_delete() {
-        let event = districtEvent()
+        let event = insertDistrictEvent()
 
         let model = TBAStat(teamKey: "frc1", ccwm: 2.2, dpr: 3.3, opr: 4.44)
         let stat = EventTeamStat.insert(model, eventKey: event.key!, in: persistentContainer.viewContext)
@@ -60,7 +60,7 @@ class EventTeamStatTestCase: CoreDataTestCase {
         let stat = EventTeamStat.init(entity: EventTeamStat.entity(), insertInto: persistentContainer.viewContext)
         XCTAssert(stat.isOrphaned)
 
-        stat.event = districtEvent()
+        stat.event = insertDistrictEvent()
         XCTAssertFalse(stat.isOrphaned)
         stat.event = nil
 

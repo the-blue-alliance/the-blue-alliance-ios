@@ -6,7 +6,7 @@ import UIKit
 
 class TeamViewController: ContainerViewController, Observable {
 
-    private let team: Team
+    private(set) var team: Team
 
     private let eventsViewController: TeamEventsViewController
     private let mediaViewController: TeamMediaCollectionViewController
@@ -71,6 +71,8 @@ class TeamViewController: ContainerViewController, Observable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
 
         if traitCollection.forceTouchCapability == .available {
             registerForPreviewing(with: self, sourceView: mediaViewController.collectionView)
