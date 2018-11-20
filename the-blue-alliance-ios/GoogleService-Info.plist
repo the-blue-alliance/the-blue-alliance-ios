@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>836511118694-aj54f0d17nui5453fe0rbj230cqto6sl.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.836511118694-aj54f0d17nui5453fe0rbj230cqto6sl</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAQFG-f7RWd4g1sFSiRmTvADi2emrvBS0w</string>
+	<key>GCM_SENDER_ID</key>
+	<string>836511118694</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.the-blue-alliance.tba</string>
+	<key>PROJECT_ID</key>
+	<string>tbatv-prod-hrd</string>
+	<key>STORAGE_BUCKET</key>
+	<string>tbatv-prod-hrd.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:836511118694:ios:962716d5bcf2e8c5</string>
+	<key>DATABASE_URL</key>
+	<string>https://tbatv-prod-hrd.firebaseio.com</string>
+</dict>
+</plist>

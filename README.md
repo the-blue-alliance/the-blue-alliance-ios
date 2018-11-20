@@ -32,7 +32,7 @@ These should be done after you've cloned the project and navigated to the projec
 
 Setup Firebase
 ---
-The Blue Alliance's mobile apps depend on Firebase. We configure Firebase in The Blue Alliance for iOS using a `GoogleService-Info.plist` file, provided by Firebase. The production plist isn't checked in to source control, since it contains an API key. You can setup your own Firebase application to develop against.
+The Blue Alliance's mobile apps depend on Firebase. We configure Firebase in The Blue Alliance for iOS using a `GoogleService-Info.plist` file, provided by Firebase. You can setup your own Firebase application to develop against.
 
 1. Navigate to the [Firebase Console](https://console.firebase.google.com/u/0/)
 2. Click `Add Project`
@@ -91,7 +91,7 @@ Before building in Xcode, make sure you've setup a Firebase project, as describe
 	* On the left sidebar, under `Targets` click `The Blue Alliance`
 	* Click the `General` tab along the top bar
 	* Change `Bundle Identifier` to the bundle identifier you set during Firebase setup
-5. Add your `GoogleService-Info.plist` is in the `the-blue-alliance-ios/the-blue-alliance-ios` folder. If linked properly, the `GoogleService-Info.plist` file in the Xcode project navigation should go from being red to being black
+5. Replace the existing `GoogleService-Info.plist` is in the `the-blue-alliance-ios/the-blue-alliance-ios` folder.
 6. Build and run The Blue Alliance for iOS!
 
 Contributing

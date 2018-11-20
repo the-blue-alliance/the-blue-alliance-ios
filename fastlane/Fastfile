@@ -1,25 +1,35 @@
-# Customise this file, documentation can be found here:
-# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
-# All available actions: https://docs.fastlane.tools/actions
-# can also be listed using the `fastlane actions` command
-
-setup_travis
-
-# If you want to automatically update fastlane if a new version is available:
-# update_fastlane
-
 default_platform :ios
 
 platform :ios do
 
-  desc "Runs all the tests"
-  lane :test do
-    test_unit
-    # test_ui
+  desc "Setup CI"
+  lane :setup_ci do
+    setup_travis
+    setup_secrets
+    setup_url_schemes
+    update_project_team
   end
 
-  desc "Run only the unit tests"
-  private_lane :test_unit do
+  ## CI Setup Lanes ##
+
+  desc "Setup Secrets.plist file (used by CI)"
+  private_lane :setup_secrets do
+    set_info_plist_value(path: "the-blue-alliance-ios/Secrets.plist", key: "tba_api_key", value: ENV['TBA_API_KEY'])
+  end
+
+  desc "Setup URL schemes in our project"
+  private_lane :setup_url_schemes do
+    # Setup Google callback URL from GoogleService-Info.plist
+    identifier = get_info_plist_value(path: "the-blue-alliance-ios/GoogleService-Info.plist", key: "REVERSED_CLIENT_ID")
+    update_url_schemes(path: "the-blue-alliance-ios/Info.plist", url_schemes: [identifier])
+  end
+
+  ## End CI Setup Lanes ##
+
+  ## Testing Lanes ##
+
+  desc "Run unit tests"
+  lane :test_unit do
     # Build for unit tests
     run_tests(
       scheme: "tba-unit-tests",
@@ -29,14 +39,13 @@ platform :ios do
     # Run unit tests
     run_tests(
       scheme: "tba-unit-tests",
-      devices: ["iPhone X (11.4)", "iPhone X (12.1)"],
       derived_data_path: "fastlane/derived_data/derived_data_unit",
       test_without_building: true
     )
   end
 
-  desc "Run only the UI tests on 3 devices (square device, notch device, and iPad) and two platforms (iOS 11.4 and iOS 12)"
-  private_lane :test_ui do
+  desc "Run UI tests"
+  lane :test_ui do
     # Build for UI tests
     run_tests(
       scheme: "tba-ui-tests",
@@ -46,11 +55,134 @@ platform :ios do
     # Run UI tests
     run_tests(
       scheme: "tba-ui-tests",
-      devices: ["iPhone X (11.4)", "iPhone X (12.0)"],
       derived_data_path: "fastlane/derived_data/derived_data_ui",
       test_without_building: true
     )
   end
+
+  ## End Testing Lanes ##
+
+  ## Create A New Version Lanes ##
+
+  desc "Create a new app version (major, minor, patch, build) by bumping the version number and creating a changelog"
+  lane :new_version do |options|
+    version_type = options[:version_type]
+    # Bump version accordingly
+    bump_version(version_type: version_type)
+    # Create new changelog file
+    version = "v#{get_version_number}"
+    if version_type == "build"
+      version = current_git_tag
+    end
+    sh("touch", "../changelogs/#{version}")
+    # Commit our version bump and changelog file
+    commit_version_bump(message: "[skip ci] New version - #{version}", xcodeproj: "the-blue-alliance-ios.xcodeproj", include: "changelogs/#{version}")
+  end
+
+  desc "Bump the build version (major, minor, patch) and/or build number (build)"
+  private_lane :bump_version do |options|
+    version_type = options[:version_type]
+    if version_type != "build"
+      increment_version_number(bump_type: version_type)
+    end
+    increment_build_number
+  end
+
+  ## End Create A New Version Lanes ##
+
+  desc "Bump version and push if necessary"
+  private_lane :ensure_version_bump do
+    if !git_tag_exists(tag: current_git_tag)
+      UI.success("`#{current_git_tag}` is a new version, all good! 💪")
+    else
+      UI.user_error!("A tag with the name `#{current_git_tag}` already exists! Run `fastlane bump_version` to generate a new version.")
+    end
+  end
+
+  ## Release Lanes ##
+
+  desc "Upload a new beta build to TestFlight"
+  lane :beta do
+    ship
+    pilot(changelog: build_changelog, distribute_external: true, wait_processing_interval: 300) # Upload to TestFlight
+    ship_github(is_prerelease: true) # Create GitHub release
+    slack(message: "#{current_git_tag} uploaded to TestFlight")
+  end
+
+  desc "Upload a new build to the App Store"
+  lane :app_store do
+    # ship
+    # deliver
+    # ship_github(is_prerelease: false) # Create GitHub release
+    # slack(message: "#{current_git_tag} shipped to the App Store")
+  end
+
+  ## End Release Lanes ##
+
+  ## Shipping Lanes for Release Lanes ##
+
+  desc "Perform pre-ship tasks"
+  private_lane :ship do
+    ensure_git_status_clean # Ensure we're in a clean repo before uploading
+    ensure_git_branch # Ensure we're on master before shipping
+    ensure_version_bump # Ensure we're on a new version
+
+    match(type: "appstore", readonly: true) # Sync our code signing with Match
+    # TODO: get_push_certificate, once we can manage uploading to Firebase preferrably
+
+    gym(scheme: "The Blue Alliance") # Build our app
+  end
+
+  private_lane :ship_github do |options|
+    set_github_release(
+      repository_name: "the-blue-alliance/the-blue-alliance-ios",
+      api_token: ENV["GITHUB_TOKEN"],
+      name: current_git_tag,
+      tag_name: current_git_tag,
+      commitish: commit,
+      description: github_changelog,
+      is_prerelease: options[:is_prerelease] ? true : false,
+      upload_assets: ["The Blue Alliance.ipa", "The Blue Alliance.app.dSYM.zip"]
+    )
+  end
+
+  ## End Shipping Lanes for Release Lanes ##
+
+  ## Internal Lanes for Shipping Lanes ##
+
+  private_lane :current_git_tag do
+    "v#{get_version_number}b#{get_build_number}"
+  end
+
+  private_lane :changelog do |options|
+    version = options[:version]
+    File.read("../changelogs/#{version}") rescue "No changelog for #{version}"
+  end
+
+  private_lane :version_changelog do
+    # Use our version changelog (no build number) - ex: `v1.0.0`
+    version = "v#{get_version_number}"
+    changelog(version: version)
+  end
+
+  private_lane :build_changelog do
+    # Use our build changelog - ex: `v1.0.0b6`
+    version = current_git_tag
+    changelog(version: version)
+  end
+
+  private_lane :github_changelog do
+    "## Release Notes\n#{version_changelog}\n## Changelog\n#{release_changelog}"
+  end
+
+  lane :release_changelog do
+    changelog_from_git_commits(
+      pretty: "{{[%h|https://github.com/the-blue-alliance/the-blue-alliance-ios/commit/%h]}} [%an]: %s",
+      merge_commit_filtering: "exclude_merges"
+    )
+  end
+
+  ## End Internal Lanes for Shipping Lanes ##
 
 end
 

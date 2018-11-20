@@ -16,11 +16,46 @@ or alternatively using `brew cask install fastlane`
 
 # Available Actions
 ## iOS
-### ios test
+### ios setup_secrets
 ```
-fastlane ios test
+fastlane ios setup_secrets
 ```
-Runs all the tests
+Setup Secrets.plist file (used by CI)
+### ios setup_url_schemes
+```
+fastlane ios setup_url_schemes
+```
+Setup URL schemes in our project
+### ios test_unit
+```
+fastlane ios test_unit
+```
+Run unit tests
+### ios test_ui
+```
+fastlane ios test_ui
+```
+Run UI tests
+### ios new_version
+```
+fastlane ios new_version
+```
+Create a new app version (major, minor, patch, build) by bumping the version number and creating a changelog
+### ios beta
+```
+fastlane ios beta
+```
+Upload a new beta build to TestFlight
+### ios app_store
+```
+fastlane ios app_store
+```
+Upload a new build to the App Store
+### ios release_changelog
+```
+fastlane ios release_changelog
+```
+
 
 ----
 

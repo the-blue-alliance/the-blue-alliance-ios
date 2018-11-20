@@ -25,12 +25,14 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.244307294958-mm07e86269vaqhug86v3piot5ndt2va9</string>
+				<string>com.googleusercontent.apps.836511118694-aj54f0d17nui5453fe0rbj230cqto6sl</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>8</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>

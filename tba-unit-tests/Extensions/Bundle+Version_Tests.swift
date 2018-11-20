@@ -1,6 +1,17 @@
 import XCTest
 @testable import The_Blue_Alliance
 
+class MockBundle: Bundle {
+
+    override var infoDictionary: [String : Any]? {
+        return [
+            "CFBundleShortVersionString": "2.3.1",
+            "CFBundleVersion": "22"
+        ]
+    }
+
+}
+
 class BundleVersionTestCase: XCTestCase {
 
     var bundle: Bundle!
@@ -8,7 +19,7 @@ class BundleVersionTestCase: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        bundle = Bundle(for: RemoteConfigTBATestCase.self)
+        bundle = MockBundle()
     }
 
     override func tearDown() {
@@ -18,15 +29,15 @@ class BundleVersionTestCase: XCTestCase {
     }
 
     func test_releaseVersionNumber() {
-        XCTAssertEqual(bundle.versionString, "1.0.0")
+        XCTAssertEqual(bundle.versionString, "2.3.1")
     }
 
     func test_buildVersionNumber() {
-        XCTAssertEqual(bundle.buildVersionNumber, 1)
+        XCTAssertEqual(bundle.buildVersionNumber, 22)
     }
 
     func test_releaseVersionNumberPretty() {
-        XCTAssertEqual(bundle.displayVersionString, "v1.0.0 (1)")
+        XCTAssertEqual(bundle.displayVersionString, "v2.3.1 (22)")
     }
 
 }
