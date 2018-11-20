@@ -1,18 +1,24 @@
-setup_travis
-
 default_platform :ios
 
 platform :ios do
 
+  desc "Setup CI"
+  lane :setup_ci do
+    setup_travis
+    setup_secrets
+    setup_url_schemes
+    update_project_team
+  end
+
   ## CI Setup Lanes ##
 
   desc "Setup Secrets.plist file (used by CI)"
-  lane :setup_secrets do
+  private_lane :setup_secrets do
     set_info_plist_value(path: "the-blue-alliance-ios/Secrets.plist", key: "tba_api_key", value: ENV['TBA_API_KEY'])
   end
 
   desc "Setup URL schemes in our project"
-  lane :setup_url_schemes do
+  private_lane :setup_url_schemes do
     # Setup Google callback URL from GoogleService-Info.plist
     identifier = get_info_plist_value(path: "the-blue-alliance-ios/GoogleService-Info.plist", key: "REVERSED_CLIENT_ID")
     update_url_schemes(path: "the-blue-alliance-ios/Info.plist", url_schemes: [identifier])
@@ -104,7 +110,7 @@ platform :ios do
   end
 
   desc "Upload a new build to the App Store"
-  lane :appstore do
+  lane :app_store do
     # ship
     # deliver
     # ship_github(is_prerelease: false) # Create GitHub release

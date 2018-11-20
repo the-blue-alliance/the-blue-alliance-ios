@@ -41,11 +41,6 @@ Run UI tests
 fastlane ios new_version
 ```
 Create a new app version (major, minor, patch, build) by bumping the version number and creating a changelog
-### ios ensure_version_bump
-```
-fastlane ios ensure_version_bump
-```
-Bump version and push if necessary
 ### ios beta
 ```
 fastlane ios beta

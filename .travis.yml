@@ -17,9 +17,7 @@ install:
   - bundle install
   - bundle exec pod install --repo-update
   - cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
-  - bundle exec fastlane setup_secrets
-  - bundle exec fastlane setup_url_schemes
-  - bundle exec fastlane update_project_team
+  - bundle exec fastlane setup_ci
 
 jobs:
   include:
