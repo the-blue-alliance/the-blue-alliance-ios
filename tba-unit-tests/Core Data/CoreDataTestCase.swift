@@ -149,4 +149,10 @@ class CoreDataTestCase: FBSnapshotTestCase {
                              suffixes: NSOrderedSet(array: [""]))
     }
 
+    func verifyLayer(_ layer: CALayer, identifier: String = "") {
+        FBSnapshotVerifyLayer(layer,
+                              identifier: identifier,
+                              suffixes: NSOrderedSet(array: [""]))
+    }
+
 }

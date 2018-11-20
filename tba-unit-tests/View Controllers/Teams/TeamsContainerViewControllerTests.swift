@@ -6,7 +6,7 @@ class TeamsContainerViewControllerTests: TBATestCase {
     var teamsContainerViewController: TeamsContainerViewController!
     var navigationController: MockNavigationController!
 
-    var viewControllerTester: TBAViewControllerTester!
+    var viewControllerTester: TBAViewControllerTester<UINavigationController>!
 
     override func setUp() {
         super.setUp()
@@ -18,7 +18,7 @@ class TeamsContainerViewControllerTests: TBATestCase {
                                                                     userDefaults: userDefaults)
         navigationController = MockNavigationController(rootViewController: teamsContainerViewController)
 
-        viewControllerTester = TBAViewControllerTester(withViewController: teamsContainerViewController)
+        viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
     }
 
     override func tearDown() {
@@ -27,6 +27,10 @@ class TeamsContainerViewControllerTests: TBATestCase {
         viewControllerTester = nil
 
         super.tearDown()
+    }
+
+    func test_snapshot() {
+        verifyLayer(viewControllerTester.window.layer)
     }
 
     func test_delegates() {

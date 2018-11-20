@@ -19,13 +19,12 @@ class TeamAtEventViewController: ContainerViewController {
         let awardsViewController: EventAwardsViewController = EventAwardsViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [summaryViewController, matchesViewController, statsViewController, awardsViewController],
+                   navigationTitle: "Team \(teamKey.teamNumber)",
+                   navigationSubtitle: "@ \(event.friendlyNameWithYear)",
                    segmentedControlTitles: ["Summary", "Matches", "Stats", "Awards"],
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
-
-        navigationTitle = "Team \(teamKey.teamNumber)"
-        navigationSubtitle = "@ \(event.friendlyNameWithYear)"
 
         summaryViewController.delegate = self
         matchesViewController.delegate = self

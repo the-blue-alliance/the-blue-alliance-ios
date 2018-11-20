@@ -25,6 +25,8 @@ class DistrictViewController: ContainerViewController {
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
+        title = "\(district.year!.stringValue) \(district.name!) Districts"
+
         eventsViewController.delegate = self
         rankingsViewController.delegate = self
     }
@@ -37,8 +39,6 @@ class DistrictViewController: ContainerViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        title = "\(district.year!.stringValue) \(district.name!) Districts"
 
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
     }

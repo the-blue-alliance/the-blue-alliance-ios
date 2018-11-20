@@ -17,14 +17,15 @@ class MatchContainerViewController: ContainerViewController {
             breakdownViewController = MatchBreakdownViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         }
 
-        super.init(viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }) as! [ContainableViewController],
-                   segmentedControlTitles: titles,
-                   persistentContainer: persistentContainer,
-                   tbaKit: tbaKit,
-                   userDefaults: userDefaults)
-
-        navigationTitle = "\(match.friendlyName)"
-        navigationSubtitle = "@ \(match.event!.friendlyNameWithYear)"
+        super.init(
+            viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }) as! [ContainableViewController],
+            navigationTitle: "\(match.friendlyName)",
+            navigationSubtitle: "@ \(match.event!.friendlyNameWithYear)",
+            segmentedControlTitles: titles,
+            persistentContainer: persistentContainer,
+            tbaKit: tbaKit,
+            userDefaults: userDefaults
+        )
     }
 
     required init?(coder aDecoder: NSCoder) {

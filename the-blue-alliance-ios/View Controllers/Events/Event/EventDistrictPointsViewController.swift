@@ -14,12 +14,11 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
         let districtPointsViewController = EventDistrictPointsViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [districtPointsViewController],
+                   navigationTitle: "District Points",
+                   navigationSubtitle: "@ \(event.friendlyNameWithYear)",
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
-
-        navigationTitle = "District Points"
-        navigationSubtitle = "@ \(event.friendlyNameWithYear)"
 
         districtPointsViewController.delegate = self
     }

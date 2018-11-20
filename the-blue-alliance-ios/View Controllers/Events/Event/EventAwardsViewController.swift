@@ -14,17 +14,20 @@ class EventAwardsContainerViewController: ContainerViewController {
 
         let awardsViewController = EventAwardsViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
+        let navigationSubtitle: String = {
+            if let teamKey = teamKey {
+                return "Team \(teamKey.teamNumber) @ \(event.friendlyNameWithYear)"
+            } else {
+                return "@ \(event.friendlyNameWithYear)"
+            }
+        }()
+
         super.init(viewControllers: [awardsViewController],
+                   navigationTitle: "Awards",
+                   navigationSubtitle: navigationSubtitle,
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
-
-        navigationTitle = "Awards"
-        if let teamKey = teamKey {
-            navigationSubtitle = "Team \(teamKey.teamNumber) @ \(event.friendlyNameWithYear)"
-        } else {
-            navigationSubtitle = "@ \(event.friendlyNameWithYear)"
-        }
 
         awardsViewController.delegate = self
     }

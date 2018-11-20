@@ -31,13 +31,12 @@ class EventStatsContainerViewController: ContainerViewController {
         }
 
         super.init(viewControllers: [teamStatsViewController, eventStatsViewController].compactMap({ $0 }),
+                   navigationTitle: "Stats",
+                   navigationSubtitle: "@ \(event.friendlyNameWithYear)",
                    segmentedControlTitles: titles,
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
-
-        navigationTitle = "Stats"
-        navigationSubtitle = "@ \(event.friendlyNameWithYear)"
 
         teamStatsViewController.delegate = self
     }

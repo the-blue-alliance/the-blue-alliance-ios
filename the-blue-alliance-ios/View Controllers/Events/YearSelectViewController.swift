@@ -31,6 +31,7 @@ class YearSelectViewController: ContainerViewController {
         super.init(viewControllers: [selectViewController], persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         title = "Years"
+
         selectViewController.delegate = self
     }
 
@@ -103,6 +104,7 @@ private class EventWeekSelectViewController: ContainerViewController {
         super.init(viewControllers: [selectViewController], persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         title = "\(year) Weeks"
+
         selectViewController.delegate = self
         selectViewController.enableRefreshing()
     }

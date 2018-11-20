@@ -16,12 +16,11 @@ class EventAlliancesContainerViewController: ContainerViewController {
         let alliancesViewController = EventAlliancesViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [alliancesViewController],
+                   navigationTitle: "Alliances",
+                   navigationSubtitle: "@ \(event.friendlyNameWithYear)",
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
-
-        navigationTitle = "Alliances"
-        navigationSubtitle = "@ \(event.friendlyNameWithYear)"
 
         alliancesViewController.delegate = self
     }
