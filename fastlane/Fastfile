@@ -85,7 +85,7 @@ platform :ios do
   ## End Create A New Version Lanes ##
 
   desc "Bump version and push if necessary"
-  lane :ensure_version_bump do
+  private_lane :ensure_version_bump do
     if !git_tag_exists(tag: current_git_tag)
       UI.success("`#{current_git_tag}` is a new version, all good! 💪")
     else
@@ -104,7 +104,7 @@ platform :ios do
   end
 
   desc "Upload a new build to the App Store"
-  lane :app_store do
+  lane :appstore do
     # ship
     # deliver
     # ship_github(is_prerelease: false) # Create GitHub release
@@ -182,7 +182,7 @@ end
 
 error do |lane, exception|
   slack(
-    message: "Erorr in #{lane.to_s} | #{exception.to_s}",
+    message: exception.to_s,
     success: false,
     username: "Travis CI",
   ) if is_ci? && ENV['SLACK_URL'] && git_branch == "master"
