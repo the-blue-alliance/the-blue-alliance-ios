@@ -6,61 +6,31 @@ platform :ios do
   lane :setup_ci do
     setup_travis
     setup_secrets
-    setup_url_schemes
-    update_project_team
   end
 
-  ## CI Setup Lanes ##
+  ## CI Lanes ##
 
   desc "Setup Secrets.plist file (used by CI)"
   private_lane :setup_secrets do
     set_info_plist_value(path: "the-blue-alliance-ios/Secrets.plist", key: "tba_api_key", value: ENV['TBA_API_KEY'])
   end
 
-  desc "Setup URL schemes in our project"
-  private_lane :setup_url_schemes do
-    # Setup Google callback URL from GoogleService-Info.plist
-    identifier = get_info_plist_value(path: "the-blue-alliance-ios/GoogleService-Info.plist", key: "REVERSED_CLIENT_ID")
-    update_url_schemes(path: "the-blue-alliance-ios/Info.plist", url_schemes: [identifier])
-  end
-
-  ## End CI Setup Lanes ##
-
-  ## Testing Lanes ##
-
-  desc "Run unit tests"
-  lane :test_unit do
-    # Build for unit tests
-    run_tests(
-      scheme: "tba-unit-tests",
-      derived_data_path: "fastlane/derived_data/derived_data_unit",
-      build_for_testing: true
+  desc "Run match on CI"
+  lane :match_ci do
+    match(
+      git_url: "https://#{ENV["GITHUB_TOKEN"]}@github.com/ZachOrr/tba-ios-certificates.git",
+      keychain_name: "fastlane_tmp_keychain"
     )
-    # Run unit tests
-    run_tests(
-      scheme: "tba-unit-tests",
-      derived_data_path: "fastlane/derived_data/derived_data_unit",
-      test_without_building: true
+    update_project_team(teamid: ENV["sigh_com.the-blue-alliance.tba_appstore_team-id"])
+    update_project_provisioning(
+      profile: ENV["sigh_com.the-blue-alliance.tba_appstore_profile-path"],
+      target_filter: "The Blue Alliance",
+      build_configuration: "Release",
+      code_signing_identity: "iPhone Distribution"
     )
   end
 
-  desc "Run UI tests"
-  lane :test_ui do
-    # Build for UI tests
-    run_tests(
-      scheme: "tba-ui-tests",
-      derived_data_path: "fastlane/derived_data/derived_data_ui",
-      build_for_testing: true
-    )
-    # Run UI tests
-    run_tests(
-      scheme: "tba-ui-tests",
-      derived_data_path: "fastlane/derived_data/derived_data_ui",
-      test_without_building: true
-    )
-  end
-
-  ## End Testing Lanes ##
+  ## End CI Lanes ##
 
   ## Create A New Version Lanes ##
 
@@ -68,24 +38,16 @@ platform :ios do
   lane :new_version do |options|
     version_type = options[:version_type]
     # Bump version accordingly
-    bump_version(version_type: version_type)
-    # Create new changelog file
-    version = "v#{get_version_number}"
-    if version_type == "build"
-      version = current_git_tag
-    end
-    sh("touch", "../changelogs/#{version}")
-    # Commit our version bump and changelog file
-    commit_version_bump(message: "[skip ci] New version - #{version}", xcodeproj: "the-blue-alliance-ios.xcodeproj", include: "changelogs/#{version}")
-  end
-
-  desc "Bump the build version (major, minor, patch) and/or build number (build)"
-  private_lane :bump_version do |options|
-    version_type = options[:version_type]
     if version_type != "build"
       increment_version_number(bump_type: version_type)
     end
     increment_build_number
+    # Create new changelog file
+    if version_type != "build"
+      sh("touch", "../release_notes/#{current_version}")
+    end
+    # Commit our version bump and changelog file
+    commit_version_bump(message: "[skip ci] New version - #{current_version}", xcodeproj: "the-blue-alliance-ios.xcodeproj", include: "release_notes/#{current_version}")
   end
 
   ## End Create A New Version Lanes ##
@@ -95,18 +57,26 @@ platform :ios do
     if !git_tag_exists(tag: current_git_tag)
       UI.success("`#{current_git_tag}` is a new version, all good! 💪")
     else
-      UI.user_error!("A tag with the name `#{current_git_tag}` already exists! Run `fastlane bump_version` to generate a new version.")
+      UI.user_error!("A tag with the name `#{current_git_tag}` already exists! Run `fastlane new_version` to generate a new version.")
     end
   end
 
   ## Release Lanes ##
 
   desc "Upload a new beta build to TestFlight"
-  lane :beta do
-    ship
-    pilot(changelog: build_changelog, distribute_external: true, wait_processing_interval: 300) # Upload to TestFlight
-    ship_github(is_prerelease: true) # Create GitHub release
-    slack(message: "#{current_git_tag} uploaded to TestFlight")
+  lane :beta do |options|
+    if is_ci?
+      slack(message: "Shipping #{current_git_tag} to TestFlight...") # Let us know
+    end
+
+    preship
+    gym(scheme: "The Blue Alliance")
+    pilot(changelog: commit_changelog, distribute_external: true, wait_processing_interval: 300) # Upload to TestFlight
+
+    if is_ci?
+      ship_github(is_prerelease: true) # Create GitHub release
+      slack(message: "#{current_git_tag} uploaded to TestFlight 🎉")
+    end
   end
 
   desc "Upload a new build to the App Store"
@@ -114,7 +84,7 @@ platform :ios do
     # ship
     # deliver
     # ship_github(is_prerelease: false) # Create GitHub release
-    # slack(message: "#{current_git_tag} shipped to the App Store")
+    # slack(message: "#{current_git_tag} shipped to the App Store 🎉")
   end
 
   ## End Release Lanes ##
@@ -122,15 +92,12 @@ platform :ios do
   ## Shipping Lanes for Release Lanes ##
 
   desc "Perform pre-ship tasks"
-  private_lane :ship do
-    ensure_git_status_clean # Ensure we're in a clean repo before uploading
-    ensure_git_branch # Ensure we're on master before shipping
+  private_lane :preship do
+    if is_ci == false
+      ensure_git_status_clean # Ensure we're in a clean repo before uploading
+      ensure_git_branch # Ensure we're on master before shipping
+    end
     ensure_version_bump # Ensure we're on a new version
-
-    match(type: "appstore", readonly: true) # Sync our code signing with Match
-    # TODO: get_push_certificate, once we can manage uploading to Firebase preferrably
-
-    gym(scheme: "The Blue Alliance") # Build our app
   end
 
   private_lane :ship_github do |options|
@@ -140,7 +107,7 @@ platform :ios do
       name: current_git_tag,
       tag_name: current_git_tag,
       commitish: commit,
-      description: github_changelog,
+      description: commit_changelog,
       is_prerelease: options[:is_prerelease] ? true : false,
       upload_assets: ["The Blue Alliance.ipa", "The Blue Alliance.app.dSYM.zip"]
     )
@@ -151,32 +118,35 @@ platform :ios do
   ## Internal Lanes for Shipping Lanes ##
 
   private_lane :current_git_tag do
-    "v#{get_version_number}b#{get_build_number}"
+    "#{current_version}b#{get_build_number}"
   end
 
-  private_lane :changelog do |options|
-    version = options[:version]
-    File.read("../changelogs/#{version}") rescue "No changelog for #{version}"
+  private_lane :current_version do
+    "v#{get_version_number}"
   end
 
-  private_lane :version_changelog do
-    # Use our version changelog (no build number) - ex: `v1.0.0`
-    version = "v#{get_version_number}"
-    changelog(version: version)
-  end
+  # desc "Release notes and changelog"
+  # private_lane :github_changelog do
+  #   "#{version_changelog}\n## Changelog\n#{commit_changelog}"
+  # end
 
-  private_lane :build_changelog do
-    # Use our build changelog - ex: `v1.0.0b6`
-    version = current_git_tag
-    changelog(version: version)
-  end
+  # desc "Release notes for version"
+  # private_lane :release_notes do
+  #   File.read("../release_notes/#{current_version}")
+  # end
 
-  private_lane :github_changelog do
-    "## Release Notes\n#{version_changelog}\n## Changelog\n#{release_changelog}"
-  end
+  # desc "Get changelog from git commits between HEAD and last version tag"
+  # lane :commit_changelog_version do
+  #   changelog_from_git_commits(
+  #     pretty: changelog_commit_format,
+  #     merge_commit_filtering: "exclude_merges"
+  #   )
+  # end
 
-  lane :release_changelog do
+  desc "Get changelog from git commits between HEAD and latest tag"
+  private_lane :commit_changelog do |options|
     changelog_from_git_commits(
+      # tag_match_pattern: options[:tag_match_pattern] || nil,
       pretty: "{{[%h|https://github.com/the-blue-alliance/the-blue-alliance-ios/commit/%h]}} [%an]: %s",
       merge_commit_filtering: "exclude_merges"
     )

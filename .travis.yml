@@ -1,6 +1,10 @@
 osx_image: xcode10.1
 language: swift
 
+branches:
+  only:
+    - master
+
 stages:
   - name: test
   - name: beta
@@ -16,15 +20,19 @@ install:
   - cd subtrees/the-blue-alliance-react && npm install && cd ../..
   - bundle install
   - bundle exec pod install --repo-update
+
+before_script:
   - cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
   - bundle exec fastlane setup_ci
+  - echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
+  - bundle exec fastlane match_ci
 
 jobs:
   include:
     - stage: test
       name: "Unit Tests"
-      script: bundle exec fastlane test_unit
-    # - script: bundle exec fastlane test_ui
+      script: bundle exec fastlane scan --scheme tba-unit-tests
+    # - script: bundle exec fastlane scan --scheme tba-ui-tests
     #   name: "UI Tests"
     - stage: beta
       script: bundle exec fastlane beta
