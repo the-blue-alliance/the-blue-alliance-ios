@@ -1,9 +1,10 @@
 osx_image: xcode10.1
 language: swift
 
-branches:
-  only:
-  - master
+stages:
+  - name: test
+  - name: beta
+    if: (type == push) AND (branch == master) AND (commit_message =~ /^\[beta\]/)
 
 cache:
   bundler: true
@@ -15,8 +16,17 @@ install:
   - cd subtrees/the-blue-alliance-react && npm install && cd ../..
   - bundle install
   - bundle exec pod install --repo-update
-  - cp mock-GoogleService-Info.plist the-blue-alliance-ios/GoogleService-Info.plist
   - cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
+  - bundle exec fastlane setup_secrets
+  - bundle exec fastlane setup_url_schemes
+  - bundle exec fastlane update_project_team
 
-script:
-  - bundle exec fastlane test
+jobs:
+  include:
+    - stage: test
+      name: "Unit Tests"
+      script: bundle exec fastlane test_unit
+    # - script: bundle exec fastlane test_ui
+    #   name: "UI Tests"
+    - stage: beta
+      script: bundle exec fastlane beta

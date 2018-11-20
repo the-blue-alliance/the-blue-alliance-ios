@@ -1,0 +1,4 @@
+git_url("git@github.com:ZachOrr/tba-ios-certificates.git")
+
+type("appstore")
+readonly(true)

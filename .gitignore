@@ -35,7 +35,6 @@ node_modules
 subtrees/the-blue-alliance-react/ios/*
 subtrees/the-blue-alliance-react/ios.zip
 
-GoogleService-Info.plist
 Secrets.plist
 
 # fastlane specific
@@ -52,3 +51,4 @@ fastlane/test_output
 
 # derived data
 fastlane/derived_data
+*.dSYM.zip
