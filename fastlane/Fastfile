@@ -92,6 +92,7 @@ platform :ios do
 
   desc "Internal beta lane - use `beta` or `beta_ci`"
   lane :beta_internal do
+    preship
     update_project_team(teamid: ENV["sigh_com.the-blue-alliance.tba_appstore_team-id"])
     update_project_provisioning(
       profile: ENV["sigh_com.the-blue-alliance.tba_appstore_profile-path"],
@@ -99,7 +100,6 @@ platform :ios do
       build_configuration: "Release",
       code_signing_identity: "iPhone Distribution"
     )
-    preship
     gym
   end
 
