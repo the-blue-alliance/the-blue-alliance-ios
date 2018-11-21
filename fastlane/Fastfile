@@ -66,16 +66,30 @@ platform :ios do
   desc "Upload a new beta build to TestFlight"
   lane :beta do |options|
     if is_ci?
-      slack(message: "Shipping #{current_git_tag} to TestFlight...") # Let us know
+      slack(channel: "#dev-ios", message: "Shipping #{current_git_tag} to TestFlight...", default_payloads: [])
     end
 
     preship
     gym(scheme: "The Blue Alliance")
-    pilot(changelog: commit_changelog, distribute_external: true, wait_processing_interval: 300) # Upload to TestFlight
+
+    if is_ci?
+      # Upload to TestFlight and move on to next steps
+      pilot(changelog: commit_changelog_short, skip_waiting_for_build_processing: true)
+    else
+      # Upload to TestFlight and wait for completion locally
+      pilot(changelog: commit_changelog_short, distribute_external: true)
+    end
 
     if is_ci?
       ship_github(is_prerelease: true) # Create GitHub release
-      slack(message: "#{current_git_tag} uploaded to TestFlight 🎉")
+      slack(
+        channel: "#dev-ios",
+        message: "#{current_git_tag} uploaded to TestFlight 🎉",
+        payload: {
+          "GitHub Release": "https://github.com/the-blue-alliance/the-blue-alliance-ios/releases/tag/#{current_git_tag}"
+        }
+        default_payloads: [],
+      )
     end
   end
 
@@ -142,6 +156,13 @@ platform :ios do
   #     merge_commit_filtering: "exclude_merges"
   #   )
   # end
+
+  private_lane :commit_changelog_short do
+    changelog_from_git_commits(
+      pretty: "%s",
+      merge_commit_filtering: "exclude_merges"
+    )
+  end
 
   desc "Get changelog from git commits between HEAD and latest tag"
   private_lane :commit_changelog do |options|
