@@ -31,11 +31,11 @@ Run all of our tests
 fastlane ios setup_secrets
 ```
 Setup Secrets.plist file (used by CI)
-### ios match_ci
+### ios configure_code_signing
 ```
-fastlane ios match_ci
+fastlane ios configure_code_signing
 ```
-Run match on CI
+Configure code signing
 ### ios new_version
 ```
 fastlane ios new_version

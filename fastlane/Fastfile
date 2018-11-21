@@ -20,12 +20,16 @@ platform :ios do
     set_info_plist_value(path: "the-blue-alliance-ios/Secrets.plist", key: "tba_api_key", value: ENV['TBA_API_KEY'])
   end
 
-  desc "Run match on CI"
-  lane :match_ci do
-    match(
-      git_url: "https://#{ENV["GITHUB_TOKEN"]}@github.com/ZachOrr/tba-ios-certificates.git",
-      keychain_name: "fastlane_tmp_keychain"
-    )
+  desc "Configure code signing"
+  lane :configure_code_signing do
+    if is_ci?
+      match(
+        git_url: "https://#{ENV["GITHUB_TOKEN"]}@github.com/ZachOrr/tba-ios-certificates.git",
+        keychain_name: "fastlane_tmp_keychain"
+      )
+    else
+      match
+    end
   end
 
   ## End CI Lanes ##
@@ -38,14 +42,12 @@ platform :ios do
     # Bump version accordingly
     if version_type != "build"
       increment_version_number(bump_type: version_type)
-    end
-    increment_build_number
-    # Create new changelog file
-    if version_type != "build"
+      # Create new changelog file
       sh("touch", "../release_notes/#{current_version}")
     end
+    increment_build_number
     # Commit our version bump and changelog file
-    commit_version_bump(message: "[skip ci] New version - #{current_version}", xcodeproj: "the-blue-alliance-ios.xcodeproj", include: "release_notes/#{current_version}")
+    commit_version_bump(message: "[skip ci] New version - #{current_git_tag}", xcodeproj: "the-blue-alliance-ios.xcodeproj", include: "release_notes/#{current_version}")
   end
 
   ## End Create A New Version Lanes ##
@@ -65,10 +67,10 @@ platform :ios do
   lane :beta_ci do
     slack(channel: "#dev-ios", message: "Shipping #{current_git_tag} to TestFlight...", default_payloads: [])
 
-    match_ci
     beta_internal
     # Upload to TestFlight and move on to next steps
     pilot(changelog: commit_changelog_short, skip_waiting_for_build_processing: true)
+
     ship_github(is_prerelease: true) # Create GitHub release
 
     slack(
@@ -83,9 +85,13 @@ platform :ios do
 
   desc "Upload a new beta build to TestFlight"
   lane :beta do
-    match
     beta_internal
-    pilot(changelog: commit_changelog_short, distribute_external: true)
+    pilot(changelog: commit_changelog_short, distribute_external: true, reject_build_waiting_for_review: true)
+
+    reset_git_repo(files: ["the-blue-alliance-ios.xcodeproj/project.pbxproj"], force: true) # Remove our code signing changes
+
+    commit_changelog
+
     add_git_tag(tag: current_git_tag)
     push_git_tags
   end
@@ -93,6 +99,7 @@ platform :ios do
   desc "Internal beta lane - use `beta` or `beta_ci`"
   lane :beta_internal do
     preship
+    configure_code_signing
     update_project_team(teamid: ENV["sigh_com.the-blue-alliance.tba_appstore_team-id"])
     update_project_provisioning(
       profile: ENV["sigh_com.the-blue-alliance.tba_appstore_profile-path"],
