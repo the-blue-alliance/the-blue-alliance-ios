@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1405237A1ED33E040072FB91 /* MatchesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140523791ED33E040072FB91 /* MatchesViewController.swift */; };
-		1405237C1ED33F500072FB91 /* MatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1405237B1ED33F500072FB91 /* MatchViewController.swift */; };
 		1416D50A218E422400F1A4A3 /* EventInsights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1416D509218E422400F1A4A3 /* EventInsights.swift */; };
 		1416D50C218E462500F1A4A3 /* EventInsightsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1416D50B218E462500F1A4A3 /* EventInsightsTests.swift */; };
 		1416D50E218E4B8200F1A4A3 /* EventTeamStatsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1416D50D218E4B8200F1A4A3 /* EventTeamStatsTests.swift */; };
@@ -21,8 +19,6 @@
 		1450778F218279BB00C61D2D /* EventKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1450778E218279BB00C61D2D /* EventKeyTests.swift */; };
 		145C57B51ED377EB004955B2 /* MatchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */; };
 		145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */; };
-		145C57B91ED3C166004955B2 /* MatchInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57B81ED3C166004955B2 /* MatchInfoViewController.swift */; };
-		145C57BB1ED3C178004955B2 /* MatchBreakdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57BA1ED3C178004955B2 /* MatchBreakdownViewController.swift */; };
 		145C57BD1ED3C3AA004955B2 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145C57BC1ED3C3AA004955B2 /* PlayerView.swift */; };
 		14796940215E9A590075AF4E /* MatchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1479693F215E9A580075AF4E /* MatchViewModel.swift */; };
 		14796942215EA5AE0075AF4E /* AwardCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14796941215EA5AE0075AF4E /* AwardCellViewModel.swift */; };
@@ -41,14 +37,11 @@
 		14B6726A21517A7E00FDDAB2 /* RealtimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B6726921517A7E00FDDAB2 /* RealtimeDatabaseService.swift */; };
 		14B6726C21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B6726B21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift */; };
 		14B6727321529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B6727221529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift */; };
-		303F824A1EF593BE007CADA1 /* EventRankingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F82491EF593BE007CADA1 /* EventRankingsViewController.swift */; };
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
 		373233698A5148831C801B8E /* Pods_The_Blue_Alliance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */; };
 		43CF3D2E906B46064E43038C /* Pods_tba_ui_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */; };
 		5797EAB49489B63DDA0980F5 /* Pods_tba_unit_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */; };
-		920DF7CD20954B430041B487 /* TeamAtDistrictViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DF7CC20954B430041B487 /* TeamAtDistrictViewController.swift */; };
-		920DF7CF20954B5D0041B487 /* DistrictBreakdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DF7CE20954B5D0041B487 /* DistrictBreakdownViewController.swift */; };
 		9218462D20CDBBDB00AAB7F8 /* RemoteConfigServiceOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9218462C20CDBBDB00AAB7F8 /* RemoteConfigServiceOperation.swift */; };
 		9221C616209BFF7D00477DE2 /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */; };
 		9221C618209BFF8700477DE2 /* LoadingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */; };
@@ -66,7 +59,6 @@
 		924459C420CB796B0007570D /* Int16+Suffix_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924459BE20CB796A0007570D /* Int16+Suffix_Tests.swift */; };
 		924459C620CB796B0007570D /* EventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924459C120CB796B0007570D /* EventTests.swift */; };
 		924459C820CB797E0007570D /* RetryService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924459C720CB797E0007570D /* RetryService_Tests.swift */; };
-		924602A41ECD27CE0030EDBF /* EventAwardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924602A31ECD27CE0030EDBF /* EventAwardsViewController.swift */; };
 		924602AB1ECE8B1D0030EDBF /* AwardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924602AA1ECE8B1D0030EDBF /* AwardTableViewCell.swift */; };
 		924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924602AE1ECE8B580030EDBF /* AwardTableViewCell.xib */; };
 		924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924AFD782171AB1A00D7BE7E /* NoDataView.xib */; };
@@ -77,7 +69,6 @@
 		92564C6D21644ACA0047917F /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C6C21644ACA0047917F /* Secrets.plist */; };
 		92564C70216456800047917F /* Secrets_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92564C6F216456800047917F /* Secrets_Tests.swift */; };
 		92564C72216457060047917F /* TestSecrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C71216457060047917F /* TestSecrets.plist */; };
-		9257DF4E208C0D1200F7E2BA /* EventAlliancesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9257DF4D208C0D1200F7E2BA /* EventAlliancesViewController.swift */; };
 		925908A921827B3A00D7BFCE /* TeamTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908A821827B3A00D7BFCE /* TeamTests.swift */; };
 		925908AB21828CC400D7BFCE /* WebcastTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908AA21828CC300D7BFCE /* WebcastTests.swift */; };
 		925908AD2184CFA900D7BFCE /* EventAllianceBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908AC2184CFA900D7BFCE /* EventAllianceBackup.swift */; };
@@ -86,9 +77,6 @@
 		925908B52185076100D7BFCE /* EventAllianceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908B42185076100D7BFCE /* EventAllianceTests.swift */; };
 		925908B721863C3E00D7BFCE /* EventAllianceBackupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908B621863C3E00D7BFCE /* EventAllianceBackupTests.swift */; };
 		92688C2B2090091D00D12B7B /* ReactNativeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92688C2A2090091D00D12B7B /* ReactNativeService.swift */; };
-		9272924B1EE4A0830027CE7C /* EventStatsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272924A1EE4A0830027CE7C /* EventStatsContainerViewController.swift */; };
-		9272924D1EE4A0FC0027CE7C /* EventStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272924C1EE4A0FC0027CE7C /* EventStatsViewController.swift */; };
-		927292521EE4A48C0027CE7C /* EventTeamStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927292511EE4A48C0027CE7C /* EventTeamStatsViewController.swift */; };
 		927C93B0217D4E350027ABEB /* DistrictRankingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */; };
 		927C93B2217D64300027ABEB /* DistrictEventPointsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */; };
 		928018F42096431200693447 /* MyTBASignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928018F32096431200693447 /* MyTBASignInViewController.swift */; };
@@ -110,8 +98,6 @@
 		92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 92942DAE1E2158EC008E79CA /* Settings.bundle */; };
 		92942DB11E215B06008E79CA /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DB01E215B06008E79CA /* EventsViewController.swift */; };
 		92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */; };
-		92942DDF1E21D2EB008E79CA /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942DDE1E21D2EB008E79CA /* EventViewController.swift */; };
-		92942E361E2A81E8008E79CA /* EventInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942E351E2A81E8008E79CA /* EventInfoViewController.swift */; };
 		929820CD216966890080C1C8 /* EventsContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929820CC216966890080C1C8 /* EventsContainerViewControllerTests.swift */; };
 		929820CF216968020080C1C8 /* TBATestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929820CE216968020080C1C8 /* TBATestCase.swift */; };
 		929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929BBB041EC55742006D3854 /* InfoTableViewCell.swift */; };
@@ -128,8 +114,6 @@
 		929F572C2092BB1C00E5313A /* Alertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929F572B2092BB1C00E5313A /* Alertable.swift */; };
 		929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */; };
 		929FCD9A1EC7F52700A38E46 /* DistrictsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD991EC7F52700A38E46 /* DistrictsViewController.swift */; };
-		929FCDA21EC8068800A38E46 /* DistrictViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCDA11EC8068800A38E46 /* DistrictViewController.swift */; };
-		929FCDA81EC8BE7200A38E46 /* DistrictRankingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCDA71EC8BE7200A38E46 /* DistrictRankingsViewController.swift */; };
 		92A2F5542156BD4B00267C63 /* NSManagedObjectContext+Extension_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A2F5532156BD4B00267C63 /* NSManagedObjectContext+Extension_Tests.swift */; };
 		92A321C7214EF83800FDADFB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A321C6214EF83800FDADFB /* SettingsViewController.swift */; };
 		92A4147C216DA76400E459A5 /* ReactNativeService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A4147B216DA76400E459A5 /* ReactNativeService_Tests.swift */; };
@@ -232,7 +216,6 @@
 		92B5561F215C459400C1D9A3 /* MyTBASignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B5561E215C459400C1D9A3 /* MyTBASignInViewController.xib */; };
 		92B55621215D37C900C1D9A3 /* YearSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55620215D37C900C1D9A3 /* YearSelectViewController.swift */; };
 		92B55625215D69DE00C1D9A3 /* WeekEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55624215D69DE00C1D9A3 /* WeekEventsViewController.swift */; };
-		92B55627215D6A9B00C1D9A3 /* DistrictEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55626215D6A9B00C1D9A3 /* DistrictEventsViewController.swift */; };
 		92B5562A215FCB1300C1D9A3 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55629215FCB1300C1D9A3 /* Reusable.swift */; };
 		92B55631215FDA9000C1D9A3 /* BasicTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55630215FDA9000C1D9A3 /* BasicTableViewCell.swift */; };
 		92B55633215FDB5300C1D9A3 /* BasicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55632215FDB5300C1D9A3 /* BasicCollectionViewCell.swift */; };
@@ -257,7 +240,6 @@
 		92C9BD352096907E007FB9C8 /* Stateful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD342096907E007FB9C8 /* Stateful.swift */; };
 		92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
-		92D5A1221EE48EC700EBFC6F /* EventDistrictPointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D5A1211EE48EC700EBFC6F /* EventDistrictPointsViewController.swift */; };
 		92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D11EC68F3800572F27 /* TeamsContainerViewController.swift */; };
 		92D855D41EC68F4200572F27 /* TeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D31EC68F4200572F27 /* TeamsViewController.swift */; };
 		92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D855D61EC695C400572F27 /* TeamTableViewCell.swift */; };
@@ -289,7 +271,6 @@
 		92DF3610217D43EC00B5246B /* Playable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF360C217D43EB00B5246B /* Playable.swift */; };
 		92DF3611217D43EC00B5246B /* Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF360D217D43EB00B5246B /* Managed.swift */; };
 		92DF3612217D43EC00B5246B /* Locatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF360E217D43EB00B5246B /* Locatable.swift */; };
-		92E6DB8B20C4609900396010 /* DistrictTeamSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E6DB8A20C4609900396010 /* DistrictTeamSummaryViewController.swift */; };
 		92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E9F0AA216C439700C1F916 /* NoDataViewController.swift */; };
 		92F38537217D31CE00A9AC02 /* AwardRecipientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F38536217D31CE00A9AC02 /* AwardRecipientTests.swift */; };
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
@@ -303,6 +284,25 @@
 		92FF10EF21A61A1B003BC5C4 /* TeamStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E821A61A1B003BC5C4 /* TeamStatsViewController.swift */; };
 		92FF10F021A61A1B003BC5C4 /* TeamMediaCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E921A61A1B003BC5C4 /* TeamMediaCollectionViewController.swift */; };
 		92FF10F121A61A1B003BC5C4 /* TeamInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10EA21A61A1B003BC5C4 /* TeamInfoViewController.swift */; };
+		92FF10F721A61AC2003BC5C4 /* MatchInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10F321A61AC2003BC5C4 /* MatchInfoViewController.swift */; };
+		92FF10F821A61AC2003BC5C4 /* MatchesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10F421A61AC2003BC5C4 /* MatchesViewController.swift */; };
+		92FF10F921A61AC2003BC5C4 /* MatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10F521A61AC2003BC5C4 /* MatchViewController.swift */; };
+		92FF10FA21A61AC2003BC5C4 /* MatchBreakdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10F621A61AC2003BC5C4 /* MatchBreakdownViewController.swift */; };
+		92FF110621A61AF6003BC5C4 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10FC21A61AF6003BC5C4 /* EventViewController.swift */; };
+		92FF110721A61AF6003BC5C4 /* EventRankingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10FD21A61AF6003BC5C4 /* EventRankingsViewController.swift */; };
+		92FF110821A61AF6003BC5C4 /* EventDistrictPointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10FE21A61AF6003BC5C4 /* EventDistrictPointsViewController.swift */; };
+		92FF110921A61AF6003BC5C4 /* EventAlliancesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10FF21A61AF6003BC5C4 /* EventAlliancesViewController.swift */; };
+		92FF110A21A61AF6003BC5C4 /* EventInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF110021A61AF6003BC5C4 /* EventInfoViewController.swift */; };
+		92FF110B21A61AF6003BC5C4 /* EventAwardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF110121A61AF6003BC5C4 /* EventAwardsViewController.swift */; };
+		92FF110C21A61AF6003BC5C4 /* EventStatsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF110321A61AF6003BC5C4 /* EventStatsContainerViewController.swift */; };
+		92FF110D21A61AF6003BC5C4 /* EventTeamStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF110421A61AF6003BC5C4 /* EventTeamStatsViewController.swift */; };
+		92FF110E21A61AF6003BC5C4 /* EventStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF110521A61AF6003BC5C4 /* EventStatsViewController.swift */; };
+		92FF111721A61B37003BC5C4 /* DistrictTeamSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF111121A61B37003BC5C4 /* DistrictTeamSummaryViewController.swift */; };
+		92FF111821A61B37003BC5C4 /* DistrictBreakdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF111221A61B37003BC5C4 /* DistrictBreakdownViewController.swift */; };
+		92FF111921A61B37003BC5C4 /* TeamAtDistrictViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF111321A61B37003BC5C4 /* TeamAtDistrictViewController.swift */; };
+		92FF111A21A61B37003BC5C4 /* DistrictViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF111421A61B37003BC5C4 /* DistrictViewController.swift */; };
+		92FF111B21A61B37003BC5C4 /* DistrictRankingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF111521A61B37003BC5C4 /* DistrictRankingsViewController.swift */; };
+		92FF111C21A61B37003BC5C4 /* DistrictEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF111621A61B37003BC5C4 /* DistrictEventsViewController.swift */; };
 		92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */; };
 		92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -326,8 +326,6 @@
 
 /* Begin PBXFileReference section */
 		0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_ui_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		140523791ED33E040072FB91 /* MatchesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchesViewController.swift; sourceTree = "<group>"; };
-		1405237B1ED33F500072FB91 /* MatchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchViewController.swift; sourceTree = "<group>"; };
 		1416D509218E422400F1A4A3 /* EventInsights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsights.swift; sourceTree = "<group>"; };
 		1416D50B218E462500F1A4A3 /* EventInsightsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsTests.swift; sourceTree = "<group>"; };
 		1416D50D218E4B8200F1A4A3 /* EventTeamStatsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatsTests.swift; sourceTree = "<group>"; };
@@ -340,8 +338,6 @@
 		1450778E218279BB00C61D2D /* EventKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventKeyTests.swift; sourceTree = "<group>"; };
 		145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchTableViewCell.swift; sourceTree = "<group>"; };
 		145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MatchTableViewCell.xib; sourceTree = "<group>"; };
-		145C57B81ED3C166004955B2 /* MatchInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchInfoViewController.swift; sourceTree = "<group>"; };
-		145C57BA1ED3C178004955B2 /* MatchBreakdownViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchBreakdownViewController.swift; sourceTree = "<group>"; };
 		145C57BC1ED3C3AA004955B2 /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		1479693F215E9A580075AF4E /* MatchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchViewModel.swift; sourceTree = "<group>"; };
 		14796941215EA5AE0075AF4E /* AwardCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwardCellViewModel.swift; sourceTree = "<group>"; };
@@ -360,14 +356,11 @@
 		14B6726921517A7E00FDDAB2 /* RealtimeDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeDatabaseService.swift; sourceTree = "<group>"; };
 		14B6726B21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeDatabaseService_Tests.swift; sourceTree = "<group>"; };
 		14B6727221529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRealtimeDatabaseService.swift; sourceTree = "<group>"; };
-		303F82491EF593BE007CADA1 /* EventRankingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventRankingsViewController.swift; sourceTree = "<group>"; };
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
 		4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.release.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.release.xcconfig"; sourceTree = "<group>"; };
 		52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_unit_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F1F0F9FCDD8A9EB6D9CCC6A /* Pods-tba-ui-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-ui-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tba-ui-tests/Pods-tba-ui-tests.debug.xcconfig"; sourceTree = "<group>"; };
-		920DF7CC20954B430041B487 /* TeamAtDistrictViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamAtDistrictViewController.swift; sourceTree = "<group>"; };
-		920DF7CE20954B5D0041B487 /* DistrictBreakdownViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictBreakdownViewController.swift; sourceTree = "<group>"; };
 		9218462C20CDBBDB00AAB7F8 /* RemoteConfigServiceOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigServiceOperation.swift; sourceTree = "<group>"; };
 		9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingTableViewCell.xib; sourceTree = "<group>"; };
@@ -385,7 +378,6 @@
 		924459BE20CB796A0007570D /* Int16+Suffix_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int16+Suffix_Tests.swift"; sourceTree = "<group>"; };
 		924459C120CB796B0007570D /* EventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
 		924459C720CB797E0007570D /* RetryService_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryService_Tests.swift; sourceTree = "<group>"; };
-		924602A31ECD27CE0030EDBF /* EventAwardsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventAwardsViewController.swift; sourceTree = "<group>"; };
 		924602AA1ECE8B1D0030EDBF /* AwardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AwardTableViewCell.swift; sourceTree = "<group>"; };
 		924602AE1ECE8B580030EDBF /* AwardTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AwardTableViewCell.xib; sourceTree = "<group>"; };
 		924AFD782171AB1A00D7BE7E /* NoDataView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoDataView.xib; sourceTree = "<group>"; };
@@ -396,7 +388,6 @@
 		92564C6C21644ACA0047917F /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
 		92564C6F216456800047917F /* Secrets_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets_Tests.swift; sourceTree = "<group>"; };
 		92564C71216457060047917F /* TestSecrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestSecrets.plist; sourceTree = "<group>"; };
-		9257DF4D208C0D1200F7E2BA /* EventAlliancesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAlliancesViewController.swift; sourceTree = "<group>"; };
 		925908A821827B3A00D7BFCE /* TeamTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamTests.swift; sourceTree = "<group>"; };
 		925908AA21828CC300D7BFCE /* WebcastTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebcastTests.swift; sourceTree = "<group>"; };
 		925908AC2184CFA900D7BFCE /* EventAllianceBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceBackup.swift; sourceTree = "<group>"; };
@@ -405,9 +396,6 @@
 		925908B42185076100D7BFCE /* EventAllianceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceTests.swift; sourceTree = "<group>"; };
 		925908B621863C3E00D7BFCE /* EventAllianceBackupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceBackupTests.swift; sourceTree = "<group>"; };
 		92688C2A2090091D00D12B7B /* ReactNativeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactNativeService.swift; sourceTree = "<group>"; };
-		9272924A1EE4A0830027CE7C /* EventStatsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatsContainerViewController.swift; sourceTree = "<group>"; };
-		9272924C1EE4A0FC0027CE7C /* EventStatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatsViewController.swift; sourceTree = "<group>"; };
-		927292511EE4A48C0027CE7C /* EventTeamStatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTeamStatsViewController.swift; sourceTree = "<group>"; };
 		927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictRankingTests.swift; sourceTree = "<group>"; };
 		927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictEventPointsTests.swift; sourceTree = "<group>"; };
 		928018F32096431200693447 /* MyTBASignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignInViewController.swift; sourceTree = "<group>"; };
@@ -431,8 +419,6 @@
 		92942DAE1E2158EC008E79CA /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		92942DB01E215B06008E79CA /* EventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBAViewController.swift; sourceTree = "<group>"; };
-		92942DDE1E21D2EB008E79CA /* EventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
-		92942E351E2A81E8008E79CA /* EventInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventInfoViewController.swift; sourceTree = "<group>"; };
 		929820CC216966890080C1C8 /* EventsContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsContainerViewControllerTests.swift; sourceTree = "<group>"; };
 		929820CE216968020080C1C8 /* TBATestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBATestCase.swift; sourceTree = "<group>"; };
 		929BBB041EC55742006D3854 /* InfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoTableViewCell.swift; sourceTree = "<group>"; };
@@ -449,8 +435,6 @@
 		929F572B2092BB1C00E5313A /* Alertable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alertable.swift; sourceTree = "<group>"; };
 		929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictsContainerViewController.swift; sourceTree = "<group>"; };
 		929FCD991EC7F52700A38E46 /* DistrictsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictsViewController.swift; sourceTree = "<group>"; };
-		929FCDA11EC8068800A38E46 /* DistrictViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictViewController.swift; sourceTree = "<group>"; };
-		929FCDA71EC8BE7200A38E46 /* DistrictRankingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictRankingsViewController.swift; sourceTree = "<group>"; };
 		92A2F5532156BD4B00267C63 /* NSManagedObjectContext+Extension_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+Extension_Tests.swift"; sourceTree = "<group>"; };
 		92A321C6214EF83800FDADFB /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		92A321CC214F029400FDADFB /* tba-ui-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tba-ui-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -555,7 +539,6 @@
 		92B5561E215C459400C1D9A3 /* MyTBASignInViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyTBASignInViewController.xib; sourceTree = "<group>"; };
 		92B55620215D37C900C1D9A3 /* YearSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearSelectViewController.swift; sourceTree = "<group>"; };
 		92B55624215D69DE00C1D9A3 /* WeekEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekEventsViewController.swift; sourceTree = "<group>"; };
-		92B55626215D6A9B00C1D9A3 /* DistrictEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictEventsViewController.swift; sourceTree = "<group>"; };
 		92B55629215FCB1300C1D9A3 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
 		92B55630215FDA9000C1D9A3 /* BasicTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTableViewCell.swift; sourceTree = "<group>"; };
 		92B55632215FDB5300C1D9A3 /* BasicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -580,7 +563,6 @@
 		92C9BD342096907E007FB9C8 /* Stateful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stateful.swift; sourceTree = "<group>"; };
 		92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATableViewController.swift; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
-		92D5A1211EE48EC700EBFC6F /* EventDistrictPointsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDistrictPointsViewController.swift; sourceTree = "<group>"; };
 		92D6483A20BE4CB8008F0DB3 /* tba-unit-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tba-unit-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D6483E20BE4CB8008F0DB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92D855D11EC68F3800572F27 /* TeamsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamsContainerViewController.swift; sourceTree = "<group>"; };
@@ -615,7 +597,6 @@
 		92DF360D217D43EB00B5246B /* Managed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Managed.swift; sourceTree = "<group>"; };
 		92DF360E217D43EB00B5246B /* Locatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locatable.swift; sourceTree = "<group>"; };
 		92E6253F208EC23000DF58C0 /* the-blue-alliance-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "the-blue-alliance-ios.entitlements"; sourceTree = "<group>"; };
-		92E6DB8A20C4609900396010 /* DistrictTeamSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictTeamSummaryViewController.swift; sourceTree = "<group>"; };
 		92E9F0AA216C439700C1F916 /* NoDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataViewController.swift; sourceTree = "<group>"; };
 		92F38536217D31CE00A9AC02 /* AwardRecipientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwardRecipientTests.swift; sourceTree = "<group>"; };
 		92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsContainerViewController.swift; sourceTree = "<group>"; };
@@ -629,6 +610,25 @@
 		92FF10E821A61A1B003BC5C4 /* TeamStatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamStatsViewController.swift; sourceTree = "<group>"; };
 		92FF10E921A61A1B003BC5C4 /* TeamMediaCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamMediaCollectionViewController.swift; sourceTree = "<group>"; };
 		92FF10EA21A61A1B003BC5C4 /* TeamInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamInfoViewController.swift; sourceTree = "<group>"; };
+		92FF10F321A61AC2003BC5C4 /* MatchInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchInfoViewController.swift; sourceTree = "<group>"; };
+		92FF10F421A61AC2003BC5C4 /* MatchesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchesViewController.swift; sourceTree = "<group>"; };
+		92FF10F521A61AC2003BC5C4 /* MatchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchViewController.swift; sourceTree = "<group>"; };
+		92FF10F621A61AC2003BC5C4 /* MatchBreakdownViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchBreakdownViewController.swift; sourceTree = "<group>"; };
+		92FF10FC21A61AF6003BC5C4 /* EventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
+		92FF10FD21A61AF6003BC5C4 /* EventRankingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventRankingsViewController.swift; sourceTree = "<group>"; };
+		92FF10FE21A61AF6003BC5C4 /* EventDistrictPointsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDistrictPointsViewController.swift; sourceTree = "<group>"; };
+		92FF10FF21A61AF6003BC5C4 /* EventAlliancesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventAlliancesViewController.swift; sourceTree = "<group>"; };
+		92FF110021A61AF6003BC5C4 /* EventInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventInfoViewController.swift; sourceTree = "<group>"; };
+		92FF110121A61AF6003BC5C4 /* EventAwardsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventAwardsViewController.swift; sourceTree = "<group>"; };
+		92FF110321A61AF6003BC5C4 /* EventStatsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatsContainerViewController.swift; sourceTree = "<group>"; };
+		92FF110421A61AF6003BC5C4 /* EventTeamStatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTeamStatsViewController.swift; sourceTree = "<group>"; };
+		92FF110521A61AF6003BC5C4 /* EventStatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventStatsViewController.swift; sourceTree = "<group>"; };
+		92FF111121A61B37003BC5C4 /* DistrictTeamSummaryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictTeamSummaryViewController.swift; sourceTree = "<group>"; };
+		92FF111221A61B37003BC5C4 /* DistrictBreakdownViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictBreakdownViewController.swift; sourceTree = "<group>"; };
+		92FF111321A61B37003BC5C4 /* TeamAtDistrictViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamAtDistrictViewController.swift; sourceTree = "<group>"; };
+		92FF111421A61B37003BC5C4 /* DistrictViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictViewController.swift; sourceTree = "<group>"; };
+		92FF111521A61B37003BC5C4 /* DistrictRankingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictRankingsViewController.swift; sourceTree = "<group>"; };
+		92FF111621A61B37003BC5C4 /* DistrictEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictEventsViewController.swift; sourceTree = "<group>"; };
 		92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewCell.xib; sourceTree = "<group>"; };
 		92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		A27CA53562D2F2F05B05659A /* Pods-The Blue Alliance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.debug.xcconfig"; sourceTree = "<group>"; };
@@ -666,18 +666,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		140523781ED33DB10072FB91 /* Match */ = {
-			isa = PBXGroup;
-			children = (
-				140523791ED33E040072FB91 /* MatchesViewController.swift */,
-				1405237B1ED33F500072FB91 /* MatchViewController.swift */,
-				145C57B81ED3C166004955B2 /* MatchInfoViewController.swift */,
-				145C57BA1ED3C178004955B2 /* MatchBreakdownViewController.swift */,
-			);
-			name = Match;
-			path = Events/Match;
-			sourceTree = "<group>";
-		};
 		1448DBAA2182313B008F542E /* myTBA */ = {
 			isa = PBXGroup;
 			children = (
@@ -728,16 +716,6 @@
 				E72D7306F6A02099E68DED02 /* Pods-tba-unit-tests.release.xcconfig */,
 			);
 			name = Pods;
-			sourceTree = "<group>";
-		};
-		920DF7CB20954B430041B487 /* Team@District */ = {
-			isa = PBXGroup;
-			children = (
-				920DF7CC20954B430041B487 /* TeamAtDistrictViewController.swift */,
-				92E6DB8A20C4609900396010 /* DistrictTeamSummaryViewController.swift */,
-				920DF7CE20954B5D0041B487 /* DistrictBreakdownViewController.swift */,
-			);
-			path = "Team@District";
 			sourceTree = "<group>";
 		};
 		922E907E217BD17C00E81447 /* Team */ = {
@@ -892,16 +870,6 @@
 			path = Event;
 			sourceTree = "<group>";
 		};
-		9272924E1EE4A1000027CE7C /* Stats */ = {
-			isa = PBXGroup;
-			children = (
-				9272924A1EE4A0830027CE7C /* EventStatsContainerViewController.swift */,
-				927292511EE4A48C0027CE7C /* EventTeamStatsViewController.swift */,
-				9272924C1EE4A0FC0027CE7C /* EventStatsViewController.swift */,
-			);
-			path = Stats;
-			sourceTree = "<group>";
-		};
 		927C93AE217D454A0027ABEB /* District */ = {
 			isa = PBXGroup;
 			children = (
@@ -1018,7 +986,7 @@
 				92942DB31E215B0E008E79CA /* Teams */,
 				92942DB41E215B1F008E79CA /* Districts */,
 				92942DB51E215B34008E79CA /* MyTBA */,
-				140523781ED33DB10072FB91 /* Match */,
+				92FF10F221A61AC2003BC5C4 /* Match */,
 				92A321C5214EF81700FDADFB /* Settings */,
 			);
 			path = "View Controllers";
@@ -1031,7 +999,7 @@
 				92B55624215D69DE00C1D9A3 /* WeekEventsViewController.swift */,
 				92942DB01E215B06008E79CA /* EventsViewController.swift */,
 				92B55620215D37C900C1D9A3 /* YearSelectViewController.swift */,
-				92D855DA1EC6B8F100572F27 /* Event */,
+				92FF10FB21A61AF6003BC5C4 /* Event */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -1051,7 +1019,7 @@
 			children = (
 				929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */,
 				929FCD991EC7F52700A38E46 /* DistrictsViewController.swift */,
-				929FCDA01EC8066800A38E46 /* District */,
+				92FF110F21A61B37003BC5C4 /* District */,
 			);
 			path = Districts;
 			sourceTree = "<group>";
@@ -1134,17 +1102,6 @@
 				9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */,
 			);
 			path = "Data Sources";
-			sourceTree = "<group>";
-		};
-		929FCDA01EC8066800A38E46 /* District */ = {
-			isa = PBXGroup;
-			children = (
-				929FCDA11EC8068800A38E46 /* DistrictViewController.swift */,
-				92B55626215D6A9B00C1D9A3 /* DistrictEventsViewController.swift */,
-				929FCDA71EC8BE7200A38E46 /* DistrictRankingsViewController.swift */,
-				920DF7CB20954B430041B487 /* Team@District */,
-			);
-			name = District;
 			sourceTree = "<group>";
 		};
 		92A2F5522156BD4B00267C63 /* Extensions */ = {
@@ -1470,20 +1427,6 @@
 			path = Teams;
 			sourceTree = "<group>";
 		};
-		92D855DA1EC6B8F100572F27 /* Event */ = {
-			isa = PBXGroup;
-			children = (
-				92942DDE1E21D2EB008E79CA /* EventViewController.swift */,
-				9257DF4D208C0D1200F7E2BA /* EventAlliancesViewController.swift */,
-				92D5A1211EE48EC700EBFC6F /* EventDistrictPointsViewController.swift */,
-				303F82491EF593BE007CADA1 /* EventRankingsViewController.swift */,
-				92942E351E2A81E8008E79CA /* EventInfoViewController.swift */,
-				924602A31ECD27CE0030EDBF /* EventAwardsViewController.swift */,
-				9272924E1EE4A1000027CE7C /* Stats */,
-			);
-			name = Event;
-			sourceTree = "<group>";
-		};
 		92DF35D6217D435C00B5246B /* District */ = {
 			isa = PBXGroup;
 			children = (
@@ -1626,6 +1569,62 @@
 				92FF10E821A61A1B003BC5C4 /* TeamStatsViewController.swift */,
 			);
 			path = "Team@Event";
+			sourceTree = "<group>";
+		};
+		92FF10F221A61AC2003BC5C4 /* Match */ = {
+			isa = PBXGroup;
+			children = (
+				92FF10F421A61AC2003BC5C4 /* MatchesViewController.swift */,
+				92FF10F521A61AC2003BC5C4 /* MatchViewController.swift */,
+				92FF10F321A61AC2003BC5C4 /* MatchInfoViewController.swift */,
+				92FF10F621A61AC2003BC5C4 /* MatchBreakdownViewController.swift */,
+			);
+			path = Match;
+			sourceTree = "<group>";
+		};
+		92FF10FB21A61AF6003BC5C4 /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				92FF10FC21A61AF6003BC5C4 /* EventViewController.swift */,
+				92FF110021A61AF6003BC5C4 /* EventInfoViewController.swift */,
+				92FF10FD21A61AF6003BC5C4 /* EventRankingsViewController.swift */,
+				92FF10FE21A61AF6003BC5C4 /* EventDistrictPointsViewController.swift */,
+				92FF10FF21A61AF6003BC5C4 /* EventAlliancesViewController.swift */,
+				92FF110121A61AF6003BC5C4 /* EventAwardsViewController.swift */,
+				92FF110221A61AF6003BC5C4 /* Stats */,
+			);
+			path = Event;
+			sourceTree = "<group>";
+		};
+		92FF110221A61AF6003BC5C4 /* Stats */ = {
+			isa = PBXGroup;
+			children = (
+				92FF110321A61AF6003BC5C4 /* EventStatsContainerViewController.swift */,
+				92FF110421A61AF6003BC5C4 /* EventTeamStatsViewController.swift */,
+				92FF110521A61AF6003BC5C4 /* EventStatsViewController.swift */,
+			);
+			path = Stats;
+			sourceTree = "<group>";
+		};
+		92FF110F21A61B37003BC5C4 /* District */ = {
+			isa = PBXGroup;
+			children = (
+				92FF111421A61B37003BC5C4 /* DistrictViewController.swift */,
+				92FF111621A61B37003BC5C4 /* DistrictEventsViewController.swift */,
+				92FF111521A61B37003BC5C4 /* DistrictRankingsViewController.swift */,
+				92FF111021A61B37003BC5C4 /* Team@District */,
+			);
+			path = District;
+			sourceTree = "<group>";
+		};
+		92FF111021A61B37003BC5C4 /* Team@District */ = {
+			isa = PBXGroup;
+			children = (
+				92FF111121A61B37003BC5C4 /* DistrictTeamSummaryViewController.swift */,
+				92FF111221A61B37003BC5C4 /* DistrictBreakdownViewController.swift */,
+				92FF111321A61B37003BC5C4 /* TeamAtDistrictViewController.swift */,
+			);
+			path = "Team@District";
 			sourceTree = "<group>";
 		};
 		92FFE5221E7C994B0037E48C /* View Elements */ = {
@@ -2080,6 +2079,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92A5E5DD21A22D550025CC85 /* Int16+Suffix.swift in Sources */,
+				92FF110E21A61AF6003BC5C4 /* EventStatsViewController.swift in Sources */,
 				92DF35DE217D435D00B5246B /* DistrictRanking.swift in Sources */,
 				92A5E51221A1B7470025CC85 /* MyTBASubscription.swift in Sources */,
 				92A5E5D421A22D550025CC85 /* Bundle+Version.swift in Sources */,
@@ -2100,10 +2100,10 @@
 				92DF3611217D43EC00B5246B /* Managed.swift in Sources */,
 				92F8E356209AAE890094213F /* PushService.swift in Sources */,
 				92BB8B64214F17440035AF28 /* URLOpener.swift in Sources */,
-				9272924D1EE4A0FC0027CE7C /* EventStatsViewController.swift in Sources */,
 				14796940215E9A590075AF4E /* MatchViewModel.swift in Sources */,
 				9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */,
 				92FF10EF21A61A1B003BC5C4 /* TeamStatsViewController.swift in Sources */,
+				92FF110721A61AF6003BC5C4 /* EventRankingsViewController.swift in Sources */,
 				92DF3608217D43CB00B5246B /* Team.swift in Sources */,
 				925908AF2184D32400D7BFCE /* EventStatusPlayoff.swift in Sources */,
 				92DF3602217D43B300B5246B /* Subscription.swift in Sources */,
@@ -2113,11 +2113,11 @@
 				929BBB051EC55742006D3854 /* InfoTableViewCell.swift in Sources */,
 				92DF35DD217D435D00B5246B /* District.swift in Sources */,
 				92DF35FA217D439500B5246B /* MatchVideo.swift in Sources */,
-				1405237C1ED33F500072FB91 /* MatchViewController.swift in Sources */,
 				145C57B51ED377EB004955B2 /* MatchTableViewCell.swift in Sources */,
 				929F571C2092B77300E5313A /* TBATableViewController.swift in Sources */,
 				924602AB1ECE8B1D0030EDBF /* AwardTableViewCell.swift in Sources */,
 				92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */,
+				92FF110821A61AF6003BC5C4 /* EventDistrictPointsViewController.swift in Sources */,
 				92A5E51421A1B7470025CC85 /* MyTBAFavorite.swift in Sources */,
 				92A5E51B21A1B7470025CC85 /* TBAKit.swift in Sources */,
 				92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */,
@@ -2126,11 +2126,12 @@
 				92DF35FB217D439500B5246B /* Match.swift in Sources */,
 				92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */,
 				92A5E51021A1B7470025CC85 /* MyTBA.swift in Sources */,
-				929FCDA21EC8068800A38E46 /* DistrictViewController.swift in Sources */,
 				92B5565E21601D9000C1D9A3 /* MatchView.swift in Sources */,
 				92A5E52021A1B7470025CC85 /* TBAEvent.swift in Sources */,
+				92FF111821A61B37003BC5C4 /* DistrictBreakdownViewController.swift in Sources */,
 				14796946215EB0B90075AF4E /* RankingCellViewModel.swift in Sources */,
 				92DF35E1217D435D00B5246B /* AwardRecipient.swift in Sources */,
+				92FF10F921A61AC2003BC5C4 /* MatchViewController.swift in Sources */,
 				14B6726A21517A7E00FDDAB2 /* RealtimeDatabaseService.swift in Sources */,
 				92A5E5D521A22D550025CC85 /* Calendar+TBA.swift in Sources */,
 				92688C2B2090091D00D12B7B /* ReactNativeService.swift in Sources */,
@@ -2139,41 +2140,38 @@
 				9218462D20CDBBDB00AAB7F8 /* RemoteConfigServiceOperation.swift in Sources */,
 				92FF10EE21A61A1B003BC5C4 /* TeamSummaryViewController.swift in Sources */,
 				92A5E5D921A22D550025CC85 /* String+Prefix.swift in Sources */,
+				92FF111B21A61B37003BC5C4 /* DistrictRankingsViewController.swift in Sources */,
 				92A5E5DC21A22D550025CC85 /* URL+Reachable.swift in Sources */,
 				92858F2D208D783E00811614 /* EventTeamStatTableViewCell.swift in Sources */,
 				145C57BD1ED3C3AA004955B2 /* PlayerView.swift in Sources */,
 				1450778D21824E2F00C61D2D /* EventKey.swift in Sources */,
 				14796942215EA5AE0075AF4E /* AwardCellViewModel.swift in Sources */,
 				92A5E5DB21A22D550025CC85 /* UINavigationController+SplitView.swift in Sources */,
+				92FF110621A61AF6003BC5C4 /* EventViewController.swift in Sources */,
 				92DF3610217D43EC00B5246B /* Playable.swift in Sources */,
 				92DF35FE217D43A200B5246B /* TeamMedia.swift in Sources */,
-				920DF7CF20954B5D0041B487 /* DistrictBreakdownViewController.swift in Sources */,
-				92942E361E2A81E8008E79CA /* EventInfoViewController.swift in Sources */,
 				92DF35F9217D439500B5246B /* MatchAlliance.swift in Sources */,
 				304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */,
 				92A5E5D821A22D550025CC85 /* RemoteConfig+TBA.swift in Sources */,
 				92DF35F1217D438400B5246B /* EventStatus.swift in Sources */,
 				92B55625215D69DE00C1D9A3 /* WeekEventsViewController.swift in Sources */,
 				92A5E51D21A1B7470025CC85 /* TBADistrict.swift in Sources */,
-				929FCDA81EC8BE7200A38E46 /* DistrictRankingsViewController.swift in Sources */,
-				145C57B91ED3C166004955B2 /* MatchInfoViewController.swift in Sources */,
 				1448DBA9218230D0008F542E /* MyTBAEntity.swift in Sources */,
 				92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */,
-				9272924B1EE4A0830027CE7C /* EventStatsContainerViewController.swift in Sources */,
+				92FF110D21A61AF6003BC5C4 /* EventTeamStatsViewController.swift in Sources */,
 				929F57262092BA1C00E5313A /* Persistable.swift in Sources */,
+				92FF10F821A61AC2003BC5C4 /* MatchesViewController.swift in Sources */,
 				929F572A2092BAFD00E5313A /* Refreshable.swift in Sources */,
 				92C9BD352096907E007FB9C8 /* Stateful.swift in Sources */,
 				92A321C7214EF83800FDADFB /* SettingsViewController.swift in Sources */,
 				92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */,
-				145C57BB1ED3C178004955B2 /* MatchBreakdownViewController.swift in Sources */,
-				920DF7CD20954B430041B487 /* TeamAtDistrictViewController.swift in Sources */,
+				92FF10FA21A61AC2003BC5C4 /* MatchBreakdownViewController.swift in Sources */,
 				92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */,
 				92FF10F121A61A1B003BC5C4 /* TeamInfoViewController.swift in Sources */,
 				92A5E5DA21A22D550025CC85 /* UIColor+TBA.swift in Sources */,
+				92FF111A21A61B37003BC5C4 /* DistrictViewController.swift in Sources */,
 				929F57222092B80B00E5313A /* ContainerViewController.swift in Sources */,
-				92E6DB8B20C4609900396010 /* DistrictTeamSummaryViewController.swift in Sources */,
 				92A5E5D321A22D550025CC85 /* UIApplication+URLOpener.swift in Sources */,
-				927292521EE4A48C0027CE7C /* EventTeamStatsViewController.swift in Sources */,
 				14796948215EBD6C0075AF4E /* EventCellViewModel.swift in Sources */,
 				92A5E51121A1B7470025CC85 /* MyTBARegister.swift in Sources */,
 				92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */,
@@ -2182,35 +2180,37 @@
 				92A5E51E21A1B7470025CC85 /* TBAMatch.swift in Sources */,
 				92A5E51F21A1B7470025CC85 /* TBAStatus.swift in Sources */,
 				92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */,
+				92FF110B21A61AF6003BC5C4 /* EventAwardsViewController.swift in Sources */,
 				92A5E51321A1B7470025CC85 /* MyTBAPreferences.swift in Sources */,
 				92AF4D0C1E330790007E967D /* SelectTableViewController.swift in Sources */,
 				929F57202092B7D400E5313A /* TBAViewController.swift in Sources */,
 				929DB38C2095640000FB575F /* ReverseSubtitleTableViewCell.swift in Sources */,
 				1479694E215EC4B60075AF4E /* InfoCellViewModel.swift in Sources */,
-				92D5A1221EE48EC700EBFC6F /* EventDistrictPointsViewController.swift in Sources */,
+				92FF10F721A61AC2003BC5C4 /* MatchInfoViewController.swift in Sources */,
 				92A5E51C21A1B7470025CC85 /* TBATeam.swift in Sources */,
 				92DF35F0217D438400B5246B /* EventAlliance.swift in Sources */,
-				924602A41ECD27CE0030EDBF /* EventAwardsViewController.swift in Sources */,
-				92942DDF1E21D2EB008E79CA /* EventViewController.swift in Sources */,
 				92564C6B21644AA30047917F /* Secrets.swift in Sources */,
-				303F824A1EF593BE007CADA1 /* EventRankingsViewController.swift in Sources */,
 				92DF35F4217D438400B5246B /* Webcast.swift in Sources */,
 				92DF35F2217D438400B5246B /* EventStatusAlliance.swift in Sources */,
 				92DF3612217D43EC00B5246B /* Locatable.swift in Sources */,
+				92FF111721A61B37003BC5C4 /* DistrictTeamSummaryViewController.swift in Sources */,
 				929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */,
 				92DF3603217D43B300B5246B /* Favorite.swift in Sources */,
 				14796944215EAF7A0075AF4E /* TeamCellViewModel.swift in Sources */,
+				92FF111C21A61B37003BC5C4 /* DistrictEventsViewController.swift in Sources */,
+				92FF110A21A61AF6003BC5C4 /* EventInfoViewController.swift in Sources */,
 				92A5E51521A1B7470025CC85 /* MyTBAModel.swift in Sources */,
-				92B55627215D6A9B00C1D9A3 /* DistrictEventsViewController.swift in Sources */,
+				92FF110C21A61AF6003BC5C4 /* EventStatsContainerViewController.swift in Sources */,
 				9287013C20CD70CF0077D6DA /* RemoteConfigService.swift in Sources */,
 				92A5E5D721A22D550025CC85 /* Date+TBA.swift in Sources */,
+				92FF111921A61B37003BC5C4 /* TeamAtDistrictViewController.swift in Sources */,
 				925471F7208CC6F100AD3204 /* EventAllianceTableViewCell.swift in Sources */,
 				92DF35F3217D438400B5246B /* WLT.swift in Sources */,
-				9257DF4E208C0D1200F7E2BA /* EventAlliancesViewController.swift in Sources */,
 				92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */,
 				9287014820CD8C4A0077D6DA /* TBAOperation.swift in Sources */,
 				92FF10EC21A61A1B003BC5C4 /* TeamEventsViewController.swift in Sources */,
 				92858F27208D444700811614 /* CoreDataContextObserver.swift in Sources */,
+				92FF110921A61AF6003BC5C4 /* EventAlliancesViewController.swift in Sources */,
 				928018F42096431200693447 /* MyTBASignInViewController.swift in Sources */,
 				9221C616209BFF7D00477DE2 /* LoadingTableViewCell.swift in Sources */,
 				92942DB11E215B06008E79CA /* EventsViewController.swift in Sources */,
@@ -2221,7 +2221,6 @@
 				92FF10ED21A61A1B003BC5C4 /* TeamAtEventViewController.swift in Sources */,
 				92DF35EC217D438400B5246B /* Event.swift in Sources */,
 				1479694A215EBE460075AF4E /* EventAllianceCellViewModel.swift in Sources */,
-				1405237A1ED33E040072FB91 /* MatchesViewController.swift in Sources */,
 				92A5E51621A1B7470025CC85 /* MyTBASubscribable.swift in Sources */,
 				92DF360F217D43EC00B5246B /* NSManagedObjectContext+Extension.swift in Sources */,
 				9223AC851EE7214A00F54F93 /* MediaCollectionViewCell.swift in Sources */,
