@@ -25,7 +25,6 @@ before_script:
   - cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
   - bundle exec fastlane setup_ci
   - echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
-  - bundle exec fastlane match_ci
 
 jobs:
   include:
@@ -35,4 +34,6 @@ jobs:
     # - script: bundle exec fastlane scan --scheme tba-ui-tests
     #   name: "UI Tests"
     - stage: beta
-      script: bundle exec fastlane beta
+      script:
+        - bundle exec fastlane setup_secrets
+        - bundle exec fastlane beta_ci

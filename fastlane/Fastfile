@@ -5,13 +5,18 @@ platform :ios do
   desc "Setup CI"
   lane :setup_ci do
     setup_travis
-    setup_secrets
+  end
+
+  desc "Run all of our tests"
+  lane :test do
+    scan(scheme: "tba-unit-tests")
+    # scan(scheme: "tba-ui-tests")
   end
 
   ## CI Lanes ##
 
   desc "Setup Secrets.plist file (used by CI)"
-  private_lane :setup_secrets do
+  lane :setup_secrets do
     set_info_plist_value(path: "the-blue-alliance-ios/Secrets.plist", key: "tba_api_key", value: ENV['TBA_API_KEY'])
   end
 
@@ -20,13 +25,6 @@ platform :ios do
     match(
       git_url: "https://#{ENV["GITHUB_TOKEN"]}@github.com/ZachOrr/tba-ios-certificates.git",
       keychain_name: "fastlane_tmp_keychain"
-    )
-    update_project_team(teamid: ENV["sigh_com.the-blue-alliance.tba_appstore_team-id"])
-    update_project_provisioning(
-      profile: ENV["sigh_com.the-blue-alliance.tba_appstore_profile-path"],
-      target_filter: "The Blue Alliance",
-      build_configuration: "Release",
-      code_signing_identity: "iPhone Distribution"
     )
   end
 
@@ -53,7 +51,7 @@ platform :ios do
   ## End Create A New Version Lanes ##
 
   desc "Bump version and push if necessary"
-  private_lane :ensure_version_bump do
+  lane :ensure_version_bump do
     if !git_tag_exists(tag: current_git_tag)
       UI.success("`#{current_git_tag}` is a new version, all good! 💪")
     else
@@ -63,34 +61,46 @@ platform :ios do
 
   ## Release Lanes ##
 
+  desc "Upload a new beta build to TestFlight (for CI machine)"
+  lane :beta_ci do
+    slack(channel: "#dev-ios", message: "Shipping #{current_git_tag} to TestFlight...", default_payloads: [])
+
+    match_ci
+    beta_internal
+    # Upload to TestFlight and move on to next steps
+    pilot(changelog: commit_changelog_short, skip_waiting_for_build_processing: true)
+    ship_github(is_prerelease: true) # Create GitHub release
+
+    slack(
+      channel: "#dev-ios",
+      message: "#{current_git_tag} uploaded to TestFlight 🎉",
+      payload: {
+        "GitHub Release": "https://github.com/the-blue-alliance/the-blue-alliance-ios/releases/tag/#{current_git_tag}"
+      },
+      default_payloads: []
+    )
+  end
+
   desc "Upload a new beta build to TestFlight"
-  lane :beta do |options|
-    if is_ci?
-      slack(channel: "#dev-ios", message: "Shipping #{current_git_tag} to TestFlight...", default_payloads: [])
-    end
+  lane :beta do
+    match
+    beta_internal
+    pilot(changelog: commit_changelog_short, distribute_external: true)
+    add_git_tag(tag: current_git_tag)
+    push_git_tags
+  end
 
+  desc "Internal beta lane - use `beta` or `beta_ci`"
+  lane :beta_internal do
+    update_project_team(teamid: ENV["sigh_com.the-blue-alliance.tba_appstore_team-id"])
+    update_project_provisioning(
+      profile: ENV["sigh_com.the-blue-alliance.tba_appstore_profile-path"],
+      target_filter: "The Blue Alliance",
+      build_configuration: "Release",
+      code_signing_identity: "iPhone Distribution"
+    )
     preship
-    gym(scheme: "The Blue Alliance")
-
-    if is_ci?
-      # Upload to TestFlight and move on to next steps
-      pilot(changelog: commit_changelog_short, skip_waiting_for_build_processing: true)
-    else
-      # Upload to TestFlight and wait for completion locally
-      pilot(changelog: commit_changelog_short, distribute_external: true)
-    end
-
-    if is_ci?
-      ship_github(is_prerelease: true) # Create GitHub release
-      slack(
-        channel: "#dev-ios",
-        message: "#{current_git_tag} uploaded to TestFlight 🎉",
-        payload: {
-          "GitHub Release": "https://github.com/the-blue-alliance/the-blue-alliance-ios/releases/tag/#{current_git_tag}"
-        }
-        default_payloads: [],
-      )
-    end
+    gym
   end
 
   desc "Upload a new build to the App Store"
@@ -168,7 +178,7 @@ platform :ios do
   private_lane :commit_changelog do |options|
     changelog_from_git_commits(
       # tag_match_pattern: options[:tag_match_pattern] || nil,
-      pretty: "{{[%h|https://github.com/the-blue-alliance/the-blue-alliance-ios/commit/%h]}} [%an]: %s",
+      pretty: "[%h](https://github.com/the-blue-alliance/the-blue-alliance-ios/commit/%h): %s",
       merge_commit_filtering: "exclude_merges"
     )
   end
