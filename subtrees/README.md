@@ -6,13 +6,9 @@ To add a subtree:
 -----------------
 `git subtree add --prefix subtrees/<folder name> <URL> <branch> --squash`
 
-Example: `git subtree add --prefix subtrees/the-blue-alliance-react https://github.com/the-blue-alliance/the-blue-alliance-react.git master --squash`
-
 To update a subtree:
 --------------------
 `git subtree pull --prefix subtrees/<folder name> <URL> <branch> --squash`
-
-Example: `git subtree pull --prefix subtrees/the-blue-alliance-react https://github.com/the-blue-alliance/the-blue-alliance-react.git master --squash`
 
 More information about subtrees:
 --------------------------------
