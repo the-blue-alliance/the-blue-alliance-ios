@@ -189,7 +189,7 @@ extension TeamsViewController: Refreshable {
                 Team.insert(teams, page: page, in: backgroundContext)
 
                 if backgroundContext.saveOrRollback() {
-                    self.tbaKit.setLastModified(request!)
+                    self.tbaKit.setLastModified(previousRequest!)
                 }
                 self.removeRequest(request: previousRequest!)
             })
