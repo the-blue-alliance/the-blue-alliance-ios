@@ -10,8 +10,28 @@ typealias ContainableViewController = UIViewController & Refreshable & Persistab
 
 class ContainerViewController: UIViewController, Persistable, Alertable {
 
+    // MARK: - Public Properties
+
+    var navigationTitle: String? {
+        didSet {
+            DispatchQueue.main.async {
+                self.navigationTitleLabel.text = self.navigationTitle
+            }
+        }
+    }
+
+    var navigationSubtitle: String? {
+        didSet {
+            DispatchQueue.main.async {
+                self.navigationSubtitleLabel.text = self.navigationSubtitle
+            }
+        }
+    }
+
+    // MARK: - Private Properties
+
     var persistentContainer: NSPersistentContainer
-    let tbaKit: TBAKit
+    private(set) var tbaKit: TBAKit
     private(set) var userDefaults: UserDefaults
 
     private var isRootContainerViewController: Bool {
@@ -26,8 +46,10 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         }
     }
 
+    // MARK: - Private View Elements
+
     private lazy var navigationStackView: UIStackView = {
-        let navigationStackView = UIStackView(arrangedSubviews: [navigationTitleLabel, navigationDetailLabel])
+        let navigationStackView = UIStackView(arrangedSubviews: [navigationTitleLabel, navigationSubtitleLabel])
         navigationStackView.translatesAutoresizingMaskIntoConstraints = false
         navigationStackView.axis = .vertical
         navigationStackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(navigationTitleTapped)))
@@ -38,27 +60,12 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         navigationTitleLabel.font = UIFont.systemFont(ofSize: 17)
         return navigationTitleLabel
     }()
-    private lazy var navigationDetailLabel: UILabel = {
-        let navigationDetailLabel = ContainerViewController.createNavigationLabel()
-        navigationDetailLabel.font = UIFont.systemFont(ofSize: 11)
-        return navigationDetailLabel
+    private lazy var navigationSubtitleLabel: UILabel = {
+        let navigationSubtitleLabel = ContainerViewController.createNavigationLabel()
+        navigationSubtitleLabel.font = UIFont.systemFont(ofSize: 11)
+        return navigationSubtitleLabel
     }()
     weak var navigationTitleDelegate: NavigationTitleDelegate?
-
-    var navigationTitle: String? {
-        didSet {
-            DispatchQueue.main.async {
-                self.navigationTitleLabel.text = self.navigationTitle
-            }
-        }
-    }
-    var navigationSubtitle: String? {
-        didSet {
-            DispatchQueue.main.async {
-                self.navigationDetailLabel.text = self.navigationSubtitle
-            }
-        }
-    }
 
     private let shouldShowSegmentedControl: Bool = false
     private lazy var segmentedControlView: UIView = {
@@ -76,26 +83,36 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     private let containerView: UIView = UIView()
     private let viewControllers: [ContainableViewController]
 
-    init(viewControllers: [ContainableViewController], segmentedControlTitles: [String]? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(viewControllers: [ContainableViewController], navigationTitle: String? = nil, navigationSubtitle: String?  = nil, segmentedControlTitles: [String]? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.viewControllers = viewControllers
         self.persistentContainer = persistentContainer
         self.tbaKit = tbaKit
         self.userDefaults = userDefaults
 
+        self.navigationTitle = navigationTitle
+        self.navigationSubtitle = navigationSubtitle
+
         segmentedControl = UISegmentedControl(items: segmentedControlTitles)
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        segmentedControl.backgroundColor = .primaryBlue
         segmentedControl.tintColor = .white
 
         super.init(nibName: nil, bundle: nil)
 
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
+
+        if let navigationTitle = navigationTitle, let navigationSubtitle = navigationSubtitle {
+            navigationTitleLabel.text = navigationTitle
+            navigationSubtitleLabel.text = navigationSubtitle
+            navigationItem.titleView = navigationStackView
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,10 +139,6 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         stackView.autoPinEdge(toSuperviewSafeArea: .top)
         // Pin our stack view underneath the safe area to extend underneath the home bar on notch phones
         stackView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
-
-        if navigationTitle != nil, navigationSubtitle != nil {
-            navigationItem.titleView = navigationStackView
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -149,15 +162,23 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
     // MARK: - Public Methods
 
-    func switchedToIndex(_ index: Int) {}
+    public func switchedToIndex(_ index: Int) {}
 
-    func currentViewController() -> ContainableViewController? {
+    public func currentViewController() -> ContainableViewController? {
         if viewControllers.count == 1, let viewController = viewControllers.first {
             return viewController
         } else if viewControllers.count > segmentedControl.selectedSegmentIndex {
             return viewControllers[segmentedControl.selectedSegmentIndex]
         }
         return nil
+    }
+
+    public static func yearSubtitle(_ year: Int?) -> String {
+        if let year = year {
+            return "▾ \(year)"
+        } else {
+            return "▾ ----"
+        }
     }
 
     // MARK: - Private Methods

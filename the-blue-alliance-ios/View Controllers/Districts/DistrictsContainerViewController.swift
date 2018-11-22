@@ -27,14 +27,14 @@ class DistrictsContainerViewController: ContainerViewController {
         districtsViewController = DistrictsViewController(year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [districtsViewController],
+                   navigationTitle: "Districts",
+                   navigationSubtitle: ContainerViewController.yearSubtitle(year),
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
         title = "Districts"
         tabBarItem.image = UIImage(named: "ic_assignment")
-        navigationTitle = "Districts"
-        updateInterface()
 
         navigationTitleDelegate = self
         districtsViewController.delegate = self
@@ -44,18 +44,10 @@ class DistrictsContainerViewController: ContainerViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // TODO: Shouldn't this have the same split view controller code the other root views do?
-    }
-
     // MARK: - Private Methods
 
     private func updateInterface() {
-        navigationSubtitle = "▾ \(year)"
+        navigationSubtitle = ContainerViewController.yearSubtitle(year)
     }
 
 }

@@ -21,13 +21,14 @@ class EventsContainerViewController: ContainerViewController {
         eventsViewController = WeekEventsViewController(year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [eventsViewController],
+                   navigationTitle: EventsContainerViewController.eventsTitle(eventsViewController.weekEvent),
+                   navigationSubtitle: ContainerViewController.yearSubtitle(year),
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
         title = "Events"
         tabBarItem.image = UIImage(named: "ic_event")
-        updateInterface()
 
         navigationTitleDelegate = self
         eventsViewController.delegate = self
@@ -40,14 +41,17 @@ class EventsContainerViewController: ContainerViewController {
 
     // MARK: - Private Methods
 
-    private func updateInterface() {
-        if let weekEvent = eventsViewController.weekEvent {
-            navigationTitle = "\(weekEvent.weekString) Events"
-            navigationSubtitle = "▾ \(weekEvent.year!.intValue)"
+    private static func eventsTitle(_ event: Event?) -> String {
+        if let event = event {
+            return "\(event.weekString) Events"
         } else {
-            navigationTitle = "---- Events"
-            navigationSubtitle = "▾ \(year)"
+            return "---- Events"
         }
+    }
+
+    private func updateInterface() {
+        navigationTitle = EventsContainerViewController.eventsTitle(eventsViewController.weekEvent)
+        navigationSubtitle = ContainerViewController.yearSubtitle(year)
     }
 
 }

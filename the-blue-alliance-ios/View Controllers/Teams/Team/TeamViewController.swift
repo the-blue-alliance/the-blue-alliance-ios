@@ -43,13 +43,15 @@ class TeamViewController: ContainerViewController, Observable {
         eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         mediaViewController = TeamMediaCollectionViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        super.init(viewControllers: [infoViewController, eventsViewController, mediaViewController],
-                   segmentedControlTitles: ["Info", "Events", "Media"],
-                   persistentContainer: persistentContainer,
-                   tbaKit: tbaKit,
-                   userDefaults: userDefaults)
-
-        updateInterface()
+        super.init(
+            viewControllers: [infoViewController, eventsViewController, mediaViewController],
+            navigationTitle: "Team \(team.teamNumber!.stringValue)",
+            navigationSubtitle: ContainerViewController.yearSubtitle(year),
+            segmentedControlTitles: ["Info", "Events", "Media"],
+            persistentContainer: persistentContainer,
+            tbaKit: tbaKit,
+            userDefaults: userDefaults
+        )
 
         navigationTitleDelegate = self
         eventsViewController.delegate = self
@@ -100,13 +102,7 @@ class TeamViewController: ContainerViewController, Observable {
     }
 
     private func updateInterface() {
-        navigationTitle = "Team \(team.teamNumber!.stringValue)"
-
-        if let year = year {
-            navigationSubtitle = "▾ \(year)"
-        } else {
-            navigationSubtitle = "▾ ----"
-        }
+        navigationSubtitle = ContainerViewController.yearSubtitle(year)
     }
 
     private func refreshYearsParticipated() {

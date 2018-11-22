@@ -30,25 +30,6 @@ class TBATestCase: CoreDataTestCase {
 
 }
 
-class TBAViewControllerTester {
-
-    let viewController: UIViewController
-
-    init(withViewController viewController: UIViewController) {
-        self.viewController = viewController
-
-        _ = viewController.view
-
-        viewController.viewWillAppear(false)
-        viewController.viewDidAppear(false)
-    }
-
-    deinit {
-        viewController.viewWillDisappear(false)
-        viewController.viewDidDisappear(false)
-    }
-}
-
 class MockRemoteConfig: RemoteConfig {
 
     let config: [String: NSObject]?

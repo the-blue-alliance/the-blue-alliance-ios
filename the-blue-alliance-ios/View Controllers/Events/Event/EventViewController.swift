@@ -21,6 +21,8 @@ class EventViewController: ContainerViewController {
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
+        title = event.friendlyNameWithYear
+
         infoViewController.delegate = self
         teamsViewController.delegate = self
         rankingsViewController.delegate = self
@@ -35,8 +37,6 @@ class EventViewController: ContainerViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        title = event.friendlyNameWithYear
 
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
     }

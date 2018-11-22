@@ -16,14 +16,15 @@ class TeamAtDistrictViewController: ContainerViewController {
         let summaryViewController = DistrictTeamSummaryViewController(ranking: ranking, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let breakdownViewController = DistrictBreakdownViewController(ranking: ranking, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        super.init(viewControllers: [summaryViewController, breakdownViewController],
-                   segmentedControlTitles: ["Summary", "Breakdown"],
-                   persistentContainer: persistentContainer,
-                   tbaKit: tbaKit,
-                   userDefaults: userDefaults)
-
-        navigationTitle = "Team \(ranking.teamKey!.teamNumber)"
-        navigationSubtitle = "@ \(ranking.district!.abbreviationWithYear)"
+        super.init(
+            viewControllers: [summaryViewController, breakdownViewController],
+            navigationTitle: "Team \(ranking.teamKey!.teamNumber)",
+            navigationSubtitle: "@ \(ranking.district!.abbreviationWithYear)",
+            segmentedControlTitles: ["Summary", "Breakdown"],
+            persistentContainer: persistentContainer,
+            tbaKit: tbaKit,
+            userDefaults: userDefaults
+        )
 
         summaryViewController.delegate = self
     }

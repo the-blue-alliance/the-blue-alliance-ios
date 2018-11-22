@@ -6,7 +6,7 @@ class DistrictsContainerViewControllerTests: TBATestCase {
     var districtsContainerViewController: DistrictsContainerViewController!
     var navigationController: MockNavigationController!
 
-    var viewControllerTester: TBAViewControllerTester!
+    var viewControllerTester: TBAViewControllerTester<UINavigationController>!
 
     override func setUp() {
         super.setUp()
@@ -18,7 +18,7 @@ class DistrictsContainerViewControllerTests: TBATestCase {
                                                                             userDefaults: userDefaults)
         navigationController = MockNavigationController(rootViewController: districtsContainerViewController)
 
-        viewControllerTester = TBAViewControllerTester(withViewController: districtsContainerViewController)
+        viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
     }
 
     override func tearDown() {
@@ -29,6 +29,10 @@ class DistrictsContainerViewControllerTests: TBATestCase {
         super.tearDown()
     }
 
+    func test_snapshot() {
+        verifyLayer(viewControllerTester.window.layer)
+    }
+    
     func test_delegates() {
         XCTAssertNotNil(districtsContainerViewController.navigationTitleDelegate)
         XCTAssertNotNil(districtsContainerViewController.districtsViewController.delegate)

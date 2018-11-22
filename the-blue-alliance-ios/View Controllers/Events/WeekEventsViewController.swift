@@ -1,6 +1,11 @@
 import Foundation
 import CoreData
 
+/**
+ Although the weekEvent can be set via a YearSelect in the EventsContainerViewController, we need
+ this delegate because on an initial load the weekEvent isn't set yet, and we have to set it and have
+ the EventsContainerViewController respond to setting weekEvent in WeekEventsViewController.
+ */
 protocol WeekEventsDelegate: AnyObject {
     func weekEventUpdated()
 }

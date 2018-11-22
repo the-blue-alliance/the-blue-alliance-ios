@@ -10,7 +10,7 @@ class DistrictViewControllerTests: TBATestCase {
     var districtViewController: DistrictViewController!
     var navigationController: MockNavigationController!
 
-    var viewControllerTester: TBAViewControllerTester!
+    var viewControllerTester: TBAViewControllerTester<UINavigationController>!
 
     override func setUp() {
         super.setUp()
@@ -24,7 +24,7 @@ class DistrictViewControllerTests: TBATestCase {
                                                         userDefaults: userDefaults)
         navigationController = MockNavigationController(rootViewController: districtViewController)
 
-        viewControllerTester = TBAViewControllerTester(withViewController: districtViewController)
+        viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
     }
 
     override func tearDown() {
@@ -33,6 +33,10 @@ class DistrictViewControllerTests: TBATestCase {
         viewControllerTester = nil
 
         super.tearDown()
+    }
+
+    func test_snapshot() {
+        verifyLayer(viewControllerTester.window.layer)
     }
 
     private func insertDistrictEvents(district: District) {

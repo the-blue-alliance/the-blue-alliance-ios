@@ -6,7 +6,7 @@ class EventsContainerViewControllerTests: TBATestCase {
     var eventsContainerViewController: EventsContainerViewController!
     var navigationController: MockNavigationController!
 
-    var viewControllerTester: TBAViewControllerTester!
+    var viewControllerTester: TBAViewControllerTester<UINavigationController>!
 
     override func setUp() {
         super.setUp()
@@ -18,7 +18,7 @@ class EventsContainerViewControllerTests: TBATestCase {
                                                                       userDefaults: userDefaults)
         navigationController = MockNavigationController(rootViewController: eventsContainerViewController)
 
-        viewControllerTester = TBAViewControllerTester(withViewController: eventsContainerViewController)
+        viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
     }
 
     override func tearDown() {
@@ -27,6 +27,10 @@ class EventsContainerViewControllerTests: TBATestCase {
         viewControllerTester = nil
 
         super.tearDown()
+    }
+
+    func test_snapshot() {
+        verifyLayer(viewControllerTester.window.layer)
     }
 
     func test_delegates() {
