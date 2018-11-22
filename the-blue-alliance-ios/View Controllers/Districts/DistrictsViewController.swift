@@ -111,7 +111,7 @@ extension DistrictsViewController: Refreshable {
                     District.insert(districts, year: self.year, in: backgroundContext)
 
                     if backgroundContext.saveOrRollback() {
-                        TBAKit.setLastModified(for: request!)
+                        self.tbaKit.setLastModified(request!)
                     }
                 }
                 self.removeRequest(request: request!)

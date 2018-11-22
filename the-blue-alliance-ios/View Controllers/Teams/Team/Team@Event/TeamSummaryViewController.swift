@@ -333,7 +333,7 @@ extension TeamSummaryViewController: Refreshable {
                     event.insert(status)
 
                     if backgroundContext.saveOrRollback() {
-                        TBAKit.setLastModified(for: teamStatusRequest!)
+                        self.tbaKit.setLastModified(teamStatusRequest!)
                     }
                 }
                 self.removeRequest(request: teamStatusRequest!)
@@ -358,7 +358,7 @@ extension TeamSummaryViewController: Refreshable {
                     self.updateSummaryInfo()
 
                     if backgroundContext.saveOrRollback() {
-                        TBAKit.setLastModified(for: awardsRequest!)
+                        self.tbaKit.setLastModified(awardsRequest!)
                     }
                 }
                 self.removeRequest(request: awardsRequest!)

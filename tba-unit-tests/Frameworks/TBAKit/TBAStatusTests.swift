@@ -1,15 +1,7 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-class TBAStatusTests: XCTestCase {
-    
-    var kit: MockTBAKit!
-    
-    override func setUp() {
-        super.setUp()
-
-        kit = MockTBAKit()
-    }
+class TBAStatusTests: TBAKitTestCase {
     
     func test_status() {
         let ex = expectation(description: "status")

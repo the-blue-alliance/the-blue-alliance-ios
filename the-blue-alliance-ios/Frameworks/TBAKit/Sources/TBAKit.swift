@@ -30,24 +30,26 @@ internal protocol TBAModel {
 public class TBAKit: NSObject {
 
     private let apiKey: String
-    let urlSession: URLSession
+    private let urlSession: URLSession
+    private let userDefaults: UserDefaults
 
-    public init(apiKey: String, urlSession: URLSession? = nil) {
+    public init(apiKey: String, urlSession: URLSession? = nil, userDefaults: UserDefaults) {
         self.apiKey = apiKey
         self.urlSession = urlSession ?? URLSession(configuration: .default)
+        self.userDefaults = userDefaults
     }
     
     private static func lastModifiedURLString(for url: URL) -> String {
         return "LAST_MODIFIED:\(url.absoluteString)"
     }
     
-    private static func lastModified(for url: URL) -> String? {
-        let lastModifiedString = lastModifiedURLString(for: url)
-        let lastModifiedDictionary = UserDefaults.standard.dictionary(forKey: Constants.APIConstants.lastModifiedDictionary) ?? [:]
+    private func lastModified(for url: URL) -> String? {
+        let lastModifiedString = TBAKit.lastModifiedURLString(for: url)
+        let lastModifiedDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.lastModifiedDictionary) ?? [:]
         return lastModifiedDictionary[lastModifiedString] as? String
     }
 
-    public static func setLastModified(for request: URLSessionDataTask) {
+    public func setLastModified(_ request: URLSessionDataTask) {
         // Pull our response off of our request
         guard let httpResponse = request.response as? HTTPURLResponse else {
             return
@@ -61,17 +63,17 @@ public class TBAKit: NSObject {
             return
         }
 
-        let lastModifiedString = lastModifiedURLString(for: url)
-        var lastModifiedDictionary = UserDefaults.standard.dictionary(forKey: Constants.APIConstants.lastModifiedDictionary) ?? [:]
+        let lastModifiedString = TBAKit.lastModifiedURLString(for: url)
+        var lastModifiedDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.lastModifiedDictionary) ?? [:]
         lastModifiedDictionary[lastModifiedString] = lastModified
 
-        UserDefaults.standard.set(lastModifiedDictionary, forKey: Constants.APIConstants.lastModifiedDictionary)
-        UserDefaults.standard.synchronize()
+        userDefaults.set(lastModifiedDictionary, forKey: Constants.APIConstants.lastModifiedDictionary)
+        userDefaults.synchronize()
     }
 
-    public static func clearLastModified() {
-        UserDefaults.standard.removeObject(forKey: Constants.APIConstants.lastModifiedDictionary)
-        UserDefaults.standard.synchronize()
+    public func clearLastModified() {
+        userDefaults.removeObject(forKey: Constants.APIConstants.lastModifiedDictionary)
+        userDefaults.synchronize()
     }
     
     internal func callApi(method: String, completion: @escaping TBAKitRequestCompletionBlock) -> URLSessionDataTask {
@@ -80,7 +82,7 @@ public class TBAKit: NSObject {
         request.httpMethod = "GET"
         request.addValue(apiKey, forHTTPHeaderField: "X-TBA-Auth-Key")
 
-        if let lastModified = TBAKit.lastModified(for: apiURL) {
+        if let lastModified = lastModified(for: apiURL) {
             request.addValue(lastModified, forHTTPHeaderField: "If-Modified-Since")
         }
 

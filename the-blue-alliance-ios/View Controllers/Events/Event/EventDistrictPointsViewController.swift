@@ -141,7 +141,7 @@ extension EventDistrictPointsViewController: Refreshable {
                     DistrictEventPoints.insert(eventPoints, eventKey: self.event.key!, in: backgroundContext)
 
                     if backgroundContext.saveOrRollback() {
-                        TBAKit.setLastModified(for: request!)
+                        self.tbaKit.setLastModified(request!)
                     }
                 }
                 self.removeRequest(request: request!)

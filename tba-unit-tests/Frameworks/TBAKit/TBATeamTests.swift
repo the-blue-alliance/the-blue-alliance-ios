@@ -1,15 +1,7 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-class TBATeamTests: XCTestCase {
-    
-    var kit: MockTBAKit!
-    
-    override func setUp() {
-        super.setUp()
-
-        kit = MockTBAKit()
-    }
+class TBATeamTests: TBAKitTestCase {
 
     func test_team_init() {
         let team = TBATeam(key: "frc7332", teamNumber: 7332, name: "Rawrbotz", rookieYear: 2012)

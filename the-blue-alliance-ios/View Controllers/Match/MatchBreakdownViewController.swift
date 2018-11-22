@@ -195,7 +195,7 @@ extension MatchBreakdownViewController: Refreshable {
                     event.insert(modelMatch)
 
                     if backgroundContext.saveOrRollback() {
-                        TBAKit.setLastModified(for: request!)
+                        self.tbaKit.setLastModified(request!)
                     }
                 }
                 self.removeRequest(request: request!)

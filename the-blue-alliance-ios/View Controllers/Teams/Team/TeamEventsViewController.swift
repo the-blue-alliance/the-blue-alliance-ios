@@ -60,7 +60,7 @@ class TeamEventsViewController: EventsViewController {
                     team.insert(events)
 
                     if backgroundContext.saveOrRollback() {
-                        TBAKit.setLastModified(for: request!)
+                        self.tbaKit.setLastModified(request!)
                     }
                 }
                 self.removeRequest(request: request!)

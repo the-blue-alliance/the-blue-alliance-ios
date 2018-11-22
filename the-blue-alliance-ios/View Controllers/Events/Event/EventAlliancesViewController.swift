@@ -149,7 +149,7 @@ extension EventAlliancesViewController: Refreshable {
                     event.insert(alliances)
 
                     if backgroundContext.saveOrRollback() {
-                        TBAKit.setLastModified(for: request!)
+                        self.tbaKit.setLastModified(request!)
                     }
                 }
                 self.removeRequest(request: request!)

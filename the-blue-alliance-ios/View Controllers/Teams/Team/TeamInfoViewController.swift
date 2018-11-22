@@ -214,7 +214,7 @@ extension TeamInfoViewController: Refreshable {
                     Team.insert(modelTeam, in: backgroundContext)
 
                     if backgroundContext.saveOrRollback() {
-                        TBAKit.setLastModified(for: request!)
+                        self.tbaKit.setLastModified(request!)
                     }
                 }
                 self.removeRequest(request: request!)
