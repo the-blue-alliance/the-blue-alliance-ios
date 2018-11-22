@@ -7,7 +7,6 @@ class DistrictsContainerViewController: ContainerViewController {
 
     private let remoteConfig: RemoteConfig
     private let urlOpener: URLOpener
-    private let userDefaults: UserDefaults
 
     private(set) var year: Int {
         didSet {
@@ -20,17 +19,17 @@ class DistrictsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(remoteConfig: RemoteConfig, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(remoteConfig: RemoteConfig, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.remoteConfig = remoteConfig
         self.urlOpener = urlOpener
-        self.userDefaults = userDefaults
 
         year = remoteConfig.currentSeason
-        districtsViewController = DistrictsViewController(year: year, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        districtsViewController = DistrictsViewController(year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [districtsViewController],
                    persistentContainer: persistentContainer,
-                   tbaKit: tbaKit)
+                   tbaKit: tbaKit,
+                   userDefaults: userDefaults)
 
         title = "Districts"
         tabBarItem.image = UIImage(named: "ic_assignment")
@@ -64,7 +63,7 @@ class DistrictsContainerViewController: ContainerViewController {
 extension DistrictsContainerViewController: NavigationTitleDelegate {
 
     func navigationTitleTapped() {
-        let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(current: year, options: Array(2009...remoteConfig.maxSeason).reversed(), persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(current: year, options: Array(2009...remoteConfig.maxSeason).reversed(), persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         selectTableViewController.title = "Select Year"
         selectTableViewController.delegate = self
 
@@ -98,7 +97,7 @@ extension DistrictsContainerViewController: DistrictsViewControllerDelegate {
 
     func districtSelected(_ district: District) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let districtViewController = DistrictViewController(district: district, urlOpener: urlOpener, userDefaults: userDefaults, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let districtViewController = DistrictViewController(district: district, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let nav = UINavigationController(rootViewController: districtViewController)
         navigationController?.showDetailViewController(nav, sender: nil)
     }

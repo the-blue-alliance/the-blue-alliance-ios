@@ -15,10 +15,10 @@ class DistrictRankingsViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(district: District, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(district: District, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.district = district
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         setupDataSource()
     }

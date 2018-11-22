@@ -82,7 +82,7 @@
 		928018F42096431200693447 /* MyTBASignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928018F32096431200693447 /* MyTBASignInViewController.swift */; };
 		928030E4219780540099CB65 /* EventAllianceTableViewCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928030E3219780540099CB65 /* EventAllianceTableViewCellTests.swift */; };
 		928030E62197806A0099CB65 /* EventAllianceCellViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928030E52197806A0099CB65 /* EventAllianceCellViewModelTests.swift */; };
-		9280EAED21685F310016621D /* Refreshable_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9280EAEC21685F310016621D /* Refreshable_Tests.swift */; };
+		9280EAED21685F310016621D /* RefreshableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9280EAEC21685F310016621D /* RefreshableTests.swift */; };
 		92858F27208D444700811614 /* CoreDataContextObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92858F26208D444700811614 /* CoreDataContextObserver.swift */; };
 		92858F2B208D783300811614 /* EventTeamStatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92858F2A208D783300811614 /* EventTeamStatTableViewCell.xib */; };
 		92858F2D208D783E00811614 /* EventTeamStatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92858F2C208D783E00811614 /* EventTeamStatTableViewCell.swift */; };
@@ -401,7 +401,7 @@
 		928018F32096431200693447 /* MyTBASignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignInViewController.swift; sourceTree = "<group>"; };
 		928030E3219780540099CB65 /* EventAllianceTableViewCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceTableViewCellTests.swift; sourceTree = "<group>"; };
 		928030E52197806A0099CB65 /* EventAllianceCellViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceCellViewModelTests.swift; sourceTree = "<group>"; };
-		9280EAEC21685F310016621D /* Refreshable_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Refreshable_Tests.swift; sourceTree = "<group>"; };
+		9280EAEC21685F310016621D /* RefreshableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshableTests.swift; sourceTree = "<group>"; };
 		92858F26208D444700811614 /* CoreDataContextObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataContextObserver.swift; sourceTree = "<group>"; };
 		92858F2A208D783300811614 /* EventTeamStatTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventTeamStatTableViewCell.xib; sourceTree = "<group>"; };
 		92858F2C208D783E00811614 /* EventTeamStatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatTableViewCell.swift; sourceTree = "<group>"; };
@@ -900,7 +900,7 @@
 		9280EAEB21685F100016621D /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				9280EAEC21685F310016621D /* Refreshable_Tests.swift */,
+				9280EAEC21685F310016621D /* RefreshableTests.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -2271,7 +2271,7 @@
 				9287014220CD7CCB0077D6DA /* RemoteConfig+TBA_Tests.swift in Sources */,
 				1450778F218279BB00C61D2D /* EventKeyTests.swift in Sources */,
 				1416D50E218E4B8200F1A4A3 /* EventTeamStatsTests.swift in Sources */,
-				9280EAED21685F310016621D /* Refreshable_Tests.swift in Sources */,
+				9280EAED21685F310016621D /* RefreshableTests.swift in Sources */,
 				92A5E56F21A1B7830025CC85 /* MockURLSessionDataTask.swift in Sources */,
 				14472BB72168487F00E0AE72 /* DistrictTests.swift in Sources */,
 				925908AB21828CC400D7BFCE /* WebcastTests.swift in Sources */,

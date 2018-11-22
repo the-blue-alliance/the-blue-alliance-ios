@@ -65,11 +65,11 @@ class TeamSummaryViewController: TBATableViewController {
     private var summaryRows: [TeamSummaryRow] = []
     private var summaryValues: [Any] = []
 
-    init(teamKey: TeamKey, event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(teamKey: TeamKey, event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.teamKey = teamKey
         self.event = event
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }
 
     required init?(coder aDecoder: NSCoder) {

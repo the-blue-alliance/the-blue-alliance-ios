@@ -10,16 +10,17 @@ class TeamAtDistrictViewController: ContainerViewController {
 
     // MARK: Init
 
-    init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.ranking = ranking
 
-        let summaryViewController = DistrictTeamSummaryViewController(ranking: ranking, persistentContainer: persistentContainer, tbaKit: tbaKit)
-        let breakdownViewController = DistrictBreakdownViewController(ranking: ranking, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let summaryViewController = DistrictTeamSummaryViewController(ranking: ranking, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let breakdownViewController = DistrictBreakdownViewController(ranking: ranking, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [summaryViewController, breakdownViewController],
                    segmentedControlTitles: ["Summary", "Breakdown"],
                    persistentContainer: persistentContainer,
-                   tbaKit: tbaKit)
+                   tbaKit: tbaKit,
+                   userDefaults: userDefaults)
 
         navigationTitle = "Team \(ranking.teamKey!.teamNumber)"
         navigationSubtitle = "@ \(ranking.district!.abbreviationWithYear)"
@@ -42,7 +43,7 @@ extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegat
         }
 
         // TODO: Let's see what we can to do not force-unwrap these from Core Data
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventPoints.teamKey!, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventPoints.teamKey!, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

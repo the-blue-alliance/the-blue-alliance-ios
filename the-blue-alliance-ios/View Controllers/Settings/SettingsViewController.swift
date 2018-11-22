@@ -30,6 +30,7 @@ class SettingsViewController: UITableViewController, Persistable {
     private var urlOpener: URLOpener
     private var metadata: ReactNativeMetadata
     var persistentContainer: NSPersistentContainer
+    var userDefaults: UserDefaults
 
     private let reactNativeDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -39,10 +40,11 @@ class SettingsViewController: UITableViewController, Persistable {
 
     // MARK: - Init
 
-    init(urlOpener: URLOpener, metadata: ReactNativeMetadata, persistentContainer: NSPersistentContainer) {
+    init(urlOpener: URLOpener, metadata: ReactNativeMetadata, persistentContainer: NSPersistentContainer, userDefaults: UserDefaults) {
         self.urlOpener = urlOpener
         self.metadata = metadata
         self.persistentContainer = persistentContainer
+        self.userDefaults = userDefaults
 
         super.init(style: .grouped)
 
@@ -193,7 +195,7 @@ class SettingsViewController: UITableViewController, Persistable {
     }
 
     internal func deleteNetworkCache() {
-        clearSuccessfulRefreshes()
+        userDefaults.clearSuccessfulRefreshes()
         TBAKit.clearLastModified()
     }
 

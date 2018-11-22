@@ -78,11 +78,11 @@ class MatchInfoViewController: TBAViewController, Observable {
 
     // MARK: Init
 
-    init(match: Match, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(match: Match, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.match = match
         self.teamKey = teamKey
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         contextObserver.observeObject(object: match, state: .updated) { [unowned self] (_, _) in
             DispatchQueue.main.async {

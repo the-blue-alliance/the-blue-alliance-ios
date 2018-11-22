@@ -22,12 +22,12 @@ class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TB
     private let willPush: Bool
     weak var delegate: Delegate?
 
-    init(current: Delegate.OptionType?, options: [Delegate.OptionType], willPush: Bool = false, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(current: Delegate.OptionType?, options: [Delegate.OptionType], willPush: Bool = false, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.current = current
         self.options = options
         self.willPush = willPush
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }
 
     required init?(coder aDecoder: NSCoder) {

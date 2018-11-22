@@ -47,11 +47,11 @@ class EventInfoViewController: TBATableViewController, Observable {
 
     // MARK: - Init
 
-    init(event: Event, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(event: Event, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
         self.urlOpener = urlOpener
 
-        super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         contextObserver.observeObject(object: event, state: .updated) { [unowned self] (_, _) in
             DispatchQueue.main.async {

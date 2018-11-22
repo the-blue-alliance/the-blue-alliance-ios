@@ -17,23 +17,24 @@ class EventStatsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
 
-        teamStatsViewController = EventTeamStatsTableViewController(event: event, userDefaults: userDefaults, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        teamStatsViewController = EventTeamStatsTableViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         var eventStatsViewController: EventStatsViewController?
         // Only show event stats if year is 2016 or onward
         var titles = ["Team Stats"]
         if event.year!.intValue >= 2016 {
             titles.append("Event Stats")
-            eventStatsViewController = EventStatsViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit)
+            eventStatsViewController = EventStatsViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         }
 
         super.init(viewControllers: [teamStatsViewController, eventStatsViewController].compactMap({ $0 }),
                    segmentedControlTitles: titles,
                    persistentContainer: persistentContainer,
-                   tbaKit: tbaKit)
+                   tbaKit: tbaKit,
+                   userDefaults: userDefaults)
 
         navigationTitle = "Stats"
         navigationSubtitle = "@ \(event.friendlyNameWithYear)"
@@ -48,7 +49,7 @@ class EventStatsContainerViewController: ContainerViewController {
     // MARK: - Interface Actions
 
     @objc private func showFilter() {
-        let selectTableViewController = SelectTableViewController<EventStatsContainerViewController>(current: teamStatsViewController.filter, options: EventTeamStatFilter.allCases, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let selectTableViewController = SelectTableViewController<EventStatsContainerViewController>(current: teamStatsViewController.filter, options: EventTeamStatFilter.allCases, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         selectTableViewController.title = "Sort stats by"
         selectTableViewController.delegate = self
 
@@ -93,7 +94,7 @@ extension EventStatsContainerViewController: SelectTableViewControllerDelegate {
 extension EventStatsContainerViewController: EventTeamStatsSelectionDelegate {
 
     func eventTeamStatSelected(_ eventTeamStat: EventTeamStat) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventTeamStat.teamKey!, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventTeamStat.teamKey!, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

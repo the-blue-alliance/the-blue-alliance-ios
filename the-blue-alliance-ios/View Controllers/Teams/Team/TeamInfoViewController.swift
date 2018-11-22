@@ -30,11 +30,11 @@ class TeamInfoViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(team: Team, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(team: Team, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.team = team
         self.urlOpener = urlOpener
 
-        super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }
 
     required init?(coder aDecoder: NSCoder) {

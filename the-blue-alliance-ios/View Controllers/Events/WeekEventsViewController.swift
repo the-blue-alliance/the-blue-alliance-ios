@@ -23,10 +23,10 @@ class WeekEventsViewController: EventsViewController {
     }
     var weeks: [Event] = []
 
-    init(year: Int, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(year: Int, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.year = year
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         setupWeeks()
     }

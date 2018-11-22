@@ -1,24 +1,18 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-class ReactNativeMetadata_Tests: XCTestCase {
+class ReactNativeMetadata_Tests: TBATestCase {
 
     var metadata: ReactNativeMetadata!
 
     override func setUp() {
         super.setUp()
 
-        // TODO: Mock UserDefaults
-        metadata = ReactNativeMetadata(userDefaults: UserDefaults.standard)
+        metadata = ReactNativeMetadata(userDefaults: userDefaults)
     }
 
     override func tearDown() {
         metadata = nil
-
-        // Until we start mocking UserDefaults as in-memory, clear aftewards
-        if let bundleID = Bundle(for: type(of: self)).bundleIdentifier {
-            UserDefaults.standard.removePersistentDomain(forName: bundleID)
-        }
 
         super.tearDown()
     }

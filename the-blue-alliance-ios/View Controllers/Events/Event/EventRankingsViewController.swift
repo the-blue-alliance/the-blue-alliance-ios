@@ -15,10 +15,10 @@ class EventRankingsViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         setupDataSource()
     }

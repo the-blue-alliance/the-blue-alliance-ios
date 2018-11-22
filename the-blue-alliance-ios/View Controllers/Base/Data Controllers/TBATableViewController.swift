@@ -10,6 +10,7 @@ class TBATableViewController: UITableViewController, DataController {
     // MARK: - Refreshable
 
     var requests: [URLSessionDataTask] = []
+    var userDefaults: UserDefaults
 
     // MARK: - Stateful
 
@@ -17,9 +18,10 @@ class TBATableViewController: UITableViewController, DataController {
 
     // MARK: - Init
 
-    init(style: UITableView.Style = .plain, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(style: UITableView.Style = .plain, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.persistentContainer = persistentContainer
         self.tbaKit = tbaKit
+        self.userDefaults = userDefaults
 
         super.init(style: style)
     }

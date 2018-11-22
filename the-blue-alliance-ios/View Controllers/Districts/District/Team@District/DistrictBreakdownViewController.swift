@@ -15,10 +15,10 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
 
     // MARK: - Init
 
-    init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(ranking: DistrictRanking, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.ranking = ranking
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }
 
     required init?(coder aDecoder: NSCoder) {
