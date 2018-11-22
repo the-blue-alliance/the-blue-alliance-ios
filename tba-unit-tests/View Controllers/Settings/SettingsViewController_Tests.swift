@@ -10,7 +10,8 @@ class SettingsViewControllerTestCase: TBATestCase {
 
         settingsViewController = SettingsViewController(urlOpener: urlOpener,
                                                         metadata: ReactNativeMetadata(userDefaults: userDefaults),
-                                                        persistentContainer: persistentContainer)
+                                                        persistentContainer: persistentContainer,
+                                                        userDefaults: userDefaults)
     }
 
     override func tearDown() {

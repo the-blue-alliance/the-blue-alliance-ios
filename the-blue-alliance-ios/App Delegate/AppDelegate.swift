@@ -23,21 +23,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let eventsViewController = EventsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
                                                                  urlOpener: urlOpener,
-                                                                 userDefaults: userDefaults,
                                                                  persistentContainer: persistentContainer,
-                                                                 tbaKit: tbaKit)
+                                                                 tbaKit: tbaKit,
+                                                                 userDefaults: userDefaults)
         let teamsViewController = TeamsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
                                                                urlOpener: urlOpener,
                                                                persistentContainer: persistentContainer,
-                                                               tbaKit: tbaKit)
+                                                               tbaKit: tbaKit,
+                                                               userDefaults: userDefaults)
         let districtsViewController = DistrictsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
                                                                        urlOpener: urlOpener,
-                                                                       userDefaults: userDefaults,
                                                                        persistentContainer: persistentContainer,
-                                                                       tbaKit: tbaKit)
+                                                                       tbaKit: tbaKit,
+                                                                       userDefaults: userDefaults)
         let settingsViewController = SettingsViewController(urlOpener: urlOpener,
                                                             metadata: reactNativeMetadata,
-                                                            persistentContainer: persistentContainer)
+                                                            persistentContainer: persistentContainer,
+                                                            userDefaults: userDefaults)
         let rootViewControllers: [UIViewController] = [eventsViewController, teamsViewController, districtsViewController, settingsViewController]
         tabBarController.viewControllers = rootViewControllers.compactMap({ (viewController) -> UIViewController? in
             let navigationController = UINavigationController(rootViewController: viewController)
@@ -261,7 +263,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func setupMyTBA() {
-        let myTBAViewController = MyTBAViewController(persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let myTBAViewController = MyTBAViewController(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         tabBarController.viewControllers?.append(myTBAViewController)
 
         // Assign our Push Service as a delegate to all push-related classes

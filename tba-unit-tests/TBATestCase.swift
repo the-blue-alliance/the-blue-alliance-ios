@@ -5,7 +5,7 @@ import XCTest
 class TBATestCase: CoreDataTestCase {
 
     var tbaKit: MockTBAKit!
-    var userDefaults: UserDefaults! // TODO: Mock this...
+    var userDefaults: UserDefaults!
     var urlOpener: MockURLOpener!
     var remoteConfig: MockRemoteConfig!
     var reactNativeMetadata: ReactNativeMetadata!
@@ -14,7 +14,7 @@ class TBATestCase: CoreDataTestCase {
         super.setUp()
 
         tbaKit = MockTBAKit()
-        userDefaults = UserDefaults.standard
+        userDefaults = UserDefaults(suiteName: "TBATests")
         urlOpener = MockURLOpener()
         remoteConfig = MockRemoteConfig(config: [
             "max_season": NSNumber(value: 2016),
@@ -23,10 +23,7 @@ class TBATestCase: CoreDataTestCase {
     }
 
     override func tearDown() {
-        // Until we start mocking UserDefaults as in-memory, clear aftewards
-        if let bundleID = Bundle(for: type(of: self)).bundleIdentifier {
-            UserDefaults.standard.removePersistentDomain(forName: bundleID)
-        }
+        userDefaults.removePersistentDomain(forName: "TBATests")
 
         super.tearDown()
     }

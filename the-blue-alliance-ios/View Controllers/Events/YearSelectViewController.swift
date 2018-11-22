@@ -22,19 +22,13 @@ class YearSelectViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(year: Int, years: [Int], week: Event?, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(year: Int, years: [Int], week: Event?, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.year = year
         self.week = week
 
-        selectViewController = SelectTableViewController<YearSelectViewController>(current: year,
-                                                                                   options: years,
-                                                                                   willPush: true,
-                                                                                   persistentContainer: persistentContainer,
-                                                                                   tbaKit: tbaKit)
+        selectViewController = SelectTableViewController<YearSelectViewController>(current: year, options: years, willPush: true, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        super.init(viewControllers: [selectViewController],
-                   persistentContainer: persistentContainer,
-                   tbaKit: tbaKit)
+        super.init(viewControllers: [selectViewController], persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         title = "Years"
         selectViewController.delegate = self
@@ -51,7 +45,7 @@ class YearSelectViewController: ContainerViewController {
 
         selectViewController.disableRefreshing()
 
-        eventWeekSelectViewController = EventWeekSelectViewController(year: year, week: week, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        eventWeekSelectViewController = EventWeekSelectViewController(year: year, week: week, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         eventWeekSelectViewController?.delegate = delegate
 
         navigationController?.viewControllers = [self, eventWeekSelectViewController!]
@@ -66,7 +60,7 @@ class YearSelectViewController: ContainerViewController {
     }
 
     private func pushToEventWeekSelect(year: Int) {
-        eventWeekSelectViewController = EventWeekSelectViewController(year: year, week: week, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        eventWeekSelectViewController = EventWeekSelectViewController(year: year, week: week, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         eventWeekSelectViewController?.delegate = delegate
         navigationController?.pushViewController(eventWeekSelectViewController!, animated: true)
     }
@@ -94,7 +88,7 @@ private class EventWeekSelectViewController: ContainerViewController {
 
     weak var delegate: YearSelectViewControllerDelegate?
 
-    init(year: Int, week: Event?, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(year: Int, week: Event?, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.year = year
 
         let weeks = Event.weekEvents(for: year, in: persistentContainer.viewContext)
@@ -103,11 +97,10 @@ private class EventWeekSelectViewController: ContainerViewController {
                                                               current: week,
                                                               options: weeks,
                                                               persistentContainer: persistentContainer,
-                                                              tbaKit: tbaKit)
+                                                              tbaKit: tbaKit,
+                                                              userDefaults: userDefaults)
 
-        super.init(viewControllers: [selectViewController],
-                   persistentContainer: persistentContainer,
-                   tbaKit: tbaKit)
+        super.init(viewControllers: [selectViewController], persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         title = "\(year) Weeks"
         selectViewController.delegate = self
@@ -140,10 +133,10 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
 
     fileprivate var hasRefreshed: Bool = false
 
-    init(year: Int, current: Event?, options: [Event], persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(year: Int, current: Event?, options: [Event], persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.year = year
 
-        super.init(current: current, options: options, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        super.init(current: current, options: options, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }
 
     required init?(coder aDecoder: NSCoder) {

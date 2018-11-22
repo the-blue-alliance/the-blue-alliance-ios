@@ -14,8 +14,8 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     // MARK: - Init
 
-    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
+    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }
 
     required init?(coder aDecoder: NSCoder) {

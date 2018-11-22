@@ -13,9 +13,9 @@ class DistrictsContainerViewControllerTests: TBATestCase {
 
         districtsContainerViewController = DistrictsContainerViewController(remoteConfig: remoteConfig,
                                                                             urlOpener: urlOpener,
-                                                                            userDefaults: userDefaults,
                                                                             persistentContainer: persistentContainer,
-                                                                            tbaKit: tbaKit)
+                                                                            tbaKit: tbaKit,
+                                                                            userDefaults: userDefaults)
         navigationController = MockNavigationController(rootViewController: districtsContainerViewController)
 
         viewControllerTester = TBAViewControllerTester(withViewController: districtsContainerViewController)

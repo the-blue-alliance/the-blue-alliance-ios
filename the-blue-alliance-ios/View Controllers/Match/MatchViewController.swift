@@ -6,21 +6,22 @@ class MatchContainerViewController: ContainerViewController {
 
     // MARK: Init
 
-    init(match: Match, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
-        let infoViewController = MatchInfoViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit)
+    init(match: Match, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        let infoViewController = MatchInfoViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         // Only show match breakdown if year is 2015 or onward
         var breakdownViewController: MatchBreakdownViewController?
         var titles: [String]  = ["Info"]
         if match.event!.year!.intValue >= 2015 {
             titles.append("Breakdown")
-            breakdownViewController = MatchBreakdownViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit)
+            breakdownViewController = MatchBreakdownViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         }
 
         super.init(viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }) as! [ContainableViewController],
                    segmentedControlTitles: titles,
                    persistentContainer: persistentContainer,
-                   tbaKit: tbaKit)
+                   tbaKit: tbaKit,
+                   userDefaults: userDefaults)
 
         navigationTitle = "\(match.friendlyName)"
         navigationSubtitle = "@ \(match.event!.friendlyNameWithYear)"

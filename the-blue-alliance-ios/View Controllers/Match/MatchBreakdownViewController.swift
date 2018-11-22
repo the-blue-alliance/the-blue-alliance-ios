@@ -37,10 +37,10 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
 
     // MARK: - Init
 
-    init(match: Match, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(match: Match, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.match = match
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         contextObserver.observeObject(object: match, state: .updated) { [unowned self] (_, _) in
             DispatchQueue.main.async {

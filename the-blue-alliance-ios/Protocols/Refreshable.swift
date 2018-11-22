@@ -12,6 +12,9 @@ protocol Refreshable: AnyObject {
     var refreshControl: UIRefreshControl? { get set }
     var refreshView: UIScrollView { get }
 
+    /// Needed to store lastRefresh information
+    var userDefaults: UserDefaults { get }
+
     /**
      Identifier that reflects type of data used during refresh, and if we've fetched it before - used to calculate if we should refresh.
 
@@ -53,7 +56,7 @@ extension Refreshable {
             guard let refreshKey = refreshKey else {
                 return nil
             }
-            let successfulRefreshes = UserDefaults.standard.dictionary(forKey: kSuccessfulRefreshKeys) ?? [:]
+            let successfulRefreshes = userDefaults.dictionary(forKey: kSuccessfulRefreshKeys) ?? [:]
             if let lastRefreshDate = successfulRefreshes[refreshKey] as? Date {
                 return lastRefreshDate
             }
@@ -63,11 +66,11 @@ extension Refreshable {
             guard let refreshKey = refreshKey else {
                 return
             }
-            var successfulRefreshes = UserDefaults.standard.dictionary(forKey: kSuccessfulRefreshKeys) ?? [:]
+            var successfulRefreshes = userDefaults.dictionary(forKey: kSuccessfulRefreshKeys) ?? [:]
             successfulRefreshes[refreshKey] = newValue
 
-            UserDefaults.standard.set(successfulRefreshes, forKey: kSuccessfulRefreshKeys)
-            UserDefaults.standard.synchronize()
+            userDefaults.set(successfulRefreshes, forKey: kSuccessfulRefreshKeys)
+            userDefaults.synchronize()
         }
     }
 
@@ -173,7 +176,11 @@ extension Refreshable {
 
 }
 
-func clearSuccessfulRefreshes() {
-    UserDefaults.standard.removeObject(forKey: kSuccessfulRefreshKeys)
-    UserDefaults.standard.synchronize()
+extension UserDefaults {
+
+    func clearSuccessfulRefreshes() {
+        removeObject(forKey: kSuccessfulRefreshKeys)
+        synchronize()
+    }
+
 }

@@ -8,15 +8,16 @@ class EventAwardsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(event: Event, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
         self.teamKey = teamKey
 
-        let awardsViewController = EventAwardsViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let awardsViewController = EventAwardsViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [awardsViewController],
                    persistentContainer: persistentContainer,
-                   tbaKit: tbaKit)
+                   tbaKit: tbaKit,
+                   userDefaults: userDefaults)
 
         navigationTitle = "Awards"
         if let teamKey = teamKey {
@@ -43,7 +44,8 @@ extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate 
         let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey,
                                                                   event: event,
                                                                   persistentContainer: persistentContainer,
-                                                                  tbaKit: tbaKit)
+                                                                  tbaKit: tbaKit,
+                                                                  userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -63,11 +65,11 @@ class EventAwardsViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(event: Event, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
         self.teamKey = teamKey
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         setupDataSource()
     }

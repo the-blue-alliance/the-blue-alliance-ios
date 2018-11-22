@@ -20,7 +20,6 @@ enum EventTeamStatFilter: String, Comparable, CaseIterable {
 class EventTeamStatsTableViewController: TBATableViewController {
 
     private let event: Event
-    private let userDefaults: UserDefaults
 
     weak var delegate: EventTeamStatsSelectionDelegate?
     private var dataSource: TableViewDataSource<EventTeamStat, EventTeamStatsTableViewController>!
@@ -36,9 +35,8 @@ class EventTeamStatsTableViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
-        self.userDefaults = userDefaults
 
         if let savedFilter = userDefaults.string(forKey: "EventTeamStatFilter"), !savedFilter.isEmpty, let filter = EventTeamStatFilter(rawValue: savedFilter) {
             self.filter = filter
@@ -46,7 +44,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
             self.filter = EventTeamStatFilter.opr
         }
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         setupDataSource()
     }

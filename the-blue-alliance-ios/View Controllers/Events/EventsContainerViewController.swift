@@ -7,24 +7,23 @@ class EventsContainerViewController: ContainerViewController {
 
     private let remoteConfig: RemoteConfig
     private let urlOpener: URLOpener
-    private let userDefaults: UserDefaults
 
     private(set) var year: Int
     private(set) var eventsViewController: WeekEventsViewController
 
     // MARK: - Init
 
-    init(remoteConfig: RemoteConfig, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(remoteConfig: RemoteConfig, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.remoteConfig = remoteConfig
         self.urlOpener = urlOpener
-        self.userDefaults = userDefaults
 
         year = remoteConfig.currentSeason
-        eventsViewController = WeekEventsViewController(year: year, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        eventsViewController = WeekEventsViewController(year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [eventsViewController],
                    persistentContainer: persistentContainer,
-                   tbaKit: tbaKit)
+                   tbaKit: tbaKit,
+                   userDefaults: userDefaults)
 
         title = "Events"
         tabBarItem.image = UIImage(named: "ic_event")
@@ -56,11 +55,7 @@ class EventsContainerViewController: ContainerViewController {
 extension EventsContainerViewController: NavigationTitleDelegate {
 
     func navigationTitleTapped() {
-        let yearSelectViewController = YearSelectViewController(year: year,
-                                                                years: Array(1992...remoteConfig.maxSeason).reversed(),
-                                                                week: eventsViewController.weekEvent,
-                                                                persistentContainer: persistentContainer,
-                                                                tbaKit: tbaKit)
+        let yearSelectViewController = YearSelectViewController(year: year, years: Array(1992...remoteConfig.maxSeason).reversed(), week: eventsViewController.weekEvent, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         yearSelectViewController.delegate = self
 
         let nav = UINavigationController(rootViewController: yearSelectViewController)
@@ -90,7 +85,7 @@ extension EventsContainerViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let eventViewController = EventViewController(event: event, urlOpener: urlOpener, userDefaults: userDefaults, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let eventViewController = EventViewController(event: event, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let nav = UINavigationController(rootViewController: eventViewController)
         navigationController?.showDetailViewController(nav, sender: nil)
     }

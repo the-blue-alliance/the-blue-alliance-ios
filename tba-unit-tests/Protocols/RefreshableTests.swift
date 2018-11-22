@@ -3,6 +3,12 @@ import XCTest
 
 class MockRefreshable: Refreshable {
 
+    var userDefaults: UserDefaults
+
+    init(userDefaults: UserDefaults) {
+        self.userDefaults = userDefaults
+    }
+
     // MARK: - Mock Expectations
 
     var updateRefreshExpectation: XCTestExpectation?
@@ -53,18 +59,18 @@ class MockRefreshable: Refreshable {
 
 }
 
-class Refreshable_TestCase: XCTestCase {
+class RefreshableTests: TBATestCase {
 
     var refreshable: MockRefreshable!
 
     override func setUp() {
         super.setUp()
 
-        refreshable = MockRefreshable()
+        refreshable = MockRefreshable(userDefaults: userDefaults)
     }
 
     override func tearDown() {
-        clearSuccessfulRefreshes()
+        userDefaults.clearSuccessfulRefreshes()
         refreshable = nil
 
         super.tearDown()
@@ -130,7 +136,7 @@ class Refreshable_TestCase: XCTestCase {
         XCTAssert(refreshable.shouldRefresh())
         refreshable.markRefreshSuccessful()
         XCTAssertFalse(refreshable.shouldRefresh())
-        clearSuccessfulRefreshes()
+        userDefaults.clearSuccessfulRefreshes()
         XCTAssert(refreshable.shouldRefresh())
     }
 
@@ -233,6 +239,32 @@ class Refreshable_TestCase: XCTestCase {
         refreshable.enableRefreshing()
         refreshable.disableRefreshing()
         XCTAssertNil(refreshable.refreshControl)
+    }
+
+}
+
+class UserDefaultsRefreshableTests: TBATestCase {
+
+    var refreshable: MockRefreshable!
+
+    override func setUp() {
+        super.setUp()
+
+        refreshable = MockRefreshable(userDefaults: userDefaults)
+    }
+
+    override func tearDown() {
+        refreshable = nil
+
+        super.tearDown()
+    }
+
+    func test_clearSuccessfulRefreshes() {
+        XCTAssertNil(userDefaults.object(forKey: "successful_refresh_keys"))
+        refreshable.markRefreshSuccessful(Calendar.current.date(byAdding: DateComponents(hour: -1), to: Date())!)
+        XCTAssertNotNil(userDefaults.object(forKey: "successful_refresh_keys"))
+        userDefaults.clearSuccessfulRefreshes()
+        XCTAssertNil(userDefaults.object(forKey: "successful_refresh_keys"))
     }
 
 }
