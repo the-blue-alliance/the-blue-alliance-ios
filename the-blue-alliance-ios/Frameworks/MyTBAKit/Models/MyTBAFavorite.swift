@@ -21,8 +21,7 @@ struct MyTBAFavorite: MyTBAModel, Equatable, Codable {
     var modelKey: String
     var modelType: MyTBAModelType
 
-    static var fetch: ((@escaping ([MyTBAModel]?, Error?) -> Void) -> URLSessionDataTask) = MyTBA.shared.fetchFavorites
-
+    static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> URLSessionDataTask = MyTBA.fetchFavorites
 }
 
 extension MyTBA {

@@ -1,136 +1,134 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
-        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <viewController id="GWW-1a-Acx" customClass="MyTBASignInViewController" customModule="The_Blue_Alliance" customModuleProvider="target">
-            <view key="view" contentMode="scaleToFill" id="t8S-eI-yHk">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                <subviews>
-                    <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" axis="vertical" distribution="equalSpacing" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="GHm-jo-SWw">
-                        <rect key="frame" x="20" y="161.5" width="335" height="344.5"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gJS-sF-yoy">
-                                <rect key="frame" x="58.5" y="0.0" width="218" height="91.5"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" verticalHuggingPriority="750" image="star_yellow" translatesAutoresizingMaskIntoConstraints="NO" id="g4n-2a-hdA">
-                                        <rect key="frame" x="77.5" y="0.0" width="63" height="60"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="60" id="7oq-xo-qmg"/>
-                                            <constraint firstAttribute="width" secondItem="g4n-2a-hdA" secondAttribute="height" multiplier="102:97" id="igA-M6-mt1"/>
-                                        </constraints>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Welcome to myTBA" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eLD-y8-UJK">
-                                        <rect key="frame" x="0.0" y="60" width="218" height="31.5"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                            </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="kDf-bN-XDK">
-                                <rect key="frame" x="8" y="111.5" width="319.5" height="42.5"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ic_favorite_border" translatesAutoresizingMaskIntoConstraints="NO" id="V9P-3O-rGH">
-                                        <rect key="frame" x="0.0" y="7" width="28" height="28"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="28" id="11f-u2-ecU"/>
-                                            <constraint firstAttribute="width" constant="28" id="Maa-CY-KJ0"/>
-                                        </constraints>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Mark teams, events, and matches as favorites for fast access" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kvi-eS-eJp">
-                                        <rect key="frame" x="36" y="0.0" width="283.5" height="42.5"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                            </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="1000" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="DWy-Wv-irC">
-                                <rect key="frame" x="8" y="174" width="319.5" height="42.5"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" image="ic_notifications_none" translatesAutoresizingMaskIntoConstraints="NO" id="kK2-7h-yg5">
-                                        <rect key="frame" x="0.0" y="7" width="28" height="28"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="28" id="CG5-Kv-Luh"/>
-                                            <constraint firstAttribute="width" constant="28" id="bTG-lG-kXZ"/>
-                                        </constraints>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="999" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Subscribe to teams, events, and matches to get realtime updates" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zRP-NB-TDt">
-                                        <rect key="frame" x="36" y="0.0" width="283.5" height="42.5"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                            </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5uU-W0-cKh">
-                                <rect key="frame" x="0.0" y="236.5" width="335" height="108"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PCK-YF-VW6">
-                                        <rect key="frame" x="0.0" y="0.0" width="335" height="48"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="48" id="cUJ-A7-t2S"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                                        <state key="normal" title="Sign in with Google" backgroundImage="btn_google_signin_light_normal_ios">
-                                            <color key="titleColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
-                                        <state key="disabled" backgroundImage="btn_google_signin_light_disabled_ios"/>
-                                        <state key="selected" backgroundImage="btn_google_signin_light_focus_ios"/>
-                                        <state key="highlighted" backgroundImage="btn_google_signin_light_pressed_ios"/>
-                                        <connections>
-                                            <action selector="signIn" destination="GWW-1a-Acx" eventType="touchUpInside" id="7bf-A9-hNj"/>
-                                        </connections>
-                                    </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dkI-XF-hBU">
-                                        <rect key="frame" x="10" y="56" width="315" height="52"/>
-                                        <string key="text">The Blue Alliance uses Google Accounts to handle our login. Only your email address is shared with us and it will always be kept private.</string>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                                        <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="dkI-XF-hBU" firstAttribute="width" secondItem="PCK-YF-VW6" secondAttribute="width" constant="-20" id="Tra-ub-RxX"/>
-                                </constraints>
-                            </stackView>
-                        </subviews>
-                        <constraints>
-                            <constraint firstItem="PCK-YF-VW6" firstAttribute="width" secondItem="GHm-jo-SWw" secondAttribute="width" id="bVj-8S-Jhr"/>
-                            <constraint firstItem="DWy-Wv-irC" firstAttribute="leading" secondItem="kDf-bN-XDK" secondAttribute="leading" id="fb3-x7-RAs"/>
-                            <constraint firstItem="DWy-Wv-irC" firstAttribute="trailing" secondItem="kDf-bN-XDK" secondAttribute="trailing" id="s7y-8N-ocj"/>
-                        </constraints>
-                    </stackView>
-                </subviews>
-                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                <constraints>
-                    <constraint firstItem="TKa-b7-SsL" firstAttribute="trailing" secondItem="GHm-jo-SWw" secondAttribute="trailing" constant="20" id="3Yu-u8-BDf"/>
-                    <constraint firstItem="GHm-jo-SWw" firstAttribute="top" relation="greaterThanOrEqual" secondItem="TKa-b7-SsL" secondAttribute="top" constant="20" id="AnT-5C-QnK"/>
-                    <constraint firstItem="GHm-jo-SWw" firstAttribute="centerY" secondItem="t8S-eI-yHk" secondAttribute="centerY" id="JCu-PI-owK"/>
-                    <constraint firstItem="TKa-b7-SsL" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="GHm-jo-SWw" secondAttribute="bottom" constant="20" id="ShD-v9-H7k"/>
-                    <constraint firstItem="GHm-jo-SWw" firstAttribute="leading" secondItem="TKa-b7-SsL" secondAttribute="leading" constant="20" id="qJQ-QS-wpP"/>
-                </constraints>
-                <viewLayoutGuide key="safeArea" id="TKa-b7-SsL"/>
-            </view>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyTBASignInViewController" customModule="The_Blue_Alliance" customModuleProvider="target">
             <connections>
-                <outlet property="favoriteImageView" destination="V9P-3O-rGH" id="QfY-nh-UAI"/>
-                <outlet property="starImageView" destination="g4n-2a-hdA" id="Gge-wI-mT7"/>
-                <outlet property="subscriptionImageView" destination="kK2-7h-yg5" id="RzQ-qy-fgP"/>
-                <outlet property="view" destination="t8S-eI-yHk" id="WjX-dm-Wvk"/>
+                <outlet property="favoriteImageView" destination="V9P-3O-rGH" id="fy3-zh-SBn"/>
+                <outlet property="starImageView" destination="g4n-2a-hdA" id="hej-fJ-PJL"/>
+                <outlet property="subscriptionImageView" destination="kK2-7h-yg5" id="HJV-ED-UAH"/>
+                <outlet property="view" destination="t8S-eI-yHk" id="D5w-pZ-piN"/>
             </connections>
-            <point key="canvasLocation" x="385" y="906"/>
-        </viewController>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="t8S-eI-yHk">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" axis="vertical" distribution="equalSpacing" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="GHm-jo-SWw">
+                    <rect key="frame" x="20" y="161.5" width="335" height="344.5"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gJS-sF-yoy">
+                            <rect key="frame" x="58.5" y="0.0" width="218" height="91.5"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" verticalHuggingPriority="750" image="star_yellow" translatesAutoresizingMaskIntoConstraints="NO" id="g4n-2a-hdA">
+                                    <rect key="frame" x="77.5" y="0.0" width="63" height="60"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="60" id="7oq-xo-qmg"/>
+                                        <constraint firstAttribute="width" secondItem="g4n-2a-hdA" secondAttribute="height" multiplier="102:97" id="igA-M6-mt1"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Welcome to myTBA" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eLD-y8-UJK">
+                                    <rect key="frame" x="0.0" y="60" width="218" height="31.5"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                        </stackView>
+                        <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="kDf-bN-XDK">
+                            <rect key="frame" x="8" y="111.5" width="319.5" height="42.5"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ic_favorite_border" translatesAutoresizingMaskIntoConstraints="NO" id="V9P-3O-rGH">
+                                    <rect key="frame" x="0.0" y="7" width="28" height="28"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="28" id="11f-u2-ecU"/>
+                                        <constraint firstAttribute="width" constant="28" id="Maa-CY-KJ0"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Mark teams, events, and matches as favorites for fast access" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kvi-eS-eJp">
+                                    <rect key="frame" x="36" y="0.0" width="283.5" height="42.5"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                        </stackView>
+                        <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="1000" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="DWy-Wv-irC">
+                            <rect key="frame" x="8" y="174" width="319.5" height="42.5"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" image="ic_notifications_none" translatesAutoresizingMaskIntoConstraints="NO" id="kK2-7h-yg5">
+                                    <rect key="frame" x="0.0" y="7" width="28" height="28"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="28" id="CG5-Kv-Luh"/>
+                                        <constraint firstAttribute="width" constant="28" id="bTG-lG-kXZ"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="999" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Subscribe to teams, events, and matches to get realtime updates" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zRP-NB-TDt">
+                                    <rect key="frame" x="36" y="0.0" width="283.5" height="42.5"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                        </stackView>
+                        <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5uU-W0-cKh">
+                            <rect key="frame" x="0.0" y="236.5" width="335" height="108"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PCK-YF-VW6">
+                                    <rect key="frame" x="0.0" y="0.0" width="335" height="48"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="48" id="cUJ-A7-t2S"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                    <state key="normal" title="Sign in with Google" backgroundImage="btn_google_signin_light_normal_ios">
+                                        <color key="titleColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <state key="disabled" backgroundImage="btn_google_signin_light_disabled_ios"/>
+                                    <state key="selected" backgroundImage="btn_google_signin_light_focus_ios"/>
+                                    <state key="highlighted" backgroundImage="btn_google_signin_light_pressed_ios"/>
+                                    <connections>
+                                        <action selector="signIn" destination="-1" eventType="touchUpInside" id="j7V-xA-bYK"/>
+                                    </connections>
+                                </button>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dkI-XF-hBU">
+                                    <rect key="frame" x="10" y="56" width="315" height="52"/>
+                                    <string key="text">The Blue Alliance uses Google Accounts to handle our login. Only your email address is shared with us and it will always be kept private.</string>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                    <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="dkI-XF-hBU" firstAttribute="width" secondItem="PCK-YF-VW6" secondAttribute="width" constant="-20" id="Tra-ub-RxX"/>
+                            </constraints>
+                        </stackView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="PCK-YF-VW6" firstAttribute="width" secondItem="GHm-jo-SWw" secondAttribute="width" id="bVj-8S-Jhr"/>
+                        <constraint firstItem="DWy-Wv-irC" firstAttribute="leading" secondItem="kDf-bN-XDK" secondAttribute="leading" id="fb3-x7-RAs"/>
+                        <constraint firstItem="DWy-Wv-irC" firstAttribute="trailing" secondItem="kDf-bN-XDK" secondAttribute="trailing" id="s7y-8N-ocj"/>
+                    </constraints>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="TKa-b7-SsL" firstAttribute="trailing" secondItem="GHm-jo-SWw" secondAttribute="trailing" constant="20" id="3Yu-u8-BDf"/>
+                <constraint firstItem="GHm-jo-SWw" firstAttribute="top" relation="greaterThanOrEqual" secondItem="TKa-b7-SsL" secondAttribute="top" constant="20" id="AnT-5C-QnK"/>
+                <constraint firstItem="GHm-jo-SWw" firstAttribute="centerY" secondItem="t8S-eI-yHk" secondAttribute="centerY" id="JCu-PI-owK"/>
+                <constraint firstItem="TKa-b7-SsL" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="GHm-jo-SWw" secondAttribute="bottom" constant="20" id="ShD-v9-H7k"/>
+                <constraint firstItem="GHm-jo-SWw" firstAttribute="leading" secondItem="TKa-b7-SsL" secondAttribute="leading" constant="20" id="qJQ-QS-wpP"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="TKa-b7-SsL"/>
+        </view>
     </objects>
     <resources>
         <image name="btn_google_signin_light_disabled_ios" width="38" height="48"/>

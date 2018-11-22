@@ -2,11 +2,19 @@ import CoreData
 import Foundation
 import UIKit
 
-class MatchContainerViewController: ContainerViewController {
+class MatchContainerViewController: MyTBAContainerViewController {
+
+    let match: Match
+
+    override var subscribableModel: MyTBASubscribable {
+        return match
+    }
 
     // MARK: Init
 
-    init(match: Match, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(match: Match, teamKey: TeamKey? = nil, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+        self.match = match
+
         let infoViewController = MatchInfoViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         // Only show match breakdown if year is 2015 or onward
@@ -19,6 +27,7 @@ class MatchContainerViewController: ContainerViewController {
 
         super.init(viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }) as! [ContainableViewController],
                    segmentedControlTitles: titles,
+                   myTBA: myTBA,
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit)
 

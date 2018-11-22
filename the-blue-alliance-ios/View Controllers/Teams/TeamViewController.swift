@@ -4,12 +4,16 @@ import FirebaseRemoteConfig
 import Photos
 import UIKit
 
-class TeamViewController: ContainerViewController, Observable {
+class TeamViewController: MyTBAContainerViewController, Observable {
 
     private(set) var team: Team
 
     private let eventsViewController: TeamEventsViewController
     private let mediaViewController: TeamMediaCollectionViewController
+
+    override var subscribableModel: MyTBASubscribable {
+        return team
+    }
 
     private var year: Int? {
         didSet {
@@ -35,7 +39,7 @@ class TeamViewController: ContainerViewController, Observable {
 
     // MARK: Init
 
-    init(team: Team, remoteConfig: RemoteConfig, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(team: Team, myTBA: MyTBA, remoteConfig: RemoteConfig, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.team = team
         self.year = TeamViewController.latestYear(remoteConfig: remoteConfig, years: team.yearsParticipated)
 
@@ -45,6 +49,7 @@ class TeamViewController: ContainerViewController, Observable {
 
         super.init(viewControllers: [infoViewController, eventsViewController, mediaViewController],
                    segmentedControlTitles: ["Info", "Events", "Media"],
+                   myTBA: myTBA,
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit)
 
@@ -192,7 +197,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

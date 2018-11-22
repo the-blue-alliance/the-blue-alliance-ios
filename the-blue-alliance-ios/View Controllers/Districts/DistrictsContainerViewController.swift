@@ -5,6 +5,7 @@ import FirebaseRemoteConfig
 
 class DistrictsContainerViewController: ContainerViewController {
 
+    private let myTBA: MyTBA
     private let remoteConfig: RemoteConfig
     private let urlOpener: URLOpener
     private let userDefaults: UserDefaults
@@ -20,7 +21,8 @@ class DistrictsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(remoteConfig: RemoteConfig, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(myTBA: MyTBA, remoteConfig: RemoteConfig, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+        self.myTBA = myTBA
         self.remoteConfig = remoteConfig
         self.urlOpener = urlOpener
         self.userDefaults = userDefaults
@@ -43,14 +45,6 @@ class DistrictsContainerViewController: ContainerViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // TODO: Shouldn't this have the same split view controller code the other root views do?
     }
 
     // MARK: - Private Methods
@@ -98,7 +92,7 @@ extension DistrictsContainerViewController: DistrictsViewControllerDelegate {
 
     func districtSelected(_ district: District) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let districtViewController = DistrictViewController(district: district, urlOpener: urlOpener, userDefaults: userDefaults, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let districtViewController = DistrictViewController(district: district, myTBA: myTBA, urlOpener: urlOpener, userDefaults: userDefaults, persistentContainer: persistentContainer, tbaKit: tbaKit)
         let nav = UINavigationController(rootViewController: districtViewController)
         navigationController?.showDetailViewController(nav, sender: nil)
     }

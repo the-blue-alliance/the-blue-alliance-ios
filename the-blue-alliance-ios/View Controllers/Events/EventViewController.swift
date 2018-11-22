@@ -1,14 +1,18 @@
 import CoreData
 import UIKit
 
-class EventViewController: ContainerViewController {
+class EventViewController: MyTBAContainerViewController {
 
     private(set) var event: Event
     private let userDefaults: UserDefaults
 
+    override var subscribableModel: MyTBASubscribable {
+        return event
+    }
+
     // MARK: - Init
 
-    init(event: Event, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(event: Event, myTBA: MyTBA, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.event = event
         self.userDefaults = userDefaults
 
@@ -19,6 +23,7 @@ class EventViewController: ContainerViewController {
 
         super.init(viewControllers: [infoViewController, teamsViewController, rankingsViewController, matchesViewController],
                    segmentedControlTitles: ["Info", "Teams", "Rankings", "Matches"],
+                   myTBA: myTBA,
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit)
 
@@ -47,22 +52,22 @@ class EventViewController: ContainerViewController {
 extension EventViewController: EventInfoViewControllerDelegate {
 
     func showAlliances() {
-        let eventAlliancesViewController = EventAlliancesContainerViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let eventAlliancesViewController = EventAlliancesContainerViewController(event: event, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(eventAlliancesViewController, animated: true)
     }
 
     func showAwards() {
-        let eventAwardsViewController = EventAwardsContainerViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let eventAwardsViewController = EventAwardsContainerViewController(event: event, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(eventAwardsViewController, animated: true)
     }
 
     func showDistrictPoints() {
-        let eventDistrictPointsViewController = EventDistrictPointsContainerViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let eventDistrictPointsViewController = EventDistrictPointsContainerViewController(event: event, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(eventDistrictPointsViewController, animated: true)
     }
 
     func showStats() {
-        let eventStatsContainerViewController = EventStatsContainerViewController(event: event, userDefaults: userDefaults, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let eventStatsContainerViewController = EventStatsContainerViewController(event: event, myTBA: myTBA, userDefaults: userDefaults, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(eventStatsContainerViewController, animated: true)
     }
 
@@ -71,7 +76,7 @@ extension EventViewController: EventInfoViewControllerDelegate {
 extension EventViewController: TeamsViewControllerDelegate {
 
     func teamSelected(_ team: Team) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -80,7 +85,7 @@ extension EventViewController: TeamsViewControllerDelegate {
 extension EventViewController: EventRankingsViewControllerDelegate {
 
     func rankingSelected(_ ranking: EventRanking) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: ranking.teamKey!, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: ranking.teamKey!, event: event, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -89,7 +94,7 @@ extension EventViewController: EventRankingsViewControllerDelegate {
 extension EventViewController: MatchesViewControllerDelegate {
 
     func matchSelected(_ match: Match) {
-        let matchViewController = MatchContainerViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let matchViewController = MatchContainerViewController(match: match, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(matchViewController, animated: true)
     }
 

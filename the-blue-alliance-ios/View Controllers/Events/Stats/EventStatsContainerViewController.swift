@@ -5,6 +5,7 @@ import UIKit
 class EventStatsContainerViewController: ContainerViewController {
 
     private let event: Event
+    private let myTBA: MyTBA
 
     private let teamStatsViewController: EventTeamStatsTableViewController
 
@@ -17,8 +18,9 @@ class EventStatsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(event: Event, myTBA: MyTBA, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.event = event
+        self.myTBA = myTBA
 
         teamStatsViewController = EventTeamStatsTableViewController(event: event, userDefaults: userDefaults, persistentContainer: persistentContainer, tbaKit: tbaKit)
 
@@ -93,7 +95,7 @@ extension EventStatsContainerViewController: SelectTableViewControllerDelegate {
 extension EventStatsContainerViewController: EventTeamStatsSelectionDelegate {
 
     func eventTeamStatSelected(_ eventTeamStat: EventTeamStat) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventTeamStat.teamKey!, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventTeamStat.teamKey!, event: event, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

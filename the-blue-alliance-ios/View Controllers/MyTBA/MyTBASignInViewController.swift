@@ -13,7 +13,7 @@ class MyTBASignInViewController: UIViewController {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
 
     // MARK: - View Lifecycle
@@ -51,7 +51,7 @@ class MyTBASignInViewController: UIViewController {
 
     // MARK: - IBActions
 
-    private func signIn() {
+    @IBAction private func signIn() {
         GIDSignIn.sharedInstance().signIn()
     }
 

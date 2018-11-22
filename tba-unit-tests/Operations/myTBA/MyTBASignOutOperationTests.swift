@@ -10,7 +10,7 @@ class MyTBASignOutOperationTestCase: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        myTBA = MockMyTBA()
+        myTBA = MockMyTBA(uuid: "abcd123")
         myTBASignOutOperation = MyTBASignOutOperation(myTBA: myTBA, pushToken: "push_token")
     }
 

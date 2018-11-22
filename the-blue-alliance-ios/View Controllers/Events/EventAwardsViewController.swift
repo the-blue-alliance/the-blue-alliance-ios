@@ -5,12 +5,14 @@ class EventAwardsContainerViewController: ContainerViewController {
 
     private let event: Event
     private let teamKey: TeamKey?
+    private let myTBA: MyTBA
 
     // MARK: - Init
 
-    init(event: Event, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(event: Event, teamKey: TeamKey? = nil, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.event = event
         self.teamKey = teamKey
+        self.myTBA = myTBA
 
         let awardsViewController = EventAwardsViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit)
 
@@ -40,10 +42,7 @@ extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate 
         if teamKey == self.teamKey {
             return
         }
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey,
-                                                                  event: event,
-                                                                  persistentContainer: persistentContainer,
-                                                                  tbaKit: tbaKit)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

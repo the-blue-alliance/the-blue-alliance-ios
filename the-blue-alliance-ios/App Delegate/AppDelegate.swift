@@ -21,24 +21,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy private var rootSplitViewController: UISplitViewController = { [unowned self] in
         let splitViewController = UISplitViewController()
 
-        let eventsViewController = EventsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
+        let eventsViewController = EventsContainerViewController(myTBA: myTBA,
+                                                                 remoteConfig: remoteConfigService.remoteConfig,
                                                                  urlOpener: urlOpener,
                                                                  userDefaults: userDefaults,
                                                                  persistentContainer: persistentContainer,
                                                                  tbaKit: tbaKit)
-        let teamsViewController = TeamsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
+        let teamsViewController = TeamsContainerViewController(myTBA: myTBA,
+                                                               remoteConfig: remoteConfigService.remoteConfig,
                                                                urlOpener: urlOpener,
                                                                persistentContainer: persistentContainer,
                                                                tbaKit: tbaKit)
-        let districtsViewController = DistrictsContainerViewController(remoteConfig: remoteConfigService.remoteConfig,
+
+        let districtsViewController = DistrictsContainerViewController(myTBA: myTBA,
+                                                                       remoteConfig: remoteConfigService.remoteConfig,
                                                                        urlOpener: urlOpener,
                                                                        userDefaults: userDefaults,
                                                                        persistentContainer: persistentContainer,
                                                                        tbaKit: tbaKit)
+
+        let myTBAViewController = MyTBAViewController(myTBA: myTBA,
+                                                      persistentContainer: persistentContainer,
+                                                      tbaKit: tbaKit)
+
         let settingsViewController = SettingsViewController(urlOpener: urlOpener,
                                                             metadata: reactNativeMetadata,
                                                             persistentContainer: persistentContainer)
-        let rootViewControllers: [UIViewController] = [eventsViewController, teamsViewController, districtsViewController, settingsViewController]
+        let rootViewControllers: [UIViewController] = [eventsViewController, teamsViewController, districtsViewController, myTBAViewController, settingsViewController]
         tabBarController.viewControllers = rootViewControllers.compactMap({ (viewController) -> UIViewController? in
             let navigationController = UINavigationController(rootViewController: viewController)
             return navigationController
@@ -65,6 +74,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Services
 
+    lazy var myTBA: MyTBA = {
+        return MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString)
+    }()
     lazy var persistentContainer: NSPersistentContainer = {
         return NSPersistentContainer(name: "TBA")
     }()
@@ -74,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     lazy var pushService: PushService = {
         return PushService(userDefaults: userDefaults,
-                           myTBA: MyTBA.shared,
+                           myTBA: myTBA,
                            retryService: RetryService())
     }()
     lazy var realtimeDatabaseService: RealtimeDatabaseService = {
@@ -119,6 +131,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Listen for changes to FMS availability
         registerForFMSStatusChanges()
 
+        // Assign our Push Service as a delegate to all push-related classes
+        AppDelegate.setupPushServiceDelegates(myTBA: myTBA, pushService: pushService)
+        // Kickoff background myTBA/Google sign in, along with setting up delegates
+        setupGoogleAuthentication()
+
         // Our app setup operation will load our persistent stores, fetch our remote config, propogate persistance container
         let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer,
                                                   remoteConfigService: remoteConfigService)
@@ -150,10 +167,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                     self.rootSplitViewController.view.addSubview(snapshot)
                     window.rootViewController = self.rootSplitViewController
-
-                    if self.remoteConfigService.remoteConfig.myTBAEnabled {
-                        self.setupMyTBA()
-                    }
 
                     // 0.35 is an iOS animation magic number... for now
                     UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
@@ -236,10 +249,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.rootViewController?.present(alertController, animated: true, completion: nil)
     }
 
-    private static func setupPushServiceDelegates(with pushService: PushService) {
+    private static func setupPushServiceDelegates(myTBA: MyTBA, pushService: PushService) {
         Messaging.messaging().delegate = pushService
         UNUserNotificationCenter.current().delegate = pushService
-        MyTBA.shared.authenticationProvider.add(observer: pushService)
+        myTBA.authenticationProvider.add(observer: pushService)
     }
 
     private func setupGoogleAuthentication() {
@@ -260,15 +273,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return launchViewController
     }
 
-    private func setupMyTBA() {
-        let myTBAViewController = MyTBAViewController(persistentContainer: persistentContainer, tbaKit: tbaKit)
-        tabBarController.viewControllers?.append(myTBAViewController)
-
-        // Assign our Push Service as a delegate to all push-related classes
-        AppDelegate.setupPushServiceDelegates(with: pushService)
-        // Kickoff background myTBA/Google sign in, along with setting up delegates
-        setupGoogleAuthentication()
-    }
 
     static func setupAppearance() {
         let navigationBarAppearance = UINavigationBar.appearance()

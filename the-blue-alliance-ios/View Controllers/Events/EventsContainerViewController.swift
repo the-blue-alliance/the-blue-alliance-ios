@@ -5,6 +5,7 @@ import FirebaseRemoteConfig
 
 class EventsContainerViewController: ContainerViewController {
 
+    private let myTBA: MyTBA
     private let remoteConfig: RemoteConfig
     private let urlOpener: URLOpener
     private let userDefaults: UserDefaults
@@ -14,7 +15,8 @@ class EventsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(remoteConfig: RemoteConfig, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(myTBA: MyTBA, remoteConfig: RemoteConfig, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+        self.myTBA = myTBA
         self.remoteConfig = remoteConfig
         self.urlOpener = urlOpener
         self.userDefaults = userDefaults
@@ -90,7 +92,7 @@ extension EventsContainerViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let eventViewController = EventViewController(event: event, urlOpener: urlOpener, userDefaults: userDefaults, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let eventViewController = EventViewController(event: event, myTBA: myTBA, urlOpener: urlOpener, userDefaults: userDefaults, persistentContainer: persistentContainer, tbaKit: tbaKit)
         let nav = UINavigationController(rootViewController: eventViewController)
         navigationController?.showDetailViewController(nav, sender: nil)
     }

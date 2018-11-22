@@ -70,7 +70,7 @@ class WeekEventsViewController: EventsViewController {
             }
 
             self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+                backgroundContext.mergePolicy = NSMergePolicy(merge: .mergeByPropertyStoreTrumpMergePolicyType)
 
                 if let events = events {
                     Event.insert(events, year: year, in: backgroundContext)

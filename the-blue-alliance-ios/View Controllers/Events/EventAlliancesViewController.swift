@@ -5,13 +5,15 @@ import CoreData
 class EventAlliancesContainerViewController: ContainerViewController {
 
     private let event: Event
+    private let myTBA: MyTBA
 
     private var alliancesViewController: EventAlliancesViewController!
 
     // MARK: - Init
 
-    init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(event: Event, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.event = event
+        self.myTBA = myTBA
 
         let alliancesViewController = EventAlliancesViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit)
 
@@ -34,7 +36,7 @@ class EventAlliancesContainerViewController: ContainerViewController {
 extension EventAlliancesContainerViewController: EventAlliancesViewControllerDelegate {
 
     func teamKeySelected(_ teamKey: TeamKey) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: self.event, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: self.event, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

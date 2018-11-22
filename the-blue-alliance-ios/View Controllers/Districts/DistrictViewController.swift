@@ -5,6 +5,7 @@ import UIKit
 class DistrictViewController: ContainerViewController {
 
     private(set) var district: District
+    private let myTBA: MyTBA
     private let urlOpener: URLOpener
     private let userDefaults: UserDefaults
 
@@ -13,8 +14,9 @@ class DistrictViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(district: District, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(district: District, myTBA: MyTBA, urlOpener: URLOpener, userDefaults: UserDefaults, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
         self.district = district
+        self.myTBA = myTBA
         self.urlOpener = urlOpener
         self.userDefaults = userDefaults
 
@@ -49,7 +51,7 @@ class DistrictViewController: ContainerViewController {
 extension DistrictViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let eventViewController = EventViewController(event: event, urlOpener: urlOpener, userDefaults: userDefaults, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let eventViewController = EventViewController(event: event, myTBA: myTBA, urlOpener: urlOpener, userDefaults: userDefaults, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(eventViewController, animated: true)
     }
 
@@ -62,7 +64,7 @@ extension DistrictViewController: EventsViewControllerDelegate {
 extension DistrictViewController: DistrictRankingsViewControllerDelegate {
 
     func districtRankingSelected(_ districtRanking: DistrictRanking) {
-        let teamAtDistrictViewController = TeamAtDistrictViewController(ranking: districtRanking, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        let teamAtDistrictViewController = TeamAtDistrictViewController(ranking: districtRanking, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit)
         self.navigationController?.pushViewController(teamAtDistrictViewController, animated: true)
     }
 

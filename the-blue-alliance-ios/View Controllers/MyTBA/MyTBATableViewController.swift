@@ -11,10 +11,13 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     // let myTBAObjectSelected: ((T) -> ())
     private var backgroundFetchKeys: Set<String> = []
+    private let myTBA: MyTBA
 
     // MARK: - Init
 
-    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+        self.myTBA = myTBA
+
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit)
     }
 
@@ -46,17 +49,34 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         }
     }
 
+    // MARK: - Private Methods
 
-    // MARK: FRC
+    private func object(forMyTBAObject obj: MyTBAEntity) -> Managed? {
+        let predicate = NSPredicate(format: "key == %@", obj.modelKey!)
+
+        switch obj.modelType {
+        case .event:
+            return Event.findOrFetch(in: persistentContainer.viewContext, matching: predicate)
+        case .team:
+            return Team.findOrFetch(in: persistentContainer.viewContext, matching: predicate)
+        case .match:
+            return Match.findOrFetch(in: persistentContainer.viewContext, matching: predicate)
+        }
+    }
+
+    // MARK: - FRC
 
     fileprivate var fetchedResultsController: NSFetchedResultsController<T>?
 
     fileprivate func setupFetchedResultsController() {
         let fetchRequest = NSFetchRequest<T>(entityName: T.entityName)
 
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "modelType", ascending: true), NSSortDescriptor(key: "modelKey", ascending: true)]
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: #keyPath(MyTBAEntity.modelTypeRaw), ascending: true),
+            NSSortDescriptor(key: #keyPath(MyTBAEntity.modelKey), ascending: true)
+        ]
 
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "modelType", cacheName: nil)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: #keyPath(MyTBAEntity.modelTypeRaw), cacheName: nil)
         fetchedResultsController!.delegate = self
         try! fetchedResultsController!.performFetch()
 
@@ -71,35 +91,30 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let fallbackCell = UITableViewCell()
         fallbackCell.textLabel?.text = "----"
+        fallbackCell.selectionStyle = .none
 
-        guard let obj = fetchedResultsController?.object(at: indexPath) else {
+        guard let myTBAObj = fetchedResultsController?.object(at: indexPath) else {
             return fallbackCell
         }
+        fallbackCell.textLabel?.text = myTBAObj.modelKey! // TODO: Add type?
 
-        let myTBACell = self.tableView(tableView, cellForRowAt: indexPath, for: obj)
-
-        let predicate = NSPredicate(format: "key == %@", obj.modelKey!)
+        guard let obj = object(forMyTBAObject: myTBAObj) else {
+            return fallbackCell
+        }
 
         // TODO: All Cell subclasses need gear icons
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/179
 
-        switch obj.modelType {
-        case .event:
-            guard let event = Event.findOrFetch(in: persistentContainer.viewContext, matching: predicate) else {
-                return myTBACell
-            }
-            return self.tableView(tableView, cellForRowAt: indexPath, for: event)
-        case .team:
-            guard let team = Team.findOrFetch(in: persistentContainer.viewContext, matching: predicate) else {
-                return myTBACell
-            }
-            return self.tableView(tableView, cellForRowAt: indexPath, for: team)
-        case .match:
-            guard let match = Match.findOrFetch(in: persistentContainer.viewContext, matching: predicate) else {
-                return myTBACell
-            }
-            return self.tableView(tableView, cellForRowAt: indexPath, for: match)
+        if let event = obj as? Event {
+            return self.tableView(tableView, cellForRowAt: indexPath, event: event)
+        } else if let team = obj as? Team {
+            return self.tableView(tableView, cellForRowAt: indexPath, team: team)
+        } else if let match = obj as? Match {
+            return self.tableView(tableView, cellForRowAt: indexPath, match: match)
+        } else if backgroundFetchKeys.contains(myTBAObj.modelKey!) {
+            return self.tableView(tableView, cellForRowAt: indexPath, myTBA: myTBAObj)
         }
+        return fallbackCell
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -151,44 +166,43 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     // MARK: - Table Views
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, for myTBA: MyTBAEntity) -> LoadingTableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, myTBA: MyTBAEntity) -> LoadingTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as LoadingTableViewCell
         cell.keyLabel.text = myTBA.modelKey
         cell.backgroundFetchActivityIndicator.isHidden = !backgroundFetchKeys.contains(myTBA.modelKey!)
         return cell
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, for event: Event) -> EventTableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, event: Event) -> EventTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
         cell.viewModel = EventCellViewModel(event: event)
         return cell
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, for team: Team) -> TeamTableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, team: Team) -> TeamTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as TeamTableViewCell
         cell.viewModel = TeamCellViewModel(team: team)
         return cell
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, for match: Match) -> MatchTableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, match: Match) -> MatchTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
         cell.viewModel = MatchViewModel(match: match)
         return cell
     }
 
-    // MARK: UITableView Delegate
+
+    // MARK: - UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let obj = fetchedResultsController?.object(at: indexPath)
-        /*
         if let obj = obj {
             myTBAObjectSelected(obj)
         }
-        */
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    // MARK: NSFetchedResultsControllerDelegate
+    // MARK: - NSFetchedResultsControllerDelegate
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         tableView.reloadData()
@@ -211,23 +225,32 @@ extension MyTBATableViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        if MyTBA.shared.isAuthenticated, let objs = fetchedResultsController?.fetchedObjects, objs.isEmpty {
+        if myTBA.isAuthenticated, let objs = fetchedResultsController?.fetchedObjects, objs.isEmpty {
             return true
         }
         return false
     }
 
     func refresh() {
+        if !myTBA.isAuthenticated {
+            return
+        }
+
         removeNoDataView()
 
         // I'd love to use MyTBAManaged's RemoteType here, but it doesn't seem like I can get it
-        var request: URLSessionDataTask?
-        request = J.fetch { (models, error) in
-            let modelName = T.entityName.lowercased()
-
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh \(modelName) - \(error.localizedDescription)")
+        let fetchMethod = { [unowned self] () -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> URLSessionDataTask in
+            // This is terrible
+            if J.arrayKey == "favorites" {
+                return self.myTBA.fetchFavorites
             } else {
+                return self.myTBA.fetchSubscriptions
+            }
+        }()
+
+        var request: URLSessionDataTask?
+        request = fetchMethod() { (models, error) in
+            if error == nil {
                 self.markRefreshSuccessful()
             }
 
@@ -235,15 +258,102 @@ extension MyTBATableViewController: Refreshable {
                 backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
 
                 if let models = models as? [T.RemoteType] {
-                    T.insert(models, in: backgroundContext)
+                    let myTBAObjects = T.insert(models, in: backgroundContext) as! [T]
 
+                    // Kickoff fetch for myTBA objects that don't exist
+                    for myTBAObject in myTBAObjects {
+                        let key = myTBAObject.modelKey!
+                        switch myTBAObject.modelType {
+                        case .event:
+                            self.fetchEvent(key)
+                        case .team:
+                            self.fetchTeam(key)
+                        case .match:
+                            self.fetchMatch(key)
+                        }
+                        backgroundFetchKeys.insert(key)
+                    }
+
+                    // Fetch the ones we don't have?
                     // No `Last-Modified` for myTBA methods
                     _ = backgroundContext.saveOrRollback()
                 }
+
                 self.removeRequest(request: request!)
             })
         }
         addRequest(request: request!)
+    }
+
+    // MARK: - Fetch Methods
+
+    func fetchEvent(_ key: String) {
+        var request: URLSessionDataTask?
+        request = tbaKit.fetchEvent(key: key) { (event, error) in
+            self.persistentContainer.performBackgroundTask({
+                $0.mergePolicy = NSMergePolicy(merge: .mergeByPropertyStoreTrumpMergePolicyType)
+
+                if let event = event {
+                    Event.insert(event, in: $0)
+
+                    if $0.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
+
+                self.backgroundFetchKeys.remove(key)
+
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            })
+        }
+    }
+
+    func fetchTeam(_ key: String) {
+        var request: URLSessionDataTask?
+        request = tbaKit.fetchTeam(key: key) { (team, error) in
+            self.persistentContainer.performBackgroundTask({
+                $0.mergePolicy = NSMergePolicy(merge: .mergeByPropertyStoreTrumpMergePolicyType)
+
+                if let team = team {
+                    Team.insert(team, in: $0)
+
+                    if $0.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
+
+                self.backgroundFetchKeys.remove(key)
+
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            })
+        }
+    }
+
+    func fetchMatch(_ key: String) {
+        var request: URLSessionDataTask?
+        request = tbaKit.fetchMatch(key: key) { (match, error) in
+            self.persistentContainer.performBackgroundTask({
+                $0.mergePolicy = NSMergePolicy(merge: .mergeByPropertyStoreTrumpMergePolicyType)
+
+                if let match = match {
+                    Match.insert(match, in: $0)
+
+                    if $0.saveOrRollback() {
+                        TBAKit.setLastModified(for: request!)
+                    }
+                }
+
+                self.backgroundFetchKeys.remove(key)
+
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            })
+        }
     }
 
 }

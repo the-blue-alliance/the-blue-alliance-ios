@@ -11,7 +11,8 @@ class TeamsContainerViewControllerTests: TBATestCase {
     override func setUp() {
         super.setUp()
 
-        teamsContainerViewController = TeamsContainerViewController(remoteConfig: remoteConfig,
+        teamsContainerViewController = TeamsContainerViewController(myTBA: myTBA,
+                                                                    remoteConfig: remoteConfig,
                                                                     urlOpener: urlOpener,
                                                                     persistentContainer: persistentContainer,
                                                                     tbaKit: tbaKit)

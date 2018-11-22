@@ -85,7 +85,6 @@ class TeamSummaryViewController: TBATableViewController {
         eventStatus = EventStatus.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
 
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
-        tableView.registerReusableCell(LoadingTableViewCell.self)
         tableView.registerReusableCell(MatchTableViewCell.self)
     }
 
@@ -170,7 +169,6 @@ class TeamSummaryViewController: TBATableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let rowType = summaryRows[indexPath.row]
-        let rowValue = summaryValues[indexPath.row]
         let cell: UITableViewCell = {
             switch rowType {
             case .rank:
@@ -188,14 +186,8 @@ class TeamSummaryViewController: TBATableViewController {
             case .breakdown:
                 return self.tableView(tableView, breakdownCellForRowAt: indexPath)
             case .nextMatch:
-                if rowValue is String {
-                    return self.tableView(tableView, loadingCellAt: indexPath)
-                }
                 return self.tableView(tableView, matchCellForRowAt: indexPath)
             case .lastMatch:
-                if rowValue is String {
-                    return self.tableView(tableView, loadingCellAt: indexPath)
-                }
                 return self.tableView(tableView, matchCellForRowAt: indexPath)
             default:
                 return UITableViewCell()
@@ -252,18 +244,14 @@ class TeamSummaryViewController: TBATableViewController {
         return cell
     }
 
-    private func tableView(_ tableView: UITableView, loadingCellAt indexPath: IndexPath) -> LoadingTableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as LoadingTableViewCell
-        cell.keyLabel.text = summaryValues[indexPath.row] as? String
-        cell.backgroundFetchActivityIndicator.isHidden = false
-        cell.selectionStyle = .none
-        return cell
-    }
-
     private func tableView(_ tableView: UITableView, matchCellForRowAt indexPath: IndexPath) -> MatchTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
-        let match = summaryValues[indexPath.row] as! Match
-        cell.viewModel = MatchViewModel(match: match, teamKey: teamKey)
+        let matchVal = summaryValues[indexPath.row]
+        if let match = matchVal as? Match {
+            cell.viewModel = MatchViewModel(match: match, teamKey: teamKey)
+        } else {
+            cell.viewModel = nil
+        }
         return cell
     }
 

@@ -8,12 +8,18 @@ import UserNotifications
 
 class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
+    let myTBA: MyTBA
+
     private let signInViewController: MyTBASignInViewController
     private let favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>
     private let subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>
 
-    @IBOutlet internal var signInView: UIView!
-    @IBOutlet internal var signOutBarButtonItem: UIBarButtonItem!
+    private var signInView: UIView! {
+        return signInViewController.view
+    }
+    private let signOutBarButtonItem: UIBarButtonItem = {
+        return UIBarButtonItem(title: "Sign Out", style: .plain, target: self, action: #selector(logoutTapped))
+    }()
     private var signOutActivityIndicatorBarButtonItem: UIBarButtonItem = {
         let activityIndicatorView = UIActivityIndicatorView(style: .white)
         activityIndicatorView.startAnimating()
@@ -27,20 +33,26 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
             }
         }
     }
+
     private var isLoggedIn: Bool {
-        return MyTBA.shared.isAuthenticated
+        return myTBA.isAuthenticated
     }
 
-    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+    init(myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit) {
+        self.myTBA = myTBA
+
         signInViewController = MyTBASignInViewController()
 
-        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(persistentContainer: persistentContainer, tbaKit: tbaKit)
-        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(persistentContainer: persistentContainer, tbaKit: tbaKit)
+        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit)
+        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit)
 
         super.init(viewControllers: [favoritesViewController, subscriptionsViewController],
                    segmentedControlTitles: ["Favorites", "Subscriptions"],
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit)
+
+        title = "myTBA"
+        tabBarItem.image = UIImage(named: "ic_star")
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -57,7 +69,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         // modalPresentationCapturesStatusBarAppearance = true
 
         GIDSignIn.sharedInstance().uiDelegate = self
-        MyTBA.shared.authenticationProvider.add(observer: self)
+        myTBA.authenticationProvider.add(observer: self)
 
         styleInterface()
     }
@@ -65,17 +77,14 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     // MARK: - Private Methods
 
     private func styleInterface() {
+        view.addSubview(signInView)
+        signInView.autoPinEdgesToSuperviewSafeArea()
         signInView.isHidden = isLoggedIn
 
         updateInterface()
     }
 
     private func updateInterface() {
-        // Make sure observers don't setup our interface before our VC is initialized
-        if view == nil {
-            return
-        }
-
         if isLoggingOut {
             navigationItem.rightBarButtonItem = signOutActivityIndicatorBarButtonItem
         } else {
@@ -90,12 +99,13 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
             return
         }
 
-        let signOutOperation = MyTBASignOutOperation(myTBA: MyTBA.shared, pushToken: fcmToken)
+        let signOutOperation = MyTBASignOutOperation(myTBA: myTBA, pushToken: fcmToken)
         signOutOperation.completionBlock = { [unowned signOutOperation] in
             self.isLoggingOut = false
 
             if let error = signOutOperation.completionError {
                 Crashlytics.sharedInstance().recordError(error)
+                self.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
             } else {
                 self.logoutSuccessful()
             }
@@ -126,16 +136,17 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     }
 
     private func pushMyTBAObject(_ myTBAObject: MyTBAEntity) {
-        /*
         switch myTBAObject.modelType {
         case .event:
-            performSegue(withIdentifier: EventSegue, sender: myTBAObject.modelKey!)
+            // TODO: Push to Event
+            break
         case .team:
-            performSegue(withIdentifier: TeamSegue, sender: myTBAObject.modelKey!)
+            // TODO: Push to Team
+            break
         case .match:
-            performSegue(withIdentifier: MatchSegue, sender: myTBAObject.modelKey!)
+            // TODO: Push to Match
+            break
         }
-        */
     }
 
     // MARK: - Interface Methods
