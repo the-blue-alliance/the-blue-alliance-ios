@@ -229,7 +229,7 @@
 		92BB718920D216D50081F4E5 /* EmptyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92BB718820D216D50081F4E5 /* EmptyViewController.xib */; };
 		92BB8B5A214F04DD0035AF28 /* SettingsViewController_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B59214F04DD0035AF28 /* SettingsViewController_UITests.swift */; };
 		92BB8B5C214F12440035AF28 /* TBAUITestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B5B214F12440035AF28 /* TBAUITestCase.swift */; };
-		92BB8B62214F16710035AF28 /* SettingsViewController_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B61214F16710035AF28 /* SettingsViewController_Tests.swift */; };
+		92BB8B62214F16710035AF28 /* SettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B61214F16710035AF28 /* SettingsViewControllerTests.swift */; };
 		92BB8B64214F17440035AF28 /* URLOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B63214F17440035AF28 /* URLOpener.swift */; };
 		92C1F2DE216994CF00BD8445 /* CoreDataTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2DD216994CF00BD8445 /* CoreDataTestCase.swift */; };
 		92C1F2E02169A3B800BD8445 /* MockNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2DF2169A3B800BD8445 /* MockNavigationController.swift */; };
@@ -553,7 +553,7 @@
 		92BB718820D216D50081F4E5 /* EmptyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyViewController.xib; sourceTree = "<group>"; };
 		92BB8B59214F04DD0035AF28 /* SettingsViewController_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController_UITests.swift; sourceTree = "<group>"; };
 		92BB8B5B214F12440035AF28 /* TBAUITestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAUITestCase.swift; sourceTree = "<group>"; };
-		92BB8B61214F16710035AF28 /* SettingsViewController_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController_Tests.swift; sourceTree = "<group>"; };
+		92BB8B61214F16710035AF28 /* SettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		92BB8B63214F17440035AF28 /* URLOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLOpener.swift; sourceTree = "<group>"; };
 		92C1F2DD216994CF00BD8445 /* CoreDataTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataTestCase.swift; path = "tba-unit-tests/Core Data/CoreDataTestCase.swift"; sourceTree = SOURCE_ROOT; };
 		92C1F2DF2169A3B800BD8445 /* MockNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNavigationController.swift; sourceTree = "<group>"; };
@@ -1395,7 +1395,7 @@
 		92C72C2521528C6E00534AC3 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				92BB8B61214F16710035AF28 /* SettingsViewController_Tests.swift */,
+				92BB8B61214F16710035AF28 /* SettingsViewControllerTests.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -2310,7 +2310,7 @@
 				92C1F2E62169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift in Sources */,
 				92A5E56B21A1B7830025CC85 /* TBAKitTests.swift in Sources */,
 				92C1F2DE216994CF00BD8445 /* CoreDataTestCase.swift in Sources */,
-				92BB8B62214F16710035AF28 /* SettingsViewController_Tests.swift in Sources */,
+				92BB8B62214F16710035AF28 /* SettingsViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

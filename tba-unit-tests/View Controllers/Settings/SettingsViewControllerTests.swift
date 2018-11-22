@@ -1,7 +1,7 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-class SettingsViewControllerTestCase: TBATestCase {
+class SettingsViewControllerTests: TBATestCase {
 
     var settingsViewController: SettingsViewController!
 
