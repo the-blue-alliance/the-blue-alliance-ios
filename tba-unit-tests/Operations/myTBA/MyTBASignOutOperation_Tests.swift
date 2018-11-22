@@ -48,6 +48,10 @@ class MockMyTBA: MyTBA {
 
     var unregisterError: Error?
 
+    init() {
+        super.init(uuid: "abcd123")
+    }
+
     // https://github.com/jrose-apple/swift-evolution/blob/overridable-members-in-extensions/proposals/nnnn-overridable-members-in-extensions.md
     override func unregister(_ token: String, completion: @escaping (Error?) -> Void) -> URLSessionDataTask? {
         completion(unregisterError)
