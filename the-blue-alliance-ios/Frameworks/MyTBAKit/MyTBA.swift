@@ -26,7 +26,7 @@ extension MyTBAError: LocalizedError {
 
 class MyTBA {
 
-    public static let shared = MyTBA()
+    public static let shared = MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString)
     private var authToken: String? {
         didSet {
             // Only disaptch on changed state
@@ -48,8 +48,9 @@ class MyTBA {
         return authToken != nil
     }
 
-    public init() {
+    public init(uuid: String) {
         self.urlSession = URLSession(configuration: .default)
+        self.uuid = uuid
 
         // Block gets called on init - ignore the init call
         var initCall = true
@@ -69,7 +70,8 @@ class MyTBA {
         }
     }
     var authenticationProvider = Provider<MyTBAAuthenticationObservable>()
-    var urlSession: URLSession
+    private var urlSession: URLSession
+    internal var uuid: String
 
     static var jsonEncoder: JSONEncoder {
         let jsonEncoder = JSONEncoder()

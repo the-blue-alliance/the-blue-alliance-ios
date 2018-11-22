@@ -30,11 +30,6 @@ extension MyTBA {
     }
 
     private func registerUnregister(_ method: String, token: String, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTask? {
-        guard let uuid = UIDevice.current.identifierForVendor?.uuidString else {
-            completion(MyTBAError.error("Unable to update myTBA registration - no UUID"))
-            return nil
-        }
-
         let registration = MyTBARegisterRequest(deviceUuid: uuid,
                                                 mobileId: token,
                                                 name: UIDevice.current.name)
