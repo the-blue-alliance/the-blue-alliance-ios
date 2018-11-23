@@ -2,15 +2,15 @@ import XCTest
 import CoreData
 @testable import The_Blue_Alliance
 
-class PersistentContainerOperationTestCase: XCTestCase {
+class PersistentContainerOperationTests: XCTestCase {
 
-    var persistentContainer: MockPersistentContainer!
-    var persistentContainerOperation: MockPersistentContainerOperation!
+    private var persistentContainer: PrivateMockPersistentContainer!
+    private var persistentContainerOperation: MockPersistentContainerOperation!
 
     override func setUp() {
         super.setUp()
 
-        persistentContainer = MockPersistentContainer(name: "Test")
+        persistentContainer = PrivateMockPersistentContainer(name: "Test")
         persistentContainerOperation = MockPersistentContainerOperation(persistentContainer: persistentContainer)
     }
 
@@ -32,7 +32,7 @@ class PersistentContainerOperationTestCase: XCTestCase {
     }
 
     func test_execute_error() {
-        persistentContainer.mockError = NSError(domain: "com.zor.zach", code: 2337, userInfo: nil)
+        persistentContainer.loadPersistentStoresError = NSError(domain: "com.zor.zach", code: 2337, userInfo: nil)
         persistentContainerOperation.execute()
         XCTAssertNotNil(persistentContainerOperation.completionError)
     }
@@ -51,12 +51,14 @@ class MockPersistentContainerOperation: PersistentContainerOperation {
 
 }
 
-class MockPersistentContainer: NSPersistentContainer {
+private class PrivateMockPersistentContainer: NSPersistentContainer {
 
-    var mockError: Error?
+    var loadPersistentStoresError: Error?
+
+    // MARK: - Load
 
     override func loadPersistentStores(completionHandler block: @escaping (NSPersistentStoreDescription, Error?) -> Void) {
-        block(NSPersistentStoreDescription(), mockError)
+        block(NSPersistentStoreDescription(), loadPersistentStoresError)
     }
 
 }
