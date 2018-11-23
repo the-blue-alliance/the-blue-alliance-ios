@@ -34,8 +34,8 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         signInViewController = MyTBASignInViewController()
 
-        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(persistentContainer: persistentContainer, myTBA: MyTBA.shared, tbaKit: tbaKit, userDefaults: userDefaults)
+        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(persistentContainer: persistentContainer, myTBA: MyTBA.shared, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [favoritesViewController, subscriptionsViewController],
                    segmentedControlTitles: ["Favorites", "Subscriptions"],

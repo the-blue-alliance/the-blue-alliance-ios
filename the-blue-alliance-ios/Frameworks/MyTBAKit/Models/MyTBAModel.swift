@@ -17,5 +17,5 @@ protocol MyTBAModel: Codable {
     var modelKey: String { get set }
     var modelType: MyTBAModelType { get set }
 
-    static var fetch: ((@escaping ([MyTBAModel]?, Error?) -> Void) -> URLSessionDataTask) { get }
+    static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> URLSessionDataTask { get }
 }

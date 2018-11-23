@@ -38,12 +38,13 @@ public class TBAKit: NSObject {
         self.urlSession = urlSession ?? URLSession(configuration: .default)
         self.userDefaults = userDefaults
     }
-    
+
     private static func lastModifiedURLString(for url: URL) -> String {
         return "LAST_MODIFIED:\(url.absoluteString)"
     }
-    
-    private func lastModified(for url: URL) -> String? {
+
+    /// Please do not use - if you need this for testing, use MockTBAKit.lastModified(:)
+    func lastModified(for url: URL) -> String? {
         let lastModifiedString = TBAKit.lastModifiedURLString(for: url)
         let lastModifiedDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.lastModifiedDictionary) ?? [:]
         return lastModifiedDictionary[lastModifiedString] as? String
