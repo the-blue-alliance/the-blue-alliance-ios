@@ -118,7 +118,7 @@ class TeamViewController: ContainerViewController, Observable {
                     team.yearsParticipated = years.sorted().reversed()
 
                     if backgroundContext.saveOrRollback() {
-                        TBAKit.setLastModified(for: request!)
+                        self.tbaKit.setLastModified(request!)
                     }
                 }
             })

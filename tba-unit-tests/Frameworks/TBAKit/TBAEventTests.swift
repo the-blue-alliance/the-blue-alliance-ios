@@ -1,15 +1,7 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-class TBAEventTests: XCTestCase {
-    
-    var kit: MockTBAKit!
-    
-    override func setUp() {
-        super.setUp()
-
-        kit = MockTBAKit()
-    }
+class TBAEventTests: TBAKitTestCase {
 
     func test_event_init() {
         let dateFormatter = DateFormatter()

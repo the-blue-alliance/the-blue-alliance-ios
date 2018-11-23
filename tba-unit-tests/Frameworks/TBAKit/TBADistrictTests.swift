@@ -1,15 +1,7 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-class TBADistrictTests: XCTestCase {
-    
-    var kit: MockTBAKit!
-    
-    override func setUp() {
-        super.setUp()
-
-        kit = MockTBAKit()
-    }
+class TBADistrictTests: TBAKitTestCase {
 
     func test_district_init() {
         let district = TBADistrict(abbreviation: "fim", name: "FIRST in Michigan", key: "2018fim", year: 2018)

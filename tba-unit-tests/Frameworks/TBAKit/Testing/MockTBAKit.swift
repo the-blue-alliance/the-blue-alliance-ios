@@ -5,9 +5,10 @@ class MockTBAKit: TBAKit {
 
     let session: MockURLSession
 
-    init() {
+    init(userDefaults: UserDefaults) {
         self.session = MockURLSession()
-        super.init(apiKey: "abcd123", urlSession: session)
+
+        super.init(apiKey: "abcd123", urlSession: session, userDefaults: userDefaults)
     }
     
     func sendUnauthorizedStub(for task: URLSessionDataTask) {

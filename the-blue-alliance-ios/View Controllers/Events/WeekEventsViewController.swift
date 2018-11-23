@@ -81,7 +81,7 @@ class WeekEventsViewController: EventsViewController {
                     Event.insert(events, year: year, in: backgroundContext)
 
                     if backgroundContext.saveOrRollback() {
-                        TBAKit.setLastModified(for: request!)
+                        self.tbaKit.setLastModified(request!)
                     }
                 }
                 self.removeRequest(request: request!)

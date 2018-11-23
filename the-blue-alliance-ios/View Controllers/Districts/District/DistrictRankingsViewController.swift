@@ -105,7 +105,7 @@ extension DistrictRankingsViewController: Refreshable {
                     district.insert(rankings)
 
                     if backgroundContext.saveOrRollback() {
-                        TBAKit.setLastModified(for: request!)
+                        self.tbaKit.setLastModified(request!)
                     }
                 }
                 self.removeRequest(request: request!)

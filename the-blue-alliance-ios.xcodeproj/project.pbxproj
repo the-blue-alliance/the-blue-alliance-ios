@@ -229,7 +229,7 @@
 		92BB718920D216D50081F4E5 /* EmptyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92BB718820D216D50081F4E5 /* EmptyViewController.xib */; };
 		92BB8B5A214F04DD0035AF28 /* SettingsViewController_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B59214F04DD0035AF28 /* SettingsViewController_UITests.swift */; };
 		92BB8B5C214F12440035AF28 /* TBAUITestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B5B214F12440035AF28 /* TBAUITestCase.swift */; };
-		92BB8B62214F16710035AF28 /* SettingsViewController_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B61214F16710035AF28 /* SettingsViewController_Tests.swift */; };
+		92BB8B62214F16710035AF28 /* SettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B61214F16710035AF28 /* SettingsViewControllerTests.swift */; };
 		92BB8B64214F17440035AF28 /* URLOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B63214F17440035AF28 /* URLOpener.swift */; };
 		92C1F2DE216994CF00BD8445 /* CoreDataTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2DD216994CF00BD8445 /* CoreDataTestCase.swift */; };
 		92C1F2E02169A3B800BD8445 /* MockNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2DF2169A3B800BD8445 /* MockNavigationController.swift */; };
@@ -276,6 +276,7 @@
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
 		92F8E356209AAE890094213F /* PushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E355209AAE890094213F /* PushService.swift */; };
 		92F8E358209AB3B50094213F /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E357209AB3B50094213F /* Provider.swift */; };
+		92FB84B621A77155009AE330 /* TBAKitTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FB84B521A77155009AE330 /* TBAKitTestCase.swift */; };
 		92FE68BB20D8A1E8004A1481 /* MyTBASignOutOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FE68BA20D8A1E8004A1481 /* MyTBASignOutOperation.swift */; };
 		92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E321A61A1B003BC5C4 /* TeamViewController.swift */; };
 		92FF10EC21A61A1B003BC5C4 /* TeamEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E421A61A1B003BC5C4 /* TeamEventsViewController.swift */; };
@@ -553,7 +554,7 @@
 		92BB718820D216D50081F4E5 /* EmptyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyViewController.xib; sourceTree = "<group>"; };
 		92BB8B59214F04DD0035AF28 /* SettingsViewController_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController_UITests.swift; sourceTree = "<group>"; };
 		92BB8B5B214F12440035AF28 /* TBAUITestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAUITestCase.swift; sourceTree = "<group>"; };
-		92BB8B61214F16710035AF28 /* SettingsViewController_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController_Tests.swift; sourceTree = "<group>"; };
+		92BB8B61214F16710035AF28 /* SettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		92BB8B63214F17440035AF28 /* URLOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLOpener.swift; sourceTree = "<group>"; };
 		92C1F2DD216994CF00BD8445 /* CoreDataTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataTestCase.swift; path = "tba-unit-tests/Core Data/CoreDataTestCase.swift"; sourceTree = SOURCE_ROOT; };
 		92C1F2DF2169A3B800BD8445 /* MockNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNavigationController.swift; sourceTree = "<group>"; };
@@ -603,6 +604,7 @@
 		92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsContainerViewController.swift; sourceTree = "<group>"; };
 		92F8E355209AAE890094213F /* PushService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushService.swift; sourceTree = "<group>"; };
 		92F8E357209AB3B50094213F /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+		92FB84B521A77155009AE330 /* TBAKitTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAKitTestCase.swift; sourceTree = "<group>"; };
 		92FE68BA20D8A1E8004A1481 /* MyTBASignOutOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignOutOperation.swift; sourceTree = "<group>"; };
 		92FF10E321A61A1B003BC5C4 /* TeamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamViewController.swift; sourceTree = "<group>"; };
 		92FF10E421A61A1B003BC5C4 /* TeamEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamEventsViewController.swift; sourceTree = "<group>"; };
@@ -957,8 +959,8 @@
 				92A5E5C721A22D550025CC85 /* Extensions */,
 				92FFE5221E7C994B0037E48C /* View Elements */,
 				92942DAD1E215722008E79CA /* View Controllers */,
-				92A5E4F721A1B7470025CC85 /* Frameworks */,
 				92942DAC1E215718008E79CA /* Core Data */,
+				92A5E4F721A1B7470025CC85 /* Frameworks */,
 			);
 			path = "the-blue-alliance-ios";
 			sourceTree = "<group>";
@@ -1136,8 +1138,8 @@
 		92A5E4F721A1B7470025CC85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				92A5E4F821A1B7470025CC85 /* MyTBAKit */,
 				92A5E50221A1B7470025CC85 /* TBAKit */,
+				92A5E4F821A1B7470025CC85 /* MyTBAKit */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
@@ -1212,6 +1214,7 @@
 		92A5E52721A1B7830025CC85 /* Testing */ = {
 			isa = PBXGroup;
 			children = (
+				92FB84B521A77155009AE330 /* TBAKitTestCase.swift */,
 				92A5E52921A1B7830025CC85 /* MockTBAKit.swift */,
 				92A5E52A21A1B7830025CC85 /* MockURLSession.swift */,
 				92A5E52B21A1B7830025CC85 /* MockURLSessionDataTask.swift */,
@@ -1394,7 +1397,7 @@
 		92C72C2521528C6E00534AC3 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				92BB8B61214F16710035AF28 /* SettingsViewController_Tests.swift */,
+				92BB8B61214F16710035AF28 /* SettingsViewControllerTests.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -2270,6 +2273,7 @@
 				14B6727321529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift in Sources */,
 				92A5E56A21A1B7830025CC85 /* TBAMatchTests.swift in Sources */,
 				1448DBAC21823148008F542E /* FavoriteTests.swift in Sources */,
+				92FB84B621A77155009AE330 /* TBAKitTestCase.swift in Sources */,
 				927C93B0217D4E350027ABEB /* DistrictRankingTests.swift in Sources */,
 				9287014220CD7CCB0077D6DA /* RemoteConfig+TBA_Tests.swift in Sources */,
 				1450778F218279BB00C61D2D /* EventKeyTests.swift in Sources */,
@@ -2310,7 +2314,7 @@
 				92C1F2E62169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift in Sources */,
 				92A5E56B21A1B7830025CC85 /* TBAKitTests.swift in Sources */,
 				92C1F2DE216994CF00BD8445 /* CoreDataTestCase.swift in Sources */,
-				92BB8B62214F16710035AF28 /* SettingsViewController_Tests.swift in Sources */,
+				92BB8B62214F16710035AF28 /* SettingsViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

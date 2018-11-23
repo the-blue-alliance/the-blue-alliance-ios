@@ -1,15 +1,7 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-class TBAMatchTests: XCTestCase {
-    
-    var kit: MockTBAKit!
-    
-    override func setUp() {
-        super.setUp()
-        
-        kit = MockTBAKit()
-    }
+class TBAMatchTests: TBAKitTestCase {
 
     func test_match_init() {
         let match = TBAMatch(key: "2018miket_qm1", compLevel: "qm", setNumber: 1, matchNumber: 1, eventKey: "2018miket")

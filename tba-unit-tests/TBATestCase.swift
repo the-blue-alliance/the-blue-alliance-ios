@@ -13,8 +13,8 @@ class TBATestCase: CoreDataTestCase {
     override func setUp() {
         super.setUp()
 
-        tbaKit = MockTBAKit()
         userDefaults = UserDefaults(suiteName: "TBATests")
+        tbaKit = MockTBAKit(userDefaults: userDefaults)
         urlOpener = MockURLOpener()
         remoteConfig = MockRemoteConfig(config: [
             "max_season": NSNumber(value: 2016),

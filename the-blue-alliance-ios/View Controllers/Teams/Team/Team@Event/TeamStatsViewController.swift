@@ -130,7 +130,7 @@ extension TeamStatsViewController: Refreshable {
                     event.insert(stats)
 
                     if backgroundContext.saveOrRollback() {
-                        TBAKit.setLastModified(for: request!)
+                        self.tbaKit.setLastModified(request!)
                     }
                 }
                 self.removeRequest(request: request!)

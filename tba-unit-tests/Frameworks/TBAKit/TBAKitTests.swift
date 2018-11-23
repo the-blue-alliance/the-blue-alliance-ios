@@ -11,23 +11,8 @@ class APIErrorTests: XCTestCase {
 
 }
 
-class TBAKitTests: XCTestCase {
+class TBAKitTests: TBAKitTestCase {
     
-    var kit: MockTBAKit!
-    
-    override func setUp() {
-        super.setUp()
-
-        kit = MockTBAKit()
-    }
-    
-    override func tearDown() {
-        TBAKit.clearLastModified()
-        kit = nil
-
-        super.tearDown()
-    }
-
     func testAPIKeyInAuthorizationHeaders() {
         let ex = expectation(description: "auth_header_api_key")
         kit.session.resumeExpectation = ex
@@ -73,7 +58,7 @@ class TBAKitTests: XCTestCase {
             XCTAssertNotNil(status)
             XCTAssertNil(error)
 
-            TBAKit.setLastModified(for: setLastModifiedTask!)
+            self.kit.setLastModified(setLastModifiedTask!)
 
             setLastModifiedExpectation.fulfill()
         }
@@ -122,7 +107,7 @@ class TBAKitTests: XCTestCase {
     }
 
     func testClearLastModified() {
-        TBAKit.clearLastModified()
+        kit.clearLastModified()
 
         let setLastModifiedTask = kit.fetchStatus { (status, error) in
         }

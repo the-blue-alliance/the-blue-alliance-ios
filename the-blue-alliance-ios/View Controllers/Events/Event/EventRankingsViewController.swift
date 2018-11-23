@@ -104,7 +104,7 @@ extension EventRankingsViewController: Refreshable {
                     event.insert(rankings, sortOrderInfo: sortOrder, extraStatsInfo: extraStats)
 
                     if backgroundContext.saveOrRollback() {
-                        TBAKit.setLastModified(for: request!)
+                        self.tbaKit.setLastModified(request!)
                     }
                 }
                 self.removeRequest(request: request!)

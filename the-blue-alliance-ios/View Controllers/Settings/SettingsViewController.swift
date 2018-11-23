@@ -25,12 +25,10 @@ private enum DebugRow: Int {
     case max
 }
 
-class SettingsViewController: UITableViewController, Persistable {
+class SettingsViewController: TBATableViewController {
 
     private var urlOpener: URLOpener
     private var metadata: ReactNativeMetadata
-    var persistentContainer: NSPersistentContainer
-    var userDefaults: UserDefaults
 
     private let reactNativeDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -40,13 +38,11 @@ class SettingsViewController: UITableViewController, Persistable {
 
     // MARK: - Init
 
-    init(urlOpener: URLOpener, metadata: ReactNativeMetadata, persistentContainer: NSPersistentContainer, userDefaults: UserDefaults) {
+    init(urlOpener: URLOpener, metadata: ReactNativeMetadata, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.urlOpener = urlOpener
         self.metadata = metadata
-        self.persistentContainer = persistentContainer
-        self.userDefaults = userDefaults
 
-        super.init(style: .grouped)
+        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         title = "Settings"
         tabBarItem.image = UIImage(named: "ic_settings")
@@ -196,7 +192,7 @@ class SettingsViewController: UITableViewController, Persistable {
 
     internal func deleteNetworkCache() {
         userDefaults.clearSuccessfulRefreshes()
-        TBAKit.clearLastModified()
+        tbaKit.clearLastModified()
     }
 
 }

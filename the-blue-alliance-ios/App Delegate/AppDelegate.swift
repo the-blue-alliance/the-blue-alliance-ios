@@ -39,6 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let settingsViewController = SettingsViewController(urlOpener: urlOpener,
                                                             metadata: reactNativeMetadata,
                                                             persistentContainer: persistentContainer,
+                                                            tbaKit: tbaKit,
                                                             userDefaults: userDefaults)
         let rootViewControllers: [UIViewController] = [eventsViewController, teamsViewController, districtsViewController, settingsViewController]
         tabBarController.viewControllers = rootViewControllers.compactMap({ (viewController) -> UIViewController? in
@@ -113,7 +114,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
 
         let secrets = Secrets()
-        tbaKit = TBAKit(apiKey: secrets.tbaAPIKey)
+        tbaKit = TBAKit(apiKey: secrets.tbaAPIKey, userDefaults: userDefaults)
 
         // Setup our React Native service
         reactNativeService.registerRetryable(initiallyRetry: true)

@@ -50,7 +50,7 @@ class DistrictEventsViewController: EventsViewController {
                     district.insert(events)
 
                     if backgroundContext.saveOrRollback() {
-                        TBAKit.setLastModified(for: request!)
+                        self.tbaKit.setLastModified(request!)
                     }
                 }
                 self.removeRequest(request: request!)
