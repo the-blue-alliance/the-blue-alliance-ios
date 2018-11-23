@@ -6,11 +6,12 @@ import FBSnapshotTestCase
 
 class CoreDataTestCase: FBSnapshotTestCase {
 
-    var persistentContainer: NSPersistentContainer!
-
-    static let managedObjectModel: NSManagedObjectModel = {
+    private static let managedObjectModel: NSManagedObjectModel = {
         return NSManagedObjectModel.mergedModel(from: [Bundle.main])!
     } ()
+    var persistentContainer: TBAPersistenceContainer!
+
+    private var saveNotificationCompleteHandler: ((Notification, NSManagedObjectContext)->())?
 
     override func setUp() {
         super.setUp()
@@ -19,7 +20,7 @@ class CoreDataTestCase: FBSnapshotTestCase {
         // Uncomment to record all new snapshots
         // recordMode = true
 
-        persistentContainer = NSPersistentContainer(name: "TBA", managedObjectModel: CoreDataTestCase.managedObjectModel)
+        persistentContainer = TBAPersistenceContainer(name: "TBA", managedObjectModel: CoreDataTestCase.managedObjectModel)
 
         let description = NSPersistentStoreDescription()
         description.type = NSInMemoryStoreType
@@ -37,6 +38,22 @@ class CoreDataTestCase: FBSnapshotTestCase {
             persistentContainerSetupExpectation.fulfill()
         })
         wait(for: [persistentContainerSetupExpectation], timeout: 10.0)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(contextSaved(notification:)), name: NSNotification.Name.NSManagedObjectContextDidSave, object: nil)
+    }
+
+    override func tearDown() {
+        NotificationCenter.default.removeObserver(self)
+
+        super.tearDown()
+    }
+
+    func contextSaved(notification: Notification) {
+        saveNotificationCompleteHandler?(notification, notification.object as! NSManagedObjectContext)
+    }
+
+    func waitForSavedNotification(completeHandler: @escaping ((Notification, NSManagedObjectContext)->()) ) {
+        saveNotificationCompleteHandler = completeHandler
     }
 
     func insertEvent(year: Int = 2015) -> Event {

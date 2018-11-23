@@ -67,8 +67,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Services
 
-    lazy var persistentContainer: NSPersistentContainer = {
-        return NSPersistentContainer(name: "TBA")
+    lazy var persistentContainer: TBAPersistenceContainer = {
+        return TBAPersistenceContainer()
     }()
     var tbaKit: TBAKit!
     let userDefaults: UserDefaults = UserDefaults.standard
