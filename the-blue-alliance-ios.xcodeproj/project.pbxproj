@@ -76,9 +76,23 @@
 		925908B32184F86700D7BFCE /* NSSet+OnlyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908B22184F86700D7BFCE /* NSSet+OnlyTests.swift */; };
 		925908B52185076100D7BFCE /* EventAllianceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908B42185076100D7BFCE /* EventAllianceTests.swift */; };
 		925908B721863C3E00D7BFCE /* EventAllianceBackupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908B621863C3E00D7BFCE /* EventAllianceBackupTests.swift */; };
+		9266A1C621AA0A3000545867 /* MyTBATestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266A1C521AA0A3000545867 /* MyTBATestCase.swift */; };
+		9266A1CF21AA0E8500545867 /* register_401.json in Resources */ = {isa = PBXBuildFile; fileRef = 9266A1C921AA0E8500545867 /* register_401.json */; };
+		9266A1D021AA0E8500545867 /* favorites_list.json in Resources */ = {isa = PBXBuildFile; fileRef = 9266A1CA21AA0E8500545867 /* favorites_list.json */; };
+		9266A1D121AA0E8500545867 /* unregister.json in Resources */ = {isa = PBXBuildFile; fileRef = 9266A1CB21AA0E8500545867 /* unregister.json */; };
+		9266A1D221AA0E8500545867 /* register.json in Resources */ = {isa = PBXBuildFile; fileRef = 9266A1CC21AA0E8500545867 /* register.json */; };
+		9266A1D321AA0E8500545867 /* subscriptions_list.json in Resources */ = {isa = PBXBuildFile; fileRef = 9266A1CD21AA0E8500545867 /* subscriptions_list.json */; };
+		9266A1D421AA0E8500545867 /* unregister_401.json in Resources */ = {isa = PBXBuildFile; fileRef = 9266A1CE21AA0E8500545867 /* unregister_401.json */; };
+		9266A1D621AA0ECA00545867 /* MyTBASubscriptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266A1D521AA0ECA00545867 /* MyTBASubscriptionTests.swift */; };
+		9266A1D821AA161500545867 /* MyTBAFavoriteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266A1D721AA161500545867 /* MyTBAFavoriteTests.swift */; };
+		9266A1DA21AA16A200545867 /* MyTBAPreferencesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266A1D921AA16A200545867 /* MyTBAPreferencesTests.swift */; };
+		9266A1DD21AA196500545867 /* model_setPreferences_401.json in Resources */ = {isa = PBXBuildFile; fileRef = 9266A1DB21AA196400545867 /* model_setPreferences_401.json */; };
+		9266A1DE21AA196500545867 /* model_setPreferences.json in Resources */ = {isa = PBXBuildFile; fileRef = 9266A1DC21AA196400545867 /* model_setPreferences.json */; };
 		92688C2B2090091D00D12B7B /* ReactNativeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92688C2A2090091D00D12B7B /* ReactNativeService.swift */; };
 		927C93B0217D4E350027ABEB /* DistrictRankingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */; };
 		927C93B2217D64300027ABEB /* DistrictEventPointsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */; };
+		927EAABD21A88A730068FD96 /* MockMyTBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EAABC21A88A730068FD96 /* MockMyTBA.swift */; };
+		927EAAC021A88AF10068FD96 /* MyTBARegisterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EAABF21A88AF10068FD96 /* MyTBARegisterTests.swift */; };
 		928018F42096431200693447 /* MyTBASignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928018F32096431200693447 /* MyTBASignInViewController.swift */; };
 		928030E4219780540099CB65 /* EventAllianceTableViewCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928030E3219780540099CB65 /* EventAllianceTableViewCellTests.swift */; };
 		928030E62197806A0099CB65 /* EventAllianceCellViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928030E52197806A0099CB65 /* EventAllianceCellViewModelTests.swift */; };
@@ -278,6 +292,7 @@
 		92F8E358209AB3B50094213F /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E357209AB3B50094213F /* Provider.swift */; };
 		92FB84B621A77155009AE330 /* TBAKitTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FB84B521A77155009AE330 /* TBAKitTestCase.swift */; };
 		92FE68BB20D8A1E8004A1481 /* MyTBASignOutOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FE68BA20D8A1E8004A1481 /* MyTBASignOutOperation.swift */; };
+		92FF10D021A25D86003BC5C4 /* TBAViewControllerTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10CF21A25D86003BC5C4 /* TBAViewControllerTester.swift */; };
 		92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E321A61A1B003BC5C4 /* TeamViewController.swift */; };
 		92FF10EC21A61A1B003BC5C4 /* TeamEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E421A61A1B003BC5C4 /* TeamEventsViewController.swift */; };
 		92FF10ED21A61A1B003BC5C4 /* TeamAtEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E621A61A1B003BC5C4 /* TeamAtEventViewController.swift */; };
@@ -304,7 +319,6 @@
 		92FF111A21A61B37003BC5C4 /* DistrictViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF111421A61B37003BC5C4 /* DistrictViewController.swift */; };
 		92FF111B21A61B37003BC5C4 /* DistrictRankingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF111521A61B37003BC5C4 /* DistrictRankingsViewController.swift */; };
 		92FF111C21A61B37003BC5C4 /* DistrictEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF111621A61B37003BC5C4 /* DistrictEventsViewController.swift */; };
-		92FF10D021A25D86003BC5C4 /* TBAViewControllerTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10CF21A25D86003BC5C4 /* TBAViewControllerTester.swift */; };
 		92FF113021A66778003BC5C4 /* TBAPersistenceContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF112F21A66778003BC5C4 /* TBAPersistenceContainer.swift */; };
 		92FF113221A667E2003BC5C4 /* TBAPersistenceContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF113121A667E2003BC5C4 /* TBAPersistenceContainerTests.swift */; };
 		92FF113421A70B16003BC5C4 /* CoreDataTestCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF113321A70B16003BC5C4 /* CoreDataTestCaseTests.swift */; };
@@ -400,9 +414,23 @@
 		925908B22184F86700D7BFCE /* NSSet+OnlyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSSet+OnlyTests.swift"; sourceTree = "<group>"; };
 		925908B42185076100D7BFCE /* EventAllianceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceTests.swift; sourceTree = "<group>"; };
 		925908B621863C3E00D7BFCE /* EventAllianceBackupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceBackupTests.swift; sourceTree = "<group>"; };
+		9266A1C521AA0A3000545867 /* MyTBATestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATestCase.swift; sourceTree = "<group>"; };
+		9266A1C921AA0E8500545867 /* register_401.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = register_401.json; sourceTree = "<group>"; };
+		9266A1CA21AA0E8500545867 /* favorites_list.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = favorites_list.json; sourceTree = "<group>"; };
+		9266A1CB21AA0E8500545867 /* unregister.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = unregister.json; sourceTree = "<group>"; };
+		9266A1CC21AA0E8500545867 /* register.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = register.json; sourceTree = "<group>"; };
+		9266A1CD21AA0E8500545867 /* subscriptions_list.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = subscriptions_list.json; sourceTree = "<group>"; };
+		9266A1CE21AA0E8500545867 /* unregister_401.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = unregister_401.json; sourceTree = "<group>"; };
+		9266A1D521AA0ECA00545867 /* MyTBASubscriptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASubscriptionTests.swift; sourceTree = "<group>"; };
+		9266A1D721AA161500545867 /* MyTBAFavoriteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAFavoriteTests.swift; sourceTree = "<group>"; };
+		9266A1D921AA16A200545867 /* MyTBAPreferencesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferencesTests.swift; sourceTree = "<group>"; };
+		9266A1DB21AA196400545867 /* model_setPreferences_401.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = model_setPreferences_401.json; sourceTree = "<group>"; };
+		9266A1DC21AA196400545867 /* model_setPreferences.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = model_setPreferences.json; sourceTree = "<group>"; };
 		92688C2A2090091D00D12B7B /* ReactNativeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactNativeService.swift; sourceTree = "<group>"; };
 		927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictRankingTests.swift; sourceTree = "<group>"; };
 		927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictEventPointsTests.swift; sourceTree = "<group>"; };
+		927EAABC21A88A730068FD96 /* MockMyTBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMyTBA.swift; sourceTree = "<group>"; };
+		927EAABF21A88AF10068FD96 /* MyTBARegisterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBARegisterTests.swift; sourceTree = "<group>"; };
 		928018F32096431200693447 /* MyTBASignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignInViewController.swift; sourceTree = "<group>"; };
 		928030E3219780540099CB65 /* EventAllianceTableViewCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceTableViewCellTests.swift; sourceTree = "<group>"; };
 		928030E52197806A0099CB65 /* EventAllianceCellViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceCellViewModelTests.swift; sourceTree = "<group>"; };
@@ -609,6 +637,7 @@
 		92F8E357209AB3B50094213F /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		92FB84B521A77155009AE330 /* TBAKitTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAKitTestCase.swift; sourceTree = "<group>"; };
 		92FE68BA20D8A1E8004A1481 /* MyTBASignOutOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignOutOperation.swift; sourceTree = "<group>"; };
+		92FF10CF21A25D86003BC5C4 /* TBAViewControllerTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAViewControllerTester.swift; sourceTree = "<group>"; };
 		92FF10E321A61A1B003BC5C4 /* TeamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamViewController.swift; sourceTree = "<group>"; };
 		92FF10E421A61A1B003BC5C4 /* TeamEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamEventsViewController.swift; sourceTree = "<group>"; };
 		92FF10E621A61A1B003BC5C4 /* TeamAtEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamAtEventViewController.swift; sourceTree = "<group>"; };
@@ -635,7 +664,6 @@
 		92FF111421A61B37003BC5C4 /* DistrictViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictViewController.swift; sourceTree = "<group>"; };
 		92FF111521A61B37003BC5C4 /* DistrictRankingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictRankingsViewController.swift; sourceTree = "<group>"; };
 		92FF111621A61B37003BC5C4 /* DistrictEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictEventsViewController.swift; sourceTree = "<group>"; };
-		92FF10CF21A25D86003BC5C4 /* TBAViewControllerTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAViewControllerTester.swift; sourceTree = "<group>"; };
 		92FF112F21A66778003BC5C4 /* TBAPersistenceContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAPersistenceContainer.swift; sourceTree = "<group>"; };
 		92FF113121A667E2003BC5C4 /* TBAPersistenceContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAPersistenceContainerTests.swift; sourceTree = "<group>"; };
 		92FF113321A70B16003BC5C4 /* CoreDataTestCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTestCaseTests.swift; sourceTree = "<group>"; };
@@ -798,6 +826,9 @@
 		923AEE972167038B00EF50C8 /* MyTBAKit */ = {
 			isa = PBXGroup;
 			children = (
+				9266A1C821AA0E8500545867 /* data */,
+				927EAABB21A88A5E0068FD96 /* Testing */,
+				927EAABE21A88ADE0068FD96 /* Models */,
 				923AEE98216703CB00EF50C8 /* MyTBATests.swift */,
 			);
 			path = MyTBAKit;
@@ -882,6 +913,21 @@
 			path = Event;
 			sourceTree = "<group>";
 		};
+		9266A1C821AA0E8500545867 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				9266A1DB21AA196400545867 /* model_setPreferences_401.json */,
+				9266A1DC21AA196400545867 /* model_setPreferences.json */,
+				9266A1C921AA0E8500545867 /* register_401.json */,
+				9266A1CA21AA0E8500545867 /* favorites_list.json */,
+				9266A1CB21AA0E8500545867 /* unregister.json */,
+				9266A1CC21AA0E8500545867 /* register.json */,
+				9266A1CD21AA0E8500545867 /* subscriptions_list.json */,
+				9266A1CE21AA0E8500545867 /* unregister_401.json */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
 		927C93AE217D454A0027ABEB /* District */ = {
 			isa = PBXGroup;
 			children = (
@@ -890,6 +936,26 @@
 				927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */,
 			);
 			path = District;
+			sourceTree = "<group>";
+		};
+		927EAABB21A88A5E0068FD96 /* Testing */ = {
+			isa = PBXGroup;
+			children = (
+				9266A1C521AA0A3000545867 /* MyTBATestCase.swift */,
+				927EAABC21A88A730068FD96 /* MockMyTBA.swift */,
+			);
+			path = Testing;
+			sourceTree = "<group>";
+		};
+		927EAABE21A88ADE0068FD96 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				927EAABF21A88AF10068FD96 /* MyTBARegisterTests.swift */,
+				9266A1D521AA0ECA00545867 /* MyTBASubscriptionTests.swift */,
+				9266A1D721AA161500545867 /* MyTBAFavoriteTests.swift */,
+				9266A1D921AA16A200545867 /* MyTBAPreferencesTests.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		928030E12197802C0099CB65 /* View Elements */ = {
@@ -1853,6 +1919,7 @@
 				92A5E5A321A1B7830025CC85 /* team_frc2337_robots.json in Resources */,
 				92A5E5A521A1B7830025CC85 /* event_2017mike2_alliances.json in Resources */,
 				92A5E58921A1B7830025CC85 /* teams_2017_100.json in Resources */,
+				9266A1D421AA0E8500545867 /* unregister_401.json in Resources */,
 				92A5E58021A1B7830025CC85 /* team_frc2337_events_2017.json in Resources */,
 				92A5E57E21A1B7830025CC85 /* team_frc2337_event_2016micmp_status.json in Resources */,
 				92A5E57221A1B7830025CC85 /* team_frc2337_event_2017mike2_status.json in Resources */,
@@ -1878,10 +1945,12 @@
 				92A5E58121A1B7830025CC85 /* event_2017mike2_teams.json in Resources */,
 				92A5E58821A1B7830025CC85 /* team_frc2337_events_2018_statuses.json in Resources */,
 				92A5E5A621A1B7830025CC85 /* event_1992cmp_oprs.json in Resources */,
+				9266A1D021AA0E8500545867 /* favorites_list.json in Resources */,
 				92A5E58321A1B7830025CC85 /* team_frc2337_years_participated.json in Resources */,
 				92A5E59921A1B7830025CC85 /* teams_100.json in Resources */,
 				92A5E57B21A1B7830025CC85 /* event_2017mike2.json in Resources */,
 				92A5E57D21A1B7830025CC85 /* event_2017mike2_rankings.json in Resources */,
+				9266A1D121AA0E8500545867 /* unregister.json in Resources */,
 				92A5E57621A1B7830025CC85 /* team_frc13.json in Resources */,
 				92A5E58B21A1B7830025CC85 /* event_2018cars_rankings.json in Resources */,
 				92A5E59F21A1B7830025CC85 /* event_2015micmp_awards.json in Resources */,
@@ -1890,6 +1959,10 @@
 				92A5E59521A1B7830025CC85 /* match_2017mike2_qm1.json in Resources */,
 				92A5E58221A1B7830025CC85 /* teams_0.json in Resources */,
 				92A5E57921A1B7830025CC85 /* event_2018micmp4_alliances.json in Resources */,
+				9266A1DD21AA196500545867 /* model_setPreferences_401.json in Resources */,
+				9266A1CF21AA0E8500545867 /* register_401.json in Resources */,
+				9266A1D221AA0E8500545867 /* register.json in Resources */,
+				9266A1D321AA0E8500545867 /* subscriptions_list.json in Resources */,
 				92A5E59221A1B7830025CC85 /* team_frc2337_awards_2017.json in Resources */,
 				92A5E5A721A1B7830025CC85 /* event_2017micmp.json in Resources */,
 				92A5E59021A1B7830025CC85 /* event_2015miket_insights.json in Resources */,
@@ -1900,6 +1973,7 @@
 				92A5E57521A1B7830025CC85 /* event_2005ga_district_points.json in Resources */,
 				92A5E57721A1B7830025CC85 /* team_frc2337_social_media.json in Resources */,
 				92A5E58A21A1B7830025CC85 /* event_2009gg_predictions.json in Resources */,
+				9266A1DE21AA196500545867 /* model_setPreferences.json in Resources */,
 				92A5E59421A1B7830025CC85 /* event_2017mike2_predictions.json in Resources */,
 				92A5E57321A1B7830025CC85 /* event_2015miket_rankings.json in Resources */,
 				92A5E59D21A1B7830025CC85 /* event_2017mike2_insights.json in Resources */,
@@ -2267,6 +2341,7 @@
 				928030E62197806A0099CB65 /* EventAllianceCellViewModelTests.swift in Sources */,
 				92A5E56921A1B7830025CC85 /* TBATeamTests.swift in Sources */,
 				92BB718420CE1E310081F4E5 /* Test.xcdatamodeld in Sources */,
+				927EAAC021A88AF10068FD96 /* MyTBARegisterTests.swift in Sources */,
 				923AEE99216703CB00EF50C8 /* MyTBATests.swift in Sources */,
 				92F38537217D31CE00A9AC02 /* AwardRecipientTests.swift in Sources */,
 				92B076F120FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift in Sources */,
@@ -2280,6 +2355,7 @@
 				923AEE8C21658C5800EF50C8 /* Bundle+Version_Tests.swift in Sources */,
 				92A5E56C21A1B7830025CC85 /* TBAStatusTests.swift in Sources */,
 				92BB717F20CE19F40081F4E5 /* PersistentContainerOperationTests.swift in Sources */,
+				9266A1DA21AA16A200545867 /* MyTBAPreferencesTests.swift in Sources */,
 				14B6727321529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift in Sources */,
 				92A5E56A21A1B7830025CC85 /* TBAMatchTests.swift in Sources */,
 				1448DBAC21823148008F542E /* FavoriteTests.swift in Sources */,
@@ -2287,6 +2363,7 @@
 				927C93B0217D4E350027ABEB /* DistrictRankingTests.swift in Sources */,
 				9287014220CD7CCB0077D6DA /* RemoteConfig+TBA_Tests.swift in Sources */,
 				1450778F218279BB00C61D2D /* EventKeyTests.swift in Sources */,
+				927EAABD21A88A730068FD96 /* MockMyTBA.swift in Sources */,
 				1416D50E218E4B8200F1A4A3 /* EventTeamStatsTests.swift in Sources */,
 				9280EAED21685F310016621D /* RefreshableTests.swift in Sources */,
 				92A5E56F21A1B7830025CC85 /* MockURLSessionDataTask.swift in Sources */,
@@ -2294,6 +2371,7 @@
 				92FF113221A667E2003BC5C4 /* TBAPersistenceContainerTests.swift in Sources */,
 				925908AB21828CC400D7BFCE /* WebcastTests.swift in Sources */,
 				1421ADF3219E040A00118634 /* MyTBAEntityTests.swift in Sources */,
+				9266A1D821AA161500545867 /* MyTBAFavoriteTests.swift in Sources */,
 				92564C70216456800047917F /* Secrets_Tests.swift in Sources */,
 				92BB718120CE1A000081F4E5 /* RemoteConfigServiceOperation_Tests.swift in Sources */,
 				92A2F5542156BD4B00267C63 /* NSManagedObjectContext+ExtensionTests.swift in Sources */,
@@ -2301,6 +2379,7 @@
 				929820CF216968020080C1C8 /* TBATestCase.swift in Sources */,
 				925908B32184F86700D7BFCE /* NSSet+OnlyTests.swift in Sources */,
 				92269EE1219B9CF300FAA610 /* DistrictViewControllerTests.swift in Sources */,
+				9266A1D621AA0ECA00545867 /* MyTBASubscriptionTests.swift in Sources */,
 				92361028217D1175000CC5E9 /* AwardTests.swift in Sources */,
 				925908A921827B3A00D7BFCE /* TeamTests.swift in Sources */,
 				92A5E5AA21A1B7830025CC85 /* TBADistrictTests.swift in Sources */,
@@ -2322,6 +2401,7 @@
 				928030E4219780540099CB65 /* EventAllianceTableViewCellTests.swift in Sources */,
 				9236101F2178245C000CC5E9 /* TeamMediaTests.swift in Sources */,
 				92C1F2E42169AA7200BD8445 /* TeamsContainerViewControllerTests.swift in Sources */,
+				9266A1C621AA0A3000545867 /* MyTBATestCase.swift in Sources */,
 				14B520F7218CA28B00F2EF4F /* EventStatusAllianceTests.swift in Sources */,
 				92C1F2E62169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift in Sources */,
 				92A5E56B21A1B7830025CC85 /* TBAKitTests.swift in Sources */,

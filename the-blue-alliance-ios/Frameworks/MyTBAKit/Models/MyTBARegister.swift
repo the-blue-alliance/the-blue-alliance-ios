@@ -28,7 +28,7 @@ extension MyTBA {
     private func registerUnregister(_ method: String, token: String, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTask? {
         let registration = MyTBARegisterRequest(deviceUuid: uuid,
                                                 mobileId: token,
-                                                name: UIDevice.current.name)
+                                                name: deviceName) // TODO: Let's remove this UIDevice stuff... we shouldn't need UIKit
 
         guard let encodedRegistration = try? MyTBA.jsonEncoder.encode(registration) else {
             completion(MyTBAError.error("Unable to update myTBA registration - invalid data"))
