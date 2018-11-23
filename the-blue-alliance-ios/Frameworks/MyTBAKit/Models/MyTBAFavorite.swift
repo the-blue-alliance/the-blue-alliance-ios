@@ -1,15 +1,11 @@
 import Foundation
 
 struct MyTBAFavoritesRequest: Codable {
-
     var favorites: [MyTBAFavorite]
-
 }
 
 struct MyTBAFavoritesResponse: MyTBAResponse, Codable {
-
     var favorites: [MyTBAFavorite]
-
 }
 
 struct MyTBAFavorite: MyTBAModel, Equatable, Codable {
@@ -22,7 +18,6 @@ struct MyTBAFavorite: MyTBAModel, Equatable, Codable {
     var modelType: MyTBAModelType
 
     static var fetch: ((@escaping ([MyTBAModel]?, Error?) -> Void) -> URLSessionDataTask) = MyTBA.shared.fetchFavorites
-
 }
 
 extension MyTBA {
