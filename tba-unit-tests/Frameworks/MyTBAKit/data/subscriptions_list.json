@@ -1,0 +1,30 @@
+{
+ "subscriptions": [
+  {
+   "model_key": "2016mndu_sf1m1",
+   "model_type": 2,
+   "notifications": [
+    "match_score",
+    "upcoming_match"
+   ]
+  },
+  {
+   "model_key": "2018txsc",
+   "model_type": 0,
+   "notifications": [
+    "match_score"
+   ]
+  },
+  {
+   "model_key": "frc2337",
+   "model_type": 1,
+   "notifications": [
+    "match_score",
+    "alliance_selection",
+    "awards_posted",
+    "match_video",
+    "upcoming_match"
+   ]
+  }
+ ]
+}

@@ -26,8 +26,9 @@ extension MyTBAError: LocalizedError {
 
 class MyTBA {
 
-    public static let shared = MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString)
-    private var authToken: String? {
+    public static let shared = MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString, deviceName: UIDevice.current.name)
+    // This shouldn't be public, but we can't fake the auth stuff for testing because Firebase blows
+    var authToken: String? {
         didSet {
             // Only disaptch on changed state
             if oldValue == authToken {
@@ -48,9 +49,10 @@ class MyTBA {
         return authToken != nil
     }
 
-    public init(uuid: String) {
-        self.urlSession = URLSession(configuration: .default)
+    public init(uuid: String, deviceName: String, urlSession: URLSession? = nil) {
         self.uuid = uuid
+        self.deviceName = deviceName
+        self.urlSession = urlSession ?? URLSession(configuration: .default)
 
         // Block gets called on init - ignore the init call
         var initCall = true
@@ -72,6 +74,7 @@ class MyTBA {
     var authenticationProvider = Provider<MyTBAAuthenticationObservable>()
     private var urlSession: URLSession
     internal var uuid: String
+    internal var deviceName: String
 
     static var jsonEncoder: JSONEncoder {
         let jsonEncoder = JSONEncoder()

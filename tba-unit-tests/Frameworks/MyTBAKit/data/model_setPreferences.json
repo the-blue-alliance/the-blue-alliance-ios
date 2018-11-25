@@ -1,0 +1,4 @@
+{
+    "code": 200,
+    "message": "{\"favorite\": {\"message\": \"Favorite added\", \"code\": 200}, \"subscription\": {\"message\": \"Subscription updated\", \"code\": 200}}"
+}
