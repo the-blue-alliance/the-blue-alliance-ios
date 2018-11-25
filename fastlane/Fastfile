@@ -14,12 +14,11 @@ platform :ios do
     setup_travis
   end
 
-  desc "Run all of our tests"
-  lane :test do
-    scan(scheme: "tba-unit-tests")
-    # scan(scheme: "tba-ui-tests")
+  desc "Run our unit tets"
+  lane :test_unit do
+    scan(scheme: "tba-unit-tests", buildlog_path: "build/reports")
+    sh "cat ../build/reports/xcodebuild.log | second_curtain"
   end
-
   ## CI Lanes ##
 
   desc "Setup Secrets.plist file (used by CI)"
