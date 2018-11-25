@@ -26,6 +26,11 @@ Install project dependencies
 fastlane ios setup_ci
 ```
 Setup CI
+### ios test_unit
+```
+fastlane ios test_unit
+```
+Run unit tests (for CI)
 ### ios test
 ```
 fastlane ios test

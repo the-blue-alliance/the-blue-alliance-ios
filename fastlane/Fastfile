@@ -14,10 +14,15 @@ platform :ios do
     setup_travis
   end
 
-  desc "Run our unit tets"
+  desc "Run unit tests (for CI)"
   lane :test_unit do
-    scan(scheme: "tba-unit-tests", buildlog_path: "build/reports")
-    sh "cat ../build/reports/xcodebuild.log | second_curtain"
+    scan(scheme: "tba-unit-tests")
+  end
+
+  desc "Run all of our tests"
+  lane :test do
+    scan(scheme: "tba-unit-tests")
+    # scan(scheme: "tba-ui-tests")
   end
   ## CI Lanes ##
 
