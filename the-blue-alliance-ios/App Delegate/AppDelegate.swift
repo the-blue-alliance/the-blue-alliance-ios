@@ -41,7 +41,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                             persistentContainer: persistentContainer,
                                                             tbaKit: tbaKit,
                                                             userDefaults: userDefaults)
-        let rootViewControllers: [UIViewController] = [eventsViewController, teamsViewController, districtsViewController, settingsViewController]
+        let myTBAViewController = MyTBAViewController(persistentContainer: persistentContainer,
+                                                      tbaKit: tbaKit,
+                                                      userDefaults: userDefaults)
+        let rootViewControllers: [UIViewController] = [eventsViewController, teamsViewController, districtsViewController, myTBAViewController, settingsViewController]
         tabBarController.viewControllers = rootViewControllers.compactMap({ (viewController) -> UIViewController? in
             let navigationController = UINavigationController(rootViewController: viewController)
             return navigationController
@@ -122,6 +125,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Listen for changes to FMS availability
         registerForFMSStatusChanges()
 
+        // Assign our Push Service as a delegate to all push-related classes
+        AppDelegate.setupPushServiceDelegates(pushService: pushService)
+        // Kickoff background myTBA/Google sign in, along with setting up delegates
+        setupGoogleAuthentication()
+
         // Our app setup operation will load our persistent stores, fetch our remote config, propogate persistance container
         let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer,
                                                   remoteConfigService: remoteConfigService)
@@ -153,10 +161,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                     self.rootSplitViewController.view.addSubview(snapshot)
                     window.rootViewController = self.rootSplitViewController
-
-                    if self.remoteConfigService.remoteConfig.myTBAEnabled {
-                        self.setupMyTBA()
-                    }
 
                     // 0.35 is an iOS animation magic number... for now
                     UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
@@ -239,7 +243,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.rootViewController?.present(alertController, animated: true, completion: nil)
     }
 
-    private static func setupPushServiceDelegates(with pushService: PushService) {
+    private static func setupPushServiceDelegates(pushService: PushService) {
         Messaging.messaging().delegate = pushService
         UNUserNotificationCenter.current().delegate = pushService
         MyTBA.shared.authenticationProvider.add(observer: pushService)
@@ -261,16 +265,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             fatalError("Unable to load launch view controller")
         }
         return launchViewController
-    }
-
-    private func setupMyTBA() {
-        let myTBAViewController = MyTBAViewController(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        tabBarController.viewControllers?.append(myTBAViewController)
-
-        // Assign our Push Service as a delegate to all push-related classes
-        AppDelegate.setupPushServiceDelegates(with: pushService)
-        // Kickoff background myTBA/Google sign in, along with setting up delegates
-        setupGoogleAuthentication()
     }
 
     static func setupAppearance() {
