@@ -253,6 +253,8 @@
 		92C2E939217B92C500004B9E /* MatchVideoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C2E938217B92C500004B9E /* MatchVideoTests.swift */; };
 		92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */; };
 		92C8CE4221AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4121AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift */; };
+		92C8CE4421ACB03300683558 /* Subscribable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4321ACB03300683558 /* Subscribable.swift */; };
+		92C8CE4621ACB05900683558 /* SubscribableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4521ACB05900683558 /* SubscribableTests.swift */; };
 		92C9BD352096907E007FB9C8 /* Stateful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD342096907E007FB9C8 /* Stateful.swift */; };
 		92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
@@ -598,6 +600,8 @@
 		92C2E938217B92C500004B9E /* MatchVideoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchVideoTests.swift; sourceTree = "<group>"; };
 		92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferenceViewController.swift; sourceTree = "<group>"; };
 		92C8CE4121AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferenceViewControllerTests.swift; sourceTree = "<group>"; };
+		92C8CE4321ACB03300683558 /* Subscribable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscribable.swift; sourceTree = "<group>"; };
+		92C8CE4521ACB05900683558 /* SubscribableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribableTests.swift; sourceTree = "<group>"; };
 		92C9BD342096907E007FB9C8 /* Stateful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stateful.swift; sourceTree = "<group>"; };
 		92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATableViewController.swift; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
@@ -985,6 +989,7 @@
 			isa = PBXGroup;
 			children = (
 				9280EAEC21685F310016621D /* RefreshableTests.swift */,
+				92C8CE4521ACB05900683558 /* SubscribableTests.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -1612,6 +1617,7 @@
 				92C9BD342096907E007FB9C8 /* Stateful.swift */,
 				929F57272092BA6500E5313A /* Observable.swift */,
 				92BB8B63214F17440035AF28 /* URLOpener.swift */,
+				92C8CE4321ACB03300683558 /* Subscribable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -2206,6 +2212,7 @@
 				92DF3611217D43EC00B5246B /* Managed.swift in Sources */,
 				92F8E356209AAE890094213F /* PushService.swift in Sources */,
 				92BB8B64214F17440035AF28 /* URLOpener.swift in Sources */,
+				92C8CE4421ACB03300683558 /* Subscribable.swift in Sources */,
 				14796940215E9A590075AF4E /* MatchViewModel.swift in Sources */,
 				9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */,
 				92FF10EF21A61A1B003BC5C4 /* TeamStatsViewController.swift in Sources */,
@@ -2373,6 +2380,7 @@
 				923AEE8C21658C5800EF50C8 /* Bundle+Version_Tests.swift in Sources */,
 				92A5E56C21A1B7830025CC85 /* TBAStatusTests.swift in Sources */,
 				92BB717F20CE19F40081F4E5 /* PersistentContainerOperationTests.swift in Sources */,
+				92C8CE4621ACB05900683558 /* SubscribableTests.swift in Sources */,
 				9266A1DA21AA16A200545867 /* MyTBAPreferencesTests.swift in Sources */,
 				14B6727321529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift in Sources */,
 				92A5E56A21A1B7830025CC85 /* TBAMatchTests.swift in Sources */,
