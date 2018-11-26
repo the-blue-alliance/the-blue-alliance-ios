@@ -92,18 +92,6 @@ class MyTBATableViewControllerTests: TBATestCase {
 
     // MARK: - Private testing methods
 
-    private func backgroundContextSaveExpectation() -> XCTestExpectation {
-        let saveExpectation = expectation(description: "Background context saved")
-        waitForSavedNotification { (notification, context) in
-            // Check that we saved the background context
-            guard context.concurrencyType == .privateQueueConcurrencyType else {
-                return
-            }
-            saveExpectation.fulfill()
-        }
-        return saveExpectation
-    }
-
     private func testRefresh<T: Managed & NSManagedObject>(_ Type: T.Type, key: String, fetch: (String) -> (URLSessionDataTask), unmodified: Bool = false) {
         // Sanity check pre-fetch
         checkFetchKeys(key, shouldContainKey: false)
