@@ -93,20 +93,17 @@ class DistrictRankingTestCase: CoreDataTestCase {
     }
 
     func test_sortedEventPoints() {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-
         // Three Events that all start at different dates
         let eventOne = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        eventOne.startDate = dateFormatter.date(from: "2018-03-01")!
+        eventOne.startDate = Event.dateFormatter.date(from: "2018-03-01")!
         eventOne.key = "2018miket"
 
         let eventTwo = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        eventTwo.startDate = dateFormatter.date(from: "2018-03-02")!
+        eventTwo.startDate = Event.dateFormatter.date(from: "2018-03-02")!
         eventTwo.key = "2018mike2"
 
         let eventThree = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        eventThree.startDate = dateFormatter.date(from: "2018-03-03")!
+        eventThree.startDate = Event.dateFormatter.date(from: "2018-03-03")!
         eventThree.key = "2018mike3"
 
         let ranking = DistrictRanking.init(entity: DistrictRanking.entity(), insertInto: persistentContainer.viewContext)

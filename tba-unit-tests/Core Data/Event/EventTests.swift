@@ -6,11 +6,8 @@ class EventTestCase: CoreDataTestCase {
     let calendar: Calendar = Calendar.current
 
     func test_insert_year() {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-
-        let modelEventOne = TBAEvent(key: "2018miket", name: "name", eventCode: "code", eventType: 1, startDate: dateFormatter.date(from: "2018-03-01")!, endDate: dateFormatter.date(from: "2018-03-03")!, year: 2018, eventTypeString: "District", divisionKeys: [])
-        let modelEventTwo = TBAEvent(key: "2018mike2", name: "name", eventCode: "code", eventType: 1, startDate: dateFormatter.date(from: "2018-03-01")!, endDate: dateFormatter.date(from: "2018-03-03")!, year: 2018, eventTypeString: "District", divisionKeys: [])
+        let modelEventOne = TBAEvent(key: "2018miket", name: "name", eventCode: "code", eventType: 1, startDate: Event.dateFormatter.date(from: "2018-03-01")!, endDate: Event.dateFormatter.date(from: "2018-03-03")!, year: 2018, eventTypeString: "District", divisionKeys: [])
+        let modelEventTwo = TBAEvent(key: "2018mike2", name: "name", eventCode: "code", eventType: 1, startDate: Event.dateFormatter.date(from: "2018-03-01")!, endDate: Event.dateFormatter.date(from: "2018-03-03")!, year: 2018, eventTypeString: "District", divisionKeys: [])
 
         Event.insert([modelEventOne, modelEventTwo], year: 2018, in: persistentContainer.viewContext)
         let eventsFirst = Event.fetch(in: persistentContainer.viewContext) {
@@ -42,9 +39,6 @@ class EventTestCase: CoreDataTestCase {
     }
 
     func test_insert() {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-
         let district = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
         let eventModel = TBAEvent(key: "2018miket",
                                   name: "Name",
@@ -54,8 +48,8 @@ class EventTestCase: CoreDataTestCase {
                                   city: "city",
                                   stateProv: "state",
                                   country: "country",
-                                  startDate: dateFormatter.date(from: "2018-03-01")!,
-                                  endDate: dateFormatter.date(from: "2018-03-03")!,
+                                  startDate: Event.dateFormatter.date(from: "2018-03-01")!,
+                                  endDate: Event.dateFormatter.date(from: "2018-03-03")!,
                                   year: 2018,
                                   shortName: "short name",
                                   eventTypeString: "District",
@@ -647,24 +641,52 @@ class EventTestCase: CoreDataTestCase {
         XCTAssertEqual(Event.notificationTypes.count, 7)
     }
 
-    func test_dateString() {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+    func test_dateString_noDates() {
+        let noDates = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertNil(noDates.dateString())
 
+        noDates.startDate = Event.dateFormatter.date(from: "2018-03-05")!
+        XCTAssertNil(noDates.dateString())
+        noDates.startDate = nil
+
+        noDates.endDate = Event.dateFormatter.date(from: "2018-03-05")!
+        XCTAssertNil(noDates.dateString())
+
+        noDates.startDate = Event.dateFormatter.date(from: "2018-03-05")!
+        XCTAssertNotNil(noDates.dateString())
+    }
+
+    func test_dateString() {
         let sameDay = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        sameDay.startDate = dateFormatter.date(from: "2018-03-05")!
-        sameDay.endDate = dateFormatter.date(from: "2018-03-05")!
-        XCTAssertEqual(sameDay.dateString(), "Mar 05, 2018")
+        sameDay.startDate = Event.dateFormatter.date(from: "2018-03-05")!
+        sameDay.endDate = Event.dateFormatter.date(from: "2018-03-05")!
+        XCTAssertEqual(sameDay.dateString(), "Mar 05")
 
         let sameYear = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        sameYear.startDate = dateFormatter.date(from: "2018-03-01")!
-        sameYear.endDate = dateFormatter.date(from: "2018-03-03")!
-        XCTAssertEqual(sameYear.dateString(), "Mar 01 to Mar 03, 2018")
+        sameYear.startDate = Event.dateFormatter.date(from: "2018-03-01")!
+        sameYear.endDate = Event.dateFormatter.date(from: "2018-03-03")!
+        XCTAssertEqual(sameYear.dateString(), "Mar 01 to Mar 03")
 
         let differentYear = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        differentYear.startDate = dateFormatter.date(from: "2018-12-31")!
-        differentYear.endDate = dateFormatter.date(from: "2019-01-01")!
-        XCTAssertEqual(differentYear.dateString(), "Dec 31, 2018 to Jan 01, 2019")
+        differentYear.startDate = Event.dateFormatter.date(from: "2018-12-31")!
+        differentYear.endDate = Event.dateFormatter.date(from: "2019-01-01")!
+        XCTAssertEqual(differentYear.dateString(), "Dec 31 to Jan 01, 2019")
+    }
+
+    func test_dateString_timezone() {
+        let timeZone = TimeZone(abbreviation: "UTC")!
+        NSTimeZone.default = timeZone
+
+        let sameYear = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        sameYear.startDate = Event.dateFormatter.date(from: "2018-03-01")!
+        sameYear.endDate = Event.dateFormatter.date(from: "2018-03-03")!
+        sameYear.timezone = "America/New_York"
+
+        XCTAssertEqual(sameYear.dateString(), "Mar 01 to Mar 03")
+
+        addTeardownBlock {
+            NSTimeZone.resetSystemTimeZone()
+        }
     }
 
 }

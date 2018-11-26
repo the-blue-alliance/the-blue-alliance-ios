@@ -16,6 +16,12 @@ public enum EventType: Int {
 
 extension Event: Locatable, Managed {
 
+    static var dateFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        return dateFormatter
+    }
+
     /**
      Insert Events for a year with values from TBAKit Event models in to the managed object context.
 
@@ -371,7 +377,7 @@ extension Event: Locatable, Managed {
     }
 
     public func dateString() -> String? {
-        if self.startDate == nil || self.endDate == nil {
+        guard let startDate = startDate, let endDate = endDate else {
             return nil
         }
 
@@ -383,25 +389,13 @@ extension Event: Locatable, Managed {
         let longDateFormatter = DateFormatter()
         longDateFormatter.dateFormat = "MMM dd, y"
 
-        let startDate = Date(timeIntervalSince1970: self.startDate!.timeIntervalSince1970)
-        let endDate = Date(timeIntervalSince1970: self.endDate!.timeIntervalSince1970)
-
-        if let timezone = timezone {
-            let tz = TimeZone(identifier: timezone)
-            shortDateFormatter.timeZone = tz
-            longDateFormatter.timeZone = tz
-        }
-
-        var dateText: String?
         if startDate == endDate {
-            dateText = longDateFormatter.string(from: Date(timeIntervalSince1970: endDate.timeIntervalSince1970))
+            return shortDateFormatter.string(from: endDate)
         } else if calendar.component(.year, from: startDate) == calendar.component(.year, from: endDate) {
-            dateText = "\(shortDateFormatter.string(from: startDate)) to \(longDateFormatter.string(from: endDate))"
+            return "\(shortDateFormatter.string(from: startDate)) to \(shortDateFormatter.string(from: endDate))"
         } else {
-            dateText = "\(longDateFormatter.string(from: startDate)) to \(longDateFormatter.string(from: endDate))"
+            return "\(shortDateFormatter.string(from: startDate)) to \(longDateFormatter.string(from: endDate))"
         }
-
-        return dateText
     }
 
     public var weekString: String {

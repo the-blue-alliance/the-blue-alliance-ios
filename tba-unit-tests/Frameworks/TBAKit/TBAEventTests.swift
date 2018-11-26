@@ -4,11 +4,8 @@ import XCTest
 class TBAEventTests: TBAKitTestCase {
 
     func test_event_init() {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-
-        let startDate = dateFormatter.date(from: "2018-03-01")!
-        let endDate = dateFormatter.date(from: "2018-03-03")!
+        let startDate = Event.dateFormatter.date(from: "2018-03-01")!
+        let endDate = Event.dateFormatter.date(from: "2018-03-03")!
 
         let event = TBAEvent(key: "2018miket", name: "Kettering District", eventCode: "miket", eventType: 1, startDate: startDate, endDate: endDate, year: 2018, eventTypeString: "District", divisionKeys: [])
 
