@@ -56,6 +56,30 @@ class CoreDataTestCase: FBSnapshotTestCase {
         saveNotificationCompleteHandler = completeHandler
     }
 
+    func viewContextSaveExpectation() -> XCTestExpectation {
+        let saveExpectation = expectation(description: "View context saved")
+        waitForSavedNotification { (notification, context) in
+            // Check that we saved the view context
+            guard context == self.persistentContainer.viewContext else {
+                return
+            }
+            saveExpectation.fulfill()
+        }
+        return saveExpectation
+    }
+
+    func backgroundContextSaveExpectation() -> XCTestExpectation {
+        let saveExpectation = expectation(description: "Background context saved")
+        waitForSavedNotification { (notification, context) in
+            // Check that we saved the background context
+            guard context.concurrencyType == .privateQueueConcurrencyType else {
+                return
+            }
+            saveExpectation.fulfill()
+        }
+        return saveExpectation
+    }
+
     func insertEvent(year: Int = 2015) -> Event {
         let model = TBAEvent(key: "\(year)qcmo",
                              name: "FRC Festival de Robotique - Montreal Regional",
