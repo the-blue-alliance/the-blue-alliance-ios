@@ -26,19 +26,19 @@ class MyTBATableViewControllerTests: TBATestCase {
     func test_snapshot() {
         myTBATableViewController.tableView.reloadData()
         waitForAnimations()
-        verifyView(myTBATableViewController.view, identifier: "no_data")
+        verifyLayer(viewControllerTester.window.layer, identifier: "no_data")
 
         Favorite.insert([MyTBAFavorite(modelKey: "2018miket", modelType: .event), MyTBAFavorite(modelKey: "2018ctsc_qm1", modelType: .match), MyTBAFavorite(modelKey: "frc7332", modelType: .team)], in: persistentContainer.viewContext)
         try! persistentContainer.viewContext.save()
         waitForAnimations()
 
-        verifyView(myTBATableViewController.view, identifier: "partial_data")
+        verifyLayer(viewControllerTester.window.layer, identifier: "partial_data")
 
         _ = insertTeam()
         _ = insertDistrictEvent()
         myTBATableViewController.tableView.reloadData()
 
-        verifyView(myTBATableViewController.view, identifier: "data")
+        verifyLayer(viewControllerTester.window.layer, identifier: "data")
     }
 
     func test_refresh() {
