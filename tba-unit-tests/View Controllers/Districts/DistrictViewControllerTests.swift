@@ -40,9 +40,6 @@ class DistrictViewControllerTests: TBATestCase {
     }
 
     private func insertDistrictEvents(district: District) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-
         let eventOne = TBAEvent(key: "2018miket",
                                 name: "FIM District Kettering University Event #1",
                                 eventCode: "miket",
@@ -51,8 +48,8 @@ class DistrictViewControllerTests: TBATestCase {
                                 city: nil,
                                 stateProv: nil,
                                 country: nil,
-                                startDate: dateFormatter.date(from: "2018-03-01")!,
-                                endDate: dateFormatter.date(from: "2018-03-03")!,
+                                startDate: Event.dateFormatter.date(from: "2018-03-01")!,
+                                endDate: Event.dateFormatter.date(from: "2018-03-03")!,
                                 year: 2018,
                                 shortName: "Kettering University #1",
                                 eventTypeString: "District",
@@ -82,8 +79,8 @@ class DistrictViewControllerTests: TBATestCase {
                                 city: nil,
                                 stateProv: nil,
                                 country: nil,
-                                startDate: dateFormatter.date(from: "2018-03-08")!,
-                                endDate: dateFormatter.date(from: "2018-03-10")!,
+                                startDate: Event.dateFormatter.date(from: "2018-03-08")!,
+                                endDate: Event.dateFormatter.date(from: "2018-03-10")!,
                                 year: 2018,
                                 shortName: "Kettering University #2",
                                 eventTypeString: "District",

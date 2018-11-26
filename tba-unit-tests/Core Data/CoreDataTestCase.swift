@@ -57,9 +57,6 @@ class CoreDataTestCase: FBSnapshotTestCase {
     }
 
     func insertEvent(year: Int = 2015) -> Event {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-
         let model = TBAEvent(key: "\(year)qcmo",
                              name: "FRC Festival de Robotique - Montreal Regional",
                              eventCode: "qcmo",
@@ -68,8 +65,8 @@ class CoreDataTestCase: FBSnapshotTestCase {
                              city: nil,
                              stateProv: nil,
                              country: nil,
-                             startDate: dateFormatter.date(from: "\(year)-03-18")!,
-                             endDate: dateFormatter.date(from: "\(year)-03-21")!,
+                             startDate: Event.dateFormatter.date(from: "\(year)-03-18")!,
+                             endDate: Event.dateFormatter.date(from: "\(year)-03-21")!,
                              year: year,
                              shortName: "Festival de Robotique - Montreal",
                              eventTypeString: "Reginal",
@@ -95,9 +92,6 @@ class CoreDataTestCase: FBSnapshotTestCase {
     }
 
     func insertDistrictEvent(eventKey: String = "2018miket") -> Event {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-
         let district = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
         let model = TBAEvent(key: eventKey,
                              name: "FIM District Kettering University Event #1",
@@ -107,8 +101,8 @@ class CoreDataTestCase: FBSnapshotTestCase {
                              city: "Flint",
                              stateProv: "MI",
                              country: "USA",
-                             startDate: dateFormatter.date(from: "2018-03-01")!,
-                             endDate: dateFormatter.date(from: "2018-03-03")!,
+                             startDate: Event.dateFormatter.date(from: "2018-03-01")!,
+                             endDate: Event.dateFormatter.date(from: "2018-03-03")!,
                              year: 2018,
                              shortName: "Kettering University #1",
                              eventTypeString: "District",
