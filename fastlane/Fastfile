@@ -75,8 +75,7 @@ platform :ios do
     slack(channel: "#dev-ios", message: "Shipping #{current_git_tag} to TestFlight...", default_payloads: [])
 
     beta_internal
-    # Upload to TestFlight and move on to next steps
-    pilot(changelog: commit_changelog_short, skip_waiting_for_build_processing: true)
+    pilot(changelog: commit_changelog_short, distribute_external: true, reject_build_waiting_for_review: true)
 
     ship_github(is_prerelease: true) # Create GitHub release
 
