@@ -647,4 +647,24 @@ class EventTestCase: CoreDataTestCase {
         XCTAssertEqual(Event.notificationTypes.count, 7)
     }
 
+    func test_dateString() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        let sameDay = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        sameDay.startDate = dateFormatter.date(from: "2018-03-05")!
+        sameDay.endDate = dateFormatter.date(from: "2018-03-05")!
+        XCTAssertEqual(sameDay.dateString(), "Mar 05, 2018")
+
+        let sameYear = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        sameYear.startDate = dateFormatter.date(from: "2018-03-01")!
+        sameYear.endDate = dateFormatter.date(from: "2018-03-03")!
+        XCTAssertEqual(sameYear.dateString(), "Mar 01 to Mar 03, 2018")
+
+        let differentYear = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        differentYear.startDate = dateFormatter.date(from: "2018-12-31")!
+        differentYear.endDate = dateFormatter.date(from: "2019-01-01")!
+        XCTAssertEqual(differentYear.dateString(), "Dec 31, 2018 to Jan 01, 2019")
+    }
+
 }

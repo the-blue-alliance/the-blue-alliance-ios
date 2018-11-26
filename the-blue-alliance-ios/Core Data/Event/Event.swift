@@ -396,7 +396,7 @@ extension Event: Locatable, Managed {
         if startDate == endDate {
             dateText = longDateFormatter.string(from: Date(timeIntervalSince1970: endDate.timeIntervalSince1970))
         } else if calendar.component(.year, from: startDate) == calendar.component(.year, from: endDate) {
-            dateText = "\(shortDateFormatter.string(from: startDate)) to \(shortDateFormatter.string(from: endDate))"
+            dateText = "\(shortDateFormatter.string(from: startDate)) to \(longDateFormatter.string(from: endDate))"
         } else {
             dateText = "\(longDateFormatter.string(from: startDate)) to \(longDateFormatter.string(from: endDate))"
         }
