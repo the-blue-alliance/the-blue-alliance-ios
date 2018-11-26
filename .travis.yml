@@ -30,10 +30,14 @@ jobs:
   include:
     - stage: test
       name: "Unit Tests"
-      script: bundle exec fastlane scan --scheme tba-unit-tests
+      script:
+        - bundle exec fastlane test_unit
     # - script: bundle exec fastlane scan --scheme tba-ui-tests
     #   name: "UI Tests"
     - stage: beta
       script:
         - bundle exec fastlane setup_secrets
         - bundle exec fastlane beta_ci
+
+after_failure:
+  - cat build/reports/tba-unit-tests-tba-unit-tests.log | bundle exec second_curtain > /dev/null

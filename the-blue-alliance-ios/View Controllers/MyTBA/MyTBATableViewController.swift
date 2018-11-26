@@ -10,11 +10,14 @@ import UIKit
 class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TBATableViewController, NSFetchedResultsControllerDelegate {
 
     // let myTBAObjectSelected: ((T) -> ())
-    private var backgroundFetchKeys: Set<String> = []
+    private(set) var backgroundFetchKeys: Set<String> = []
+    let myTBA: MyTBA
 
     // MARK: - Init
 
-    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(persistentContainer: NSPersistentContainer, myTBA: MyTBA, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.myTBA = myTBA
+
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }
 
@@ -54,9 +57,12 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     fileprivate func setupFetchedResultsController() {
         let fetchRequest = NSFetchRequest<T>(entityName: T.entityName)
 
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "modelType", ascending: true), NSSortDescriptor(key: "modelKey", ascending: true)]
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: #keyPath(MyTBAEntity.modelTypeRaw), ascending: true),
+            NSSortDescriptor(key: #keyPath(MyTBAEntity.modelKey), ascending: true)
+        ]
 
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "modelType", cacheName: nil)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: #keyPath(MyTBAEntity.modelTypeRaw), cacheName: nil)
         fetchedResultsController!.delegate = self
         try! fetchedResultsController!.performFetch()
 
@@ -194,6 +200,79 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         tableView.reloadData()
     }
 
+    // MARK: - Fetch Methods
+
+    @discardableResult
+    func fetchEvent(_ key: String) -> URLSessionDataTask {
+        var request: URLSessionDataTask?
+        request = tbaKit.fetchEvent(key: key) { (event, error) in
+            // TODO: Check concurrency of tbaKit callbacks and stuff
+            let context = self.persistentContainer.newBackgroundContext()
+
+            context.performChangesAndWait({
+                if let event = event {
+                    Event.insert(event, in: context)
+                }
+            }, saved: {
+                self.tbaKit.setLastModified(request!)
+            })
+
+            self.backgroundFetchKeys.remove(key)
+
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+        backgroundFetchKeys.insert(key)
+        return request!
+    }
+
+    @discardableResult
+    func fetchTeam(_ key: String) -> URLSessionDataTask {
+        var request: URLSessionDataTask?
+        request = tbaKit.fetchTeam(key: key) { (team, error) in
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
+                if let team = team {
+                    Team.insert(team, in: context)
+                }
+            }, saved: {
+                self.tbaKit.setLastModified(request!)
+            })
+
+            self.backgroundFetchKeys.remove(key)
+
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+        backgroundFetchKeys.insert(key)
+        return request!
+    }
+
+    @discardableResult
+    func fetchMatch(_ key: String) -> URLSessionDataTask {
+        var request: URLSessionDataTask?
+        request = tbaKit.fetchMatch(key: key) { (match, error) in
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
+                if let match = match {
+                    Match.insert(match, in: context)
+                }
+            }, saved: {
+                self.tbaKit.setLastModified(request!)
+            })
+
+            self.backgroundFetchKeys.remove(key)
+
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+        backgroundFetchKeys.insert(key)
+        return request!
+    }
+
 }
 
 extension MyTBATableViewController: Refreshable {
@@ -211,7 +290,7 @@ extension MyTBATableViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        if MyTBA.shared.isAuthenticated, let objs = fetchedResultsController?.fetchedObjects, objs.isEmpty {
+        if myTBA.isAuthenticated, let objs = fetchedResultsController?.fetchedObjects, objs.isEmpty {
             return true
         }
         return false
@@ -220,28 +299,28 @@ extension MyTBATableViewController: Refreshable {
     func refresh() {
         removeNoDataView()
 
-        // I'd love to use MyTBAManaged's RemoteType here, but it doesn't seem like I can get it
         var request: URLSessionDataTask?
-        request = J.fetch { (models, error) in
-            let modelName = T.entityName.lowercased()
-
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh \(modelName) - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
+        request = J.fetch(myTBA)() { (models, error) in
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
                 if let models = models as? [T.RemoteType] {
-                    T.insert(models, in: backgroundContext)
-
-                    // No `Last-Modified` for myTBA methods
-                    _ = backgroundContext.saveOrRollback()
+                    let myTBAObjects = T.insert(models, in: context) as! [T]
+                    // Kickoff fetch for myTBA objects that don't exist
+                    for myTBAObject in myTBAObjects {
+                        let key = myTBAObject.modelKey!
+                        switch myTBAObject.modelType {
+                        case .event:
+                            self.fetchEvent(key)
+                        case .team:
+                            self.fetchTeam(key)
+                        case .match:
+                            self.fetchMatch(key)
+                        }
+                    }
                 }
-                self.removeRequest(request: request!)
             })
+
+            self.removeRequest(request: request!)
         }
         addRequest(request: request!)
     }

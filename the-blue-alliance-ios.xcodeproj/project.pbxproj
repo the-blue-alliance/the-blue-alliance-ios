@@ -319,6 +319,8 @@
 		92FF111A21A61B37003BC5C4 /* DistrictViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF111421A61B37003BC5C4 /* DistrictViewController.swift */; };
 		92FF111B21A61B37003BC5C4 /* DistrictRankingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF111521A61B37003BC5C4 /* DistrictRankingsViewController.swift */; };
 		92FF111C21A61B37003BC5C4 /* DistrictEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF111621A61B37003BC5C4 /* DistrictEventsViewController.swift */; };
+		92FF10D021A25D86003BC5C4 /* TBAViewControllerTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10CF21A25D86003BC5C4 /* TBAViewControllerTester.swift */; };
+		92FF112621A654B5003BC5C4 /* MyTBATableViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF112521A654B5003BC5C4 /* MyTBATableViewControllerTests.swift */; };
 		92FF113021A66778003BC5C4 /* TBAPersistenceContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF112F21A66778003BC5C4 /* TBAPersistenceContainer.swift */; };
 		92FF113221A667E2003BC5C4 /* TBAPersistenceContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF113121A667E2003BC5C4 /* TBAPersistenceContainerTests.swift */; };
 		92FF113421A70B16003BC5C4 /* CoreDataTestCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF113321A70B16003BC5C4 /* CoreDataTestCaseTests.swift */; };
@@ -664,6 +666,8 @@
 		92FF111421A61B37003BC5C4 /* DistrictViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictViewController.swift; sourceTree = "<group>"; };
 		92FF111521A61B37003BC5C4 /* DistrictRankingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictRankingsViewController.swift; sourceTree = "<group>"; };
 		92FF111621A61B37003BC5C4 /* DistrictEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictEventsViewController.swift; sourceTree = "<group>"; };
+		92FF10CF21A25D86003BC5C4 /* TBAViewControllerTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAViewControllerTester.swift; sourceTree = "<group>"; };
+		92FF112521A654B5003BC5C4 /* MyTBATableViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATableViewControllerTests.swift; sourceTree = "<group>"; };
 		92FF112F21A66778003BC5C4 /* TBAPersistenceContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAPersistenceContainer.swift; sourceTree = "<group>"; };
 		92FF113121A667E2003BC5C4 /* TBAPersistenceContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAPersistenceContainerTests.swift; sourceTree = "<group>"; };
 		92FF113321A70B16003BC5C4 /* CoreDataTestCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTestCaseTests.swift; sourceTree = "<group>"; };
@@ -1447,6 +1451,7 @@
 				929820CB2169667A0080C1C8 /* Events */,
 				92C1F2E12169AA5D00BD8445 /* Teams */,
 				92C1F2E22169AA6000BD8445 /* Districts */,
+				92FF112421A65491003BC5C4 /* myTBA */,
 				92C72C2521528C6E00534AC3 /* Settings */,
 			);
 			path = "View Controllers";
@@ -1706,6 +1711,14 @@
 				92FF111321A61B37003BC5C4 /* TeamAtDistrictViewController.swift */,
 			);
 			path = "Team@District";
+			sourceTree = "<group>";
+		};
+		92FF112421A65491003BC5C4 /* myTBA */ = {
+			isa = PBXGroup;
+			children = (
+				92FF112521A654B5003BC5C4 /* MyTBATableViewControllerTests.swift */,
+			);
+			path = myTBA;
 			sourceTree = "<group>";
 		};
 		92FFE5221E7C994B0037E48C /* View Elements */ = {
@@ -2382,6 +2395,7 @@
 				9266A1D621AA0ECA00545867 /* MyTBASubscriptionTests.swift in Sources */,
 				92361028217D1175000CC5E9 /* AwardTests.swift in Sources */,
 				925908A921827B3A00D7BFCE /* TeamTests.swift in Sources */,
+				92FF112621A654B5003BC5C4 /* MyTBATableViewControllerTests.swift in Sources */,
 				92A5E5AA21A1B7830025CC85 /* TBADistrictTests.swift in Sources */,
 				925908B721863C3E00D7BFCE /* EventAllianceBackupTests.swift in Sources */,
 				92A5E5AB21A1B7830025CC85 /* TBAEventTests.swift in Sources */,

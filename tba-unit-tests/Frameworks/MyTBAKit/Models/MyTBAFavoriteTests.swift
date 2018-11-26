@@ -7,7 +7,7 @@ class MyTBAFavoriteTests: MyTBATestCase {
         let ex = expectation(description: "favorites/list called")
         let task = myTBA.fetchFavorites { (favorites, error) in
             XCTAssertNotNil(favorites)
-            XCTAssertEqual(favorites?.count, 5)
+            XCTAssertEqual(favorites?.count, 3)
             XCTAssertNil(error)
             ex.fulfill()
         }

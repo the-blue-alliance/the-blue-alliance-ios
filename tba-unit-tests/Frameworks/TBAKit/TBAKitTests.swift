@@ -62,7 +62,7 @@ class TBAKitTests: TBAKitTestCase {
 
             setLastModifiedExpectation.fulfill()
         }
-        kit.sendSuccessStub(for: setLastModifiedTask!, headerFields: ["Last-Modified": "Sun, 11 Jun 2017 03:34:00 GMT"])
+        kit.sendSuccessStub(for: setLastModifiedTask!)
         wait(for: [setLastModifiedExpectation], timeout: 1.0)
 
         let setIfModifiedSinceExpectation = expectation(description: "if_modified_since")
@@ -94,7 +94,7 @@ class TBAKitTests: TBAKitTestCase {
 
             setLastModifiedExpectation.fulfill()
         }
-        kit.sendSuccessStub(for: setLastModifiedTask, with: 404, headerFields: ["Last-Modified": "Sun, 11 Jun 2017 03:34:00 GMT"])
+        kit.sendSuccessStub(for: setLastModifiedTask, with: 404)
         wait(for: [setLastModifiedExpectation], timeout: 1.0)
 
         let setIfModifiedSinceTask = kit.fetchStatus { (status, error) in

@@ -28,6 +28,12 @@ class TBATestCase: CoreDataTestCase {
         super.tearDown()
     }
 
+    func waitForAnimations() {
+        let ex = expectation(description: "Wait for animations")
+        ex.isInverted = true
+        wait(for: [ex], timeout: 1.0)
+    }
+
 }
 
 class MockRemoteConfig: RemoteConfig {

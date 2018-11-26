@@ -1,3 +1,4 @@
 workspace("the-blue-alliance-ios.xcworkspace")
 devices(["iPhone X (11.4)", "iPhone X (12.1)"])
+buildlog_path("build/reports")
 disable_concurrent_testing(true)

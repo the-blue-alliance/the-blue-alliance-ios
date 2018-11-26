@@ -66,7 +66,7 @@ struct MyTBASubscription: MyTBAModel, Equatable, Codable {
     var modelType: MyTBAModelType
     var notifications: [NotificationType]
 
-    static var fetch: ((@escaping ([MyTBAModel]?, Error?) -> Void) -> URLSessionDataTask) = MyTBA.shared.fetchSubscriptions
+    static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> URLSessionDataTask = MyTBA.fetchSubscriptions
 }
 
 extension MyTBA {
