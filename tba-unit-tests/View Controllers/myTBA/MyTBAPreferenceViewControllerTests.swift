@@ -4,7 +4,6 @@ import XCTest
 class MyTBAPreferenceViewControllerTests: TBATestCase {
 
     var subscribableModel: MyTBASubscribable!
-    let myTBA = MockMyTBA()
 
     var myTBAPreferencesViewController: MyTBAPreferenceViewController!
     var navigationController: MockNavigationController!
