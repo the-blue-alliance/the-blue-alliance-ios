@@ -4,7 +4,6 @@ import XCTest
 
 class MyTBATableViewControllerTests: TBATestCase {
 
-    let myTBA = MockMyTBA()
     var myTBATableViewController: MyTBATableViewController<Favorite, MyTBAFavorite>!
     var viewControllerTester: TBAViewControllerTester<MyTBATableViewController<Favorite, MyTBAFavorite>>!
 

@@ -255,6 +255,8 @@
 		92C8CE4221AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4121AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift */; };
 		92C8CE4421ACB03300683558 /* Subscribable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4321ACB03300683558 /* Subscribable.swift */; };
 		92C8CE4621ACB05900683558 /* SubscribableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4521ACB05900683558 /* SubscribableTests.swift */; };
+		92C8CE4821ADAA5100683558 /* MyTBAContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4721ADAA5100683558 /* MyTBAContainerViewController.swift */; };
+		92C8CE4C21ADAE4500683558 /* MyTBAContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4B21ADAE4500683558 /* MyTBAContainerViewControllerTests.swift */; };
 		92C9BD352096907E007FB9C8 /* Stateful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD342096907E007FB9C8 /* Stateful.swift */; };
 		92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
@@ -602,6 +604,8 @@
 		92C8CE4121AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPreferenceViewControllerTests.swift; sourceTree = "<group>"; };
 		92C8CE4321ACB03300683558 /* Subscribable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscribable.swift; sourceTree = "<group>"; };
 		92C8CE4521ACB05900683558 /* SubscribableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribableTests.swift; sourceTree = "<group>"; };
+		92C8CE4721ADAA5100683558 /* MyTBAContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAContainerViewController.swift; sourceTree = "<group>"; };
+		92C8CE4B21ADAE4500683558 /* MyTBAContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAContainerViewControllerTests.swift; sourceTree = "<group>"; };
 		92C9BD342096907E007FB9C8 /* Stateful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stateful.swift; sourceTree = "<group>"; };
 		92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATableViewController.swift; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
@@ -1129,7 +1133,7 @@
 		92942E311E230340008E79CA /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				929F57242092B82700E5313A /* Container Controllers */,
+				929F57242092B82700E5313A /* Containers */,
 				929F57232092B81D00E5313A /* Data Controllers */,
 				92AF4D0B1E330790007E967D /* SelectTableViewController.swift */,
 			);
@@ -1178,12 +1182,13 @@
 			path = "Data Controllers";
 			sourceTree = "<group>";
 		};
-		929F57242092B82700E5313A /* Container Controllers */ = {
+		929F57242092B82700E5313A /* Containers */ = {
 			isa = PBXGroup;
 			children = (
 				929F57212092B80B00E5313A /* ContainerViewController.swift */,
+				92C8CE4721ADAA5100683558 /* MyTBAContainerViewController.swift */,
 			);
-			path = "Container Controllers";
+			path = Containers;
 			sourceTree = "<group>";
 		};
 		929F572D2092BBCB00E5313A /* Data Sources */ = {
@@ -1456,6 +1461,7 @@
 		92BB8B60214F165A0035AF28 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				92C8CE4921ADAE1F00683558 /* Base */,
 				929820CB2169667A0080C1C8 /* Events */,
 				92C1F2E12169AA5D00BD8445 /* Teams */,
 				92C1F2E22169AA6000BD8445 /* Districts */,
@@ -1488,6 +1494,22 @@
 				92BB8B61214F16710035AF28 /* SettingsViewControllerTests.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		92C8CE4921ADAE1F00683558 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				92C8CE4A21ADAE2400683558 /* Containers */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		92C8CE4A21ADAE2400683558 /* Containers */ = {
+			isa = PBXGroup;
+			children = (
+				92C8CE4B21ADAE4500683558 /* MyTBAContainerViewControllerTests.swift */,
+			);
+			path = Containers;
 			sourceTree = "<group>";
 		};
 		92D6483B20BE4CB8008F0DB3 /* tba-unit-tests */ = {
@@ -2234,6 +2256,7 @@
 				92A5E51421A1B7470025CC85 /* MyTBAFavorite.swift in Sources */,
 				92A5E51B21A1B7470025CC85 /* TBAKit.swift in Sources */,
 				92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */,
+				92C8CE4821ADAA5100683558 /* MyTBAContainerViewController.swift in Sources */,
 				92942DAB1E215700008E79CA /* TBA.xcdatamodeld in Sources */,
 				929F572C2092BB1C00E5313A /* Alertable.swift in Sources */,
 				92DF35FB217D439500B5246B /* Match.swift in Sources */,
@@ -2432,6 +2455,7 @@
 				9266A1C621AA0A3000545867 /* MyTBATestCase.swift in Sources */,
 				14B520F7218CA28B00F2EF4F /* EventStatusAllianceTests.swift in Sources */,
 				92C1F2E62169AB9F00BD8445 /* DistrictsContainerViewControllerTests.swift in Sources */,
+				92C8CE4C21ADAE4500683558 /* MyTBAContainerViewControllerTests.swift in Sources */,
 				92A5E56B21A1B7830025CC85 /* TBAKitTests.swift in Sources */,
 				92C1F2DE216994CF00BD8445 /* CoreDataTestCase.swift in Sources */,
 				92BB8B62214F16710035AF28 /* SettingsViewControllerTests.swift in Sources */,

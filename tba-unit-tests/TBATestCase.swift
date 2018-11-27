@@ -4,6 +4,7 @@ import XCTest
 
 class TBATestCase: CoreDataTestCase {
 
+    var myTBA: MockMyTBA!
     var tbaKit: MockTBAKit!
     var userDefaults: UserDefaults!
     var urlOpener: MockURLOpener!
@@ -13,6 +14,7 @@ class TBATestCase: CoreDataTestCase {
     override func setUp() {
         super.setUp()
 
+        myTBA = MockMyTBA()
         userDefaults = UserDefaults(suiteName: "TBATests")
         tbaKit = MockTBAKit(userDefaults: userDefaults)
         urlOpener = MockURLOpener()
