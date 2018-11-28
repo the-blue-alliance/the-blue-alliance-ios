@@ -41,7 +41,7 @@ class MatchViewControllerTests: TBATestCase {
 
     func test_title() {
         XCTAssertEqual(matchViewController.navigationTitle, "Quals 1")
-        XCTAssertEqual(matchViewController.navigationSubtitle, "2018ctsc_qm1")
+        XCTAssertEqual(matchViewController.navigationSubtitle, "@ 2018ctsc_qm1")
     }
 
     func test_title_event() {
@@ -50,7 +50,7 @@ class MatchViewControllerTests: TBATestCase {
         let vc = MatchViewController(match: match, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         XCTAssertEqual(vc.navigationTitle, "Quals 1")
-        XCTAssertEqual(vc.navigationSubtitle, "2018 Kettering University #1 District")
+        XCTAssertEqual(vc.navigationSubtitle, "@ 2018 Kettering University #1 District")
     }
 
     func test_showsInfo() {
