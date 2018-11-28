@@ -446,4 +446,17 @@ class MatchTestCase: CoreDataTestCase {
         XCTAssertEqual(Match.notificationTypes.count, 3)
     }
 
+    func test_year_event() {
+        let event = insertDistrictEvent()
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        match.event = event
+        XCTAssertEqual(match.year, 2018)
+    }
+
+    func test_year_key() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        match.key = "2015miket_qm1"
+        XCTAssertEqual(match.year, 2015)
+    }
+
 }

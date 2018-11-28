@@ -30,8 +30,8 @@ class TBATestCase: CoreDataTestCase {
         super.tearDown()
     }
 
-    func waitForAnimations() {
-        let ex = expectation(description: "Wait for animations")
+    func waitOneSecond() {
+        let ex = expectation(description: "Wait one second")
         ex.isInverted = true
         wait(for: [ex], timeout: 1.0)
     }

@@ -11,7 +11,7 @@ extension Team: Locatable, Managed {
      Returns an uppercased team number by removing the `frc` prefix on the key
      */
     static func trimFRCPrefix(_ key: String) -> String {
-        return key.prefixTrim("frc").uppercased()
+        return key.trimPrefix("frc").uppercased()
     }
 
     /**

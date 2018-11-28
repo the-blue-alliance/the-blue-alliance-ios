@@ -173,6 +173,26 @@ class CoreDataTestCase: FBSnapshotTestCase {
         return Team.insert(team, in: persistentContainer.viewContext)
     }
 
+    func insertMatch(eventKey: String = "2018ctsc") -> Match {
+        let match = TBAMatch(key: "\(eventKey)_qm1",
+                             compLevel: "qm",
+                             setNumber: 1,
+                             matchNumber: 1,
+                             alliances: [
+                                "red": TBAMatchAlliance(score: 396, teams: ["frc1", "frc2", "frc3"]),
+                                "blue": TBAMatchAlliance(score: 256, teams: ["frc4", "frc5", "frc6"]),
+                             ],
+                             winningAlliance: "red",
+                             eventKey: eventKey,
+                             time: 1520109780,
+                             actualTime: 1520090745,
+                             predictedTime: 1520109780,
+                             postResultTime: 1520090929,
+                             breakdown: nil,
+                             videos: [TBAMatchVideo(key: "KXELQZI46FA", type: "youtube")])
+        return Match.insert(match, in: persistentContainer.viewContext)
+    }
+
     func insertDistrict() -> District {
         let district = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
         return District.insert(district, in: persistentContainer.viewContext)

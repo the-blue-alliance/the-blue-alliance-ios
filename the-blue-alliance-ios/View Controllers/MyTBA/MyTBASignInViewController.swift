@@ -10,19 +10,15 @@ class MyTBASignInViewController: UIViewController {
 
     init() {
         super.init(nibName: String(describing: type(of: self)), bundle: Bundle.main)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
 
         styleInterface()
     }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
+    // MARK: - View Lifecycle
 
     override func viewWillAppear(_ animated: Bool) {
         hideOrShowImageViews(for: traitCollection)
@@ -51,7 +47,7 @@ class MyTBASignInViewController: UIViewController {
 
     // MARK: - IBActions
 
-    private func signIn() {
+    @IBAction private func signIn() {
         GIDSignIn.sharedInstance().signIn()
     }
 

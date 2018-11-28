@@ -1,6 +1,7 @@
 import CoreData
 import Crashlytics
 import FirebaseAuth
+import FirebaseRemoteConfig
 import FirebaseMessaging
 import GoogleSignIn
 import UIKit
@@ -8,19 +9,27 @@ import UserNotifications
 
 class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
-    private let signInViewController: MyTBASignInViewController
-    private let favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>
-    private let subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>
+    private let myTBA: MyTBA
+    private let remoteConfig: RemoteConfig
+    private let urlOpener: URLOpener
 
-    @IBOutlet internal var signInView: UIView!
-    @IBOutlet internal var signOutBarButtonItem: UIBarButtonItem!
+    private(set) var signInViewController: MyTBASignInViewController = MyTBASignInViewController()
+    private(set) var favoritesViewController: MyTBATableViewController<Favorite, MyTBAFavorite>
+    private(set) var subscriptionsViewController: MyTBATableViewController<Subscription, MyTBASubscription>
+
+    private var signInView: UIView! {
+        return signInViewController.view
+    }
+    private lazy var signOutBarButtonItem: UIBarButtonItem = {
+         return UIBarButtonItem(title: "Sign Out", style: .plain, target: self, action: #selector(logoutTapped))
+    }()
     private var signOutActivityIndicatorBarButtonItem: UIBarButtonItem = {
         let activityIndicatorView = UIActivityIndicatorView(style: .white)
         activityIndicatorView.startAnimating()
         return UIBarButtonItem(customView: activityIndicatorView)
     }()
 
-    private var isLoggingOut: Bool = false {
+    var isLoggingOut: Bool = false {
         didSet {
             DispatchQueue.main.async {
                 self.updateInterface()
@@ -28,20 +37,33 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         }
     }
     private var isLoggedIn: Bool {
-        return MyTBA.shared.isAuthenticated
+        return myTBA.isAuthenticated
     }
 
-    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        signInViewController = MyTBASignInViewController()
+    init(myTBA: MyTBA, remoteConfig: RemoteConfig, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.myTBA = myTBA
+        self.remoteConfig = remoteConfig
+        self.urlOpener = urlOpener
 
-        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(persistentContainer: persistentContainer, myTBA: MyTBA.shared, tbaKit: tbaKit, userDefaults: userDefaults)
-        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(persistentContainer: persistentContainer, myTBA: MyTBA.shared, tbaKit: tbaKit, userDefaults: userDefaults)
+        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: MyTBA.shared, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(myTBA: MyTBA.shared, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [favoritesViewController, subscriptionsViewController],
                    segmentedControlTitles: ["Favorites", "Subscriptions"],
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
+
+        title = "MyTBA"
+        tabBarItem.image = UIImage(named: "ic_star")
+
+        styleInterface()
+
+        favoritesViewController.delegate = self
+        subscriptionsViewController.delegate = self
+
+        GIDSignIn.sharedInstance().uiDelegate = self
+        myTBA.authenticationProvider.add(observer: self)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -56,32 +78,27 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         // TODO: Fix the white status bar/white UINavigationController during sign in
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/180
         // modalPresentationCapturesStatusBarAppearance = true
-
-        GIDSignIn.sharedInstance().uiDelegate = self
-        MyTBA.shared.authenticationProvider.add(observer: self)
-
-        styleInterface()
     }
 
     // MARK: - Private Methods
 
     private func styleInterface() {
-        signInView.isHidden = isLoggedIn
+        view.addSubview(signInView)
+        signInView.autoPinEdgesToSuperviewEdges()
 
         updateInterface()
     }
 
     private func updateInterface() {
-        // Make sure observers don't setup our interface before our VC is initialized
-        if view == nil {
-            return
-        }
-
         if isLoggingOut {
             navigationItem.rightBarButtonItem = signOutActivityIndicatorBarButtonItem
         } else {
             navigationItem.rightBarButtonItem = isLoggedIn ? signOutBarButtonItem : nil
         }
+
+        // Disable interaction with our view while logging out
+        view.isUserInteractionEnabled = !isLoggingOut
+
         signInView.isHidden = isLoggedIn
     }
 
@@ -91,12 +108,13 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
             return
         }
 
-        let signOutOperation = MyTBASignOutOperation(myTBA: MyTBA.shared, pushToken: fcmToken)
+        let signOutOperation = MyTBASignOutOperation(myTBA: myTBA, pushToken: fcmToken)
         signOutOperation.completionBlock = { [unowned signOutOperation] in
             self.isLoggingOut = false
 
             if let error = signOutOperation.completionError {
                 Crashlytics.sharedInstance().recordError(error)
+                self.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
             } else {
                 self.logoutSuccessful()
             }
@@ -118,7 +136,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         removeMyTBAData()
     }
 
-    private func removeMyTBAData() {
+    func removeMyTBAData() {
         persistentContainer.viewContext.deleteAllObjectsForEntity(entity: Favorite.entity())
         persistentContainer.viewContext.deleteAllObjectsForEntity(entity: Subscription.entity())
 
@@ -126,22 +144,9 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         persistentContainer.viewContext.performSaveOrRollback()
     }
 
-    private func pushMyTBAObject(_ myTBAObject: MyTBAEntity) {
-        /*
-        switch myTBAObject.modelType {
-        case .event:
-            performSegue(withIdentifier: EventSegue, sender: myTBAObject.modelKey!)
-        case .team:
-            performSegue(withIdentifier: TeamSegue, sender: myTBAObject.modelKey!)
-        case .match:
-            performSegue(withIdentifier: MatchSegue, sender: myTBAObject.modelKey!)
-        }
-        */
-    }
-
     // MARK: - Interface Methods
 
-    @IBAction func logoutTapped() {
+    @objc func logoutTapped() {
         let signOutAlertController = UIAlertController(title: "Log Out?", message: "Are you sure you want to sign out of myTBA?", preferredStyle: .alert)
         signOutAlertController.addAction(UIAlertAction(title: "Log Out", style: .default, handler: { (_) in
             self.logout()
@@ -150,57 +155,59 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         present(signOutAlertController, animated: true, completion: nil)
     }
 
-    // MARK: - Navigation
+}
 
-    /*
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let key = sender as? String ?? ""
-        let predicate = NSPredicate(format: "key == %@", key)
+extension MyTBAViewController: MyTBATableViewControllerDelegate {
 
-        if segue.identifier == EventSegue {
-            let eventViewController = segue.destination as! EventViewController
-            if let event = Event.findOrFetch(in: persistentContainer.viewContext, matching: predicate) {
-                eventViewController.event = event
+    func myTBAObjectSelected(_ myTBAObject: MyTBAEntity) {
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/177
+        var viewController: UIViewController?
+
+        switch myTBAObject.modelType {
+        case .event:
+            if let event = myTBAObject.tbaObject as? Event {
+                viewController = EventViewController(event: event, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+            } else {
+                // TODO: Push using just key
             }
-            eventViewController.persistentContainer = persistentContainer
-            // TODO: Handle passing a key
-            // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/177
-        } else if segue.identifier == TeamSegue {
-            let teamViewController = segue.destination as! TeamViewController
-            if let team = Team.findOrFetch(in: persistentContainer.viewContext, matching: predicate) {
-                teamViewController.team = team
+        case .team:
+            if let team = myTBAObject.tbaObject as? Team {
+                viewController = TeamViewController(team: team, remoteConfig: remoteConfig, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+            } else {
+                // TODO: Push using just key
             }
-            teamViewController.persistentContainer = persistentContainer
-            // TODO: Handle passing a key
-        } else if segue.identifier == MatchSegue {
-            let matchViewController = segue.destination as! MatchViewController
-            if let match = Match.findOrFetch(in: persistentContainer.viewContext, matching: predicate) {
-                matchViewController.match = match
+        case .match:
+            if let match = myTBAObject.tbaObject as? Match {
+                viewController = MatchViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+            } else {
+                // TODO: Push using just key
             }
-            matchViewController.persistentContainer = persistentContainer
-            // TODO: Handle passing a key
         }
+
+        guard let vc = viewController else {
+            return
+        }
+        navigationController?.pushViewController(vc, animated: true)
     }
-    */
 
 }
 
 extension MyTBAViewController: MyTBAAuthenticationObservable {
 
-    func authenticated() {
+    @objc func authenticated() {
         if let viewController = currentViewController() {
             viewController.refresh()
         }
         updateInterfaceMain()
     }
 
-    func unauthenticated() {
+    @objc func unauthenticated() {
         updateInterfaceMain()
     }
 
     func updateInterfaceMain() {
-        DispatchQueue.main.async { [unowned self] in
-            self.updateInterface()
+        DispatchQueue.main.async { [weak self] in
+            self?.updateInterface()
         }
     }
 

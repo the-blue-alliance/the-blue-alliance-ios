@@ -22,6 +22,25 @@ extension MyTBAEntity: Managed {
         }
     }
 
+    /**
+     Get the corresponding object for this MyTBA Entity, if it exists locally - a Event, Team, or Match
+     */
+    var tbaObject: Managed? {
+        guard let managedObjectContext = managedObjectContext else {
+            return nil
+        }
+
+        let predicate = NSPredicate(format: "key == %@", modelKey!)
+        switch modelType {
+        case .event:
+            return Event.findOrFetch(in: managedObjectContext, matching: predicate)
+        case .team:
+            return Team.findOrFetch(in: managedObjectContext, matching: predicate)
+        case .match:
+            return Match.findOrFetch(in: managedObjectContext, matching: predicate)
+        }
+    }
+
     var isOrphaned: Bool {
         return false
     }

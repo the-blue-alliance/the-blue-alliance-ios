@@ -78,7 +78,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         segmentedControl.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16.0)
         return segmentedControlView
     }()
-    private let segmentedControl: UISegmentedControl
+    private(set) var segmentedControl: UISegmentedControl
 
     private let containerView: UIView = UIView()
     private let viewControllers: [ContainableViewController]

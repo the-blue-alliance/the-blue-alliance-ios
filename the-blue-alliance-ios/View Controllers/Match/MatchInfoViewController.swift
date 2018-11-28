@@ -84,9 +84,9 @@ class MatchInfoViewController: TBAViewController, Observable {
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        contextObserver.observeObject(object: match, state: .updated) { [unowned self] (_, _) in
+        contextObserver.observeObject(object: match, state: .updated) { [weak self] (_, _) in
             DispatchQueue.main.async {
-                self.styleInterface()
+                self?.styleInterface()
             }
         }
     }

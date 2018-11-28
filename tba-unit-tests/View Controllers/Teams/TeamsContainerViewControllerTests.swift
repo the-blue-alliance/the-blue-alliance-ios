@@ -22,9 +22,9 @@ class TeamsContainerViewControllerTests: TBATestCase {
     }
 
     override func tearDown() {
-        teamsContainerViewController = nil
-        navigationController = nil
         viewControllerTester = nil
+        navigationController = nil
+        teamsContainerViewController = nil
 
         super.tearDown()
     }

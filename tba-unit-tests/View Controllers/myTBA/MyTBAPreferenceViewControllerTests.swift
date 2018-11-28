@@ -46,7 +46,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
 
         // Kickoff a Save
         myTBAPreferencesViewController.save()
-        waitForAnimations()
+        waitOneSecond()
         verifyLayer(viewControllerTester.window.layer, identifier: "saving")
     }
 
