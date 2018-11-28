@@ -8,11 +8,9 @@
 	<integer>-1</integer>
 	<key>ios_latest_app_version</key>
 	<integer>-1</integer>
-	<key>mytba_enabled</key>
-	<string>0</string>
 	<key>app_store_id</key>
 	<string>abcd123</string>
 	<key>current_season</key>
-	<integer>2018</integer>
+	<real>2019</real>
 </dict>
 </plist>

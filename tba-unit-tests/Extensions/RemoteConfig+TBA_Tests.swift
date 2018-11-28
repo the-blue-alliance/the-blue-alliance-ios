@@ -9,7 +9,6 @@ class RemoteConfigTBATestCase: XCTestCase {
         "ios_latest_app_version": NSNumber(value: -1),
         "ios_min_app_version": NSNumber(value: -1),
         "max_season": NSNumber(value: 2015),
-        "mytba_enabled": NSNumber(value: 1),
         "app_store_id": NSString(string: "tba_testing_id")
     ]
 
@@ -40,10 +39,6 @@ class RemoteConfigTBATestCase: XCTestCase {
 
     func test_maxSeason() {
         XCTAssertEqual(remoteConfig.maxSeason, 2015)
-    }
-
-    func test_myTBAEnabled() {
-        XCTAssert(remoteConfig.myTBAEnabled)
     }
 
     func test_appStoreID() {
