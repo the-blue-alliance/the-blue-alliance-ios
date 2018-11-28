@@ -28,9 +28,9 @@ class DistrictViewControllerTests: TBATestCase {
     }
 
     override func tearDown() {
-        districtViewController = nil
-        navigationController = nil
         viewControllerTester = nil
+        navigationController = nil
+        districtViewController = nil
 
         super.tearDown()
     }

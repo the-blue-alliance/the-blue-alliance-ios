@@ -80,8 +80,6 @@ extension Refreshable {
     }
 
     func shouldRefresh() -> Bool {
-        let hasDataBeenRefreshed = lastRefresh != nil
-
         var isDataStale = false
         if let lastRefresh = lastRefresh, let automaticRefreshInterval = automaticRefreshInterval {
             let now = Date()
@@ -106,11 +104,15 @@ extension Refreshable {
             }
         }
 
-        return (!hasDataBeenRefreshed || isDataStale || isDataSourceEmpty) && !isRefreshing
+        return (!hasSuccessfullyRefreshed || isDataStale || isDataSourceEmpty) && !isRefreshing
     }
 
     func markRefreshSuccessful(_ lastRefresh: Date = Date()) {
         self.lastRefresh = lastRefresh
+    }
+
+    var hasSuccessfullyRefreshed: Bool {
+        return lastRefresh != nil
     }
 
     // TODO: Add a method to add an observer on a single core data object for changes

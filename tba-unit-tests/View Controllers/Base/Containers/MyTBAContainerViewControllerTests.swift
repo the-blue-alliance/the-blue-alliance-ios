@@ -61,7 +61,7 @@ class MyTBAContainerViewControllerTests: TBATestCase {
         verifyLayer(navigationController.navigationBar.layer, identifier: "unauthenticated")
 
         myTBA.authToken = "abcd123"
-        waitForAnimations()
+        waitOneSecond()
 
         verifyLayer(navigationController.navigationBar.layer, identifier: "authenticated")
     }

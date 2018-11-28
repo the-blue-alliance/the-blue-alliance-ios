@@ -10,7 +10,7 @@ class MyTBATableViewControllerTests: TBATestCase {
     override func setUp() {
         super.setUp()
 
-        myTBATableViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(persistentContainer: persistentContainer, myTBA: myTBA, tbaKit: tbaKit, userDefaults: userDefaults)
+        myTBATableViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         viewControllerTester = TBAViewControllerTester(withViewController: myTBATableViewController)
     }
@@ -24,24 +24,31 @@ class MyTBATableViewControllerTests: TBATestCase {
 
     func test_snapshot() {
         myTBATableViewController.tableView.reloadData()
-        waitForAnimations()
+        waitOneSecond()
         verifyLayer(viewControllerTester.window.layer, identifier: "no_data")
 
         Favorite.insert([MyTBAFavorite(modelKey: "2018miket", modelType: .event), MyTBAFavorite(modelKey: "2018ctsc_qm1", modelType: .match), MyTBAFavorite(modelKey: "frc7332", modelType: .team)], in: persistentContainer.viewContext)
-        try! persistentContainer.viewContext.save()
-        waitForAnimations()
+        myTBATableViewController.fetchMatch("2018ctsc_qm1")
+        waitOneSecond()
 
         verifyLayer(viewControllerTester.window.layer, identifier: "partial_data")
 
         _ = insertTeam()
         _ = insertDistrictEvent()
+        _ = insertMatch()
         myTBATableViewController.tableView.reloadData()
 
         verifyLayer(viewControllerTester.window.layer, identifier: "data")
     }
 
+    func test_refersh_unauthenticated() {
+        myTBATableViewController.refresh()
+        XCTAssertEqual(myTBATableViewController.requests.count, 0)
+    }
+
     func test_refresh() {
-        let mockMyTBATableViewController = MockMyTBATableViewController<Favorite, MyTBAFavorite>(persistentContainer: persistentContainer, myTBA: myTBA, tbaKit: tbaKit, userDefaults: userDefaults)
+        myTBA.authToken = "abcd123"
+        let mockMyTBATableViewController = MockMyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         let fetchEventExpectation = expectation(description: "Fetch event called")
         mockMyTBATableViewController.fetchEventExpectation = fetchEventExpectation
@@ -63,6 +70,22 @@ class MyTBATableViewControllerTests: TBATestCase {
 
         wait(for: [fetchEventExpectation, fetchTeamExpectation, fetchMatchExpectation], timeout: 1.0)
         XCTAssert(mockMyTBATableViewController.requests.isEmpty)
+
+        XCTAssert(mockMyTBATableViewController.hasSuccessfullyRefreshed)
+    }
+
+    func test_select() {
+        Favorite.insert([MyTBAFavorite(modelKey: "2018miket", modelType: .event)], in: persistentContainer.viewContext)
+        waitOneSecond() // Wait for our FRC to refetch
+
+        let ex = expectation(description: "myTBAObjectSelected called")
+
+        let mockDelegate = MockMyTBATableViewControllerDelegate()
+        mockDelegate.myTBAObjectSelectedExpectation = ex
+        myTBATableViewController.delegate = mockDelegate
+
+        myTBATableViewController.tableView(myTBATableViewController.tableView, didSelectRowAt: IndexPath(item: 0, section: 0))
+        wait(for: [ex], timeout: 1.0)
     }
 
     func test_fetchEvent() {
@@ -131,6 +154,49 @@ class MyTBATableViewControllerTests: TBATestCase {
         XCTAssert(myTBATableViewController.requests.isEmpty)
     }
 
+    func test_refreshKey() {
+        let favorites = MockMyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        XCTAssertEqual(favorites.refreshKey, "favorites")
+
+        let subscriptions = MockMyTBATableViewController<Subscription, MyTBASubscription>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        XCTAssertEqual(subscriptions.refreshKey, "subscriptions")
+    }
+
+    func test_automaticRefreshInterval() {
+        XCTAssertEqual(myTBATableViewController.automaticRefreshInterval?.day, 1)
+    }
+
+    func test_automaticRefreshEndDate() {
+        XCTAssertNil(myTBATableViewController.automaticRefreshEndDate)
+    }
+
+    func test_isDataSourceEmpty() {
+        // No objects, MyTBA not auth'd
+        XCTAssertFalse(myTBATableViewController.isDataSourceEmpty)
+
+        // MyTBA Auth'd, no objects
+        myTBA.authToken = "abcd123"
+        XCTAssert(myTBATableViewController.isDataSourceEmpty)
+
+        // MyTBA not auth'd, with objects
+        myTBA.authToken = nil
+        Favorite.insert([MyTBAFavorite(modelKey: "2018miket", modelType: .event)], in: persistentContainer.viewContext)
+        waitOneSecond() // Wait for our FRC to refetch
+        XCTAssertFalse(myTBATableViewController.isDataSourceEmpty)
+
+        // MyTBA auth'd, with objects
+        myTBA.authToken = "abcd123"
+        XCTAssertFalse(myTBATableViewController.isDataSourceEmpty)
+    }
+
+    func test_noDataText() {
+        let favorites = MockMyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        XCTAssertEqual(favorites.noDataText, "No myTBA favorites")
+
+        let subscriptions = MockMyTBATableViewController<Subscription, MyTBASubscription>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        XCTAssertEqual(subscriptions.noDataText, "No myTBA subscriptions")
+    }
+
 }
 
 private class MockMyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: MyTBATableViewController<T, J> {
@@ -152,6 +218,16 @@ private class MockMyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyT
     override func fetchMatch(_ key: String) -> URLSessionDataTask {
         fetchMatchExpectation?.fulfill()
         return super.fetchMatch(key)
+    }
+
+}
+
+private class MockMyTBATableViewControllerDelegate: NSObject, MyTBATableViewControllerDelegate {
+
+    var myTBAObjectSelectedExpectation: XCTestExpectation?
+
+    func myTBAObjectSelected(_ myTBAObject: MyTBAEntity) {
+        myTBAObjectSelectedExpectation?.fulfill()
     }
 
 }

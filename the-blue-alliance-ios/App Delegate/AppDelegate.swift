@@ -41,7 +41,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                             persistentContainer: persistentContainer,
                                                             tbaKit: tbaKit,
                                                             userDefaults: userDefaults)
-        let myTBAViewController = MyTBAViewController(persistentContainer: persistentContainer,
+        let myTBAViewController = MyTBAViewController(myTBA: MyTBA.shared,
+                                                      remoteConfig: remoteConfigService.remoteConfig,
+                                                      urlOpener: urlOpener,
+                                                      persistentContainer: persistentContainer,
                                                       tbaKit: tbaKit,
                                                       userDefaults: userDefaults)
         let rootViewControllers: [UIViewController] = [eventsViewController, teamsViewController, districtsViewController, myTBAViewController, settingsViewController]

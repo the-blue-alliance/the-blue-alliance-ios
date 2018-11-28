@@ -21,6 +21,8 @@ class SettingsViewControllerTests: TBATestCase {
         super.tearDown()
     }
 
+    // TODO: Snapshot tests
+
     func test_openTBAWebsite() {
         let expectation = XCTestExpectation(description: "open called")
         guard let url = URL(string: InfoURL.website.rawValue) else {

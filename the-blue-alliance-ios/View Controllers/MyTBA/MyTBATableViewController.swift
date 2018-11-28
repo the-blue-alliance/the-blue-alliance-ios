@@ -2,6 +2,10 @@ import Foundation
 import CoreData
 import UIKit
 
+protocol MyTBATableViewControllerDelegate: AnyObject {
+    func myTBAObjectSelected(_ myTBAObject: MyTBAEntity)
+}
+
 /**
  MyTBATableViewController implements it's on FRC/TableViewDataSource logic, since the existing abstraction
  won't work for this case, since we need to show one of three different types of cells (as opposed to a single
@@ -9,13 +13,14 @@ import UIKit
  */
 class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TBATableViewController, NSFetchedResultsControllerDelegate {
 
-    // let myTBAObjectSelected: ((T) -> ())
-    private(set) var backgroundFetchKeys: Set<String> = []
     let myTBA: MyTBA
+    weak var delegate: MyTBATableViewControllerDelegate?
+
+    private(set) var backgroundFetchKeys: Set<String> = []
 
     // MARK: - Init
 
-    init(persistentContainer: NSPersistentContainer, myTBA: MyTBA, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.myTBA = myTBA
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -66,10 +71,8 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         fetchedResultsController!.delegate = self
         try! fetchedResultsController!.performFetch()
 
-        DispatchQueue.main.async {
-            self.tableView.dataSource = self
-            self.tableView.reloadData()
-        }
+        tableView.dataSource = self
+        tableView.reloadData()
     }
 
     // MARK: Table View Data Source
@@ -84,24 +87,22 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
         let myTBACell = self.tableView(tableView, cellForRowAt: indexPath, for: obj)
 
-        let predicate = NSPredicate(format: "key == %@", obj.modelKey!)
-
         // TODO: All Cell subclasses need gear icons
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/179
 
         switch obj.modelType {
         case .event:
-            guard let event = Event.findOrFetch(in: persistentContainer.viewContext, matching: predicate) else {
+            guard let event = obj.tbaObject as? Event else {
                 return myTBACell
             }
             return self.tableView(tableView, cellForRowAt: indexPath, for: event)
         case .team:
-            guard let team = Team.findOrFetch(in: persistentContainer.viewContext, matching: predicate) else {
+            guard let team = obj.tbaObject as? Team else {
                 return myTBACell
             }
             return self.tableView(tableView, cellForRowAt: indexPath, for: team)
         case .match:
-            guard let match = Match.findOrFetch(in: persistentContainer.viewContext, matching: predicate) else {
+            guard let match = obj.tbaObject as? Match else {
                 return myTBACell
             }
             return self.tableView(tableView, cellForRowAt: indexPath, for: match)
@@ -185,13 +186,10 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let obj = fetchedResultsController?.object(at: indexPath)
-        /*
-        if let obj = obj {
-            myTBAObjectSelected(obj)
+        guard let myTBAObject = fetchedResultsController?.object(at: indexPath) else {
+            return
         }
-        */
-        tableView.deselectRow(at: indexPath, animated: true)
+        delegate?.myTBAObjectSelected(myTBAObject)
     }
 
     // MARK: NSFetchedResultsControllerDelegate
@@ -206,7 +204,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     func fetchEvent(_ key: String) -> URLSessionDataTask {
         var request: URLSessionDataTask?
         request = tbaKit.fetchEvent(key: key) { (event, error) in
-            // TODO: Check concurrency of tbaKit callbacks and stuff
             let context = self.persistentContainer.newBackgroundContext()
 
             context.performChangesAndWait({
@@ -297,6 +294,10 @@ extension MyTBATableViewController: Refreshable {
     }
 
     func refresh() {
+        if !myTBA.isAuthenticated {
+            return
+        }
+
         removeNoDataView()
 
         var request: URLSessionDataTask?
@@ -320,6 +321,7 @@ extension MyTBATableViewController: Refreshable {
                 }
             })
 
+            self.markRefreshSuccessful()
             self.removeRequest(request: request!)
         }
         addRequest(request: request!)

@@ -11,13 +11,13 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
 
     private lazy var breakdownView: RCTRootView? = {
         // Match breakdowns only exist for 2015 and onward
-        if match.event!.year!.intValue < 2015 {
+        if match.year < 2015 {
             return nil
         }
         guard let breakdownData = dataForBreakdown() else {
             return nil
         }
-        let moduleName = "MatchBreakdown\(match.event!.year!.stringValue)"
+        let moduleName = "MatchBreakdown\(match.year)"
         let breakdownView = RCTRootView(bundleURL: sourceURL,
                                         moduleName: moduleName,
                                         initialProperties: breakdownData,
@@ -42,9 +42,9 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        contextObserver.observeObject(object: match, state: .updated) { [unowned self] (_, _) in
+        contextObserver.observeObject(object: match, state: .updated) { [weak self] (_, _) in
             DispatchQueue.main.async {
-                self.updateBreakdownView()
+                self?.updateBreakdownView()
             }
         }
     }

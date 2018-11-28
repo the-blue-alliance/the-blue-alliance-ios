@@ -13,6 +13,30 @@ class MyTBAEntityTestCase: CoreDataTestCase {
         XCTAssertEqual(entity.modelTypeRaw, 2)
     }
 
+    func test_tbaObject_event() {
+        let favorite = Favorite.insert(MyTBAFavorite(modelKey: "2018miket", modelType: .event), in: persistentContainer.viewContext)
+        XCTAssertNil(favorite.tbaObject)
+
+        _ = insertDistrictEvent()
+        XCTAssertNotNil(favorite.tbaObject)
+    }
+
+    func test_tbaObject_team() {
+        let favorite = Favorite.insert(MyTBAFavorite(modelKey: "frc7332", modelType: .team), in: persistentContainer.viewContext)
+        XCTAssertNil(favorite.tbaObject)
+
+        _ = insertTeam()
+        XCTAssertNotNil(favorite.tbaObject)
+    }
+
+    func test_tbaObject_match() {
+        let favorite = Favorite.insert(MyTBAFavorite(modelKey: "2018ctsc_qm1", modelType: .match), in: persistentContainer.viewContext)
+        XCTAssertNil(favorite.tbaObject)
+
+        _ = insertMatch()
+        XCTAssertNotNil(favorite.tbaObject)
+    }
+
     func test_isOrphaned() {
         let entity = MyTBAEntity.init(entity: MyTBAEntity.entity(), insertInto: persistentContainer.viewContext)
         XCTAssertFalse(entity.isOrphaned)

@@ -88,7 +88,7 @@ extension EventViewController: EventRankingsViewControllerDelegate {
 extension EventViewController: MatchesViewControllerDelegate {
 
     func matchSelected(_ match: Match) {
-        let matchViewController = MatchContainerViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let matchViewController = MatchViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(matchViewController, animated: true)
     }
 

@@ -22,9 +22,9 @@ class EventsContainerViewControllerTests: TBATestCase {
     }
 
     override func tearDown() {
-        eventsContainerViewController = nil
-        navigationController = nil
         viewControllerTester = nil
+        navigationController = nil
+        eventsContainerViewController = nil
 
         super.tearDown()
     }

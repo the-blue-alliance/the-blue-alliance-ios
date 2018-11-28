@@ -39,7 +39,7 @@ struct MatchViewModel {
         // If we can't figure out a piece of information, default to yes, the match is a regular match,
         // where someone wins, and someone loses
         let hasWinnersAndLosers: Bool = {
-            if match.event!.year!.intValue == 2015 && match.compLevel != .final {
+            if match.year == 2015 && match.compLevel != .final {
                 return false
             }
             return true

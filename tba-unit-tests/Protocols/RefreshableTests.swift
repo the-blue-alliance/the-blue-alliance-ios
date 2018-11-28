@@ -132,6 +132,12 @@ class RefreshableTests: TBATestCase {
         XCTAssertFalse(refreshable.shouldRefresh())
     }
 
+    func test_hasSuccessfullyRefreshed() {
+        XCTAssertFalse(refreshable.hasSuccessfullyRefreshed)
+        refreshable.markRefreshSuccessful()
+        XCTAssert(refreshable.hasSuccessfullyRefreshed)
+    }
+
     func test_clearSuccessfulRefreshes() {
         XCTAssert(refreshable.shouldRefresh())
         refreshable.markRefreshSuccessful()

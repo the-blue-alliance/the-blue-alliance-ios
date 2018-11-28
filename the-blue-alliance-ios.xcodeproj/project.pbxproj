@@ -227,7 +227,6 @@
 		92B076F120FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B076F020FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift */; };
 		92B076F320FF948D00F9B2D7 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */; };
 		92B0AA3B20CB837A0074FDF1 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0AA3A20CB837A0074FDF1 /* main.swift */; };
-		92B5561F215C459400C1D9A3 /* MyTBASignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B5561E215C459400C1D9A3 /* MyTBASignInViewController.xib */; };
 		92B55621215D37C900C1D9A3 /* YearSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55620215D37C900C1D9A3 /* YearSelectViewController.swift */; };
 		92B55625215D69DE00C1D9A3 /* WeekEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55624215D69DE00C1D9A3 /* WeekEventsViewController.swift */; };
 		92B5562A215FCB1300C1D9A3 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55629215FCB1300C1D9A3 /* Reusable.swift */; };
@@ -257,6 +256,9 @@
 		92C8CE4621ACB05900683558 /* SubscribableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4521ACB05900683558 /* SubscribableTests.swift */; };
 		92C8CE4821ADAA5100683558 /* MyTBAContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4721ADAA5100683558 /* MyTBAContainerViewController.swift */; };
 		92C8CE4C21ADAE4500683558 /* MyTBAContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4B21ADAE4500683558 /* MyTBAContainerViewControllerTests.swift */; };
+		92C8CE4E21ADCA8000683558 /* MyTBASignInViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4D21ADCA8000683558 /* MyTBASignInViewControllerTests.swift */; };
+		92C8CE5021ADCC5F00683558 /* MyTBASignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92C8CE4F21ADCC5F00683558 /* MyTBASignInViewController.xib */; };
+		92C8CE5221AE4F7900683558 /* MyTBAViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE5121AE4F7900683558 /* MyTBAViewControllerTests.swift */; };
 		92C9BD352096907E007FB9C8 /* Stateful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD342096907E007FB9C8 /* Stateful.swift */; };
 		92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
@@ -576,7 +578,6 @@
 		92B076F020FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignOutOperation_Tests.swift; sourceTree = "<group>"; };
 		92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppDelegate.swift; sourceTree = "<group>"; };
 		92B0AA3A20CB837A0074FDF1 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		92B5561E215C459400C1D9A3 /* MyTBASignInViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyTBASignInViewController.xib; sourceTree = "<group>"; };
 		92B55620215D37C900C1D9A3 /* YearSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearSelectViewController.swift; sourceTree = "<group>"; };
 		92B55624215D69DE00C1D9A3 /* WeekEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekEventsViewController.swift; sourceTree = "<group>"; };
 		92B55629215FCB1300C1D9A3 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
@@ -606,6 +607,9 @@
 		92C8CE4521ACB05900683558 /* SubscribableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribableTests.swift; sourceTree = "<group>"; };
 		92C8CE4721ADAA5100683558 /* MyTBAContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAContainerViewController.swift; sourceTree = "<group>"; };
 		92C8CE4B21ADAE4500683558 /* MyTBAContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAContainerViewControllerTests.swift; sourceTree = "<group>"; };
+		92C8CE4D21ADCA8000683558 /* MyTBASignInViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignInViewControllerTests.swift; sourceTree = "<group>"; };
+		92C8CE4F21ADCC5F00683558 /* MyTBASignInViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyTBASignInViewController.xib; sourceTree = "<group>"; };
+		92C8CE5121AE4F7900683558 /* MyTBAViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAViewControllerTests.swift; sourceTree = "<group>"; };
 		92C9BD342096907E007FB9C8 /* Stateful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stateful.swift; sourceTree = "<group>"; };
 		92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATableViewController.swift; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
@@ -1124,7 +1128,7 @@
 				92942DBA1E215B8D008E79CA /* MyTBAViewController.swift */,
 				92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */,
 				928018F32096431200693447 /* MyTBASignInViewController.swift */,
-				92B5561E215C459400C1D9A3 /* MyTBASignInViewController.xib */,
+				92C8CE4F21ADCC5F00683558 /* MyTBASignInViewController.xib */,
 				92C8CE3F21AC5D5C00683558 /* MyTBAPreferenceViewController.swift */,
 			);
 			path = MyTBA;
@@ -1747,6 +1751,8 @@
 		92FF112421A65491003BC5C4 /* myTBA */ = {
 			isa = PBXGroup;
 			children = (
+				92C8CE5121AE4F7900683558 /* MyTBAViewControllerTests.swift */,
+				92C8CE4D21ADCA8000683558 /* MyTBASignInViewControllerTests.swift */,
 				92FF112521A654B5003BC5C4 /* MyTBATableViewControllerTests.swift */,
 				92C8CE4121AC60D500683558 /* MyTBAPreferenceViewControllerTests.swift */,
 			);
@@ -1922,6 +1928,7 @@
 			files = (
 				924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */,
 				145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */,
+				92C8CE5021ADCC5F00683558 /* MyTBASignInViewController.xib in Resources */,
 				92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */,
 				304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */,
 				92942DA21E2154DA008E79CA /* LaunchScreen.storyboard in Resources */,
@@ -1936,7 +1943,6 @@
 				92D855D91EC695CE00572F27 /* TeamTableViewCell.xib in Resources */,
 				9287013E20CD72EC0077D6DA /* RemoteConfigDefaults.plist in Resources */,
 				92BB718920D216D50081F4E5 /* EmptyViewController.xib in Resources */,
-				92B5561F215C459400C1D9A3 /* MyTBASignInViewController.xib in Resources */,
 				92564C6D21644ACA0047917F /* Secrets.plist in Resources */,
 				925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */,
 				929DB38E2095640C00FB575F /* ReverseSubtitleTableViewCell.xib in Resources */,
@@ -2389,6 +2395,7 @@
 				928030E62197806A0099CB65 /* EventAllianceCellViewModelTests.swift in Sources */,
 				92A5E56921A1B7830025CC85 /* TBATeamTests.swift in Sources */,
 				92BB718420CE1E310081F4E5 /* Test.xcdatamodeld in Sources */,
+				92C8CE5221AE4F7900683558 /* MyTBAViewControllerTests.swift in Sources */,
 				927EAAC021A88AF10068FD96 /* MyTBARegisterTests.swift in Sources */,
 				923AEE99216703CB00EF50C8 /* MyTBATests.swift in Sources */,
 				92F38537217D31CE00A9AC02 /* AwardRecipientTests.swift in Sources */,
@@ -2450,6 +2457,7 @@
 				92FF10D021A25D86003BC5C4 /* TBAViewControllerTester.swift in Sources */,
 				92FF113421A70B16003BC5C4 /* CoreDataTestCaseTests.swift in Sources */,
 				928030E4219780540099CB65 /* EventAllianceTableViewCellTests.swift in Sources */,
+				92C8CE4E21ADCA8000683558 /* MyTBASignInViewControllerTests.swift in Sources */,
 				9236101F2178245C000CC5E9 /* TeamMediaTests.swift in Sources */,
 				92C1F2E42169AA7200BD8445 /* TeamsContainerViewControllerTests.swift in Sources */,
 				9266A1C621AA0A3000545867 /* MyTBATestCase.swift in Sources */,

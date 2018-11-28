@@ -67,6 +67,18 @@ public enum MatchCompLevel: String, CaseIterable {
 extension Match {
 
     /**
+     Returns the year the Match was played in. Will default to the Event's year.
+     If the Match doesn't have an Event, we'll attempt to pull the year off of the key.
+    */
+    var year: Int {
+        if let event = event, let year = event.year {
+            return year.intValue
+        }
+        let yearString = key!.prefix(4)
+        return Int(yearString)!
+    }
+
+    /**
      Returns the MatchCompLevel for the Match's compLevelString.
      */
     var compLevel: MatchCompLevel? {
