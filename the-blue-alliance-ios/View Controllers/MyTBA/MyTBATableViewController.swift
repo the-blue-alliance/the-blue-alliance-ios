@@ -200,6 +200,40 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     // MARK: - Fetch Methods
 
+    @objc func refresh() {
+        if !myTBA.isAuthenticated {
+            return
+        }
+
+        removeNoDataView()
+
+        var request: URLSessionDataTask?
+        request = J.fetch(myTBA)() { (models, error) in
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
+                if let models = models as? [T.RemoteType] {
+                    let myTBAObjects = T.insert(models, in: context) as! [T]
+                    // Kickoff fetch for myTBA objects that don't exist
+                    for myTBAObject in myTBAObjects {
+                        let key = myTBAObject.modelKey!
+                        switch myTBAObject.modelType {
+                        case .event:
+                            self.fetchEvent(key)
+                        case .team:
+                            self.fetchTeam(key)
+                        case .match:
+                            self.fetchMatch(key)
+                        }
+                    }
+                }
+            })
+
+            self.markRefreshSuccessful()
+            self.removeRequest(request: request!)
+        }
+        addRequest(request: request!)
+    }
+
     @discardableResult
     func fetchEvent(_ key: String) -> URLSessionDataTask {
         var request: URLSessionDataTask?
@@ -291,40 +325,6 @@ extension MyTBATableViewController: Refreshable {
             return true
         }
         return false
-    }
-
-    func refresh() {
-        if !myTBA.isAuthenticated {
-            return
-        }
-
-        removeNoDataView()
-
-        var request: URLSessionDataTask?
-        request = J.fetch(myTBA)() { (models, error) in
-            let context = self.persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                if let models = models as? [T.RemoteType] {
-                    let myTBAObjects = T.insert(models, in: context) as! [T]
-                    // Kickoff fetch for myTBA objects that don't exist
-                    for myTBAObject in myTBAObjects {
-                        let key = myTBAObject.modelKey!
-                        switch myTBAObject.modelType {
-                        case .event:
-                            self.fetchEvent(key)
-                        case .team:
-                            self.fetchTeam(key)
-                        case .match:
-                            self.fetchMatch(key)
-                        }
-                    }
-                }
-            })
-
-            self.markRefreshSuccessful()
-            self.removeRequest(request: request!)
-        }
-        addRequest(request: request!)
     }
 
 }
