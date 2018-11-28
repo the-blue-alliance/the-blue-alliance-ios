@@ -4,12 +4,17 @@ import FirebaseRemoteConfig
 import Photos
 import UIKit
 
-class TeamViewController: ContainerViewController, Observable {
+class TeamViewController: MyTBAContainerViewController, Observable {
 
     private(set) var team: Team
 
-    private let eventsViewController: TeamEventsViewController
-    private let mediaViewController: TeamMediaCollectionViewController
+    private(set) var infoViewController: TeamInfoViewController
+    private(set) var eventsViewController: TeamEventsViewController
+    private(set) var mediaViewController: TeamMediaCollectionViewController
+
+    override var subscribableModel: MyTBASubscribable {
+        return team
+    }
 
     private var year: Int? {
         didSet {
@@ -35,11 +40,11 @@ class TeamViewController: ContainerViewController, Observable {
 
     // MARK: Init
 
-    init(team: Team, remoteConfig: RemoteConfig, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(team: Team, remoteConfig: RemoteConfig, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.team = team
         self.year = TeamViewController.latestYear(remoteConfig: remoteConfig, years: team.yearsParticipated)
 
-        let infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         mediaViewController = TeamMediaCollectionViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
@@ -48,6 +53,7 @@ class TeamViewController: ContainerViewController, Observable {
             navigationTitle: "Team \(team.teamNumber!.stringValue)",
             navigationSubtitle: ContainerViewController.yearSubtitle(year),
             segmentedControlTitles: ["Info", "Events", "Media"],
+            myTBA: myTBA,
             persistentContainer: persistentContainer,
             tbaKit: tbaKit,
             userDefaults: userDefaults
@@ -189,7 +195,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

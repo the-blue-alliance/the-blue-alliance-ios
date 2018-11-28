@@ -26,7 +26,6 @@ extension MyTBAError: LocalizedError {
 
 class MyTBA {
 
-    public static let shared = MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString, deviceName: UIDevice.current.name)
     // This shouldn't be public, but we can't fake the auth stuff for testing because Firebase blows
     var authToken: String? {
         didSet {

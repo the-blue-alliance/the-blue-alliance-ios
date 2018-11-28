@@ -45,8 +45,8 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         self.remoteConfig = remoteConfig
         self.urlOpener = urlOpener
 
-        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: MyTBA.shared, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(myTBA: MyTBA.shared, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        subscriptionsViewController = MyTBATableViewController<Subscription, MyTBASubscription>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [favoritesViewController, subscriptionsViewController],
                    segmentedControlTitles: ["Favorites", "Subscriptions"],
@@ -166,19 +166,19 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
         switch myTBAObject.modelType {
         case .event:
             if let event = myTBAObject.tbaObject as? Event {
-                viewController = EventViewController(event: event, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                viewController = EventViewController(event: event, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
             } else {
                 // TODO: Push using just key
             }
         case .team:
             if let team = myTBAObject.tbaObject as? Team {
-                viewController = TeamViewController(team: team, remoteConfig: remoteConfig, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                viewController = TeamViewController(team: team, remoteConfig: remoteConfig, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
             } else {
                 // TODO: Push using just key
             }
         case .match:
             if let match = myTBAObject.tbaObject as? Match {
-                viewController = MatchViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                viewController = MatchViewController(match: match, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
             } else {
                 // TODO: Push using just key
             }

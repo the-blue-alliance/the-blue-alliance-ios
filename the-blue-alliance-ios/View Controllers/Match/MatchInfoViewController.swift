@@ -32,14 +32,14 @@ class MatchInfoViewController: TBAViewController, Observable {
         return UIStackView(arrangedSubviews: labels)
     }()
 
-    private let matchView: MatchView = {
-        let matchView = MatchView()
-        matchView.matchInfoStackView.isHidden = true
-        return matchView
+    private let matchSummaryView: MatchSummaryView = {
+        let matchSummaryView = MatchSummaryView()
+        matchSummaryView.matchInfoStackView.isHidden = true
+        return matchSummaryView
     }()
 
     private lazy var matchStackView: UIStackView = {
-        let matchStackView = UIStackView(arrangedSubviews: [infoStackView, matchView])
+        let matchStackView = UIStackView(arrangedSubviews: [infoStackView, matchSummaryView])
         matchStackView.axis = .vertical
         return matchStackView
     }()
@@ -109,11 +109,11 @@ class MatchInfoViewController: TBAViewController, Observable {
 
         infoStackView.autoMatch(.height, to: .height, of: matchStackView, withMultiplier: (1.0/3.0))
         // Match the 'Score' label with the size of the score
-        scoreTitleLabel.autoMatch(.width, to: .width, of: matchView.redScoreLabel)
+        scoreTitleLabel.autoMatch(.width, to: .width, of: matchSummaryView.redScoreLabel)
 
         scrollView.addSubview(timeLabel)
         for edge in [ALEdge.top, ALEdge.bottom, ALEdge.leading, ALEdge.trailing] {
-            timeLabel.autoPinEdge(edge, to: edge, of: matchView)
+            timeLabel.autoPinEdge(edge, to: edge, of: matchSummaryView)
         }
 
         scrollView.addSubview(videoStackView)
@@ -131,15 +131,15 @@ class MatchInfoViewController: TBAViewController, Observable {
         // Override our default background color to be white
         view.backgroundColor = .white
 
-        updateMatchView()
+        updateMatchSummaryView()
         updateMatchVideos()
     }
 
-    func updateMatchView() {
-        matchView.resetView()
+    func updateMatchSummaryView() {
+        matchSummaryView.resetView()
 
         let viewModel = MatchViewModel(match: match, teamKey: teamKey)
-        matchView.viewModel = viewModel
+        matchSummaryView.viewModel = viewModel
 
         if !viewModel.hasScores {
             teamsLabel.isHidden = true

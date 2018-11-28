@@ -1,0 +1,75 @@
+import XCTest
+@testable import The_Blue_Alliance
+
+class MatchViewControllerTests: TBATestCase {
+
+    var match: Match {
+        return matchViewController.match
+    }
+
+    var matchViewController: MatchViewController!
+    var navigationController: MockNavigationController!
+
+    var viewControllerTester: TBAViewControllerTester<UINavigationController>!
+
+    override func setUp() {
+        super.setUp()
+
+        let match = insertMatch()
+
+        matchViewController = MatchViewController(match: match, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        navigationController = MockNavigationController(rootViewController: matchViewController)
+
+        viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
+    }
+
+    override func tearDown() {
+        viewControllerTester = nil
+        navigationController = nil
+        matchViewController = nil
+
+        super.tearDown()
+    }
+
+    func test_snapshot() {
+        verifyLayer(viewControllerTester.window.layer)
+
+        // MyTBA authed
+        myTBA.authToken = "abcd123"
+        verifyLayer(viewControllerTester.window.layer, identifier: "mytba")
+    }
+
+    func test_title() {
+        XCTAssertEqual(matchViewController.navigationTitle, "Team 7332")
+        XCTAssertEqual(matchViewController.navigationSubtitle, "▾ ----")
+    }
+
+    func test_title_event() {
+        let event = insertDistrictEvent()
+        match.event = event
+
+        XCTAssertEqual(matchViewController.navigationTitle, "Team 7332")
+        XCTAssertEqual(matchViewController.navigationSubtitle, "▾ ----")
+    }
+
+    func test_showsInfo() {
+        XCTAssert(matchViewController.children.contains(where: { (viewController) -> Bool in
+            return viewController is MatchInfoViewController
+        }))
+    }
+
+    func test_showsBreakdown() {
+        XCTAssert(matchViewController.children.contains(where: { (viewController) -> Bool in
+            return viewController is MatchBreakdownViewController
+        }))
+    }
+
+    func test_doesNotShowBreakdown() {
+        let match = insertMatch(eventKey: "2014miket_qm1")
+        let vc = MatchViewController(match: match, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        XCTAssertFalse(vc.children.contains(where: { (viewController) -> Bool in
+            return viewController is MatchBreakdownViewController
+        }))
+    }
+
+}
