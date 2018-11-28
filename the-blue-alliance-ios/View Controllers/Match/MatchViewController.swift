@@ -2,15 +2,25 @@ import CoreData
 import Foundation
 import UIKit
 
-class MatchViewController: ContainerViewController {
+class MatchViewController: MyTBAContainerViewController {
+
+    private(set) var match: Match
+
+    private(set) var infoViewController: MatchInfoViewController
+    private(set) var breakdownViewController: MatchBreakdownViewController?
+
+    override var subscribableModel: MyTBASubscribable {
+        return match
+    }
 
     // MARK: Init
 
-    init(match: Match, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        let infoViewController = MatchInfoViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+    init(match: Match, teamKey: TeamKey? = nil, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.match = match
+
+        infoViewController = MatchInfoViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         // Only show match breakdown if year is 2015 or onward
-        var breakdownViewController: MatchBreakdownViewController?
         var titles: [String]  = ["Info"]
         if match.year >= 2015 {
             titles.append("Breakdown")
@@ -22,6 +32,7 @@ class MatchViewController: ContainerViewController {
             navigationTitle: "\(match.friendlyName)",
             navigationSubtitle: "@ \(match.event?.friendlyNameWithYear ?? match.key!)", // TODO: Use EventKey
             segmentedControlTitles: titles,
+            myTBA: myTBA,
             persistentContainer: persistentContainer,
             tbaKit: tbaKit,
             userDefaults: userDefaults

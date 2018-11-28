@@ -42,9 +42,9 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
 
         styleInterface()
 
-        contextObserver.observeObject(object: event, state: .updated) { [unowned self] (_, _) in
+        contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
             DispatchQueue.main.async {
-                self.updateEventStatsView()
+                self?.updateEventStatsView()
             }
         }
     }

@@ -232,8 +232,8 @@
 		92B5562A215FCB1300C1D9A3 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55629215FCB1300C1D9A3 /* Reusable.swift */; };
 		92B55631215FDA9000C1D9A3 /* BasicTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55630215FDA9000C1D9A3 /* BasicTableViewCell.swift */; };
 		92B55633215FDB5300C1D9A3 /* BasicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55632215FDB5300C1D9A3 /* BasicCollectionViewCell.swift */; };
-		92B5565E21601D9000C1D9A3 /* MatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B5565D21601D9000C1D9A3 /* MatchView.swift */; };
-		92B5566021601D9B00C1D9A3 /* MatchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B5565F21601D9B00C1D9A3 /* MatchView.xib */; };
+		92B5565E21601D9000C1D9A3 /* MatchSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B5565D21601D9000C1D9A3 /* MatchSummaryView.swift */; };
+		92B5566021601D9B00C1D9A3 /* MatchSummaryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B5565F21601D9B00C1D9A3 /* MatchSummaryView.xib */; };
 		92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */; };
 		92BB717C20CE116C0081F4E5 /* TBAOperation_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB717B20CE116C0081F4E5 /* TBAOperation_Tests.swift */; };
 		92BB717F20CE19F40081F4E5 /* PersistentContainerOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB717E20CE19F40081F4E5 /* PersistentContainerOperationTests.swift */; };
@@ -259,6 +259,9 @@
 		92C8CE4E21ADCA8000683558 /* MyTBASignInViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE4D21ADCA8000683558 /* MyTBASignInViewControllerTests.swift */; };
 		92C8CE5021ADCC5F00683558 /* MyTBASignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92C8CE4F21ADCC5F00683558 /* MyTBASignInViewController.xib */; };
 		92C8CE5221AE4F7900683558 /* MyTBAViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE5121AE4F7900683558 /* MyTBAViewControllerTests.swift */; };
+		92C8CE5421AEE64B00683558 /* EventViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE5321AEE64B00683558 /* EventViewControllerTests.swift */; };
+		92C8CE5621AEF1AE00683558 /* TeamViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE5521AEF1AE00683558 /* TeamViewControllerTests.swift */; };
+		92C8CE5921AEF4C600683558 /* MatchViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE5821AEF4C600683558 /* MatchViewControllerTests.swift */; };
 		92C9BD352096907E007FB9C8 /* Stateful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD342096907E007FB9C8 /* Stateful.swift */; };
 		92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
@@ -583,8 +586,8 @@
 		92B55629215FCB1300C1D9A3 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
 		92B55630215FDA9000C1D9A3 /* BasicTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTableViewCell.swift; sourceTree = "<group>"; };
 		92B55632215FDB5300C1D9A3 /* BasicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicCollectionViewCell.swift; sourceTree = "<group>"; };
-		92B5565D21601D9000C1D9A3 /* MatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchView.swift; sourceTree = "<group>"; };
-		92B5565F21601D9B00C1D9A3 /* MatchView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MatchView.xib; sourceTree = "<group>"; };
+		92B5565D21601D9000C1D9A3 /* MatchSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchSummaryView.swift; sourceTree = "<group>"; };
+		92B5565F21601D9B00C1D9A3 /* MatchSummaryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MatchSummaryView.xib; sourceTree = "<group>"; };
 		92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetupOperation.swift; sourceTree = "<group>"; };
 		92BB717B20CE116C0081F4E5 /* TBAOperation_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAOperation_Tests.swift; sourceTree = "<group>"; };
 		92BB717E20CE19F40081F4E5 /* PersistentContainerOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainerOperationTests.swift; sourceTree = "<group>"; };
@@ -610,6 +613,9 @@
 		92C8CE4D21ADCA8000683558 /* MyTBASignInViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignInViewControllerTests.swift; sourceTree = "<group>"; };
 		92C8CE4F21ADCC5F00683558 /* MyTBASignInViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyTBASignInViewController.xib; sourceTree = "<group>"; };
 		92C8CE5121AE4F7900683558 /* MyTBAViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAViewControllerTests.swift; sourceTree = "<group>"; };
+		92C8CE5321AEE64B00683558 /* EventViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewControllerTests.swift; sourceTree = "<group>"; };
+		92C8CE5521AEF1AE00683558 /* TeamViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamViewControllerTests.swift; sourceTree = "<group>"; };
+		92C8CE5821AEF4C600683558 /* MatchViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchViewControllerTests.swift; sourceTree = "<group>"; };
 		92C9BD342096907E007FB9C8 /* Stateful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stateful.swift; sourceTree = "<group>"; };
 		92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATableViewController.swift; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
@@ -735,8 +741,8 @@
 		145C57B31ED377DE004955B2 /* Match */ = {
 			isa = PBXGroup;
 			children = (
-				92B5565F21601D9B00C1D9A3 /* MatchView.xib */,
-				92B5565D21601D9000C1D9A3 /* MatchView.swift */,
+				92B5565F21601D9B00C1D9A3 /* MatchSummaryView.xib */,
+				92B5565D21601D9000C1D9A3 /* MatchSummaryView.swift */,
 				145C57B61ED378E2004955B2 /* MatchTableViewCell.xib */,
 				145C57B41ED377EB004955B2 /* MatchTableViewCell.swift */,
 				1479693F215E9A580075AF4E /* MatchViewModel.swift */,
@@ -1148,6 +1154,7 @@
 			isa = PBXGroup;
 			children = (
 				929820CC216966890080C1C8 /* EventsContainerViewControllerTests.swift */,
+				92C8CE5321AEE64B00683558 /* EventViewControllerTests.swift */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -1470,6 +1477,7 @@
 				92C1F2E12169AA5D00BD8445 /* Teams */,
 				92C1F2E22169AA6000BD8445 /* Districts */,
 				92FF112421A65491003BC5C4 /* myTBA */,
+				92C8CE5721AEF4B400683558 /* Match */,
 				92C72C2521528C6E00534AC3 /* Settings */,
 			);
 			path = "View Controllers";
@@ -1479,6 +1487,7 @@
 			isa = PBXGroup;
 			children = (
 				92C1F2E32169AA7200BD8445 /* TeamsContainerViewControllerTests.swift */,
+				92C8CE5521AEF1AE00683558 /* TeamViewControllerTests.swift */,
 			);
 			path = Teams;
 			sourceTree = "<group>";
@@ -1514,6 +1523,14 @@
 				92C8CE4B21ADAE4500683558 /* MyTBAContainerViewControllerTests.swift */,
 			);
 			path = Containers;
+			sourceTree = "<group>";
+		};
+		92C8CE5721AEF4B400683558 /* Match */ = {
+			isa = PBXGroup;
+			children = (
+				92C8CE5821AEF4C600683558 /* MatchViewControllerTests.swift */,
+			);
+			path = Match;
 			sourceTree = "<group>";
 		};
 		92D6483B20BE4CB8008F0DB3 /* tba-unit-tests */ = {
@@ -1937,7 +1954,7 @@
 				924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */,
 				9221C618209BFF8700477DE2 /* LoadingTableViewCell.xib in Resources */,
 				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
-				92B5566021601D9B00C1D9A3 /* MatchView.xib in Resources */,
+				92B5566021601D9B00C1D9A3 /* MatchSummaryView.xib in Resources */,
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
 				92858F2B208D783300811614 /* EventTeamStatTableViewCell.xib in Resources */,
 				92D855D91EC695CE00572F27 /* TeamTableViewCell.xib in Resources */,
@@ -2268,7 +2285,7 @@
 				92DF35FB217D439500B5246B /* Match.swift in Sources */,
 				92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */,
 				92A5E51021A1B7470025CC85 /* MyTBA.swift in Sources */,
-				92B5565E21601D9000C1D9A3 /* MatchView.swift in Sources */,
+				92B5565E21601D9000C1D9A3 /* MatchSummaryView.swift in Sources */,
 				92A5E52021A1B7470025CC85 /* TBAEvent.swift in Sources */,
 				92FF111821A61B37003BC5C4 /* DistrictBreakdownViewController.swift in Sources */,
 				14796946215EB0B90075AF4E /* RankingCellViewModel.swift in Sources */,
@@ -2396,6 +2413,7 @@
 				92A5E56921A1B7830025CC85 /* TBATeamTests.swift in Sources */,
 				92BB718420CE1E310081F4E5 /* Test.xcdatamodeld in Sources */,
 				92C8CE5221AE4F7900683558 /* MyTBAViewControllerTests.swift in Sources */,
+				92C8CE5621AEF1AE00683558 /* TeamViewControllerTests.swift in Sources */,
 				927EAAC021A88AF10068FD96 /* MyTBARegisterTests.swift in Sources */,
 				923AEE99216703CB00EF50C8 /* MyTBATests.swift in Sources */,
 				92F38537217D31CE00A9AC02 /* AwardRecipientTests.swift in Sources */,
@@ -2405,6 +2423,7 @@
 				1416D50C218E462500F1A4A3 /* EventInsightsTests.swift in Sources */,
 				922E9080217BD18400E81447 /* TeamKeyTests.swift in Sources */,
 				924459C320CB796B0007570D /* Date+TBA_Tests.swift in Sources */,
+				92C8CE5921AEF4C600683558 /* MatchViewControllerTests.swift in Sources */,
 				92C1F2E02169A3B800BD8445 /* MockNavigationController.swift in Sources */,
 				9236102521798655000CC5E9 /* MatchTests.swift in Sources */,
 				923AEE8C21658C5800EF50C8 /* Bundle+Version_Tests.swift in Sources */,
@@ -2467,6 +2486,7 @@
 				92A5E56B21A1B7830025CC85 /* TBAKitTests.swift in Sources */,
 				92C1F2DE216994CF00BD8445 /* CoreDataTestCase.swift in Sources */,
 				92BB8B62214F16710035AF28 /* SettingsViewControllerTests.swift in Sources */,
+				92C8CE5421AEE64B00683558 /* EventViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2546,7 +2566,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -2598,7 +2618,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -2618,7 +2638,7 @@
 				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2639,7 +2659,7 @@
 				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "the-blue-alliance-ios/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2663,7 +2683,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "tba-ui-tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba-ui-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2687,7 +2707,7 @@
 				CURRENT_PROJECT_VERSION = 10;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "tba-ui-tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba-ui-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2713,7 +2733,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "tba-unit-tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba-unit-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2738,7 +2758,7 @@
 				CURRENT_PROJECT_VERSION = 10;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "tba-unit-tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba-unit-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";

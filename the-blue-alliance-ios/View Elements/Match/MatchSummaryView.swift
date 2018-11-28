@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-class MatchView: UIView {
+class MatchSummaryView: UIView {
 
     var viewModel: MatchViewModel? {
         didSet {
@@ -14,7 +14,7 @@ class MatchView: UIView {
 
     // MARK: - IBOutlet
 
-    @IBOutlet private var matchView: UIView!
+    @IBOutlet private var summaryView: UIView!
 
     @IBOutlet weak var matchInfoStackView: UIStackView!
     @IBOutlet private weak var matchNumberLabel: UILabel!
@@ -53,10 +53,10 @@ class MatchView: UIView {
     }
 
     func initMatchView() {
-        Bundle.main.loadNibNamed(String(describing: MatchView.self), owner: self, options: nil)
-        matchView.frame = self.bounds
-        matchView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        self.addSubview(matchView)
+        Bundle.main.loadNibNamed(String(describing: MatchSummaryView.self), owner: self, options: nil)
+        summaryView.frame = self.bounds
+        summaryView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        self.addSubview(summaryView)
     }
 
     // MARK: - Public Methods

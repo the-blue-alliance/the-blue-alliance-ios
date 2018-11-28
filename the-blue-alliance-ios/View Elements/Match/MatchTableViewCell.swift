@@ -5,7 +5,7 @@ class MatchTableViewCell: UITableViewCell, Reusable {
 
     var viewModel: MatchViewModel? {
         didSet {
-            matchView.viewModel = viewModel
+            matchSummaryView.viewModel = viewModel
         }
     }
 
@@ -17,10 +17,10 @@ class MatchTableViewCell: UITableViewCell, Reusable {
 
     // MARK: - Interface Builder
 
-    @IBOutlet private var matchView: MatchView!
+    @IBOutlet private var matchSummaryView: MatchSummaryView!
 
     private var coloredViews: [UIView] {
-        return [matchView.redContainerView, matchView.redScoreLabel, matchView.blueContainerView, matchView.blueScoreLabel, matchView.timeLabel]
+        return [matchSummaryView.redContainerView, matchSummaryView.redScoreLabel, matchSummaryView.blueContainerView, matchSummaryView.blueScoreLabel, matchSummaryView.timeLabel]
     }
 
     // MARK: - View Methods
@@ -46,7 +46,7 @@ class MatchTableViewCell: UITableViewCell, Reusable {
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        matchView?.resetView()
+        matchSummaryView?.resetView()
     }
 
     // MARK: - Private Methods

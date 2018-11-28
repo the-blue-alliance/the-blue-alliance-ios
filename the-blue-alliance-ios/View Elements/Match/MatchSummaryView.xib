@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MatchView" customModule="The_Blue_Alliance" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MatchSummaryView" customModule="The_Blue_Alliance" customModuleProvider="target">
             <connections>
-                <outlet property="blueContainerView" destination="ujk-xM-7ok" id="80o-WH-u7F"/>
+                <outlet property="blueContainerView" destination="ujk-xM-7ok" id="OqU-mA-Q5D"/>
                 <outlet property="blueScoreLabel" destination="BIa-h9-yIu" id="MF0-LK-IzD"/>
                 <outlet property="blueStackView" destination="C6h-fR-VJi" id="vRF-WK-RJv"/>
                 <outlet property="matchInfoStackView" destination="Jmu-Uu-boJ" id="eyv-AC-M1I"/>
                 <outlet property="matchNumberLabel" destination="yPd-Gy-NoB" id="BhK-va-myy"/>
-                <outlet property="matchView" destination="iN0-l3-epB" id="UCL-kG-EFe"/>
                 <outlet property="playIconImageView" destination="mRu-M0-eMP" id="Eh2-vo-Ze0"/>
                 <outlet property="redContainerView" destination="mpK-JO-dy3" id="nrm-lE-A5y"/>
                 <outlet property="redScoreLabel" destination="r4c-pQ-IQY" id="4z0-go-u4f"/>
                 <outlet property="redStackView" destination="Ifh-sb-xaX" id="wM1-3g-BXu"/>
+                <outlet property="summaryView" destination="iN0-l3-epB" id="uEA-0I-L6n"/>
                 <outlet property="timeLabel" destination="D1e-rS-9fu" id="GLs-Sc-vvY"/>
             </connections>
         </placeholder>

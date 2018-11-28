@@ -6,12 +6,14 @@ class TeamAtEventViewController: ContainerViewController {
 
     private let teamKey: TeamKey
     private let event: Event
+    private let myTBA: MyTBA
 
     // MARK: - Init
 
-    init(teamKey: TeamKey, event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(teamKey: TeamKey, event: Event, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.teamKey = teamKey
         self.event = event
+        self.myTBA = myTBA
 
         let summaryViewController: TeamSummaryViewController = TeamSummaryViewController(teamKey: teamKey, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let matchesViewController: MatchesViewController = MatchesViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -40,12 +42,12 @@ class TeamAtEventViewController: ContainerViewController {
 extension TeamAtEventViewController: MatchesViewControllerDelegate, TeamSummaryViewControllerDelegate {
 
     func awardsSelected() {
-        let awardsViewController = EventAwardsContainerViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let awardsViewController = EventAwardsContainerViewController(event: event, teamKey: teamKey, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(awardsViewController, animated: true)
     }
 
     func matchSelected(_ match: Match) {
-        let matchViewController = MatchViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let matchViewController = MatchViewController(match: match, teamKey: teamKey, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(matchViewController, animated: true)
     }
 
@@ -59,7 +61,7 @@ extension TeamAtEventViewController: EventAwardsViewControllerDelegate {
             return
         }
 
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

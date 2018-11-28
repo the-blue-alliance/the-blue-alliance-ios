@@ -5,9 +5,6 @@ class EventAllianceTableViewCellTestCase: CoreDataTestCase {
 
     override func setUp() {
         super.setUp()
-
-        // Uncomment to record new screenshots for tests
-        // recordMode = true
     }
 
     func test_init() {
