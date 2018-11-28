@@ -84,6 +84,8 @@ class MatchInfoViewController: TBAViewController, Observable {
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
+        styleInterface()
+
         contextObserver.observeObject(object: match, state: .updated) { [weak self] (_, _) in
             DispatchQueue.main.async {
                 self?.styleInterface()
@@ -95,11 +97,9 @@ class MatchInfoViewController: TBAViewController, Observable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: View Lifecycle
+    // MARK: Interface Methods
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
+    func styleInterface() {
         scrollView.addSubview(matchStackView)
         matchStackView.autoMatch(.width, to: .width, of: scrollView, withOffset: -32)
         matchStackView.autoSetDimension(.height, toSize: 90)
@@ -122,12 +122,6 @@ class MatchInfoViewController: TBAViewController, Observable {
         videoStackView.autoPinEdge(.trailing, to: .trailing, of: matchStackView)
         videoStackView.autoPinEdge(toSuperviewEdge: .bottom)
 
-        styleInterface()
-    }
-
-    // MARK: Interface Methods
-
-    func styleInterface() {
         // Override our default background color to be white
         view.backgroundColor = .white
 

@@ -40,16 +40,17 @@ class MatchViewControllerTests: TBATestCase {
     }
 
     func test_title() {
-        XCTAssertEqual(matchViewController.navigationTitle, "Team 7332")
-        XCTAssertEqual(matchViewController.navigationSubtitle, "▾ ----")
+        XCTAssertEqual(matchViewController.navigationTitle, "Quals 1")
+        XCTAssertEqual(matchViewController.navigationSubtitle, "2018ctsc_qm1")
     }
 
     func test_title_event() {
         let event = insertDistrictEvent()
         match.event = event
+        let vc = MatchViewController(match: match, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        XCTAssertEqual(matchViewController.navigationTitle, "Team 7332")
-        XCTAssertEqual(matchViewController.navigationSubtitle, "▾ ----")
+        XCTAssertEqual(vc.navigationTitle, "Quals 1")
+        XCTAssertEqual(vc.navigationSubtitle, "2018 Kettering University #1 District")
     }
 
     func test_showsInfo() {

@@ -31,24 +31,7 @@ class MyTBAViewControllerTests: TBATestCase {
 
         myTBA.authToken = "abcd123"
         waitOneSecond()
-
-        // Favorites - no data
-        verifyLayer(viewControllerTester.window.layer, identifier: "favorites_no_data")
-
-        // Favorites
-        Favorite.insert([MyTBAFavorite(modelKey: "2018miket", modelType: .event), MyTBAFavorite(modelKey: "2018ctsc_qm1", modelType: .match), MyTBAFavorite(modelKey: "frc7332", modelType: .team)], in: persistentContainer.viewContext)
-        waitOneSecond()
-        verifyLayer(viewControllerTester.window.layer, identifier: "favorites_partial_data")
-
-        myTBAViewController.segmentedControl.selectedSegmentIndex = 1
-        myTBAViewController.segmentedControl.sendActions(for: UIControl.Event.valueChanged)
-        // Subscriptions
-        waitOneSecond()
-        verifyLayer(viewControllerTester.window.layer, identifier: "subscriptions_no_data")
-
-        Subscription.insert([MyTBASubscription(modelKey: "2018miket", modelType: .event, notifications: [.awards]), MyTBASubscription(modelKey: "2018ctsc_qm1", modelType: .match, notifications: [.matchScore]), MyTBASubscription(modelKey: "frc7332", modelType: .team, notifications: [.upcomingMatch])], in: persistentContainer.viewContext)
-        waitOneSecond()
-        verifyLayer(viewControllerTester.window.layer, identifier: "subscriptions_partial_data")
+        verifyLayer(viewControllerTester.window.layer, identifier: "signed_in")
 
         myTBAViewController.isLoggingOut = true
         waitOneSecond()
