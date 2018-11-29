@@ -84,8 +84,6 @@ class MatchInfoViewController: TBAViewController, Observable {
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        styleInterface()
-
         contextObserver.observeObject(object: match, state: .updated) { [weak self] (_, _) in
             DispatchQueue.main.async {
                 self?.updateInterface()
@@ -95,6 +93,14 @@ class MatchInfoViewController: TBAViewController, Observable {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        styleInterface()
     }
 
     // MARK: Interface Methods

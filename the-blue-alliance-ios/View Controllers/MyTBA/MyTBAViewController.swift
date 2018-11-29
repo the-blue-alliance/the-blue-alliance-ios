@@ -57,8 +57,6 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         title = "MyTBA"
         tabBarItem.image = UIImage(named: "ic_star")
 
-        styleInterface()
-
         favoritesViewController.delegate = self
         subscriptionsViewController.delegate = self
 
@@ -78,6 +76,8 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         // TODO: Fix the white status bar/white UINavigationController during sign in
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/180
         // modalPresentationCapturesStatusBarAppearance = true
+
+        styleInterface()
     }
 
     // MARK: - Private Methods

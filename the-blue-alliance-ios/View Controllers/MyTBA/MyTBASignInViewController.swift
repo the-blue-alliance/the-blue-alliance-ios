@@ -10,8 +10,6 @@ class MyTBASignInViewController: UIViewController {
 
     init() {
         super.init(nibName: String(describing: type(of: self)), bundle: Bundle.main)
-
-        styleInterface()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -19,6 +17,12 @@ class MyTBASignInViewController: UIViewController {
     }
 
     // MARK: - View Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        styleInterface()
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         hideOrShowImageViews(for: traitCollection)
