@@ -2,52 +2,6 @@ import Foundation
 import React
 import Firebase
 import ZIPFoundation
-import Crashlytics
-
-protocol ReactNative {
-    func showErrorView()
-}
-
-extension ReactNative {
-
-    var sourceURL: URL {
-        #if DEBUG
-        return debugSourceURL
-        #else
-        return prodSourceURL
-        #endif
-    }
-
-    fileprivate var debugSourceURL: URL {
-        let debugSourceURL = URL(string: "http://localhost:8081/index.ios.bundle")
-        if let debugSourceURL = debugSourceURL.reachableURL {
-            return debugSourceURL
-        }
-        return prodSourceURL
-    }
-
-    var prodSourceURL: URL {
-        let fallbackURL = Bundle.main.url(forResource: "main", withExtension: "jsbundle")
-        guard let documentsDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else {
-            return fallbackURL!
-        }
-
-        let bundleURL = documentsDirectory.appendingPathComponent(ReactNativeService.BundleName.downloaded.rawValue)
-        if let reachable = try? bundleURL.checkResourceIsReachable(), reachable == false {
-            return fallbackURL!
-        }
-
-        return bundleURL
-    }
-
-    func reactNativeError(_ sender: NSNotification) {
-        if let error = sender.userInfo?["error"] as? Error {
-            Crashlytics.sharedInstance().recordError(error)
-        }
-        showErrorView()
-    }
-
-}
 
 protocol ReactNativeMetadataObservable {
     func metadataUpdated()
@@ -96,7 +50,7 @@ class ReactNativeMetadata {
 
 class ReactNativeService {
 
-    fileprivate enum BundleName: String {
+    enum BundleName: String {
         case assets = "ios/assets"
         case downloaded = "ios/main.jsbundle"
         case compressed = "ios.zip"
@@ -183,7 +137,8 @@ class ReactNativeService {
 
     private func cleanupCompressedBundle() {
         // Check if we have an old compressed bundle to cleanup
-        if let reachable = try? compressedBundleURL.checkResourceIsReachable(), reachable == false {
+        let reachable = (try? compressedBundleURL.checkResourceIsReachable()) ?? false
+        if !reachable {
             return
         }
 
@@ -194,11 +149,12 @@ class ReactNativeService {
         }
 
         // If we don't have the uncompressed files we need, attempt to uncompress them
-        if safeToDelete == false {
+        // Otherwise, go ahead and clean up the compressed bundle we don't need anymore
+        if safeToDelete {
+            try? fileManager.removeItem(at: compressedBundleURL)
+        } else {
             unzipCompressedBundle()
         }
-
-        try? fileManager.removeItem(at: compressedBundleURL)
     }
 
     private func unzipCompressedBundle() {

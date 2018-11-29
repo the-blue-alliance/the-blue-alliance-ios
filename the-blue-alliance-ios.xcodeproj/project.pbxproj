@@ -76,6 +76,7 @@
 		925908B32184F86700D7BFCE /* NSSet+OnlyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908B22184F86700D7BFCE /* NSSet+OnlyTests.swift */; };
 		925908B52185076100D7BFCE /* EventAllianceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908B42185076100D7BFCE /* EventAllianceTests.swift */; };
 		925908B721863C3E00D7BFCE /* EventAllianceBackupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908B621863C3E00D7BFCE /* EventAllianceBackupTests.swift */; };
+		9266825221B058DA0077C75C /* TBAReactNativeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */; };
 		9266A1C621AA0A3000545867 /* MyTBATestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266A1C521AA0A3000545867 /* MyTBATestCase.swift */; };
 		9266A1CF21AA0E8500545867 /* register_401.json in Resources */ = {isa = PBXBuildFile; fileRef = 9266A1C921AA0E8500545867 /* register_401.json */; };
 		9266A1D021AA0E8500545867 /* favorites_list.json in Resources */ = {isa = PBXBuildFile; fileRef = 9266A1CA21AA0E8500545867 /* favorites_list.json */; };
@@ -428,6 +429,7 @@
 		925908B22184F86700D7BFCE /* NSSet+OnlyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSSet+OnlyTests.swift"; sourceTree = "<group>"; };
 		925908B42185076100D7BFCE /* EventAllianceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceTests.swift; sourceTree = "<group>"; };
 		925908B621863C3E00D7BFCE /* EventAllianceBackupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceBackupTests.swift; sourceTree = "<group>"; };
+		9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAReactNativeViewController.swift; sourceTree = "<group>"; };
 		9266A1C521AA0A3000545867 /* MyTBATestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATestCase.swift; sourceTree = "<group>"; };
 		9266A1C921AA0E8500545867 /* register_401.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = register_401.json; sourceTree = "<group>"; };
 		9266A1CA21AA0E8500545867 /* favorites_list.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = favorites_list.json; sourceTree = "<group>"; };
@@ -1192,6 +1194,7 @@
 			isa = PBXGroup;
 			children = (
 				929F571F2092B7D400E5313A /* TBAViewController.swift */,
+				9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */,
 				929F571B2092B77300E5313A /* TBATableViewController.swift */,
 				929F571D2092B7A400E5313A /* TBACollectionViewController.swift */,
 				929F572D2092BBCB00E5313A /* Data Sources */,
@@ -2393,6 +2396,7 @@
 				92A5E51621A1B7470025CC85 /* MyTBASubscribable.swift in Sources */,
 				92DF360F217D43EC00B5246B /* NSManagedObjectContext+Extension.swift in Sources */,
 				9223AC851EE7214A00F54F93 /* MediaCollectionViewCell.swift in Sources */,
+				9266825221B058DA0077C75C /* TBAReactNativeViewController.swift in Sources */,
 				92B076F320FF948D00F9B2D7 /* TestAppDelegate.swift in Sources */,
 				9255EB6D209AC9760006A745 /* RetryService.swift in Sources */,
 			);

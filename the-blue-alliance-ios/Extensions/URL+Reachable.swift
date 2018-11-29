@@ -8,7 +8,7 @@ extension Optional where Wrapped == URL {
         // Check URL type
         switch self {
         case .some(let url):
-            if url.isFileURL, let reachable = try? url.checkResourceIsReachable(), reachable == true {
+            if url.isFileURL, (try? url.checkResourceIsReachable()) ?? false {
                 return url
             } else if url.checkRemoteURLIsReachable() == true {
                 return url

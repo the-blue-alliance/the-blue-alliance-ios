@@ -3,30 +3,9 @@ import UIKit
 import React
 import CoreData
 
-class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
+class MatchBreakdownViewController: TBAReactNativeViewController, Observable {
 
     private let match: Match
-
-    // MARK: - React Native
-
-    private lazy var breakdownView: RCTRootView? = {
-        // Match breakdowns only exist for 2015 and onward
-        if match.year < 2015 {
-            return nil
-        }
-        guard let breakdownData = dataForBreakdown() else {
-            return nil
-        }
-        let moduleName = "MatchBreakdown\(match.year)"
-        let breakdownView = RCTRootView(bundleURL: sourceURL,
-                                        moduleName: moduleName,
-                                        initialProperties: breakdownData,
-                                        launchOptions: [:])
-        breakdownView!.delegate = self
-        breakdownView!.sizeFlexibility = .height
-        // TODO: loadingView
-        return breakdownView
-    }()
 
     // MARK: - Observable
 
@@ -40,11 +19,13 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
     init(match: Match, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.match = match
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(moduleName: "MatchBreakdown\(match.year)", persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+
+        delegate = self
 
         contextObserver.observeObject(object: match, state: .updated) { [weak self] (_, _) in
             DispatchQueue.main.async {
-                self?.updateBreakdownView()
+                self?.reloadData()
             }
         }
     }
@@ -58,16 +39,7 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // TODO: Move this... out. Somewhere else. In the ReactNative Protocol
-        NotificationCenter.default.addObserver(self, selector: #selector(handleReactNativeErrorNotification(_:)), name: NSNotification.Name.RCTJavaScriptDidFailToLoad, object: nil)
-
         styleInterface()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        updateBreakdownView()
     }
 
     // MARK: Interface Methods
@@ -75,29 +47,13 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
     func styleInterface() {
         // Override our default background color to match the match breakdown background color
         view.backgroundColor = UIColor.colorWithRGB(rgbValue: 0xdddddd)
-
-        guard let breakdownView = breakdownView else {
-            showErrorView()
-            return
-        }
-
-        removeNoDataView()
-        scrollView.addSubview(breakdownView)
-
-        breakdownView.autoMatch(.width, to: .width, of: scrollView)
-        breakdownView.autoPinEdgesToSuperviewEdges()
-        print("breakdownView.reactViewController: \(breakdownView.reactViewController)")
     }
 
-    func updateBreakdownView() {
-        if let breakdownView = breakdownView, let breakdownData = dataForBreakdown() {
-            breakdownView.appProperties = breakdownData
-        }
-    }
+}
 
-    // MARK: Private
+extension MatchBreakdownViewController: TBAReactNativeViewControllerDelegate {
 
-    func dataForBreakdown() -> [String: Any]? {
+    var appProperties: [String: Any]? {
         // TODO: Support all alliances
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/273
         guard var redBreakdown = match.breakdown?["red"] as? [String: Any] else {
@@ -122,37 +78,6 @@ class MatchBreakdownViewController: TBAViewController, Observable, ReactNative {
                 "blueTeams": match.blueAllianceTeamNumbers,
                 "blueBreakdown": blueBreakdown,
                 "compLevel": match.compLevelString!]
-    }
-
-
-    override func reloadViewAfterRefresh() {
-        if isDataSourceEmpty {
-            showNoDataView()
-        } else {
-            updateBreakdownView()
-        }
-    }
-
-    // MARK: - ReactNative
-    // MARK: - Notifications
-
-    // TODO: This sucks, but also, we can't have @objc in a protocol extension so
-    @objc func handleReactNativeErrorNotification(_ sender: NSNotification) {
-        reactNativeError(sender)
-    }
-
-    func showErrorView() {
-        showNoDataView()
-        // Disable refreshing if we hit an error
-        disableRefreshing()
-    }
-
-}
-
-extension MatchBreakdownViewController: RCTRootViewDelegate {
-
-    func rootViewDidChangeIntrinsicSize(_ rootView: RCTRootView!) {
-        rootView.autoSetDimension(.height, toSize: rootView.intrinsicContentSize.height)
     }
 
 }

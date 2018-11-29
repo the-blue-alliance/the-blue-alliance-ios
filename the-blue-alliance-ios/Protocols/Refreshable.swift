@@ -103,7 +103,6 @@ extension Refreshable {
                 }
             }
         }
-
         return (!hasSuccessfullyRefreshed || isDataStale || isDataSourceEmpty) && !isRefreshing
     }
 

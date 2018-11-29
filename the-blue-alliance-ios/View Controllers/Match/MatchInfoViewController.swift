@@ -177,7 +177,7 @@ class MatchInfoViewController: TBAViewController, Observable {
         }
     }
 
-    override func reloadViewAfterRefresh() {
+    override func reloadData() {
         // We'll always have a match, so we shouldn't need to show a no data state
     }
 
