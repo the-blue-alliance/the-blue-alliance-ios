@@ -40,8 +40,6 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        styleInterface()
-
         contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
             DispatchQueue.main.async {
                 self?.updateEventStatsView()
@@ -60,6 +58,8 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
 
         // TODO: Move this... out. Somewhere else. In the ReactNative Protocol
         NotificationCenter.default.addObserver(self, selector: #selector(handleReactNativeErrorNotification(_:)), name: NSNotification.Name.RCTJavaScriptDidFailToLoad, object: nil)
+
+        styleInterface()
     }
 
     // MARK: Interface Methods

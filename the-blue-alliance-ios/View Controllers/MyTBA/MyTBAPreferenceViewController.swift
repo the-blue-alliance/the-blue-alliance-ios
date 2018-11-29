@@ -69,8 +69,6 @@ class MyTBAPreferenceViewController: UITableViewController {
         super.init(style: .grouped)
 
         title = "MyTBA Preferences"
-
-        styleInterface()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -78,6 +76,12 @@ class MyTBAPreferenceViewController: UITableViewController {
     }
 
     // MARK: - View Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        styleInterface()
+    }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
