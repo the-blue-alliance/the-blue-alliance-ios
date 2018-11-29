@@ -74,6 +74,27 @@ class MyTBATableViewControllerTests: TBATestCase {
         XCTAssert(mockMyTBATableViewController.hasSuccessfullyRefreshed)
     }
 
+    func test_refresh_delete() {
+        myTBA.authToken = "abcd123"
+
+        Favorite.insert([MyTBAFavorite(modelKey: "2018miket", modelType: .event), MyTBAFavorite(modelKey: "2018ctsc_qm1", modelType: .match), MyTBAFavorite(modelKey: "frc7332", modelType: .team)], in: persistentContainer.viewContext)
+        Subscription.insert(modelKey: "2018miket", modelType: .event, notifications: [.awards], in: persistentContainer.viewContext)
+        try! persistentContainer.viewContext.save()
+
+        // Sanity check
+        XCTAssertEqual(Favorite.fetch(in: persistentContainer.viewContext).count, 3)
+        XCTAssertEqual(Subscription.fetch(in: persistentContainer.viewContext).count, 1)
+
+        myTBATableViewController.refresh()
+        let task = myTBATableViewController.requests.first!
+        let saveExpectation = backgroundContextSaveExpectation()
+        myTBA.sendStub(for: task, code: 201)
+        wait(for: [saveExpectation], timeout: 1.0)
+
+        XCTAssertEqual(Favorite.fetch(in: persistentContainer.viewContext).count, 0)
+        XCTAssertEqual(Subscription.fetch(in: persistentContainer.viewContext).count, 1)
+    }
+
     func test_select() {
         Favorite.insert([MyTBAFavorite(modelKey: "2018miket", modelType: .event)], in: persistentContainer.viewContext)
         waitOneSecond() // Wait for our FRC to refetch

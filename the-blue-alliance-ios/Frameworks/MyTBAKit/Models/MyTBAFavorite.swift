@@ -5,7 +5,7 @@ struct MyTBAFavoritesRequest: Codable {
 }
 
 struct MyTBAFavoritesResponse: MyTBAResponse, Codable {
-    var favorites: [MyTBAFavorite]
+    var favorites: [MyTBAFavorite]?
 }
 
 struct MyTBAFavorite: MyTBAModel, Equatable, Codable {

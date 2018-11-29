@@ -3,7 +3,7 @@ import XCTest
 
 class MyTBAFavoriteTests: MyTBATestCase {
 
-    func test_subscriptions() {
+    func test_favorites() {
         let ex = expectation(description: "favorites/list called")
         let task = myTBA.fetchFavorites { (favorites, error) in
             XCTAssertNotNil(favorites)
@@ -12,6 +12,17 @@ class MyTBAFavoriteTests: MyTBATestCase {
             ex.fulfill()
         }
         myTBA.sendStub(for: task)
+        wait(for: [ex], timeout: 1.0)
+    }
+
+    func test_favorites_empty() {
+        let ex = expectation(description: "favorites/list called")
+        let task = myTBA.fetchFavorites { (favorites, error) in
+            XCTAssertNil(favorites)
+            XCTAssertNil(error)
+            ex.fulfill()
+        }
+        myTBA.sendStub(for: task, code: 201)
         wait(for: [ex], timeout: 1.0)
     }
 
