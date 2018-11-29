@@ -88,7 +88,7 @@ class MatchInfoViewController: TBAViewController, Observable {
 
         contextObserver.observeObject(object: match, state: .updated) { [weak self] (_, _) in
             DispatchQueue.main.async {
-                self?.styleInterface()
+                self?.updateInterface()
             }
         }
     }
@@ -125,6 +125,10 @@ class MatchInfoViewController: TBAViewController, Observable {
         // Override our default background color to be white
         view.backgroundColor = .white
 
+        updateInterface()
+    }
+
+    func updateInterface() {
         updateMatchSummaryView()
         updateMatchVideos()
     }
@@ -186,7 +190,10 @@ extension MatchInfoViewController: Refreshable {
     var automaticRefreshEndDate: Date? {
         // Automatically refresh the match info until a few days after the match has been played
         // (Mostly looking for new videos)
-        return Calendar.current.date(byAdding: DateComponents(day: 7), to: match.event!.endDate!)!
+        guard let event = match.event else {
+            return nil
+        }
+        return Calendar.current.date(byAdding: DateComponents(day: 7), to: event.endDate!)!
     }
 
     var isDataSourceEmpty: Bool {
@@ -209,8 +216,12 @@ extension MatchInfoViewController: Refreshable {
 
                 if let modelMatch = modelMatch {
                     // TODO: Match can never be deleted
-                    let event = backgroundContext.object(with: self.match.event!.objectID) as! Event
-                    event.insert(modelMatch)
+                    if let event = self.match.event {
+                        let event = backgroundContext.object(with: event.objectID) as! Event
+                        event.insert(modelMatch)
+                    } else {
+                        Match.insert(modelMatch, in: backgroundContext)
+                    }
 
                     if backgroundContext.saveOrRollback() {
                         self.tbaKit.setLastModified(request!)

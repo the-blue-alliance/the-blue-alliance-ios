@@ -191,8 +191,12 @@ extension MatchBreakdownViewController: Refreshable {
 
                 if let modelMatch = modelMatch {
                     // TODO: Match can never be deleted
-                    let event = backgroundContext.object(with: self.match.event!.objectID) as! Event
-                    event.insert(modelMatch)
+                    if let event = self.match.event {
+                        let event = backgroundContext.object(with: event.objectID) as! Event
+                        event.insert(modelMatch)
+                    } else {
+                        Match.insert(modelMatch, in: backgroundContext)
+                    }
 
                     if backgroundContext.saveOrRollback() {
                         self.tbaKit.setLastModified(request!)
