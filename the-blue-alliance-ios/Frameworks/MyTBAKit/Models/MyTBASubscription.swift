@@ -53,7 +53,7 @@ enum NotificationType: String, Codable {
 }
 
 struct MyTBASubscriptionsResponse: MyTBAResponse, Codable {
-    var subscriptions: [MyTBASubscription]
+    var subscriptions: [MyTBASubscription]?
 }
 
 struct MyTBASubscription: MyTBAModel, Equatable, Codable {

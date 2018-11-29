@@ -262,6 +262,8 @@
 		92C8CE5421AEE64B00683558 /* EventViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE5321AEE64B00683558 /* EventViewControllerTests.swift */; };
 		92C8CE5621AEF1AE00683558 /* TeamViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE5521AEF1AE00683558 /* TeamViewControllerTests.swift */; };
 		92C8CE5921AEF4C600683558 /* MatchViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C8CE5821AEF4C600683558 /* MatchViewControllerTests.swift */; };
+		92C8CE5C21AF81B200683558 /* favorites_list_201.json in Resources */ = {isa = PBXBuildFile; fileRef = 92C8CE5A21AF81B200683558 /* favorites_list_201.json */; };
+		92C8CE5D21AF81B200683558 /* subscriptions_list_201.json in Resources */ = {isa = PBXBuildFile; fileRef = 92C8CE5B21AF81B200683558 /* subscriptions_list_201.json */; };
 		92C9BD352096907E007FB9C8 /* Stateful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD342096907E007FB9C8 /* Stateful.swift */; };
 		92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */; };
 		92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */; };
@@ -616,6 +618,8 @@
 		92C8CE5321AEE64B00683558 /* EventViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewControllerTests.swift; sourceTree = "<group>"; };
 		92C8CE5521AEF1AE00683558 /* TeamViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamViewControllerTests.swift; sourceTree = "<group>"; };
 		92C8CE5821AEF4C600683558 /* MatchViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchViewControllerTests.swift; sourceTree = "<group>"; };
+		92C8CE5A21AF81B200683558 /* favorites_list_201.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = favorites_list_201.json; sourceTree = "<group>"; };
+		92C8CE5B21AF81B200683558 /* subscriptions_list_201.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = subscriptions_list_201.json; sourceTree = "<group>"; };
 		92C9BD342096907E007FB9C8 /* Stateful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stateful.swift; sourceTree = "<group>"; };
 		92C9BD3A2096BBA5007FB9C8 /* MyTBATableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATableViewController.swift; sourceTree = "<group>"; };
 		92CFF55C1EB548E3008D2348 /* TableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
@@ -940,6 +944,8 @@
 		9266A1C821AA0E8500545867 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				92C8CE5A21AF81B200683558 /* favorites_list_201.json */,
+				92C8CE5B21AF81B200683558 /* subscriptions_list_201.json */,
 				9266A1DB21AA196400545867 /* model_setPreferences_401.json */,
 				9266A1DC21AA196400545867 /* model_setPreferences.json */,
 				9266A1C921AA0E8500545867 /* register_401.json */,
@@ -2004,6 +2010,7 @@
 				92A5E57421A1B7830025CC85 /* event_2018misjo_matches_timeseries.json in Resources */,
 				92A5E59A21A1B7830025CC85 /* event_2017mike2_district_points.json in Resources */,
 				92A5E57121A1B7830025CC85 /* team_frc20_event_1992cmp_status.json in Resources */,
+				92C8CE5D21AF81B200683558 /* subscriptions_list_201.json in Resources */,
 				92A5E59821A1B7830025CC85 /* team_frc2337_matches_2017.json in Resources */,
 				92A5E59121A1B7830025CC85 /* events_2017.json in Resources */,
 				92A5E5A921A1B7830025CC85 /* teams_2017_0.json in Resources */,
@@ -2013,6 +2020,7 @@
 				92A5E58121A1B7830025CC85 /* event_2017mike2_teams.json in Resources */,
 				92A5E58821A1B7830025CC85 /* team_frc2337_events_2018_statuses.json in Resources */,
 				92A5E5A621A1B7830025CC85 /* event_1992cmp_oprs.json in Resources */,
+				92C8CE5C21AF81B200683558 /* favorites_list_201.json in Resources */,
 				9266A1D021AA0E8500545867 /* favorites_list.json in Resources */,
 				92A5E58321A1B7830025CC85 /* team_frc2337_years_participated.json in Resources */,
 				92A5E59921A1B7830025CC85 /* teams_100.json in Resources */,

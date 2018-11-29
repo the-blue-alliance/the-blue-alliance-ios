@@ -225,6 +225,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                             self.fetchMatch(key)
                         }
                     }
+                } else if error == nil {
+                    // If we don't get any models and we don't have an error, we probably don't have any models upstream
+                    context.deleteAllObjectsForEntity(entity: T.entity())
                 }
             })
 
