@@ -96,7 +96,7 @@ platform :ios do
   desc "Upload a new beta build to TestFlight"
   lane :beta do
     beta_internal
-    pilot(changelog: commit_changelog_short, distribute_external: true, reject_build_waiting_for_review: true)
+    pilot(changelog: commit_changelog_short, distribute_external: true, groups: ["Beta"], reject_build_waiting_for_review: true)
 
     reset_git_repo(files: ["the-blue-alliance-ios.xcodeproj/project.pbxproj"], force: true) # Remove our code signing changes
 
