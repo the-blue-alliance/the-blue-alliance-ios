@@ -77,7 +77,7 @@ public class CoreDataContextObserver<T: NSManagedObject> {
 
             for case let object as T in objectsSet {
                 guard let actionsForObject = actionsForManagedObjectID[object.objectID] else { continue }
-                actionsForObject.forEach({ $0.completionBlock(object, state) })
+                actionsForObject.filter({ $0.state == state }).forEach({ $0.completionBlock(object, state) })
             }
         }
     }
