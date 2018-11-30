@@ -192,20 +192,20 @@ class MyTBATableViewControllerTests: TBATestCase {
     }
 
     func test_isDataSourceEmpty() {
-        // No objects, MyTBA not auth'd
+        // No objects, myTBA not auth'd
         XCTAssertFalse(myTBATableViewController.isDataSourceEmpty)
 
-        // MyTBA Auth'd, no objects
+        // myTBA Auth'd, no objects
         myTBA.authToken = "abcd123"
         XCTAssert(myTBATableViewController.isDataSourceEmpty)
 
-        // MyTBA not auth'd, with objects
+        // myTBA not auth'd, with objects
         myTBA.authToken = nil
         Favorite.insert([MyTBAFavorite(modelKey: "2018miket", modelType: .event)], in: persistentContainer.viewContext)
         waitOneSecond() // Wait for our FRC to refetch
         XCTAssertFalse(myTBATableViewController.isDataSourceEmpty)
 
-        // MyTBA auth'd, with objects
+        // myTBA auth'd, with objects
         myTBA.authToken = "abcd123"
         XCTAssertFalse(myTBATableViewController.isDataSourceEmpty)
     }

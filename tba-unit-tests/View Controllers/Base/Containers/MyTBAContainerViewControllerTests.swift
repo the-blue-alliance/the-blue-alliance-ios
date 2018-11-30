@@ -67,7 +67,7 @@ class MyTBAContainerViewControllerTests: TBATestCase {
     }
 
     func test_myTBAAuthenticationObservable_authenticated() {
-        let ex = expectation(description: "MyTBA authenticated updated buttons")
+        let ex = expectation(description: "myTBA authenticated updated buttons")
         tbaContainerViewController.updateFavoriteButtonExpectation = ex
         myTBA.authToken = "abcd123"
         wait(for: [ex], timeout: 1.0)
@@ -75,7 +75,7 @@ class MyTBAContainerViewControllerTests: TBATestCase {
 
     func test_myTBAAuthenticationObservable_unauthenticated() {
         myTBA.authToken = "abcd123"
-        let ex = expectation(description: "MyTBA unauthenticated updated buttons")
+        let ex = expectation(description: "myTBA unauthenticated updated buttons")
         tbaContainerViewController.updateFavoriteButtonExpectation = ex
         myTBA.authToken = nil
         wait(for: [ex], timeout: 1.0)

@@ -39,9 +39,9 @@ extension Favorite: MyTBAManaged {
     }
 
     /**
-     Insert a Favorite with values from a MyTBA Favorite model in to the managed object context.
+     Insert a Favorite with values from a myTBA Favorite model in to the managed object context.
 
-     - Parameter model: The MyTBA Favorite representation to set values from.
+     - Parameter model: The myTBA Favorite representation to set values from.
 
      - Parameter context: The NSManagedContext to insert the Favorite in to.
 

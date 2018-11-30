@@ -37,7 +37,7 @@ target 'The Blue Alliance' do
   pod 'Firebase/RemoteConfig'
   pod 'Firebase/Storage'
 
-  # MyTBA
+  # myTBA
   pod 'GoogleSignIn'
 
   # Crash reporting

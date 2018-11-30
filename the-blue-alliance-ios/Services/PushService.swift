@@ -35,7 +35,7 @@ class PushService: NSObject {
 
     fileprivate func registerPushToken(_ token: String) {
         if !myTBA.isAuthenticated {
-            // Not authenticated to MyTBA - save token for registration once we're auth'd
+            // Not authenticated to myTBA - save token for registration once we're auth'd
             pendingRegisterPushToken = token
         } else {
             myTBA.register(token) { (error) in

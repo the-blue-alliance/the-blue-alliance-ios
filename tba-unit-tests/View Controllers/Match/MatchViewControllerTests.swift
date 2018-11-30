@@ -34,7 +34,7 @@ class MatchViewControllerTests: TBATestCase {
     func test_snapshot() {
         verifyLayer(viewControllerTester.window.layer)
 
-        // MyTBA authed
+        // myTBA authed
         myTBA.authToken = "abcd123"
         verifyLayer(viewControllerTester.window.layer, identifier: "mytba")
     }

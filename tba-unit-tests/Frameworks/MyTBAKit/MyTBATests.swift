@@ -28,7 +28,7 @@ class MyTBATests: MyTBATestCase {
 
         XCTAssertNil(myTBA.authToken)
 
-        let authenticatedExpectation = expectation(description: "MyTBA Authenticated")
+        let authenticatedExpectation = expectation(description: "myTBA Authenticated")
         authObserver.authenticatedExpectation = authenticatedExpectation
         myTBA.authToken = "abcd123"
         wait(for: [authenticatedExpectation], timeout: 1.0)
@@ -41,7 +41,7 @@ class MyTBATests: MyTBATestCase {
         XCTAssertNil(myTBA.authToken)
         myTBA.authToken = "abcd123"
 
-        let authenticatedExpectation = expectation(description: "MyTBA Authenticated")
+        let authenticatedExpectation = expectation(description: "myTBA Authenticated")
         authenticatedExpectation.isInverted = true
         authObserver.authenticatedExpectation = authenticatedExpectation
         myTBA.authToken = "abcd123"
@@ -56,7 +56,7 @@ class MyTBATests: MyTBATestCase {
         XCTAssertNil(myTBA.authToken)
         myTBA.authToken = "abcd123"
 
-        let authenticatedExpectation = expectation(description: "MyTBA Authenticated")
+        let authenticatedExpectation = expectation(description: "myTBA Authenticated")
         authObserver.authenticatedExpectation = authenticatedExpectation
         myTBA.authToken = "321dcba"
 
@@ -70,7 +70,7 @@ class MyTBATests: MyTBATestCase {
         XCTAssertNil(myTBA.authToken)
         myTBA.authToken = "abcd123"
 
-        let unauthenticatedExpectation = expectation(description: "MyTBA Unauthenticated")
+        let unauthenticatedExpectation = expectation(description: "myTBA Unauthenticated")
         authObserver.unauthenticatedExpectation = unauthenticatedExpectation
         myTBA.authToken = nil
 

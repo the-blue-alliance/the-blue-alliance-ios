@@ -4,6 +4,7 @@ import FirebaseAuth
 import FirebaseRemoteConfig
 import FirebaseMessaging
 import GoogleSignIn
+import PureLayout
 import UIKit
 import UserNotifications
 
@@ -54,7 +55,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
-        title = "MyTBA"
+        title = "myTBA"
         tabBarItem.image = UIImage(named: "ic_star")
 
         favoritesViewController.delegate = self
@@ -84,7 +85,12 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
     private func styleInterface() {
         view.addSubview(signInView)
-        signInView.autoPinEdgesToSuperviewEdges()
+        for edge in [ALEdge.top, ALEdge.bottom] {
+            signInView.autoPinEdge(toSuperviewSafeArea: edge)
+        }
+        for edge in [ALEdge.leading, ALEdge.trailing] {
+            signInView.autoPinEdge(toSuperviewEdge: edge)
+        }
 
         updateInterface()
     }
