@@ -79,7 +79,6 @@ platform :ios do
     slack(channel: "#dev-ios", message: "Shipping #{current_git_tag} to TestFlight...", default_payloads: [])
 
     beta_internal
-    pilot(changelog: commit_changelog_short, distribute_external: true, reject_build_waiting_for_review: true)
 
     ship_github(is_prerelease: true) # Create GitHub release
 
@@ -96,7 +95,6 @@ platform :ios do
   desc "Upload a new beta build to TestFlight"
   lane :beta do
     beta_internal
-    pilot(changelog: commit_changelog_short, distribute_external: true, groups: ["Beta"], reject_build_waiting_for_review: true)
 
     reset_git_repo(files: ["the-blue-alliance-ios.xcodeproj/project.pbxproj"], force: true) # Remove our code signing changes
 
@@ -118,6 +116,7 @@ platform :ios do
       code_signing_identity: "iPhone Distribution"
     )
     gym
+    pilot(changelog: commit_changelog_short, distribute_external: true, groups: ["Beta"], reject_build_waiting_for_review: true)
   end
 
   desc "Upload a new build to the App Store"
