@@ -4,6 +4,9 @@ import XCTest
 class SettingsViewControllerTests: TBATestCase {
 
     var settingsViewController: SettingsViewController!
+    var navigationController: MockNavigationController!
+
+    var viewControllerTester: TBAViewControllerTester<UINavigationController>!
 
     override func setUp() {
         super.setUp()
@@ -13,6 +16,9 @@ class SettingsViewControllerTests: TBATestCase {
                                                         persistentContainer: persistentContainer,
                                                         tbaKit: tbaKit,
                                                         userDefaults: userDefaults)
+        navigationController = MockNavigationController(rootViewController: settingsViewController)
+
+        viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
     }
 
     override func tearDown() {
@@ -21,7 +27,17 @@ class SettingsViewControllerTests: TBATestCase {
         super.tearDown()
     }
 
-    // TODO: Snapshot tests
+    func test_snapshot() {
+        verifyLayer(viewControllerTester.window.layer)
+    }
+
+    func test_title() {
+        XCTAssertEqual(settingsViewController.title, "Settings")
+    }
+
+    func test_tabBar() {
+        XCTAssertEqual(settingsViewController.tabBarItem.title, "Settings")
+    }
 
     func test_openTBAWebsite() {
         let expectation = XCTestExpectation(description: "open called")
