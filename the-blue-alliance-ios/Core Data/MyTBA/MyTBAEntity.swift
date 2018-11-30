@@ -23,7 +23,7 @@ extension MyTBAEntity: Managed {
     }
 
     /**
-     Get the corresponding object for this MyTBA Entity, if it exists locally - a Event, Team, or Match
+     Get the corresponding object for this myTBA Entity, if it exists locally - a Event, Team, or Match
      */
     var tbaObject: Managed? {
         guard let managedObjectContext = managedObjectContext else {

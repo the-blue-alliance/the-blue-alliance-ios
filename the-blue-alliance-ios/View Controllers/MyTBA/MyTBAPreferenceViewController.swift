@@ -68,7 +68,7 @@ class MyTBAPreferenceViewController: UITableViewController {
 
         super.init(style: .grouped)
 
-        title = "MyTBA Preferences"
+        title = "myTBA Preferences"
     }
 
     required init?(coder aDecoder: NSCoder) {

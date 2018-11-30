@@ -44,11 +44,11 @@ class MyTBAViewControllerTests: TBATestCase {
     }
 
     func test_title() {
-        XCTAssertEqual(myTBAViewController.title, "MyTBA")
+        XCTAssertEqual(myTBAViewController.title, "myTBA")
     }
 
     func test_tabBar() {
-        XCTAssertEqual(myTBAViewController.tabBarItem.title, "MyTBA")
+        XCTAssertEqual(myTBAViewController.tabBarItem.title, "myTBA")
     }
 
     func test_showsFavorites() {

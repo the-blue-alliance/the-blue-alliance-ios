@@ -17,7 +17,7 @@ private class Weak: Hashable {
 /**
  Provider is an class used to manage observers that respond to a custom protocol.
  Mostly, it manages a colleciton of observers and creating weak references to observers. For an example, see the auth
- observer on MyTBA
+ observer on myTBA
  */
 class Provider<ObserverType> {
     private var weakObservers = Set<Weak>()

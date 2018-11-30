@@ -48,9 +48,9 @@ extension Subscription: MyTBAManaged {
     }
 
     /**
-     Insert a Subscription with values from a MyTBA Subscription model in to the managed object context.
+     Insert a Subscription with values from a myTBA Subscription model in to the managed object context.
 
-     - Parameter model: The MyTBA Subscription representation to set values from.
+     - Parameter model: The myTBA Subscription representation to set values from.
 
      - Parameter context: The NSManagedContext to insert the Subscription in to.
 
