@@ -1,5 +1,6 @@
 import CoreData
 import Foundation
+import FirebaseMessaging
 import UIKit
 
 enum InfoURL: String {
@@ -22,13 +23,17 @@ private enum InfoRow: Int {
 
 private enum DebugRow: Int {
     case deleteNetworkCache
+    case troubleshootNotifications
     case max
 }
 
 class SettingsViewController: TBATableViewController {
 
-    private var urlOpener: URLOpener
-    private var metadata: ReactNativeMetadata
+    private let messaging: Messaging
+    private let metadata: ReactNativeMetadata
+    private let myTBA: MyTBA
+    private let pushService: PushService
+    private let urlOpener: URLOpener
 
     private let reactNativeDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -38,9 +43,12 @@ class SettingsViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(urlOpener: URLOpener, metadata: ReactNativeMetadata, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        self.urlOpener = urlOpener
+    init(messaging: Messaging, metadata: ReactNativeMetadata, myTBA: MyTBA, pushService: PushService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.messaging = messaging
         self.metadata = metadata
+        self.myTBA = myTBA
+        self.pushService = pushService
+        self.urlOpener = urlOpener
 
         super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
@@ -118,6 +126,8 @@ class SettingsViewController: TBATableViewController {
             switch indexPath.row {
             case DebugRow.deleteNetworkCache.rawValue:
                 titleString = "Delete network cache"
+            case DebugRow.troubleshootNotifications.rawValue:
+                titleString = "Troubleshoot notifications"
             default:
                 fatalError("This row does not exist")
             }
@@ -164,6 +174,9 @@ class SettingsViewController: TBATableViewController {
                 alertController.addAction(cancelAction)
 
                 self.present(alertController, animated: true, completion: nil)
+            case DebugRow.troubleshootNotifications.rawValue:
+                let notificationsViewController = NotificationsViewController(messaging: messaging, myTBA: myTBA, pushService: pushService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                navigationController?.pushViewController(notificationsViewController, animated: true)
             default:
                 fatalError("This row does not exist")
             }
