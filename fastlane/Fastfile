@@ -146,7 +146,6 @@ platform :ios do
       api_token: ENV["GITHUB_TOKEN"],
       name: current_git_tag,
       tag_name: current_git_tag,
-      commitish: commit,
       description: commit_changelog,
       is_prerelease: options[:is_prerelease] ? true : false,
       upload_assets: ["The Blue Alliance.ipa", "The Blue Alliance.app.dSYM.zip"]
