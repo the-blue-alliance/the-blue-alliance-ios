@@ -3,28 +3,9 @@ import CoreData
 import UIKit
 import React
 
-class EventStatsViewController: TBAViewController, Observable, ReactNative {
+class EventStatsViewController: TBAReactNativeViewController, Observable {
 
     private let event: Event
-
-    // MARK: - React Native
-
-    private lazy var eventStatsView: RCTRootView? = {
-        // Event stats only exist for 2016 and onward
-        if event.year!.intValue < 2016 {
-            return nil
-        }
-
-        let moduleName = "EventInsights\(event.year!.stringValue)"
-        let eventStatsView = RCTRootView(bundleURL: sourceURL,
-                                         moduleName: moduleName,
-                                         initialProperties: event.insights?.insightsDictionary ?? [:],
-                                         launchOptions: [:])
-        // TODO: eventStatsView.loadingView
-        eventStatsView!.delegate = self
-        eventStatsView!.sizeFlexibility = .height
-        return eventStatsView
-    }()
 
     // MARK: - Observable
 
@@ -38,11 +19,13 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
     init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(moduleName: "EventInsights\(event.year!.stringValue)", persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+
+        delegate = self
 
         contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
             DispatchQueue.main.async {
-                self?.updateEventStatsView()
+                self?.reloadData()
             }
         }
     }
@@ -51,64 +34,12 @@ class EventStatsViewController: TBAViewController, Observable, ReactNative {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - View Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // TODO: Move this... out. Somewhere else. In the ReactNative Protocol
-        NotificationCenter.default.addObserver(self, selector: #selector(handleReactNativeErrorNotification(_:)), name: NSNotification.Name.RCTJavaScriptDidFailToLoad, object: nil)
-
-        styleInterface()
-    }
-
-    // MARK: Interface Methods
-
-    func styleInterface() {
-        guard let eventStatsView = eventStatsView else {
-            showErrorView()
-            return
-        }
-
-        scrollView.addSubview(eventStatsView)
-        eventStatsView.autoMatch(.width, to: .width, of: scrollView)
-        eventStatsView.autoPinEdgesToSuperviewEdges()
-    }
-
-    func updateEventStatsView() {
-        if let eventStatsView = eventStatsView, let insights = event.insights {
-            eventStatsView.appProperties = insights.insightsDictionary
-        }
-    }
-
-    override func reloadViewAfterRefresh() {
-        if isDataSourceEmpty {
-            showNoDataView()
-        } else {
-            updateEventStatsView()
-        }
-    }
-
-    // MARK: - ReactNative
-    // MARK: - Notifications
-
-    // TODO: This sucks, but also, we can't have @objc in a protocol extension so
-    @objc func handleReactNativeErrorNotification(_ sender: NSNotification) {
-        reactNativeError(sender)
-    }
-
-    func showErrorView() {
-        showNoDataView()
-        // Disable refreshing if we hit an error
-        disableRefreshing()
-    }
-
 }
 
-extension EventStatsViewController: RCTRootViewDelegate {
+extension EventStatsViewController: TBAReactNativeViewControllerDelegate {
 
-    func rootViewDidChangeIntrinsicSize(_ rootView: RCTRootView!) {
-        rootView.autoSetDimension(.height, toSize: rootView.intrinsicContentSize.height)
+    var appProperties: [String : Any]? {
+        return event.insights?.insightsDictionary
     }
 
 }
