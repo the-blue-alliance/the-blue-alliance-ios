@@ -39,12 +39,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                        persistentContainer: persistentContainer,
                                                                        tbaKit: tbaKit,
                                                                        userDefaults: userDefaults)
-        let settingsViewController = SettingsViewController(urlOpener: urlOpener,
+        let settingsViewController = SettingsViewController(messaging: messaging,
                                                             metadata: reactNativeMetadata,
+                                                            myTBA: myTBA,
+                                                            pushService: pushService,
+                                                            urlOpener: urlOpener,
                                                             persistentContainer: persistentContainer,
                                                             tbaKit: tbaKit,
                                                             userDefaults: userDefaults)
-        let myTBAViewController = MyTBAViewController(myTBA: myTBA,
+        let myTBAViewController = MyTBAViewController(messaging: messaging,
+                                                      myTBA: myTBA,
                                                       remoteConfig: remoteConfigService.remoteConfig,
                                                       urlOpener: urlOpener,
                                                       persistentContainer: persistentContainer,
@@ -76,6 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
 
     // MARK: - Services
+    lazy var messaging: Messaging = Messaging.messaging()
     lazy var myTBA: MyTBA = {
         return MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString, deviceName: UIDevice.current.name)
     }()
@@ -134,7 +139,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         registerForFMSStatusChanges()
 
         // Assign our Push Service as a delegate to all push-related classes
-        AppDelegate.setupPushServiceDelegates(myTBA: myTBA, pushService: pushService)
+        setupPushServiceDelegates()
         // Kickoff background myTBA/Google sign in, along with setting up delegates
         setupGoogleAuthentication()
 
@@ -251,8 +256,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.rootViewController?.present(alertController, animated: true, completion: nil)
     }
 
-    private static func setupPushServiceDelegates(myTBA: MyTBA, pushService: PushService) {
-        Messaging.messaging().delegate = pushService
+    private func setupPushServiceDelegates() {
+        messaging.delegate = pushService
         UNUserNotificationCenter.current().delegate = pushService
         myTBA.authenticationProvider.add(observer: pushService)
     }
@@ -318,7 +323,7 @@ extension AppDelegate: GIDSignInDelegate {
                     signInDelegate.showErrorAlert(with: "Error signing in to Firebase - \(error.localizedDescription)")
                 }
             } else {
-                PushService.requestAuthorizationForNotifications { (error) in
+                PushService.requestAuthorizationForNotifications { (_, error) in
                     if let error = error, let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? ContainerViewController & Alertable {
                         signInDelegate.showErrorAlert(with: "Error authorizing notifications - \(error.localizedDescription)")
                     }

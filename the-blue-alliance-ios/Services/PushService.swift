@@ -60,12 +60,10 @@ class PushService: NSObject {
         registerPushToken(pendingRegisterPushToken)
     }
 
-    static func requestAuthorizationForNotifications(_ completion: ((Error?) -> Void)?) {
+    static func requestAuthorizationForNotifications(_ completion: ((Bool, Error?) -> Void)?) {
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (_, error) in
-            if let completion = completion {
-                completion(error)
-            }
+        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (granted, error) in
+            completion?(granted, error)
         }
     }
 

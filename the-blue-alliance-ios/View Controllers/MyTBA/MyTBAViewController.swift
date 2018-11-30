@@ -10,6 +10,7 @@ import UserNotifications
 
 class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
+    private let messaging: Messaging
     private let myTBA: MyTBA
     private let remoteConfig: RemoteConfig
     private let urlOpener: URLOpener
@@ -41,7 +42,8 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         return myTBA.isAuthenticated
     }
 
-    init(myTBA: MyTBA, remoteConfig: RemoteConfig, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(messaging: Messaging, myTBA: MyTBA, remoteConfig: RemoteConfig, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.messaging = messaging
         self.myTBA = myTBA
         self.remoteConfig = remoteConfig
         self.urlOpener = urlOpener
@@ -109,7 +111,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     }
 
     private func logout() {
-        guard let fcmToken = Messaging.messaging().fcmToken else {
+        guard let fcmToken = messaging.fcmToken else {
             // No FCM token to unregister
             return
         }
