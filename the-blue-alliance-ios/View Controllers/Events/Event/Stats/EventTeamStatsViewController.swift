@@ -130,25 +130,16 @@ extension EventTeamStatsTableViewController: Refreshable {
 
         var request: URLSessionDataTask?
         request = tbaKit.fetchEventTeamStats(key: event.key!, completion: { (stats, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh event team stats - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
                 if let stats = stats {
-                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    let event = context.object(with: self.event.objectID) as! Event
                     event.insert(stats)
-
-                    if backgroundContext.saveOrRollback() {
-                        self.tbaKit.setLastModified(request!)
-                    }
                 }
-                self.removeRequest(request: request!)
+            }, saved: {
+                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
             })
+            self.removeRequest(request: request!)
         })
         addRequest(request: request!)
     }

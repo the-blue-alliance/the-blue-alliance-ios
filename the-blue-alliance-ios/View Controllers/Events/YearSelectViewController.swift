@@ -160,27 +160,18 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
 
         var request: URLSessionDataTask?
         request = tbaKit.fetchEvents(year: year, completion: { (events, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
                 if let events = events {
-                    Event.insert(events, year: self.year, in: backgroundContext)
-
-                    if backgroundContext.saveOrRollback() {
-                        self.tbaKit.setLastModified(request!)
-                    }
+                    Event.insert(events, year: self.year, in: context)
                 }
-                self.removeRequest(request: request!)
-
-                self.hasRefreshed = true
-                self.updateWeeks()
+            }, saved: {
+                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
             })
+            self.removeRequest(request: request!)
+
+            self.hasRefreshed = true
+            self.updateWeeks()
         })
         addRequest(request: request!)
     }
@@ -188,7 +179,9 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
     func updateWeeks() {
         options = Event.weekEvents(for: year, in: persistentContainer.viewContext)
         if isDataSourceEmpty && hasRefreshed {
-            showNoDataView()
+            DispatchQueue.main.async {
+                self.showNoDataView()
+            }
         }
     }
     

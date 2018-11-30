@@ -300,7 +300,7 @@ extension AppDelegate: GIDSignInDelegate {
             return
         } else if let error = error {
             Crashlytics.sharedInstance().recordError(error)
-            if let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? UIViewController & Alertable {
+            if let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? ContainerViewController & Alertable {
                 signInDelegate.showErrorAlert(with: "Error authorizing notifications - \(error.localizedDescription)")
             }
             return
@@ -314,12 +314,12 @@ extension AppDelegate: GIDSignInDelegate {
         Auth.auth().signIn(with: credential) { (_, error) in
             if let error = error {
                 Crashlytics.sharedInstance().recordError(error)
-                if let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? UIViewController & Alertable {
+                if let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? ContainerViewController & Alertable {
                     signInDelegate.showErrorAlert(with: "Error signing in to Firebase - \(error.localizedDescription)")
                 }
             } else {
                 PushService.requestAuthorizationForNotifications { (error) in
-                    if let error = error, let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? UIViewController & Alertable {
+                    if let error = error, let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? ContainerViewController & Alertable {
                         signInDelegate.showErrorAlert(with: "Error authorizing notifications - \(error.localizedDescription)")
                     }
                 }

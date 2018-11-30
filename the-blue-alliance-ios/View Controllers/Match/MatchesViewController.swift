@@ -109,25 +109,16 @@ extension MatchesViewController: Refreshable {
 
         var request: URLSessionDataTask?
         request = tbaKit.fetchEventMatches(key: event.key!, completion: { (matches, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh event matches - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
                 if let matches = matches {
-                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    let event = context.object(with: self.event.objectID) as! Event
                     event.insert(matches)
-
-                    if backgroundContext.saveOrRollback() {
-                        self.tbaKit.setLastModified(request!)
-                    }
                 }
-                self.removeRequest(request: request!)
+            }, saved: {
+                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
             })
+            self.removeRequest(request: request!)
         })
         addRequest(request: request!)
     }

@@ -320,49 +320,35 @@ extension TeamSummaryViewController: Refreshable {
         // Refresh team status
         var teamStatusRequest: URLSessionDataTask?
         teamStatusRequest = tbaKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!, completion: { (status, error) in
-            if error != nil {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
                 // TODO: We can never remove an Status
                 if let status = status {
-                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    let event = context.object(with: self.event.objectID) as! Event
                     event.insert(status)
-
-                    if backgroundContext.saveOrRollback() {
-                        self.tbaKit.setLastModified(teamStatusRequest!)
-                    }
                 }
-                self.removeRequest(request: teamStatusRequest!)
+            }, saved: {
+                self.markTBARefreshSuccessful(self.tbaKit, request: teamStatusRequest!)
             })
+            self.removeRequest(request: teamStatusRequest!)
         })
         addRequest(request: teamStatusRequest!)
 
         // Refresh awards
         var awardsRequest: URLSessionDataTask?
         awardsRequest = tbaKit.fetchTeamAwards(key: teamKey.key!, eventKey: event.key!, completion: { (awards, error) in
-            if error != nil {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
                 if let awards = awards {
-                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    let event = context.object(with: self.event.objectID) as! Event
                     event.insert(awards, teamKey: self.teamKey.key!)
-
-                    self.updateSummaryInfo()
-
-                    if backgroundContext.saveOrRollback() {
-                        self.tbaKit.setLastModified(awardsRequest!)
-                    }
                 }
-                self.removeRequest(request: awardsRequest!)
+            }, saved: {
+                self.markTBARefreshSuccessful(self.tbaKit, request: awardsRequest!)
             })
+            self.removeRequest(request: awardsRequest!)
+
+            self.updateSummaryInfo()
         })
         addRequest(request: awardsRequest!)
     }

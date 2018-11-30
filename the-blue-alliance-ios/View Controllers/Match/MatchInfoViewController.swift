@@ -211,30 +211,21 @@ extension MatchInfoViewController: Refreshable {
     @objc func refresh() {
         var request: URLSessionDataTask?
         request = tbaKit.fetchMatch(key: match.key!, { (modelMatch, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh match - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
                 if let modelMatch = modelMatch {
                     // TODO: Match can never be deleted
                     if let event = self.match.event {
-                        let event = backgroundContext.object(with: event.objectID) as! Event
+                        let event = context.object(with: event.objectID) as! Event
                         event.insert(modelMatch)
                     } else {
-                        Match.insert(modelMatch, in: backgroundContext)
-                    }
-
-                    if backgroundContext.saveOrRollback() {
-                        self.tbaKit.setLastModified(request!)
+                        Match.insert(modelMatch, in: context)
                     }
                 }
-                self.removeRequest(request: request!)
+            }, saved: {
+                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
             })
+            self.removeRequest(request: request!)
         })
         addRequest(request: request!)
     }

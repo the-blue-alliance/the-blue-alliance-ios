@@ -106,6 +106,17 @@ extension Refreshable {
         return (!hasSuccessfullyRefreshed || isDataStale || isDataSourceEmpty) && !isRefreshing
     }
 
+    /**
+     Set our LastModified in TBAKit as well as setting our last successful refresh data for Refreshable.
+     */
+    func markTBARefreshSuccessful(_ tbaKit: TBAKit, request: URLSessionDataTask, lastRefresh: Date = Date()) {
+        tbaKit.setLastModified(request)
+        markRefreshSuccessful()
+    }
+
+    /**
+     Set our lastRefresh date - will be used when deciding if we should automatically refresh for new data.
+     */
     func markRefreshSuccessful(_ lastRefresh: Date = Date()) {
         self.lastRefresh = lastRefresh
     }

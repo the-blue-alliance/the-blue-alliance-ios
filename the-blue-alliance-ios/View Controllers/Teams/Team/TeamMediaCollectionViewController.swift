@@ -263,29 +263,20 @@ extension TeamMediaCollectionViewController: Refreshable {
 
         var request: URLSessionDataTask?
         request = tbaKit.fetchTeamMedia(key: team.key!, year: year, completion: { (media, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh team media - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
                 if let media = media {
-                    let team = backgroundContext.object(with: self.team.objectID) as! Team
+                    let team = context.object(with: self.team.objectID) as! Team
                     team.insert(media, year: year)
-
-                    if backgroundContext.saveOrRollback() {
-                        self.tbaKit.setLastModified(request!)
-                    }
                 }
-                self.removeRequest(request: request!)
-
-                DispatchQueue.main.async {
-                    fetchTeamMedia()
-                }
+            }, saved: {
+                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
             })
+            self.removeRequest(request: request!)
+
+            DispatchQueue.main.async {
+                fetchTeamMedia()
+            }
         })
         addRequest(request: request!)
     }
