@@ -136,25 +136,16 @@ extension EventAlliancesViewController: Refreshable {
 
         var request: URLSessionDataTask?
         request = tbaKit.fetchEventAlliances(key: event.key!, completion: { (alliances, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh event alliances - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
                 if let alliances = alliances {
-                    let event = backgroundContext.object(with: self.event.objectID) as! Event
+                    let event = context.object(with: self.event.objectID) as! Event
                     event.insert(alliances)
-
-                    if backgroundContext.saveOrRollback() {
-                        self.tbaKit.setLastModified(request!)
-                    }
                 }
-                self.removeRequest(request: request!)
+            }, saved: {
+                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
             })
+            self.removeRequest(request: request!)
         })
         self.addRequest(request: request!)
     }

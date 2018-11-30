@@ -36,25 +36,16 @@ class DistrictEventsViewController: EventsViewController {
 
         var request: URLSessionDataTask?
         request = tbaKit.fetchDistrictEvents(key: district.key!, completion: { (events, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
                 if let events = events {
-                    let district = backgroundContext.object(with: self.district.objectID) as! District
+                    let district = context.object(with: self.district.objectID) as! District
                     district.insert(events)
-
-                    if backgroundContext.saveOrRollback() {
-                        self.tbaKit.setLastModified(request!)
-                    }
                 }
-                self.removeRequest(request: request!)
+            }, saved: {
+                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
             })
+            self.removeRequest(request: request!)
         })
         addRequest(request: request!)
     }

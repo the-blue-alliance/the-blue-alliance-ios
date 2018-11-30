@@ -117,25 +117,16 @@ extension DistrictTeamSummaryViewController: Refreshable {
     @objc func refresh() {
         var request: URLSessionDataTask?
         request = tbaKit.fetchDistrictRankings(key: ranking.district!.key!, completion: { (rankings, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh district rankings - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
                 if let rankings = rankings {
-                    let district = backgroundContext.object(with: self.ranking.district!.objectID) as! District
+                    let district = context.object(with: self.ranking.district!.objectID) as! District
                     district.insert(rankings)
-
-                    if backgroundContext.saveOrRollback() {
-                        self.tbaKit.setLastModified(request!)
-                    }
                 }
-                self.removeRequest(request: request!)
+            }, saved: {
+                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
             })
+            self.removeRequest(request: request!)
         })
         addRequest(request: request!)
     }

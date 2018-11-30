@@ -46,25 +46,16 @@ class TeamEventsViewController: EventsViewController {
 
         var request: URLSessionDataTask?
         request = tbaKit.fetchTeamEvents(key: team.key!, completion: { (events, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
                 if let events = events {
-                    let team = backgroundContext.object(with: self.team.objectID) as! Team
+                    let team = context.object(with: self.team.objectID) as! Team
                     team.insert(events)
-
-                    if backgroundContext.saveOrRollback() {
-                        self.tbaKit.setLastModified(request!)
-                    }
                 }
-                self.removeRequest(request: request!)
+            }, saved: {
+                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
             })
+            self.removeRequest(request: request!)
         })
         addRequest(request: request!)
     }

@@ -68,25 +68,16 @@ class WeekEventsViewController: EventsViewController {
 
         var request: URLSessionDataTask?
         request = tbaKit.fetchEvents(year: year, completion: { (events, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh events - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
                 if let events = events {
-                    Event.insert(events, year: year, in: backgroundContext)
-
-                    if backgroundContext.saveOrRollback() {
-                        self.tbaKit.setLastModified(request!)
-                    }
+                    Event.insert(events, year: year, in: context)
                 }
-                self.removeRequest(request: request!)
-                self.setupWeeks()
+            }, saved: {
+                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
             })
+            self.removeRequest(request: request!)
+            self.setupWeeks()
         })
         addRequest(request: request!)
     }

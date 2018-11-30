@@ -229,9 +229,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                     // If we don't get any models and we don't have an error, we probably don't have any models upstream
                     context.deleteAllObjectsForEntity(entity: T.entity())
                 }
+            }, saved: {
+                self.markRefreshSuccessful()
             })
-
-            self.markRefreshSuccessful()
             self.removeRequest(request: request!)
         }
         addRequest(request: request!)

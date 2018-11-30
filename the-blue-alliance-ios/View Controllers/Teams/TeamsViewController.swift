@@ -183,22 +183,16 @@ extension TeamsViewController: Refreshable {
             let previousRequest = request
             request = task
 
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
-                Team.insert(teams, page: page, in: backgroundContext)
-
-                if backgroundContext.saveOrRollback() {
-                    self.tbaKit.setLastModified(previousRequest!)
-                }
-                self.removeRequest(request: previousRequest!)
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
+                Team.insert(teams, page: page, in: context)
+            }, saved: {
+                self.tbaKit.setLastModified(previousRequest!)
             })
+            self.removeRequest(request: previousRequest!)
         }) { (error) in
             self.removeRequest(request: request!)
-
-            if let error = error {
-                self.showErrorAlert(with: "Unable to refresh teams - \(error.localizedDescription)")
-            } else {
+            if error == nil {
                 self.markRefreshSuccessful()
             }
         }
@@ -212,25 +206,16 @@ extension TeamsViewController: Refreshable {
 
         var request: URLSessionDataTask?
         request = tbaKit.fetchEventTeams(key: eventKey, completion: { (teams, error) in
-            if let error = error {
-                self.showErrorAlert(with: "Unable to teams events - \(error.localizedDescription)")
-            } else {
-                self.markRefreshSuccessful()
-            }
-
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
                 if let teams = teams {
-                    let event = backgroundContext.object(with: event.objectID) as! Event
+                    let event = context.object(with: event.objectID) as! Event
                     event.insert(teams)
-
-                    if backgroundContext.saveOrRollback() {
-                        self.tbaKit.setLastModified(request!)
-                    }
                 }
-                self.removeRequest(request: request!)
+            }, saved: {
+                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
             })
+            self.removeRequest(request: request!)
         })
         addRequest(request: request!)
     }

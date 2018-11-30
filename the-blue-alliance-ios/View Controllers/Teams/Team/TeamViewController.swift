@@ -114,19 +114,14 @@ class TeamViewController: MyTBAContainerViewController, Observable {
     private func refreshYearsParticipated() {
         var request: URLSessionDataTask?
         request = tbaKit.fetchTeamYearsParticipated(key: team.key!, completion: { (years, error) in
-            self.persistentContainer.performBackgroundTask({ (backgroundContext) in
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
-                backgroundContext.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
-
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
                 if let years = years {
-                    let team = backgroundContext.object(with: self.team.objectID) as! Team
+                    let team = context.object(with: self.team.objectID) as! Team
                     team.yearsParticipated = years.sorted().reversed()
-
-                    if backgroundContext.saveOrRollback() {
-                        self.tbaKit.setLastModified(request!)
-                    }
                 }
+            }, saved: {
+                self.tbaKit.setLastModified(request!)
             })
         })
     }
