@@ -1,3 +1,4 @@
+import CoreData
 import FirebaseRemoteConfig
 import XCTest
 @testable import The_Blue_Alliance
@@ -10,6 +11,7 @@ class TBATestCase: CoreDataTestCase {
     var urlOpener: MockURLOpener!
     var remoteConfig: MockRemoteConfig!
     var reactNativeMetadata: ReactNativeMetadata!
+    var pushService: PushService!
 
     override func setUp() {
         super.setUp()
@@ -22,6 +24,7 @@ class TBATestCase: CoreDataTestCase {
             "max_season": NSNumber(value: 2016),
             "current_season": NSNumber(value: 2015)
         ])
+        pushService = PushService(userDefaults: userDefaults, myTBA: myTBA, retryService: RetryService())
     }
 
     override func tearDown() {
