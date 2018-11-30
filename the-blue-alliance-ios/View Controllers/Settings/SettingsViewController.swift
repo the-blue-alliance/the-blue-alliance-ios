@@ -42,7 +42,7 @@ class SettingsViewController: TBATableViewController {
         self.urlOpener = urlOpener
         self.metadata = metadata
 
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         title = "Settings"
         tabBarItem.image = UIImage(named: "ic_settings")
@@ -132,6 +132,10 @@ class SettingsViewController: TBATableViewController {
     }
 
     // MARK: - Table View Delegate
+
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        // Override so we don't get colored headers
+    }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
