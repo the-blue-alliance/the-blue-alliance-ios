@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="18B75" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Award" representedClassName="Award" syncable="YES" codeGenerationType="class">
         <attribute name="awardType" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
@@ -107,6 +107,7 @@
         <relationship name="childEvents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="parentEvent" inverseEntity="Event" syncable="YES"/>
         <relationship name="parentDivision" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="divisions" inverseEntity="Event" syncable="YES"/>
         <relationship name="points" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictEventPoints" inverseName="eventKey" inverseEntity="DistrictEventPoints" syncable="YES"/>
+        <relationship name="status" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Status" inverseName="downEvents" inverseEntity="Status" syncable="YES"/>
     </entity>
     <entity name="EventRanking" representedClassName="EventRanking" syncable="YES" codeGenerationType="class">
         <attribute name="dq" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
@@ -197,6 +198,14 @@
         <attribute name="modelKey" attributeType="String" syncable="YES"/>
         <attribute name="modelTypeRaw" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
     </entity>
+    <entity name="Status" representedClassName="Status" syncable="YES" codeGenerationType="class">
+        <attribute name="currentSeason" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="isDatafeedDown" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="latestAppVersion" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="maxSeason" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="minAppVersion" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="downEvents" toMany="YES" deletionRule="Nullify" destinationEntity="EventKey" inverseName="status" inverseEntity="EventKey" syncable="YES"/>
+    </entity>
     <entity name="Subscription" representedClassName="Subscription" parentEntity="MyTBAEntity" syncable="YES" codeGenerationType="class">
         <attribute name="notificationsRaw" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
     </entity>
@@ -270,7 +279,7 @@
         <element name="EventAlliance" positionX="54" positionY="144" width="128" height="135"/>
         <element name="EventAllianceBackup" positionX="63" positionY="153" width="128" height="105"/>
         <element name="EventInsights" positionX="45" positionY="135" width="128" height="90"/>
-        <element name="EventKey" positionX="45" positionY="135" width="128" height="105"/>
+        <element name="EventKey" positionX="45" positionY="135" width="128" height="120"/>
         <element name="EventRanking" positionX="160" positionY="192" width="128" height="225"/>
         <element name="EventStatus" positionX="45" positionY="135" width="128" height="195"/>
         <element name="EventStatusAlliance" positionX="63" positionY="153" width="128" height="120"/>
@@ -287,5 +296,6 @@
         <element name="TeamKey" positionX="45" positionY="135" width="128" height="255"/>
         <element name="TeamMedia" positionX="-45" positionY="144" width="128" height="180"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
+        <element name="Status" positionX="45" positionY="135" width="128" height="135"/>
     </elements>
 </model>

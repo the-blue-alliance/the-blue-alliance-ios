@@ -45,6 +45,7 @@ class RetryService {
 
 protocol Retryable {
     var retryService: RetryService { get set }
+    /// The number of seconds between retries
     var retryInterval: TimeInterval { get }
 
     func retry()

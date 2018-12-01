@@ -1,7 +1,6 @@
 import CoreData
 import Crashlytics
 import FirebaseAuth
-import FirebaseRemoteConfig
 import FirebaseMessaging
 import GoogleSignIn
 import PureLayout
@@ -12,7 +11,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
     private let messaging: Messaging
     private let myTBA: MyTBA
-    private let remoteConfig: RemoteConfig
+    private let statusService: StatusService
     private let urlOpener: URLOpener
 
     private(set) var signInViewController: MyTBASignInViewController = MyTBASignInViewController()
@@ -42,10 +41,10 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         return myTBA.isAuthenticated
     }
 
-    init(messaging: Messaging, myTBA: MyTBA, remoteConfig: RemoteConfig, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(messaging: Messaging, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.messaging = messaging
         self.myTBA = myTBA
-        self.remoteConfig = remoteConfig
+        self.statusService = statusService
         self.urlOpener = urlOpener
 
         favoritesViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -180,7 +179,7 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
             }
         case .team:
             if let team = myTBAObject.tbaObject as? Team {
-                viewController = TeamViewController(team: team, remoteConfig: remoteConfig, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                viewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
             } else {
                 // TODO: Push using just key
             }

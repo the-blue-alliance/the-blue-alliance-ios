@@ -52,3 +52,5 @@ fastlane/test_output
 # derived data
 fastlane/derived_data
 *.dSYM.zip
+
+tba-unit-tests/FailureDiffs

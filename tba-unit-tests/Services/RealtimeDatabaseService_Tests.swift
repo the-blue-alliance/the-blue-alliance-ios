@@ -1,4 +1,4 @@
-import FirebaseDatabase
+/*
 import XCTest
 @testable import The_Blue_Alliance
 
@@ -109,3 +109,4 @@ class RealtimeDatabaseService_Tests: XCTestCase {
     }
 
 }
+*/

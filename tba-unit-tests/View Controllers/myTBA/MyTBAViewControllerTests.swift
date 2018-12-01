@@ -12,7 +12,7 @@ class MyTBAViewControllerTests: TBATestCase {
     override func setUp() {
         super.setUp()
 
-        myTBAViewController = MyTBAViewController(messaging: Messaging.messaging(), myTBA: myTBA, remoteConfig: remoteConfig, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        myTBAViewController = MyTBAViewController(messaging: Messaging.messaging(), myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController = MockNavigationController(rootViewController: myTBAViewController)
 
         viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
@@ -110,7 +110,7 @@ class MyTBAViewControllerTests: TBATestCase {
     
     func test_authenticated() {
         let ex = expectation(description: "Authenticated")
-        let mock = MockMyTBAViewController(messaging: Messaging.messaging(), myTBA: myTBA, remoteConfig: remoteConfig, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let mock = MockMyTBAViewController(messaging: Messaging.messaging(), myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         mock.authenticatedExpectation = ex
         myTBA.authToken = "abcd123"
         wait(for: [ex], timeout: 1.0)
@@ -119,7 +119,7 @@ class MyTBAViewControllerTests: TBATestCase {
     func test_unauthenticated() {
         myTBA.authToken = "abcd123"
         let ex = expectation(description: "Unauthenticated")
-        let mock = MockMyTBAViewController(messaging: Messaging.messaging(), myTBA: myTBA, remoteConfig: remoteConfig, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let mock = MockMyTBAViewController(messaging: Messaging.messaging(), myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         mock.unauthenticatedExpectation = ex
         myTBA.authToken = nil
         wait(for: [ex], timeout: 1.0)
