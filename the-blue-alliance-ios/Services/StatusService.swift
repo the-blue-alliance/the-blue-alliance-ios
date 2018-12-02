@@ -6,6 +6,7 @@ import Foundation
  */
 class StatusService: NSObject {
 
+    private let bundle: Bundle
     private let persistentContainer: NSPersistentContainer
     var retryService: RetryService
     private let tbaKit: TBAKit
@@ -13,7 +14,7 @@ class StatusService: NSObject {
     private lazy var status: Status = {
         if let status = Status.status(in: persistentContainer.viewContext) {
             return status
-        } else if let status = Status.fromPlist("StatusDefaults", in: persistentContainer.viewContext) {
+        } else if let status = Status.fromPlist(bundle: bundle, in: persistentContainer.viewContext) {
             return status
         } else {
             fatalError("Cannot setup Status for StatusService")
@@ -40,7 +41,8 @@ class StatusService: NSObject {
         return status.maxSeason!.intValue
     }
 
-    init(persistentContainer: NSPersistentContainer, retryService: RetryService, tbaKit: TBAKit) {
+    init(bundle: Bundle = Bundle.main, persistentContainer: NSPersistentContainer, retryService: RetryService, tbaKit: TBAKit) {
+        self.bundle = bundle
         self.persistentContainer = persistentContainer
         self.retryService = retryService
         self.tbaKit = tbaKit
@@ -55,14 +57,10 @@ class StatusService: NSObject {
             }
 
             let fmsStatus = s.isDatafeedDown!.boolValue
-            if fmsStatus != self?.previousFMSStatus {
-                self?.updateFMSSubscribers(isDatafeedDown: fmsStatus)
-                self?.previousFMSStatus = fmsStatus
-            }
+            self?.dispatchFMSDown(fmsStatus)
 
             let downEventKeys = (s.downEvents!.allObjects as! [EventKey]).map({ $0.key! })
             self?.dispatchEvents(downEventKeys: downEventKeys)
-            self?.previouslyDownEventKeys = downEventKeys
         }
     }
 
@@ -79,6 +77,13 @@ class StatusService: NSObject {
         }
     }
 
+    func dispatchFMSDown(_ fmsStatus: Bool) {
+        if fmsStatus != previousFMSStatus {
+            updateFMSSubscribers(isDatafeedDown: fmsStatus)
+        }
+        previousFMSStatus = fmsStatus
+    }
+
     func dispatchEvents(downEventKeys: [String]) {
         // Dispatch new events are down
         let newlyDownEventKeys = downEventKeys.filter({ !previouslyDownEventKeys.contains($0) })
@@ -91,27 +96,30 @@ class StatusService: NSObject {
         for eventKey in newlyUpEventKeys {
             updateEventSubscribers(eventKey: eventKey, isEventOffline: false)
         }
+
+        // Save our state
+        previouslyDownEventKeys = downEventKeys
     }
 
     // MARK: - Status Notifications
 
-    func registerForFMSStatusChanges(_ subscriber: FMSStatusSubscribable) {
+    fileprivate func registerForFMSStatusChanges(_ subscriber: FMSStatusSubscribable) {
         fmsStatusSubscribers.add(subscriber)
     }
 
-    func registerForEventStatusChanges(_ subscriber: EventStatusSubscribable, eventKey: String) {
+    fileprivate func registerForEventStatusChanges(_ subscriber: EventStatusSubscribable, eventKey: String) {
         let subscribers = eventStatusSubscribers.object(forKey: eventKey as NSString) ?? NSHashTable.weakObjects()
         subscribers.add(subscriber)
         eventStatusSubscribers.setObject(subscribers, forKey: eventKey as NSString)
     }
 
-    func updateFMSSubscribers(isDatafeedDown: Bool) {
+    fileprivate func updateFMSSubscribers(isDatafeedDown: Bool) {
         for subscriber in self.fmsStatusSubscribers.allObjects {
             subscriber.fmsStatusChanged(isDatafeedDown: isDatafeedDown)
         }
     }
 
-    func updateEventSubscribers(eventKey: String, isEventOffline: Bool) {
+    fileprivate func updateEventSubscribers(eventKey: String, isEventOffline: Bool) {
         guard let subscribersTable = eventStatusSubscribers.object(forKey: eventKey as NSString) else {
             return
         }

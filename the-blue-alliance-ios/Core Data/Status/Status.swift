@@ -39,10 +39,11 @@ extension Status: Managed {
         }
     }
 
-    static func fromPlist(_ name: String, in context: NSManagedObjectContext) -> Status? {
-        guard let url = Bundle.main.url(forResource: name, withExtension: "plist") else {
+    static func fromPlist(bundle: Bundle, in context: NSManagedObjectContext) -> Status? {
+        guard let path = bundle.path(forResource: "StatusDefaults", ofType: "plist") else {
             return nil
         }
+        let url = URL(fileURLWithPath: path)
         guard let data = try? Data(contentsOf: url) else {
             return nil
         }

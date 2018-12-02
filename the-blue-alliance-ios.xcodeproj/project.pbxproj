@@ -94,6 +94,8 @@
 		9275956421B1D0A600560D81 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956321B1D0A600560D81 /* Status.swift */; };
 		9275956621B1E92B00560D81 /* StatusServiceOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956521B1E92B00560D81 /* StatusServiceOperation.swift */; };
 		9275956821B33CF500560D81 /* MyTBAPing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956721B33CF500560D81 /* MyTBAPing.swift */; };
+		9275956A21B442AA00560D81 /* StatusServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956921B442AA00560D81 /* StatusServiceTests.swift */; };
+		9275956C21B44A2A00560D81 /* StatusDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9275956B21B44A2A00560D81 /* StatusDefaults.plist */; };
 		927C93B0217D4E350027ABEB /* DistrictRankingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */; };
 		927C93B2217D64300027ABEB /* DistrictEventPointsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */; };
 		927EAABD21A88A730068FD96 /* MockMyTBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EAABC21A88A730068FD96 /* MockMyTBA.swift */; };
@@ -448,6 +450,8 @@
 		9275956321B1D0A600560D81 /* Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
 		9275956521B1E92B00560D81 /* StatusServiceOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusServiceOperation.swift; sourceTree = "<group>"; };
 		9275956721B33CF500560D81 /* MyTBAPing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPing.swift; sourceTree = "<group>"; };
+		9275956921B442AA00560D81 /* StatusServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusServiceTests.swift; sourceTree = "<group>"; };
+		9275956B21B44A2A00560D81 /* StatusDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = StatusDefaults.plist; sourceTree = "<group>"; };
 		927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictRankingTests.swift; sourceTree = "<group>"; };
 		927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictEventPointsTests.swift; sourceTree = "<group>"; };
 		927EAABC21A88A730068FD96 /* MockMyTBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMyTBA.swift; sourceTree = "<group>"; };
@@ -901,6 +905,7 @@
 				14B6726B21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift */,
 				92564C6F216456800047917F /* Secrets_Tests.swift */,
 				92A4147B216DA76400E459A5 /* ReactNativeService_Tests.swift */,
+				9275956921B442AA00560D81 /* StatusServiceTests.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1586,6 +1591,7 @@
 				923AEE962167038000EF50C8 /* Frameworks */,
 				92D6483E20BE4CB8008F0DB3 /* Info.plist */,
 				92564C71216457060047917F /* TestSecrets.plist */,
+				9275956B21B44A2A00560D81 /* StatusDefaults.plist */,
 			);
 			path = "tba-unit-tests";
 			sourceTree = "<group>";
@@ -2081,6 +2087,7 @@
 				92A5E57721A1B7830025CC85 /* team_frc2337_social_media.json in Resources */,
 				92A5E58A21A1B7830025CC85 /* event_2009gg_predictions.json in Resources */,
 				9266A1DE21AA196500545867 /* model_setPreferences.json in Resources */,
+				9275956C21B44A2A00560D81 /* StatusDefaults.plist in Resources */,
 				92A5E59421A1B7830025CC85 /* event_2017mike2_predictions.json in Resources */,
 				92A5E57321A1B7830025CC85 /* event_2015miket_rankings.json in Resources */,
 				92A5E59D21A1B7830025CC85 /* event_2017mike2_insights.json in Resources */,
@@ -2509,6 +2516,7 @@
 				1448DBAE21823178008F542E /* SubscriptionTests.swift in Sources */,
 				92A5E56E21A1B7830025CC85 /* MockURLSession.swift in Sources */,
 				92A5E56D21A1B7830025CC85 /* MockTBAKit.swift in Sources */,
+				9275956A21B442AA00560D81 /* StatusServiceTests.swift in Sources */,
 				148FF626218B90AC006202E6 /* EventRankingTests.swift in Sources */,
 				14B424F62167B01700E1904C /* Calendar+TBA_Tests.swift in Sources */,
 				92FF10D021A25D86003BC5C4 /* TBAViewControllerTester.swift in Sources */,

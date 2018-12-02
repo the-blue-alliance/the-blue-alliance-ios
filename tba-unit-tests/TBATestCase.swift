@@ -15,15 +15,14 @@ class TBATestCase: CoreDataTestCase {
     override func setUp() {
         super.setUp()
 
+        let testBundle = Bundle(for: type(of: self))
+
         myTBA = MockMyTBA()
         userDefaults = UserDefaults(suiteName: "TBATests")
         tbaKit = MockTBAKit(userDefaults: userDefaults)
         urlOpener = MockURLOpener()
         pushService = PushService(userDefaults: userDefaults, myTBA: myTBA, retryService: RetryService())
-
-        statusService = StatusService(persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
-        let statusTask = statusService.fetchStatus()
-        tbaKit.sendSuccessStub(for: statusTask)
+        statusService = StatusService(bundle: testBundle, persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
     }
 
     override func tearDown() {

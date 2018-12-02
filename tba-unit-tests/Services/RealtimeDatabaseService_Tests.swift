@@ -2,67 +2,6 @@
 import XCTest
 @testable import The_Blue_Alliance
 
-class FMSStatusSubscribable_Tests: XCTestCase {
-
-    var mockRealtimeDatabaseService: MockRealtimeDatabaseService!
-    var fmsSubscribable: MockFMSStatusSubscribable!
-
-    override func setUp() {
-        super.setUp()
-
-        mockRealtimeDatabaseService = MockRealtimeDatabaseService(databaseReference: DatabaseReference())
-        fmsSubscribable = MockFMSStatusSubscribable(realtimeDatabaseService: mockRealtimeDatabaseService)
-    }
-
-    override func tearDown() {
-        fmsSubscribable = nil
-        mockRealtimeDatabaseService = nil
-
-        super.tearDown()
-    }
-
-    func test_registerForFMSStatusChanges() {
-        let registerForFMSStatusChangesExpectation = XCTestExpectation(description: "registerForFMSStatusChanges called")
-        mockRealtimeDatabaseService.registerForFMSStatusChangesExpectation = registerForFMSStatusChangesExpectation
-
-        fmsSubscribable.registerForFMSStatusChanges()
-        wait(for: [registerForFMSStatusChangesExpectation], timeout: 1.0)
-    }
-
-}
-
-class EventStatusSubscribable_Tests: XCTestCase {
-
-    var mockRealtimeDatabaseService: MockRealtimeDatabaseService!
-    var eventSubscribable: MockEventStatusSubscribable!
-
-    override func setUp() {
-        super.setUp()
-
-        mockRealtimeDatabaseService = MockRealtimeDatabaseService(databaseReference: DatabaseReference())
-        eventSubscribable = MockEventStatusSubscribable(realtimeDatabaseService: mockRealtimeDatabaseService)
-    }
-
-    override func tearDown() {
-        eventSubscribable = nil
-        mockRealtimeDatabaseService = nil
-
-        super.tearDown()
-    }
-
-    func test_registerForFMSStatusChanges() {
-        let testEventKey = "2018miket"
-
-        let registerForEventStatusChangesExpectation = XCTestExpectation(description: "registerForEventStatusChanges called")
-        mockRealtimeDatabaseService.registerForEventStatusChangesEventKey = testEventKey
-        mockRealtimeDatabaseService.registerForEventStatusChangesExpectation = registerForEventStatusChangesExpectation
-
-        eventSubscribable.registerForEventStatusChanges(eventKey: testEventKey)
-        wait(for: [registerForEventStatusChangesExpectation], timeout: 1.0)
-    }
-
-}
-
 class RealtimeDatabaseService_Tests: XCTestCase {
 
     var realtimeDatabaseService: RealtimeDatabaseService!
