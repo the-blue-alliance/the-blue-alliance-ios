@@ -93,6 +93,7 @@
 		9274E14921B1AAD300F5D5D0 /* NotificationStatusTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9274E14821B1A12500F5D5D0 /* NotificationStatusTableViewCell.xib */; };
 		9275956421B1D0A600560D81 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956321B1D0A600560D81 /* Status.swift */; };
 		9275956621B1E92B00560D81 /* StatusServiceOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956521B1E92B00560D81 /* StatusServiceOperation.swift */; };
+		9275956821B33CF500560D81 /* MyTBAPing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956721B33CF500560D81 /* MyTBAPing.swift */; };
 		927C93B0217D4E350027ABEB /* DistrictRankingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */; };
 		927C93B2217D64300027ABEB /* DistrictEventPointsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */; };
 		927EAABD21A88A730068FD96 /* MockMyTBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EAABC21A88A730068FD96 /* MockMyTBA.swift */; };
@@ -446,6 +447,7 @@
 		9274E14821B1A12500F5D5D0 /* NotificationStatusTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationStatusTableViewCell.xib; sourceTree = "<group>"; };
 		9275956321B1D0A600560D81 /* Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
 		9275956521B1E92B00560D81 /* StatusServiceOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusServiceOperation.swift; sourceTree = "<group>"; };
+		9275956721B33CF500560D81 /* MyTBAPing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPing.swift; sourceTree = "<group>"; };
 		927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictRankingTests.swift; sourceTree = "<group>"; };
 		927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictEventPointsTests.swift; sourceTree = "<group>"; };
 		927EAABC21A88A730068FD96 /* MockMyTBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMyTBA.swift; sourceTree = "<group>"; };
@@ -1296,6 +1298,7 @@
 			isa = PBXGroup;
 			children = (
 				92A5E4FB21A1B7470025CC85 /* MyTBARegister.swift */,
+				9275956721B33CF500560D81 /* MyTBAPing.swift */,
 				92A5E4FC21A1B7470025CC85 /* MyTBASubscription.swift */,
 				92A5E4FD21A1B7470025CC85 /* MyTBAPreferences.swift */,
 				92A5E4FE21A1B7470025CC85 /* MyTBAFavorite.swift */,
@@ -2399,6 +2402,7 @@
 				92FF110A21A61AF6003BC5C4 /* EventInfoViewController.swift in Sources */,
 				92A5E51521A1B7470025CC85 /* MyTBAModel.swift in Sources */,
 				92FF110C21A61AF6003BC5C4 /* EventStatsContainerViewController.swift in Sources */,
+				9275956821B33CF500560D81 /* MyTBAPing.swift in Sources */,
 				92A5E5D721A22D550025CC85 /* Date+TBA.swift in Sources */,
 				92FF111921A61B37003BC5C4 /* TeamAtDistrictViewController.swift in Sources */,
 				925471F7208CC6F100AD3204 /* EventAllianceTableViewCell.swift in Sources */,

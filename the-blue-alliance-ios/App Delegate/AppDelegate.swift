@@ -255,6 +255,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func setupPushServiceDelegates() {
         messaging.delegate = pushService
+        // TODO: remoteMessageDelegate
         UNUserNotificationCenter.current().delegate = pushService
         myTBA.authenticationProvider.add(observer: pushService)
     }

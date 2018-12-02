@@ -4,19 +4,27 @@ import FirebaseMessaging
 import UIKit
 import UserNotifications
 
-private enum NotificationRow: Int {
+private enum NotificationRow: Int, CaseIterable {
     case device
     case firebase
     case myTBA
-    case test
-    case max
+    case ping
 }
 
-enum NotificationStatus: Int {
+enum NotificationStatus {
     case unknown
     case loading
-    case invalid
+    case invalid(String)
     case valid
+
+    var isValid: Bool {
+        switch self {
+        case .valid:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 class NotificationsViewController: TBATableViewController {
@@ -24,31 +32,35 @@ class NotificationsViewController: TBATableViewController {
     private let messaging: Messaging
     private let myTBA: MyTBA
     private let pushService: PushService
+    private let urlOpener: URLOpener
 
-    private let deviceCell: NotificationStatusTableViewCell
-    private var deviceAuthorization: UNAuthorizationStatus?
+    private lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(showCopyFCMToken))
 
-    private let firebaseCell: NotificationStatusTableViewCell
+    private var fetchingDeviceAuthorizationStatus = false
+    private var deviceAuthorizationStatus: UNAuthorizationStatus?
 
-    private let myTBACell: NotificationStatusTableViewCell
-    private var myTBAError: Error?
+    private var myTBARegisterRequest: URLSessionDataTask?
+    private var myTBARegisterResponse: MyTBABaseResponse?
+    private var myTBARegisterError: Error?
 
-    private let pingCell: NotificationStatusTableViewCell
-    lazy var cells = [deviceCell, firebaseCell, myTBACell, pingCell]
+    private var myTBAPingRequest: URLSessionDataTask?
+    private var myTBAPingResponse: MyTBABaseResponse?
+    private var myTBAPingError: Error?
 
-    init(messaging: Messaging, myTBA: MyTBA, pushService: PushService, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(messaging: Messaging, myTBA: MyTBA, pushService: PushService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.messaging = messaging
         self.myTBA = myTBA
         self.pushService = pushService
-
-        deviceCell = NotificationsViewController.cell("Device Settings")
-        firebaseCell = NotificationsViewController.cell("Firebase Status")
-        myTBACell = NotificationsViewController.cell("myTBA Registration")
-        pingCell = NotificationsViewController.cell("Test Notification")
+        self.urlOpener = urlOpener
 
         super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         title = "Troubleshoot Notifications"
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(checkDeviceAuthorization),
+                                               name: UIApplication.willEnterForegroundNotification,
+                                               object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -58,95 +70,73 @@ class NotificationsViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Kick-off the first stage in our checks
+        // Kick-off the stages in our checks
         checkDeviceAuthorization()
+        checkMyTBARegistration()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        myTBARegisterRequest?.cancel()
+        myTBAPingRequest?.cancel()
     }
 
     // MARK: - Table View Data Source
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return NotificationRow.max.rawValue
-    }
-
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return cells[indexPath.row]
-    }
-
-    // MARK: - Private Methods
-
-    private static func cell(_ title: String) -> NotificationStatusTableViewCell {
         let cell = NotificationStatusTableViewCell.nib!.instantiate(withOwner: self, options: nil).first as! NotificationStatusTableViewCell
-        cell.viewModel = NotificationStatusCellViewModel(title: title)
+
+        let row = NotificationRow(rawValue: indexPath.row)!
+        let viewModel: NotificationStatusCellViewModel = {
+            switch row {
+            case .device:
+                if fetchingDeviceAuthorizationStatus {
+                    return NotificationStatusCellViewModel(title: "Checking Device Notification Settings...", notificationStatus: .loading)
+                } else {
+                    var status = NotificationStatus.unknown
+                    if let deviceAuthorizationStatus = deviceAuthorizationStatus {
+                        status = deviceAuthorizationNotificationStatus(forAuthorizationStatus: deviceAuthorizationStatus)
+                    }
+                    return NotificationStatusCellViewModel(title: "Device Notification Settings", notificationStatus: status)
+                }
+            case .firebase:
+                let status: NotificationStatus = {
+                    if messaging.fcmToken == nil {
+                        return .invalid("No FCM token from Firebase")
+                    } else {
+                        return .valid
+                    }
+                }()
+                return NotificationStatusCellViewModel(title: "Firebase Token", notificationStatus: status)
+            case .myTBA:
+                if myTBARegisterRequest == nil {
+                    let status = self.myTBARegistrationNotificationStatus()
+                    return NotificationStatusCellViewModel(title: "myTBA Registration", notificationStatus: status)
+                } else {
+                    return NotificationStatusCellViewModel(title: "Checking myTBA Registration...", notificationStatus: .loading)
+                }
+            case .ping:
+                if myTBAPingRequest == nil {
+                    let status = self.myTBAPingNotificationStatus()
+                    return NotificationStatusCellViewModel(title: "Ping Device", notificationStatus: status)
+                } else {
+                    return NotificationStatusCellViewModel(title: "Pinging Device...", notificationStatus: .unknown)
+                }
+            }
+        }()
+        cell.viewModel = viewModel
         return cell
     }
 
-    private func updateCell(_ cell: NotificationStatusTableViewCell, status: NotificationStatus) {
-        DispatchQueue.main.async {
-            cell.viewModel = NotificationStatusCellViewModel(title: cell.viewModel!.title, notificationStatus: status)
-        }
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return NotificationRow.allCases.count
     }
 
-    private func checkDeviceAuthorization() {
-        updateCell(deviceCell, status: .loading)
+    // MARK: - Table View Delegate
 
-        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
-            self.deviceAuthorization = settings.authorizationStatus
-
-            let status: NotificationStatus = {
-                switch settings.authorizationStatus {
-                case .authorized:
-                    return .valid
-                case .notDetermined:
-                    return .invalid
-                case .denied:
-                    return .invalid
-                case .provisional:
-                    return .valid
-                }
-            }()
-            self.updateCell(self.deviceCell, status: status)
-            self.checkFirebaseConfiguration()
-        }
-    }
-
-    private func checkFirebaseConfiguration() {
-        updateCell(firebaseCell, status: .loading)
-
-        let status: NotificationStatus = {
-            if messaging.fcmToken == nil {
-                return .invalid
-            } else {
-                return .valid
-            }
-        }()
-        updateCell(firebaseCell, status: status)
-        checkMyTBARegistration()
-    }
-
-    private func checkMyTBARegistration() {
-        updateCell(myTBACell, status: .loading)
-        guard let fcmToken = messaging.fcmToken else {
-            updateCell(myTBACell, status: .invalid)
-            return
-        }
-        guard myTBA.authToken != nil else {
-            updateCell(myTBACell, status: .invalid)
-            return
-        }
-        myTBA.register(fcmToken) { (error) in
-            self.myTBAError = error
-
-            if error == nil {
-                self.updateCell(self.myTBACell, status: .valid)
-            } else {
-                self.updateCell(self.myTBACell, status: .invalid)
-            }
-            self.sendPing()
-        }
-    }
-
-    func sendPing() {
-        // TODO: Find some way to send this device a ping from upstream
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 44.0
     }
 
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
@@ -156,25 +146,191 @@ class NotificationsViewController: TBATableViewController {
         return nil
     }
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-
-        let cell = cells[indexPath.row]
-        if cell == deviceCell, let deviceAuthorization = deviceAuthorization {
-            if deviceAuthorization == .denied {
-                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-            } else if deviceAuthorization == .notDetermined {
-                PushService.requestAuthorizationForNotifications(nil)
-            }
-        } else if cell == firebaseCell {
-            showError("No token from Firebase - try relaunching the app")
-        } else if cell == myTBACell, let myTBAError = myTBAError {
-            showError("Error registering with myTBA - \(myTBAError.localizedDescription)")
-        } else if cell == pingCell {
-            showError("Error sending test notification - something is wrong upstream")
+    override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        if section == 0, !(view.gestureRecognizers?.contains(longPressGestureRecognizer) ?? false) {
+            view.addGestureRecognizer(longPressGestureRecognizer)
         }
     }
 
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
+        let row = NotificationRow(rawValue: indexPath.row)!
+        switch row {
+        case .device:
+            if deviceAuthorizationStatus == .denied {
+                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+            } else if deviceAuthorizationStatus == .notDetermined {
+                PushService.requestAuthorizationForNotifications({ (_, _) in
+                    self.checkDeviceAuthorization()
+                })
+            } else {
+                showError("Unable to resolve device settings - check push notification settings in Settings.app")
+            }
+        case .firebase:
+            showError("No FCM token from Firebase - try force quitting and re-launching the app.")
+        case .myTBA:
+            let status = myTBARegistrationNotificationStatus()
+            switch status {
+            case .invalid(let str):
+                showError("Error registering with myTBA - \(str)")
+            default:
+                showError("Unknown error registering with myTBA")
+            }
+        case .ping:
+            let status = myTBAPingNotificationStatus()
+            switch status {
+            case .invalid(let str):
+                showError("Error pinging device - \(str)")
+            default:
+                showError("Unknown error pinging device")
+            }
+        }
+    }
+
+    // MARK: - State Machine methods
+
+    // MARK: - Device Settings
+
+    @objc private func checkDeviceAuthorization() {
+        // Already fetching authorzation
+        guard fetchingDeviceAuthorizationStatus == false else {
+            return
+        }
+
+        fetchingDeviceAuthorizationStatus = true
+        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+            self.fetchingDeviceAuthorizationStatus = false
+            self.deviceAuthorizationStatus = settings.authorizationStatus
+
+            self.sendPing()
+            self.reloadMain()
+        }
+        reloadMain()
+    }
+
+    private func deviceAuthorizationNotificationStatus(forAuthorizationStatus status: UNAuthorizationStatus) -> NotificationStatus {
+        return {
+            switch status {
+            case .authorized:
+                return .valid
+            case .notDetermined:
+                return .invalid("Have not yet asked for push notification permissions.")
+            case .denied:
+                return .invalid("Permission for push notifications was denied.")
+            case .provisional:
+                return .valid
+            }
+        }()
+    }
+
+    // MARK: - myTBA Registration
+
+    private func checkMyTBARegistration() {
+        // Already checking myTBA registration
+        guard myTBARegisterRequest == nil else {
+            return
+        }
+
+        guard myTBA.isAuthenticated else {
+            return
+        }
+
+        guard let fcmToken = messaging.fcmToken else {
+            return
+        }
+
+        myTBARegisterRequest = myTBA.register(fcmToken) { (response, error) in
+            self.myTBARegisterRequest = nil
+            self.myTBARegisterResponse = response
+            self.myTBARegisterError = error
+
+            self.sendPing()
+            self.reloadMain()
+        }
+        reloadMain()
+    }
+
+    private func myTBARegistrationNotificationStatus() -> NotificationStatus {
+        if !myTBA.isAuthenticated {
+            return .invalid("Not signed in to myTBA. Sign in under the myTBA tab.")
+        } else if messaging.fcmToken == nil {
+            return .invalid("No FCM token from Firebase.")
+        } else if let myTBARegisterError = myTBARegisterError {
+            return .invalid(myTBARegisterError.localizedDescription)
+        } else if myTBARegisterResponse != nil {
+            return .valid
+        } else {
+            return .unknown
+        }
+    }
+
+    // MARK: - Ping
+
+    func sendPing() {
+        // We wouldn't get the ping, since our device isn't authorized to get push notifications
+        let deviceAuthorizationStatusValid: Bool = {
+            if let deviceAuthorizationStatus = self.deviceAuthorizationStatus {
+                return self.deviceAuthorizationNotificationStatus(forAuthorizationStatus: deviceAuthorizationStatus).isValid
+            }
+            return false
+        }()
+        guard deviceAuthorizationStatusValid else {
+            return
+        }
+
+        // Not auth'd to myTBA - request would fail
+        guard myTBA.isAuthenticated else {
+            return
+        }
+
+        // We're not registered to myTBA, so we wouldn't see a ping
+        guard self.myTBARegistrationNotificationStatus().isValid else {
+            return
+        }
+
+        // Already pinging device
+        guard myTBAPingRequest == nil else {
+            return
+        }
+
+        guard let fcmToken = messaging.fcmToken else {
+            return
+        }
+
+        myTBAPingRequest = myTBA.ping(fcmToken, completion: { (response, error) in
+            self.myTBAPingRequest = nil
+            self.myTBAPingResponse = response
+            self.myTBAPingError = error
+
+            self.reloadMain()
+        })
+        reloadMain()
+    }
+
+    private func myTBAPingNotificationStatus() -> NotificationStatus {
+        if !myTBA.isAuthenticated {
+            return .unknown
+        } else if messaging.fcmToken == nil {
+            return .unknown
+        } else if let myTBAPingError = myTBAPingError {
+            return .invalid(myTBAPingError.localizedDescription)
+        } else if myTBAPingResponse != nil {
+            return .valid
+        } else {
+            return .unknown
+        }
+    }
+
+    // MARK: - UI Methods
+
+    func reloadMain() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
+
+    // TODO: Use Alertable instead...
     private func showError(_ error: String) {
         let alert = UIAlertController(title: "Error", message: error, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
@@ -182,6 +338,26 @@ class NotificationsViewController: TBATableViewController {
         DispatchQueue.main.async {
             self.present(alert, animated: true, completion: nil)
         }
+    }
+
+    @objc func showCopyFCMToken() {
+        guard let fcmToken = messaging.fcmToken else {
+            return
+        }
+
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Copy Token", style: .default) { [weak self] _ in
+            self?.copyFCMTokenToPasteboard(fcmToken)
+        })
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+
+        DispatchQueue.main.async {
+            self.present(actionSheet, animated: true, completion: nil)
+        }
+    }
+
+    private func copyFCMTokenToPasteboard(_ fcmToken: String) {
+        UIPasteboard.general.string = fcmToken
     }
 
 }
