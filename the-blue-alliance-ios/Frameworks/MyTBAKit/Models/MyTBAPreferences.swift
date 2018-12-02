@@ -37,7 +37,10 @@ extension MyTBA {
             if let error = error {
                 completion(nil, nil, error)
             } else if let preferencesResponse = preferencesResponse, let data = preferencesResponse.message.data(using: .utf8) {
-                let messageResponse = try! JSONDecoder().decode(MyTBAPreferencesMessageResponse.self, from: data)
+                guard let messageResponse = try? JSONDecoder().decode(MyTBAPreferencesMessageResponse.self, from: data) else {
+                    completion(nil, nil, MyTBAError.error("Error decoding myTBA preferences response"))
+                    return
+                }
                 completion(messageResponse.favorite, messageResponse.subscription, error)
             } else {
                 completion(nil, nil, error)

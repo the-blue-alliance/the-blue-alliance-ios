@@ -27,7 +27,7 @@ class MyTBATableViewControllerTests: TBATestCase {
         waitOneSecond()
         verifyLayer(viewControllerTester.window.layer, identifier: "no_data")
 
-        Favorite.insert([MyTBAFavorite(modelKey: "2018miket", modelType: .event), MyTBAFavorite(modelKey: "2018ctsc_qm1", modelType: .match), MyTBAFavorite(modelKey: "frc7332", modelType: .team)], in: persistentContainer.viewContext)
+        Favorite.insert([MyTBAFavorite(modelKey: "2018miket", modelType: .event), MyTBAFavorite(modelKey: "2018ctsc_qm1", modelType: .match), MyTBAFavorite(modelKey: "frc7332", modelType: .team), MyTBAFavorite(modelKey: "2018miket_frc2337", modelType: .eventTeam), MyTBAFavorite(modelKey: "frc7332", modelType: .team)], in: persistentContainer.viewContext)
         myTBATableViewController.fetchMatch("2018ctsc_qm1")
         waitOneSecond()
 
