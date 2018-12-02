@@ -9,6 +9,26 @@ enum MyTBAModelType: Int, Codable {
 
 protocol MyTBAResponse: Codable {}
 
+
+typealias MyTBABaseCompletionBlock = (MyTBABaseResponse?, Error?) -> ()
+
+struct MyTBABaseResponse: MyTBAResponse, Codable {
+    var code: Int
+    var message: String
+
+    enum CodingKeys: String, CodingKey {
+        case code
+        case message
+    }
+
+    var error: MyTBAError? {
+        if code >= 400 {
+            return MyTBAError.error(message)
+        }
+        return nil
+    }
+}
+
 // Models for Favorite/Subscription
 protocol MyTBAModel: Codable {
 
