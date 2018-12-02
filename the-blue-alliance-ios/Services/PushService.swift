@@ -38,7 +38,8 @@ class PushService: NSObject {
             // Not authenticated to myTBA - save token for registration once we're auth'd
             pendingRegisterPushToken = token
         } else {
-            myTBA.register(token) { (error) in
+            print("Auth token: \(myTBA.authToken)")
+            myTBA.register(token) { (_, error) in
                 if let error = error {
                     Crashlytics.sharedInstance().recordError(error)
                     DispatchQueue.main.async {

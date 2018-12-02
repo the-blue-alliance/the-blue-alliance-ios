@@ -54,6 +54,7 @@ class SettingsViewController: TBATableViewController {
 
         title = "Settings"
         tabBarItem.image = UIImage(named: "ic_settings")
+        hidesBottomBarWhenPushed = true
 
         metadata.metadataProvider.add(observer: self)
     }
@@ -175,7 +176,7 @@ class SettingsViewController: TBATableViewController {
 
                 self.present(alertController, animated: true, completion: nil)
             case DebugRow.troubleshootNotifications.rawValue:
-                let notificationsViewController = NotificationsViewController(messaging: messaging, myTBA: myTBA, pushService: pushService, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                let notificationsViewController = NotificationsViewController(messaging: messaging, myTBA: myTBA, pushService: pushService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
                 navigationController?.pushViewController(notificationsViewController, animated: true)
             default:
                 fatalError("This row does not exist")

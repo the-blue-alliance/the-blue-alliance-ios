@@ -14,7 +14,7 @@ class MyTBASignOutOperation: TBAOperation {
     }
 
     override func execute() {
-        unregisterTask = myTBA.unregister(pushToken) { (error) in
+        unregisterTask = myTBA.unregister(pushToken) { (_, error) in
             self.unregisterTask = nil
             if let error = error {
                 self.completionError = error

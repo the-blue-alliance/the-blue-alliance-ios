@@ -97,7 +97,7 @@ class MyTBATests: MyTBATestCase {
 
     func test_callApi_hasBearer() {
         myTBA.authToken = "abcd123"
-        let task = myTBA.callApi(method: "test") { (registerResponse: MyTBARegisterResponse?, error: Error?) in
+        let task = myTBA.callApi(method: "test") { (registerResponse: MyTBABaseResponse?, error: Error?) in
             // NOP
         }
         guard let request = task.currentRequest else {

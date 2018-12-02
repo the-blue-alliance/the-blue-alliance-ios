@@ -8,20 +8,9 @@ struct MyTBAPreferences: Codable {
     var notifications: [NotificationType]
 }
 
-struct MyTBAPreferencesResponse: MyTBAResponse, Codable {
-    var code: Int
-    var message: String
-}
-
 struct MyTBAPreferencesMessageResponse: Codable {
-    let favorite: MyTBAPreferencesSubResponse
-    let subscription: MyTBAPreferencesSubResponse
-}
-
-// Responses for favorite/subscription actions stored in MyPreferencesResponse.message
-struct MyTBAPreferencesSubResponse: Codable {
-    var code: Int
-    var message: String
+    let favorite: MyTBABaseResponse
+    let subscription: MyTBABaseResponse
 }
 
 extension MyTBA {
@@ -30,7 +19,7 @@ extension MyTBA {
     // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/174
 
     @discardableResult
-    func updatePreferences(modelKey: String, modelType: MyTBAModelType, favorite: Bool, notifications: [NotificationType], completion: @escaping (_ favoriteResponse: MyTBAPreferencesSubResponse?, _ subscriptionResponse: MyTBAPreferencesSubResponse?, _ error: Error?) -> Void) -> URLSessionDataTask? {
+    func updatePreferences(modelKey: String, modelType: MyTBAModelType, favorite: Bool, notifications: [NotificationType], completion: @escaping (_ favoriteResponse: MyTBABaseResponse?, _ subscriptionResponse: MyTBABaseResponse?, _ error: Error?) -> Void) -> URLSessionDataTask? {
         let preferences = MyTBAPreferences(deviceKey: uuid,
                                            favorite: favorite,
                                            modelKey: modelKey,
@@ -44,9 +33,9 @@ extension MyTBA {
 
         let method = "model/setPreferences"
 
-        return callApi(method: method, bodyData: encodedPreferences, completion: { (preferencesResponse: MyTBAPreferencesResponse?, error: Error?) in
-            if let preferencesResponse = preferencesResponse, preferencesResponse.code >= 400 {
-                completion(nil, nil, MyTBAError.error(preferencesResponse.message))
+        return callApi(method: method, bodyData: encodedPreferences, completion: { (preferencesResponse: MyTBABaseResponse?, error: Error?) in
+            if let error = error {
+                completion(nil, nil, error)
             } else if let preferencesResponse = preferencesResponse, let data = preferencesResponse.message.data(using: .utf8) {
                 let messageResponse = try! JSONDecoder().decode(MyTBAPreferencesMessageResponse.self, from: data)
                 completion(messageResponse.favorite, messageResponse.subscription, error)

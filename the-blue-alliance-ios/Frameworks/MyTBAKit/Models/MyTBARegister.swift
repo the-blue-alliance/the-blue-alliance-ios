@@ -8,40 +8,26 @@ struct MyTBARegisterRequest: Codable {
     let operatingSystem: String = "ios"
 }
 
-struct MyTBARegisterResponse: MyTBAResponse, Codable {
-    var code: Int
-    var message: String
-}
-
 extension MyTBA {
 
     @discardableResult
-    func register(_ token: String, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTask? {
+    func register(_ token: String, completion: @escaping MyTBABaseCompletionBlock) -> URLSessionDataTask? {
         return registerUnregister("register", token: token, completion: completion)
     }
 
     @discardableResult
-    @objc func unregister(_ token: String, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTask? {
+    func unregister(_ token: String, completion: @escaping MyTBABaseCompletionBlock) -> URLSessionDataTask? {
         return registerUnregister("unregister", token: token, completion: completion)
     }
 
-    private func registerUnregister(_ method: String, token: String, completion: @escaping (_ error: Error?) -> Void) -> URLSessionDataTask? {
-        let registration = MyTBARegisterRequest(deviceUuid: uuid,
-                                                mobileId: token,
-                                                name: deviceName) // TODO: Let's remove this UIDevice stuff... we shouldn't need UIKit
+    private func registerUnregister(_ method: String, token: String, completion: @escaping MyTBABaseCompletionBlock) -> URLSessionDataTask? {
+        let registration = MyTBARegisterRequest(deviceUuid: uuid, mobileId: token, name: deviceName)
 
         guard let encodedRegistration = try? MyTBA.jsonEncoder.encode(registration) else {
-            completion(MyTBAError.error("Unable to update myTBA registration - invalid data"))
+            completion(nil, MyTBAError.error("Unable to update myTBA registration - invalid data"))
             return nil
         }
-
-        return callApi(method: method, bodyData: encodedRegistration, completion: { (registerResponse: MyTBARegisterResponse?, error: Error?) in
-            if let registerResponse = registerResponse, registerResponse.code >= 400 {
-                completion(MyTBAError.error(registerResponse.message))
-            } else {
-                completion(error)
-            }
-        })
+        return callApi(method: method, bodyData: encodedRegistration, completion: completion)
     }
 
 }

@@ -2,10 +2,10 @@ PODS:
   - BFRImageViewer (1.2.3):
     - PINRemoteImage (~> 3.0.0-beta.12)
   - boost-for-react-native (1.63.0)
-  - Crashlytics (3.10.1):
-    - Fabric (~> 1.7.5)
+  - Crashlytics (3.10.9):
+    - Fabric (~> 1.7.13)
   - DoubleConversion (1.1.5)
-  - Fabric (1.7.6)
+  - Fabric (1.7.13)
   - Firebase/Analytics (4.13.0):
     - Firebase/Core
   - Firebase/Auth (4.13.0):
@@ -251,9 +251,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   BFRImageViewer: 647b91e4c9956d1ffc66245614aca22f10b0d370
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
+  Crashlytics: 55e24fc23989680285a21cb1146578d9d18e432c
   DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
-  Fabric: f8d42c893bb187326a7968b62abe55c36a987a46
+  Fabric: 25d0963b691fc97be566392243ff0ecef5a68338
   Firebase: 5ec5e863d269d82d66b4bf56856726f8fb8f0fb3
   FirebaseABTesting: d07d0ee833b842d5153549e4c7e2e2cb1c23a3f9
   FirebaseAnalytics: 7ef69e76a5142f643aeb47c780e1cdce4e23632e
