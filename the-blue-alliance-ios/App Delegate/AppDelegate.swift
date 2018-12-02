@@ -91,9 +91,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let urlOpener: URLOpener = UIApplication.shared
 
     lazy var pushService: PushService = {
-        return PushService(userDefaults: userDefaults,
+        return PushService(messaging: messaging,
                            myTBA: myTBA,
-                           retryService: RetryService())
+                           retryService: RetryService(),
+                           userDefaults: userDefaults)
     }()
     lazy var statusService: StatusService = {
         return StatusService(persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
@@ -324,6 +325,9 @@ extension AppDelegate: GIDSignInDelegate {
                 PushService.requestAuthorizationForNotifications { (_, error) in
                     if let error = error, let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? ContainerViewController & Alertable {
                         signInDelegate.showErrorAlert(with: "Error authorizing notifications - \(error.localizedDescription)")
+                    } else {
+                        // Register with myTBA
+                        self.pushService.registerFCMToken()
                     }
                 }
             }

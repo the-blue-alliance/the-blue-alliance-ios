@@ -1,4 +1,5 @@
 import CoreData
+import FirebaseMessaging
 import XCTest
 @testable import The_Blue_Alliance
 
@@ -21,7 +22,7 @@ class TBATestCase: CoreDataTestCase {
         userDefaults = UserDefaults(suiteName: "TBATests")
         tbaKit = MockTBAKit(userDefaults: userDefaults)
         urlOpener = MockURLOpener()
-        pushService = PushService(userDefaults: userDefaults, myTBA: myTBA, retryService: RetryService())
+        pushService = PushService(messaging: Messaging.messaging(), myTBA: myTBA, retryService: RetryService(), userDefaults: userDefaults)
         statusService = StatusService(bundle: testBundle, persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
     }
 

@@ -67,6 +67,11 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             NSSortDescriptor(key: #keyPath(MyTBAEntity.modelKey), ascending: true)
         ]
 
+        // Only show supported myTBA entities (basically, exclude team@event)
+        fetchRequest.predicate = NSPredicate(format: "%K IN %@",
+                                             #keyPath(MyTBAEntity.modelTypeRaw),
+                                             [MyTBAModelType.event, MyTBAModelType.team, MyTBAModelType.match].map({ $0.rawValue }))
+
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: #keyPath(MyTBAEntity.modelTypeRaw), cacheName: nil)
         fetchedResultsController!.delegate = self
         try! fetchedResultsController!.performFetch()
@@ -106,6 +111,8 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 return myTBACell
             }
             return self.tableView(tableView, cellForRowAt: indexPath, for: match)
+        default:
+            return myTBACell
         }
     }
 
@@ -153,6 +160,8 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             return "Team"
         case .match:
             return "Match"
+        default:
+            return "Other"
         }
     }
 
@@ -223,6 +232,8 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                             self.fetchTeam(key)
                         case .match:
                             self.fetchMatch(key)
+                        default:
+                            break
                         }
                     }
                 } else if error == nil {

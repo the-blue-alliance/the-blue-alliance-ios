@@ -189,6 +189,8 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
             } else {
                 // TODO: Push using just key
             }
+        default:
+            break
         }
 
         guard let vc = viewController else {
