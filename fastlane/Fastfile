@@ -107,7 +107,7 @@ platform :ios do
   end
 
   desc "Internal beta lane - use `beta` or `beta_ci`"
-  private lane :beta_internal do
+  private_lane :beta_internal do
     preship
     configure_code_signing
     update_project_team(teamid: ENV["sigh_com.the-blue-alliance.tba_appstore_team-id"])
@@ -121,7 +121,7 @@ platform :ios do
   end
 
   desc "Ship a compiled build to TestFlight"
-  private lane :beta_testflight do
+  private_lane :beta_testflight do
     pilot(changelog: commit_changelog_short, distribute_external: true, groups: ["Beta"], reject_build_waiting_for_review: true)
   end
 
