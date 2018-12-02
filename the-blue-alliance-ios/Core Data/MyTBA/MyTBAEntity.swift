@@ -38,6 +38,8 @@ extension MyTBAEntity: Managed {
             return Team.findOrFetch(in: managedObjectContext, matching: predicate)
         case .match:
             return Match.findOrFetch(in: managedObjectContext, matching: predicate)
+        default:
+            return nil
         }
     }
 

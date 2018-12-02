@@ -1,4 +1,5 @@
 import CoreData
+import FirebaseMessaging
 import FirebaseRemoteConfig
 import XCTest
 @testable import The_Blue_Alliance
@@ -24,7 +25,7 @@ class TBATestCase: CoreDataTestCase {
             "max_season": NSNumber(value: 2016),
             "current_season": NSNumber(value: 2015)
         ])
-        pushService = PushService(userDefaults: userDefaults, myTBA: myTBA, retryService: RetryService())
+        pushService = PushService(messaging: Messaging.messaging(), myTBA: myTBA, retryService: RetryService(), userDefaults: userDefaults)
     }
 
     override func tearDown() {

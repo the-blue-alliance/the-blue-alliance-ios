@@ -5,6 +5,11 @@ enum MyTBAModelType: Int, Codable {
     case event
     case team
     case match
+    case eventTeam
+    case district
+    case districtTeam
+    case award
+    case media
 }
 
 protocol MyTBAResponse: Codable {}

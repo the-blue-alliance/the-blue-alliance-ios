@@ -21,14 +21,16 @@ class PushService: NSObject {
         }
     }
 
-    private var userDefaults: UserDefaults
+    private var messaging: Messaging
     private var myTBA: MyTBA
     internal var retryService: RetryService
+    private var userDefaults: UserDefaults
 
-    init(userDefaults: UserDefaults, myTBA: MyTBA, retryService: RetryService) {
-        self.userDefaults = userDefaults
+    init(messaging: Messaging, myTBA: MyTBA, retryService: RetryService, userDefaults: UserDefaults) {
+        self.messaging = messaging
         self.myTBA = myTBA
         self.retryService = retryService
+        self.userDefaults = userDefaults
 
         super.init()
     }
@@ -38,7 +40,6 @@ class PushService: NSObject {
             // Not authenticated to myTBA - save token for registration once we're auth'd
             pendingRegisterPushToken = token
         } else {
-            print("Auth token: \(myTBA.authToken)")
             myTBA.register(token) { (_, error) in
                 if let error = error {
                     Crashlytics.sharedInstance().recordError(error)
@@ -52,6 +53,13 @@ class PushService: NSObject {
                 self.pendingRegisterPushToken = (error != nil ? token : nil)
             }
         }
+    }
+
+    func registerFCMToken() {
+        guard let fcmToken = messaging.fcmToken else {
+            return
+        }
+        registerPushToken(fcmToken)
     }
 
     private func registerPendingPushToken() {
