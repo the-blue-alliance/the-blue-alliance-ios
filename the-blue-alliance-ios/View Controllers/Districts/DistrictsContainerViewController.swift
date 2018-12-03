@@ -1,12 +1,11 @@
 import CoreData
 import Foundation
 import UIKit
-import FirebaseRemoteConfig
 
 class DistrictsContainerViewController: ContainerViewController {
 
     private let myTBA: MyTBA
-    private let remoteConfig: RemoteConfig
+    private let statusService: StatusService
     private let urlOpener: URLOpener
 
     private(set) var year: Int {
@@ -20,12 +19,12 @@ class DistrictsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, remoteConfig: RemoteConfig, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.myTBA = myTBA
-        self.remoteConfig = remoteConfig
+        self.statusService = statusService
         self.urlOpener = urlOpener
 
-        year = remoteConfig.currentSeason
+        year = statusService.currentSeason
         districtsViewController = DistrictsViewController(year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [districtsViewController],
@@ -57,7 +56,7 @@ class DistrictsContainerViewController: ContainerViewController {
 extension DistrictsContainerViewController: NavigationTitleDelegate {
 
     func navigationTitleTapped() {
-        let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(current: year, options: Array(2009...remoteConfig.maxSeason).reversed(), persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(current: year, options: Array(2009...statusService.maxSeason).reversed(), persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         selectTableViewController.title = "Select Year"
         selectTableViewController.delegate = self
 

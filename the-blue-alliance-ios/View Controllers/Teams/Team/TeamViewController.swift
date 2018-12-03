@@ -1,6 +1,5 @@
 import BFRImageViewer
 import CoreData
-import FirebaseRemoteConfig
 import Photos
 import UIKit
 
@@ -40,9 +39,9 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
     // MARK: Init
 
-    init(team: Team, remoteConfig: RemoteConfig, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(team: Team, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.team = team
-        self.year = TeamViewController.latestYear(remoteConfig: remoteConfig, years: team.yearsParticipated)
+        self.year = TeamViewController.latestYear(statusService: statusService, years: team.yearsParticipated)
 
         infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -65,7 +64,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
         contextObserver.observeObject(object: team, state: .updated) { [unowned self] (team, _) in
             if self.year == nil {
-                self.year = TeamViewController.latestYear(remoteConfig: remoteConfig, years: team.yearsParticipated)
+                self.year = TeamViewController.latestYear(statusService: statusService, years: team.yearsParticipated)
             } else {
                 self.updateInterface()
             }
@@ -92,13 +91,13 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
     // MARK: - Private
 
-    private static func latestYear(remoteConfig: RemoteConfig, years: [Int]?) -> Int? {
+    private static func latestYear(statusService: StatusService, years: [Int]?) -> Int? {
         if let years = years, !years.isEmpty {
             // Limit default year set to be <= currentSeason
             let latestYear = years.first!
-            if latestYear > remoteConfig.currentSeason, years.count > 1 {
+            if latestYear > statusService.currentSeason, years.count > 1 {
                 // Find the next year before the current season
-                return years.first(where: { $0 <= remoteConfig.currentSeason })
+                return years.first(where: { $0 <= statusService.currentSeason })
             } else {
                 // Otherwise, the first year is fine (for new teams)
                 return years.first

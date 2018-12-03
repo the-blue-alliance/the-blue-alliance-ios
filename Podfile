@@ -31,18 +31,15 @@ target 'The Blue Alliance' do
   pod 'Firebase/Analytics'
   pod 'Firebase/Auth'
   pod 'Firebase/Core'
-  pod 'Firebase/Database'
   pod 'Firebase/Messaging'
-  pod 'Firebase/Performance'
-  pod 'Firebase/RemoteConfig'
   pod 'Firebase/Storage'
 
   # myTBA
   pod 'GoogleSignIn'
 
   # Crash reporting
-  pod 'Fabric', '~> 1.7.6'
-  pod 'Crashlytics', '~> 3.10.1'
+  pod 'Fabric'
+  pod 'Crashlytics'
 
   target 'tba-unit-tests' do
     inherit! :search_paths

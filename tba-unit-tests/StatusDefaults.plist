@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>current_season</key>
+	<integer>2015</integer>
+	<key>min_app_version</key>
+	<integer>-1</integer>
+	<key>max_season</key>
+	<integer>2016</integer>
+	<key>latest_app_version</key>
+	<integer>3</integer>
+</dict>
+</plist>

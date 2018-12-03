@@ -5,13 +5,13 @@ import UIKit
 class AppSetupOperation: TBAOperation {
 
     var persistentContainerOperation: PersistentContainerOperation
-    var remoteConfigServiceOperation: RemoteConfigServiceOperation
+    var statusServiceOperation: StatusServiceOperation
 
     let appSetupOperationQueue = OperationQueue()
 
-    init(persistentContainer: NSPersistentContainer, remoteConfigService: RemoteConfigService) {
+    init(persistentContainer: NSPersistentContainer, statusService: StatusService) {
         self.persistentContainerOperation = PersistentContainerOperation(persistentContainer: persistentContainer)
-        self.remoteConfigServiceOperation = RemoteConfigServiceOperation(remoteConfigService: remoteConfigService)
+        self.statusServiceOperation = StatusServiceOperation(statusService: statusService)
 
         super.init()
     }
@@ -27,7 +27,7 @@ class AppSetupOperation: TBAOperation {
             self.finish()
         }
 
-        let dependentOperations = [persistentContainerOperation, remoteConfigServiceOperation]
+        let dependentOperations = [persistentContainerOperation, statusServiceOperation]
         for op in dependentOperations {
             blockOperation.addDependency(op)
         }

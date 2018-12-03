@@ -80,6 +80,16 @@ class CoreDataTestCase: FBSnapshotTestCase {
         return saveExpectation
     }
 
+    func insertStatus() -> Status {
+        let model = TBAStatus(android: TBAAppInfo(latestAppVersion: -1, minAppVersion: -1),
+                              ios: TBAAppInfo(latestAppVersion: -1, minAppVersion: -1),
+                              currentSeason: 2015,
+                              downEvents: [],
+                              datafeedDown: false,
+                              maxSeason: 2016)
+        return Status.insert(model, in: persistentContainer.viewContext)
+    }
+
     func insertEvent(year: Int = 2015) -> Event {
         let model = TBAEvent(key: "\(year)qcmo",
                              name: "FRC Festival de Robotique - Montreal Regional",

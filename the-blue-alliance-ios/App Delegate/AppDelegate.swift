@@ -2,7 +2,6 @@ import CoreData
 import Crashlytics
 import Firebase
 import FirebaseAuth
-import FirebaseDatabase
 import FirebaseMessaging
 import GoogleSignIn
 import UIKit
@@ -22,19 +21,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let splitViewController = UISplitViewController()
 
         let eventsViewController = EventsContainerViewController(myTBA: myTBA,
-                                                                 remoteConfig: remoteConfigService.remoteConfig,
+                                                                 statusService: statusService,
                                                                  urlOpener: urlOpener,
                                                                  persistentContainer: persistentContainer,
                                                                  tbaKit: tbaKit,
                                                                  userDefaults: userDefaults)
         let teamsViewController = TeamsContainerViewController(myTBA: myTBA,
-                                                               remoteConfig: remoteConfigService.remoteConfig,
+                                                               statusService: statusService,
                                                                urlOpener: urlOpener,
                                                                persistentContainer: persistentContainer,
                                                                tbaKit: tbaKit,
                                                                userDefaults: userDefaults)
         let districtsViewController = DistrictsContainerViewController(myTBA: myTBA,
-                                                                       remoteConfig: remoteConfigService.remoteConfig,
+                                                                       statusService: statusService,
                                                                        urlOpener: urlOpener,
                                                                        persistentContainer: persistentContainer,
                                                                        tbaKit: tbaKit,
@@ -49,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                             userDefaults: userDefaults)
         let myTBAViewController = MyTBAViewController(messaging: messaging,
                                                       myTBA: myTBA,
-                                                      remoteConfig: remoteConfigService.remoteConfig,
+                                                      statusService: statusService,
                                                       urlOpener: urlOpener,
                                                       persistentContainer: persistentContainer,
                                                       tbaKit: tbaKit,
@@ -97,12 +96,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                            retryService: RetryService(),
                            userDefaults: userDefaults)
     }()
-    lazy var realtimeDatabaseService: RealtimeDatabaseService = {
-        return RealtimeDatabaseService(databaseReference: Database.database().reference())
-    }()
-    lazy var remoteConfigService: RemoteConfigService = {
-        return RemoteConfigService(remoteConfig: RemoteConfig.remoteConfig(),
-                                   retryService: RetryService())
+    lazy var statusService: StatusService = {
+        return StatusService(persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
     }()
     lazy var reactNativeService: ReactNativeService = {
         return ReactNativeService(fileManager: FileManager.default,
@@ -144,9 +139,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Kickoff background myTBA/Google sign in, along with setting up delegates
         setupGoogleAuthentication()
 
-        // Our app setup operation will load our persistent stores, fetch our remote config, propogate persistance container
+        // Our app setup operation will load our persistent stores, fetch our status, propogate persistance container
         let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer,
-                                                  remoteConfigService: remoteConfigService)
+                                                  statusService: statusService)
         weak var weakAppSetupOperation = appSetupOperation
         appSetupOperation.completionBlock = { [unowned self] in
             if let error = weakAppSetupOperation?.completionError as NSError? {
@@ -155,16 +150,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     AppDelegate.showFatalError(error, in: window)
                 }
             } else if let buildVersionNumber = Bundle.main.buildVersionNumber,
-                !self.isAppVersionSupported(buildVersionNumber, remoteConfig: self.remoteConfigService.remoteConfig) {
+                !AppDelegate.isAppVersionSupported(buildVersionNumber, statusService: self.statusService) {
                 // App build is less than minimum app version - abort
-                let appStoreID = self.remoteConfigService.remoteConfig.appStoreID
                 DispatchQueue.main.async {
-                    AppDelegate.showMinimumAppAlert(appStoreID: appStoreID,
+                    AppDelegate.showMinimumAppAlert(appStoreID: "1441973916",
                                                     currentAppVersion: buildVersionNumber,
                                                     in: window)
                 }
             } else {
-                self.remoteConfigService.registerRetryable()
+                // Register retries for our status service on the main thread
+                DispatchQueue.main.async {
+                    self.statusService.registerRetryable()
+                }
 
                 DispatchQueue.main.async {
                     guard let window = self.window else {
@@ -220,11 +217,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: Private
 
-    private func isAppVersionSupported(_ version: Int, remoteConfig: RemoteConfig) -> Bool {
+    private static func isAppVersionSupported(_ version: Int, statusService: StatusService) -> Bool {
         if ProcessInfo.processInfo.arguments.contains("-testUnsupportedVersion") {
             return false
         }
-        return version >= self.remoteConfigService.remoteConfig.minimumAppVersion
+        return version >= statusService.minAppVersion
     }
 
     private static func showFatalError(_ error: NSError, in window: UIWindow) {
