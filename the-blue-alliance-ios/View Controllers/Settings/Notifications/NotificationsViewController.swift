@@ -56,6 +56,7 @@ class NotificationsViewController: TBATableViewController {
         super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         title = "Troubleshoot Notifications"
+        hidesBottomBarWhenPushed = true
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(checkDeviceAuthorization),

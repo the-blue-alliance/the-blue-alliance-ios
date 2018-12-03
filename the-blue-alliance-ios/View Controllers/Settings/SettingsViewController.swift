@@ -54,7 +54,7 @@ class SettingsViewController: TBATableViewController {
 
         title = "Settings"
         tabBarItem.image = UIImage(named: "ic_settings")
-        hidesBottomBarWhenPushed = true
+        hidesBottomBarWhenPushed = false
 
         metadata.metadataProvider.add(observer: self)
     }
