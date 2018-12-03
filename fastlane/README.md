@@ -66,11 +66,6 @@ Upload a new beta build to TestFlight (for CI machine)
 fastlane ios beta
 ```
 Upload a new beta build to TestFlight
-### ios beta_internal
-```
-fastlane ios beta_internal
-```
-Internal beta lane - use `beta` or `beta_ci`
 ### ios app_store
 ```
 fastlane ios app_store
