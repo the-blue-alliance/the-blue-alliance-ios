@@ -117,7 +117,7 @@ platform :ios do
       build_configuration: "Release",
       code_signing_identity: "iPhone Distribution"
     )
-    gym
+    gym(archive_path: 'TBA.xcarchive')
   end
 
   desc "Ship a compiled build to TestFlight"
@@ -154,7 +154,7 @@ platform :ios do
       tag_name: current_git_tag,
       description: commit_changelog,
       is_prerelease: options[:is_prerelease] ? true : false,
-      upload_assets: ["The Blue Alliance.ipa", "The Blue Alliance.app.dSYM.zip"]
+      upload_assets: ["The Blue Alliance.ipa", "The Blue Alliance.app.dSYM.zip", "TBA.xcarchive"]
     )
   end
 
