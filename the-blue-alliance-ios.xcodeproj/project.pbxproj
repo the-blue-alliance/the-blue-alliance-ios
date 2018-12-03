@@ -95,6 +95,7 @@
 		9275956821B33CF500560D81 /* MyTBAPing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956721B33CF500560D81 /* MyTBAPing.swift */; };
 		9275956A21B442AA00560D81 /* StatusServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956921B442AA00560D81 /* StatusServiceTests.swift */; };
 		9275956C21B44A2A00560D81 /* StatusDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9275956B21B44A2A00560D81 /* StatusDefaults.plist */; };
+		9275956F21B4EF0600560D81 /* StatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956E21B4EF0600560D81 /* StatusTests.swift */; };
 		927C93B0217D4E350027ABEB /* DistrictRankingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */; };
 		927C93B2217D64300027ABEB /* DistrictEventPointsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */; };
 		927EAABD21A88A730068FD96 /* MockMyTBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EAABC21A88A730068FD96 /* MockMyTBA.swift */; };
@@ -450,6 +451,7 @@
 		9275956721B33CF500560D81 /* MyTBAPing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPing.swift; sourceTree = "<group>"; };
 		9275956921B442AA00560D81 /* StatusServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusServiceTests.swift; sourceTree = "<group>"; };
 		9275956B21B44A2A00560D81 /* StatusDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = StatusDefaults.plist; sourceTree = "<group>"; };
+		9275956E21B4EF0600560D81 /* StatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTests.swift; sourceTree = "<group>"; };
 		927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictRankingTests.swift; sourceTree = "<group>"; };
 		927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictEventPointsTests.swift; sourceTree = "<group>"; };
 		927EAABC21A88A730068FD96 /* MockMyTBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMyTBA.swift; sourceTree = "<group>"; };
@@ -885,6 +887,7 @@
 				92C1F2DD216994CF00BD8445 /* CoreDataTestCase.swift */,
 				92FF113321A70B16003BC5C4 /* CoreDataTestCaseTests.swift */,
 				92FF113121A667E2003BC5C4 /* TBAPersistenceContainerTests.swift */,
+				9275956D21B4EEF400560D81 /* Status */,
 				92361026217D116A000CC5E9 /* Award */,
 				927C93AE217D454A0027ABEB /* District */,
 				926652622156C55C000E4F4F /* Event */,
@@ -984,6 +987,14 @@
 			isa = PBXGroup;
 			children = (
 				9275956321B1D0A600560D81 /* Status.swift */,
+			);
+			path = Status;
+			sourceTree = "<group>";
+		};
+		9275956D21B4EEF400560D81 /* Status */ = {
+			isa = PBXGroup;
+			children = (
+				9275956E21B4EF0600560D81 /* StatusTests.swift */,
 			);
 			path = Status;
 			sourceTree = "<group>";
@@ -2492,6 +2503,7 @@
 				92564C70216456800047917F /* Secrets_Tests.swift in Sources */,
 				92A2F5542156BD4B00267C63 /* NSManagedObjectContext+ExtensionTests.swift in Sources */,
 				92BB717C20CE116C0081F4E5 /* TBAOperation_Tests.swift in Sources */,
+				9275956F21B4EF0600560D81 /* StatusTests.swift in Sources */,
 				929820CF216968020080C1C8 /* TBATestCase.swift in Sources */,
 				925908B32184F86700D7BFCE /* NSSet+OnlyTests.swift in Sources */,
 				92269EE1219B9CF300FAA610 /* DistrictViewControllerTests.swift in Sources */,
