@@ -1,12 +1,11 @@
 import Foundation
 import UIKit
 import CoreData
-import FirebaseRemoteConfig
 
 class EventsContainerViewController: ContainerViewController {
 
     private let myTBA: MyTBA
-    private let remoteConfig: RemoteConfig
+    private let statusService: StatusService
     private let urlOpener: URLOpener
 
     private(set) var year: Int
@@ -14,12 +13,12 @@ class EventsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, remoteConfig: RemoteConfig, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.myTBA = myTBA
-        self.remoteConfig = remoteConfig
+        self.statusService = statusService
         self.urlOpener = urlOpener
 
-        year = remoteConfig.currentSeason
+        year = statusService.currentSeason
         eventsViewController = WeekEventsViewController(year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [eventsViewController],
@@ -61,7 +60,7 @@ class EventsContainerViewController: ContainerViewController {
 extension EventsContainerViewController: NavigationTitleDelegate {
 
     func navigationTitleTapped() {
-        let yearSelectViewController = YearSelectViewController(year: year, years: Array(1992...remoteConfig.maxSeason).reversed(), week: eventsViewController.weekEvent, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let yearSelectViewController = YearSelectViewController(year: year, years: Array(1992...statusService.maxSeason).reversed(), week: eventsViewController.weekEvent, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         yearSelectViewController.delegate = self
 
         let nav = UINavigationController(rootViewController: yearSelectViewController)

@@ -4,12 +4,10 @@
 <dict>
 	<key>max_season</key>
 	<integer>2019</integer>
-	<key>ios_min_app_version</key>
+	<key>min_app_version</key>
 	<integer>-1</integer>
-	<key>ios_latest_app_version</key>
+	<key>latest_app_version</key>
 	<integer>-1</integer>
-	<key>app_store_id</key>
-	<string>abcd123</string>
 	<key>current_season</key>
 	<real>2019</real>
 </dict>

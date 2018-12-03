@@ -34,15 +34,11 @@
 		14B520F7218CA28B00F2EF4F /* EventStatusAllianceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B520F6218CA28B00F2EF4F /* EventStatusAllianceTests.swift */; };
 		14B520F9218CB19400F2EF4F /* EventStatusPlayoffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B520F8218CB19400F2EF4F /* EventStatusPlayoffTests.swift */; };
 		14B520FB218CB96400F2EF4F /* EventStatusQualTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B520FA218CB96400F2EF4F /* EventStatusQualTests.swift */; };
-		14B6726A21517A7E00FDDAB2 /* RealtimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B6726921517A7E00FDDAB2 /* RealtimeDatabaseService.swift */; };
-		14B6726C21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B6726B21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift */; };
-		14B6727321529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B6727221529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift */; };
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
 		373233698A5148831C801B8E /* Pods_The_Blue_Alliance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */; };
 		43CF3D2E906B46064E43038C /* Pods_tba_ui_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */; };
 		5797EAB49489B63DDA0980F5 /* Pods_tba_unit_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */; };
-		9218462D20CDBBDB00AAB7F8 /* RemoteConfigServiceOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9218462C20CDBBDB00AAB7F8 /* RemoteConfigServiceOperation.swift */; };
 		9221C616209BFF7D00477DE2 /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */; };
 		9221C618209BFF8700477DE2 /* LoadingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */; };
 		9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */; };
@@ -94,7 +90,13 @@
 		9274E14521B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */; };
 		9274E14721B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */; };
 		9274E14921B1AAD300F5D5D0 /* NotificationStatusTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9274E14821B1A12500F5D5D0 /* NotificationStatusTableViewCell.xib */; };
+		9275956421B1D0A600560D81 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956321B1D0A600560D81 /* Status.swift */; };
+		9275956621B1E92B00560D81 /* StatusServiceOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956521B1E92B00560D81 /* StatusServiceOperation.swift */; };
 		9275956821B33CF500560D81 /* MyTBAPing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956721B33CF500560D81 /* MyTBAPing.swift */; };
+		9275956A21B442AA00560D81 /* StatusServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956921B442AA00560D81 /* StatusServiceTests.swift */; };
+		9275956C21B44A2A00560D81 /* StatusDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9275956B21B44A2A00560D81 /* StatusDefaults.plist */; };
+		9275956F21B4EF0600560D81 /* StatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956E21B4EF0600560D81 /* StatusTests.swift */; };
+		9275957121B4F10500560D81 /* StatusServiceOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275957021B4F10500560D81 /* StatusServiceOperation.swift */; };
 		927C93B0217D4E350027ABEB /* DistrictRankingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */; };
 		927C93B2217D64300027ABEB /* DistrictEventPointsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */; };
 		927EAABD21A88A730068FD96 /* MockMyTBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EAABC21A88A730068FD96 /* MockMyTBA.swift */; };
@@ -106,9 +108,7 @@
 		92858F27208D444700811614 /* CoreDataContextObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92858F26208D444700811614 /* CoreDataContextObserver.swift */; };
 		92858F2B208D783300811614 /* EventTeamStatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92858F2A208D783300811614 /* EventTeamStatTableViewCell.xib */; };
 		92858F2D208D783E00811614 /* EventTeamStatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92858F2C208D783E00811614 /* EventTeamStatTableViewCell.swift */; };
-		9287013C20CD70CF0077D6DA /* RemoteConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9287013B20CD70CF0077D6DA /* RemoteConfigService.swift */; };
-		9287013E20CD72EC0077D6DA /* RemoteConfigDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9287013D20CD72EC0077D6DA /* RemoteConfigDefaults.plist */; };
-		9287014220CD7CCB0077D6DA /* RemoteConfig+TBA_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9287014120CD7CCB0077D6DA /* RemoteConfig+TBA_Tests.swift */; };
+		9287013E20CD72EC0077D6DA /* StatusDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9287013D20CD72EC0077D6DA /* StatusDefaults.plist */; };
 		9287014620CD8C0B0077D6DA /* PersistentContainerOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9287014420CD8C070077D6DA /* PersistentContainerOperation.swift */; };
 		9287014820CD8C4A0077D6DA /* TBAOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9287014720CD8C4A0077D6DA /* TBAOperation.swift */; };
 		92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92942D951E2154DA008E79CA /* AppDelegate.swift */; };
@@ -223,7 +223,6 @@
 		92A5E5D521A22D550025CC85 /* Calendar+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5CA21A22D550025CC85 /* Calendar+TBA.swift */; };
 		92A5E5D621A22D550025CC85 /* NSSet+Only.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5CB21A22D550025CC85 /* NSSet+Only.swift */; };
 		92A5E5D721A22D550025CC85 /* Date+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5CC21A22D550025CC85 /* Date+TBA.swift */; };
-		92A5E5D821A22D550025CC85 /* RemoteConfig+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5CD21A22D550025CC85 /* RemoteConfig+TBA.swift */; };
 		92A5E5D921A22D550025CC85 /* String+Prefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5CE21A22D550025CC85 /* String+Prefix.swift */; };
 		92A5E5DA21A22D550025CC85 /* UIColor+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5CF21A22D550025CC85 /* UIColor+TBA.swift */; };
 		92A5E5DB21A22D550025CC85 /* UINavigationController+SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5D021A22D550025CC85 /* UINavigationController+SplitView.swift */; };
@@ -243,7 +242,6 @@
 		92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */; };
 		92BB717C20CE116C0081F4E5 /* TBAOperation_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB717B20CE116C0081F4E5 /* TBAOperation_Tests.swift */; };
 		92BB717F20CE19F40081F4E5 /* PersistentContainerOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB717E20CE19F40081F4E5 /* PersistentContainerOperationTests.swift */; };
-		92BB718120CE1A000081F4E5 /* RemoteConfigServiceOperation_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB718020CE1A000081F4E5 /* RemoteConfigServiceOperation_Tests.swift */; };
 		92BB718420CE1E310081F4E5 /* Test.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92BB718220CE1E310081F4E5 /* Test.xcdatamodeld */; };
 		92BB718920D216D50081F4E5 /* EmptyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92BB718820D216D50081F4E5 /* EmptyViewController.xib */; };
 		92BB8B5A214F04DD0035AF28 /* SettingsViewController_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B59214F04DD0035AF28 /* SettingsViewController_UITests.swift */; };
@@ -304,6 +302,7 @@
 		92DF3610217D43EC00B5246B /* Playable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF360C217D43EB00B5246B /* Playable.swift */; };
 		92DF3611217D43EC00B5246B /* Managed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF360D217D43EB00B5246B /* Managed.swift */; };
 		92DF3612217D43EC00B5246B /* Locatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF360E217D43EB00B5246B /* Locatable.swift */; };
+		92DF54E121B1B65A0082C58C /* StatusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF54E021B1B65A0082C58C /* StatusService.swift */; };
 		92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E9F0AA216C439700C1F916 /* NoDataViewController.swift */; };
 		92F38537217D31CE00A9AC02 /* AwardRecipientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F38536217D31CE00A9AC02 /* AwardRecipientTests.swift */; };
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
@@ -392,15 +391,11 @@
 		14B520F6218CA28B00F2EF4F /* EventStatusAllianceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusAllianceTests.swift; sourceTree = "<group>"; };
 		14B520F8218CB19400F2EF4F /* EventStatusPlayoffTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusPlayoffTests.swift; sourceTree = "<group>"; };
 		14B520FA218CB96400F2EF4F /* EventStatusQualTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusQualTests.swift; sourceTree = "<group>"; };
-		14B6726921517A7E00FDDAB2 /* RealtimeDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeDatabaseService.swift; sourceTree = "<group>"; };
-		14B6726B21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeDatabaseService_Tests.swift; sourceTree = "<group>"; };
-		14B6727221529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRealtimeDatabaseService.swift; sourceTree = "<group>"; };
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
 		4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.release.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.release.xcconfig"; sourceTree = "<group>"; };
 		52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_unit_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F1F0F9FCDD8A9EB6D9CCC6A /* Pods-tba-ui-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-ui-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tba-ui-tests/Pods-tba-ui-tests.debug.xcconfig"; sourceTree = "<group>"; };
-		9218462C20CDBBDB00AAB7F8 /* RemoteConfigServiceOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigServiceOperation.swift; sourceTree = "<group>"; };
 		9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingTableViewCell.xib; sourceTree = "<group>"; };
 		9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
@@ -452,7 +447,13 @@
 		9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusTableViewCell.swift; sourceTree = "<group>"; };
 		9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusCellViewModel.swift; sourceTree = "<group>"; };
 		9274E14821B1A12500F5D5D0 /* NotificationStatusTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationStatusTableViewCell.xib; sourceTree = "<group>"; };
+		9275956321B1D0A600560D81 /* Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
+		9275956521B1E92B00560D81 /* StatusServiceOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusServiceOperation.swift; sourceTree = "<group>"; };
 		9275956721B33CF500560D81 /* MyTBAPing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPing.swift; sourceTree = "<group>"; };
+		9275956921B442AA00560D81 /* StatusServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusServiceTests.swift; sourceTree = "<group>"; };
+		9275956B21B44A2A00560D81 /* StatusDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = StatusDefaults.plist; sourceTree = "<group>"; };
+		9275956E21B4EF0600560D81 /* StatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTests.swift; sourceTree = "<group>"; };
+		9275957021B4F10500560D81 /* StatusServiceOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusServiceOperation.swift; sourceTree = "<group>"; };
 		927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictRankingTests.swift; sourceTree = "<group>"; };
 		927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictEventPointsTests.swift; sourceTree = "<group>"; };
 		927EAABC21A88A730068FD96 /* MockMyTBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMyTBA.swift; sourceTree = "<group>"; };
@@ -464,9 +465,7 @@
 		92858F26208D444700811614 /* CoreDataContextObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataContextObserver.swift; sourceTree = "<group>"; };
 		92858F2A208D783300811614 /* EventTeamStatTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventTeamStatTableViewCell.xib; sourceTree = "<group>"; };
 		92858F2C208D783E00811614 /* EventTeamStatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatTableViewCell.swift; sourceTree = "<group>"; };
-		9287013B20CD70CF0077D6DA /* RemoteConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigService.swift; sourceTree = "<group>"; };
-		9287013D20CD72EC0077D6DA /* RemoteConfigDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = RemoteConfigDefaults.plist; sourceTree = "<group>"; };
-		9287014120CD7CCB0077D6DA /* RemoteConfig+TBA_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RemoteConfig+TBA_Tests.swift"; sourceTree = "<group>"; };
+		9287013D20CD72EC0077D6DA /* StatusDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = StatusDefaults.plist; sourceTree = "<group>"; };
 		9287014420CD8C070077D6DA /* PersistentContainerOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainerOperation.swift; sourceTree = "<group>"; };
 		9287014720CD8C4A0077D6DA /* TBAOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAOperation.swift; sourceTree = "<group>"; };
 		92942D921E2154DA008E79CA /* The Blue Alliance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Blue Alliance.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -585,7 +584,6 @@
 		92A5E5CA21A22D550025CC85 /* Calendar+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Calendar+TBA.swift"; sourceTree = "<group>"; };
 		92A5E5CB21A22D550025CC85 /* NSSet+Only.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSSet+Only.swift"; sourceTree = "<group>"; };
 		92A5E5CC21A22D550025CC85 /* Date+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+TBA.swift"; sourceTree = "<group>"; };
-		92A5E5CD21A22D550025CC85 /* RemoteConfig+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RemoteConfig+TBA.swift"; sourceTree = "<group>"; };
 		92A5E5CE21A22D550025CC85 /* String+Prefix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Prefix.swift"; sourceTree = "<group>"; };
 		92A5E5CF21A22D550025CC85 /* UIColor+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+TBA.swift"; sourceTree = "<group>"; };
 		92A5E5D021A22D550025CC85 /* UINavigationController+SplitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationController+SplitView.swift"; sourceTree = "<group>"; };
@@ -605,7 +603,6 @@
 		92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetupOperation.swift; sourceTree = "<group>"; };
 		92BB717B20CE116C0081F4E5 /* TBAOperation_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAOperation_Tests.swift; sourceTree = "<group>"; };
 		92BB717E20CE19F40081F4E5 /* PersistentContainerOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainerOperationTests.swift; sourceTree = "<group>"; };
-		92BB718020CE1A000081F4E5 /* RemoteConfigServiceOperation_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigServiceOperation_Tests.swift; sourceTree = "<group>"; };
 		92BB718320CE1E310081F4E5 /* Test.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Test.xcdatamodel; sourceTree = "<group>"; };
 		92BB718820D216D50081F4E5 /* EmptyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyViewController.xib; sourceTree = "<group>"; };
 		92BB8B59214F04DD0035AF28 /* SettingsViewController_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController_UITests.swift; sourceTree = "<group>"; };
@@ -668,6 +665,7 @@
 		92DF360C217D43EB00B5246B /* Playable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Playable.swift; sourceTree = "<group>"; };
 		92DF360D217D43EB00B5246B /* Managed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Managed.swift; sourceTree = "<group>"; };
 		92DF360E217D43EB00B5246B /* Locatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locatable.swift; sourceTree = "<group>"; };
+		92DF54E021B1B65A0082C58C /* StatusService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusService.swift; sourceTree = "<group>"; };
 		92E6253F208EC23000DF58C0 /* the-blue-alliance-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "the-blue-alliance-ios.entitlements"; sourceTree = "<group>"; };
 		92E9F0AA216C439700C1F916 /* NoDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataViewController.swift; sourceTree = "<group>"; };
 		92F38536217D31CE00A9AC02 /* AwardRecipientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwardRecipientTests.swift; sourceTree = "<group>"; };
@@ -778,7 +776,6 @@
 		14B6727121529DDC00FDDAB2 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				14B6727221529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -881,7 +878,6 @@
 				14B424F52167B01700E1904C /* Calendar+TBA_Tests.swift */,
 				924459BD20CB796A0007570D /* Date+TBA_Tests.swift */,
 				924459BE20CB796A0007570D /* Int16+Suffix_Tests.swift */,
-				9287014120CD7CCB0077D6DA /* RemoteConfig+TBA_Tests.swift */,
 				925908B22184F86700D7BFCE /* NSSet+OnlyTests.swift */,
 			);
 			path = Extensions;
@@ -893,6 +889,7 @@
 				92C1F2DD216994CF00BD8445 /* CoreDataTestCase.swift */,
 				92FF113321A70B16003BC5C4 /* CoreDataTestCaseTests.swift */,
 				92FF113121A667E2003BC5C4 /* TBAPersistenceContainerTests.swift */,
+				9275956D21B4EEF400560D81 /* Status */,
 				92361026217D116A000CC5E9 /* Award */,
 				927C93AE217D454A0027ABEB /* District */,
 				926652622156C55C000E4F4F /* Event */,
@@ -908,9 +905,9 @@
 			isa = PBXGroup;
 			children = (
 				924459C720CB797E0007570D /* RetryService_Tests.swift */,
-				14B6726B21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift */,
 				92564C6F216456800047917F /* Secrets_Tests.swift */,
 				92A4147B216DA76400E459A5 /* ReactNativeService_Tests.swift */,
+				9275956921B442AA00560D81 /* StatusServiceTests.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -986,6 +983,22 @@
 				9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		9275956221B1D09A00560D81 /* Status */ = {
+			isa = PBXGroup;
+			children = (
+				9275956321B1D0A600560D81 /* Status.swift */,
+			);
+			path = Status;
+			sourceTree = "<group>";
+		};
+		9275956D21B4EEF400560D81 /* Status */ = {
+			isa = PBXGroup;
+			children = (
+				9275956E21B4EF0600560D81 /* StatusTests.swift */,
+			);
+			path = Status;
 			sourceTree = "<group>";
 		};
 		927C93AE217D454A0027ABEB /* District */ = {
@@ -1085,7 +1098,7 @@
 				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
 				92942DA31E2154DA008E79CA /* Info.plist */,
 				92D8CD1220C2634200777D93 /* GoogleService-Info.plist */,
-				9287013D20CD72EC0077D6DA /* RemoteConfigDefaults.plist */,
+				9287013D20CD72EC0077D6DA /* StatusDefaults.plist */,
 				92564C6C21644ACA0047917F /* Secrets.plist */,
 				92942DAE1E2158EC008E79CA /* Settings.bundle */,
 				9287014320CD8BF60077D6DA /* Operations */,
@@ -1108,6 +1121,7 @@
 				92DF360B217D43EB00B5246B /* Protocols */,
 				92858F26208D444700811614 /* CoreDataContextObserver.swift */,
 				92942DA91E215700008E79CA /* TBA.xcdatamodeld */,
+				9275956221B1D09A00560D81 /* Status */,
 				92DF35DA217D435D00B5246B /* Award */,
 				92DF35D6217D435C00B5246B /* District */,
 				92DF35E2217D438400B5246B /* Event */,
@@ -1437,7 +1451,6 @@
 				92A5E5CA21A22D550025CC85 /* Calendar+TBA.swift */,
 				92A5E5CB21A22D550025CC85 /* NSSet+Only.swift */,
 				92A5E5CC21A22D550025CC85 /* Date+TBA.swift */,
-				92A5E5CD21A22D550025CC85 /* RemoteConfig+TBA.swift */,
 				92A5E5CE21A22D550025CC85 /* String+Prefix.swift */,
 				92A5E5CF21A22D550025CC85 /* UIColor+TBA.swift */,
 				92A5E5D021A22D550025CC85 /* UINavigationController+SplitView.swift */,
@@ -1468,7 +1481,7 @@
 			children = (
 				92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */,
 				9287014420CD8C070077D6DA /* PersistentContainerOperation.swift */,
-				9218462C20CDBBDB00AAB7F8 /* RemoteConfigServiceOperation.swift */,
+				9275956521B1E92B00560D81 /* StatusServiceOperation.swift */,
 			);
 			path = "App Setup";
 			sourceTree = "<group>";
@@ -1487,7 +1500,7 @@
 			isa = PBXGroup;
 			children = (
 				92BB717E20CE19F40081F4E5 /* PersistentContainerOperationTests.swift */,
-				92BB718020CE1A000081F4E5 /* RemoteConfigServiceOperation_Tests.swift */,
+				9275957021B4F10500560D81 /* StatusServiceOperation.swift */,
 			);
 			path = "App Setup";
 			sourceTree = "<group>";
@@ -1589,6 +1602,7 @@
 				923AEE962167038000EF50C8 /* Frameworks */,
 				92D6483E20BE4CB8008F0DB3 /* Info.plist */,
 				92564C71216457060047917F /* TestSecrets.plist */,
+				9275956B21B44A2A00560D81 /* StatusDefaults.plist */,
 			);
 			path = "tba-unit-tests";
 			sourceTree = "<group>";
@@ -1710,10 +1724,9 @@
 				9255EB6C209AC9760006A745 /* RetryService.swift */,
 				92F8E355209AAE890094213F /* PushService.swift */,
 				92688C2A2090091D00D12B7B /* ReactNativeService.swift */,
-				14B6726921517A7E00FDDAB2 /* RealtimeDatabaseService.swift */,
-				9287013B20CD70CF0077D6DA /* RemoteConfigService.swift */,
-				92F8E357209AB3B50094213F /* Provider.swift */,
+				92DF54E021B1B65A0082C58C /* StatusService.swift */,
 				92564C6A21644AA30047917F /* Secrets.swift */,
+				92F8E357209AB3B50094213F /* Provider.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1999,7 +2012,7 @@
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
 				92858F2B208D783300811614 /* EventTeamStatTableViewCell.xib in Resources */,
 				92D855D91EC695CE00572F27 /* TeamTableViewCell.xib in Resources */,
-				9287013E20CD72EC0077D6DA /* RemoteConfigDefaults.plist in Resources */,
+				9287013E20CD72EC0077D6DA /* StatusDefaults.plist in Resources */,
 				92BB718920D216D50081F4E5 /* EmptyViewController.xib in Resources */,
 				92564C6D21644ACA0047917F /* Secrets.plist in Resources */,
 				925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */,
@@ -2085,6 +2098,7 @@
 				92A5E57721A1B7830025CC85 /* team_frc2337_social_media.json in Resources */,
 				92A5E58A21A1B7830025CC85 /* event_2009gg_predictions.json in Resources */,
 				9266A1DE21AA196500545867 /* model_setPreferences.json in Resources */,
+				9275956C21B44A2A00560D81 /* StatusDefaults.plist in Resources */,
 				92A5E59421A1B7830025CC85 /* event_2017mike2_predictions.json in Resources */,
 				92A5E57321A1B7830025CC85 /* event_2015miket_rankings.json in Resources */,
 				92A5E59D21A1B7830025CC85 /* event_2017mike2_insights.json in Resources */,
@@ -2141,9 +2155,9 @@
 				"${BUILT_PRODUCTS_DIR}/DoubleConversion/DoubleConversion.framework",
 				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
 				"${BUILT_PRODUCTS_DIR}/Folly/folly.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/PINCache/PINCache.framework",
 				"${BUILT_PRODUCTS_DIR}/PINOperation/PINOperation.framework",
 				"${BUILT_PRODUCTS_DIR}/PINRemoteImage/PINRemoteImage.framework",
@@ -2152,7 +2166,6 @@
 				"${BUILT_PRODUCTS_DIR}/React/React.framework",
 				"${BUILT_PRODUCTS_DIR}/ZIPFoundation/ZIPFoundation.framework",
 				"${BUILT_PRODUCTS_DIR}/glog/glog.framework",
-				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 				"${BUILT_PRODUCTS_DIR}/yoga/yoga.framework",
 				"${BUILT_PRODUCTS_DIR}/youtube-ios-player-helper/youtube_ios_player_helper.framework",
@@ -2163,9 +2176,9 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DoubleConversion.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/folly.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINCache.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINOperation.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINRemoteImage.framework",
@@ -2174,7 +2187,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZIPFoundation.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/glog.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/youtube_ios_player_helper.framework",
@@ -2318,6 +2330,7 @@
 				92DF35FA217D439500B5246B /* MatchVideo.swift in Sources */,
 				145C57B51ED377EB004955B2 /* MatchTableViewCell.swift in Sources */,
 				929F571C2092B77300E5313A /* TBATableViewController.swift in Sources */,
+				9275956421B1D0A600560D81 /* Status.swift in Sources */,
 				924602AB1ECE8B1D0030EDBF /* AwardTableViewCell.swift in Sources */,
 				92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */,
 				92FF110821A61AF6003BC5C4 /* EventDistrictPointsViewController.swift in Sources */,
@@ -2326,6 +2339,7 @@
 				92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */,
 				92C8CE4821ADAA5100683558 /* MyTBAContainerViewController.swift in Sources */,
 				92942DAB1E215700008E79CA /* TBA.xcdatamodeld in Sources */,
+				9275956621B1E92B00560D81 /* StatusServiceOperation.swift in Sources */,
 				929F572C2092BB1C00E5313A /* Alertable.swift in Sources */,
 				92DF35FB217D439500B5246B /* Match.swift in Sources */,
 				92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */,
@@ -2336,12 +2350,10 @@
 				14796946215EB0B90075AF4E /* RankingCellViewModel.swift in Sources */,
 				92DF35E1217D435D00B5246B /* AwardRecipient.swift in Sources */,
 				92FF10F921A61AC2003BC5C4 /* MatchViewController.swift in Sources */,
-				14B6726A21517A7E00FDDAB2 /* RealtimeDatabaseService.swift in Sources */,
 				92A5E5D521A22D550025CC85 /* Calendar+TBA.swift in Sources */,
 				92688C2B2090091D00D12B7B /* ReactNativeService.swift in Sources */,
 				92DF35E0217D435D00B5246B /* Award.swift in Sources */,
 				925908AD2184CFA900D7BFCE /* EventAllianceBackup.swift in Sources */,
-				9218462D20CDBBDB00AAB7F8 /* RemoteConfigServiceOperation.swift in Sources */,
 				92FF10EE21A61A1B003BC5C4 /* TeamSummaryViewController.swift in Sources */,
 				92A5E5D921A22D550025CC85 /* String+Prefix.swift in Sources */,
 				92FF111B21A61B37003BC5C4 /* DistrictRankingsViewController.swift in Sources */,
@@ -2357,7 +2369,6 @@
 				92DF35FE217D43A200B5246B /* TeamMedia.swift in Sources */,
 				92DF35F9217D439500B5246B /* MatchAlliance.swift in Sources */,
 				304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */,
-				92A5E5D821A22D550025CC85 /* RemoteConfig+TBA.swift in Sources */,
 				92DF35F1217D438400B5246B /* EventStatus.swift in Sources */,
 				92B55625215D69DE00C1D9A3 /* WeekEventsViewController.swift in Sources */,
 				92A5E51D21A1B7470025CC85 /* TBADistrict.swift in Sources */,
@@ -2374,6 +2385,7 @@
 				92942DBB1E215B8D008E79CA /* MyTBAViewController.swift in Sources */,
 				92FF10F121A61A1B003BC5C4 /* TeamInfoViewController.swift in Sources */,
 				92A5E5DA21A22D550025CC85 /* UIColor+TBA.swift in Sources */,
+				92DF54E121B1B65A0082C58C /* StatusService.swift in Sources */,
 				92FF111A21A61B37003BC5C4 /* DistrictViewController.swift in Sources */,
 				92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */,
 				929F57222092B80B00E5313A /* ContainerViewController.swift in Sources */,
@@ -2408,7 +2420,6 @@
 				92FF110A21A61AF6003BC5C4 /* EventInfoViewController.swift in Sources */,
 				92A5E51521A1B7470025CC85 /* MyTBAModel.swift in Sources */,
 				92FF110C21A61AF6003BC5C4 /* EventStatsContainerViewController.swift in Sources */,
-				9287013C20CD70CF0077D6DA /* RemoteConfigService.swift in Sources */,
 				9275956821B33CF500560D81 /* MyTBAPing.swift in Sources */,
 				92A5E5D721A22D550025CC85 /* Date+TBA.swift in Sources */,
 				92FF111921A61B37003BC5C4 /* TeamAtDistrictViewController.swift in Sources */,
@@ -2456,7 +2467,6 @@
 				929820CD216966890080C1C8 /* EventsContainerViewControllerTests.swift in Sources */,
 				92A4147C216DA76400E459A5 /* ReactNativeService_Tests.swift in Sources */,
 				927C93B2217D64300027ABEB /* DistrictEventPointsTests.swift in Sources */,
-				14B6726C21528D6600FDDAB2 /* RealtimeDatabaseService_Tests.swift in Sources */,
 				928030E62197806A0099CB65 /* EventAllianceCellViewModelTests.swift in Sources */,
 				92A5E56921A1B7830025CC85 /* TBATeamTests.swift in Sources */,
 				92BB718420CE1E310081F4E5 /* Test.xcdatamodeld in Sources */,
@@ -2479,12 +2489,10 @@
 				92BB717F20CE19F40081F4E5 /* PersistentContainerOperationTests.swift in Sources */,
 				92C8CE4621ACB05900683558 /* SubscribableTests.swift in Sources */,
 				9266A1DA21AA16A200545867 /* MyTBAPreferencesTests.swift in Sources */,
-				14B6727321529DEE00FDDAB2 /* MockRealtimeDatabaseService.swift in Sources */,
 				92A5E56A21A1B7830025CC85 /* TBAMatchTests.swift in Sources */,
 				1448DBAC21823148008F542E /* FavoriteTests.swift in Sources */,
 				92FB84B621A77155009AE330 /* TBAKitTestCase.swift in Sources */,
 				927C93B0217D4E350027ABEB /* DistrictRankingTests.swift in Sources */,
-				9287014220CD7CCB0077D6DA /* RemoteConfig+TBA_Tests.swift in Sources */,
 				1450778F218279BB00C61D2D /* EventKeyTests.swift in Sources */,
 				927EAABD21A88A730068FD96 /* MockMyTBA.swift in Sources */,
 				1416D50E218E4B8200F1A4A3 /* EventTeamStatsTests.swift in Sources */,
@@ -2492,13 +2500,14 @@
 				92A5E56F21A1B7830025CC85 /* MockURLSessionDataTask.swift in Sources */,
 				14472BB72168487F00E0AE72 /* DistrictTests.swift in Sources */,
 				92FF113221A667E2003BC5C4 /* TBAPersistenceContainerTests.swift in Sources */,
+				9275957121B4F10500560D81 /* StatusServiceOperation.swift in Sources */,
 				925908AB21828CC400D7BFCE /* WebcastTests.swift in Sources */,
 				1421ADF3219E040A00118634 /* MyTBAEntityTests.swift in Sources */,
 				9266A1D821AA161500545867 /* MyTBAFavoriteTests.swift in Sources */,
 				92564C70216456800047917F /* Secrets_Tests.swift in Sources */,
-				92BB718120CE1A000081F4E5 /* RemoteConfigServiceOperation_Tests.swift in Sources */,
 				92A2F5542156BD4B00267C63 /* NSManagedObjectContext+ExtensionTests.swift in Sources */,
 				92BB717C20CE116C0081F4E5 /* TBAOperation_Tests.swift in Sources */,
+				9275956F21B4EF0600560D81 /* StatusTests.swift in Sources */,
 				929820CF216968020080C1C8 /* TBATestCase.swift in Sources */,
 				925908B32184F86700D7BFCE /* NSSet+OnlyTests.swift in Sources */,
 				92269EE1219B9CF300FAA610 /* DistrictViewControllerTests.swift in Sources */,
@@ -2519,6 +2528,7 @@
 				1448DBAE21823178008F542E /* SubscriptionTests.swift in Sources */,
 				92A5E56E21A1B7830025CC85 /* MockURLSession.swift in Sources */,
 				92A5E56D21A1B7830025CC85 /* MockTBAKit.swift in Sources */,
+				9275956A21B442AA00560D81 /* StatusServiceTests.swift in Sources */,
 				148FF626218B90AC006202E6 /* EventRankingTests.swift in Sources */,
 				14B424F62167B01700E1904C /* Calendar+TBA_Tests.swift in Sources */,
 				92FF10D021A25D86003BC5C4 /* TBAViewControllerTester.swift in Sources */,

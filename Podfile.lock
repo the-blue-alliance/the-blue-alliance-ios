@@ -2,123 +2,112 @@ PODS:
   - BFRImageViewer (1.2.3):
     - PINRemoteImage (~> 3.0.0-beta.12)
   - boost-for-react-native (1.63.0)
-  - Crashlytics (3.10.9):
-    - Fabric (~> 1.7.13)
+  - Crashlytics (3.12.0):
+    - Fabric (~> 1.9.0)
   - DoubleConversion (1.1.5)
-  - Fabric (1.7.13)
-  - Firebase/Analytics (4.13.0):
+  - Fabric (1.9.0)
+  - Firebase/Analytics (5.13.0):
     - Firebase/Core
-  - Firebase/Auth (4.13.0):
-    - Firebase/Core
-    - FirebaseAuth (= 4.6.1)
-  - Firebase/Core (4.13.0):
-    - FirebaseAnalytics (= 4.2.0)
-    - FirebaseCore (= 4.0.20)
-  - Firebase/Database (4.13.0):
-    - Firebase/Core
-    - FirebaseDatabase (= 4.1.5)
-  - Firebase/Messaging (4.13.0):
-    - Firebase/Core
-    - FirebaseMessaging (= 2.2.0)
-  - Firebase/Performance (4.13.0):
-    - Firebase/Core
-    - FirebasePerformance (= 1.1.3)
-  - Firebase/RemoteConfig (4.13.0):
-    - Firebase/Core
-    - FirebaseRemoteConfig (= 2.1.3)
-  - Firebase/Storage (4.13.0):
-    - Firebase/Core
-    - FirebaseStorage (= 2.2.0)
-  - FirebaseABTesting (1.0.0):
-    - FirebaseCore (~> 4.0)
-    - Protobuf (~> 3.1)
-  - FirebaseAnalytics (4.2.0):
-    - FirebaseCore (~> 4.0)
-    - FirebaseInstanceID (~> 2.0)
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+  - Firebase/Auth (5.13.0):
+    - Firebase/CoreOnly
+    - FirebaseAuth (= 5.0.5)
+  - Firebase/Core (5.13.0):
+    - Firebase/CoreOnly
+    - FirebaseAnalytics (= 5.3.0)
+  - Firebase/CoreOnly (5.13.0):
+    - FirebaseCore (= 5.1.8)
+  - Firebase/Messaging (5.13.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (= 3.2.1)
+  - Firebase/Storage (5.13.0):
+    - Firebase/CoreOnly
+    - FirebaseStorage (= 3.0.3)
+  - FirebaseAnalytics (5.3.0):
+    - FirebaseCore (~> 5.1)
+    - FirebaseInstanceID (~> 3.3)
+    - GoogleAppMeasurement (~> 5.3)
+    - GoogleUtilities/AppDelegateSwizzler (~> 5.2)
+    - GoogleUtilities/MethodSwizzler (~> 5.2)
+    - GoogleUtilities/Network (~> 5.2)
+    - "GoogleUtilities/NSData+zlib (~> 5.2)"
     - nanopb (~> 0.3)
-  - FirebaseAuth (4.6.1):
-    - FirebaseAnalytics (~> 4.2)
-    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
+  - FirebaseAnalyticsInterop (1.1.0)
+  - FirebaseAuth (5.0.5):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 5.1)
+    - GoogleUtilities/Environment (~> 5.2)
     - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseCore (4.0.20):
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
-  - FirebaseDatabase (4.1.5):
-    - FirebaseAnalytics (~> 4.1)
-    - FirebaseCore (~> 4.0)
-    - leveldb-library (~> 1.18)
-  - FirebaseInstanceID (2.0.10):
-    - FirebaseCore (~> 4.0)
-  - FirebaseMessaging (2.2.0):
-    - FirebaseAnalytics (~> 4.1)
-    - FirebaseCore (~> 4.0)
-    - FirebaseInstanceID (~> 2.0)
-    - GoogleToolboxForMac/Logger (~> 2.1)
-    - Protobuf (~> 3.5)
-  - FirebasePerformance (1.1.3):
-    - FirebaseAnalytics (~> 4.1)
-    - FirebaseInstanceID (~> 2.0)
-    - FirebaseSwizzlingUtilities/ISASwizzling (~> 1.0)
-    - FirebaseSwizzlingUtilities/MethodSwizzling (~> 1.0)
-    - GoogleToolboxForMac/Logger (~> 2.1)
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+  - FirebaseAuthInterop (1.0.0)
+  - FirebaseCore (5.1.8):
+    - GoogleUtilities/Logger (~> 5.2)
+  - FirebaseInstanceID (3.3.0):
+    - FirebaseCore (~> 5.1)
+    - GoogleUtilities/Environment (~> 5.3)
+    - GoogleUtilities/UserDefaults (~> 5.3)
+  - FirebaseMessaging (3.2.1):
+    - FirebaseAnalyticsInterop (~> 1.1)
+    - FirebaseCore (~> 5.1)
+    - FirebaseInstanceID (~> 3.0)
+    - GoogleUtilities/Environment (~> 5.2)
+    - GoogleUtilities/Reachability (~> 5.2)
+    - Protobuf (~> 3.1)
+  - FirebaseStorage (3.0.3):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 5.1)
     - GTMSessionFetcher/Core (~> 1.1)
-    - Protobuf (~> 3.5)
-  - FirebaseRemoteConfig (2.1.3):
-    - FirebaseABTesting (~> 1.0)
-    - FirebaseAnalytics (~> 4.1)
-    - FirebaseCore (~> 4.0)
-    - FirebaseInstanceID (~> 2.0)
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
-    - Protobuf (~> 3.5)
-  - FirebaseStorage (2.2.0):
-    - FirebaseAnalytics (~> 4.1)
-    - FirebaseCore (~> 4.0)
-    - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseSwizzlingUtilities/ISASwizzling (1.0.1)
-  - FirebaseSwizzlingUtilities/MethodSwizzling (1.0.1):
-    - FirebaseCore (~> 4.0)
   - FLAnimatedImage (1.0.12)
   - Folly (2016.10.31.00):
     - boost-for-react-native
     - DoubleConversion
     - glog
   - glog (0.3.4)
-  - GoogleSignIn (4.1.2):
+  - GoogleAppMeasurement (5.3.0):
+    - GoogleUtilities/AppDelegateSwizzler (~> 5.2)
+    - GoogleUtilities/MethodSwizzler (~> 5.2)
+    - GoogleUtilities/Network (~> 5.2)
+    - "GoogleUtilities/NSData+zlib (~> 5.2)"
+    - nanopb (~> 0.3)
+  - GoogleSignIn (4.4.0):
     - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
     - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
-    - GTMOAuth2 (~> 1.0)
     - GTMSessionFetcher/Core (~> 1.1)
   - GoogleToolboxForMac/DebugUtils (2.1.4):
     - GoogleToolboxForMac/Defines (= 2.1.4)
   - GoogleToolboxForMac/Defines (2.1.4)
-  - GoogleToolboxForMac/Logger (2.1.4):
-    - GoogleToolboxForMac/Defines (= 2.1.4)
-  - "GoogleToolboxForMac/NSData+zlib (2.1.4)":
-    - GoogleToolboxForMac/Defines (= 2.1.4)
   - "GoogleToolboxForMac/NSDictionary+URLArguments (2.1.4)":
     - GoogleToolboxForMac/DebugUtils (= 2.1.4)
     - GoogleToolboxForMac/Defines (= 2.1.4)
     - "GoogleToolboxForMac/NSString+URLArguments (= 2.1.4)"
   - "GoogleToolboxForMac/NSString+URLArguments (2.1.4)"
-  - GTMOAuth2 (1.1.6):
-    - GTMSessionFetcher (~> 1.1)
-  - GTMSessionFetcher (1.1.15):
-    - GTMSessionFetcher/Full (= 1.1.15)
-  - GTMSessionFetcher/Core (1.1.15)
-  - GTMSessionFetcher/Full (1.1.15):
-    - GTMSessionFetcher/Core (= 1.1.15)
-  - iOSSnapshotTestCase (4.0.0):
-    - iOSSnapshotTestCase/SwiftSupport (= 4.0.0)
-  - iOSSnapshotTestCase/Core (4.0.0)
-  - iOSSnapshotTestCase/SwiftSupport (4.0.0):
+  - GoogleUtilities/AppDelegateSwizzler (5.3.6):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (5.3.6)
+  - GoogleUtilities/Logger (5.3.6):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/MethodSwizzler (5.3.6):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/Network (5.3.6):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (5.3.6)"
+  - GoogleUtilities/Reachability (5.3.6):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (5.3.6):
+    - GoogleUtilities/Logger
+  - GTMSessionFetcher/Core (1.2.1)
+  - iOSSnapshotTestCase (4.0.1):
+    - iOSSnapshotTestCase/SwiftSupport (= 4.0.1)
+  - iOSSnapshotTestCase/Core (4.0.1)
+  - iOSSnapshotTestCase/SwiftSupport (4.0.1):
     - iOSSnapshotTestCase/Core
-  - leveldb-library (1.20)
-  - nanopb (0.3.8):
-    - nanopb/decode (= 0.3.8)
-    - nanopb/encode (= 0.3.8)
-  - nanopb/decode (0.3.8)
-  - nanopb/encode (0.3.8)
+  - nanopb (0.3.901):
+    - nanopb/decode (= 0.3.901)
+    - nanopb/encode (= 0.3.901)
+  - nanopb/decode (0.3.901)
+  - nanopb/encode (0.3.901)
   - PINCache (3.0.1-beta.6):
     - PINCache/Arc-exception-safe (= 3.0.1-beta.6)
     - PINCache/Core (= 3.0.1-beta.6)
@@ -138,8 +127,8 @@ PODS:
   - PINRemoteImage/PINCache (3.0.0-beta.13):
     - PINCache (= 3.0.1-beta.6)
     - PINRemoteImage/Core
-  - Protobuf (3.5.0)
-  - PureLayout (3.1.2)
+  - Protobuf (3.6.1)
+  - PureLayout (3.1.4)
   - React/Core (0.57.1):
     - yoga (= 0.57.1.React)
   - React/CxxBridge (0.57.1):
@@ -179,15 +168,12 @@ PODS:
 
 DEPENDENCIES:
   - BFRImageViewer
-  - Crashlytics (~> 3.10.1)
-  - Fabric (~> 1.7.6)
+  - Crashlytics
+  - Fabric
   - Firebase/Analytics
   - Firebase/Auth
   - Firebase/Core
-  - Firebase/Database
   - Firebase/Messaging
-  - Firebase/Performance
-  - Firebase/RemoteConfig
   - Firebase/Storage
   - Folly (from `subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - GoogleSignIn
@@ -212,25 +198,22 @@ SPEC REPOS:
     - DoubleConversion
     - Fabric
     - Firebase
-    - FirebaseABTesting
     - FirebaseAnalytics
+    - FirebaseAnalyticsInterop
     - FirebaseAuth
+    - FirebaseAuthInterop
     - FirebaseCore
-    - FirebaseDatabase
     - FirebaseInstanceID
     - FirebaseMessaging
-    - FirebasePerformance
-    - FirebaseRemoteConfig
     - FirebaseStorage
-    - FirebaseSwizzlingUtilities
     - FLAnimatedImage
     - glog
+    - GoogleAppMeasurement
     - GoogleSignIn
     - GoogleToolboxForMac
-    - GTMOAuth2
+    - GoogleUtilities
     - GTMSessionFetcher
     - iOSSnapshotTestCase
-    - leveldb-library
     - nanopb
     - PINCache
     - PINOperation
@@ -251,41 +234,38 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   BFRImageViewer: 647b91e4c9956d1ffc66245614aca22f10b0d370
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  Crashlytics: 55e24fc23989680285a21cb1146578d9d18e432c
+  Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
   DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
-  Fabric: 25d0963b691fc97be566392243ff0ecef5a68338
-  Firebase: 5ec5e863d269d82d66b4bf56856726f8fb8f0fb3
-  FirebaseABTesting: d07d0ee833b842d5153549e4c7e2e2cb1c23a3f9
-  FirebaseAnalytics: 7ef69e76a5142f643aeb47c780e1cdce4e23632e
-  FirebaseAuth: bf22cacf22c60ab454bf2636f556d8892b10b53f
-  FirebaseCore: 90cb1c53d69b556f112a1bf72b5fcfaad7650790
-  FirebaseDatabase: 5f0bc6134c5c237cf55f9e1249d406770a75eafd
-  FirebaseInstanceID: 8d20d890d65c917f9f7d9950b6e10a760ad34321
-  FirebaseMessaging: 75cdb862e86c30e0913a2ff307e48d49357c5b73
-  FirebasePerformance: 85bdc3f3d630deb629e85695fcab23364d68f5db
-  FirebaseRemoteConfig: 3e95fb7c072308492e85fa41d59d38b3d6fd2372
-  FirebaseStorage: 0c223481c8f89ed300cf1239ddd2d9833622c65f
-  FirebaseSwizzlingUtilities: 6006111d30248d2321ffac0231e246663e704ea3
+  Fabric: f988e33c97f08930a413e08123064d2e5f68d655
+  Firebase: 6df9a6114bc9f106a98fe83d5438d4d9833c2019
+  FirebaseAnalytics: 63202d2665de4e6adcbdce189135255d8b5962ba
+  FirebaseAnalyticsInterop: e5f21be9af6548372e2f0815834ff909bff395a2
+  FirebaseAuth: 9299ab178271bec7426967b05b2718bb6fc31f17
+  FirebaseAuthInterop: 0ffa57668be100582bb7643d4fcb7615496c41fc
+  FirebaseCore: fba2bfaa691c49028309b92e4dd37cc4b5512fbe
+  FirebaseInstanceID: e2fa4cb35ef5558c200f7f0ad8a53e212215f93e
+  FirebaseMessaging: 0f14a264b0d7f867e8eff5d3556bc5d0d4e57888
+  FirebaseStorage: 3d22c041370593e639fba013d1eb698a8dae2881
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
   glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
-  GoogleSignIn: d9ef55b10f0aa401a5de2747f59b725e4b9732ac
+  GoogleAppMeasurement: 5029d78f2b438bd30ffb44e6c558b57c21622727
+  GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
   GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
-  GTMOAuth2: e8b6512c896235149df975c41d9a36c868ab7fba
-  GTMSessionFetcher: 5fa5b80fd20e439ef5f545fb2cb3ca6c6714caa2
-  iOSSnapshotTestCase: 711379b19f69a22c131527df862352c877c2773c
-  leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
-  nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
+  GoogleUtilities: 95996bea7c7d9b8fb811b7507669a4a8762f80c7
+  GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
+  iOSSnapshotTestCase: f3b2b7e606fe03fdbe49af84316bd235df32dc44
+  nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   PINCache: d195fdba255283f7e9900a55e3cced377f431f9b
   PINOperation: a6219e6fc9db9c269eb7a7b871ac193bcf400aac
   PINRemoteImage: d6d51c5d2adda55f1ce30c96e850b6c4ebd2856a
-  Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
-  PureLayout: 4634d0b61e3b5021166e8ec7c18e9e0ca0720c8b
+  Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
+  PureLayout: f08c01b8dec00bb14a1fefa3de4c7d9c265df85e
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
   ZIPFoundation: 68c35eb2637c21abe56dc60b3277636443bc1501
 
-PODFILE CHECKSUM: c30771689ce6fa49775b1b5fe0d2aa3e586225e5
+PODFILE CHECKSUM: 8b1e7c6de03e361c7393f8bd99cc78171f6efbfd
 
 COCOAPODS: 1.5.3
