@@ -5,6 +5,7 @@ import XCTest
 
 class TBATestCase: CoreDataTestCase {
 
+    var testBundle: Bundle!
     var myTBA: MockMyTBA!
     var tbaKit: MockTBAKit!
     var userDefaults: UserDefaults!
@@ -16,8 +17,7 @@ class TBATestCase: CoreDataTestCase {
     override func setUp() {
         super.setUp()
 
-        let testBundle = Bundle(for: type(of: self))
-
+        testBundle = Bundle(for: type(of: self))
         myTBA = MockMyTBA()
         userDefaults = UserDefaults(suiteName: "TBATests")
         tbaKit = MockTBAKit(userDefaults: userDefaults)

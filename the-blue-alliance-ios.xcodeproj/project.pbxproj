@@ -96,6 +96,7 @@
 		9275956A21B442AA00560D81 /* StatusServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956921B442AA00560D81 /* StatusServiceTests.swift */; };
 		9275956C21B44A2A00560D81 /* StatusDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9275956B21B44A2A00560D81 /* StatusDefaults.plist */; };
 		9275956F21B4EF0600560D81 /* StatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956E21B4EF0600560D81 /* StatusTests.swift */; };
+		9275957121B4F10500560D81 /* StatusServiceOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275957021B4F10500560D81 /* StatusServiceOperation.swift */; };
 		927C93B0217D4E350027ABEB /* DistrictRankingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */; };
 		927C93B2217D64300027ABEB /* DistrictEventPointsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */; };
 		927EAABD21A88A730068FD96 /* MockMyTBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EAABC21A88A730068FD96 /* MockMyTBA.swift */; };
@@ -452,6 +453,7 @@
 		9275956921B442AA00560D81 /* StatusServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusServiceTests.swift; sourceTree = "<group>"; };
 		9275956B21B44A2A00560D81 /* StatusDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = StatusDefaults.plist; sourceTree = "<group>"; };
 		9275956E21B4EF0600560D81 /* StatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTests.swift; sourceTree = "<group>"; };
+		9275957021B4F10500560D81 /* StatusServiceOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusServiceOperation.swift; sourceTree = "<group>"; };
 		927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictRankingTests.swift; sourceTree = "<group>"; };
 		927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictEventPointsTests.swift; sourceTree = "<group>"; };
 		927EAABC21A88A730068FD96 /* MockMyTBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMyTBA.swift; sourceTree = "<group>"; };
@@ -1498,6 +1500,7 @@
 			isa = PBXGroup;
 			children = (
 				92BB717E20CE19F40081F4E5 /* PersistentContainerOperationTests.swift */,
+				9275957021B4F10500560D81 /* StatusServiceOperation.swift */,
 			);
 			path = "App Setup";
 			sourceTree = "<group>";
@@ -2497,6 +2500,7 @@
 				92A5E56F21A1B7830025CC85 /* MockURLSessionDataTask.swift in Sources */,
 				14472BB72168487F00E0AE72 /* DistrictTests.swift in Sources */,
 				92FF113221A667E2003BC5C4 /* TBAPersistenceContainerTests.swift in Sources */,
+				9275957121B4F10500560D81 /* StatusServiceOperation.swift in Sources */,
 				925908AB21828CC400D7BFCE /* WebcastTests.swift in Sources */,
 				1421ADF3219E040A00118634 /* MyTBAEntityTests.swift in Sources */,
 				9266A1D821AA161500545867 /* MyTBAFavoriteTests.swift in Sources */,
