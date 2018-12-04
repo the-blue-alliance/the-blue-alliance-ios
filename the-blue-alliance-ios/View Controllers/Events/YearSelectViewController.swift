@@ -33,6 +33,8 @@ class YearSelectViewController: ContainerViewController {
         title = "Years"
 
         selectViewController.delegate = self
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTapped))
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -50,8 +52,6 @@ class YearSelectViewController: ContainerViewController {
         eventWeekSelectViewController?.delegate = delegate
 
         navigationController?.viewControllers = [self, eventWeekSelectViewController!]
-
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTapped))
     }
 
     // MARK: - Private Methods
@@ -107,10 +107,18 @@ private class EventWeekSelectViewController: ContainerViewController {
 
         selectViewController.delegate = self
         selectViewController.enableRefreshing()
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Private Methods
+
+    @objc private func doneButtonTapped() {
+        dismiss(animated: true, completion: nil)
     }
 
 }
