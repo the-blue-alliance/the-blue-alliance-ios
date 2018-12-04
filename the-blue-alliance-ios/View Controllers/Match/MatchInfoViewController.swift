@@ -13,12 +13,14 @@ class MatchInfoViewController: TBAViewController, Observable {
     private let teamsLabel: UILabel = {
         let teamsLabel = UILabel(forAutoLayout: ())
         teamsLabel.text = "Teams"
+        teamsLabel.translatesAutoresizingMaskIntoConstraints = false
         return teamsLabel
     }()
 
     private let scoreTitleLabel: UILabel = {
         let scoreTitleLabel = UILabel(forAutoLayout: ())
         scoreTitleLabel.text = "Score"
+        scoreTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         return scoreTitleLabel
     }()
 
@@ -28,19 +30,24 @@ class MatchInfoViewController: TBAViewController, Observable {
             label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
             label.textAlignment = .center
             label.backgroundColor = .backgroundGray
+            label.translatesAutoresizingMaskIntoConstraints = false
         }
-        return UIStackView(arrangedSubviews: labels)
+        let infoStackView = UIStackView(arrangedSubviews: labels)
+        infoStackView.translatesAutoresizingMaskIntoConstraints = false
+        return infoStackView
     }()
 
     private let matchSummaryView: MatchSummaryView = {
         let matchSummaryView = MatchSummaryView()
         matchSummaryView.matchInfoStackView.isHidden = true
+        matchSummaryView.translatesAutoresizingMaskIntoConstraints = false
         return matchSummaryView
     }()
 
     private lazy var matchStackView: UIStackView = {
         let matchStackView = UIStackView(arrangedSubviews: [infoStackView, matchSummaryView])
         matchStackView.axis = .vertical
+        matchStackView.translatesAutoresizingMaskIntoConstraints = false
         return matchStackView
     }()
 
@@ -49,6 +56,7 @@ class MatchInfoViewController: TBAViewController, Observable {
         timeLabel.font = UIFont.systemFont(ofSize: 14)
         timeLabel.textAlignment = .center
         timeLabel.backgroundColor = .white
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
         return timeLabel
     }()
 
@@ -58,6 +66,7 @@ class MatchInfoViewController: TBAViewController, Observable {
         videoStackView.alignment = .fill
         videoStackView.distribution = .fill
         videoStackView.spacing = 10
+        videoStackView.translatesAutoresizingMaskIntoConstraints = false
         return videoStackView
     }()
 
@@ -107,11 +116,10 @@ class MatchInfoViewController: TBAViewController, Observable {
 
     func styleInterface() {
         scrollView.addSubview(matchStackView)
-        matchStackView.autoMatch(.width, to: .width, of: scrollView, withOffset: -32)
         matchStackView.autoSetDimension(.height, toSize: 90)
         matchStackView.autoPinEdge(.top, to: .top, of: scrollView, withOffset: 8)
-        matchStackView.autoPinEdge(.leading, to: .leading, of: scrollView, withOffset: 16)
-        matchStackView.autoPinEdge(.trailing, to: .trailing, of: scrollView, withOffset: -16)
+        matchStackView.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 16)
+        matchStackView.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 16)
 
         infoStackView.autoMatch(.height, to: .height, of: matchStackView, withMultiplier: (1.0/3.0))
         // Match the 'Score' label with the size of the score
@@ -124,8 +132,8 @@ class MatchInfoViewController: TBAViewController, Observable {
 
         scrollView.addSubview(videoStackView)
         videoStackView.autoPinEdge(.top, to: .bottom, of: matchStackView, withOffset: 8)
-        videoStackView.autoPinEdge(.leading, to: .leading, of: matchStackView)
-        videoStackView.autoPinEdge(.trailing, to: .trailing, of: matchStackView)
+        videoStackView.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 16)
+        videoStackView.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 16)
         videoStackView.autoPinEdge(toSuperviewEdge: .bottom)
 
         // Override our default background color to be white
