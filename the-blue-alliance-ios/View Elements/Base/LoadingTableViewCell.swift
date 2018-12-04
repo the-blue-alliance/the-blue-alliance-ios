@@ -14,4 +14,11 @@ class LoadingTableViewCell: UITableViewCell, Reusable {
     @IBOutlet public var keyLabel: UILabel!
     @IBOutlet public var backgroundFetchActivityIndicator: UIActivityIndicatorView!
 
+    override func awakeFromNib() {
+        super.awakeFromNib()
+
+        selectionStyle = .none
+        isUserInteractionEnabled = false
+    }
+
 }
