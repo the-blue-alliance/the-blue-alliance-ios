@@ -459,4 +459,12 @@ class MatchTestCase: CoreDataTestCase {
         XCTAssertEqual(match.year, 2015)
     }
 
+    func test_find() {
+        let key = "2018ctsc_qm1"
+
+        XCTAssertNil(Match.forKey(key, in: persistentContainer.viewContext))
+        _ = insertMatch()
+        XCTAssertNotNil(Match.forKey(key, in: persistentContainer.viewContext))
+    }
+
 }
