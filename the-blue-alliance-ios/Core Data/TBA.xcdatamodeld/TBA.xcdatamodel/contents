@@ -19,6 +19,7 @@
         <attribute name="year" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="district" inverseEntity="Event" syncable="YES"/>
         <relationship name="rankings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DistrictRanking" inverseName="district" inverseEntity="DistrictRanking" syncable="YES"/>
+        <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="districts" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="DistrictEventPoints" representedClassName="DistrictEventPoints" syncable="YES" codeGenerationType="class">
         <attribute name="alliancePoints" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
@@ -229,6 +230,7 @@
         <attribute name="teamNumber" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="yearsParticipated" optional="YES" attributeType="Transformable" customClassName="[Int]" syncable="YES"/>
+        <relationship name="districts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="District" inverseName="teams" inverseEntity="District" syncable="YES"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="teams" inverseEntity="Event" syncable="YES"/>
         <relationship name="media" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TeamMedia" inverseName="team" inverseEntity="TeamMedia" syncable="YES"/>
         <fetchIndex name="byKeyIndex">
@@ -272,7 +274,7 @@
     <elements>
         <element name="Award" positionX="-54" positionY="135" width="128" height="30"/>
         <element name="AwardRecipient" positionX="-54" positionY="135" width="128" height="30"/>
-        <element name="District" positionX="-63" positionY="135" width="128" height="135"/>
+        <element name="District" positionX="-63" positionY="135" width="128" height="150"/>
         <element name="DistrictEventPoints" positionX="-54" positionY="135" width="128" height="180"/>
         <element name="DistrictRanking" positionX="-54" positionY="135" width="128" height="135"/>
         <element name="Event" positionX="-63" positionY="-18" width="128" height="630"/>
@@ -291,11 +293,11 @@
         <element name="MatchAlliance" positionX="45" positionY="135" width="128" height="135"/>
         <element name="MatchVideo" positionX="45" positionY="135" width="128" height="90"/>
         <element name="MyTBAEntity" positionX="45" positionY="135" width="128" height="75"/>
+        <element name="Status" positionX="45" positionY="135" width="128" height="135"/>
         <element name="Subscription" positionX="54" positionY="144" width="128" height="60"/>
-        <element name="Team" positionX="-54" positionY="135" width="128" height="360"/>
+        <element name="Team" positionX="-54" positionY="135" width="128" height="375"/>
         <element name="TeamKey" positionX="45" positionY="135" width="128" height="255"/>
         <element name="TeamMedia" positionX="-45" positionY="144" width="128" height="180"/>
         <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
-        <element name="Status" positionX="45" positionY="135" width="128" height="135"/>
     </elements>
 </model>

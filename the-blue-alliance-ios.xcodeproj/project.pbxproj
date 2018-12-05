@@ -97,6 +97,8 @@
 		9275956C21B44A2A00560D81 /* StatusDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9275956B21B44A2A00560D81 /* StatusDefaults.plist */; };
 		9275956F21B4EF0600560D81 /* StatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956E21B4EF0600560D81 /* StatusTests.swift */; };
 		9275957121B4F10500560D81 /* StatusServiceOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275957021B4F10500560D81 /* StatusServiceOperation.swift */; };
+		9275957321B7514700560D81 /* DistrictTeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275957221B7514700560D81 /* DistrictTeamsViewController.swift */; };
+		9275957521B7519C00560D81 /* EventTeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275957421B7519C00560D81 /* EventTeamsViewController.swift */; };
 		927C93B0217D4E350027ABEB /* DistrictRankingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */; };
 		927C93B2217D64300027ABEB /* DistrictEventPointsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */; };
 		927EAABD21A88A730068FD96 /* MockMyTBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EAABC21A88A730068FD96 /* MockMyTBA.swift */; };
@@ -454,6 +456,8 @@
 		9275956B21B44A2A00560D81 /* StatusDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = StatusDefaults.plist; sourceTree = "<group>"; };
 		9275956E21B4EF0600560D81 /* StatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTests.swift; sourceTree = "<group>"; };
 		9275957021B4F10500560D81 /* StatusServiceOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusServiceOperation.swift; sourceTree = "<group>"; };
+		9275957221B7514700560D81 /* DistrictTeamsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictTeamsViewController.swift; sourceTree = "<group>"; };
+		9275957421B7519C00560D81 /* EventTeamsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamsViewController.swift; sourceTree = "<group>"; };
 		927C93AF217D4E350027ABEB /* DistrictRankingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictRankingTests.swift; sourceTree = "<group>"; };
 		927C93B1217D64300027ABEB /* DistrictEventPointsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictEventPointsTests.swift; sourceTree = "<group>"; };
 		927EAABC21A88A730068FD96 /* MockMyTBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMyTBA.swift; sourceTree = "<group>"; };
@@ -1777,6 +1781,7 @@
 			children = (
 				92FF10FC21A61AF6003BC5C4 /* EventViewController.swift */,
 				92FF110021A61AF6003BC5C4 /* EventInfoViewController.swift */,
+				9275957421B7519C00560D81 /* EventTeamsViewController.swift */,
 				92FF10FD21A61AF6003BC5C4 /* EventRankingsViewController.swift */,
 				92FF10FE21A61AF6003BC5C4 /* EventDistrictPointsViewController.swift */,
 				92FF10FF21A61AF6003BC5C4 /* EventAlliancesViewController.swift */,
@@ -1801,6 +1806,7 @@
 			children = (
 				92FF111421A61B37003BC5C4 /* DistrictViewController.swift */,
 				92FF111621A61B37003BC5C4 /* DistrictEventsViewController.swift */,
+				9275957221B7514700560D81 /* DistrictTeamsViewController.swift */,
 				92FF111521A61B37003BC5C4 /* DistrictRankingsViewController.swift */,
 				92FF111021A61B37003BC5C4 /* Team@District */,
 			);
@@ -2366,6 +2372,7 @@
 				92A5E5DB21A22D550025CC85 /* UINavigationController+SplitView.swift in Sources */,
 				92FF110621A61AF6003BC5C4 /* EventViewController.swift in Sources */,
 				92DF3610217D43EC00B5246B /* Playable.swift in Sources */,
+				9275957521B7519C00560D81 /* EventTeamsViewController.swift in Sources */,
 				92DF35FE217D43A200B5246B /* TeamMedia.swift in Sources */,
 				92DF35F9217D439500B5246B /* MatchAlliance.swift in Sources */,
 				304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */,
@@ -2399,6 +2406,7 @@
 				92A5E51F21A1B7470025CC85 /* TBAStatus.swift in Sources */,
 				92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */,
 				92FF110B21A61AF6003BC5C4 /* EventAwardsViewController.swift in Sources */,
+				9275957321B7514700560D81 /* DistrictTeamsViewController.swift in Sources */,
 				92A5E51321A1B7470025CC85 /* MyTBAPreferences.swift in Sources */,
 				92AF4D0C1E330790007E967D /* SelectTableViewController.swift in Sources */,
 				929F57202092B7D400E5313A /* TBAViewController.swift in Sources */,

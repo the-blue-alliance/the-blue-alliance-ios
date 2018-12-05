@@ -77,6 +77,35 @@ class DistrictTestCase: CoreDataTestCase {
         XCTAssertNotNil(eventTwo.managedObjectContext)
     }
 
+    func test_insert_teams() {
+        let modelDistrict = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
+        let district = District.insert(modelDistrict, in: persistentContainer.viewContext)
+
+        let modelTeamOne = TBATeam(key: "frc1", teamNumber: 1, name: "Team 1", rookieYear: 2001)
+        let modelTeamTwo = TBATeam(key: "frc2", teamNumber: 2, name: "Team 2", rookieYear: 2002)
+
+        district.insert([modelTeamOne, modelTeamTwo])
+
+        let teams = district.teams!.allObjects as! [Team]
+        let teamOne = teams.first(where: { $0.key == "frc1" })!
+        let teamTwo = teams.first(where: { $0.key == "frc2" })!
+
+        // Sanity check
+        XCTAssertEqual(district.teams?.count, 2)
+        XCTAssertNotEqual(teamOne, teamTwo)
+
+        district.insert([modelTeamTwo])
+
+        // Sanity check
+        XCTAssert(district.teams!.onlyObject(teamTwo))
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // No teams, including orphans, should be deleted
+        XCTAssertNotNil(teamOne.managedObjectContext)
+        XCTAssertNotNil(teamTwo.managedObjectContext)
+    }
+
     func test_insert_rankings() {
         let modelDistrict = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2018fim", year: 2018)
         let district = District.insert(modelDistrict, in: persistentContainer.viewContext)

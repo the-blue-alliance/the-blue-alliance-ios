@@ -19,6 +19,7 @@ class DistrictViewControllerTests: TBATestCase {
 
         districtViewController = DistrictViewController(district: district,
                                                         myTBA: myTBA,
+                                                        statusService: statusService,
                                                         urlOpener: urlOpener,
                                                         persistentContainer: persistentContainer,
                                                         tbaKit: tbaKit,
@@ -106,6 +107,13 @@ class DistrictViewControllerTests: TBATestCase {
         district.insert([eventOne, eventTwo])
     }
 
+    private func insertDistrictTeams(district: District) {
+        let teamOne = TBATeam(key: "frc1", teamNumber: 1, name: "Team 1", rookieYear: 2001)
+        let teamTwo = TBATeam(key: "frc2", teamNumber: 2, name: "Team 2", rookieYear: 2002)
+
+        district.insert([teamOne, teamTwo])
+    }
+
     private func insertDistrictRankings(district: District) {
         let rankingOne = TBADistrictRanking(teamKey: "frc7332", rank: 1, pointTotal: 209, eventPoints: [])
         let rankingTwo = TBADistrictRanking(teamKey: "frc1", rank: 2, pointTotal: 32, eventPoints: [])
@@ -115,6 +123,7 @@ class DistrictViewControllerTests: TBATestCase {
 
     func test_delegates() {
         XCTAssertNotNil(districtViewController.eventsViewController.delegate)
+        XCTAssertNotNil(districtViewController.teamsViewController.delegate)
         XCTAssertNotNil(districtViewController.rankingsViewController.delegate)
     }
 
@@ -125,6 +134,12 @@ class DistrictViewControllerTests: TBATestCase {
     func test_showsEvents() {
         XCTAssert(districtViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is DistrictEventsViewController
+        }))
+    }
+
+    func test_showsTeams() {
+        XCTAssert(districtViewController.children.contains(where: { (viewController) -> Bool in
+            return viewController is DistrictTeamsViewController
         }))
     }
 
@@ -143,6 +158,17 @@ class DistrictViewControllerTests: TBATestCase {
         XCTAssert(navigationController.pushedViewController is EventViewController)
         let eventViewController = navigationController.pushedViewController as! EventViewController
         XCTAssertEqual(eventViewController.event, event)
+    }
+
+    func test_evets_pushesTeam() {
+        insertDistrictTeams(district: district)
+
+        let team = district.teams!.anyObject() as! Team
+        districtViewController.teamSelected(team)
+
+        XCTAssert(navigationController.pushedViewController is TeamViewController)
+        let teamViewController = navigationController.pushedViewController as! TeamViewController
+        XCTAssertEqual(teamViewController.team, team)
     }
 
     func test_events_eventWeekTitle() {

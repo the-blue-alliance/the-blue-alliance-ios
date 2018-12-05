@@ -118,6 +118,23 @@ extension District: Managed {
     }
 
     /**
+     Insert Teams with values from TBAKit Team models in to the managed object context.
+
+     This method manages setting up an District's relationship to Teams.
+
+     - Parameter team: The TBAKit Team representations to set values from.
+     */
+    func insert(_ teams: [TBATeam]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        self.teams = NSSet(array: teams.map({
+            return Team.insert($0, in: managedObjectContext)
+        }))
+    }
+
+    /**
      Insert an array of District Rankings with values from TBAKit District Ranking models in to the managed object context for a District.
 
      This method manages setting up a District Ranking's relationship to a District and deleting orphaned District Rankings.

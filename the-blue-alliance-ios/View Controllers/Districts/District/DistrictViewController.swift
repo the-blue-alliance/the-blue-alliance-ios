@@ -6,23 +6,27 @@ class DistrictViewController: ContainerViewController {
 
     private(set) var district: District
     private let myTBA: MyTBA
+    private let statusService: StatusService
     private let urlOpener: URLOpener
 
     private(set) var eventsViewController: DistrictEventsViewController
+    private(set) var teamsViewController: DistrictTeamsViewController
     private(set) var rankingsViewController: DistrictRankingsViewController
 
     // MARK: - Init
 
-    init(district: District, myTBA: MyTBA, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(district: District, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.district = district
+        self.statusService = statusService
         self.myTBA = myTBA
         self.urlOpener = urlOpener
 
         eventsViewController = DistrictEventsViewController(district: district, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        teamsViewController = DistrictTeamsViewController(district: district, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         rankingsViewController = DistrictRankingsViewController(district: district, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        super.init(viewControllers: [eventsViewController, rankingsViewController],
-                   segmentedControlTitles: ["Events", "Rankings"],
+        super.init(viewControllers: [eventsViewController, teamsViewController, rankingsViewController],
+                   segmentedControlTitles: ["Events", "Teams", "Rankings"],
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
@@ -30,6 +34,7 @@ class DistrictViewController: ContainerViewController {
         title = "\(district.year!.stringValue) \(district.name!) Districts"
 
         eventsViewController.delegate = self
+        teamsViewController.delegate = self
         rankingsViewController.delegate = self
     }
 
@@ -56,6 +61,15 @@ extension DistrictViewController: EventsViewControllerDelegate {
 
     func title(for event: Event) -> String? {
         return "\(event.weekString) Events"
+    }
+
+}
+
+extension DistrictViewController: TeamsViewControllerDelegate {
+
+    func teamSelected(_ team: Team) {
+        let teamViewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        self.navigationController?.pushViewController(teamViewController, animated: true)
     }
 
 }
