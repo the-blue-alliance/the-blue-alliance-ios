@@ -1,9 +1,10 @@
 import CoreData
 import UIKit
 
-class EventViewController: MyTBAContainerViewController {
+class EventViewController: MyTBAContainerViewController, EventStatusSubscribable {
 
     private(set) var event: Event
+    private(set) var statusService: StatusService
 
     private(set) var infoViewController: EventInfoViewController
     private(set) var teamsViewController: EventTeamsViewController
@@ -16,8 +17,9 @@ class EventViewController: MyTBAContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
+        self.statusService = statusService
 
         infoViewController = EventInfoViewController(event: event, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         teamsViewController = EventTeamsViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -49,6 +51,19 @@ class EventViewController: MyTBAContainerViewController {
         super.viewDidLoad()
 
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
+
+        if isEventDown(eventKey: event.key!) {
+            showOfflineEventMessage(shouldShow: true, animated: false)
+        }
+        registerForEventStatusChanges(eventKey: event.key!)
+    }
+
+    // MARK: - Interface Methods
+
+    func eventStatusChanged(isEventOffline: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            self?.showOfflineEventMessage(shouldShow: isEventOffline)
+        }
     }
 
 }

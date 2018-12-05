@@ -173,7 +173,7 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
         switch myTBAObject.modelType {
         case .event:
             if let event = myTBAObject.tbaObject as? Event {
-                viewController = EventViewController(event: event, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                viewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
             } else {
                 // TODO: Push using just key
             }

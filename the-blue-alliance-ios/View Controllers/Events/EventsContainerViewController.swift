@@ -90,7 +90,7 @@ extension EventsContainerViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let eventViewController = EventViewController(event: event, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let eventViewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let nav = UINavigationController(rootViewController: eventViewController)
         navigationController?.showDetailViewController(nav, sender: nil)
     }
