@@ -66,6 +66,12 @@ public enum MatchCompLevel: String, CaseIterable {
 
 extension Match {
 
+    static func forKey(_ key: String, in context: NSManagedObjectContext) -> Match? {
+        let predicate = NSPredicate(format: "%K == %@",
+                                    #keyPath(Match.key), key)
+        return Match.findOrFetch(in: context, matching: predicate)
+    }
+
     /**
      Returns the year the Match was played in. Will default to the Event's year.
      If the Match doesn't have an Event, we'll attempt to pull the year off of the key.

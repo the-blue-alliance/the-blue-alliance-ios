@@ -12,12 +12,17 @@ protocol TableViewDataSourceDelegate: class {
 
     func configure(_ cell: Cell, for object: Object, at indexPath: IndexPath)
     func title(for section: Int) -> String?
+    func controllerDidChangeContent()
 }
 
 extension TableViewDataSourceDelegate {
 
     func title(for section: Int) -> String? {
         return nil
+    }
+
+    func controllerDidChangeContent() {
+        // NOP
     }
 
 }
@@ -101,6 +106,7 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         delegate.tableView.reloadData()
+        delegate.controllerDidChangeContent()
     }
 
 }

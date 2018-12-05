@@ -512,8 +512,14 @@ extension Event: Locatable, Managed {
     static func weekEvents(for year: Int, in managedObjectContext: NSManagedObjectContext) -> [Event] {
         let events = Event.fetch(in: managedObjectContext) { (fetchRequest) in
             // Filter out CMP divisions - we don't want them below for our weeks calculation
-            fetchRequest.predicate = NSPredicate(format: "year == %ld && eventType != %ld", year, EventType.championshipDivision.rawValue)
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "week", ascending: true), NSSortDescriptor(key: "eventType", ascending: true), NSSortDescriptor(key: "endDate", ascending: true)]
+            fetchRequest.predicate = NSPredicate(format: "%K == %ld && %K != %ld",
+                                                 #keyPath(Event.year), year,
+                                                 #keyPath(Event.eventType), EventType.championshipDivision.rawValue)
+            fetchRequest.sortDescriptors = [
+                NSSortDescriptor(key: #keyPath(Event.week), ascending: true),
+                NSSortDescriptor(key: #keyPath(Event.eventType), ascending: true),
+                NSSortDescriptor(key: #keyPath(Event.endDate), ascending: true)
+            ]
         }
 
         // Take one event for each week(type) to use for our weekEvents array

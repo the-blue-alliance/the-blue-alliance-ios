@@ -7,17 +7,18 @@ protocol TeamSummaryViewControllerDelegate: AnyObject {
     func matchSelected(_ match: Match)
 }
 
-private enum TeamSummaryRow: Int {
-    case rank
-    case awards
+private enum TeamSummaryRow {
+    case rank(rank: Int)
+    case awards(count: Int)
     case pit // only during CMP, and if they exist
-    case record // don't show record for 2015, because no wins
-    case alliance
-    case status
-    case breakdown
-    case nextMatch
-    case lastMatch
-    case max
+    case record(wlt: WLT) // don't show record for 2015, because no wins
+    case alliance(allianceStatus: String)
+    case status(overallStatus: String)
+    case breakdown(tiebreakerInfo: String)
+    case nextMatchKey(key: String)
+    case nextMatch(match: Match)
+    case lastMatchKey(key: String)
+    case lastMatch(match: Match)
 }
 
 class TeamSummaryViewController: TBATableViewController {
@@ -31,16 +32,22 @@ class TeamSummaryViewController: TBATableViewController {
         guard let awards = event.awards else {
             return []
         }
-        return awards.filtered(using: NSPredicate(format: "event == %@ AND (ANY recipients.teamKey.key == %@)", event, teamKey.key!)) as? Set<Award> ?? []
+        return awards.filtered(using: NSPredicate(format: "%K == %@ AND (ANY recipients.teamKey.key == %@)",
+                                                  #keyPath(Award.event), event,
+                                                  teamKey.key!)) as? Set<Award> ?? []
     }
 
     private var eventStatus: EventStatus? {
         didSet {
             if let eventStatus = eventStatus {
-                updateSummaryInfo()
+                DispatchQueue.main.async { [weak self] in
+                    self?.tableView.reloadData()
+                }
 
-                contextObserver.observeObject(object: eventStatus, state: .updated) { [unowned self] (_, _) in
-                    self.updateSummaryInfo()
+                contextObserver.observeObject(object: eventStatus, state: .updated) { (_, _) in
+                    DispatchQueue.main.async { [weak self] in
+                        self?.tableView.reloadData()
+                    }
                 }
             } else {
                 contextObserver.observeInsertions { [unowned self] (eventStatuses) in
@@ -48,6 +55,71 @@ class TeamSummaryViewController: TBATableViewController {
                 }
             }
         }
+    }
+
+    fileprivate var summaryRows: [TeamSummaryRow] {
+        var summaryRows: [TeamSummaryRow] = []
+
+        // Rank
+        if let rank = eventStatus?.qual?.ranking?.rank {
+            summaryRows.append(TeamSummaryRow.rank(rank: rank.intValue))
+        }
+
+        // Awards
+        if teamAwards.count > 0 {
+            summaryRows.append(TeamSummaryRow.awards(count: teamAwards.count))
+        }
+
+        // TODO: Add support for Pits
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/163
+
+        // Record
+        if let record = eventStatus?.qual?.ranking?.record, event.year != 2015 {
+            summaryRows.append(TeamSummaryRow.record(wlt: record))
+        }
+
+        // Alliance
+        if let allianceStatus = eventStatus?.allianceStatus {
+            print(allianceStatus)
+            summaryRows.append(TeamSummaryRow.alliance(allianceStatus: allianceStatus))
+        }
+
+        // Team Status
+        if let overallStatus = eventStatus?.overallStatus {
+            summaryRows.append(TeamSummaryRow.status(overallStatus: overallStatus))
+        }
+
+        // Breakdown
+        if let tiebreakerInfo = eventStatus?.qual?.ranking?.tiebreakerInfoString {
+            summaryRows.append(TeamSummaryRow.breakdown(tiebreakerInfo: tiebreakerInfo))
+        }
+
+        // From here on, we only show this data if the event is currently happening
+        guard event.isHappeningNow else {
+            return summaryRows
+        }
+
+        // Next Match
+        if let nextMatchKey = eventStatus?.nextMatchKey {
+            if let match = Match.forKey(nextMatchKey, in: persistentContainer.viewContext) {
+                summaryRows.append(TeamSummaryRow.nextMatch(match: match))
+            } else {
+                summaryRows.append(TeamSummaryRow.nextMatchKey(key: nextMatchKey))
+                fetchMatch(nextMatchKey)
+            }
+        }
+
+        // Last Match
+        if let lastMatchKey = eventStatus?.lastMatchKey {
+            if let match = Match.forKey(lastMatchKey, in: persistentContainer.viewContext) {
+                summaryRows.append(TeamSummaryRow.lastMatch(match: match))
+            } else {
+                summaryRows.append(TeamSummaryRow.lastMatchKey(key: lastMatchKey))
+                fetchMatch(lastMatchKey)
+            }
+        }
+
+        return summaryRows
     }
 
     // MARK: - Observable
@@ -62,8 +134,6 @@ class TeamSummaryViewController: TBATableViewController {
     }()
 
     private var backgroundFetchKeys: Set<String> = []
-    private var summaryRows: [TeamSummaryRow] = []
-    private var summaryValues: [Any] = []
 
     init(teamKey: TeamKey, event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.teamKey = teamKey
@@ -81,79 +151,12 @@ class TeamSummaryViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // TODO: Since we leverage didSet, we need to do this *after* initilization
+        // Since we leverage didSet, we need to do this *after* initilization
         eventStatus = EventStatus.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
 
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
         tableView.registerReusableCell(LoadingTableViewCell.self)
         tableView.registerReusableCell(MatchTableViewCell.self)
-    }
-
-    // MARK: - Private
-
-    func updateSummaryInfo() {
-        summaryRows = []
-        summaryValues = []
-
-        // Rank
-        if let rank = eventStatus?.qual?.ranking?.rank {
-            summaryRows.append(TeamSummaryRow.rank)
-            summaryValues.append(rank)
-        }
-
-        // Awards
-        if teamAwards.count > 0 {
-            summaryRows.append(TeamSummaryRow.awards)
-            summaryValues.append(teamAwards.count)
-        }
-
-        // TODO: Add support for Pits
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/163
-
-        // Record
-        if let record = eventStatus?.qual?.ranking?.record, event.year != 2015 {
-            summaryRows.append(TeamSummaryRow.record)
-            summaryValues.append(record)
-        }
-
-        // Alliance
-        if let allianceStatusString = eventStatus?.allianceStatus {
-            summaryRows.append(TeamSummaryRow.alliance)
-            summaryValues.append(allianceStatusString)
-        }
-
-        // Team Status
-        if let overallStatusString = eventStatus?.overallStatus {
-            summaryRows.append(TeamSummaryRow.status)
-            summaryValues.append(overallStatusString)
-        }
-
-        // Breakdown
-        if let breakdown = eventStatus?.qual?.ranking?.tiebreakerInfoString {
-            summaryRows.append(TeamSummaryRow.breakdown)
-            summaryValues.append(breakdown)
-        }
-
-        // Only show next/last match if the event is happening now
-        if event.isHappeningNow {
-            for (type, key) in [(TeamSummaryRow.nextMatch, eventStatus?.nextMatchKey), (TeamSummaryRow.lastMatch, eventStatus?.lastMatchKey)] {
-                guard let key = key else {
-                    continue
-                }
-                summaryRows.append(type)
-                let match = Match.findOrFetch(in: persistentContainer.viewContext, matching: NSPredicate(format: "%K == %@", #keyPath(Match.key), key))
-                if let match = match {
-                    summaryValues.append(match)
-                } else {
-                    summaryValues.append(key)
-                    // TODO: Fetch Match
-                }
-            }
-        }
-
-        DispatchQueue.main.async { [weak self] in
-            self?.tableView.reloadData()
-        }
     }
 
     // MARK: - Table view data source
@@ -169,34 +172,29 @@ class TeamSummaryViewController: TBATableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let rowType = summaryRows[indexPath.row]
-        let rowValue = summaryValues[indexPath.row]
+        let row = summaryRows[indexPath.row]
         let cell: UITableViewCell = {
-            switch rowType {
-            case .rank:
-                return self.tableView(tableView, rankCellForRowAt: indexPath)
-            case .awards:
-                return self.tableView(tableView, awardsCellForRowAt: indexPath)
-            case .pit:
-                return UITableViewCell()
-            case .record:
-                return self.tableView(tableView, recordCellForRowAt: indexPath)
-            case .alliance:
-                return self.tableView(tableView, allianceCellForRowAt: indexPath)
-            case .status:
-                return self.tableView(tableView, statusCellForRowAt: indexPath)
-            case .breakdown:
-                return self.tableView(tableView, breakdownCellForRowAt: indexPath)
-            case .nextMatch:
-                if rowValue is String {
-                    return self.tableView(tableView, loadingCellAt: indexPath)
-                }
-                return self.tableView(tableView, matchCellForRowAt: indexPath)
-            case .lastMatch:
-                if rowValue is String {
-                    return self.tableView(tableView, loadingCellAt: indexPath)
-                }
-                return self.tableView(tableView, matchCellForRowAt: indexPath)
+            switch row {
+            case .rank(let rank):
+                return self.tableView(tableView, cellForRank: rank, at: indexPath)
+            case .awards(let count):
+                return self.tableView(tableView, cellForAwardCount: count, at: indexPath)
+            case .record(let record):
+                return self.tableView(tableView, cellForRecord: record, at: indexPath)
+            case .alliance(let allianceStatus):
+                return self.tableView(tableView, cellForAllianceStatus: allianceStatus, at: indexPath)
+            case .status(let status):
+                return self.tableView(tableView, cellForStatus: status, at: indexPath)
+            case .breakdown(let breakdown):
+                return self.tableView(tableView, cellForBreakdown: breakdown, at: indexPath)
+            case .nextMatchKey(let key):
+                return self.tableView(tableView, loadingCellForKey: key, at: indexPath)
+            case .nextMatch(let match):
+                return self.tableView(tableView, cellForMatch: match, at: indexPath)
+            case .lastMatchKey(let key):
+                return self.tableView(tableView, loadingCellForKey: key, at: indexPath)
+            case .lastMatch(let match):
+                return self.tableView(tableView, cellForMatch: match, at: indexPath)
             default:
                 return UITableViewCell()
             }
@@ -204,44 +202,32 @@ class TeamSummaryViewController: TBATableViewController {
         return cell
     }
 
-    private func tableView(_ tableView: UITableView, rankCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let rank = summaryValues[indexPath.row] as! NSNumber
-        return self.tableView(tableView, reverseSubtitleCellWithTitle: "Rank", subtitle: "\(rank.stringValue)\(rank.intValue.suffix)", at: indexPath)
+    private func tableView(_ tableView: UITableView, cellForRank rank: Int, at indexPath: IndexPath) -> UITableViewCell {
+        return self.tableView(tableView, reverseSubtitleCellWithTitle: "Rank", subtitle: "\(rank)\(rank.suffix)", at: indexPath)
     }
 
-    private func tableView(_ tableView: UITableView, awardsCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let awardCount = summaryValues[indexPath.row] as! Int
+    private func tableView(_ tableView: UITableView, cellForAwardCount awardCount: Int, at indexPath: IndexPath) -> UITableViewCell {
         let recordString = "Won \(awardCount) award\(awardCount > 1 ? "s" : "")"
         let cell = self.tableView(tableView, reverseSubtitleCellWithTitle: "Awards", subtitle: recordString, at: indexPath)
-
         // Allow us to push to what awards the team won
         cell.accessoryType = .disclosureIndicator
         cell.selectionStyle = .default
-
         return cell
     }
 
-    private func tableView(_ tableView: UITableView, recordCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let record = summaryValues[indexPath.row] as! WLT
+    private func tableView(_ tableView: UITableView, cellForRecord record: WLT, at indexPath: IndexPath) -> UITableViewCell {
         return self.tableView(tableView, reverseSubtitleCellWithTitle: "Qual Record", subtitle: record.displayString(), at: indexPath)
     }
 
-    private func tableView(_ tableView: UITableView, allianceCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let allianceStatusString = summaryValues[indexPath.row] as! String
-        let cell = self.tableView(tableView, reverseSubtitleCellWithTitle: "Alliance", subtitle: allianceStatusString, at: indexPath)
-        cell.setHTMLSubtitle(text: allianceStatusString)
-        return cell
+    private func tableView(_ tableView: UITableView, cellForAllianceStatus allianceStatus: String, at indexPath: IndexPath) -> UITableViewCell {
+        return self.tableView(tableView, reverseSubtitleCellWithTitle: "Alliance", subtitle: allianceStatus, at: indexPath)
     }
 
-    private func tableView(_ tableView: UITableView, statusCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let overallStatusString = summaryValues[indexPath.row] as! String
-        let cell = self.tableView(tableView, reverseSubtitleCellWithTitle: "Team Status", subtitle: overallStatusString, at: indexPath)
-        cell.setHTMLSubtitle(text: overallStatusString)
-        return cell
+    private func tableView(_ tableView: UITableView, cellForStatus status: String, at indexPath: IndexPath) -> UITableViewCell {
+        return self.tableView(tableView, reverseSubtitleCellWithTitle: "Team Status", subtitle: status, at: indexPath)
     }
 
-    private func tableView(_ tableView: UITableView, breakdownCellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let breakdown = summaryValues[indexPath.row] as! String
+    private func tableView(_ tableView: UITableView, cellForBreakdown breakdown: String, at indexPath: IndexPath) -> UITableViewCell {
         return self.tableView(tableView, reverseSubtitleCellWithTitle: "Ranking Breakdown", subtitle: breakdown, at: indexPath)
     }
 
@@ -249,20 +235,20 @@ class TeamSummaryViewController: TBATableViewController {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
         cell.titleLabel.text = title
         cell.subtitleLabel.text = subtitle
-        return cell
-    }
-
-    private func tableView(_ tableView: UITableView, loadingCellAt indexPath: IndexPath) -> LoadingTableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as LoadingTableViewCell
-        cell.keyLabel.text = summaryValues[indexPath.row] as? String
-        cell.backgroundFetchActivityIndicator.isHidden = false
+        cell.accessoryType = .none
         cell.selectionStyle = .none
         return cell
     }
 
-    private func tableView(_ tableView: UITableView, matchCellForRowAt indexPath: IndexPath) -> MatchTableViewCell {
+    private func tableView(_ tableView: UITableView, loadingCellForKey key: String, at indexPath: IndexPath) -> LoadingTableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as LoadingTableViewCell
+        cell.keyLabel.text = key
+        cell.backgroundFetchActivityIndicator.isHidden = false
+        return cell
+    }
+
+    private func tableView(_ tableView: UITableView, cellForMatch match: Match, at indexPath: IndexPath) -> MatchTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
-        let match = summaryValues[indexPath.row] as! Match
         cell.viewModel = MatchViewModel(match: match, teamKey: teamKey)
         return cell
     }
@@ -271,26 +257,24 @@ class TeamSummaryViewController: TBATableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
 
         let rowType = summaryRows[indexPath.row]
-        let rowValue = summaryValues[indexPath.row]
         switch rowType {
         case .awards:
             delegate?.awardsSelected()
-        case .nextMatch, .lastMatch:
-            if let match = rowValue as? Match {
-                delegate?.matchSelected(match)
-            }
+        case .nextMatch(let match), .lastMatch(let match):
+            delegate?.matchSelected(match)
         default:
             break
         }
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let rowType = summaryRows[indexPath.row]
-        let rowValue = summaryValues[indexPath.row]
-        if (rowType == .nextMatch && rowValue is String) || (rowType == .lastMatch && rowValue is String) {
+        let row = summaryRows[indexPath.row]
+        switch row {
+        case .nextMatchKey, .lastMatchKey:
             return 44.0
+        default:
+            return UITableView.automaticDimension
         }
-        return UITableView.automaticDimension
     }
 
 }
@@ -347,10 +331,34 @@ extension TeamSummaryViewController: Refreshable {
                 self.markTBARefreshSuccessful(self.tbaKit, request: awardsRequest!)
             })
             self.removeRequest(request: awardsRequest!)
-
-            self.updateSummaryInfo()
         })
         addRequest(request: awardsRequest!)
+    }
+
+    func fetchMatch(_ key: String) {
+        // Already fetching match key
+        guard !backgroundFetchKeys.contains(key) else {
+            return
+        }
+
+        var request: URLSessionDataTask?
+        request = tbaKit.fetchMatch(key: key) { (match, error) in
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
+                if let match = match {
+                    Match.insert(match, in: context)
+                }
+            }, saved: {
+                self.tbaKit.setLastModified(request!)
+            })
+
+            self.backgroundFetchKeys.remove(key)
+
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
+        }
+        backgroundFetchKeys.insert(key)
     }
 
 }
