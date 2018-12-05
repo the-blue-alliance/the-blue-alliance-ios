@@ -51,15 +51,11 @@ class StatusService: NSObject {
     }
 
     func setupStatusObservers() {
-        contextObserver.observeObject(object: status) { [weak self] (s, state) in
-            guard state == .updated || state == .refreshed else {
-                return
-            }
-
-            let fmsStatus = s.isDatafeedDown!.boolValue
+        contextObserver.observeObject(object: status, state: .updated) { [weak self] (status, _) in
+            let fmsStatus = status.isDatafeedDown!.boolValue
             self?.dispatchFMSDown(fmsStatus)
 
-            let downEventKeys = (s.downEvents!.allObjects as! [EventKey]).map({ $0.key! })
+            let downEventKeys = (status.downEvents!.allObjects as! [EventKey]).map({ $0.key! })
             self?.dispatchEvents(downEventKeys: downEventKeys)
         }
     }
