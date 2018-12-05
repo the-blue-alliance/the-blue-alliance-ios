@@ -44,11 +44,7 @@ class TeamSummaryViewController: TBATableViewController {
                     self?.tableView.reloadData()
                 }
 
-                contextObserver.observeObject(object: eventStatus) { [unowned self] (_, state) in
-                    guard state == .updated || state == .refreshed else {
-                        return
-                    }
-
+                contextObserver.observeObject(object: eventStatus, state: .updated) { (_, _) in
                     DispatchQueue.main.async { [weak self] in
                         self?.tableView.reloadData()
                     }

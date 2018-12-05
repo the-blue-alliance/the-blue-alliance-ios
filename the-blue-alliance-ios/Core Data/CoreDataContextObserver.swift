@@ -8,10 +8,9 @@ public struct CoreDataContextObserverState: OptionSet {
     public static let inserted  = CoreDataContextObserverState(rawValue: 1 << 0)
     public static let updated   = CoreDataContextObserverState(rawValue: 1 << 1)
     public static let deleted   = CoreDataContextObserverState(rawValue: 1 << 2)
-    public static let refreshed = CoreDataContextObserverState(rawValue: 1 << 3)
-    public static let all: CoreDataContextObserverState = [inserted, updated, deleted, refreshed]
+    public static let all: CoreDataContextObserverState = [inserted, updated, deleted]
 
-    public static let allList: [CoreDataContextObserverState] = [inserted, updated, deleted, refreshed]
+    public static let allList: [CoreDataContextObserverState] = [inserted, updated, deleted]
 }
 
 public struct CoreDataObserverAction<T: NSManagedObject> {
@@ -62,9 +61,19 @@ public class CoreDataContextObserver<T: NSManagedObject> {
 
         // This assumes we won't get multiple calls by having an object in more than one set (which should be true?)
         // Ex: If an object is inserted and deleted before we get the notification, we'll call this twice
-        let objectKeys = [NSInsertedObjectsKey, NSUpdatedObjectsKey, NSDeletedObjectsKey, NSRefreshedObjectsKey]
+        let objectKeys = [NSInsertedObjectsKey, NSUpdatedObjectsKey, NSDeletedObjectsKey]
         for (key, state) in zip(objectKeys, CoreDataContextObserverState.allList) {
-            let objectsSet = notification.userInfo?[key] as? Set<NSManagedObject> ?? Set<NSManagedObject>()
+            let objectsSet: Set<NSManagedObject> = {
+                let objectsSet = notification.userInfo?[key] as? Set<NSManagedObject> ?? Set<NSManagedObject>()
+                if state == .updated {
+                    // Treat refreshed objects as being updated - which is fine for our use case right now
+                    let refreshedSet = notification.userInfo?[NSRefreshedObjectsKey] as? Set<NSManagedObject> ?? Set<NSManagedObject>()
+
+                    let thirdSet = NSMutableSet(set: objectsSet)
+                    return thirdSet.addingObjects(from: refreshedSet) as! Set<NSManagedObject>
+                }
+                return objectsSet
+            }()
 
             // Handle Insertion observers
             if state == .inserted, let completionBlock = completionForInsertedManagedObjectID {
