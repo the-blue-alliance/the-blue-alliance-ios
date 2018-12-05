@@ -29,6 +29,7 @@ class TeamsViewController: TBATableViewController {
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         setupDataSource()
+        updateInterface()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -46,6 +47,16 @@ class TeamsViewController: TBATableViewController {
         definesPresentationContext = true
     }
 
+    // MARK: - Interface Methods
+
+    func updateInterface() {
+        searchController.searchBar.placeholder = {
+            guard let numberOfTeams = dataSource.fetchedResultsController.fetchedObjects?.count else {
+                return nil
+            }
+            return "Search \(numberOfTeams) Teams"
+        }()
+    }
 
     // MARK: UITableView Delegate
 
@@ -96,6 +107,10 @@ extension TeamsViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: TeamTableViewCell, for object: Team, at indexPath: IndexPath) {
         cell.viewModel = TeamCellViewModel(team: object)
+    }
+
+    func controllerDidChangeContent() {
+        updateInterface()
     }
 
 }
