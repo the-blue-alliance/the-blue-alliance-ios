@@ -6,7 +6,7 @@ class EventViewController: MyTBAContainerViewController {
     private(set) var event: Event
 
     private(set) var infoViewController: EventInfoViewController
-    private(set) var teamsViewController: TeamsViewController
+    private(set) var teamsViewController: EventTeamsViewController
     private(set) var rankingsViewController: EventRankingsViewController
     private(set) var matchesViewController: MatchesViewController
 
@@ -20,7 +20,7 @@ class EventViewController: MyTBAContainerViewController {
         self.event = event
 
         infoViewController = EventInfoViewController(event: event, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        teamsViewController = TeamsViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        teamsViewController = EventTeamsViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         rankingsViewController = EventRankingsViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         matchesViewController = MatchesViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 

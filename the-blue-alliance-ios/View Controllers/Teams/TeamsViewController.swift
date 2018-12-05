@@ -6,11 +6,19 @@ protocol TeamsViewControllerDelegate: AnyObject {
     func teamSelected(_ team: Team)
 }
 
-class TeamsViewController: TBATableViewController {
+protocol TeamsViewControllerDataSourceConfiguration {
+    var fetchRequestPredicate: NSPredicate? { get }
+}
 
-    private let event: Event?
+/**
+ TeamsViewController is an abstract view controller which should be subclassed by other view controllers
+ that display a list of teams, given a set of information.
 
-    var delegate: TeamsViewControllerDelegate?
+ See: EventTeamsViewController, DistrictTeamsViewController
+ */
+class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsViewControllerDataSourceConfiguration {
+
+    weak var delegate: TeamsViewControllerDelegate?
     private var dataSource: TableViewDataSource<Team, TeamsViewController>!
 
     lazy private var searchController: UISearchController = {
@@ -21,11 +29,9 @@ class TeamsViewController: TBATableViewController {
         return searchController
     }()
 
-    // MARK: - Init
+    // MARK: Init
 
-    init(event: Event? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        self.event = event
-
+    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         setupDataSource()
@@ -41,6 +47,7 @@ class TeamsViewController: TBATableViewController {
         super.viewDidLoad()
 
         tableView.tableHeaderView = searchController.searchBar
+        tableView.registerReusableCell(TeamTableViewCell.self)
 
         // Used to make sure the UISearchBar stays in our root VC (this VC) when presented and doesn't overlay in push
         definesPresentationContext = true
@@ -60,76 +67,17 @@ class TeamsViewController: TBATableViewController {
         }
     }
 
-    // MARK: Table View Data Source
-
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "teamNumber", ascending: true)]
-        setupFetchRequest(fetchRequest)
-        fetchRequest.fetchBatchSize = 50
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
-    }
-
-    private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
-
-    private func setupFetchRequest(_ request: NSFetchRequest<Team>) {
-        if let searchText = searchController.searchBar.text, !searchText.isEmpty {
-            if let event = event {
-                request.predicate = NSPredicate(format: "ANY events = %@ AND (nickname contains[cd] %@ OR teamNumber.stringValue beginswith[cd] %@)", event, searchText, searchText)
-            } else {
-                request.predicate = NSPredicate(format: "(nickname contains[cd] %@ OR teamNumber.stringValue beginswith[cd] %@)", searchText, searchText)
-            }
-        } else if let event = event {
-            request.predicate = NSPredicate(format: "ANY events = %@", event)
-        } else {
-            request.predicate = nil
-        }
-    }
-
-}
-
-extension TeamsViewController: TableViewDataSourceDelegate {
-
-    func configure(_ cell: TeamTableViewCell, for object: Team, at indexPath: IndexPath) {
-        cell.viewModel = TeamCellViewModel(team: object)
-    }
-
-}
-
-extension TeamsViewController: UISearchResultsUpdating {
-
-    public func updateSearchResults(for searchController: UISearchController) {
-        updateDataSource()
-    }
-
-}
-
-extension TeamsViewController: Refreshable {
+    // MARK: - Refreshable
 
     var refreshKey: String? {
-        if let event = event {
-            return "\(event.key!)_teams"
-        }
         return "teams"
     }
 
     var automaticRefreshInterval: DateComponents? {
-        if event != nil {
-            return DateComponents(day: 1)
-        }
         return DateComponents(month: 1)
     }
 
     var automaticRefreshEndDate: Date? {
-        // Refresh event teams until the event is over
-        if let event = event {
-            return event.endDate?.endOfDay()
-        }
-        // Always periodically refresh teams
         return nil
     }
 
@@ -141,13 +89,27 @@ extension TeamsViewController: Refreshable {
     }
 
     @objc func refresh() {
-        removeNoDataView()
+        var request: URLSessionDataTask?
+        request = fetchAllTeams(taskChanged: { [unowned self] (task, page, teams) in
+            self.addRequest(request: task)
 
-        if event != nil {
-            refreshEventTeams()
-        } else {
-            refreshTeams()
+            let previousRequest = request
+            request = task
+
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
+                Team.insert(teams, page: page, in: context)
+            }, saved: {
+                self.tbaKit.setLastModified(previousRequest!)
+            })
+            self.removeRequest(request: previousRequest!)
+        }) { (error) in
+            self.removeRequest(request: request!)
+            if error == nil {
+                self.markRefreshSuccessful()
+            }
         }
+        addRequest(request: request!)
     }
 
     func fetchAllTeams(taskChanged: @escaping (URLSessionDataTask, Int, [TBATeam]) -> Void, completion: @escaping (Error?) -> Void) -> URLSessionDataTask {
@@ -175,57 +137,63 @@ extension TeamsViewController: Refreshable {
         })
     }
 
-    private func refreshTeams() {
-        var request: URLSessionDataTask?
-        request = fetchAllTeams(taskChanged: { [unowned self] (task, page, teams) in
-            self.addRequest(request: task)
+    // MARK: - Stateful
 
-            let previousRequest = request
-            request = task
-
-            let context = self.persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                Team.insert(teams, page: page, in: context)
-            }, saved: {
-                self.tbaKit.setLastModified(previousRequest!)
-            })
-            self.removeRequest(request: previousRequest!)
-        }) { (error) in
-            self.removeRequest(request: request!)
-            if error == nil {
-                self.markRefreshSuccessful()
-            }
-        }
-        addRequest(request: request!)
+    var noDataText: String {
+        return "No teams"
     }
 
-    private func refreshEventTeams() {
-        guard let event = event, let eventKey = event.key else {
-            return
-        }
+    // MARK: Table View Data Source
 
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchEventTeams(key: eventKey, completion: { (teams, error) in
-            let context = self.persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                if let teams = teams {
-                    let event = context.object(with: event.objectID) as! Event
-                    event.insert(teams)
-                }
-            }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
-            })
-            self.removeRequest(request: request!)
-        })
-        addRequest(request: request!)
+    private func setupDataSource() {
+        let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "teamNumber", ascending: true)]
+        fetchRequest.fetchBatchSize = 50
+        setupFetchRequest(fetchRequest)
+
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                             managedObjectContext: persistentContainer.viewContext,
+                                             sectionNameKeyPath: nil,
+                                             cacheName: nil)
+        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    }
+
+    private func updateDataSource() {
+        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
+    }
+
+    private func setupFetchRequest(_ request: NSFetchRequest<Team>) {
+        let searchPredicate: NSPredicate? = {
+            guard let searchText = searchController.searchBar.text, !searchText.isEmpty else {
+                return nil
+            }
+            return NSPredicate(format: "(%K contains[cd] %@ OR %K beginswith[cd] %@)",
+                               #keyPath(Team.nickname), searchText,
+                               #keyPath(Team.teamNumber.stringValue), searchText)
+        }()
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [searchPredicate, fetchRequestPredicate].compactMap({ $0 }))
+    }
+
+    // MARK: - EventsViewControllerDataSourceConfiguration
+
+    var fetchRequestPredicate: NSPredicate? {
+        return nil
     }
 
 }
 
-extension TeamsViewController: Stateful {
+extension TeamsViewController: TableViewDataSourceDelegate {
 
-    var noDataText: String {
-        return "No teams"
+    func configure(_ cell: TeamTableViewCell, for object: Team, at indexPath: IndexPath) {
+        cell.viewModel = TeamCellViewModel(team: object)
+    }
+
+}
+
+extension TeamsViewController: UISearchResultsUpdating {
+
+    public func updateSearchResults(for searchController: UISearchController) {
+        updateDataSource()
     }
 
 }

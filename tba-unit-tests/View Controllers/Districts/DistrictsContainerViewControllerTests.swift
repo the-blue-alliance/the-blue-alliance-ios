@@ -50,7 +50,7 @@ class DistrictsContainerViewControllerTests: TBATestCase {
         XCTAssertEqual(districtsContainerViewController.tabBarItem.title, "Districts")
     }
 
-    func test_showsTeams() {
+    func test_showsDistricts() {
         XCTAssert(districtsContainerViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is DistrictsViewController
         }))

@@ -62,7 +62,7 @@ class EventViewControllerTests: TBATestCase {
 
     func test_showsTeams() {
         XCTAssert(eventViewController.children.contains(where: { (viewController) -> Bool in
-            return viewController is TeamsViewController
+            return viewController is EventTeamsViewController
         }))
     }
 
