@@ -17,7 +17,7 @@ class EventViewControllerTests: TBATestCase {
 
         let event = insertDistrictEvent()
 
-        eventViewController = EventViewController(event: event, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        eventViewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController = MockNavigationController(rootViewController: eventViewController)
 
         viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
@@ -32,7 +32,17 @@ class EventViewControllerTests: TBATestCase {
     }
 
     func test_snapshot() {
+        // Stop our VC from refreshing
+        eventViewController.infoViewController.markRefreshSuccessful()
+
         verifyLayer(viewControllerTester.window.layer)
+
+        // Event offline
+        statusService.dispatchEvents(downEventKeys: [event.key!])
+        waitOneSecond()
+        verifyLayer(viewControllerTester.window.layer, identifier: "event_offline")
+        statusService.dispatchEvents(downEventKeys: [])
+        waitOneSecond()
 
         // myTBA authed
         myTBA.authToken = "abcd123"

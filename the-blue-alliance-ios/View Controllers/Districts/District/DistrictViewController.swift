@@ -55,7 +55,7 @@ class DistrictViewController: ContainerViewController {
 extension DistrictViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let eventViewController = EventViewController(event: event, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let eventViewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(eventViewController, animated: true)
     }
 

@@ -11,7 +11,7 @@ class StatusService: NSObject {
     var retryService: RetryService
     private let tbaKit: TBAKit
 
-    private lazy var status: Status = {
+    fileprivate lazy var status: Status = {
         if let status = Status.status(in: persistentContainer.viewContext) {
             return status
         } else if let status = Status.fromPlist(bundle: bundle, in: persistentContainer.viewContext) {
@@ -146,9 +146,11 @@ extension StatusService: Retryable {
 }
 
 extension FMSStatusSubscribable {
+
     func registerForFMSStatusChanges() {
         statusService.registerForFMSStatusChanges(self)
     }
+
 }
 
 @objc protocol EventStatusSubscribable {
@@ -158,7 +160,14 @@ extension FMSStatusSubscribable {
 }
 
 extension EventStatusSubscribable {
+
     func registerForEventStatusChanges(eventKey: String) {
         statusService.registerForEventStatusChanges(self, eventKey: eventKey)
     }
+
+    func isEventDown(eventKey: String) -> Bool {
+        let downEventKeys = (statusService.status.downEvents?.allObjects as? [EventKey] ?? []).map({ $0.key! })
+        return downEventKeys.contains(eventKey)
+    }
+
 }

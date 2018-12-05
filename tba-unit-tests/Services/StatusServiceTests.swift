@@ -205,6 +205,15 @@ class EventStatusSubscribableTests: TBATestCase {
         wait(for: [ex], timeout: 1.0)
     }
 
+    func test_isEventDown() {
+        let testEventKey = "2018miket"
+
+        let status = insertStatus()
+        XCTAssertFalse(eventSubscribable.isEventDown(eventKey: testEventKey))
+        status.addToDownEvents(EventKey.insert(withKey: testEventKey, in: persistentContainer.viewContext))
+        XCTAssert(eventSubscribable.isEventDown(eventKey: testEventKey))
+    }
+
 }
 
 private class MockFMSStatusSubscribable: FMSStatusSubscribable {

@@ -11,6 +11,14 @@ extension UIColor {
         return .color(red: 48, green: 63, blue: 159)
     }
 
+    public class var dangerRed: UIColor {
+        return .colorWithRGB(rgbValue: 0xf2dede)
+    }
+
+    public class var dangerDarkRed: UIColor {
+        return .colorWithRGB(rgbValue: 0xa94442)
+    }
+
     public class var backgroundGray: UIColor {
         return .color(red: 239, green: 239, blue: 239)
     }

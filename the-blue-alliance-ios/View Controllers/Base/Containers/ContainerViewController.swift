@@ -82,6 +82,22 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
     private let containerView: UIView = UIView()
     private let viewControllers: [ContainableViewController]
+    private var rootStackView: UIStackView!
+
+    private lazy var offlineEventView: UIView = {
+        let offlineEventLabel = UILabel(forAutoLayout: ())
+        offlineEventLabel.text = "It looks like this event hasn't posted any results recently. It's possible that the internet connection at the event is down. The event's information might be out of date."
+        offlineEventLabel.textColor = .dangerDarkRed
+        offlineEventLabel.numberOfLines = 0
+        offlineEventLabel.textAlignment = .center
+        offlineEventLabel.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.footnote)
+
+        let offlineEventView = UIView(forAutoLayout: ())
+        offlineEventView.addSubview(offlineEventLabel)
+        offlineEventLabel.autoPinEdgesToSuperviewSafeArea(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
+        offlineEventView.backgroundColor = .dangerRed
+        return offlineEventView
+    }()
 
     init(viewControllers: [ContainableViewController], navigationTitle: String? = nil, navigationSubtitle: String?  = nil, segmentedControlTitles: [String]? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.viewControllers = viewControllers
@@ -123,10 +139,10 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
             arrangedSubviews.insert(segmentedControlView, at: 0)
         }
 
-        let stackView = UIStackView(arrangedSubviews: arrangedSubviews)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        view.addSubview(stackView)
+        rootStackView = UIStackView(arrangedSubviews: arrangedSubviews)
+        rootStackView.translatesAutoresizingMaskIntoConstraints = false
+        rootStackView.axis = .vertical
+        view.addSubview(rootStackView)
 
         // Add subviews to view hiearchy in reverse order, so first one is showing automatically
         for viewController in viewControllers.reversed() {
@@ -136,9 +152,9 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
             viewController.enableRefreshing()
         }
 
-        stackView.autoPinEdge(toSuperviewSafeArea: .top)
+        rootStackView.autoPinEdge(toSuperviewSafeArea: .top)
         // Pin our stack view underneath the safe area to extend underneath the home bar on notch phones
-        stackView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
+        rootStackView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -178,6 +194,45 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
             return "▾ \(year)"
         } else {
             return "▾ ----"
+        }
+    }
+
+    public func showOfflineEventMessage(shouldShow: Bool, animated: Bool = true) {
+        if shouldShow {
+            if !rootStackView.arrangedSubviews.contains(offlineEventView) {
+                // Animate our down events view in
+                if animated {
+                    offlineEventView.isHidden = true
+                }
+                rootStackView.addArrangedSubview(offlineEventView)
+                if animated {
+                    // iOS animation timing magic number
+                    UIView.animate(withDuration: 0.35) {
+                        self.offlineEventView.isHidden = false
+                    }
+                }
+            }
+        } else {
+            if animated {
+                if rootStackView.arrangedSubviews.contains(offlineEventView) {
+                    UIView.animate(withDuration: 0.35, animations: {
+                        self.offlineEventView.isHidden = true
+                    }, completion: { (_) in
+                        self.rootStackView.removeArrangedSubview(self.offlineEventView)
+                        if self.offlineEventView.superview != nil {
+                            self.offlineEventView.removeFromSuperview()
+                        }
+                        self.offlineEventView.isHidden = false
+                    })
+                }
+            } else {
+                if rootStackView.arrangedSubviews.contains(offlineEventView) {
+                    rootStackView.removeArrangedSubview(offlineEventView)
+                }
+                if offlineEventView.superview != nil {
+                    self.offlineEventView.removeFromSuperview()
+                }
+            }
         }
     }
 
