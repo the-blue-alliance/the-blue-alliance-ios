@@ -37,7 +37,6 @@
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
 		373233698A5148831C801B8E /* Pods_The_Blue_Alliance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */; };
-		43CF3D2E906B46064E43038C /* Pods_tba_ui_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */; };
 		5797EAB49489B63DDA0980F5 /* Pods_tba_unit_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */; };
 		9221C616209BFF7D00477DE2 /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */; };
 		9221C618209BFF8700477DE2 /* LoadingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */; };
@@ -48,7 +47,6 @@
 		9236101F2178245C000CC5E9 /* TeamMediaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9236101E2178245C000CC5E9 /* TeamMediaTests.swift */; };
 		9236102521798655000CC5E9 /* MatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9236102421798655000CC5E9 /* MatchTests.swift */; };
 		92361028217D1175000CC5E9 /* AwardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92361027217D1175000CC5E9 /* AwardTests.swift */; };
-		923AEE8A21658BC400EF50C8 /* Launch_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923AEE8921658BC400EF50C8 /* Launch_UITests.swift */; };
 		923AEE8C21658C5800EF50C8 /* Bundle+Version_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923AEE8B21658C5800EF50C8 /* Bundle+Version_Tests.swift */; };
 		923AEE99216703CB00EF50C8 /* MyTBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923AEE98216703CB00EF50C8 /* MyTBATests.swift */; };
 		924459C320CB796B0007570D /* Date+TBA_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924459BD20CB796A0007570D /* Date+TBA_Tests.swift */; };
@@ -246,8 +244,6 @@
 		92BB717F20CE19F40081F4E5 /* PersistentContainerOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB717E20CE19F40081F4E5 /* PersistentContainerOperationTests.swift */; };
 		92BB718420CE1E310081F4E5 /* Test.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92BB718220CE1E310081F4E5 /* Test.xcdatamodeld */; };
 		92BB718920D216D50081F4E5 /* EmptyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92BB718820D216D50081F4E5 /* EmptyViewController.xib */; };
-		92BB8B5A214F04DD0035AF28 /* SettingsViewController_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B59214F04DD0035AF28 /* SettingsViewController_UITests.swift */; };
-		92BB8B5C214F12440035AF28 /* TBAUITestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B5B214F12440035AF28 /* TBAUITestCase.swift */; };
 		92BB8B62214F16710035AF28 /* SettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B61214F16710035AF28 /* SettingsViewControllerTests.swift */; };
 		92BB8B64214F17440035AF28 /* URLOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BB8B63214F17440035AF28 /* URLOpener.swift */; };
 		92C1F2DE216994CF00BD8445 /* CoreDataTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1F2DD216994CF00BD8445 /* CoreDataTestCase.swift */; };
@@ -348,13 +344,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		92A321D1214F029400FDADFB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 92942D8A1E2154DA008E79CA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 92942D911E2154DA008E79CA;
-			remoteInfo = "The Blue Alliance";
-		};
 		92D6483F20BE4CB8008F0DB3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 92942D8A1E2154DA008E79CA /* Project object */;
@@ -397,7 +386,6 @@
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
 		4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.release.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.release.xcconfig"; sourceTree = "<group>"; };
 		52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_unit_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5F1F0F9FCDD8A9EB6D9CCC6A /* Pods-tba-ui-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-ui-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tba-ui-tests/Pods-tba-ui-tests.debug.xcconfig"; sourceTree = "<group>"; };
 		9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingTableViewCell.xib; sourceTree = "<group>"; };
 		9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
@@ -407,7 +395,6 @@
 		9236101E2178245C000CC5E9 /* TeamMediaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamMediaTests.swift; sourceTree = "<group>"; };
 		9236102421798655000CC5E9 /* MatchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchTests.swift; sourceTree = "<group>"; };
 		92361027217D1175000CC5E9 /* AwardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwardTests.swift; sourceTree = "<group>"; };
-		923AEE8921658BC400EF50C8 /* Launch_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Launch_UITests.swift; sourceTree = "<group>"; };
 		923AEE8B21658C5800EF50C8 /* Bundle+Version_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Version_Tests.swift"; sourceTree = "<group>"; };
 		923AEE98216703CB00EF50C8 /* MyTBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBATests.swift; sourceTree = "<group>"; };
 		924459BD20CB796A0007570D /* Date+TBA_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+TBA_Tests.swift"; sourceTree = "<group>"; };
@@ -500,8 +487,6 @@
 		929FCD991EC7F52700A38E46 /* DistrictsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictsViewController.swift; sourceTree = "<group>"; };
 		92A2F5532156BD4B00267C63 /* NSManagedObjectContext+ExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+ExtensionTests.swift"; sourceTree = "<group>"; };
 		92A321C6214EF83800FDADFB /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		92A321CC214F029400FDADFB /* tba-ui-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tba-ui-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		92A321D0214F029400FDADFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92A4147B216DA76400E459A5 /* ReactNativeService_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeService_Tests.swift; sourceTree = "<group>"; };
 		92A5E4F921A1B7470025CC85 /* MyTBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBA.swift; sourceTree = "<group>"; };
 		92A5E4FB21A1B7470025CC85 /* MyTBARegister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTBARegister.swift; sourceTree = "<group>"; };
@@ -610,8 +595,6 @@
 		92BB717E20CE19F40081F4E5 /* PersistentContainerOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainerOperationTests.swift; sourceTree = "<group>"; };
 		92BB718320CE1E310081F4E5 /* Test.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Test.xcdatamodel; sourceTree = "<group>"; };
 		92BB718820D216D50081F4E5 /* EmptyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyViewController.xib; sourceTree = "<group>"; };
-		92BB8B59214F04DD0035AF28 /* SettingsViewController_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController_UITests.swift; sourceTree = "<group>"; };
-		92BB8B5B214F12440035AF28 /* TBAUITestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAUITestCase.swift; sourceTree = "<group>"; };
 		92BB8B61214F16710035AF28 /* SettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		92BB8B63214F17440035AF28 /* URLOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLOpener.swift; sourceTree = "<group>"; };
 		92C1F2DD216994CF00BD8445 /* CoreDataTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataTestCase.swift; path = "tba-unit-tests/Core Data/CoreDataTestCase.swift"; sourceTree = SOURCE_ROOT; };
@@ -713,7 +696,6 @@
 		92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		A27CA53562D2F2F05B05659A /* Pods-The Blue Alliance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.debug.xcconfig"; sourceTree = "<group>"; };
 		AC390655114E5828E3FE13D0 /* Pods-tba-unit-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.debug.xcconfig"; sourceTree = "<group>"; };
-		C1B2EE8B87E56B5D1B50E096 /* Pods-tba-ui-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-ui-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-tba-ui-tests/Pods-tba-ui-tests.release.xcconfig"; sourceTree = "<group>"; };
 		E72D7306F6A02099E68DED02 /* Pods-tba-unit-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.release.xcconfig"; sourceTree = "<group>"; };
 		FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_The_Blue_Alliance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -724,14 +706,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				373233698A5148831C801B8E /* Pods_The_Blue_Alliance.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		92A321C9214F029400FDADFB /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				43CF3D2E906B46064E43038C /* Pods_tba_ui_tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -789,8 +763,6 @@
 			children = (
 				A27CA53562D2F2F05B05659A /* Pods-The Blue Alliance.debug.xcconfig */,
 				4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */,
-				5F1F0F9FCDD8A9EB6D9CCC6A /* Pods-tba-ui-tests.debug.xcconfig */,
-				C1B2EE8B87E56B5D1B50E096 /* Pods-tba-ui-tests.release.xcconfig */,
 				AC390655114E5828E3FE13D0 /* Pods-tba-unit-tests.debug.xcconfig */,
 				E72D7306F6A02099E68DED02 /* Pods-tba-unit-tests.release.xcconfig */,
 			);
@@ -835,14 +807,6 @@
 				924AFD782171AB1A00D7BE7E /* NoDataView.xib */,
 			);
 			path = "Launch Views";
-			sourceTree = "<group>";
-		};
-		923AEE8821658BAE00EF50C8 /* Launch */ = {
-			isa = PBXGroup;
-			children = (
-				923AEE8921658BC400EF50C8 /* Launch_UITests.swift */,
-			);
-			path = Launch;
 			sourceTree = "<group>";
 		};
 		923AEE8F2165966C00EF50C8 /* App Delegate */ = {
@@ -1077,7 +1041,6 @@
 				928D509A21BDB7A000571069 /* the-blue-alliance-ios.entitlements */,
 				92942D941E2154DA008E79CA /* the-blue-alliance-ios */,
 				92D6483B20BE4CB8008F0DB3 /* tba-unit-tests */,
-				92A321CD214F029400FDADFB /* tba-ui-tests */,
 				AB6808F14167475E1AE2783E /* Frameworks */,
 				92942D931E2154DA008E79CA /* Products */,
 				5EC6F9271347DB8630C82782 /* Pods */,
@@ -1089,7 +1052,6 @@
 			children = (
 				92942D921E2154DA008E79CA /* The Blue Alliance.app */,
 				92D6483A20BE4CB8008F0DB3 /* tba-unit-tests.xctest */,
-				92A321CC214F029400FDADFB /* tba-ui-tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1281,17 +1243,6 @@
 				9274E14221B1027100F5D5D0 /* Notifications */,
 			);
 			path = Settings;
-			sourceTree = "<group>";
-		};
-		92A321CD214F029400FDADFB /* tba-ui-tests */ = {
-			isa = PBXGroup;
-			children = (
-				92BB8B5F214F127A0035AF28 /* Base */,
-				923AEE8821658BAE00EF50C8 /* Launch */,
-				92BB8B58214F04CC0035AF28 /* Settings */,
-				92A321D0214F029400FDADFB /* Info.plist */,
-			);
-			path = "tba-ui-tests";
 			sourceTree = "<group>";
 		};
 		92A5E4F721A1B7470025CC85 /* Frameworks */ = {
@@ -1507,22 +1458,6 @@
 				9275957021B4F10500560D81 /* StatusServiceOperation.swift */,
 			);
 			path = "App Setup";
-			sourceTree = "<group>";
-		};
-		92BB8B58214F04CC0035AF28 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				92BB8B59214F04DD0035AF28 /* SettingsViewController_UITests.swift */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
-		92BB8B5F214F127A0035AF28 /* Base */ = {
-			isa = PBXGroup;
-			children = (
-				92BB8B5B214F12440035AF28 /* TBAUITestCase.swift */,
-			);
-			path = Base;
 			sourceTree = "<group>";
 		};
 		92BB8B60214F165A0035AF28 /* View Controllers */ = {
@@ -1904,25 +1839,6 @@
 			productReference = 92942D921E2154DA008E79CA /* The Blue Alliance.app */;
 			productType = "com.apple.product-type.application";
 		};
-		92A321CB214F029400FDADFB /* tba-ui-tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 92A321D3214F029400FDADFB /* Build configuration list for PBXNativeTarget "tba-ui-tests" */;
-			buildPhases = (
-				02D45D339C2BDC1DDA20A397 /* [CP] Check Pods Manifest.lock */,
-				92A321C8214F029400FDADFB /* Sources */,
-				92A321C9214F029400FDADFB /* Frameworks */,
-				92A321CA214F029400FDADFB /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				92A321D2214F029400FDADFB /* PBXTargetDependency */,
-			);
-			name = "tba-ui-tests";
-			productName = "tba-ui-tests";
-			productReference = 92A321CC214F029400FDADFB /* tba-ui-tests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 		92D6483920BE4CB8008F0DB3 /* tba-unit-tests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92D6484120BE4CB8008F0DB3 /* Build configuration list for PBXNativeTarget "tba-unit-tests" */;
@@ -1963,12 +1879,6 @@
 							};
 						};
 					};
-					92A321CB214F029400FDADFB = {
-						CreatedOnToolsVersion = 9.4.1;
-						LastSwiftMigration = 1000;
-						ProvisioningStyle = Automatic;
-						TestTargetID = 92942D911E2154DA008E79CA;
-					};
 					92D6483920BE4CB8008F0DB3 = {
 						CreatedOnToolsVersion = 9.3.1;
 						LastSwiftMigration = 1000;
@@ -1992,7 +1902,6 @@
 			targets = (
 				92942D911E2154DA008E79CA /* The Blue Alliance */,
 				92D6483920BE4CB8008F0DB3 /* tba-unit-tests */,
-				92A321CB214F029400FDADFB /* tba-ui-tests */,
 			);
 		};
 /* End PBXProject section */
@@ -2024,13 +1933,6 @@
 				925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */,
 				929DB38E2095640C00FB575F /* ReverseSubtitleTableViewCell.xib in Resources */,
 				92D8CD1320C2634200777D93 /* GoogleService-Info.plist in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		92A321CA214F029400FDADFB /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2114,24 +2016,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		02D45D339C2BDC1DDA20A397 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-tba-ui-tests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		2C02C8A4B0B326A6A5B12AA9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2457,16 +2341,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		92A321C8214F029400FDADFB /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				92BB8B5A214F04DD0035AF28 /* SettingsViewController_UITests.swift in Sources */,
-				923AEE8A21658BC400EF50C8 /* Launch_UITests.swift in Sources */,
-				92BB8B5C214F12440035AF28 /* TBAUITestCase.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		92D6483620BE4CB8008F0DB3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2559,11 +2433,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		92A321D2214F029400FDADFB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 92942D911E2154DA008E79CA /* The Blue Alliance */;
-			targetProxy = 92A321D1214F029400FDADFB /* PBXContainerItemProxy */;
-		};
 		92D6484020BE4CB8008F0DB3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 92942D911E2154DA008E79CA /* The Blue Alliance */;
@@ -2735,55 +2604,6 @@
 			};
 			name = Release;
 		};
-		92A321D4214F029400FDADFB /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5F1F0F9FCDD8A9EB6D9CCC6A /* Pods-tba-ui-tests.debug.xcconfig */;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "tba-ui-tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba-ui-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "The Blue Alliance";
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = Debug;
-		};
-		92A321D5214F029400FDADFB /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = C1B2EE8B87E56B5D1B50E096 /* Pods-tba-ui-tests.release.xcconfig */;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "tba-ui-tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba-ui-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "The Blue Alliance";
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = Release;
-		};
 		92D6484220BE4CB8008F0DB3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AC390655114E5828E3FE13D0 /* Pods-tba-unit-tests.debug.xcconfig */;
@@ -2872,15 +2692,6 @@
 			buildConfigurations = (
 				92942DA71E2154DA008E79CA /* Debug */,
 				92942DA81E2154DA008E79CA /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		92A321D3214F029400FDADFB /* Build configuration list for PBXNativeTarget "tba-ui-tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				92A321D4214F029400FDADFB /* Debug */,
-				92A321D5214F029400FDADFB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

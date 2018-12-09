@@ -40,17 +40,6 @@
                ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "92A321CB214F029400FDADFB"
-               BuildableName = "tba-ui-tests.xctest"
-               BlueprintName = "tba-ui-tests"
-               ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

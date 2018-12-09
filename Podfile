@@ -46,10 +46,6 @@ target 'The Blue Alliance' do
 
     pod 'iOSSnapshotTestCase'
   end
-
-  target 'tba-ui-tests' do
-    inherit! :search_paths
-  end
 end
 
 post_install do | installer |
