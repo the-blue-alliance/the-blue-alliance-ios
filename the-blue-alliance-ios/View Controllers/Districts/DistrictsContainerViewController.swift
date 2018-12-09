@@ -61,6 +61,7 @@ extension DistrictsContainerViewController: NavigationTitleDelegate {
         selectTableViewController.delegate = self
 
         let nav = UINavigationController(rootViewController: selectTableViewController)
+        nav.modalPresentationStyle = .formSheet
         nav.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSelectYear))
 
         navigationController?.present(nav, animated: true, completion: nil)
