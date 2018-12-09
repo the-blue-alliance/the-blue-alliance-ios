@@ -5,6 +5,7 @@ import UIKit
 import UserNotifications
 
 private enum NotificationRow: Int, CaseIterable {
+    case registration
     case device
     case firebase
     case myTBA
@@ -35,6 +36,10 @@ class NotificationsViewController: TBATableViewController {
     private let urlOpener: URLOpener
 
     private lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(showCopyFCMToken))
+
+    private var fetchingRemoteNotificationRegistrationStatus = false
+    private var hasCheckedRemoteNotificationRegistration = false
+    private var remoteNotificationRegistrationError: Error?
 
     private var fetchingDeviceAuthorizationStatus = false
     private var deviceAuthorizationStatus: UNAuthorizationStatus?
@@ -72,6 +77,7 @@ class NotificationsViewController: TBATableViewController {
         super.viewDidLoad()
 
         // Kick-off the stages in our checks
+        checkRemoteNotificationRegistration()
         checkDeviceAuthorization()
         checkMyTBARegistration()
     }
@@ -91,6 +97,20 @@ class NotificationsViewController: TBATableViewController {
         let row = NotificationRow(rawValue: indexPath.row)!
         let viewModel: NotificationStatusCellViewModel = {
             switch row {
+            case .registration:
+                if fetchingRemoteNotificationRegistrationStatus {
+                    return NotificationStatusCellViewModel(title: "Checking Remote Notification Registration...", notificationStatus: .loading)
+                } else {
+                    var status = NotificationStatus.unknown
+                    if hasCheckedRemoteNotificationRegistration {
+                        if let error = remoteNotificationRegistrationError {
+                            status = NotificationStatus.invalid(error.localizedDescription)
+                        } else {
+                            status = NotificationStatus.valid
+                        }
+                    }
+                    return NotificationStatusCellViewModel(title: "Remote Notification Registration", notificationStatus: status)
+                }
             case .device:
                 if fetchingDeviceAuthorizationStatus {
                     return NotificationStatusCellViewModel(title: "Checking Device Notification Settings...", notificationStatus: .loading)
@@ -158,6 +178,12 @@ class NotificationsViewController: TBATableViewController {
 
         let row = NotificationRow(rawValue: indexPath.row)!
         switch row {
+        case .registration:
+            if let error = remoteNotificationRegistrationError {
+                showError(error.localizedDescription)
+            } else {
+                showError("Unknown error registering for remote notifications - try force quitting and re-launching the app.")
+            }
         case .device:
             if deviceAuthorizationStatus == .denied {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
@@ -190,6 +216,25 @@ class NotificationsViewController: TBATableViewController {
     }
 
     // MARK: - State Machine methods
+
+    // MARK: - Remote Notification Registration
+
+    private func checkRemoteNotificationRegistration() {
+        // Already fetching remote notification registration status
+        guard fetchingRemoteNotificationRegistrationStatus == false else {
+            return
+        }
+
+        fetchingRemoteNotificationRegistrationStatus = true
+        PushService.registerForRemoteNotifications { (error) in
+            self.fetchingRemoteNotificationRegistrationStatus = false
+            self.hasCheckedRemoteNotificationRegistration = true
+            self.remoteNotificationRegistrationError = error
+
+            self.reloadMain()
+        }
+        reloadMain()
+    }
 
     // MARK: - Device Settings
 
