@@ -64,6 +64,7 @@ extension EventsContainerViewController: NavigationTitleDelegate {
         yearSelectViewController.delegate = self
 
         let nav = UINavigationController(rootViewController: yearSelectViewController)
+        nav.modalPresentationStyle = .formSheet
         navigationController?.present(nav, animated: true, completion: nil)
     }
 
