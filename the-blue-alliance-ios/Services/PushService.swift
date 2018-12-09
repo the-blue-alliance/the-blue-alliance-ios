@@ -43,8 +43,10 @@ class PushService: NSObject {
             myTBA.register(token) { (_, error) in
                 if let error = error {
                     Crashlytics.sharedInstance().recordError(error)
-                    DispatchQueue.main.async {
-                        self.registerRetryable()
+                    if !self.retryService.isRetryRegistered {
+                        DispatchQueue.main.async {
+                            self.registerRetryable()
+                        }
                     }
                 } else {
                     self.unregisterRetryable()
@@ -76,6 +78,15 @@ class PushService: NSObject {
         }
     }
 
+    static func registerForRemoteNotifications(_ completion: ((Error?) -> ())?) {
+        guard let delegate = UIApplication.shared.delegate as? AppDelegate else {
+            fatalError("Unable to get application delegate in PushService registerForRemoteNotifications")
+        }
+
+        delegate.registerForRemoteNotificationsCompletion = completion
+        UIApplication.shared.registerForRemoteNotifications()
+    }
+
 }
 
 extension PushService: MyTBAAuthenticationObservable {
@@ -97,6 +108,7 @@ extension PushService: MessagingDelegate {
     }
 
     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
+        print("FCM Remote Data")
         print(remoteMessage.appData)
     }
 
@@ -105,18 +117,15 @@ extension PushService: MessagingDelegate {
 extension PushService: UNUserNotificationCenterDelegate {
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        let userInfo = notification.request.content.userInfo
-        // Print full message.
-        print("Will present")
-        print(userInfo)
-
-        // Handle notification information in foreground
-        completionHandler([])
+        // Called when we're in the foreground and we recieve a notification
+        // Show all notifications in the foreground
+        completionHandler([.alert, .badge, .sound])
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        // Called when we click a notification
+        // TODO: Push to view controllers from notification
         let userInfo = response.notification.request.content.userInfo
-        // Print full message.
         print("Push notification")
         print(userInfo)
 

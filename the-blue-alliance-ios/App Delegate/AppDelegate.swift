@@ -79,6 +79,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
 
     // MARK: - Services
+
     lazy var messaging: Messaging = Messaging.messaging()
     lazy var myTBA: MyTBA = {
         return MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString, deviceName: UIDevice.current.name)
@@ -109,6 +110,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var reactNativeMetadata: ReactNativeMetadata = {
         return ReactNativeMetadata(userDefaults: userDefaults)
     }()
+
+    // A completion block for registering for remote notifications
+    var registerForRemoteNotificationsCompletion: ((Error?) -> ())?
+
     // MARK: - UIApplicationDelegate
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -136,6 +141,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Assign our Push Service as a delegate to all push-related classes
         setupPushServiceDelegates()
+        // Register for remote notifications - don't worry if we fail here
+        PushService.registerForRemoteNotifications(nil)
+
         // Kickoff background myTBA/Google sign in, along with setting up delegates
         setupGoogleAuthentication()
 
@@ -213,6 +221,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return GIDSignIn.sharedInstance().handle(url,
                                                  sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
                                                  annotation: options[UIApplication.OpenURLOptionsKey.annotation])
+    }
+
+    // MARK: Push Delegate Methods
+
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        registerForRemoteNotificationsCompletion?(error)
+    }
+
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        registerForRemoteNotificationsCompletion?(nil)
     }
 
     // MARK: Private
@@ -315,7 +333,7 @@ extension AppDelegate: GIDSignInDelegate {
         let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
                                                        accessToken: authentication.accessToken)
 
-        Auth.auth().signIn(with: credential) { (_, error) in
+        Auth.auth().signInAndRetrieveData(with: credential) { (_, error) in
             if let error = error {
                 Crashlytics.sharedInstance().recordError(error)
                 if let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? ContainerViewController & Alertable {
@@ -323,12 +341,10 @@ extension AppDelegate: GIDSignInDelegate {
                 }
             } else {
                 PushService.requestAuthorizationForNotifications { (_, error) in
-                    if let error = error, let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? ContainerViewController & Alertable {
-                        signInDelegate.showErrorAlert(with: "Error authorizing notifications - \(error.localizedDescription)")
-                    } else {
-                        // Register with myTBA
-                        self.pushService.registerFCMToken()
+                    guard error == nil else {
+                        return
                     }
+                    self.pushService.registerFCMToken()
                 }
             }
         }
