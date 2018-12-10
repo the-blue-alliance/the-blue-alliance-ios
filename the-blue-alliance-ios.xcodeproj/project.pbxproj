@@ -472,7 +472,7 @@
 		9287013D20CD72EC0077D6DA /* StatusDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = StatusDefaults.plist; sourceTree = "<group>"; };
 		9287014420CD8C070077D6DA /* PersistentContainerOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainerOperation.swift; sourceTree = "<group>"; };
 		9287014720CD8C4A0077D6DA /* TBAOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAOperation.swift; sourceTree = "<group>"; };
-		928D509A21BDB7A000571069 /* The Blue Alliance.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "The Blue Alliance.entitlements"; sourceTree = "<group>"; };
+		928D509A21BDB7A000571069 /* the-blue-alliance-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "the-blue-alliance-ios.entitlements"; sourceTree = "<group>"; };
 		92942D921E2154DA008E79CA /* The Blue Alliance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Blue Alliance.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92942D951E2154DA008E79CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92942D9E1E2154DA008E79CA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1074,7 +1074,7 @@
 		92942D891E2154DA008E79CA = {
 			isa = PBXGroup;
 			children = (
-				928D509A21BDB7A000571069 /* The Blue Alliance.entitlements */,
+				928D509A21BDB7A000571069 /* the-blue-alliance-ios.entitlements */,
 				92942D941E2154DA008E79CA /* the-blue-alliance-ios */,
 				92D6483B20BE4CB8008F0DB3 /* tba-unit-tests */,
 				92A321CD214F029400FDADFB /* tba-ui-tests */,
@@ -2698,7 +2698,7 @@
 			baseConfigurationReference = A27CA53562D2F2F05B05659A /* Pods-The Blue Alliance.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 18;
@@ -2719,7 +2719,7 @@
 			baseConfigurationReference = 4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios/the-blue-alliance-ios.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 18;
