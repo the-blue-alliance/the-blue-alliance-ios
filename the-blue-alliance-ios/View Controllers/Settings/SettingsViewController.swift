@@ -177,7 +177,8 @@ class SettingsViewController: TBATableViewController {
                 self.present(alertController, animated: true, completion: nil)
             case DebugRow.troubleshootNotifications.rawValue:
                 let notificationsViewController = NotificationsViewController(messaging: messaging, myTBA: myTBA, pushService: pushService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-                navigationController?.pushViewController(notificationsViewController, animated: true)
+                let nav = UINavigationController(rootViewController: notificationsViewController)
+                navigationController?.showDetailViewController(nav, sender: nil)
             default:
                 fatalError("This row does not exist")
             }
