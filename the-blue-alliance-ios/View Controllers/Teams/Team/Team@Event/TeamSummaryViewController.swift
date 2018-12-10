@@ -80,7 +80,6 @@ class TeamSummaryViewController: TBATableViewController {
 
         // Alliance
         if let allianceStatus = eventStatus?.allianceStatus {
-            print(allianceStatus)
             summaryRows.append(TeamSummaryRow.alliance(allianceStatus: allianceStatus))
         }
 
@@ -234,7 +233,7 @@ class TeamSummaryViewController: TBATableViewController {
     private func tableView(_ tableView: UITableView, reverseSubtitleCellWithTitle title: String, subtitle: String, at indexPath: IndexPath) -> ReverseSubtitleTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
         cell.titleLabel.text = title
-        cell.subtitleLabel.text = subtitle
+        cell.setHTMLSubtitle(text: subtitle)
         cell.accessoryType = .none
         cell.selectionStyle = .none
         return cell

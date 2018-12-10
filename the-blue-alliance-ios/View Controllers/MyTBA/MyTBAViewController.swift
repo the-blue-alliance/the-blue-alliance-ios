@@ -196,7 +196,8 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
         guard let vc = viewController else {
             return
         }
-        navigationController?.pushViewController(vc, animated: true)
+        let nav = UINavigationController(rootViewController: vc)
+        navigationController?.showDetailViewController(nav, sender: nil)
     }
 
 }
