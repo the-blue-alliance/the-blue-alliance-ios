@@ -18,6 +18,7 @@ extension Subscribable where Self: UIViewController, Self: Persistable {
                                                                            myTBA: myTBA,
                                                                            persistentContainer: persistentContainer)
         let navController = UINavigationController(rootViewController: myTBAPreferencesViewController)
+        navController.modalPresentationStyle = .formSheet
 
         present(navController, animated: true, completion: nil)
     }
