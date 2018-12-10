@@ -34,6 +34,13 @@ class ReverseSubtitleTableViewCell: UITableViewCell, Reusable {
         }
     }
 
-    // TODO: Add method to show HTML strings
+    public func setHTMLSubtitle(text: String) {
+        guard let data = text.data(using: String.Encoding.unicode) else { return }
+
+        let htmlString = try! NSAttributedString(data: data,
+                                                 options: [.documentType: NSAttributedString.DocumentType.html],
+                                                 documentAttributes: nil)
+        subtitleLabel.text = htmlString.string
+    }
 
 }

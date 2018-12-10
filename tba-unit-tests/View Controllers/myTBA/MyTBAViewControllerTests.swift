@@ -72,40 +72,49 @@ class MyTBAViewControllerTests: TBATestCase {
     func test_myTBAObjectSelected_event_noEvent() {
         let myTBAObject = Favorite.insert(modelKey: "2018miket", modelType: .event, in: persistentContainer.viewContext)
         myTBAViewController.myTBAObjectSelected(myTBAObject)
-        XCTAssert(navigationController.pushedViewController is MyTBAViewController)
+        XCTAssertNil(navigationController.detailViewController)
     }
 
     func test_myTBAObjectSelected_event() {
         let event = insertDistrictEvent()
         let myTBAObject = Favorite.insert(modelKey: event.key!, modelType: .event, in: persistentContainer.viewContext)
         myTBAViewController.myTBAObjectSelected(myTBAObject)
-        XCTAssert(navigationController.pushedViewController is EventViewController)
+
+        XCTAssert(navigationController.detailViewController is UINavigationController)
+        let nav = navigationController.detailViewController as! UINavigationController
+        XCTAssert(nav.viewControllers.first is EventViewController)
     }
 
     func test_myTBAObjectSelected_team_noTeam() {
         let myTBAObject = Favorite.insert(modelKey: "frc7332", modelType: .team, in: persistentContainer.viewContext)
         myTBAViewController.myTBAObjectSelected(myTBAObject)
-        XCTAssert(navigationController.pushedViewController is MyTBAViewController)
+        XCTAssertNil(navigationController.detailViewController)
     }
 
     func test_myTBAObjectSelected_team() {
         let team = insertTeam()
         let myTBAObject = Favorite.insert(modelKey: team.key!, modelType: .team, in: persistentContainer.viewContext)
         myTBAViewController.myTBAObjectSelected(myTBAObject)
-        XCTAssert(navigationController.pushedViewController is TeamViewController)
+
+        XCTAssert(navigationController.detailViewController is UINavigationController)
+        let nav = navigationController.detailViewController as! UINavigationController
+        XCTAssert(nav.viewControllers.first is TeamViewController)
     }
 
     func test_myTBAObjectSelected_team_noMatch() {
         let myTBAObject = Favorite.insert(modelKey: "2018miket_qm1", modelType: .match, in: persistentContainer.viewContext)
         myTBAViewController.myTBAObjectSelected(myTBAObject)
-        XCTAssert(navigationController.pushedViewController is MyTBAViewController)
+        XCTAssertNil(navigationController.detailViewController)
     }
 
     func test_myTBAObjectSelected_match() {
         let match = insertMatch()
         let myTBAObject = Favorite.insert(modelKey: match.key!, modelType: .match, in: persistentContainer.viewContext)
         myTBAViewController.myTBAObjectSelected(myTBAObject)
-        XCTAssert(navigationController.pushedViewController is MatchViewController)
+
+        XCTAssert(navigationController.detailViewController is UINavigationController)
+        let nav = navigationController.detailViewController as! UINavigationController
+        XCTAssert(nav.viewControllers.first is MatchViewController)
     }
     
     func test_authenticated() {
