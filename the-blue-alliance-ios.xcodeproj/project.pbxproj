@@ -386,6 +386,8 @@
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
 		4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.release.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.release.xcconfig"; sourceTree = "<group>"; };
 		52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_unit_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9214974521C6BC8700D86ABA /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		9214974621C6BC9500D86ABA /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingTableViewCell.xib; sourceTree = "<group>"; };
 		9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
@@ -769,6 +771,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		9214974421C6BC8700D86ABA /* xcconfigs */ = {
+			isa = PBXGroup;
+			children = (
+				9214974521C6BC8700D86ABA /* Debug.xcconfig */,
+				9214974621C6BC9500D86ABA /* Release.xcconfig */,
+			);
+			path = xcconfigs;
+			sourceTree = "<group>";
+		};
 		922E907E217BD17C00E81447 /* Team */ = {
 			isa = PBXGroup;
 			children = (
@@ -1039,6 +1050,7 @@
 			isa = PBXGroup;
 			children = (
 				928D509A21BDB7A000571069 /* the-blue-alliance-ios.entitlements */,
+				9214974421C6BC8700D86ABA /* xcconfigs */,
 				92942D941E2154DA008E79CA /* the-blue-alliance-ios */,
 				92D6483B20BE4CB8008F0DB3 /* tba-unit-tests */,
 				AB6808F14167475E1AE2783E /* Frameworks */,
@@ -1829,6 +1841,7 @@
 				6D02EECF657E8A3F9121C002 /* [CP] Embed Pods Frameworks */,
 				E7F2F429133ED67EFC850346 /* [CP] Copy Pods Resources */,
 				924E826C208FE7D20053247C /* Run Fabric */,
+				9214974721C6C41200D86ABA /* Enable Analytics/Crash Reporting */,
 			);
 			buildRules = (
 			);
@@ -2088,6 +2101,24 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		9214974721C6C41200D86ABA /* Enable Analytics/Crash Reporting */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Enable Analytics/Crash Reporting";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ ${CONFIGURATION} = \"Release\" ]; then\n/usr/libexec/PlistBuddy -c \"Set :FirebaseScreenReportingEnabled YES\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n/usr/libexec/PlistBuddy -c \"Set :FIREBASE_ANALYTICS_COLLECTION_ENABLED YES\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n/usr/libexec/PlistBuddy -c \"Set :firebase_crash_collection_enabled YES\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi\n";
 		};
 		924E826C208FE7D20053247C /* Run Fabric */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2458,6 +2489,7 @@
 /* Begin XCBuildConfiguration section */
 		92942DA41E2154DA008E79CA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9214974521C6BC8700D86ABA /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -2516,6 +2548,7 @@
 		};
 		92942DA51E2154DA008E79CA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9214974621C6BC9500D86ABA /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -2567,7 +2600,7 @@
 		};
 		92942DA71E2154DA008E79CA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A27CA53562D2F2F05B05659A /* Pods-The Blue Alliance.debug.xcconfig */;
+			baseConfigurationReference = 9214974521C6BC8700D86ABA /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios.entitlements";
@@ -2588,7 +2621,7 @@
 		};
 		92942DA81E2154DA008E79CA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */;
+			baseConfigurationReference = 9214974621C6BC9500D86ABA /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios.entitlements";

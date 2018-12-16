@@ -1,0 +1,14 @@
+//
+//  Debug.xcconfig
+//  the-blue-alliance-ios
+//
+//  Created by Zachary Orr on 12/16/18.
+//  Copyright © 2018 The Blue Alliance. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.debug.xcconfig"
+
+ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon
