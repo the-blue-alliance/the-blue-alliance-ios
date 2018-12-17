@@ -32,8 +32,6 @@ jobs:
       name: "Unit Tests"
       script:
         - bundle exec fastlane test_unit
-    # - script: bundle exec fastlane scan --scheme tba-ui-tests
-    #   name: "UI Tests"
     - stage: beta
       script:
         - bundle exec fastlane setup_secrets

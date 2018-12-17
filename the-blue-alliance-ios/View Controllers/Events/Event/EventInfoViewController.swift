@@ -8,27 +8,24 @@ protocol EventInfoViewControllerDelegate: AnyObject {
     func showStats()
 }
 
-private enum EventInfoSection: Int {
+private enum EventInfoSection: Int, CaseIterable {
     case title
     case detail
     case link
-    case max
 }
 
-private enum EventDetailRow: Int {
+private enum EventDetailRow: Int, CaseIterable {
     case alliances
     case districtPoints
     case stats
     case awards
-    case max
 }
 
-private enum EventLinkRow: Int {
+private enum EventLinkRow: Int, CaseIterable {
     case website
     case twitter
     case youtube
     case chiefDelphi
-    case max
 }
 
 class EventInfoViewController: TBATableViewController, Observable {
@@ -76,7 +73,7 @@ class EventInfoViewController: TBATableViewController, Observable {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return EventInfoSection.max.rawValue
+        return EventInfoSection.allCases.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -85,10 +82,10 @@ class EventInfoViewController: TBATableViewController, Observable {
             return 1
         case EventInfoSection.detail.rawValue:
             // Only show Alliances, Stats, and Awards if event isn't a district
-            let max = EventDetailRow.max.rawValue
+            let max = EventDetailRow.allCases.count
             return event.district != nil ? max : max - 1
         case EventInfoSection.link.rawValue:
-            let max = EventLinkRow.max.rawValue
+            let max = EventLinkRow.allCases.count
             return event.website != nil ? max : max - 1
         default:
             return 0

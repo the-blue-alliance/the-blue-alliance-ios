@@ -1,24 +1,21 @@
 import UIKit
 import CoreData
 
-private enum TeamInfoSection: Int {
+private enum TeamInfoSection: Int, CaseIterable {
     case title
     case link
-    case max
 }
 
-private enum TeamTitleRow: Int {
+private enum TeamTitleRow: Int, CaseIterable {
     case nickname
     case sponsors
-    case max
 }
 
-private enum TeamLinkRow: Int {
+private enum TeamLinkRow: Int, CaseIterable {
     case website
     case twitter
     case youtube
     case chiefDelphi
-    case max
 }
 
 class TeamInfoViewController: TBATableViewController {
@@ -53,15 +50,15 @@ class TeamInfoViewController: TBATableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return TeamInfoSection.max.rawValue
+        return TeamInfoSection.allCases.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case TeamInfoSection.title.rawValue:
-            return TeamTitleRow.max.rawValue
+            return TeamTitleRow.allCases.count
         case TeamInfoSection.link.rawValue:
-            let max = TeamLinkRow.max.rawValue
+            let max = TeamLinkRow.allCases.count
             return team.website != nil ? max : max - 1
         default:
             return 0

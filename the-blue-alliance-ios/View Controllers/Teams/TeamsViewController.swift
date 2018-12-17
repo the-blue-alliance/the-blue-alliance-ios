@@ -48,6 +48,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
         super.viewDidLoad()
 
         tableView.tableHeaderView = searchController.searchBar
+
         tableView.registerReusableCell(TeamTableViewCell.self)
 
         // Used to make sure the UISearchBar stays in our root VC (this VC) when presented and doesn't overlay in push
