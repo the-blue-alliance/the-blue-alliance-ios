@@ -22,7 +22,6 @@ platform :ios do
   desc "Run all of our tests"
   lane :test do
     scan(scheme: "tba-unit-tests")
-    # scan(scheme: "tba-ui-tests")
   end
   ## CI Lanes ##
 

@@ -24,10 +24,10 @@ class TeamsContainerViewController: ContainerViewController {
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
-        teamsViewController.delegate = self
-
         title = "Teams"
         tabBarItem.image = UIImage(named: "ic_people")
+
+        teamsViewController.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {

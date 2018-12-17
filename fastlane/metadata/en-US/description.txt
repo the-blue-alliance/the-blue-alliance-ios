@@ -1,0 +1,6 @@
+The Blue Alliance is a tool to help FIRST Robotics teams scout for, compete at, and relive competitions.
+
+This app is the easiest way to access all the great content on thebluealliance.com on your mobile device. You can keep up to date with live events, see what teams are competing when, or look back at the vast archive of historical match data and videos. The Blue Alliance app is the perfect companion for anybody looking to have the most up to date information about FRC competitions.
+
+Are you a developer? Check out the source on GitHub and start contributing today!
+https://github.com/the-blue-alliance/the-blue-alliance-ios
