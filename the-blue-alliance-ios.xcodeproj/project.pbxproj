@@ -2865,7 +2865,7 @@
 				92942DA51E2154DA008E79CA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "The Blue Alliance" */ = {
 			isa = XCConfigurationList;
@@ -2874,7 +2874,7 @@
 				92942DA81E2154DA008E79CA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		92A321D3214F029400FDADFB /* Build configuration list for PBXNativeTarget "tba-ui-tests" */ = {
 			isa = XCConfigurationList;
@@ -2883,7 +2883,7 @@
 				92A321D5214F029400FDADFB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		92D6484120BE4CB8008F0DB3 /* Build configuration list for PBXNativeTarget "tba-unit-tests" */ = {
 			isa = XCConfigurationList;
@@ -2892,7 +2892,7 @@
 				92D6484320BE4CB8008F0DB3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 
