@@ -77,32 +77,36 @@ class EventInfoViewController: TBATableViewController, Observable {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let section = EventInfoSection(rawValue: section) else {
+            return 0
+        }
+
         switch section {
-        case EventInfoSection.title.rawValue:
+        case .title:
             return 1
-        case EventInfoSection.detail.rawValue:
+        case .detail:
             // Only show Alliances, Stats, and Awards if event isn't a district
             let max = EventDetailRow.allCases.count
             return event.district != nil ? max : max - 1
-        case EventInfoSection.link.rawValue:
+        case .link:
             let max = EventLinkRow.allCases.count
             return event.website != nil ? max : max - 1
-        default:
-            return 0
         }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = {
-            switch indexPath.section {
-            case EventInfoSection.title.rawValue:
-                return self.tableView(tableView, titleCellForRowAt: indexPath)
-            case EventInfoSection.detail.rawValue:
-                return self.tableView(tableView, detailCellForRowAt: indexPath)
-            case EventInfoSection.link.rawValue:
-                return self.tableView(tableView, linkCellForRowAt: indexPath)
-            default:
+            guard let section = EventInfoSection(rawValue: indexPath.section) else {
                 return UITableViewCell()
+            }
+
+            switch section {
+            case .title:
+                return self.tableView(tableView, titleCellForRowAt: indexPath)
+            case .detail:
+                return self.tableView(tableView, detailCellForRowAt: indexPath)
+            case .link:
+                return self.tableView(tableView, linkCellForRowAt: indexPath)
             }
         }()
         return cell

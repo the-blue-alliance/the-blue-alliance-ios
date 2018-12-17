@@ -75,11 +75,10 @@ platform :ios do
 
   desc "Upload a new beta build to TestFlight (for CI machine)"
   lane :beta_ci do
-    slack(channel: "#dev-ios", message: "Shipping #{current_git_tag} to TestFlight...", default_payloads: [])
-
     beta_internal
 
     ship_github(is_prerelease: true) # Create GitHub release
+    slack(channel: "#dev-ios", message: "Shipping #{current_git_tag} to TestFlight...", default_payloads: [])
     beta_testflight
 
     slack(
