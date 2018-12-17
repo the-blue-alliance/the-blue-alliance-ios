@@ -17,9 +17,9 @@ cache:
     - js/node_modules
 
 install:
-  - cd subtrees/the-blue-alliance-react && npm install && cd ../..
   - bundle install
-  - bundle exec pod install --repo-update
+  - cd subtrees/the-blue-alliance-react && npm install && cd ../..
+  - bundle exec pod install
 
 before_script:
   - cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
