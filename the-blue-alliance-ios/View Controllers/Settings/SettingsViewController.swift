@@ -8,23 +8,20 @@ enum InfoURL: String {
     case github = "https://github.com/the-blue-alliance/the-blue-alliance-ios"
 }
 
-private enum SettingsSection: Int {
+private enum SettingsSection: Int, CaseIterable {
     case info
     case debug
-    case max
 }
 
-private enum InfoRow: Int {
+private enum InfoRow: Int, CaseIterable {
     case website
     case repo
     // case changelog TODO: https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/193
-    case max
 }
 
-private enum DebugRow: Int {
+private enum DebugRow: Int, CaseIterable {
     case deleteNetworkCache
     case troubleshootNotifications
-    case max
 }
 
 class SettingsViewController: TBATableViewController {
@@ -66,15 +63,15 @@ class SettingsViewController: TBATableViewController {
     // MARK: - Table View Data Source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return SettingsSection.max.rawValue
+        return SettingsSection.allCases.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case SettingsSection.info.rawValue:
-            return InfoRow.max.rawValue
+            return InfoRow.allCases.count
         case SettingsSection.debug.rawValue:
-            return DebugRow.max.rawValue
+            return DebugRow.allCases.count
         default:
             return 0
         }
@@ -92,7 +89,7 @@ class SettingsViewController: TBATableViewController {
     }
 
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        if section == SettingsSection.max.rawValue - 1 {
+        if section == SettingsSection.debug.rawValue {
             let reactNativeVersion: String = {
                 if let bundleCreated = metadata.bundleCreated {
                     return "\(reactNativeDateFormatter.string(from: bundleCreated)) (\(metadata.bundleGeneration))"
