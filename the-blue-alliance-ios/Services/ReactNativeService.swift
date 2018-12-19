@@ -53,7 +53,7 @@ class ReactNativeService {
     enum BundleName: String {
         case assets = "ios/assets"
         case downloaded = "ios/main.jsbundle"
-        case compressed = "ios.zip"
+        case compressed = "react-native.zip"
     }
 
     fileprivate var documentDirectory: URL {
