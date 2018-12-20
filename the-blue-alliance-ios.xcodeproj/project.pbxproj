@@ -38,6 +38,8 @@
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
 		373233698A5148831C801B8E /* Pods_The_Blue_Alliance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */; };
 		5797EAB49489B63DDA0980F5 /* Pods_tba_unit_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */; };
+		92004C6521C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */; };
+		92004C6621C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */; };
 		9221C616209BFF7D00477DE2 /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */; };
 		9221C618209BFF8700477DE2 /* LoadingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */; };
 		9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */; };
@@ -232,6 +234,9 @@
 		92B076F120FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B076F020FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift */; };
 		92B076F320FF948D00F9B2D7 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */; };
 		92B0AA3B20CB837A0074FDF1 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B0AA3A20CB837A0074FDF1 /* main.swift */; };
+		92B3873E21CAF6740041A049 /* IconTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B3873D21CAF6740041A049 /* IconTableViewCell.swift */; };
+		92B3874021CAF67F0041A049 /* IconCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B3873F21CAF67F0041A049 /* IconCellViewModel.swift */; };
+		92B3874221CAF7190041A049 /* IconTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92B3874121CAF7190041A049 /* IconTableViewCell.xib */; };
 		92B55621215D37C900C1D9A3 /* YearSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55620215D37C900C1D9A3 /* YearSelectViewController.swift */; };
 		92B55625215D69DE00C1D9A3 /* WeekEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55624215D69DE00C1D9A3 /* WeekEventsViewController.swift */; };
 		92B5562A215FCB1300C1D9A3 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B55629215FCB1300C1D9A3 /* Reusable.swift */; };
@@ -386,6 +391,8 @@
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
 		4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.release.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.release.xcconfig"; sourceTree = "<group>"; };
 		52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_unit_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2019DeepSpaceIcon@2x.png"; sourceTree = "<group>"; };
+		92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2019DeepSpaceIcon@3x.png"; sourceTree = "<group>"; };
 		9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingTableViewCell.xib; sourceTree = "<group>"; };
 		9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
@@ -583,6 +590,9 @@
 		92B076F020FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignOutOperation_Tests.swift; sourceTree = "<group>"; };
 		92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppDelegate.swift; sourceTree = "<group>"; };
 		92B0AA3A20CB837A0074FDF1 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		92B3873D21CAF6740041A049 /* IconTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconTableViewCell.swift; sourceTree = "<group>"; };
+		92B3873F21CAF67F0041A049 /* IconCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconCellViewModel.swift; sourceTree = "<group>"; };
+		92B3874121CAF7190041A049 /* IconTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IconTableViewCell.xib; sourceTree = "<group>"; };
 		92B55620215D37C900C1D9A3 /* YearSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearSelectViewController.swift; sourceTree = "<group>"; };
 		92B55624215D69DE00C1D9A3 /* WeekEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekEventsViewController.swift; sourceTree = "<group>"; };
 		92B55629215FCB1300C1D9A3 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
@@ -769,6 +779,23 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		92004C6221C21BC600A858C8 /* App Icons */ = {
+			isa = PBXGroup;
+			children = (
+				92004C6721C21C8B00A858C8 /* 2019DeepSpaceIcon */,
+			);
+			path = "App Icons";
+			sourceTree = "<group>";
+		};
+		92004C6721C21C8B00A858C8 /* 2019DeepSpaceIcon */ = {
+			isa = PBXGroup;
+			children = (
+				92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */,
+				92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */,
+			);
+			path = 2019DeepSpaceIcon;
+			sourceTree = "<group>";
+		};
 		922E907E217BD17C00E81447 /* Team */ = {
 			isa = PBXGroup;
 			children = (
@@ -946,9 +973,8 @@
 		9274E14321B10D8F00F5D5D0 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				9274E14821B1A12500F5D5D0 /* NotificationStatusTableViewCell.xib */,
-				9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */,
-				9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */,
+				92B3873C21CAF65F0041A049 /* Icons */,
+				92B3873021C93DF70041A049 /* Notifications */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -1062,6 +1088,7 @@
 				923AEE8F2165966C00EF50C8 /* App Delegate */,
 				923A0D7620D21D3800BF5E31 /* Launch Views */,
 				92942D9E1E2154DA008E79CA /* Assets.xcassets */,
+				92004C6221C21BC600A858C8 /* App Icons */,
 				92942DA31E2154DA008E79CA /* Info.plist */,
 				92D8CD1220C2634200777D93 /* GoogleService-Info.plist */,
 				9287013D20CD72EC0077D6DA /* StatusDefaults.plist */,
@@ -1421,6 +1448,26 @@
 				92B076F020FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift */,
 			);
 			path = myTBA;
+			sourceTree = "<group>";
+		};
+		92B3873021C93DF70041A049 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				9274E14821B1A12500F5D5D0 /* NotificationStatusTableViewCell.xib */,
+				9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */,
+				9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		92B3873C21CAF65F0041A049 /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				92B3874121CAF7190041A049 /* IconTableViewCell.xib */,
+				92B3873D21CAF6740041A049 /* IconTableViewCell.swift */,
+				92B3873F21CAF67F0041A049 /* IconCellViewModel.swift */,
+			);
+			path = Icons;
 			sourceTree = "<group>";
 		};
 		92B55628215FCB0900C1D9A3 /* Protocols */ = {
@@ -1916,6 +1963,7 @@
 			files = (
 				924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */,
 				145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */,
+				92004C6621C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png in Resources */,
 				92C8CE5021ADCC5F00683558 /* MyTBASignInViewController.xib in Resources */,
 				92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */,
 				9274E14921B1AAD300F5D5D0 /* NotificationStatusTableViewCell.xib in Resources */,
@@ -1928,6 +1976,8 @@
 				92942D9F1E2154DA008E79CA /* Assets.xcassets in Resources */,
 				92B5566021601D9B00C1D9A3 /* MatchSummaryView.xib in Resources */,
 				92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */,
+				92004C6521C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png in Resources */,
+				92B3874221CAF7190041A049 /* IconTableViewCell.xib in Resources */,
 				92858F2B208D783300811614 /* EventTeamStatTableViewCell.xib in Resources */,
 				92D855D91EC695CE00572F27 /* TeamTableViewCell.xib in Resources */,
 				9287013E20CD72EC0077D6DA /* StatusDefaults.plist in Resources */,
@@ -2213,6 +2263,7 @@
 				92FF10EF21A61A1B003BC5C4 /* TeamStatsViewController.swift in Sources */,
 				92FF110721A61AF6003BC5C4 /* EventRankingsViewController.swift in Sources */,
 				92DF3608217D43CB00B5246B /* Team.swift in Sources */,
+				92B3873E21CAF6740041A049 /* IconTableViewCell.swift in Sources */,
 				925908AF2184D32400D7BFCE /* EventStatusPlayoff.swift in Sources */,
 				92DF3602217D43B300B5246B /* Subscription.swift in Sources */,
 				92DF3607217D43CB00B5246B /* TeamKey.swift in Sources */,
@@ -2257,6 +2308,7 @@
 				14796942215EA5AE0075AF4E /* AwardCellViewModel.swift in Sources */,
 				92FF113021A66778003BC5C4 /* TBAPersistenceContainer.swift in Sources */,
 				92A5E5DB21A22D550025CC85 /* UINavigationController+SplitView.swift in Sources */,
+				92B3874021CAF67F0041A049 /* IconCellViewModel.swift in Sources */,
 				92FF110621A61AF6003BC5C4 /* EventViewController.swift in Sources */,
 				92DF3610217D43EC00B5246B /* Playable.swift in Sources */,
 				9275957521B7519C00560D81 /* EventTeamsViewController.swift in Sources */,
