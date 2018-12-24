@@ -46,7 +46,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                             persistentContainer: persistentContainer,
                                                             tbaKit: tbaKit,
                                                             userDefaults: userDefaults)
-        /*
         let myTBAViewController = MyTBAViewController(messaging: messaging,
                                                       myTBA: myTBA,
                                                       statusService: statusService,
@@ -54,8 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                       persistentContainer: persistentContainer,
                                                       tbaKit: tbaKit,
                                                       userDefaults: userDefaults)
-        */
-        let rootViewControllers: [UIViewController] = [eventsViewController, teamsViewController, districtsViewController, settingsViewController]
+        let rootViewControllers: [UIViewController] = [eventsViewController, teamsViewController, districtsViewController, myTBAViewController, settingsViewController]
         tabBarController.viewControllers = rootViewControllers.compactMap({ (viewController) -> UIViewController? in
             let navigationController = UINavigationController(rootViewController: viewController)
             return navigationController
