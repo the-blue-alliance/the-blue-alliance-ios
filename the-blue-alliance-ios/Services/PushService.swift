@@ -119,6 +119,8 @@ extension PushService: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         // Called when we're in the foreground and we recieve a notification
         // Show all notifications in the foreground
+        print("Foreground push notification")
+        print(notification.request.content.userInfo)
         completionHandler([.alert, .badge, .sound])
     }
 
