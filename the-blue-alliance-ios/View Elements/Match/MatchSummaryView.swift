@@ -79,7 +79,7 @@ class MatchSummaryView: UIView {
     private func removeTeams() {
         for stackView in [redStackView, blueStackView] as [UIStackView] {
             for view in stackView.arrangedSubviews {
-                if [redScoreLabel, blueScoreLabel].contains(view) {
+                if [redScoreLabel, redRPLabel, blueScoreLabel, blueRPLabel].contains(view) {
                     continue
                 }
                 view.removeFromSuperview()

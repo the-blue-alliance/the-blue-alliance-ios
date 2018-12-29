@@ -30,11 +30,11 @@ struct MatchViewModel {
 
         redAlliance = match.redAllianceTeamNumbers
         redScore = match.redAlliance?.score?.stringValue
-        redRP = "•"
+        redRP = "••"
 
         blueAlliance = match.blueAllianceTeamNumbers
         blueScore = match.blueAlliance?.score?.stringValue
-        blueRP = "•"
+        blueRP = "••"
 
         timeString = match.timeString ?? "No Time Yet"
 
