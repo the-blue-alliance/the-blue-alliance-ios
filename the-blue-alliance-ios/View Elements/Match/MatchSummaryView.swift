@@ -35,8 +35,13 @@ class MatchSummaryView: UIView {
         }
     }
     @IBOutlet weak var blueScoreLabel: UILabel!
+    
+    @IBOutlet weak var redRPLabel: UILabel!
+    
+    @IBOutlet weak var blueRPLabel: UILabel!
 
     @IBOutlet weak var timeLabel: UILabel!
+    
 
     // MARK: - Init
 
@@ -97,12 +102,14 @@ class MatchSummaryView: UIView {
             redStackView.insertArrangedSubview(teamLabel, at: 0)
         }
         redScoreLabel.text = viewModel.redScore
+        redRPLabel.text = viewModel.redRP
 
         for teamKey in viewModel.blueAlliance {
             let teamLabel = label(for: teamKey, baseTeamKey: viewModel.baseTeamKey)
             blueStackView.insertArrangedSubview(teamLabel, at: 0)
         }
         blueScoreLabel.text = viewModel.blueScore
+        blueRPLabel.text = viewModel.blueRP
 
         timeLabel.isHidden = viewModel.hasScores
         timeLabel.text = viewModel.timeString

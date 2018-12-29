@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -13,12 +12,14 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MatchSummaryView" customModule="The_Blue_Alliance" customModuleProvider="target">
             <connections>
                 <outlet property="blueContainerView" destination="ujk-xM-7ok" id="OqU-mA-Q5D"/>
+                <outlet property="blueRPLabel" destination="J1H-ng-Fye" id="ePO-J8-Jh4"/>
                 <outlet property="blueScoreLabel" destination="BIa-h9-yIu" id="MF0-LK-IzD"/>
                 <outlet property="blueStackView" destination="C6h-fR-VJi" id="vRF-WK-RJv"/>
                 <outlet property="matchInfoStackView" destination="Jmu-Uu-boJ" id="eyv-AC-M1I"/>
                 <outlet property="matchNumberLabel" destination="yPd-Gy-NoB" id="BhK-va-myy"/>
                 <outlet property="playIconImageView" destination="mRu-M0-eMP" id="Eh2-vo-Ze0"/>
                 <outlet property="redContainerView" destination="mpK-JO-dy3" id="nrm-lE-A5y"/>
+                <outlet property="redRPLabel" destination="abb-wu-aTo" id="hRE-2R-o2u"/>
                 <outlet property="redScoreLabel" destination="r4c-pQ-IQY" id="4z0-go-u4f"/>
                 <outlet property="redStackView" destination="Ifh-sb-xaX" id="wM1-3g-BXu"/>
                 <outlet property="summaryView" destination="iN0-l3-epB" id="uEA-0I-L6n"/>
@@ -65,7 +66,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="278" height="32.5"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="114" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r4c-pQ-IQY">
-                                                            <rect key="frame" x="0.0" y="0.0" width="278" height="32.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="138" height="32.5"/>
                                                             <color key="backgroundColor" red="1" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="150" id="rJJ-xb-K6o"/>
@@ -78,6 +79,12 @@
                                                                     <exclude reference="rJJ-xb-K6o"/>
                                                                 </mask>
                                                             </variation>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="••" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="abb-wu-aTo">
+                                                            <rect key="frame" x="140" y="0.0" width="138" height="32.5"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
                                                 </stackView>
@@ -192,6 +199,14 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <point key="canvasLocation" x="131.19999999999999" y="-117.39130434782609"/>
         </view>
+        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="J1H-ng-Fye">
+            <rect key="frame" x="0.0" y="0.0" width="42" height="21"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+            <nil key="textColor"/>
+            <nil key="highlightedColor"/>
+            <point key="canvasLocation" x="99" y="-117"/>
+        </label>
     </objects>
     <resources>
         <image name="ic_action_play_over_video" width="24" height="24"/>
