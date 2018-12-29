@@ -8,11 +8,11 @@ struct MatchViewModel {
 
     let redAlliance: [String]
     let redScore: String?
-    let redRP: String
+    let redRP: String?
 
     let blueAlliance: [String]
     let blueScore: String?
-    let blueRP: String
+    let blueRP: String?
 
     let timeString: String
 

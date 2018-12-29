@@ -117,7 +117,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="278" height="32.5"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5774" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BIa-h9-yIu">
-                                                            <rect key="frame" x="0.0" y="0.0" width="278" height="32.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="138" height="32.5"/>
                                                             <color key="backgroundColor" red="0.86666666670000003" green="0.86274509799999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="150" id="tIL-6y-jGh"/>
@@ -130,6 +130,12 @@
                                                                     <exclude reference="tIL-6y-jGh"/>
                                                                 </mask>
                                                             </variation>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J1H-ng-Fye">
+                                                            <rect key="frame" x="140" y="0.0" width="138" height="32.5"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
                                                 </stackView>
@@ -199,14 +205,6 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <point key="canvasLocation" x="131.19999999999999" y="-117.39130434782609"/>
         </view>
-        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="J1H-ng-Fye">
-            <rect key="frame" x="0.0" y="0.0" width="42" height="21"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-            <nil key="textColor"/>
-            <nil key="highlightedColor"/>
-            <point key="canvasLocation" x="99" y="-117"/>
-        </label>
     </objects>
     <resources>
         <image name="ic_action_play_over_video" width="24" height="24"/>
