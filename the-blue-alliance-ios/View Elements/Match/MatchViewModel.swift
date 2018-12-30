@@ -8,16 +8,17 @@ struct MatchViewModel {
 
     let redAlliance: [String]
     let redScore: String?
-    let redRP: String?
 
     let blueAlliance: [String]
     let blueScore: String?
-    let blueRP: String?
 
     let timeString: String
 
     let redAllianceWon: Bool
     let blueAllianceWon: Bool
+    
+    let redRPString: String
+    let blueRPString: String
 
     let baseTeamKey: String?
 
@@ -30,11 +31,9 @@ struct MatchViewModel {
 
         redAlliance = match.redAllianceTeamNumbers
         redScore = match.redAlliance?.score?.stringValue
-        redRP = "••"
 
         blueAlliance = match.blueAllianceTeamNumbers
         blueScore = match.blueAlliance?.score?.stringValue
-        blueRP = "••"
 
         timeString = match.timeString ?? "No Time Yet"
 
@@ -48,6 +47,19 @@ struct MatchViewModel {
             }
             return true
         }()
+        
+        // Set RP things, specifically for 2018
+        // Other years can use a similar pattern
+        redRPString = {
+            var tempString: String = ""
+            if match.year == 2018 {
+                tempString += "•"
+            }
+            return tempString
+        }()
+
+//        redRPString = "••"
+        blueRPString = "••"
 
         redAllianceWon = hasWinnersAndLosers && match.winningAlliance == "red"
         blueAllianceWon = hasWinnersAndLosers && match.winningAlliance == "blue"
