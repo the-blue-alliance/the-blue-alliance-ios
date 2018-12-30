@@ -54,6 +54,7 @@ struct MatchViewModel {
             var tempString: String = ""
             if match.year == 2018 {
                 tempString += "•"
+                tempString += "•"
             }
             return tempString
         }()
