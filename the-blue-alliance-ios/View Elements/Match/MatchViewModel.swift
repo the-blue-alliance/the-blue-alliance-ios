@@ -50,17 +50,26 @@ struct MatchViewModel {
         
         // Set RP things, specifically for 2018
         // Other years can use a similar pattern
-        redRPString = {
-            var tempString: String = ""
-            if match.year == 2018 {
-                tempString += "•"
-                tempString += "•"
-            }
-            return tempString
-        }()
+        if match.year == 2018 {
+            redRPString = {
+                guard var redBreakdown = match.breakdown?["red"] as? [String: Any] else { return "" }
+                var rpString: String = ""
+                rpString += (redBreakdown["autoQuestRankingPoint"] as! Bool ? "•" : "")
+                rpString += (redBreakdown["faceTheBossRankingPoint"] as! Bool ? "•" : "")
+                return rpString
+            }()
 
-//        redRPString = "••"
-        blueRPString = "••"
+            blueRPString = {
+                guard var blueBreakdown = match.breakdown?["blue"] as? [String: Any] else { return "" }
+                var rpString: String = ""
+                rpString += (blueBreakdown["autoQuestRankingPoint"] as! Bool ? "•" : "")
+                rpString += (blueBreakdown["faceTheBossRankingPoint"] as! Bool ? "•" : "")
+                return rpString
+            }()
+        } else {
+            redRPString = ""
+            blueRPString = ""
+        }
 
         redAllianceWon = hasWinnersAndLosers && match.winningAlliance == "red"
         blueAllianceWon = hasWinnersAndLosers && match.winningAlliance == "blue"
@@ -71,5 +80,4 @@ struct MatchViewModel {
     var hasScores: Bool {
         return blueScore != nil && redScore != nil
     }
-
 }
