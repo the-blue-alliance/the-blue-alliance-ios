@@ -17,7 +17,7 @@ iOS discussion happens in the `#dev-ios` channel in the Slack
 
 Learning
 ---
-Information about the app's architecture, tooling used for this repo, and more can be found in [the Wiki](https://github.com/the-blue-alliance/the-blue-alliance-ios/wiki).
+Information about the app's architecture, tooling used for this repo, and more can be found in [the Wiki](https://github.com/the-blue-alliance/the-blue-alliance-ios/wiki). If you're new to iOS development, please refer to Apple's documentation for reference. [This tutorial](https://developer.apple.com/library/archive/referencelibrary/GettingStarted/DevelopiOSAppsSwift/index.html) is a great tutorial to start with.
 
 Finding Tasks
 ---
