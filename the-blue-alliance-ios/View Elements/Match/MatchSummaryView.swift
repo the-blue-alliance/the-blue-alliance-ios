@@ -137,7 +137,7 @@ class MatchSummaryView: UIView {
     private func addRPToView(stackView: UIStackView, rpCount: Int) {
         for _ in 0..<rpCount {
             let rpLabel = label(text: "•", isBold: true)
-            stackView.insertArrangedSubview(rpLabel, at: 0)
+            stackView.addArrangedSubview(rpLabel)
         }
     }
     
