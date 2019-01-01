@@ -48,13 +48,16 @@ struct MatchViewModel {
             return true
         }()
         
-        var redBreakdown = match.breakdown?["red"] as! [String: Any]
-        var blueBreakdown = match.breakdown?["blue"] as! [String: Any]
+        // TODO: Support all alliances
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/274
+//        let redBreakdown = match.breakdown?["red"] as! [String: Any]
+        let redBreakdown = match.breakdown?["red"] as? [String: Any]
+        let blueBreakdown = match.breakdown?["blue"] as? [String: Any]
         
         // Set RP things, specifically for 2018
         // Other years can use a similar pattern
-        let rpName1: String
-        let rpName2: String
+        var rpName1: String?
+        var rpName2: String?
 
         switch match.year {
         case 2016:
@@ -67,17 +70,25 @@ struct MatchViewModel {
             rpName1 = "autoQuestRankingPoint"
             rpName2 = "faceTheBossRankingPoint"
         default:
-            rpName1 = ""
-            rpName2 = ""
+            break
         }
 
-        if rpName1 != "" {
-            redRPCount += (redBreakdown[rpName1] as! Bool ? 1 : 0)
-            blueRPCount += (blueBreakdown[rpName1] as! Bool ? 1 : 0)
+        if let rpName1 = rpName1 {
+            if let redBreakdown = redBreakdown?[rpName1] as? Bool {
+                redRPCount += redBreakdown ? 1 : 0
+            }
+            if let blueBreakdown = blueBreakdown?[rpName1] as? Bool {
+                blueRPCount += blueBreakdown ? 1 : 0
+            }
         }
-        if rpName2 != "" {
-            redRPCount += (redBreakdown[rpName2] as! Bool ? 1 : 0)
-            blueRPCount += (blueBreakdown[rpName2] as! Bool ? 1 : 0)
+
+        if let rpName2 = rpName2 {
+            if let redBreakdown = redBreakdown?[rpName2] as? Bool {
+                redRPCount += redBreakdown ? 1 : 0
+            }
+            if let blueBreakdown = blueBreakdown?[rpName2] as? Bool {
+                blueRPCount += blueBreakdown ? 1 : 0
+            }
         }
 
         redAllianceWon = hasWinnersAndLosers && match.winningAlliance == "red"
