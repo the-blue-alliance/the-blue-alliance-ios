@@ -37,10 +37,6 @@ class MatchSummaryView: UIView {
     }
     @IBOutlet weak var blueScoreLabel: UILabel!
     @IBOutlet private weak var blueRPStackView: UIStackView!
-    
-    @IBOutlet weak var redRPLabel: UILabel!
-    
-    @IBOutlet weak var blueRPLabel: UILabel!
 
     @IBOutlet weak var timeLabel: UILabel!
     

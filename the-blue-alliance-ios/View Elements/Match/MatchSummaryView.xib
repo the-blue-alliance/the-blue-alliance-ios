@@ -12,7 +12,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MatchSummaryView" customModule="The_Blue_Alliance" customModuleProvider="target">
             <connections>
                 <outlet property="blueContainerView" destination="ujk-xM-7ok" id="OqU-mA-Q5D"/>
-                <outlet property="blueRPLabel" destination="J1H-ng-Fye" id="ePO-J8-Jh4"/>
                 <outlet property="blueRPStackView" destination="lwC-KQ-hCX" id="FhZ-o6-tfS"/>
                 <outlet property="blueScoreLabel" destination="BIa-h9-yIu" id="MF0-LK-IzD"/>
                 <outlet property="blueStackView" destination="C6h-fR-VJi" id="vRF-WK-RJv"/>
@@ -20,7 +19,6 @@
                 <outlet property="matchNumberLabel" destination="yPd-Gy-NoB" id="BhK-va-myy"/>
                 <outlet property="playIconImageView" destination="mRu-M0-eMP" id="Eh2-vo-Ze0"/>
                 <outlet property="redContainerView" destination="mpK-JO-dy3" id="nrm-lE-A5y"/>
-                <outlet property="redRPLabel" destination="abb-wu-aTo" id="hRE-2R-o2u"/>
                 <outlet property="redRPStackView" destination="D8q-gZ-JhX" id="nLS-7d-t3K"/>
                 <outlet property="redScoreLabel" destination="r4c-pQ-IQY" id="4z0-go-u4f"/>
                 <outlet property="redStackView" destination="Ifh-sb-xaX" id="wM1-3g-BXu"/>
@@ -177,28 +175,12 @@
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D8q-gZ-JhX" userLabel="Red RP View">
+                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D8q-gZ-JhX" userLabel="Red RP View">
                     <rect key="frame" x="89" y="-3" width="11.5" height="14.5"/>
-                    <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="••" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="abb-wu-aTo">
-                            <rect key="frame" x="0.0" y="0.0" width="11.5" height="14.5"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                    </subviews>
                     <viewLayoutGuide key="safeArea" id="aOv-nb-YVi"/>
                 </stackView>
-                <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lwC-KQ-hCX" userLabel="Blue RP View">
+                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lwC-KQ-hCX" userLabel="Blue RP View">
                     <rect key="frame" x="89" y="29.5" width="11.5" height="14.5"/>
-                    <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="••" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J1H-ng-Fye">
-                            <rect key="frame" x="0.0" y="0.0" width="11.5" height="14.5"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                    </subviews>
                     <viewLayoutGuide key="safeArea" id="MDd-GC-vmQ"/>
                 </stackView>
             </subviews>
