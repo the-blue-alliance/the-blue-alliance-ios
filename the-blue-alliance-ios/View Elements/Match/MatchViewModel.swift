@@ -78,15 +78,15 @@ struct MatchViewModel {
         }
         
         let breakdownKeys: [String] = [rpName1, rpName2].compactMap({ $0 })
-        redRPCount = calculateRP(breakdown: redBreakdown, breakdownKeys: breakdownKeys)
-        blueRPCount = calculateRP(breakdown: blueBreakdown, breakdownKeys: breakdownKeys)
+        redRPCount = MatchViewModel.calculateRP(breakdown: redBreakdown, breakdownKeys: breakdownKeys)
+        blueRPCount = MatchViewModel.calculateRP(breakdown: blueBreakdown, breakdownKeys: breakdownKeys)
     }
 
     var hasScores: Bool {
         return blueScore != nil && redScore != nil
     }
     
-    private func calculateRP(breakdown: [String: Any]?, breakdownKeys: [String]) -> Int {
+    static func calculateRP(breakdown: [String: Any]?, breakdownKeys: [String]) -> Int {
         var rpCount: Int = 0
 
         for key in breakdownKeys {
