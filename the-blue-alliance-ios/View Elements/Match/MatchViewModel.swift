@@ -48,9 +48,13 @@ struct MatchViewModel {
             return true
         }()
         
+        redAllianceWon = hasWinnersAndLosers && match.winningAlliance == "red"
+        blueAllianceWon = hasWinnersAndLosers && match.winningAlliance == "blue"
+        
+        baseTeamKey = teamKey?.key
+        
         // TODO: Support all alliances
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/274
-//        let redBreakdown = match.breakdown?["red"] as! [String: Any]
         let redBreakdown = match.breakdown?["red"] as? [String: Any]
         let blueBreakdown = match.breakdown?["blue"] as? [String: Any]
         
@@ -72,32 +76,24 @@ struct MatchViewModel {
         default:
             break
         }
-
-        if let rpName1 = rpName1 {
-            if let redBreakdown = redBreakdown?[rpName1] as? Bool {
-                redRPCount += redBreakdown ? 1 : 0
-            }
-            if let blueBreakdown = blueBreakdown?[rpName1] as? Bool {
-                blueRPCount += blueBreakdown ? 1 : 0
-            }
-        }
-
-        if let rpName2 = rpName2 {
-            if let redBreakdown = redBreakdown?[rpName2] as? Bool {
-                redRPCount += redBreakdown ? 1 : 0
-            }
-            if let blueBreakdown = blueBreakdown?[rpName2] as? Bool {
-                blueRPCount += blueBreakdown ? 1 : 0
-            }
-        }
-
-        redAllianceWon = hasWinnersAndLosers && match.winningAlliance == "red"
-        blueAllianceWon = hasWinnersAndLosers && match.winningAlliance == "blue"
-
-        baseTeamKey = teamKey?.key
+        
+        let breakdownKeys: [String] = [rpName1, rpName2].compactMap({ $0 })
+        redRPCount = calculateRP(breakdown: redBreakdown, breakdownKeys: breakdownKeys)
+        blueRPCount = calculateRP(breakdown: blueBreakdown, breakdownKeys: breakdownKeys)
     }
 
     var hasScores: Bool {
         return blueScore != nil && redScore != nil
+    }
+    
+    private func calculateRP(breakdown: [String: Any]?, breakdownKeys: [String]) -> Int {
+        var rpCount: Int = 0
+
+        for key in breakdownKeys {
+            if let breakdown = breakdown?[key] as? Bool {
+                rpCount += breakdown ? 1 : 0
+            }
+        }
+        return rpCount
     }
 }
