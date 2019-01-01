@@ -346,10 +346,9 @@ extension AppDelegate: GIDSignInDelegate {
                 }
             } else {
                 PushService.requestAuthorizationForNotifications { (_, error) in
-                    guard error == nil else {
-                        return
+                    if let error = error {
+                        Crashlytics.sharedInstance().recordError(error)
                     }
-                    self.pushService.registerFCMToken()
                 }
             }
         }
