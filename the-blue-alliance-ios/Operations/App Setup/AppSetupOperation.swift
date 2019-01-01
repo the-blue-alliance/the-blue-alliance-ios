@@ -13,6 +13,10 @@ class AppSetupOperation: TBAOperation {
         self.persistentContainerOperation = PersistentContainerOperation(persistentContainer: persistentContainer)
         self.statusServiceOperation = StatusServiceOperation(statusService: statusService)
 
+        // Wait for persistent container to setup before running our status service operation
+        // This is to prevent a crash when we attempt to save a status object
+        self.statusServiceOperation.addDependency(self.persistentContainerOperation)
+
         super.init()
     }
 
