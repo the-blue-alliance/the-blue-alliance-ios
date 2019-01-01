@@ -17,8 +17,8 @@ struct MatchViewModel {
     let redAllianceWon: Bool
     let blueAllianceWon: Bool
     
-    let redRPString: String
-    let blueRPString: String
+    let redRPCount: Int
+    let blueRPCount: Int
 
     let baseTeamKey: String?
 
@@ -48,27 +48,17 @@ struct MatchViewModel {
             return true
         }()
         
+        var redBreakdown = match.breakdown?["red"] as! [String: Any]
+        var blueBreakdown = match.breakdown?["blue"] as! [String: Any]
+        
         // Set RP things, specifically for 2018
         // Other years can use a similar pattern
         if match.year == 2018 {
-            redRPString = {
-                guard var redBreakdown = match.breakdown?["red"] as? [String: Any] else { return "" }
-                var rpString: String = ""
-                rpString += (redBreakdown["autoQuestRankingPoint"] as! Bool ? "•" : "")
-                rpString += (redBreakdown["faceTheBossRankingPoint"] as! Bool ? "•" : "")
-                return rpString
-            }()
-
-            blueRPString = {
-                guard var blueBreakdown = match.breakdown?["blue"] as? [String: Any] else { return "" }
-                var rpString: String = ""
-                rpString += (blueBreakdown["autoQuestRankingPoint"] as! Bool ? "•" : "")
-                rpString += (blueBreakdown["faceTheBossRankingPoint"] as! Bool ? "•" : "")
-                return rpString
-            }()
+            redRPCount = (redBreakdown["autoQuestRankingPoint"] as! Bool ? 1 : 0) + (redBreakdown["faceTheBossRankingPoint"] as! Bool ? 1 : 0)
+            blueRPCount = (blueBreakdown["autoQuestRankingPoint"] as! Bool ? 1 : 0) + (blueBreakdown["faceTheBossRankingPoint"] as! Bool ? 1 : 0)
         } else {
-            redRPString = ""
-            blueRPString = ""
+            redRPCount = 0
+            blueRPCount = 0
         }
 
         redAllianceWon = hasWinnersAndLosers && match.winningAlliance == "red"

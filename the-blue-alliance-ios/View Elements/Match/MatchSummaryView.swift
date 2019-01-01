@@ -111,7 +111,7 @@ class MatchSummaryView: UIView {
         redScoreLabel.text = viewModel.redScore
 
         // Add red RP to view
-        addRPToView(stackView: redRPStackView, rpString: viewModel.redRPString)
+        addRPToView(stackView: redRPStackView, rpCount: viewModel.redRPCount)
 
         for teamKey in viewModel.blueAlliance {
             let blueTeamLabel = teamLabel(for: teamKey, baseTeamKey: viewModel.baseTeamKey)
@@ -120,7 +120,7 @@ class MatchSummaryView: UIView {
         blueScoreLabel.text = viewModel.blueScore
         
         // Add blue RP to view
-        addRPToView(stackView: blueRPStackView, rpString: viewModel.blueRPString)
+        addRPToView(stackView: blueRPStackView, rpCount: viewModel.blueRPCount)
 
         timeLabel.isHidden = viewModel.hasScores
         timeLabel.text = viewModel.timeString
@@ -134,9 +134,11 @@ class MatchSummaryView: UIView {
         }
     }
     
-    private func addRPToView(stackView: UIStackView, rpString: String) {
-        let rpLabel = label(text: rpString, isBold: true)
-        stackView.insertArrangedSubview(rpLabel, at: 0)
+    private func addRPToView(stackView: UIStackView, rpCount: Int) {
+        for _ in 0..<rpCount {
+            let rpLabel = label(text: "•", isBold: true)
+            stackView.insertArrangedSubview(rpLabel, at: 0)
+        }
     }
     
     private func teamLabel(for teamKey: String, baseTeamKey: String?) -> UILabel {
