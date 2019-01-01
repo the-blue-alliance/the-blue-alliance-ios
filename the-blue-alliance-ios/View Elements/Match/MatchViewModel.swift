@@ -17,8 +17,8 @@ struct MatchViewModel {
     let redAllianceWon: Bool
     let blueAllianceWon: Bool
     
-    let redRPCount: Int
-    let blueRPCount: Int
+    var redRPCount: Int = 0
+    var blueRPCount: Int = 0
 
     let baseTeamKey: String?
 
@@ -53,12 +53,31 @@ struct MatchViewModel {
         
         // Set RP things, specifically for 2018
         // Other years can use a similar pattern
-        if match.year == 2018 {
-            redRPCount = (redBreakdown["autoQuestRankingPoint"] as! Bool ? 1 : 0) + (redBreakdown["faceTheBossRankingPoint"] as! Bool ? 1 : 0)
-            blueRPCount = (blueBreakdown["autoQuestRankingPoint"] as! Bool ? 1 : 0) + (blueBreakdown["faceTheBossRankingPoint"] as! Bool ? 1 : 0)
-        } else {
-            redRPCount = 0
-            blueRPCount = 0
+        let rpName1: String
+        let rpName2: String
+
+        switch match.year {
+        case 2016:
+            rpName1 = "teleopDefensesBreached"
+            rpName2 = "teleopTowerCaptured"
+        case 2017:
+            rpName1 = "kPaRankingPointAchieved"
+            rpName2 = "rotorRankingPointAchieved"
+        case 2018:
+            rpName1 = "autoQuestRankingPoint"
+            rpName2 = "faceTheBossRankingPoint"
+        default:
+            rpName1 = ""
+            rpName2 = ""
+        }
+
+        if rpName1 != "" {
+            redRPCount += (redBreakdown[rpName1] as! Bool ? 1 : 0)
+            blueRPCount += (blueBreakdown[rpName1] as! Bool ? 1 : 0)
+        }
+        if rpName2 != "" {
+            redRPCount += (redBreakdown[rpName2] as! Bool ? 1 : 0)
+            blueRPCount += (blueBreakdown[rpName2] as! Bool ? 1 : 0)
         }
 
         redAllianceWon = hasWinnersAndLosers && match.winningAlliance == "red"
