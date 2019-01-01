@@ -104,23 +104,21 @@ class MatchSummaryView: UIView {
         removeTeams()
         removeRPs()
 
-        for teamKey in viewModel.redAlliance {
-            let redTeamLabel = teamLabel(for: teamKey, baseTeamKey: viewModel.baseTeamKey)
-            redStackView.insertArrangedSubview(redTeamLabel, at: 0)
+        for (alliance, stackView) in [(viewModel.redAlliance, redStackView!), (viewModel.blueAlliance, blueStackView!)] {
+            for teamKey in alliance {
+                let label = teamLabel(for: teamKey, baseTeamKey: viewModel.baseTeamKey)
+                // Insert each new stack view at the index just before the score view
+                stackView.insertArrangedSubview(label, at: stackView.arrangedSubviews.count - 1)
+            }
         }
-        redScoreLabel.text = viewModel.redScore
 
         // Add red RP to view
         addRPToView(stackView: redRPStackView, rpCount: viewModel.redRPCount)
-
-        for teamKey in viewModel.blueAlliance {
-            let blueTeamLabel = teamLabel(for: teamKey, baseTeamKey: viewModel.baseTeamKey)
-            blueStackView.insertArrangedSubview(blueTeamLabel, at: 0)
-        }
-        blueScoreLabel.text = viewModel.blueScore
-        
         // Add blue RP to view
         addRPToView(stackView: blueRPStackView, rpCount: viewModel.blueRPCount)
+
+        redScoreLabel.text = viewModel.redScore
+        blueScoreLabel.text = viewModel.blueScore
 
         timeLabel.isHidden = viewModel.hasScores
         timeLabel.text = viewModel.timeString
