@@ -66,42 +66,18 @@ extension TeamMedia {
         }
     }
 
-    // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/models/media.py#L92
     public var viewImageURL: URL? {
-        guard let type = type else {
+        guard let viewURL = viewURL else {
             return nil
         }
-
-        if type == MediaType.cdPhotoThread.rawValue {
-            return cdphotothreadThreadURL
-        } else if type == MediaType.imgur.rawValue {
-            return imgurURL
-        } else if type == MediaType.grabcad.rawValue {
-            return grabcadURL
-        } else if type == MediaType.instagramImage.rawValue {
-            return instagramURL
-        } else {
-            return nil
-        }
+        return URL(string: viewURL)
     }
 
     public var imageDirectURL: URL? {
-        guard let type = type else {
+        guard let directURL = directURL else {
             return nil
         }
-
-        // Largest image that isn't max resolution (which can be arbitrarily huge)
-        if type == MediaType.cdPhotoThread.rawValue {
-            return cdphotothreadImageSize(.medium)
-        } else if type == MediaType.imgur.rawValue {
-            return imgurImageSize(.direct)
-        } else if type == MediaType.grabcad.rawValue {
-            return grabcadDirectURL
-        } else if type == MediaType.instagramImage.rawValue {
-            return instagramDirectURL(.large)
-        } else {
-            return nil
-        }
+        return URL(string: directURL)
     }
 
 }
@@ -156,113 +132,13 @@ extension TeamMedia: Managed {
             media.foreignKey = model.foreignKey
             media.details = model.details
             media.preferred = model.preferred ?? false
+            media.viewURL = model.viewURL
+            media.directURL = model.directURL
         }
     }
 
     var isOrphaned: Bool {
         return team == nil
-    }
-
-}
-
-// CDPhotoThread URLs
-extension TeamMedia {
-
-    public enum CDPhotoTreadSize: String {
-        case small = "_s"
-        case medium = "_m"
-        case large = "_l"
-    }
-
-    fileprivate var cdphotothreadImageURL: URL? {
-        guard let image_partial = details?["image_partial"] as? String else {
-            return nil
-        }
-        return URL(string: "http://www.chiefdelphi.com/media/img/\(image_partial)")
-    }
-
-    private func cdphotothreadImageSize(_ size: CDPhotoTreadSize) -> URL? {
-        guard let url = cdphotothreadImageURL else {
-            return nil
-        }
-        return URL(string: url.absoluteString.replacingOccurrences(of: CDPhotoTreadSize.large.rawValue, with: size.rawValue))
-    }
-
-    private var cdphotothreadThreadURL: URL? {
-        guard let foreignKey = foreignKey else {
-            return nil
-        }
-        return URL(string: "http://www.chiefdelphi.com/media/photos/\(foreignKey)")
-    }
-
-}
-
-// Instagram URLs
-extension TeamMedia {
-
-    public enum ImgurImageSize: String {
-        case small = "s"
-        case medium = "m"
-        case direct = "h"
-    }
-
-    fileprivate var imgurURL: URL? {
-        guard let foreignKey = foreignKey else {
-            return nil
-        }
-        return URL(string: "https://imgur.com/\(foreignKey)")
-    }
-
-    private func imgurImageSize(_ size: ImgurImageSize) -> URL? {
-        guard let foreignKey = foreignKey else {
-            return nil
-        }
-        return URL(string: "https://i.imgur.com/\(foreignKey)\(size.rawValue).jpg")
-    }
-
-}
-
-// Instagram URLs
-extension TeamMedia {
-
-    public enum InstagramImageSize: String {
-        case thumbnail = "t"
-        case medium = "m"
-        case large = "l"
-    }
-
-    fileprivate var instagramURL: URL? {
-        guard let foreignKey = foreignKey else {
-            return nil
-        }
-        return URL(string: "https://www.instagram.com/p/\(foreignKey)")
-    }
-
-    // https://github.com/the-blue-alliance/the-blue-alliance/blob/fe43a0ce3b1bf2f74de945765f4e04f37eb6112d/models/media.py#L158
-    private func instagramDirectURL(_ size: InstagramImageSize) -> URL? {
-        guard let instagramURL = instagramURL else {
-            return nil
-        }
-        return URL(string: "\(instagramURL)/media/?size=\(size.rawValue)")
-    }
-
-}
-
-// Grabcad URLs
-extension TeamMedia {
-
-    fileprivate var grabcadURL: URL? {
-        guard let foreignKey = foreignKey else {
-            return nil
-        }
-        return URL(string: "https://grabcad.com/library/\(foreignKey)")
-    }
-
-    fileprivate var grabcadDirectURL: URL? {
-        guard let modelImage = details?["model_image"] as? String else {
-            return nil
-        }
-        return URL(string: modelImage.replacingOccurrences(of: "card.jpg", with: "large.png"))
     }
 
 }

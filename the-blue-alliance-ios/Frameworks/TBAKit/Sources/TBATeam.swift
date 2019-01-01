@@ -250,20 +250,24 @@ public struct TBAEventStatusAlliance: TBAModel {
 
 }
 
-public struct TBAMedia: TBAModel{
+public struct TBAMedia: TBAModel {
     
     public var key: String?
     public var type: String
     public var foreignKey: String?
     public var details: [String: Any]?
     public var preferred: Bool?
+    public var directURL: String?
+    public var viewURL: String?
 
-    public init(key: String? = nil, type: String, foreignKey: String? = nil, details: [String: Any]? = nil, preferred: Bool? = nil) {
+    public init(key: String? = nil, type: String, foreignKey: String? = nil, details: [String: Any]? = nil, preferred: Bool? = nil, directURL: String? = nil, viewURL: String? = nil) {
         self.key = key
         self.type = type
         self.foreignKey = foreignKey
         self.details = details
         self.preferred = preferred
+        self.directURL = directURL
+        self.viewURL = viewURL
     }
 
     init?(json: [String: Any]) {
@@ -274,10 +278,12 @@ public struct TBAMedia: TBAModel{
             return nil
         }
         self.type = type
-        
+
         self.foreignKey = json["foreign_key"] as? String
         self.details = json["details"] as? [String: Any]
         self.preferred = json["preferred"] as? Bool
+        self.directURL = json["direct_url"] as? String
+        self.viewURL = json["view_url"] as? String
     }
     
 }

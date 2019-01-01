@@ -126,76 +126,26 @@ class TeamMediaTestCase: CoreDataTestCase {
         XCTAssertEqual(media.youtubeKey, foreignKey)
     }
 
-    func test_imageTypes_hasURL() {
-        let media = TeamMedia.init(entity: TeamMedia.entity(), insertInto: persistentContainer.viewContext)
-        media.foreignKey = "foreign_key"
-        // Setup details so we can get images
-        media.details = [
-            "image_partial": "test",
-            "model_image": "test"
-        ]
-
-        for imageType in MediaType.imageTypes {
-            media.type = imageType
-            XCTAssertNotNil(media.viewImageURL)
-            XCTAssertNotNil(media.imageDirectURL)
-        }
-    }
-
     func test_viewImageURL() {
         let media = TeamMedia.init(entity: TeamMedia.entity(), insertInto: persistentContainer.viewContext)
-        media.foreignKey = "foreign_key"
 
-        // No type - nil
+        // No url - nil
         XCTAssertNil(media.viewImageURL)
 
         // cdPhotoThread
-        media.type = MediaType.cdPhotoThread.rawValue
+        media.viewURL = "http://www.chiefdelphi.com/media/photos/foreign_key"
         XCTAssertEqual(media.viewImageURL?.absoluteString, "http://www.chiefdelphi.com/media/photos/foreign_key")
-
-        // imgur
-        media.type = MediaType.imgur.rawValue
-        XCTAssertEqual(media.viewImageURL?.absoluteString, "https://imgur.com/foreign_key")
-
-        // instagramImage
-        media.type = MediaType.instagramImage.rawValue
-        XCTAssertEqual(media.viewImageURL?.absoluteString, "https://www.instagram.com/p/foreign_key")
-
-        // grabcad
-        media.type = MediaType.grabcad.rawValue
-        XCTAssertEqual(media.viewImageURL?.absoluteString, "https://grabcad.com/library/foreign_key")
     }
 
     func test_imageDirectURL() {
         let media = TeamMedia.init(entity: TeamMedia.entity(), insertInto: persistentContainer.viewContext)
-        media.foreignKey = "foreign_key"
 
         // No type - nil
-        XCTAssertNil(media.viewImageURL)
+        XCTAssertNil(media.imageDirectURL)
 
         // cdPhotoThread
-        media.type = MediaType.cdPhotoThread.rawValue
-        media.details = [
-            "image_partial": "test_l"
-        ]
+        media.directURL = "http://www.chiefdelphi.com/media/img/test_m"
         XCTAssertEqual(media.imageDirectURL?.absoluteString, "http://www.chiefdelphi.com/media/img/test_m")
-
-        // imgur
-        media.type = MediaType.imgur.rawValue
-        media.details = nil
-        XCTAssertEqual(media.imageDirectURL?.absoluteString, "https://i.imgur.com/foreign_keyh.jpg")
-
-        // instagramImage
-        media.type = MediaType.instagramImage.rawValue
-        media.details = nil
-        XCTAssertEqual(media.imageDirectURL?.absoluteString, "https://www.instagram.com/p/foreign_key/media/?size=l")
-
-        // grabcad
-        media.type = MediaType.grabcad.rawValue
-        media.details = [
-            "model_image": "https://test.test.net/screenshots/pics/2850f4cfb0ca7a196d00e100c6bdd91b/card.jpg"
-        ]
-        XCTAssertEqual(media.imageDirectURL?.absoluteString, "https://test.test.net/screenshots/pics/2850f4cfb0ca7a196d00e100c6bdd91b/large.png")
     }
 
 }
