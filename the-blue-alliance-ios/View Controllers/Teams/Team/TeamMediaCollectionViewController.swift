@@ -158,7 +158,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
                 media.mediaError = MediaError.error("No data for request")
             }
 
-            _ = self.persistentContainer.viewContext.saveOrRollback()
+            self.persistentContainer.viewContext.performSaveOrRollback()
         })
         dataTask.resume()
     }
