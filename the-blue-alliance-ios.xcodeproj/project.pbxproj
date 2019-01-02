@@ -346,6 +346,7 @@
 		92FF113421A70B16003BC5C4 /* CoreDataTestCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF113321A70B16003BC5C4 /* CoreDataTestCaseTests.swift */; };
 		92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */; };
 		92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */; };
+		A6544CF021DC3CDC00D423F2 /* MatchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6544CEF21DC3CDC00D423F2 /* MatchViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -705,6 +706,7 @@
 		92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewCell.xib; sourceTree = "<group>"; };
 		92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		A27CA53562D2F2F05B05659A /* Pods-The Blue Alliance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.debug.xcconfig"; sourceTree = "<group>"; };
+		A6544CEF21DC3CDC00D423F2 /* MatchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchViewModelTests.swift; sourceTree = "<group>"; };
 		AC390655114E5828E3FE13D0 /* Pods-tba-unit-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.debug.xcconfig"; sourceTree = "<group>"; };
 		E72D7306F6A02099E68DED02 /* Pods-tba-unit-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.release.xcconfig"; sourceTree = "<group>"; };
 		FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_The_Blue_Alliance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1028,6 +1030,7 @@
 		928030E12197802C0099CB65 /* View Elements */ = {
 			isa = PBXGroup;
 			children = (
+				A6544CEB21DC39FB00D423F2 /* Match */,
 				928030E22197803F0099CB65 /* Events */,
 			);
 			path = "View Elements";
@@ -1851,6 +1854,14 @@
 			path = Events;
 			sourceTree = "<group>";
 		};
+		A6544CEB21DC39FB00D423F2 /* Match */ = {
+			isa = PBXGroup;
+			children = (
+				A6544CEF21DC3CDC00D423F2 /* MatchViewModelTests.swift */,
+			);
+			path = Match;
+			sourceTree = "<group>";
+		};
 		AB6808F14167475E1AE2783E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -2415,6 +2426,7 @@
 				92B076F120FF8E8400F9B2D7 /* MyTBASignOutOperation_Tests.swift in Sources */,
 				925908B52185076100D7BFCE /* EventAllianceTests.swift in Sources */,
 				92C2E939217B92C500004B9E /* MatchVideoTests.swift in Sources */,
+				A6544CF021DC3CDC00D423F2 /* MatchViewModelTests.swift in Sources */,
 				1416D50C218E462500F1A4A3 /* EventInsightsTests.swift in Sources */,
 				922E9080217BD18400E81447 /* TeamKeyTests.swift in Sources */,
 				924459C320CB796B0007570D /* Date+TBA_Tests.swift in Sources */,

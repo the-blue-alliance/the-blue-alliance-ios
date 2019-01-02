@@ -27,6 +27,7 @@ class MatchSummaryView: UIView {
         }
     }
     @IBOutlet weak var redScoreLabel: UILabel!
+    @IBOutlet private weak var redRPStackView: UIStackView!
 
     @IBOutlet weak private var blueStackView: UIStackView!
     @IBOutlet weak var blueContainerView: UIView! {
@@ -35,8 +36,10 @@ class MatchSummaryView: UIView {
         }
     }
     @IBOutlet weak var blueScoreLabel: UILabel!
+    @IBOutlet private weak var blueRPStackView: UIStackView!
 
     @IBOutlet weak var timeLabel: UILabel!
+    
 
     // MARK: - Init
 
@@ -81,6 +84,14 @@ class MatchSummaryView: UIView {
             }
         }
     }
+    
+    private func removeRPs() {
+        for stackView in [redRPStackView, blueRPStackView] as [UIStackView] {
+            for view in stackView.arrangedSubviews {
+                view.removeFromSuperview()
+            }
+        }
+    }
 
     private func configureView() {
         guard let viewModel = viewModel else {
@@ -91,18 +102,25 @@ class MatchSummaryView: UIView {
         playIconImageView.isHidden = viewModel.hasVideos
 
         removeTeams()
+        removeRPs()
 
         for teamKey in viewModel.redAlliance {
-            let teamLabel = label(for: teamKey, baseTeamKey: viewModel.baseTeamKey)
-            redStackView.insertArrangedSubview(teamLabel, at: 0)
+            let redTeamLabel = teamLabel(for: teamKey, baseTeamKey: viewModel.baseTeamKey)
+            redStackView.insertArrangedSubview(redTeamLabel, at: 0)
         }
         redScoreLabel.text = viewModel.redScore
 
+        // Add red RP to view
+        addRPToView(stackView: redRPStackView, rpCount: viewModel.redRPCount)
+
         for teamKey in viewModel.blueAlliance {
-            let teamLabel = label(for: teamKey, baseTeamKey: viewModel.baseTeamKey)
-            blueStackView.insertArrangedSubview(teamLabel, at: 0)
+            let blueTeamLabel = teamLabel(for: teamKey, baseTeamKey: viewModel.baseTeamKey)
+            blueStackView.insertArrangedSubview(blueTeamLabel, at: 0)
         }
         blueScoreLabel.text = viewModel.blueScore
+        
+        // Add blue RP to view
+        addRPToView(stackView: blueRPStackView, rpCount: viewModel.blueRPCount)
 
         timeLabel.isHidden = viewModel.hasScores
         timeLabel.text = viewModel.timeString
@@ -115,12 +133,26 @@ class MatchSummaryView: UIView {
             blueScoreLabel.font = winnerFont
         }
     }
+    
+    private func addRPToView(stackView: UIStackView, rpCount: Int) {
+        for _ in 0..<rpCount {
+            let rpLabel = label(text: "•", isBold: true)
+            stackView.addArrangedSubview(rpLabel)
+        }
+    }
+    
+    private func teamLabel(for teamKey: String, baseTeamKey: String?) -> UILabel {
+        let text: String = "\(Team.trimFRCPrefix(teamKey))"
+        let isBold: Bool = (teamKey == baseTeamKey)
+        
+        return label(text: text, isBold: isBold)
+    }
 
-    private func label(for teamKey: String, baseTeamKey: String?) -> UILabel {
+    private func label(text: String, isBold: Bool) -> UILabel {
         let label = UILabel()
-        label.text = "\(Team.trimFRCPrefix(teamKey))"
+        label.text = text
         var font: UIFont = .systemFont(ofSize: 14)
-        if teamKey == baseTeamKey {
+        if isBold {
             font = .boldSystemFont(ofSize: 14)
         }
         label.font = font

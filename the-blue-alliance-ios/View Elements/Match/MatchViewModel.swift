@@ -16,6 +16,9 @@ struct MatchViewModel {
 
     let redAllianceWon: Bool
     let blueAllianceWon: Bool
+    
+    var redRPCount: Int = 0
+    var blueRPCount: Int = 0
 
     let baseTeamKey: String?
 
@@ -49,10 +52,46 @@ struct MatchViewModel {
         blueAllianceWon = hasWinnersAndLosers && match.winningAlliance == "blue"
 
         baseTeamKey = teamKey?.key
+        
+        // TODO: Support all alliances
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/274
+        let redBreakdown = match.breakdown?["red"] as? [String: Any]
+        let blueBreakdown = match.breakdown?["blue"] as? [String: Any]
+
+        var rpName1: String?
+        var rpName2: String?
+
+        switch match.year {
+        case 2016:
+            rpName1 = "teleopDefensesBreached"
+            rpName2 = "teleopTowerCaptured"
+        case 2017:
+            rpName1 = "kPaRankingPointAchieved"
+            rpName2 = "rotorRankingPointAchieved"
+        case 2018:
+            rpName1 = "autoQuestRankingPoint"
+            rpName2 = "faceTheBossRankingPoint"
+        default:
+            break
+        }
+        
+        let breakdownKeys: [String] = [rpName1, rpName2].compactMap({ $0 })
+        redRPCount = MatchViewModel.calculateRP(breakdown: redBreakdown, breakdownKeys: breakdownKeys)
+        blueRPCount = MatchViewModel.calculateRP(breakdown: blueBreakdown, breakdownKeys: breakdownKeys)
     }
 
     var hasScores: Bool {
         return blueScore != nil && redScore != nil
     }
+    
+    static func calculateRP(breakdown: [String: Any]?, breakdownKeys: [String]) -> Int {
+        var rpCount: Int = 0
 
+        for key in breakdownKeys {
+            if let breakdown = breakdown?[key] as? Bool {
+                rpCount += breakdown ? 1 : 0
+            }
+        }
+        return rpCount
+    }
 }
