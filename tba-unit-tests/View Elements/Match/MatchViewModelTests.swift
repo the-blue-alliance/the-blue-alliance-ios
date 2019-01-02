@@ -2,38 +2,137 @@ import XCTest
 @testable import The_Blue_Alliance
 
 class MatchViewModelTestCase: CoreDataTestCase {
-    func test_init() {
-        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
-//        alliance.addToPicks(NSOrderedSet(array: [
-//            TeamKey.insert(withKey: "frc1", in: persistentContainer.viewContext),
-//            TeamKey.insert(withKey: "frc3", in: persistentContainer.viewContext),
-//            TeamKey.insert(withKey: "frc2", in: persistentContainer.viewContext),
-//            TeamKey.insert(withKey: "frc4", in: persistentContainer.viewContext)
-//            ]))
+    func test_no_breakdown() {
+        let match = insertMatch(eventKey: "2018inwla")
 
-        let teamKey = TeamKey.insert(withKey: "frc1", in: persistentContainer.viewContext)
-        let first = MatchViewModel(match: match, teamKey: teamKey)
-//        XCTAssertEqual(first.picks, ["frc1", "frc3", "frc2", "frc4"])
-//        XCTAssertEqual(first.allianceName, "Alliance 2")
-//        XCTAssertNil(first.allianceLevel)
-//        XCTAssertFalse(first.hasAllianceLevel)
-
-//        alliance.name = "Alliance 3"
-//        let second = EventAllianceCellViewModel(alliance: alliance, allianceNumber: 2)
-//        XCTAssertEqual(second.picks, ["frc1", "frc3", "frc2", "frc4"])
-//        XCTAssertEqual(second.allianceName, "Alliance 3")
-//        XCTAssertNil(first.allianceLevel)
-//        XCTAssertFalse(first.hasAllianceLevel)
-//
-//        let status = EventStatusPlayoff.init(entity: EventStatusPlayoff.entity(), insertInto: persistentContainer.viewContext)
-//        status.level = "f"
-//        status.status = "won"
-//        alliance.status = status
-//        let third = EventAllianceCellViewModel(alliance: alliance, allianceNumber: 2)
-//        XCTAssertEqual(third.picks, ["frc1", "frc3", "frc2", "frc4"])
-//        XCTAssertEqual(third.allianceName, "Alliance 3")
-//        XCTAssertEqual(third.allianceLevel, "W")
-//        XCTAssert(third.hasAllianceLevel)
+        let subject = MatchViewModel(match: match)
+        XCTAssertEqual(subject.redRPCount, 0)
+        XCTAssertEqual(subject.blueRPCount, 0)
     }
 
+    func test_no_rp() {
+        let match = insertMatch(eventKey: "2018inwla")
+        match.breakdown = [
+            "red": [
+                "autoQuestRankingPoint": false,
+                "faceTheBossRankingPoint": false
+            ],
+            "blue": [
+                "autoQuestRankingPoint": false,
+                "faceTheBossRankingPoint": false
+            ]
+        ]
+
+        let subject = MatchViewModel(match: match)
+        XCTAssertEqual(subject.redRPCount, 0)
+        XCTAssertEqual(subject.blueRPCount, 0)
+    }
+
+    func test_first_rp() {
+        let match = insertMatch(eventKey: "2018inwla")
+        match.breakdown = [
+            "red": [
+                "autoQuestRankingPoint": true,
+                "faceTheBossRankingPoint": false
+            ],
+            "blue": [
+                "autoQuestRankingPoint": true,
+                "faceTheBossRankingPoint": false
+            ]
+        ]
+
+        let subject = MatchViewModel(match: match)
+        XCTAssertEqual(subject.redRPCount, 1)
+        XCTAssertEqual(subject.blueRPCount, 1)
+    }
+
+    func test_second_rp() {
+        let match = insertMatch(eventKey: "2018inwla")
+        match.breakdown = [
+            "red": [
+                "autoQuestRankingPoint": false,
+                "faceTheBossRankingPoint": true
+            ],
+            "blue": [
+                "autoQuestRankingPoint": false,
+                "faceTheBossRankingPoint": true
+            ]
+        ]
+
+        let subject = MatchViewModel(match: match)
+        XCTAssertEqual(subject.redRPCount, 1)
+        XCTAssertEqual(subject.blueRPCount, 1)
+    }
+
+    func test_both_rp() {
+        let match = insertMatch(eventKey: "2018inwla")
+        match.breakdown = [
+            "red": [
+                "autoQuestRankingPoint": true,
+                "faceTheBossRankingPoint": true
+            ],
+            "blue": [
+                "autoQuestRankingPoint": true,
+                "faceTheBossRankingPoint": true
+            ]
+        ]
+
+        let subject = MatchViewModel(match: match)
+        XCTAssertEqual(subject.redRPCount, 2)
+        XCTAssertEqual(subject.blueRPCount, 2)
+    }
+
+    func test_2018_rp() {
+        let match = insertMatch(eventKey: "2018inwla")
+        match.breakdown = [
+            "red": [
+                "autoQuestRankingPoint": true,
+                "faceTheBossRankingPoint": true
+            ],
+            "blue": [
+                "autoQuestRankingPoint": true,
+                "faceTheBossRankingPoint": true
+            ]
+        ]
+
+        let subject = MatchViewModel(match: match)
+        XCTAssertEqual(subject.redRPCount, 2)
+        XCTAssertEqual(subject.blueRPCount, 2)
+    }
+
+    func test_2017_rp() {
+        let match = insertMatch(eventKey: "2017inwla")
+        match.breakdown = [
+            "red": [
+                "kPaRankingPointAchieved": true,
+                "rotorRankingPointAchieved": true
+            ],
+            "blue": [
+                "kPaRankingPointAchieved": true,
+                "rotorRankingPointAchieved": true
+            ]
+        ]
+
+        let subject = MatchViewModel(match: match)
+        XCTAssertEqual(subject.redRPCount, 2)
+        XCTAssertEqual(subject.blueRPCount, 2)
+    }
+
+    func test_2016_rp() {
+        let match = insertMatch(eventKey: "2016inwla")
+        match.breakdown = [
+            "red": [
+                "teleopDefensesBreached": true,
+                "teleopTowerCaptured": true
+            ],
+            "blue": [
+                "teleopDefensesBreached": true,
+                "teleopTowerCaptured": true
+            ]
+        ]
+
+        let subject = MatchViewModel(match: match)
+        XCTAssertEqual(subject.redRPCount, 2)
+        XCTAssertEqual(subject.blueRPCount, 2)
+    }
 }
