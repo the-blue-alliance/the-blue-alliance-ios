@@ -57,9 +57,7 @@ struct MatchViewModel {
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/274
         let redBreakdown = match.breakdown?["red"] as? [String: Any]
         let blueBreakdown = match.breakdown?["blue"] as? [String: Any]
-        
-        // Set RP things, specifically for 2018
-        // Other years can use a similar pattern
+
         var rpName1: String?
         var rpName2: String?
 
