@@ -3,19 +3,20 @@ import XCTest
 
 class MatchViewModelTestCase: CoreDataTestCase {
     func test_init() {
-        let match = Match.init(entity: EventAlliance.entity(), insertInto: persistentContainer.viewContext)
-        alliance.addToPicks(NSOrderedSet(array: [
-            TeamKey.insert(withKey: "frc1", in: persistentContainer.viewContext),
-            TeamKey.insert(withKey: "frc3", in: persistentContainer.viewContext),
-            TeamKey.insert(withKey: "frc2", in: persistentContainer.viewContext),
-            TeamKey.insert(withKey: "frc4", in: persistentContainer.viewContext)
-            ]))
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+//        alliance.addToPicks(NSOrderedSet(array: [
+//            TeamKey.insert(withKey: "frc1", in: persistentContainer.viewContext),
+//            TeamKey.insert(withKey: "frc3", in: persistentContainer.viewContext),
+//            TeamKey.insert(withKey: "frc2", in: persistentContainer.viewContext),
+//            TeamKey.insert(withKey: "frc4", in: persistentContainer.viewContext)
+//            ]))
 
-        let first = MatchViewModel(match: Match, teamKey: TeamKey? = nil)
-        XCTAssertEqual(first.picks, ["frc1", "frc3", "frc2", "frc4"])
-        XCTAssertEqual(first.allianceName, "Alliance 2")
-        XCTAssertNil(first.allianceLevel)
-        XCTAssertFalse(first.hasAllianceLevel)
+        let teamKey = TeamKey.insert(withKey: "frc1", in: persistentContainer.viewContext)
+        let first = MatchViewModel(match: match, teamKey: teamKey)
+//        XCTAssertEqual(first.picks, ["frc1", "frc3", "frc2", "frc4"])
+//        XCTAssertEqual(first.allianceName, "Alliance 2")
+//        XCTAssertNil(first.allianceLevel)
+//        XCTAssertFalse(first.hasAllianceLevel)
 
 //        alliance.name = "Alliance 3"
 //        let second = EventAllianceCellViewModel(alliance: alliance, allianceNumber: 2)
