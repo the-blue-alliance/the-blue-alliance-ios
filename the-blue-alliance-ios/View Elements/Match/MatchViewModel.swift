@@ -47,10 +47,10 @@ struct MatchViewModel {
             }
             return true
         }()
-        
+
         redAllianceWon = hasWinnersAndLosers && match.winningAlliance == "red"
         blueAllianceWon = hasWinnersAndLosers && match.winningAlliance == "blue"
-        
+
         baseTeamKey = teamKey?.key
         
         // TODO: Support all alliances
