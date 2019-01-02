@@ -2,8 +2,27 @@ import XCTest
 @testable import The_Blue_Alliance
 
 class MatchViewModelTestCase: CoreDataTestCase {
+
     func test_no_breakdown() {
         let match = insertMatch(eventKey: "2018inwla")
+
+        let subject = MatchViewModel(match: match)
+        XCTAssertEqual(subject.redRPCount, 0)
+        XCTAssertEqual(subject.blueRPCount, 0)
+    }
+
+    func test_bad_bereakdown_keys() {
+        let match = insertMatch(eventKey: "2018inwla")
+        match.breakdown = [
+            "red": [
+                "notThere1": false,
+                "notThere2": false
+            ],
+            "blue": [
+                "notThere1": false,
+                "notThere2": false
+            ]
+        ]
 
         let subject = MatchViewModel(match: match)
         XCTAssertEqual(subject.redRPCount, 0)
@@ -135,4 +154,5 @@ class MatchViewModelTestCase: CoreDataTestCase {
         XCTAssertEqual(subject.redRPCount, 2)
         XCTAssertEqual(subject.blueRPCount, 2)
     }
+
 }
