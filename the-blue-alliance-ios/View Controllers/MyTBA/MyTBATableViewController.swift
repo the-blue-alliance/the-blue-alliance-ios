@@ -359,7 +359,7 @@ extension MyTBATableViewController: Refreshable {
 extension MyTBATableViewController: Stateful {
 
     var noDataText: String {
-        if J.self == Subscription.self {
+        if T.self == Favorite.self {
             return "No \(J.arrayKey)"
         } else {
             return "Subscriptions are not yet supported"
