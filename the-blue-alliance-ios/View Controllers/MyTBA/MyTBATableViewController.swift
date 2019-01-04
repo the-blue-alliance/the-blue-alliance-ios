@@ -40,7 +40,15 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         tableView.registerReusableCell(TeamTableViewCell.self)
         tableView.registerReusableCell(MatchTableViewCell.self)
 
-        setupFetchedResultsController()
+        // Disable subscriptions
+        if T.self == Favorite.self {
+            setupFetchedResultsController()
+        } else if T.self == Subscription.self {
+            DispatchQueue.main.async {
+                self.showNoDataView()
+                self.disableRefreshing()
+            }
+        }
     }
 
     // MARK: - Public methods
@@ -214,6 +222,11 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             return
         }
 
+        // Disable subscription refresh
+        if T.self == Subscription.self {
+            return
+        }
+
         removeNoDataView()
 
         var request: URLSessionDataTask?
@@ -346,7 +359,11 @@ extension MyTBATableViewController: Refreshable {
 extension MyTBATableViewController: Stateful {
 
     var noDataText: String {
-        return "No myTBA \(J.arrayKey)"
+        if J.self == Subscription.self {
+            return "No \(J.arrayKey)"
+        } else {
+            return "Subscriptions are not yet supported"
+        }
     }
 
 }
