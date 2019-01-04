@@ -34,9 +34,7 @@ extension MyTBA {
         let method = "model/setPreferences"
 
         return callApi(method: method, bodyData: encodedPreferences, completion: { (preferencesResponse: MyTBABaseResponse?, error: Error?) in
-            if let error = error {
-                completion(nil, nil, error)
-            } else if let preferencesResponse = preferencesResponse, let data = preferencesResponse.message.data(using: .utf8) {
+            if let preferencesResponse = preferencesResponse, let data = preferencesResponse.message.data(using: .utf8) {
                 guard let messageResponse = try? JSONDecoder().decode(MyTBAPreferencesMessageResponse.self, from: data) else {
                     completion(nil, nil, MyTBAError.error("Error decoding myTBA preferences response"))
                     return
