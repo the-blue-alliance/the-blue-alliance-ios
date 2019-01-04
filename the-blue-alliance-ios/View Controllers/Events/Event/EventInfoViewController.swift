@@ -208,7 +208,7 @@ class EventInfoViewController: TBATableViewController, Observable {
             case EventLinkRow.youtube.rawValue:
                 urlString = "https://www.youtube.com/results?search_query=\(event.key!)"
             case EventLinkRow.chiefDelphi.rawValue:
-                urlString = "http://www.chiefdelphi.com/media/photos/tags/\(event.key!)"
+                urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(event.key!)"
             default:
                 break
             }
