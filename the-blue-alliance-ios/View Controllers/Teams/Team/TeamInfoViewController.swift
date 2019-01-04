@@ -162,7 +162,7 @@ class TeamInfoViewController: TBATableViewController {
             case TeamLinkRow.youtube.rawValue:
                 urlString = "https://www.youtube.com/results?search_query=\(team.key!)"
             case TeamLinkRow.chiefDelphi.rawValue:
-                urlString = "http://www.chiefdelphi.com/media/photos/tags/\(team.key!)"
+                urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(team.key!)"
             default:
                 break
             }
