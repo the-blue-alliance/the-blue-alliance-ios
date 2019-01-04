@@ -7,13 +7,17 @@ class EventAwardsContainerViewController: ContainerViewController {
     private(set) var event: Event
     private(set) var teamKey: TeamKey?
     private let myTBA: MyTBA
+    private let statusService: StatusService
+    private let urlOpener: URLOpener
 
     // MARK: - Init
 
-    init(event: Event, teamKey: TeamKey? = nil, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, teamKey: TeamKey? = nil, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
         self.teamKey = teamKey
         self.myTBA = myTBA
+        self.statusService = statusService
+        self.urlOpener = urlOpener
 
         let awardsViewController = EventAwardsViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
@@ -61,7 +65,8 @@ extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate 
         if teamKey == self.teamKey {
             return
         }
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

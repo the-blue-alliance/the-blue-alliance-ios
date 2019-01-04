@@ -13,8 +13,7 @@ extension TeamKey: Managed {
      The Team object in the managed object context with the same key as the TeamKey.
      */
     var team: Team? {
-        return Team.findOrFetch(in: managedObjectContext!, matching: NSPredicate(format: "%K == %@",
-                                                                                 #keyPath(Team.key), key!))
+        return Team.findOrFetch(in: managedObjectContext!, matching: Team.predicate(key: key!))
     }
 
     /**

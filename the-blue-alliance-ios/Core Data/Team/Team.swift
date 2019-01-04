@@ -60,6 +60,11 @@ extension Team: Locatable, Managed {
         })
     }
 
+    static func predicate(key: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Team.key), key)
+    }
+
     /**
      Insert a Team with values from a TBAKit Team model in to the managed object context.
 
@@ -71,8 +76,7 @@ extension Team: Locatable, Managed {
      */
     @discardableResult
     static func insert(_ model: TBATeam, in context: NSManagedObjectContext) -> Team {
-        let predicate = NSPredicate(format: "%K == %@",
-                                    #keyPath(Team.key), model.key)
+        let predicate = Team.predicate(key: model.key)
 
         return findOrCreate(in: context, matching: predicate) { (team) in
             // Required: key, name, teamNumber, rookieYear
