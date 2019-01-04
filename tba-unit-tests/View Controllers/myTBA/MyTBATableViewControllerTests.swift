@@ -212,10 +212,10 @@ class MyTBATableViewControllerTests: TBATestCase {
 
     func test_noDataText() {
         let favorites = MockMyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        XCTAssertEqual(favorites.noDataText, "No myTBA favorites")
+        XCTAssertEqual(favorites.noDataText, "No favorites")
 
         let subscriptions = MockMyTBATableViewController<Subscription, MyTBASubscription>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        XCTAssertEqual(subscriptions.noDataText, "No myTBA subscriptions")
+        XCTAssertEqual(subscriptions.noDataText, "Subscriptions are not yet supported")
     }
 
 }

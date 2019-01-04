@@ -102,8 +102,7 @@ class SettingsViewController: TBATableViewController {
         case .icons:
             return alternateAppIcons.count + 1 // +1 for default icon
         case .debug:
-            return 1 // For now, don't show troubleshoot notifications
-            // return DebugRow.allCases.count
+            return DebugRow.allCases.count
         }
     }
 
