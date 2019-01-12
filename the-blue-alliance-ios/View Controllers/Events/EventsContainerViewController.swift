@@ -1,6 +1,7 @@
+import CoreData
+import Firebase
 import Foundation
 import UIKit
-import CoreData
 
 class EventsContainerViewController: ContainerViewController {
 
@@ -38,6 +39,14 @@ class EventsContainerViewController: ContainerViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Methods
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        Analytics.logEvent("events", parameters: ["year": NSNumber(value: year)])
     }
 
     // MARK: - Private Methods

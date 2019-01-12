@@ -1,4 +1,5 @@
 import CoreData
+import Firebase
 import Foundation
 import UIKit
 
@@ -48,6 +49,12 @@ class DistrictViewController: ContainerViewController {
         super.viewDidLoad()
 
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        Analytics.logEvent("district", parameters: ["district": district.key!])
     }
 
 }

@@ -1,4 +1,5 @@
 import CoreData
+import Firebase
 import Foundation
 import UIKit
 
@@ -9,6 +10,7 @@ protocol YearSelectViewControllerDelegate: AnyObject {
 class YearSelectViewController: ContainerViewController {
 
     private(set) var year: Int
+    private(set) var years: [Int]
     private(set) var week: Event?
 
     private let selectViewController: SelectTableViewController<YearSelectViewController>
@@ -24,6 +26,7 @@ class YearSelectViewController: ContainerViewController {
 
     init(year: Int, years: [Int], week: Event?, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.year = year
+        self.years = years
         self.week = week
 
         selectViewController = SelectTableViewController<YearSelectViewController>(current: year, options: years, willPush: true, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -52,6 +55,16 @@ class YearSelectViewController: ContainerViewController {
         eventWeekSelectViewController?.delegate = delegate
 
         navigationController?.viewControllers = [self, eventWeekSelectViewController!]
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        var parameters = ["year": NSNumber(value: year), "years": NSArray(array: years)]
+        if let week = week {
+            parameters["week"] = NSString(string: week.key!)
+        }
+        Analytics.logEvent("year_select", parameters: parameters)
     }
 
     // MARK: - Private Methods

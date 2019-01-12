@@ -1,4 +1,5 @@
 import CoreData
+import Firebase
 import UIKit
 
 class EventAwardsContainerViewController: ContainerViewController {
@@ -36,6 +37,20 @@ class EventAwardsContainerViewController: ContainerViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        var parameters = [
+            "event": self.event.key!,
+            ]
+        if let teamKey = teamKey {
+            parameters["team"] = teamKey.key!
+        }
+        Analytics.logEvent("event_awards", parameters: parameters)
     }
 
 }

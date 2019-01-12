@@ -1,5 +1,6 @@
 import BFRImageViewer
 import CoreData
+import Firebase
 import Photos
 import UIKit
 
@@ -87,6 +88,12 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         }
 
         refreshYearsParticipated()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        Analytics.logEvent("team", parameters: ["team": team.key!])
     }
 
     // MARK: - Private

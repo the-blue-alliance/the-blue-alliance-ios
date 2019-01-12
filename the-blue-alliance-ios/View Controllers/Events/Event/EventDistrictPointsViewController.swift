@@ -1,5 +1,6 @@
-import UIKit
 import CoreData
+import Firebase
+import UIKit
 
 // TODO: Eventually, this will be redundant, and will go away
 class EventDistrictPointsContainerViewController: ContainerViewController {
@@ -27,6 +28,14 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        Analytics.logEvent("event_district_points", parameters: ["event": event.key!])
     }
 
 }
