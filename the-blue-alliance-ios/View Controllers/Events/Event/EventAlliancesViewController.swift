@@ -1,6 +1,7 @@
+import CoreData
+import Firebase
 import Foundation
 import UIKit
-import CoreData
 
 class EventAlliancesContainerViewController: ContainerViewController {
 
@@ -29,6 +30,14 @@ class EventAlliancesContainerViewController: ContainerViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        Analytics.logEvent("event_alliances", parameters: ["event": event.key!])
     }
 
 }

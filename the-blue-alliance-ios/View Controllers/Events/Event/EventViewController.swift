@@ -1,4 +1,5 @@
 import CoreData
+import Firebase
 import UIKit
 
 class EventViewController: MyTBAContainerViewController, EventStatusSubscribable {
@@ -56,6 +57,12 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
             showOfflineEventMessage(shouldShow: true, animated: false)
         }
         registerForEventStatusChanges(eventKey: event.key!)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        Analytics.logEvent("event", parameters: ["event": event.key!])
     }
 
     // MARK: - Interface Methods

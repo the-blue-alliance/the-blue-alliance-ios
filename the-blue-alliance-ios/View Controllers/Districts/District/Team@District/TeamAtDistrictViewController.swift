@@ -1,5 +1,6 @@
-import Foundation
 import CoreData
+import Firebase
+import Foundation
 import UIKit
 
 class TeamAtDistrictViewController: ContainerViewController {
@@ -33,6 +34,14 @@ class TeamAtDistrictViewController: ContainerViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        Analytics.logEvent("team_at_district", parameters: ["district": ranking.district!.key!, "team": ranking.teamKey!.key!])
     }
 
 }

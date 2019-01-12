@@ -1,5 +1,6 @@
-import Foundation
 import CoreData
+import Firebase
+import Foundation
 import UIKit
 
 class EventStatsContainerViewController: ContainerViewController {
@@ -45,6 +46,14 @@ class EventStatsContainerViewController: ContainerViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View Lifecycle
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        Analytics.logEvent("event_stats", parameters: ["event": event.key!])
     }
 
     // MARK: - Interface Actions
