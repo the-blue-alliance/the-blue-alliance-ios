@@ -86,7 +86,7 @@ extension TeamAtEventViewController: NavigationTitleDelegate {
             navigationController?.pushViewController(eventViewController, animated: true)
         } else if showDetailTeam {
             // Push to Team
-            let eventViewController = TeamViewController(team: nil, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+            let eventViewController = TeamViewController(teamKey: teamKey, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
             navigationController?.pushViewController(eventViewController, animated: true)
         }
     }

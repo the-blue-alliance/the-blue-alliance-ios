@@ -11,13 +11,12 @@ class TeamViewController: MyTBAContainerViewController, Observable {
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
-    private(set) var infoViewController: TeamInfoViewController
-    private(set) var eventsViewController: TeamEventsViewController
-    private(set) var mediaViewController: TeamMediaCollectionViewController
+    private(set) var infoViewController: TeamInfoViewController!
+    private(set) var eventsViewController: TeamEventsViewController!
+    private(set) var mediaViewController: TeamMediaCollectionViewController!
 
     override var subscribableModel: MyTBASubscribable {
-        // Uhhhh can we make a *Team Key* subscribable?
-        return team
+        return teamKey
     }
 
     private var year: Int? {
@@ -59,16 +58,17 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         self.statusService = statusService
         self.urlOpener = urlOpener
         // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        self.year = TeamViewController.latestYear(statusService: statusService, years: team.yearsParticipated)
+//        self.year = TeamViewController.latestYear(statusService: statusService, years: team.yearsParticipated)
 
-        infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        mediaViewController = TeamMediaCollectionViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+//        infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+//        eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+//        mediaViewController = TeamMediaCollectionViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         let teamNumber = teamKey.teamNumber
 
         super.init(
-            viewControllers: [infoViewController, eventsViewController, mediaViewController],
+            // viewControllers: [infoViewController, eventsViewController, mediaViewController],
+            viewControllers: [],
             navigationTitle: "Team \(teamKey.teamNumber)",
             navigationSubtitle: ContainerViewController.yearSubtitle(year),
             segmentedControlTitles: ["Info", "Events", "Media"],
@@ -79,8 +79,8 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         )
 
         navigationTitleDelegate = self
-        eventsViewController.delegate = self
-        mediaViewController.delegate = self
+//        eventsViewController.delegate = self
+//        mediaViewController.delegate = self
 
         setupObservers()
     }
@@ -154,8 +154,8 @@ class TeamViewController: MyTBAContainerViewController, Observable {
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if let years = years {
-                    let team = context.object(with: self.team.objectID) as! Team
-                    team.yearsParticipated = years.sorted().reversed()
+                    // let team = context.object(with: self.team.objectID) as! Team
+                    // team.yearsParticipated = years.sorted().reversed()
                 }
             }, saved: {
                 self.tbaKit.setLastModified(request!)
