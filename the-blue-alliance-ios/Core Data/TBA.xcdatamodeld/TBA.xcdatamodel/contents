@@ -184,7 +184,7 @@
     </entity>
     <entity name="MatchAlliance" representedClassName="MatchAlliance" syncable="YES" codeGenerationType="class">
         <attribute name="allianceKey" attributeType="String" syncable="YES"/>
-        <attribute name="score" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="score" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="dqTeams" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="TeamKey" inverseName="dqAlliances" inverseEntity="TeamKey" syncable="YES"/>
         <relationship name="match" maxCount="1" deletionRule="Deny" ordered="YES" destinationEntity="Match" inverseName="alliances" inverseEntity="Match" syncable="YES"/>
         <relationship name="surrogateTeams" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="TeamKey" inverseName="surrogateAlliances" inverseEntity="TeamKey" syncable="YES"/>
