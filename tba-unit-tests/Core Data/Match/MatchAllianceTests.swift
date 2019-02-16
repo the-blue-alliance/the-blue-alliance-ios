@@ -22,6 +22,25 @@ class MatchAllianceTestCase: CoreDataTestCase {
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
+    func test_insert_no_score() {
+        let matchModel = TBAMatch(key: "2018miket_f1m1", compLevel: "f", setNumber: 1, matchNumber: 1, eventKey: "2018miket")
+
+        let model = TBAMatchAlliance(score: -1, teams: ["frc1", "frc2"], surrogateTeams: ["frc3", "frc4"], dqTeams: ["frc5", "frc6"])
+        let alliance = MatchAlliance.insert(model, allianceKey: "red", matchKey: matchModel.key, in: persistentContainer.viewContext)
+
+        XCTAssertEqual(alliance.allianceKey, "red")
+        XCTAssertEqual(alliance.score, nil)
+        XCTAssertEqual((alliance.teams!.array as! [TeamKey]).map({ $0.key }), ["frc1", "frc2"])
+        XCTAssertEqual((alliance.surrogateTeams!.array as! [TeamKey]).map({ $0.key }), ["frc3", "frc4"])
+        XCTAssertEqual((alliance.dqTeams!.array as! [TeamKey]).map({ $0.key }), ["frc5", "frc6"])
+
+        // Should throw - needs to be attached to a Match
+        XCTAssertThrowsError(try persistentContainer.viewContext.save())
+
+        alliance.match = Match.insert(matchModel, in: persistentContainer.viewContext)
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+    }
+
     func test_update() {
         let match = Match(entity: Match.entity(), insertInto: persistentContainer.viewContext)
         match.key = "2018miket_f1m1"
