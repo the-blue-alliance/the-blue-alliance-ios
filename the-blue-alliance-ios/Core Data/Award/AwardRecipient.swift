@@ -23,6 +23,8 @@ extension AwardRecipient {
             }
         } else if let awardee = awardee {
             awardText.append(awardee)
+        } else {
+            awardText.append("--")
         }
         return awardText
     }
@@ -58,7 +60,9 @@ extension AwardRecipient: Managed {
                 return NSPredicate(format: "%K == %@",
                                    #keyPath(AwardRecipient.awardee), awardee)
             } else {
-                fatalError("Award has no info")
+                return NSPredicate(format: "%K == nil AND %K == nil",
+                                   #keyPath(AwardRecipient.awardee),
+                                   #keyPath(AwardRecipient.teamKey.key))
             }
         }
 

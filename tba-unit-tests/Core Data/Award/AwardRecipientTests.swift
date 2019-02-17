@@ -79,6 +79,16 @@ class AwardRecipientTestCase: AwardTestCase {
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
     }
 
+    func test_insert_none() {
+        let modelRecipient = TBAAwardRecipient(teamKey: nil, awardee: nil)
+        let recipient = AwardRecipient.insert(modelRecipient, in: persistentContainer.viewContext)
+
+        XCTAssertNil(recipient.teamKey)
+        XCTAssertNil(recipient.awardee)
+
+        XCTAssertThrowsError(try persistentContainer.viewContext.save())
+    }
+
     func test_update_awardee() {
         let modelRecipient = TBAAwardRecipient(awardee: "Zachary Orr")
         let recipientOne = AwardRecipient.insert(modelRecipient, in: persistentContainer.viewContext)
@@ -181,6 +191,12 @@ class AwardRecipientTestCase: AwardTestCase {
         team.nickname = "The Rawrbotz"
 
         XCTAssertEqual(recipient.awardText, ["Team 7332", "The Rawrbotz"])
+    }
+
+    func test_awardText_none() {
+        let modelRecipient = TBAAwardRecipient(teamKey: nil, awardee: nil)
+        let recipient = AwardRecipient.insert(modelRecipient, in: persistentContainer.viewContext)
+        XCTAssertEqual(recipient.awardText, ["--"])
     }
 
 }
