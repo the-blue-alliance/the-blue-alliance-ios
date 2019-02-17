@@ -200,10 +200,6 @@ extension TeamsViewController: TableViewDataSourceDelegate {
         cell.viewModel = TeamCellViewModel(team: object)
     }
 
-    func controllerDidChangeContent() {
-        updateInterface()
-    }
-
 }
 
 
@@ -211,6 +207,7 @@ extension TeamsViewController: UISearchResultsUpdating {
 
     public func updateSearchResults(for searchController: UISearchController) {
         updateDataSource()
+        updateInterface()
     }
 
 }
