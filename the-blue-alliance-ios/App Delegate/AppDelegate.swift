@@ -105,7 +105,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                   firebaseStorage: Storage.storage(),
                                   firebaseOptions: FirebaseOptions.defaultOptions(),
                                   metadata: reactNativeMetadata,
-                                  retryService: RetryService())
+                                  retryService: RetryService(),
+                                  userDefaults: userDefaults)
     }()
     lazy var reactNativeMetadata: ReactNativeMetadata = {
         return ReactNativeMetadata(userDefaults: userDefaults)

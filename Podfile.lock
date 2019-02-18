@@ -164,7 +164,7 @@ PODS:
     - React/RCTBlob
   - yoga (0.57.1.React)
   - youtube-ios-player-helper (0.1.6)
-  - ZIPFoundation (0.9.6)
+  - Zip (1.1.0)
 
 DEPENDENCIES:
   - BFRImageViewer
@@ -188,7 +188,7 @@ DEPENDENCIES:
   - React/RCTWebSocket (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
   - yoga (from `subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga`)
   - youtube-ios-player-helper
-  - ZIPFoundation
+  - Zip (~> 1.1)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -221,7 +221,7 @@ SPEC REPOS:
     - Protobuf
     - PureLayout
     - youtube-ios-player-helper
-    - ZIPFoundation
+    - Zip
 
 EXTERNAL SOURCES:
   Folly:
@@ -264,8 +264,8 @@ SPEC CHECKSUMS:
   React: b4e0982b0ed6a7de90e96cf6fe5cf036aeadd1ec
   yoga: 5e2e4bcf11188977f799b64625dc5913c2aea8fd
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
-  ZIPFoundation: 68c35eb2637c21abe56dc60b3277636443bc1501
+  Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: 13bfea9c2019c59bb4f93861e75ce3885d76d3ea
+PODFILE CHECKSUM: c54b7d65affac1b1b2812273ce087d746589633a
 
 COCOAPODS: 1.6.0.beta.2
