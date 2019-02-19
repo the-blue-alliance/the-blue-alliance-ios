@@ -1,7 +1,8 @@
+import Crashlytics
 import Foundation
 import React
 import Firebase
-import ZIPFoundation
+import Zip
 
 protocol ReactNativeMetadataObservable {
     func metadataUpdated()
@@ -50,6 +51,8 @@ class ReactNativeMetadata {
 
 class ReactNativeService {
 
+    private static var forceRedownloadKeys = ["v1.0.4"]
+
     enum BundleName: String {
         case assets = "ios/assets"
         case downloaded = "ios/main.jsbundle"
@@ -69,18 +72,33 @@ class ReactNativeService {
         return documentDirectory.appendingPathComponent(BundleName.compressed.rawValue)
     }
 
+    private var needsForcedRedownload: Bool {
+        return ReactNativeService.forceRedownloadKeys.contains { (key) -> Bool in
+            return !userDefaults.bool(forKey: key)
+        }
+    }
+
+    func markForcedRedownload() {
+        ReactNativeService.forceRedownloadKeys.filter({ !userDefaults.bool(forKey: $0) }).forEach({
+            userDefaults.set(true, forKey: $0)
+        })
+        userDefaults.synchronize()
+    }
+
     private var fileManager: FileManager
     private var firebaseStorage: Storage
     private var firebaseOptions: FirebaseOptions?
     private var metadata: ReactNativeMetadata
     internal var retryService: RetryService
+    private var userDefaults: UserDefaults
 
-    init(fileManager: FileManager,  firebaseStorage: Storage, firebaseOptions: FirebaseOptions?, metadata: ReactNativeMetadata, retryService: RetryService) {
+    init(fileManager: FileManager, firebaseStorage: Storage, firebaseOptions: FirebaseOptions?, metadata: ReactNativeMetadata, retryService: RetryService, userDefaults: UserDefaults) {
         self.fileManager = fileManager
         self.firebaseStorage = firebaseStorage
         self.firebaseOptions = firebaseOptions
         self.metadata = metadata
         self.retryService = retryService
+        self.userDefaults = userDefaults
     }
 
     private var remoteBundleReference: StorageReference? {
@@ -95,51 +113,75 @@ class ReactNativeService {
 
     public func updateReactNativeBundle() {
         // Check if we have an orphaned compressed bundle that needs to be cleaned up (or unzipped)
-        cleanupCompressedBundle()
+        do {
+            try cleanupCompressedBundle()
+        } catch {
+            Crashlytics.sharedInstance().recordError(error)
+            return
+        }
 
         guard let remoteBundleReference = remoteBundleReference else {
             assertionFailure("No remote bundle found - make sure Firebase is setup before updating RN")
             return
         }
 
-        // Check if we need to download a new compressed React Native bundle, or if the version we have is the most recent
+        // Check if we need to download a new compressed React Native bundle,
+        // or if the version we have is the most recent
         remoteBundleReference.getMetadata { [unowned self] (metadata, error) in
             if let error = error {
                 print("Unable to fetch metadata for compressed React Native bundle: \(error.localizedDescription)")
-            } else if let metadata = metadata, Int(metadata.generation) > self.metadata.bundleGeneration {
-                // Download the newest React Native bundle
-                self.downloadReactNativeBundle(completion: { (error) in
-                    if error == nil {
-                        self.metadata.bundleGeneration = Int(metadata.generation)
-                        self.metadata.bundleCreated = metadata.timeCreated
+                Crashlytics.sharedInstance().recordError(error)
+            } else if let metadata = metadata {
+                let needsDownload = (Int(metadata.generation) > self.metadata.bundleGeneration || self.needsForcedRedownload)
+                // If this is our first launch, our bundleGeneration will be 0
+                let needsMarkForcedDownload = (self.metadata.bundleGeneration == 0 || self.needsForcedRedownload)
+
+                // Download if we need to force a redownload, or if the local version is outdated
+                if needsDownload {
+                    self.downloadReactNativeBundle(remoteBundleReference: remoteBundleReference) { (error) in
+                        if let error = error {
+                            Crashlytics.sharedInstance().recordError(error)
+                        } else {
+                            if needsMarkForcedDownload {
+                                self.markForcedRedownload()
+                            }
+                            self.updateMetadata(storageMetadata: metadata)
+                        }
                     }
-                })
+                }
+            } else {
+                print("Unable to fetch metadata for compressed React Native bundle")
             }
         }
     }
 
-    private func downloadReactNativeBundle(completion: @escaping (Error?) -> Void) {
-        guard let remoteBundleReference = remoteBundleReference else {
-            assertionFailure("No remote bundle found - make sure Firebase is setup before updating RN")
-            return
-        }
-
+    private func downloadReactNativeBundle(remoteBundleReference: StorageReference, completion: @escaping (Error?) -> Void) {
         remoteBundleReference.write(toFile: compressedBundleURL, completion: { [unowned self] (url, error) in
+            var downloadError: Error?
             if let error = error {
-                print("Error writing compressed React Native bundle to filesystem: \(error.localizedDescription)")
-            } else if url != nil {
-                self.unzipCompressedBundle()
-                self.cleanupCompressedBundle()
+                downloadError = error
+            } else {
+                do {
+                    try self.unzipCompressedBundle()
+                    try self.cleanupCompressedBundle()
+                } catch {
+                    downloadError = error
+                }
             }
-            completion(error)
+            completion(downloadError)
         })
     }
 
-    private func cleanupCompressedBundle() {
+    private func updateMetadata(storageMetadata: StorageMetadata) {
+        self.metadata.bundleGeneration = Int(storageMetadata.generation)
+        self.metadata.bundleCreated = storageMetadata.timeCreated
+    }
+
+    private var safeToDelete: Bool {
         // Check if we have an old compressed bundle to cleanup
         let reachable = (try? compressedBundleURL.checkResourceIsReachable()) ?? false
         if !reachable {
-            return
+            return false
         }
 
         // Ensure we have an uncompressed bundle file and assets folder
@@ -148,17 +190,20 @@ class ReactNativeService {
             return result && (checkURL.reachableURL != nil)
         }
 
-        // If we don't have the uncompressed files we need, attempt to uncompress them
-        // Otherwise, go ahead and clean up the compressed bundle we don't need anymore
+        return safeToDelete
+    }
+
+    private func cleanupCompressedBundle() throws {
         if safeToDelete {
-            try? fileManager.removeItem(at: compressedBundleURL)
-        } else {
-            unzipCompressedBundle()
+            try fileManager.removeItem(at: compressedBundleURL)
         }
     }
 
-    private func unzipCompressedBundle() {
-        try? fileManager.unzipItem(at: compressedBundleURL, to: documentDirectory)
+    private func unzipCompressedBundle() throws {
+        try Zip.unzipFile(compressedBundleURL,
+                      destination: documentDirectory,
+                      overwrite: true,
+                      password: nil)
     }
 
 }
