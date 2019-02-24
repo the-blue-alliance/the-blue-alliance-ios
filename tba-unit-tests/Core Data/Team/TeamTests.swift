@@ -68,7 +68,6 @@ class TeamTestCase: CoreDataTestCase {
                             locationName: "location",
                             website: "http://website.com",
                             rookieYear: 2010,
-                            motto: "Some motto",
                             homeChampionship: ["2018": "Detroit"])
         let team = Team.insert(model, in: persistentContainer.viewContext)
 
@@ -88,7 +87,6 @@ class TeamTestCase: CoreDataTestCase {
         XCTAssertEqual(team.locationName, "location")
         XCTAssertEqual(team.website, "http://website.com")
         XCTAssertEqual(team.rookieYear, 2010)
-        XCTAssertEqual(team.motto, "Some motto")
         XCTAssertEqual(team.homeChampionship, ["2018": "Detroit"])
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())

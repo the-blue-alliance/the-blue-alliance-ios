@@ -17,10 +17,9 @@ public struct TBATeam: TBAModel {
     public var locationName: String?
     public var website: String?
     public var rookieYear: Int
-    public var motto: String?
     public var homeChampionship: [String: String]?
 
-    public init(key: String, teamNumber: Int, nickname: String? = nil, name: String, city: String? = nil, stateProv: String? = nil, country: String? = nil, address: String? = nil, postalCode: String? = nil, gmapsPlaceID: String? = nil, gmapsURL: String? = nil, lat: Double? = nil, lng: Double? = nil, locationName: String? = nil, website: String? = nil, rookieYear: Int, motto: String? = nil, homeChampionship: [String: String]? = nil) {
+    public init(key: String, teamNumber: Int, nickname: String? = nil, name: String, city: String? = nil, stateProv: String? = nil, country: String? = nil, address: String? = nil, postalCode: String? = nil, gmapsPlaceID: String? = nil, gmapsURL: String? = nil, lat: Double? = nil, lng: Double? = nil, locationName: String? = nil, website: String? = nil, rookieYear: Int, homeChampionship: [String: String]? = nil) {
         self.key = key
         self.teamNumber = teamNumber
         self.nickname = nickname
@@ -37,7 +36,6 @@ public struct TBATeam: TBAModel {
         self.locationName = locationName
         self.website = website
         self.rookieYear = rookieYear
-        self.motto = motto
         self.homeChampionship = homeChampionship
     }
 
@@ -72,7 +70,6 @@ public struct TBATeam: TBAModel {
         self.lat = json["lat"] as? Double
         self.lng = json["lng"] as? Double
         self.locationName = json["location_name"] as? String
-        self.motto = json["motto"] as? String
         self.nickname = json["nickname"] as? String
         self.postalCode = json["postal_code"] as? String
         self.stateProv = json["state_prov"] as? String

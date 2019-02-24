@@ -178,7 +178,6 @@ class CoreDataTestCase: FBSnapshotTestCase {
                            locationName: nil,
                            website: nil,
                            rookieYear: 2010,
-                           motto: nil,
                            homeChampionship: nil)
         return Team.insert(team, in: persistentContainer.viewContext)
     }
