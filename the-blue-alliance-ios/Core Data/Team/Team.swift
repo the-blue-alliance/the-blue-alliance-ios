@@ -86,7 +86,6 @@ extension Team: Locatable, Managed {
             team.lat = model.lat as NSNumber?
             team.lng = model.lng as NSNumber?
             team.locationName = model.locationName
-            team.motto = model.motto
             team.name = model.name
             team.nickname = model.nickname
             team.postalCode = model.postalCode
