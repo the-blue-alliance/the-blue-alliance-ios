@@ -12,6 +12,8 @@ struct MatchViewModel {
     let blueAlliance: [String]
     let blueScore: String?
 
+    let dqs: [String]
+
     let timeString: String
 
     let redAllianceWon: Bool
@@ -29,11 +31,13 @@ struct MatchViewModel {
 
         hasVideos = match.videos?.count == 0
 
-        redAlliance = match.redAllianceTeamNumbers
+        redAlliance = match.redAllianceTeamKeys
         redScore = match.redAlliance?.score?.stringValue
 
-        blueAlliance = match.blueAllianceTeamNumbers
+        blueAlliance = match.blueAllianceTeamKeys
         blueScore = match.blueAlliance?.score?.stringValue
+
+        dqs = match.dqTeamKeys
 
         timeString = match.timeString ?? "No Time Yet"
 

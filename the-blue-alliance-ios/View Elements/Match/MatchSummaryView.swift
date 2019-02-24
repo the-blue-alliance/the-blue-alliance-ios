@@ -106,7 +106,7 @@ class MatchSummaryView: UIView {
 
         for (alliance, stackView) in [(viewModel.redAlliance, redStackView!), (viewModel.blueAlliance, blueStackView!)] {
             for teamKey in alliance {
-                let label = teamLabel(for: teamKey, baseTeamKey: viewModel.baseTeamKey)
+                let label = teamLabel(for: teamKey, baseTeamKey: viewModel.baseTeamKey, dq: viewModel.dqs.contains(teamKey))
                 // Insert each new stack view at the index just before the score view
                 stackView.insertArrangedSubview(label, at: stackView.arrangedSubviews.count - 1)
             }
@@ -139,22 +139,31 @@ class MatchSummaryView: UIView {
         }
     }
     
-    private func teamLabel(for teamKey: String, baseTeamKey: String?) -> UILabel {
+    private func teamLabel(for teamKey: String, baseTeamKey: String?, dq: Bool) -> UILabel {
         let text: String = "\(Team.trimFRCPrefix(teamKey))"
         let isBold: Bool = (teamKey == baseTeamKey)
-        
-        return label(text: text, isBold: isBold)
+
+        return label(text: text, isBold: isBold, isStrikethrough: dq)
     }
 
-    private func label(text: String, isBold: Bool) -> UILabel {
-        let label = UILabel()
-        label.text = text
+    private func label(text: String, isBold: Bool, isStrikethrough: Bool = false) -> UILabel {
+        let attributeString =  NSMutableAttributedString(string: text)
+        let attributedStringRange = NSMakeRange(0, attributeString.length)
+
         var font: UIFont = .systemFont(ofSize: 14)
         if isBold {
             font = .boldSystemFont(ofSize: 14)
         }
-        label.font = font
+        attributeString.addAttribute(.font, value: font, range: attributedStringRange)
+
+        if isStrikethrough {
+            attributeString.addAttribute(.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: attributedStringRange)
+        }
+
+        let label = UILabel()
         label.textAlignment = .center
+        label.attributedText = attributeString
+
         return label
     }
 
