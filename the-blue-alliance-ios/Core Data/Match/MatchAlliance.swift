@@ -4,6 +4,20 @@ import CoreData
 extension MatchAlliance: Managed {
 
     /**
+     Returns team keys for the alliance.
+     */
+    var teamKeys: [String] {
+        return (teams!.array as? [TeamKey])?.map({ $0.key! }) ?? []
+    }
+
+    /**
+     Returns team keys for DQ'd teams for the alliance.
+     */
+    var dqTeamKeys: [String] {
+        return (dqTeams?.array as? [TeamKey])?.map({ $0.key! }) ?? []
+    }
+
+    /**
      Insert a Match Alliance with values from a TBAKit Match Alliance model in to the managed object context.
 
      - Important: This method does not manage setting up a Match Alliance's relationship to a Match.

@@ -117,10 +117,17 @@ extension Match {
     }
 
     /**
-     Returns the trimmed team keys for the red alliance.
+     Returns the team keys for the red alliance.
+     */
+    var redAllianceTeamKeys: [String] {
+        return redAlliance?.teamKeys ?? []
+    }
+
+    /**
+     Returns the team numbers (trimmed team keys) for the red alliance.
      */
     var redAllianceTeamNumbers: [String] {
-        return (redAlliance?.teams?.array as? [TeamKey])?.map({ Team.trimFRCPrefix($0.key!) }) ?? []
+        return redAllianceTeamKeys.map({ Team.trimFRCPrefix($0) })
     }
 
     /**
@@ -131,10 +138,24 @@ extension Match {
     }
 
     /**
-     Returns the trimmed team keys for the blue alliance.
+     Returns the team keys for the blue alliance.
+     */
+    var blueAllianceTeamKeys: [String] {
+        return blueAlliance?.teamKeys ?? []
+    }
+
+    /**
+     Returns the team numbers (trimmed team keys) for the blue alliance.
      */
     var blueAllianceTeamNumbers: [String] {
-        return (blueAlliance?.teams!.array as? [TeamKey])?.map({ Team.trimFRCPrefix($0.key!) }) ?? []
+        return blueAllianceTeamKeys.map({ Team.trimFRCPrefix($0) })
+    }
+
+    /**
+    Returns the team keys that were DQ'd in this match - not specifically any alliance
+    */
+    var dqTeamKeys: [String] {
+        return (blueAlliance?.dqTeamKeys ?? []) + (redAlliance?.dqTeamKeys ?? [])
     }
 
     private func alliance(with allianceKey: String) -> MatchAlliance? {

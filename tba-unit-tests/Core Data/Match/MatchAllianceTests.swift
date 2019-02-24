@@ -3,6 +3,20 @@ import XCTest
 
 class MatchAllianceTestCase: CoreDataTestCase {
 
+    func test_teamKeys() {
+        let model = TBAMatchAlliance(score: 200, teams: ["frc1", "frc2"], surrogateTeams: ["frc3", "frc4"], dqTeams: ["frc5", "frc6"])
+        let alliance = MatchAlliance.insert(model, allianceKey: "red", matchKey: "2018miket_f1m1", in: persistentContainer.viewContext)
+        XCTAssertEqual(alliance.teamKeys, ["frc1", "frc2"])
+    }
+
+    func test_dqTeamKeys() {
+        let alliance = MatchAlliance.init(entity: MatchAlliance.entity(), insertInto: persistentContainer.viewContext)
+        alliance.dqTeams = NSOrderedSet(array: ["frc3", "frc2"].map({ (key) -> TeamKey in
+            return TeamKey.insert(withKey: key, in: persistentContainer.viewContext)
+        }))
+        XCTAssertEqual(alliance.dqTeamKeys, ["frc3", "frc2"])
+    }
+
     func test_insert() {
         let matchModel = TBAMatch(key: "2018miket_f1m1", compLevel: "f", setNumber: 1, matchNumber: 1, eventKey: "2018miket")
 

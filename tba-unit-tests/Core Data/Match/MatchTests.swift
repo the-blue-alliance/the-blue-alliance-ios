@@ -8,7 +8,7 @@ class MatchTestCase: CoreDataTestCase {
         XCTAssertEqual(predicate.predicateFormat, "key == \"2018miket_qm1\"")
     }
 
-    func alliance(allianceKey: String) -> MatchAlliance {
+    func alliance(allianceKey: String, dqs: [String]? = nil) -> MatchAlliance {
         let alliance = MatchAlliance(entity: MatchAlliance.entity(), insertInto: persistentContainer.viewContext)
         alliance.allianceKey = allianceKey
         alliance.teams = NSOrderedSet(array: ["frc2337", "frc7332", "frc3333"].map({ (key) -> TeamKey in
@@ -16,6 +16,13 @@ class MatchTestCase: CoreDataTestCase {
             teamKey.key = key
             return teamKey
         }))
+        if let dqs = dqs {
+            alliance.dqTeams = NSOrderedSet(array: dqs.map({ (key) -> TeamKey in
+                let teamKey = TeamKey.init(entity: TeamKey.entity(), insertInto: persistentContainer.viewContext)
+                teamKey.key = key
+                return teamKey
+            }))
+        }
         return alliance
     }
 
@@ -402,6 +409,12 @@ class MatchTestCase: CoreDataTestCase {
         XCTAssertNotNil(match.redAlliance)
     }
 
+    func test_redAllianceTeamKeys() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        match.alliances = Set([alliance(allianceKey: "red")]) as NSSet
+        XCTAssertEqual(match.redAllianceTeamKeys, ["frc2337", "frc7332", "frc3333"])
+    }
+    
     func test_redAllianceTeamNumbers() {
         let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
         match.alliances = Set([alliance(allianceKey: "red")]) as NSSet
@@ -416,10 +429,22 @@ class MatchTestCase: CoreDataTestCase {
         XCTAssertNotNil(match.blueAlliance)
     }
 
+    func test_blueAllianceTeamKeys() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        match.alliances = Set([alliance(allianceKey: "blue")]) as NSSet
+        XCTAssertEqual(match.blueAllianceTeamKeys, ["frc2337", "frc7332", "frc3333"])
+    }
+
     func test_blueAllianceTeamNumbers() {
         let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
         match.alliances = Set([alliance(allianceKey: "blue")]) as NSSet
         XCTAssertEqual(match.blueAllianceTeamNumbers, ["2337", "7332", "3333"])
+    }
+
+    func test_dqTeamKeys() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        match.alliances = Set([alliance(allianceKey: "blue", dqs: ["frc7332"])]) as NSSet
+        XCTAssertEqual(match.dqTeamKeys, ["frc7332"])
     }
 
     func test_friendlyName() {
