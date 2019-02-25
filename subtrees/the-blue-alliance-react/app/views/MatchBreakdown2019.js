@@ -52,7 +52,7 @@ export default class MatchBreakdown2019 extends React.Component {
         panelCount++
       }
       if (breakdown["bay" + i].includes("Cargo")) {
-        panelCount++
+        cargoCount++
       }
     }
     return `${panelCount} / ${cargoCount}`
