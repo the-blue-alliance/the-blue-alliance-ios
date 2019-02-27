@@ -18,7 +18,7 @@ before_deploy:
 stages:
   - test
   - name: deploy
-    if: (type = push) AND (branch = master)
+    if: (type == push) AND (branch == master) AND (commit_message =~ /^\[deploy\]/)
 
 jobs:
   include:
@@ -31,4 +31,3 @@ jobs:
       script: ./ops/travis-deploy.sh
       on:
         branch: master
-
