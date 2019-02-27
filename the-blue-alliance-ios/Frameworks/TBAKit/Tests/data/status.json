@@ -1,0 +1,14 @@
+{
+  "android": {
+    "latest_app_version": 4020399,
+    "min_app_version": -1
+  },
+  "current_season": 2015,
+  "down_events": ["2017miket2"],
+  "ios": {
+    "latest_app_version": -1,
+    "min_app_version": -1
+  },
+  "is_datafeed_down": false,
+  "max_season": 2016
+}

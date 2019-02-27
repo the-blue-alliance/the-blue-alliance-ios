@@ -1,5 +1,6 @@
 import CoreData
 import Firebase
+import TBAKit
 import UIKit
 
 class EventViewController: MyTBAContainerViewController, EventStatusSubscribable {

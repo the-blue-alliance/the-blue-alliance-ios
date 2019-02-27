@@ -14,14 +14,20 @@ platform :ios do
     setup_travis
   end
 
-  desc "Run unit tests (for CI)"
+  desc "Run TBA unit tests"
   lane :test_unit do
-    scan(scheme: "tba-unit-tests")
+    scan(workspace: "the-blue-alliance-ios.xcworkspace", scheme: "tba-unit-tests")
+  end
+
+  desc "Run TBAKit unit tests"
+  lane :test_tbakit do
+    scan(project: "Pods/Pods.xcodeproj", scheme: "TBAKit")
   end
 
   desc "Run all of our tests"
   lane :test do
-    scan(scheme: "tba-unit-tests")
+    test_unit
+    test_tbakit
   end
   ## CI Lanes ##
 

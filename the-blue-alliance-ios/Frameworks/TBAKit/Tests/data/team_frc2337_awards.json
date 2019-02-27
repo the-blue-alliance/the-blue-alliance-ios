@@ -1,0 +1,726 @@
+[
+  {
+    "award_type": 14,
+    "event_key": "2008cur",
+    "name": "Curie - Highest Rookie Seed",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2008
+  },
+  {
+    "award_type": 10,
+    "event_key": "2008dt",
+    "name": "Rookie All Star Award",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2008
+  },
+  {
+    "award_type": 14,
+    "event_key": "2008dt",
+    "name": "Highest Rookie Seed Award",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2008
+  },
+  {
+    "award_type": 14,
+    "event_key": "2008mi",
+    "name": "Highest Rookie Seed Award",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2008
+  },
+  {
+    "award_type": 20,
+    "event_key": "2008mi",
+    "name": "Xerox Creativity Award",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2008
+  },
+  {
+    "award_type": 18,
+    "event_key": "2009gg",
+    "name": "Underwriters Laboratories Industrial Safety Award",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2009
+  },
+  {
+    "award_type": 18,
+    "event_key": "2009gl",
+    "name": "Underwriters Laboratories Industrial Safety Award",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2009
+  },
+  {
+    "award_type": 30,
+    "event_key": "2010gg",
+    "name": "Team Spirit Award sponsored by Chrysler",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2010
+  },
+  {
+    "award_type": 1,
+    "event_key": "2010wc",
+    "name": "Winner",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc573"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc66"
+      }
+    ],
+    "year": 2010
+  },
+  {
+    "award_type": 17,
+    "event_key": "2010wc",
+    "name": "Quality Award sponsored by Motorola",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2010
+  },
+  {
+    "award_type": 17,
+    "event_key": "2011gl",
+    "name": "Quality Award sponsored by Motorola",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2011
+  },
+  {
+    "award_type": 1,
+    "event_key": "2011oc",
+    "name": "Winner",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc469"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc3548"
+      }
+    ],
+    "year": 2011
+  },
+  {
+    "award_type": 18,
+    "event_key": "2011oc",
+    "name": "Industrial Safety Award sponsored by Underwriters Laboratories",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2011
+  },
+  {
+    "award_type": 21,
+    "event_key": "2011oc",
+    "name": "Engineering Excellence Award sponsored by Delphi",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2011
+  },
+  {
+    "award_type": 0,
+    "event_key": "2011wc",
+    "name": "Regional Chairman's Award",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2011
+  },
+  {
+    "award_type": 1,
+    "event_key": "2011wc",
+    "name": "Winner",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc494"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc66"
+      }
+    ],
+    "year": 2011
+  },
+  {
+    "award_type": 1,
+    "event_key": "2012gg",
+    "name": "Regional Winners",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc33"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc4294"
+      }
+    ],
+    "year": 2012
+  },
+  {
+    "award_type": 9,
+    "event_key": "2012gg",
+    "name": "Engineering Inspiration Award",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2012
+  },
+  {
+    "award_type": 17,
+    "event_key": "2012gl",
+    "name": "Quality Award sponsored by Motorola",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2012
+  },
+  {
+    "award_type": 18,
+    "event_key": "2012gl",
+    "name": "Industrial Safety Award sponsored by Underwriters Laboratories",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2012
+  },
+  {
+    "award_type": 29,
+    "event_key": "2012wca",
+    "name": "Innovation in Control Award sponsored by Rockwell Automation",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2012
+  },
+  {
+    "award_type": 31,
+    "event_key": "2012wca",
+    "name": "Website Award",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2012
+  },
+  {
+    "award_type": 11,
+    "event_key": "2013mibed",
+    "name": "Gracious Professionalism Award sponsored by Johnson & Johnson",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2013
+  },
+  {
+    "award_type": 0,
+    "event_key": "2013micmp",
+    "name": "Regional Chairman's Award",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc27"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc503"
+      }
+    ],
+    "year": 2013
+  },
+  {
+    "award_type": 2,
+    "event_key": "2013micmp",
+    "name": "Regional Finalists",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc67"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc2054"
+      }
+    ],
+    "year": 2013
+  },
+  {
+    "award_type": 21,
+    "event_key": "2013miket",
+    "name": "Excellence in Engineering Award sponsored by Delphi",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2013
+  },
+  {
+    "award_type": 0,
+    "event_key": "2013mitry",
+    "name": "Regional Chairman's Award",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2013
+  },
+  {
+    "award_type": 17,
+    "event_key": "2014micmp",
+    "name": "Quality Award sponsored by Motorola",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2014
+  },
+  {
+    "award_type": 1,
+    "event_key": "2014miket",
+    "name": "Winner",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc314"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc5081"
+      }
+    ],
+    "year": 2014
+  },
+  {
+    "award_type": 9,
+    "event_key": "2014miket",
+    "name": "Engineering Inspiration",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2014
+  },
+  {
+    "award_type": 0,
+    "event_key": "2014misjo",
+    "name": "District Chairman's Award",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2014
+  },
+  {
+    "award_type": 1,
+    "event_key": "2014misjo",
+    "name": "Winner",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc3620"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc1502"
+      }
+    ],
+    "year": 2014
+  },
+  {
+    "award_type": 2,
+    "event_key": "2014mitry",
+    "name": "Finalist",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc3539"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc3302"
+      }
+    ],
+    "year": 2014
+  },
+  {
+    "award_type": 20,
+    "event_key": "2014mitry",
+    "name": "Creativity Award sponsored by Xerox",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2014
+  },
+  {
+    "award_type": 16,
+    "event_key": "2015micmp",
+    "name": "Industrial Design Award sponsored by General Motors",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2015
+  },
+  {
+    "award_type": 1,
+    "event_key": "2015miket",
+    "name": "District Event Winner",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc314"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc5784"
+      }
+    ],
+    "year": 2015
+  },
+  {
+    "award_type": 16,
+    "event_key": "2015miket",
+    "name": "Industrial Design Award sponsored by General Motors",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2015
+  },
+  {
+    "award_type": 18,
+    "event_key": "2015miket",
+    "name": "Industrial Safety Award sponsored by Underwriters Laboratories",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2015
+  },
+  {
+    "award_type": 2,
+    "event_key": "2015mitry",
+    "name": "District Event Finalist",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc226"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc5217"
+      }
+    ],
+    "year": 2015
+  },
+  {
+    "award_type": 9,
+    "event_key": "2015mitry",
+    "name": "District Engineering Inspiration Award",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2015
+  },
+  {
+    "award_type": 11,
+    "event_key": "2016marc",
+    "name": "Gracious Professionalism",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2016
+  },
+  {
+    "award_type": 9,
+    "event_key": "2016mike2",
+    "name": "District Engineering Inspiration Award",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2016
+  },
+  {
+    "award_type": 2,
+    "event_key": "2016mitry",
+    "name": "District Event Finalist",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc3539"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc6013"
+      }
+    ],
+    "year": 2016
+  },
+  {
+    "award_type": 9,
+    "event_key": "2016mitry",
+    "name": "District Engineering Inspiration Award",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2016
+  },
+  {
+    "award_type": 30,
+    "event_key": "2017arc",
+    "name": "Team Spirit Award sponsored by FCA Foundation",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2017
+  },
+  {
+    "award_type": 1,
+    "event_key": "2017micmp3",
+    "name": "District Championship Winner",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc107"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc5561"
+      }
+    ],
+    "year": 2017
+  },
+  {
+    "award_type": 16,
+    "event_key": "2017micmp3",
+    "name": "Industrial Design Award sponsored by General Motors",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2017
+  },
+  {
+    "award_type": 11,
+    "event_key": "2017mike2",
+    "name": "Gracious Professionalism Award sponsored by Johnson & Johnson",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2017
+  },
+  {
+    "award_type": 29,
+    "event_key": "2017mishe",
+    "name": "Innovation in Control Award sponsored by Rockwell Automation",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2017
+  },
+  {
+    "award_type": 11,
+    "event_key": "2017mitry",
+    "name": "Gracious Professionalism Award sponsored by Johnson & Johnson",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      }
+    ],
+    "year": 2017
+  },
+  {
+    "award_type": 2,
+    "event_key": "2017mitry",
+    "name": "District Event Finalist",
+    "recipient_list": [
+      {
+        "awardee": null,
+        "team_key": "frc3098"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc2337"
+      },
+      {
+        "awardee": null,
+        "team_key": "frc5048"
+      }
+    ],
+    "year": 2017
+  }
+]

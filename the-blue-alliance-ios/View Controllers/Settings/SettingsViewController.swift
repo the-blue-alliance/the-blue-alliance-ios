@@ -1,6 +1,7 @@
 import CoreData
 import Foundation
 import FirebaseMessaging
+import TBAKit
 import UIKit
 
 enum InfoURL: String {

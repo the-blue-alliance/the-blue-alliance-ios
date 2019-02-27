@@ -1,0 +1,76 @@
+{
+  "alliance": {
+    "backup": null,
+    "name": "Alliance 4",
+    "number": 4,
+    "pick": 0
+  },
+  "alliance_status_str": "<b>Captain</b> of <b>Alliance 4</b>",
+  "overall_status_str": "Team 2337 was <b>Rank 5/39</b> with a record of <b>8-4-0</b> in quals, competed in the playoffs as the <b>Captain</b> of <b>Alliance 4</b>, and was <b>eliminated in the Semifinals</b> with a playoff record of <b>2-2-0</b>.",
+  "playoff": {
+    "current_level_record": {
+      "losses": 2,
+      "ties": 0,
+      "wins": 0
+    },
+    "level": "sf",
+    "playoff_average": null,
+    "record": {
+      "losses": 2,
+      "ties": 0,
+      "wins": 2
+    },
+    "status": "eliminated"
+  },
+  "playoff_status_str": "<b>Eliminated in the Semifinals</b> with a playoff record of <b>2-2-0</b>",
+  "qual": {
+    "num_teams": 39,
+    "ranking": {
+      "dq": 0,
+      "matches_played": 12,
+      "qual_average": null,
+      "rank": 5,
+      "record": {
+        "losses": 4,
+        "ties": 0,
+        "wins": 8
+      },
+      "sort_orders": [
+        1.5,
+        2715.0,
+        469.0,
+        1340.0,
+        950.0,
+        195.0
+      ],
+      "team_key": "frc2337"
+    },
+    "sort_order_info": [
+      {
+        "name": "Ranking Score",
+        "precision": 2
+      },
+      {
+        "name": "Match Points",
+        "precision": 0
+      },
+      {
+        "name": "Auto",
+        "precision": 0
+      },
+      {
+        "name": "Rotor",
+        "precision": 0
+      },
+      {
+        "name": "Touchpad",
+        "precision": 0
+      },
+      {
+        "name": "Pressure",
+        "precision": 0
+      }
+    ],
+    "status": "completed"
+  }
+}

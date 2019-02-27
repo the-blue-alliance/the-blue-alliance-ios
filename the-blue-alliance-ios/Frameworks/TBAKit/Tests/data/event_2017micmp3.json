@@ -1,0 +1,42 @@
+{
+  "address": "48710, 7400 Bay Rd, Saginaw, MI 48604, USA",
+  "city": "Saginaw",
+  "country": "USA",
+  "district": {
+    "abbreviation": "fim",
+    "display_name": "Michigan",
+    "key": "2017fim",
+    "year": 2017
+  },
+  "division_keys": [],
+  "end_date": "2017-04-15",
+  "event_code": "micmp3",
+  "event_type": 5,
+  "event_type_string": "District Championship Division",
+  "first_event_id": null,
+  "gmaps_place_id": "ChIJP-WmCAbdI4gRDHBqkqY4ycc",
+  "gmaps_url": "https://maps.google.com/?cid=14396099971938676748",
+  "key": "2017micmp3",
+  "lat": 43.513915399999988,
+  "lng": -83.962684899999999,
+  "location_name": "Saginaw Valley State University",
+  "name": "Michigan State Championship - DTE Energy Foundation Division",
+  "parent_event_key": "2017micmp",
+  "playoff_type": 0,
+  "playoff_type_string": "Elimination Bracket (8 Alliances)",
+  "postal_code": "48604",
+  "short_name": "MSC - DTE Energy Foundation",
+  "start_date": "2017-04-12",
+  "state_prov": "MI",
+  "timezone": "America/New_York",
+  "webcasts": [
+    {
+      "channel": "66716",
+      "file": "219330",
+      "type": "dacast"
+    }
+  ],
+  "website": "http://www.firstinmichigan.org",
+  "week": 6,
+  "year": 2017
+}

@@ -1,6 +1,7 @@
+import CoreData
 import Firebase
 import Foundation
-import CoreData
+import TBAKit
 import UIKit
 
 class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable {

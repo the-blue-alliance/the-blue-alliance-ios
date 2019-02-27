@@ -38,7 +38,7 @@ jobs:
     - stage: test
       name: "Unit Tests"
       script:
-        - bundle exec fastlane test_unit
+        - bundle exec fastlane test
     - stage: beta
       script:
         - bundle exec fastlane setup_secrets

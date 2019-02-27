@@ -1,3 +1,4 @@
+import TBAKitTesting
 import XCTest
 @testable import The_Blue_Alliance
 

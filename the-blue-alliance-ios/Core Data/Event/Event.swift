@@ -1,5 +1,6 @@
-import Foundation
 import CoreData
+import Foundation
+import TBAKit
 
 public enum EventType: Int {
     case regional = 0

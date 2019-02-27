@@ -1,6 +1,7 @@
-import Foundation
-import UIKit
 import CoreData
+import Foundation
+import TBAKit
+import UIKit
 
 class TBATableViewController: UITableViewController, DataController {
 

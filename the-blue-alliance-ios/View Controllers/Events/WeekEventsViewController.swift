@@ -1,5 +1,6 @@
-import Foundation
 import CoreData
+import Foundation
+import TBAKit
 
 /**
  Although the weekEvent can be set via a YearSelect in the EventsContainerViewController, we need

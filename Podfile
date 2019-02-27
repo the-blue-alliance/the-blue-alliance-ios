@@ -38,6 +38,10 @@ target 'The Blue Alliance' do
   pod 'Firebase/Performance'
   pod 'Firebase/Storage'
 
+  # Local Deps
+  pod 'TBAKit', :path => 'the-blue-alliance-ios/Frameworks/TBAKit', :testspecs => ['Tests']
+  pod 'TBAKitTesting', :path => 'the-blue-alliance-ios/Frameworks/TBAKit'
+
   # myTBA
   pod 'GoogleSignIn'
 

@@ -27,7 +27,7 @@ internal protocol TBAModel {
     init?(json: [String: Any])
 }
 
-public class TBAKit: NSObject {
+open class TBAKit: NSObject {
 
     private let apiKey: String
     private let urlSession: URLSession
@@ -44,7 +44,7 @@ public class TBAKit: NSObject {
     }
 
     /// Please do not use - if you need this for testing, use MockTBAKit.lastModified(:)
-    func lastModified(for url: URL) -> String? {
+    public func lastModified(for url: URL) -> String? {
         let lastModifiedString = TBAKit.lastModifiedURLString(for: url)
         let lastModifiedDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.lastModifiedDictionary) ?? [:]
         return lastModifiedDictionary[lastModifiedString] as? String

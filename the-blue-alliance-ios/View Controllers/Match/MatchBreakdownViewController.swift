@@ -1,7 +1,8 @@
-import Foundation
-import UIKit
-import React
 import CoreData
+import Foundation
+import React
+import TBAKit
+import UIKit
 
 class MatchBreakdownViewController: TBAReactNativeViewController, Observable {
 

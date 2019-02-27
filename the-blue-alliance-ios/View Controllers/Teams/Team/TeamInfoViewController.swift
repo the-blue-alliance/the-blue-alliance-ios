@@ -1,5 +1,6 @@
-import UIKit
 import CoreData
+import TBAKit
+import UIKit
 
 private enum TeamInfoSection: Int, CaseIterable {
     case title

@@ -1,7 +1,8 @@
-import XCTest
-import Foundation
 import CoreData
 import FBSnapshotTestCase
+import Foundation
+import TBAKit
+import XCTest
 @testable import The_Blue_Alliance
 
 class CoreDataTestCase: FBSnapshotTestCase {

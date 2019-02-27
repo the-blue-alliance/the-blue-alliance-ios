@@ -1,0 +1,32 @@
+[
+  {
+    "details": {},
+    "foreign_key": "team2337",
+    "preferred": false,
+    "type": "facebook-profile"
+  },
+  {
+    "details": {},
+    "foreign_key": "team2337",
+    "preferred": false,
+    "type": "github-profile"
+  },
+  {
+    "details": {},
+    "foreign_key": "team2337",
+    "preferred": false,
+    "type": "instagram-profile"
+  },
+  {
+    "details": {},
+    "foreign_key": "team2337",
+    "preferred": false,
+    "type": "twitter-profile"
+  },
+  {
+    "details": {},
+    "foreign_key": "team2337",
+    "preferred": false,
+    "type": "youtube-channel"
+  }
+]

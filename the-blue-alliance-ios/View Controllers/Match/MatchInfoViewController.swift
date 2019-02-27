@@ -1,7 +1,8 @@
-import Foundation
-import UIKit
 import CoreData
+import Foundation
 import PureLayout
+import TBAKit
+import UIKit
 
 class MatchInfoViewController: TBAViewController, Observable {
 
