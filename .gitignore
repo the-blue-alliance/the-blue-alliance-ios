@@ -1,7 +1,14 @@
+.DS_Store
+
 # Node
 node_modules
 *.log
 .nvm
 
 ios/
-ios.zip
+android/
+react-native.zip
+gcp-service-key.json
+*-tba-dev-*.json
+*-firebase-*.json
+ops/deploy_keys.tar
