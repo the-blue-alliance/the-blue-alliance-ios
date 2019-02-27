@@ -16,9 +16,11 @@ cache:
   directories:
     - js/node_modules
 
-install:
+before_install:
   - cd subtrees/the-blue-alliance-react && npm install && cd ../..
   - bundle install
+
+install:
   - bundle exec pod install --repo-update
 
 before_script:
