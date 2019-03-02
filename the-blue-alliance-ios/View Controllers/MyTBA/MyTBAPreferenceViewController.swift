@@ -40,12 +40,7 @@ class MyTBAPreferenceViewController: UITableViewController {
                                                                            style: .done,
                                                                            target: self,
                                                                            action: #selector(save))
-
-    internal var saveActivityIndicatorBarButtonItem: UIBarButtonItem = {
-        let activityIndicatorView = UIActivityIndicatorView(style: .white)
-        activityIndicatorView.startAnimating()
-        return UIBarButtonItem(customView: activityIndicatorView)
-    }()
+    internal var saveActivityIndicatorBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
 
     init(subscribableModel: MyTBASubscribable, myTBA: MyTBA, persistentContainer: NSPersistentContainer) {
         self.subscribableModel = subscribableModel

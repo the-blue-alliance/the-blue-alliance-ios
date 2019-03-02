@@ -24,11 +24,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     private lazy var signOutBarButtonItem: UIBarButtonItem = {
          return UIBarButtonItem(title: "Sign Out", style: .plain, target: self, action: #selector(logoutTapped))
     }()
-    private var signOutActivityIndicatorBarButtonItem: UIBarButtonItem = {
-        let activityIndicatorView = UIActivityIndicatorView(style: .white)
-        activityIndicatorView.startAnimating()
-        return UIBarButtonItem(customView: activityIndicatorView)
-    }()
+    private var signOutActivityIndicatorBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
 
     var isLoggingOut: Bool = false {
         didSet {

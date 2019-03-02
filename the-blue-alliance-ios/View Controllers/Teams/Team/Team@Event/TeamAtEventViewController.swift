@@ -17,6 +17,9 @@ class TeamAtEventViewController: ContainerViewController {
     private let urlOpener: URLOpener
     private let myTBA: MyTBA
 
+    private var teamRequest: URLSessionDataTask?
+
+
     // MARK: - Init
 
     init(teamKey: TeamKey, event: Event, myTBA: MyTBA, showDetailEvent: Bool, showDetailTeam: Bool, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
@@ -64,6 +67,12 @@ class TeamAtEventViewController: ContainerViewController {
         Analytics.logEvent("team_at_event", parameters: ["event": event.key!, "team": teamKey.key!])
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        teamRequest?.cancel()
+    }
+
     // MARK: - Private Methods
 
     @objc private func pushEvent() {
@@ -72,7 +81,48 @@ class TeamAtEventViewController: ContainerViewController {
     }
 
     @objc private func pushTeam() {
-        let eventViewController = TeamViewController(teamKey: teamKey, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        _pushTeam(attemptedToLoadTeam: false)
+    }
+    
+    private func _pushTeam(attemptedToLoadTeam: Bool) {
+        guard let team = teamKey.team else {
+            if attemptedToLoadTeam {
+                showErrorAlert(with: "Unable to load team.")
+            } else {
+                let oldRightBarButtonIcon = navigationItem.rightBarButtonItem
+                DispatchQueue.main.async {
+                    self.navigationItem.rightBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
+                }
+
+                teamRequest = tbaKit.fetchTeam(key: teamKey.key!, completion: { (team, error) in
+                    let context = self.persistentContainer.newBackgroundContext()
+                    context.performChangesAndWait({
+                        if let team = team {
+                            Team.insert(team, in: context)
+                        }
+                    }, saved: {
+                        // Switch back to our main thread
+                        DispatchQueue.main.async {
+                            self._pushTeam(attemptedToLoadTeam: true) // Try again - but don't get in to a cycle if the request is failing
+                        }
+                    })
+
+                    self.teamRequest = nil
+
+                    // Reset our nav bar item
+                    DispatchQueue.main.async {
+                        self.navigationItem.rightBarButtonItem = oldRightBarButtonIcon
+                    }
+                })
+            }
+            return
+        }
+
+        _pushTeam(team: team)
+    }
+
+    private func _pushTeam(team: Team) {
+        let eventViewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(eventViewController, animated: true)
     }
 
