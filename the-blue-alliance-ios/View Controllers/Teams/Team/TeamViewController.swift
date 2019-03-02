@@ -10,9 +10,9 @@ class TeamViewController: MyTBAContainerViewController, Observable {
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
-    private(set) var infoViewController: TeamInfoViewController!
-    private(set) var eventsViewController: TeamEventsViewController!
-    private(set) var mediaViewController: TeamMediaCollectionViewController!
+    private(set) var infoViewController: TeamInfoViewController
+    private(set) var eventsViewController: TeamEventsViewController
+    private(set) var mediaViewController: TeamMediaCollectionViewController
 
     override var subscribableModel: MyTBASubscribable {
         return team
@@ -101,7 +101,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
             if self.year == nil {
                 self.year = TeamViewController.latestYear(statusService: self.statusService, years: team.yearsParticipated)
             } else {
-                // self.updateInterface()
+                self.updateInterface()
             }
         }
     }
