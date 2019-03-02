@@ -59,7 +59,7 @@ class TeamInfoViewController: TBATableViewController {
             return TeamTitleRow.allCases.count
         case TeamInfoSection.link.rawValue:
             let max = TeamLinkRow.allCases.count
-            return team.website != nil ? max : max - 1
+            return team.hasWebsite ? max : max - 1
         default:
             return 0
         }
@@ -119,7 +119,7 @@ class TeamInfoViewController: TBATableViewController {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
 
         var row = indexPath.row
-        if team.website == nil, row >= TeamLinkRow.website.rawValue {
+        if !team.hasWebsite, row >= TeamLinkRow.website.rawValue {
             row += 1
         }
 
@@ -149,7 +149,7 @@ class TeamInfoViewController: TBATableViewController {
             tableView.reloadRows(at: [indexPath], with: .fade)
         } else if indexPath.section == TeamInfoSection.link.rawValue {
             var row = indexPath.row
-            if team.website == nil, row >= TeamLinkRow.website.rawValue {
+            if !team.hasWebsite, row >= TeamLinkRow.website.rawValue {
                 row += 1
             }
 

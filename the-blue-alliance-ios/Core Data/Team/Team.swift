@@ -1,7 +1,7 @@
 import Foundation
 import CoreData
 
-extension Team: Locatable, Managed {
+extension Team: Locatable, Surfable, Managed {
 
     var fallbackNickname: String {
         return "Team \(teamNumber!.stringValue)"
