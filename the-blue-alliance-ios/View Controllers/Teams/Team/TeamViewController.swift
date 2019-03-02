@@ -96,9 +96,9 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
 
-        if traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: mediaViewController.collectionView)
-        }
+//        if traitCollection.forceTouchCapability == .available {
+//            registerForPreviewing(with: self, sourceView: mediaViewController.collectionView)
+//        }
 
         refreshYearsParticipated()
     }
@@ -106,7 +106,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("team", parameters: ["team": team.key!])
+        // Analytics.logEvent("team", parameters: ["team": team.key!])
     }
 
     // MARK: - Private

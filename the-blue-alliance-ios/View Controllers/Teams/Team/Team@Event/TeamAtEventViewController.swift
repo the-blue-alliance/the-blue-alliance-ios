@@ -33,31 +33,20 @@ class TeamAtEventViewController: ContainerViewController {
         let statsViewController: TeamStatsViewController = TeamStatsViewController(teamKey: teamKey, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let awardsViewController: EventAwardsViewController = EventAwardsViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        let navigationTitle: String = {
-            var navigationTitle = "Team \(teamKey.teamNumber)"
-            if showDetailTeam {
-                navigationTitle.append(" >")
-            }
-            return navigationTitle
-        }()
-
-        let navigationSubtitle: String = {
-            var navigationSubtitle = "@ \(event.friendlyNameWithYear)"
-            if showDetailEvent {
-                navigationSubtitle.append(" >")
-            }
-            return navigationSubtitle
-        }()
-
         super.init(viewControllers: [summaryViewController, matchesViewController, statsViewController, awardsViewController],
-                   navigationTitle: navigationTitle,
-                   navigationSubtitle: navigationSubtitle,
+                   navigationTitle: "Team \(teamKey.teamNumber)",
+                   navigationSubtitle: "@ \(event.friendlyNameWithYear)",
                    segmentedControlTitles: ["Summary", "Matches", "Stats", "Awards"],
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
-        navigationTitleDelegate = self
+        if showDetailEvent {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.eventIcon, style: .plain, target: self, action: #selector(pushEvent))
+        } else if showDetailTeam {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.teamIcon, style: .plain, target: self, action: #selector(pushTeam))
+        }
+
         summaryViewController.delegate = self
         matchesViewController.delegate = self
         awardsViewController.delegate = self
@@ -75,20 +64,16 @@ class TeamAtEventViewController: ContainerViewController {
         Analytics.logEvent("team_at_event", parameters: ["event": event.key!, "team": teamKey.key!])
     }
 
-}
+    // MARK: - Private Methods
 
-extension TeamAtEventViewController: NavigationTitleDelegate {
+    @objc private func pushEvent() {
+        let eventViewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        navigationController?.pushViewController(eventViewController, animated: true)
+    }
 
-    func navigationTitleTapped() {
-        if showDetailEvent {
-            // Push to Event
-            let eventViewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-            navigationController?.pushViewController(eventViewController, animated: true)
-        } else if showDetailTeam {
-            // Push to Team
-            let eventViewController = TeamViewController(teamKey: teamKey, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-            navigationController?.pushViewController(eventViewController, animated: true)
-        }
+    @objc private func pushTeam() {
+        let eventViewController = TeamViewController(teamKey: teamKey, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        navigationController?.pushViewController(eventViewController, animated: true)
     }
 
 }
