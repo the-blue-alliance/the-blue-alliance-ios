@@ -3,12 +3,16 @@ import Firebase
 import Foundation
 import UIKit
 
-class TeamAtDistrictViewController: ContainerViewController {
+class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushable {
+
+    internal var teamKey: TeamKey {
+        return ranking.teamKey!
+    }
 
     private(set) var ranking: DistrictRanking
-    private let myTBA: MyTBA
-    private let statusService: StatusService
-    private let urlOpener: URLOpener
+    internal var myTBA: MyTBA
+    internal var statusService: StatusService
+    internal var urlOpener: URLOpener
 
     private var summaryViewController: DistrictTeamSummaryViewController!
 
@@ -23,8 +27,6 @@ class TeamAtDistrictViewController: ContainerViewController {
         let summaryViewController = DistrictTeamSummaryViewController(ranking: ranking, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let breakdownViewController = DistrictBreakdownViewController(ranking: ranking, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        // TODO: Should probably show a way to go out from here too... for parity reasons
-
         super.init(
             viewControllers: [summaryViewController, breakdownViewController],
             navigationTitle: "Team \(ranking.teamKey!.teamNumber)",
@@ -34,6 +36,8 @@ class TeamAtDistrictViewController: ContainerViewController {
             tbaKit: tbaKit,
             userDefaults: userDefaults
         )
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.teamIcon, style: .plain, target: self, action: #selector(pushTeam))
 
         summaryViewController.delegate = self
     }
@@ -48,6 +52,12 @@ class TeamAtDistrictViewController: ContainerViewController {
         super.viewWillAppear(animated)
 
         Analytics.logEvent("team_at_district", parameters: ["district": ranking.district!.key!, "team": ranking.teamKey!.key!])
+    }
+
+    // MARK: - Private Methods
+
+    @objc private func pushTeam() {
+        _pushTeam(attemptedToLoadTeam: false)
     }
 
 }

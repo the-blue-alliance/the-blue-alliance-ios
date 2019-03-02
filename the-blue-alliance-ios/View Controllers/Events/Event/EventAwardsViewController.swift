@@ -65,7 +65,6 @@ extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate 
         if teamKey == self.teamKey {
             return
         }
-
         let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }

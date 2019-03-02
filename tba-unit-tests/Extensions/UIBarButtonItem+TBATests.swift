@@ -9,6 +9,7 @@ class UIBarButtonItemTBATests: XCTestCase {
         XCTAssert(activityIndicatorBarButtonItem.customView is UIActivityIndicatorView)
         let activityIndicatorView = activityIndicatorBarButtonItem.customView as! UIActivityIndicatorView
         XCTAssert(activityIndicatorView.isAnimating)
+        // TODO: Snapshot test...
     }
 
 }

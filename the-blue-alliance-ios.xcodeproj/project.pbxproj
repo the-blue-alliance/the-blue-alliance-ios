@@ -43,6 +43,7 @@
 		921D0B53222AF36A0056578A /* UIImage+TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B52222AF36A0056578A /* UIImage+TBATests.swift */; };
 		921D0B57222AFB0B0056578A /* UIBarButtonItem+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */; };
 		921D0B5B222AFFE40056578A /* UIBarButtonItem+TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B5A222AFFE40056578A /* UIBarButtonItem+TBATests.swift */; };
+		921D0B5F222B13480056578A /* ContainerViewController+Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B5E222B13480056578A /* ContainerViewController+Team.swift */; };
 		9221C616209BFF7D00477DE2 /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */; };
 		9221C618209BFF8700477DE2 /* LoadingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */; };
 		9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */; };
@@ -401,6 +402,7 @@
 		921D0B52222AF36A0056578A /* UIImage+TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TBATests.swift"; sourceTree = "<group>"; };
 		921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+TBA.swift"; sourceTree = "<group>"; };
 		921D0B5A222AFFE40056578A /* UIBarButtonItem+TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+TBATests.swift"; sourceTree = "<group>"; };
+		921D0B5E222B13480056578A /* ContainerViewController+Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContainerViewController+Team.swift"; sourceTree = "<group>"; };
 		9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingTableViewCell.xib; sourceTree = "<group>"; };
 		9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
@@ -1453,6 +1455,7 @@
 				92A5E5D221A22D550025CC85 /* Int16+Suffix.swift */,
 				928DE031222AF10A00C6234A /* UIImage+TBA.swift */,
 				921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */,
+				921D0B5E222B13480056578A /* ContainerViewController+Team.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2302,6 +2305,7 @@
 				924602AB1ECE8B1D0030EDBF /* AwardTableViewCell.swift in Sources */,
 				92D855D71EC695C400572F27 /* TeamTableViewCell.swift in Sources */,
 				92FF110821A61AF6003BC5C4 /* EventDistrictPointsViewController.swift in Sources */,
+				921D0B5F222B13480056578A /* ContainerViewController+Team.swift in Sources */,
 				92A5E51421A1B7470025CC85 /* MyTBAFavorite.swift in Sources */,
 				92A5E51B21A1B7470025CC85 /* TBAKit.swift in Sources */,
 				92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */,
