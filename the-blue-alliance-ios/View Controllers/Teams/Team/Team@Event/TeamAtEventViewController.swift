@@ -20,11 +20,13 @@ class TeamAtEventViewController: ContainerViewController {
         let matchesViewController: MatchesViewController = MatchesViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let statsViewController: TeamStatsViewController = TeamStatsViewController(teamKey: teamKey, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let awardsViewController: EventAwardsViewController = EventAwardsViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        // TODO: Problematic
+        let mediaViewController: TeamMediaCollectionViewController = TeamMediaCollectionViewController(team: teamKey.team!, year: event.year!.intValue, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        super.init(viewControllers: [summaryViewController, matchesViewController, statsViewController, awardsViewController],
+        super.init(viewControllers: [summaryViewController, matchesViewController, statsViewController, awardsViewController, mediaViewController],
                    navigationTitle: "Team \(teamKey.teamNumber)",
                    navigationSubtitle: "@ \(event.friendlyNameWithYear)",
-                   segmentedControlTitles: ["Summary", "Matches", "Stats", "Awards"],
+                   segmentedControlTitles: ["Summary", "Matches", "Stats", "Awards", "Media"],
                    persistentContainer: persistentContainer,
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)

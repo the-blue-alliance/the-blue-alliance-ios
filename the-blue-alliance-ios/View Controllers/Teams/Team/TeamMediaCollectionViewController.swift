@@ -24,7 +24,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     private let spacerSize: CGFloat = 3.0
 
-    private let team: Team
+    private let teamKey: TeamKey
 
     var year: Int? {
         didSet {
@@ -39,8 +39,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     // MARK: Init
 
-    init(team: Team, year: Int? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        self.team = team
+    init(teamKey: TeamKey, year: Int? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.teamKey = teamKey
         self.year = year
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -96,13 +96,13 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         // TODO: Split section by photos/videos like we do on the web
         if let year = year {
             request.predicate = NSPredicate(format: "%K == %@ AND %K == %ld AND %K in %@",
-                                            #keyPath(TeamMedia.team.key), team.key!,
+                                            #keyPath(TeamMedia.team.key), teamKey.key!,
                                             #keyPath(TeamMedia.year), year,
                                             #keyPath(TeamMedia.type), MediaType.imageTypes)
         } else {
             // Match none by passing a bosus year
             request.predicate = NSPredicate(format: "%K == %@ AND %K == 0",
-                                            #keyPath(TeamMedia.team.key), team.key!,
+                                            #keyPath(TeamMedia.team.key), teamKey.key!,
                                             #keyPath(TeamMedia.type))
         }
 
@@ -220,7 +220,7 @@ extension TeamMediaCollectionViewController: Refreshable {
         guard let year = year else {
             return nil
         }
-        return "\(year)_\(team.key!)_media"
+        return "\(year)_\(teamKey.key!)_media"
     }
 
     var automaticRefreshInterval: DateComponents? {
