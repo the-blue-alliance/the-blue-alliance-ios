@@ -157,7 +157,7 @@ class MatchInfoViewController: TBAViewController, Observable {
             teamsLabel.isHidden = true
             timeLabel.isHidden = false
 
-            if let timeString = match.timeString {
+            if let timeString = match.startTimeString {
                 timeLabel.text = timeString
             } else {
                 timeLabel.text = "No Time Yet"

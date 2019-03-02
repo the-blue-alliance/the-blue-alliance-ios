@@ -95,17 +95,35 @@ extension Match {
     }
 
     /**
-     The formatted Match time.
+     Start time for the match, actual or a guess. In order
+     - Returns actual start time for the match
+     - Returns predicted start time for the match
+     - Returns scheduled start time for the match
      */
-    var timeString: String? {
-        guard let time = time else {
+    var startTime: NSNumber? {
+        if let actualTime = actualTime {
+            return actualTime
+        } else if let predictedTime = predictedTime {
+            return predictedTime
+        } else if let time = time {
+            return time
+        } else {
+            return nil
+        }
+    }
+
+    /**
+     The formatted Match startTime.
+     */
+    var startTimeString: String? {
+        guard let startTime = startTime else {
             return nil
         }
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEE h:mm a"
 
-        let date = Date(timeIntervalSince1970: time.doubleValue)
+        let date = Date(timeIntervalSince1970: startTime.doubleValue)
         return dateFormatter.string(from: date)
     }
 

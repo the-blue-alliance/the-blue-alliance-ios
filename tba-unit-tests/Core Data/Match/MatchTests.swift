@@ -38,7 +38,7 @@ class MatchTestCase: CoreDataTestCase {
                              eventKey: "2018miket",
                              time: 1520109780,
                              actualTime: 1520090745,
-                             predictedTime: 1520109780,
+                             predictedTime: 1520109779,
                              postResultTime: 1520090929,
                              breakdown: ["red": [:], "blue": [:]],
                              videos: [TBAMatchVideo(key: "G-pq01gqMTw", type: "youtube")])
@@ -55,7 +55,7 @@ class MatchTestCase: CoreDataTestCase {
         XCTAssertEqual(match.winningAlliance, "blue")
         XCTAssertEqual(match.time, 1520109780)
         XCTAssertEqual(match.actualTime, 1520090745)
-        XCTAssertEqual(match.predictedTime, 1520109780)
+        XCTAssertEqual(match.predictedTime, 1520109779)
         XCTAssertEqual(match.postResultTime, 1520090929)
         XCTAssertEqual(match.videos?.count, 1)
 
@@ -384,17 +384,81 @@ class MatchTestCase: CoreDataTestCase {
         XCTAssertEqual(match.compLevel?.levelShort, "Finals")
     }
 
-    func test_timeString() {
+    func test_startTime_actualTime() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        match.actualTime = NSNumber(value: 1520090781)
+        match.predictedTime = NSNumber(value: 1520090780)
+        match.time = NSNumber(value: 1520090779)
+
+        XCTAssertNotNil(match.startTime)
+        XCTAssertEqual(match.startTime, match.actualTime)
+    }
+
+    func test_startTime_predictedTime() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        match.predictedTime = NSNumber(value: 1520090780)
+        match.time = NSNumber(value: 1520090779)
+
+        XCTAssertNotNil(match.startTime)
+        XCTAssertEqual(match.startTime, match.predictedTime)
+    }
+
+    func test_startTime_time() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        match.time = NSNumber(value: 1520090779)
+
+        XCTAssertNotNil(match.startTime)
+        XCTAssertEqual(match.startTime, match.time)
+    }
+
+    func test_startTimeString_actualTime() {
         let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
 
         let defaultTimeZone = NSTimeZone.default
 
         NSTimeZone.default = TimeZone(abbreviation: "EST")!
-        XCTAssertNil(match.timeString)
+        XCTAssertNil(match.startTimeString)
 
         // Set default time zone for this test
-        match.time = NSNumber(value: 1425764880)
-        XCTAssertEqual(match.timeString, "Sat 4:48 PM")
+        match.actualTime = NSNumber(value: 1520010781)
+        match.predictedTime = NSNumber(value: 1520020780)
+        match.time = NSNumber(value: 1520090779)
+        XCTAssertEqual(match.startTimeString, "Fri 12:13 PM")
+
+        addTeardownBlock {
+            NSTimeZone.default = defaultTimeZone
+        }
+    }
+
+    func test_startTimeString_predictedTime() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+
+        let defaultTimeZone = NSTimeZone.default
+
+        NSTimeZone.default = TimeZone(abbreviation: "EST")!
+        XCTAssertNil(match.startTimeString)
+
+        // Set default time zone for this test
+        match.predictedTime = NSNumber(value: 1520020780)
+        match.time = NSNumber(value: 1520090779)
+        XCTAssertEqual(match.startTimeString, "Fri 2:59 PM")
+
+        addTeardownBlock {
+            NSTimeZone.default = defaultTimeZone
+        }
+    }
+
+    func test_startTimeString_time() {
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+
+        let defaultTimeZone = NSTimeZone.default
+
+        NSTimeZone.default = TimeZone(abbreviation: "EST")!
+        XCTAssertNil(match.startTimeString)
+
+        // Set default time zone for this test
+        match.time = NSNumber(value: 1520090779)
+        XCTAssertEqual(match.startTimeString, "Sat 10:26 AM")
 
         addTeardownBlock {
             NSTimeZone.default = defaultTimeZone
