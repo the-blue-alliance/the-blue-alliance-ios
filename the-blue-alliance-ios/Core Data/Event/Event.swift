@@ -14,7 +14,7 @@ public enum EventType: Int {
     case unlabeled = -1
 }
 
-extension Event: Locatable, Managed {
+extension Event: Locatable, Surfable, Managed {
 
     static var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()

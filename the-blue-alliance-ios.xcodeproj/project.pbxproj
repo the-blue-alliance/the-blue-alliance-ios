@@ -44,6 +44,8 @@
 		921D0B57222AFB0B0056578A /* UIBarButtonItem+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */; };
 		921D0B5B222AFFE40056578A /* UIBarButtonItem+TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B5A222AFFE40056578A /* UIBarButtonItem+TBATests.swift */; };
 		921D0B5F222B13480056578A /* ContainerViewController+Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B5E222B13480056578A /* ContainerViewController+Team.swift */; };
+		921D0B61222B1BBE0056578A /* Surfable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B60222B1BBE0056578A /* Surfable.swift */; };
+		921D0B66222B1D2B0056578A /* SurfableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B65222B1D2B0056578A /* SurfableTests.swift */; };
 		9221C616209BFF7D00477DE2 /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */; };
 		9221C618209BFF8700477DE2 /* LoadingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */; };
 		9223AC831EE7003C00F54F93 /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */; };
@@ -403,6 +405,8 @@
 		921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+TBA.swift"; sourceTree = "<group>"; };
 		921D0B5A222AFFE40056578A /* UIBarButtonItem+TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+TBATests.swift"; sourceTree = "<group>"; };
 		921D0B5E222B13480056578A /* ContainerViewController+Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContainerViewController+Team.swift"; sourceTree = "<group>"; };
+		921D0B60222B1BBE0056578A /* Surfable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Surfable.swift; sourceTree = "<group>"; };
+		921D0B65222B1D2B0056578A /* SurfableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurfableTests.swift; sourceTree = "<group>"; };
 		9221C615209BFF7D00477DE2 /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		9221C617209BFF8700477DE2 /* LoadingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingTableViewCell.xib; sourceTree = "<group>"; };
 		9223AC821EE7003C00F54F93 /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
@@ -808,6 +812,14 @@
 			path = 2019DeepSpaceIcon;
 			sourceTree = "<group>";
 		};
+		921D0B64222B1D200056578A /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				921D0B65222B1D2B0056578A /* SurfableTests.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		922E907E217BD17C00E81447 /* Team */ = {
 			isa = PBXGroup;
 			children = (
@@ -895,6 +907,7 @@
 		924459BF20CB796B0007570D /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
+				921D0B64222B1D200056578A /* Protocols */,
 				92C1F2DD216994CF00BD8445 /* CoreDataTestCase.swift */,
 				92FF113321A70B16003BC5C4 /* CoreDataTestCaseTests.swift */,
 				92FF113121A667E2003BC5C4 /* TBAPersistenceContainerTests.swift */,
@@ -1704,6 +1717,7 @@
 				92DF360C217D43EB00B5246B /* Playable.swift */,
 				92DF360D217D43EB00B5246B /* Managed.swift */,
 				92DF360E217D43EB00B5246B /* Locatable.swift */,
+				921D0B60222B1BBE0056578A /* Surfable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -2413,6 +2427,7 @@
 				929F571E2092B7A400E5313A /* TBACollectionViewController.swift in Sources */,
 				92B55621215D37C900C1D9A3 /* YearSelectViewController.swift in Sources */,
 				929FCD9A1EC7F52700A38E46 /* DistrictsViewController.swift in Sources */,
+				921D0B61222B1BBE0056578A /* Surfable.swift in Sources */,
 				92FF10ED21A61A1B003BC5C4 /* TeamAtEventViewController.swift in Sources */,
 				92DF35EC217D438400B5246B /* Event.swift in Sources */,
 				1479694A215EBE460075AF4E /* EventAllianceCellViewModel.swift in Sources */,
@@ -2434,6 +2449,7 @@
 				92A4147C216DA76400E459A5 /* ReactNativeService_Tests.swift in Sources */,
 				927C93B2217D64300027ABEB /* DistrictEventPointsTests.swift in Sources */,
 				928030E62197806A0099CB65 /* EventAllianceCellViewModelTests.swift in Sources */,
+				921D0B66222B1D2B0056578A /* SurfableTests.swift in Sources */,
 				92A5E56921A1B7830025CC85 /* TBATeamTests.swift in Sources */,
 				92BB718420CE1E310081F4E5 /* Test.xcdatamodeld in Sources */,
 				921D0B53222AF36A0056578A /* UIImage+TBATests.swift in Sources */,

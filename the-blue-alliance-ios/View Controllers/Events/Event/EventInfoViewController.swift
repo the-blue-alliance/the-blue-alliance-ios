@@ -90,7 +90,7 @@ class EventInfoViewController: TBATableViewController, Observable {
             return event.district != nil ? max : max - 1
         case .link:
             let max = EventLinkRow.allCases.count
-            return event.website != nil ? max : max - 1
+            return event.hasWebsite ? max : max - 1
         }
     }
 
@@ -152,7 +152,7 @@ class EventInfoViewController: TBATableViewController, Observable {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
 
         var row = indexPath.row
-        if event.website == nil, row >= EventLinkRow.website.rawValue {
+        if !event.hasWebsite, row >= EventLinkRow.website.rawValue {
             row += 1
         }
 
@@ -195,7 +195,7 @@ class EventInfoViewController: TBATableViewController, Observable {
             }
         } else if indexPath.section == EventInfoSection.link.rawValue {
             var row = indexPath.row
-            if event.website == nil, row >= EventLinkRow.website.rawValue {
+            if !event.hasWebsite, row >= EventLinkRow.website.rawValue {
                 row += 1
             }
 
