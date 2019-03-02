@@ -39,7 +39,7 @@ struct MatchViewModel {
 
         dqs = match.dqTeamKeys
 
-        timeString = match.timeString ?? "No Time Yet"
+        timeString = match.startTimeString ?? "No Time Yet"
 
         // Everyone is a winner in 2015 ╮ (. ❛ ᴗ ❛.) ╭
         // Except in the Finals, where there is a winner
