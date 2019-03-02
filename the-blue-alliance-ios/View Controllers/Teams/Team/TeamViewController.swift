@@ -7,6 +7,8 @@ import UIKit
 class TeamViewController: MyTBAContainerViewController, Observable {
 
     private(set) var team: Team
+    private let statusService: StatusService
+    private let urlOpener: URLOpener
 
     private(set) var infoViewController: TeamInfoViewController
     private(set) var eventsViewController: TeamEventsViewController
@@ -43,6 +45,8 @@ class TeamViewController: MyTBAContainerViewController, Observable {
     init(team: Team, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.team = team
         self.year = TeamViewController.latestYear(statusService: statusService, years: team.yearsParticipated)
+        self.statusService = statusService
+        self.urlOpener = urlOpener
 
         infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -63,13 +67,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         eventsViewController.delegate = self
         mediaViewController.delegate = self
 
-        contextObserver.observeObject(object: team, state: .updated) { [unowned self] (team, _) in
-            if self.year == nil {
-                self.year = TeamViewController.latestYear(statusService: statusService, years: team.yearsParticipated)
-            } else {
-                self.updateInterface()
-            }
-        }
+        setupObservers()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -97,6 +95,16 @@ class TeamViewController: MyTBAContainerViewController, Observable {
     }
 
     // MARK: - Private
+
+    private func setupObservers() {
+        contextObserver.observeObject(object: team, state: .updated) { [unowned self] (team, _) in
+            if self.year == nil {
+                self.year = TeamViewController.latestYear(statusService: self.statusService, years: team.yearsParticipated)
+            } else {
+                self.updateInterface()
+            }
+        }
+    }
 
     private static func latestYear(statusService: StatusService, years: [Int]?) -> Int? {
         if let years = years, !years.isEmpty {
@@ -197,7 +205,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

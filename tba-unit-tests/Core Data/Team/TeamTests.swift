@@ -3,6 +3,11 @@ import XCTest
 
 class TeamTestCase: CoreDataTestCase {
 
+    func test_predicate() {
+        let predicate = Team.predicate(key: "frc7332")
+        XCTAssertEqual(predicate.predicateFormat, "key == \"frc7332\"")
+    }
+
     func test_trimFRCPrefix() {
         XCTAssertEqual(Team.trimFRCPrefix("frc2337"), "2337")
         XCTAssertEqual(Team.trimFRCPrefix("frc2337b"), "2337B")

@@ -30,7 +30,7 @@ class EventsContainerViewController: ContainerViewController {
                    userDefaults: userDefaults)
 
         title = "Events"
-        tabBarItem.image = UIImage(named: "ic_event")
+        tabBarItem.image = UIImage.eventIcon
 
         navigationTitleDelegate = self
         eventsViewController.delegate = self

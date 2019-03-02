@@ -3,18 +3,26 @@ import Firebase
 import Foundation
 import UIKit
 
-class TeamAtDistrictViewController: ContainerViewController {
+class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushable {
+
+    internal var teamKey: TeamKey {
+        return ranking.teamKey!
+    }
 
     private(set) var ranking: DistrictRanking
-    private let myTBA: MyTBA
+    internal var myTBA: MyTBA
+    internal var statusService: StatusService
+    internal var urlOpener: URLOpener
 
     private var summaryViewController: DistrictTeamSummaryViewController!
 
     // MARK: Init
 
-    init(ranking: DistrictRanking, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(ranking: DistrictRanking, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.ranking = ranking
         self.myTBA = myTBA
+        self.statusService = statusService
+        self.urlOpener = urlOpener
 
         let summaryViewController = DistrictTeamSummaryViewController(ranking: ranking, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let breakdownViewController = DistrictBreakdownViewController(ranking: ranking, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -28,6 +36,8 @@ class TeamAtDistrictViewController: ContainerViewController {
             tbaKit: tbaKit,
             userDefaults: userDefaults
         )
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.teamIcon, style: .plain, target: self, action: #selector(pushTeam))
 
         summaryViewController.delegate = self
     }
@@ -44,6 +54,12 @@ class TeamAtDistrictViewController: ContainerViewController {
         Analytics.logEvent("team_at_district", parameters: ["district": ranking.district!.key!, "team": ranking.teamKey!.key!])
     }
 
+    // MARK: - Private Methods
+
+    @objc private func pushTeam() {
+        _pushTeam(attemptedToLoadTeam: false)
+    }
+
 }
 
 extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegate {
@@ -55,7 +71,7 @@ extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegat
         }
 
         // TODO: Let's see what we can to do not force-unwrap these from Core Data
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventPoints.teamKey!, event: event, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventPoints.teamKey!, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
