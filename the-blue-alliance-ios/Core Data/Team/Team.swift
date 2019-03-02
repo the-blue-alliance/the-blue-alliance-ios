@@ -184,19 +184,3 @@ extension Team: MyTBASubscribable {
     }
 
 }
-
-extension TeamKey: MyTBASubscribable {
-
-    var modelKey: String {
-        return key!
-    }
-
-    var modelType: MyTBAModelType {
-        return .team
-    }
-
-    static var notificationTypes: [NotificationType] {
-        return Team.notificationTypes
-    }
-
-}
