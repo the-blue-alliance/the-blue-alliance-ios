@@ -2,15 +2,15 @@
 
 import React from 'react';
 import {
-  Image,
   Text,
   View
 } from 'react-native';
-import BreakdownRow from '../componets/BreakdownRow';
-import breakdown from '../styles/breakdown';
-import images from '../config/images';
+import BreakdownRow from '../../components/BreakdownRow';
+import MatchBreakdown from '../breakdowns/MatchBreakdown';
+import breakdownStyle from '../../styles/breakdown';
+import {safeRender} from '../../helpers/safeRender'
 
-export default class MatchBreakdown2016 extends React.Component {
+export default class MatchBreakdown2016 extends MatchBreakdown {
 
   defenseName(defense) {
     if (defense == "A_ChevalDeFrise") {
@@ -43,23 +43,23 @@ export default class MatchBreakdown2016 extends React.Component {
       }
       return (
         <View>
-          <Text style={[breakdown.font, {fontStyle: 'italic'}]}>{defenseName}</Text>
-          <Text style={breakdown.font}>{crossingCount}x Cross</Text>
+          <Text style={[breakdownStyle.font, {fontStyle: 'italic'}]}>{defenseName}</Text>
+          <Text style={breakdownStyle.font}>{crossingCount}x Cross</Text>
         </View>
       );
   }
 
   checkOrClear(value) {
     if (value == true) {
-      return <Image syle={breakdown.imageSize} source={images.check} />
+      return this.checkImage()
     } else {
-      return <Image style={breakdown.imageSize} source={images.clear} />
+      return this.xImage()
     }
   }
 
   render() {
-    return (
-      <View style={breakdown.container}>
+    return safeRender(
+      <View style={breakdownStyle.container}>
 
         <BreakdownRow data={["Teams", this.props.redTeams, this.props.blueTeams]} vertical={true} subtotal={true} />
 

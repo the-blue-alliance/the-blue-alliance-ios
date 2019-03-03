@@ -1,33 +1,17 @@
 import React from 'react';
-import ReactNative from 'react-native';
 import {
-  Text,
   View
 } from 'react-native';
-import BreakdownRow from '../componets/BreakdownRow';
-import breakdown from '../styles/breakdown';
-import images from '../config/images';
+import BreakdownRow from '../../components/BreakdownRow';
+import breakdownStyle from '../../styles/breakdown';
+import MatchBreakdown from '../breakdowns/MatchBreakdown';
+import {safeRender} from '../../helpers/safeRender'
 
-// Override our Image and Text to have specific sizes
-const Image = ({ style, ...props }) => <ReactNative.Image style={[breakdown.imageSize, style]} {...props} />;
-
-export default class MatchBreakdown2018 extends React.Component {
-
-  checkImage() {
-    return (
-      <Image source={images.check} />
-    );
-  }
-
-  xImage() {
-    return (
-      <Image source={images.clear} />
-    );
-  }
+export default class MatchBreakdown2018 extends MatchBreakdown {
 
   render() {
-    return (
-      <View style={breakdown.container}>
+    return safeRender(
+      <View style={breakdownStyle.container}>
 
         <BreakdownRow data={["Teams", this.props.redTeams, this.props.blueTeams]} vertical={true} subtotal={true} />
 

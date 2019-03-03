@@ -1,17 +1,14 @@
 import React from 'react';
-import ReactNative from 'react-native';
 import {
   Text,
   View
 } from 'react-native';
-import BreakdownRow from '../componets/BreakdownRow';
-import breakdown from '../styles/breakdown';
-import images from '../config/images';
+import BreakdownRow from '../../components/BreakdownRow';
+import breakdownStyle from '../../styles/breakdown';
+import MatchBreakdown from '../breakdowns/MatchBreakdown';
+import {safeRender} from '../../helpers/safeRender'
 
-// Override our Image and Text to have specific sizes
-const Image = ({ style, ...props }) => <ReactNative.Image style={[breakdown.imageSize, style]} {...props} />;
-
-export default class MatchBreakdown2017 extends React.Component {
+export default class MatchBreakdown2017 extends MatchBreakdown {
 
   renderRotorView(json_data, rotor_number) {
     var autoEngaged = false
@@ -19,11 +16,11 @@ export default class MatchBreakdown2017 extends React.Component {
       autoEngaged = json_data["rotor" + rotor_number + "Auto"]
     }
     var teleopEngaged = json_data["rotor" + rotor_number + "Engaged"]
-    
+
     if (autoEngaged) {
-      return <Image source={images.checkCircle} />
+      return this.checkCircleImage()
     } else if (teleopEngaged) {
-      return <Image source={images.check} />
+      return this.checkImage()
     }
   }
 
@@ -31,37 +28,19 @@ export default class MatchBreakdown2017 extends React.Component {
     if (value == true) {
       return (
         <View style={{alignItems: 'center', flexDirection: 'row'}}>
-          <Image source={images.check} />
-          <Text style={breakdown.font}>(+ {bonus})</Text>
+          {this.checkImage()}
+          <Text style={breakdownStyle.font}>(+ {bonus})</Text>
         </View>
       );
     } else {
-      return <Image source={images.clear} />
+      return this.xImage()
     }
   }
-  
-  checkImage() {
-    return (
-      <Image source={images.check} />
-    );
-  }
-  
-  upArrowImage() {
-    return (
-      <Image source={images.arrows.up} />
-    );
-  }
-  
-  downArrowImage() {
-    return (
-      <Image source={images.arrows.down} />
-    );
-  }
-  
+
   render() {
-    return (
-      <View style={breakdown.container}>
-        
+    return safeRender(
+      <View style={breakdownStyle.container}>
+
         <BreakdownRow data={["Teams", this.props.redTeams, this.props.blueTeams]} vertical={true} subtotal={true} />
 
         <BreakdownRow data={["Auto Mobility",

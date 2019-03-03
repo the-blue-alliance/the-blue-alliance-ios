@@ -5,19 +5,20 @@ import {
     Text,
     View
 } from 'react-native';
-import TableSectionHeader from '../componets/TableSectionHeader';
-import InsightRow from '../componets/InsightRow';
-import { round } from '../helpers/number';
+import TableSectionHeader from '../../components/TableSectionHeader';
+import InsightRow from '../../components/InsightRow';
+import { round } from '../../helpers/number';
 import {
   scoreFor,
   bonusStat,
   highScoreString,
-} from '../helpers/insights';
+} from '../../helpers/insights';
+import { safeRender } from '../../helpers/safeRender';
 
 export default class EventInsights2016 extends React.Component {
   render() {
 
-    return (
+    return safeRender(
       <View>
         {/* Match Stats */}
         <TableSectionHeader>Match Stats</TableSectionHeader>
