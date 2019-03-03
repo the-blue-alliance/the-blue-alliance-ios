@@ -2156,8 +2156,6 @@
 				927C93B2217D64300027ABEB /* DistrictEventPointsTests.swift in Sources */,
 				928030E62197806A0099CB65 /* EventAllianceCellViewModelTests.swift in Sources */,
 				921D0B66222B1D2B0056578A /* SurfableTests.swift in Sources */,
-				92A5E56921A1B7830025CC85 /* TBATeamTests.swift in Sources */,
-				92BB718420CE1E310081F4E5 /* Test.xcdatamodeld in Sources */,
 				921D0B53222AF36A0056578A /* UIImage+TBATests.swift in Sources */,
 				92C8CE5221AE4F7900683558 /* MyTBAViewControllerTests.swift in Sources */,
 				92C8CE5621AEF1AE00683558 /* TeamViewControllerTests.swift in Sources */,
