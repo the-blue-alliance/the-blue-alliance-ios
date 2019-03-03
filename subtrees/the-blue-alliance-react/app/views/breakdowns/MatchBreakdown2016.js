@@ -8,6 +8,7 @@ import {
 import BreakdownRow from '../../components/BreakdownRow';
 import MatchBreakdown from '../breakdowns/MatchBreakdown';
 import breakdownStyle from '../../styles/breakdown';
+import {safeRender} from '../../helpers/safeRender'
 
 export default class MatchBreakdown2016 extends MatchBreakdown {
 
@@ -57,7 +58,7 @@ export default class MatchBreakdown2016 extends MatchBreakdown {
   }
 
   render() {
-    return (
+    return safeRender(
       <View style={breakdownStyle.container}>
 
         <BreakdownRow data={["Teams", this.props.redTeams, this.props.blueTeams]} vertical={true} subtotal={true} />
