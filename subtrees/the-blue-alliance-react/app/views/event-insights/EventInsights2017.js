@@ -2,17 +2,15 @@
 
 import React from 'react';
 import {
-    Text,
     View
 } from 'react-native';
-import TableSectionHeader from '../componets/TableSectionHeader';
-import InsightRow from '../componets/InsightRow';
-import { round } from '../helpers/number';
+import TableSectionHeader from '../../components/TableSectionHeader';
+import InsightRow from '../../components/InsightRow';
 import {
   scoreFor,
   bonusStat,
   highScoreString,
-} from '../helpers/insights';
+} from '../../helpers/insights';
 
 export default class EventInsights2017 extends React.Component {
 
