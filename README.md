@@ -1,4 +1,4 @@
-The Blue Alliance - Rect Native
+The Blue Alliance - React Native
 ===
 
 React Native code used in The Blue Alliance's iOS app
@@ -29,23 +29,25 @@ You can test the React Native code locally with [The Blue Alliance for iOS](http
 * To view RN logs: `react-native log-ios`
 * Debugging is easier if you install [react-devtools](https://github.com/facebook/react-devtools/tree/master/packages/react-devtools)
 
-
-Building
+Building Locally
 ===
-For compiling the React Native bundle to be used offline. The iOS app expects the hosted files to be zipped in a file called `ios.zip`
+For compiling the React Native bundle to be used offline. The iOS app expects the hosted files to be zipped in a file called `react-native.zip`
 
 ```
-$ mkdir ios
 $ react-native bundle --platform ios --dev false --assets-dest ios --entry-file index.ios.js --bundle-output ios/main.jsbundle --reset-cache
-$ zip -r ios.zip ios/
+$ zip -r react-native.zip ios/
 ```
+
+Building and Deploying with Travis
+===
+For building and deploying with Travis, follow the setup guide available [HERE](travis-setup.md).
 
 Contributing
 ============
 
 Want to add features, fix bugs, or just poke around the code? No problem!
 
-Project Communication 
+Project Communication
 ---
  - Keep up to date with the [mailing list](https://groups.google.com/forum/#!forum/thebluealliance-developers).
  - Chat with us on our [Slack team](https://the-blue-alliance.slack.com/). (Request an invite in the mailing list.)
