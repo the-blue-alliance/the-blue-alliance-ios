@@ -12,10 +12,11 @@ import {
   bonusStat,
   highScoreString,
 } from '../../helpers/insights';
+import { safeRender } from '../../helpers/safeRender';
 
 export default class EventInsights2019 extends React.Component {
   render() {
-    return (
+    return safeRender(
       <View>
         {/* Match Stats */}
         <TableSectionHeader>Match Stats</TableSectionHeader>
