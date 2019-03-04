@@ -19,14 +19,17 @@ target 'The Blue Alliance' do
   # Explicitly include Yoga if you are using RN >= 0.42.0
   pod "yoga", :path => "subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga"
   # Third party deps podspec link
+  pod 'DoubleConversion', :podspec => 'subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+  pod 'glog', :podspec => 'subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => 'subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   # Deps
   pod 'BFRImageViewer'
+  pod 'PINRemoteImage', '3.0.0-beta.13'
   pod 'PureLayout'
   pod 'youtube-ios-player-helper'
   pod 'Zip', '~> 1.1'
-  
+
   # Firebase
   pod 'Firebase/Analytics'
   pod 'Firebase/Auth'
@@ -44,7 +47,7 @@ target 'The Blue Alliance' do
   target 'tba-unit-tests' do
     inherit! :search_paths
 
-    pod 'iOSSnapshotTestCase'
+    pod 'iOSSnapshotTestCase', '4.0.1' # TODO: Update to 6.0
   end
 end
 
