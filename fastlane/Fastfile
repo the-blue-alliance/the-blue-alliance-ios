@@ -16,12 +16,12 @@ platform :ios do
 
   desc "Run TBA unit tests"
   lane :test_unit do
-    scan(workspace: "the-blue-alliance-ios.xcworkspace", scheme: "tba-unit-tests")
+    scan(scheme: "tba-unit-tests")
   end
 
   desc "Run TBAKit unit tests"
   lane :test_tbakit do
-    scan(project: "Pods/Pods.xcodeproj", scheme: "TBAKit")
+    scan(scheme: "TBAKit-Unit-Tests")
   end
 
   desc "Run all of our tests"

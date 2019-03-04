@@ -2,6 +2,10 @@ platform :ios, '11.0'
 
 inhibit_all_warnings!
 
+if ENV['TRAVIS']
+  install! 'cocoapods', :share_schemes_for_development_pods => true
+end
+
 target 'The Blue Alliance' do
   use_frameworks!
 
