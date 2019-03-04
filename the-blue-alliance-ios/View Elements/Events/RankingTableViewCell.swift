@@ -21,6 +21,7 @@ class RankingTableViewCell: UITableViewCell, Reusable {
     @IBOutlet private weak var numberLabel: UILabel!
     @IBOutlet private weak var nameLabel: UILabel!
     @IBOutlet private weak var wltLabel: UILabel!
+    @IBOutlet private weak var rpLabel: UILabel!
     @IBOutlet private weak var detailLabel: UILabel!
 
     // MARK: - Private Methods
@@ -41,6 +42,9 @@ class RankingTableViewCell: UITableViewCell, Reusable {
 
         wltLabel.isHidden = !viewModel.hasWLT
         wltLabel.text = viewModel.wltText
+        
+        rpLabel.isHidden = !viewModel.hasRP
+        rpLabel.text = viewModel.rpText
     }
 
 }

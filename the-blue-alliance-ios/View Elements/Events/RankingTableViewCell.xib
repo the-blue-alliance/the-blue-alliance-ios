@@ -21,7 +21,7 @@
                         <rect key="frame" x="16" y="8" width="358" height="100.5"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="Ebk-yh-TAW">
-                                <rect key="frame" x="0.0" y="0.0" width="68" height="64.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="68" height="86.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" text="7332" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U0F-O3-fhT">
                                         <rect key="frame" x="0.0" y="0.0" width="68" height="20.5"/>
@@ -39,6 +39,12 @@
                                         <rect key="frame" x="0.0" y="46.5" width="68" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="24 RP" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wXc-hQ-7Lb">
+                                        <rect key="frame" x="0.0" y="68.5" width="68" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -81,9 +87,10 @@
                 <outlet property="nameLabel" destination="SZF-lW-7fe" id="MBP-fY-Z3Z"/>
                 <outlet property="numberLabel" destination="U0F-O3-fhT" id="Dho-hP-00Q"/>
                 <outlet property="rankLabel" destination="g5M-Kd-TUO" id="ne3-gY-6tE"/>
+                <outlet property="rpLabel" destination="wXc-hQ-7Lb" id="QfS-bh-8PT"/>
                 <outlet property="wltLabel" destination="0VW-OE-b4Q" id="cxr-re-pmN"/>
             </connections>
-            <point key="canvasLocation" x="127" y="70.5"/>
+            <point key="canvasLocation" x="126.40000000000001" y="69.715142428785612"/>
         </tableViewCell>
     </objects>
 </document>

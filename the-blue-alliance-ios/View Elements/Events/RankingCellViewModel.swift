@@ -9,6 +9,8 @@ struct RankingCellViewModel {
 
     let detailText: String?
     let wltText: String?
+    
+    let rpText: String?
 
     init(districtRanking: DistrictRanking) {
         rankText = "Rank \(districtRanking.rank!.stringValue)"
@@ -18,6 +20,7 @@ struct RankingCellViewModel {
 
         detailText = "\(districtRanking.pointTotal!.stringValue) Points"
         wltText = nil
+        rpText = nil
     }
 
     init(rank: String, districtEventPoints: DistrictEventPoints) {
@@ -28,6 +31,7 @@ struct RankingCellViewModel {
 
         detailText = "\(districtEventPoints.total!.stringValue) Points"
         wltText = nil
+        rpText = nil
     }
 
     init(eventRanking: EventRanking) {
@@ -45,6 +49,26 @@ struct RankingCellViewModel {
             return nil
         }()
         wltText = eventRanking.record?.displayString()
+        
+        var rpIndex : Int? = nil
+        
+        if(eventRanking.extraStatsNames != nil){
+            for (index, element) in eventRanking.extraStatsNames!.enumerated() {
+                if(element == "Total Ranking Points"){
+                    rpIndex = index;
+                }
+            }
+        }
+
+        if(rpIndex != nil){
+            if let rp = eventRanking.extraStatsValues?[rpIndex!] {
+                rpText = "\(rp) RP"
+            } else {
+                rpText = nil
+            }
+        } else {
+            rpText = nil
+        }
     }
 
     init(eventTeamStat: EventTeamStat) {
@@ -55,8 +79,9 @@ struct RankingCellViewModel {
 
         detailText = String(format: "OPR: %.2f, DPR: %.2f, CCWM: %.2f", eventTeamStat.opr!.floatValue, eventTeamStat.dpr!.floatValue, eventTeamStat.ccwm!.floatValue)
         wltText = nil
+        rpText = nil
     }
-
+    
     var hasRank: Bool {
         return rankText != nil
     }
@@ -69,6 +94,10 @@ struct RankingCellViewModel {
 
     var hasWLT: Bool {
         return wltText != nil
+    }
+    
+    var hasRP: Bool {
+        return rpText != nil
     }
 
 }
