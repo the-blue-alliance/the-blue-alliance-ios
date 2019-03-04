@@ -51,18 +51,22 @@ struct RankingCellViewModel {
         wltText = eventRanking.record?.displayString()
         
         var rpIndex : Int? = nil
+        var isAvg = false
         
         if(eventRanking.extraStatsNames != nil){
             for (index, element) in eventRanking.extraStatsNames!.enumerated() {
                 if(element == "Total Ranking Points"){
                     rpIndex = index;
+                } else if(element == "Ranking Score/Match"){
+                    rpIndex = index;
+                    isAvg = true
                 }
             }
         }
 
         if(rpIndex != nil){
             if let rp = eventRanking.extraStatsValues?[rpIndex!] {
-                rpText = "\(rp) RP"
+                rpText = "\(rp) RP" + (isAvg ? "/m" : "")
             } else {
                 rpText = nil
             }

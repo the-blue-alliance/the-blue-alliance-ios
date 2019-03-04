@@ -113,7 +113,7 @@
     <entity name="EventRanking" representedClassName="EventRanking" syncable="YES" codeGenerationType="class">
         <attribute name="dq" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="extraStatsNames" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
-        <attribute name="extraStatsValues" optional="YES" attributeType="Transformable" customClassName="[Int]" syncable="YES"/>
+        <attribute name="extraStatsValues" optional="YES" attributeType="Transformable" customClassName="[NSNumber]" syncable="YES"/>
         <attribute name="matchesPlayed" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="qualAverage" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="rank" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
