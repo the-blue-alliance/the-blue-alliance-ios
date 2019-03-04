@@ -9,8 +9,6 @@ struct RankingCellViewModel {
 
     let detailText: String?
     let wltText: String?
-    
-    let rpText: String?
 
     init(districtRanking: DistrictRanking) {
         rankText = "Rank \(districtRanking.rank!.stringValue)"
@@ -20,7 +18,6 @@ struct RankingCellViewModel {
 
         detailText = "\(districtRanking.pointTotal!.stringValue) Points"
         wltText = nil
-        rpText = nil
     }
 
     init(rank: String, districtEventPoints: DistrictEventPoints) {
@@ -31,7 +28,6 @@ struct RankingCellViewModel {
 
         detailText = "\(districtEventPoints.total!.stringValue) Points"
         wltText = nil
-        rpText = nil
     }
 
     init(eventRanking: EventRanking) {
@@ -39,40 +35,50 @@ struct RankingCellViewModel {
 
         teamNumber = String(describing: eventRanking.teamKey!.teamNumber)
         teamName = eventRanking.teamKey!.team?.nickname ?? eventRanking.teamKey!.name
-
-        detailText = {
-            if let qualAverage = eventRanking.qualAverage {
-                return "Avg. \(qualAverage.doubleValue) Points"
-            } else if let tiebreakerInfoString = eventRanking.tiebreakerInfoString {
-                return tiebreakerInfoString
-            }
-            return nil
-        }()
-        wltText = eventRanking.record?.displayString()
         
         var rpIndex : Int? = nil
         var isAvg = false
         
+        var rpString = ""
+        
         if(eventRanking.extraStatsNames != nil){
             for (index, element) in eventRanking.extraStatsNames!.enumerated() {
                 if(element == "Total Ranking Points"){
+                    rpString = element
                     rpIndex = index;
-                } else if(element == "Ranking Score/Match"){
+                } else if(element == "Ranking Score/Match" || element == "Qual Score/Match"){
+                    rpString = element
                     rpIndex = index;
                     isAvg = true
                 }
             }
         }
-
+        
+        var rpTotal : NSNumber = -1
+        
         if(rpIndex != nil){
-            if let rp = eventRanking.extraStatsValues?[rpIndex!] {
-                rpText = "\(rp) RP" + (isAvg ? "/m" : "")
-            } else {
-                rpText = nil
+            if var rp = eventRanking.extraStatsValues?[rpIndex!] {
+                if(isAvg){
+                    rp = NSNumber(value: Double(round(100*rp.doubleValue)/100))
+                }
+                rpTotal = rp
             }
-        } else {
-            rpText = nil
         }
+
+
+        detailText = {
+            if let qualAverage = eventRanking.qualAverage {
+                return "Avg. \(qualAverage.doubleValue) Points"
+            } else if let tiebreakerInfoString = eventRanking.tiebreakerInfoString {
+                if(rpString != "" && rpTotal.intValue >= 0){
+                    return "\(rpString): \(rpTotal), \(tiebreakerInfoString)"
+                } else {
+                    return tiebreakerInfoString
+                }
+            }
+            return nil
+        }()
+        wltText = eventRanking.record?.displayString()
     }
 
     init(eventTeamStat: EventTeamStat) {
@@ -83,7 +89,6 @@ struct RankingCellViewModel {
 
         detailText = String(format: "OPR: %.2f, DPR: %.2f, CCWM: %.2f", eventTeamStat.opr!.floatValue, eventTeamStat.dpr!.floatValue, eventTeamStat.ccwm!.floatValue)
         wltText = nil
-        rpText = nil
     }
     
     var hasRank: Bool {
@@ -99,9 +104,4 @@ struct RankingCellViewModel {
     var hasWLT: Bool {
         return wltText != nil
     }
-    
-    var hasRP: Bool {
-        return rpText != nil
-    }
-
 }
