@@ -19,7 +19,6 @@ cache:
 install:
   - cd subtrees/the-blue-alliance-react && npm install && cd ../..
   - bundle install
-  - bundle exec fastlane run xcversion version:'10.1'
   - bundle exec pod check || bundle exec pod install || bundle exec pod install --repo-update
 
 before_script:
