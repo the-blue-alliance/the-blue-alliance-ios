@@ -35,41 +35,40 @@ struct RankingCellViewModel {
 
         teamNumber = String(describing: eventRanking.teamKey!.teamNumber)
         teamName = eventRanking.teamKey!.team?.nickname ?? eventRanking.teamKey!.name
-        
-        var rpIndex : Int? = nil
-        var isAvg = false
-        
-        var rpString = ""
-        
-        if(eventRanking.extraStatsNames != nil){
-            for (index, element) in eventRanking.extraStatsNames!.enumerated() {
-                if(element == "Total Ranking Points"){
-                    rpString = element
-                    rpIndex = index;
-                } else if(element == "Ranking Score/Match" || element == "Qual Score/Match"){
-                    rpString = element
-                    rpIndex = index;
-                    isAvg = true
-                }
-            }
-        }
-        
-        var rpTotal : NSNumber = -1
-        
-        if(rpIndex != nil){
-            if var rp = eventRanking.extraStatsValues?[rpIndex!] {
-                if(isAvg){
-                    rp = NSNumber(value: Double(round(100*rp.doubleValue)/100))
-                }
-                rpTotal = rp
-            }
-        }
-
 
         detailText = {
             if let qualAverage = eventRanking.qualAverage {
                 return "Avg. \(qualAverage.doubleValue) Points"
             } else if let tiebreakerInfoString = eventRanking.tiebreakerInfoString {
+                var rpIndex : Int? = nil
+                var isAvg = false
+                
+                var rpString = ""
+                
+                if(eventRanking.extraStatsNames != nil){
+                    for (index, element) in eventRanking.extraStatsNames!.enumerated() {
+                        if(element == "Total Ranking Points"){
+                            rpString = element
+                            rpIndex = index;
+                        } else if(element == "Ranking Score/Match" || element == "Qual Score/Match"){
+                            rpString = element
+                            rpIndex = index;
+                            isAvg = true
+                        }
+                    }
+                }
+                
+                var rpTotal : NSNumber = -1
+                
+                if(rpIndex != nil){
+                    if var rp = eventRanking.extraStatsValues?[rpIndex!] {
+                        if(isAvg){
+                            rp = NSNumber(value: Double(round(100*rp.doubleValue)/100))
+                        }
+                        rpTotal = rp
+                    }
+                }
+                
                 if(rpString != "" && rpTotal.intValue >= 0){
                     return "\(rpString): \(rpTotal), \(tiebreakerInfoString)"
                 } else {
