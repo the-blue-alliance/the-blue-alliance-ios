@@ -2,7 +2,7 @@ import XCTest
 import Foundation
 import CoreData
 import FBSnapshotTestCase
-@testable import The_Blue_Alliance
+@testable import TBA
 
 class CoreDataTestCase: FBSnapshotTestCase {
 

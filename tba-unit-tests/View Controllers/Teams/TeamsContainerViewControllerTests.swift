@@ -1,5 +1,5 @@
 import XCTest
-@testable import The_Blue_Alliance
+@testable import TBA
 
 class TeamsContainerViewControllerTests: TBATestCase {
 

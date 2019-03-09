@@ -1,6 +1,6 @@
 import FirebaseMessaging
 import XCTest
-@testable import The_Blue_Alliance
+@testable import TBA
 
 class SettingsViewControllerTests: TBATestCase {
 

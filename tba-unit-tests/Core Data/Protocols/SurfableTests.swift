@@ -1,5 +1,5 @@
 import XCTest
-@testable import The_Blue_Alliance
+@testable import TBA
 
 private class MockSurfable: Surfable {
     var website: String?

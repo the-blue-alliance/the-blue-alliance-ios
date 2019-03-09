@@ -1,6 +1,6 @@
 import CoreData
 import XCTest
-@testable import The_Blue_Alliance
+@testable import TBA
 
 class MyTBASignInViewControllerTests: TBATestCase {
 

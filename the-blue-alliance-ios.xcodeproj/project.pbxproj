@@ -36,8 +36,7 @@
 		14B520FB218CB96400F2EF4F /* EventStatusQualTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B520FA218CB96400F2EF4F /* EventStatusQualTests.swift */; };
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
-		373233698A5148831C801B8E /* Pods_The_Blue_Alliance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */; };
-		5797EAB49489B63DDA0980F5 /* Pods_tba_unit_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */; };
+		79BC77C7621A3B38BE9C13D5 /* Pods_TBA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3948E550691380B453EA20C2 /* Pods_TBA.framework */; };
 		92004C6521C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */; };
 		92004C6621C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */; };
 		921D0B53222AF36A0056578A /* UIImage+TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B52222AF36A0056578A /* UIImage+TBATests.swift */; };
@@ -354,6 +353,7 @@
 		92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */; };
 		92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */; };
 		A6544CF021DC3CDC00D423F2 /* MatchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6544CEF21DC3CDC00D423F2 /* MatchViewModelTests.swift */; };
+		DBAB9FC76AC1B141CFAED131 /* Pods_tba_unit_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC6EDE6DE9FBCA31A4F0318E /* Pods_tba_unit_tests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -367,7 +367,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_ui_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1416D509218E422400F1A4A3 /* EventInsights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsights.swift; sourceTree = "<group>"; };
 		1416D50B218E462500F1A4A3 /* EventInsightsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsTests.swift; sourceTree = "<group>"; };
 		1416D50D218E4B8200F1A4A3 /* EventTeamStatsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatsTests.swift; sourceTree = "<group>"; };
@@ -395,10 +394,11 @@
 		14B520F6218CA28B00F2EF4F /* EventStatusAllianceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusAllianceTests.swift; sourceTree = "<group>"; };
 		14B520F8218CB19400F2EF4F /* EventStatusPlayoffTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusPlayoffTests.swift; sourceTree = "<group>"; };
 		14B520FA218CB96400F2EF4F /* EventStatusQualTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusQualTests.swift; sourceTree = "<group>"; };
+		1EAE48DCF6EDA573D2E501C6 /* Pods-TBA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TBA.debug.xcconfig"; path = "Target Support Files/Pods-TBA/Pods-TBA.debug.xcconfig"; sourceTree = "<group>"; };
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
-		4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.release.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.release.xcconfig"; sourceTree = "<group>"; };
-		52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_unit_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3948E550691380B453EA20C2 /* Pods_TBA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TBA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8126C9E1B238E61BBD78F536 /* Pods-tba-unit-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.release.xcconfig"; path = "Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.release.xcconfig"; sourceTree = "<group>"; };
 		92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2019DeepSpaceIcon@2x.png"; sourceTree = "<group>"; };
 		92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2019DeepSpaceIcon@3x.png"; sourceTree = "<group>"; };
 		921D0B52222AF36A0056578A /* UIImage+TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TBATests.swift"; sourceTree = "<group>"; };
@@ -482,7 +482,7 @@
 		9287014720CD8C4A0077D6DA /* TBAOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAOperation.swift; sourceTree = "<group>"; };
 		928D509A21BDB7A000571069 /* the-blue-alliance-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "the-blue-alliance-ios.entitlements"; sourceTree = "<group>"; };
 		928DE031222AF10A00C6234A /* UIImage+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TBA.swift"; sourceTree = "<group>"; };
-		92942D921E2154DA008E79CA /* The Blue Alliance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Blue Alliance.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		92942D921E2154DA008E79CA /* TBA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TBA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92942D951E2154DA008E79CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92942D9E1E2154DA008E79CA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		92942DA11E2154DA008E79CA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -719,11 +719,10 @@
 		92FF113321A70B16003BC5C4 /* CoreDataTestCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTestCaseTests.swift; sourceTree = "<group>"; };
 		92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewCell.xib; sourceTree = "<group>"; };
 		92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
-		A27CA53562D2F2F05B05659A /* Pods-The Blue Alliance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.debug.xcconfig"; sourceTree = "<group>"; };
+		975298E6EFF6F8D6650E9398 /* Pods-TBA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TBA.release.xcconfig"; path = "Target Support Files/Pods-TBA/Pods-TBA.release.xcconfig"; sourceTree = "<group>"; };
 		A6544CEF21DC3CDC00D423F2 /* MatchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchViewModelTests.swift; sourceTree = "<group>"; };
-		AC390655114E5828E3FE13D0 /* Pods-tba-unit-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.debug.xcconfig"; sourceTree = "<group>"; };
-		E72D7306F6A02099E68DED02 /* Pods-tba-unit-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.release.xcconfig"; sourceTree = "<group>"; };
-		FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_The_Blue_Alliance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC6EDE6DE9FBCA31A4F0318E /* Pods_tba_unit_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_unit_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA2E827073DD24CF776776D8 /* Pods-tba-unit-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.debug.xcconfig"; path = "Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -731,7 +730,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				373233698A5148831C801B8E /* Pods_The_Blue_Alliance.framework in Frameworks */,
+				79BC77C7621A3B38BE9C13D5 /* Pods_TBA.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -739,7 +738,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5797EAB49489B63DDA0980F5 /* Pods_tba_unit_tests.framework in Frameworks */,
+				DBAB9FC76AC1B141CFAED131 /* Pods_tba_unit_tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -784,15 +783,16 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		5EC6F9271347DB8630C82782 /* Pods */ = {
+		6448FD1B2D848743B5A740EB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				A27CA53562D2F2F05B05659A /* Pods-The Blue Alliance.debug.xcconfig */,
-				4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */,
-				AC390655114E5828E3FE13D0 /* Pods-tba-unit-tests.debug.xcconfig */,
-				E72D7306F6A02099E68DED02 /* Pods-tba-unit-tests.release.xcconfig */,
+				1EAE48DCF6EDA573D2E501C6 /* Pods-TBA.debug.xcconfig */,
+				975298E6EFF6F8D6650E9398 /* Pods-TBA.release.xcconfig */,
+				EA2E827073DD24CF776776D8 /* Pods-tba-unit-tests.debug.xcconfig */,
+				8126C9E1B238E61BBD78F536 /* Pods-tba-unit-tests.release.xcconfig */,
 			);
 			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		92004C6221C21BC600A858C8 /* App Icons */ = {
@@ -1095,16 +1095,16 @@
 				928D509A21BDB7A000571069 /* the-blue-alliance-ios.entitlements */,
 				92942D941E2154DA008E79CA /* the-blue-alliance-ios */,
 				92D6483B20BE4CB8008F0DB3 /* tba-unit-tests */,
-				AB6808F14167475E1AE2783E /* Frameworks */,
 				92942D931E2154DA008E79CA /* Products */,
-				5EC6F9271347DB8630C82782 /* Pods */,
+				6448FD1B2D848743B5A740EB /* Pods */,
+				FF80A9D30AB3E00D00AA7056 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		92942D931E2154DA008E79CA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				92942D921E2154DA008E79CA /* The Blue Alliance.app */,
+				92942D921E2154DA008E79CA /* TBA.app */,
 				92D6483A20BE4CB8008F0DB3 /* tba-unit-tests.xctest */,
 			);
 			name = Products;
@@ -1891,12 +1891,11 @@
 			path = Match;
 			sourceTree = "<group>";
 		};
-		AB6808F14167475E1AE2783E /* Frameworks */ = {
+		FF80A9D30AB3E00D00AA7056 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */,
-				0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */,
-				52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */,
+				3948E550691380B453EA20C2 /* Pods_TBA.framework */,
+				CC6EDE6DE9FBCA31A4F0318E /* Pods_tba_unit_tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1904,37 +1903,37 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		92942D911E2154DA008E79CA /* The Blue Alliance */ = {
+		92942D911E2154DA008E79CA /* TBA */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "The Blue Alliance" */;
+			buildConfigurationList = 92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "TBA" */;
 			buildPhases = (
-				DC9F63135A2623342564B887 /* [CP] Check Pods Manifest.lock */,
+				19E37E85D4BE46C65634AC5F /* [CP] Check Pods Manifest.lock */,
 				92942D8E1E2154DA008E79CA /* Sources */,
 				92942D8F1E2154DA008E79CA /* Frameworks */,
 				92942D901E2154DA008E79CA /* Resources */,
 				92E624CE208E8D1600DF58C0 /* Bundle React Native code and images */,
-				6D02EECF657E8A3F9121C002 /* [CP] Embed Pods Frameworks */,
-				E7F2F429133ED67EFC850346 /* [CP] Copy Pods Resources */,
 				924E826C208FE7D20053247C /* Run Fabric */,
+				00BF9639D0F2F94BF7347657 /* [CP] Embed Pods Frameworks */,
+				7F7FB403781C68FF3A296F02 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "The Blue Alliance";
+			name = TBA;
 			productName = "the-blue-alliance";
-			productReference = 92942D921E2154DA008E79CA /* The Blue Alliance.app */;
+			productReference = 92942D921E2154DA008E79CA /* TBA.app */;
 			productType = "com.apple.product-type.application";
 		};
 		92D6483920BE4CB8008F0DB3 /* tba-unit-tests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92D6484120BE4CB8008F0DB3 /* Build configuration list for PBXNativeTarget "tba-unit-tests" */;
 			buildPhases = (
-				2C02C8A4B0B326A6A5B12AA9 /* [CP] Check Pods Manifest.lock */,
+				0458FACDE5FC39137C8BF1F9 /* [CP] Check Pods Manifest.lock */,
 				92D6483620BE4CB8008F0DB3 /* Sources */,
 				92D6483720BE4CB8008F0DB3 /* Frameworks */,
 				92D6483820BE4CB8008F0DB3 /* Resources */,
-				F8CA407276FDEDCD342B403C /* [CP] Embed Pods Frameworks */,
+				F4347D6DE501E6CAC0544115 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1990,7 +1989,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				92942D911E2154DA008E79CA /* The Blue Alliance */,
+				92942D911E2154DA008E79CA /* TBA */,
 				92D6483920BE4CB8008F0DB3 /* tba-unit-tests */,
 			);
 		};
@@ -2109,31 +2108,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2C02C8A4B0B326A6A5B12AA9 /* [CP] Check Pods Manifest.lock */ = {
+		00BF9639D0F2F94BF7347657 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-tba-unit-tests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6D02EECF657E8A3F9121C002 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-TBA/Pods-TBA-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/BFRImageViewer/BFRImageViewer.framework",
 				"${BUILT_PRODUCTS_DIR}/DoubleConversion/DoubleConversion.framework",
 				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
@@ -2154,6 +2137,8 @@
 				"${BUILT_PRODUCTS_DIR}/youtube-ios-player-helper/youtube_ios_player_helper.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BFRImageViewer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DoubleConversion.framework",
@@ -2176,7 +2161,73 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TBA/Pods-TBA-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		0458FACDE5FC39137C8BF1F9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-tba-unit-tests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		19E37E85D4BE46C65634AC5F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TBA-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7F7FB403781C68FF3A296F02 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TBA/Pods-TBA-resources.sh",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TBA/Pods-TBA-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		924E826C208FE7D20053247C /* Run Fabric */ = {
@@ -2208,43 +2259,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\nsubtrees/the-blue-alliance-react/node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		DC9F63135A2623342564B887 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-The Blue Alliance-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E7F2F429133ED67EFC850346 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-resources.sh",
-				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F8CA407276FDEDCD342B403C /* [CP] Embed Pods Frameworks */ = {
+		F4347D6DE501E6CAC0544115 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2538,7 +2553,7 @@
 /* Begin PBXTargetDependency section */
 		92D6484020BE4CB8008F0DB3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 92942D911E2154DA008E79CA /* The Blue Alliance */;
+			target = 92942D911E2154DA008E79CA /* TBA */;
 			targetProxy = 92D6483F20BE4CB8008F0DB3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -2667,7 +2682,7 @@
 		};
 		92942DA71E2154DA008E79CA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A27CA53562D2F2F05B05659A /* Pods-The Blue Alliance.debug.xcconfig */;
+			baseConfigurationReference = 1EAE48DCF6EDA573D2E501C6 /* Pods-TBA.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios.entitlements";
@@ -2688,7 +2703,7 @@
 		};
 		92942DA81E2154DA008E79CA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */;
+			baseConfigurationReference = 975298E6EFF6F8D6650E9398 /* Pods-TBA.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "the-blue-alliance-ios.entitlements";
@@ -2709,7 +2724,7 @@
 		};
 		92D6484220BE4CB8008F0DB3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AC390655114E5828E3FE13D0 /* Pods-tba-unit-tests.debug.xcconfig */;
+			baseConfigurationReference = EA2E827073DD24CF776776D8 /* Pods-tba-unit-tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2738,14 +2753,14 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/The Blue Alliance.app/The Blue Alliance";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TBA.app/TBA";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
 		92D6484320BE4CB8008F0DB3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E72D7306F6A02099E68DED02 /* Pods-tba-unit-tests.release.xcconfig */;
+			baseConfigurationReference = 8126C9E1B238E61BBD78F536 /* Pods-tba-unit-tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2773,7 +2788,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/The Blue Alliance.app/The Blue Alliance";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TBA.app/TBA";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -2790,7 +2805,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "The Blue Alliance" */ = {
+		92942DA61E2154DA008E79CA /* Build configuration list for PBXNativeTarget "TBA" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				92942DA71E2154DA008E79CA /* Debug */,

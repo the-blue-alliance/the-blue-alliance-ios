@@ -111,12 +111,12 @@ platform :ios do
     update_project_team(teamid: ENV["sigh_com.the-blue-alliance.tba_appstore_team-id"])
     update_project_provisioning(
       profile: ENV["sigh_com.the-blue-alliance.tba_appstore_profile-path"],
-      target_filter: "The Blue Alliance",
+      target_filter: "TBA",
       build_configuration: "Release",
       code_signing_identity: "iPhone Distribution"
     )
-    gym(archive_path: 'TBA.xcarchive')
-    upload_symbols_to_crashlytics(dsym_path: "The Blue Alliance.app.dSYM.zip", gsp_path: "the-blue-alliance-ios/GoogleService-Info.plist")
+    gym
+    upload_symbols_to_crashlytics(dsym_path: "TBA.app.dSYM.zip", gsp_path: "the-blue-alliance-ios/GoogleService-Info.plist")
   end
 
   desc "Ship a compiled build to TestFlight"
@@ -153,7 +153,7 @@ platform :ios do
       tag_name: current_git_tag,
       description: commit_changelog,
       is_prerelease: options[:is_prerelease] ? true : false,
-      upload_assets: ["The Blue Alliance.ipa", "The Blue Alliance.app.dSYM.zip", "TBA.xcarchive"]
+      upload_assets: ["TBA.ipa", "TBA.app.dSYM.zip"]
     )
   end
 

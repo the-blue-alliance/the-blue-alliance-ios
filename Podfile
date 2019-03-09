@@ -2,7 +2,7 @@ platform :ios, '11.0'
 
 inhibit_all_warnings!
 
-target 'The Blue Alliance' do
+target 'TBA' do
   use_frameworks!
 
   # React Native
@@ -53,7 +53,7 @@ end
 
 post_install do | installer |
   require 'fileutils'
-  FileUtils.cp_r('Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-acknowledgements.plist',
+  FileUtils.cp_r('Pods/Target Support Files/Pods-TBA/Pods-TBA-acknowledgements.plist',
   'the-blue-alliance-ios/Settings.bundle/Acknowledgements.plist', :remove_destination => true)
 
   installer.pods_project.targets.each do |target|

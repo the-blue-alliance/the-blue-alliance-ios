@@ -1,6 +1,6 @@
 import XCTest
 import CoreData
-@testable import The_Blue_Alliance
+@testable import TBA
 
 class MockManagedObjectContext: NSManagedObjectContext {
 
