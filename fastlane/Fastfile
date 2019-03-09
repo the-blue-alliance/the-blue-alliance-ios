@@ -52,12 +52,8 @@ platform :ios do
     # Bump version accordingly
     if version_type != "build"
       increment_version_number(bump_type: version_type)
-      # Create new changelog file
-      sh("touch", "../release_notes/#{current_version}")
     end
     increment_build_number
-    # Commit our version bump and changelog file
-    commit_version_bump(message: "[skip ci] New version - #{current_git_tag}", xcodeproj: "the-blue-alliance-ios.xcodeproj", include: "release_notes/#{current_version}")
   end
 
   ## End Create A New Version Lanes ##
