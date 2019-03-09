@@ -82,6 +82,7 @@ public class TBAKit: NSObject {
         var request = URLRequest(url: apiURL)
         request.httpMethod = "GET"
         request.addValue(apiKey, forHTTPHeaderField: "X-TBA-Auth-Key")
+        request.addValue("gzip", forHTTPHeaderField: "Accept-Encoding")
 
         if let lastModified = lastModified(for: apiURL) {
             request.addValue(lastModified, forHTTPHeaderField: "If-Modified-Since")
