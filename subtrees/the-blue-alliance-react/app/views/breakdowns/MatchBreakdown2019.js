@@ -1,45 +1,101 @@
 import React from 'react';
+import ReactNative from 'react-native';
 import {
-  View
+  View,
+  Text
 } from 'react-native';
 import BreakdownRow from '../../components/BreakdownRow';
+import images from '../../config/images';
+import ImageCount from '../../components/ImageCount';
 import MatchBreakdown from '../breakdowns/MatchBreakdown';
 import breakdownStyle from '../../styles/breakdown';
 import {safeRender} from '../../helpers/safeRender'
 
+// Override our Image and Text to have specific sizes
+const Image = ({ style, ...props }) => <ReactNative.Image style={[breakdownStyle.imageSize, style]} {...props} />;
+
 export default class MatchBreakdown2019 extends MatchBreakdown {
+
+  nullHatchPanelImage() {
+    return (
+      <Image source={images[2019].hatchPanel} style={{ tintColor: '#616161' }} />
+    );
+  }
+
+  hatchPanelImage() {
+    return (
+      <Image source={images[2019].hatchPanel} style={{ tintColor: '#ffeb3b' }} />
+    );
+  }
+
+  cargoImage() {
+    return (
+      <Image source={images[2019].cargo} style={{ tintColor: '#ff6d00' }} />
+    );
+  }
 
   getSandstormBonusFor(breakdown, robotNumber) {
     if (breakdown["habLineRobot" + robotNumber] == "CrossedHabLineInSandstorm") {
       let result = breakdown["preMatchLevelRobot" + robotNumber]
       if (result.includes("HabLevel")) {
-        return `Level ${result.substr(-1)}`
+        let level = result.substr(-1);
+        let climbPoints = [3, 6];
+        return `Level ${level} (+${climbPoints[level - 1]})`
       }
     }
-    return "--"
+    return this.xImage()
   }
 
   getHABClimbFor(breakdown, robotNumber) {
     let result = breakdown["endgameRobot" + robotNumber]
     if (result.includes("HabLevel")) {
-      return `Level ${result.substr(-1)}`
+      let level = result.substr(-1);
+      let climbPoints = [3, 6, 12];
+      return `Level ${level} (+${climbPoints[level-1]})`
     }
-    return "--"
+    return this.xImage()
   }
 
   getCargoShipDataFor(breakdown) {
+    var nullPanelCount = 0
     var panelCount = 0
     var cargoCount = 0
 
     for (let i = 1; i <= 8; i++) {
-      if (breakdown["bay" + i].includes("Panel")) {
-        panelCount++
+      let key = `bay${i}`
+
+      if (breakdown[key].includes("Panel")) {
+        let nullKey = `preMatchBay${i}`
+
+        // Safeguard against against bays 4 and 5, which will never have null hatches
+        let isNullHatch = breakdown.hasOwnProperty(nullKey) && breakdown[nullKey].includes("Panel")
+
+        if (isNullHatch) {
+          nullPanelCount++
+        } else {
+          panelCount++
+        }
       }
-      if (breakdown["bay" + i].includes("Cargo")) {
+      if (breakdown[key].includes("Cargo")) {
         cargoCount++
       }
     }
-    return `${panelCount} / ${cargoCount}`
+
+    return (
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <ImageCount
+          image={this.nullHatchPanelImage()}
+          count={nullPanelCount} />
+
+        <ImageCount
+          image={this.hatchPanelImage()}
+          count={panelCount} />
+
+        <ImageCount
+          image={this.cargoImage()}
+          count={cargoCount} />
+      </View>
+    )
   }
 
   getRocketShipDataFor(breakdown, rocketLocation) {
@@ -61,7 +117,18 @@ export default class MatchBreakdown2019 extends MatchBreakdown {
         cargoCount++
       }
     });
-    return `${panelCount} / ${cargoCount}`
+
+    return (
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <ImageCount
+          image={this.hatchPanelImage()}
+          count={panelCount} />
+
+        <ImageCount
+          image={this.cargoImage()}
+          count={cargoCount} />
+      </View>
+    )
   }
 
   render() {
@@ -86,21 +153,61 @@ export default class MatchBreakdown2019 extends MatchBreakdown {
           this.props.redBreakdown.sandStormBonusPoints,
           this.props.blueBreakdown.sandStormBonusPoints]} total={true} />
 
-        <BreakdownRow data={["Cargo Ship: # Hatch Panels / # Cargo",
+        <BreakdownRow data={["Cargo Ship",
           this.getCargoShipDataFor(this.props.redBreakdown),
           this.getCargoShipDataFor(this.props.blueBreakdown)]} />
 
-        <BreakdownRow data={["Rocket 1: # Hatch Panels / # Cargo",
+        <BreakdownRow data={["Rocket 1",
           this.getRocketShipDataFor(this.props.redBreakdown, "Near"),
           this.getRocketShipDataFor(this.props.blueBreakdown, "Near")]} />
 
-        <BreakdownRow data={["Rocket 2: # Hatch Panels / # Cargo",
+        <BreakdownRow data={["Rocket 2",
           this.getRocketShipDataFor(this.props.redBreakdown, "Far"),
           this.getRocketShipDataFor(this.props.blueBreakdown, "Far")]} />
 
-        <BreakdownRow data={["Total Points: Hatch Panels / Cargo",
-          `${this.props.redBreakdown.hatchPanelPoints} / ${this.props.redBreakdown.cargoPoints}`,
-          `${this.props.blueBreakdown.hatchPanelPoints} / ${this.props.blueBreakdown.cargoPoints}`]} subtotal={true} />
+        <BreakdownRow data={["Total Hatch Panels",
+          (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <ImageCount
+                image={this.hatchPanelImage()}
+                count={this.props.redBreakdown.hatchPanelPoints / 2} />
+              <Text>
+                {`(+${this.props.redBreakdown.hatchPanelPoints})`}
+              </Text>
+            </View>
+          ),
+          (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <ImageCount
+                image={this.hatchPanelImage()}
+                count={this.props.blueBreakdown.hatchPanelPoints / 2} />
+              <Text>
+                {`(+${this.props.blueBreakdown.hatchPanelPoints})`}
+              </Text>
+            </View>
+          )]} subtotal={true} />
+
+        <BreakdownRow data={["Total Points Cargo",
+          (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <ImageCount
+                image={this.cargoImage()}
+                count={this.props.redBreakdown.cargoPoints / 3} />
+              <Text>
+                {`(+${this.props.redBreakdown.cargoPoints})`}
+              </Text>
+            </View>
+          ),
+          (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <ImageCount
+                image={this.cargoImage()}
+                count={this.props.blueBreakdown.cargoPoints / 3} />
+              <Text>
+                {`(+${this.props.blueBreakdown.cargoPoints})`}
+              </Text>
+            </View>
+          )]} subtotal={true} />
 
         <BreakdownRow data={["Robot 1 HAB Climb",
           this.getHABClimbFor(this.props.redBreakdown, 1),
