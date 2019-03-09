@@ -1,63 +1,14 @@
 .DS_Store
-# Xcode
-#
-build/
-*.pbxuser
-!default.pbxuser
-*.mode1v3
-!default.mode1v3
-*.mode2v3
-!default.mode2v3
-*.perspectivev3
-!default.perspectivev3
-xcuserdata
-*.xccheckout
-*.moved-aside
-DerivedData
-*.hmap
-*.ipa
-*.xcuserstate
-
-# CocoaPods
-#
-# We recommend against adding the Pods directory to your .gitignore. However
-# you should judge for yourself, the pros and cons are mentioned at:
-# http://guides.cocoapods.org/using/using-cocoapods.html#should-i-ignore-the-pods-directory-in-source-control
-#
-Pods/
-
-the-blue-alliance-ios.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 
 # Node
 node_modules
 *.log
 .nvm
-subtrees/the-blue-alliance-react/ios/*
-subtrees/the-blue-alliance-react/ios.zip
 
-Secrets.plist
-
-# fastlane specific
-fastlane/report.xml
-
-# deliver temporary files
-fastlane/Preview.html
-
-# snapshot generated screenshots
-fastlane/screenshots
-
-# scan temporary files
-fastlane/test_output
-
-# derived data
-fastlane/derived_data
-*.dSYM.zip
-
-tba-unit-tests/FailureDiffs
-
-# Ignore some Metadata from Fastlane with sensitive information
-fastlane/metadata/trade_representative_contact_information
-fastlane/metadata/review_information
-
-# rbenv
-.ruby-version
+ios/
+android/
+react-native.zip
+gcp-service-key.json
+*-tba-dev-*.json
+*-firebase-*.json
+ops/deploy_keys.tar
