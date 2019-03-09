@@ -1,9 +1,7 @@
-GIT
-  remote: git@github.com:ZachOrr/cocoapods-fix-react-native.git
-  revision: 593a1d5c99a8545ac6c7dbff102fa8502652290c
-  branch: zorr/patch-0.58.6
+PATH
+  remote: subtrees/cocoapods-fix-react-native
   specs:
-    cocoapods-fix-react-native (2019.03.09.12)
+    cocoapods-fix-react-native (2019.03.09.13)
 
 GEM
   remote: https://rubygems.org/
