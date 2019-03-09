@@ -31,6 +31,12 @@ class TBAKitTests: TBAKitTestCase {
         }
         XCTAssertEqual(apiKeyHeader, "abcd123")
 
+        guard let acceptEncoding = headers["Accept-Encoding"] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(acceptEncoding, "gzip")
+
         wait(for: [ex], timeout: 2.0)
 
         kit.session.resumeExpectation = nil
