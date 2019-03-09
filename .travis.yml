@@ -7,6 +7,7 @@ branches:
 
 stages:
   - name: test
+    if: NOT ((type == push) AND (commit_message =~ /^\[clowntown\]/))
   - name: beta
     if: (type == push) AND (branch == master) AND (commit_message =~ /^\[beta\]/)
 
@@ -17,6 +18,7 @@ cache:
     - subtrees/the-blue-alliance-react/node_modules
 
 install:
+  - brew install watchman
   - cd subtrees/the-blue-alliance-react && npm install && cd ../..
   - bundle install
   - bundle exec pod check || bundle exec pod install || bundle exec pod install --repo-update
@@ -39,4 +41,3 @@ jobs:
 
 after_failure:
   - cat build/reports/tba-unit-tests-tba-unit-tests.log | bundle exec second_curtain > /dev/null
-  - ls logs
