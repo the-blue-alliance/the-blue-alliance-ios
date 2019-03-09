@@ -1,3 +1,10 @@
+GIT
+  remote: git@github.com:ZachOrr/cocoapods-fix-react-native.git
+  revision: 23159c8ab387c954c8092eb2a3813e712991e215
+  branch: zorr/fix-0.58.6
+  specs:
+    cocoapods-fix-react-native (2019.03.09.11)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -219,6 +226,7 @@ PLATFORMS
 DEPENDENCIES
   cocoapods
   cocoapods-check
+  cocoapods-fix-react-native!
   fastlane
   second_curtain
 

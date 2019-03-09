@@ -1,3 +1,5 @@
+plugin 'cocoapods-fix-react-native'
+
 platform :ios, '11.0'
 
 inhibit_all_warnings!
