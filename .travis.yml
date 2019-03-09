@@ -19,6 +19,7 @@ cache:
 
 before_install:
   - export COCOAPODS_FIX_REACT_NATIVE_DEV_ROOT=subtrees/the-blue-alliance-react/node_modules/react-native
+  - echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
 install:
   - cd subtrees/the-blue-alliance-react && npm install && cd ../..
