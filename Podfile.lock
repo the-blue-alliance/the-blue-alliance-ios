@@ -129,48 +129,48 @@ PODS:
     - PINRemoteImage/Core
   - Protobuf (3.6.1)
   - PureLayout (3.1.4)
-  - React/Core (0.59.0-rc.3):
-    - yoga (= 0.59.0-rc.3.React)
-  - React/CxxBridge (0.59.0-rc.3):
+  - React/Core (0.58.6):
+    - yoga (= 0.58.6.React)
+  - React/CxxBridge (0.58.6):
     - Folly (= 2018.10.22.00)
     - React/Core
     - React/cxxreact
     - React/jsiexecutor
-  - React/cxxreact (0.59.0-rc.3):
+  - React/cxxreact (0.58.6):
     - boost-for-react-native (= 1.63.0)
     - DoubleConversion
     - Folly (= 2018.10.22.00)
     - glog
     - React/jsinspector
-  - React/DevSupport (0.59.0-rc.3):
+  - React/DevSupport (0.58.6):
     - React/Core
     - React/RCTWebSocket
-  - React/fishhook (0.59.0-rc.3)
-  - React/jsi (0.59.0-rc.3):
+  - React/fishhook (0.58.6)
+  - React/jsi (0.58.6):
     - DoubleConversion
     - Folly (= 2018.10.22.00)
     - glog
-  - React/jsiexecutor (0.59.0-rc.3):
+  - React/jsiexecutor (0.58.6):
     - DoubleConversion
     - Folly (= 2018.10.22.00)
     - glog
     - React/cxxreact
     - React/jsi
-  - React/jsinspector (0.59.0-rc.3)
-  - React/RCTBlob (0.59.0-rc.3):
+  - React/jsinspector (0.58.6)
+  - React/RCTBlob (0.58.6):
     - React/Core
-  - React/RCTImage (0.59.0-rc.3):
+  - React/RCTImage (0.58.6):
     - React/Core
     - React/RCTNetwork
-  - React/RCTNetwork (0.59.0-rc.3):
+  - React/RCTNetwork (0.58.6):
     - React/Core
-  - React/RCTText (0.59.0-rc.3):
+  - React/RCTText (0.58.6):
     - React/Core
-  - React/RCTWebSocket (0.59.0-rc.3):
+  - React/RCTWebSocket (0.58.6):
     - React/Core
     - React/fishhook
     - React/RCTBlob
-  - yoga (0.59.0-rc.3.React)
+  - yoga (0.58.6.React)
   - youtube-ios-player-helper (0.1.6)
   - Zip (1.1.0)
 
@@ -274,8 +274,8 @@ SPEC CHECKSUMS:
   PINRemoteImage: d6d51c5d2adda55f1ce30c96e850b6c4ebd2856a
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
   PureLayout: f08c01b8dec00bb14a1fefa3de4c7d9c265df85e
-  React: e18068c843db92d5761d2d05a485c85c430727da
-  yoga: 4d7f00d234c42cf46c609ee1e429c987167b30f1
+  React: d8bdef2c0a34933988fc5016484a50517372f8aa
+  yoga: 32d7ef1081951e9a35a4c72a7be797598b138a48
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
