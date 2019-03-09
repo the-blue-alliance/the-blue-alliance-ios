@@ -14,7 +14,7 @@ cache:
   bundler: true
   cocoapods: true
   directories:
-    - js/node_modules
+    - subtrees/the-blue-alliance-react/node_modules
 
 install:
   - cd subtrees/the-blue-alliance-react && npm install && cd ../..
