@@ -75,6 +75,9 @@ struct MatchViewModel {
         case 2018:
             rpName1 = "autoQuestRankingPoint"
             rpName2 = "faceTheBossRankingPoint"
+        case 2019:
+            rpName1 = "completeRocketRankingPoint"
+            rpName2 = "habDockingRankingPoint"
         default:
             break
         }

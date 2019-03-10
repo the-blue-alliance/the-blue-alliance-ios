@@ -38,6 +38,7 @@ class EventAllianceTableViewCell: UITableViewCell, Reusable {
 
     private func removeAllianceTeams() {
         for view in allianceTeamsStackView.arrangedSubviews {
+            allianceTeamsStackView.removeArrangedSubview(view)
             view.removeFromSuperview()
         }
     }

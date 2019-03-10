@@ -22,6 +22,7 @@ class InfoTableViewCell: UITableViewCell, Reusable {
 
     private func removeInfo() {
         for view in infoStackView.arrangedSubviews {
+            infoStackView.removeArrangedSubview(view)
             view.removeFromSuperview()
         }
     }
