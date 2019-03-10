@@ -370,10 +370,10 @@ public struct TBAEventRanking: TBAModel {
     public var matchesPlayed: Int?
     public var qualAverage: Double?
     public var record: TBAWLT?
-    public var extraStats: [Int]?
-    public var sortOrders: [Double]?
+    public var extraStats: [NSNumber]?
+    public var sortOrders: [NSNumber]?
 
-    public init(teamKey: String, rank: Int, dq: Int? = nil, matchesPlayed: Int? = nil, qualAverage: Double? = nil, record: TBAWLT? = nil, extraStats: [Int]? = nil, sortOrders: [Double]? = nil) {
+    public init(teamKey: String, rank: Int, dq: Int? = nil, matchesPlayed: Int? = nil, qualAverage: Double? = nil, record: TBAWLT? = nil, extraStats: [NSNumber]? = nil, sortOrders: [NSNumber]? = nil) {
         self.teamKey = teamKey
         self.rank = rank
         self.dq = dq
@@ -404,8 +404,8 @@ public struct TBAEventRanking: TBAModel {
             self.record = TBAWLT(json: recordJSON)
         }
 
-        self.extraStats = json["extra_stats"] as? [Int]
-        self.sortOrders = json["sort_orders"] as? [Double]
+        self.extraStats = json["extra_stats"] as? [NSNumber]
+        self.sortOrders = json["sort_orders"] as? [NSNumber]
     }
     
 }

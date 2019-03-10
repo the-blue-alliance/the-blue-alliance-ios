@@ -3,17 +3,22 @@ import CoreData
 
 extension EventRanking: Managed {
 
-    /// Description for an EventRanking's sortOrders (tiebreaker names/values) as a comma separated string.
-    var tiebreakerInfoString: String? {
+    /// Description for an EventRanking's extraStats/sortOrders (ranking/tiebreaker names/values) as a comma separated string.
+    var rankingInfoString: String? {
         get {
-            if let tiebreakerValues = tiebreakerValues, !tiebreakerValues.isEmpty, let tiebreakerNames = tiebreakerNames, !tiebreakerNames.isEmpty {
-                var infoParts: [String] = []
-                for (sortOrderName, sortOrderValue) in zip(tiebreakerNames, tiebreakerValues) {
-                    infoParts.append("\(sortOrderName): \(sortOrderValue)")
+            let rankingInformation: [([String]?, [NSNumber]?)] = [(extraStatsNames, extraStatsValues), (tiebreakerNames, tiebreakerValues)]
+            var rankingInfoStringParts: [String] = []
+            for (names, values) in rankingInformation {
+                guard let names = names, !names.isEmpty, let values = values, !values.isEmpty else {
+                    continue
                 }
-                return infoParts.joined(separator: ", ")
+                var infoParts: [String] = []
+                for (name, value) in zip(names, values) {
+                    infoParts.append("\(name): \(value)")
+                }
+                rankingInfoStringParts.append(infoParts.joined(separator: ", "))
             }
-            return nil
+            return rankingInfoStringParts.isEmpty ? nil : rankingInfoStringParts.joined(separator: ", ")
         }
     }
 
@@ -44,6 +49,7 @@ extension EventRanking: Managed {
             }
 
             if let sortOrderInfo = sortOrderInfo {
+                // Note: We get rid of precision, because... we probably don't need it
                 let tiebreakerNames = sortOrderInfo.map { $0.name }
                 if !tiebreakerNames.isEmpty {
                     ranking.tiebreakerNames = tiebreakerNames
@@ -60,6 +66,7 @@ extension EventRanking: Managed {
             }
 
             if let extraStatsInfo = extraStatsInfo {
+                // Note: We get rid of precision, because... we probably don't need it
                 let extraStatsNames = extraStatsInfo.map { $0.name }
                 if !extraStatsNames.isEmpty {
                     ranking.extraStatsNames = extraStatsNames

@@ -14,7 +14,7 @@ private enum TeamSummaryRow {
     case record(wlt: WLT) // don't show record for 2015, because no wins
     case alliance(allianceStatus: String)
     case status(overallStatus: String)
-    case breakdown(tiebreakerInfo: String)
+    case breakdown(rankingInfo: String)
     case nextMatchKey(key: String)
     case nextMatch(match: Match)
     case lastMatchKey(key: String)
@@ -89,8 +89,8 @@ class TeamSummaryViewController: TBATableViewController {
         }
 
         // Breakdown
-        if let tiebreakerInfo = eventStatus?.qual?.ranking?.tiebreakerInfoString {
-            summaryRows.append(TeamSummaryRow.breakdown(tiebreakerInfo: tiebreakerInfo))
+        if let rankingInfo = eventStatus?.qual?.ranking?.rankingInfoString {
+            summaryRows.append(TeamSummaryRow.breakdown(rankingInfo: rankingInfo))
         }
 
         // From here on, we only show this data if the event is currently happening
