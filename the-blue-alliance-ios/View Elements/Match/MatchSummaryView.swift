@@ -80,6 +80,7 @@ class MatchSummaryView: UIView {
                 if [redScoreLabel, blueScoreLabel].contains(view) {
                     continue
                 }
+                stackView.removeArrangedSubview(view)
                 view.removeFromSuperview()
             }
         }
@@ -88,6 +89,7 @@ class MatchSummaryView: UIView {
     private func removeRPs() {
         for stackView in [redRPStackView, blueRPStackView] as [UIStackView] {
             for view in stackView.arrangedSubviews {
+                stackView.removeArrangedSubview(view)
                 view.removeFromSuperview()
             }
         }
@@ -163,6 +165,7 @@ class MatchSummaryView: UIView {
         let label = UILabel()
         label.textAlignment = .center
         label.attributedText = attributeString
+        label.translatesAutoresizingMaskIntoConstraints = false
 
         return label
     }

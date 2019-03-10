@@ -25,6 +25,7 @@ class AwardTableViewCell: UITableViewCell, Reusable {
 
     private func removeAwards() {
         for view in awardInfoStackView.arrangedSubviews {
+            awardInfoStackView.removeArrangedSubview(view)
             view.removeFromSuperview()
         }
     }

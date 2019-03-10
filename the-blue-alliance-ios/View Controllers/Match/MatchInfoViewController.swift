@@ -51,15 +51,6 @@ class MatchInfoViewController: TBAViewController, Observable {
         return matchStackView
     }()
 
-    private let timeLabel: UILabel = {
-        let timeLabel = UILabel(forAutoLayout: ())
-        timeLabel.font = UIFont.systemFont(ofSize: 14)
-        timeLabel.textAlignment = .center
-        timeLabel.backgroundColor = .white
-        timeLabel.translatesAutoresizingMaskIntoConstraints = false
-        return timeLabel
-    }()
-
     private let videoStackView: UIStackView = {
         let videoStackView = UIStackView(forAutoLayout: ())
         videoStackView.axis = .vertical
@@ -122,13 +113,6 @@ class MatchInfoViewController: TBAViewController, Observable {
         matchStackView.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 16)
 
         infoStackView.autoMatch(.height, to: .height, of: matchStackView, withMultiplier: (1.0/3.0))
-        // Match the 'Score' label with the size of the score
-        scoreTitleLabel.autoMatch(.width, to: .width, of: matchSummaryView.redScoreLabel)
-
-        scrollView.addSubview(timeLabel)
-        for edge in [ALEdge.top, ALEdge.bottom, ALEdge.leading, ALEdge.trailing] {
-            timeLabel.autoPinEdge(edge, to: edge, of: matchSummaryView)
-        }
 
         scrollView.addSubview(videoStackView)
         videoStackView.autoPinEdge(.top, to: .bottom, of: matchStackView, withOffset: 8)
@@ -140,6 +124,16 @@ class MatchInfoViewController: TBAViewController, Observable {
         view.backgroundColor = .white
 
         updateInterface()
+
+        if let viewModel = matchSummaryView.viewModel {
+            if viewModel.hasScores {
+                // Match the 'Score' label with the size of the score
+                scoreTitleLabel.autoMatch(.width, to: .width, of: matchSummaryView.redScoreLabel)
+            } else {
+                // Match the 'Time' label to the size of the time
+                scoreTitleLabel.autoMatch(.width, to: .width, of: matchSummaryView.timeLabel)
+            }
+        }
     }
 
     func updateInterface() {
@@ -154,24 +148,15 @@ class MatchInfoViewController: TBAViewController, Observable {
         matchSummaryView.viewModel = viewModel
 
         if !viewModel.hasScores {
-            teamsLabel.isHidden = true
-            timeLabel.isHidden = false
-
-            if let timeString = match.startTimeString {
-                timeLabel.text = timeString
-            } else {
-                timeLabel.text = "No Time Yet"
-            }
             scoreTitleLabel.text = "Time"
         } else {
-            teamsLabel.isHidden = false
-            timeLabel.isHidden = true
             scoreTitleLabel.text = "Score"
         }
     }
 
     func updateMatchVideos() {
         for view in videoStackView.arrangedSubviews {
+            videoStackView.removeArrangedSubview(view)
             view.removeFromSuperview()
         }
 
