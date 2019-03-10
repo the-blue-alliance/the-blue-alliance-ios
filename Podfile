@@ -35,6 +35,7 @@ target 'The Blue Alliance' do
   pod 'Firebase/Auth'
   pod 'Firebase/Core'
   pod 'Firebase/Messaging'
+  pod 'Firebase/Performance'
   pod 'Firebase/Storage'
 
   # myTBA
