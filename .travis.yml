@@ -1,6 +1,11 @@
 osx_image: xcode10.1
 language: swift
 
+# addons:
+#   artifacts
+#     paths:
+#       - logs
+
 branches:
   only:
     - master
