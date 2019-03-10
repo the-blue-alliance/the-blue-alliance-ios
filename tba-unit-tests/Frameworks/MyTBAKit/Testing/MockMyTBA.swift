@@ -25,7 +25,7 @@ class MockMyTBA: MyTBA {
             return
         }
 
-        var filepath = components.path.replacingOccurrences(of: "/_ah/api/tbaMobile/v9/", with: "").replacingOccurrences(of: "/", with: "_")
+        var filepath = components.path.replacingOccurrences(of: "/clientapi/tbaClient/v9/", with: "").replacingOccurrences(of: "/", with: "_")
         if code != 200 {
             filepath.append("_\(code)")
         }
