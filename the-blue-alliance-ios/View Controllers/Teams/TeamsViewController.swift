@@ -179,9 +179,10 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
             guard let searchText = searchController.searchBar.text, !searchText.isEmpty else {
                 return nil
             }
-            return NSPredicate(format: "(%K contains[cd] %@ OR %K beginswith[cd] %@)",
+            return NSPredicate(format: "(%K contains[cd] %@ OR %K beginswith[cd] %@ OR %K contains[cd] %@)",
                                #keyPath(Team.nickname), searchText,
-                               #keyPath(Team.teamNumber.stringValue), searchText)
+                               #keyPath(Team.teamNumber.stringValue), searchText,
+                               #keyPath(Team.city), searchText)
         }()
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [searchPredicate, fetchRequestPredicate].compactMap({ $0 }))
     }
