@@ -37,14 +37,20 @@ struct RankingCellViewModel {
         teamName = eventRanking.teamKey!.team?.nickname ?? eventRanking.teamKey!.name
 
         detailText = {
-            if let qualAverage = eventRanking.qualAverage {
-                return "Avg. \(qualAverage.doubleValue) Points"
-            } else if let tiebreakerInfoString = eventRanking.tiebreakerInfoString {
-                return tiebreakerInfoString
+            if let rankingInfoString = eventRanking.rankingInfoString {
+                return rankingInfoString
             }
             return nil
         }()
-        wltText = eventRanking.record?.displayString()
+
+        wltText = {
+            // Show qualAverage - WLT otherwise
+            if let qualAverage = eventRanking.qualAverage {
+                return qualAverage.stringValue
+            } else {
+                return eventRanking.record?.displayString()
+            }
+        }()
     }
 
     init(eventTeamStat: EventTeamStat) {

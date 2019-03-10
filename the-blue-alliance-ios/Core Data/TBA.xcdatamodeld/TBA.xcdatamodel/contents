@@ -113,13 +113,13 @@
     <entity name="EventRanking" representedClassName="EventRanking" syncable="YES" codeGenerationType="class">
         <attribute name="dq" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="extraStatsNames" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
-        <attribute name="extraStatsValues" optional="YES" attributeType="Transformable" customClassName="[Int]" syncable="YES"/>
+        <attribute name="extraStatsValues" optional="YES" attributeType="Transformable" customClassName="[NSNumber]" syncable="YES"/>
         <attribute name="matchesPlayed" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="qualAverage" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="rank" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="record" optional="YES" attributeType="Transformable" customClassName="WLT" syncable="YES"/>
         <attribute name="tiebreakerNames" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
-        <attribute name="tiebreakerValues" optional="YES" attributeType="Transformable" customClassName="[Double]" syncable="YES"/>
+        <attribute name="tiebreakerValues" optional="YES" attributeType="Transformable" customClassName="[NSNumber]" syncable="YES"/>
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="rankings" inverseEntity="Event" syncable="YES"/>
         <relationship name="qualStatus" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventStatusQual" inverseName="ranking" inverseEntity="EventStatusQual" syncable="YES"/>
         <relationship name="teamKey" maxCount="1" deletionRule="Nullify" destinationEntity="TeamKey" inverseName="eventRankings" inverseEntity="TeamKey" syncable="YES"/>

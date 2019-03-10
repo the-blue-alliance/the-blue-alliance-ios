@@ -12,7 +12,7 @@ class EventRankingTestCase: CoreDataTestCase {
             TBAEventRankingSortOrder(name: "First Ranking", precision: 0),
             TBAEventRankingSortOrder(name: "Second Raking", precision: 0)
         ]
-        let model = TBAEventRanking(teamKey: "frc1", rank: 2, dq: 10, matchesPlayed: 6, qualAverage: 20, record: TBAWLT(wins: 1, losses: 2, ties: 3), extraStats: [25], sortOrders: [2.08, 530.0, 0.0])
+        let model = TBAEventRanking(teamKey: "frc1", rank: 2, dq: 10, matchesPlayed: 6, qualAverage: 20, record: TBAWLT(wins: 1, losses: 2, ties: 3), extraStats: [25.0, 3], sortOrders: [2.08, 530.0, 3])
         let ranking = EventRanking.insert(model, sortOrderInfo: sortOrderInfo, extraStatsInfo: extraStatsInfo, eventKey: event.key!, in: persistentContainer.viewContext)
 
         XCTAssertEqual(ranking.teamKey?.key, "frc1")
@@ -21,9 +21,9 @@ class EventRankingTestCase: CoreDataTestCase {
         XCTAssertEqual(ranking.matchesPlayed, 6)
         XCTAssertEqual(ranking.qualAverage, 20)
         XCTAssertNotNil(ranking.record)
-        XCTAssertEqual(ranking.tiebreakerValues, [2.08, 530.0, 0.0])
+        XCTAssertEqual(ranking.tiebreakerValues, [2.08, 530.0, 3])
         XCTAssertEqual(ranking.tiebreakerNames, ["Ranking Score", "First Ranking", "Second Raking"])
-        XCTAssertEqual(ranking.extraStatsValues, [25])
+        XCTAssertEqual(ranking.extraStatsValues, [25.0, 3])
         XCTAssertEqual(ranking.extraStatsNames, ["Total Ranking Points"])
 
         // Should throw an error - must be attached to an Event
@@ -66,7 +66,7 @@ class EventRankingTestCase: CoreDataTestCase {
             TBAEventRankingSortOrder(name: "First Ranking", precision: 0),
             TBAEventRankingSortOrder(name: "Second Raking", precision: 0)
         ]
-        let modelOne = TBAEventRanking(teamKey: "frc1", rank: 2, dq: 10, matchesPlayed: 6, qualAverage: 20, record: TBAWLT(wins: 1, losses: 2, ties: 3), extraStats: [25], sortOrders: [2.08, 530.0, 0.0])
+        let modelOne = TBAEventRanking(teamKey: "frc1", rank: 2, dq: 10, matchesPlayed: 6, qualAverage: 20, record: TBAWLT(wins: 1, losses: 2, ties: 3), extraStats: [25, 3.0], sortOrders: [2.08, 530.0, 2])
         let rankingOne = EventRanking.insert(modelOne, sortOrderInfo: sortOrderInfo, extraStatsInfo: extraStatsInfo, eventKey: event.key!, in: persistentContainer.viewContext)
         event.addToRankings(rankingOne)
 
@@ -162,21 +162,45 @@ class EventRankingTestCase: CoreDataTestCase {
 
     func test_tiebreakerInfoString() {
         let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
-        XCTAssertNil(ranking.tiebreakerInfoString)
+        XCTAssertNil(ranking.rankingInfoString)
+
+        let extraStatsNames = ["Value 4", "Value 6", "Value 5"]
+        let extraStatsValues: [NSNumber] = [2, 3.0, 49.999]
 
         let tiebreakerNames = ["Value 1", "Value 2", "Value 3"]
-        let tiebreakerValues = [1.00, 2.2, 3.33]
+        let tiebreakerValues: [NSNumber] = [1.00, 2.2, 3.33]
 
         // Needs both keys and values
         ranking.tiebreakerNames = tiebreakerNames
-        XCTAssertNil(ranking.tiebreakerInfoString)
+        XCTAssertNil(ranking.rankingInfoString)
         ranking.tiebreakerNames = nil
 
         ranking.tiebreakerValues = tiebreakerValues
-        XCTAssertNil(ranking.tiebreakerInfoString)
+        XCTAssertNil(ranking.rankingInfoString)
+        ranking.tiebreakerValues = nil
 
+        ranking.extraStatsNames = extraStatsNames
+        XCTAssertNil(ranking.rankingInfoString)
+        ranking.extraStatsNames = nil
+
+        ranking.extraStatsValues = extraStatsValues
+        XCTAssertNil(ranking.rankingInfoString)
+
+        // Only with extra stats
+        ranking.extraStatsNames = extraStatsNames
+        XCTAssertEqual(ranking.rankingInfoString, "Value 4: 2, Value 6: 3, Value 5: 49.999")
+        ranking.extraStatsNames = nil
+        ranking.extraStatsValues = nil
+
+        // Only with tiebreaker info
         ranking.tiebreakerNames = tiebreakerNames
-        XCTAssertEqual(ranking.tiebreakerInfoString, "Value 1: 1.0, Value 2: 2.2, Value 3: 3.33")
+        ranking.tiebreakerValues = tiebreakerValues
+        XCTAssertEqual(ranking.rankingInfoString, "Value 1: 1, Value 2: 2.2, Value 3: 3.33")
+
+        // Show with both
+        ranking.extraStatsNames = extraStatsNames
+        ranking.extraStatsValues = extraStatsValues
+        XCTAssertEqual(ranking.rankingInfoString, "Value 4: 2, Value 6: 3, Value 5: 49.999, Value 1: 1, Value 2: 2.2, Value 3: 3.33")
     }
 
 }
