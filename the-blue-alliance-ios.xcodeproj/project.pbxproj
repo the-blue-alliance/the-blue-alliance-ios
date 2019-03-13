@@ -124,6 +124,7 @@
 		929F572C2092BB1C00E5313A /* Alertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929F572B2092BB1C00E5313A /* Alertable.swift */; };
 		929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */; };
 		929FCD9A1EC7F52700A38E46 /* DistrictsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD991EC7F52700A38E46 /* DistrictsViewController.swift */; };
+		92A04B912238868900F3599E /* WLTTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A04B902238868900F3599E /* WLTTests.swift */; };
 		92A2F5542156BD4B00267C63 /* NSManagedObjectContext+ExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A2F5532156BD4B00267C63 /* NSManagedObjectContext+ExtensionTests.swift */; };
 		92A321C7214EF83800FDADFB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A321C6214EF83800FDADFB /* SettingsViewController.swift */; };
 		92A4147C216DA76400E459A5 /* ReactNativeService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A4147B216DA76400E459A5 /* ReactNativeService_Tests.swift */; };
@@ -380,6 +381,7 @@
 		929F572B2092BB1C00E5313A /* Alertable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alertable.swift; sourceTree = "<group>"; };
 		929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictsContainerViewController.swift; sourceTree = "<group>"; };
 		929FCD991EC7F52700A38E46 /* DistrictsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictsViewController.swift; sourceTree = "<group>"; };
+		92A04B902238868900F3599E /* WLTTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WLTTests.swift; sourceTree = "<group>"; };
 		92A2F5532156BD4B00267C63 /* NSManagedObjectContext+ExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+ExtensionTests.swift"; sourceTree = "<group>"; };
 		92A321C6214EF83800FDADFB /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		92A4147B216DA76400E459A5 /* ReactNativeService_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeService_Tests.swift; sourceTree = "<group>"; };
@@ -731,6 +733,7 @@
 				14B520F6218CA28B00F2EF4F /* EventStatusAllianceTests.swift */,
 				14B520F8218CB19400F2EF4F /* EventStatusPlayoffTests.swift */,
 				1416D50D218E4B8200F1A4A3 /* EventTeamStatsTests.swift */,
+				92A04B902238868900F3599E /* WLTTests.swift */,
 				925908AA21828CC300D7BFCE /* WebcastTests.swift */,
 			);
 			path = Event;
@@ -1967,6 +1970,7 @@
 				921D0B53222AF36A0056578A /* UIImage+TBATests.swift in Sources */,
 				92C8CE5221AE4F7900683558 /* MyTBAViewControllerTests.swift in Sources */,
 				92C8CE5621AEF1AE00683558 /* TeamViewControllerTests.swift in Sources */,
+				92A04B912238868900F3599E /* WLTTests.swift in Sources */,
 				92F38537217D31CE00A9AC02 /* AwardRecipientTests.swift in Sources */,
 				925908B52185076100D7BFCE /* EventAllianceTests.swift in Sources */,
 				92C2E939217B92C500004B9E /* MatchVideoTests.swift in Sources */,

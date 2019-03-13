@@ -36,19 +36,13 @@ struct RankingCellViewModel {
         teamNumber = String(describing: eventRanking.teamKey!.teamNumber)
         teamName = eventRanking.teamKey!.team?.nickname ?? eventRanking.teamKey!.name
 
-        detailText = {
-            if let rankingInfoString = eventRanking.rankingInfoString {
-                return rankingInfoString
-            }
-            return nil
-        }()
+        detailText = eventRanking.rankingInfoString
 
         wltText = {
-            // Show qualAverage - WLT otherwise
             if let qualAverage = eventRanking.qualAverage {
                 return qualAverage.stringValue
             } else {
-                return eventRanking.record?.displayString()
+                return eventRanking.record?.stringValue
             }
         }()
     }
