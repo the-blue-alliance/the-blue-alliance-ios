@@ -1,5 +1,6 @@
 osx_image: xcode10.1
 language: swift
+gemfile: Gemfile
 
 # addons:
 #   artifacts
@@ -45,4 +46,5 @@ jobs:
         - bundle exec fastlane beta_ci
 
 after_failure:
+  - gem install second_curtain
   - cat build/reports/tba-unit-tests-tba-unit-tests.log | bundle exec second_curtain > /dev/null
