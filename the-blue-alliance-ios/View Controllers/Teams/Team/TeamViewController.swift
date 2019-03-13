@@ -2,6 +2,7 @@ import BFRImageViewer
 import CoreData
 import Firebase
 import Photos
+import TBAKit
 import UIKit
 
 class TeamViewController: MyTBAContainerViewController, Observable {

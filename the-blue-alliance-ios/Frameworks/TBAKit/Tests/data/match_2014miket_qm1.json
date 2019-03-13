@@ -1,0 +1,39 @@
+{
+  "actual_time": null,
+  "alliances": {
+    "blue": {
+      "score": 27,
+      "surrogate_team_keys": [],
+      "team_keys": [
+        "frc468",
+        "frc5084",
+        "frc3415"
+      ]
+    },
+    "red": {
+      "score": 0,
+      "surrogate_team_keys": [],
+      "team_keys": [
+        "frc4994",
+        "frc703",
+        "frc313"
+      ]
+    }
+  },
+  "comp_level": "qm",
+  "event_key": "2014miket",
+  "key": "2014miket_qm1",
+  "match_number": 1,
+  "post_result_time": null,
+  "predicted_time": null,
+  "score_breakdown": null,
+  "set_number": 1,
+  "time": 1394208000,
+  "videos": [
+    {
+      "key": "0I3H685Ncfc",
+      "type": "youtube"
+    }
+  ],
+  "winning_alliance": "blue"
+}

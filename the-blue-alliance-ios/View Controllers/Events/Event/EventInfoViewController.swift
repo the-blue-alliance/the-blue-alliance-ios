@@ -1,5 +1,6 @@
-import UIKit
 import CoreData
+import TBAKit
+import UIKit
 
 protocol EventInfoViewControllerDelegate: AnyObject {
     func showAlliances()

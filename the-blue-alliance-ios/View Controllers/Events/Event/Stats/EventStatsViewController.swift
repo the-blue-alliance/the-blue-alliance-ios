@@ -1,7 +1,8 @@
-import Foundation
 import CoreData
-import UIKit
+import Foundation
 import React
+import TBAKit
+import UIKit
 
 class EventStatsViewController: TBAReactNativeViewController, Observable {
 

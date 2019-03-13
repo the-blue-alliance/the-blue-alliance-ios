@@ -1,5 +1,6 @@
-import Foundation
 import CoreData
+import TBAKit
+import Foundation
 
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/1324e9e5b7c4ab21315bd00a768112991bada108/models/match.py#L25
 public enum MatchCompLevel: String, CaseIterable {

@@ -1,5 +1,6 @@
-import Foundation
 import CoreData
+import Foundation
+import TBAKit
 import UIKit
 
 public enum MediaType: String {

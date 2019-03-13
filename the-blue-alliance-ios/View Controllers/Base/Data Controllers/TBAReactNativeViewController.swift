@@ -2,6 +2,7 @@ import CoreData
 import Crashlytics
 import Foundation
 import React
+import TBAKit
 import UIKit
 
 protocol TBAReactNativeViewControllerDelegate: AnyObject {

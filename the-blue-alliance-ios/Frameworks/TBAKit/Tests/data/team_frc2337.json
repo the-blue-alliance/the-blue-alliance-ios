@@ -1,0 +1,23 @@
+{
+  "address": null,
+  "city": "Grand Blanc",
+  "country": "USA",
+  "gmaps_place_id": null,
+  "gmaps_url": null,
+  "home_championship": {
+    "2017": "St. Louis",
+    "2018": "Detroit"
+  },
+  "key": "frc2337",
+  "lat": null,
+  "lng": null,
+  "location_name": null,
+  "motto": "Inspire. Redefine. Design. Change.",
+  "name": "General Motors / Premier Tooling Systems / The Chrysler Foundation / Davison Tool & Engineering, L.L.C. / Michigan Department of Education / UnyPOS Manufacturing / The Robot Space / Kettering University & Grand Blanc Community High School",
+  "nickname": "EngiNERDs",
+  "postal_code": "48439",
+  "rookie_year": 2008,
+  "state_prov": "Michigan",
+  "team_number": 2337,
+  "website": "http://www.team2337.com"
+}

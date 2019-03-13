@@ -59,6 +59,9 @@ tba-unit-tests/FailureDiffs
 fastlane/metadata/trade_representative_contact_information
 fastlane/metadata/review_information
 
+# pod gen
+gen/
+
 # rbenv
 .ruby-version
 

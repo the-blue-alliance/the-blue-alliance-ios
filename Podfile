@@ -2,6 +2,10 @@ platform :ios, '11.0'
 
 inhibit_all_warnings!
 
+if ENV['TRAVIS']
+  install! 'cocoapods', :share_schemes_for_development_pods => true
+end
+
 target 'The Blue Alliance' do
   use_frameworks!
 
@@ -37,6 +41,10 @@ target 'The Blue Alliance' do
   pod 'Firebase/Messaging'
   pod 'Firebase/Performance'
   pod 'Firebase/Storage'
+
+  # Local Deps
+  pod 'TBAKit', :path => 'the-blue-alliance-ios/Frameworks/TBAKit', :testspecs => ['Tests']
+  pod 'TBAKitTesting', :path => 'the-blue-alliance-ios/Frameworks/TBAKit'
 
   # myTBA
   pod 'GoogleSignIn'

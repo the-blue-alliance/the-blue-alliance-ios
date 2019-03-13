@@ -1,5 +1,6 @@
 import CoreData
 import Foundation
+import TBAKit
 
 extension Award: Managed {
 

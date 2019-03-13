@@ -1,0 +1,62 @@
+[
+ {
+  "abbreviation": "chs",
+  "display_name": "Chesapeake",
+  "key": "2017chs",
+  "year": 2017
+ },
+ {
+  "abbreviation": "fim",
+  "display_name": "Michigan",
+  "key": "2017fim",
+  "year": 2017
+ },
+ {
+  "abbreviation": "in",
+  "display_name": "Indiana",
+  "key": "2017in",
+  "year": 2017
+ },
+ {
+  "abbreviation": "isr",
+  "display_name": "Israel",
+  "key": "2017isr",
+  "year": 2017
+ },
+ {
+  "abbreviation": "mar",
+  "display_name": "Mid-Atlantic",
+  "key": "2017mar",
+  "year": 2017
+ },
+ {
+  "abbreviation": "nc",
+  "display_name": "North Carolina",
+  "key": "2017nc",
+  "year": 2017
+ },
+ {
+  "abbreviation": "ne",
+  "display_name": "New England",
+  "key": "2017ne",
+  "year": 2017
+ },
+ {
+  "abbreviation": "ont",
+  "display_name": "Ontario",
+  "key": "2017ont",
+  "year": 2017
+ },
+ {
+  "abbreviation": "pch",
+  "display_name": "Peachtree",
+  "key": "2017pch",
+  "year": 2017
+ },
+ {
+  "abbreviation": "pnw",
+  "display_name": "Pacific Northwest",
+  "key": "2017pnw",
+  "year": 2017
+ }
+]

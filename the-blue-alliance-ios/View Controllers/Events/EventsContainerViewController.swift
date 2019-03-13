@@ -1,6 +1,7 @@
 import CoreData
 import Firebase
 import Foundation
+import TBAKit
 import UIKit
 
 class EventsContainerViewController: ContainerViewController {

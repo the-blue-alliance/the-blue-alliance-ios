@@ -30,7 +30,12 @@ Setup CI
 ```
 fastlane ios test_unit
 ```
-Run unit tests (for CI)
+Run TBA unit tests
+### ios test_tbakit
+```
+fastlane ios test_tbakit
+```
+Run TBAKit unit tests
 ### ios test
 ```
 fastlane ios test

@@ -1,5 +1,6 @@
 import CoreData
 import Foundation
+import TBAKit
 
 class EventTeamsViewController: TeamsViewController {
 

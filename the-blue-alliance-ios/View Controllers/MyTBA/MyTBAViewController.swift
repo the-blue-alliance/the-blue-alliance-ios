@@ -4,6 +4,7 @@ import FirebaseAuth
 import FirebaseMessaging
 import GoogleSignIn
 import PureLayout
+import TBAKit
 import UIKit
 import UserNotifications
 
