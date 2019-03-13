@@ -42,6 +42,7 @@ GEM
       nap (~> 1.0)
     cocoapods-deintegrate (1.0.3)
     cocoapods-downloader (1.2.2)
+    cocoapods-generate (1.4.0)
     cocoapods-plugins (1.0.0)
       nap
     cocoapods-search (1.0.0)
@@ -219,6 +220,7 @@ PLATFORMS
 DEPENDENCIES
   cocoapods
   cocoapods-check
+  cocoapods-generate
   fastlane
   second_curtain
 
