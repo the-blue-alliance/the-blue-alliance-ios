@@ -44,7 +44,6 @@ target 'The Blue Alliance' do
 
   # Local Deps
   pod 'TBAKit', :path => 'the-blue-alliance-ios/Frameworks/TBAKit', :testspecs => ['Tests']
-  pod 'TBAKitTesting', :path => 'the-blue-alliance-ios/Frameworks/TBAKit'
 
   # myTBA
   pod 'GoogleSignIn'
@@ -57,6 +56,7 @@ target 'The Blue Alliance' do
     inherit! :search_paths
 
     pod 'iOSSnapshotTestCase', '4.0.1' # TODO: Update to 6.0
+    pod 'TBAKitTesting', :path => 'the-blue-alliance-ios/Frameworks/TBAKit'
   end
 end
 
