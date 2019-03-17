@@ -1,3 +1,4 @@
+import Crashlytics
 import Foundation
 import FirebaseAuth
 import FirebaseMessaging
@@ -114,11 +115,19 @@ class MyTBA {
                 }
                 #endif
 
-                let response = try! MyTBA.jsonDecoder.decode(T.self, from: data)
-                if let baseResponse = response as? MyTBABaseResponse {
-                    completion(response, error ?? baseResponse.error)
+                var decodedResponse: T?
+                do {
+                    decodedResponse = try MyTBA.jsonDecoder.decode(T.self, from: data)
+                } catch {
+                    Crashlytics.sharedInstance().recordError(error)
+                    completion(nil, error)
+                    return
+                }
+
+                if let myTBAResponse = decodedResponse as? MyTBABaseResponse {
+                    completion(decodedResponse, error ?? myTBAResponse.error)
                 } else {
-                    completion(response, error)
+                    completion(decodedResponse, error)
                 }
             } else {
                 completion(nil, MyTBAError.error("Unexpected response from myTBA API"))
