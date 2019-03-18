@@ -92,7 +92,7 @@ class PushService: NSObject {
 extension PushService: MyTBAAuthenticationObservable {
 
     func authenticated() {
-        registerPendingPushToken()
+        registerFCMToken()
     }
 
     func unauthenticated() {
