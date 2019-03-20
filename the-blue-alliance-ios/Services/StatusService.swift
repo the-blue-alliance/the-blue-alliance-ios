@@ -7,12 +7,13 @@ import Foundation
  */
 class StatusService: NSObject {
 
+    var retryService: RetryService
+
     private let bundle: Bundle
     private let persistentContainer: NSPersistentContainer
-    var retryService: RetryService
     private let tbaKit: TBAKit
 
-    fileprivate lazy var status: Status = {
+    lazy var status: Status = {
         if let status = Status.status(in: persistentContainer.viewContext) {
             return status
         } else if let status = Status.fromPlist(bundle: bundle, in: persistentContainer.viewContext) {
@@ -25,6 +26,7 @@ class StatusService: NSObject {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
 
+    private let statusSubscribers: NSHashTable<StatusSubscribable> = NSHashTable.weakObjects()
     private let fmsStatusSubscribers: NSHashTable<FMSStatusSubscribable> = NSHashTable.weakObjects()
     private let eventStatusSubscribers: NSMapTable<NSString, NSHashTable<EventStatusSubscribable>> = NSMapTable()
 
@@ -32,9 +34,6 @@ class StatusService: NSObject {
     private var previousFMSStatus: Bool = false
     private var previouslyDownEventKeys: [String] = []
 
-    var minAppVersion: Int {
-        return status.minAppVersion?.intValue ?? -1
-    }
     var currentSeason: Int {
         return status.currentSeason!.intValue
     }
@@ -53,6 +52,8 @@ class StatusService: NSObject {
 
     func setupStatusObservers() {
         contextObserver.observeObject(object: status, state: .updated) { [weak self] (status, _) in
+            self?.dispatchStatusChanged(status)
+
             if let isDatafeedDown = status.isDatafeedDown {
                 self?.dispatchFMSDown(isDatafeedDown.boolValue)
             }
@@ -74,6 +75,10 @@ class StatusService: NSObject {
             })
             completion?(error)
         }
+    }
+
+    func dispatchStatusChanged(_ status: Status) {
+        updateStatusSubscribers(status)
     }
 
     func dispatchFMSDown(_ fmsStatus: Bool) {
@@ -102,6 +107,10 @@ class StatusService: NSObject {
 
     // MARK: - Status Notifications
 
+    fileprivate func registerForStatusChanges(_ subscriber: StatusSubscribable) {
+        statusSubscribers.add(subscriber)
+    }
+
     fileprivate func registerForFMSStatusChanges(_ subscriber: FMSStatusSubscribable) {
         fmsStatusSubscribers.add(subscriber)
     }
@@ -110,6 +119,12 @@ class StatusService: NSObject {
         let subscribers = eventStatusSubscribers.object(forKey: eventKey as NSString) ?? NSHashTable.weakObjects()
         subscribers.add(subscriber)
         eventStatusSubscribers.setObject(subscribers, forKey: eventKey as NSString)
+    }
+
+    fileprivate func updateStatusSubscribers(_ status: Status) {
+        for subscriber in self.statusSubscribers.allObjects {
+            subscriber.statusChanged(status: status)
+        }
     }
 
     fileprivate func updateFMSSubscribers(isDatafeedDown: Bool) {
@@ -138,6 +153,20 @@ extension StatusService: Retryable {
 
     func retry() {
         fetchStatus()
+    }
+
+}
+
+@objc protocol StatusSubscribable {
+    var statusService: StatusService { get }
+
+    func statusChanged(status: Status)
+}
+
+extension StatusSubscribable {
+
+    func registerForStatusChanges() {
+        statusService.registerForStatusChanges(self)
     }
 
 }

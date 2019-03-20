@@ -97,12 +97,10 @@
 		9274E14721B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */; };
 		9274E14921B1AAD300F5D5D0 /* NotificationStatusTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9274E14821B1A12500F5D5D0 /* NotificationStatusTableViewCell.xib */; };
 		9275956421B1D0A600560D81 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956321B1D0A600560D81 /* Status.swift */; };
-		9275956621B1E92B00560D81 /* StatusServiceOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956521B1E92B00560D81 /* StatusServiceOperation.swift */; };
 		9275956821B33CF500560D81 /* MyTBAPing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956721B33CF500560D81 /* MyTBAPing.swift */; };
 		9275956A21B442AA00560D81 /* StatusServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956921B442AA00560D81 /* StatusServiceTests.swift */; };
 		9275956C21B44A2A00560D81 /* StatusDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9275956B21B44A2A00560D81 /* StatusDefaults.plist */; };
 		9275956F21B4EF0600560D81 /* StatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275956E21B4EF0600560D81 /* StatusTests.swift */; };
-		9275957121B4F10500560D81 /* StatusServiceOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275957021B4F10500560D81 /* StatusServiceOperation.swift */; };
 		9275957321B7514700560D81 /* DistrictTeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275957221B7514700560D81 /* DistrictTeamsViewController.swift */; };
 		9275957521B7519C00560D81 /* EventTeamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9275957421B7519C00560D81 /* EventTeamsViewController.swift */; };
 		927B35E222265B6E0011B48C /* Test.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 927B35DB22265B6E0011B48C /* Test.xcdatamodeld */; };
@@ -387,12 +385,10 @@
 		9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusCellViewModel.swift; sourceTree = "<group>"; };
 		9274E14821B1A12500F5D5D0 /* NotificationStatusTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotificationStatusTableViewCell.xib; sourceTree = "<group>"; };
 		9275956321B1D0A600560D81 /* Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
-		9275956521B1E92B00560D81 /* StatusServiceOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusServiceOperation.swift; sourceTree = "<group>"; };
 		9275956721B33CF500560D81 /* MyTBAPing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBAPing.swift; sourceTree = "<group>"; };
 		9275956921B442AA00560D81 /* StatusServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusServiceTests.swift; sourceTree = "<group>"; };
 		9275956B21B44A2A00560D81 /* StatusDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = StatusDefaults.plist; sourceTree = "<group>"; };
 		9275956E21B4EF0600560D81 /* StatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTests.swift; sourceTree = "<group>"; };
-		9275957021B4F10500560D81 /* StatusServiceOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusServiceOperation.swift; sourceTree = "<group>"; };
 		9275957221B7514700560D81 /* DistrictTeamsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistrictTeamsViewController.swift; sourceTree = "<group>"; };
 		9275957421B7519C00560D81 /* EventTeamsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamsViewController.swift; sourceTree = "<group>"; };
 		927B35DC22265B6E0011B48C /* Test.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Test.xcdatamodel; sourceTree = "<group>"; };
@@ -1277,7 +1273,6 @@
 			children = (
 				92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */,
 				9287014420CD8C070077D6DA /* PersistentContainerOperation.swift */,
-				9275956521B1E92B00560D81 /* StatusServiceOperation.swift */,
 			);
 			path = "App Setup";
 			sourceTree = "<group>";
@@ -1296,7 +1291,6 @@
 			isa = PBXGroup;
 			children = (
 				92BB717E20CE19F40081F4E5 /* PersistentContainerOperationTests.swift */,
-				9275957021B4F10500560D81 /* StatusServiceOperation.swift */,
 			);
 			path = "App Setup";
 			sourceTree = "<group>";
@@ -2038,7 +2032,6 @@
 				92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */,
 				92C8CE4821ADAA5100683558 /* MyTBAContainerViewController.swift in Sources */,
 				92942DAB1E215700008E79CA /* TBA.xcdatamodeld in Sources */,
-				9275956621B1E92B00560D81 /* StatusServiceOperation.swift in Sources */,
 				929F572C2092BB1C00E5313A /* Alertable.swift in Sources */,
 				92DF35FB217D439500B5246B /* Match.swift in Sources */,
 				92C9BD3B2096BBA5007FB9C8 /* MyTBATableViewController.swift in Sources */,
@@ -2187,7 +2180,6 @@
 				9280EAED21685F310016621D /* RefreshableTests.swift in Sources */,
 				14472BB72168487F00E0AE72 /* DistrictTests.swift in Sources */,
 				92FF113221A667E2003BC5C4 /* TBAPersistenceContainerTests.swift in Sources */,
-				9275957121B4F10500560D81 /* StatusServiceOperation.swift in Sources */,
 				925908AB21828CC400D7BFCE /* WebcastTests.swift in Sources */,
 				1421ADF3219E040A00118634 /* MyTBAEntityTests.swift in Sources */,
 				9266A1D821AA161500545867 /* MyTBAFavoriteTests.swift in Sources */,

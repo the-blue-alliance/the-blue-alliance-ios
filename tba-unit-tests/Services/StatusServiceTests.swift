@@ -12,13 +12,8 @@ class StatusServiceTests: TBATestCase {
         XCTAssertEqual(statusService.currentSeason, 2015)
     }
 
-    func test_minAppVersion() {
-        XCTAssertEqual(statusService.minAppVersion, -1)
-    }
-
     func test_currentSeason() {
         XCTAssertEqual(statusService.currentSeason, 2015)
-
     }
 
     func test_maxSeason() {
@@ -30,13 +25,12 @@ class StatusServiceTests: TBATestCase {
 
         statusService.setupStatusObservers()
 
-        let fmsSubscribable = MockFMSStatusSubscribable(statusService: statusService)
-
-        // Ignore inserts
         let insertExpectation = expectation(description: "status inserted")
         insertExpectation.isInverted = true
-        fmsSubscribable.fmsStatusChangedExpectation = insertExpectation
-        fmsSubscribable.registerForFMSStatusChanges()
+
+        let statusSubscribable = MockStatusSubscribable(statusService: statusService)
+        statusSubscribable.statusChangedExpectation = insertExpectation
+        statusSubscribable.registerForStatusChanges()
 
         try! persistentContainer.viewContext.save()
         wait(for: [insertExpectation], timeout: 1.0)
@@ -48,13 +42,12 @@ class StatusServiceTests: TBATestCase {
 
         statusService.setupStatusObservers()
 
-        let fmsSubscribable = MockFMSStatusSubscribable(statusService: statusService)
-
-        // Ignore deletions
         let deletionExpectation = expectation(description: "status deleted")
         deletionExpectation.isInverted = true
-        fmsSubscribable.fmsStatusChangedExpectation = deletionExpectation
-        fmsSubscribable.registerForFMSStatusChanges()
+
+        let statusSubscribable = MockStatusSubscribable(statusService: statusService)
+        statusSubscribable.statusChangedExpectation = deletionExpectation
+        statusSubscribable.registerForStatusChanges()
 
         persistentContainer.viewContext.delete(status)
         try! persistentContainer.viewContext.save()
@@ -67,13 +60,11 @@ class StatusServiceTests: TBATestCase {
 
         statusService.setupStatusObservers()
 
-        let fmsSubscribable = MockFMSStatusSubscribable(statusService: statusService)
-
-        // Handle updates
         let updateExpectation = expectation(description: "status updated")
-        fmsSubscribable.fmsStatusChangedExpectation = updateExpectation
-        fmsSubscribable.fmsStatusChangedValue = true
-        fmsSubscribable.registerForFMSStatusChanges()
+
+        let statusSubscribable = MockStatusSubscribable(statusService: statusService)
+        statusSubscribable.statusChangedExpectation = updateExpectation
+        statusSubscribable.registerForStatusChanges()
 
         status.isDatafeedDown = NSNumber(value: true)
         try! persistentContainer.viewContext.save()
@@ -86,13 +77,11 @@ class StatusServiceTests: TBATestCase {
 
         statusService.setupStatusObservers()
 
-        let fmsSubscribable = MockFMSStatusSubscribable(statusService: statusService)
-
-        // Handle refreshes
         let refreshExpectation = expectation(description: "status refreshed")
-        fmsSubscribable.fmsStatusChangedExpectation = refreshExpectation
-        fmsSubscribable.fmsStatusChangedValue = true
-        fmsSubscribable.registerForFMSStatusChanges()
+
+        let statusSubscribable = MockStatusSubscribable(statusService: statusService)
+        statusSubscribable.statusChangedExpectation = refreshExpectation
+        statusSubscribable.registerForStatusChanges()
 
         let backgroundSaveExpectation = backgroundContextSaveExpectation()
         persistentContainer.performBackgroundTask { (backgroundContext) in
@@ -123,6 +112,45 @@ class StatusServiceTests: TBATestCase {
     }
 
 }
+
+class StatusSubscribableTests: TBATestCase {
+
+    fileprivate var subscribable: MockStatusSubscribable!
+
+    override func setUp() {
+        super.setUp()
+
+        subscribable = MockStatusSubscribable(statusService: statusService)
+    }
+
+    override func tearDown() {
+        subscribable = nil
+
+        super.tearDown()
+    }
+
+    func test_registerForStatusChanges() {
+        let ex = expectation(description: "Status changes dispatch")
+        subscribable.statusChangedExpectation = ex
+
+        subscribable.registerForStatusChanges()
+        statusService.dispatchStatusChanged(Status.init(entity: Status.entity(), insertInto: persistentContainer.viewContext))
+
+        wait(for: [ex], timeout: 1.0)
+    }
+
+    func test_registerForFMSStatusChanges_notRegistered() {
+        let ex = expectation(description: "Status changes do not dispatch")
+        ex.isInverted = true
+        subscribable.statusChangedExpectation = ex
+
+        statusService.dispatchStatusChanged(Status.init(entity: Status.entity(), insertInto: persistentContainer.viewContext))
+
+        wait(for: [ex], timeout: 1.0)
+    }
+
+}
+
 
 class FMSStatusSubscribableTests: TBATestCase {
 
@@ -212,6 +240,23 @@ class EventStatusSubscribableTests: TBATestCase {
         XCTAssertFalse(eventSubscribable.isEventDown(eventKey: testEventKey))
         status.addToDownEvents(EventKey.insert(withKey: testEventKey, in: persistentContainer.viewContext))
         XCTAssert(eventSubscribable.isEventDown(eventKey: testEventKey))
+    }
+
+}
+
+private class MockStatusSubscribable: StatusSubscribable {
+
+    var statusService: StatusService
+
+    var statusChangedExpectation: XCTestExpectation?
+
+    init(statusService: StatusService) {
+        self.statusService = statusService
+    }
+
+    func statusChanged(status: Status) {
+        XCTAssertNotNil(status)
+        statusChangedExpectation?.fulfill()
     }
 
 }
