@@ -5,17 +5,12 @@ import UIKit
 class AppSetupOperation: TBAOperation {
 
     var persistentContainerOperation: PersistentContainerOperation
-    var statusServiceOperation: StatusServiceOperation
 
     let appSetupOperationQueue = OperationQueue()
 
-    init(persistentContainer: NSPersistentContainer, statusService: StatusService) {
+    init(persistentContainer: NSPersistentContainer) {
         self.persistentContainerOperation = PersistentContainerOperation(persistentContainer: persistentContainer)
-        self.statusServiceOperation = StatusServiceOperation(statusService: statusService)
-
-        // Wait for persistent container to setup before running our status service operation
-        // This is to prevent a crash when we attempt to save a status object
-        self.statusServiceOperation.addDependency(self.persistentContainerOperation)
+        // We can always add more operations and chain them together addDependency(self.persistentContainerOperation)
 
         super.init()
     }
@@ -31,7 +26,7 @@ class AppSetupOperation: TBAOperation {
             self.finish()
         }
 
-        let dependentOperations = [persistentContainerOperation, statusServiceOperation]
+        let dependentOperations = [persistentContainerOperation]
         for op in dependentOperations {
             blockOperation.addDependency(op)
         }

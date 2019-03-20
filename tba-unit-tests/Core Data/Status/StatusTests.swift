@@ -60,4 +60,16 @@ class StatusTestCase: CoreDataTestCase {
         XCTAssertFalse(status.isOrphaned)
     }
 
+    func test_safeMinAppVersion_none() {
+        let status = Status.init(entity: Status.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(status.safeMinAppVersion, -1)
+    }
+
+    func test_safeMinAppVersion() {
+        let status = Status.init(entity: Status.entity(), insertInto: persistentContainer.viewContext)
+        status.minAppVersion = NSNumber(value: 3)
+
+        XCTAssertEqual(status.safeMinAppVersion, 3)
+    }
+
 }

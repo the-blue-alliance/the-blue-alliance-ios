@@ -74,4 +74,8 @@ extension Status: Managed {
         return false
     }
 
+    var safeMinAppVersion: Int {
+        return minAppVersion?.intValue ?? -1
+    }
+
 }

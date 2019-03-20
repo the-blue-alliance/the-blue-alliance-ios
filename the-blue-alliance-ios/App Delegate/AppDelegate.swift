@@ -140,6 +140,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Listen for changes to FMS availability
         registerForFMSStatusChanges()
+        registerForStatusChanges()
 
         // Assign our Push Service as a delegate to all push-related classes
         setupPushServiceDelegates()
@@ -149,9 +150,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Kickoff background myTBA/Google sign in, along with setting up delegates
         setupGoogleAuthentication()
 
-        // Our app setup operation will load our persistent stores, fetch our status, propogate persistance container
-        let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer,
-                                                  statusService: statusService)
+        // Our app setup operation will load our persistent stores, propogate persistance container
+        let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer)
         weak var weakAppSetupOperation = appSetupOperation
         appSetupOperation.completionBlock = { [unowned self] in
             if let error = weakAppSetupOperation?.completionError as NSError? {
@@ -159,18 +159,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 DispatchQueue.main.async {
                     AppDelegate.showFatalError(error, in: window)
                 }
-            } else if let buildVersionNumber = Bundle.main.buildVersionNumber,
-                !AppDelegate.isAppVersionSupported(buildVersionNumber, statusService: self.statusService) {
-                // App build is less than minimum app version - abort
-                DispatchQueue.main.async {
-                    AppDelegate.showMinimumAppAlert(appStoreID: "1441973916",
-                                                    currentAppVersion: buildVersionNumber,
-                                                    in: window)
-                }
             } else {
                 // Register retries for our status service on the main thread
                 DispatchQueue.main.async {
-                    self.statusService.registerRetryable()
+                    self.statusService.registerRetryable(initiallyRetry: true)
+                }
+
+                // Check our minimum app version - abort app flow if necessary
+                if !self.isAppVersionSupported(minimumAppVersion: self.statusService.status.safeMinAppVersion) {
+                    self.showMinimumAppVersionAlert(status: self.statusService.status)
+                    return
                 }
 
                 DispatchQueue.main.async {
@@ -242,13 +240,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: Private
 
-    private static func isAppVersionSupported(_ version: Int, statusService: StatusService) -> Bool {
-        if ProcessInfo.processInfo.arguments.contains("-testUnsupportedVersion") {
-            return false
-        }
-        return version >= statusService.minAppVersion
-    }
-
     private static func showFatalError(_ error: NSError, in window: UIWindow) {
         showRootAlertView(title: "Error Loading Data",
                           message: "There was an error loading local data - try reinstalling The Blue Alliance",
@@ -258,24 +249,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private static func showMinimumAppAlert(appStoreID: String, currentAppVersion: Int, in window: UIWindow) {
-        showRootAlertView(title: "Unsupported App Version",
-                          message: "Your version (\(currentAppVersion)) of The Blue Alliance for iOS is no longer supported - please visit the App Store to update to the latest version",
-                          in: window) { (_) in
-                            if let url = URL(string: "https://itunes.apple.com/app/id\(appStoreID)") {
-                                UIApplication.shared.open(url, options: [:], completionHandler: { (_) in
-                                    fatalError("Unsupported app version \(currentAppVersion)")
-                                })
-                            } else {
-                                fatalError("Unsupported app version \(currentAppVersion)")
-                            }
-        }
+        showRootAlertView(title: "Unsupported App Version", message: "Your version (\(currentAppVersion)) of The Blue Alliance for iOS is no longer supported - please visit the App Store to update to the latest version", in: window, handler: nil)
     }
 
     private static func showRootAlertView(title: String, message: String, in window: UIWindow, handler: ((UIAlertAction) -> Void)?) {
         let alertController = UIAlertController(title: title,
                                                 message: message,
                                                 preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "Close", style: .default, handler: handler))
         window.rootViewController?.present(alertController, animated: true, completion: nil)
     }
 
@@ -356,6 +336,34 @@ extension AppDelegate: GIDSignInDelegate {
         }
     }
 
+    func isAppVersionSupported(minimumAppVersion: Int) -> Bool {
+        if ProcessInfo.processInfo.arguments.contains("-testUnsupportedVersion") {
+            return true
+        }
+
+        return Bundle.main.buildVersionNumber >= minimumAppVersion
+    }
+
+    func showMinimumAppVersionAlert(status: Status) {
+        guard let window = window else {
+            return
+        }
+
+        DispatchQueue.main.async {
+            AppDelegate.showMinimumAppAlert(appStoreID: "1441973916", currentAppVersion: status.safeMinAppVersion, in: window)
+        }
+    }
+
+}
+
+extension AppDelegate: StatusSubscribable {
+
+    func statusChanged(status: Status) {
+        if !isAppVersionSupported(minimumAppVersion: status.safeMinAppVersion) {
+            showMinimumAppVersionAlert(status: status)
+        }
+    }
+
 }
 
 extension AppDelegate: FMSStatusSubscribable {
@@ -370,7 +378,6 @@ extension AppDelegate: FMSStatusSubscribable {
         let alertController = UIAlertController(title: "FIRST's servers are down",
                                                 message: "We rely on FIRST to provide scores, ranking, and more. Unfortunately, FIRST's servers are broken right now, so we can't get the latest updates. The information you see here may be out of date.",
                                                 preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
         window?.rootViewController?.present(alertController, animated: true, completion: nil)
     }
 
