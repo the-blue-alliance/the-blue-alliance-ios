@@ -135,7 +135,7 @@ class WeekEventsViewController: EventsViewController {
 
     func setupCurrentSeasonWeek() {
         // Fetch all events where endDate is today or after today
-        let coreDataDate = NSDate(timeIntervalSince1970: Date().endOfDay().timeIntervalSince1970)
+        let coreDataDate = NSDate(timeIntervalSince1970: Date().startOfDay().timeIntervalSince1970)
 
         // Find the first non-finished event for the selected year
         let event = Event.fetchSingleObject(in: persistentContainer.viewContext) { (fetchRequest) in
