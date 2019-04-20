@@ -18,6 +18,13 @@ extension Date {
     }
 
     /**
+     00:00:00am on the reciving date.
+     */
+    func startOfDay(calendar: Calendar = Calendar.current) -> Date {
+        return calendar.date(bySettingHour: 0, minute: 0, second: 0, of: self)!
+    }
+
+    /**
      11:59:59pm on the reciving date - used to inclusively match date in date logic
      */
     func endOfDay(calendar: Calendar = Calendar.current) -> Date {

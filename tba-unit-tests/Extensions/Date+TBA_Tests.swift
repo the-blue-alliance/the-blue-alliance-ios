@@ -33,6 +33,12 @@ class DateTBATestCase: XCTestCase {
         XCTAssertFalse(epoch.isBetween(date: now, andDate: oneHourAgo))
     }
 
+    func test_startOfDay() {
+        let calendar = Calendar.current
+        let today = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
+        XCTAssertEqual(Date().startOfDay(), today)
+    }
+
     func test_endOfDay() {
         let calendar = Calendar.current
         let today = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
