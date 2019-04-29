@@ -28,8 +28,8 @@ class MatchViewController: MyTBAContainerViewController {
 
     init(match: Match, teamKey: TeamKey? = nil, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.match = match
-        infoViewController = MatchInfoViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         
+        infoViewController = MatchInfoViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         // Only show match breakdown if year is 2015 or onward
         var titles: [String]  = ["Info"]
         if match.year >= 2015 {
@@ -52,7 +52,7 @@ class MatchViewController: MyTBAContainerViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: - View Lifecycle
 
     override func viewWillAppear(_ animated: Bool) {
@@ -60,4 +60,5 @@ class MatchViewController: MyTBAContainerViewController {
 
         Analytics.logEvent("match", parameters: ["match": match.key!])
     }
+    
 }
