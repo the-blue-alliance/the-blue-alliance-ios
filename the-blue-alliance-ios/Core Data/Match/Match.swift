@@ -169,6 +169,15 @@ extension Match {
     var blueAllianceTeamNumbers: [String] {
         return blueAllianceTeamKeys.map({ Team.trimFRCPrefix($0) })
     }
+    
+    /**
+     Returns the team keys from both alliances
+    */
+    var teamKeys: [TeamKey]? {
+        guard let blueKeys = blueAlliance?.teams?.array as? [TeamKey] else { return nil }
+        guard let redKeys = redAlliance?.teams?.array as? [TeamKey] else { return nil }
+        return blueKeys + redKeys
+    }
 
     /**
     Returns the team keys that were DQ'd in this match - not specifically any alliance
