@@ -1,13 +1,22 @@
 import Foundation
 import UIKit
 
-class MatchSummaryView: UIView {
+protocol MatchSummaryViewDelegate:class {
+    func teamPressed(teamNumber: Int)
+}
 
+class MatchSummaryView: UIView {
+    
+    public weak var delegate: MatchSummaryViewDelegate?
+    
     var viewModel: MatchViewModel? {
         didSet {
             configureView()
         }
     }
+    
+    // change this variable so that the teams are shown as buttons
+    private var teamsTappable: Bool = false
 
     private let winnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
     private let notWinnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
@@ -43,9 +52,9 @@ class MatchSummaryView: UIView {
 
     // MARK: - Init
 
-    init() {
+    init(teamsTappable: Bool = false) {
         super.init(frame: .zero)
-
+        self.teamsTappable = teamsTappable
         initMatchView()
     }
 
@@ -108,7 +117,10 @@ class MatchSummaryView: UIView {
 
         for (alliance, stackView) in [(viewModel.redAlliance, redStackView!), (viewModel.blueAlliance, blueStackView!)] {
             for teamKey in alliance {
-                let label = teamLabel(for: teamKey, baseTeamKey: viewModel.baseTeamKey, dq: viewModel.dqs.contains(teamKey))
+                // if teams are tappable, load the team #s as buttons to link to the team page
+                let label = teamsTappable
+                    ? teamButton(for: teamKey, baseTeamKey: viewModel.baseTeamKey, dq: viewModel.dqs.contains(teamKey))
+                    : teamLabel(for: teamKey, baseTeamKey: viewModel.baseTeamKey, dq: viewModel.dqs.contains(teamKey))
                 // Insert each new stack view at the index just before the score view
                 stackView.insertArrangedSubview(label, at: stackView.arrangedSubviews.count - 1)
             }
@@ -144,30 +156,67 @@ class MatchSummaryView: UIView {
     private func teamLabel(for teamKey: String, baseTeamKey: String?, dq: Bool) -> UILabel {
         let text: String = "\(Team.trimFRCPrefix(teamKey))"
         let isBold: Bool = (teamKey == baseTeamKey)
-
+        
         return label(text: text, isBold: isBold, isStrikethrough: dq)
+    }
+    
+    private func teamButton(for teamKey: String, baseTeamKey: String?, dq: Bool) -> UIButton {
+        let text: String = "\(Team.trimFRCPrefix(teamKey))"
+        let isBold: Bool = (teamKey == baseTeamKey)
+
+        return button(text: text, isBold: isBold, isStrikethrough: dq)
+    }
+    
+    private func button(text: String, isBold: Bool, isStrikethrough: Bool = false, isTeam: Bool = true) -> UIButton {
+        let newButton = UIButton(type: .system)
+        newButton.setTitle(text, for: [])
+        
+        // set color of the label to black like default
+        let buttonColor = UIColor.primaryBlue
+        newButton.setTitleColor(buttonColor, for: .normal)
+        // change color to gray when user hits the button
+        newButton.setTitleColor(buttonColor.withAlphaComponent(0.8), for: .highlighted)
+        newButton.setTitleColor(buttonColor.withAlphaComponent(0.8), for: .focused)
+        
+
+        newButton.titleLabel?.attributedText = customAttributedString(text: text, isBold: isBold, isStrikethrough: isStrikethrough)
+        
+        newButton.addTarget(self, action: #selector(teamPressed(sender:)), for: .touchUpInside)
+        newButton.translatesAutoresizingMaskIntoConstraints = false
+        return newButton
     }
 
     private func label(text: String, isBold: Bool, isStrikethrough: Bool = false) -> UILabel {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.attributedText = customAttributedString(text: text, isBold: isBold, isStrikethrough: isStrikethrough)
+        label.translatesAutoresizingMaskIntoConstraints = false
+
+        return label
+    }
+    
+    @objc private func teamPressed(sender: UIButton) {
+        guard let text = sender.titleLabel?.text else { return }
+        guard let teamNumber = Int(text) else { return }
+        self.delegate?.teamPressed(teamNumber: teamNumber)
+    }
+    
+    private func customAttributedString(text: String, isBold: Bool, isStrikethrough: Bool = false) -> NSMutableAttributedString {
         let attributeString =  NSMutableAttributedString(string: text)
         let attributedStringRange = NSMakeRange(0, attributeString.length)
-
+        
         var font: UIFont = .systemFont(ofSize: 14)
         if isBold {
             font = .boldSystemFont(ofSize: 14)
         }
         attributeString.addAttribute(.font, value: font, range: attributedStringRange)
-
+        
         if isStrikethrough {
             attributeString.addAttribute(.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: attributedStringRange)
         }
+        
+        return attributeString
 
-        let label = UILabel()
-        label.textAlignment = .center
-        label.attributedText = attributeString
-        label.translatesAutoresizingMaskIntoConstraints = false
-
-        return label
     }
 
 }

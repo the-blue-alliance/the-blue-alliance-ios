@@ -17,7 +17,8 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
     internal var statusService: StatusService
     internal var urlOpener: URLOpener
     internal var myTBA: MyTBA
-
+    
+    private var matchViewController: MatchViewController?
 
     // MARK: - Init
 
@@ -87,8 +88,9 @@ extension TeamAtEventViewController: MatchesViewControllerDelegate, TeamSummaryV
     }
 
     func matchSelected(_ match: Match) {
-        let matchViewController = MatchViewController(match: match, teamKey: teamKey, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        self.navigationController?.pushViewController(matchViewController, animated: true)
+        self.matchViewController = MatchViewController(match: match, teamKey: teamKey, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        matchViewController?.matchSummaryDelegate = self
+        self.navigationController?.pushViewController(matchViewController!, animated: true)
     }
 
 }
@@ -105,4 +107,26 @@ extension TeamAtEventViewController: EventAwardsViewControllerDelegate {
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
+}
+
+extension TeamAtEventViewController: MatchSummaryViewDelegate {
+    func teamPressed(teamNumber: Int) {
+        let teamKey = "frc\(teamNumber)"
+        print("Team key: \(teamKey)")
+        tbaKit.fetchTeam(key: teamKey) { (tbaTeam, err) in
+            if let err = err {
+                print(err)
+                return
+            }
+            DispatchQueue.main.async {
+                print("Team: \(tbaTeam)")
+                guard let team = tbaTeam else { return }
+                let newTeam = Team.insert(team, in: self.persistentContainer.viewContext)
+                let teamAtEventVC = TeamAtEventViewController(teamKey: newTeam.teamKey, event: self.event, myTBA: self.myTBA, showDetailEvent: true, showDetailTeam: true, statusService: self.statusService, urlOpener: self.urlOpener, persistentContainer: self.persistentContainer, tbaKit: self.tbaKit, userDefaults: self.userDefaults)
+                self.navigationController?.pushViewController(teamAtEventVC, animated: true)
+            }
+            
+        }
+        
+    }
 }

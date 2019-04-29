@@ -13,6 +13,8 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
     private(set) var teamsViewController: EventTeamsViewController
     private(set) var rankingsViewController: EventRankingsViewController
     private(set) var matchesViewController: MatchesViewController
+    
+    private var matchViewController: MatchViewController?
 
     override var subscribableModel: MyTBASubscribable {
         return event
@@ -121,10 +123,29 @@ extension EventViewController: EventRankingsViewControllerDelegate {
 }
 
 extension EventViewController: MatchesViewControllerDelegate {
-
     func matchSelected(_ match: Match) {
-        let matchViewController = MatchViewController(match: match, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        self.navigationController?.pushViewController(matchViewController, animated: true)
+        self.matchViewController = MatchViewController(match: match, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        self.matchViewController?.matchSummaryDelegate = self
+        self.navigationController?.pushViewController(matchViewController!, animated: true)
     }
+}
 
+extension EventViewController: MatchSummaryViewDelegate {
+    func teamPressed(teamNumber: Int) {
+        let teamKey = "frc\(teamNumber)"
+        tbaKit.fetchTeam(key: teamKey) { (tbaTeam, err) in
+            if let err = err {
+                print(err)
+                return
+            }
+            DispatchQueue.main.async {
+                guard let team = tbaTeam else { return }
+                let newTeam = Team.insert(team, in: self.persistentContainer.viewContext)
+                let teamAtEventVC = TeamAtEventViewController(teamKey: newTeam.teamKey, event: self.event, myTBA: self.myTBA, showDetailEvent: false, showDetailTeam: true, statusService: self.statusService, urlOpener: self.urlOpener, persistentContainer: self.persistentContainer, tbaKit: self.tbaKit, userDefaults: self.userDefaults)
+                self.navigationController?.pushViewController(teamAtEventVC, animated: true)
+            }
+            
+        }
+        
+    }
 }

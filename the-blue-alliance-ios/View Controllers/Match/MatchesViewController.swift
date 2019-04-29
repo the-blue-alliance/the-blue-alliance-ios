@@ -13,6 +13,7 @@ class MatchesViewController: TBATableViewController {
     private let teamKey: TeamKey?
 
     weak var delegate: MatchesViewControllerDelegate?
+    
     private var dataSource: TableViewDataSource<Match, MatchesViewController>!
 
     // MARK: - Init

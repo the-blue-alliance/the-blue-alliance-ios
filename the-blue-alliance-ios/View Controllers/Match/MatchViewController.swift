@@ -10,6 +10,15 @@ class MatchViewController: MyTBAContainerViewController {
 
     private(set) var infoViewController: MatchInfoViewController
     private(set) var breakdownViewController: MatchBreakdownViewController?
+    
+    public var matchSummaryDelegate: MatchSummaryViewDelegate? {
+        set {
+            self.infoViewController.matchSummaryDelegate = newValue
+        }
+        get {
+            return self.infoViewController.matchSummaryDelegate
+        }
+    }
 
     override var subscribableModel: MyTBASubscribable {
         return match
@@ -21,14 +30,16 @@ class MatchViewController: MyTBAContainerViewController {
         self.match = match
 
         infoViewController = MatchInfoViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
+        
         // Only show match breakdown if year is 2015 or onward
         var titles: [String]  = ["Info"]
         if match.year >= 2015 {
             titles.append("Breakdown")
             breakdownViewController = MatchBreakdownViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         }
-
+        
+        
+        
         super.init(
             viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }) as! [ContainableViewController],
             navigationTitle: "\(match.friendlyName)",
@@ -52,5 +63,4 @@ class MatchViewController: MyTBAContainerViewController {
 
         Analytics.logEvent("match", parameters: ["match": match.key!])
     }
-
 }
