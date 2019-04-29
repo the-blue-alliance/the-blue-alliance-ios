@@ -63,21 +63,18 @@ class MatchViewController: MyTBAContainerViewController {
 extension MatchViewController: MatchSummaryViewDelegate {
     
     func teamPressed(teamNumber: Int) {
-        let teamKey = "frc\(teamNumber)"
-        tbaKit.fetchTeam(key: teamKey) { (tbaTeam, err) in
-            if let err = err {
-                print(err)
-                return
-            }
-            DispatchQueue.main.async {
-                guard let team = tbaTeam else { return }
-                let newTeam = Team.insert(team, in: self.persistentContainer.viewContext)
-                guard let event = self.match.event else { return }
-                let teamAtEventVC = TeamAtEventViewController(teamKey: newTeam.teamKey, event: event, myTBA: self.myTBA, showDetailEvent: true, showDetailTeam: true, statusService: self.statusService, urlOpener: self.urlOpener, persistentContainer: self.persistentContainer, tbaKit: self.tbaKit, userDefaults: self.userDefaults)
-                self.navigationController?.pushViewController(teamAtEventVC, animated: true)
-            }
-            
-        }
+        guard let event = match.event else { return }
+        guard let redTeamKeys = match.redAlliance?.teams?.array as? [TeamKey] else { return }
+        guard let blueTeamKeys = match.blueAlliance?.teams?.array as? [TeamKey] else { return }
+        
+        // get team key that matches the target teamNumber
+        guard let teamKey = (redTeamKeys + blueTeamKeys).filter({
+            $0.teamNumber == "\(teamNumber)"
+        }).first else { return }
+        
+        let teamAtEventVC = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: self.myTBA, showDetailEvent: true, showDetailTeam: true, statusService: self.statusService, urlOpener: self.urlOpener, persistentContainer: self.persistentContainer, tbaKit: self.tbaKit, userDefaults: self.userDefaults)
+        self.navigationController?.pushViewController(teamAtEventVC, animated: true)
+        
     }
     
 }

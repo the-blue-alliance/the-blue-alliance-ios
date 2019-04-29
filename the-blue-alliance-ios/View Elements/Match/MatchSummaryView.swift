@@ -173,11 +173,13 @@ class MatchSummaryView: UIView {
         newButton.setTitle(text, for: [])
         
         // set color of the label to black like default
-        let buttonColor = UIColor.primaryBlue
-        newButton.setTitleColor(buttonColor, for: .normal)
-        // change color to gray when user hits the button
-        newButton.setTitleColor(buttonColor.withAlphaComponent(0.8), for: .highlighted)
-        newButton.setTitleColor(buttonColor.withAlphaComponent(0.8), for: .focused)
+        newButton.setTitleColor(.primaryBlue, for: .normal)
+        
+        if isTeam {
+            if let teamNumber = Int(text) {
+                newButton.tag = teamNumber
+            }
+        }
 
         newButton.titleLabel?.attributedText = customAttributedString(text: text, isBold: isBold, isStrikethrough: isStrikethrough)
         
@@ -196,9 +198,8 @@ class MatchSummaryView: UIView {
     }
     
     @objc private func teamPressed(sender: UIButton) {
-        guard let text = sender.titleLabel?.text else { return }
-        guard let teamNumber = Int(text) else { return }
-        self.delegate?.teamPressed(teamNumber: teamNumber)
+        if sender.tag == 0 { return }
+        self.delegate?.teamPressed(teamNumber: sender.tag)
     }
     
     private func customAttributedString(text: String, isBold: Bool, isStrikethrough: Bool = false) -> NSMutableAttributedString {
