@@ -141,7 +141,7 @@ extension EventViewController: MatchSummaryViewDelegate {
             DispatchQueue.main.async {
                 guard let team = tbaTeam else { return }
                 let newTeam = Team.insert(team, in: self.persistentContainer.viewContext)
-                let teamAtEventVC = TeamAtEventViewController(teamKey: newTeam.teamKey, event: self.event, myTBA: self.myTBA, showDetailEvent: false, showDetailTeam: true, statusService: self.statusService, urlOpener: self.urlOpener, persistentContainer: self.persistentContainer, tbaKit: self.tbaKit, userDefaults: self.userDefaults)
+                let teamAtEventVC = TeamAtEventViewController(teamKey: newTeam.teamKey, event: self.event, myTBA: self.myTBA, showDetailEvent: true, showDetailTeam: true, statusService: self.statusService, urlOpener: self.urlOpener, persistentContainer: self.persistentContainer, tbaKit: self.tbaKit, userDefaults: self.userDefaults)
                 self.navigationController?.pushViewController(teamAtEventVC, animated: true)
             }
             

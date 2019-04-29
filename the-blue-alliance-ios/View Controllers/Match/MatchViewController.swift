@@ -37,9 +37,7 @@ class MatchViewController: MyTBAContainerViewController {
             titles.append("Breakdown")
             breakdownViewController = MatchBreakdownViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         }
-        
-        
-        
+
         super.init(
             viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }) as! [ContainableViewController],
             navigationTitle: "\(match.friendlyName)",
