@@ -182,7 +182,7 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
             }
         case .match:
             if let match = myTBAObject.tbaObject as? Match {
-                viewController = MatchViewController(match: match, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                viewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
             } else {
                 // TODO: Push using just key
             }

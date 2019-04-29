@@ -54,6 +54,7 @@ class MatchSummaryView: UIView {
 
     init(teamsTappable: Bool = false) {
         super.init(frame: .zero)
+        
         self.teamsTappable = teamsTappable
         initMatchView()
     }

@@ -11,14 +11,8 @@ class MatchViewController: MyTBAContainerViewController {
     private(set) var infoViewController: MatchInfoViewController
     private(set) var breakdownViewController: MatchBreakdownViewController?
     
-    public var matchSummaryDelegate: MatchSummaryViewDelegate? {
-        set {
-            self.infoViewController.matchSummaryDelegate = newValue
-        }
-        get {
-            return self.infoViewController.matchSummaryDelegate
-        }
-    }
+    private let statusService: StatusService
+    private let urlOpener: URLOpener
 
     override var subscribableModel: MyTBASubscribable {
         return match
@@ -26,8 +20,10 @@ class MatchViewController: MyTBAContainerViewController {
 
     // MARK: Init
 
-    init(match: Match, teamKey: TeamKey? = nil, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(match: Match, teamKey: TeamKey? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.match = match
+        self.statusService = statusService
+        self.urlOpener = urlOpener
         
         infoViewController = MatchInfoViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         // Only show match breakdown if year is 2015 or onward
@@ -47,6 +43,7 @@ class MatchViewController: MyTBAContainerViewController {
             tbaKit: tbaKit,
             userDefaults: userDefaults
         )
+        self.infoViewController.matchSummaryDelegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -59,6 +56,28 @@ class MatchViewController: MyTBAContainerViewController {
         super.viewWillAppear(animated)
 
         Analytics.logEvent("match", parameters: ["match": match.key!])
+    }
+    
+}
+
+extension MatchViewController: MatchSummaryViewDelegate {
+    
+    func teamPressed(teamNumber: Int) {
+        let teamKey = "frc\(teamNumber)"
+        tbaKit.fetchTeam(key: teamKey) { (tbaTeam, err) in
+            if let err = err {
+                print(err)
+                return
+            }
+            DispatchQueue.main.async {
+                guard let team = tbaTeam else { return }
+                let newTeam = Team.insert(team, in: self.persistentContainer.viewContext)
+                guard let event = self.match.event else { return }
+                let teamAtEventVC = TeamAtEventViewController(teamKey: newTeam.teamKey, event: event, myTBA: self.myTBA, showDetailEvent: true, showDetailTeam: true, statusService: self.statusService, urlOpener: self.urlOpener, persistentContainer: self.persistentContainer, tbaKit: self.tbaKit, userDefaults: self.userDefaults)
+                self.navigationController?.pushViewController(teamAtEventVC, animated: true)
+            }
+            
+        }
     }
     
 }
