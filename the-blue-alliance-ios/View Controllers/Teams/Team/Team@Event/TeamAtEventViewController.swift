@@ -18,8 +18,6 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
     internal var urlOpener: URLOpener
     internal var myTBA: MyTBA
     
-    private var matchViewController: MatchViewController?
-
     // MARK: - Init
 
     init(teamKey: TeamKey, event: Event, myTBA: MyTBA, showDetailEvent: Bool, showDetailTeam: Bool, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
@@ -88,8 +86,8 @@ extension TeamAtEventViewController: MatchesViewControllerDelegate, TeamSummaryV
     }
 
     func matchSelected(_ match: Match) {
-        self.matchViewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        self.navigationController?.pushViewController(matchViewController!, animated: true)
+        let matchViewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        self.navigationController?.pushViewController(matchViewController, animated: true)
     }
 
 }

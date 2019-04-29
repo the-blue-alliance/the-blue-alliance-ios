@@ -24,7 +24,6 @@ class MatchViewController: MyTBAContainerViewController {
         self.match = match
         self.statusService = statusService
         self.urlOpener = urlOpener
-        
         infoViewController = MatchInfoViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         // Only show match breakdown if year is 2015 or onward
         var titles: [String]  = ["Info"]
@@ -43,7 +42,8 @@ class MatchViewController: MyTBAContainerViewController {
             tbaKit: tbaKit,
             userDefaults: userDefaults
         )
-        self.infoViewController.matchSummaryDelegate = self
+        
+        infoViewController.matchSummaryDelegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -72,9 +72,8 @@ extension MatchViewController: MatchSummaryViewDelegate {
             $0.teamNumber == "\(teamNumber)"
         }).first else { return }
         
-        let teamAtEventVC = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: self.myTBA, showDetailEvent: true, showDetailTeam: true, statusService: self.statusService, urlOpener: self.urlOpener, persistentContainer: self.persistentContainer, tbaKit: self.tbaKit, userDefaults: self.userDefaults)
-        self.navigationController?.pushViewController(teamAtEventVC, animated: true)
-        
+        let teamAtEventVC = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        navigationController?.pushViewController(teamAtEventVC, animated: true)
     }
     
 }

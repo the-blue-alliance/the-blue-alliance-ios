@@ -64,10 +64,10 @@ class MatchInfoViewController: TBAViewController, Observable {
     
     public var matchSummaryDelegate: MatchSummaryViewDelegate? {
         get {
-            return self.matchSummaryView.delegate
+            return matchSummaryView.delegate
         }
         set {
-            self.matchSummaryView.delegate = newValue
+            matchSummaryView.delegate = newValue
         }
     }
 

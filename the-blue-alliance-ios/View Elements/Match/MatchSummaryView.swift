@@ -168,17 +168,15 @@ class MatchSummaryView: UIView {
         return button(text: text, isBold: isBold, isStrikethrough: dq)
     }
     
-    private func button(text: String, isBold: Bool, isStrikethrough: Bool = false, isTeam: Bool = true) -> UIButton {
+    private func button(text: String, isBold: Bool, isStrikethrough: Bool = false) -> UIButton {
         let newButton = UIButton(type: .system)
         newButton.setTitle(text, for: [])
         
         // set color of the label to black like default
         newButton.setTitleColor(.primaryBlue, for: .normal)
         
-        if isTeam {
-            if let teamNumber = Int(text) {
-                newButton.tag = teamNumber
-            }
+        if let teamNumber = Int(text) {
+            newButton.tag = teamNumber
         }
 
         newButton.titleLabel?.attributedText = customAttributedString(text: text, isBold: isBold, isStrikethrough: isStrikethrough)
@@ -199,7 +197,7 @@ class MatchSummaryView: UIView {
     
     @objc private func teamPressed(sender: UIButton) {
         if sender.tag == 0 { return }
-        self.delegate?.teamPressed(teamNumber: sender.tag)
+        delegate?.teamPressed(teamNumber: sender.tag)
     }
     
     private func customAttributedString(text: String, isBold: Bool, isStrikethrough: Bool = false) -> NSMutableAttributedString {
@@ -217,7 +215,6 @@ class MatchSummaryView: UIView {
         }
         
         return attributeString
-
     }
 
 }

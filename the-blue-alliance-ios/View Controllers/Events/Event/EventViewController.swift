@@ -13,8 +13,6 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
     private(set) var teamsViewController: EventTeamsViewController
     private(set) var rankingsViewController: EventRankingsViewController
     private(set) var matchesViewController: MatchesViewController
-    
-    private var matchViewController: MatchViewController?
 
     override var subscribableModel: MyTBASubscribable {
         return event
@@ -124,7 +122,7 @@ extension EventViewController: EventRankingsViewControllerDelegate {
 
 extension EventViewController: MatchesViewControllerDelegate {
     func matchSelected(_ match: Match) {
-        self.matchViewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        self.navigationController?.pushViewController(matchViewController!, animated: true)
+        let matchViewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        self.navigationController?.pushViewController(matchViewController, animated: true)
     }
 }
