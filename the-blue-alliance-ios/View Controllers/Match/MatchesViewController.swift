@@ -66,7 +66,6 @@ class MatchesViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 30.0
     }
-
 }
 
 extension MatchesViewController: TableViewDataSourceDelegate {

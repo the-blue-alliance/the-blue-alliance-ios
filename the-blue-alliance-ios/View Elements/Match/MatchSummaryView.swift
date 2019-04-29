@@ -177,7 +177,6 @@ class MatchSummaryView: UIView {
         // change color to gray when user hits the button
         newButton.setTitleColor(buttonColor.withAlphaComponent(0.8), for: .highlighted)
         newButton.setTitleColor(buttonColor.withAlphaComponent(0.8), for: .focused)
-        
 
         newButton.titleLabel?.attributedText = customAttributedString(text: text, isBold: isBold, isStrikethrough: isStrikethrough)
         

@@ -112,7 +112,6 @@ extension TeamAtEventViewController: EventAwardsViewControllerDelegate {
 extension TeamAtEventViewController: MatchSummaryViewDelegate {
     func teamPressed(teamNumber: Int) {
         let teamKey = "frc\(teamNumber)"
-        print("Team key: \(teamKey)")
         tbaKit.fetchTeam(key: teamKey) { (tbaTeam, err) in
             if let err = err {
                 print(err)
