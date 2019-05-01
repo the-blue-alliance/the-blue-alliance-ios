@@ -63,11 +63,10 @@ class MatchViewController: MyTBAContainerViewController {
 extension MatchViewController: MatchSummaryViewDelegate {
     
     func teamPressed(teamNumber: Int) {
-        guard let event = match.event,
-            let teamKeys = match.teamKeys else { return }
+        guard let event = match.event else { return }
         
         // get team key that matches the target teamNumber
-        guard let teamKey = teamKeys.first(where: { $0.teamNumber == "\(teamNumber)"}) else { return }
+        guard let teamKey = match.teamKeys.first(where: { $0.teamNumber == "\(teamNumber)"}) else { return }
         
         let teamAtEventVC = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(teamAtEventVC, animated: true)

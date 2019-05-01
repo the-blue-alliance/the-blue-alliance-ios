@@ -171,12 +171,10 @@ extension Match {
     }
     
     /**
-     Returns the team keys from both alliances
+     Returns the team keys for all alliances
     */
-    var teamKeys: [TeamKey]? {
-        guard let blueKeys = blueAlliance?.teams?.array as? [TeamKey] else { return nil }
-        guard let redKeys = redAlliance?.teams?.array as? [TeamKey] else { return nil }
-        return blueKeys + redKeys
+    var teamKeys: [TeamKey] {
+        return (alliances?.allObjects as? [MatchAlliance])?.reduce([], { $0 + ($1.teams?.array as? [TeamKey] ?? []) }) ?? []
     }
 
     /**
