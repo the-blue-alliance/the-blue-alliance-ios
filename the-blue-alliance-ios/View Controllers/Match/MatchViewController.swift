@@ -25,6 +25,7 @@ class MatchViewController: MyTBAContainerViewController {
         self.statusService = statusService
         self.urlOpener = urlOpener
         infoViewController = MatchInfoViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        
         // Only show match breakdown if year is 2015 or onward
         var titles: [String]  = ["Info"]
         if match.year >= 2015 {
