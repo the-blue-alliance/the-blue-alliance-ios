@@ -35,18 +35,6 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     private(set) var tbaKit: TBAKit
     private(set) var userDefaults: UserDefaults
 
-    private var isRootContainerViewController: Bool {
-        return navigationController?.topViewController != self
-    }
-    override var hidesBottomBarWhenPushed: Bool {
-        get {
-            return isRootContainerViewController
-        }
-        set {
-            super.hidesBottomBarWhenPushed = newValue
-        }
-    }
-
     // MARK: - Private View Elements
 
     private lazy var navigationStackView: UIStackView = {
