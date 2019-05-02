@@ -79,7 +79,6 @@ platform :ios do
   lane :beta_ci do
     beta_internal
 
-    ship_github(is_prerelease: true) # Create GitHub release
     slack(channel: "#dev-ios", message: "Shipping #{current_git_tag} to TestFlight...", default_payloads: [])
     beta_testflight
 
@@ -99,11 +98,6 @@ platform :ios do
     beta_testflight
 
     reset_git_repo(files: ["the-blue-alliance-ios.xcodeproj/project.pbxproj"], force: true) # Remove our code signing changes
-
-    commit_changelog
-
-    add_git_tag(tag: current_git_tag)
-    push_git_tags
   end
 
   desc "Internal beta lane - use `beta` or `beta_ci`"
