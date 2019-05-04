@@ -21,11 +21,6 @@ or alternatively using `brew cask install fastlane`
 fastlane ios install_deps
 ```
 Install project dependencies
-### ios setup_ci
-```
-fastlane ios setup_ci
-```
-Setup CI
 ### ios test_unit
 ```
 fastlane ios test_unit

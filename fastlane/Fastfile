@@ -9,11 +9,6 @@ platform :ios do
     cocoapods(repo_update: true, use_bundle_exec: true) # Install pods
   end
 
-  desc "Setup CI"
-  lane :setup_ci do
-    setup_travis
-  end
-
   desc "Run TBA unit tests"
   lane :test_unit do
     scan(workspace: "the-blue-alliance-ios.xcworkspace", scheme: "tba-unit-tests")
