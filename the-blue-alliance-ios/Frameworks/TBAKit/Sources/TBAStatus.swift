@@ -85,7 +85,7 @@ public struct TBAAppInfo: TBAModel, Equatable {
 extension TBAKit {
 
     @discardableResult
-    public func fetchStatus(_ completion: @escaping (_ status: TBAStatus?, _ error: Error?) -> ()) -> URLSessionDataTask {
+    public func fetchStatus(_ completion: @escaping (Result<TBAStatus?, Error>) -> ()) -> URLSessionDataTask {
         let method = "status"
         return callObject(method: method, completion: completion)
     }

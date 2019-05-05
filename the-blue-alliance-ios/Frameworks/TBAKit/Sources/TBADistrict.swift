@@ -178,25 +178,25 @@ public struct TBADistrictPointsTiebreaker: TBAModel {
 extension TBAKit {
 
     @discardableResult
-    public func fetchDistricts(year: Int, completion: @escaping ([TBADistrict]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchDistricts(year: Int, completion: @escaping (Result<[TBADistrict], Error>) -> ()) -> URLSessionDataTask {
         let method = "districts/\(year)"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchDistrictEvents(key: String, completion: @escaping ([TBAEvent]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchDistrictEvents(key: String, completion: @escaping (Result<[TBAEvent], Error>) -> ()) -> URLSessionDataTask {
         let method = "district/\(key)/events"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchDistrictTeams(key: String, completion: @escaping ([TBATeam]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchDistrictTeams(key: String, completion: @escaping (Result<[TBATeam], Error>) -> ()) -> URLSessionDataTask {
         let method = "district/\(key)/teams"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchDistrictRankings(key: String, completion: @escaping ([TBADistrictRanking]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchDistrictRankings(key: String, completion: @escaping (Result<[TBADistrictRanking], Error>) -> ()) -> URLSessionDataTask {
         let method = "district/\(key)/rankings"
         return callArray(method: method, completion: completion)
     }

@@ -115,61 +115,61 @@ open class TBAKit: NSObject {
         return task
     }
     
-    internal func callObject<T: TBAModel>(method: String, completion: @escaping (T?, Error?) -> ()) -> URLSessionDataTask {
-        return callApi(method: method) { (response, json, error) in
-            var model: T?
-            if let json = json as? [String: Any] {
-                model = T(json: json)
-            }
-            completion(model, error)
-        }
-    }
-    
-    internal func callArray<T: TBAModel>(method: String, completion: @escaping ([T]?, Error?) -> ()) -> URLSessionDataTask {
-        return callApi(method: method) { (response, json, error) in
-            var models: [T]?
-            if let json = json as? [[String: Any]] {
-                models = []
-                for result in json {
-                    if let model = T(json: result) {
-                        models!.append(model)
-                    }
-                }
-            }
-            completion(models, error)
-        }
-    }
-    
-    internal func callArray(method: String, completion: @escaping ([Any]?, Error?) -> ()) -> URLSessionDataTask {
+    internal func callObject<T: TBAModel>(method: String, completion: @escaping (Result<T?, Error>) -> ()) -> URLSessionDataTask {
         return callApi(method: method) { (response, json, error) in
             if let error = error {
-                completion(nil, error)
-                return
-            }
-            
-            if let statusCode = response?.statusCode, statusCode == 304 {
-                completion(nil, nil)
-            } else if let array = json as? [Any] {
-                completion(array, nil)
+                completion(.failure(error))
+            } else if let statusCode = response?.statusCode, statusCode == 304 {
+                completion(.success(nil))
+            } else if let json = json as? [String: Any] {
+                completion(.success(T(json: json)))
             } else {
-                completion(nil, APIError.error("Unexpected response from server."))
+                completion(.failure(APIError.error("Unexpected response from server.")))
+            }
+        }
+    }
+    
+    internal func callArray<T: TBAModel>(method: String, completion: @escaping (Result<[T], Error>) -> ()) -> URLSessionDataTask {
+        return callApi(method: method) { (response, json, error) in
+            if let error = error {
+                completion(.failure(error))
+            } else if let statusCode = response?.statusCode, statusCode == 304 {
+                completion(.success([]))
+            } else if let json = json as? [[String: Any]] {
+                let models = json.compactMap({
+                    return T(json: $0)
+                })
+                completion(.success(models))
+            } else {
+                completion(.failure(APIError.error("Unexpected response from server.")))
+            }
+        }
+    }
+    
+    internal func callArray(method: String, completion: @escaping (Result<[Any], Error>) -> ()) -> URLSessionDataTask {
+        return callApi(method: method) { (response, json, error) in
+            if let error = error {
+                completion(.failure(error))
+            } else if let statusCode = response?.statusCode, statusCode == 304 {
+                completion(.success([]))
+            } else if let array = json as? [Any] {
+                completion(.success(array))
+            } else {
+                completion(.failure(APIError.error("Unexpected response from server.")))
             }
         }
     }
 
-    internal func callDictionary(method: String, completion: @escaping ([String: Any]?, Error?) -> ()) -> URLSessionDataTask {
+    internal func callDictionary(method: String, completion: @escaping (Result<[String: Any], Error>) -> ()) -> URLSessionDataTask {
         return callApi(method: method) { (response, json, error) in
             if let error = error {
-                completion(nil, error)
-                return
-            }
-            
-            if let statusCode = response?.statusCode, statusCode == 304 {
-                completion(nil, nil)
+                completion(.failure(error))
+            } else if let statusCode = response?.statusCode, statusCode == 304 {
+                completion(.success([:]))
             } else if let dict = json as? [String: Any] {
-                completion(dict, nil)
+                completion(.success(dict))
             } else {
-                completion(nil, APIError.error("Unexpected response from server."))
+                completion(.failure(APIError.error("Unexpected response from server.")))
             }
         }
     }

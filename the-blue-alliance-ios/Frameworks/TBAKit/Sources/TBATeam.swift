@@ -288,7 +288,7 @@ public struct TBAMedia: TBAModel {
 extension TBAKit {
 
     @discardableResult
-    public func fetchTeams(page: Int, year: Int? = nil, completion: @escaping ([TBATeam]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchTeams(page: Int, year: Int? = nil, completion: @escaping (Result<[TBATeam], Error>) -> ()) -> URLSessionDataTask {
         var method = "teams"
         if let year = year {
             method = "\(method)/\(year)"
@@ -298,39 +298,42 @@ extension TBAKit {
     }
 
     @discardableResult
-    public func fetchTeam(key: String, completion: @escaping (TBATeam?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchTeam(key: String, completion: @escaping (Result<TBATeam?, Error>) -> ()) -> URLSessionDataTask {
         let method = "team/\(key)"
         return callObject(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchTeamYearsParticipated(key: String, completion: @escaping ([Int]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchTeamYearsParticipated(key: String, completion: @escaping (Result<[Int], Error>) -> ()) -> URLSessionDataTask {
         let method = "team/\(key)/years_participated"
-        return callArray(method: method) { (years, error) in
-            if let error = error {
-                completion(nil, error)
-            } else if let years = years as? [Int]? {
-                completion(years, nil)
-            } else {
-                completion(nil, APIError.error("Unexpected response from server."))
+        return callArray(method: method) { (result) in
+            switch result {
+            case .failure(let error):
+                completion(.failure(error))
+            case .success(let years):
+                if let years = years as? [Int] {
+                    completion(.success(years))
+                } else {
+                    completion(.failure(APIError.error("Unexpected response from server.")))
+                }
             }
         }
     }
 
     @discardableResult
-    public func fetchTeamDistricts(key: String, completion: @escaping ([TBADistrict]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchTeamDistricts(key: String, completion: @escaping (Result<[TBADistrict], Error>) -> ()) -> URLSessionDataTask {
         let method = "team/\(key)/districts"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchTeamRobots(key: String, completion: @escaping ([TBARobot]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchTeamRobots(key: String, completion: @escaping (Result<[TBARobot], Error>) -> ()) -> URLSessionDataTask {
         let method = "team/\(key)/robots"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchTeamEvents(key: String, year: Int? = nil, completion: @escaping ([TBAEvent]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchTeamEvents(key: String, year: Int? = nil, completion: @escaping (Result<[TBAEvent], Error>) -> ()) -> URLSessionDataTask {
         var method = "team/\(key)/events"
         if let year = year {
             method = "\(method)/\(year)"
@@ -339,12 +342,13 @@ extension TBAKit {
     }
 
     @discardableResult
-    public func fetchTeamStatuses(key: String, year: Int, completion: @escaping ([TBAEventStatus]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchTeamStatuses(key: String, year: Int, completion: @escaping (Result<[TBAEventStatus], Error>) -> ()) -> URLSessionDataTask {
         let method = "team/\(key)/events/\(year)/statuses"
-        return callDictionary(method: method, completion: { (dictionary, error) in
-            if let error = error {
-                completion(nil, error)
-            } else if let dictionary = dictionary {
+        return callDictionary(method: method, completion: { (result) in
+            switch result {
+            case .failure(let error):
+                completion(.failure(error))
+            case .success(let dictionary):
                 let eventStatuses = dictionary.compactMap({ (eventKey, statusJSON) -> TBAEventStatus? in
                     // Add teamKey/eventKey to statusJSON
                     guard var json = statusJSON as? [String: Any] else {
@@ -355,47 +359,44 @@ extension TBAKit {
 
                     return TBAEventStatus(json: json)
                 })
-                completion(eventStatuses, nil)
-            } else {
-                completion(nil, APIError.error("Unexpected response from server."))
+                completion(.success(eventStatuses))
             }
         })
     }
 
     @discardableResult
-    public func fetchTeamMatches(key: String, eventKey: String, completion: @escaping ([TBAMatch]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchTeamMatches(key: String, eventKey: String, completion: @escaping (Result<[TBAMatch], Error>) -> ()) -> URLSessionDataTask {
         let method = "team/\(key)/event/\(eventKey)/matches"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchTeamAwards(key: String, eventKey: String, completion: @escaping ([TBAAward]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchTeamAwards(key: String, eventKey: String, completion: @escaping (Result<[TBAAward], Error>) -> ()) -> URLSessionDataTask {
         let method = "team/\(key)/event/\(eventKey)/awards"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchTeamStatus(key: String, eventKey: String, completion: @escaping (TBAEventStatus?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchTeamStatus(key: String, eventKey: String, completion: @escaping (Result<TBAEventStatus?, Error>) -> ()) -> URLSessionDataTask {
         let method = "team/\(key)/event/\(eventKey)/status"
-        return callDictionary(method: method, completion: { (dictionary, error) in
-            if let error = error {
-                completion(nil, error)
-            } else if var dictionary = dictionary {
+        return callDictionary(method: method, completion: { (result) in
+            switch result {
+            case .failure(let error):
+                completion(.failure(error))
+            case .success(var dictionary):
                 dictionary["team_key"] = key
                 dictionary["event_key"] = eventKey
-                
+
                 if let status = TBAEventStatus(json: dictionary) {
-                    completion(status, nil)
+                    completion(.success(status))
                 } else {
-                    completion(nil, APIError.error("Unexpected response from server."))
+                    completion(.failure(APIError.error("Unexpected response from server.")))
                 }
-            } else {
-                completion(nil, APIError.error("Unexpected response from server."))
             }
         })
     }
     
-    public func fetchTeamAwards(key: String, year: Int? = nil, completion: @escaping ([TBAAward]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchTeamAwards(key: String, year: Int? = nil, completion: @escaping (Result<[TBAAward], Error>) -> ()) -> URLSessionDataTask {
         var method = "team/\(key)/awards"
         if let year = year {
             method = "\(method)/\(year)"
@@ -403,17 +404,17 @@ extension TBAKit {
         return callArray(method: method, completion: completion)
     }
     
-    public func fetchTeamMatches(key: String, year: Int, completion: @escaping ([TBAMatch]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchTeamMatches(key: String, year: Int, completion: @escaping (Result<[TBAMatch], Error>) -> ()) -> URLSessionDataTask {
         let method = "team/\(key)/matches/\(year)"
         return callArray(method: method, completion: completion)
     }
     
-    public func fetchTeamMedia(key: String, year: Int, completion: @escaping ([TBAMedia]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchTeamMedia(key: String, year: Int, completion: @escaping (Result<[TBAMedia], Error>) -> ()) -> URLSessionDataTask {
         let method = "team/\(key)/media/\(year)"
         return callArray(method: method, completion: completion)
     }
     
-    public func fetchTeamSocialMedia(key: String, completion: @escaping ([TBAMedia]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchTeamSocialMedia(key: String, completion: @escaping (Result<[TBAMedia], Error>) -> ()) -> URLSessionDataTask {
         let method = "team/\(key)/social_media"
         return callArray(method: method, completion: completion)
     }

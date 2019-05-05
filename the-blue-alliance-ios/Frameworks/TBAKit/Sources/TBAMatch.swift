@@ -159,23 +159,9 @@ public struct TBAMatchAlliance: TBAModel {
 extension TBAKit {
 
     @discardableResult
-    public func fetchMatch(key: String, _ completion: @escaping (TBAMatch?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchMatch(key: String, _ completion: @escaping (Result<TBAMatch?, Error>) -> ()) -> URLSessionDataTask {
         let method = "match/\(key)"
         return callObject(method: method, completion: completion)
-    }
-
-    @discardableResult
-    public func fetchMatchTimeseries(key: String, completion: @escaping ([[String: Any]]?, Error?) -> ()) -> URLSessionDataTask {
-        let method = "match/\(key)/timeseries"
-        return callArray(method: method) { (timeseries, error) in
-            if let error = error {
-                completion(nil, error)
-            } else if let timeseries = timeseries as? [[String: Any]]? {
-                completion(timeseries, nil)
-            } else {
-                completion(nil, APIError.error("Unexpected response from server."))
-            }
-        }
     }
 
 }

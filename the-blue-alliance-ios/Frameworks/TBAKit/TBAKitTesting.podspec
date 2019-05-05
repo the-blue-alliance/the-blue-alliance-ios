@@ -6,6 +6,7 @@ Pod::Spec.new do |s|
   s.homepage         = 'https://github.com/the-blue-alliance/the-blue-alliance-ios/tree/master/the-blue-alliance-ios/Frameworks/TBAKit/Testing'
   s.author           = 'ZachOrr'
   s.source           = { :git => 'https://thebluealliance.com/', :tag => s.version.to_s }
+  s.swift_version    = '5.0'
 
   s.ios.deployment_target = '11.0'
 

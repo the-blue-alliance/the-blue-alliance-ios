@@ -40,23 +40,21 @@ class TBADistrictTests: TBAKitTestCase {
 
     func testDistrictsYear() {
         let ex = expectation(description: "districts_year")
-        
-        let task = kit.fetchDistricts(year: 2017) { (districts, error) in
-            XCTAssertNotNil(districts)
-            XCTAssertGreaterThan(districts!.count, 0)
-            
-            let district = districts?.first
-            XCTAssertNotNil(district?.abbreviation)
-            XCTAssertNotNil(district?.name)
-            XCTAssertNotNil(district?.key)
-            XCTAssertNotNil(district?.year)
-            
-            XCTAssertNil(error)
-            
+
+        let task = kit.fetchDistricts(year: 2017) { (result) in
+            let districts = try! result.get()
+            XCTAssertGreaterThan(districts.count, 0)
+
+            let district = districts.first!
+            XCTAssertNotNil(district.abbreviation)
+            XCTAssertNotNil(district.name)
+            XCTAssertNotNil(district.key)
+            XCTAssertNotNil(district.year)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
@@ -64,37 +62,35 @@ class TBADistrictTests: TBAKitTestCase {
 
     func testDistrictEvents() {
         let ex = expectation(description: "district_events")
-        
-        let task = kit.fetchDistrictEvents(key: "2017fim") { (events, error) in
-            XCTAssertNotNil(events)
-            XCTAssertGreaterThan(events!.count, 0)
 
-            XCTAssertNil(error)
-            
+        let task = kit.fetchDistrictEvents(key: "2017fim") { (result) in
+            let events = try! result.get()
+            XCTAssertGreaterThan(events.count, 0)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testDistrictRankings() {
         let ex = expectation(description: "district_rankings")
-        
-        let task = kit.fetchDistrictRankings(key: "2017fim") { (rankings, error) in
-            XCTAssertNotNil(rankings)
-            XCTAssertGreaterThan(rankings!.count, 0)
-            
-            let ranking = rankings!.first!
+
+        let task = kit.fetchDistrictRankings(key: "2017fim") { (result) in
+            let rankings = try! result.get()
+            XCTAssertGreaterThan(rankings.count, 0)
+
+            let ranking = rankings.first!
             XCTAssertNotNil(ranking.teamKey)
             XCTAssertNotNil(ranking.rank)
             XCTAssertNotNil(ranking.pointTotal)
-            
+
             XCTAssertNotNil(ranking.eventPoints)
             XCTAssertGreaterThan(ranking.eventPoints.count, 0)
-            
+
             let eventPoints = ranking.eventPoints.first!
             XCTAssertNotNil(eventPoints.eventKey)
             XCTAssertNotNil(eventPoints.teamKey)
@@ -104,14 +100,11 @@ class TBADistrictTests: TBAKitTestCase {
             XCTAssertNotNil(eventPoints.elimPoints)
             XCTAssertNotNil(eventPoints.qualPoints)
             XCTAssertNotNil(eventPoints.total)
-            
-            XCTAssertNil(error)
-            
-            ex.fulfill()
 
+            ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
@@ -119,20 +112,18 @@ class TBADistrictTests: TBAKitTestCase {
 
     func testDistricTeams() {
         let ex = expectation(description: "district_teams")
-        
-        let task = kit.fetchDistrictTeams(key: "2017fim") { (teams, error) in
-            XCTAssertNotNil(teams)
-            XCTAssertGreaterThan(teams!.count, 0)
-            
-            XCTAssertNil(error)
-            
+
+        let task = kit.fetchDistrictTeams(key: "2017fim") { (result) in
+            let teams = try! result.get()
+            XCTAssertGreaterThan(teams.count, 0)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
 }
