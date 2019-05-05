@@ -47,4 +47,4 @@ jobs:
 
 after_failure:
   - gem install second_curtain
-  - cat build/reports/tba-unit-tests-tba-unit-tests.log | bundle exec second_curtain > /dev/null
+  - cat build/reports/tba-unit-tests-tba-unit-tests.log | second_curtain > /dev/null
