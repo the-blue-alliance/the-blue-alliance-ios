@@ -58,7 +58,7 @@ class MatchViewController: MyTBAContainerViewController {
 
         Analytics.logEvent("match", parameters: ["match": match.key!])
     }
-    
+
 }
 
 extension MatchViewController: MatchSummaryViewDelegate {

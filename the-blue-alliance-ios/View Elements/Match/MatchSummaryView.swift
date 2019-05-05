@@ -116,12 +116,14 @@ class MatchSummaryView: UIView {
         removeTeams()
         removeRPs()
 
+        let baseTeamKey = viewModel.baseTeamKey
         for (alliance, stackView) in [(viewModel.redAlliance, redStackView!), (viewModel.blueAlliance, blueStackView!)] {
             for teamKey in alliance {
+                let dq = viewModel.dqs.contains(teamKey)
                 // if teams are tappable, load the team #s as buttons to link to the team page
                 let label = teamsTappable
-                    ? teamButton(for: teamKey, baseTeamKey: viewModel.baseTeamKey, dq: viewModel.dqs.contains(teamKey))
-                    : teamLabel(for: teamKey, baseTeamKey: viewModel.baseTeamKey, dq: viewModel.dqs.contains(teamKey))
+                    ? teamButton(for: teamKey, baseTeamKey: baseTeamKey, dq: dq)
+                    : teamLabel(for: teamKey, baseTeamKey: baseTeamKey, dq: dq)
                 // Insert each new stack view at the index just before the score view
                 stackView.insertArrangedSubview(label, at: stackView.arrangedSubviews.count - 1)
             }
@@ -171,8 +173,6 @@ class MatchSummaryView: UIView {
     private func button(text: String, isBold: Bool, isStrikethrough: Bool = false) -> UIButton {
         let newButton = UIButton(type: .system)
         newButton.setTitle(text, for: [])
-        
-        // set color of the label to black like default
         newButton.setTitleColor(.primaryBlue, for: .normal)
         
         if let teamNumber = Int(text) {
@@ -191,7 +191,6 @@ class MatchSummaryView: UIView {
         label.textAlignment = .center
         label.attributedText = customAttributedString(text: text, isBold: isBold, isStrikethrough: isStrikethrough)
         label.translatesAutoresizingMaskIntoConstraints = false
-
         return label
     }
     
