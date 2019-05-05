@@ -3,6 +3,7 @@ import UIKit
 
 class AwardTableViewCell: UITableViewCell, Reusable {
 
+
     var viewModel: AwardCellViewModel? {
         didSet {
             configureCell()
@@ -10,24 +11,31 @@ class AwardTableViewCell: UITableViewCell, Reusable {
     }
     var teamKeySelected: ((_ teamKey: String) -> Void)?
 
-    // MARK: - Reusable
+    private let awardNameLabel = UILabel()
 
-    static var nib: UINib? {
-        return UINib(nibName: String(describing: self), bundle: nil)
+    // Mark: - Init
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        awardNameLabel.font = .systemFont(ofSize: 16, weight: .medium)
+        awardNameLabel.numberOfLines = 2
+        awardNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(awardNameLabel)
+        awardNameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        awardNameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+        awardNameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
     }
 
-    // MARK: - Interface Builder
-
-    @IBOutlet private weak var awardNameLabel: UILabel!
-    @IBOutlet private weak var awardInfoStackView: UIStackView!
+    required init?(coder aDecoder: NSCoder) { fatalError() }
 
     // MARK: - Private Methods
 
     private func removeAwards() {
-        for view in awardInfoStackView.arrangedSubviews {
+        /*for view in awardInfoStackView.arrangedSubviews {
             awardInfoStackView.removeArrangedSubview(view)
             view.removeFromSuperview()
-        }
+        }*/
     }
 
     private func configureCell() {
@@ -48,7 +56,7 @@ class AwardTableViewCell: UITableViewCell, Reusable {
                 let label = boldLabelWithText(text)
                 stackView.addArrangedSubview(label)
             }
-            awardInfoStackView.addArrangedSubview(stackView)
+            //awardInfoStackView.addArrangedSubview(stackView)
         }
     }
 
