@@ -8,7 +8,7 @@ private enum TeamInfoSection: Int, CaseIterable {
 }
 
 private enum TeamTitleRow: Int, CaseIterable {
-    case nickname
+    // case nickname
     case sponsors
 }
 
@@ -71,8 +71,8 @@ class TeamInfoViewController: TBATableViewController {
             switch indexPath.section {
             case TeamInfoSection.title.rawValue:
                 switch indexPath.row {
-                case TeamTitleRow.nickname.rawValue:
-                    return self.tableView(tableView, titleCellForRowAt: indexPath)
+//                case TeamTitleRow.nickname.rawValue:
+//                    return self.tableView(tableView, titleCellForRowAt: indexPath)
                 case TeamTitleRow.sponsors.rawValue:
                     return self.tableView(tableView, sponsorCellForRowAt: indexPath)
                 default:

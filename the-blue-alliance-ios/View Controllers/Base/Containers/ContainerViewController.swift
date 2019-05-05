@@ -69,9 +69,9 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     }()
     private(set) var segmentedControl: UISegmentedControl
 
-    private let containerView: UIView = UIView()
+    let containerView: UIView = UIView()
     private let viewControllers: [ContainableViewController]
-    private var rootStackView: UIStackView!
+    var rootStackView: UIStackView!
 
     private lazy var offlineEventView: UIView = {
         let offlineEventLabel = UILabel(forAutoLayout: ())
