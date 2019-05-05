@@ -157,7 +157,7 @@ class MatchSummaryView: UIView {
     private func teamLabel(for teamKey: String, baseTeamKey: String?, dq: Bool) -> UILabel {
         let text: String = "\(Team.trimFRCPrefix(teamKey))"
         let isBold: Bool = (teamKey == baseTeamKey)
-        
+
         return label(text: text, isBold: isBold, isStrikethrough: dq)
     }
     
@@ -203,13 +203,13 @@ class MatchSummaryView: UIView {
     private func customAttributedString(text: String, isBold: Bool, isStrikethrough: Bool = false) -> NSMutableAttributedString {
         let attributeString =  NSMutableAttributedString(string: text)
         let attributedStringRange = NSMakeRange(0, attributeString.length)
-        
+
         var font: UIFont = .systemFont(ofSize: 14)
         if isBold {
             font = .boldSystemFont(ofSize: 14)
         }
         attributeString.addAttribute(.font, value: font, range: attributedStringRange)
-        
+
         if isStrikethrough {
             attributeString.addAttribute(.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: attributedStringRange)
         }

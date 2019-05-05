@@ -25,7 +25,7 @@ class MatchViewController: MyTBAContainerViewController {
         self.statusService = statusService
         self.urlOpener = urlOpener
         infoViewController = MatchInfoViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        
+
         // Only show match breakdown if year is 2015 or onward
         var titles: [String]  = ["Info"]
         if match.year >= 2015 {
@@ -50,7 +50,7 @@ class MatchViewController: MyTBAContainerViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - View Lifecycle
 
     override func viewWillAppear(_ animated: Bool) {
