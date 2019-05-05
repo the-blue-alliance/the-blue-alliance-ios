@@ -66,14 +66,19 @@ class StatusService: NSObject {
 
     @discardableResult
     internal func fetchStatus(completion: ((_ error: Error?) -> Void)? = nil) -> URLSessionDataTask {
-        return tbaKit.fetchStatus { (status, error) in
-            let context = self.persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                if let status = status {
-                    Status.insert(status, in: context)
-                }
-            })
-            completion?(error)
+        return tbaKit.fetchStatus { (result) in
+            switch result {
+            case .failure(let error):
+                completion?(error)
+            case .success(let status):
+                let context = self.persistentContainer.newBackgroundContext()
+                context.performChangesAndWait({
+                    if let status = status {
+                        Status.insert(status, in: context)
+                    }
+                })
+                completion?(nil)
+            }
         }
     }
 

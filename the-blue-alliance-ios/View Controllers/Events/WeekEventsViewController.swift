@@ -68,7 +68,8 @@ class WeekEventsViewController: EventsViewController {
         }
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchEvents(year: year, completion: { (events, error) in
+        request = tbaKit.fetchEvents(year: year, completion: { (result) in
+            let events = try? result.get()
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if let events = events {

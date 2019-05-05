@@ -46,7 +46,8 @@ class TeamEventsViewController: EventsViewController {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchTeamEvents(key: team.key!, completion: { (events, error) in
+        request = tbaKit.fetchTeamEvents(key: team.key!, completion: { (result) in
+            let events = try? result.get()
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if let events = events {

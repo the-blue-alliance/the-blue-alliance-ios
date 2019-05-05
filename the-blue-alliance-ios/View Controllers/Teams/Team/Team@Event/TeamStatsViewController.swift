@@ -116,7 +116,8 @@ extension TeamStatsViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchEventTeamStats(key: event.key!, completion: { (stats, error) in
+        request = tbaKit.fetchEventTeamStats(key: event.key!, completion: { (result) in
+            let stats = try? result.get()
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if let stats = stats {

@@ -35,7 +35,8 @@ class EventTeamsViewController: TeamsViewController {
 
     @objc override func refresh() {
         var request: URLSessionDataTask?
-        request = tbaKit.fetchEventTeams(key: event.key!, completion: { (teams, error) in
+        request = tbaKit.fetchEventTeams(key: event.key!, completion: { (result) in
+            let teams = try? result.get()
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if let teams = teams {

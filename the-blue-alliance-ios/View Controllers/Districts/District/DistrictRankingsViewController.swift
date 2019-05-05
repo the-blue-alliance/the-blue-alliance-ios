@@ -91,7 +91,8 @@ extension DistrictRankingsViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchDistrictRankings(key: district.key!, completion: { (rankings, error) in
+        request = tbaKit.fetchDistrictRankings(key: district.key!, completion: { (result) in
+            let rankings = try? result.get()
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if let rankings = rankings {

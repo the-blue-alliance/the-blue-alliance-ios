@@ -150,7 +150,7 @@ extension Refreshable {
     }
 
     func removeRequest(request: URLSessionDataTask) {
-        guard let index = requests.index(of: request) else {
+        guard let index = requests.firstIndex(of: request) else {
             return
         }
         requests.remove(at: index)

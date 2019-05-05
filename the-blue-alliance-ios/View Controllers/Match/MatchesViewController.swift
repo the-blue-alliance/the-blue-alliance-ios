@@ -109,7 +109,8 @@ extension MatchesViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchEventMatches(key: event.key!, completion: { (matches, error) in
+        request = tbaKit.fetchEventMatches(key: event.key!, completion: { (result) in
+            let matches = try? result.get()
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if let matches = matches {

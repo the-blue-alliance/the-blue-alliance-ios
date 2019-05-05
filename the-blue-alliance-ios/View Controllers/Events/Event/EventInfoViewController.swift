@@ -244,16 +244,21 @@ extension EventInfoViewController: Refreshable {
 
     @objc func refresh() {
         var request: URLSessionDataTask?
-        request = tbaKit.fetchEvent(key: event.key!, completion: { (modelEvent, error) in
-            let context = self.persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                // TODO: Event can never be deleted
-                if let modelEvent = modelEvent {
-                    Event.insert(modelEvent, in: context)
-                }
-            }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
-            })
+        request = tbaKit.fetchEvent(key: event.key!, completion: { (result) in
+            do {
+                let event = try result.get()
+                let context = self.persistentContainer.newBackgroundContext()
+                context.performChangesAndWait({
+                    // TODO: Event can never be deleted
+                    if let event = event {
+                        Event.insert(event, in: context)
+                    }
+                }, saved: {
+                    self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                })
+            } catch {
+                // Pass
+            }
             self.removeRequest(request: request!)
         })
         addRequest(request: request!)

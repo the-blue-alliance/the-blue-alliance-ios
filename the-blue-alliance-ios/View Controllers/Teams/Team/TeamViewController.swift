@@ -128,7 +128,8 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
     private func refreshYearsParticipated() {
         var request: URLSessionDataTask?
-        request = tbaKit.fetchTeamYearsParticipated(key: team.key!, completion: { (years, error) in
+        request = tbaKit.fetchTeamYearsParticipated(key: team.key!, completion: { (result) in
+            let years = try? result.get()
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if let years = years {

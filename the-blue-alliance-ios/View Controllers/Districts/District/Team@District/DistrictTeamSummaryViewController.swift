@@ -117,7 +117,8 @@ extension DistrictTeamSummaryViewController: Refreshable {
 
     @objc func refresh() {
         var request: URLSessionDataTask?
-        request = tbaKit.fetchDistrictRankings(key: ranking.district!.key!, completion: { (rankings, error) in
+        request = tbaKit.fetchDistrictRankings(key: ranking.district!.key!, completion: { (result) in
+            let rankings = try? result.get()
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if let rankings = rankings {

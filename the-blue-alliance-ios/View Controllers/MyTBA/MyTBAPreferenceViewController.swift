@@ -111,7 +111,7 @@ class MyTBAPreferenceViewController: UITableViewController {
         let index = sender.tag
         let notificationType = notificationTypes[index]
 
-        if let removeIndex = notifications.index(of: notificationType) {
+        if let removeIndex = notifications.firstIndex(of: notificationType) {
             notifications.remove(at: removeIndex)
         } else {
             notifications.append(notificationType)
