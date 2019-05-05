@@ -31,7 +31,7 @@ install:
 
 before_script:
   - cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
-  - bundle exec fastlane run setup_ci
+  - bundle exec fastlane run setup_travis
   - echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
 
 jobs:
