@@ -17,7 +17,7 @@ class MatchViewControllerTests: TBATestCase {
 
         let match = insertMatch()
 
-        matchViewController = MatchViewController(match: match, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        matchViewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController = MockNavigationController(rootViewController: matchViewController)
 
         viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
@@ -47,7 +47,7 @@ class MatchViewControllerTests: TBATestCase {
     func test_title_event() {
         let event = insertDistrictEvent()
         match.event = event
-        let vc = MatchViewController(match: match, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let vc = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         XCTAssertEqual(vc.navigationTitle, "Quals 1")
         XCTAssertEqual(vc.navigationSubtitle, "@ 2018 Kettering University #1 District")
@@ -67,7 +67,7 @@ class MatchViewControllerTests: TBATestCase {
 
     func test_doesNotShowBreakdown() {
         let match = insertMatch(eventKey: "2014miket_qm1")
-        let vc = MatchViewController(match: match, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let vc = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         XCTAssertFalse(vc.children.contains(where: { (viewController) -> Bool in
             return viewController is MatchBreakdownViewController
         }))

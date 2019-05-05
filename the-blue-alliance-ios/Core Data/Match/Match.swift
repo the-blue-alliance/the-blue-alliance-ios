@@ -169,6 +169,13 @@ extension Match {
     var blueAllianceTeamNumbers: [String] {
         return blueAllianceTeamKeys.map({ Team.trimFRCPrefix($0) })
     }
+    
+    /**
+     Returns the team keys for all alliances
+    */
+    var teamKeys: [TeamKey] {
+        return (alliances?.allObjects as? [MatchAlliance])?.reduce([], { $0 + ($1.teams?.array as? [TeamKey] ?? []) }) ?? []
+    }
 
     /**
     Returns the team keys that were DQ'd in this match - not specifically any alliance

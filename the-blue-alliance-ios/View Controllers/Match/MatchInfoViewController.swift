@@ -39,7 +39,7 @@ class MatchInfoViewController: TBAViewController, Observable {
     }()
 
     private let matchSummaryView: MatchSummaryView = {
-        let matchSummaryView = MatchSummaryView()
+        let matchSummaryView = MatchSummaryView(teamsTappable: true)
         matchSummaryView.matchInfoStackView.isHidden = true
         matchSummaryView.translatesAutoresizingMaskIntoConstraints = false
         return matchSummaryView
@@ -61,6 +61,15 @@ class MatchInfoViewController: TBAViewController, Observable {
         videoStackView.translatesAutoresizingMaskIntoConstraints = false
         return videoStackView
     }()
+    
+    public var matchSummaryDelegate: MatchSummaryViewDelegate? {
+        get {
+            return matchSummaryView.delegate
+        }
+        set {
+            matchSummaryView.delegate = newValue
+        }
+    }
 
     // MARK: - Observable
 
