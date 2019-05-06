@@ -91,10 +91,10 @@ extension DistrictRankingsViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchDistrictRankings(key: district.key!, completion: { (rankings, error) in
+        request = tbaKit.fetchDistrictRankings(key: district.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let rankings = rankings {
+                if !notModified, let rankings = try? result.get() {
                     let district = context.object(with: self.district.objectID) as! District
                     district.insert(rankings)
                 }

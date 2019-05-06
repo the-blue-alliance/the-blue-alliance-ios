@@ -44,71 +44,71 @@ class TBATeamTests: TBAKitTestCase {
 
     func testTeamsPage() {
         let ex = expectation(description: "teams_page")
-        
-        let task = kit.fetchTeams(page: 0) { (teams, error) in
-            XCTAssertNotNil(teams)
-            XCTAssertGreaterThan(teams!.count, 0)
-            
-            XCTAssertNil(error)
-            
+
+        let task = kit.fetchTeams(page: 0) { (result, notModified) in
+            let teams = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(teams.count, 0)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testTeamsPageEmpty() {
         let ex = expectation(description: "teams_page_empty")
-        
-        let task = kit.fetchTeams(page: 100) { (teams, error) in
-            XCTAssertNotNil(teams)
-            XCTAssertEqual(teams!.count, 0)
-            
-            XCTAssertNil(error)
-            
+
+        let task = kit.fetchTeams(page: 100) { (result, notModified) in
+            let teams = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertEqual(teams.count, 0)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testTeamsYearPage() {
         let ex = expectation(description: "teams_year_page")
-        
-        let task = kit.fetchTeams(page: 0, year: 2017) { (teams, error) in
-            XCTAssertNotNil(teams)
-            XCTAssertGreaterThan(teams!.count, 0)
-            
-            XCTAssertNil(error)
-            
+
+        let task = kit.fetchTeams(page: 0, year: 2017) { (result, notModified) in
+            let teams = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(teams.count, 0)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testTeamsYearPageEmpty() {
         let ex = expectation(description: "teams_year_page_empty")
-        
-        let task = kit.fetchTeams(page: 100, year: 2017) { (teams, error) in
-            XCTAssertNotNil(teams)
-            XCTAssertEqual(teams!.count, 0)
-            
-            XCTAssertNil(error)
-            
+
+        let task = kit.fetchTeams(page: 100, year: 2017) { (result, notModified) in
+            let teams = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertEqual(teams.count, 0)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
@@ -117,71 +117,73 @@ class TBATeamTests: TBAKitTestCase {
     func testTeam() {
         let ex = expectation(description: "team")
 
-        let task = kit.fetchTeam(key: "frc2337") { (team, error) in
-            XCTAssertNotNil(team)
-            XCTAssertNotNil(team?.key)
-            XCTAssertNotNil(team?.name)
-            XCTAssertNotNil(team?.teamNumber)
-            XCTAssertNotNil(team?.rookieYear)
-            
-            XCTAssertNil(error)
-            
+        let task = kit.fetchTeam(key: "frc2337") { (result, notModified) in
+            let team = try! result.get()!
+            XCTAssertFalse(notModified)
+
+            XCTAssertNotNil(team.key)
+            XCTAssertNotNil(team.name)
+            XCTAssertNotNil(team.teamNumber)
+            XCTAssertNotNil(team.rookieYear)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testTeamEmpty() {
         let ex = expectation(description: "team_empty")
-        
-        let task = kit.fetchTeam(key: "frc13") { (team, error) in
+
+        let task = kit.fetchTeam(key: "frc13") { (result, notModified) in
+            let team = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertNil(team)
-            XCTAssertNil(error)
-            
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testTeamAwards() {
         let ex = expectation(description: "team_awards")
 
-        let task = kit.fetchTeamAwards(key: "frc2337") { (awards, error) in
-            XCTAssertNotNil(awards)
-            XCTAssertGreaterThan(awards!.count, 0)
-            
-            XCTAssertNil(error)
-            
+        let task = kit.fetchTeamAwards(key: "frc2337") { (result, notModified) in
+            let awards = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(awards.count, 0)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testTeamAwardsYear() {
         let ex = expectation(description: "team_awards_year")
-        
-        let task = kit.fetchTeamAwards(key: "frc2337", year: 2017) { (awards, error) in
-            XCTAssertNotNil(awards)
-            XCTAssertGreaterThan(awards!.count, 0)
-            
-            XCTAssertNil(error)
-            
+
+        let task = kit.fetchTeamAwards(key: "frc2337", year: 2017) { (result, notModified) in
+            let awards = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(awards.count, 0)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
@@ -189,219 +191,217 @@ class TBATeamTests: TBAKitTestCase {
 
     func testTeamDistricts() {
         let ex = expectation(description: "team_districts")
-        
-        let task = kit.fetchTeamDistricts(key: "frc2337") { (districts, error) in
-            XCTAssertNotNil(districts)
-            XCTAssertGreaterThan(districts!.count, 0)
-            
-            XCTAssertNil(error)
-            
+
+        let task = kit.fetchTeamDistricts(key: "frc2337") { (result, notModified) in
+            let districts = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(districts.count, 0)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testTeamEventsYear() {
         let ex = expectation(description: "team_events_year")
-        
-        let task = kit.fetchTeamEvents(key: "frc2337", year: 2017) { (events, error) in
-            XCTAssertNotNil(events)
-            XCTAssertGreaterThan(events!.count, 0)
-            
-            XCTAssertNil(error)
-            
+
+        let task = kit.fetchTeamEvents(key: "frc2337", year: 2017) { (result, notModified) in
+            let events = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(events.count, 0)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testTeamEventAwards() {
         let ex = expectation(description: "team_event_awards")
-        
-        let task = kit.fetchTeamAwards(key: "frc2337", eventKey: "2017mike2") { (awards, error) in
-            XCTAssertNotNil(awards)
-            XCTAssertGreaterThan(awards!.count, 0)
-            
-            XCTAssertNil(error)
-            
+
+        let task = kit.fetchTeamAwards(key: "frc2337", eventKey: "2017mike2") { (result, notModified) in
+            let awards = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(awards.count, 0)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testTeamEventMatches() {
         let ex = expectation(description: "team_event_matches")
-        
-        let task = kit.fetchTeamMatches(key: "frc2337", eventKey: "2017mike2") { (matches, error) in
-            XCTAssertNotNil(matches)
-            XCTAssertGreaterThan(matches!.count, 0)
-            
-            XCTAssertNil(error)
-            
+
+        let task = kit.fetchTeamMatches(key: "frc2337", eventKey: "2017mike2") { (result, notModified) in
+            let matches = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(matches.count, 0)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testTeamStatues() {
         let ex = expectation(description: "team_event_statuses")
-        
-        let task = kit.fetchTeamStatuses(key: "frc2337", year: 2018) { (statuses, error) in
-            XCTAssertNotNil(statuses)
-            XCTAssertGreaterThan(statuses!.count, 0)
-            
-            XCTAssertNil(error)
-            
+
+        let task = kit.fetchTeamStatuses(key: "frc2337", year: 2018) { (result, notModified) in
+            let statuses = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(statuses.count, 0)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testTeamEventStatus() {
         let ex = expectation(description: "team_event_status")
-        
-        let task = kit.fetchTeamStatus(key: "frc2337", eventKey: "2017mike2") { (status, error) in
-            XCTAssertNotNil(status)
 
-            XCTAssertEqual(status?.teamKey, "frc2337")
-            XCTAssertEqual(status?.eventKey, "2017mike2")
+        let task = kit.fetchTeamStatus(key: "frc2337", eventKey: "2017mike2") { (result, notModified) in
+            let status = try! result.get()!
+            XCTAssertFalse(notModified)
 
-            XCTAssertNotNil(status?.qual)
-            XCTAssertNotNil(status?.qual?.numTeams)
-            XCTAssertNotNil(status?.qual?.status)
-            XCTAssertNotNil(status?.qual?.ranking)
-            XCTAssertNotNil(status?.qual?.sortOrder)
-            XCTAssertGreaterThan(status!.qual!.sortOrder!.count, 0)
-            
-            XCTAssertNotNil(status?.alliance)
-            XCTAssertNotNil(status?.alliance?.number)
-            XCTAssertNotNil(status?.alliance?.pick)
+            XCTAssertEqual(status.teamKey, "frc2337")
+            XCTAssertEqual(status.eventKey, "2017mike2")
 
-            XCTAssertNotNil(status?.playoff)
-            
-            XCTAssertNotNil(status?.allianceStatusString)
-            XCTAssertNotNil(status?.playoffStatusString)
-            XCTAssertNotNil(status?.overallStatusString)
-            
-            XCTAssertNil(error)
-            
+            let qual = status.qual!
+            XCTAssertNotNil(qual.numTeams)
+            XCTAssertNotNil(qual.status)
+            XCTAssertNotNil(qual.ranking)
+            XCTAssertNotNil(qual.sortOrder)
+            let qualSortOrder = qual.sortOrder!
+            XCTAssertGreaterThan(qualSortOrder.count, 0)
+
+            let alliance = status.alliance!
+            XCTAssertNotNil(alliance.number)
+            XCTAssertNotNil(alliance.pick)
+
+            XCTAssertNotNil(status.playoff)
+
+            XCTAssertNotNil(status.allianceStatusString)
+            XCTAssertNotNil(status.playoffStatusString)
+            XCTAssertNotNil(status.overallStatusString)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testTeamEventStatusNoElims() {
         let ex = expectation(description: "team_event_status_no_elims")
-        
-        let task = kit.fetchTeamStatus(key: "frc2337", eventKey: "2016micmp") { (status, error) in
-            XCTAssertNotNil(status)
-            
-            XCTAssertNotNil(status?.qual)
-            XCTAssertNil(status?.alliance)
-            XCTAssertNil(status?.playoff)
-            
-            XCTAssertNotNil(status?.allianceStatusString)
-            XCTAssertNotNil(status?.playoffStatusString)
-            XCTAssertNotNil(status?.overallStatusString)
-            
-            XCTAssertNotNil(status?.lastMatchKey)
-            XCTAssertNil(status?.nextMatchKey)
 
-            XCTAssertNil(error)
-            
+        let task = kit.fetchTeamStatus(key: "frc2337", eventKey: "2016micmp") { (result, notModified) in
+            let status = try! result.get()!
+            XCTAssertFalse(notModified)
+
+            XCTAssertNotNil(status.qual)
+            XCTAssertNil(status.alliance)
+            XCTAssertNil(status.playoff)
+
+            XCTAssertNotNil(status.allianceStatusString)
+            XCTAssertNotNil(status.playoffStatusString)
+            XCTAssertNotNil(status.overallStatusString)
+
+            XCTAssertNotNil(status.lastMatchKey)
+            XCTAssertNil(status.nextMatchKey)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testTeamEventStatusEmpty() {
         let ex = expectation(description: "team_event_status_empty")
-        
-        let task = kit.fetchTeamStatus(key: "frc20", eventKey: "1992cmp") { (status, error) in
-            XCTAssertNotNil(status)
-            
-            XCTAssertNil(status?.qual)
-            XCTAssertNil(status?.alliance)
-            XCTAssertNil(status?.playoff)
-            
-            XCTAssertNotNil(status?.allianceStatusString)
-            XCTAssertNotNil(status?.playoffStatusString)
-            XCTAssertNotNil(status?.overallStatusString)
-            
-            XCTAssertNil(error)
-            
+
+        let task = kit.fetchTeamStatus(key: "frc20", eventKey: "1992cmp") { (result, notModified) in
+            let status = try! result.get()!
+            XCTAssertFalse(notModified)
+
+            XCTAssertNil(status.qual)
+            XCTAssertNil(status.alliance)
+            XCTAssertNil(status.playoff)
+
+            XCTAssertNotNil(status.allianceStatusString)
+            XCTAssertNotNil(status.playoffStatusString)
+            XCTAssertNotNil(status.overallStatusString)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testTeamMatchesYear() {
         let ex = expectation(description: "team_matches_year")
-        
-        let task = kit.fetchTeamMatches(key: "frc2337", year: 2017) { (matches, error) in
-            XCTAssertNotNil(matches)
-            XCTAssertGreaterThan(matches!.count, 0)
-            
-            XCTAssertNil(error)
-            
+
+        let task = kit.fetchTeamMatches(key: "frc2337", year: 2017) { (result, notModified) in
+            let matches = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(matches.count, 0)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testTeamMediaYear() {
         let ex = expectation(description: "team_media_year")
-        
-        let task = kit.fetchTeamMedia(key: "frc2337", year: 2017) { (media, error) in
-            XCTAssertNotNil(media)
-            XCTAssertGreaterThan(media!.count, 0)
-            
-            let m = media!.first!
+
+        let task = kit.fetchTeamMedia(key: "frc2337", year: 2017) { (result, notModified) in
+            let media = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(media.count, 0)
+
+            let m = media.first!
             XCTAssertNotNil(m.type)
             XCTAssertNotNil(m.foreignKey)
-            
-            XCTAssertNil(error)
-            
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
@@ -409,66 +409,66 @@ class TBATeamTests: TBAKitTestCase {
 
     func testTeamRobots() {
         let ex = expectation(description: "team_robots")
-        
-        let task = kit.fetchTeamRobots(key: "frc2337") { (robots, error) in
-            XCTAssertNotNil(robots)
-            XCTAssertGreaterThan(robots!.count, 0)
-            
-            let robot = robots!.first!
+
+        let task = kit.fetchTeamRobots(key: "frc2337") { (result, notModified) in
+            let robots = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(robots.count, 0)
+
+            let robot = robots.first!
             XCTAssertNotNil(robot.key)
             XCTAssertNotNil(robot.name)
             XCTAssertNotNil(robot.teamKey)
             XCTAssertNotNil(robot.year)
-            
-            XCTAssertNil(error)
-            
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testSocialMedia() {
         let ex = expectation(description: "team_social_media")
-        
-        let task = kit.fetchTeamSocialMedia(key: "frc2337") { (socialMedia, error) in
-            XCTAssertNotNil(socialMedia)
-            XCTAssertGreaterThan(socialMedia!.count, 0)
-            
-            let media = socialMedia!.first!
+
+        let task = kit.fetchTeamSocialMedia(key: "frc2337") { (result, notModified) in
+            let socialMedia = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(socialMedia.count, 0)
+
+            let media = socialMedia.first!
             XCTAssertNotNil(media.type)
             XCTAssertNotNil(media.foreignKey)
-            
-            XCTAssertNil(error)
-            
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
     func testYearsParticipated() {
         let ex = expectation(description: "team_years_participated")
-        
-        let task = kit.fetchTeamYearsParticipated(key: "frc2337") { (years, error) in
-            XCTAssertNotNil(years)
-            XCTAssertGreaterThan(years!.count, 0)
-            
-            XCTAssertNil(error)
-            
+
+        let task = kit.fetchTeamYearsParticipated(key: "frc2337") { (result, notModified) in
+            let years = try! result.get()
+            XCTAssertFalse(notModified)
+
+            XCTAssertGreaterThan(years.count, 0)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
+
 }

@@ -323,8 +323,8 @@ SPEC CHECKSUMS:
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
   PureLayout: f08c01b8dec00bb14a1fefa3de4c7d9c265df85e
   React: 0d6c719d9549bea0bd5676f8170b0e5c56e2c3c7
-  TBAKit: 9557aab044f45980b4a9526d4584f39b164b3c5f
-  TBAKitTesting: 01b73a1f8deecf223819d4ba5c90360f0c8a50a5
+  TBAKit: c3552e9f07cb9aa36dcf6bc1193eb4079b8d7c2c
+  TBAKitTesting: 8548fd91404db4e319d2eac3fa335cb890d48478
   yoga: 26673abd38bbdf0c33e134ad9e690c5fbf16e8fc
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
   Zip: 8877eede3dda76bcac281225c20e71c25270774c

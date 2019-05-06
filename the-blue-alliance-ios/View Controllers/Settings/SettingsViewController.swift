@@ -371,8 +371,8 @@ class SettingsViewController: TBATableViewController {
     }
 
     internal func deleteNetworkCache() {
+        tbaKit.clearCacheHeaders()
         userDefaults.clearSuccessfulRefreshes()
-        tbaKit.clearLastModified()
     }
 
     private func pushTroubleshootNotifications() {

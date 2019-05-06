@@ -522,46 +522,47 @@ public struct TBAWebcast: TBAModel {
 extension TBAKit {
 
     @discardableResult
-    public func fetchEvents(year: Int, completion: @escaping ([TBAEvent]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchEvents(year: Int, completion: @escaping (Result<[TBAEvent], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "events/\(year)"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchEvent(key: String, completion: @escaping (TBAEvent?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchEvent(key: String, completion: @escaping (Result<TBAEvent?, Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)"
         return callObject(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchEventAlliances(key: String, completion: @escaping ([TBAAlliance]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchEventAlliances(key: String, completion: @escaping (Result<[TBAAlliance], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/alliances"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchEventInsights(key: String, completion: @escaping (TBAEventInsights?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchEventInsights(key: String, completion: @escaping (Result<TBAEventInsights?, Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/insights"
         return callObject(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchEventTeamStats(key: String, completion: @escaping ([TBAStat]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchEventTeamStats(key: String, completion: @escaping (Result<[TBAStat], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/oprs"
-        return callDictionary(method: method) { (dictionary, error) in
-            if let error = error {
-                completion(nil, error)
-            } else if let dictionary = dictionary {
+        return callDictionary(method: method) { (result, notModified) in
+            switch result {
+            case .failure(let error):
+                completion(.failure(error), notModified)
+            case .success(let dictionary):
                 var oprs: [String: Double] = [:]
                 if let oprsDict = dictionary["oprs"] as? [String: Double] {
                     oprs = oprsDict
                 }
-                
+
                 var dprs: [String: Double] = [:]
                 if let dprsDict = dictionary["dprs"] as? [String: Double] {
                     dprs = dprsDict
                 }
-                
+
                 var ccwms: [String: Double] = [:]
                 if let ccwmsDict = dictionary["ccwms"] as? [String: Double] {
                     ccwms = ccwmsDict
@@ -579,71 +580,64 @@ extension TBAKit {
                     guard let ccwm = ccwms[teamKey] else {
                         continue
                     }
-                    
+
                     let json = ["team_key": teamKey,
                                 "opr": opr,
                                 "dpr": dpr,
                                 "ccwm": ccwm] as [String: Any]
-                    
+
                     if let stat = TBAStat(json: json) {
                         stats.append(stat)
                     }
                 }
-                completion(stats, nil)
-            } else {
-                completion(nil, APIError.error("Unexpected response from server."))
+                completion(.success(stats), notModified)
             }
         }
     }
 
     @discardableResult
-    public func fetchEventPredictions(key: String, completion: @escaping ([String: Any]?, Error?) -> ()) -> URLSessionDataTask {
-        let method = "event/\(key)/predictions"
-        return callDictionary(method: method, completion: completion)
-    }
-
-    @discardableResult
-    public func fetchEventRankings(key: String, completion: @escaping ([TBAEventRanking]?, [TBAEventRankingSortOrder]?, [TBAEventRankingSortOrder]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchEventRankings(key: String, completion: @escaping (Result<([TBAEventRanking], [TBAEventRankingSortOrder], [TBAEventRankingSortOrder]), Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/rankings"
-        return callDictionary(method: method, completion: { (dictionary, error) in
-            if let error = error {
-                completion(nil, nil, nil, error)
-            } else if let dictionary = dictionary {
+        return callDictionary(method: method, completion: { (result, notModified) in
+            switch result {
+            case .failure(let error):
+                completion(.failure(error), notModified)
+            case .success(let dictionary):
                 var rankings: [TBAEventRanking] = []
                 if let rankingsJSON = dictionary["rankings"] as? [[String: Any]] {
                     rankings = rankingsJSON.compactMap({ (rankingJSON) -> TBAEventRanking? in
                         return TBAEventRanking(json: rankingJSON)
                     })
                 }
-                
+
                 var sortOrderInfo: [TBAEventRankingSortOrder] = []
                 if let sortOrderInfoJSON = dictionary["sort_order_info"] as? [[String: Any]] {
                     sortOrderInfo = sortOrderInfoJSON.compactMap({ (sortOrderJSON) -> TBAEventRankingSortOrder? in
                         return TBAEventRankingSortOrder(json: sortOrderJSON)
                     })
                 }
-                
+
                 var extraStatsInfo: [TBAEventRankingSortOrder] = []
                 if let extraStatsInfoJSON = dictionary["extra_stats_info"] as? [[String: Any]] {
                     extraStatsInfo = extraStatsInfoJSON.compactMap({ (extraInfoJSON) -> TBAEventRankingSortOrder? in
                         return TBAEventRankingSortOrder(json: extraInfoJSON)
                     })
                 }
-                completion(rankings, sortOrderInfo, extraStatsInfo, nil)
-            } else {
-                completion(nil, nil, nil, APIError.error("Unexpected response from server."))
+
+                completion(.success((rankings, sortOrderInfo, extraStatsInfo)), notModified)
             }
         })
         
     }
 
     @discardableResult
-    public func fetchEventDistrictPoints(key: String, completion: @escaping ([TBADistrictEventPoints]?, [TBADistrictPointsTiebreaker]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchEventDistrictPoints(key: String, completion: @escaping (Result<([TBADistrictEventPoints], [TBADistrictPointsTiebreaker]), Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/district_points"
-        return callDictionary(method: method) { (dictionary, error) in
-            if let error = error {
-                completion(nil, nil, error)
-            } else if let dictionary = dictionary {
+        return callDictionary(method: method) { (result, notModified) in
+            switch result {
+            case .failure(let error):
+                completion(.failure(error), notModified)
+            case .success(let dictionary):
                 var districtPoints: [TBADistrictEventPoints] = []
                 if let points = dictionary["points"] as? [String: Any] {
                     districtPoints = points.compactMap({ (teamKey, pointsJSON) -> TBADistrictEventPoints? in
@@ -657,7 +651,7 @@ extension TBAKit {
                         return TBADistrictEventPoints(json: json)
                     })
                 }
-                
+
                 var pointsTiebreakers: [TBADistrictPointsTiebreaker] = []
                 if let tiebreakers = dictionary["tiebreakers"] as? [String : Any] {
                     pointsTiebreakers = tiebreakers.compactMap({ (teamKey, tiebreakerJSON) -> TBADistrictPointsTiebreaker? in
@@ -666,30 +660,30 @@ extension TBAKit {
                             return nil
                         }
                         json["team_key"] = teamKey
-                        
+
                         return TBADistrictPointsTiebreaker(json: json)
                     })
                 }
-                completion(districtPoints, pointsTiebreakers, nil)
-            } else {
-                completion(nil, nil, APIError.error("Unexpected response from server."))
+
+                completion(.success((districtPoints, pointsTiebreakers)), notModified)
             }
         }
     }
 
     @discardableResult
-    public func fetchEventTeams(key: String, completion: @escaping ([TBATeam]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchEventTeams(key: String, completion: @escaping (Result<[TBATeam], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/teams"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchEventStatuses(key: String, completion: @escaping ([TBAEventStatus]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchEventStatuses(key: String, completion: @escaping (Result<[TBAEventStatus], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/teams/statuses"
-        return callDictionary(method: method, completion: { (dictionary, error) in
-            if let error = error {
-                completion(nil, error)
-            } else if let dictionary = dictionary {
+        return callDictionary(method: method, completion: { (result, notModified) in
+            switch result {
+            case .failure(let error):
+                completion(.failure(error), notModified)
+            case .success(let dictionary):
                 let eventStatuses = dictionary.compactMap({ (eventKey, statusJSON) -> TBAEventStatus? in
                     // Add teamKey/eventKey to statusJSON
                     guard var json = statusJSON as? [String: Any] else {
@@ -697,38 +691,22 @@ extension TBAKit {
                     }
                     json["team_key"] = key
                     json["event_key"] = eventKey
-                    
+
                     return TBAEventStatus(json: json)
                 })
-                completion(eventStatuses, nil)
-            } else {
-                completion(nil, APIError.error("Unexpected response from server."))
+                completion(.success(eventStatuses), notModified)
             }
         })
     }
 
     @discardableResult
-    public func fetchEventMatches(key: String, completion: @escaping ([TBAMatch]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchEventMatches(key: String, completion: @escaping (Result<[TBAMatch], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/matches"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchEventMatchesTimeseries(key: String, completion: @escaping ([String]?, Error?) -> ()) -> URLSessionDataTask {
-        let method = "event/\(key)/matches/timeseries"
-        return callArray(method: method) { (timeseriesMatches, error) in
-            if let error = error {
-                completion(nil, error)
-            } else if let timeseriesMatches = timeseriesMatches as? [String]? {
-                completion(timeseriesMatches, error)
-            } else {
-                completion(nil, APIError.error("Unexpected response from server."))
-            }
-        }
-    }
-
-    @discardableResult
-    public func fetchEventAwards(key: String, completion: @escaping ([TBAAward]?, Error?) -> ()) -> URLSessionDataTask {
+    public func fetchEventAwards(key: String, completion: @escaping (Result<[TBAAward], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/awards"
         return callArray(method: method, completion: completion)
     }

@@ -111,7 +111,7 @@ extension Refreshable {
      Set our LastModified in TBAKit as well as setting our last successful refresh data for Refreshable.
      */
     func markTBARefreshSuccessful(_ tbaKit: TBAKit, request: URLSessionDataTask, lastRefresh: Date = Date()) {
-        tbaKit.setLastModified(request)
+        tbaKit.storeCacheHeaders(request)
         markRefreshSuccessful()
     }
 
@@ -150,7 +150,7 @@ extension Refreshable {
     }
 
     func removeRequest(request: URLSessionDataTask) {
-        guard let index = requests.index(of: request) else {
+        guard let index = requests.firstIndex(of: request) else {
             return
         }
         requests.remove(at: index)

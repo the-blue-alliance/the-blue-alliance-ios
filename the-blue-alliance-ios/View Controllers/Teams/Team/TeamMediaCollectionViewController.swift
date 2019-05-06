@@ -263,10 +263,10 @@ extension TeamMediaCollectionViewController: Refreshable {
         }
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchTeamMedia(key: team.key!, year: year, completion: { (media, error) in
+        request = tbaKit.fetchTeamMedia(key: team.key!, year: year, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let media = media {
+                if !notModified, let media = try? result.get() {
                     let team = context.object(with: self.team.objectID) as! Team
                     team.insert(media, year: year)
                 }

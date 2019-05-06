@@ -19,55 +19,64 @@ class TBAMatchTests: TBAKitTestCase {
         XCTAssertEqual(video.type, "type")
     }
 
-    func teset_something() {
+    func test_match_alliance_partial() {
         let alliance = TBAMatchAlliance(score: 2, teams: ["frc7332"])
         XCTAssertEqual(alliance.score, 2)
         XCTAssertEqual(alliance.teams, ["frc7332"])
+        XCTAssertNil(alliance.surrogateTeams)
+        XCTAssertNil(alliance.dqTeams)
+    }
+
+    func test_match_alliance_full() {
+        let alliance = TBAMatchAlliance(score: 2, teams: ["frc7332"], surrogateTeams: ["frc1"], dqTeams: ["frc2"])
+        XCTAssertEqual(alliance.score, 2)
+        XCTAssertEqual(alliance.teams, ["frc7332"])
+        XCTAssertEqual(alliance.surrogateTeams, ["frc1"])
+        XCTAssertEqual(alliance.dqTeams, ["frc2"])
     }
 
     func testMatch() {
         let ex = expectation(description: "match")
-        
-        let task = kit.fetchMatch(key: "2017mike2_qm1") { (match, error) in
-            XCTAssertNotNil(match)
-            XCTAssertNotNil(match?.compLevel)
-            XCTAssertNotNil(match?.eventKey)
-            XCTAssertNotNil(match?.key)
-            XCTAssertNotNil(match?.matchNumber)
-            XCTAssertNotNil(match?.setNumber)
 
-            XCTAssertEqual(match?.alliances?.count, 2)
+        let task = kit.fetchMatch(key: "2017mike2_qm1") { (result, notModified) in
+            let match = try! result.get()!
+            XCTAssertFalse(notModified)
+
+            XCTAssertNotNil(match.compLevel)
+            XCTAssertNotNil(match.eventKey)
+            XCTAssertNotNil(match.key)
+            XCTAssertNotNil(match.matchNumber)
+            XCTAssertNotNil(match.setNumber)
+
+            let alliances = match.alliances!
+            XCTAssertEqual(alliances.count, 2)
 
             // Red alliance
-            let redAlliance = match?.alliances?["red"]
-            XCTAssertNotNil(redAlliance)
-            XCTAssertNotNil(redAlliance?.score)
-            XCTAssertEqual(redAlliance?.teams, ["frc5046", "frc6071", "frc494"])
-            
-            // Blue alliance
-            let blueAlliance = match?.alliances?["blue"]
-            XCTAssertNotNil(blueAlliance)
-            XCTAssertNotNil(blueAlliance?.score)
-            XCTAssertEqual(blueAlliance?.teams, ["frc5612", "frc3534", "frc5661"])
+            let redAlliance = alliances["red"]!
+            XCTAssertNotNil(redAlliance.score)
+            XCTAssertEqual(redAlliance.teams, ["frc5046", "frc6071", "frc494"])
 
-            XCTAssertEqual(match?.breakdown?.count, 2)
+            // Blue alliance
+            let blueAlliance = alliances["blue"]!
+            XCTAssertNotNil(blueAlliance.score)
+            XCTAssertEqual(blueAlliance.teams, ["frc5612", "frc3534", "frc5661"])
+
+            XCTAssertEqual(match.breakdown?.count, 2)
 
             // Breakdowns
-            XCTAssertNotNil(match?.breakdown?["red"])
-            XCTAssertNotNil(match?.breakdown?["blue"])
-            
+            XCTAssertNotNil(match.breakdown?["red"])
+            XCTAssertNotNil(match.breakdown?["blue"])
+
             // Videos
-            XCTAssertNotNil(match?.videos)
-            let video = match!.videos!.first!
+            XCTAssertNotNil(match.videos)
+            let video = match.videos!.first!
             XCTAssertNotNil(video.type)
             XCTAssertNotNil(video.key)
 
-            XCTAssertNil(error)
-            
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
@@ -75,56 +84,21 @@ class TBAMatchTests: TBAKitTestCase {
 
     func testMatchNoBreakdown() {
         let ex = expectation(description: "match_no_breakdown")
-        
-        let task = kit.fetchMatch(key: "2014miket_qm1") { (match, error) in
-            XCTAssertNotNil(match)
-            XCTAssertEqual(match?.alliances?.count, 2)
-            XCTAssertNil(match?.breakdown)
 
-            XCTAssertNil(error)
-            
+        let task = kit.fetchMatch(key: "2014miket_qm1") { (result, notModified) in
+            let match = try! result.get()!
+            XCTAssertFalse(notModified)
+
+            XCTAssertEqual(match.alliances!.count, 2)
+            XCTAssertNil(match.breakdown)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)
-        
+
         waitForExpectations(timeout: 2) { (error) in
             XCTAssertNil(error)
         }
     }
-    
-    func testMatchTimeseries() {
-        let ex = expectation(description: "match_no_timeseries")
-        
-        let task = kit.fetchMatchTimeseries(key: "2018carv_qm1") { (timeseries, error) in
-            XCTAssertNotNil(timeseries)
-            XCTAssertGreaterThan(timeseries!.count, 0)
 
-            XCTAssertNil(error)
-            
-            ex.fulfill()
-        }
-        kit.sendSuccessStub(for: task)
-        
-        waitForExpectations(timeout: 2) { (error) in
-            XCTAssertNil(error)
-        }
-    }
-    
-    func testMatchNoTimeseries() {
-        let ex = expectation(description: "match_no_timeseries")
-
-        let task = kit.fetchMatchTimeseries(key: "2018misjo_sf1m2") { (timeseries, error) in
-            XCTAssertNotNil(timeseries)
-            XCTAssertEqual(timeseries!.count, 0)
-            
-            XCTAssertNil(error)
-            
-            ex.fulfill()
-        }
-        kit.sendSuccessStub(for: task)
-        
-        waitForExpectations(timeout: 2) { (error) in
-            XCTAssertNil(error)
-        }
-    }
 }

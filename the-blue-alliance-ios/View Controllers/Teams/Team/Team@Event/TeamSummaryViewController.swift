@@ -303,13 +303,19 @@ extension TeamSummaryViewController: Refreshable {
 
         // Refresh team status
         var teamStatusRequest: URLSessionDataTask?
-        teamStatusRequest = tbaKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!, completion: { (status, error) in
+        teamStatusRequest = tbaKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                // TODO: We can never remove an Status
-                if let status = status {
-                    let event = context.object(with: self.event.objectID) as! Event
-                    event.insert(status)
+                switch result {
+                case .success(let status):
+                    if let status = status {
+                        let event = context.object(with: self.event.objectID) as! Event
+                        event.insert(status)
+                    } else if !notModified {
+                        // TODO: Delete status, move back up our hiearchy
+                    }
+                default:
+                    break
                 }
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, request: teamStatusRequest!)
@@ -320,10 +326,10 @@ extension TeamSummaryViewController: Refreshable {
 
         // Refresh awards
         var awardsRequest: URLSessionDataTask?
-        awardsRequest = tbaKit.fetchTeamAwards(key: teamKey.key!, eventKey: event.key!, completion: { (awards, error) in
+        awardsRequest = tbaKit.fetchTeamAwards(key: teamKey.key!, eventKey: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let awards = awards {
+                if !notModified, let awards = try? result.get() {
                     let event = context.object(with: self.event.objectID) as! Event
                     event.insert(awards, teamKey: self.teamKey.key!)
                 }
@@ -342,14 +348,14 @@ extension TeamSummaryViewController: Refreshable {
         }
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchMatch(key: key) { (match, error) in
+        request = tbaKit.fetchMatch(key: key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let match = match {
+                if let match = try? result.get() {
                     Match.insert(match, in: context)
                 }
             }, saved: {
-                self.tbaKit.setLastModified(request!)
+                self.tbaKit.storeCacheHeaders(request!)
             })
 
             self.backgroundFetchKeys.remove(key)

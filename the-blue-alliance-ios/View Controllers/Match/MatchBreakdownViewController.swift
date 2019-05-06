@@ -105,17 +105,23 @@ extension MatchBreakdownViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchMatch(key: match.key!, { (modelMatch, error) in
+        request = tbaKit.fetchMatch(key: match.key!, { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let modelMatch = modelMatch {
-                    // TODO: Match can never be deleted
-                    if let event = self.match.event {
-                        let event = context.object(with: event.objectID) as! Event
-                        event.insert(modelMatch)
-                    } else {
-                        Match.insert(modelMatch, in: context)
+                switch result {
+                case .success(let match):
+                    if let match = match {
+                        if let event = self.match.event {
+                            let event = context.object(with: event.objectID) as! Event
+                            event.insert(match)
+                        } else {
+                            Match.insert(match, in: context)
+                        }
+                    } else if !notModified {
+                        // TODO: Delete match, move back up our hiearchy
                     }
+                default:
+                    break
                 }
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, request: request!)

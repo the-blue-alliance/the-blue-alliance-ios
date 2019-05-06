@@ -265,15 +265,14 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     @discardableResult
     func fetchEvent(_ key: String) -> URLSessionDataTask {
         var request: URLSessionDataTask?
-        request = tbaKit.fetchEvent(key: key) { (event, error) in
+        request = tbaKit.fetchEvent(key: key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
-
             context.performChangesAndWait({
-                if let event = event {
+                if let event = try? result.get() {
                     Event.insert(event, in: context)
                 }
             }, saved: {
-                self.tbaKit.setLastModified(request!)
+                self.tbaKit.storeCacheHeaders(request!)
             })
 
             self.backgroundFetchKeys.remove(key)
@@ -289,14 +288,14 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     @discardableResult
     func fetchTeam(_ key: String) -> URLSessionDataTask {
         var request: URLSessionDataTask?
-        request = tbaKit.fetchTeam(key: key) { (team, error) in
+        request = tbaKit.fetchTeam(key: key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let team = team {
+                if let team = try? result.get() {
                     Team.insert(team, in: context)
                 }
             }, saved: {
-                self.tbaKit.setLastModified(request!)
+                self.tbaKit.storeCacheHeaders(request!)
             })
 
             self.backgroundFetchKeys.remove(key)
@@ -312,14 +311,14 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     @discardableResult
     func fetchMatch(_ key: String) -> URLSessionDataTask {
         var request: URLSessionDataTask?
-        request = tbaKit.fetchMatch(key: key) { (match, error) in
+        request = tbaKit.fetchMatch(key: key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let match = match {
+                if let match = try? result.get() {
                     Match.insert(match, in: context)
                 }
             }, saved: {
-                self.tbaKit.setLastModified(request!)
+                self.tbaKit.storeCacheHeaders(request!)
             })
 
             self.backgroundFetchKeys.remove(key)

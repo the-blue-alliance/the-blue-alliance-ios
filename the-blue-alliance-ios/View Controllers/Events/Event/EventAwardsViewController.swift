@@ -162,10 +162,10 @@ extension EventAwardsViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchEventAwards(key: event.key!, completion: { (awards, error) in
+        request = tbaKit.fetchEventAwards(key: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let awards = awards {
+                if !notModified, let awards = try? result.get() {
                     let event = context.object(with: self.event.objectID) as! Event
                     event.insert(awards)
                 }

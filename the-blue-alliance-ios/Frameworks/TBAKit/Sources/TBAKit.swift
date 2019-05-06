@@ -6,6 +6,7 @@ private struct Constants {
     struct APIConstants {
         static let baseURL = URL(string: "https://www.thebluealliance.com/api/v3/")!
         static let lastModifiedDictionary = "LastModifiedDictionary"
+        static let etagDictionary = "EtagDictionary"
     }
 }
 
@@ -39,44 +40,64 @@ open class TBAKit: NSObject {
         self.userDefaults = userDefaults
     }
 
-    private static func lastModifiedURLString(for url: URL) -> String {
+    public func storeCacheHeaders(_ request: URLSessionDataTask) {
+        // Pull our response off of our request
+        guard let httpResponse = request.response as? HTTPURLResponse else {
+            return
+        }
+        // Grab our lastModified to store
+        let lastModified = httpResponse.allHeaderFields["Last-Modified"]
+        // Grab our etag to store
+        let etag = httpResponse.allHeaderFields["Etag"]
+
+        // And finally, grab our URL
+        guard let url = httpResponse.url else {
+            return
+        }
+
+        if let lastModified = lastModified as? String {
+            let lastModifiedString = TBAKit.lastModifiedURLString(for: url)
+            var lastModifiedDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.lastModifiedDictionary) ?? [:]
+            lastModifiedDictionary[lastModifiedString] = lastModified
+            userDefaults.set(lastModifiedDictionary, forKey: Constants.APIConstants.lastModifiedDictionary)
+        }
+        if let etag = etag as? String {
+            let etagString = TBAKit.etagURLString(for: url)
+            var etagDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.etagDictionary) ?? [:]
+            etagDictionary[etagString] = etag
+            userDefaults.set(etagDictionary, forKey: Constants.APIConstants.etagDictionary)
+        }
+        userDefaults.synchronize()
+    }
+
+    public func clearCacheHeaders() {
+        userDefaults.removeObject(forKey: Constants.APIConstants.lastModifiedDictionary)
+        userDefaults.removeObject(forKey: Constants.APIConstants.etagDictionary)
+        userDefaults.synchronize()
+    }
+
+    // Please - for the love of god - do not use these methods
+    // They're only exposed for testing.
+    public static func lastModifiedURLString(for url: URL) -> String {
         return "LAST_MODIFIED:\(url.absoluteString)"
     }
 
-    /// Please do not use - if you need this for testing, use MockTBAKit.lastModified(:)
+    public static func etagURLString(for url: URL) -> String {
+        return "ETAG:\(url.absoluteString)"
+    }
+
     public func lastModified(for url: URL) -> String? {
         let lastModifiedString = TBAKit.lastModifiedURLString(for: url)
         let lastModifiedDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.lastModifiedDictionary) ?? [:]
         return lastModifiedDictionary[lastModifiedString] as? String
     }
 
-    public func setLastModified(_ request: URLSessionDataTask) {
-        // Pull our response off of our request
-        guard let httpResponse = request.response as? HTTPURLResponse else {
-            return
-        }
-        // Grab our lastModified to store
-        guard let lastModified = httpResponse.allHeaderFields["Last-Modified"] as? String else {
-            return
-        }
-        // And finally, grab our URL
-        guard let url = httpResponse.url else {
-            return
-        }
-
-        let lastModifiedString = TBAKit.lastModifiedURLString(for: url)
-        var lastModifiedDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.lastModifiedDictionary) ?? [:]
-        lastModifiedDictionary[lastModifiedString] = lastModified
-
-        userDefaults.set(lastModifiedDictionary, forKey: Constants.APIConstants.lastModifiedDictionary)
-        userDefaults.synchronize()
+    public func etag(for url: URL) -> String? {
+        let etagString = TBAKit.etagURLString(for: url)
+        let etagDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.etagDictionary) ?? [:]
+        return etagDictionary[etagString] as? String
     }
 
-    public func clearLastModified() {
-        userDefaults.removeObject(forKey: Constants.APIConstants.lastModifiedDictionary)
-        userDefaults.synchronize()
-    }
-    
     internal func callApi(method: String, completion: @escaping TBAKitRequestCompletionBlock) -> URLSessionDataTask {
         let apiURL = URL(string: method, relativeTo: Constants.APIConstants.baseURL)!
         var request = URLRequest(url: apiURL)
@@ -86,6 +107,10 @@ open class TBAKit: NSObject {
 
         if let lastModified = lastModified(for: apiURL) {
             request.addValue(lastModified, forHTTPHeaderField: "If-Modified-Since")
+        }
+
+        if let etag = etag(for: apiURL) {
+            request.addValue(etag, forHTTPHeaderField: "If-None-Match")
         }
 
         let task = urlSession.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
@@ -115,61 +140,61 @@ open class TBAKit: NSObject {
         return task
     }
     
-    internal func callObject<T: TBAModel>(method: String, completion: @escaping (T?, Error?) -> ()) -> URLSessionDataTask {
-        return callApi(method: method) { (response, json, error) in
-            var model: T?
-            if let json = json as? [String: Any] {
-                model = T(json: json)
-            }
-            completion(model, error)
-        }
-    }
-    
-    internal func callArray<T: TBAModel>(method: String, completion: @escaping ([T]?, Error?) -> ()) -> URLSessionDataTask {
-        return callApi(method: method) { (response, json, error) in
-            var models: [T]?
-            if let json = json as? [[String: Any]] {
-                models = []
-                for result in json {
-                    if let model = T(json: result) {
-                        models!.append(model)
-                    }
-                }
-            }
-            completion(models, error)
-        }
-    }
-    
-    internal func callArray(method: String, completion: @escaping ([Any]?, Error?) -> ()) -> URLSessionDataTask {
+    internal func callObject<T: TBAModel>(method: String, completion: @escaping (Result<T?, Error>, Bool) -> ()) -> URLSessionDataTask {
         return callApi(method: method) { (response, json, error) in
             if let error = error {
-                completion(nil, error)
-                return
-            }
-            
-            if let statusCode = response?.statusCode, statusCode == 304 {
-                completion(nil, nil)
-            } else if let array = json as? [Any] {
-                completion(array, nil)
+                completion(.failure(error), false)
+            } else if let statusCode = response?.statusCode, statusCode == 304 {
+                completion(.success(nil), true)
+            } else if let json = json as? [String: Any] {
+                completion(.success(T(json: json)), false)
             } else {
-                completion(nil, APIError.error("Unexpected response from server."))
+                completion(.failure(APIError.error("Unexpected response from server.")), false)
+            }
+        }
+    }
+    
+    internal func callArray<T: TBAModel>(method: String, completion: @escaping (Result<[T], Error>, Bool) -> ()) -> URLSessionDataTask {
+        return callApi(method: method) { (response, json, error) in
+            if let error = error {
+                completion(.failure(error), false)
+            } else if let statusCode = response?.statusCode, statusCode == 304 {
+                completion(.success([]), true)
+            } else if let json = json as? [[String: Any]] {
+                let models = json.compactMap({
+                    return T(json: $0)
+                })
+                completion(.success(models), false)
+            } else {
+                completion(.failure(APIError.error("Unexpected response from server.")), false)
+            }
+        }
+    }
+    
+    internal func callArray(method: String, completion: @escaping (Result<[Any], Error>, Bool) -> ()) -> URLSessionDataTask {
+        return callApi(method: method) { (response, json, error) in
+            if let error = error {
+                completion(.failure(error), false)
+            } else if let statusCode = response?.statusCode, statusCode == 304 {
+                completion(.success([]), true)
+            } else if let array = json as? [Any] {
+                completion(.success(array), false)
+            } else {
+                completion(.failure(APIError.error("Unexpected response from server.")), false)
             }
         }
     }
 
-    internal func callDictionary(method: String, completion: @escaping ([String: Any]?, Error?) -> ()) -> URLSessionDataTask {
+    internal func callDictionary(method: String, completion: @escaping (Result<[String: Any], Error>, Bool) -> ()) -> URLSessionDataTask {
         return callApi(method: method) { (response, json, error) in
             if let error = error {
-                completion(nil, error)
-                return
-            }
-            
-            if let statusCode = response?.statusCode, statusCode == 304 {
-                completion(nil, nil)
+                completion(.failure(error), false)
+            } else if let statusCode = response?.statusCode, statusCode == 304 {
+                completion(.success([:]), true)
             } else if let dict = json as? [String: Any] {
-                completion(dict, nil)
+                completion(.success(dict), false)
             } else {
-                completion(nil, APIError.error("Unexpected response from server."))
+                completion(.failure(APIError.error("Unexpected response from server.")), false)
             }
         }
     }

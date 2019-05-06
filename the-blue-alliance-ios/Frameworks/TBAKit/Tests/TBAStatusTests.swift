@@ -3,30 +3,29 @@ import TBAKitTesting
 import XCTest
 
 class TBAStatusTests: TBAKitTestCase {
-    
+
     func test_status() {
         let ex = expectation(description: "status")
-        
-        let task = kit.fetchStatus { (status, error) in
-            XCTAssertNotNil(status)
-            
-            // Android Info
-            XCTAssertNotNil(status?.android)
-            XCTAssertNotNil(status?.android.latestAppVersion)
-            XCTAssertNotNil(status?.android.minAppVersion)
-            
-            // iOS Info
-            XCTAssertNotNil(status?.ios)
-            XCTAssertNotNil(status?.ios.latestAppVersion)
-            XCTAssertNotNil(status?.ios.minAppVersion)
 
-            XCTAssertNotNil(status?.currentSeason)
-            XCTAssertNotNil(status?.downEvents)
-            XCTAssertNotNil(status?.datafeedDown)
-            XCTAssertNotNil(status?.maxSeason)
-            
-            XCTAssertNil(error)
-            
+        let task = kit.fetchStatus { (result, notModified) in
+            let status = try! result.get()!
+            XCTAssertFalse(notModified)
+
+            // Android Info
+            XCTAssertNotNil(status.android)
+            XCTAssertNotNil(status.android.latestAppVersion)
+            XCTAssertNotNil(status.android.minAppVersion)
+
+            // iOS Info
+            XCTAssertNotNil(status.ios)
+            XCTAssertNotNil(status.ios.latestAppVersion)
+            XCTAssertNotNil(status.ios.minAppVersion)
+
+            XCTAssertNotNil(status.currentSeason)
+            XCTAssertNotNil(status.downEvents)
+            XCTAssertNotNil(status.datafeedDown)
+            XCTAssertNotNil(status.maxSeason)
+
             ex.fulfill()
         }
         kit.sendSuccessStub(for: task)

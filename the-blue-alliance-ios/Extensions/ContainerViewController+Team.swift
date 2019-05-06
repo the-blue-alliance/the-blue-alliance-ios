@@ -22,10 +22,10 @@ extension ContainerTeamPushable where Self: ContainerViewController {
                     self.navigationItem.rightBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
                 }
 
-                tbaKit.fetchTeam(key: teamKey.key!, completion: { (team, error) in
+                tbaKit.fetchTeam(key: teamKey.key!, completion: { (result, notModified) in
                     let context = self.persistentContainer.newBackgroundContext()
                     context.performChangesAndWait({
-                        if let team = team {
+                        if let team = try? result.get() {
                             Team.insert(team, in: context)
                         }
                     }, saved: {
