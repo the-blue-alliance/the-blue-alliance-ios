@@ -16,6 +16,9 @@ class AwardTeamButton: UIView {
     private let headerLabel = UILabel()
     private let subheaderLabel = UILabel()
 
+    private var leftPadding: CGFloat = 10
+    private var rightPadding: CGFloat = 40
+
     // Mark: - Init
 
     required init?(coder aDecoder: NSCoder) { fatalError() }
@@ -56,12 +59,12 @@ class AwardTeamButton: UIView {
 
     // Mark: - Methods
     private func defineConstraints() {
-        headerLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1).isActive = true
-        headerLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.65, constant: 0).isActive = true
+        headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftPadding).isActive = true
+        //headerLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -rightPadding).isActive = true
         headerLabel.bottomAnchor.constraint(equalTo: centerYAnchor).isActive = true
         
-        subheaderLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1).isActive = true
-        subheaderLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.65, constant: 0).isActive = true
+        subheaderLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftPadding).isActive = true
+        //subheaderLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -rightPadding).isActive = true
         subheaderLabel.topAnchor.constraint(equalTo: centerYAnchor).isActive = true
         
         self.heightAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 2.5).isActive = true
@@ -73,17 +76,17 @@ class AwardTeamButton: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         guard let superviewWidth = self.superview?.bounds.width else { return }
-        let labelsWidth = max(headerLabel.intrinsicContentSize.width, subheaderLabel.intrinsicContentSize.width) / 0.65
+        let naturalWidth = max(headerLabel.intrinsicContentSize.width, subheaderLabel.intrinsicContentSize.width) + leftPadding + rightPadding
         let lower = widthRange.lowerBound * superviewWidth
         let upper = widthRange.upperBound * superviewWidth
-        if labelsWidth > upper {
+        if naturalWidth > upper {
             widthConstraint.constant = upper
         }
-        else if labelsWidth < lower {
+        else if naturalWidth < lower {
             widthConstraint.constant = lower
         }
         else {
-            widthConstraint.constant = labelsWidth
+            widthConstraint.constant = naturalWidth
         }
     }
 

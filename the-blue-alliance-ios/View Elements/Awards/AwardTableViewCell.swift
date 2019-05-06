@@ -11,7 +11,7 @@ class AwardTableViewCell: UITableViewCell, Reusable {
     var teamKeySelected: ((_ teamKey: String) -> Void)?
     private let awardNameLabel = UILabel()
     private let awardsFlexView = FlexLayoutView()
-
+    
     // Mark: - Init
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -21,9 +21,9 @@ class AwardTableViewCell: UITableViewCell, Reusable {
         awardNameLabel.numberOfLines = 0
         awardNameLabel.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(awardNameLabel)
-        awardNameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2).isActive = true
+        awardNameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         awardNameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-        awardNameLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2).isActive = true
+        awardNameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
 
         awardsFlexView.horizontalSpacing = 10
         awardsFlexView.verticalSpacing = 10
@@ -32,7 +32,7 @@ class AwardTableViewCell: UITableViewCell, Reusable {
         awardsFlexView.leadingAnchor.constraint(equalTo: awardNameLabel.leadingAnchor).isActive = true
         awardsFlexView.trailingAnchor.constraint(equalTo: awardNameLabel.trailingAnchor).isActive = true
         awardsFlexView.topAnchor.constraint(equalToSystemSpacingBelow: awardNameLabel.lastBaselineAnchor, multiplier: 1).isActive = true
-        self.bottomAnchor.constraint(equalToSystemSpacingBelow: awardsFlexView.bottomAnchor, multiplier: 2).isActive = true
+        self.bottomAnchor.constraint(equalTo: awardsFlexView.bottomAnchor, constant: 20).isActive = true
     }
 
     required init?(coder aDecoder: NSCoder) { fatalError() }
