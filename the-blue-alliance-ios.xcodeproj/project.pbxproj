@@ -38,6 +38,8 @@
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
 		373233698A5148831C801B8E /* Pods_The_Blue_Alliance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */; };
 		488C423D227F5A0300D02CBA /* UIFont+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488C423C227F5A0300D02CBA /* UIFont+TBA.swift */; };
+		488C423F227F5BAA00D02CBA /* AwardTeamButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488C423E227F5BAA00D02CBA /* AwardTeamButton.swift */; };
+		488C4243227FE21600D02CBA /* FlexLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488C4242227FE21600D02CBA /* FlexLayoutView.swift */; };
 		5797EAB49489B63DDA0980F5 /* Pods_tba_unit_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */; };
 		92004C6521C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */; };
 		92004C6621C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */; };
@@ -325,6 +327,8 @@
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
 		488C423C227F5A0300D02CBA /* UIFont+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+TBA.swift"; sourceTree = "<group>"; };
+		488C423E227F5BAA00D02CBA /* AwardTeamButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwardTeamButton.swift; sourceTree = "<group>"; };
+		488C4242227FE21600D02CBA /* FlexLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexLayoutView.swift; sourceTree = "<group>"; };
 		4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.release.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.release.xcconfig"; sourceTree = "<group>"; };
 		52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_unit_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2019DeepSpaceIcon@2x.png"; sourceTree = "<group>"; };
@@ -792,6 +796,8 @@
 			children = (
 				924602AA1ECE8B1D0030EDBF /* AwardTableViewCell.swift */,
 				14796941215EA5AE0075AF4E /* AwardCellViewModel.swift */,
+				488C423E227F5BAA00D02CBA /* AwardTeamButton.swift */,
+				488C4242227FE21600D02CBA /* FlexLayoutView.swift */,
 			);
 			path = Awards;
 			sourceTree = "<group>";
@@ -2068,6 +2074,7 @@
 				1448DBA9218230D0008F542E /* MyTBAEntity.swift in Sources */,
 				92D855D21EC68F3800572F27 /* TeamsContainerViewController.swift in Sources */,
 				92FF110D21A61AF6003BC5C4 /* EventTeamStatsViewController.swift in Sources */,
+				488C4243227FE21600D02CBA /* FlexLayoutView.swift in Sources */,
 				929F57262092BA1C00E5313A /* Persistable.swift in Sources */,
 				92FF10F821A61AC2003BC5C4 /* MatchesViewController.swift in Sources */,
 				929F572A2092BAFD00E5313A /* Refreshable.swift in Sources */,
@@ -2121,6 +2128,7 @@
 				9287014820CD8C4A0077D6DA /* TBAOperation.swift in Sources */,
 				92FF10EC21A61A1B003BC5C4 /* TeamEventsViewController.swift in Sources */,
 				92858F27208D444700811614 /* CoreDataContextObserver.swift in Sources */,
+				488C423F227F5BAA00D02CBA /* AwardTeamButton.swift in Sources */,
 				92FF110921A61AF6003BC5C4 /* EventAlliancesViewController.swift in Sources */,
 				928018F42096431200693447 /* MyTBASignInViewController.swift in Sources */,
 				9221C616209BFF7D00477DE2 /* LoadingTableViewCell.swift in Sources */,

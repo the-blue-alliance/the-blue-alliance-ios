@@ -3,15 +3,14 @@ import UIKit
 
 class AwardTableViewCell: UITableViewCell, Reusable {
 
-
     var viewModel: AwardCellViewModel? {
         didSet {
             configureCell()
         }
     }
     var teamKeySelected: ((_ teamKey: String) -> Void)?
-
     private let awardNameLabel = UILabel()
+    private let awardInfoStackView = FlexLayoutView()
 
     // Mark: - Init
 
@@ -19,12 +18,21 @@ class AwardTableViewCell: UITableViewCell, Reusable {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         awardNameLabel.font = .systemFont(ofSize: 16, weight: .medium)
-        awardNameLabel.numberOfLines = 2
+        awardNameLabel.numberOfLines = 0
         awardNameLabel.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(awardNameLabel)
-        awardNameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        awardNameLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2).isActive = true
         awardNameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-        awardNameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
+        awardNameLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2).isActive = true
+
+        awardInfoStackView.horizontalSpacing = 10
+        awardInfoStackView.verticalSpacing = 10
+        awardInfoStackView.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(awardInfoStackView)
+        awardInfoStackView.leadingAnchor.constraint(equalTo: awardNameLabel.leadingAnchor).isActive = true
+        awardInfoStackView.trailingAnchor.constraint(equalTo: awardNameLabel.trailingAnchor).isActive = true
+        awardInfoStackView.topAnchor.constraint(equalToSystemSpacingBelow: awardNameLabel.lastBaselineAnchor, multiplier: 1).isActive = true
+        self.bottomAnchor.constraint(equalToSystemSpacingBelow: awardInfoStackView.bottomAnchor, multiplier: 2).isActive = true
     }
 
     required init?(coder aDecoder: NSCoder) { fatalError() }
@@ -32,10 +40,7 @@ class AwardTableViewCell: UITableViewCell, Reusable {
     // MARK: - Private Methods
 
     private func removeAwards() {
-        /*for view in awardInfoStackView.arrangedSubviews {
-            awardInfoStackView.removeArrangedSubview(view)
-            view.removeFromSuperview()
-        }*/
+        awardInfoStackView.removeAllViews()
     }
 
     private func configureCell() {
@@ -47,26 +52,14 @@ class AwardTableViewCell: UITableViewCell, Reusable {
 
         removeAwards()
 
-        for (index, recipient) in viewModel.recipients.enumerated() {
-            let stackView = UIStackView()
-            stackView.axis = .vertical
-            stackView.tag = index
-            stackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(recipientTapped(gesture:))))
-            for text in recipient.awardText {
-                let label = boldLabelWithText(text)
-                stackView.addArrangedSubview(label)
-            }
-            //awardInfoStackView.addArrangedSubview(stackView)
-        }
-    }
+        for (_, recipient) in viewModel.recipients.enumerated() {
+            if let header = recipient.teamNumber, let subHeader = recipient.teamName {
+                let button = AwardTeamButton(header: "Team \(header)", subheader: subHeader)
 
-    private func boldLabelWithText(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.numberOfLines = 0
-        label.font = UIFont.boldSystemFont(ofSize: 14)
-        label.textAlignment = .right
-        return label
+                awardInfoStackView.addView(view: button)
+            }
+        }
+        self.layoutIfNeeded()
     }
 
     @objc private func recipientTapped(gesture: UITapGestureRecognizer) {

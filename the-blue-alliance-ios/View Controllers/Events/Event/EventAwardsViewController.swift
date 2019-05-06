@@ -99,6 +99,12 @@ class EventAwardsViewController: TBATableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // Mark: View Lifestyle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+
     // MARK: Table View Data Source
 
     private func setupDataSource() {
