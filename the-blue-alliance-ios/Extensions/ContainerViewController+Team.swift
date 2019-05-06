@@ -25,7 +25,7 @@ extension ContainerTeamPushable where Self: ContainerViewController {
                 tbaKit.fetchTeam(key: teamKey.key!, completion: { (result, notModified) in
                     let context = self.persistentContainer.newBackgroundContext()
                     context.performChangesAndWait({
-                        if !notModified, let team = try? result.get() {
+                        if let team = try? result.get() {
                             Team.insert(team, in: context)
                         }
                     }, saved: {

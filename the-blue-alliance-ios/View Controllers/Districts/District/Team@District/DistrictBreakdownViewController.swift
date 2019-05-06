@@ -129,7 +129,6 @@ extension DistrictBreakdownViewController: Refreshable {
                     district.insert(rankings)
                 }
             }, saved: {
-                // TODO: We should probably think about - should we set successful refreshes like this or no?
                 self.markTBARefreshSuccessful(self.tbaKit, request: request!)
             })
             self.removeRequest(request: request!)

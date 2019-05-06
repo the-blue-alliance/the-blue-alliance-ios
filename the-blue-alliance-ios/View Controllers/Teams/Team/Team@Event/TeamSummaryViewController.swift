@@ -351,7 +351,7 @@ extension TeamSummaryViewController: Refreshable {
         request = tbaKit.fetchMatch(key: key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if !notModified, let match = try? result.get() {
+                if let match = try? result.get() {
                     Match.insert(match, in: context)
                 }
             }, saved: {

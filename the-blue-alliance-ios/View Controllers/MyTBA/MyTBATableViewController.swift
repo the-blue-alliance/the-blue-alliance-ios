@@ -268,7 +268,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         request = tbaKit.fetchEvent(key: key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if !notModified, let event = try? result.get() {
+                if let event = try? result.get() {
                     Event.insert(event, in: context)
                 }
             }, saved: {
@@ -291,7 +291,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         request = tbaKit.fetchTeam(key: key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if !notModified, let team = try? result.get() {
+                if let team = try? result.get() {
                     Team.insert(team, in: context)
                 }
             }, saved: {
@@ -314,7 +314,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         request = tbaKit.fetchMatch(key: key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if !notModified, let match = try? result.get() {
+                if let match = try? result.get() {
                     Match.insert(match, in: context)
                 }
             }, saved: {
