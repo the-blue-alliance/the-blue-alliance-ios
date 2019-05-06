@@ -7,8 +7,9 @@ class TBAStatusTests: TBAKitTestCase {
     func test_status() {
         let ex = expectation(description: "status")
 
-        let task = kit.fetchStatus { (result) in
+        let task = kit.fetchStatus { (result, notModified) in
             let status = try! result.get()!
+            XCTAssertFalse(notModified)
 
             // Android Info
             XCTAssertNotNil(status.android)

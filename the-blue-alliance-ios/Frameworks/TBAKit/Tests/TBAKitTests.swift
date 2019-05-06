@@ -18,7 +18,7 @@ class TBAKitTests: TBAKitTestCase {
         let ex = expectation(description: "auth_header_api_key")
         kit.session.resumeExpectation = ex
 
-        let task = kit.fetchStatus { (result) in
+        let task = kit.fetchStatus { (result, notModified) in
             XCTFail() // shouldn't be called
         }
 
@@ -47,7 +47,7 @@ class TBAKitTests: TBAKitTestCase {
         let ex = expectation(description: "cancel_task")
         kit.session.cancelExpectation = ex
 
-        let task = kit.fetchStatus { (result) in
+        let task = kit.fetchStatus { (result, notModified) in
             XCTFail()
             return
         }
@@ -61,8 +61,9 @@ class TBAKitTests: TBAKitTestCase {
     func testLastModified() {
         let setLastModifiedExpectation = expectation(description: "last_modified")
         var setLastModifiedTask: URLSessionDataTask?
-        setLastModifiedTask = kit.fetchStatus { (result) in
+        setLastModifiedTask = kit.fetchStatus { (result, notModified) in
             let status = try! result.get()
+            XCTAssertFalse(notModified)
 
             self.kit.setLastModified(setLastModifiedTask!)
 
@@ -72,8 +73,9 @@ class TBAKitTests: TBAKitTestCase {
         wait(for: [setLastModifiedExpectation], timeout: 1.0)
 
         let setIfModifiedSinceExpectation = expectation(description: "if_modified_since")
-        let setIfModifiedSinceTask = kit.fetchStatus { (result) in
+        let setIfModifiedSinceTask = kit.fetchStatus { (result, notModified) in
             let status = try! result.get()
+            XCTAssert(notModified)
             XCTAssertNil(status)
 
             setIfModifiedSinceExpectation.fulfill()
@@ -94,15 +96,18 @@ class TBAKitTests: TBAKitTestCase {
 
     func testDoesNotStoreErrorLastModified() {
         let setLastModifiedExpectation = expectation(description: "last_modified")
-        let setLastModifiedTask = kit.fetchStatus { (result) in
+        let setLastModifiedTask = kit.fetchStatus { (result, notModified) in
             let status = try! result.get()
+            XCTAssertFalse(notModified)
 
             setLastModifiedExpectation.fulfill()
         }
         kit.sendSuccessStub(for: setLastModifiedTask, with: 404)
         wait(for: [setLastModifiedExpectation], timeout: 1.0)
 
-        let setIfModifiedSinceTask = kit.fetchStatus { (result) in
+        let setIfModifiedSinceTask = kit.fetchStatus { (result, notModified) in
+            let status = try! result.get()
+            XCTAssertFalse(notModified)
         }
         guard let headers = setIfModifiedSinceTask.currentRequest?.allHTTPHeaderFields else {
             XCTFail()
@@ -114,7 +119,9 @@ class TBAKitTests: TBAKitTestCase {
     func testClearLastModified() {
         kit.clearLastModified()
 
-        let setLastModifiedTask = kit.fetchStatus { (result) in
+        let setLastModifiedTask = kit.fetchStatus { (result, notModified) in
+            let status = try! result.get()
+            XCTAssertFalse(notModified)
         }
 
         guard let headers = setLastModifiedTask.currentRequest?.allHTTPHeaderFields else {

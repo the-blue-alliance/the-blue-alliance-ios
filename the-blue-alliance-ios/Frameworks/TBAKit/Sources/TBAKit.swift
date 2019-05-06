@@ -158,61 +158,61 @@ open class TBAKit: NSObject {
         return task
     }
     
-    internal func callObject<T: TBAModel>(method: String, completion: @escaping (Result<T?, Error>) -> ()) -> URLSessionDataTask {
+    internal func callObject<T: TBAModel>(method: String, completion: @escaping (Result<T?, Error>, Bool) -> ()) -> URLSessionDataTask {
         return callApi(method: method) { (response, json, error) in
             if let error = error {
-                completion(.failure(error))
+                completion(.failure(error), false)
             } else if let statusCode = response?.statusCode, statusCode == 304 {
-                completion(.success(nil))
+                completion(.success(nil), true)
             } else if let json = json as? [String: Any] {
-                completion(.success(T(json: json)))
+                completion(.success(T(json: json)), false)
             } else {
-                completion(.failure(APIError.error("Unexpected response from server.")))
+                completion(.failure(APIError.error("Unexpected response from server.")), false)
             }
         }
     }
     
-    internal func callArray<T: TBAModel>(method: String, completion: @escaping (Result<[T], Error>) -> ()) -> URLSessionDataTask {
+    internal func callArray<T: TBAModel>(method: String, completion: @escaping (Result<[T], Error>, Bool) -> ()) -> URLSessionDataTask {
         return callApi(method: method) { (response, json, error) in
             if let error = error {
-                completion(.failure(error))
+                completion(.failure(error), false)
             } else if let statusCode = response?.statusCode, statusCode == 304 {
-                completion(.success([]))
+                completion(.success([]), true)
             } else if let json = json as? [[String: Any]] {
                 let models = json.compactMap({
                     return T(json: $0)
                 })
-                completion(.success(models))
+                completion(.success(models), false)
             } else {
-                completion(.failure(APIError.error("Unexpected response from server.")))
+                completion(.failure(APIError.error("Unexpected response from server.")), false)
             }
         }
     }
     
-    internal func callArray(method: String, completion: @escaping (Result<[Any], Error>) -> ()) -> URLSessionDataTask {
+    internal func callArray(method: String, completion: @escaping (Result<[Any], Error>, Bool) -> ()) -> URLSessionDataTask {
         return callApi(method: method) { (response, json, error) in
             if let error = error {
-                completion(.failure(error))
+                completion(.failure(error), false)
             } else if let statusCode = response?.statusCode, statusCode == 304 {
-                completion(.success([]))
+                completion(.success([]), true)
             } else if let array = json as? [Any] {
-                completion(.success(array))
+                completion(.success(array), false)
             } else {
-                completion(.failure(APIError.error("Unexpected response from server.")))
+                completion(.failure(APIError.error("Unexpected response from server.")), false)
             }
         }
     }
 
-    internal func callDictionary(method: String, completion: @escaping (Result<[String: Any], Error>) -> ()) -> URLSessionDataTask {
+    internal func callDictionary(method: String, completion: @escaping (Result<[String: Any], Error>, Bool) -> ()) -> URLSessionDataTask {
         return callApi(method: method) { (response, json, error) in
             if let error = error {
-                completion(.failure(error))
+                completion(.failure(error), false)
             } else if let statusCode = response?.statusCode, statusCode == 304 {
-                completion(.success([:]))
+                completion(.success([:]), true)
             } else if let dict = json as? [String: Any] {
-                completion(.success(dict))
+                completion(.success(dict), false)
             } else {
-                completion(.failure(APIError.error("Unexpected response from server.")))
+                completion(.failure(APIError.error("Unexpected response from server.")), false)
             }
         }
     }

@@ -45,8 +45,10 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamsPage() {
         let ex = expectation(description: "teams_page")
 
-        let task = kit.fetchTeams(page: 0) { (result) in
+        let task = kit.fetchTeams(page: 0) { (result, notModified) in
             let teams = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(teams.count, 0)
 
             ex.fulfill()
@@ -61,8 +63,10 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamsPageEmpty() {
         let ex = expectation(description: "teams_page_empty")
 
-        let task = kit.fetchTeams(page: 100) { (result) in
+        let task = kit.fetchTeams(page: 100) { (result, notModified) in
             let teams = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertEqual(teams.count, 0)
 
             ex.fulfill()
@@ -77,8 +81,10 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamsYearPage() {
         let ex = expectation(description: "teams_year_page")
 
-        let task = kit.fetchTeams(page: 0, year: 2017) { (result) in
+        let task = kit.fetchTeams(page: 0, year: 2017) { (result, notModified) in
             let teams = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(teams.count, 0)
 
             ex.fulfill()
@@ -93,8 +99,10 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamsYearPageEmpty() {
         let ex = expectation(description: "teams_year_page_empty")
 
-        let task = kit.fetchTeams(page: 100, year: 2017) { (result) in
+        let task = kit.fetchTeams(page: 100, year: 2017) { (result, notModified) in
             let teams = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertEqual(teams.count, 0)
 
             ex.fulfill()
@@ -109,8 +117,10 @@ class TBATeamTests: TBAKitTestCase {
     func testTeam() {
         let ex = expectation(description: "team")
 
-        let task = kit.fetchTeam(key: "frc2337") { (result) in
+        let task = kit.fetchTeam(key: "frc2337") { (result, notModified) in
             let team = try! result.get()!
+            XCTAssertFalse(notModified)
+
             XCTAssertNotNil(team.key)
             XCTAssertNotNil(team.name)
             XCTAssertNotNil(team.teamNumber)
@@ -128,8 +138,10 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamEmpty() {
         let ex = expectation(description: "team_empty")
 
-        let task = kit.fetchTeam(key: "frc13") { (result) in
+        let task = kit.fetchTeam(key: "frc13") { (result, notModified) in
             let team = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertNil(team)
 
             ex.fulfill()
@@ -144,8 +156,10 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamAwards() {
         let ex = expectation(description: "team_awards")
 
-        let task = kit.fetchTeamAwards(key: "frc2337") { (result) in
+        let task = kit.fetchTeamAwards(key: "frc2337") { (result, notModified) in
             let awards = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(awards.count, 0)
 
             ex.fulfill()
@@ -160,8 +174,10 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamAwardsYear() {
         let ex = expectation(description: "team_awards_year")
 
-        let task = kit.fetchTeamAwards(key: "frc2337", year: 2017) { (result) in
+        let task = kit.fetchTeamAwards(key: "frc2337", year: 2017) { (result, notModified) in
             let awards = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(awards.count, 0)
 
             ex.fulfill()
@@ -176,8 +192,10 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamDistricts() {
         let ex = expectation(description: "team_districts")
 
-        let task = kit.fetchTeamDistricts(key: "frc2337") { (result) in
+        let task = kit.fetchTeamDistricts(key: "frc2337") { (result, notModified) in
             let districts = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(districts.count, 0)
 
             ex.fulfill()
@@ -192,8 +210,10 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamEventsYear() {
         let ex = expectation(description: "team_events_year")
 
-        let task = kit.fetchTeamEvents(key: "frc2337", year: 2017) { (result) in
+        let task = kit.fetchTeamEvents(key: "frc2337", year: 2017) { (result, notModified) in
             let events = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(events.count, 0)
 
             ex.fulfill()
@@ -208,8 +228,10 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamEventAwards() {
         let ex = expectation(description: "team_event_awards")
 
-        let task = kit.fetchTeamAwards(key: "frc2337", eventKey: "2017mike2") { (result) in
+        let task = kit.fetchTeamAwards(key: "frc2337", eventKey: "2017mike2") { (result, notModified) in
             let awards = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(awards.count, 0)
 
             ex.fulfill()
@@ -224,8 +246,10 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamEventMatches() {
         let ex = expectation(description: "team_event_matches")
 
-        let task = kit.fetchTeamMatches(key: "frc2337", eventKey: "2017mike2") { (result) in
+        let task = kit.fetchTeamMatches(key: "frc2337", eventKey: "2017mike2") { (result, notModified) in
             let matches = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(matches.count, 0)
 
             ex.fulfill()
@@ -240,8 +264,10 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamStatues() {
         let ex = expectation(description: "team_event_statuses")
 
-        let task = kit.fetchTeamStatuses(key: "frc2337", year: 2018) { (result) in
+        let task = kit.fetchTeamStatuses(key: "frc2337", year: 2018) { (result, notModified) in
             let statuses = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(statuses.count, 0)
 
             ex.fulfill()
@@ -256,8 +282,9 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamEventStatus() {
         let ex = expectation(description: "team_event_status")
 
-        let task = kit.fetchTeamStatus(key: "frc2337", eventKey: "2017mike2") { (result) in
+        let task = kit.fetchTeamStatus(key: "frc2337", eventKey: "2017mike2") { (result, notModified) in
             let status = try! result.get()!
+            XCTAssertFalse(notModified)
 
             XCTAssertEqual(status.teamKey, "frc2337")
             XCTAssertEqual(status.eventKey, "2017mike2")
@@ -292,8 +319,9 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamEventStatusNoElims() {
         let ex = expectation(description: "team_event_status_no_elims")
 
-        let task = kit.fetchTeamStatus(key: "frc2337", eventKey: "2016micmp") { (result) in
+        let task = kit.fetchTeamStatus(key: "frc2337", eventKey: "2016micmp") { (result, notModified) in
             let status = try! result.get()!
+            XCTAssertFalse(notModified)
 
             XCTAssertNotNil(status.qual)
             XCTAssertNil(status.alliance)
@@ -318,8 +346,9 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamEventStatusEmpty() {
         let ex = expectation(description: "team_event_status_empty")
 
-        let task = kit.fetchTeamStatus(key: "frc20", eventKey: "1992cmp") { (result) in
+        let task = kit.fetchTeamStatus(key: "frc20", eventKey: "1992cmp") { (result, notModified) in
             let status = try! result.get()!
+            XCTAssertFalse(notModified)
 
             XCTAssertNil(status.qual)
             XCTAssertNil(status.alliance)
@@ -341,8 +370,10 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamMatchesYear() {
         let ex = expectation(description: "team_matches_year")
 
-        let task = kit.fetchTeamMatches(key: "frc2337", year: 2017) { (result) in
+        let task = kit.fetchTeamMatches(key: "frc2337", year: 2017) { (result, notModified) in
             let matches = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(matches.count, 0)
 
             ex.fulfill()
@@ -357,8 +388,10 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamMediaYear() {
         let ex = expectation(description: "team_media_year")
 
-        let task = kit.fetchTeamMedia(key: "frc2337", year: 2017) { (result) in
+        let task = kit.fetchTeamMedia(key: "frc2337", year: 2017) { (result, notModified) in
             let media = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(media.count, 0)
 
             let m = media.first!
@@ -377,8 +410,10 @@ class TBATeamTests: TBAKitTestCase {
     func testTeamRobots() {
         let ex = expectation(description: "team_robots")
 
-        let task = kit.fetchTeamRobots(key: "frc2337") { (result) in
+        let task = kit.fetchTeamRobots(key: "frc2337") { (result, notModified) in
             let robots = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(robots.count, 0)
 
             let robot = robots.first!
@@ -399,8 +434,10 @@ class TBATeamTests: TBAKitTestCase {
     func testSocialMedia() {
         let ex = expectation(description: "team_social_media")
 
-        let task = kit.fetchTeamSocialMedia(key: "frc2337") { (result) in
+        let task = kit.fetchTeamSocialMedia(key: "frc2337") { (result, notModified) in
             let socialMedia = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(socialMedia.count, 0)
 
             let media = socialMedia.first!
@@ -419,8 +456,10 @@ class TBATeamTests: TBAKitTestCase {
     func testYearsParticipated() {
         let ex = expectation(description: "team_years_participated")
 
-        let task = kit.fetchTeamYearsParticipated(key: "frc2337") { (result) in
+        let task = kit.fetchTeamYearsParticipated(key: "frc2337") { (result, notModified) in
             let years = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(years.count, 0)
 
             ex.fulfill()

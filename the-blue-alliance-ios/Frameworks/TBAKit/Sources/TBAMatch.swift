@@ -159,7 +159,7 @@ public struct TBAMatchAlliance: TBAModel {
 extension TBAKit {
 
     @discardableResult
-    public func fetchMatch(key: String, _ completion: @escaping (Result<TBAMatch?, Error>) -> ()) -> URLSessionDataTask {
+    public func fetchMatch(key: String, _ completion: @escaping (Result<TBAMatch?, Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "match/\(key)"
         return callObject(method: method, completion: completion)
     }

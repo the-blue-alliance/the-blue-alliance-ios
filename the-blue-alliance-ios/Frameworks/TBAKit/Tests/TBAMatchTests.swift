@@ -38,8 +38,10 @@ class TBAMatchTests: TBAKitTestCase {
     func testMatch() {
         let ex = expectation(description: "match")
 
-        let task = kit.fetchMatch(key: "2017mike2_qm1") { (result) in
+        let task = kit.fetchMatch(key: "2017mike2_qm1") { (result, notModified) in
             let match = try! result.get()!
+            XCTAssertFalse(notModified)
+
             XCTAssertNotNil(match.compLevel)
             XCTAssertNotNil(match.eventKey)
             XCTAssertNotNil(match.key)
@@ -83,8 +85,10 @@ class TBAMatchTests: TBAKitTestCase {
     func testMatchNoBreakdown() {
         let ex = expectation(description: "match_no_breakdown")
 
-        let task = kit.fetchMatch(key: "2014miket_qm1") { (result) in
+        let task = kit.fetchMatch(key: "2014miket_qm1") { (result, notModified) in
             let match = try! result.get()!
+            XCTAssertFalse(notModified)
+
             XCTAssertEqual(match.alliances!.count, 2)
             XCTAssertNil(match.breakdown)
 

@@ -522,36 +522,36 @@ public struct TBAWebcast: TBAModel {
 extension TBAKit {
 
     @discardableResult
-    public func fetchEvents(year: Int, completion: @escaping (Result<[TBAEvent], Error>) -> ()) -> URLSessionDataTask {
+    public func fetchEvents(year: Int, completion: @escaping (Result<[TBAEvent], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "events/\(year)"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchEvent(key: String, completion: @escaping (Result<TBAEvent?, Error>) -> ()) -> URLSessionDataTask {
+    public func fetchEvent(key: String, completion: @escaping (Result<TBAEvent?, Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)"
         return callObject(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchEventAlliances(key: String, completion: @escaping (Result<[TBAAlliance], Error>) -> ()) -> URLSessionDataTask {
+    public func fetchEventAlliances(key: String, completion: @escaping (Result<[TBAAlliance], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/alliances"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchEventInsights(key: String, completion: @escaping (Result<TBAEventInsights?, Error>) -> ()) -> URLSessionDataTask {
+    public func fetchEventInsights(key: String, completion: @escaping (Result<TBAEventInsights?, Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/insights"
         return callObject(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchEventTeamStats(key: String, completion: @escaping (Result<[TBAStat], Error>) -> ()) -> URLSessionDataTask {
+    public func fetchEventTeamStats(key: String, completion: @escaping (Result<[TBAStat], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/oprs"
-        return callDictionary(method: method) { (result) in
+        return callDictionary(method: method) { (result, notModified) in
             switch result {
             case .failure(let error):
-                completion(.failure(error))
+                completion(.failure(error), notModified)
             case .success(let dictionary):
                 var oprs: [String: Double] = [:]
                 if let oprsDict = dictionary["oprs"] as? [String: Double] {
@@ -590,18 +590,18 @@ extension TBAKit {
                         stats.append(stat)
                     }
                 }
-                completion(.success(stats))
+                completion(.success(stats), notModified)
             }
         }
     }
 
     @discardableResult
-    public func fetchEventRankings(key: String, completion: @escaping (Result<([TBAEventRanking], [TBAEventRankingSortOrder], [TBAEventRankingSortOrder]), Error>) -> ()) -> URLSessionDataTask {
+    public func fetchEventRankings(key: String, completion: @escaping (Result<([TBAEventRanking], [TBAEventRankingSortOrder], [TBAEventRankingSortOrder]), Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/rankings"
-        return callDictionary(method: method, completion: { (result) in
+        return callDictionary(method: method, completion: { (result, notModified) in
             switch result {
             case .failure(let error):
-                completion(.failure(error))
+                completion(.failure(error), notModified)
             case .success(let dictionary):
                 var rankings: [TBAEventRanking] = []
                 if let rankingsJSON = dictionary["rankings"] as? [[String: Any]] {
@@ -624,19 +624,19 @@ extension TBAKit {
                     })
                 }
 
-                completion(.success((rankings, sortOrderInfo, extraStatsInfo)))
+                completion(.success((rankings, sortOrderInfo, extraStatsInfo)), notModified)
             }
         })
         
     }
 
     @discardableResult
-    public func fetchEventDistrictPoints(key: String, completion: @escaping (Result<([TBADistrictEventPoints], [TBADistrictPointsTiebreaker]), Error>) -> ()) -> URLSessionDataTask {
+    public func fetchEventDistrictPoints(key: String, completion: @escaping (Result<([TBADistrictEventPoints], [TBADistrictPointsTiebreaker]), Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/district_points"
-        return callDictionary(method: method) { (result) in
+        return callDictionary(method: method) { (result, notModified) in
             switch result {
             case .failure(let error):
-                completion(.failure(error))
+                completion(.failure(error), notModified)
             case .success(let dictionary):
                 var districtPoints: [TBADistrictEventPoints] = []
                 if let points = dictionary["points"] as? [String: Any] {
@@ -665,24 +665,24 @@ extension TBAKit {
                     })
                 }
 
-                completion(.success((districtPoints, pointsTiebreakers)))
+                completion(.success((districtPoints, pointsTiebreakers)), notModified)
             }
         }
     }
 
     @discardableResult
-    public func fetchEventTeams(key: String, completion: @escaping (Result<[TBATeam], Error>) -> ()) -> URLSessionDataTask {
+    public func fetchEventTeams(key: String, completion: @escaping (Result<[TBATeam], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/teams"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchEventStatuses(key: String, completion: @escaping (Result<[TBAEventStatus], Error>) -> ()) -> URLSessionDataTask {
+    public func fetchEventStatuses(key: String, completion: @escaping (Result<[TBAEventStatus], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/teams/statuses"
-        return callDictionary(method: method, completion: { (result) in
+        return callDictionary(method: method, completion: { (result, notModified) in
             switch result {
             case .failure(let error):
-                completion(.failure(error))
+                completion(.failure(error), notModified)
             case .success(let dictionary):
                 let eventStatuses = dictionary.compactMap({ (eventKey, statusJSON) -> TBAEventStatus? in
                     // Add teamKey/eventKey to statusJSON
@@ -694,19 +694,19 @@ extension TBAKit {
 
                     return TBAEventStatus(json: json)
                 })
-                completion(.success(eventStatuses))
+                completion(.success(eventStatuses), notModified)
             }
         })
     }
 
     @discardableResult
-    public func fetchEventMatches(key: String, completion: @escaping (Result<[TBAMatch], Error>) -> ()) -> URLSessionDataTask {
+    public func fetchEventMatches(key: String, completion: @escaping (Result<[TBAMatch], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/matches"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchEventAwards(key: String, completion: @escaping (Result<[TBAAward], Error>) -> ()) -> URLSessionDataTask {
+    public func fetchEventAwards(key: String, completion: @escaping (Result<[TBAAward], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "event/\(key)/awards"
         return callArray(method: method, completion: completion)
     }

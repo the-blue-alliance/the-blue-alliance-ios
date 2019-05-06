@@ -41,9 +41,10 @@ class TBADistrictTests: TBAKitTestCase {
     func testDistrictsYear() {
         let ex = expectation(description: "districts_year")
 
-        let task = kit.fetchDistricts(year: 2017) { (result) in
+        let task = kit.fetchDistricts(year: 2017) { (result, notModified) in
             let districts = try! result.get()
             XCTAssertGreaterThan(districts.count, 0)
+            XCTAssertFalse(notModified)
 
             let district = districts.first!
             XCTAssertNotNil(district.abbreviation)
@@ -63,9 +64,10 @@ class TBADistrictTests: TBAKitTestCase {
     func testDistrictEvents() {
         let ex = expectation(description: "district_events")
 
-        let task = kit.fetchDistrictEvents(key: "2017fim") { (result) in
+        let task = kit.fetchDistrictEvents(key: "2017fim") { (result, notModified) in
             let events = try! result.get()
             XCTAssertGreaterThan(events.count, 0)
+            XCTAssertFalse(notModified)
 
             ex.fulfill()
         }
@@ -79,9 +81,10 @@ class TBADistrictTests: TBAKitTestCase {
     func testDistrictRankings() {
         let ex = expectation(description: "district_rankings")
 
-        let task = kit.fetchDistrictRankings(key: "2017fim") { (result) in
+        let task = kit.fetchDistrictRankings(key: "2017fim") { (result, notModified) in
             let rankings = try! result.get()
             XCTAssertGreaterThan(rankings.count, 0)
+            XCTAssertFalse(notModified)
 
             let ranking = rankings.first!
             XCTAssertNotNil(ranking.teamKey)
@@ -113,9 +116,10 @@ class TBADistrictTests: TBAKitTestCase {
     func testDistricTeams() {
         let ex = expectation(description: "district_teams")
 
-        let task = kit.fetchDistrictTeams(key: "2017fim") { (result) in
+        let task = kit.fetchDistrictTeams(key: "2017fim") { (result, notModified) in
             let teams = try! result.get()
             XCTAssertGreaterThan(teams.count, 0)
+            XCTAssertFalse(notModified)
 
             ex.fulfill()
         }

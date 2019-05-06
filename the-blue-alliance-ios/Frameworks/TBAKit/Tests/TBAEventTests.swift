@@ -99,8 +99,10 @@ class TBAEventTests: TBAKitTestCase {
     func testEventsYear() {
         let ex = expectation(description: "events_year")
 
-        let task = kit.fetchEvents(year: 2017) { (result) in
+        let task = kit.fetchEvents(year: 2017) { (result, notModified) in
             let events = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(events.count, 0)
 
             ex.fulfill()
@@ -115,8 +117,10 @@ class TBAEventTests: TBAKitTestCase {
     func testEvent() {
         let ex = expectation(description: "event")
 
-        let task = kit.fetchEvent(key: "2017mike2") { (result) in
+        let task = kit.fetchEvent(key: "2017mike2") { (result, notModified) in
             let event = try! result.get()!
+            XCTAssertFalse(notModified)
+
             XCTAssertNotNil(event.key)
             XCTAssertNotNil(event.eventCode)
             XCTAssertNotNil(event.name)
@@ -138,8 +142,10 @@ class TBAEventTests: TBAKitTestCase {
         let childEventKey = "2017micmp3"
 
         let parentEx = expectation(description: "event_parent")
-        let parentTask = kit.fetchEvent(key: parentEventKey) { (result) in
+        let parentTask = kit.fetchEvent(key: parentEventKey) { (result, notModified) in
             let event = try! result.get()!
+            XCTAssertFalse(notModified)
+
             XCTAssertNotNil(event.divisionKeys)
             XCTAssertTrue(event.divisionKeys.contains(childEventKey))
 
@@ -148,8 +154,10 @@ class TBAEventTests: TBAKitTestCase {
         kit.sendSuccessStub(for: parentTask)
 
         let childEx = expectation(description: "event_child")
-        let childTask = kit.fetchEvent(key: childEventKey) { (result) in
+        let childTask = kit.fetchEvent(key: childEventKey) { (result, notModified) in
             let event = try! result.get()!
+            XCTAssertFalse(notModified)
+
             XCTAssertNotNil(event.parentEventKey)
             XCTAssertEqual(event.parentEventKey, parentEventKey)
 
@@ -165,8 +173,10 @@ class TBAEventTests: TBAKitTestCase {
     func testEventAlliances() {
         let ex = expectation(description: "event_alliances")
 
-        let task = kit.fetchEventAlliances(key: "2017mike2") { (result) in
+        let task = kit.fetchEventAlliances(key: "2017mike2") { (result, notModified) in
             let alliances = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(alliances.count, 0)
 
             let alliance = alliances.first!
@@ -198,8 +208,10 @@ class TBAEventTests: TBAKitTestCase {
     func testEventAlliancesBackup() {
         let ex = expectation(description: "event_alliances_backup")
 
-        let task = kit.fetchEventAlliances(key: "2018micmp4") { (result) in
+        let task = kit.fetchEventAlliances(key: "2018micmp4") { (result, notModified) in
             let alliances = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(alliances.count, 0)
 
             XCTAssertNil(alliances.first!.backup)
@@ -222,8 +234,10 @@ class TBAEventTests: TBAKitTestCase {
     func testEventAlliancesPlayoffAverage() {
         let ex = expectation(description: "event_alliances_playoff_average")
 
-        let task = kit.fetchEventAlliances(key: "2015mike2") { (result) in
+        let task = kit.fetchEventAlliances(key: "2015mike2") { (result, notModified) in
             let alliances = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(alliances.count, 0)
 
             let alliance = alliances.first!
@@ -244,8 +258,10 @@ class TBAEventTests: TBAKitTestCase {
     func testEventAwards() {
         let ex = expectation(description: "event_awards")
 
-        let task = kit.fetchEventAwards(key: "2017mike2") { (result) in
+        let task = kit.fetchEventAwards(key: "2017mike2") { (result, notModified) in
             let awards = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(awards.count, 0)
 
             let award = awards.first!
@@ -272,8 +288,10 @@ class TBAEventTests: TBAKitTestCase {
     func testEventAwardsAwardee() {
         let ex = expectation(description: "event_awards_awardee")
 
-        let task = kit.fetchEventAwards(key: "2015micmp") { (result) in
+        let task = kit.fetchEventAwards(key: "2015micmp") { (result, notModified) in
             let awards = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(awards.count, 0)
 
             guard let deansListAwardIndex = awards.index(where: { $0.awardType == 4 }) else {
@@ -298,8 +316,10 @@ class TBAEventTests: TBAKitTestCase {
     func testEventDistrictPoints() {
         let ex = expectation(description: "event_district_points")
 
-        let task = kit.fetchEventDistrictPoints(key: "2017mike2") { (result) in
+        let task = kit.fetchEventDistrictPoints(key: "2017mike2") { (result, notModified) in
             let (districtPoints, tiebreakers) = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(districtPoints.count, 0)
 
             let districtPoint = districtPoints.first!
@@ -332,13 +352,14 @@ class TBAEventTests: TBAKitTestCase {
     func testEventDistrictPointsRegional() {
         let ex = expectation(description: "event_district_points_regional")
 
-        let task = kit.fetchEventDistrictPoints(key: "2005ga") { (result) in
+        let task = kit.fetchEventDistrictPoints(key: "2005ga") { (result, notModified) in
             do {
                 let (districtPoints, tiebreakers) = try result.get()
                 XCTFail()
             } catch {
                 XCTAssertNotNil(error)
             }
+            XCTAssertFalse(notModified)
 
             ex.fulfill()
         }
@@ -352,8 +373,10 @@ class TBAEventTests: TBAKitTestCase {
     func testEventInsights() {
         let ex = expectation(description: "event_insights")
 
-        let task = kit.fetchEventInsights(key: "2017mike2") { (result) in
+        let task = kit.fetchEventInsights(key: "2017mike2") { (result, notModified) in
             let insights = try! result.get()!
+            XCTAssertFalse(notModified)
+
             XCTAssertNotNil(insights.qual)
             XCTAssertNotNil(insights.playoff)
 
@@ -369,13 +392,14 @@ class TBAEventTests: TBAKitTestCase {
     func testEventInsightsNull() {
         let ex = expectation(description: "event_insights_null")
 
-        let task = kit.fetchEventInsights(key: "2015miket") { (result) in
+        let task = kit.fetchEventInsights(key: "2015miket") { (result, notModified) in
             do {
                 let insights = try result.get()
                 XCTFail()
             } catch {
                 XCTAssertNotNil(error)
             }
+            XCTAssertFalse(notModified)
 
             ex.fulfill()
         }
@@ -389,8 +413,10 @@ class TBAEventTests: TBAKitTestCase {
     func testEventMatches() {
         let ex = expectation(description: "event_matches")
 
-        let task = kit.fetchEventMatches(key: "2017mike2") { (result) in
+        let task = kit.fetchEventMatches(key: "2017mike2") { (result, notModified) in
             let matches = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(matches.count, 0)
 
             ex.fulfill()
@@ -405,8 +431,10 @@ class TBAEventTests: TBAKitTestCase {
     func testEventOPRs() {
         let ex = expectation(description: "event_oprs")
 
-        let task = kit.fetchEventTeamStats(key: "2017mike2") { (result) in
+        let task = kit.fetchEventTeamStats(key: "2017mike2") { (result, notModified) in
             let stats = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(stats.count, 0)
 
             let stat = stats.first!
@@ -427,13 +455,14 @@ class TBAEventTests: TBAKitTestCase {
     func testEventOPRsNull() {
         let ex = expectation(description: "event_oprs_null")
 
-        let task = kit.fetchEventTeamStats(key: "1992cmp") { (result) in
+        let task = kit.fetchEventTeamStats(key: "1992cmp") { (result, notModified) in
             do {
                 let stats = try result.get()
                 XCTFail()
             } catch {
                 XCTAssertNotNil(error)
             }
+            XCTAssertFalse(notModified)
 
             ex.fulfill()
         }
@@ -447,8 +476,10 @@ class TBAEventTests: TBAKitTestCase {
     func testEventRankings() {
         let ex = expectation(description: "event_rankings")
 
-        let task = kit.fetchEventRankings(key: "2017mike2") { (result) in
+        let task = kit.fetchEventRankings(key: "2017mike2") { (result, notModified) in
             let (rankings, sortOrderInfo, extraStatsInfo) = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(rankings.count, 0)
 
             let ranking = rankings.first!
@@ -484,8 +515,10 @@ class TBAEventTests: TBAKitTestCase {
     func testEventRankings2015() {
         let ex = expectation(description: "event_rankings_2015")
 
-        let task = kit.fetchEventRankings(key: "2015miket") { (result) in
+        let task = kit.fetchEventRankings(key: "2015miket") { (result, notModified) in
             let (rankings, sortOrderInfo, extraStatsInfo) = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(rankings.count, 0)
             XCTAssertGreaterThan(sortOrderInfo.count, 0)
             XCTAssertEqual(extraStatsInfo.count, 0)
@@ -506,8 +539,10 @@ class TBAEventTests: TBAKitTestCase {
     func testEventRankingsEmpty() {
         let ex = expectation(description: "event_rankings_empty")
 
-        let task = kit.fetchEventRankings(key: "2018cars") { (result) in
+        let task = kit.fetchEventRankings(key: "2018cars") { (result, notModified) in
             let (rankings, sortOrderInfo, extraStatsInfo) = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertEqual(rankings.count, 0)
             XCTAssertEqual(extraStatsInfo.count, 0)
             XCTAssertGreaterThan(sortOrderInfo.count, 0)
@@ -524,13 +559,14 @@ class TBAEventTests: TBAKitTestCase {
     func testEventRankingsNull() {
         let ex = expectation(description: "event_rankings_null")
 
-        let task = kit.fetchEventRankings(key: "1992cmp") { (result) in
+        let task = kit.fetchEventRankings(key: "1992cmp") { (result, notModified) in
             do {
                 let (rankings, sortOrderInfo, extraStatsInfo) = try result.get()
                 XCTFail()
             } catch {
                 XCTAssertNotNil(error)
             }
+            XCTAssertFalse(notModified)
 
             ex.fulfill()
         }
@@ -544,8 +580,10 @@ class TBAEventTests: TBAKitTestCase {
     func testEventTeams() {
         let ex = expectation(description: "event_teams")
 
-        let task = kit.fetchEventTeams(key: "2017mike2") { (result) in
+        let task = kit.fetchEventTeams(key: "2017mike2") { (result, notModified) in
             let teams = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(teams.count, 0)
 
             ex.fulfill()
@@ -560,8 +598,10 @@ class TBAEventTests: TBAKitTestCase {
     func testEventTeamStatuses() {
         let ex = expectation(description: "event_team_statuses")
 
-        let task = kit.fetchEventStatuses(key: "2018misjo") { (result) in
+        let task = kit.fetchEventStatuses(key: "2018misjo") { (result, notModified) in
             let statuses = try! result.get()
+            XCTAssertFalse(notModified)
+
             XCTAssertGreaterThan(statuses.count, 0)
 
             ex.fulfill()
