@@ -24,6 +24,7 @@ class AwardTableViewCell: UITableViewCell, Reusable {
         awardNameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         awardNameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
         awardNameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
+        awardNameLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
 
         awardsFlexView.horizontalSpacing = 10
         awardsFlexView.verticalSpacing = 10
@@ -32,7 +33,9 @@ class AwardTableViewCell: UITableViewCell, Reusable {
         awardsFlexView.leadingAnchor.constraint(equalTo: awardNameLabel.leadingAnchor).isActive = true
         awardsFlexView.trailingAnchor.constraint(equalTo: awardNameLabel.trailingAnchor).isActive = true
         awardsFlexView.topAnchor.constraint(equalToSystemSpacingBelow: awardNameLabel.lastBaselineAnchor, multiplier: 1).isActive = true
-        self.bottomAnchor.constraint(equalTo: awardsFlexView.bottomAnchor, constant: 20).isActive = true
+        awardsFlexView.setContentHuggingPriority(.defaultHigh, for: .vertical)
+
+        self.bottomAnchor.constraint(equalTo: awardsFlexView.bottomAnchor, constant: 20).withPriority(.defaultLow).isActive = true
     }
 
     required init?(coder aDecoder: NSCoder) { fatalError() }

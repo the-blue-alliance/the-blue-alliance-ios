@@ -40,6 +40,7 @@
 		488C423D227F5A0300D02CBA /* UIFont+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488C423C227F5A0300D02CBA /* UIFont+TBA.swift */; };
 		488C423F227F5BAA00D02CBA /* AwardTeamButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488C423E227F5BAA00D02CBA /* AwardTeamButton.swift */; };
 		488C4243227FE21600D02CBA /* FlexLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488C4242227FE21600D02CBA /* FlexLayoutView.swift */; };
+		488C42452280D10A00D02CBA /* NSLayoutConstraint+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488C42442280D10A00D02CBA /* NSLayoutConstraint+TBA.swift */; };
 		5797EAB49489B63DDA0980F5 /* Pods_tba_unit_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */; };
 		92004C6521C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */; };
 		92004C6621C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */; };
@@ -329,6 +330,7 @@
 		488C423C227F5A0300D02CBA /* UIFont+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+TBA.swift"; sourceTree = "<group>"; };
 		488C423E227F5BAA00D02CBA /* AwardTeamButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwardTeamButton.swift; sourceTree = "<group>"; };
 		488C4242227FE21600D02CBA /* FlexLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexLayoutView.swift; sourceTree = "<group>"; };
+		488C42442280D10A00D02CBA /* NSLayoutConstraint+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSLayoutConstraint+TBA.swift"; sourceTree = "<group>"; };
 		4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.release.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.release.xcconfig"; sourceTree = "<group>"; };
 		52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_unit_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2019DeepSpaceIcon@2x.png"; sourceTree = "<group>"; };
@@ -1234,6 +1236,7 @@
 				921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */,
 				921D0B5E222B13480056578A /* ContainerViewController+Team.swift */,
 				488C423C227F5A0300D02CBA /* UIFont+TBA.swift */,
+				488C42442280D10A00D02CBA /* NSLayoutConstraint+TBA.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2087,6 +2090,7 @@
 				92A5E5DA21A22D550025CC85 /* UIColor+TBA.swift in Sources */,
 				92DF54E121B1B65A0082C58C /* StatusService.swift in Sources */,
 				92FF111A21A61B37003BC5C4 /* DistrictViewController.swift in Sources */,
+				488C42452280D10A00D02CBA /* NSLayoutConstraint+TBA.swift in Sources */,
 				92C8CE4021AC5D5C00683558 /* MyTBAPreferenceViewController.swift in Sources */,
 				929F57222092B80B00E5313A /* ContainerViewController.swift in Sources */,
 				92A5E5D321A22D550025CC85 /* UIApplication+URLOpener.swift in Sources */,
