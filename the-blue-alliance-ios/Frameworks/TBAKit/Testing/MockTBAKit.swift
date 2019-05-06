@@ -23,7 +23,20 @@ public class MockTBAKit: TBAKit {
             return nil
         }
 
-        return lastModified(for: url)
+        return TBAKit.lastModifiedURLString(for: url)
+    }
+
+    public func etag(_ task: URLSessionDataTask) -> String? {
+        // Pull our response off of our request
+        guard let request = task.currentRequest else {
+            return nil
+        }
+        // Grab our URL
+        guard let url = request.url else {
+            return nil
+        }
+
+        return TBAKit.etagURLString(for: url)
     }
 
     public func sendUnauthorizedStub(for task: URLSessionDataTask) {
@@ -63,7 +76,10 @@ public class MockTBAKit: TBAKit {
             return
         }
 
-        let headerFields = ["Last-Modified": "Sun, 11 Jun 2017 03:34:00 GMT"]
+        let headerFields = [
+            "Last-Modified": "Sun, 11 Jun 2017 03:34:00 GMT",
+            "Etag": "W/\"1ea6e1a87aafbbeeb6a89b31cf4fb84c\""
+        ]
         let response = HTTPURLResponse(url: requestURL, statusCode: 304, httpVersion: nil, headerFields: headerFields)
         mockRequest.testResponse = response
         mockRequest.completionHandler?(nil, response, nil)
@@ -96,7 +112,10 @@ public class MockTBAKit: TBAKit {
             XCTFail()
         }
 
-        let headerFields = ["Last-Modified": "Sun, 11 Jun 2017 03:34:00 GMT"]
+        let headerFields = [
+            "Last-Modified": "Sun, 11 Jun 2017 03:34:00 GMT",
+            "Etag": "W/\"1ea6e1a87aafbbeeb6a89b31cf4fb84c\""
+        ]
         let response = HTTPURLResponse(url: requestURL, statusCode: code, httpVersion: nil, headerFields: headerFields)
         mockRequest.testResponse = response
         mockRequest.completionHandler?(data, response, nil)

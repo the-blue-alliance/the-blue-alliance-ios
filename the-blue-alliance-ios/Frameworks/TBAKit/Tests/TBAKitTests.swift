@@ -58,77 +58,84 @@ class TBAKitTests: TBAKitTestCase {
         kit.session.cancelExpectation = nil
     }
 
-    func testLastModified() {
-        let setLastModifiedExpectation = expectation(description: "last_modified")
-        var setLastModifiedTask: URLSessionDataTask?
-        setLastModifiedTask = kit.fetchStatus { (result, notModified) in
+    func testStoreCacheHeaders() {
+        let storeCacheHeadersExpectation = expectation(description: "store_cache_headers")
+        var storeCacheHeadersTask: URLSessionDataTask?
+        storeCacheHeadersTask = kit.fetchStatus { (result, notModified) in
             let status = try! result.get()
             XCTAssertFalse(notModified)
 
-            self.kit.setLastModified(setLastModifiedTask!)
+            self.kit.storeCacheHeaders(storeCacheHeadersTask!)
 
-            setLastModifiedExpectation.fulfill()
+            storeCacheHeadersExpectation.fulfill()
         }
-        kit.sendSuccessStub(for: setLastModifiedTask!)
-        wait(for: [setLastModifiedExpectation], timeout: 1.0)
+        kit.sendSuccessStub(for: storeCacheHeadersTask!)
+        wait(for: [storeCacheHeadersExpectation], timeout: 1.0)
 
-        let setIfModifiedSinceExpectation = expectation(description: "if_modified_since")
-        let setIfModifiedSinceTask = kit.fetchStatus { (result, notModified) in
+        let notModifiedExpectation = expectation(description: "not_modified")
+        let notModifiedTask = kit.fetchStatus { (result, notModified) in
             let status = try! result.get()
             XCTAssert(notModified)
             XCTAssertNil(status)
 
-            setIfModifiedSinceExpectation.fulfill()
+            notModifiedExpectation.fulfill()
         }
-        kit.sendSuccessStub(for: setIfModifiedSinceTask, with: 304)
-        wait(for: [setIfModifiedSinceExpectation], timeout: 1.0)
+        kit.sendSuccessStub(for: notModifiedTask, with: 304)
+        wait(for: [notModifiedExpectation], timeout: 1.0)
 
-        guard let headers = setIfModifiedSinceTask.currentRequest?.allHTTPHeaderFields else {
+        guard let headers = notModifiedTask.currentRequest?.allHTTPHeaderFields else {
             XCTFail()
             return
         }
+
         guard let ifModifiedSinceHeader = headers["If-Modified-Since"] else {
             XCTFail()
             return
         }
         XCTAssertEqual(ifModifiedSinceHeader, "Sun, 11 Jun 2017 03:34:00 GMT")
+
+        guard let etagHeader = headers["If-None-Match"] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(etagHeader, "W/\"1ea6e1a87aafbbeeb6a89b31cf4fb84c\"")
     }
 
     func testDoesNotStoreErrorLastModified() {
-        let setLastModifiedExpectation = expectation(description: "last_modified")
-        let setLastModifiedTask = kit.fetchStatus { (result, notModified) in
+        let setCacheHeadersExpectation = expectation(description: "set_cache_headers")
+        let setCacheHeadersTask = kit.fetchStatus { (result, notModified) in
             let status = try! result.get()
             XCTAssertFalse(notModified)
 
-            setLastModifiedExpectation.fulfill()
+            setCacheHeadersExpectation.fulfill()
         }
-        kit.sendSuccessStub(for: setLastModifiedTask, with: 404)
-        wait(for: [setLastModifiedExpectation], timeout: 1.0)
+        kit.sendSuccessStub(for: setCacheHeadersTask, with: 404)
+        wait(for: [setCacheHeadersExpectation], timeout: 1.0)
 
         let setIfModifiedSinceTask = kit.fetchStatus { (result, notModified) in
-            let status = try! result.get()
-            XCTAssertFalse(notModified)
+            XCTFail()
         }
         guard let headers = setIfModifiedSinceTask.currentRequest?.allHTTPHeaderFields else {
             XCTFail()
             return
         }
         XCTAssertNil(headers["If-Modified-Since"])
+        XCTAssertNil(headers["If-None-Match"])
     }
 
-    func testClearLastModified() {
-        kit.clearLastModified()
+    func testClearCacheHeaders() {
+        kit.clearCacheHeaders()
 
-        let setLastModifiedTask = kit.fetchStatus { (result, notModified) in
-            let status = try! result.get()
-            XCTAssertFalse(notModified)
+        let storeCacheHeadersTask = kit.fetchStatus { (result, notModified) in
+            XCTFail()
         }
 
-        guard let headers = setLastModifiedTask.currentRequest?.allHTTPHeaderFields else {
+        guard let headers = storeCacheHeadersTask.currentRequest?.allHTTPHeaderFields else {
             XCTFail()
             return
         }
         XCTAssertNil(headers["If-Modified-Since"])
+        XCTAssertNil(headers["If-None-Match"])
     }
 
 }
