@@ -204,6 +204,7 @@ PODS:
     - TBAKitTesting
   - TBAKitTesting (1.0.0-LOCAL):
     - TBAKit
+  - TBATesting (1.0.0-LOCAL)
   - yoga (0.59.0.React)
   - youtube-ios-player-helper (0.1.6)
   - Zip (1.1.0)
@@ -232,9 +233,10 @@ DEPENDENCIES:
   - React/RCTNetwork (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
   - React/RCTText (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
   - React/RCTWebSocket (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
-  - TBAKit (from `the-blue-alliance-ios/Frameworks/TBAKit`)
-  - TBAKit/Tests (from `the-blue-alliance-ios/Frameworks/TBAKit`)
-  - TBAKitTesting (from `the-blue-alliance-ios/Frameworks/TBAKit`)
+  - TBAKit (from `Frameworks/TBAKit`)
+  - TBAKit/Tests (from `Frameworks/TBAKit`)
+  - TBAKitTesting (from `Frameworks/TBAKit`)
+  - TBATesting (from `Frameworks/TBATesting`)
   - yoga (from `subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga`)
   - youtube-ios-player-helper
   - Zip (~> 1.1)
@@ -283,9 +285,11 @@ EXTERNAL SOURCES:
   React:
     :path: subtrees/the-blue-alliance-react/node_modules/react-native
   TBAKit:
-    :path: the-blue-alliance-ios/Frameworks/TBAKit
+    :path: Frameworks/TBAKit
   TBAKitTesting:
-    :path: the-blue-alliance-ios/Frameworks/TBAKit
+    :path: Frameworks/TBAKit
+  TBATesting:
+    :path: Frameworks/TBATesting
   yoga:
     :path: subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga
 
@@ -323,12 +327,13 @@ SPEC CHECKSUMS:
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
   PureLayout: f08c01b8dec00bb14a1fefa3de4c7d9c265df85e
   React: 0d6c719d9549bea0bd5676f8170b0e5c56e2c3c7
-  TBAKit: c3552e9f07cb9aa36dcf6bc1193eb4079b8d7c2c
-  TBAKitTesting: 8548fd91404db4e319d2eac3fa335cb890d48478
+  TBAKit: 3e5780e1c968e6d07abf808831fbf91d1e05e356
+  TBAKitTesting: 319cd14596636556b886fa7e5e0d202148c3a93f
+  TBATesting: 598744de12ee8ce63a7b60f121edb4c1b573155c
   yoga: 26673abd38bbdf0c33e134ad9e690c5fbf16e8fc
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: 40d3880e95712e7aee4e527321f27cabe820a3ef
+PODFILE CHECKSUM: 7c9f6c529a8a46029bc4fc87ec7d9c9acfef2057
 
 COCOAPODS: 1.6.1

@@ -1,7 +1,5 @@
 import CoreData
-import FBSnapshotTestCase
 import Foundation
-import TBAKit
 import XCTest
 @testable import The_Blue_Alliance
 
@@ -16,10 +14,6 @@ class CoreDataTestCase: FBSnapshotTestCase {
 
     override func setUp() {
         super.setUp()
-
-        agnosticOptions = .OS
-        // Uncomment to record all new snapshots
-        // recordMode = true
 
         persistentContainer = TBAPersistenceContainer(name: "TBA", managedObjectModel: CoreDataTestCase.managedObjectModel)
 

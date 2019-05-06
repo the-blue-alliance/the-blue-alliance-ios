@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
     that offers complete models and requests for the API
                        DESC
 
-  s.homepage         = 'https://github.com/the-blue-alliance/the-blue-alliance-ios/tree/master/the-blue-alliance-ios/Frameworks/TBAKit'
+  s.homepage         = 'https://github.com/the-blue-alliance/the-blue-alliance-ios/tree/master/Frameworks/TBAKit'
   s.author           = 'ZachOrr'
   s.source           = { :git => 'https://thebluealliance.com/', :tag => s.version.to_s }
   s.swift_version    = '5.0'
