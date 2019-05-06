@@ -23,7 +23,7 @@ public class MockTBAKit: TBAKit {
             return nil
         }
 
-        return TBAKit.lastModifiedURLString(for: url)
+        return lastModified(for: url)
     }
 
     public func etag(_ task: URLSessionDataTask) -> String? {
@@ -36,7 +36,7 @@ public class MockTBAKit: TBAKit {
             return nil
         }
 
-        return TBAKit.etagURLString(for: url)
+        return etag(for: url)
     }
 
     public func sendUnauthorizedStub(for task: URLSessionDataTask) {

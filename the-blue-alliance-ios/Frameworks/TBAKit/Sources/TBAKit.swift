@@ -86,13 +86,13 @@ open class TBAKit: NSObject {
         return "ETAG:\(url.absoluteString)"
     }
 
-    private func lastModified(for url: URL) -> String? {
+    public func lastModified(for url: URL) -> String? {
         let lastModifiedString = TBAKit.lastModifiedURLString(for: url)
         let lastModifiedDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.lastModifiedDictionary) ?? [:]
         return lastModifiedDictionary[lastModifiedString] as? String
     }
 
-    private func etag(for url: URL) -> String? {
+    public func etag(for url: URL) -> String? {
         let etagString = TBAKit.etagURLString(for: url)
         let etagDictionary = userDefaults.dictionary(forKey: Constants.APIConstants.etagDictionary) ?? [:]
         return etagDictionary[etagString] as? String
