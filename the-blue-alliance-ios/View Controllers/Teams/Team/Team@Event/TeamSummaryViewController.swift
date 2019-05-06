@@ -355,7 +355,7 @@ extension TeamSummaryViewController: Refreshable {
                     Match.insert(match, in: context)
                 }
             }, saved: {
-                self.tbaKit.setLastModified(request!)
+                self.tbaKit.storeCacheHeaders(request!)
             })
 
             self.backgroundFetchKeys.remove(key)

@@ -136,7 +136,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
                     team.yearsParticipated = years.sorted().reversed()
                 }
             }, saved: {
-                self.tbaKit.setLastModified(request!)
+                self.tbaKit.storeCacheHeaders(request!)
             })
         })
     }

@@ -272,7 +272,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                     Event.insert(event, in: context)
                 }
             }, saved: {
-                self.tbaKit.setLastModified(request!)
+                self.tbaKit.storeCacheHeaders(request!)
             })
 
             self.backgroundFetchKeys.remove(key)
@@ -295,7 +295,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                     Team.insert(team, in: context)
                 }
             }, saved: {
-                self.tbaKit.setLastModified(request!)
+                self.tbaKit.storeCacheHeaders(request!)
             })
 
             self.backgroundFetchKeys.remove(key)
@@ -318,7 +318,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                     Match.insert(match, in: context)
                 }
             }, saved: {
-                self.tbaKit.setLastModified(request!)
+                self.tbaKit.storeCacheHeaders(request!)
             })
 
             self.backgroundFetchKeys.remove(key)
