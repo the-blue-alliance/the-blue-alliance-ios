@@ -36,11 +36,10 @@ class DistrictTeamsViewController: TeamsViewController {
 
     @objc override func refresh() {
         var request: URLSessionDataTask?
-        request = tbaKit.fetchDistrictTeams(key: district.key!, completion: { (result) in
-            let teams = try? result.get()
+        request = tbaKit.fetchDistrictTeams(key: district.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let teams = teams {
+                if !notModified, let teams = try? result.get() {
                     let district = context.object(with: self.district.objectID) as! District
                     district.insert(teams)
                 }

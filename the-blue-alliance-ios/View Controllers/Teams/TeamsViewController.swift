@@ -112,8 +112,6 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Team.insert(teams, page: page, in: context)
-            }, saved: {
-                self.tbaKit.setLastModified(previousRequest!)
             })
             self.removeRequest(request: previousRequest!)
         }) { (error) in
@@ -131,7 +129,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
 
     private func fetchAllTeams(taskChanged: @escaping (URLSessionDataTask, Int, [TBATeam]) -> Void, page: Int, completion: @escaping (Error?) -> Void) -> URLSessionDataTask {
         // TODO: This is problematic, and doesn't handle 304's properly
-        return tbaKit.fetchTeams(page: page, completion: { (result) in
+        return tbaKit.fetchTeams(page: page, completion: { (result, notModified) in
             switch result {
             case .failure(let error):
                 completion(error)

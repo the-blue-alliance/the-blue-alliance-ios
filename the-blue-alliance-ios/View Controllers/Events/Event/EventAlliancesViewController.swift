@@ -149,11 +149,10 @@ extension EventAlliancesViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchEventAlliances(key: event.key!, completion: { (result) in
-            let alliances = try? result.get()
+        request = tbaKit.fetchEventAlliances(key: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let alliances = alliances {
+                if !notModified, let alliances = try? result.get() {
                     let event = context.object(with: self.event.objectID) as! Event
                     event.insert(alliances)
                 }

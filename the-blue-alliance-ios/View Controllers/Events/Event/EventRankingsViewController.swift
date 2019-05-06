@@ -90,20 +90,16 @@ extension EventRankingsViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchEventRankings(key: event.key!, completion: { (result) in
-            do {
-                let (rankings, sortOrder, extraStats) = try result.get()
-                let context = self.persistentContainer.newBackgroundContext()
-                context.performChangesAndWait({
+        request = tbaKit.fetchEventRankings(key: event.key!, completion: { (result, notModified) in
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
+                if !notModified, let (rankings, sortOrder, extraStats) = try? result.get() {
                     let event = context.object(with: self.event.objectID) as! Event
                     event.insert(rankings, sortOrderInfo: sortOrder, extraStatsInfo: extraStats)
-                }, saved: {
-                    self.markTBARefreshSuccessful(self.tbaKit, request: request!)
-                })
-            }
-            catch {
-                // Pass
-            }
+                }
+            }, saved: {
+                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+            })
             self.removeRequest(request: request!)
         })
         self.addRequest(request: request!)

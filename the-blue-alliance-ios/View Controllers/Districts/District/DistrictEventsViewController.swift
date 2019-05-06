@@ -36,11 +36,10 @@ class DistrictEventsViewController: EventsViewController {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchDistrictEvents(key: district.key!, completion: { (result) in
-            let events = try? result.get()
+        request = tbaKit.fetchDistrictEvents(key: district.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let events = events {
+                if !notModified, let events = try? result.get() {
                     let district = context.object(with: self.district.objectID) as! District
                     district.insert(events)
                 }

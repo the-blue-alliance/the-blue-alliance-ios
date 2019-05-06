@@ -98,11 +98,10 @@ extension DistrictsViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchDistricts(year: year, completion: { (result) in
-            let districts = try? result.get()
+        request = tbaKit.fetchDistricts(year: year, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let districts = districts {
+                if !notModified, let districts = try? result.get() {
                     District.insert(districts, year: self.year, in: context)
                 }
             }, saved: {

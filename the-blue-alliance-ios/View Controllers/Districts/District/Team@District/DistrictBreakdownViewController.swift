@@ -121,15 +121,15 @@ extension DistrictBreakdownViewController: Refreshable {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchDistrictRankings(key: ranking.district!.key!, completion: { (result) in
-            let rankings = try? result.get()
+        request = tbaKit.fetchDistrictRankings(key: ranking.district!.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let rankings = rankings {
+                if !notModified, let rankings = try? result.get() {
                     let district = context.object(with: self.ranking.district!.objectID) as! District
                     district.insert(rankings)
                 }
             }, saved: {
+                // TODO: We should probably think about - should we set successful refreshes like this or no?
                 self.markTBARefreshSuccessful(self.tbaKit, request: request!)
             })
             self.removeRequest(request: request!)

@@ -198,21 +198,22 @@ extension TeamInfoViewController: Refreshable {
 
     @objc func refresh() {
         var request: URLSessionDataTask?
-        request = tbaKit.fetchTeam(key: team.key!, completion: { (result) in
-            do {
-                let team = try result.get()
-                let context = self.persistentContainer.newBackgroundContext()
-                context.performChangesAndWait({
-                    // TODO: Team never deleted
+        request = tbaKit.fetchTeam(key: team.key!, completion: { (result, notModified) in
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
+                switch result {
+                case .success(let team):
                     if let team = team {
                         Team.insert(team, in: context)
+                    } else if !notModified {
+                        // TODO: Delete team, move back up our hiearchy
                     }
-                }, saved: {
-                    self.markTBARefreshSuccessful(self.tbaKit, request: request!)
-                })
-            } catch {
-                // Pass
-            }
+                default:
+                    break
+                }
+            }, saved: {
+                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+            })
             self.removeRequest(request: request!)
         })
         addRequest(request: request!)

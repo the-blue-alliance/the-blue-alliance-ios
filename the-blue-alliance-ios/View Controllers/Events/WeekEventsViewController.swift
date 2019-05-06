@@ -68,11 +68,10 @@ class WeekEventsViewController: EventsViewController {
         }
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchEvents(year: year, completion: { (result) in
-            let events = try? result.get()
+        request = tbaKit.fetchEvents(year: year, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let events = events {
+                if !notModified, let events = try? result.get() {
                     Event.insert(events, year: year, in: context)
                 }
             }, saved: {

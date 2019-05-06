@@ -46,11 +46,10 @@ class TeamEventsViewController: EventsViewController {
         removeNoDataView()
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchTeamEvents(key: team.key!, completion: { (result) in
-            let events = try? result.get()
+        request = tbaKit.fetchTeamEvents(key: team.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
-                if let events = events {
+                if !notModified, let events = try? result.get() {
                     let team = context.object(with: self.team.objectID) as! Team
                     team.insert(events)
                 }

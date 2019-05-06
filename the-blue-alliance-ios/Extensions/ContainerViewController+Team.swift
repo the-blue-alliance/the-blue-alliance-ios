@@ -22,23 +22,18 @@ extension ContainerTeamPushable where Self: ContainerViewController {
                     self.navigationItem.rightBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
                 }
 
-                tbaKit.fetchTeam(key: teamKey.key!, completion: { (result) in
-                    do {
-                        let team = try result.get()
-                        let context = self.persistentContainer.newBackgroundContext()
-                        context.performChangesAndWait({
-                            if let team = team {
-                                Team.insert(team, in: context)
-                            }
-                        }, saved: {
-                            // Switch back to our main thread
-                            DispatchQueue.main.async {
-                                self._pushTeam(attemptedToLoadTeam: true) // Try again - but don't get in to a cycle if the request is failing
-                            }
-                        })
-                    } catch {
-                        // Pass
-                    }
+                tbaKit.fetchTeam(key: teamKey.key!, completion: { (result, notModified) in
+                    let context = self.persistentContainer.newBackgroundContext()
+                    context.performChangesAndWait({
+                        if !notModified, let team = try? result.get() {
+                            Team.insert(team, in: context)
+                        }
+                    }, saved: {
+                        // Switch back to our main thread
+                        DispatchQueue.main.async {
+                            self._pushTeam(attemptedToLoadTeam: true) // Try again - but don't get in to a cycle if the request is failing
+                        }
+                    })
 
                     // Reset our nav bar item
                     DispatchQueue.main.async {
