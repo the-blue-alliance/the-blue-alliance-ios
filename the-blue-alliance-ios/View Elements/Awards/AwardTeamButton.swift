@@ -60,11 +60,11 @@ class AwardTeamButton: UIView {
     // Mark: - Methods
     private func defineConstraints() {
         headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftPadding).isActive = true
-        //headerLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -rightPadding).isActive = true
+        headerLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -rightPadding).isActive = true
         headerLabel.bottomAnchor.constraint(equalTo: centerYAnchor).isActive = true
         
         subheaderLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: leftPadding).isActive = true
-        //subheaderLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -rightPadding).isActive = true
+        subheaderLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -rightPadding).isActive = true
         subheaderLabel.topAnchor.constraint(equalTo: centerYAnchor).isActive = true
         
         self.heightAnchor.constraint(equalTo: headerLabel.heightAnchor, multiplier: 2.5).isActive = true
