@@ -37,6 +37,7 @@ class AwardTeamButton: UIView {
     var calculatedWidth: CGFloat {
         let naturalWidth = max(headerLabel.intrinsicContentSize.width, subheaderLabel.intrinsicContentSize.width) + leftPadding + rightPadding
         guard let superviewWidth = self.superview?.bounds.width else { return naturalWidth }
+        print("Natural width, \(headerText ?? "?"): \(naturalWidth), superwidth: \(superviewWidth)")
         let lower = widthRange.lowerBound * superviewWidth
         let upper = widthRange.upperBound * superviewWidth
         if naturalWidth > upper { return upper }
@@ -113,8 +114,9 @@ class AwardTeamButton: UIView {
     // Mark: View Lifecycle
 
     override func layoutSubviews() {
-        super.layoutSubviews()
+        let size = self.intrinsicContentSize
         invalidateIntrinsicContentSize()
+        super.layoutSubviews()
     }
 
 }

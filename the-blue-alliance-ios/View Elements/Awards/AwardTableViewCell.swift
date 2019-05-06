@@ -30,8 +30,8 @@ class AwardTableViewCell: UITableViewCell, Reusable {
         awardsFlexView.verticalSpacing = 10
         awardsFlexView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(awardsFlexView)
-        awardsFlexView.leadingAnchor.constraint(equalTo: awardNameLabel.leadingAnchor).isActive = true
-        awardsFlexView.trailingAnchor.constraint(equalTo: awardNameLabel.trailingAnchor).isActive = true
+        awardsFlexView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        awardsFlexView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
         awardsFlexView.topAnchor.constraint(equalToSystemSpacingBelow: awardNameLabel.lastBaselineAnchor, multiplier: 1).isActive = true
         awardsFlexView.setContentHuggingPriority(.defaultHigh, for: .vertical)
 
@@ -55,10 +55,12 @@ class AwardTableViewCell: UITableViewCell, Reusable {
 
         removeAwards()
 
-        for (_, recipient) in viewModel.recipients.enumerated() {
+        for (index, recipient) in viewModel.recipients.enumerated() {
             if let header = recipient.teamNumber, let subHeader = recipient.teamName {
                 let button = AwardTeamButton(header: "Team \(header)", subheader: subHeader)
-
+                button.tag = index
+                let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(recipientTapped(gesture:)))
+                button.addGestureRecognizer(tapGestureRecognizer)
                 awardsFlexView.addView(view: button)
             }
         }
