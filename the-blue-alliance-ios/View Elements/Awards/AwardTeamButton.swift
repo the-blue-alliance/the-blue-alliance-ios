@@ -20,7 +20,7 @@ class AwardTeamButton: UIView {
 
     required init?(coder aDecoder: NSCoder) { fatalError() }
 
-    init(header: String, subheader: String, widthRange: ClosedRange<CGFloat> = 0.3...0.6) {
+    init(header: String, subheader: String, widthRange: ClosedRange<CGFloat> = 0.3...0.65) {
         self.widthRange = widthRange
         super.init(frame: .zero)
         self.translatesAutoresizingMaskIntoConstraints = false

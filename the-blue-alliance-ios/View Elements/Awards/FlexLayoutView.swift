@@ -48,24 +48,23 @@ class FlexLayoutView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+
         var currentRow = 0
         var currentX: CGFloat = 0
         var rowMaxY: CGFloat = 0
         var currentRowY: CGFloat = 0
         for view in views {
-            if currentX + horizontalSpacing * 2 + view.bounds.width > self.bounds.width {
+            if currentX + horizontalSpacing + view.bounds.width > self.bounds.width {
                 currentX = 0
                 currentRow += 1
                 currentRowY = rowMaxY + verticalSpacing
                 rowMaxY = currentRowY
             }
             view.frame = CGRect(x: currentX, y: currentRowY, width: view.bounds.width, height: view.bounds.height)
-            print(view.frame)
             if view.bounds.height + currentRowY > rowMaxY { rowMaxY = view.bounds.height + currentRowY }
             currentX += horizontalSpacing + view.bounds.width
         }
-        heightConstraint.constant = rowMaxY + verticalSpacing
+        heightConstraint.constant = rowMaxY
     }
 
 }

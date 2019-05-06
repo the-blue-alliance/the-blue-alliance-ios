@@ -10,7 +10,7 @@ class AwardTableViewCell: UITableViewCell, Reusable {
     }
     var teamKeySelected: ((_ teamKey: String) -> Void)?
     private let awardNameLabel = UILabel()
-    private let awardInfoStackView = FlexLayoutView()
+    private let awardsFlexView = FlexLayoutView()
 
     // Mark: - Init
 
@@ -25,14 +25,14 @@ class AwardTableViewCell: UITableViewCell, Reusable {
         awardNameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
         awardNameLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2).isActive = true
 
-        awardInfoStackView.horizontalSpacing = 10
-        awardInfoStackView.verticalSpacing = 10
-        awardInfoStackView.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(awardInfoStackView)
-        awardInfoStackView.leadingAnchor.constraint(equalTo: awardNameLabel.leadingAnchor).isActive = true
-        awardInfoStackView.trailingAnchor.constraint(equalTo: awardNameLabel.trailingAnchor).isActive = true
-        awardInfoStackView.topAnchor.constraint(equalToSystemSpacingBelow: awardNameLabel.lastBaselineAnchor, multiplier: 1).isActive = true
-        self.bottomAnchor.constraint(equalToSystemSpacingBelow: awardInfoStackView.bottomAnchor, multiplier: 2).isActive = true
+        awardsFlexView.horizontalSpacing = 10
+        awardsFlexView.verticalSpacing = 10
+        awardsFlexView.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(awardsFlexView)
+        awardsFlexView.leadingAnchor.constraint(equalTo: awardNameLabel.leadingAnchor).isActive = true
+        awardsFlexView.trailingAnchor.constraint(equalTo: awardNameLabel.trailingAnchor).isActive = true
+        awardsFlexView.topAnchor.constraint(equalToSystemSpacingBelow: awardNameLabel.lastBaselineAnchor, multiplier: 1).isActive = true
+        self.bottomAnchor.constraint(equalToSystemSpacingBelow: awardsFlexView.bottomAnchor, multiplier: 2).isActive = true
     }
 
     required init?(coder aDecoder: NSCoder) { fatalError() }
@@ -40,7 +40,7 @@ class AwardTableViewCell: UITableViewCell, Reusable {
     // MARK: - Private Methods
 
     private func removeAwards() {
-        awardInfoStackView.removeAllViews()
+        awardsFlexView.removeAllViews()
     }
 
     private func configureCell() {
@@ -56,7 +56,7 @@ class AwardTableViewCell: UITableViewCell, Reusable {
             if let header = recipient.teamNumber, let subHeader = recipient.teamName {
                 let button = AwardTeamButton(header: "Team \(header)", subheader: subHeader)
 
-                awardInfoStackView.addView(view: button)
+                awardsFlexView.addView(view: button)
             }
         }
         self.layoutIfNeeded()
