@@ -2,7 +2,6 @@ import CoreData
 import FirebaseMessaging
 import TBAKitTesting
 import XCTest
-@testable import The_Blue_Alliance
 
 class TBATestCase: CoreDataTestCase {
 

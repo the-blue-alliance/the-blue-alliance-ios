@@ -7,8 +7,6 @@ if ENV['TRAVIS']
 end
 
 target 'The Blue Alliance' do
-  use_frameworks!
-
   # React Native
   pod 'React', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native', :subspecs => [
     'Core',
@@ -43,7 +41,10 @@ target 'The Blue Alliance' do
   pod 'Firebase/Storage'
 
   # Local Deps
+  pod 'MyTBAKit', :path => 'Frameworks/MyTBAKit', :testspecs => ['Tests']
+  pod 'TBAData', :path => 'Frameworks/TBAData', :testspecs => ['Tests']
   pod 'TBAKit', :path => 'Frameworks/TBAKit', :testspecs => ['Tests']
+  pod 'TBAUtilities', :path => 'Frameworks/TBAUtilities', :testspecs => ['Tests']
 
   # myTBA
   pod 'GoogleSignIn'
@@ -55,8 +56,10 @@ target 'The Blue Alliance' do
   target 'tba-unit-tests' do
     inherit! :search_paths
 
-    pod 'TBATesting', :path => 'Frameworks/TBATesting'
+    pod 'MyTBAKitTesting', :path => 'Frameworks/MyTBAKit'
+    pod 'TBADataTesting', :path => 'Frameworks/TBAData'
     pod 'TBAKitTesting', :path => 'Frameworks/TBAKit'
+    pod 'TBATesting', :path => 'Frameworks/TBATesting'
   end
 
   target 'tba-snapshot-tests' do

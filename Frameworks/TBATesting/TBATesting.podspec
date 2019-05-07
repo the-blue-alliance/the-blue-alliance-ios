@@ -10,10 +10,17 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '11.0'
 
-  s.source_files = 'Sources/**'
+  s.source_files = 'Sources/**/*'
+  s.framework = 'XCTest'
+
+  s.static_framework = true
+
+  s.dependency 'Firebase/Core'
+  s.dependency 'Firebase/Messaging'
+  s.dependency 'TBAKitTesting'
 
   s.test_spec 'Tests' do |test_spec|
-    test_spec.source_files = 'Tests/**'
+    test_spec.source_files = 'Tests/**/*'
 
     test_spec.framework = 'XCTest'
   end

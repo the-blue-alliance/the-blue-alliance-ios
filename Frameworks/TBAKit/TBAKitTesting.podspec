@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '11.0'
 
-  s.source_files = 'Testing/**'
+  s.source_files = 'Testing/**/*'
   s.framework = 'XCTest'
 
   s.dependency 'TBAKit'

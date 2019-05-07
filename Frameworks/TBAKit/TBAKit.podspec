@@ -15,15 +15,13 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '11.0'
 
-  s.source_files = 'Sources/**'
+  s.source_files = 'Sources/**/*'
 
   s.test_spec 'Tests' do |test_spec|
-    test_spec.source_files = 'Tests/**'
+    test_spec.source_files = 'Tests/**/*.swift'
 
     test_spec.framework = 'XCTest'
 
     test_spec.dependency 'TBAKitTesting'
-
-    test_spec.resources = 'Tests/data/**'
   end
 end

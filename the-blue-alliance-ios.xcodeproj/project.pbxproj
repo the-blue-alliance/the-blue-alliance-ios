@@ -36,8 +36,8 @@
 		14B520FB218CB96400F2EF4F /* EventStatusQualTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B520FA218CB96400F2EF4F /* EventStatusQualTests.swift */; };
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
-		373233698A5148831C801B8E /* Pods_The_Blue_Alliance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */; };
-		5797EAB49489B63DDA0980F5 /* Pods_tba_unit_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */; };
+		468C34DDA13D6E9731C30094 /* libPods-The Blue Alliance.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CE6FE8832018F6072CE3B3D /* libPods-The Blue Alliance.a */; };
+		5FE7CE2B0150B7521D99EA85 /* libPods-tba-snapshot-tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B670F1F154E185A7BFBA0CD /* libPods-tba-snapshot-tests.a */; };
 		92004C6521C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */; };
 		92004C6621C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */; };
 		921D0B53222AF36A0056578A /* UIImage+TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B52222AF36A0056578A /* UIImage+TBATests.swift */; };
@@ -75,7 +75,6 @@
 		925908AB21828CC400D7BFCE /* WebcastTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908AA21828CC300D7BFCE /* WebcastTests.swift */; };
 		925908AD2184CFA900D7BFCE /* EventAllianceBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908AC2184CFA900D7BFCE /* EventAllianceBackup.swift */; };
 		925908AF2184D32400D7BFCE /* EventStatusPlayoff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908AE2184D32400D7BFCE /* EventStatusPlayoff.swift */; };
-		925908B32184F86700D7BFCE /* NSSet+OnlyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908B22184F86700D7BFCE /* NSSet+OnlyTests.swift */; };
 		925908B52185076100D7BFCE /* EventAllianceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908B42185076100D7BFCE /* EventAllianceTests.swift */; };
 		925908B721863C3E00D7BFCE /* EventAllianceBackupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908B621863C3E00D7BFCE /* EventAllianceBackupTests.swift */; };
 		9266825221B058DA0077C75C /* TBAReactNativeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */; };
@@ -163,7 +162,6 @@
 		92A5E5D321A22D550025CC85 /* UIApplication+URLOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5C821A22D550025CC85 /* UIApplication+URLOpener.swift */; };
 		92A5E5D421A22D550025CC85 /* Bundle+Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5C921A22D550025CC85 /* Bundle+Version.swift */; };
 		92A5E5D521A22D550025CC85 /* Calendar+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5CA21A22D550025CC85 /* Calendar+TBA.swift */; };
-		92A5E5D621A22D550025CC85 /* NSSet+Only.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5CB21A22D550025CC85 /* NSSet+Only.swift */; };
 		92A5E5D721A22D550025CC85 /* Date+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5CC21A22D550025CC85 /* Date+TBA.swift */; };
 		92A5E5D921A22D550025CC85 /* String+Prefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5CE21A22D550025CC85 /* String+Prefix.swift */; };
 		92A5E5DA21A22D550025CC85 /* UIColor+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5CF21A22D550025CC85 /* UIColor+TBA.swift */; };
@@ -248,7 +246,6 @@
 		92F38537217D31CE00A9AC02 /* AwardRecipientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F38536217D31CE00A9AC02 /* AwardRecipientTests.swift */; };
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
 		92F8E356209AAE890094213F /* PushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E355209AAE890094213F /* PushService.swift */; };
-		92F8E358209AB3B50094213F /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E357209AB3B50094213F /* Provider.swift */; };
 		92FE68BB20D8A1E8004A1481 /* MyTBASignOutOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FE68BA20D8A1E8004A1481 /* MyTBASignOutOperation.swift */; };
 		92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E321A61A1B003BC5C4 /* TeamViewController.swift */; };
 		92FF10EC21A61A1B003BC5C4 /* TeamEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E421A61A1B003BC5C4 /* TeamEventsViewController.swift */; };
@@ -283,7 +280,7 @@
 		92FFE5251E7C994B0037E48C /* EventTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */; };
 		92FFE5271E7C9A1F0037E48C /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */; };
 		A6544CF021DC3CDC00D423F2 /* MatchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6544CEF21DC3CDC00D423F2 /* MatchViewModelTests.swift */; };
-		EA21BE950BEA6F4BFF9B261A /* Pods_tba_snapshot_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 520FD5E454372E2464E951F4 /* Pods_tba_snapshot_tests.framework */; };
+		FF018036D5FDEA751E8064C4 /* libPods-tba-unit-tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22739916F85D142066F935D7 /* libPods-tba-unit-tests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -332,12 +329,13 @@
 		14B520F6218CA28B00F2EF4F /* EventStatusAllianceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusAllianceTests.swift; sourceTree = "<group>"; };
 		14B520F8218CB19400F2EF4F /* EventStatusPlayoffTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusPlayoffTests.swift; sourceTree = "<group>"; };
 		14B520FA218CB96400F2EF4F /* EventStatusQualTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusQualTests.swift; sourceTree = "<group>"; };
+		1B670F1F154E185A7BFBA0CD /* libPods-tba-snapshot-tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tba-snapshot-tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		22739916F85D142066F935D7 /* libPods-tba-unit-tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tba-unit-tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
+		3CE6FE8832018F6072CE3B3D /* libPods-The Blue Alliance.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-The Blue Alliance.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		43BE3F787677D356C5C6FC08 /* Pods-tba-snapshot-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-snapshot-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-tba-snapshot-tests/Pods-tba-snapshot-tests.release.xcconfig"; sourceTree = "<group>"; };
 		4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.release.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.release.xcconfig"; sourceTree = "<group>"; };
-		520FD5E454372E2464E951F4 /* Pods_tba_snapshot_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_snapshot_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_unit_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2019DeepSpaceIcon@2x.png"; sourceTree = "<group>"; };
 		92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2019DeepSpaceIcon@3x.png"; sourceTree = "<group>"; };
 		921D0B52222AF36A0056578A /* UIImage+TBATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TBATests.swift"; sourceTree = "<group>"; };
@@ -375,7 +373,6 @@
 		925908AA21828CC300D7BFCE /* WebcastTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebcastTests.swift; sourceTree = "<group>"; };
 		925908AC2184CFA900D7BFCE /* EventAllianceBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceBackup.swift; sourceTree = "<group>"; };
 		925908AE2184D32400D7BFCE /* EventStatusPlayoff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusPlayoff.swift; sourceTree = "<group>"; };
-		925908B22184F86700D7BFCE /* NSSet+OnlyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSSet+OnlyTests.swift"; sourceTree = "<group>"; };
 		925908B42185076100D7BFCE /* EventAllianceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceTests.swift; sourceTree = "<group>"; };
 		925908B621863C3E00D7BFCE /* EventAllianceBackupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceBackupTests.swift; sourceTree = "<group>"; };
 		9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAReactNativeViewController.swift; sourceTree = "<group>"; };
@@ -467,7 +464,6 @@
 		92A5E5C821A22D550025CC85 /* UIApplication+URLOpener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+URLOpener.swift"; sourceTree = "<group>"; };
 		92A5E5C921A22D550025CC85 /* Bundle+Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bundle+Version.swift"; sourceTree = "<group>"; };
 		92A5E5CA21A22D550025CC85 /* Calendar+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Calendar+TBA.swift"; sourceTree = "<group>"; };
-		92A5E5CB21A22D550025CC85 /* NSSet+Only.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSSet+Only.swift"; sourceTree = "<group>"; };
 		92A5E5CC21A22D550025CC85 /* Date+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+TBA.swift"; sourceTree = "<group>"; };
 		92A5E5CE21A22D550025CC85 /* String+Prefix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Prefix.swift"; sourceTree = "<group>"; };
 		92A5E5CF21A22D550025CC85 /* UIColor+TBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+TBA.swift"; sourceTree = "<group>"; };
@@ -554,7 +550,6 @@
 		92F38536217D31CE00A9AC02 /* AwardRecipientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwardRecipientTests.swift; sourceTree = "<group>"; };
 		92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsContainerViewController.swift; sourceTree = "<group>"; };
 		92F8E355209AAE890094213F /* PushService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushService.swift; sourceTree = "<group>"; };
-		92F8E357209AB3B50094213F /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		92FE68BA20D8A1E8004A1481 /* MyTBASignOutOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignOutOperation.swift; sourceTree = "<group>"; };
 		92FF10CF21A25D86003BC5C4 /* TBAViewControllerTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAViewControllerTester.swift; sourceTree = "<group>"; };
 		92FF10E321A61A1B003BC5C4 /* TeamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamViewController.swift; sourceTree = "<group>"; };
@@ -594,7 +589,6 @@
 		AC390655114E5828E3FE13D0 /* Pods-tba-unit-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.debug.xcconfig"; sourceTree = "<group>"; };
 		D9D95379875BA54FBC3550DF /* Pods-tba-snapshot-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-snapshot-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tba-snapshot-tests/Pods-tba-snapshot-tests.debug.xcconfig"; sourceTree = "<group>"; };
 		E72D7306F6A02099E68DED02 /* Pods-tba-unit-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.release.xcconfig"; sourceTree = "<group>"; };
-		FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_The_Blue_Alliance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -602,7 +596,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA21BE950BEA6F4BFF9B261A /* Pods_tba_snapshot_tests.framework in Frameworks */,
+				5FE7CE2B0150B7521D99EA85 /* libPods-tba-snapshot-tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -610,7 +604,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				373233698A5148831C801B8E /* Pods_The_Blue_Alliance.framework in Frameworks */,
+				468C34DDA13D6E9731C30094 /* libPods-The Blue Alliance.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -618,7 +612,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5797EAB49489B63DDA0980F5 /* Pods_tba_unit_tests.framework in Frameworks */,
+				FF018036D5FDEA751E8064C4 /* libPods-tba-unit-tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -776,7 +770,6 @@
 				14B424F52167B01700E1904C /* Calendar+TBA_Tests.swift */,
 				924459BD20CB796A0007570D /* Date+TBA_Tests.swift */,
 				924459BE20CB796A0007570D /* Int16+Suffix_Tests.swift */,
-				925908B22184F86700D7BFCE /* NSSet+OnlyTests.swift */,
 				921D0B52222AF36A0056578A /* UIImage+TBATests.swift */,
 				921D0B5A222AFFE40056578A /* UIBarButtonItem+TBATests.swift */,
 			);
@@ -1282,7 +1275,6 @@
 				92A5E5C821A22D550025CC85 /* UIApplication+URLOpener.swift */,
 				92A5E5C921A22D550025CC85 /* Bundle+Version.swift */,
 				92A5E5CA21A22D550025CC85 /* Calendar+TBA.swift */,
-				92A5E5CB21A22D550025CC85 /* NSSet+Only.swift */,
 				92A5E5CC21A22D550025CC85 /* Date+TBA.swift */,
 				92A5E5CE21A22D550025CC85 /* String+Prefix.swift */,
 				92A5E5CF21A22D550025CC85 /* UIColor+TBA.swift */,
@@ -1564,7 +1556,6 @@
 				92688C2A2090091D00D12B7B /* ReactNativeService.swift */,
 				92DF54E021B1B65A0082C58C /* StatusService.swift */,
 				92564C6A21644AA30047917F /* Secrets.swift */,
-				92F8E357209AB3B50094213F /* Provider.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1714,10 +1705,10 @@
 		AB6808F14167475E1AE2783E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */,
 				0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */,
-				52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */,
-				520FD5E454372E2464E951F4 /* Pods_tba_snapshot_tests.framework */,
+				3CE6FE8832018F6072CE3B3D /* libPods-The Blue Alliance.a */,
+				1B670F1F154E185A7BFBA0CD /* libPods-tba-snapshot-tests.a */,
+				22739916F85D142066F935D7 /* libPods-tba-unit-tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1733,7 +1724,6 @@
 				926BFE902280A68E00778BF4 /* Sources */,
 				926BFE912280A68E00778BF4 /* Frameworks */,
 				926BFE922280A68E00778BF4 /* Resources */,
-				00192F10377E191BE0528808 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1754,7 +1744,6 @@
 				92942D8F1E2154DA008E79CA /* Frameworks */,
 				92942D901E2154DA008E79CA /* Resources */,
 				92E624CE208E8D1600DF58C0 /* Bundle React Native code and images */,
-				6D02EECF657E8A3F9121C002 /* [CP] Embed Pods Frameworks */,
 				E7F2F429133ED67EFC850346 /* [CP] Copy Pods Resources */,
 				924E826C208FE7D20053247C /* Run Fabric */,
 			);
@@ -1775,7 +1764,7 @@
 				92D6483620BE4CB8008F0DB3 /* Sources */,
 				92D6483720BE4CB8008F0DB3 /* Frameworks */,
 				92D6483820BE4CB8008F0DB3 /* Resources */,
-				F8CA407276FDEDCD342B403C /* [CP] Embed Pods Frameworks */,
+				E54F0DD93DB516E3975A3D3E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1909,28 +1898,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		00192F10377E191BE0528808 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tba-snapshot-tests/Pods-tba-snapshot-tests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/iOSSnapshotTestCase/FBSnapshotTestCase.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSnapshotTestCase.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tba-snapshot-tests/Pods-tba-snapshot-tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		2C02C8A4B0B326A6A5B12AA9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1947,60 +1914,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6D02EECF657E8A3F9121C002 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/BFRImageViewer/BFRImageViewer.framework",
-				"${BUILT_PRODUCTS_DIR}/DoubleConversion/DoubleConversion.framework",
-				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
-				"${BUILT_PRODUCTS_DIR}/Folly/folly.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
-				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
-				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
-				"${BUILT_PRODUCTS_DIR}/PINCache/PINCache.framework",
-				"${BUILT_PRODUCTS_DIR}/PINOperation/PINOperation.framework",
-				"${BUILT_PRODUCTS_DIR}/PINRemoteImage/PINRemoteImage.framework",
-				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
-				"${BUILT_PRODUCTS_DIR}/PureLayout/PureLayout.framework",
-				"${BUILT_PRODUCTS_DIR}/React/React.framework",
-				"${BUILT_PRODUCTS_DIR}/TBAKit/TBAKit.framework",
-				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
-				"${BUILT_PRODUCTS_DIR}/glog/glog.framework",
-				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
-				"${BUILT_PRODUCTS_DIR}/yoga/yoga.framework",
-				"${BUILT_PRODUCTS_DIR}/youtube-ios-player-helper/youtube_ios_player_helper.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BFRImageViewer.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DoubleConversion.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/folly.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINCache.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINOperation.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINRemoteImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PureLayout.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Zip.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/glog.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/youtube_ios_player_helper.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		924E826C208FE7D20053247C /* Run Fabric */ = {
@@ -2050,6 +1963,32 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		E54F0DD93DB516E3975A3D3E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests-resources.sh",
+				"${PODS_ROOT}/../Frameworks/TBAData/Resources/TBA.xcdatamodeld/TBA.xcdatamodel/contents",
+				"${PODS_ROOT}/../Frameworks/TBAData/Resources/TBA.xcdatamodeld",
+				"${PODS_ROOT}/../Frameworks/TBAData/Resources/TBA.xcdatamodeld/TBA.xcdatamodel",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/contents",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TBA.momd",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TBA.mom",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		E7F2F429133ED67EFC850346 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2057,11 +1996,27 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance-resources.sh",
+				"${PODS_ROOT}/BFRImageViewer/BFRImageViewController/Resources/BFRImageViewerLocalizations.bundle",
+				"${PODS_ROOT}/BFRImageViewer/BFRImageViewController/Resources/cross.png",
+				"${PODS_ROOT}/BFRImageViewer/BFRImageViewController/Resources/cross@2x.png",
+				"${PODS_ROOT}/BFRImageViewer/BFRImageViewController/Resources/cross@3x.png",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+				"${PODS_ROOT}/../Frameworks/TBAData/Resources/TBA.xcdatamodeld/TBA.xcdatamodel/contents",
+				"${PODS_ROOT}/../Frameworks/TBAData/Resources/TBA.xcdatamodeld",
+				"${PODS_ROOT}/../Frameworks/TBAData/Resources/TBA.xcdatamodeld/TBA.xcdatamodel",
+				"${PODS_ROOT}/youtube-ios-player-helper/youtube-ios-player-helper/Assets.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/BFRImageViewerLocalizations.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cross.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cross@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cross@3x.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/contents",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TBA.momd",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TBA.mom",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2090,30 +2045,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F8CA407276FDEDCD342B403C /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/TBAKit/TBAKit.framework",
-				"${BUILT_PRODUCTS_DIR}/TBAKitTesting/TBAKitTesting.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKitTesting.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -2138,7 +2069,6 @@
 				92A5E51221A1B7470025CC85 /* MyTBASubscription.swift in Sources */,
 				92A5E5D421A22D550025CC85 /* Bundle+Version.swift in Sources */,
 				929F57282092BA6500E5313A /* Observable.swift in Sources */,
-				92F8E358209AB3B50094213F /* Provider.swift in Sources */,
 				92D855D41EC68F4200572F27 /* TeamsViewController.swift in Sources */,
 				1479694C215EC1670075AF4E /* EventTeamStatCellViewModel.swift in Sources */,
 				9274E14521B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift in Sources */,
@@ -2146,7 +2076,6 @@
 				92DF35EE217D438400B5246B /* EventTeamStat.swift in Sources */,
 				92FF10F021A61A1B003BC5C4 /* TeamMediaCollectionViewController.swift in Sources */,
 				92DF35DF217D435D00B5246B /* DistrictEventPoints.swift in Sources */,
-				92A5E5D621A22D550025CC85 /* NSSet+Only.swift in Sources */,
 				1416D50A218E422400F1A4A3 /* EventInsights.swift in Sources */,
 				92942D961E2154DA008E79CA /* AppDelegate.swift in Sources */,
 				92DF35ED217D438400B5246B /* EventStatusQual.swift in Sources */,
@@ -2339,7 +2268,6 @@
 				92BB717C20CE116C0081F4E5 /* TBAOperation_Tests.swift in Sources */,
 				9275956F21B4EF0600560D81 /* StatusTests.swift in Sources */,
 				929820CF216968020080C1C8 /* TBATestCase.swift in Sources */,
-				925908B32184F86700D7BFCE /* NSSet+OnlyTests.swift in Sources */,
 				92269EE1219B9CF300FAA610 /* DistrictViewControllerTests.swift in Sources */,
 				9266A1D621AA0ECA00545867 /* MyTBASubscriptionTests.swift in Sources */,
 				92361028217D1175000CC5E9 /* AwardTests.swift in Sources */,
