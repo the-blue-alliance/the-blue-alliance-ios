@@ -2,20 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleIcons~ipad</key>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>TBA</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIcons</key>
 	<dict>
-		<key>CFBundleIcons~ipad</key>
-		<dict>
-			<key>DESTINATION: DEEP SPACE</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>2019DeepSpaceIcon</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<false/>
-			</dict>
-		</dict>
 		<key>CFBundleAlternateIcons</key>
 		<dict>
 			<key>DESTINATION: DEEP SPACE</key>
@@ -36,15 +30,21 @@
 			<false/>
 		</dict>
 	</dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
-	<key>CFBundleDisplayName</key>
-	<string>TBA</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIcons</key>
+	<key>CFBundleIcons~ipad</key>
 	<dict>
 		<key>CFBundleAlternateIcons</key>
+		<dict>
+			<key>DESTINATION: DEEP SPACE</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>2019DeepSpaceIcon</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+		</dict>
+		<key>CFBundleIcons~ipad</key>
 		<dict>
 			<key>DESTINATION: DEEP SPACE</key>
 			<dict>
@@ -112,16 +112,6 @@
 	</array>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
-	<key>UIStatusBarTintParameters</key>
-	<dict>
-		<key>UINavigationBar</key>
-		<dict>
-			<key>Style</key>
-			<string>UIBarStyleDefault</string>
-			<key>Translucent</key>
-			<false/>
-		</dict>
-	</dict>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
