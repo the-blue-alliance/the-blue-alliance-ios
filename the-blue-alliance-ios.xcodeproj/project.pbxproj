@@ -1972,17 +1972,15 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests-resources.sh",
-				"${PODS_ROOT}/../Frameworks/TBAData/Resources/TBA.xcdatamodeld/TBA.xcdatamodel/contents",
 				"${PODS_ROOT}/../Frameworks/TBAData/Resources/TBA.xcdatamodeld",
-				"${PODS_ROOT}/../Frameworks/TBAData/Resources/TBA.xcdatamodeld/TBA.xcdatamodel",
+				"${PODS_CONFIGURATION_BUILD_DIR}/TBAData/TBAData.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/contents",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TBA.momd",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TBA.mom",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TBAData.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2001,9 +1999,8 @@
 				"${PODS_ROOT}/BFRImageViewer/BFRImageViewController/Resources/cross@2x.png",
 				"${PODS_ROOT}/BFRImageViewer/BFRImageViewController/Resources/cross@3x.png",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-				"${PODS_ROOT}/../Frameworks/TBAData/Resources/TBA.xcdatamodeld/TBA.xcdatamodel/contents",
 				"${PODS_ROOT}/../Frameworks/TBAData/Resources/TBA.xcdatamodeld",
-				"${PODS_ROOT}/../Frameworks/TBAData/Resources/TBA.xcdatamodeld/TBA.xcdatamodel",
+				"${PODS_CONFIGURATION_BUILD_DIR}/TBAData/TBAData.bundle",
 				"${PODS_ROOT}/youtube-ios-player-helper/youtube-ios-player-helper/Assets.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -2013,9 +2010,8 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cross@2x.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cross@3x.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/contents",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TBA.momd",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TBA.mom",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TBAData.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;

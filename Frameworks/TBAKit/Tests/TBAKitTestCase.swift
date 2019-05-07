@@ -10,7 +10,10 @@ class TBAKitTestCase: XCTestCase {
         super.setUp()
 
         userDefaults = UserDefaults(suiteName: "TBAKitTests")
-        kit = MockTBAKit(userDefaults: userDefaults, bundle: Bundle(for: type(of: self)))
+        let frameworkBundle = Bundle(for: type(of: self))
+        let bundleURL = frameworkBundle.resourceURL?.appendingPathComponent("TBAKit-Unit-Tests.bundle")
+        let bundle = Bundle(url: bundleURL!)!
+        kit = MockTBAKit(userDefaults: userDefaults, bundle: bundle)
     }
 
     override func tearDown() {

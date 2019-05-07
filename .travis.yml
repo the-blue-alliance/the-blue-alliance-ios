@@ -11,6 +11,13 @@ branches:
   only:
     - master
 
+env:
+  matrix:
+  - TEST=test_unit
+  - TEST=test_mytbakit
+  - TEST=test_tbakit
+  - TEST=test_tbautilities
+
 stages:
   - name: test
     if: NOT ((type == push) AND (commit_message =~ /^\[clowntown\]/))
@@ -33,13 +40,11 @@ before_script:
   - cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
   - bundle exec fastlane run setup_travis
   - echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
+script:
+  - bundle exec fastlane $TEST
 
 jobs:
   include:
-    - stage: test
-      name: "Unit Tests"
-      script:
-        - bundle exec fastlane test
     - stage: beta
       script:
         - bundle exec fastlane setup_secrets

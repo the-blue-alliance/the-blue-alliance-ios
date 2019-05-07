@@ -377,8 +377,8 @@ SPEC CHECKSUMS:
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
   PureLayout: f08c01b8dec00bb14a1fefa3de4c7d9c265df85e
   React: 0d6c719d9549bea0bd5676f8170b0e5c56e2c3c7
-  TBAData: b75d5725b4d9f7f8e798d6883ca394bc408dc522
-  TBADataTesting: 20c6e2cbffe1ce9069f016f13753f3dbf2677f5b
+  TBAData: a1d0e7e56d48d37bd8bdaef2afee8d9d0169c21d
+  TBADataTesting: e95274cbf89a89a1f4341cd3aded3c2ac56bc931
   TBAKit: 000fc40193d9dfbc3976ce67421ede578accc3d4
   TBAKitTesting: 5dd4b26f9118dda3fccae74fb5eba6b7f68adcf9
   TBATesting: 463e4aec42bf10fe8f30f6d4d8f7ce5387a1e0b9

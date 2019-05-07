@@ -14,16 +14,31 @@ platform :ios do
     scan(workspace: "the-blue-alliance-ios.xcworkspace", scheme: "tba-unit-tests")
   end
 
+  # TODO: Snapshot tests
+
+  desc "Run MyTBAKit unit tests"
+  lane :test_mytbakit do
+    scan(project: "Pods/Pods.xcodeproj", scheme: "MyTBAKit-Unit-Tests")
+  end
+
   desc "Run TBAKit unit tests"
   lane :test_tbakit do
     scan(project: "Pods/Pods.xcodeproj", scheme: "TBAKit-Unit-Tests")
   end
 
+  desc "Run TBAUtilities unit tests"
+  lane :test_tbautilities do
+    scan(project: "Pods/Pods.xcodeproj", scheme: "TBAUtilities-Unit-Tests")
+  end
+
   desc "Run all of our tests"
   lane :test do
     test_unit
+    test_mytbakit
     test_tbakit
+    test_tbautilities
   end
+
   ## CI Lanes ##
 
   desc "Setup Secrets.plist file (used by CI)"
