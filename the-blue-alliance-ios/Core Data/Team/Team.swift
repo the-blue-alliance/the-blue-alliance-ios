@@ -1,5 +1,6 @@
 import CoreData
 import Foundation
+import MyTBAKit
 import TBAKit
 
 extension Team: Locatable, Surfable, Managed {
@@ -166,15 +167,15 @@ extension Team: Locatable, Surfable, Managed {
 
 extension Team: MyTBASubscribable {
 
-    var modelKey: String {
+    public var modelKey: String {
         return key!
     }
 
-    var modelType: MyTBAModelType {
+    public var modelType: MyTBAModelType {
         return .team
     }
 
-    static var notificationTypes: [NotificationType] {
+    public static var notificationTypes: [NotificationType] {
         return [
             NotificationType.upcomingMatch,
             NotificationType.matchScore,

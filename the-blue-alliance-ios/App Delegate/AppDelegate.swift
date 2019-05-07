@@ -4,6 +4,7 @@ import Firebase
 import FirebaseAuth
 import FirebaseMessaging
 import GoogleSignIn
+import MyTBAKit
 import TBAKit
 import UIKit
 import UserNotifications
@@ -146,6 +147,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupPushServiceDelegates()
         // Register for remote notifications - don't worry if we fail here
         PushService.registerForRemoteNotifications(nil)
+
+        // Register our myTBA object with Firebase Auth listener
+        // Block gets called on init - ignore the init call
+        var initCall = true
+        Auth.auth().addIDTokenDidChangeListener { (_, user) in
+            if initCall {
+                initCall = false
+                return
+            }
+
+            if let user = user {
+                user.getIDToken(completion: { (token, _) in
+                    self.myTBA.authToken = token
+                })
+            } else {
+                self.myTBA.authToken = nil
+            }
+        }
 
         // Kickoff background myTBA/Google sign in, along with setting up delegates
         setupGoogleAuthentication()

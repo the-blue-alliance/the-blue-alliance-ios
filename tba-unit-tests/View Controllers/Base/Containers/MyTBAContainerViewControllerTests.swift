@@ -1,6 +1,7 @@
 import CoreData
 import TBAKit
 import XCTest
+@testable import MyTBAKit
 @testable import The_Blue_Alliance
 
 class MockMyTBAContainerViewController: MyTBAContainerViewController {

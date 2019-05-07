@@ -3,6 +3,7 @@ import Crashlytics
 import FirebaseAuth
 import FirebaseMessaging
 import GoogleSignIn
+import MyTBAKit
 import PureLayout
 import TBAKit
 import UIKit
