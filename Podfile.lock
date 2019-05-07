@@ -205,6 +205,7 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
+  - Reveal-SDK (22)
   - TBAKit (1.0.0-LOCAL)
   - TBAKit/Tests (1.0.0-LOCAL):
     - TBAKitTesting
@@ -212,8 +213,8 @@ PODS:
     - TBAKit
     - TBATestingMocks
   - TBATestingMocks (1.0.0-LOCAL)
+  - XCDYouTubeKit (2.7.4)
   - yoga (0.59.0.React)
-  - youtube-ios-player-helper (0.1.6)
   - Zip (1.1.0)
 
 DEPENDENCIES:
@@ -243,12 +244,13 @@ DEPENDENCIES:
   - React/RCTNetwork (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
   - React/RCTText (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
   - React/RCTWebSocket (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
+  - Reveal-SDK
   - TBAKit (from `Frameworks/TBAKit`)
   - TBAKit/Tests (from `Frameworks/TBAKit`)
   - TBAKitTesting (from `Frameworks/TBAKit`)
   - TBATestingMocks (from `Frameworks/TBATestingMocks`)
+  - XCDYouTubeKit (~> 2.7)
   - yoga (from `subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga`)
-  - youtube-ios-player-helper
   - Zip (~> 1.1)
 
 SPEC REPOS:
@@ -282,7 +284,8 @@ SPEC REPOS:
     - PINRemoteImage
     - Protobuf
     - PureLayout
-    - youtube-ios-player-helper
+    - Reveal-SDK
+    - XCDYouTubeKit
     - Zip
 
 EXTERNAL SOURCES:
@@ -343,13 +346,14 @@ SPEC CHECKSUMS:
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
   PureLayout: f08c01b8dec00bb14a1fefa3de4c7d9c265df85e
   React: 0d6c719d9549bea0bd5676f8170b0e5c56e2c3c7
+  Reveal-SDK: 1385ab77aa15e9a3e21f798c74bd8e94cb54c651
   TBAKit: 75bbe21fe4c1ceef84c91a47799f9b8e896d42d2
   TBAKitTesting: 01d2be262383a8978c11cb886f9782d0acfb219e
   TBATestingMocks: c43f0abc435cd9950a448c08755062d35e0c7ce9
+  XCDYouTubeKit: a38534160e092d87c8ea983a8d92939020501551
   yoga: 26673abd38bbdf0c33e134ad9e690c5fbf16e8fc
-  youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: 7b1b51586ba38a22b10bac28cad9371c9d235198
+PODFILE CHECKSUM: 345bc6d899eba3f585e7fc4aeb93a4057df91fbc
 
 COCOAPODS: 1.6.1

@@ -1,7 +1,8 @@
+import AVKit
 import Foundation
-import UIKit
-import youtube_ios_player_helper
 import PureLayout
+import UIKit
+import XCDYouTubeKit
 
 class PlayerView: UIView {
 
@@ -11,9 +12,13 @@ class PlayerView: UIView {
         }
     }
 
-    private var youtubePlayerView: YTPlayerView = {
-        let youtubePlayerView = YTPlayerView()
-        return youtubePlayerView
+    lazy var playerViewController: TBAPlayerViewController = {
+        let playerViewController = TBAPlayerViewController()
+        playerViewController.entersFullScreenWhenPlaybackBegins = true
+        playerViewController.exitsFullScreenWhenPlaybackEnds = true
+        playerViewController.showsPlaybackControls = false
+        playerViewController.delegate = self
+        return playerViewController
     }()
 
     fileprivate var loadingActivityIndicator: UIActivityIndicatorView = {
@@ -21,6 +26,14 @@ class PlayerView: UIView {
         activityIndicator.hidesWhenStopped = true
         return activityIndicator
     }()
+
+    lazy var noDataViewController: NoDataViewController = {
+        let noDataViewController = NoDataViewController()
+        noDataViewController.textLabel.textColor = .white
+        return noDataViewController
+    }()
+
+    private var youtubeVideoOperation: XCDYouTubeOperation?
 
     init(playable: Playable) {
         self.playable = playable
@@ -30,41 +43,79 @@ class PlayerView: UIView {
         configureView()
     }
 
+    deinit {
+        youtubeVideoOperation?.cancel()
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     private func configureView() {
-        if youtubePlayerView.superview == nil {
-            youtubePlayerView.delegate = self
-            addSubview(youtubePlayerView)
-            youtubePlayerView.autoPinEdgesToSuperviewEdges()
+        if playerViewController.view.superview == nil {
+            addSubview(playerViewController.view)
+            playerViewController.view.autoPinEdgesToSuperviewEdges()
         }
 
         if loadingActivityIndicator.superview == nil {
             addSubview(loadingActivityIndicator)
             loadingActivityIndicator.autoCenterInSuperview()
+            loadingActivityIndicator.startAnimating()
         }
 
-        loadingActivityIndicator.startAnimating()
+        guard youtubeVideoOperation == nil else {
+            return
+        }
 
         if let youtubeKey = playable.youtubeKey {
-            youtubePlayerView.load(withVideoId: youtubeKey)
+            youtubeVideoOperation = XCDYouTubeClient.default().getVideoWithIdentifier(youtubeKey) { [weak self] (video, error) in
+                self?.youtubeVideoOperation = nil
+                guard let streamURLs = video?.streamURLs else {
+                    self?.showErrorView(error: "No URLs for video.")
+                    return
+                }
+                guard let streamURL = streamURLs[XCDYouTubeVideoQualityHTTPLiveStreaming] ?? streamURLs[NSNumber(value: XCDYouTubeVideoQuality.HD720.rawValue)] ?? streamURLs[NSNumber(value: XCDYouTubeVideoQuality.medium360.rawValue)] ?? streamURLs[NSNumber(value: XCDYouTubeVideoQuality.small240.rawValue)] else {
+                    self?.showErrorView(error: "Unable to load video URL.")
+                    return
+                }
+                self?.playerViewController.player = AVPlayer(url: streamURL)
+                self?.playerViewController.showsPlaybackControls = true
+                self?.loadingActivityIndicator.stopAnimating()
+            }
+        } else {
+            // TODO: Handle other video types, yeah?
+            showErrorView(error: "No YouTube key for video.")
+        }
+    }
+
+    private func showErrorView(error: String) {
+        playerViewController.player = nil
+        playerViewController.showsPlaybackControls = false
+        loadingActivityIndicator.stopAnimating()
+
+        noDataViewController.textLabel.text = error
+        if noDataViewController.view.superview == nil {
+            addSubview(noDataViewController.view)
+            noDataViewController.view.autoPinEdgesToSuperviewEdges()
         }
     }
 
 }
 
-extension PlayerView: YTPlayerViewDelegate {
+extension PlayerView: AVPlayerViewControllerDelegate {
 
-    func playerViewPreferredInitialLoading(_ playerView: YTPlayerView) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = .black
-        return view
+    func playerViewController(_ playerViewController: AVPlayerViewController, failedToStartPictureInPictureWithError error: Error) {
+        DispatchQueue.main.async {
+            self.showErrorView(error: error.localizedDescription)
+        }
     }
 
-    func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
-        loadingActivityIndicator.stopAnimating()
+}
+
+class TBAPlayerViewController: AVPlayerViewController {
+
+    override var prefersStatusBarHidden: Bool {
+        return false
     }
 
 }

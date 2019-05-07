@@ -31,7 +31,7 @@ target 'The Blue Alliance' do
   pod 'BFRImageViewer'
   pod 'PINRemoteImage', '3.0.0-beta.13'
   pod 'PureLayout'
-  pod 'youtube-ios-player-helper'
+  pod 'XCDYouTubeKit', '~> 2.7'
   pod 'Zip', '~> 1.1'
 
   # Firebase
@@ -52,6 +52,9 @@ target 'The Blue Alliance' do
   # Crash reporting
   pod 'Fabric'
   pod 'Crashlytics'
+
+  # Debugging
+  pod 'Reveal-SDK', :configurations => ['Debug']
 
   target 'tba-unit-tests' do
     inherit! :search_paths
