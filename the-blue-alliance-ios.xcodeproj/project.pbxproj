@@ -37,7 +37,7 @@
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
 		468C34DDA13D6E9731C30094 /* libPods-The Blue Alliance.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CE6FE8832018F6072CE3B3D /* libPods-The Blue Alliance.a */; };
-		5FE7CE2B0150B7521D99EA85 /* libPods-tba-snapshot-tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B670F1F154E185A7BFBA0CD /* libPods-tba-snapshot-tests.a */; };
+		714F6B30F115C9E92A38254C /* Pods_tba_snapshot_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9541011556D9D99771BD2E5F /* Pods_tba_snapshot_tests.framework */; };
 		92004C6521C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */; };
 		92004C6621C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92004C6421C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png */; };
 		921D0B53222AF36A0056578A /* UIImage+TBATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921D0B52222AF36A0056578A /* UIImage+TBATests.swift */; };
@@ -329,7 +329,6 @@
 		14B520F6218CA28B00F2EF4F /* EventStatusAllianceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusAllianceTests.swift; sourceTree = "<group>"; };
 		14B520F8218CB19400F2EF4F /* EventStatusPlayoffTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusPlayoffTests.swift; sourceTree = "<group>"; };
 		14B520FA218CB96400F2EF4F /* EventStatusQualTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusQualTests.swift; sourceTree = "<group>"; };
-		1B670F1F154E185A7BFBA0CD /* libPods-tba-snapshot-tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tba-snapshot-tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		22739916F85D142066F935D7 /* libPods-tba-unit-tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tba-unit-tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
@@ -584,6 +583,7 @@
 		92FF113321A70B16003BC5C4 /* CoreDataTestCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTestCaseTests.swift; sourceTree = "<group>"; };
 		92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewCell.xib; sourceTree = "<group>"; };
 		92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
+		9541011556D9D99771BD2E5F /* Pods_tba_snapshot_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_snapshot_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A27CA53562D2F2F05B05659A /* Pods-The Blue Alliance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.debug.xcconfig"; sourceTree = "<group>"; };
 		A6544CEF21DC3CDC00D423F2 /* MatchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchViewModelTests.swift; sourceTree = "<group>"; };
 		AC390655114E5828E3FE13D0 /* Pods-tba-unit-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -596,7 +596,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5FE7CE2B0150B7521D99EA85 /* libPods-tba-snapshot-tests.a in Frameworks */,
+				714F6B30F115C9E92A38254C /* Pods_tba_snapshot_tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1707,8 +1707,8 @@
 			children = (
 				0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */,
 				3CE6FE8832018F6072CE3B3D /* libPods-The Blue Alliance.a */,
-				1B670F1F154E185A7BFBA0CD /* libPods-tba-snapshot-tests.a */,
 				22739916F85D142066F935D7 /* libPods-tba-unit-tests.a */,
+				9541011556D9D99771BD2E5F /* Pods_tba_snapshot_tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1724,6 +1724,7 @@
 				926BFE902280A68E00778BF4 /* Sources */,
 				926BFE912280A68E00778BF4 /* Frameworks */,
 				926BFE922280A68E00778BF4 /* Resources */,
+				3C63252029863758CF14BB69 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1914,6 +1915,38 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3C63252029863758CF14BB69 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-tba-snapshot-tests/Pods-tba-snapshot-tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities-086bfff4/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/Protobuf-framework/Protobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/TBAKit-framework/TBAKit.framework",
+				"${BUILT_PRODUCTS_DIR}/TBAKitTesting-framework/TBAKitTesting.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb-framework/nanopb.framework",
+				"${BUILT_PRODUCTS_DIR}/iOSSnapshotTestCase/FBSnapshotTestCase.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKitTesting.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSnapshotTestCase.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tba-snapshot-tests/Pods-tba-snapshot-tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		924E826C208FE7D20053247C /* Run Fabric */ = {

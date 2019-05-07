@@ -64,6 +64,7 @@ target 'The Blue Alliance' do
 
   target 'tba-snapshot-tests' do
     inherit! :search_paths
+    use_frameworks!
 
     pod 'TBATesting', :path => 'Frameworks/TBATesting'
     pod 'iOSSnapshotTestCase', '4.0.1' # TODO: Update to 6.0
