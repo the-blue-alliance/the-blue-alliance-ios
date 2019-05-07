@@ -3,7 +3,7 @@ import UIKit
 
 class AwardTeamButton: UIView {
 
-    var widthRange: ClosedRange<CGFloat> {
+    var widthPercentRange: ClosedRange<CGFloat> {
         didSet {
             invalidateIntrinsicContentSize()
         }
@@ -24,10 +24,10 @@ class AwardTeamButton: UIView {
     }
     private let headerLabel = UILabel()
     private let subheaderLabel = UILabel()
-    private var arrowView = UIImageView(image: UIImage(named: "ic_arrow")?.withRenderingMode(.alwaysTemplate))
+    private let arrowView = UIImageView(image: UIImage(named: "ic_arrow")?.withRenderingMode(.alwaysTemplate))
 
-    private var leftPadding: CGFloat = 10
-    private var rightPadding: CGFloat = 40
+    private let leftPadding: CGFloat = 10
+    private let rightPadding: CGFloat = 40
 
     override var intrinsicContentSize: CGSize {
         get {
@@ -38,8 +38,8 @@ class AwardTeamButton: UIView {
         let naturalWidth = max(headerLabel.intrinsicContentSize.width, subheaderLabel.intrinsicContentSize.width) + leftPadding + rightPadding
         guard let superviewWidth = self.superview?.bounds.width else { return naturalWidth }
         print("Natural width, \(headerText ?? "?"): \(naturalWidth), superwidth: \(superviewWidth)")
-        let lower = widthRange.lowerBound * superviewWidth
-        let upper = widthRange.upperBound * superviewWidth
+        let lower = widthPercentRange.lowerBound * superviewWidth
+        let upper = widthPercentRange.upperBound * superviewWidth
         if naturalWidth > upper { return upper }
         else if naturalWidth < lower {return lower }
         return naturalWidth
@@ -52,8 +52,8 @@ class AwardTeamButton: UIView {
 
     required init?(coder aDecoder: NSCoder) { fatalError() }
 
-    init(header: String, subheader: String, widthRange: ClosedRange<CGFloat> = 0.3...0.45) {
-        self.widthRange = widthRange
+    init(header: String, subheader: String, widthPercentRange: ClosedRange<CGFloat> = 0.3...0.45) {
+        self.widthPercentRange = widthPercentRange
         super.init(frame: .zero)
         self.translatesAutoresizingMaskIntoConstraints = false
         self.setContentHuggingPriority(.defaultHigh, for: .vertical)
@@ -114,9 +114,8 @@ class AwardTeamButton: UIView {
     // Mark: View Lifecycle
 
     override func layoutSubviews() {
-        let size = self.intrinsicContentSize
-        invalidateIntrinsicContentSize()
         super.layoutSubviews()
+        invalidateIntrinsicContentSize()
     }
 
 }

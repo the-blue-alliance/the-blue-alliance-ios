@@ -16,7 +16,7 @@ class AwardTableViewCell: UITableViewCell, Reusable {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         awardNameLabel.font = .systemFont(ofSize: 16, weight: .medium)
         awardNameLabel.numberOfLines = 0
         awardNameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -55,14 +55,13 @@ class AwardTableViewCell: UITableViewCell, Reusable {
 
         removeAwards()
 
+        print("Recipients: \(viewModel.recipients)")
         for (index, recipient) in viewModel.recipients.enumerated() {
-            if let header = recipient.teamNumber, let subHeader = recipient.teamName {
-                let button = AwardTeamButton(header: "Team \(header)", subheader: subHeader)
-                button.tag = index
-                let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(recipientTapped(gesture:)))
-                button.addGestureRecognizer(tapGestureRecognizer)
-                awardsFlexView.addView(view: button)
-            }
+            let button = AwardTeamButton(header: recipient.teamNumber != nil ? "Team \(recipient.teamNumber ?? "")" : "", subheader: recipient.teamName ?? "")
+            button.tag = index
+            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(recipientTapped(gesture:)))
+            button.addGestureRecognizer(tapGestureRecognizer)
+            awardsFlexView.addView(view: button)
         }
         self.layoutIfNeeded()
     }
