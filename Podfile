@@ -43,7 +43,8 @@ target 'The Blue Alliance' do
   pod 'Firebase/Storage'
 
   # Local Deps
-  pod 'TBAKit', :path => 'the-blue-alliance-ios/Frameworks/TBAKit', :testspecs => ['Tests']
+  pod 'MyTBAKit', :path => 'Frameworks/MyTBAKit', :testspecs => ['Tests']
+  pod 'TBAKit', :path => 'Frameworks/TBAKit', :testspecs => ['Tests']
 
   # myTBA
   pod 'GoogleSignIn'
@@ -56,7 +57,9 @@ target 'The Blue Alliance' do
     inherit! :search_paths
 
     pod 'iOSSnapshotTestCase', '4.0.1' # TODO: Update to 6.0
-    pod 'TBAKitTesting', :path => 'the-blue-alliance-ios/Frameworks/TBAKit'
+    pod 'MyTBAKitTesting', :path => 'Frameworks/MyTBAKit'
+    pod 'TBAKitTesting', :path => 'Frameworks/TBAKit'
+    pod 'TBATestingMocks', :path => 'Frameworks/TBATestingMocks'
   end
 end
 

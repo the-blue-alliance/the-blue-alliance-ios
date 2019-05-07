@@ -1,5 +1,6 @@
 import CoreData
 import Foundation
+import MyTBAKit
 import TBAKit
 
 public enum EventType: Int {
@@ -641,15 +642,15 @@ extension Event: Comparable {
 
 extension Event: MyTBASubscribable {
 
-    var modelKey: String {
+    public var modelKey: String {
         return key!
     }
 
-    var modelType: MyTBAModelType {
+    public var modelType: MyTBAModelType {
         return .event
     }
 
-    static var notificationTypes: [NotificationType] {
+    public static var notificationTypes: [NotificationType] {
         return [
             NotificationType.upcomingMatch,
             NotificationType.matchScore,

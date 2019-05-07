@@ -132,6 +132,12 @@ PODS:
   - iOSSnapshotTestCase/Core (4.0.1)
   - iOSSnapshotTestCase/SwiftSupport (4.0.1):
     - iOSSnapshotTestCase/Core
+  - MyTBAKit (1.0.0-LOCAL)
+  - MyTBAKit/Tests (1.0.0-LOCAL):
+    - MyTBAKitTesting
+  - MyTBAKitTesting (1.0.0-LOCAL):
+    - MyTBAKit
+    - TBATestingMocks
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
@@ -204,6 +210,8 @@ PODS:
     - TBAKitTesting
   - TBAKitTesting (1.0.0-LOCAL):
     - TBAKit
+    - TBATestingMocks
+  - TBATestingMocks (1.0.0-LOCAL)
   - yoga (0.59.0.React)
   - youtube-ios-player-helper (0.1.6)
   - Zip (1.1.0)
@@ -223,6 +231,9 @@ DEPENDENCIES:
   - glog (from `subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/glog.podspec`)
   - GoogleSignIn
   - iOSSnapshotTestCase (= 4.0.1)
+  - MyTBAKit (from `Frameworks/MyTBAKit`)
+  - MyTBAKit/Tests (from `Frameworks/MyTBAKit`)
+  - MyTBAKitTesting (from `Frameworks/MyTBAKit`)
   - PINRemoteImage (= 3.0.0-beta.13)
   - PureLayout
   - React/Core (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
@@ -232,9 +243,10 @@ DEPENDENCIES:
   - React/RCTNetwork (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
   - React/RCTText (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
   - React/RCTWebSocket (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
-  - TBAKit (from `the-blue-alliance-ios/Frameworks/TBAKit`)
-  - TBAKit/Tests (from `the-blue-alliance-ios/Frameworks/TBAKit`)
-  - TBAKitTesting (from `the-blue-alliance-ios/Frameworks/TBAKit`)
+  - TBAKit (from `Frameworks/TBAKit`)
+  - TBAKit/Tests (from `Frameworks/TBAKit`)
+  - TBAKitTesting (from `Frameworks/TBAKit`)
+  - TBATestingMocks (from `Frameworks/TBATestingMocks`)
   - yoga (from `subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga`)
   - youtube-ios-player-helper
   - Zip (~> 1.1)
@@ -280,12 +292,18 @@ EXTERNAL SOURCES:
     :podspec: subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/Folly.podspec
   glog:
     :podspec: subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/glog.podspec
+  MyTBAKit:
+    :path: Frameworks/MyTBAKit
+  MyTBAKitTesting:
+    :path: Frameworks/MyTBAKit
   React:
     :path: subtrees/the-blue-alliance-react/node_modules/react-native
   TBAKit:
-    :path: the-blue-alliance-ios/Frameworks/TBAKit
+    :path: Frameworks/TBAKit
   TBAKitTesting:
-    :path: the-blue-alliance-ios/Frameworks/TBAKit
+    :path: Frameworks/TBAKit
+  TBATestingMocks:
+    :path: Frameworks/TBATestingMocks
   yoga:
     :path: subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga
 
@@ -316,6 +334,8 @@ SPEC CHECKSUMS:
   GoogleUtilities: 111a012f4c3a29c9e7c954c082fafd6ee3c999c0
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
   iOSSnapshotTestCase: f3b2b7e606fe03fdbe49af84316bd235df32dc44
+  MyTBAKit: 3a16f0982b145e1a86dc808df0f59ee390f529ad
+  MyTBAKitTesting: cd6dbb57eef130b8d15692d86d3af767a051a403
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   PINCache: d195fdba255283f7e9900a55e3cced377f431f9b
   PINOperation: a6219e6fc9db9c269eb7a7b871ac193bcf400aac
@@ -323,12 +343,13 @@ SPEC CHECKSUMS:
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
   PureLayout: f08c01b8dec00bb14a1fefa3de4c7d9c265df85e
   React: 0d6c719d9549bea0bd5676f8170b0e5c56e2c3c7
-  TBAKit: c3552e9f07cb9aa36dcf6bc1193eb4079b8d7c2c
-  TBAKitTesting: 8548fd91404db4e319d2eac3fa335cb890d48478
+  TBAKit: 75bbe21fe4c1ceef84c91a47799f9b8e896d42d2
+  TBAKitTesting: 01d2be262383a8978c11cb886f9782d0acfb219e
+  TBATestingMocks: c43f0abc435cd9950a448c08755062d35e0c7ce9
   yoga: 26673abd38bbdf0c33e134ad9e690c5fbf16e8fc
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: 40d3880e95712e7aee4e527321f27cabe820a3ef
+PODFILE CHECKSUM: 7b1b51586ba38a22b10bac28cad9371c9d235198
 
 COCOAPODS: 1.6.1

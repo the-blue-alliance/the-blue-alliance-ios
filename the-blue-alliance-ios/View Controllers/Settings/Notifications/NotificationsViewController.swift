@@ -1,6 +1,7 @@
 import CoreData
 import Foundation
 import FirebaseMessaging
+import MyTBAKit
 import TBAKit
 import UIKit
 import UserNotifications
@@ -267,6 +268,8 @@ class NotificationsViewController: TBATableViewController {
                 return .invalid("Permission for push notifications was denied.")
             case .provisional:
                 return .valid
+            @unknown default:
+                return .invalid("Unknown permissions error.")
             }
         }()
     }

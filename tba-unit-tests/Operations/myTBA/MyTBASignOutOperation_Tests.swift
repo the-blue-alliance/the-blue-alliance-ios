@@ -1,8 +1,9 @@
 import Firebase
+import MyTBAKitTesting
 import XCTest
 @testable import The_Blue_Alliance
 
-class MyTBASignOutOperationTestCase: MyTBATestCase {
+class MyTBASignOutOperationTestCase: TBATestCase {
 
     var myTBASignOutOperation: MyTBASignOutOperation!
 

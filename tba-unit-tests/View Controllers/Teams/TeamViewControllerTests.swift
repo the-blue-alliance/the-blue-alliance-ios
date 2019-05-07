@@ -1,4 +1,5 @@
 import XCTest
+@testable import MyTBAKit
 @testable import The_Blue_Alliance
 
 class TeamViewControllerTests: TBATestCase {

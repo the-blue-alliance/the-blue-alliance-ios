@@ -1,5 +1,6 @@
-import XCTest
 import FirebaseMessaging
+import XCTest
+@testable import MyTBAKit
 @testable import The_Blue_Alliance
 
 class MyTBAViewControllerTests: TBATestCase {

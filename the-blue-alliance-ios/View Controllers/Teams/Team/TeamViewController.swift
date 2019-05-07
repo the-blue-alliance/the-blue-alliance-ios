@@ -1,6 +1,7 @@
 import BFRImageViewer
 import CoreData
 import Firebase
+import MyTBAKit
 import Photos
 import TBAKit
 import UIKit

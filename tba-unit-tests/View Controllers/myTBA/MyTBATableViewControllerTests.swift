@@ -1,5 +1,6 @@
 import CoreData
 import XCTest
+@testable import MyTBAKit
 @testable import The_Blue_Alliance
 
 class MyTBATableViewControllerTests: TBATestCase {

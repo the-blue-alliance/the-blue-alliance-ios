@@ -1,5 +1,5 @@
-import Foundation
 import CoreData
+import MyTBAKit
 
 protocol MyTBAManaged: Managed {
     associatedtype MyType: NSManagedObject

@@ -1,5 +1,5 @@
 import CoreData
-import Foundation
+import MyTBAKit
 import UIKit
 
 // Two sections are a single no-title section for "Favorite" cell,

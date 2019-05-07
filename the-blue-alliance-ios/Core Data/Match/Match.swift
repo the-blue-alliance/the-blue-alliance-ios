@@ -1,6 +1,6 @@
 import CoreData
+import MyTBAKit
 import TBAKit
-import Foundation
 
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/1324e9e5b7c4ab21315bd00a768112991bada108/models/match.py#L25
 public enum MatchCompLevel: String, CaseIterable {
@@ -288,15 +288,15 @@ extension Match: Managed {
 
 extension Match: MyTBASubscribable {
 
-    var modelKey: String {
+    public var modelKey: String {
         return key!
     }
 
-    var modelType: MyTBAModelType {
+    public var modelType: MyTBAModelType {
         return .match
     }
 
-    static var notificationTypes: [NotificationType] {
+    public static var notificationTypes: [NotificationType] {
         return [
             NotificationType.upcomingMatch,
             NotificationType.matchScore,

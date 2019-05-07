@@ -1,5 +1,5 @@
 import Crashlytics
-import Foundation
+import MyTBAKit
 import React
 import Firebase
 import Zip
