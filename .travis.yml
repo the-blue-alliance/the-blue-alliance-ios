@@ -4,56 +4,57 @@ gemfile: Gemfile
 
 # addons:
 #   artifacts
-#     paths:
-#       - logs
+#   paths:
+#   - logs
 
 branches:
   only:
-    - master
+  - master
 
 stages:
-  - name: cron
-    if: (type == cron)
-  - name: test
-    if: NOT ((type == push) AND (commit_message =~ /^\[clowntown\]/))
-  - name: beta
-    if: (type == push) AND (branch == master) AND (commit_message =~ /^\[beta\]/)
+- name: cron
+  if: "(type == cron)"
+- name: test
+  if: NOT ((type == push) AND (commit_message =~ /^\[clowntown\]/))
+- name: beta
+  if: "(type == push) AND (branch == master) AND (commit_message =~ /^\\[beta\\]/)"
 
 cache:
   bundler: true
   cocoapods: true
   directories:
-    - subtrees/the-blue-alliance-react/node_modules
+  - subtrees/the-blue-alliance-react/node_modules
 
 install:
-  - brew install watchman
-  - cd subtrees/the-blue-alliance-react && npm install && cd ../..
-  - bundle install
-  - bundle exec pod install --repo-update
+- brew install watchman
+- cd subtrees/the-blue-alliance-react && npm install && cd ../..
+- bundle install
+- bundle exec pod install --repo-update
 
 before_script:
-  - cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
-  - bundle exec fastlane run setup_travis
-  - echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
+- cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
+- bundle exec fastlane run setup_travis
+- echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
 
 jobs:
   include:
-    - stage: cron
-      name: "Cron tasks"
-      script:
-        - bundle exec fastlane refresh_dsyms
-    - stage: test
-      name: "Unit Tests"
-      script:
-        - bundle exec fastlane test
-    - stage: beta
-      script:
-        - bundle exec fastlane setup_secrets
-        - bundle exec fastlane beta_ci
+  - stage: cron
+    name: Cron tasks
+    script:
+    - bundle exec fastlane refresh_dsyms
+  - stage: test
+    name: Unit Tests
+    script:
+    - bundle exec fastlane test
+  - stage: beta
+    script:
+    - bundle exec fastlane setup_secrets
+    - bundle exec fastlane beta_ci
 
 after_failure:
-  - gem install second_curtain
-  - cat build/reports/tba-unit-tests-tba-unit-tests.log | second_curtain > /dev/null
+- gem install second_curtain
+- cat build/reports/tba-unit-tests-tba-unit-tests.log | second_curtain > /dev/null
 
 notifications:
-  slack: $SLACK_INTEGRATION_KEY
+  slack:
+    secure: hBTFXrG237C6bpI0RWztRcTZFT8E5NNzBkx9/QQvheW04pid0ftXo/t2rHjoXORDoEsNa5sO2fXJJh86kQrK1REaCklmGVneJ3IVF7urTmIsWC4CjtMOmp1vhYBqck369VEKn0CoP9NlF254Rzh1A/sTuGM/dkOG+YPFz91rPKs=
