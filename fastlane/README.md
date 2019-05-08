@@ -61,6 +61,11 @@ Create a new app version (major, minor, patch, build) by bumping the version num
 fastlane ios ensure_version_bump
 ```
 Bump version and push if necessary
+### ios new_git_tag
+```
+fastlane ios new_git_tag
+```
+Create a new tag and push to GitHub
 ### ios beta_ci
 ```
 fastlane ios beta_ci
