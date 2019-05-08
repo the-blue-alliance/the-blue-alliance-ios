@@ -20,7 +20,7 @@ class MatchTableViewCell: UITableViewCell, Reusable {
     @IBOutlet private var matchSummaryView: MatchSummaryView!
 
     private var coloredViews: [UIView] {
-        return [matchSummaryView.redContainerView, matchSummaryView.redScoreLabel, matchSummaryView.blueContainerView, matchSummaryView.blueScoreLabel, matchSummaryView.timeLabel]
+        return [matchSummaryView.redContainerView, matchSummaryView.redScoreLabel, matchSummaryView.blueContainerView, matchSummaryView.blueScoreLabel, matchSummaryView.timeView]
     }
 
     // MARK: - View Methods
