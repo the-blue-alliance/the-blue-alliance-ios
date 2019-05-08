@@ -20,6 +20,7 @@ class FlexLayoutView: UIView {
         super.init(frame: .zero)
 
         self.translatesAutoresizingMaskIntoConstraints = false
+        self.setContentHuggingPriority(.defaultHigh, for: .vertical)
         heightConstraint = heightAnchor.constraint(equalToConstant: 0)
         heightConstraint.isActive = true
     }
@@ -64,7 +65,6 @@ class FlexLayoutView: UIView {
             if view.bounds.height + currentRowY > rowMaxY { rowMaxY = view.bounds.height + currentRowY }
             currentX += horizontalSpacing + view.bounds.width
         }
-        heightConstraint.constant = rowMaxY
+        heightConstraint.constant = rowMaxY == 0 ? 50 : rowMaxY
     }
-
 }

@@ -21,4 +21,5 @@ struct AwardCellViewModel {
             return Recipient(teamKey: recipient.teamKey?.key, awardText: recipient.awardText, teamNumber: recipient.teamKey?.teamNumber, teamName: name, awardee: recipient.awardee)
         }) ?? []
     }
+
 }

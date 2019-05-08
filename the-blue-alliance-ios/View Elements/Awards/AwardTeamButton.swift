@@ -3,7 +3,7 @@ import UIKit
 
 class AwardTeamButton: UIView {
 
-    var widthPercentRange: ClosedRange<CGFloat> {
+    var widthRange: ClosedRange<CGFloat> {
         didSet {
             invalidateIntrinsicContentSize()
         }
@@ -36,12 +36,8 @@ class AwardTeamButton: UIView {
     }
     var calculatedWidth: CGFloat {
         let naturalWidth = max(headerLabel.intrinsicContentSize.width, subheaderLabel.intrinsicContentSize.width) + leftPadding + rightPadding
-        guard let superviewWidth = self.superview?.bounds.width else { return naturalWidth }
-        print("Natural width, \(headerText ?? "?"): \(naturalWidth), superwidth: \(superviewWidth)")
-        let lower = widthPercentRange.lowerBound * superviewWidth
-        let upper = widthPercentRange.upperBound * superviewWidth
-        if naturalWidth > upper { return upper }
-        else if naturalWidth < lower {return lower }
+        if naturalWidth > widthRange.upperBound { return widthRange.upperBound }
+        else if naturalWidth < widthRange.lowerBound { return widthRange.lowerBound }
         return naturalWidth
     }
     var calculatedHeight: CGFloat {
@@ -52,8 +48,8 @@ class AwardTeamButton: UIView {
 
     required init?(coder aDecoder: NSCoder) { fatalError() }
 
-    init(header: String, subheader: String, widthPercentRange: ClosedRange<CGFloat> = 0.3...0.45) {
-        self.widthPercentRange = widthPercentRange
+    init(header: String, subheader: String, widthRange: ClosedRange<CGFloat> = 100...200) {
+        self.widthRange = widthRange
         super.init(frame: .zero)
         self.translatesAutoresizingMaskIntoConstraints = false
         self.setContentHuggingPriority(.defaultHigh, for: .vertical)

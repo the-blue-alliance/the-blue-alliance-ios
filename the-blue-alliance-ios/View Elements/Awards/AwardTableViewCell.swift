@@ -33,9 +33,10 @@ class AwardTableViewCell: UITableViewCell, Reusable {
         awardsFlexView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         awardsFlexView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
         awardsFlexView.topAnchor.constraint(equalToSystemSpacingBelow: awardNameLabel.lastBaselineAnchor, multiplier: 1).isActive = true
-        awardsFlexView.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        //awardsFlexView.setContentHuggingPriority(.defaultHigh, for: .vertical)
 
-        self.bottomAnchor.constraint(equalTo: awardsFlexView.bottomAnchor, constant: 20).withPriority(.defaultLow).isActive = true
+        self.bottomAnchor.constraint(equalTo: awardsFlexView.bottomAnchor, constant: 20).withPriority(.defaultHigh).isActive = true
+        self.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
 
     required init?(coder aDecoder: NSCoder) { fatalError() }
@@ -55,9 +56,8 @@ class AwardTableViewCell: UITableViewCell, Reusable {
 
         removeAwards()
 
-        print("Recipients: \(viewModel.recipients)")
         for (index, recipient) in viewModel.recipients.enumerated() {
-            let button = AwardTeamButton(header: recipient.teamNumber != nil ? "Team \(recipient.teamNumber ?? "")" : "", subheader: recipient.teamName ?? "")
+            let button = AwardTeamButton(header: recipient.teamNumber != nil ? "Team \(recipient.teamNumber ?? "")" : "", subheader: recipient.teamName ?? "", widthRange: (UIScreen.main.bounds.width * 0.3)...(UIScreen.main.bounds.width * 0.4))
             button.tag = index
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(recipientTapped(gesture:)))
             button.addGestureRecognizer(tapGestureRecognizer)
