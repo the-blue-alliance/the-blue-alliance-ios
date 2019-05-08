@@ -8,13 +8,7 @@ open class MyTBATestCase: XCTestCase {
     override open func setUp() {
         super.setUp()
 
-        let selfBundle = Bundle(for: type(of: self))
-        guard let resourceURL = selfBundle.resourceURL?.appendingPathComponent("MyTBAKitTesting.bundle"),
-            let bundle = Bundle(url: resourceURL) else {
-                XCTFail()
-                return
-        }
-        myTBA = MockMyTBA(bundle: bundle)
+        myTBA = MockMyTBA()
     }
 
     override open func tearDown() {

@@ -7,8 +7,14 @@ public class MockTBAKit: TBAKit {
     public let session: MockURLSession
     private let bundle: Bundle
 
-    public init(userDefaults: UserDefaults, bundle: Bundle) {
+    public init(userDefaults: UserDefaults) {
         self.session = MockURLSession()
+
+        let selfBundle = Bundle(for: type(of: self))
+        guard let resourceURL = selfBundle.resourceURL?.appendingPathComponent("TBAKitTesting.bundle"),
+            let bundle = Bundle(url: resourceURL) else {
+                fatalError("Unable to find TBAKitTesting.bundle")
+        }
         self.bundle = bundle
 
         super.init(apiKey: "abcd123", urlSession: session, userDefaults: userDefaults)

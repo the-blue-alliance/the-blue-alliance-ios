@@ -19,25 +19,10 @@ class TBATestCase: CoreDataTestCase {
     override func setUp() {
         super.setUp()
 
-        let myTBAKitTestingBundle = Bundle(for: MockMyTBA.self)
-        guard let myTBAKitTestingResourcesBundleURL = myTBAKitTestingBundle.resourceURL?.appendingPathComponent("MyTBAKitTesting.bundle"),
-            let myTBAKitTestingResourcesBundle = Bundle(url: myTBAKitTestingResourcesBundleURL) else {
-                XCTFail("Unable to load MyTBAKitTesting resources bundle.")
-                return
-        }
-        myTBA = MockMyTBA(bundle: myTBAKitTestingResourcesBundle)
-
         testBundle = Bundle(for: type(of: self))
         userDefaults = UserDefaults(suiteName: "TBATests")
-
-        let tbaKitTestingBundle = Bundle(for: MockTBAKit.self)
-        guard let tbaKitTestingResourcesBundleURL = tbaKitTestingBundle.resourceURL?.appendingPathComponent("TBAKitTesting.bundle"),
-            let tbaKitTestingResourcesBundle = Bundle(url: tbaKitTestingResourcesBundleURL) else {
-                XCTFail("Unable to load TBAKitTesting resources bundle.")
-                return
-        }
-        tbaKit = MockTBAKit(userDefaults: userDefaults, bundle: tbaKitTestingResourcesBundle)
-
+        myTBA = MockMyTBA()
+        tbaKit = MockTBAKit(userDefaults: userDefaults)
         urlOpener = MockURLOpener()
         pushService = PushService(messaging: Messaging.messaging(), myTBA: myTBA, retryService: RetryService(), userDefaults: userDefaults)
         statusService = StatusService(bundle: testBundle, persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
