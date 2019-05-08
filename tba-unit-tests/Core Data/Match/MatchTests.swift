@@ -530,7 +530,7 @@ class MatchTestCase: CoreDataTestCase {
         XCTAssertEqual(match.friendlyName, "Quals 73")
 
         match.compLevelString = MatchCompLevel.eightfinal.rawValue
-        XCTAssertEqual(match.friendlyName, "Eighths 2 - 73")
+        XCTAssertEqual(match.friendlyName, "Eighths 2-73")
     }
 
     func test_myTBASubscribable() {

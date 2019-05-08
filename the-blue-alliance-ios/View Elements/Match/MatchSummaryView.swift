@@ -35,6 +35,7 @@ class MatchSummaryView: UIView {
             redContainerView.layer.borderColor = UIColor.red.cgColor
         }
     }
+    @IBOutlet weak var redScoreView: UIView!
     @IBOutlet weak var redScoreLabel: UILabel!
     @IBOutlet private weak var redRPStackView: UIStackView!
 
@@ -44,9 +45,11 @@ class MatchSummaryView: UIView {
             blueContainerView.layer.borderColor = UIColor.blue.cgColor
         }
     }
+    @IBOutlet weak var blueScoreView: UIView!
     @IBOutlet weak var blueScoreLabel: UILabel!
     @IBOutlet private weak var blueRPStackView: UIStackView!
 
+    @IBOutlet weak var timeView: UIView!
     @IBOutlet weak var timeLabel: UILabel!
     
 
@@ -87,7 +90,7 @@ class MatchSummaryView: UIView {
     private func removeTeams() {
         for stackView in [redStackView, blueStackView] as [UIStackView] {
             for view in stackView.arrangedSubviews {
-                if [redScoreLabel, blueScoreLabel].contains(view) {
+                if [redScoreView, blueScoreView].contains(view) {
                     continue
                 }
                 stackView.removeArrangedSubview(view)
@@ -137,8 +140,8 @@ class MatchSummaryView: UIView {
         redScoreLabel.text = viewModel.redScore
         blueScoreLabel.text = viewModel.blueScore
 
-        timeLabel.isHidden = viewModel.hasScores
         timeLabel.text = viewModel.timeString
+        timeView.isHidden = viewModel.hasScores
 
         if viewModel.redAllianceWon {
             redContainerView.layer.borderWidth = 2.0
@@ -171,19 +174,19 @@ class MatchSummaryView: UIView {
     }
     
     private func button(text: String, isBold: Bool, isStrikethrough: Bool = false) -> UIButton {
-        let newButton = UIButton(type: .system)
-        newButton.setTitle(text, for: [])
-        newButton.setTitleColor(.primaryBlue, for: .normal)
+        let button = UIButton(type: .system)
+        button.setTitle(text, for: [])
+        button.setTitleColor(.primaryBlue, for: .normal)
         
         if let teamNumber = Int(text) {
-            newButton.tag = teamNumber
+            button.tag = teamNumber
         }
 
-        newButton.titleLabel?.attributedText = customAttributedString(text: text, isBold: isBold, isStrikethrough: isStrikethrough)
-        
-        newButton.addTarget(self, action: #selector(teamPressed(sender:)), for: .touchUpInside)
-        newButton.translatesAutoresizingMaskIntoConstraints = false
-        return newButton
+        button.titleLabel?.attributedText = customAttributedString(text: text, isBold: isBold, isStrikethrough: isStrikethrough)
+
+        button.addTarget(self, action: #selector(teamPressed(sender:)), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }
 
     private func label(text: String, isBold: Bool, isStrikethrough: Bool = false) -> UILabel {

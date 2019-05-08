@@ -196,7 +196,7 @@ extension Match {
             if compLevel == .qualification {
                 return "\(compLevel.levelShort) \(matchNumber!.stringValue)"
             } else {
-                return "\(compLevel.levelShort) \(setNumber!.stringValue) - \(matchNumber!.stringValue)"
+                return "\(compLevel.levelShort) \(setNumber!.stringValue)-\(matchNumber!.stringValue)"
             }
         }
     }
