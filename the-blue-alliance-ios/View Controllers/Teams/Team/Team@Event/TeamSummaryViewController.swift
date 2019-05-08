@@ -51,8 +51,8 @@ class TeamSummaryViewController: TBATableViewController {
                     }
                 }
             } else {
-                contextObserver.observeInsertions { [unowned self] (eventStatuses) in
-                    self.eventStatus = eventStatuses.first
+                contextObserver.observeInsertions { [weak self] (eventStatuses) in
+                    self?.eventStatus = eventStatuses.first
                 }
             }
         }

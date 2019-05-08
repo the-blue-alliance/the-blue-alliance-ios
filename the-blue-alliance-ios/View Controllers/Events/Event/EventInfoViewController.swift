@@ -51,9 +51,9 @@ class EventInfoViewController: TBATableViewController, Observable {
 
         super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        contextObserver.observeObject(object: event, state: .updated) { [unowned self] (_, _) in
+        contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                self?.tableView.reloadData()
             }
         }
     }
