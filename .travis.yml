@@ -48,3 +48,6 @@ jobs:
 after_failure:
   - gem install second_curtain
   - cat build/reports/tba-unit-tests-tba-unit-tests.log | second_curtain > /dev/null
+
+notifications:
+  slack: $SLACK_INTEGRATION_KEY

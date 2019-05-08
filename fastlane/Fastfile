@@ -74,6 +74,12 @@ platform :ios do
     end
   end
 
+  desc "Create a new tag and push to GitHub"
+  lane :new_git_tag do
+    add_git_tag(tag: current_git_tag)
+    push_git_tags
+  end
+
   ## Release Lanes ##
 
   desc "Upload a new beta build to TestFlight (for CI machine)"
@@ -86,11 +92,10 @@ platform :ios do
     slack(
       channel: "#dev-ios",
       message: "#{current_git_tag} uploaded to TestFlight 🎉",
-      payload: {
-        "GitHub Release": "https://github.com/the-blue-alliance/the-blue-alliance-ios/releases/tag/#{current_git_tag}"
-      },
       default_payloads: []
     )
+
+    new_git_tag
   end
 
   desc "Upload a new beta build to TestFlight"
@@ -99,6 +104,9 @@ platform :ios do
     beta_testflight
 
     reset_git_repo(files: ["the-blue-alliance-ios.xcodeproj/project.pbxproj"], force: true) # Remove our code signing changes
+
+    commit_changelog
+    new_git_tag
   end
 
   desc "Internal beta lane - use `beta` or `beta_ci`"
@@ -202,12 +210,4 @@ platform :ios do
 
   ## End Internal Lanes for Shipping Lanes ##
 
-end
-
-error do |lane, exception|
-  slack(
-    message: exception.to_s,
-    success: false,
-    username: "Travis CI",
-  ) if is_ci? && ENV['SLACK_URL'] && git_branch == "master"
 end
