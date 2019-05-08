@@ -181,6 +181,14 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [searchPredicate, fetchRequestPredicate].compactMap({ $0 }))
     }
 
+    // MARK: TableViewDataSourceDelegate
+
+    func controllerDidChangeContent() {
+        DispatchQueue.main.async { [weak self] in
+            self?.updateInterface()
+        }
+    }
+
     // MARK: - EventsViewControllerDataSourceConfiguration
 
     var fetchRequestPredicate: NSPredicate? {
