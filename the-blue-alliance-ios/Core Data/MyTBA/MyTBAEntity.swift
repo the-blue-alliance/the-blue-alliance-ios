@@ -30,13 +30,15 @@ extension MyTBAEntity: Managed {
             return nil
         }
 
-        let predicate = NSPredicate(format: "key == %@", modelKey!)
         switch modelType {
         case .event:
+            let predicate = NSPredicate(format: "%K == %@", #keyPath(Event.key), modelKey!)
             return Event.findOrFetch(in: managedObjectContext, matching: predicate)
         case .team:
+            let predicate = NSPredicate(format: "%K == %@", #keyPath(Team.key), modelKey!)
             return Team.findOrFetch(in: managedObjectContext, matching: predicate)
         case .match:
+            let predicate = NSPredicate(format: "%K == %@", #keyPath(Match.key), modelKey!)
             return Match.findOrFetch(in: managedObjectContext, matching: predicate)
         default:
             return nil

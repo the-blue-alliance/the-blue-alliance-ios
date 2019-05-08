@@ -92,7 +92,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
 
     private func setupDataSource() {
         let fetchRequest: NSFetchRequest<DistrictEventPoints> = DistrictEventPoints.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "total", ascending: false)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(DistrictEventPoints.total), ascending: false)]
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)

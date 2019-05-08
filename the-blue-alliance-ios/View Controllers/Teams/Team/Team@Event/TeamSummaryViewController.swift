@@ -130,7 +130,8 @@ class TeamSummaryViewController: TBATableViewController {
     }()
     lazy var observerPredicate: NSPredicate = {
         return NSPredicate(format: "%K == %@ AND %K == %@",
-                           #keyPath(EventStatus.event), event, #keyPath(EventStatus.teamKey), teamKey)
+                           #keyPath(EventStatus.event), event,
+                           #keyPath(EventStatus.teamKey), teamKey)
     }()
 
     private var backgroundFetchKeys: Set<String> = []

@@ -96,7 +96,7 @@ private class EventAlliancesViewController: TBATableViewController {
     private func setupDataSource() {
         let fetchRequest: NSFetchRequest<EventAlliance> = EventAlliance.fetchRequest()
         // This seems like a poor sort descriptor... since this could be nil
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(EventAlliance.name), ascending: true)]
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
@@ -108,7 +108,8 @@ private class EventAlliancesViewController: TBATableViewController {
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<EventAlliance>) {
-        request.predicate = NSPredicate(format: "event == %@", event)
+        request.predicate = NSPredicate(format: "%K == %@",
+                                        #keyPath(EventAlliance.event), event)
     }
 
 }

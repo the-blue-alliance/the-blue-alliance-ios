@@ -71,9 +71,13 @@ class TeamEventsViewController: EventsViewController {
 
     override var fetchRequestPredicate: NSPredicate {
         if let year = year {
-            return NSPredicate(format: "year == %ld AND ANY teams == %@", year, team)
+            return NSPredicate(format: "%K == %ld AND ANY %K == %@",
+                               #keyPath(Event.year), year,
+                               #keyPath(Event.teams), team)
         } else {
-            return NSPredicate(format: "year == -1 AND ANY teams == %@", team)
+            return NSPredicate(format: "%K == -1 AND ANY %K == %@",
+                               #keyPath(Event.year),
+                               #keyPath(Event.teams), team)
         }
     }
 

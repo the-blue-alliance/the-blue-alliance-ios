@@ -34,9 +34,9 @@ class MatchesViewController: TBATableViewController {
 
     private func setupDataSource() {
         let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "compLevelSortOrder", ascending: true),
-                                        NSSortDescriptor(key: "setNumber", ascending: true),
-                                        NSSortDescriptor(key: "matchNumber", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Match.compLevelSortOrder), ascending: true),
+                                        NSSortDescriptor(key: #keyPath(Match.setNumber), ascending: true),
+                                        NSSortDescriptor(key: #keyPath(Match.matchNumber), ascending: true)]
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "compLevelSortOrder", cacheName: nil)
@@ -49,9 +49,13 @@ class MatchesViewController: TBATableViewController {
 
     private func setupFetchRequest(_ request: NSFetchRequest<Match>) {
         if let teamKey = teamKey {
-            request.predicate = NSPredicate(format: "event == %@ AND SUBQUERY(alliances, $a, ANY $a.teams.key == %@).@count > 0", event, teamKey.key!)
+            // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
+            request.predicate = NSPredicate(format: "%K == %@ AND SUBQUERY(%K, $a, ANY $a.teams.key == %@).@count > 0",
+                                            #keyPath(Match.event), event,
+                                            #keyPath(Match.alliances), teamKey.key!)
         } else {
-            request.predicate = NSPredicate(format: "event == %@", event)
+            request.predicate = NSPredicate(format: "%K == %@",
+                                            #keyPath(Match.event), event)
         }
     }
 

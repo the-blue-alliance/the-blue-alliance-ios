@@ -104,7 +104,7 @@ class EventAwardsViewController: TBATableViewController {
 
     private func setupDataSource() {
         let fetchRequest: NSFetchRequest<Award> = Award.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "awardType", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Award.awardType), ascending: true)]
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
@@ -117,9 +117,13 @@ class EventAwardsViewController: TBATableViewController {
 
     private func setupFetchRequest(_ request: NSFetchRequest<Award>) {
         if let teamKey = teamKey {
-            request.predicate = NSPredicate(format: "event == %@ AND (ANY recipients.teamKey.key == %@)", event, teamKey.key!)
+            // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/pull/169
+            request.predicate = NSPredicate(format: "%K == %@ AND (ANY recipients.teamKey.key == %@)",
+                                            #keyPath(Award.event), event,
+                                            teamKey.key!)
         } else {
-            request.predicate = NSPredicate(format: "event == %@", event)
+            request.predicate = NSPredicate(format: "%K == %@",
+                                            #keyPath(Award.event), event)
         }
     }
 
