@@ -49,7 +49,6 @@ class MatchSummaryView: UIView {
     @IBOutlet weak var blueScoreLabel: UILabel!
     @IBOutlet private weak var blueRPStackView: UIStackView!
 
-    @IBOutlet weak var timeView: UIView!
     @IBOutlet weak var timeLabel: UILabel!
     
 
@@ -140,8 +139,8 @@ class MatchSummaryView: UIView {
         redScoreLabel.text = viewModel.redScore
         blueScoreLabel.text = viewModel.blueScore
 
-        timeView.isHidden = viewModel.hasScores
         timeLabel.text = viewModel.timeString
+        timeLabel.isHidden = viewModel.hasScores
 
         if viewModel.redAllianceWon {
             redContainerView.layer.borderWidth = 2.0
