@@ -27,7 +27,7 @@ install:
   - brew install watchman
   - cd subtrees/the-blue-alliance-react && npm install && cd ../..
   - bundle install
-  - bundle exec pod check || bundle exec pod install || bundle exec pod install --repo-update
+  - bundle exec pod install --repo-update
 
 before_script:
   - cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
