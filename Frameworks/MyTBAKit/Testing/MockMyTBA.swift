@@ -7,8 +7,14 @@ public class MockMyTBA: MyTBA {
     let session: MockURLSession
     private let bundle: Bundle
 
-    public init(bundle: Bundle) {
+    public init() {
         self.session = MockURLSession()
+
+        let selfBundle = Bundle(for: type(of: self))
+        guard let resourceURL = selfBundle.resourceURL?.appendingPathComponent("MyTBAKitTesting.bundle"),
+            let bundle = Bundle(url: resourceURL) else {
+                fatalError("Unable to find MyTBAKitTesting.bundle")
+        }
         self.bundle = bundle
 
         super.init(uuid: "abcd123", deviceName: "MyTBATesting", urlSession: session)
