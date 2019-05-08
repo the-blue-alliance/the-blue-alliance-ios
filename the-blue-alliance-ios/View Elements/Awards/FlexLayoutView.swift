@@ -65,6 +65,6 @@ class FlexLayoutView: UIView {
             if view.bounds.height + currentRowY > rowMaxY { rowMaxY = view.bounds.height + currentRowY }
             currentX += horizontalSpacing + view.bounds.width
         }
-        heightConstraint.constant = rowMaxY == 0 ? 50 : rowMaxY
+        heightConstraint.constant = rowMaxY
     }
 }
