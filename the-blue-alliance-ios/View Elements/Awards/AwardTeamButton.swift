@@ -41,7 +41,7 @@ class AwardTeamButton: UIView {
         return naturalWidth
     }
     var calculatedHeight: CGFloat {
-        return (headerLabel.intrinsicContentSize.height + subheaderLabel.intrinsicContentSize.height) * 1.5
+        return headerLabel.intrinsicContentSize.height * 2.75
     }
 
     // Mark: - Init

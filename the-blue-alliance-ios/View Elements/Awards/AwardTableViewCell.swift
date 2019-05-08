@@ -56,11 +56,26 @@ class AwardTableViewCell: UITableViewCell, Reusable {
         removeAwards()
 
         for (index, recipient) in viewModel.recipients.enumerated() {
-            let button = AwardTeamButton(header: recipient.teamNumber != nil ? "Team \(recipient.teamNumber ?? "")" : "", subheader: recipient.teamName ?? "", widthRange: (UIScreen.main.bounds.width * 0.3)...(UIScreen.main.bounds.width * 0.4))
-            button.tag = index
+            var viewToAdd = UIView()
+            if let teamNumber = recipient.teamNumber, let awardee = recipient.awardee {
+                let button = AwardTeamButton(header: teamNumber, subheader: recipient.teamName ?? "", widthRange: (UIScreen.main.bounds.width * 0.3)...(UIScreen.main.bounds.width * 0.4))
+                viewToAdd = TeamButtonWithAwardee(teamButton: button, awardee: awardee)
+            }
+            else if let teamNumber = recipient.teamNumber {
+                viewToAdd = AwardTeamButton(header: teamNumber, subheader: recipient.teamName ?? "", widthRange: (UIScreen.main.bounds.width * 0.3)...(UIScreen.main.bounds.width * 0.4))
+            }
+            else if let awardee = recipient.awardee {
+                let label = UILabel()
+                label.text = awardee
+                label.font = .italicSystemFont(ofSize: 14)
+                label.translatesAutoresizingMaskIntoConstraints = false
+                viewToAdd = label
+            }
+
+            viewToAdd.tag = index
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(recipientTapped(gesture:)))
-            button.addGestureRecognizer(tapGestureRecognizer)
-            awardsFlexView.addView(view: button)
+            viewToAdd.addGestureRecognizer(tapGestureRecognizer)
+            awardsFlexView.addView(view: viewToAdd)
         }
         self.layoutIfNeeded()
     }
@@ -70,6 +85,48 @@ class AwardTableViewCell: UITableViewCell, Reusable {
             return
         }
         teamKeySelected?(teamKey)
+    }
+
+}
+
+class TeamButtonWithAwardee: UIView {
+
+    private let teamButton: AwardTeamButton
+    private let awardeeLabel: UILabel
+
+    override var intrinsicContentSize: CGSize {
+        get {
+            return CGSize(width: max(awardeeLabel.intrinsicContentSize.width, teamButton.intrinsicContentSize.width), height: awardeeLabel.intrinsicContentSize.height + teamButton.intrinsicContentSize.height + 5)
+        }
+    }
+
+    // Mark: - Init
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError()
+    }
+    init(teamButton: AwardTeamButton, awardee: String) {
+        self.teamButton = teamButton
+        self.awardeeLabel = UILabel()
+        super.init(frame: .zero)
+        
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.setContentHuggingPriority(.defaultHigh, for: .vertical)
+
+        awardeeLabel.text = awardee
+        awardeeLabel.font = .italicSystemFont(ofSize: 14)
+        awardeeLabel.textColor = .black
+        awardeeLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        self.addSubview(awardeeLabel)
+        self.addSubview(teamButton)
+
+        awardeeLabel.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        awardeeLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
+
+        teamButton.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        teamButton.topAnchor.constraint(equalTo: awardeeLabel.bottomAnchor, constant: 5).isActive = true
+        self.invalidateIntrinsicContentSize()
     }
 
 }
