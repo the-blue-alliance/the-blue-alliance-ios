@@ -39,9 +39,9 @@ class DistrictTeamSummaryViewController: TBATableViewController {
 
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
 
-        contextObserver.observeObject(object: ranking, state: .updated) { [unowned self] (_, _) in
+        contextObserver.observeObject(object: ranking, state: .updated) { [weak self] (_, _) in
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                self?.tableView.reloadData()
             }
         }
     }

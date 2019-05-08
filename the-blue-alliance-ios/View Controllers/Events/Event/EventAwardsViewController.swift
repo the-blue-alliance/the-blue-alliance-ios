@@ -130,9 +130,12 @@ extension EventAwardsViewController: TableViewDataSourceDelegate {
     func configure(_ cell: AwardTableViewCell, for object: Award, at indexPath: IndexPath) {
         cell.selectionStyle = .none
         cell.viewModel = AwardCellViewModel(award: object)
-        cell.teamKeySelected = { [unowned self] (teamKey) in
-            let teamKey = TeamKey.insert(withKey: teamKey, in: self.persistentContainer.viewContext)
-            self.delegate?.teamKeySelected(teamKey)
+        cell.teamKeySelected = { [weak self] (teamKey) in
+            guard let context = self?.persistentContainer.viewContext else {
+                return
+            }
+            let teamKey = TeamKey.insert(withKey: teamKey, in: context)
+            self?.delegate?.teamKeySelected(teamKey)
         }
     }
 

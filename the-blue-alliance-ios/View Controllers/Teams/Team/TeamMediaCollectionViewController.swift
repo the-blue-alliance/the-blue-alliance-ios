@@ -144,8 +144,8 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             }
         }
 
-        let dataTask = URLSession.shared.dataTask(with: url, completionHandler: { [unowned self] (data, _, error) in
-            self.fetchingMedia.remove(media)
+        let dataTask = URLSession.shared.dataTask(with: url, completionHandler: { [weak self] (data, _, error) in
+            self?.fetchingMedia.remove(media)
 
             if let error = error {
                 media.mediaError = MediaError.error(error.localizedDescription)
@@ -159,7 +159,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
                 media.mediaError = MediaError.error("No data for request")
             }
 
-            self.persistentContainer.viewContext.performSaveOrRollback()
+            self?.persistentContainer.viewContext.performSaveOrRollback()
         })
         dataTask.resume()
     }
@@ -254,10 +254,10 @@ extension TeamMediaCollectionViewController: Refreshable {
 
         removeNoDataView()
 
-        let fetchTeamMedia: () -> () = { [unowned self] in
-            if let teamMedia = self.team.media?.allObjects as? [TeamMedia] {
+        let fetchTeamMedia: () -> () = { [weak self] in
+            if let teamMedia = self?.team.media?.allObjects as? [TeamMedia] {
                 teamMedia.forEach({ (media) in
-                    self.fetchMedia(media)
+                    self?.fetchMedia(media)
                 })
             }
         }

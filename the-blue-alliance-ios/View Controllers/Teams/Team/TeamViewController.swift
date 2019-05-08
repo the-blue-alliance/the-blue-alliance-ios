@@ -99,11 +99,14 @@ class TeamViewController: MyTBAContainerViewController, Observable {
     // MARK: - Private
 
     private func setupObservers() {
-        contextObserver.observeObject(object: team, state: .updated) { [unowned self] (team, _) in
-            if self.year == nil {
-                self.year = TeamViewController.latestYear(statusService: self.statusService, years: team.yearsParticipated)
+        contextObserver.observeObject(object: team, state: .updated) { [weak self] (team, _) in
+            if self?.year == nil {
+                guard let statusService = self?.statusService else {
+                    return
+                }
+                self?.year = TeamViewController.latestYear(statusService: statusService, years: team.yearsParticipated)
             } else {
-                self.updateInterface()
+                self?.updateInterface()
             }
         }
     }
@@ -296,18 +299,24 @@ class TeamMediaImageViewController: BFRImageViewController {
     }
 
     override var previewActionItems: [UIPreviewActionItem] {
-        let copyAction = UIPreviewAction(title: "Copy", style: .default, handler: { [unowned self] (_, _) in
-            guard let image = self.images[self.currentIndex] as? UIImage else {
+        let copyAction = UIPreviewAction(title: "Copy", style: .default, handler: { [weak self] (_, _) in
+            guard let index = self?.currentIndex else {
                 return
             }
-            self.pasteboard?.image = image
+            guard let image = self?.images[index] as? UIImage else {
+                return
+            }
+            self?.pasteboard?.image = image
         })
 
-        let saveAction = UIPreviewAction(title: "Save", style: .default) { [unowned self] (_, _) in
-            guard let image = self.images[self.currentIndex] as? UIImage else {
+        let saveAction = UIPreviewAction(title: "Save", style: .default) { [weak self] (_, _) in
+            guard let index = self?.currentIndex else {
                 return
             }
-            self.photoLibrary?.performChanges({
+            guard let image = self?.images[index] as? UIImage else {
+                return
+            }
+            self?.photoLibrary?.performChanges({
                 PHAssetChangeRequest.creationRequestForAsset(from: image)
             }, completionHandler: nil)
         }
