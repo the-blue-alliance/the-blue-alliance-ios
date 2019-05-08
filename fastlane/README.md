@@ -81,6 +81,11 @@ Upload a new beta build to TestFlight
 fastlane ios app_store
 ```
 Upload a new build to the App Store
+### ios refresh_dsyms
+```
+fastlane ios refresh_dsyms
+```
+
 
 ----
 

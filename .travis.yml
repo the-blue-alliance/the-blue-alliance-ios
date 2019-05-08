@@ -12,6 +12,8 @@ branches:
     - master
 
 stages:
+  - name: cron
+    if: (type == cron)
   - name: test
     if: NOT ((type == push) AND (commit_message =~ /^\[clowntown\]/))
   - name: beta
@@ -36,6 +38,10 @@ before_script:
 
 jobs:
   include:
+    - stage: cron
+      name: "Cron tasks"
+      script:
+        - bundle exec fastlane refresh_dsyms
     - stage: test
       name: "Unit Tests"
       script:
