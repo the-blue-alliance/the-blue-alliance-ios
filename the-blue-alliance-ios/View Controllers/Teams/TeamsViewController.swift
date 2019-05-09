@@ -153,7 +153,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
 
     private func setupDataSource() {
         let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "teamNumber", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Team.teamNumber), ascending: true)]
         fetchRequest.fetchBatchSize = 50
         setupFetchRequest(fetchRequest)
 

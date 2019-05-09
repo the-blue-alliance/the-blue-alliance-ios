@@ -39,7 +39,7 @@ class EventRankingsViewController: TBATableViewController {
 
     private func setupDataSource() {
         let fetchRequest: NSFetchRequest<EventRanking> = EventRanking.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(EventRanking.rank), ascending: true)]
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
@@ -51,7 +51,8 @@ class EventRankingsViewController: TBATableViewController {
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<EventRanking>) {
-        request.predicate = NSPredicate(format: "event == %@", event)
+        request.predicate = NSPredicate(format: "%K == %@",
+                                        #keyPath(EventRanking.event), event)
     }
 
 }

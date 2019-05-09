@@ -66,7 +66,8 @@ extension Event: Locatable, Surfable, Managed {
      */
     @discardableResult
     static func insert(_ model: TBAEvent, in context: NSManagedObjectContext) -> Event {
-        let predicate = NSPredicate(format: "key == %@", model.key)
+        let predicate = NSPredicate(format: "%K == %@",
+                                    #keyPath(Event.key), model.key)
         return findOrCreate(in: context, matching: predicate) { (event) in
             // Required: endDate, eventCode, eventType, key, name, startDate, year
             event.address = model.address
@@ -179,6 +180,7 @@ extension Event: Locatable, Surfable, Managed {
 
         // Fetch all of the previous Awards for this Event/TeamKey
         let oldAwards = Award.fetch(in: managedObjectContext) {
+            // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
             $0.predicate = NSPredicate(format: "SUBQUERY(%K, $r, $r.teamKey.key == %@).@count == 1",
                                        #keyPath(Award.recipients), teamKey)
         }

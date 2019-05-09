@@ -39,7 +39,7 @@ class DistrictRankingsViewController: TBATableViewController {
 
     private func setupDataSource() {
         let fetchRequest: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "rank", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(DistrictRanking.rank), ascending: true)]
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
@@ -51,7 +51,8 @@ class DistrictRankingsViewController: TBATableViewController {
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<DistrictRanking>) {
-        request.predicate = NSPredicate(format: "district == %@", district)
+        request.predicate = NSPredicate(format: "%K == %@",
+                                        #keyPath(DistrictRanking.district), district)
     }
 
 }

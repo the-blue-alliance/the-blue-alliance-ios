@@ -95,8 +95,8 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
     private func setupDataSource() {
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
         fetchRequest.sortDescriptors = [firstSortDescriptor,
-                                        NSSortDescriptor(key: "startDate", ascending: true),
-                                        NSSortDescriptor(key: "name", ascending: true)]
+                                        NSSortDescriptor(key: #keyPath(Event.startDate), ascending: true),
+                                        NSSortDescriptor(key: #keyPath(Event.name), ascending: true)]
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
@@ -117,7 +117,7 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
     // MARK: - EventsViewControllerDataSourceConfiguration
 
     var firstSortDescriptor: NSSortDescriptor {
-        return NSSortDescriptor(key: "hybridType", ascending: true)
+        return NSSortDescriptor(key: #keyPath(Event.hybridType), ascending: true)
     }
 
     var sectionNameKeyPath: String {

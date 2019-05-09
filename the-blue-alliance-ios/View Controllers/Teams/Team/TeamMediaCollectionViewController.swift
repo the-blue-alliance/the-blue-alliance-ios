@@ -82,7 +82,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
 
     private func setupDataSource() {
         let fetchRequest: NSFetchRequest<TeamMedia> = TeamMedia.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "type", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(TeamMedia.type), ascending: true)]
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
@@ -110,9 +110,9 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         // Sort these by a lot of things, in an attempt to make sure that when refreshing,
         // images don't jump from to different places because the sort is too general
         request.sortDescriptors = [
-            NSSortDescriptor(key: "type", ascending: false),
-            NSSortDescriptor(key: "foreignKey", ascending: false),
-            NSSortDescriptor(key: "key", ascending: false)
+            NSSortDescriptor(key: #keyPath(TeamMedia.type), ascending: false),
+            NSSortDescriptor(key: #keyPath(TeamMedia.foreignKey), ascending: false),
+            NSSortDescriptor(key: #keyPath(TeamMedia.key), ascending: false)
         ]
     }
 

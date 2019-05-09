@@ -20,6 +20,7 @@ extension EventAlliance: Managed {
      - Returns: The inserted Event Alliance.
      */
     static func insert(_ model: TBAAlliance, eventKey: String, in context: NSManagedObjectContext) -> EventAlliance {
+        // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
         let predicate = NSPredicate(format: "%K == %@ AND SUBQUERY(picks, $pick, $pick.key IN %@).@count == %d",
                                     #keyPath(EventAlliance.event.key), eventKey,
                                     model.picks, model.picks.count)
