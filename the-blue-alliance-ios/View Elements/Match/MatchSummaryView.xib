@@ -42,11 +42,11 @@
                             <rect key="frame" x="0.0" y="0.0" width="60" height="138"/>
                             <subviews>
                                 <view contentMode="scaleToFill" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="IRh-sF-Phh">
-                                    <rect key="frame" x="0.0" y="0.0" width="60" height="38.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="60" height="40.5"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </view>
-                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="tkL-p5-dZ1">
-                                    <rect key="frame" x="0.0" y="38.5" width="60" height="61.5"/>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="tkL-p5-dZ1">
+                                    <rect key="frame" x="0.0" y="40.5" width="60" height="57.5"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Quarters 1-1" textAlignment="center" lineBreakMode="clip" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="yPd-Gy-NoB">
                                             <rect key="frame" x="0.0" y="0.0" width="60" height="33.5"/>
@@ -55,12 +55,12 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="750" image="ic_action_play_over_video" translatesAutoresizingMaskIntoConstraints="NO" id="mRu-M0-eMP">
-                                            <rect key="frame" x="0.0" y="37.5" width="60" height="24"/>
+                                            <rect key="frame" x="0.0" y="33.5" width="60" height="24"/>
                                         </imageView>
                                     </subviews>
                                 </stackView>
                                 <view contentMode="scaleToFill" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="F1U-is-RmS">
-                                    <rect key="frame" x="0.0" y="100" width="60" height="38"/>
+                                    <rect key="frame" x="0.0" y="98" width="60" height="40"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </view>
                             </subviews>
@@ -219,7 +219,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="119" height="138"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" text="Sat 12:27 PM" textAlignment="center" lineBreakMode="clip" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="D1e-rS-9fu">
-                                    <rect key="frame" x="4" y="0.0" width="111" height="138"/>
+                                    <rect key="frame" x="2" y="0.0" width="115" height="138"/>
                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <viewLayoutGuide key="safeArea" id="KX7-UR-bWs"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -230,8 +230,8 @@
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="bottom" secondItem="D1e-rS-9fu" secondAttribute="bottom" id="NTT-iy-8ZI"/>
-                                <constraint firstItem="D1e-rS-9fu" firstAttribute="leading" secondItem="1sY-pY-r3s" secondAttribute="leading" constant="4" id="OXo-U5-QCk"/>
-                                <constraint firstAttribute="trailing" secondItem="D1e-rS-9fu" secondAttribute="trailing" constant="4" id="wBq-ef-YHL"/>
+                                <constraint firstItem="D1e-rS-9fu" firstAttribute="leading" secondItem="1sY-pY-r3s" secondAttribute="leading" constant="2" id="OXo-U5-QCk"/>
+                                <constraint firstAttribute="trailing" secondItem="D1e-rS-9fu" secondAttribute="trailing" constant="2" id="wBq-ef-YHL"/>
                                 <constraint firstItem="D1e-rS-9fu" firstAttribute="top" secondItem="1sY-pY-r3s" secondAttribute="top" id="wuJ-Lr-zw6"/>
                             </constraints>
                         </view>
