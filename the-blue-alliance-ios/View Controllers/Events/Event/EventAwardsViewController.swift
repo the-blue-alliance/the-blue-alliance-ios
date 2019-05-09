@@ -111,10 +111,6 @@ class EventAwardsViewController: TBATableViewController {
         dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
     }
 
-    private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
-
     private func setupFetchRequest(_ request: NSFetchRequest<Award>) {
         if let teamKey = teamKey {
             request.predicate = NSPredicate(format: "event == %@ AND (ANY recipients.teamKey.key == %@)", event, teamKey.key!)

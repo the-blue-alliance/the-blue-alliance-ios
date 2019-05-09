@@ -46,10 +46,6 @@ class EventRankingsViewController: TBATableViewController {
         dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
     }
 
-    private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
-
     private func setupFetchRequest(_ request: NSFetchRequest<EventRanking>) {
         request.predicate = NSPredicate(format: "event == %@", event)
     }

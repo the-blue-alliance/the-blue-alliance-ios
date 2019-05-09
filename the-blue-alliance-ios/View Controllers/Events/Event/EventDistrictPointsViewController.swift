@@ -99,10 +99,6 @@ private class EventDistrictPointsViewController: TBATableViewController {
         dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
     }
 
-    private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
-
     private func setupFetchRequest(_ request: NSFetchRequest<DistrictEventPoints>) {
         request.predicate = NSPredicate(format: "%K == %@",
                                         #keyPath(DistrictEventPoints.eventKey.key), event.key!)

@@ -43,10 +43,6 @@ class MatchesViewController: TBATableViewController {
         dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
     }
 
-    private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
-
     private func setupFetchRequest(_ request: NSFetchRequest<Match>) {
         if let teamKey = teamKey {
             request.predicate = NSPredicate(format: "event == %@ AND SUBQUERY(alliances, $a, ANY $a.teams.key == %@).@count > 0", event, teamKey.key!)
