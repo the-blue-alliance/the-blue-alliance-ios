@@ -2,23 +2,8 @@ import CoreData
 import TBAKit
 import UIKit
 
-enum MediaError: Error {
-    case error(String)
-}
-
-extension MediaError: LocalizedError {
-    var errorDescription: String? {
-        switch self {
-        case let .error(message):
-            return NSLocalizedString(message, comment: "Media error")
-        }
-    }
-}
-
 protocol TeamMediaCollectionViewControllerDelegate: AnyObject {
-
     func mediaSelected(_ media: TeamMedia)
-
 }
 
 class TeamMediaCollectionViewController: TBACollectionViewController {
@@ -125,9 +110,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     private func fetchMedia(_ media: TeamMedia) {
         // Make sure we can attempt to fetch our media
         guard let url = media.imageDirectURL else {
-            self.persistentContainer.viewContext.performChanges {
-                media.mediaError = MediaError.error("No url for media")
-            }
+            media.imageError = MediaError.error("No url for media")
             return
         }
 
@@ -148,15 +131,15 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
             self?.fetchingMedia.remove(media)
 
             if let error = error {
-                media.mediaError = MediaError.error(error.localizedDescription)
+                media.imageError = MediaError.error(error.localizedDescription)
             } else if let data = data {
                 if let image = UIImage(data: data) {
                     media.image = image
                 } else {
-                    media.mediaError = MediaError.error("Invalid data for request")
+                    media.imageError = MediaError.error("Invalid data for request")
                 }
             } else {
-                media.mediaError = MediaError.error("No data for request")
+                media.imageError = MediaError.error("No data for request")
             }
 
             self?.persistentContainer.viewContext.performSaveOrRollback()
@@ -206,7 +189,7 @@ extension TeamMediaCollectionViewController: CollectionViewDataSourceDelegate {
             cell.state = .loading
         } else if let image = object.image {
             cell.state = .loaded(image)
-        } else if let error = object.mediaError {
+        } else if let error = object.imageError {
             cell.state = .error("Error loading media - \(error.localizedDescription)")
         } else {
             cell.state = .error("Error loading media - unknown error")
@@ -221,7 +204,8 @@ extension TeamMediaCollectionViewController: Refreshable {
         guard let year = year else {
             return nil
         }
-        return "\(year)_\(team.key!)_media"
+        let key = team.getValue(\Team.key!)
+        return "\(year)_\(key)_media"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -255,7 +239,7 @@ extension TeamMediaCollectionViewController: Refreshable {
         removeNoDataView()
 
         let fetchTeamMedia: () -> () = { [weak self] in
-            if let teamMedia = self?.team.media?.allObjects as? [TeamMedia] {
+            if let teamMediaSet = self?.team.getValue(\Team.media), let teamMedia = teamMediaSet.allObjects as? [TeamMedia] {
                 teamMedia.forEach({ (media) in
                     self?.fetchMedia(media)
                 })

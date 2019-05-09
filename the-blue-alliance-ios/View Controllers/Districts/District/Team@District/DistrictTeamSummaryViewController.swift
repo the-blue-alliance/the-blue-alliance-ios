@@ -99,7 +99,8 @@ class DistrictTeamSummaryViewController: TBATableViewController {
 extension DistrictTeamSummaryViewController: Refreshable {
 
     var refreshKey: String? {
-        return "\(ranking.district!.key!)_rankings"
+        let key = ranking.getValue(\DistrictRanking.district!.key!)
+        return "\(key)_rankings"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -108,7 +109,9 @@ extension DistrictTeamSummaryViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh district team summary until the district is over
-        return ranking.district?.endDate?.endOfDay()
+        let district = ranking.getValue(\DistrictRanking.district)
+        let endDate = district?.endDate
+        return endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {
@@ -121,7 +124,7 @@ extension DistrictTeamSummaryViewController: Refreshable {
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let rankings = try? result.get() {
-                    let district = context.object(with: self.ranking.district!.objectID) as! District
+                    let district = context.object(with: self.ranking.getValue(\DistrictRanking.district!).objectID) as! District
                     district.insert(rankings)
                 }
             }, saved: {

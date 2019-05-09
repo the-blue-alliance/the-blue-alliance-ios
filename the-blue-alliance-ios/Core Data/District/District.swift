@@ -8,14 +8,16 @@ extension District {
      A string concatenating the district's year and abbrevation.
      */
     public var abbreviationWithYear: String {
-        return "\(year!.stringValue) \(abbreviation!.uppercased())"
+        let year = getValue(\District.year!)
+        let abbrv = getValue(\District.abbreviation!)
+        return "\(year.stringValue) \(abbrv.uppercased())"
     }
 
     /**
      The district championship for a district. A nil value means the DCMP hasn't been fetched yet.
      */
     private var districtChampionship: Event? {
-        guard let events = events?.allObjects as? [Event] else {
+        guard let eventsSet = getValue(\District.events), let events = eventsSet.allObjects as? [Event] else {
             return nil
         }
         return events.first(where: { (event) -> Bool in
@@ -27,22 +29,23 @@ extension District {
      If the district is currently "in season", meaning it's after stop build day, but before the district CMP is over
      */
     var isHappeningNow: Bool {
-        if year!.intValue != Calendar.current.year {
+        let year = getValue(\District.year!.intValue)
+        if year != Calendar.current.year {
             return false
         }
         // If we can't find the district championship, we don't know if we're in season or not
-        guard let districtChampionship = districtChampionship else {
+        guard let dcmpEndDate = endDate else {
             return false
         }
         let startOfEvents = Calendar.current.stopBuildDay()
-        return Date().isBetween(date: startOfEvents, andDate: districtChampionship.endDate!.endOfDay())
+        return Date().isBetween(date: startOfEvents, andDate: dcmpEndDate.endOfDay())
     }
 
     /**
      The 'end date' for the district - the end date of the district championship
      */
     var endDate: Date? {
-        return districtChampionship?.endDate
+        return districtChampionship?.getValue(\Event.endDate)
     }
 
 }

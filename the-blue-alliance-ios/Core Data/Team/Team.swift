@@ -170,7 +170,7 @@ extension Team: Locatable, Surfable, Managed {
 extension Team: MyTBASubscribable {
 
     public var modelKey: String {
-        return key!
+        return getValue(\Team.key!)
     }
 
     public var modelType: MyTBAModelType {

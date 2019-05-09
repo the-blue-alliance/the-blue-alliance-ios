@@ -41,11 +41,13 @@ class TeamSummaryViewController: TBATableViewController {
     private var eventStatus: EventStatus? {
         didSet {
             if let eventStatus = eventStatus {
+                summaryRows = calculateSummaryRows()
                 DispatchQueue.main.async { [weak self] in
                     self?.tableView.reloadData()
                 }
 
                 contextObserver.observeObject(object: eventStatus, state: .updated) { [weak self] (_, _) in
+                    self?.summaryRows = self?.calculateSummaryRows() ?? []
                     DispatchQueue.main.async {
                         self?.tableView.reloadData()
                     }
@@ -58,69 +60,7 @@ class TeamSummaryViewController: TBATableViewController {
         }
     }
 
-    fileprivate var summaryRows: [TeamSummaryRow] {
-        var summaryRows: [TeamSummaryRow] = []
-
-        // Rank
-        if let rank = eventStatus?.qual?.ranking?.rank {
-            summaryRows.append(TeamSummaryRow.rank(rank: rank.intValue))
-        }
-
-        // Awards
-        if teamAwards.count > 0 {
-            summaryRows.append(TeamSummaryRow.awards(count: teamAwards.count))
-        }
-
-        // TODO: Add support for Pits
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/163
-
-        // Record
-        if let record = eventStatus?.qual?.ranking?.record, event.year != 2015 {
-            summaryRows.append(TeamSummaryRow.record(wlt: record))
-        }
-
-        // Alliance
-        if let allianceStatus = eventStatus?.allianceStatus {
-            summaryRows.append(TeamSummaryRow.alliance(allianceStatus: allianceStatus))
-        }
-
-        // Team Status
-        if let overallStatus = eventStatus?.overallStatus {
-            summaryRows.append(TeamSummaryRow.status(overallStatus: overallStatus))
-        }
-
-        // Breakdown
-        if let rankingInfo = eventStatus?.qual?.ranking?.rankingInfoString {
-            summaryRows.append(TeamSummaryRow.breakdown(rankingInfo: rankingInfo))
-        }
-
-        // From here on, we only show this data if the event is currently happening
-        guard event.isHappeningNow else {
-            return summaryRows
-        }
-
-        // Next Match
-        if let nextMatchKey = eventStatus?.nextMatchKey {
-            if let match = Match.forKey(nextMatchKey, in: persistentContainer.viewContext) {
-                summaryRows.append(TeamSummaryRow.nextMatch(match: match))
-            } else {
-                summaryRows.append(TeamSummaryRow.nextMatchKey(key: nextMatchKey))
-                fetchMatch(nextMatchKey)
-            }
-        }
-
-        // Last Match
-        if let lastMatchKey = eventStatus?.lastMatchKey {
-            if let match = Match.forKey(lastMatchKey, in: persistentContainer.viewContext) {
-                summaryRows.append(TeamSummaryRow.lastMatch(match: match))
-            } else {
-                summaryRows.append(TeamSummaryRow.lastMatchKey(key: lastMatchKey))
-                fetchMatch(lastMatchKey)
-            }
-        }
-
-        return summaryRows
-    }
+    fileprivate var summaryRows: [TeamSummaryRow] = []
 
     // MARK: - Observable
 
@@ -278,12 +218,78 @@ class TeamSummaryViewController: TBATableViewController {
         }
     }
 
+    // MARK: Private Methods
+
+    private func calculateSummaryRows() -> [TeamSummaryRow] {
+        var summaryRows: [TeamSummaryRow] = []
+
+        // Rank
+        if let rank = eventStatus?.qual?.ranking?.rank {
+            summaryRows.append(TeamSummaryRow.rank(rank: rank.intValue))
+        }
+
+        // Awards
+        if teamAwards.count > 0 {
+            summaryRows.append(TeamSummaryRow.awards(count: teamAwards.count))
+        }
+
+        // TODO: Add support for Pits
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/163
+
+        // Record
+        if let record = eventStatus?.qual?.ranking?.record, event.year != 2015 {
+            summaryRows.append(TeamSummaryRow.record(wlt: record))
+        }
+
+        // Alliance
+        if let allianceStatus = eventStatus?.allianceStatus {
+            summaryRows.append(TeamSummaryRow.alliance(allianceStatus: allianceStatus))
+        }
+
+        // Team Status
+        if let overallStatus = eventStatus?.overallStatus {
+            summaryRows.append(TeamSummaryRow.status(overallStatus: overallStatus))
+        }
+
+        // Breakdown
+        if let rankingInfo = eventStatus?.qual?.ranking?.rankingInfoString {
+            summaryRows.append(TeamSummaryRow.breakdown(rankingInfo: rankingInfo))
+        }
+
+        // From here on, we only show this data if the event is currently happening
+        guard event.isHappeningNow else {
+            return summaryRows
+        }
+
+        // Next Match
+        if let nextMatchKey = eventStatus?.nextMatchKey {
+            if let match = Match.forKey(nextMatchKey, in: persistentContainer.viewContext) {
+                summaryRows.append(TeamSummaryRow.nextMatch(match: match))
+            } else {
+                summaryRows.append(TeamSummaryRow.nextMatchKey(key: nextMatchKey))
+                fetchMatch(nextMatchKey)
+            }
+        }
+
+        // Last Match
+        if let lastMatchKey = eventStatus?.lastMatchKey {
+            if let match = Match.forKey(lastMatchKey, in: persistentContainer.viewContext) {
+                summaryRows.append(TeamSummaryRow.lastMatch(match: match))
+            } else {
+                summaryRows.append(TeamSummaryRow.lastMatchKey(key: lastMatchKey))
+                fetchMatch(lastMatchKey)
+            }
+        }
+
+        return summaryRows
+    }
+
 }
 
 extension TeamSummaryViewController: Refreshable {
 
     var refreshKey: String? {
-        return "\(teamKey.key!)@\(event.key!)_status"
+        return "\(teamKey.getValue(\TeamKey.key!))@\(event.getValue(\Event.key!))_status"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -292,7 +298,7 @@ extension TeamSummaryViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh team summary until the event is over
-        return event.endDate?.endOfDay()
+        return event.getValue(\Event.endDate)?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {
@@ -326,13 +332,14 @@ extension TeamSummaryViewController: Refreshable {
         addRequest(request: teamStatusRequest!)
 
         // Refresh awards
+        let teamKeyKey = teamKey.key!
         var awardsRequest: URLSessionDataTask?
-        awardsRequest = tbaKit.fetchTeamAwards(key: teamKey.key!, eventKey: event.key!, completion: { (result, notModified) in
+        awardsRequest = tbaKit.fetchTeamAwards(key: teamKeyKey, eventKey: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let awards = try? result.get() {
                     let event = context.object(with: self.event.objectID) as! Event
-                    event.insert(awards, teamKey: self.teamKey.key!)
+                    event.insert(awards, teamKey: teamKeyKey)
                 }
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, request: awardsRequest!)
@@ -362,6 +369,7 @@ extension TeamSummaryViewController: Refreshable {
             self.backgroundFetchKeys.remove(key)
 
             DispatchQueue.main.async { [weak self] in
+                self?.summaryRows = self?.calculateSummaryRows() ?? []
                 self?.tableView.reloadData()
             }
         }

@@ -107,7 +107,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
                 fatalError("No context for Team.")
             }
             if self.year == nil {
-                self.year = TeamViewController.latestYear(years: team.yearsParticipated, in: context)
+                self.year = TeamViewController.latestYear(years: team.getValue(\Team.yearsParticipated), in: context)
             } else {
                 self.updateInterface()
             }
@@ -141,7 +141,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
             context.performChangesAndWait({
                 if !notModified, let years = try? result.get() {
                     let team = context.object(with: self.team.objectID) as! Team
-                    team.yearsParticipated = years.sorted().reversed()
+                    team.setValue(years.sorted().reversed(), \Team.yearsParticipated)
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(request!)
@@ -214,7 +214,6 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        // TODO: PROBLEMATIC because of teamKey
         let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }

@@ -652,7 +652,7 @@ extension Event: Comparable {
 extension Event: MyTBASubscribable {
 
     public var modelKey: String {
-        return key!
+        return getValue(\Event.key!)
     }
 
     public var modelType: MyTBAModelType {

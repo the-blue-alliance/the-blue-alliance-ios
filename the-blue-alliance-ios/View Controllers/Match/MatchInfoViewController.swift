@@ -189,7 +189,7 @@ class MatchInfoViewController: TBAViewController, Observable {
 extension MatchInfoViewController: Refreshable {
 
     var refreshKey: String? {
-        return match.key
+        return match.getValue(\Match.key)
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -199,16 +199,16 @@ extension MatchInfoViewController: Refreshable {
     var automaticRefreshEndDate: Date? {
         // Automatically refresh the match info until a few days after the match has been played
         // (Mostly looking for new videos)
-        guard let event = match.event else {
+        guard let event = match.getValue(\Match.event) else {
             return nil
         }
-        return Calendar.current.date(byAdding: DateComponents(day: 7), to: event.endDate!)!
+        return Calendar.current.date(byAdding: DateComponents(day: 7), to: event.getValue(\Event.endDate!))!
     }
 
     var isDataSourceEmpty: Bool {
         // TODO: Think about doing a quiet refresh in the background for match videos on initial load...
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/135
-        return (match.videos?.count ?? 0) == 0
+        return (match.getValue(\Match.videos)?.count ?? 0) == 0
     }
 
     @objc func refresh() {
@@ -219,7 +219,7 @@ extension MatchInfoViewController: Refreshable {
                 switch result {
                 case .success(let match):
                     if let match = match {
-                        if let event = self.match.event {
+                        if let event = self.match.getValue(\Match.event) {
                             let event = context.object(with: event.objectID) as! Event
                             event.insert(match)
                         } else {

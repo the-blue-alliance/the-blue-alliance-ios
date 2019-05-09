@@ -289,7 +289,7 @@ extension Match: Managed {
 extension Match: MyTBASubscribable {
 
     public var modelKey: String {
-        return key!
+        return getValue(\Match.key!)
     }
 
     public var modelType: MyTBAModelType {

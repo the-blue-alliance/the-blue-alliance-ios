@@ -96,7 +96,8 @@ class TeamStatsViewController: TBATableViewController, Observable {
 extension TeamStatsViewController: Refreshable {
 
     var refreshKey: String? {
-        return "\(event.key!)_team_stats"
+        let key = event.getValue(\Event.key!)
+        return "\(key)_team_stats"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -105,7 +106,7 @@ extension TeamStatsViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh team stats until the event is over
-        return event.endDate?.endOfDay()
+        return event.getValue(\Event.endDate)?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {

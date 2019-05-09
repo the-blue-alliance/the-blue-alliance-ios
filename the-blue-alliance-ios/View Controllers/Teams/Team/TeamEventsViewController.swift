@@ -26,7 +26,8 @@ class TeamEventsViewController: EventsViewController {
     // MARK: - Refreshable
 
     override var refreshKey: String? {
-        return "\(team.key!)_events"
+        let key = team.getValue(\Team.key!)
+        return "\(key)_events"
     }
 
     override var automaticRefreshInterval: DateComponents? {

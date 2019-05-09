@@ -86,7 +86,7 @@ extension MatchBreakdownViewController: TBAReactNativeViewControllerDelegate {
 extension MatchBreakdownViewController: Refreshable {
 
     var refreshKey: String? {
-        return match.key
+        return match.getValue(\Match.key)
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -98,7 +98,7 @@ extension MatchBreakdownViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        return match.breakdown == nil
+        return match.getValue(\Match.breakdown) == nil
     }
 
     @objc func refresh() {
@@ -111,7 +111,7 @@ extension MatchBreakdownViewController: Refreshable {
                 switch result {
                 case .success(let match):
                     if let match = match {
-                        if let event = self.match.event {
+                        if let event = self.match.getValue(\Match.event) {
                             let event = context.object(with: event.objectID) as! Event
                             event.insert(match)
                         } else {
