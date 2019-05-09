@@ -43,10 +43,6 @@ class MatchesViewController: TBATableViewController {
         dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
     }
 
-    private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
-
     private func setupFetchRequest(_ request: NSFetchRequest<Match>) {
         if let teamKey = teamKey {
             // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162

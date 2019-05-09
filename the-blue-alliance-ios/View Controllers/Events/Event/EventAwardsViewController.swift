@@ -111,10 +111,6 @@ class EventAwardsViewController: TBATableViewController {
         dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
     }
 
-    private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
-
     private func setupFetchRequest(_ request: NSFetchRequest<Award>) {
         if let teamKey = teamKey {
             // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/pull/169

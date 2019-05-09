@@ -46,10 +46,6 @@ class DistrictRankingsViewController: TBATableViewController {
         dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
     }
 
-    private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
-
     private func setupFetchRequest(_ request: NSFetchRequest<DistrictRanking>) {
         request.predicate = NSPredicate(format: "%K == %@",
                                         #keyPath(DistrictRanking.district), district)

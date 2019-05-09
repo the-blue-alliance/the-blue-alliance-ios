@@ -103,10 +103,6 @@ private class EventAlliancesViewController: TBATableViewController {
         dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
     }
 
-    private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
-    }
-
     private func setupFetchRequest(_ request: NSFetchRequest<EventAlliance>) {
         request.predicate = NSPredicate(format: "%K == %@",
                                         #keyPath(EventAlliance.event), event)
