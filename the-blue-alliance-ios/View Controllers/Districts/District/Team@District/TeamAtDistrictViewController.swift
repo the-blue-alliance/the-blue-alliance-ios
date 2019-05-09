@@ -12,9 +12,9 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
     }
 
     private(set) var ranking: DistrictRanking
-    internal var myTBA: MyTBA
-    internal var statusService: StatusService
-    internal var urlOpener: URLOpener
+    internal let statusService: StatusService
+    internal let myTBA: MyTBA
+    internal let urlOpener: URLOpener
 
     private var summaryViewController: DistrictTeamSummaryViewController!
 
@@ -73,6 +73,7 @@ extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegat
         }
 
         // TODO: Let's see what we can to do not force-unwrap these from Core Data
+        // TODO: Hey we can come back to this, yeah!
         let teamAtEventViewController = TeamAtEventViewController(teamKey: eventPoints.teamKey!, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }

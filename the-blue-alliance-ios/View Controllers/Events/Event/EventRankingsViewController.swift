@@ -64,7 +64,8 @@ extension EventRankingsViewController: TableViewDataSourceDelegate {
 extension EventRankingsViewController: Refreshable {
 
     var refreshKey: String? {
-        return "\(event.key!)_rankings"
+        let key = event.getValue(\Event.key!)
+        return "\(key)_rankings"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -73,7 +74,7 @@ extension EventRankingsViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh event rankings until the event is over
-        return event.endDate?.endOfDay()
+        return event.getValue(\Event.endDate)?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {
@@ -91,6 +92,7 @@ extension EventRankingsViewController: Refreshable {
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let (rankings, sortOrder, extraStats) = try? result.get() {
+                    // TODO: Is ObjectID thread safe?
                     let event = context.object(with: self.event.objectID) as! Event
                     event.insert(rankings, sortOrderInfo: sortOrder, extraStatsInfo: extraStats)
                 }

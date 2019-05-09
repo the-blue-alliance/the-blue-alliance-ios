@@ -75,7 +75,8 @@ extension Status: Managed {
     }
 
     var safeMinAppVersion: Int {
-        return minAppVersion?.intValue ?? -1
+        let minAppVersion = getValue(\Status.minAppVersion?.intValue)
+        return minAppVersion ?? -1
     }
 
 }

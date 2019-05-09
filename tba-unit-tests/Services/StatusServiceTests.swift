@@ -1,3 +1,4 @@
+import CoreData
 import XCTest
 @testable import The_Blue_Alliance
 
@@ -282,11 +283,13 @@ private class MockFMSStatusSubscribable: FMSStatusSubscribable {
 private class MockEventStatusSubscribable: EventStatusSubscribable {
 
     var statusService: StatusService
+    var persistentContainer: NSPersistentContainer
 
     var eventOfflineValue: Bool?
     var eventStatusChangedExpectation: XCTestExpectation?
 
-    init(statusService: StatusService) {
+    init(persistentContainer: NSPersistentContainer, statusService: StatusService) {
+        self.persistentContainer = persistentContainer
         self.statusService = statusService
     }
 

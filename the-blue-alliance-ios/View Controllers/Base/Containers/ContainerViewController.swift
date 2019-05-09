@@ -31,7 +31,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
     // MARK: - Private Properties
 
-    var persistentContainer: NSPersistentContainer
+    @objc var persistentContainer: NSPersistentContainer
     private(set) var tbaKit: TBAKit
     private(set) var userDefaults: UserDefaults
 

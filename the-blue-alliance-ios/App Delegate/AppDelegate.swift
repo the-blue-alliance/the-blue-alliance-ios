@@ -184,28 +184,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     self.statusService.registerRetryable(initiallyRetry: true)
                 }
 
-                // Check our minimum app version - abort app flow if necessary
-                if !self.isAppVersionSupported(minimumAppVersion: self.statusService.status.safeMinAppVersion) {
-                    self.showMinimumAppVersionAlert(status: self.statusService.status)
-                    return
-                }
+                // TODO: I'm not entirely sure we're handling this Retry service stuff right. It could be a problem.
+                // We should take a closer look at it later.
 
-                DispatchQueue.main.async {
-                    guard let window = self.window else {
-                        fatalError("Window not setup when setting root vc")
+                self.persistentContainer.performBackgroundTask { (context) in
+                    let status = StatusService.status(in: context)
+                    // Check our minimum app version - abort app flow if necessary
+                    if !AppDelegate.isAppVersionSupported(minimumAppVersion: status.safeMinAppVersion) {
+                        self.showMinimumAppVersionAlert(status: status)
+                        return
                     }
-                    guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
-                        fatalError("Unable to snapshot root view controller")
-                    }
-                    self.rootSplitViewController.view.addSubview(snapshot)
-                    window.rootViewController = self.rootSplitViewController
 
-                    // 0.35 is an iOS animation magic number... for now
-                    UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
-                        snapshot.layer.opacity = 0;
-                    }, completion: { (status) in
-                        snapshot.removeFromSuperview()
-                    })
+                    DispatchQueue.main.async {
+                        guard let window = self.window else {
+                            fatalError("Window not setup when setting root vc")
+                        }
+                        guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
+                            fatalError("Unable to snapshot root view controller")
+                        }
+                        self.rootSplitViewController.view.addSubview(snapshot)
+                        window.rootViewController = self.rootSplitViewController
+
+                        // 0.35 is an iOS animation magic number... for now
+                        UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
+                            snapshot.layer.opacity = 0;
+                        }, completion: { (status) in
+                            snapshot.removeFromSuperview()
+                        })
+                    }
                 }
             }
         }
@@ -355,7 +361,7 @@ extension AppDelegate: GIDSignInDelegate {
         }
     }
 
-    func isAppVersionSupported(minimumAppVersion: Int) -> Bool {
+    static func isAppVersionSupported(minimumAppVersion: Int) -> Bool {
         if ProcessInfo.processInfo.arguments.contains("-testUnsupportedVersion") {
             return true
         }
@@ -369,7 +375,10 @@ extension AppDelegate: GIDSignInDelegate {
         }
 
         DispatchQueue.main.async {
-            AppDelegate.showMinimumAppAlert(appStoreID: "1441973916", currentAppVersion: status.safeMinAppVersion, in: window)
+            guard let currentAppVersion = status.getValue(\Status.currentSeason?.intValue) else {
+                fatalError("No currentAppVersion for Status.")
+            }
+            AppDelegate.showMinimumAppAlert(appStoreID: "1441973916", currentAppVersion: currentAppVersion, in: window)
         }
     }
 
@@ -378,7 +387,7 @@ extension AppDelegate: GIDSignInDelegate {
 extension AppDelegate: StatusSubscribable {
 
     func statusChanged(status: Status) {
-        if !isAppVersionSupported(minimumAppVersion: status.safeMinAppVersion) {
+        if !AppDelegate.isAppVersionSupported(minimumAppVersion: status.safeMinAppVersion) {
             showMinimumAppVersionAlert(status: status)
         }
     }

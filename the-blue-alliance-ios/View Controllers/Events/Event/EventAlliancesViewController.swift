@@ -51,7 +51,7 @@ class EventAlliancesContainerViewController: ContainerViewController {
 extension EventAlliancesContainerViewController: EventAlliancesViewControllerDelegate {
 
     func teamKeySelected(_ teamKey: TeamKey) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: self.event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -128,7 +128,13 @@ extension EventAlliancesViewController: TableViewDataSourceDelegate {
 extension EventAlliancesViewController: Refreshable {
 
     var refreshKey: String? {
-        return "\(event.key!)_alliances"
+        guard let context = event.managedObjectContext else {
+            fatalError("No context for Event")
+        }
+        let eventKey = context.performAndWait {
+            return event.key
+        }
+        return "\(eventKey!)_alliances"
     }
 
     var automaticRefreshInterval: DateComponents? {

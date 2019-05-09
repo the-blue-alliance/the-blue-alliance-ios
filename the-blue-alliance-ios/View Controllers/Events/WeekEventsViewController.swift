@@ -31,10 +31,9 @@ class WeekEventsViewController: EventsViewController {
 
     init(year: Int, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.year = year
+        self.weekEvent = WeekEventsViewController.weekEvent(for: year, in: persistentContainer.viewContext)
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
-        setupWeeks()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -63,12 +62,12 @@ class WeekEventsViewController: EventsViewController {
         // Default to refreshing the currently selected year
         // Fall back to the init'd year (used during initial refresh)
         var year = self.year
-        if let weekEventYear = weekEvent?.year {
-            year = weekEventYear.intValue
+        if let weekEventYear = weekEvent?.year?.intValue {
+            year = weekEventYear
         }
 
         var request: URLSessionDataTask?
-        request = tbaKit.fetchEvents(year: year, completion: { (result, notModified) in
+        request = tbaKit.fetchEvents(year: year, completion: { [unowned self] (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let events = try? result.get() {
@@ -78,7 +77,12 @@ class WeekEventsViewController: EventsViewController {
                 self.markTBARefreshSuccessful(self.tbaKit, request: request!)
             })
             self.removeRequest(request: request!)
-            self.setupWeeks()
+
+            // Only setup weeks if we don't have a currently selected week
+            if self.weekEvent == nil, let we = WeekEventsViewController.weekEvent(for: year, in: context),
+                let weekEvent = self.persistentContainer.viewContext.object(with: we.objectID) as? Event {
+                self.weekEvent = weekEvent
+            }
         })
         addRequest(request: request!)
     }
@@ -93,34 +97,38 @@ class WeekEventsViewController: EventsViewController {
 
     override var fetchRequestPredicate: NSPredicate {
         if let weekEvent = weekEvent {
+            let eventType = weekEvent.eventType!.intValue
+            let key = weekEvent.key!
+            let year = weekEvent.year!
+
             if let week = weekEvent.week {
                 // Event has a week - filter based on the week
                 return NSPredicate(format: "%K == %@ && %K == %@",
                                    #keyPath(Event.week), week,
-                                   #keyPath(Event.year), weekEvent.year!)
+                                   #keyPath(Event.year), year)
             } else {
-                if weekEvent.eventType!.intValue == EventType.championshipFinals.rawValue {
+                if eventType == EventType.championshipFinals.rawValue {
                     // 2017 and onward - handle multiple CMPs
                     return NSPredicate(format: "(%K == %ld || %K == %ld) && %K == %@ && (%K == %@ || %K == %@)",
                                        #keyPath(Event.eventType), EventType.championshipFinals.rawValue,
                                        #keyPath(Event.eventType), EventType.championshipDivision.rawValue,
-                                       #keyPath(Event.year), weekEvent.year!,
-                                       #keyPath(Event.key), weekEvent.key!,
-                                       #keyPath(Event.parentEvent.key), weekEvent.key!)
-                } else if weekEvent.eventType!.intValue == EventType.offseason.rawValue {
+                                       #keyPath(Event.year), year,
+                                       #keyPath(Event.key), key,
+                                       #keyPath(Event.parentEvent.key), key)
+                } else if eventType == EventType.offseason.rawValue {
                     // Get all off season events for selected month
                     // Conversion stuff, since Core Data still uses NSDate's
                     let firstDayOfMonth = NSDate(timeIntervalSince1970: weekEvent.startDate!.startOfMonth().timeIntervalSince1970)
-                    let lastDayOfMonth = NSDate(timeIntervalSince1970: weekEvent.startDate!.endOfMonth().timeIntervalSince1970)
+                    let lastDayOfMonth = NSDate(timeIntervalSince1970: weekEvent.endDate!.endOfMonth().timeIntervalSince1970)
                     return NSPredicate(format: "%K == %ld && %K == %@ && (%K > %@) AND (%K <= %@)",
                                        #keyPath(Event.eventType), EventType.offseason.rawValue,
-                                       #keyPath(Event.year), weekEvent.year!,
+                                       #keyPath(Event.year), year,
                                        #keyPath(Event.startDate), firstDayOfMonth,
                                        #keyPath(Event.endDate), lastDayOfMonth)
                 } else {
                     return NSPredicate(format: "%K == %ld && %K == %@",
-                                       #keyPath(Event.eventType), weekEvent.eventType!.intValue,
-                                       #keyPath(Event.year), weekEvent.year!)
+                                       #keyPath(Event.eventType), eventType,
+                                       #keyPath(Event.year), year)
                 }
             }
         }
@@ -129,29 +137,25 @@ class WeekEventsViewController: EventsViewController {
 
     // MARK: - Private
 
-    private func setupWeeks() {
-        // Only setup weeks if we don't have a currently selected week
-        if weekEvent != nil {
-            return
-        }
-
-        let weekEvents = Event.weekEvents(for: year, in: persistentContainer.viewContext)
+    private static func weekEvent(for year: Int, in context: NSManagedObjectContext) -> Event? {
+        let weekEvents = Event.weekEvents(for: year, in: context)
 
         if year == Calendar.current.year {
             // If it's the current year, setup the current week for this year
-            setupCurrentSeasonWeek()
+            return currentSeasonWeekEvent(for: year, in: context)
         } else if let firstWeekEvent = weekEvents.first {
             // Otherwise, default to the first week for this years
-            weekEvent = firstWeekEvent
+            return firstWeekEvent
         }
+        return nil
     }
 
-    func setupCurrentSeasonWeek() {
+    private static func currentSeasonWeekEvent(for year: Int, in context: NSManagedObjectContext) -> Event? {
         // Fetch all events where endDate is today or after today
         let coreDataDate = NSDate(timeIntervalSince1970: Date().startOfDay().timeIntervalSince1970)
 
         // Find the first non-finished event for the selected year
-        let event = Event.fetchSingleObject(in: persistentContainer.viewContext) { (fetchRequest) in
+        let event = Event.fetchSingleObject(in: context) { (fetchRequest) in
             fetchRequest.predicate = NSPredicate(format: "%K == %ld && %K >= %@ && %K != %ld",
                                                  #keyPath(Event.year), year,
                                                  #keyPath(Event.endDate), coreDataDate,
@@ -159,16 +163,17 @@ class WeekEventsViewController: EventsViewController {
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Event.endDate), ascending: true)]
         }
         // Find the first overall event for the selected year
-        let firstEvent = Event.fetchSingleObject(in: persistentContainer.viewContext) { (fetchRequest) in
+        let firstEvent = Event.fetchSingleObject(in: context) { (fetchRequest) in
             fetchRequest.predicate = NSPredicate(format: "%K == %ld", #keyPath(Event.year), year)
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Event.startDate), ascending: true)]
         }
 
         if let event = event {
-            weekEvent = event
+            return event
         } else if let firstEvent = firstEvent {
-            weekEvent = firstEvent
+            return firstEvent
         }
+        return nil
     }
 
 

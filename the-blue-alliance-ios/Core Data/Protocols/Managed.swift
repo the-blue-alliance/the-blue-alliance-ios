@@ -35,7 +35,9 @@ extension Managed where Self: NSManagedObject {
     static func fetch(in context: NSManagedObjectContext, configurationBlock: (NSFetchRequest<Self>) -> Void = { _ in }) -> [Self] {
         let request = NSFetchRequest<Self>(entityName: Self.entityName)
         configurationBlock(request)
-        return try! context.fetch(request)
+        return context.performAndWait {
+            return try! context.fetch(request)
+        }!
     }
 
     static func count(in context: NSManagedObjectContext, configure: (NSFetchRequest<Self>) -> Void = { _ in }) -> Int {

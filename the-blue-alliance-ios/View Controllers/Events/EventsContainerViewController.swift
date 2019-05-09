@@ -21,7 +21,7 @@ class EventsContainerViewController: ContainerViewController {
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        year = statusService.currentSeason
+        year = StatusService.currentSeason(in: persistentContainer.viewContext)
         eventsViewController = WeekEventsViewController(year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [eventsViewController],
@@ -71,7 +71,8 @@ class EventsContainerViewController: ContainerViewController {
 extension EventsContainerViewController: NavigationTitleDelegate {
 
     func navigationTitleTapped() {
-        let yearSelectViewController = YearSelectViewController(year: year, years: Array(1992...statusService.maxSeason).reversed(), week: eventsViewController.weekEvent, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let maxSeason = StatusService.maxSeason(in: persistentContainer.viewContext)
+        let yearSelectViewController = YearSelectViewController(year: year, years: Array(1992...maxSeason).reversed(), week: eventsViewController.weekEvent, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         yearSelectViewController.delegate = self
 
         let nav = UINavigationController(rootViewController: yearSelectViewController)

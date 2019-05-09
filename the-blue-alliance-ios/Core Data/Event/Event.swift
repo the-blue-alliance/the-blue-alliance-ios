@@ -381,7 +381,7 @@ extension Event: Locatable, Surfable, Managed {
     }
 
     public func dateString() -> String? {
-        guard let startDate = startDate, let endDate = endDate else {
+        guard let startDate = getValue(\Event.startDate), let endDate = getValue(\Event.endDate) else {
             return nil
         }
 
@@ -403,29 +403,30 @@ extension Event: Locatable, Surfable, Managed {
     }
 
     public var weekString: String {
-        var weekString = "nil"
-        let eventType = self.eventType!.intValue
+        let eventType = getValue(\Event.eventType!.intValue)
+        let year = getValue(\Event.year!.intValue)
+
         if eventType == EventType.championshipDivision.rawValue || eventType == EventType.championshipFinals.rawValue {
-            if year!.intValue >= 2017, let city = city {
-                weekString = "Championship - \(city)"
+            if year >= 2017, let city = getValue(\Event.city) {
+                return "Championship - \(city)"
             } else {
-                weekString = "Championship"
+                return "Championship"
             }
         } else {
             switch eventType {
             case EventType.unlabeled.rawValue:
-                weekString = "Other"
+                return "Other"
             case EventType.preseason.rawValue:
-                weekString = "Preseason"
+                return "Preseason"
             case EventType.offseason.rawValue:
                 guard let month = month else {
                     return "Offseason"
                 }
                 return "\(month) Offseason"
             case EventType.festivalOfChampions.rawValue:
-                weekString = "Festival of Champions"
+                return "Festival of Champions"
             default:
-                guard let week = week else {
+                guard let week = getValue(\Event.week?.intValue) else {
                     return "Other"
                 }
 
@@ -436,31 +437,32 @@ extension Event: Locatable, Surfable, Managed {
                  */
                 if year == 2016 {
                     if week == 0 {
-                        weekString = "Week 0.5"
+                        return "Week 0.5"
                     } else {
-                        weekString = "Week \(week.intValue)"
+                        return "Week \(week)"
                     }
                 } else {
-                    weekString = "Week \(week.intValue + 1)"
+                    return "Week \(week + 1)"
                 }
             }
         }
-        return weekString
     }
 
     public var safeShortName: String {
-        guard let shortName = shortName else {
-            return name!
+        let name = getValue(\Event.name!)
+        guard let shortName = getValue(\Event.shortName) else {
+            return name
         }
-        return shortName.isEmpty ? name! : shortName
+        return shortName.isEmpty ? name : shortName
     }
 
     public var friendlyNameWithYear: String {
-        return "\(year!.stringValue) \(safeShortName) \(eventTypeString ?? "Event")"
+        let year = getValue(\Event.year!.stringValue)
+        return "\(year) \(safeShortName) \(eventTypeString ?? "Event")"
     }
 
     public var isChampionship: Bool {
-        let type = eventType!.intValue
+        let type = getValue(\Event.eventType!.intValue)
         return type == EventType.championshipDivision.rawValue || type == EventType.championshipFinals.rawValue
     }
 
@@ -468,7 +470,7 @@ extension Event: Locatable, Surfable, Managed {
      If the event is a district championship or a district championship division.
      */
     public var isDistrictChampionshipEvent: Bool {
-        let type = eventType!.intValue
+        let type = getValue(\Event.eventType!.intValue)
         return type == EventType.districtChampionshipDivision.rawValue || type == EventType.districtChampionship.rawValue
     }
 
@@ -476,33 +478,37 @@ extension Event: Locatable, Surfable, Managed {
      If the event is a district championship.
      */
     public var isDistrictChampionship: Bool {
-        return eventType!.intValue == EventType.districtChampionship.rawValue
+        let type = getValue(\Event.eventType!.intValue)
+        return type == EventType.districtChampionship.rawValue
     }
 
     public var isFoC: Bool {
-        return eventType!.intValue == EventType.festivalOfChampions.rawValue;
+        let type = getValue(\Event.eventType!.intValue)
+        return type == EventType.festivalOfChampions.rawValue;
     }
     
     public var isPreseason: Bool {
-        return eventType!.intValue == EventType.preseason.rawValue;
+        let type = getValue(\Event.eventType!.intValue)
+        return type == EventType.preseason.rawValue;
     }
     
     public var isOffseason: Bool {
-        return eventType!.intValue == EventType.offseason.rawValue;
+        let type = getValue(\Event.eventType!.intValue)
+        return type == EventType.offseason.rawValue;
     }
 
     /**
      If the event is currently going, based on it's start and end dates.
      */
     public var isHappeningNow: Bool {
-        guard let startDate = startDate, let endDate = endDate else {
+        guard let startDate = getValue(\Event.startDate), let endDate = getValue(\Event.endDate) else {
             return false
         }
         return Date().isBetween(date: startDate, andDate: endDate.endOfDay())
     }
 
     public var month: String? {
-        guard let startDate = startDate else {
+        guard let startDate = getValue(\Event.startDate) else {
             return nil
         }
         let dateFormatter = DateFormatter()
@@ -514,11 +520,12 @@ extension Event: Locatable, Surfable, Managed {
     // We need a full object as opposed to a number because of CMP, off-season, etc.
     // TODO: Convert this to a data model that uses a Core Data model for init but isn't a Core Data model
     static func weekEvents(for year: Int, in managedObjectContext: NSManagedObjectContext) -> [Event] {
+        // TODO: This has a problem being called in the background thread - but I'm not entirely sure wy. We need to solve this.
         let events = Event.fetch(in: managedObjectContext) { (fetchRequest) in
             // Filter out CMP divisions - we don't want them below for our weeks calculation
             fetchRequest.predicate = NSPredicate(format: "%K == %ld && %K != %ld",
                                                  #keyPath(Event.year), year,
-                                                 #keyPath(Event.eventType), EventType.championshipDivision.rawValue)
+                                                 #keyPath(Event.eventType.intValue), EventType.championshipDivision.rawValue)
             fetchRequest.sortDescriptors = [
                 NSSortDescriptor(key: #keyPath(Event.week), ascending: true),
                 NSSortDescriptor(key: #keyPath(Event.eventType), ascending: true),

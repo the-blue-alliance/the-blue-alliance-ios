@@ -51,8 +51,8 @@ class EventAwardsContainerViewController: ContainerViewController {
         super.viewWillAppear(animated)
 
         var parameters = [
-            "event": self.event.key!,
-            ]
+            "event": event.key!,
+        ]
         if let teamKey = teamKey {
             parameters["team"] = teamKey.key!
         }
@@ -144,7 +144,8 @@ extension EventAwardsViewController: TableViewDataSourceDelegate {
 extension EventAwardsViewController: Refreshable {
 
     var refreshKey: String? {
-        return "\(event.key!)_awards"
+        let key = event.getValue(\Event.key!)
+        return "\(key)_awards"
     }
 
     var automaticRefreshInterval: DateComponents? {

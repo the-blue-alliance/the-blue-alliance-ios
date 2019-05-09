@@ -9,19 +9,9 @@ class StatusService: NSObject {
 
     var retryService: RetryService
 
-    private let bundle: Bundle
     private let persistentContainer: NSPersistentContainer
     private let tbaKit: TBAKit
 
-    lazy var status: Status = {
-        if let status = Status.status(in: persistentContainer.viewContext) {
-            return status
-        } else if let status = Status.fromPlist(bundle: bundle, in: persistentContainer.viewContext) {
-            return status
-        } else {
-            fatalError("Cannot setup Status for StatusService")
-        }
-    }()
     lazy var contextObserver: CoreDataContextObserver<Status> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
@@ -34,15 +24,7 @@ class StatusService: NSObject {
     private var previousFMSStatus: Bool = false
     private var previouslyDownEventKeys: [String] = []
 
-    var currentSeason: Int {
-        return status.currentSeason!.intValue
-    }
-    var maxSeason: Int {
-        return status.maxSeason!.intValue
-    }
-
-    init(bundle: Bundle = Bundle.main, persistentContainer: NSPersistentContainer, retryService: RetryService, tbaKit: TBAKit) {
-        self.bundle = bundle
+    init(persistentContainer: NSPersistentContainer, retryService: RetryService, tbaKit: TBAKit) {
         self.persistentContainer = persistentContainer
         self.retryService = retryService
         self.tbaKit = tbaKit
@@ -50,7 +32,40 @@ class StatusService: NSObject {
         super.init()
     }
 
+    static func status(in context: NSManagedObjectContext, bundle: Bundle = Bundle.main) -> Status {
+        return context.performAndWait {
+            if let status = Status.status(in: context) {
+                return status
+            } else if let status = Status.fromPlist(bundle: bundle, in: context) {
+                return status
+            } else {
+                fatalError("Cannot setup Status for StatusService")
+            }
+        }!
+    }
+
+    static func currentSeason(in context: NSManagedObjectContext) -> Int {
+        let status = StatusService.status(in: context)
+        guard let currentSeason = (context.performAndWait {
+            return status.currentSeason
+        }) else {
+            fatalError("No currentSeason for Status.")
+        }
+        return currentSeason.intValue
+    }
+
+    static func maxSeason(in context: NSManagedObjectContext) -> Int {
+        let status = StatusService.status(in: context)
+        guard let maxSeason = (context.performAndWait {
+            return status.maxSeason
+        }) else {
+            fatalError("No maxSeason for Status.")
+        }
+        return maxSeason.intValue
+    }
+
     func setupStatusObservers() {
+        let status = StatusService.status(in: persistentContainer.viewContext)
         contextObserver.observeObject(object: status, state: .updated) { [weak self] (status, _) in
             self?.dispatchStatusChanged(status)
 
@@ -192,6 +207,7 @@ extension FMSStatusSubscribable {
 
 @objc protocol EventStatusSubscribable {
     var statusService: StatusService { get }
+    var persistentContainer: NSPersistentContainer { get }
 
     func eventStatusChanged(isEventOffline: Bool)
 }
@@ -203,7 +219,8 @@ extension EventStatusSubscribable {
     }
 
     func isEventDown(eventKey: String) -> Bool {
-        let downEventKeys = (statusService.status.downEvents?.allObjects as? [EventKey] ?? []).map({ $0.key! })
+        let status = StatusService.status(in: persistentContainer.viewContext)
+        let downEventKeys = (status.downEvents?.allObjects as? [EventKey] ?? []).map({ $0.key! })
         return downEventKeys.contains(eventKey)
     }
 
