@@ -58,3 +58,5 @@ after_failure:
 notifications:
   slack:
     secure: hBTFXrG237C6bpI0RWztRcTZFT8E5NNzBkx9/QQvheW04pid0ftXo/t2rHjoXORDoEsNa5sO2fXJJh86kQrK1REaCklmGVneJ3IVF7urTmIsWC4CjtMOmp1vhYBqck369VEKn0CoP9NlF254Rzh1A/sTuGM/dkOG+YPFz91rPKs=
+    on_success: always
+    on_failure: always
