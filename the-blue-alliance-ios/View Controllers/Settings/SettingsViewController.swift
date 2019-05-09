@@ -4,21 +4,16 @@ import MyTBAKit
 import TBAKit
 import UIKit
 
-enum InfoURL: String {
-    case website = "https://www.thebluealliance.com"
-    case github = "https://github.com/the-blue-alliance/the-blue-alliance-ios"
-}
-
 private enum SettingsSection: Int, CaseIterable {
     case info
     case icons
     case debug
 }
 
-private enum InfoRow: Int, CaseIterable {
-    case website
-    case repo
-    // case changelog TODO: https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/193
+private enum InfoRow: String, CaseIterable {
+    case website = "https://www.thebluealliance.com"
+    case github = "https://github.com/the-blue-alliance/the-blue-alliance-ios"
+    case testFlight = "https://testflight.apple.com/join/gz7RmdS7"
 }
 
 private enum DebugRow: Int, CaseIterable {
@@ -151,15 +146,15 @@ class SettingsViewController: TBATableViewController {
         case .info:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
 
-            guard let row = InfoRow(rawValue: indexPath.row) else {
-                fatalError("This row does not exist")
-            }
+            let infoRow = InfoRow.allCases[indexPath.row]
             let titleString: String = {
-                switch row {
+                switch infoRow {
                 case .website:
-                    return "The Blue Alliance Website"
-                case .repo:
+                    return "The Blue Alliance website"
+                case .github:
                     return "The Blue Alliance for iOS is open source"
+                case .testFlight:
+                    return "Join The Blue Alliance TestFlight"
                 }
             }()
 
@@ -195,12 +190,9 @@ class SettingsViewController: TBATableViewController {
         case .debug:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
 
-            guard let row = DebugRow(rawValue: indexPath.row) else {
-                fatalError("This row does not exist")
-            }
-
+            let debugRow = DebugRow.allCases[indexPath.row]
             let titleString: String = {
-                switch row {
+                switch debugRow {
                 case .deleteNetworkCache:
                     return "Delete network cache"
                 case .troubleshootNotifications:
@@ -229,14 +221,9 @@ class SettingsViewController: TBATableViewController {
 
         switch section {
         case .info:
-            guard let row = InfoRow(rawValue: indexPath.row) else {
-                fatalError("This row does not exist")
-            }
-            switch row {
-            case .website:
-                openTBAWebsite()
-            case .repo:
-                openGitHub()
+            let infoRow = InfoRow.allCases[indexPath.row]
+            if let url = URL(string: infoRow.rawValue) {
+                openURL(url: url)
             }
         case .icons:
             if indexPath.row == 0 {
@@ -246,10 +233,8 @@ class SettingsViewController: TBATableViewController {
                 setAlternateAppIcon(alternateName)
             }
         case .debug:
-            guard let row = DebugRow(rawValue: indexPath.row) else {
-                fatalError("This row does not exist")
-            }
-            switch row {
+            let debugRow = DebugRow.allCases[indexPath.row]
+            switch debugRow {
             case .deleteNetworkCache:
                 showDeleteNetworkCache()
             case .troubleshootNotifications:
@@ -261,18 +246,6 @@ class SettingsViewController: TBATableViewController {
     // MARK: - Private Methods
 
     // MARK: - Info Methods
-
-    internal func openTBAWebsite() {
-        if let url = URL(string: InfoURL.website.rawValue) {
-            openURL(url: url)
-        }
-    }
-
-    internal func openGitHub() {
-        if let url = URL(string: InfoURL.github.rawValue) {
-            openURL(url: url)
-        }
-    }
 
     private func openURL(url: URL) {
         if urlOpener.canOpenURL(url) {

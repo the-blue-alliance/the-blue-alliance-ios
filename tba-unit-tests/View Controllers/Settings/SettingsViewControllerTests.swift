@@ -44,34 +44,6 @@ class SettingsViewControllerTests: TBATestCase {
         XCTAssertEqual(settingsViewController.tabBarItem.title, "Settings")
     }
 
-    func test_openTBAWebsite() {
-        let expectation = XCTestExpectation(description: "open called")
-        guard let url = URL(string: InfoURL.website.rawValue) else {
-            XCTFail()
-            return
-        }
-        urlOpener.mockURL = url
-        urlOpener.openAssert = expectation
-
-        settingsViewController.openTBAWebsite()
-
-        wait(for: [expectation], timeout: 1.0)
-    }
-
-    func test_openTBAGitHub() {
-        let expectation = XCTestExpectation(description: "open called")
-        guard let url = URL(string: InfoURL.github.rawValue) else {
-            XCTFail()
-            return
-        }
-        urlOpener.mockURL = url
-        urlOpener.openAssert = expectation
-
-        settingsViewController.openGitHub()
-
-        wait(for: [expectation], timeout: 1.0)
-    }
-
 }
 
 class MockURLOpener: URLOpener {
