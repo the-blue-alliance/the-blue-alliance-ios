@@ -1,5 +1,6 @@
 import Foundation
 
+// Does the model have enough information to be found by a travel agent.
 protocol Locatable {
     var city: String? { get }
     var stateProv: String? { get }

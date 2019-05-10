@@ -7,7 +7,7 @@ import UIKit
 
 class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable {
 
-    internal var teamKey: TeamKey
+    internal let teamKey: TeamKey
     private let event: Event
 
     // Where should we push to, when clicking the navigation bar from the top. Should be the opposite of what view sent us here
@@ -15,9 +15,9 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
     private let showDetailEvent: Bool
     private let showDetailTeam: Bool
 
-    internal var statusService: StatusService
-    internal var urlOpener: URLOpener
-    internal var myTBA: MyTBA
+    internal let statusService: StatusService
+    internal let urlOpener: URLOpener
+    internal let myTBA: MyTBA
     
     // MARK: - Init
 

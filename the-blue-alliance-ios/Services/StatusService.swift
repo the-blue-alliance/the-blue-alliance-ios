@@ -16,12 +16,15 @@ class StatusService: NSObject {
     lazy var status: Status = {
         if let status = Status.status(in: persistentContainer.viewContext) {
             return status
-        } else if let status = Status.fromPlist(bundle: bundle, in: persistentContainer.viewContext) {
-            return status
         } else {
-            fatalError("Cannot setup Status for StatusService")
+            guard let status = Status.fromPlist(bundle: bundle, in: persistentContainer.viewContext) else {
+                fatalError("Cannot setup Status for StatusService")
+            }
+            _ = persistentContainer.viewContext.saveOrRollback()
+            return status
         }
     }()
+
     lazy var contextObserver: CoreDataContextObserver<Status> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
@@ -37,6 +40,7 @@ class StatusService: NSObject {
     var currentSeason: Int {
         return status.currentSeason!.intValue
     }
+
     var maxSeason: Int {
         return status.maxSeason!.intValue
     }

@@ -6,11 +6,18 @@ extension DistrictRanking {
 
     var sortedEventPoints: [DistrictEventPoints] {
         // TODO: This sort is going to be problematic if we don't have Event objects
-        return (eventPoints?.allObjects as? [DistrictEventPoints])?.sorted(by: { (lhs, rhs) -> Bool in
-            guard let lhsStartDate = lhs.eventKey?.event?.startDate else {
+        let eventPointsSet = getValue(\DistrictRanking.eventPoints)
+        return (eventPointsSet?.allObjects as? [DistrictEventPoints])?.sorted(by: { (lhs, rhs) -> Bool in
+            guard let lhsEventKey = lhs.getValue(\DistrictEventPoints.eventKey) else {
                 return false
             }
-            guard let rhsStartDate = rhs.eventKey?.event?.startDate else {
+            guard let lhsStartDate = lhsEventKey.event?.getValue(\Event.startDate) else {
+                return false
+            }
+            guard let rhsEventKey = rhs.getValue(\DistrictEventPoints.eventKey) else {
+                return false
+            }
+            guard let rhsStartDate = rhsEventKey.event?.getValue(\Event.startDate) else {
                 return false
             }
             return rhsStartDate > lhsStartDate

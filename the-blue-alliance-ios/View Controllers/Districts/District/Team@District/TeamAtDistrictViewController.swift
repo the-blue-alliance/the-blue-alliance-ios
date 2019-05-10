@@ -12,9 +12,9 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
     }
 
     private(set) var ranking: DistrictRanking
-    internal var myTBA: MyTBA
-    internal var statusService: StatusService
-    internal var urlOpener: URLOpener
+    internal let statusService: StatusService
+    internal let myTBA: MyTBA
+    internal let urlOpener: URLOpener
 
     private var summaryViewController: DistrictTeamSummaryViewController!
 

@@ -78,10 +78,7 @@ class EventInfoViewController: TBATableViewController, Observable {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let section = EventInfoSection(rawValue: section) else {
-            return 0
-        }
-
+        let section = EventInfoSection.allCases[section]
         switch section {
         case .title:
             return 1
@@ -96,21 +93,15 @@ class EventInfoViewController: TBATableViewController, Observable {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = {
-            guard let section = EventInfoSection(rawValue: indexPath.section) else {
-                return UITableViewCell()
-            }
-
-            switch section {
-            case .title:
-                return self.tableView(tableView, titleCellForRowAt: indexPath)
-            case .detail:
-                return self.tableView(tableView, detailCellForRowAt: indexPath)
-            case .link:
-                return self.tableView(tableView, linkCellForRowAt: indexPath)
-            }
-        }()
-        return cell
+        let section = EventInfoSection.allCases[indexPath.section]
+        switch section {
+        case .title:
+            return self.tableView(tableView, titleCellForRowAt: indexPath)
+        case .detail:
+            return self.tableView(tableView, detailCellForRowAt: indexPath)
+        case .link:
+            return self.tableView(tableView, linkCellForRowAt: indexPath)
+        }
     }
 
     func tableView(_ tableView: UITableView, titleCellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -127,6 +118,7 @@ class EventInfoViewController: TBATableViewController, Observable {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
 
         var row = indexPath.row
+
         if event.district == nil, row >= EventDetailRow.districtPoints.rawValue {
             row += 1
         }
@@ -157,13 +149,14 @@ class EventInfoViewController: TBATableViewController, Observable {
             row += 1
         }
 
+        let eventKey = event.key!
         switch row {
         case EventLinkRow.website.rawValue:
             cell.textLabel?.text = "View event's website"
         case EventLinkRow.twitter.rawValue:
-            cell.textLabel?.text = "View #\(event.key!) on Twitter"
+            cell.textLabel?.text = "View #\(eventKey) on Twitter"
         case EventLinkRow.youtube.rawValue:
-            cell.textLabel?.text = "View \(event.key!) on YouTube"
+            cell.textLabel?.text = "View \(eventKey) on YouTube"
         case EventLinkRow.chiefDelphi.rawValue:
             cell.textLabel?.text = "View photos on Chief Delphi"
         default:
@@ -178,6 +171,7 @@ class EventInfoViewController: TBATableViewController, Observable {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == EventInfoSection.detail.rawValue {
             var row = indexPath.row
+
             if event.district == nil, row >= EventDetailRow.districtPoints.rawValue {
                 row += 1
             }
@@ -200,16 +194,17 @@ class EventInfoViewController: TBATableViewController, Observable {
                 row += 1
             }
 
+            let eventKey = event.key!
             var urlString: String?
             switch row {
             case EventLinkRow.website.rawValue:
                 urlString = event.website
             case EventLinkRow.twitter.rawValue:
-                urlString = "https://twitter.com/search?q=%23\(event.key!)"
+                urlString = "https://twitter.com/search?q=%23\(eventKey)"
             case EventLinkRow.youtube.rawValue:
-                urlString = "https://www.youtube.com/results?search_query=\(event.key!)"
+                urlString = "https://www.youtube.com/results?search_query=\(eventKey)"
             case EventLinkRow.chiefDelphi.rawValue:
-                urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(event.key!)"
+                urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(eventKey)"
             default:
                 break
             }
@@ -227,7 +222,7 @@ class EventInfoViewController: TBATableViewController, Observable {
 extension EventInfoViewController: Refreshable {
 
     var refreshKey: String? {
-        return event.key
+        return event.getValue(\Event.key)
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -239,7 +234,7 @@ extension EventInfoViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        return event.name == nil
+        return event.getValue(\Event.name) == nil
     }
 
     @objc func refresh() {

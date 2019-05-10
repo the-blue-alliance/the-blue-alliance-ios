@@ -121,7 +121,7 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
     }
 
     var sectionNameKeyPath: String {
-        return "hybridType"
+        return #keyPath(Event.hybridType)
     }
 
     var fetchRequestPredicate: NSPredicate {
@@ -143,19 +143,25 @@ extension EventsViewController: TableViewDataSourceDelegate {
             return title
         }
 
+        let district = event.district
+        let districtName = district?.name
+
+        let eventType = event.eventType!.intValue
+        let eventTypeString = event.eventTypeString
+
         if event.isDistrictChampionshipEvent {
-            guard let district = event.district, let eventTypeString = event.eventTypeString else {
+            guard let districtName = districtName, let eventTypeString = eventTypeString else {
                 return nil
             }
-            return event.eventType!.intValue == EventType.districtChampionshipDivision.rawValue ? "\(district.name!) \(eventTypeString)s" : "\(eventTypeString)s"
+            return eventType == EventType.districtChampionshipDivision.rawValue ? "\(districtName) \(eventTypeString)s" : "\(eventTypeString)s"
         } else if event.isChampionship {
-            guard let eventTypeString = event.eventTypeString else {
+            guard let eventTypeString = eventTypeString else {
                 return nil
             }
             // CMP Finals are already plural
-            return event.eventType!.intValue == EventType.championshipFinals.rawValue ? eventTypeString : "\(eventTypeString)s"
-        } else if let district = event.district {
-            return "\(district.name ?? "") District Events"
+            return eventType == EventType.championshipFinals.rawValue ? eventTypeString : "\(eventTypeString)s"
+        } else if let districtName = districtName {
+            return "\(districtName) District Events"
         } else if event.isFoC {
             return "Festival of Champions"
         } else if event.isOffseason {
