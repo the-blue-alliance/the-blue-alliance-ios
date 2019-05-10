@@ -30,6 +30,7 @@ platform :ios do
     test_tbakit
     test_unit
   end
+
   ## CI Lanes ##
 
   desc "Setup Secrets.plist file (used by CI)"
@@ -47,37 +48,6 @@ platform :ios do
     else
       match
     end
-  end
-
-  ## End CI Lanes ##
-
-  ## Create A New Version Lanes ##
-
-  desc "Create a new app version (major, minor, patch, build) by bumping the version number and creating a changelog"
-  lane :new_version do |options|
-    version_type = options[:version_type]
-    # Bump version accordingly
-    if version_type != "build"
-      increment_version_number(bump_type: version_type)
-    end
-    increment_build_number
-  end
-
-  ## End Create A New Version Lanes ##
-
-  desc "Bump version and push if necessary"
-  lane :ensure_version_bump do
-    if !git_tag_exists(tag: current_git_tag)
-      UI.success("`#{current_git_tag}` is a new version, all good! 💪")
-    else
-      UI.user_error!("A tag with the name `#{current_git_tag}` already exists! Run `fastlane new_version` to generate a new version.")
-    end
-  end
-
-  desc "Create a new tag and push to GitHub"
-  lane :new_git_tag do
-    add_git_tag(tag: current_git_tag)
-    push_git_tags
   end
 
   ## Release Lanes ##
@@ -98,20 +68,10 @@ platform :ios do
     new_git_tag
   end
 
-  desc "Upload a new beta build to TestFlight"
-  lane :beta do
-    beta_internal
-    beta_testflight
-
-    reset_git_repo(files: ["the-blue-alliance-ios.xcodeproj/project.pbxproj"], force: true) # Remove our code signing changes
-
-    commit_changelog
-    new_git_tag
-  end
-
   desc "Internal beta lane - use `beta` or `beta_ci`"
   private_lane :beta_internal do
-    preship
+    prebeta
+
     configure_code_signing
     update_project_team(teamid: ENV["sigh_com.the-blue-alliance.tba_appstore_team-id"])
     update_project_provisioning(
@@ -141,25 +101,21 @@ platform :ios do
 
   ## Shipping Lanes for Release Lanes ##
 
-  desc "Perform pre-ship tasks"
-  private_lane :preship do
-    if is_ci == false
-      ensure_git_status_clean # Ensure we're in a clean repo before uploading
-      ensure_git_branch # Ensure we're on master before shipping
+  desc "Perform pre-TestFlight tasks"
+  private_lane :prebeta do
+    # Bump our build number for TestFlight
+    testflight_build_number = latest_testflight_build_number(version: get_version_number, initial_build_number: 0)
+    development_build_number = get_build_number.to_i
+    if testflight_build_number >= development_build_number
+      increment_build_number(build_number: testflight_build_number + 1)
+      commit_version_bump(message: "[skip travis] [fastlane] Version bump - #{current_git_tag}")
     end
-    ensure_version_bump # Ensure we're on a new version
   end
 
-  private_lane :ship_github do |options|
-    set_github_release(
-      repository_name: "the-blue-alliance/the-blue-alliance-ios",
-      api_token: ENV["GITHUB_TOKEN"],
-      name: current_git_tag,
-      tag_name: current_git_tag,
-      description: commit_changelog,
-      is_prerelease: options[:is_prerelease] ? true : false,
-      upload_assets: ["The Blue Alliance.ipa", "The Blue Alliance.app.dSYM.zip"]
-    )
+  desc "Create a new tag and push to GitHub"
+  lane :new_git_tag do
+    add_git_tag(tag: current_git_tag)
+    push_git_tags
   end
 
   ## End Shipping Lanes for Release Lanes ##
@@ -174,24 +130,6 @@ platform :ios do
     "v#{get_version_number}"
   end
 
-  # desc "Release notes and changelog"
-  # private_lane :github_changelog do
-  #   "#{version_changelog}\n## Changelog\n#{commit_changelog}"
-  # end
-
-  # desc "Release notes for version"
-  # private_lane :release_notes do
-  #   File.read("../release_notes/#{current_version}")
-  # end
-
-  # desc "Get changelog from git commits between HEAD and last version tag"
-  # lane :commit_changelog_version do
-  #   changelog_from_git_commits(
-  #     pretty: changelog_commit_format,
-  #     merge_commit_filtering: "exclude_merges"
-  #   )
-  # end
-
   private_lane :commit_changelog_short do
     changelog_from_git_commits(
       pretty: "%s",
@@ -199,18 +137,16 @@ platform :ios do
     )
   end
 
-  desc "Get changelog from git commits between HEAD and latest tag"
-  private_lane :commit_changelog do |options|
-    changelog_from_git_commits(
-      # tag_match_pattern: options[:tag_match_pattern] || nil,
-      pretty: "[%h](https://github.com/the-blue-alliance/the-blue-alliance-ios/commit/%h): %s",
-      merge_commit_filtering: "exclude_merges"
-    )
-  end
-
   ## End Internal Lanes for Shipping Lanes ##
 
   ## Utility Lanes ##
+
+  desc "Create a new app version (major, minor, patch) by bumping the version number and creating a changelog"
+  lane :new_version do |options|
+    version_type = options[:version_type]
+    # Bump version accordingly
+    increment_version_number(bump_type: version_type, build_number: "1")
+  end
 
   lane :refresh_dsyms do
     download_dsyms                  # Download dSYM files from iTC

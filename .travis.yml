@@ -13,11 +13,11 @@ branches:
 
 stages:
 - name: cron
-  if: "(type == cron)"
+  if: (type == cron)
 - name: test
-  if: NOT ((type == push OR type == cron) AND (commit_message =~ /^\[clowntown\]/))
+  if: NOT ((type == push AND commit_message =~ \[clowntown\]) OR (type == cron))
 - name: beta
-  if: "(type == push) AND (branch == master) AND (commit_message =~ /^\\[beta\\]/)"
+  if: (type == push) AND (branch == master) AND (commit_message =~ \[beta\])
 
 cache:
   bundler: true
