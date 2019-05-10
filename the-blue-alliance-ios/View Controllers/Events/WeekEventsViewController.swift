@@ -79,9 +79,15 @@ class WeekEventsViewController: EventsViewController {
             self.removeRequest(request: request!)
 
             // Only setup weeks if we don't have a currently selected week
-            if self.weekEvent == nil, let we = WeekEventsViewController.weekEvent(for: year, in: context),
-                let weekEvent = self.persistentContainer.viewContext.object(with: we.objectID) as? Event {
-                self.weekEvent = weekEvent
+            if self.weekEvent == nil {
+                context.perform {
+                    guard let we = WeekEventsViewController.weekEvent(for: year, in: context) else {
+                        return
+                    }
+                    self.persistentContainer.viewContext.perform {
+                        self.weekEvent = self.persistentContainer.viewContext.object(with: we.objectID) as? Event
+                    }
+                }
             }
         })
         addRequest(request: request!)

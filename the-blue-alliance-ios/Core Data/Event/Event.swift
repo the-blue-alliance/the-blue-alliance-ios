@@ -521,7 +521,6 @@ extension Event: Locatable, Surfable, Managed {
     // We need a full object as opposed to a number because of CMP, off-season, etc.
     // TODO: Convert this to a data model that uses a Core Data model for init but isn't a Core Data model
     static func weekEvents(for year: Int, in managedObjectContext: NSManagedObjectContext) -> [Event] {
-        // TODO: This has a problem being called in the background thread - but I'm not entirely sure wy. We need to solve this.
         let events = Event.fetch(in: managedObjectContext) { (fetchRequest) in
             // Filter out CMP divisions - we don't want them below for our weeks calculation
             fetchRequest.predicate = NSPredicate(format: "%K == %ld && %K != %ld",
