@@ -98,7 +98,7 @@ class StatusServiceTests: TBATestCase {
 
     func test_fetchStatus() {
         // Sanity check - no Status yet
-        XCTAssertNil(Status.status(in: persistentContainer.viewContext))
+        XCTAssertNil(Status.findOrFetch(in: persistentContainer.viewContext, matching: NSPredicate(value: true)))
 
         let backgroundSaveExpectation = backgroundContextSaveExpectation()
         let ex = expectation(description: "fetchStatus completion block called")
@@ -199,7 +199,7 @@ class EventStatusSubscribableTests: TBATestCase {
     override func setUp() {
         super.setUp()
 
-        eventSubscribable = MockEventStatusSubscribable(statusService: statusService)
+        eventSubscribable = MockEventStatusSubscribable(persistentContainer: persistentContainer, statusService: statusService)
     }
 
     override func tearDown() {

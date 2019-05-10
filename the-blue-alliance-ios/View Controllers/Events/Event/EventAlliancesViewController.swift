@@ -129,7 +129,7 @@ extension EventAlliancesViewController: Refreshable {
 
     var refreshKey: String? {
         let key = event.getValue(\Event.key!)
-        return "\(eventKey!)_alliances"
+        return "\(key)_alliances"
     }
 
     var automaticRefreshInterval: DateComponents? {
