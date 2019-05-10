@@ -11,6 +11,14 @@ extension UIColor {
         return .color(red: 48, green: 63, blue: 159)
     }
 
+    public class var avatarRed: UIColor {
+        return .colorWithRGB(rgbValue: 0xda3434)
+    }
+
+    public class var avatarBlue: UIColor {
+        return .colorWithRGB(rgbValue: 0x487fcc)
+    }
+
     public class var dangerRed: UIColor {
         return .colorWithRGB(rgbValue: 0xf2dede)
     }

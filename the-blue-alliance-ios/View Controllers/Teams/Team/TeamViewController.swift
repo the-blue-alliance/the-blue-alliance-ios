@@ -12,6 +12,8 @@ class TeamViewController: MyTBAContainerViewController, Observable {
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
+    private let teamHeaderView: TeamHeaderView
+
     private(set) var infoViewController: TeamInfoViewController
     private(set) var eventsViewController: TeamEventsViewController
     private(set) var mediaViewController: TeamMediaCollectionViewController
@@ -34,7 +36,6 @@ class TeamViewController: MyTBAContainerViewController, Observable {
             updateInterface()
         }
     }
-    private let yearButton = UIButton()
 
     // MARK: - Observable
 
@@ -49,7 +50,9 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         self.team = team
         self.statusService = statusService
         self.urlOpener = urlOpener
+
         self.year = TeamViewController.latestYear(currentSeason: statusService.currentSeason, years: team.yearsParticipated, in: persistentContainer.viewContext)
+        self.teamHeaderView = TeamHeaderView(team: team, year: year)
 
         infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -82,50 +85,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let teamNameLabel = UILabel()
-        teamNameLabel.text = team.nickname
-        teamNameLabel.font = .preferredFont(forTextStyle: .title1, compatibleWith: nil)
-        teamNameLabel.textColor = .white
-        let teamNumberLabel = UILabel()
-        teamNumberLabel.text = team.fallbackNickname
-        teamNumberLabel.textColor = .white
-        teamNameLabel.font = .preferredFont(forTextStyle: .title2, compatibleWith: nil)
-        let teamNameStackView = UIStackView(arrangedSubviews: [teamNameLabel, teamNumberLabel])
-        teamNameStackView.axis = .vertical
-        let avatarImageView = UIImageView(image: UIImage(data: Data(base64Encoded: "iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALOQAACzkBycZ2YAAAAaFJREFUWEfNlcFKw0AQhvsAQsGDB48ehELBFxYPgkfvntT3KT34BLF/ZMpk8mW7a6KZwkfSf2c3H9PddHP6dMnBMBMYZgLDTGCYCQwzgWEmMFyd992d3Y8H1+bzYZdXUGJOTgwL1sTkZgseHq+6r9dtd3i6Pl9L0BoeL6afN4wPvlRBEpegdYSXE1AzCi5CAkVOHY9rRLEJOYFhEZSoQHNJDH5WD4aLEPcnydG8AIaL4OVMUHmDnMBwFiYQBf1YnFMAw2bebrb9g7Wf7J/Ay/kxml8Awyr6h7t3ooj77viyP8vRGhVgOAl1Z4qP/X3PDDmB4QDrgF3VpePzLUoZJqZaWrMBDAdCho2RkOG7pqtf85cMA0mZWBwzSMzmLSTl+bkxKZ1GN4iQnMR8psNBc5uRUKlbhJ1U65rwcsZCkhgW0QHxYsqiXCSu0QCGRWLXLPdCU/h1KsFwEu01k7NXTazxQpFYWwGGiMS0X2sfGutKtQUwHOEPUutDW2oBDAeoc5T/ExieaX0F/QEY9qzcOQPDTGCYCQwzgWEmMMwEhknYdN9zErNTMDfHmAAAAABJRU5ErkJggg==")!)!)
-        avatarImageView.autoSetDimensions(to: CGSize(width: 50, height: 50))
-        avatarImageView.layer.cornerRadius = 5
-        // 487fcc and da3434
-        avatarImageView.layer.borderColor = UIColor.colorWithRGB(rgbValue: 0xda3434).cgColor
-        avatarImageView.layer.borderWidth = 5
-        avatarImageView.layer.masksToBounds = true
-
-        let spacerView = UIView()
-        spacerView.setContentHuggingPriority(.defaultLow, for: .horizontal)
-
-        let yearSpacerView = UIView()
-        yearSpacerView.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        yearButton.setTitle("---", for: .normal)
-        yearButton.titleLabel?.font = .preferredFont(forTextStyle: .body, compatibleWith: nil)
-        yearButton.setTitleColor(.primaryBlue, for: .normal)
-        yearButton.backgroundColor = .white
-        yearButton.layer.cornerRadius = 6
-        yearButton.clipsToBounds = true
-        yearButton.tintColor = .primaryBlue
-        yearButton.setImage(UIImage(named: "baseline_arrow_drop_down"), for: .normal)
-        yearButton.contentEdgeInsets = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 8)
-        let buttonStackView = UIStackView(arrangedSubviews: [yearSpacerView, yearButton])
-        buttonStackView.axis = .vertical
-
-        let teamInfoView = UIStackView(arrangedSubviews: [avatarImageView, teamNameStackView, spacerView, buttonStackView])
-        teamInfoView.spacing = 8
-        teamInfoView.axis = .horizontal
-
-        let view = UIView(forAutoLayout: ())
-        view.backgroundColor = .primaryBlue
-        view.addSubview(teamInfoView)
-        teamInfoView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16))
-        rootStackView.insertArrangedSubview(view, at: 0)
+        rootStackView.insertArrangedSubview(teamHeaderView, at: 0)
 
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
 
@@ -186,7 +146,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
             }
             return "---"
         }()
-        yearButton.setTitle(yearString, for: .normal)
+        teamHeaderView.setYearButtonTitle(yearString)
     }
 
     private func refreshYearsParticipated() {
@@ -200,6 +160,19 @@ class TeamViewController: MyTBAContainerViewController, Observable {
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(request!)
+            })
+        })
+    }
+
+    private func fetchTeaMedia(year: Int) {
+        var request: URLSessionDataTask?
+        request = tbaKit.fetchTeamMedia(key: team.key!, year: year, completion: { (result, notModified) in
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
+                if !notModified, let media = try? result.get() {
+                    let team = context.object(with: self.team.objectID) as! Team
+                    team.insert(media, year: year)
+                }
             })
         })
     }

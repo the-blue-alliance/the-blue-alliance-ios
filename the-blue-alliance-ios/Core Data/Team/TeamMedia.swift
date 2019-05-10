@@ -17,6 +17,7 @@ extension MediaError: LocalizedError {
 }
 
 public enum MediaType: String {
+    case avatar = "avatar"
     case youtubeVideo = "youtube"
     case cdPhotoThread = "cdphotothread"
     case imgur = "imgur"

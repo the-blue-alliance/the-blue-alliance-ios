@@ -3,11 +3,31 @@ import Foundation
 import MyTBAKit
 import TBAKit
 
-extension Team: Locatable, Surfable, Managed {
+extension Team {
 
     var fallbackNickname: String {
         return "Team \(teamNumber!.stringValue)"
     }
+
+    func avatar(year: Int) -> TeamMedia? {
+        guard let media = media?.allObjects as? [TeamMedia] else {
+            return nil
+        }
+        let avatars = media.filter {
+            guard let mediaYear = $0.year?.intValue else {
+                return false
+            }
+            guard let mediaType = $0.type else {
+                return false
+            }
+            return year == mediaYear && mediaType == MediaType.avatar.rawValue
+        }
+        return avatars.first
+    }
+
+}
+
+extension Team: Locatable, Surfable, Managed {
 
     /**
      Returns an uppercased team number by removing the `frc` prefix on the key
