@@ -27,7 +27,7 @@ class DistrictsContainerViewController: ContainerViewController {
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        year = StatusService.currentSeason(in: persistentContainer.viewContext)
+        year = statusService.currentSeason
         districtsViewController = DistrictsViewController(year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [districtsViewController],
@@ -67,8 +67,7 @@ class DistrictsContainerViewController: ContainerViewController {
 extension DistrictsContainerViewController: NavigationTitleDelegate {
 
     func navigationTitleTapped() {
-        let maxSeason = StatusService.maxSeason(in: persistentContainer.viewContext)
-        let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(current: year, options: Array(2009...maxSeason).reversed(), persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let selectTableViewController = SelectTableViewController<DistrictsContainerViewController>(current: year, options: Array(2009...statusService.maxSeason).reversed(), persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         selectTableViewController.title = "Select Year"
         selectTableViewController.delegate = self
 

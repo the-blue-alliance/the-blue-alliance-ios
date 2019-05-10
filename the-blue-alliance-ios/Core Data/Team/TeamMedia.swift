@@ -66,7 +66,7 @@ extension TeamMedia {
         }
         set {
             setValue(newValue?.pngData(), \TeamMedia.mediaData)
-            setValue(nil, \TeamMedia.mediaError)
+            setNilValue(\TeamMedia.mediaError)
         }
     }
 
@@ -76,7 +76,7 @@ extension TeamMedia {
         }
         set {
             setValue(newValue, \TeamMedia.mediaError)
-            setValue(nil, \TeamMedia.mediaData)
+            setNilValue(\TeamMedia.mediaData)
         }
     }
 

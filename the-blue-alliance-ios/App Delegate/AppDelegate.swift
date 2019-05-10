@@ -100,7 +100,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                            userDefaults: userDefaults)
     }()
     lazy var statusService: StatusService = {
-        return StatusService(persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
+        return StatusService(
+            status: Status.status(in: persistentContainer.viewContext),
+            persistentContainer: persistentContainer,
+            retryService: RetryService(),
+            tbaKit: tbaKit
+        )
     }()
     lazy var reactNativeService: ReactNativeService = {
         return ReactNativeService(fileManager: FileManager.default,
@@ -184,34 +189,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     self.statusService.registerRetryable(initiallyRetry: true)
                 }
 
-                // TODO: I'm not entirely sure we're handling this Retry service stuff right. It could be a problem.
-                // We should take a closer look at it later.
+                // Check our minimum app version - abort app flow if necessary
+                if !AppDelegate.isAppVersionSupported(minimumAppVersion: self.statusService.status.safeMinAppVersion) {
+                    self.showMinimumAppVersionAlert(status: self.statusService.status)
+                    return
+                }
 
-                self.persistentContainer.performBackgroundTask { (context) in
-                    let status = StatusService.status(in: context)
-                    // Check our minimum app version - abort app flow if necessary
-                    if !AppDelegate.isAppVersionSupported(minimumAppVersion: status.safeMinAppVersion) {
-                        self.showMinimumAppVersionAlert(status: status)
-                        return
+                DispatchQueue.main.async {
+                    guard let window = self.window else {
+                        fatalError("Window not setup when setting root vc")
                     }
-
-                    DispatchQueue.main.async {
-                        guard let window = self.window else {
-                            fatalError("Window not setup when setting root vc")
-                        }
-                        guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
-                            fatalError("Unable to snapshot root view controller")
-                        }
-                        self.rootSplitViewController.view.addSubview(snapshot)
-                        window.rootViewController = self.rootSplitViewController
-
-                        // 0.35 is an iOS animation magic number... for now
-                        UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
-                            snapshot.layer.opacity = 0;
-                        }, completion: { (status) in
-                            snapshot.removeFromSuperview()
-                        })
+                    guard let snapshot = window.snapshotView(afterScreenUpdates: true) else {
+                        fatalError("Unable to snapshot root view controller")
                     }
+                    self.rootSplitViewController.view.addSubview(snapshot)
+                    window.rootViewController = self.rootSplitViewController
+
+                    // 0.35 is an iOS animation magic number... for now
+                    UIView.transition(with: snapshot, duration: 0.35, options: .transitionCrossDissolve, animations: {
+                        snapshot.layer.opacity = 0;
+                    }, completion: { (status) in
+                        snapshot.removeFromSuperview()
+                    })
                 }
             }
         }
@@ -375,10 +374,10 @@ extension AppDelegate: GIDSignInDelegate {
         }
 
         DispatchQueue.main.async {
-            guard let currentAppVersion = status.getValue(\Status.currentSeason?.intValue) else {
+            guard let currentAppVersion = status.getValue(\Status.currentSeason) else {
                 fatalError("No currentAppVersion for Status.")
             }
-            AppDelegate.showMinimumAppAlert(appStoreID: "1441973916", currentAppVersion: currentAppVersion, in: window)
+            AppDelegate.showMinimumAppAlert(appStoreID: "1441973916", currentAppVersion: currentAppVersion.intValue, in: window)
         }
     }
 

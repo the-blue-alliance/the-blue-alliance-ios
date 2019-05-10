@@ -48,7 +48,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         self.team = team
         self.statusService = statusService
         self.urlOpener = urlOpener
-        self.year = TeamViewController.latestYear(years: team.yearsParticipated, in: persistentContainer.viewContext)
+        self.year = TeamViewController.latestYear(currentSeason: statusService.currentSeason, years: team.yearsParticipated, in: persistentContainer.viewContext)
 
         infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -107,18 +107,21 @@ class TeamViewController: MyTBAContainerViewController, Observable {
                 fatalError("No context for Team.")
             }
             if self.year == nil {
-                self.year = TeamViewController.latestYear(years: team.getValue(\Team.yearsParticipated), in: context)
+                self.year = TeamViewController.latestYear(
+                    currentSeason: self.statusService.currentSeason,
+                    years: team.getValue(\Team.yearsParticipated),
+                    in: context
+                )
             } else {
                 self.updateInterface()
             }
         }
     }
 
-    private static func latestYear(years: [Int]?, in context: NSManagedObjectContext) -> Int? {
+    private static func latestYear(currentSeason: Int, years: [Int]?, in context: NSManagedObjectContext) -> Int? {
         if let years = years, !years.isEmpty {
             // Limit default year set to be <= currentSeason
             let latestYear = years.first!
-            let currentSeason = StatusService.currentSeason(in: context)
             if latestYear > currentSeason, years.count > 1 {
                 // Find the next year before the current season
                 return years.first(where: { $0 <= currentSeason })

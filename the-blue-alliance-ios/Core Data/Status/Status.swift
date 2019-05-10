@@ -7,8 +7,16 @@ extension Status: Managed {
     /**
      'Singleton' to get the only Status that should exist in the context
      */
-    static func status(in context: NSManagedObjectContext) -> Status? {
-        return findOrFetch(in: context, matching: statusPredicate)
+    static func status(in context: NSManagedObjectContext, bundle: Bundle = Bundle.main) -> Status {
+        return context.performAndWait {
+            if let status = findOrFetch(in: context, matching: statusPredicate) {
+                return status
+            } else if let status = Status.fromPlist(bundle: bundle, in: context) {
+                return status
+            } else {
+                fatalError("Cannot setup Status for StatusService")
+            }
+        }!
     }
 
     private static var statusPredicate: NSPredicate {

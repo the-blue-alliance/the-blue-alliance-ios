@@ -128,12 +128,7 @@ extension EventAlliancesViewController: TableViewDataSourceDelegate {
 extension EventAlliancesViewController: Refreshable {
 
     var refreshKey: String? {
-        guard let context = event.managedObjectContext else {
-            fatalError("No context for Event")
-        }
-        let eventKey = context.performAndWait {
-            return event.key
-        }
+        let key = event.getValue(\Event.key!)
         return "\(eventKey!)_alliances"
     }
 

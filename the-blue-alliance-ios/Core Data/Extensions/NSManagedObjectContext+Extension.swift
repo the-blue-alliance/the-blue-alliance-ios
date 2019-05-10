@@ -20,6 +20,14 @@ extension NSManagedObject {
         context.setKeyPathAndWait(obj: self, value: value, keyPath: keyPath)
     }
 
+    /** Syncronous, thread-safe method to set a nil value for a NSManagedObject. **/
+    func setNilValue<T, J>(_ keyPath: KeyPath<T, J>) {
+        guard let context = managedObjectContext else {
+            fatalError("No managedObjectContext for object.")
+        }
+        context.setNilKeyPathAndWait(obj: self, keyPath: keyPath)
+    }
+
 }
 
 extension NSManagedObjectContext {
@@ -86,6 +94,15 @@ extension NSManagedObjectContext {
         }
         performAndWait {
             obj.setValue(value, forKeyPath: keyPathString)
+        }
+    }
+
+    fileprivate func setNilKeyPathAndWait<T, J>(obj: NSManagedObject, keyPath: KeyPath<T, J>) {
+        guard let keyPathString = keyPath._kvcKeyPathString else {
+            fatalError("Unable to get key path string for \(keyPath)")
+        }
+        performAndWait {
+            obj.setNilValueForKey(keyPathString)
         }
     }
 
