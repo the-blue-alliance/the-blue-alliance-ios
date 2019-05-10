@@ -55,7 +55,7 @@ class EventsContainerViewController: ContainerViewController {
 
     private static func eventsTitle(_ event: Event?) -> String {
         if let event = event {
-            return "\(event.weekString) Events"
+            return "\(event.title) Events"
         } else {
             return "---- Events"
         }

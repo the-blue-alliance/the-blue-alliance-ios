@@ -146,7 +146,7 @@ extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
     }
 
     func titleForOption(_ option: OptionType) -> String {
-        return option.weekString
+        return option.title
     }
 
 }

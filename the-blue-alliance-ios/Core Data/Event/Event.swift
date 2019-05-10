@@ -402,28 +402,28 @@ extension Event: Locatable, Surfable, Managed {
         }
     }
 
-    public var weekString: String {
-        var weekString = "nil"
+    public var title: String {
+        var title = "nil"
         let eventType = self.eventType!.intValue
         if eventType == EventType.championshipDivision.rawValue || eventType == EventType.championshipFinals.rawValue {
             if year!.intValue >= 2017, let city = city {
-                weekString = "Championship - \(city)"
+                title = "Championship - \(city)"
             } else {
-                weekString = "Championship"
+                title = "Championship"
             }
         } else {
             switch eventType {
             case EventType.unlabeled.rawValue:
-                weekString = "Other"
+                title = "Other"
             case EventType.preseason.rawValue:
-                weekString = "Preseason"
+                title = "Preseason"
             case EventType.offseason.rawValue:
                 guard let month = month else {
                     return "Offseason"
                 }
                 return "\(month) Offseason"
             case EventType.festivalOfChampions.rawValue:
-                weekString = "Festival of Champions"
+                title = "Festival of Champions"
             default:
                 guard let week = week else {
                     return "Other"
@@ -436,16 +436,27 @@ extension Event: Locatable, Surfable, Managed {
                  */
                 if year == 2016 {
                     if week == 0 {
-                        weekString = "Week 0.5"
+                        title = "Week 0.5"
                     } else {
-                        weekString = "Week \(week.intValue)"
+                        title = "Week \(week.intValue)"
                     }
                 } else {
-                    weekString = "Week \(week.intValue + 1)"
+                    title = "Week \(week.intValue + 1)"
                 }
             }
         }
-        return weekString
+        return title
+    }
+    
+    /**
+     Same as title but return nil if title isn't in Week 0.5..7
+     */
+    public var weekString: String? {
+        if title.contains("Week") {
+            return title
+        } else {
+            return nil
+        }
     }
 
     public var safeShortName: String {

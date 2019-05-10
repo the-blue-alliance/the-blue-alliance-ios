@@ -159,7 +159,7 @@ extension EventsViewController: TableViewDataSourceDelegate {
         } else if event.isFoC {
             return "Festival of Champions"
         } else if event.isOffseason {
-            return "\(event.weekString) Events"
+            return "\(event.title) Events"
         } else if event.isPreseason {
             return "Preseason Events"
         } else {
