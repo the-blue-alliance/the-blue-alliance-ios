@@ -100,12 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                            userDefaults: userDefaults)
     }()
     lazy var statusService: StatusService = {
-        return StatusService(
-            status: Status.status(in: persistentContainer.viewContext),
-            persistentContainer: persistentContainer,
-            retryService: RetryService(),
-            tbaKit: tbaKit
-        )
+        return StatusService(persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
     }()
     lazy var reactNativeService: ReactNativeService = {
         return ReactNativeService(fileManager: FileManager.default,
@@ -187,15 +182,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // Register retries for our status service on the main thread
                 DispatchQueue.main.async {
                     self.statusService.registerRetryable(initiallyRetry: true)
-                }
 
-                // Check our minimum app version - abort app flow if necessary
-                if !AppDelegate.isAppVersionSupported(minimumAppVersion: self.statusService.status.safeMinAppVersion) {
-                    self.showMinimumAppVersionAlert(status: self.statusService.status)
-                    return
-                }
+                    // Check our minimum app version
+                    let mininmumAppVersion = self.statusService.status.safeMinAppVersion
+                    if !AppDelegate.isAppVersionSupported(minimumAppVersion: mininmumAppVersion) {
+                        self.showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion!.intValue)
+                        return
+                    }
 
-                DispatchQueue.main.async {
                     guard let window = self.window else {
                         fatalError("Window not setup when setting root vc")
                     }
@@ -368,16 +362,13 @@ extension AppDelegate: GIDSignInDelegate {
         return Bundle.main.buildVersionNumber >= minimumAppVersion
     }
 
-    func showMinimumAppVersionAlert(status: Status) {
+    func showMinimumAppVersionAlert(currentAppVersion: Int) {
         guard let window = window else {
             return
         }
 
         DispatchQueue.main.async {
-            guard let currentAppVersion = status.getValue(\Status.currentSeason) else {
-                fatalError("No currentAppVersion for Status.")
-            }
-            AppDelegate.showMinimumAppAlert(appStoreID: "1441973916", currentAppVersion: currentAppVersion.intValue, in: window)
+            AppDelegate.showMinimumAppAlert(appStoreID: "1441973916", currentAppVersion: currentAppVersion, in: window)
         }
     }
 
@@ -387,7 +378,7 @@ extension AppDelegate: StatusSubscribable {
 
     func statusChanged(status: Status) {
         if !AppDelegate.isAppVersionSupported(minimumAppVersion: status.safeMinAppVersion) {
-            showMinimumAppVersionAlert(status: status)
+            showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion!.intValue)
         }
     }
 

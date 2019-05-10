@@ -1,4 +1,3 @@
-import CoreData
 import XCTest
 @testable import The_Blue_Alliance
 
@@ -98,7 +97,7 @@ class StatusServiceTests: TBATestCase {
 
     func test_fetchStatus() {
         // Sanity check - no Status yet
-        XCTAssertNil(Status.findOrFetch(in: persistentContainer.viewContext, matching: NSPredicate(value: true)))
+        XCTAssertNil(Status.status(in: persistentContainer.viewContext))
 
         let backgroundSaveExpectation = backgroundContextSaveExpectation()
         let ex = expectation(description: "fetchStatus completion block called")

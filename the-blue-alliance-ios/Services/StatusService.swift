@@ -9,9 +9,21 @@ class StatusService: NSObject {
 
     var retryService: RetryService
 
-    let status: Status
+    private let bundle: Bundle
     private let persistentContainer: NSPersistentContainer
     private let tbaKit: TBAKit
+
+    lazy var status: Status = {
+        if let status = Status.status(in: persistentContainer.viewContext) {
+            return status
+        } else {
+            guard let status = Status.fromPlist(bundle: bundle, in: persistentContainer.viewContext) else {
+                fatalError("Cannot setup Status for StatusService")
+            }
+            _ = persistentContainer.viewContext.saveOrRollback()
+            return status
+        }
+    }()
 
     lazy var contextObserver: CoreDataContextObserver<Status> = {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
@@ -26,21 +38,15 @@ class StatusService: NSObject {
     private var previouslyDownEventKeys: [String] = []
 
     var currentSeason: Int {
-        guard let currentSeason = status.currentSeason else {
-            fatalError("No currentSeason for Status.")
-        }
-        return currentSeason.intValue
+        return status.currentSeason!.intValue
     }
 
     var maxSeason: Int {
-        guard let maxSeason = status.maxSeason else {
-            fatalError("No maxSeason for Status.")
-        }
-        return maxSeason.intValue
+        return status.maxSeason!.intValue
     }
 
-    init(status: Status, persistentContainer: NSPersistentContainer, retryService: RetryService, tbaKit: TBAKit) {
-        self.status = status
+    init(bundle: Bundle = Bundle.main, persistentContainer: NSPersistentContainer, retryService: RetryService, tbaKit: TBAKit) {
+        self.bundle = bundle
         self.persistentContainer = persistentContainer
         self.retryService = retryService
         self.tbaKit = tbaKit

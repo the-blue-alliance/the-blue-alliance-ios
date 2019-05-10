@@ -25,9 +25,7 @@ class TBATestCase: CoreDataTestCase {
         tbaKit = MockTBAKit(userDefaults: userDefaults)
         urlOpener = MockURLOpener()
         pushService = PushService(messaging: Messaging.messaging(), myTBA: myTBA, retryService: RetryService(), userDefaults: userDefaults)
-
-        let status = Status.status(in: persistentContainer.viewContext, bundle: testBundle)
-        statusService = StatusService(status: status, persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
+        statusService = StatusService(bundle: testBundle, persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
     }
 
     override func tearDown() {
