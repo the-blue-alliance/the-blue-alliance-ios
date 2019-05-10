@@ -144,7 +144,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
             context.performChangesAndWait({
                 if !notModified, let years = try? result.get() {
                     let team = context.object(with: self.team.objectID) as! Team
-                    team.setValue(years.sorted().reversed(), \Team.yearsParticipated)
+                    team.yearsParticipated = years.sorted().reversed()
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(request!)

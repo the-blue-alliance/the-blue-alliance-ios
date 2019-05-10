@@ -59,36 +59,29 @@ extension TeamMedia {
 
     var image: UIImage? {
         get {
-            if let mediaData = getValue(\TeamMedia.mediaData) {
+            if let mediaData = mediaData {
                 return UIImage(data: mediaData)
             }
             return nil
         }
         set {
-            setValue(newValue?.pngData(), \TeamMedia.mediaData)
-            setNilValue(\TeamMedia.mediaError)
+            mediaData = newValue?.pngData()
+            mediaError = nil
         }
     }
 
     var imageError: Error? {
         get {
-            return getValue(\TeamMedia.mediaError)
+            return mediaError
         }
         set {
-            setValue(newValue, \TeamMedia.mediaError)
-            setNilValue(\TeamMedia.mediaData)
+            mediaError = newValue
+            mediaData = nil
         }
-    }
-
-    public var viewImageURL: URL? {
-        guard let viewURL = getValue(\TeamMedia.viewURL) else {
-            return nil
-        }
-        return URL(string: viewURL)
     }
 
     public var imageDirectURL: URL? {
-        guard let directURL = getValue(\TeamMedia.directURL) else {
+        guard let directURL = directURL else {
             return nil
         }
         return URL(string: directURL)

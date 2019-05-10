@@ -12,22 +12,6 @@ extension NSManagedObject {
         return context.getKeyPathAndWait(obj: self, keyPath: keyPath)!
     }
 
-    /** Syncronous, thread-safe method to set a typed value for a NSManagedObject. **/
-    func setValue<T, J>(_ value: J, _ keyPath: KeyPath<T, J>) {
-        guard let context = managedObjectContext else {
-            fatalError("No managedObjectContext for object.")
-        }
-        context.setKeyPathAndWait(obj: self, value: value, keyPath: keyPath)
-    }
-
-    /** Syncronous, thread-safe method to set a nil value for a NSManagedObject. **/
-    func setNilValue<T, J>(_ keyPath: KeyPath<T, J>) {
-        guard let context = managedObjectContext else {
-            fatalError("No managedObjectContext for object.")
-        }
-        context.setNilKeyPathAndWait(obj: self, keyPath: keyPath)
-    }
-
 }
 
 extension NSManagedObjectContext {

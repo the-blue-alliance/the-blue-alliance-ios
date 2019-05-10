@@ -127,17 +127,6 @@ class TeamMediaTestCase: CoreDataTestCase {
         XCTAssertEqual(media.youtubeKey, foreignKey)
     }
 
-    func test_viewImageURL() {
-        let media = TeamMedia.init(entity: TeamMedia.entity(), insertInto: persistentContainer.viewContext)
-
-        // No url - nil
-        XCTAssertNil(media.viewImageURL)
-
-        // cdPhotoThread
-        media.viewURL = "http://www.chiefdelphi.com/media/photos/foreign_key"
-        XCTAssertEqual(media.viewImageURL?.absoluteString, "http://www.chiefdelphi.com/media/photos/foreign_key")
-    }
-
     func test_imageDirectURL() {
         let media = TeamMedia.init(entity: TeamMedia.entity(), insertInto: persistentContainer.viewContext)
 

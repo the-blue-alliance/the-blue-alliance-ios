@@ -130,19 +130,23 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         let dataTask = URLSession.shared.dataTask(with: url, completionHandler: { [weak self] (data, _, error) in
             self?.fetchingMedia.remove(media)
 
-            if let error = error {
-                media.imageError = MediaError.error(error.localizedDescription)
-            } else if let data = data {
-                if let image = UIImage(data: data) {
-                    media.image = image
-                } else {
-                    media.imageError = MediaError.error("Invalid data for request")
-                }
-            } else {
-                media.imageError = MediaError.error("No data for request")
+            guard let backgroundContext = self?.persistentContainer.newBackgroundContext() else {
+                return
             }
-
-            self?.persistentContainer.viewContext.performSaveOrRollback()
+            backgroundContext.performChanges {
+                let backgroundMedia = backgroundContext.object(with: media.objectID) as! TeamMedia
+                if let error = error {
+                    backgroundMedia.imageError = MediaError.error(error.localizedDescription)
+                } else if let data = data {
+                    if let image = UIImage(data: data) {
+                        backgroundMedia.image = image
+                    } else {
+                        backgroundMedia.imageError = MediaError.error("Invalid data for request")
+                    }
+                } else {
+                    backgroundMedia.imageError = MediaError.error("No data for request")
+                }
+            }
         })
         dataTask.resume()
     }
