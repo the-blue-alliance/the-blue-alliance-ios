@@ -10,7 +10,7 @@ class MatchViewController: MyTBAContainerViewController {
 
     private(set) var infoViewController: MatchInfoViewController
     private(set) var breakdownViewController: MatchBreakdownViewController?
-    
+
     private let statusService: StatusService
     private let urlOpener: URLOpener
 

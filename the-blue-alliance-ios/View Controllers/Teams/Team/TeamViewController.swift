@@ -46,9 +46,9 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
     init(team: Team, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.team = team
-        self.year = TeamViewController.latestYear(statusService: statusService, years: team.yearsParticipated)
         self.statusService = statusService
         self.urlOpener = urlOpener
+        self.year = TeamViewController.latestYear(currentSeason: statusService.currentSeason, years: team.yearsParticipated, in: persistentContainer.viewContext)
 
         infoViewController = TeamInfoViewController(team: team, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -100,24 +100,31 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
     private func setupObservers() {
         contextObserver.observeObject(object: team, state: .updated) { [weak self] (team, _) in
-            if self?.year == nil {
-                guard let statusService = self?.statusService else {
-                    return
-                }
-                self?.year = TeamViewController.latestYear(statusService: statusService, years: team.yearsParticipated)
+            guard let self = self else {
+                return
+            }
+            guard let context = team.managedObjectContext else {
+                fatalError("No context for Team.")
+            }
+            if self.year == nil {
+                self.year = TeamViewController.latestYear(
+                    currentSeason: self.statusService.currentSeason,
+                    years: team.getValue(\Team.yearsParticipated),
+                    in: context
+                )
             } else {
-                self?.updateInterface()
+                self.updateInterface()
             }
         }
     }
 
-    private static func latestYear(statusService: StatusService, years: [Int]?) -> Int? {
+    private static func latestYear(currentSeason: Int, years: [Int]?, in context: NSManagedObjectContext) -> Int? {
         if let years = years, !years.isEmpty {
             // Limit default year set to be <= currentSeason
             let latestYear = years.first!
-            if latestYear > statusService.currentSeason, years.count > 1 {
+            if latestYear > currentSeason, years.count > 1 {
                 // Find the next year before the current season
-                return years.first(where: { $0 <= statusService.currentSeason })
+                return years.first(where: { $0 <= currentSeason })
             } else {
                 // Otherwise, the first year is fine (for new teams)
                 return years.first

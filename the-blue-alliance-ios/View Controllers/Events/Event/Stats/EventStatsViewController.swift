@@ -48,7 +48,8 @@ extension EventStatsViewController: TBAReactNativeViewControllerDelegate {
 extension EventStatsViewController: Refreshable {
 
     var refreshKey: String? {
-        return "\(event.key!)_insights"
+        let key = event.getValue(\Event.key!)
+        return "\(key)_insights"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -57,14 +58,14 @@ extension EventStatsViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh event stats until the event is over
-        return event.endDate?.endOfDay()
+        return event.getValue(\Event.endDate)?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {
-        guard let insights = event.insights else {
+        guard let insights = event.getValue(\Event.insights) else {
             return true
         }
-        return insights.qual == nil || insights.playoff == nil
+        return insights.getValue(\EventInsights.qual) == nil || insights.getValue(\EventInsights.playoff) == nil
     }
 
     @objc func refresh() {

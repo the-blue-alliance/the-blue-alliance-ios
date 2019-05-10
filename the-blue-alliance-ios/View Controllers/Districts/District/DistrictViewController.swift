@@ -19,8 +19,8 @@ class DistrictViewController: ContainerViewController {
 
     init(district: District, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.district = district
-        self.statusService = statusService
         self.myTBA = myTBA
+        self.statusService = statusService
         self.urlOpener = urlOpener
 
         eventsViewController = DistrictEventsViewController(district: district, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)

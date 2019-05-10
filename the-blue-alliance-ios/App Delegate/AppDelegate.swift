@@ -182,15 +182,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // Register retries for our status service on the main thread
                 DispatchQueue.main.async {
                     self.statusService.registerRetryable(initiallyRetry: true)
-                }
 
-                // Check our minimum app version - abort app flow if necessary
-                if !self.isAppVersionSupported(minimumAppVersion: self.statusService.status.safeMinAppVersion) {
-                    self.showMinimumAppVersionAlert(status: self.statusService.status)
-                    return
-                }
+                    // Check our minimum app version
+                    let mininmumAppVersion = self.statusService.status.safeMinAppVersion
+                    if !AppDelegate.isAppVersionSupported(minimumAppVersion: mininmumAppVersion) {
+                        self.showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion!.intValue)
+                        return
+                    }
 
-                DispatchQueue.main.async {
                     guard let window = self.window else {
                         fatalError("Window not setup when setting root vc")
                     }
@@ -355,7 +354,7 @@ extension AppDelegate: GIDSignInDelegate {
         }
     }
 
-    func isAppVersionSupported(minimumAppVersion: Int) -> Bool {
+    static func isAppVersionSupported(minimumAppVersion: Int) -> Bool {
         if ProcessInfo.processInfo.arguments.contains("-testUnsupportedVersion") {
             return true
         }
@@ -363,13 +362,13 @@ extension AppDelegate: GIDSignInDelegate {
         return Bundle.main.buildVersionNumber >= minimumAppVersion
     }
 
-    func showMinimumAppVersionAlert(status: Status) {
+    func showMinimumAppVersionAlert(currentAppVersion: Int) {
         guard let window = window else {
             return
         }
 
         DispatchQueue.main.async {
-            AppDelegate.showMinimumAppAlert(appStoreID: "1441973916", currentAppVersion: status.safeMinAppVersion, in: window)
+            AppDelegate.showMinimumAppAlert(appStoreID: "1441973916", currentAppVersion: currentAppVersion, in: window)
         }
     }
 
@@ -378,8 +377,8 @@ extension AppDelegate: GIDSignInDelegate {
 extension AppDelegate: StatusSubscribable {
 
     func statusChanged(status: Status) {
-        if !isAppVersionSupported(minimumAppVersion: status.safeMinAppVersion) {
-            showMinimumAppVersionAlert(status: status)
+        if !AppDelegate.isAppVersionSupported(minimumAppVersion: status.safeMinAppVersion) {
+            showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion!.intValue)
         }
     }
 

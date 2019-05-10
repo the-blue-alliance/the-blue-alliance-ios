@@ -86,7 +86,8 @@ extension MatchesViewController: Refreshable {
     // MARK: - Refreshable
 
     var refreshKey: String? {
-        return "\(event.key!)_matches"
+        let key = event.getValue(\Event.key!)
+        return "\(key)_matches"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -95,7 +96,7 @@ extension MatchesViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh event matches until the event is over
-        return event.endDate?.endOfDay()
+        return event.getValue(\Event.endDate)?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {

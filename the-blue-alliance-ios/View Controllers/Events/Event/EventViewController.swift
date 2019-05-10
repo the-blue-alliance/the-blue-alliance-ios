@@ -57,10 +57,11 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
 
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
 
-        if isEventDown(eventKey: event.key!) {
+        let eventKey = event.key!
+        if isEventDown(eventKey: eventKey) {
             showOfflineEventMessage(shouldShow: true, animated: false)
         }
-        registerForEventStatusChanges(eventKey: event.key!)
+        registerForEventStatusChanges(eventKey: eventKey)
     }
 
     override func viewWillAppear(_ animated: Bool) {

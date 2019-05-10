@@ -64,7 +64,8 @@ extension DistrictRankingsViewController: TableViewDataSourceDelegate {
 extension DistrictRankingsViewController: Refreshable {
 
     var refreshKey: String? {
-        return "\(district.key!)_rankings"
+        let key = district.getValue(\District.key!)
+        return "\(key)_rankings"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -73,7 +74,7 @@ extension DistrictRankingsViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh district rankings until DCMP is over
-        return district.endDate?.endOfDay()
+        return district.getValue(\District.endDate)?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {

@@ -15,7 +15,7 @@ stages:
 - name: cron
   if: "(type == cron)"
 - name: test
-  if: NOT ((type == push) AND (commit_message =~ /^\[clowntown\]/))
+  if: NOT ((type == push OR type == cron) AND (commit_message =~ /^\[clowntown\]/))
 - name: beta
   if: "(type == push) AND (branch == master) AND (commit_message =~ /^\\[beta\\]/)"
 

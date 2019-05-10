@@ -48,8 +48,8 @@ extension ContainerTeamPushable where Self: ContainerViewController {
     }
 
     func _pushTeam(team: Team) {
-        let eventViewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        navigationController?.pushViewController(eventViewController, animated: true)
+        let teamViewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        navigationController?.pushViewController(teamViewController, animated: true)
     }
 
 }

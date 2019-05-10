@@ -403,29 +403,30 @@ extension Event: Locatable, Surfable, Managed {
     }
 
     public var title: String {
-        var title = "nil"
         let eventType = self.eventType!.intValue
+        let year = self.year!.intValue
+
         if eventType == EventType.championshipDivision.rawValue || eventType == EventType.championshipFinals.rawValue {
-            if year!.intValue >= 2017, let city = city {
-                title = "Championship - \(city)"
+            if year >= 2017, let city = city {
+                return "Championship - \(city)"
             } else {
-                title = "Championship"
+                return "Championship"
             }
         } else {
             switch eventType {
             case EventType.unlabeled.rawValue:
-                title = "Other"
+                return "Other"
             case EventType.preseason.rawValue:
-                title = "Preseason"
+                return "Preseason"
             case EventType.offseason.rawValue:
                 guard let month = month else {
                     return "Offseason"
                 }
                 return "\(month) Offseason"
             case EventType.festivalOfChampions.rawValue:
-                title = "Festival of Champions"
+                return "Festival of Champions"
             default:
-                guard let week = week else {
+                guard let week = week?.intValue else {
                     return "Other"
                 }
 
@@ -436,18 +437,17 @@ extension Event: Locatable, Surfable, Managed {
                  */
                 if year == 2016 {
                     if week == 0 {
-                        title = "Week 0.5"
+                        return "Week 0.5"
                     } else {
-                        title = "Week \(week.intValue)"
+                        return "Week \(week)"
                     }
                 } else {
-                    title = "Week \(week.intValue + 1)"
+                    return "Week \(week + 1)"
                 }
             }
         }
-        return title
     }
-    
+
     /**
      Same as title but return nil if title isn't in Week 0.5..7
      */
@@ -470,8 +470,11 @@ extension Event: Locatable, Surfable, Managed {
         return "\(year!.stringValue) \(safeShortName) \(eventTypeString ?? "Event")"
     }
 
+    /**
+     If the event is a CMP division or a CMP finals field.
+    */
     public var isChampionship: Bool {
-        let type = eventType!.intValue
+        let type = getValue(\Event.eventType!.intValue)
         return type == EventType.championshipDivision.rawValue || type == EventType.championshipFinals.rawValue
     }
 
@@ -479,7 +482,7 @@ extension Event: Locatable, Surfable, Managed {
      If the event is a district championship or a district championship division.
      */
     public var isDistrictChampionshipEvent: Bool {
-        let type = eventType!.intValue
+        let type = getValue(\Event.eventType!.intValue)
         return type == EventType.districtChampionshipDivision.rawValue || type == EventType.districtChampionship.rawValue
     }
 
@@ -487,33 +490,37 @@ extension Event: Locatable, Surfable, Managed {
      If the event is a district championship.
      */
     public var isDistrictChampionship: Bool {
-        return eventType!.intValue == EventType.districtChampionship.rawValue
+        let type = getValue(\Event.eventType!.intValue)
+        return type == EventType.districtChampionship.rawValue
     }
 
     public var isFoC: Bool {
-        return eventType!.intValue == EventType.festivalOfChampions.rawValue;
+        let type = getValue(\Event.eventType!.intValue)
+        return type == EventType.festivalOfChampions.rawValue;
     }
     
     public var isPreseason: Bool {
-        return eventType!.intValue == EventType.preseason.rawValue;
+        let type = getValue(\Event.eventType!.intValue)
+        return type == EventType.preseason.rawValue;
     }
     
     public var isOffseason: Bool {
-        return eventType!.intValue == EventType.offseason.rawValue;
+        let type = getValue(\Event.eventType!.intValue)
+        return type == EventType.offseason.rawValue;
     }
 
     /**
      If the event is currently going, based on it's start and end dates.
      */
     public var isHappeningNow: Bool {
-        guard let startDate = startDate, let endDate = endDate else {
+        guard let startDate = getValue(\Event.startDate), let endDate = getValue(\Event.endDate) else {
             return false
         }
         return Date().isBetween(date: startDate, andDate: endDate.endOfDay())
     }
 
     public var month: String? {
-        guard let startDate = startDate else {
+        guard let startDate = getValue(\Event.startDate) else {
             return nil
         }
         let dateFormatter = DateFormatter()
@@ -656,7 +663,7 @@ extension Event: Comparable {
 extension Event: MyTBASubscribable {
 
     public var modelKey: String {
-        return key!
+        return getValue(\Event.key!)
     }
 
     public var modelType: MyTBAModelType {

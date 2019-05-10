@@ -21,7 +21,8 @@ class DistrictTeamsViewController: TeamsViewController {
     // MARK: - Refreshable
 
     override var refreshKey: String? {
-        return "\(district.key!)_teams"
+        let key = district.getValue(\District.key!)
+        return "\(key)_teams"
     }
 
     override var automaticRefreshInterval: DateComponents? {
@@ -31,7 +32,8 @@ class DistrictTeamsViewController: TeamsViewController {
     override var automaticRefreshEndDate: Date? {
         // Automatically refresh district teams during the year before the selected year (when teams are rolling in)
         // Ex: Districts for 2019 will stop automatically refreshing on January 1st, 2019 (should all be set by then)
-        return Calendar.current.date(from: DateComponents(year: district.year!.intValue))
+        let year = district.getValue(\District.year!.intValue)
+        return Calendar.current.date(from: DateComponents(year: year))
     }
 
     @objc override func refresh() {

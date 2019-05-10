@@ -22,7 +22,8 @@ extension Team: Locatable, Surfable, Managed {
      This may seem backwards, providing a TeamKey from a Team, but since TeamAtEventViewController doesn't handle either a Team *or* a TeamKey, we need to pull a TeamKey for controllers that have full Team objects (ex: TeamsViewController)
      */
     var teamKey: TeamKey {
-        return TeamKey.insert(withKey: key!, in: managedObjectContext!)
+        let key = getValue(\Team.key!)
+        return TeamKey.insert(withKey: key, in: managedObjectContext!)
     }
 
     /**
@@ -168,7 +169,7 @@ extension Team: Locatable, Surfable, Managed {
 extension Team: MyTBASubscribable {
 
     public var modelKey: String {
-        return key!
+        return getValue(\Team.key!)
     }
 
     public var modelType: MyTBAModelType {

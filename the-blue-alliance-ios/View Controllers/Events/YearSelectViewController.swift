@@ -193,17 +193,17 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
             self.removeRequest(request: request!)
 
             self.hasRefreshed = true
-            self.updateWeeks()
+            DispatchQueue.main.async {
+                self.updateWeeks(in: self.persistentContainer.viewContext)
+            }
         })
         addRequest(request: request!)
     }
 
-    func updateWeeks() {
-        options = Event.weekEvents(for: year, in: persistentContainer.viewContext)
+    func updateWeeks(in context: NSManagedObjectContext) {
+        options = Event.weekEvents(for: year, in: context)
         if isDataSourceEmpty && hasRefreshed {
-            DispatchQueue.main.async {
-                self.showNoDataView()
-            }
+            self.showNoDataView()
         }
     }
     

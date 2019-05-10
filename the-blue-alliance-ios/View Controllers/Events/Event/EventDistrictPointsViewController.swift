@@ -117,7 +117,8 @@ extension EventDistrictPointsViewController: TableViewDataSourceDelegate {
 extension EventDistrictPointsViewController: Refreshable {
 
     var refreshKey: String? {
-        return "\(event.key!)_district_points"
+        let key = event.getValue(\Event.key!)
+        return "\(key)_district_points"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -138,12 +139,15 @@ extension EventDistrictPointsViewController: Refreshable {
     @objc func refresh() {
         removeNoDataView()
 
+        let eventKey = event.key!
+
         var request: URLSessionDataTask?
-        request = tbaKit.fetchEventDistrictPoints(key: event.key!, completion: { (result, notModified) in
+        request = tbaKit.fetchEventDistrictPoints(key: eventKey, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let (eventPoints, _) = try? result.get() {
-                    DistrictEventPoints.insert(eventPoints, eventKey: self.event.key!, in: context)
+                    // This is a fucking PROBLEM
+                    DistrictEventPoints.insert(eventPoints, eventKey: eventKey, in: context)
                 }
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, request: request!)

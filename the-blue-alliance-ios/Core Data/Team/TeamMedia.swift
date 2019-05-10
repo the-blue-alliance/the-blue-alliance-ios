@@ -3,6 +3,19 @@ import Foundation
 import TBAKit
 import UIKit
 
+enum MediaError: Error {
+    case error(String)
+}
+
+extension MediaError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case let .error(message):
+            return NSLocalizedString(message, comment: "Media error")
+        }
+    }
+}
+
 public enum MediaType: String {
     case youtubeVideo = "youtube"
     case cdPhotoThread = "cdphotothread"
@@ -67,13 +80,6 @@ extension TeamMedia {
         }
     }
 
-    public var viewImageURL: URL? {
-        guard let viewURL = viewURL else {
-            return nil
-        }
-        return URL(string: viewURL)
-    }
-
     public var imageDirectURL: URL? {
         guard let directURL = directURL else {
             return nil
@@ -87,7 +93,7 @@ extension TeamMedia: Playable {
 
     var youtubeKey: String? {
         if type == MediaType.youtubeVideo.rawValue {
-            return foreignKey
+            return getValue(\TeamMedia.foreignKey)
         }
         return nil
     }
