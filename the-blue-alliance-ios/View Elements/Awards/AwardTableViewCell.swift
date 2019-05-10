@@ -35,7 +35,6 @@ class AwardTableViewCell: UITableViewCell, Reusable {
         awardsFlexView.topAnchor.constraint(equalToSystemSpacingBelow: awardNameLabel.lastBaselineAnchor, multiplier: 1).isActive = true
         awardsFlexView.setContentHuggingPriority(UILayoutPriority(999), for: .vertical)
         self.bottomAnchor.constraint(equalTo: awardsFlexView.bottomAnchor, constant: 20).withPriority(.defaultHigh).isActive = true
-        self.setContentHuggingPriority(UILayoutPriority(999), for: .vertical)
     }
 
     required init?(coder aDecoder: NSCoder) { fatalError() }

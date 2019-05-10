@@ -10,19 +10,21 @@ class FlexLayoutView: UIView {
     private(set) var views: [UIView] = []
     var verticalSpacing: CGFloat = 0
     var horizontalSpacing: CGFloat = 0
-    private var heightConstraint: NSLayoutConstraint!
+    var specifiedWidth: CGFloat?
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: specifiedWidth ?? UIScreen.main.bounds.width, height: self.calculatedHeight)
+    }
+    var calculatedHeight: CGFloat = 0
 
     // Mark: - Init
 
     required init?(coder aDecoder: NSCoder) { fatalError() }
 
-    init() {
+    init(width: CGFloat? = nil) {
         super.init(frame: .zero)
-
+        self.specifiedWidth = width
         self.translatesAutoresizingMaskIntoConstraints = false
         self.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        heightConstraint = heightAnchor.constraint(equalToConstant: 0)
-        heightConstraint.isActive = true
     }
 
     // Mark: Methods
@@ -54,18 +56,22 @@ class FlexLayoutView: UIView {
         var currentX: CGFloat = 0
         var rowMaxY: CGFloat = 0
         var currentRowY: CGFloat = 0
+        var counter = 1
         for view in views {
-            if currentX + horizontalSpacing + view.bounds.width > self.bounds.width {
+            if currentX + horizontalSpacing + view.intrinsicContentSize.width > self.intrinsicContentSize.width {
                 currentX = 0
                 currentRow += 1
                 currentRowY = rowMaxY + verticalSpacing
                 rowMaxY = currentRowY
+                counter += 1
             }
             view.frame = CGRect(x: currentX, y: currentRowY, width: view.bounds.width, height: view.bounds.height)
             if view.bounds.height + currentRowY > rowMaxY { rowMaxY = view.bounds.height + currentRowY }
-            currentX += horizontalSpacing + view.bounds.width
+            currentX += horizontalSpacing + view.intrinsicContentSize.width
         }
-        heightConstraint.constant = rowMaxY
+
+        self.calculatedHeight = rowMaxY
+        self.invalidateIntrinsicContentSize()
     }
 
 }

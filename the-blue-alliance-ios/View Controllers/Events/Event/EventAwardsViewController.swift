@@ -122,11 +122,6 @@ class EventAwardsViewController: TBATableViewController {
         }
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.tableView.reloadData()
-    }
-
 }
 
 extension EventAwardsViewController: TableViewDataSourceDelegate {
