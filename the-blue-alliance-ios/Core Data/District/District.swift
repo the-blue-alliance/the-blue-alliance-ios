@@ -8,9 +8,7 @@ extension District {
      A string concatenating the district's year and abbrevation.
      */
     public var abbreviationWithYear: String {
-        let year = getValue(\District.year!)
-        let abbrv = getValue(\District.abbreviation!)
-        return "\(year.stringValue) \(abbrv.uppercased())"
+        return "\(year!.stringValue) \(abbreviation!.uppercased())"
     }
 
     /**

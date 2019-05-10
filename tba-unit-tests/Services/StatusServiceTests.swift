@@ -199,7 +199,7 @@ class EventStatusSubscribableTests: TBATestCase {
     override func setUp() {
         super.setUp()
 
-        eventSubscribable = MockEventStatusSubscribable(persistentContainer: persistentContainer, statusService: statusService)
+        eventSubscribable = MockEventStatusSubscribable(statusService: statusService)
     }
 
     override func tearDown() {
@@ -283,13 +283,11 @@ private class MockFMSStatusSubscribable: FMSStatusSubscribable {
 private class MockEventStatusSubscribable: EventStatusSubscribable {
 
     var statusService: StatusService
-    var persistentContainer: NSPersistentContainer
 
     var eventOfflineValue: Bool?
     var eventStatusChangedExpectation: XCTestExpectation?
 
-    init(persistentContainer: NSPersistentContainer, statusService: StatusService) {
-        self.persistentContainer = persistentContainer
+    init(statusService: StatusService) {
         self.statusService = statusService
     }
 

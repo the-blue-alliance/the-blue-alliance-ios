@@ -26,14 +26,14 @@ class StatusService: NSObject {
     private var previouslyDownEventKeys: [String] = []
 
     var currentSeason: Int {
-        guard let currentSeason = status.getValue(\Status.currentSeason) else {
+        guard let currentSeason = status.currentSeason else {
             fatalError("No currentSeason for Status.")
         }
         return currentSeason.intValue
     }
 
     var maxSeason: Int {
-        guard let maxSeason = status.getValue(\Status.maxSeason) else {
+        guard let maxSeason = status.maxSeason else {
             fatalError("No maxSeason for Status.")
         }
         return maxSeason.intValue
@@ -190,7 +190,6 @@ extension FMSStatusSubscribable {
 
 @objc protocol EventStatusSubscribable {
     var statusService: StatusService { get }
-    var persistentContainer: NSPersistentContainer { get }
 
     func eventStatusChanged(isEventOffline: Bool)
 }
@@ -202,8 +201,7 @@ extension EventStatusSubscribable {
     }
 
     func isEventDown(eventKey: String) -> Bool {
-        let downEventsSet = statusService.status.getValue(\Status.downEvents)
-        let downEventKeys = (downEventsSet?.allObjects as? [EventKey] ?? []).map({ $0.key! })
+        let downEventKeys = (statusService.status.downEvents?.allObjects as? [EventKey] ?? []).map({ $0.key! })
         return downEventKeys.contains(eventKey)
     }
 

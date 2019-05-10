@@ -381,7 +381,7 @@ extension Event: Locatable, Surfable, Managed {
     }
 
     public func dateString() -> String? {
-        guard let startDate = getValue(\Event.startDate), let endDate = getValue(\Event.endDate) else {
+        guard let startDate = startDate, let endDate = endDate else {
             return nil
         }
 
@@ -403,11 +403,11 @@ extension Event: Locatable, Surfable, Managed {
     }
 
     public var weekString: String {
-        let eventType = getValue(\Event.eventType!.intValue)
-        let year = getValue(\Event.year!.intValue)
+        let eventType = self.eventType!.intValue
+        let year = self.year!.intValue
 
         if eventType == EventType.championshipDivision.rawValue || eventType == EventType.championshipFinals.rawValue {
-            if year >= 2017, let city = getValue(\Event.city) {
+            if year >= 2017, let city = city {
                 return "Championship - \(city)"
             } else {
                 return "Championship"
@@ -426,7 +426,7 @@ extension Event: Locatable, Surfable, Managed {
             case EventType.festivalOfChampions.rawValue:
                 return "Festival of Champions"
             default:
-                guard let week = getValue(\Event.week?.intValue) else {
+                guard let week = week?.intValue else {
                     return "Other"
                 }
 
@@ -449,18 +449,19 @@ extension Event: Locatable, Surfable, Managed {
     }
 
     public var safeShortName: String {
-        let name = getValue(\Event.name!)
-        guard let shortName = getValue(\Event.shortName) else {
-            return name
+        guard let shortName = shortName else {
+            return name!
         }
-        return shortName.isEmpty ? name : shortName
+        return shortName.isEmpty ? name! : shortName
     }
 
     public var friendlyNameWithYear: String {
-        let year = getValue(\Event.year!.stringValue)
-        return "\(year) \(safeShortName) \(eventTypeString ?? "Event")"
+        return "\(year!.stringValue) \(safeShortName) \(eventTypeString ?? "Event")"
     }
 
+    /**
+     If the event is a CMP division or a CMP finals field.
+    */
     public var isChampionship: Bool {
         let type = getValue(\Event.eventType!.intValue)
         return type == EventType.championshipDivision.rawValue || type == EventType.championshipFinals.rawValue
@@ -525,7 +526,7 @@ extension Event: Locatable, Surfable, Managed {
             // Filter out CMP divisions - we don't want them below for our weeks calculation
             fetchRequest.predicate = NSPredicate(format: "%K == %ld && %K != %ld",
                                                  #keyPath(Event.year), year,
-                                                 #keyPath(Event.eventType.intValue), EventType.championshipDivision.rawValue)
+                                                 #keyPath(Event.eventType), EventType.championshipDivision.rawValue)
             fetchRequest.sortDescriptors = [
                 NSSortDescriptor(key: #keyPath(Event.week), ascending: true),
                 NSSortDescriptor(key: #keyPath(Event.eventType), ascending: true),

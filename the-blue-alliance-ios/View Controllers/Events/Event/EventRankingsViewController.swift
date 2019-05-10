@@ -92,7 +92,6 @@ extension EventRankingsViewController: Refreshable {
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let (rankings, sortOrder, extraStats) = try? result.get() {
-                    // TODO: Is ObjectID thread safe?
                     let event = context.object(with: self.event.objectID) as! Event
                     event.insert(rankings, sortOrderInfo: sortOrder, extraStatsInfo: extraStats)
                 }

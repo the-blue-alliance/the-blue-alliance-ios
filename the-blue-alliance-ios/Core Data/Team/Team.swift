@@ -6,8 +6,7 @@ import TBAKit
 extension Team: Locatable, Surfable, Managed {
 
     var fallbackNickname: String {
-        let teamNumber = getValue(\Team.teamNumber!.stringValue)
-        return "Team \(teamNumber)"
+        return "Team \(teamNumber!.stringValue)"
     }
 
     /**
