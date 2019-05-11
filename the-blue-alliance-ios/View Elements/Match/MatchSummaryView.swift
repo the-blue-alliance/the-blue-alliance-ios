@@ -14,12 +14,16 @@ class MatchSummaryView: UIView {
             configureView()
         }
     }
-    
+
     // change this variable so that the teams are shown as buttons
     private var teamsTappable: Bool = false
+    var calculatedHeight: CGFloat {
+        let multiplier: CGFloat = 2.5 // change this value to add vertical padding
+        return (currentFontSize - 14) * multiplier + 90
+    }
 
     private var currentFontSize: CGFloat {
-        return teamsTappable ? 16 : 14
+        return teamsTappable ? 18 : 14 // change this value to change button size
     }
     private var winnerFont: UIFont {
         return UIFont.systemFont(ofSize: currentFontSize, weight: UIFont.Weight.bold)
@@ -55,7 +59,6 @@ class MatchSummaryView: UIView {
     @IBOutlet private weak var blueRPStackView: UIStackView!
 
     @IBOutlet weak var timeLabel: UILabel!
-    
 
     // MARK: - Init
 
@@ -190,6 +193,7 @@ class MatchSummaryView: UIView {
         
         newButton.addTarget(self, action: #selector(teamPressed(sender:)), for: .touchUpInside)
         newButton.translatesAutoresizingMaskIntoConstraints = false
+
         return newButton
     }
 

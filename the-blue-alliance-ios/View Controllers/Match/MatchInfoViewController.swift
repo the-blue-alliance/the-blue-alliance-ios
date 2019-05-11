@@ -117,7 +117,7 @@ class MatchInfoViewController: TBAViewController, Observable {
 
     func styleInterface() {
         scrollView.addSubview(matchStackView)
-        matchStackView.autoSetDimension(.height, toSize: 90)
+        matchStackView.autoSetDimension(.height, toSize: matchSummaryView.calculatedHeight)
         matchStackView.autoPinEdge(.top, to: .top, of: scrollView, withOffset: 8)
         matchStackView.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 16)
         matchStackView.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 16)
