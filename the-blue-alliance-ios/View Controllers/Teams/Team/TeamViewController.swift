@@ -31,6 +31,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
                 if mediaViewController.year != year {
                     mediaViewController.year = year
                 }
+                fetchTeaMedia(year: year)
             }
 
             updateInterface()
@@ -157,10 +158,8 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         })
     }
 
-    /*
     private func fetchTeaMedia(year: Int) {
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchTeamMedia(key: team.key!, year: year, completion: { (result, notModified) in
+        tbaKit.fetchTeamMedia(key: team.key!, year: year, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let media = try? result.get() {
@@ -170,7 +169,6 @@ class TeamViewController: MyTBAContainerViewController, Observable {
             })
         })
     }
-    */
 
     @objc private func showSelectYear() {
         guard let yearsParticipated = team.yearsParticipated, !yearsParticipated.isEmpty else {

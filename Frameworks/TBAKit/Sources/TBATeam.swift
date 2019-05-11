@@ -395,7 +395,8 @@ extension TBAKit {
             }
         })
     }
-    
+
+    @discardableResult
     public func fetchTeamAwards(key: String, year: Int? = nil, completion: @escaping (Result<[TBAAward], Error>, Bool) -> ()) -> URLSessionDataTask {
         var method = "team/\(key)/awards"
         if let year = year {
@@ -403,17 +404,20 @@ extension TBAKit {
         }
         return callArray(method: method, completion: completion)
     }
-    
+
+    @discardableResult
     public func fetchTeamMatches(key: String, year: Int, completion: @escaping (Result<[TBAMatch], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "team/\(key)/matches/\(year)"
         return callArray(method: method, completion: completion)
     }
-    
+
+    @discardableResult
     public func fetchTeamMedia(key: String, year: Int, completion: @escaping (Result<[TBAMedia], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "team/\(key)/media/\(year)"
         return callArray(method: method, completion: completion)
     }
-    
+
+    @discardableResult
     public func fetchTeamSocialMedia(key: String, completion: @escaping (Result<[TBAMedia], Error>, Bool) -> ()) -> URLSessionDataTask {
         let method = "team/\(key)/social_media"
         return callArray(method: method, completion: completion)

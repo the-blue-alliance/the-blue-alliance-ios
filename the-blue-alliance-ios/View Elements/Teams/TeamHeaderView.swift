@@ -61,6 +61,7 @@ class TeamHeaderView: UIView {
         addSubview(rootStackView)
         rootStackView.autoPinEdgesToSuperviewEdges(with: .init(top: 16, left: 16, bottom: 16, right: 16))
         yearStackView.autoMatch(.height, to: .height, of: rootStackView)
+        rootStackView.autoSetDimension(.height, toSize: 55)
 
         avatarImageView.autoSetDimensions(to: .init(width: 55, height: 55))
     }
