@@ -39,6 +39,8 @@ class TeamHeaderView: UIView {
 
         let stackView = UIStackView(arrangedSubviews: [spacerView, yearButton])
         stackView.axis = .vertical
+        yearButton.autoSetDimension(.width, toSize: 60, relation: .greaterThanOrEqual)
+        yearButton.autoSetDimension(.height, toSize: 30, relation: .greaterThanOrEqual)
         return stackView
     }()
 
@@ -162,9 +164,8 @@ private class YearButton: UIButton {
 
     override open var isHighlighted: Bool {
         didSet {
-            let mediumWhite = UIColor(white: 0.9, alpha: 1)
             UIView.animate(withDuration: 0.125) {
-                self.backgroundColor = self.isHighlighted ? mediumWhite : UIColor.white
+                self.backgroundColor = self.isHighlighted ? UIColor.lightGray : UIColor.white
             }
         }
     }
@@ -174,21 +175,15 @@ private class YearButton: UIButton {
 
         setTitle("---", for: .normal)
         setTitleColor(.primaryBlue, for: .normal)
-        setImage(UIImage(named: "baseline_arrow_drop_down"), for: .normal)
+        setImage(UIImage(named: "year_button_arrow_down"), for: .normal)
 
         titleLabel?.font = UIFont.preferredFont(forTextStyle: .callout, compatibleWith: nil).bold()
 
         tintColor = .primaryBlue
         backgroundColor = .white
-        contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
 
         layer.masksToBounds = true
         setContentHuggingPriority(.defaultHigh, for: .horizontal)
-
-        /*
-        autoSetDimension(.width, toSize: 44, relation: .greaterThanOrEqual)
-        autoSetDimension(.height, toSize: 24)
-        */
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -199,6 +194,8 @@ private class YearButton: UIButton {
         super.layoutSubviews()
 
         layer.cornerRadius = frame.size.height * 0.5
+
+        contentEdgeInsets = UIEdgeInsets(top: 0, left: frame.size.height * 0.5, bottom: 0, right: frame.size.height * 0.5)
     }
 
 }
