@@ -186,7 +186,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, for event: Event) -> EventTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
-        cell.viewModel = EventCellViewModel(event: event)
+        cell.viewModel = EventCellViewModel(event: event, eventWeekVisible: true)
         return cell
     }
 

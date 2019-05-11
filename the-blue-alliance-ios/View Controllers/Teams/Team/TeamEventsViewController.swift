@@ -17,6 +17,8 @@ class TeamEventsViewController: EventsViewController {
         self.year = year
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        
+        self.weekNumbersVisible = true
     }
 
     required init?(coder aDecoder: NSCoder) {

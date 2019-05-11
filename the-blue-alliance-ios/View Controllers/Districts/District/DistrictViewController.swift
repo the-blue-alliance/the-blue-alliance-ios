@@ -68,7 +68,7 @@ extension DistrictViewController: EventsViewControllerDelegate {
     }
 
     func title(for event: Event) -> String? {
-        return "\(event.title) Events"
+        return "\(event.eventGroupString) Events"
     }
 
 }

@@ -402,7 +402,7 @@ extension Event: Locatable, Surfable, Managed {
         }
     }
 
-    public var title: String {
+    public var eventGroupString: String {
         let eventType = self.eventType!.intValue
         let year = self.year!.intValue
 
@@ -426,37 +426,41 @@ extension Event: Locatable, Surfable, Managed {
             case EventType.festivalOfChampions.rawValue:
                 return "Festival of Champions"
             default:
-                guard let week = week?.intValue else {
-                    return "Other"
-                }
-
-                /**
-                 * Special cases for 2016:
-                 * Week 1 is actually Week 0.5, eveything else is one less
-                 * See http://www.usfirst.org/roboticsprograms/frc/blog-The-Palmetto-Regional
-                 */
-                if year == 2016 {
-                    if week == 0 {
-                        return "Week 0.5"
-                    } else {
-                        return "Week \(week)"
-                    }
-                } else {
-                    return "Week \(week + 1)"
-                }
+                return weekString ?? "Other"
             }
         }
     }
 
-    /**
-     Same as title but return nil if title isn't in Week 0.5..7
-     */
     public var weekString: String? {
-        if title.contains("Week") {
-            return title
-        } else {
-            return nil
+        let eventType = self.eventType!.intValue
+        
+        if [EventType.regional.rawValue,
+            EventType.district.rawValue,
+            EventType.districtChampionship.rawValue,
+            EventType.districtChampionshipDivision.rawValue]
+            .contains(eventType) {
+            
+            guard let week = week?.intValue else {
+                return nil
+            }
+            
+            /**
+             * Special cases for 2016:
+             * Week 1 is actually Week 0.5, eveything else is one less
+             * See http://www.usfirst.org/roboticsprograms/frc/blog-The-Palmetto-Regional
+             */
+            if year == 2016 {
+                if week == 0 {
+                    return "Week 0.5"
+                } else {
+                    return "Week \(week)"
+                }
+            } else {
+                return "Week \(week + 1)"
+            }
         }
+        
+        return nil
     }
 
     public var safeShortName: String {

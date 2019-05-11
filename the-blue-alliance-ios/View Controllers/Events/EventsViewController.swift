@@ -31,6 +31,8 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
 
     weak var delegate: EventsViewControllerDelegate?
     private var dataSource: TableViewDataSource<Event, EventsViewController>!
+    
+    var weekNumbersVisible: Bool = false
 
     // MARK: Init
 
@@ -133,7 +135,7 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
 extension EventsViewController: TableViewDataSourceDelegate {
 
     func configure(_ cell: EventTableViewCell, for object: Event, at indexPath: IndexPath) {
-        cell.viewModel = EventCellViewModel(event: object)
+        cell.viewModel = EventCellViewModel(event: object, eventWeekVisible: weekNumbersVisible)
     }
 
     func title(for section: Int) -> String? {
@@ -165,7 +167,7 @@ extension EventsViewController: TableViewDataSourceDelegate {
         } else if event.isFoC {
             return "Festival of Champions"
         } else if event.isOffseason {
-            return "\(event.title) Events"
+            return "\(event.eventGroupString) Events"
         } else if event.isPreseason {
             return "Preseason Events"
         } else {
