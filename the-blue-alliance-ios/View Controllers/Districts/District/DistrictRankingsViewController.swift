@@ -74,7 +74,7 @@ extension DistrictRankingsViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh district rankings until DCMP is over
-        return district.getValue(\District.endDate)?.endOfDay()
+        return district.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {
