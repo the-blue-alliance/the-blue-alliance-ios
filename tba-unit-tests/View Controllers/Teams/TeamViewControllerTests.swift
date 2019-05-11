@@ -32,14 +32,6 @@ class TeamViewControllerTests: TBATestCase {
         super.tearDown()
     }
 
-    func test_snapshot() {
-        verifyLayer(viewControllerTester.window.layer)
-
-        // myTBA authed
-        myTBA.authToken = "abcd123"
-        verifyLayer(viewControllerTester.window.layer, identifier: "mytba")
-    }
-
     func test_subscribableModel() {
         XCTAssertEqual(teamViewController.subscribableModel as? Team, team)
     }

@@ -24,6 +24,7 @@ class TeamHeaderView: UIView {
         let font = UIFont.preferredFont(forTextStyle: .title1)
         let fontMetrics = UIFontMetrics(forTextStyle: .title1)
         label.font = fontMetrics.scaledFont(for: UIFont.systemFont(ofSize: font.pointSize, weight: .semibold))
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     private lazy var teamNameLabel: UILabel = {
@@ -47,6 +48,7 @@ class TeamHeaderView: UIView {
         stackView.axis = .vertical
         yearButton.autoSetDimension(.width, toSize: 60, relation: .greaterThanOrEqual)
         yearButton.autoSetDimension(.height, toSize: 30, relation: .greaterThanOrEqual)
+        yearButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         return stackView
     }()
 
@@ -61,7 +63,7 @@ class TeamHeaderView: UIView {
         addSubview(rootStackView)
         rootStackView.autoPinEdgesToSuperviewEdges(with: .init(top: 16, left: 16, bottom: 16, right: 16))
         yearStackView.autoMatch(.height, to: .height, of: rootStackView)
-        rootStackView.autoSetDimension(.height, toSize: 55)
+        rootStackView.autoSetDimension(.height, toSize: 55, relation: .greaterThanOrEqual)
 
         avatarImageView.autoSetDimensions(to: .init(width: 55, height: 55))
     }
@@ -72,7 +74,7 @@ class TeamHeaderView: UIView {
 
     // MARK: Private Methods
 
-    func configureView() {
+    private func configureView() {
         avatarImageView.imageView.image = viewModel.avatar
         avatarImageView.isHidden = !viewModel.hasAvatar
 
@@ -89,6 +91,10 @@ class TeamHeaderView: UIView {
         label.adjustsFontForContentSizeCategory = true
         label.textColor = .white
         return label
+    }
+
+    func changeAvatarBorder() {
+        avatarImageView.avatarTapped()
     }
 
 }
@@ -115,7 +121,7 @@ private class AvatarImageView: UIView {
         layer.masksToBounds = true
         layer.cornerRadius = 5
 
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(avatarTapped(sender:)))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(avatarTapped))
         addGestureRecognizer(tapGestureRecognizer)
     }
 
@@ -125,7 +131,7 @@ private class AvatarImageView: UIView {
 
     // MARK: Private Methods
 
-    @objc func avatarTapped(sender: AnyObject) {
+    @objc func avatarTapped() {
         let newColor = backgroundColor == .avatarBlue ? UIColor.avatarRed : UIColor.avatarBlue
         backgroundColor = newColor
         layer.borderColor = newColor.cgColor

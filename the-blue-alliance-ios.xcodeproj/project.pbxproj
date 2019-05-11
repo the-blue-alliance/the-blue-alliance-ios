@@ -34,6 +34,7 @@
 		14B520F7218CA28B00F2EF4F /* EventStatusAllianceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B520F6218CA28B00F2EF4F /* EventStatusAllianceTests.swift */; };
 		14B520F9218CB19400F2EF4F /* EventStatusPlayoffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B520F8218CB19400F2EF4F /* EventStatusPlayoffTests.swift */; };
 		14B520FB218CB96400F2EF4F /* EventStatusQualTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B520FA218CB96400F2EF4F /* EventStatusQualTests.swift */; };
+		229BBD06444E4D553A239F7D /* Pods_tba_snapshot_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2C88F245A0C326E2749BA8 /* Pods_tba_snapshot_tests.framework */; };
 		304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */; };
 		304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */; };
 		373233698A5148831C801B8E /* Pods_The_Blue_Alliance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */; };
@@ -79,6 +80,9 @@
 		925908B721863C3E00D7BFCE /* EventAllianceBackupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908B621863C3E00D7BFCE /* EventAllianceBackupTests.swift */; };
 		9266825221B058DA0077C75C /* TBAReactNativeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */; };
 		92688C2B2090091D00D12B7B /* ReactNativeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92688C2A2090091D00D12B7B /* ReactNativeService.swift */; };
+		927184E022867FD600EAD174 /* MockNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927184DD22867F5800EAD174 /* MockNavigationController.swift */; };
+		927184E42286861500EAD174 /* TBAViewControllerSnapshotTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927184E32286861500EAD174 /* TBAViewControllerSnapshotTestCase.swift */; };
+		927184E72286888E00EAD174 /* StatusDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 927184E62286886800EAD174 /* StatusDefaults.plist */; };
 		9274E14121B1026900F5D5D0 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14021B1026900F5D5D0 /* NotificationsViewController.swift */; };
 		9274E14521B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */; };
 		9274E14721B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */; };
@@ -219,6 +223,12 @@
 		92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */; };
 		92FA4D2F228624D500030BA3 /* UIFont+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */; };
 		92FA4D3122865C1A00030BA3 /* TeamHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D3022865C1A00030BA3 /* TeamHeaderViewModel.swift */; };
+		92FA4D34228668F000030BA3 /* TeamHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D33228668F000030BA3 /* TeamHeaderViewTests.swift */; };
+		92FA4D44228669A600030BA3 /* TBASnapshotTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D43228669A600030BA3 /* TBASnapshotTestCase.swift */; };
+		92FA4D47228669E700030BA3 /* TeamHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D46228669E700030BA3 /* TeamHeaderViewTests.swift */; };
+		92FA4D4A22866A9700030BA3 /* CoreDataTestFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D4922866A9700030BA3 /* CoreDataTestFixture.swift */; };
+		92FA4D4C228678DA00030BA3 /* TBAViewControllerTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D4B228678DA00030BA3 /* TBAViewControllerTester.swift */; };
+		92FA4D5022867E1400030BA3 /* TeamViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D4F22867E1400030BA3 /* TeamViewControllerTests.swift */; };
 		92FE68BB20D8A1E8004A1481 /* MyTBASignOutOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FE68BA20D8A1E8004A1481 /* MyTBASignOutOperation.swift */; };
 		92FF10D021A25D86003BC5C4 /* TBAViewControllerTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10CF21A25D86003BC5C4 /* TBAViewControllerTester.swift */; };
 		92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E321A61A1B003BC5C4 /* TeamViewController.swift */; };
@@ -264,6 +274,13 @@
 			remoteGlobalIDString = 92942D911E2154DA008E79CA;
 			remoteInfo = "The Blue Alliance";
 		};
+		92FA4D3E2286691700030BA3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92942D8A1E2154DA008E79CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 92942D911E2154DA008E79CA;
+			remoteInfo = "The Blue Alliance";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -297,6 +314,8 @@
 		14B520FA218CB96400F2EF4F /* EventStatusQualTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStatusQualTests.swift; sourceTree = "<group>"; };
 		304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RankingTableViewCell.xib; sourceTree = "<group>"; };
 		304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingTableViewCell.swift; sourceTree = "<group>"; };
+		3411F05E31205A27940370BA /* Pods-tba-snapshot-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-snapshot-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tba-snapshot-tests/Pods-tba-snapshot-tests.debug.xcconfig"; sourceTree = "<group>"; };
+		493E9AF744593E28C154AC51 /* Pods-tba-snapshot-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-snapshot-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-tba-snapshot-tests/Pods-tba-snapshot-tests.release.xcconfig"; sourceTree = "<group>"; };
 		4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.release.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.release.xcconfig"; sourceTree = "<group>"; };
 		52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_unit_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92004C6321C21C7F00A858C8 /* 2019DeepSpaceIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2019DeepSpaceIcon@2x.png"; sourceTree = "<group>"; };
@@ -340,6 +359,9 @@
 		925908B621863C3E00D7BFCE /* EventAllianceBackupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceBackupTests.swift; sourceTree = "<group>"; };
 		9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAReactNativeViewController.swift; sourceTree = "<group>"; };
 		92688C2A2090091D00D12B7B /* ReactNativeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactNativeService.swift; sourceTree = "<group>"; };
+		927184DD22867F5800EAD174 /* MockNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNavigationController.swift; sourceTree = "<group>"; };
+		927184E32286861500EAD174 /* TBAViewControllerSnapshotTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAViewControllerSnapshotTestCase.swift; sourceTree = "<group>"; };
+		927184E62286886800EAD174 /* StatusDefaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = StatusDefaults.plist; sourceTree = "<group>"; };
 		9274E14021B1026900F5D5D0 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusTableViewCell.swift; sourceTree = "<group>"; };
 		9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusCellViewModel.swift; sourceTree = "<group>"; };
@@ -485,6 +507,14 @@
 		92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderView.swift; sourceTree = "<group>"; };
 		92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+TBA.swift"; sourceTree = "<group>"; };
 		92FA4D3022865C1A00030BA3 /* TeamHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderViewModel.swift; sourceTree = "<group>"; };
+		92FA4D33228668F000030BA3 /* TeamHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderViewTests.swift; sourceTree = "<group>"; };
+		92FA4D392286691700030BA3 /* tba-snapshot-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tba-snapshot-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		92FA4D3D2286691700030BA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		92FA4D43228669A600030BA3 /* TBASnapshotTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBASnapshotTestCase.swift; sourceTree = "<group>"; };
+		92FA4D46228669E700030BA3 /* TeamHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderViewTests.swift; sourceTree = "<group>"; };
+		92FA4D4922866A9700030BA3 /* CoreDataTestFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTestFixture.swift; sourceTree = "<group>"; };
+		92FA4D4B228678DA00030BA3 /* TBAViewControllerTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAViewControllerTester.swift; sourceTree = "<group>"; };
+		92FA4D4F22867E1400030BA3 /* TeamViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamViewControllerTests.swift; sourceTree = "<group>"; };
 		92FE68BA20D8A1E8004A1481 /* MyTBASignOutOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignOutOperation.swift; sourceTree = "<group>"; };
 		92FF10CF21A25D86003BC5C4 /* TBAViewControllerTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAViewControllerTester.swift; sourceTree = "<group>"; };
 		92FF10E321A61A1B003BC5C4 /* TeamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamViewController.swift; sourceTree = "<group>"; };
@@ -522,6 +552,7 @@
 		A27CA53562D2F2F05B05659A /* Pods-The Blue Alliance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-The Blue Alliance.debug.xcconfig"; path = "Pods/Target Support Files/Pods-The Blue Alliance/Pods-The Blue Alliance.debug.xcconfig"; sourceTree = "<group>"; };
 		A6544CEF21DC3CDC00D423F2 /* MatchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchViewModelTests.swift; sourceTree = "<group>"; };
 		AC390655114E5828E3FE13D0 /* Pods-tba-unit-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.debug.xcconfig"; sourceTree = "<group>"; };
+		CE2C88F245A0C326E2749BA8 /* Pods_tba_snapshot_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_snapshot_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E72D7306F6A02099E68DED02 /* Pods-tba-unit-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tba-unit-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests.release.xcconfig"; sourceTree = "<group>"; };
 		FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_The_Blue_Alliance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -540,6 +571,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				5797EAB49489B63DDA0980F5 /* Pods_tba_unit_tests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		92FA4D362286691700030BA3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				229BBD06444E4D553A239F7D /* Pods_tba_snapshot_tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -591,6 +630,8 @@
 				4AA2582C43DE0E21BE569EEF /* Pods-The Blue Alliance.release.xcconfig */,
 				AC390655114E5828E3FE13D0 /* Pods-tba-unit-tests.debug.xcconfig */,
 				E72D7306F6A02099E68DED02 /* Pods-tba-unit-tests.release.xcconfig */,
+				3411F05E31205A27940370BA /* Pods-tba-snapshot-tests.debug.xcconfig */,
+				493E9AF744593E28C154AC51 /* Pods-tba-snapshot-tests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -752,6 +793,23 @@
 			path = Event;
 			sourceTree = "<group>";
 		};
+		927184DC22867F4E00EAD174 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				927184DD22867F5800EAD174 /* MockNavigationController.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
+		927184E52286868500EAD174 /* Cases */ = {
+			isa = PBXGroup;
+			children = (
+				92FA4D43228669A600030BA3 /* TBASnapshotTestCase.swift */,
+				927184E32286861500EAD174 /* TBAViewControllerSnapshotTestCase.swift */,
+			);
+			path = Cases;
+			sourceTree = "<group>";
+		};
 		9274E14221B1027100F5D5D0 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -806,6 +864,7 @@
 		928030E12197802C0099CB65 /* View Elements */ = {
 			isa = PBXGroup;
 			children = (
+				92FA4D32228668D700030BA3 /* Teams */,
 				A6544CEB21DC39FB00D423F2 /* Match */,
 				928030E22197803F0099CB65 /* Events */,
 			);
@@ -846,6 +905,7 @@
 				928D509A21BDB7A000571069 /* the-blue-alliance-ios.entitlements */,
 				92942D941E2154DA008E79CA /* the-blue-alliance-ios */,
 				92D6483B20BE4CB8008F0DB3 /* tba-unit-tests */,
+				92FA4D3A2286691700030BA3 /* tba-snapshot-tests */,
 				AB6808F14167475E1AE2783E /* Frameworks */,
 				92942D931E2154DA008E79CA /* Products */,
 				5EC6F9271347DB8630C82782 /* Pods */,
@@ -857,6 +917,7 @@
 			children = (
 				92942D921E2154DA008E79CA /* The Blue Alliance.app */,
 				92D6483A20BE4CB8008F0DB3 /* tba-unit-tests.xctest */,
+				92FA4D392286691700030BA3 /* tba-snapshot-tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1345,6 +1406,61 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		92FA4D32228668D700030BA3 /* Teams */ = {
+			isa = PBXGroup;
+			children = (
+				92FA4D33228668F000030BA3 /* TeamHeaderViewTests.swift */,
+			);
+			path = Teams;
+			sourceTree = "<group>";
+		};
+		92FA4D3A2286691700030BA3 /* tba-snapshot-tests */ = {
+			isa = PBXGroup;
+			children = (
+				927184E52286868500EAD174 /* Cases */,
+				92FA4D4922866A9700030BA3 /* CoreDataTestFixture.swift */,
+				92FA4D4B228678DA00030BA3 /* TBAViewControllerTester.swift */,
+				927184DC22867F4E00EAD174 /* Mocks */,
+				92FA4D4D228678F300030BA3 /* View Controllers */,
+				92FA4D45228669D900030BA3 /* View Elements */,
+				92FA4D3D2286691700030BA3 /* Info.plist */,
+				927184E62286886800EAD174 /* StatusDefaults.plist */,
+			);
+			path = "tba-snapshot-tests";
+			sourceTree = "<group>";
+		};
+		92FA4D45228669D900030BA3 /* View Elements */ = {
+			isa = PBXGroup;
+			children = (
+				92FA4D4822866A0000030BA3 /* Teams */,
+			);
+			path = "View Elements";
+			sourceTree = "<group>";
+		};
+		92FA4D4822866A0000030BA3 /* Teams */ = {
+			isa = PBXGroup;
+			children = (
+				92FA4D46228669E700030BA3 /* TeamHeaderViewTests.swift */,
+			);
+			path = Teams;
+			sourceTree = "<group>";
+		};
+		92FA4D4D228678F300030BA3 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				92FA4D4E2286793D00030BA3 /* Teams */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		92FA4D4E2286793D00030BA3 /* Teams */ = {
+			isa = PBXGroup;
+			children = (
+				92FA4D4F22867E1400030BA3 /* TeamViewControllerTests.swift */,
+			);
+			path = Teams;
+			sourceTree = "<group>";
+		};
 		92FE68B920D8A1CF004A1481 /* myTBA */ = {
 			isa = PBXGroup;
 			children = (
@@ -1493,6 +1609,7 @@
 				FC2E314BEBB3A18C6A77BC82 /* Pods_The_Blue_Alliance.framework */,
 				0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */,
 				52F3858F89586775CF0F36FA /* Pods_tba_unit_tests.framework */,
+				CE2C88F245A0C326E2749BA8 /* Pods_tba_snapshot_tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1542,13 +1659,33 @@
 			productReference = 92D6483A20BE4CB8008F0DB3 /* tba-unit-tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		92FA4D382286691700030BA3 /* tba-snapshot-tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 92FA4D402286691700030BA3 /* Build configuration list for PBXNativeTarget "tba-snapshot-tests" */;
+			buildPhases = (
+				69D79908EDBDF7EE5455E418 /* [CP] Check Pods Manifest.lock */,
+				92FA4D352286691700030BA3 /* Sources */,
+				92FA4D362286691700030BA3 /* Frameworks */,
+				92FA4D372286691700030BA3 /* Resources */,
+				0897086418421B580829AAD4 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				92FA4D3F2286691700030BA3 /* PBXTargetDependency */,
+			);
+			name = "tba-snapshot-tests";
+			productName = "tba-snapshot-tests";
+			productReference = 92FA4D392286691700030BA3 /* tba-snapshot-tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		92942D8A1E2154DA008E79CA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0940;
+				LastSwiftUpdateCheck = 1020;
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "The Blue Alliance";
 				TargetAttributes = {
@@ -1571,6 +1708,12 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = 92942D911E2154DA008E79CA;
 					};
+					92FA4D382286691700030BA3 = {
+						CreatedOnToolsVersion = 10.2.1;
+						LastSwiftMigration = 1020;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 92942D911E2154DA008E79CA;
+					};
 				};
 			};
 			buildConfigurationList = 92942D8D1E2154DA008E79CA /* Build configuration list for PBXProject "the-blue-alliance-ios" */;
@@ -1588,6 +1731,7 @@
 			targets = (
 				92942D911E2154DA008E79CA /* The Blue Alliance */,
 				92D6483920BE4CB8008F0DB3 /* tba-unit-tests */,
+				92FA4D382286691700030BA3 /* tba-snapshot-tests */,
 			);
 		};
 /* End PBXProject section */
@@ -1633,9 +1777,49 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		92FA4D372286691700030BA3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				927184E72286888E00EAD174 /* StatusDefaults.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0897086418421B580829AAD4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-tba-snapshot-tests/Pods-tba-snapshot-tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/MyTBAKit/MyTBAKit.framework",
+				"${BUILT_PRODUCTS_DIR}/MyTBAKitTesting/MyTBAKitTesting.framework",
+				"${BUILT_PRODUCTS_DIR}/TBAKit/TBAKit.framework",
+				"${BUILT_PRODUCTS_DIR}/TBAKitTesting/TBAKitTesting.framework",
+				"${BUILT_PRODUCTS_DIR}/TBATestingMocks/TBATestingMocks.framework",
+				"${BUILT_PRODUCTS_DIR}/iOSSnapshotTestCase/FBSnapshotTestCase.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MyTBAKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MyTBAKitTesting.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKitTesting.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBATestingMocks.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSnapshotTestCase.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tba-snapshot-tests/Pods-tba-snapshot-tests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		2C02C8A4B0B326A6A5B12AA9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1648,6 +1832,28 @@
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-tba-unit-tests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		69D79908EDBDF7EE5455E418 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-tba-snapshot-tests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2029,6 +2235,7 @@
 				1448DBAE21823178008F542E /* SubscriptionTests.swift in Sources */,
 				9275956A21B442AA00560D81 /* StatusServiceTests.swift in Sources */,
 				148FF626218B90AC006202E6 /* EventRankingTests.swift in Sources */,
+				92FA4D34228668F000030BA3 /* TeamHeaderViewTests.swift in Sources */,
 				14B424F62167B01700E1904C /* Calendar+TBA_Tests.swift in Sources */,
 				92FF10D021A25D86003BC5C4 /* TBAViewControllerTester.swift in Sources */,
 				92FF113421A70B16003BC5C4 /* CoreDataTestCaseTests.swift in Sources */,
@@ -2045,6 +2252,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		92FA4D352286691700030BA3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				92FA4D4A22866A9700030BA3 /* CoreDataTestFixture.swift in Sources */,
+				92FA4D4C228678DA00030BA3 /* TBAViewControllerTester.swift in Sources */,
+				92FA4D5022867E1400030BA3 /* TeamViewControllerTests.swift in Sources */,
+				92FA4D47228669E700030BA3 /* TeamHeaderViewTests.swift in Sources */,
+				927184E022867FD600EAD174 /* MockNavigationController.swift in Sources */,
+				92FA4D44228669A600030BA3 /* TBASnapshotTestCase.swift in Sources */,
+				927184E42286861500EAD174 /* TBAViewControllerSnapshotTestCase.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -2052,6 +2273,11 @@
 			isa = PBXTargetDependency;
 			target = 92942D911E2154DA008E79CA /* The Blue Alliance */;
 			targetProxy = 92D6483F20BE4CB8008F0DB3 /* PBXContainerItemProxy */;
+		};
+		92FA4D3F2286691700030BA3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 92942D911E2154DA008E79CA /* The Blue Alliance */;
+			targetProxy = 92FA4D3E2286691700030BA3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2292,6 +2518,59 @@
 			};
 			name = Release;
 		};
+		92FA4D412286691700030BA3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3411F05E31205A27940370BA /* Pods-tba-snapshot-tests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "tba-snapshot-tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba-snapshot-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/The Blue Alliance.app/The Blue Alliance";
+			};
+			name = Debug;
+		};
+		92FA4D422286691700030BA3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 493E9AF744593E28C154AC51 /* Pods-tba-snapshot-tests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "tba-snapshot-tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.the-blue-alliance.tba-snapshot-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/The Blue Alliance.app/The Blue Alliance";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2318,6 +2597,15 @@
 			buildConfigurations = (
 				92D6484220BE4CB8008F0DB3 /* Debug */,
 				92D6484320BE4CB8008F0DB3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		92FA4D402286691700030BA3 /* Build configuration list for PBXNativeTarget "tba-snapshot-tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				92FA4D412286691700030BA3 /* Debug */,
+				92FA4D422286691700030BA3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

@@ -9,14 +9,14 @@
          <BuildActionEntry
             buildForTesting = "YES"
             buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "92942D911E2154DA008E79CA"
-               BuildableName = "The Blue Alliance.app"
-               BlueprintName = "The Blue Alliance"
+               BlueprintIdentifier = "92FA4D382286691700030BA3"
+               BuildableName = "tba-snapshot-tests.xctest"
+               BlueprintName = "tba-snapshot-tests"
                ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -26,20 +26,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      codeCoverageEnabled = "YES"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "92D6483920BE4CB8008F0DB3"
-               BuildableName = "tba-unit-tests.xctest"
-               BlueprintName = "tba-unit-tests"
-               ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
          <TestableReference
             skipped = "NO">
             <BuildableReference
@@ -54,9 +42,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "92942D911E2154DA008E79CA"
-            BuildableName = "The Blue Alliance.app"
-            BlueprintName = "The Blue Alliance"
+            BlueprintIdentifier = "92FA4D382286691700030BA3"
+            BuildableName = "tba-snapshot-tests.xctest"
+            BlueprintName = "tba-snapshot-tests"
             ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -67,39 +55,34 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      enableThreadSanitizer = "YES"
+      disableMainThreadChecker = "YES"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
-      stopOnEveryThreadSanitizerIssue = "YES"
-      stopOnEveryMainThreadCheckerIssue = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "92942D911E2154DA008E79CA"
-            BuildableName = "The Blue Alliance.app"
-            BlueprintName = "The Blue Alliance"
+            BlueprintIdentifier = "92FA4D382286691700030BA3"
+            BuildableName = "tba-snapshot-tests.xctest"
+            BlueprintName = "tba-snapshot-tests"
             ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "-com.apple.CoreData.ConcurrencyDebug 1"
+      </MacroExpansion>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "FB_REFERENCE_IMAGE_DIR"
+            value = "$(SOURCE_ROOT)/$(TARGET_NAME)/ReferenceImages"
             isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "-com.apple.CoreData.Logging.stderr"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "-com.apple.CoreData.SQLDebug 1"
-            isEnabled = "NO">
-         </CommandLineArgument>
-      </CommandLineArguments>
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "IMAGE_DIFF_DIR"
+            value = "$(SOURCE_ROOT)/$(TARGET_NAME)/FailureDiffs"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -109,16 +92,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "92942D911E2154DA008E79CA"
-            BuildableName = "The Blue Alliance.app"
-            BlueprintName = "The Blue Alliance"
-            ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

@@ -219,4 +219,17 @@ class TeamTestCase: CoreDataTestCase {
         XCTAssertEqual(Team.notificationTypes.count, 5)
     }
 
+    func test_avatar() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+
+        let teamMedia = TeamMedia.init(entity: TeamMedia.entity(), insertInto: persistentContainer.viewContext)
+        teamMedia.year = NSNumber(value: 2018)
+        teamMedia.type = MediaType.avatar.rawValue
+
+        team.addToMedia(teamMedia)
+
+        XCTAssertNil(team.avatar(year: 2019))
+        XCTAssertNotNil(team.avatar(year: 2018))
+    }
+
 }

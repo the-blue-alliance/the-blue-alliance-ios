@@ -64,6 +64,14 @@ target 'The Blue Alliance' do
     pod 'TBAKitTesting', :path => 'Frameworks/TBAKit'
     pod 'TBATestingMocks', :path => 'Frameworks/TBATestingMocks'
   end
+
+  target 'tba-snapshot-tests' do
+    inherit! :search_paths
+
+    pod 'iOSSnapshotTestCase', '4.0.1' # TODO: Update to 6.0
+    pod 'MyTBAKitTesting', :path => 'Frameworks/MyTBAKit'
+    pod 'TBAKitTesting', :path => 'Frameworks/TBAKit'
+  end
 end
 
 post_install do | installer |

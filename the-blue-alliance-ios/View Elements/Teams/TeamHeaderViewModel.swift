@@ -30,7 +30,7 @@ struct TeamHeaderViewModel {
             if let avatar = team.avatar(year: year),
                 let base64Image = avatar.details?["base64Image"] as? String,
                 let avatarData = Data(base64Encoded: base64Image),
-                let avatarImage = UIImage(data: avatarData){
+                let avatarImage = UIImage(data: avatarData) {
                 self.avatar = avatarImage
                 self.hasAvatar = true
             } else {
