@@ -16,7 +16,11 @@ platform :ios do
 
   desc "Run TBA snapshot tests"
   lane :test_snapshot do
-    scan(workspace: "the-blue-alliance-ios.xcworkspace", scheme: "tba-snapshot-tests")
+    scan(
+      workspace: "the-blue-alliance-ios.xcworkspace",
+      scheme: "tba-snapshot-tests",
+      devices: ["iPhone X (12.2)", "iPhone 5s (12.2)", "iPad Pro (12.9-inch) (3rd generation) (12.2)"]
+    )
   end
 
   desc "Run MyTBAKit unit tests"

@@ -127,10 +127,10 @@ PODS:
   - GoogleUtilities/UserDefaults (5.3.7):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.2.1)
-  - iOSSnapshotTestCase (4.0.1):
-    - iOSSnapshotTestCase/SwiftSupport (= 4.0.1)
-  - iOSSnapshotTestCase/Core (4.0.1)
-  - iOSSnapshotTestCase/SwiftSupport (4.0.1):
+  - iOSSnapshotTestCase (6.0.3):
+    - iOSSnapshotTestCase/SwiftSupport (= 6.0.3)
+  - iOSSnapshotTestCase/Core (6.0.3)
+  - iOSSnapshotTestCase/SwiftSupport (6.0.3):
     - iOSSnapshotTestCase/Core
   - MyTBAKit (1.0.0-LOCAL)
   - MyTBAKit/Tests (1.0.0-LOCAL):
@@ -231,7 +231,7 @@ DEPENDENCIES:
   - Folly (from `subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/glog.podspec`)
   - GoogleSignIn
-  - iOSSnapshotTestCase (= 4.0.1)
+  - iOSSnapshotTestCase (~> 6.0.0)
   - MyTBAKit (from `Frameworks/MyTBAKit`)
   - MyTBAKit/Tests (from `Frameworks/MyTBAKit`)
   - MyTBAKitTesting (from `Frameworks/MyTBAKit`)
@@ -336,7 +336,7 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
   GoogleUtilities: 111a012f4c3a29c9e7c954c082fafd6ee3c999c0
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
-  iOSSnapshotTestCase: f3b2b7e606fe03fdbe49af84316bd235df32dc44
+  iOSSnapshotTestCase: 944a73f6d9676302811a86c0cf35f0e6ef5ab2a0
   MyTBAKit: 3a16f0982b145e1a86dc808df0f59ee390f529ad
   MyTBAKitTesting: cd6dbb57eef130b8d15692d86d3af767a051a403
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
@@ -354,6 +354,6 @@ SPEC CHECKSUMS:
   yoga: 26673abd38bbdf0c33e134ad9e690c5fbf16e8fc
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: 98d866347768be4abe89bc8c16d2e12bae341dbd
+PODFILE CHECKSUM: 4e90e9be2dd6581f5152dbe9fa09b881f3fbdc52
 
 COCOAPODS: 1.6.1

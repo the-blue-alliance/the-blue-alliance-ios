@@ -14,7 +14,7 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "92FA4D382286691700030BA3"
+               BlueprintIdentifier = "927184ED22872B6700EAD174"
                BuildableName = "tba-snapshot-tests.xctest"
                BlueprintName = "tba-snapshot-tests"
                ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
@@ -32,7 +32,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "92FA4D382286691700030BA3"
+               BlueprintIdentifier = "927184ED22872B6700EAD174"
                BuildableName = "tba-snapshot-tests.xctest"
                BlueprintName = "tba-snapshot-tests"
                ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
@@ -42,7 +42,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "92FA4D382286691700030BA3"
+            BlueprintIdentifier = "927184ED22872B6700EAD174"
             BuildableName = "tba-snapshot-tests.xctest"
             BlueprintName = "tba-snapshot-tests"
             ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
@@ -55,7 +55,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      disableMainThreadChecker = "YES"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -65,7 +64,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "92FA4D382286691700030BA3"
+            BlueprintIdentifier = "927184ED22872B6700EAD174"
             BuildableName = "tba-snapshot-tests.xctest"
             BlueprintName = "tba-snapshot-tests"
             ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
@@ -92,6 +91,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "927184ED22872B6700EAD174"
+            BuildableName = "tba-snapshot-tests.xctest"
+            BlueprintName = "tba-snapshot-tests"
+            ReferencedContainer = "container:the-blue-alliance-ios.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

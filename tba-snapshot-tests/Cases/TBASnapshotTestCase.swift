@@ -17,7 +17,7 @@ class TBASnapshotTestCase: FBSnapshotTestCase {
     override func setUp() {
         super.setUp()
 
-        agnosticOptions = .OS
+        fileNameOptions = .init(arrayLiteral: .OS, .screenScale, .device)
         // Uncomment to record all new snapshots
         // recordMode = true
 
@@ -36,16 +36,16 @@ class TBASnapshotTestCase: FBSnapshotTestCase {
         wait(for: [ex], timeout: 1.0)
     }
 
-    func verifyView(_ view: UIView, identifier: String = "") {
-        FBSnapshotVerifyView(view,
-                             identifier: identifier,
-                             suffixes: NSOrderedSet(array: [""]))
-    }
-
     func verifyLayer(_ layer: CALayer, identifier: String = "") {
         FBSnapshotVerifyLayer(layer,
                               identifier: identifier,
                               suffixes: NSOrderedSet(array: [""]))
+    }
+
+    func verifyView(_ view: UIView, identifier: String = "") {
+        FBSnapshotVerifyView(view,
+                             identifier: identifier,
+                             suffixes: NSOrderedSet(array: [""]))
     }
 
 }

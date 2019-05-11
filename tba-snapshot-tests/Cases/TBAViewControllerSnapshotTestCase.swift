@@ -20,7 +20,10 @@ class TBAViewControllerSnapshotTestCase: TBASnapshotTestCase {
         testBundle = Bundle(for: type(of: self))
         userDefaults = UserDefaults(suiteName: "TBATests")
         myTBA = MockMyTBA()
+
         tbaKit = MockTBAKit(userDefaults: userDefaults)
+        tbaKit.interceptRequests()
+
         urlOpener = MockURLOpener()
         statusService = StatusService(bundle: testBundle, persistentContainer: coreDataTestFixture.persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
     }
@@ -30,6 +33,10 @@ class TBAViewControllerSnapshotTestCase: TBASnapshotTestCase {
         urlOpener = nil
 
         super.tearDown()
+    }
+
+    func verifyViewController<T>(_ vc: TBAViewControllerTester<T>, identifier: String = "") {
+        verifyLayer(vc.window.layer, identifier: identifier)
     }
 
 }

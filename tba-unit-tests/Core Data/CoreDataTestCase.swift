@@ -17,7 +17,7 @@ class CoreDataTestCase: FBSnapshotTestCase {
     override func setUp() {
         super.setUp()
 
-        agnosticOptions = .OS
+        fileNameOptions = .init(arrayLiteral: .OS)
         // Uncomment to record all new snapshots
         // recordMode = true
 
