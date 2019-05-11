@@ -218,6 +218,7 @@
 		92F8E356209AAE890094213F /* PushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E355209AAE890094213F /* PushService.swift */; };
 		92FA4D2D228606BB00030BA3 /* TeamHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */; };
 		92FA4D2F228624D500030BA3 /* UIFont+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */; };
+		92FA4D3122865C1A00030BA3 /* TeamHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FA4D3022865C1A00030BA3 /* TeamHeaderViewModel.swift */; };
 		92FE68BB20D8A1E8004A1481 /* MyTBASignOutOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FE68BA20D8A1E8004A1481 /* MyTBASignOutOperation.swift */; };
 		92FF10D021A25D86003BC5C4 /* TBAViewControllerTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10CF21A25D86003BC5C4 /* TBAViewControllerTester.swift */; };
 		92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E321A61A1B003BC5C4 /* TeamViewController.swift */; };
@@ -483,6 +484,7 @@
 		92F8E355209AAE890094213F /* PushService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushService.swift; sourceTree = "<group>"; };
 		92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderView.swift; sourceTree = "<group>"; };
 		92FA4D2E228624D500030BA3 /* UIFont+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+TBA.swift"; sourceTree = "<group>"; };
+		92FA4D3022865C1A00030BA3 /* TeamHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamHeaderViewModel.swift; sourceTree = "<group>"; };
 		92FE68BA20D8A1E8004A1481 /* MyTBASignOutOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTBASignOutOperation.swift; sourceTree = "<group>"; };
 		92FF10CF21A25D86003BC5C4 /* TBAViewControllerTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAViewControllerTester.swift; sourceTree = "<group>"; };
 		92FF10E321A61A1B003BC5C4 /* TeamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamViewController.swift; sourceTree = "<group>"; };
@@ -1224,6 +1226,7 @@
 				92D855D61EC695C400572F27 /* TeamTableViewCell.swift */,
 				14796943215EAF7A0075AF4E /* TeamCellViewModel.swift */,
 				92FA4D2C228606BB00030BA3 /* TeamHeaderView.swift */,
+				92FA4D3022865C1A00030BA3 /* TeamHeaderViewModel.swift */,
 			);
 			path = Teams;
 			sourceTree = "<group>";
@@ -1941,6 +1944,7 @@
 				92A5E5D721A22D550025CC85 /* Date+TBA.swift in Sources */,
 				92FF111921A61B37003BC5C4 /* TeamAtDistrictViewController.swift in Sources */,
 				925471F7208CC6F100AD3204 /* EventAllianceTableViewCell.swift in Sources */,
+				92FA4D3122865C1A00030BA3 /* TeamHeaderViewModel.swift in Sources */,
 				92DF35F3217D438400B5246B /* WLT.swift in Sources */,
 				92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */,
 				9287014820CD8C4A0077D6DA /* TBAOperation.swift in Sources */,

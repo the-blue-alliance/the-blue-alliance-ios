@@ -3,6 +3,12 @@ import UIKit
 
 class TeamHeaderView: UIView {
 
+    var viewModel: TeamHeaderViewModel {
+        didSet {
+            configureView()
+        }
+    }
+
     private lazy var rootStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [avatarImageView, teamInfoStackView, yearStackView])
         stackView.axis = .horizontal
@@ -11,7 +17,7 @@ class TeamHeaderView: UIView {
         return stackView
     }()
 
-    private let avatarImageView = AvatarImageView(data: nil)
+    private let avatarImageView = AvatarImageView()
 
     private lazy var teamNumberLabel: UILabel = {
         let label = TeamHeaderView.teamHeaderLabel()
@@ -32,7 +38,7 @@ class TeamHeaderView: UIView {
         return stackView
     }()
 
-    private let yearButton = YearButton()
+    let yearButton = YearButton()
     private lazy var yearStackView: UIStackView = {
         let spacerView = UIView()
         spacerView.setContentHuggingPriority(.defaultLow, for: .vertical)
@@ -44,51 +50,38 @@ class TeamHeaderView: UIView {
         return stackView
     }()
 
-    // TODO: Should probably just take an Avatar, or should set Avatar not on init
-    init(team: Team, year: Int?) {
+    init(_ viewModel: TeamHeaderViewModel) {
+        self.viewModel = viewModel
+
         super.init(frame: .zero)
 
         backgroundColor = .primaryBlue
+        configureView()
 
         addSubview(rootStackView)
         rootStackView.autoPinEdgesToSuperviewEdges(with: .init(top: 16, left: 16, bottom: 16, right: 16))
         yearStackView.autoMatch(.height, to: .height, of: rootStackView)
 
         avatarImageView.autoSetDimensions(to: .init(width: 55, height: 55))
-
-        if let nickname = team.nickname {
-            teamNumberLabel.text = team.fallbackNickname
-            teamNameLabel.text = nickname
-        } else {
-            teamNumberLabel.text = team.fallbackNickname
-            teamNameLabel.isHidden = true
-        }
-
-        // TODO: We *have* to fucking move this shit off the main thread
-        if let year = year {
-            if let avatar = team.avatar(year: year) {
-                avatarImageView.isHidden = false
-                avatarImageView.setAvatar(avatar)
-            } else {
-                avatarImageView.isHidden = true
-            }
-            setYearButtonTitle("\(year)")
-        } else {
-            avatarImageView.isHidden = true
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: Public Methods
-
-    func setYearButtonTitle(_ title: String?) {
-        yearButton.setTitle(title, for: .normal)
-    }
-
     // MARK: Private Methods
+
+    func configureView() {
+        avatarImageView.imageView.image = viewModel.avatar
+        avatarImageView.isHidden = !viewModel.hasAvatar
+
+        teamNumberLabel.text = viewModel.teamNumber
+
+        teamNameLabel.text = viewModel.nickname
+        teamNumberLabel.isHidden = !viewModel.hasNickname
+
+        yearButton.setTitle(viewModel.year, for: .normal)
+    }
 
     static func teamHeaderLabel() -> UILabel {
         let label = UILabel()
@@ -101,19 +94,17 @@ class TeamHeaderView: UIView {
 
 private class AvatarImageView: UIView {
 
-    private let imageView: UIImageView
-
-    init(data: Data?) {
-        let image: UIImage? = {
-            if let data = data {
-                return UIImage(data: data)
-            }
-            return nil
-        }()
-        imageView = UIImageView(image: image)
+    fileprivate let imageView: UIImageView = {
+        let imageView = UIImageView()
         imageView.backgroundColor = .clear
+        return imageView
+    }()
 
+    init() {
         super.init(frame: .zero)
+
+        backgroundColor = .avatarBlue
+        isUserInteractionEnabled = true
 
         addSubview(imageView)
         imageView.autoPinEdgesToSuperviewEdges(with: .init(top: 5, left: 5, bottom: 5, right: 5))
@@ -123,31 +114,12 @@ private class AvatarImageView: UIView {
         layer.masksToBounds = true
         layer.cornerRadius = 5
 
-        backgroundColor = .avatarBlue
-
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(avatarTapped(sender:)))
         addGestureRecognizer(tapGestureRecognizer)
-
-        isUserInteractionEnabled = true
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: Public Methods
-
-    // TODO: Probably needs loading methods
-
-    func setAvatar(_ avatar: TeamMedia) {
-        assert(avatar.type == MediaType.avatar.rawValue, "TeamMedia avatar must be an avatar")
-        guard let base64Image = avatar.details?["base64Image"] as? String else {
-            return
-        }
-        guard let avatarData = Data(base64Encoded: base64Image) else {
-            return
-        }
-        imageView.image = UIImage(data: avatarData)
     }
 
     // MARK: Private Methods
@@ -160,7 +132,7 @@ private class AvatarImageView: UIView {
 
 }
 
-private class YearButton: UIButton {
+class YearButton: UIButton {
 
     override open var isHighlighted: Bool {
         didSet {
@@ -173,17 +145,17 @@ private class YearButton: UIButton {
     init() {
         super.init(frame: .zero)
 
-        setTitle("---", for: .normal)
-        setTitleColor(.primaryBlue, for: .normal)
-        setImage(UIImage(named: "year_button_arrow_down"), for: .normal)
-
-        titleLabel?.font = UIFont.preferredFont(forTextStyle: .callout, compatibleWith: nil).bold()
-
         tintColor = .primaryBlue
         backgroundColor = .white
 
-        layer.masksToBounds = true
+        setTitle("----", for: .normal)
+        setTitleColor(.primaryBlue, for: .normal)
+        setImage(UIImage(named: "year_button_arrow_down"), for: .normal)
         setContentHuggingPriority(.defaultHigh, for: .horizontal)
+
+        titleLabel?.font = UIFont.preferredFont(forTextStyle: .callout, compatibleWith: nil).bold()
+
+        layer.masksToBounds = true
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -193,9 +165,9 @@ private class YearButton: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        layer.cornerRadius = frame.size.height * 0.5
-
         contentEdgeInsets = UIEdgeInsets(top: 0, left: frame.size.height * 0.5, bottom: 0, right: frame.size.height * 0.5)
+
+        layer.cornerRadius = frame.size.height * 0.5
     }
 
 }
