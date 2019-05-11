@@ -18,8 +18,15 @@ class MatchSummaryView: UIView {
     // change this variable so that the teams are shown as buttons
     private var teamsTappable: Bool = false
 
-    private let winnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
-    private let notWinnerFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
+    private var currentFontSize: CGFloat {
+        return teamsTappable ? 16 : 14
+    }
+    private var winnerFont: UIFont {
+        return UIFont.systemFont(ofSize: currentFontSize, weight: UIFont.Weight.bold)
+    }
+    private var notWinnerFont: UIFont {
+        return UIFont.systemFont(ofSize: currentFontSize, weight: UIFont.Weight.medium)
+    }
 
     // MARK: - IBOutlet
 
@@ -203,9 +210,9 @@ class MatchSummaryView: UIView {
         let attributeString =  NSMutableAttributedString(string: text)
         let attributedStringRange = NSMakeRange(0, attributeString.length)
 
-        var font: UIFont = .systemFont(ofSize: 14)
+        var font: UIFont = .systemFont(ofSize: currentFontSize)
         if isBold {
-            font = .boldSystemFont(ofSize: 14)
+            font = .boldSystemFont(ofSize: currentFontSize)
         }
         attributeString.addAttribute(.font, value: font, range: attributedStringRange)
 
