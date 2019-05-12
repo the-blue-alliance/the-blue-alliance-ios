@@ -38,6 +38,12 @@ class TeamsContainerViewController: ContainerViewController {
 
     // MARK: - View Lifecycle
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // navigationController?.navigationBar.prefersLargeTitles = true
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 

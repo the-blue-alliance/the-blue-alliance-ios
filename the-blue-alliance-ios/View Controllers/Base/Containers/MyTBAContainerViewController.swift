@@ -4,7 +4,7 @@ import MyTBAKit
 import TBAKit
 import UIKit
 
-class MyTBAContainerViewController: ContainerViewController, Subscribable {
+class MyTBAContainerViewController: ScrollableContainerViewController, Subscribable {
 
     let myTBA: MyTBA
 

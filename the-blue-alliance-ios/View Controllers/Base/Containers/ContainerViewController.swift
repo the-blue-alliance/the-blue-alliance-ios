@@ -57,7 +57,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     weak var navigationTitleDelegate: NavigationTitleDelegate?
 
     private let shouldShowSegmentedControl: Bool = false
-    private lazy var segmentedControlView: UIView = {
+    lazy var segmentedControlView: UIView = {
         let segmentedControlView = UIView(forAutoLayout: ())
         segmentedControlView.autoSetDimension(.height, toSize: 44.0)
         segmentedControlView.backgroundColor = .primaryBlue
@@ -67,10 +67,10 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         segmentedControl.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16.0)
         return segmentedControlView
     }()
-    private(set) var segmentedControl: UISegmentedControl
+    var segmentedControl: UISegmentedControl
 
     let containerView: UIView = UIView()
-    private let viewControllers: [ContainableViewController]
+    let viewControllers: [ContainableViewController]
     var rootStackView: UIStackView!
 
     private lazy var offlineEventView: UIView = {
@@ -117,10 +117,16 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         fatalError("init(coder:) has not been implemented")
     }
 
+    var firstTableView: UITableView!
+
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        if (type(of: self) == TeamViewController.self) {
+            return
+        }
 
         // Remove segmentedControl if we don't need one
         var arrangedSubviews = [containerView]
