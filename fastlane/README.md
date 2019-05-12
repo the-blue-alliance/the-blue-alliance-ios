@@ -51,36 +51,26 @@ Setup Secrets.plist file (used by CI)
 fastlane ios configure_code_signing
 ```
 Configure code signing
-### ios new_version
-```
-fastlane ios new_version
-```
-Create a new app version (major, minor, patch, build) by bumping the version number and creating a changelog
-### ios ensure_version_bump
-```
-fastlane ios ensure_version_bump
-```
-Bump version and push if necessary
-### ios new_git_tag
-```
-fastlane ios new_git_tag
-```
-Create a new tag and push to GitHub
 ### ios beta_ci
 ```
 fastlane ios beta_ci
 ```
 Upload a new beta build to TestFlight (for CI machine)
-### ios beta
-```
-fastlane ios beta
-```
-Upload a new beta build to TestFlight
 ### ios app_store
 ```
 fastlane ios app_store
 ```
 Upload a new build to the App Store
+### ios new_git_tag
+```
+fastlane ios new_git_tag
+```
+Create a new tag and push to GitHub
+### ios new_version
+```
+fastlane ios new_version
+```
+Create a new app version (major, minor, patch) by bumping the version number and creating a changelog
 ### ios refresh_dsyms
 ```
 fastlane ios refresh_dsyms

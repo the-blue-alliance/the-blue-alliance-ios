@@ -141,7 +141,8 @@ platform :ios do
   lane :new_version do |options|
     version_type = options[:version_type]
     # Bump version accordingly
-    increment_version_number(bump_type: version_type, build_number: "1")
+    increment_version_number(bump_type: version_type)
+    increment_build_number(build_number: 1)
   end
 
   lane :refresh_dsyms do
