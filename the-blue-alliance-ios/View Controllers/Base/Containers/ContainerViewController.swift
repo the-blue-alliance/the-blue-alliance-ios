@@ -16,7 +16,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     var navigationTitle: String? {
         didSet {
             DispatchQueue.main.async {
-                self.navigationTitleLabel.text = self.navigationTitle
+                // self.navigationTitleLabel.text = self.navigationTitle
             }
         }
     }
@@ -24,7 +24,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     var navigationSubtitle: String? {
         didSet {
             DispatchQueue.main.async {
-                self.navigationSubtitleLabel.text = self.navigationSubtitle
+                // self.navigationSubtitleLabel.text = self.navigationSubtitle
             }
         }
     }
@@ -37,23 +37,6 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
     // MARK: - Private View Elements
 
-    private lazy var navigationStackView: UIStackView = {
-        let navigationStackView = UIStackView(arrangedSubviews: [navigationTitleLabel, navigationSubtitleLabel])
-        navigationStackView.translatesAutoresizingMaskIntoConstraints = false
-        navigationStackView.axis = .vertical
-        navigationStackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(navigationTitleTapped)))
-        return navigationStackView
-    }()
-    private lazy var navigationTitleLabel: UILabel = {
-        let navigationTitleLabel = ContainerViewController.createNavigationLabel()
-        navigationTitleLabel.font = UIFont.systemFont(ofSize: 17)
-        return navigationTitleLabel
-    }()
-    private lazy var navigationSubtitleLabel: UILabel = {
-        let navigationSubtitleLabel = ContainerViewController.createNavigationLabel()
-        navigationSubtitleLabel.font = UIFont.systemFont(ofSize: 11)
-        return navigationSubtitleLabel
-    }()
     weak var navigationTitleDelegate: NavigationTitleDelegate?
 
     private let shouldShowSegmentedControl: Bool = false
@@ -105,12 +88,6 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         super.init(nibName: nil, bundle: nil)
 
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
-
-        if let navigationTitle = navigationTitle, let navigationSubtitle = navigationSubtitle {
-            navigationTitleLabel.text = navigationTitle
-            navigationSubtitleLabel.text = navigationSubtitle
-            navigationItem.titleView = navigationStackView
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -271,10 +248,11 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
     // MARK: - Helper Methods
 
-    private static func createNavigationLabel() -> UILabel {
+    static func createNavigationLabel() -> UILabel {
         let label = UILabel(forAutoLayout: ())
         label.textColor = .white
         label.textAlignment = .center
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
         return label
     }
 

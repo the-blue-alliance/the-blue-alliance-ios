@@ -14,6 +14,15 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
     private let teamHeaderView: TeamHeaderView
 
+    // MARK: ScrollableContainerView
+
+    override var headerView: UIView {
+        return teamHeaderView
+    }
+    override var headerContentView: UIView {
+        return teamHeaderView.rootStackView
+    }
+
     private(set) var infoViewController: TeamInfoViewController
     private(set) var eventsViewController: TeamEventsViewController
     private(set) var mediaViewController: TeamMediaCollectionViewController
