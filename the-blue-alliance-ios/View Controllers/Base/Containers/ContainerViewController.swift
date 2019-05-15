@@ -16,7 +16,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     var navigationTitle: String? {
         didSet {
             DispatchQueue.main.async {
-                // self.navigationTitleLabel.text = self.navigationTitle
+                self.navigationTitleLabel.text = self.navigationTitle
             }
         }
     }
@@ -24,12 +24,15 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     var navigationSubtitle: String? {
         didSet {
             DispatchQueue.main.async {
-                // self.navigationSubtitleLabel.text = self.navigationSubtitle
+                self.navigationSubtitleLabel.text = self.navigationSubtitle
             }
         }
     }
 
     // MARK: - Private Properties
+
+    private var previousScrollOffset: CGFloat = 0
+    var headerHeightConstraint: NSLayoutConstraint?
 
     var persistentContainer: NSPersistentContainer
     private(set) var tbaKit: TBAKit
@@ -37,6 +40,23 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
     // MARK: - Private View Elements
 
+    private lazy var navigationStackView: UIStackView = {
+        let navigationStackView = UIStackView(arrangedSubviews: [navigationTitleLabel, navigationSubtitleLabel])
+        navigationStackView.translatesAutoresizingMaskIntoConstraints = false
+        navigationStackView.axis = .vertical
+        navigationStackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(navigationTitleTapped)))
+        return navigationStackView
+    }()
+    private lazy var navigationTitleLabel: UILabel = {
+        let navigationTitleLabel = ContainerViewController.createNavigationLabel()
+        navigationTitleLabel.font = UIFont.systemFont(ofSize: 17)
+        return navigationTitleLabel
+    }()
+    private lazy var navigationSubtitleLabel: UILabel = {
+        let navigationSubtitleLabel = ContainerViewController.createNavigationLabel()
+        navigationSubtitleLabel.font = UIFont.systemFont(ofSize: 11)
+        return navigationSubtitleLabel
+    }()
     weak var navigationTitleDelegate: NavigationTitleDelegate?
 
     private let shouldShowSegmentedControl: Bool = false
@@ -50,11 +70,12 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         segmentedControl.autoPinEdge(toSuperviewEdge: .trailing, withInset: 16.0)
         return segmentedControlView
     }()
-    var segmentedControl: UISegmentedControl
+    private var segmentedControl: UISegmentedControl
 
-    let containerView: UIView = UIView()
-    let viewControllers: [ContainableViewController]
-    var rootStackView: UIStackView!
+    private let containerView: UIView = UIView()
+    private let viewControllers: [ContainableViewController]
+    private var rootStackView: UIStackView!
+    private var headerView: UIView?
 
     private lazy var offlineEventView: UIView = {
         let offlineEventLabel = UILabel(forAutoLayout: ())
@@ -71,7 +92,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         return offlineEventView
     }()
 
-    init(viewControllers: [ContainableViewController], navigationTitle: String? = nil, navigationSubtitle: String?  = nil, segmentedControlTitles: [String]? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(viewControllers: [ContainableViewController], navigationTitle: String? = nil, navigationSubtitle: String?  = nil, segmentedControlTitles: [String]? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults, headerView: UIView? = nil) {
         self.viewControllers = viewControllers
         self.persistentContainer = persistentContainer
         self.tbaKit = tbaKit
@@ -79,6 +100,8 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
         self.navigationTitle = navigationTitle
         self.navigationSubtitle = navigationSubtitle
+
+        self.headerView = headerView
 
         segmentedControl = UISegmentedControl(items: segmentedControlTitles)
         segmentedControl.selectedSegmentIndex = 0
@@ -88,27 +111,31 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         super.init(nibName: nil, bundle: nil)
 
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
+
+        if let navigationTitle = navigationTitle, let navigationSubtitle = navigationSubtitle {
+            navigationTitleLabel.text = navigationTitle
+            navigationSubtitleLabel.text = navigationSubtitle
+            navigationItem.titleView = navigationStackView
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    var firstTableView: UITableView!
-
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if (type(of: self) == TeamViewController.self) {
-            return
-        }
-
         // Remove segmentedControl if we don't need one
         var arrangedSubviews = [containerView]
         if segmentedControl.numberOfSegments > 1 {
             arrangedSubviews.insert(segmentedControlView, at: 0)
+        }
+        if let headerView = headerView {
+            arrangedSubviews.insert(headerView, at: 0)
+            headerHeightConstraint = headerView.autoSetDimension(.height, toSize: 150) // TODO:
         }
 
         rootStackView = UIStackView(arrangedSubviews: arrangedSubviews)
@@ -118,6 +145,11 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
         // Add subviews to view hiearchy in reverse order, so first one is showing automatically
         for viewController in viewControllers.reversed() {
+            if let tableViewController = viewController as? UITableViewController {
+                if self.isKind(of: TeamViewController.self) {
+                    tableViewController.tableView.delegate = self
+                }
+            }
             addChild(viewController)
             containerView.addSubview(viewController.view)
             viewController.view.autoPinEdgesToSuperviewEdges()
@@ -248,12 +280,80 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
     // MARK: - Helper Methods
 
-    static func createNavigationLabel() -> UILabel {
+    private static func createNavigationLabel() -> UILabel {
         let label = UILabel(forAutoLayout: ())
         label.textColor = .white
         label.textAlignment = .center
-        label.setContentCompressionResistancePriority(.required, for: .vertical)
         return label
+    }
+
+}
+
+extension ContainerViewController: UITableViewDelegate {
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let headerHeightConstraint = headerHeightConstraint else {
+            return
+        }
+
+        let scrollDiff = scrollView.contentOffset.y - previousScrollOffset
+
+        let absoluteTop: CGFloat = 0;
+        let absoluteBottom: CGFloat = scrollView.contentSize.height - scrollView.frame.size.height;
+
+        let isScrollingDown = scrollDiff > 0 && scrollView.contentOffset.y > absoluteTop
+        let isScrollingUp = scrollDiff < 0 && scrollView.contentOffset.y < absoluteBottom
+
+        // if canAnimateHeader(scrollView) {
+
+            // Calculate new header height
+            var newHeight = headerHeightConstraint.constant
+            if isScrollingDown {
+                newHeight = max(0, headerHeightConstraint.constant - abs(scrollDiff))
+            } else if isScrollingUp {
+                // TODO:
+                newHeight = min(150, headerHeightConstraint.constant + abs(scrollDiff))
+            }
+
+        print(newHeight)
+
+            // Header needs to animate
+            if newHeight != headerHeightConstraint.constant {
+                headerHeightConstraint.constant = newHeight
+                self.updateHeader()
+                self.setScrollPosition(scrollView, previousScrollOffset)
+            }
+
+            previousScrollOffset = scrollView.contentOffset.y
+        // }
+    }
+
+    func canAnimateHeader(_ scrollView: UIScrollView) -> Bool {
+        guard let headerHeightConstraint = headerHeightConstraint else {
+            return false
+        }
+
+        // Calculate the size of the scrollView when header is collapsed
+        let scrollViewMaxHeight = scrollView.frame.height + headerHeightConstraint.constant
+
+        // Make sure that when header is collapsed, there is still room to scroll
+        return scrollView.contentSize.height > scrollViewMaxHeight
+    }
+
+    func setScrollPosition(_ scrollView: UIScrollView, _ position: CGFloat) {
+        scrollView.contentOffset = CGPoint(x: scrollView.contentOffset.x, y: position)
+    }
+
+    func updateHeader() {
+        guard let headerHeightConstraint = headerHeightConstraint else {
+            return
+        }
+
+        let openAmount = headerHeightConstraint.constant
+        let percentage = openAmount / 150 // TODO:
+
+        // titleTopConstraint.constant = -openAmount + 10
+        // logoImageView.alpha = percentage
     }
 
 }

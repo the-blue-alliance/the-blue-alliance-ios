@@ -4,7 +4,7 @@ import MyTBAKit
 import TBAKit
 import UIKit
 
-class MyTBAContainerViewController: ScrollableContainerViewController, Subscribable {
+class MyTBAContainerViewController: ContainerViewController, Subscribable {
 
     let myTBA: MyTBA
 
@@ -18,10 +18,10 @@ class MyTBAContainerViewController: ScrollableContainerViewController, Subscriba
 
     // MARK: - Init
 
-    init(viewControllers: [ContainableViewController], navigationTitle: String? = nil, navigationSubtitle: String?  = nil, segmentedControlTitles: [String]? = nil, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(viewControllers: [ContainableViewController], navigationTitle: String? = nil, navigationSubtitle: String?  = nil, segmentedControlTitles: [String]? = nil, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults, headerView: UIView? = nil) {
         self.myTBA = myTBA
 
-        super.init(viewControllers: viewControllers, navigationTitle: navigationTitle, navigationSubtitle: navigationSubtitle, segmentedControlTitles: segmentedControlTitles, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(viewControllers: viewControllers, navigationTitle: navigationTitle, navigationSubtitle: navigationSubtitle, segmentedControlTitles: segmentedControlTitles, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults, headerView: headerView)
 
         updateFavoriteButton()
 

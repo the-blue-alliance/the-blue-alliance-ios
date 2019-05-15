@@ -14,15 +14,6 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
     private let teamHeaderView: TeamHeaderView
 
-    // MARK: ScrollableContainerView
-
-    override var headerView: UIView {
-        return teamHeaderView
-    }
-    override var headerContentView: UIView {
-        return teamHeaderView.rootStackView
-    }
-
     private(set) var infoViewController: TeamInfoViewController
     private(set) var eventsViewController: TeamEventsViewController
     private(set) var mediaViewController: TeamMediaCollectionViewController
@@ -74,7 +65,8 @@ class TeamViewController: MyTBAContainerViewController, Observable {
             myTBA: myTBA,
             persistentContainer: persistentContainer,
             tbaKit: tbaKit,
-            userDefaults: userDefaults
+            userDefaults: userDefaults,
+            headerView: teamHeaderView
         )
 
         eventsViewController.delegate = self
@@ -93,8 +85,6 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        rootStackView.insertArrangedSubview(teamHeaderView, at: 0)
 
         navigationController?.setupSplitViewLeftBarButtonItem(viewController: self)
 
