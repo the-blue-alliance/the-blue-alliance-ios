@@ -14,7 +14,7 @@ protocol CollectionViewDataSourceDelegate: class {
     func configure(_ cell: Cell, for object: Object, at indexPath: IndexPath)
 }
 
-fileprivate enum Update<Object> {
+enum Update<Object> {
     case insert(IndexPath)
     case update(IndexPath, Object)
     case move(IndexPath, IndexPath)

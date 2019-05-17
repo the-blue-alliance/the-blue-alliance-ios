@@ -166,8 +166,8 @@ extension EventAwardsViewController: Refreshable {
     @objc func refresh() {
         removeNoDataView()
 
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchEventAwards(key: event.key!, completion: { (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchEventAwards(key: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let awards = try? result.get() {
@@ -175,11 +175,10 @@ extension EventAwardsViewController: Refreshable {
                     event.insert(awards)
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
         })
-        addRequest(request: request!)
+        addRefreshOperations([operation])
     }
 
 }

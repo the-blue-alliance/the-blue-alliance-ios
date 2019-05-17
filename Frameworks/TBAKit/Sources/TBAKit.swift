@@ -1,5 +1,7 @@
 import Foundation
 
+public typealias TBAKitOperationCompletion = (_ response: HTTPURLResponse?, _ json: Any?, _ error: Error?) -> ()
+
 private struct Constants {
     struct APIConstants {
         static let baseURL = URL(string: "https://www.thebluealliance.com/api/v3/")!
@@ -38,9 +40,9 @@ open class TBAKit: NSObject {
         self.userDefaults = userDefaults
     }
 
-    public func storeCacheHeaders(_ request: URLSessionDataTask) {
+    public func storeCacheHeaders(_ operation: TBAKitOperation) {
         // Pull our response off of our request
-        guard let httpResponse = request.response as? HTTPURLResponse else {
+        guard let httpResponse = operation.task.response as? HTTPURLResponse else {
             return
         }
         // Grab our lastModified to store
@@ -94,7 +96,7 @@ open class TBAKit: NSObject {
         return etagDictionary[etagString] as? String
     }
 
-    func callApi(method: String, completion: @escaping (_ response: HTTPURLResponse?, _ json: Any?, _ error: Error?) -> ()) -> URLSessionDataTask {
+    func createRequest(_ method: String) -> URLRequest {
         let apiURL = URL(string: method, relativeTo: Constants.APIConstants.baseURL)!
         var request = URLRequest(url: apiURL)
         request.httpMethod = "GET"
@@ -109,34 +111,14 @@ open class TBAKit: NSObject {
             request.addValue(etag, forHTTPHeaderField: "If-None-Match")
         }
 
-        let task = urlSession.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            let httpResponse = response as? HTTPURLResponse
-            guard let statusCode = httpResponse?.statusCode else {
-                completion(httpResponse, nil, APIError.error("No status code for response"))
-                return
-            }
-            
-            if statusCode == 304 {
-                completion(httpResponse, nil, nil)
-                return
-            }
+        return request
+    }
 
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) {
-                if let jsonDict = json as? [String: String], let apiError = jsonDict["Error"] {
-                    completion(httpResponse, nil, APIError.error(apiError))
-                } else {
-                    completion(httpResponse, json, error)
-                }
-            } else {
-                // Probably got a 'null' back from the API for the JSON
-                completion(httpResponse, nil, error)
-            }
-        }
-        task.resume()
-        return task
+    func callApi(method: String, completion: @escaping (_ response: HTTPURLResponse?, _ json: Any?, _ error: Error?) -> ()) -> TBAKitOperation {
+        return TBAKitOperation(tbaKit: self, method: method, completion: completion)
     }
     
-    func callObject<T: TBAModel>(method: String, completion: @escaping (Result<T?, Error>, Bool) -> ()) -> URLSessionDataTask {
+    func callObject<T: TBAModel>(method: String, completion: @escaping (Result<T?, Error>, Bool) -> ()) -> TBAKitOperation {
         return callApi(method: method) { (response, json, error) in
             if let error = error {
                 completion(.failure(error), false)
@@ -150,7 +132,7 @@ open class TBAKit: NSObject {
         }
     }
     
-    func callArray<T: TBAModel>(method: String, completion: @escaping (Result<[T], Error>, Bool) -> ()) -> URLSessionDataTask {
+    func callArray<T: TBAModel>(method: String, completion: @escaping (Result<[T], Error>, Bool) -> ()) -> TBAKitOperation {
         return callApi(method: method) { (response, json, error) in
             if let error = error {
                 completion(.failure(error), false)
@@ -167,7 +149,7 @@ open class TBAKit: NSObject {
         }
     }
     
-    func callArray(method: String, completion: @escaping (Result<[Any], Error>, Bool) -> ()) -> URLSessionDataTask {
+    func callArray(method: String, completion: @escaping (Result<[Any], Error>, Bool) -> ()) -> TBAKitOperation {
         return callApi(method: method) { (response, json, error) in
             if let error = error {
                 completion(.failure(error), false)
@@ -181,7 +163,7 @@ open class TBAKit: NSObject {
         }
     }
 
-    func callDictionary(method: String, completion: @escaping (Result<[String: Any], Error>, Bool) -> ()) -> URLSessionDataTask {
+    func callDictionary(method: String, completion: @escaping (Result<[String: Any], Error>, Bool) -> ()) -> TBAKitOperation {
         return callApi(method: method) { (response, json, error) in
             if let error = error {
                 completion(.failure(error), false)

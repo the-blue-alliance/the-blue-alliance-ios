@@ -1,5 +1,6 @@
 import XCTest
-@testable import The_Blue_Alliance
+import TBAOperationTesting
+@testable import TBAOperation
 
 class TBAOperationTestCase: XCTestCase {
 
@@ -76,28 +77,6 @@ class TBAOperationTestCase: XCTestCase {
     func test_finish() {
         operation.finish()
         operation.assertIsFinished()
-    }
-
-}
-
-class MockOperation: TBAOperation {
-
-    var executeExpectation: XCTestExpectation?
-    var finishExpectation: XCTestExpectation?
-
-    override func execute() {
-        executeExpectation?.fulfill()
-    }
-
-    override func finish() {
-        super.finish()
-
-        finishExpectation?.fulfill()
-    }
-
-    func assertIsFinished() {
-        XCTAssertFalse(isExecuting)
-        XCTAssert(isFinished)
     }
 
 }

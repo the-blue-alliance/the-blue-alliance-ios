@@ -104,8 +104,8 @@ extension MatchBreakdownViewController: Refreshable {
     @objc func refresh() {
         removeNoDataView()
 
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchMatch(key: match.key!, { (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchMatch(key: match.key!, { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 switch result {
@@ -124,11 +124,10 @@ extension MatchBreakdownViewController: Refreshable {
                     break
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
         })
-        addRequest(request: request!)
+        addRefreshOperations([operation])
     }
 
 }

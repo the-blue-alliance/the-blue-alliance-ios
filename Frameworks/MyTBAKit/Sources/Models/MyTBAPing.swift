@@ -7,7 +7,7 @@ struct MyTBAPingRequest: Codable {
 extension MyTBA {
 
     @discardableResult
-    public func ping(_ token: String, completion: @escaping MyTBABaseCompletionBlock) -> URLSessionDataTask? {
+    public func ping(_ token: String, completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
         let ping = MyTBAPingRequest(mobileId: token)
 
         guard let encodedPing = try? MyTBA.jsonEncoder.encode(ping) else {

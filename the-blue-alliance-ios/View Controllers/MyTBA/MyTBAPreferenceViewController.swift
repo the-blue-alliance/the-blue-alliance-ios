@@ -25,7 +25,8 @@ class MyTBAPreferenceViewController: UITableViewController {
     let myTBA: MyTBA
     let persistentContainer: NSPersistentContainer
 
-    var preferencesRequest: URLSessionDataTask?
+    var preferencesOperation: MyTBAOperation?
+    let operationQueue = OperationQueue()
 
     private var isSaving: Bool = false {
         didSet {
@@ -81,7 +82,8 @@ class MyTBAPreferenceViewController: UITableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        preferencesRequest?.cancel()
+        print(operationQueue.operations)
+        operationQueue.cancelAllOperations()
     }
 
     // MARK: - Interface Methods
@@ -133,7 +135,7 @@ class MyTBAPreferenceViewController: UITableViewController {
 
         isSaving = true
 
-        preferencesRequest = myTBA.updatePreferences(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, favorite: isFavorite, notifications: notifications, completion: { [unowned self] (favoriteResponse, subscriptionResponse, error) in
+        preferencesOperation = myTBA.updatePreferences(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, favorite: isFavorite, notifications: notifications, completion: { [unowned self] (favoriteResponse, subscriptionResponse, error) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if let favoriteResponse = favoriteResponse, favoriteResponse.code < 400 {
@@ -163,13 +165,17 @@ class MyTBAPreferenceViewController: UITableViewController {
                     }
                 }
             })
+        })
 
-            self.isSaving = false
-
+        let dismissOperation = BlockOperation(block: { [weak self] in
+            self?.isSaving = false
             DispatchQueue.main.async {
-                self.dismiss(animated: true)
+                self?.dismiss(animated: true)
             }
         })
+        dismissOperation.addDependency(preferencesOperation!)
+
+        operationQueue.addOperations([preferencesOperation!, dismissOperation], waitUntilFinished: false)
     }
 
     @objc func close() {

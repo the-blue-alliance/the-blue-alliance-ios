@@ -1,7 +1,8 @@
-import MyTBAKit
 import TBAKitTesting
 import TBATestingMocks
+import TBAOperationTesting
 import XCTest
+@testable import MyTBAKit
 @testable import The_Blue_Alliance
 
 class MyTBAPreferenceViewControllerTests: TBATestCase {
@@ -81,10 +82,10 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
 
     func test_disappear_cancelsRequest() {
         let cancelExpectation = expectation(description: "Cancel called")
-        let mockRequest = MockURLSessionDataTask()
-        mockRequest.cancelExpectation = cancelExpectation
+        let mockOperation = MockOperation()
+        mockOperation.cancelExpectation = cancelExpectation
+        myTBAPreferencesViewController.operationQueue.addOperations([mockOperation], waitUntilFinished: false)
 
-        myTBAPreferencesViewController.preferencesRequest = mockRequest
         myTBAPreferencesViewController.viewWillDisappear(false)
         wait(for: [cancelExpectation], timeout: 1.0)
     }
@@ -139,7 +140,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
         // Save should be called at the end
         let saveExpectation = backgroundContextSaveExpectation()
 
-        myTBA.sendStub(for: myTBAPreferencesViewController.preferencesRequest!)
+        myTBA.sendStub(for: myTBAPreferencesViewController.preferencesOperation!)
         wait(for: [saveExpectation, dismissExpectation], timeout: 1.0, enforceOrder: true)
     }
 
@@ -159,7 +160,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
         newPreferences.save()
 
         let saveExpectation = backgroundContextSaveExpectation()
-        myTBA.sendStub(for: newPreferences.preferencesRequest!)
+        myTBA.sendStub(for: newPreferences.preferencesOperation!)
         wait(for: [saveExpectation, deletionExpectation], timeout: 1.0)
     }
 
@@ -174,7 +175,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
         newPreferences.save()
 
         let saveExpectation = backgroundContextSaveExpectation()
-        myTBA.sendStub(for: newPreferences.preferencesRequest!)
+        myTBA.sendStub(for: newPreferences.preferencesOperation!)
         wait(for: [saveExpectation], timeout: 1.0)
 
         XCTAssertNotNil(Favorite.findOrFetch(in: persistentContainer.viewContext, matching: favoritePredicate))
@@ -196,7 +197,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
         newPreferences.save()
 
         let saveExpectation = backgroundContextSaveExpectation()
-        myTBA.sendStub(for: newPreferences.preferencesRequest!)
+        myTBA.sendStub(for: newPreferences.preferencesOperation!)
         wait(for: [saveExpectation, deletionExpectation], timeout: 1.0)
     }
 
@@ -213,7 +214,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
         newPreferences.save()
 
         let backgroundSaveExpectation = backgroundContextSaveExpectation()
-        myTBA.sendStub(for: newPreferences.preferencesRequest!)
+        myTBA.sendStub(for: newPreferences.preferencesOperation!)
         wait(for: [backgroundSaveExpectation], timeout: 1.0)
 
         persistentContainer.viewContext.refresh(subscription, mergeChanges: true)
@@ -231,7 +232,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
         newPreferences.save()
 
         let saveExpectation = backgroundContextSaveExpectation()
-        myTBA.sendStub(for: newPreferences.preferencesRequest!)
+        myTBA.sendStub(for: newPreferences.preferencesOperation!)
         wait(for: [saveExpectation], timeout: 1.0)
 
         XCTAssertNotNil(Subscription.findOrFetch(in: persistentContainer.viewContext, matching: subscriptionPredicate))

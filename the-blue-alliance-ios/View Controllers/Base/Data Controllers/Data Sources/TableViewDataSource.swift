@@ -65,6 +65,27 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
 
     public let fetchedResultsController: NSFetchedResultsController<Result>
     fileprivate weak var delegate: Delegate!
+    fileprivate var updates: [Update<Object>] = []
+
+    fileprivate func processUpdates(_ updates: [Update<Object>]?) {
+        guard let updates = updates else { return delegate.tableView.reloadData() }
+        delegate.tableView.performBatchUpdates({
+            for update in updates {
+                switch update {
+                case .insert(let indexPath):
+                    self.delegate.tableView.insertRows(at: [indexPath], with: .automatic)
+                case .update(let indexPath, let object):
+                    guard let cell = self.delegate.tableView.cellForRow(at: indexPath) as? Cell else { fatalError("wrong cell type") }
+                    self.delegate.configure(cell, for: object, at: indexPath)
+                case .move(let indexPath, let newIndexPath):
+                    self.delegate.tableView.deleteRows(at: [indexPath], with: .automatic)
+                    self.delegate.tableView.insertRows(at: [newIndexPath], with: .automatic)
+                case .delete(let indexPath):
+                    self.delegate.tableView.deleteRows(at: [indexPath], with: .automatic)
+                }
+            }
+        }, completion: nil)
+    }
 
     // MARK: UITableViewDataSource
 
@@ -104,8 +125,33 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
 
     // MARK: NSFetchedResultsControllerDelegate
 
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        updates = []
+    }
+
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            guard let indexPath = newIndexPath else { fatalError("Index path should be not nil") }
+            updates.append(.insert(indexPath))
+        case .update:
+            guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
+            let object = self.object(at: indexPath)
+            updates.append(.update(indexPath, object))
+        case .move:
+            guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
+            guard let newIndexPath = newIndexPath else { fatalError("New index path should be not nil") }
+            updates.append(.move(indexPath, newIndexPath))
+        case .delete:
+            guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
+            updates.append(.delete(indexPath))
+        @unknown default:
+            fatalError()
+        }
+    }
+
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        delegate.tableView.reloadData()
+        processUpdates(updates)
         delegate.controllerDidChangeContent()
     }
 

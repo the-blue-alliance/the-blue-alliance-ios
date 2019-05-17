@@ -19,7 +19,7 @@ class TBAViewController: UIViewController, DataController {
 
     // MARK: - Refreshable
 
-    var requests: [URLSessionDataTask] = []
+    var refreshOperationQueue: OperationQueue = OperationQueue()
     var userDefaults: UserDefaults
 
     // MARK: - Stateful

@@ -81,7 +81,7 @@ extension TeamMedia {
     }
 
     public var imageDirectURL: URL? {
-        guard let directURL = directURL else {
+        guard let directURL = getValue(\TeamMedia.directURL) else {
             return nil
         }
         return URL(string: directURL)
@@ -113,6 +113,7 @@ extension TeamMedia: Managed {
 
      - Returns: The inserted Team Media.
      */
+    @discardableResult
     static func insert(_ model: TBAMedia, year: Int, in context: NSManagedObjectContext) -> TeamMedia {
         var mediaPredicate: NSPredicate?
         if let key = model.key {

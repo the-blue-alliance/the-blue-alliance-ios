@@ -21,8 +21,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     var dataSource: CollectionViewDataSource<TeamMedia, TeamMediaCollectionViewController>!
     weak var delegate: TeamMediaCollectionViewControllerDelegate?
 
-    var fetchingMedia: NSHashTable<TeamMedia> = NSHashTable.weakObjects()
-
     // MARK: Init
 
     init(team: Team, year: Int? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
@@ -107,50 +105,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         return dataSource.fetchedResultsController.indexPath(forObject: media)
     }
 
-    private func fetchMedia(_ media: TeamMedia) {
-        // Make sure we can attempt to fetch our media
-        guard let url = media.imageDirectURL else {
-            media.imageError = MediaError.error("No url for media")
-            return
-        }
-
-        // Check if we're already fetching for this media - then lock out other fetches
-        if fetchingMedia.contains(media) {
-            return
-        }
-        fetchingMedia.add(media)
-
-        // Reload our cell, so we can show a loading spinner
-        if let indexPath = indexPath(for: media) {
-            DispatchQueue.main.async {
-                self.collectionView.reloadItems(at: [indexPath])
-            }
-        }
-
-        let dataTask = URLSession.shared.dataTask(with: url, completionHandler: { [weak self] (data, _, error) in
-            self?.fetchingMedia.remove(media)
-
-            guard let backgroundContext = self?.persistentContainer.newBackgroundContext() else {
-                return
-            }
-            backgroundContext.performChanges {
-                let backgroundMedia = backgroundContext.object(with: media.objectID) as! TeamMedia
-                if let error = error {
-                    backgroundMedia.imageError = MediaError.error(error.localizedDescription)
-                } else if let data = data {
-                    if let image = UIImage(data: data) {
-                        backgroundMedia.image = image
-                    } else {
-                        backgroundMedia.imageError = MediaError.error("Invalid data for request")
-                    }
-                } else {
-                    backgroundMedia.imageError = MediaError.error("No data for request")
-                }
-            }
-        })
-        dataTask.resume()
-    }
-
 }
 
 extension TeamMediaCollectionViewController: UICollectionViewDelegateFlowLayout {
@@ -189,12 +143,12 @@ extension TeamMediaCollectionViewController: UICollectionViewDelegateFlowLayout 
 extension TeamMediaCollectionViewController: CollectionViewDataSourceDelegate {
 
     func configure(_ cell: MediaCollectionViewCell, for object: TeamMedia, at indexPath: IndexPath) {
-        if fetchingMedia.contains(object) {
-            cell.state = .loading
-        } else if let image = object.image {
+        if let image = object.image {
             cell.state = .loaded(image)
         } else if let error = object.imageError {
             cell.state = .error("Error loading media - \(error.localizedDescription)")
+        } else if isRefreshing {
+            cell.state = .loading
         } else {
             cell.state = .error("Error loading media - unknown error")
         }
@@ -242,32 +196,31 @@ extension TeamMediaCollectionViewController: Refreshable {
 
         removeNoDataView()
 
-        let fetchTeamMedia: () -> () = { [weak self] in
-            if let teamMediaSet = self?.team.getValue(\Team.media), let teamMedia = teamMediaSet.allObjects as? [TeamMedia] {
-                teamMedia.forEach({ (media) in
-                    self?.fetchMedia(media)
-                })
-            }
-        }
+        var finalOperation: Operation!
 
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchTeamMedia(key: team.key!, year: year, completion: { (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchTeamMedia(key: team.key!, year: year, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let media = try? result.get() {
                     let team = context.object(with: self.team.objectID) as! Team
-                    team.insert(media, year: year)
+                    let operations = team.insert(media, year: year).map({ (m) -> FetchMediaOperation in
+                        return self.fetchMedia(m)
+                    })
+                    operations.forEach {
+                        finalOperation.addDependency($0)
+                    }
+                    self.refreshOperationQueue.addOperations(operations, waitUntilFinished: false)
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
-
-            DispatchQueue.main.async {
-                fetchTeamMedia()
-            }
         })
-        addRequest(request: request!)
+        finalOperation = addRefreshOperations([operation])
+    }
+
+    private func fetchMedia(_ media: TeamMedia) -> FetchMediaOperation {
+        return FetchMediaOperation(media: media, persistentContainer: persistentContainer)
     }
 
 }

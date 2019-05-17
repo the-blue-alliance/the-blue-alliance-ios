@@ -23,7 +23,7 @@ class MockRefreshable: Refreshable {
 
     // MARK: - Protocol
 
-    var requests: [URLSessionDataTask] = []
+    var refreshOperationQueue: OperationQueue = OperationQueue()
 
     var refreshControl: UIRefreshControl?
 
@@ -78,7 +78,12 @@ class RefreshableTests: TBATestCase {
 
     func test_shouldRefresh_isRefreshing() {
         refreshable.isDataSourceEmpty = true
-        refreshable.requests.append(URLSessionDataTask())
+
+        let neverFinishOp = Operation()
+        let op = Operation()
+        op.addDependency(neverFinishOp)
+        refreshable.addRefreshOperations([op])
+
         XCTAssertFalse(refreshable.shouldRefresh())
     }
 
@@ -148,7 +153,7 @@ class RefreshableTests: TBATestCase {
 
     func test_isRefreshing() {
         XCTAssertFalse(refreshable.isRefreshing)
-        refreshable.requests.append(URLSessionDataTask())
+        refreshable.addRefreshOperations([Operation()])
         XCTAssert(refreshable.isRefreshing)
     }
 
@@ -157,83 +162,44 @@ class RefreshableTests: TBATestCase {
         updateRefreshExpectation.isInverted = true
         refreshable.updateRefreshExpectation = updateRefreshExpectation
 
-        XCTAssert(refreshable.requests.isEmpty)
+        XCTAssert(refreshable.refreshOperationQueue.operations.isEmpty)
 
         refreshable.cancelRefresh()
         wait(for: [updateRefreshExpectation], timeout: 1.0)
     }
 
     func test_cancelRefresh() {
-        let request = URLSession.shared.dataTask(with: URL(string: "https://www.thebluealliance.com/")!)
-        refreshable.requests.append(request)
+        let neverFinishOp = Operation()
+        let op = Operation()
+        op.addDependency(neverFinishOp)
+
+        refreshable.addRefreshOperations([op])
+        XCTAssertEqual(refreshable.refreshOperationQueue.operations.count, 1)
 
         let updateRefreshExpectation = XCTestExpectation(description: "updateRefresh called")
         refreshable.updateRefreshExpectation = updateRefreshExpectation
 
-        XCTAssertFalse(refreshable.requests.isEmpty)
+        XCTAssertFalse(refreshable.refreshOperationQueue.operations.isEmpty)
 
         refreshable.cancelRefresh()
-        XCTAssert(refreshable.requests.isEmpty)
-        wait(for: [updateRefreshExpectation], timeout: 1.0)
-    }
-
-    func test_addRequest_ignoreDuplicates() {
-        let request = URLSessionDataTask()
-        refreshable.requests.append(request)
-
-        let updateRefreshExpectation = XCTestExpectation(description: "updateRefresh not called")
-        updateRefreshExpectation.isInverted = true
-        refreshable.updateRefreshExpectation = updateRefreshExpectation
-
-        XCTAssert(refreshable.requests.contains(request))
-
-        refreshable.addRequest(request: request)
-        XCTAssert(refreshable.requests.contains(request))
+        XCTAssert(refreshable.refreshOperationQueue.operations.reduce(true, { $0 && $1.isCancelled }))
         wait(for: [updateRefreshExpectation], timeout: 1.0)
     }
 
     func test_addRequest() {
-        let request = URLSessionDataTask()
+        let neverFinishOp = Operation()
+        let op = Operation()
+        op.addDependency(neverFinishOp)
 
         let updateRefreshExpectation = XCTestExpectation(description: "updateRefresh called")
         refreshable.updateRefreshExpectation = updateRefreshExpectation
 
-        XCTAssertFalse(refreshable.requests.contains(request))
+        XCTAssertFalse(refreshable.refreshOperationQueue.operations.contains(op))
 
-        refreshable.addRequest(request: request)
-        XCTAssert(refreshable.requests.contains(request))
+        refreshable.addRefreshOperations([op])
+        XCTAssert(refreshable.refreshOperationQueue.operations.contains(op))
+        XCTAssertEqual(refreshable.refreshOperationQueue.operations.count, 1)
         wait(for: [updateRefreshExpectation], timeout: 1.0)
-    }
-
-    func test_removeRequest_ignoreNonexistant() {
-        let updateRefreshExpectation = XCTestExpectation(description: "updateRefresh not called")
-        updateRefreshExpectation.isInverted = true
-        refreshable.updateRefreshExpectation = updateRefreshExpectation
-
-        let noDataReloadExpectation = XCTestExpectation(description: "noDataReload not called")
-        noDataReloadExpectation.isInverted = true
-        refreshable.noDataReloadExpectation = noDataReloadExpectation
-
-        refreshable.removeRequest(request: URLSessionDataTask())
-        XCTAssert(refreshable.requests.isEmpty)
-        wait(for: [updateRefreshExpectation, noDataReloadExpectation], timeout: 1.0)
-    }
-
-    func test_removeRequest() {
-        let request = URLSessionDataTask()
-        refreshable.requests.append(request)
-
-        let updateRefreshExpectation = XCTestExpectation(description: "updateRefresh called")
-        refreshable.updateRefreshExpectation = updateRefreshExpectation
-
-        let noDataReloadExpectation = XCTestExpectation(description: "noDataReload called")
-        refreshable.noDataReloadExpectation = noDataReloadExpectation
-
-        XCTAssert(refreshable.requests.contains(request))
-
-        refreshable.removeRequest(request: request)
-        XCTAssertFalse(refreshable.requests.contains(request))
-        wait(for: [updateRefreshExpectation, noDataReloadExpectation], timeout: 1.0)
     }
 
     func test_enableRefreshing() {

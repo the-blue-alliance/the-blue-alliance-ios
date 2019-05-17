@@ -22,13 +22,13 @@ public struct MyTBAFavorite: MyTBAModel, Equatable, Codable {
     public var modelKey: String
     public var modelType: MyTBAModelType
 
-    public static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> URLSessionDataTask = MyTBA.fetchFavorites
+    public static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> MyTBAOperation = MyTBA.fetchFavorites
 }
 
 extension MyTBA {
 
     @discardableResult
-    public func fetchFavorites(_ completion: @escaping (_ favorites: [MyTBAFavorite]?, _ error: Error?) -> Void) -> URLSessionDataTask {
+    public func fetchFavorites(_ completion: @escaping (_ favorites: [MyTBAFavorite]?, _ error: Error?) -> Void) -> MyTBAOperation {
         let method = "\(MyTBAFavorite.arrayKey)/list"
 
         return callApi(method: method, completion: { (favoritesResponse: MyTBAFavoritesResponse?, error) in

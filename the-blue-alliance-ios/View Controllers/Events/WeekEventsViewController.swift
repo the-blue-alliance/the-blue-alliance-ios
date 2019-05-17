@@ -66,17 +66,16 @@ class WeekEventsViewController: EventsViewController {
             year = weekEventYear
         }
 
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchEvents(year: year, completion: { [unowned self] (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchEvents(year: year, completion: { [unowned self] (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let events = try? result.get() {
                     Event.insert(events, year: year, in: context)
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
 
             // Only setup weeks if we don't have a currently selected week
             if self.weekEvent == nil {
@@ -90,7 +89,7 @@ class WeekEventsViewController: EventsViewController {
                 }
             }
         })
-        addRequest(request: request!)
+        addRefreshOperations([operation])
     }
 
     // MARK: - Stateful

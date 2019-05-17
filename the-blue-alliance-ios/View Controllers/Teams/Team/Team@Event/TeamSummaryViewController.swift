@@ -16,9 +16,7 @@ private enum TeamSummaryRow {
     case alliance(allianceStatus: String)
     case status(overallStatus: String)
     case breakdown(rankingInfo: String)
-    case nextMatchKey(key: String)
     case nextMatch(match: Match)
-    case lastMatchKey(key: String)
     case lastMatch(match: Match)
 }
 
@@ -41,16 +39,8 @@ class TeamSummaryViewController: TBATableViewController {
     private var eventStatus: EventStatus? {
         didSet {
             if let eventStatus = eventStatus {
-                summaryRows = calculateSummaryRows()
-                DispatchQueue.main.async { [weak self] in
-                    self?.tableView.reloadData()
-                }
-
                 contextObserver.observeObject(object: eventStatus, state: .updated) { [weak self] (_, _) in
-                    self?.summaryRows = self?.calculateSummaryRows() ?? []
-                    DispatchQueue.main.async {
-                        self?.tableView.reloadData()
-                    }
+                    self?.reloadData()
                 }
             } else {
                 contextObserver.observeInsertions { [weak self] (eventStatuses) in
@@ -74,8 +64,6 @@ class TeamSummaryViewController: TBATableViewController {
                            #keyPath(EventStatus.teamKey), teamKey)
     }()
 
-    private var backgroundFetchKeys: Set<String> = []
-
     init(teamKey: TeamKey, event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.teamKey = teamKey
         self.event = event
@@ -96,7 +84,6 @@ class TeamSummaryViewController: TBATableViewController {
         eventStatus = EventStatus.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
 
         tableView.registerReusableCell(ReverseSubtitleTableViewCell.self)
-        tableView.registerReusableCell(LoadingTableViewCell.self)
         tableView.registerReusableCell(MatchTableViewCell.self)
     }
 
@@ -128,12 +115,8 @@ class TeamSummaryViewController: TBATableViewController {
                 return self.tableView(tableView, cellForStatus: status, at: indexPath)
             case .breakdown(let breakdown):
                 return self.tableView(tableView, cellForBreakdown: breakdown, at: indexPath)
-            case .nextMatchKey(let key):
-                return self.tableView(tableView, loadingCellForKey: key, at: indexPath)
             case .nextMatch(let match):
                 return self.tableView(tableView, cellForMatch: match, at: indexPath)
-            case .lastMatchKey(let key):
-                return self.tableView(tableView, loadingCellForKey: key, at: indexPath)
             case .lastMatch(let match):
                 return self.tableView(tableView, cellForMatch: match, at: indexPath)
             default:
@@ -175,16 +158,13 @@ class TeamSummaryViewController: TBATableViewController {
     private func tableView(_ tableView: UITableView, reverseSubtitleCellWithTitle title: String, subtitle: String, at indexPath: IndexPath) -> ReverseSubtitleTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ReverseSubtitleTableViewCell
         cell.titleLabel.text = title
-        cell.setHTMLSubtitle(text: subtitle)
+
+        // Strip our subtitle string of HTML tags - they're expensive to render and useless.
+        let sanitizedSubtitle = subtitle.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
+        cell.subtitleLabel.text = sanitizedSubtitle
+
         cell.accessoryType = .none
         cell.selectionStyle = .none
-        return cell
-    }
-
-    private func tableView(_ tableView: UITableView, loadingCellForKey key: String, at indexPath: IndexPath) -> LoadingTableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as LoadingTableViewCell
-        cell.keyLabel.text = key
-        cell.backgroundFetchActivityIndicator.isHidden = false
         return cell
     }
 
@@ -208,19 +188,9 @@ class TeamSummaryViewController: TBATableViewController {
         }
     }
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let row = summaryRows[indexPath.row]
-        switch row {
-        case .nextMatchKey, .lastMatchKey:
-            return 44.0
-        default:
-            return UITableView.automaticDimension
-        }
-    }
-
     // MARK: Private Methods
 
-    private func calculateSummaryRows() -> [TeamSummaryRow] {
+    private func reloadData() {
         var summaryRows: [TeamSummaryRow] = []
 
         // Rank
@@ -256,32 +226,23 @@ class TeamSummaryViewController: TBATableViewController {
             summaryRows.append(TeamSummaryRow.breakdown(rankingInfo: rankingInfo))
         }
 
-        // From here on, we only show this data if the event is currently happening
-        guard event.isHappeningNow else {
-            return summaryRows
-        }
-
-        // Next Match
-        if let nextMatchKey = eventStatus?.nextMatchKey {
-            if let match = Match.forKey(nextMatchKey, in: persistentContainer.viewContext) {
+        // We only show this data if the event is currently happening
+        if event.isHappeningNow {
+            // Next Match
+            if let nextMatchKey = eventStatus?.nextMatchKey,
+                let match = Match.forKey(nextMatchKey, in: persistentContainer.viewContext) {
                 summaryRows.append(TeamSummaryRow.nextMatch(match: match))
-            } else {
-                summaryRows.append(TeamSummaryRow.nextMatchKey(key: nextMatchKey))
-                fetchMatch(nextMatchKey)
             }
-        }
 
-        // Last Match
-        if let lastMatchKey = eventStatus?.lastMatchKey {
-            if let match = Match.forKey(lastMatchKey, in: persistentContainer.viewContext) {
+            // Last Match
+            if let lastMatchKey = eventStatus?.lastMatchKey,
+                let match = Match.forKey(lastMatchKey, in: persistentContainer.viewContext) {
                 summaryRows.append(TeamSummaryRow.lastMatch(match: match))
-            } else {
-                summaryRows.append(TeamSummaryRow.lastMatchKey(key: lastMatchKey))
-                fetchMatch(lastMatchKey)
             }
         }
 
-        return summaryRows
+        self.summaryRows = summaryRows
+        self.tableView.reloadData()
     }
 
 }
@@ -308,33 +269,36 @@ extension TeamSummaryViewController: Refreshable {
     @objc func refresh() {
         removeNoDataView()
 
+        var finalOperation: Operation!
+
         // Refresh team status
-        var teamStatusRequest: URLSessionDataTask?
-        teamStatusRequest = tbaKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!, completion: { (result, notModified) in
-            let context = self.persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                switch result {
-                case .success(let status):
-                    if let status = status {
+        var teamStatusOperation: TBAKitOperation!
+        teamStatusOperation = tbaKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!, completion: { (result, notModified) in
+            switch result {
+            case .success(let status):
+                if let status = status {
+                    // Kickoff refreshes for our Match objects, add them as dependents for reloading data
+                    self.refreshStatusMatches(status, finalOperation)
+
+                    let context = self.persistentContainer.newBackgroundContext()
+                    context.performChangesAndWait({
                         let event = context.object(with: self.event.objectID) as! Event
                         event.insert(status)
-                    } else if !notModified {
-                        // TODO: Delete status, move back up our hiearchy
-                    }
-                default:
-                    break
+                    }, saved: {
+                        self.markTBARefreshSuccessful(self.tbaKit, operation: teamStatusOperation)
+                    })
+                } else if !notModified {
+                    // TODO: Delete status, move back up our hiearchy
                 }
-            }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: teamStatusRequest!)
-            })
-            self.removeRequest(request: teamStatusRequest!)
+            default:
+                break
+            }
         })
-        addRequest(request: teamStatusRequest!)
 
         // Refresh awards
         let teamKeyKey = teamKey.key!
-        var awardsRequest: URLSessionDataTask?
-        awardsRequest = tbaKit.fetchTeamAwards(key: teamKeyKey, eventKey: event.key!, completion: { (result, notModified) in
+        var awardsOperation: TBAKitOperation!
+        awardsOperation = tbaKit.fetchTeamAwards(key: teamKeyKey, eventKey: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let awards = try? result.get() {
@@ -342,38 +306,44 @@ extension TeamSummaryViewController: Refreshable {
                     event.insert(awards, teamKey: teamKeyKey)
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: awardsRequest!)
+                self.tbaKit.storeCacheHeaders(awardsOperation)
             })
-            self.removeRequest(request: awardsRequest!)
         })
-        addRequest(request: awardsRequest!)
+
+        let reloadOperation = BlockOperation { [weak self] in
+            self?.reloadData()
+        }
+        finalOperation = addRefreshOperations([teamStatusOperation, awardsOperation])
+        reloadOperation.addDependency(finalOperation)
+        OperationQueue.main.addOperation(reloadOperation)
     }
 
-    func fetchMatch(_ key: String) {
-        // Already fetching match key
-        guard !backgroundFetchKeys.contains(key) else {
+    func refreshStatusMatches(_ status: TBAEventStatus, _ reloadOperation: Operation?) {
+        let ops = [status.lastMatchKey, status.nextMatchKey].compactMap({ $0 }).compactMap { [weak self] in
+            return self?.fetchMatch($0)
+        }
+        guard ops.count > 0 else {
             return
         }
+        for op in ops {
+            reloadOperation?.addDependency(op)
+        }
+        refreshOperationQueue.addOperations(ops, waitUntilFinished: false)
+    }
 
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchMatch(key: key) { (result, notModified) in
+    func fetchMatch(_ key: String) -> TBAKitOperation? {
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchMatch(key: key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if let match = try? result.get() {
                     Match.insert(match, in: context)
                 }
             }, saved: {
-                self.tbaKit.storeCacheHeaders(request!)
+                self.tbaKit.storeCacheHeaders(operation)
             })
-
-            self.backgroundFetchKeys.remove(key)
-
-            DispatchQueue.main.async { [weak self] in
-                self?.summaryRows = self?.calculateSummaryRows() ?? []
-                self?.tableView.reloadData()
-            }
         }
-        backgroundFetchKeys.insert(key)
+        return operation
     }
 
 }

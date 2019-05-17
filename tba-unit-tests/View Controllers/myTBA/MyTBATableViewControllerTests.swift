@@ -1,5 +1,6 @@
 import CoreData
 import XCTest
+@testable import TBAKit
 @testable import MyTBAKit
 @testable import The_Blue_Alliance
 
@@ -44,7 +45,7 @@ class MyTBATableViewControllerTests: TBATestCase {
 
     func test_refersh_unauthenticated() {
         myTBATableViewController.refresh()
-        XCTAssertEqual(myTBATableViewController.requests.count, 0)
+        XCTAssertEqual(myTBATableViewController.refreshOperationQueue.operations.count, 0)
     }
 
     func test_refresh() {
@@ -59,18 +60,18 @@ class MyTBATableViewControllerTests: TBATestCase {
         mockMyTBATableViewController.fetchMatchExpectation = fetchMatchExpectation
 
         mockMyTBATableViewController.refresh()
-        XCTAssertEqual(mockMyTBATableViewController.requests.count, 1)
+        XCTAssertEqual(mockMyTBATableViewController.refreshOperationQueue.operations.count, 1)
 
-        let task = mockMyTBATableViewController.requests.first!
+        let operation = mockMyTBATableViewController.refreshOperationQueue.operations.first! as! MyTBAOperation
         let saveExpectation = backgroundContextSaveExpectation()
-        myTBA.sendStub(for: task)
+        myTBA.sendStub(for: operation)
         wait(for: [saveExpectation], timeout: 1.0)
 
         let favories = Favorite.fetch(in: persistentContainer.viewContext)
         XCTAssertEqual(favories.count, 3)
 
         wait(for: [fetchEventExpectation, fetchTeamExpectation, fetchMatchExpectation], timeout: 1.0)
-        XCTAssert(mockMyTBATableViewController.requests.isEmpty)
+        XCTAssert(myTBATableViewController.refreshOperationQueue.operations.isEmpty)
 
         XCTAssert(mockMyTBATableViewController.hasSuccessfullyRefreshed)
     }
@@ -87,9 +88,9 @@ class MyTBATableViewControllerTests: TBATestCase {
         XCTAssertEqual(Subscription.fetch(in: persistentContainer.viewContext).count, 1)
 
         myTBATableViewController.refresh()
-        let task = myTBATableViewController.requests.first!
+        let operation = myTBATableViewController.refreshOperationQueue.operations.first! as! MyTBAOperation
         let saveExpectation = backgroundContextSaveExpectation()
-        myTBA.sendStub(for: task, code: 201)
+        myTBA.sendStub(for: operation, code: 201)
         wait(for: [saveExpectation], timeout: 1.0)
 
         XCTAssertEqual(Favorite.fetch(in: persistentContainer.viewContext).count, 0)
@@ -136,44 +137,32 @@ class MyTBATableViewControllerTests: TBATestCase {
 
     // MARK: - Private testing methods
 
-    private func testRefresh<T: Managed & NSManagedObject>(_ Type: T.Type, key: String, fetch: (String) -> (URLSessionDataTask), unmodified: Bool = false) {
+    private func testRefresh<T: Managed & NSManagedObject>(_ Type: T.Type, key: String, fetch: ((String) -> TBAKitOperation), unmodified: Bool = false) {
         // Sanity check pre-fetch
-        checkFetchKeys(key, shouldContainKey: false)
         checkKey(T.self, key: key, shouldBeNil: true)
 
         // Kickoff our fetch
-        let request = fetch(key)
-        checkFetchKeys(key)
-        XCTAssertNil(tbaKit.lastModified(request))
+        let operation = fetch(key)
+        let task = operation.task! as! URLSessionDataTask
+        XCTAssertNil(tbaKit.lastModified(task))
 
         // Wait for callback block and save
         let saveExpectation = backgroundContextSaveExpectation()
         if unmodified {
-            tbaKit.sendUnmodifiedStub(for: request)
+            tbaKit.sendUnmodifiedStub(for: operation)
         } else {
-            tbaKit.sendSuccessStub(for: request)
+            tbaKit.sendSuccessStub(for: operation)
         }
         wait(for: [saveExpectation], timeout: 1.0)
 
         // Post-fetch
         checkKey(T.self, key: key, shouldBeNil: unmodified)
-        checkFetchKeys(key, shouldContainKey: false)
-        XCTAssertNotNil(tbaKit.lastModified(request))
+        XCTAssertNotNil(tbaKit.lastModified(task))
     }
 
     private func checkKey<T: Managed & NSManagedObject>(_ Type: T.Type, key: String, shouldBeNil: Bool = false) {
         let predicate = NSPredicate(format: "key == %@", key)
         XCTAssertEqual(T.findOrFetch(in: persistentContainer.viewContext, matching: predicate) == nil, shouldBeNil)
-    }
-
-    private func checkFetchKeys(_ key: String, shouldContainKey: Bool = true) {
-        if shouldContainKey {
-            XCTAssert(myTBATableViewController.backgroundFetchKeys.contains(key))
-        } else {
-            XCTAssertFalse(myTBATableViewController.backgroundFetchKeys.contains(key))
-        }
-        // Check that we don't add the request to our refreshing
-        XCTAssert(myTBATableViewController.requests.isEmpty)
     }
 
     func test_refreshKey() {
@@ -227,17 +216,17 @@ private class MockMyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyT
     var fetchTeamExpectation: XCTestExpectation?
     var fetchMatchExpectation: XCTestExpectation?
 
-    override func fetchEvent(_ key: String) -> URLSessionDataTask {
+    override func fetchEvent(_ key: String) -> TBAKitOperation {
         fetchEventExpectation?.fulfill()
         return super.fetchEvent(key)
     }
 
-    override func fetchTeam(_ key: String) -> URLSessionDataTask {
+    override func fetchTeam(_ key: String) -> TBAKitOperation {
         fetchTeamExpectation?.fulfill()
         return super.fetchTeam(key)
     }
 
-    override func fetchMatch(_ key: String) -> URLSessionDataTask {
+    override func fetchMatch(_ key: String) -> TBAKitOperation {
         fetchMatchExpectation?.fulfill()
         return super.fetchMatch(key)
     }

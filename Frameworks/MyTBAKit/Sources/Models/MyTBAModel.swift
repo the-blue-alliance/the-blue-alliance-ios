@@ -12,7 +12,7 @@ public enum MyTBAModelType: Int, Codable {
     case media
 }
 
-protocol MyTBAResponse: Codable {}
+public protocol MyTBAResponse: Codable {}
 
 // TODO: Remove when we move to Result
 public typealias MyTBABaseCompletionBlock = (MyTBABaseResponse?, Error?) -> ()
@@ -42,5 +42,5 @@ public protocol MyTBAModel: Codable {
     var modelKey: String { get set }
     var modelType: MyTBAModelType { get set }
 
-    static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> URLSessionDataTask { get }
+    static var fetch: (MyTBA) -> (@escaping ([MyTBAModel]?, Error?) -> Void) -> MyTBAOperation { get }
 }

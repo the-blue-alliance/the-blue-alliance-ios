@@ -141,8 +141,8 @@ extension EventDistrictPointsViewController: Refreshable {
 
         let eventKey = event.key!
 
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchEventDistrictPoints(key: eventKey, completion: { (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchEventDistrictPoints(key: eventKey, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let (eventPoints, _) = try? result.get() {
@@ -150,11 +150,10 @@ extension EventDistrictPointsViewController: Refreshable {
                     DistrictEventPoints.insert(eventPoints, eventKey: eventKey, in: context)
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
         })
-        addRequest(request: request!)
+        addRefreshOperations([operation])
     }
 
 }
