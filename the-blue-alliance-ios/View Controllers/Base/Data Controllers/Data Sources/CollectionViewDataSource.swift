@@ -14,7 +14,12 @@ protocol CollectionViewDataSourceDelegate: class {
     func configure(_ cell: Cell, for object: Object, at indexPath: IndexPath)
 }
 
-enum Update<Object> {
+enum SectionUpdate {
+    case insert(IndexSet)
+    case delete(IndexSet)
+}
+
+enum RowUpdate<Object> {
     case insert(IndexPath)
     case update(IndexPath, Object)
     case move(IndexPath, IndexPath)
@@ -58,9 +63,9 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
 
     public let fetchedResultsController: NSFetchedResultsController<Result>
     fileprivate weak var delegate: Delegate!
-    fileprivate var updates: [Update<Object>] = []
+    fileprivate var updates: [RowUpdate<Object>] = []
 
-    fileprivate func processUpdates(_ updates: [Update<Object>]?) {
+    fileprivate func processUpdates(_ updates: [RowUpdate<Object>]?) {
         guard let updates = updates else { return delegate.collectionView.reloadData() }
         delegate.collectionView.performBatchUpdates({
             for update in updates {
@@ -131,6 +136,7 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
         case .move:
             guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
             guard let newIndexPath = newIndexPath else { fatalError("New index path should be not nil") }
+            if indexPath == newIndexPath { return }
             updates.append(.move(indexPath, newIndexPath))
         case .delete:
             guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
