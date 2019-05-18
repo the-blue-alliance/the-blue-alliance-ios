@@ -73,15 +73,16 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
             for update in updates {
                 switch update {
                 case .insert(let indexPath):
-                    self.delegate.tableView.insertRows(at: [indexPath], with: .automatic)
+                    self.delegate.tableView.insertRows(at: [indexPath], with: .fade)
                 case .update(let indexPath, let object):
-                    guard let cell = self.delegate.tableView.cellForRow(at: indexPath) as? Cell else { fatalError("wrong cell type") }
-                    self.delegate.configure(cell, for: object, at: indexPath)
+                    if let cell = self.delegate.tableView.cellForRow(at: indexPath) as? Cell {
+                        self.delegate.configure(cell, for: object, at: indexPath)
+                    }
                 case .move(let indexPath, let newIndexPath):
-                    self.delegate.tableView.deleteRows(at: [indexPath], with: .automatic)
-                    self.delegate.tableView.insertRows(at: [newIndexPath], with: .automatic)
+                    self.delegate.tableView.deleteRows(at: [indexPath], with: .fade)
+                    self.delegate.tableView.insertRows(at: [newIndexPath], with: .fade)
                 case .delete(let indexPath):
-                    self.delegate.tableView.deleteRows(at: [indexPath], with: .automatic)
+                    self.delegate.tableView.deleteRows(at: [indexPath], with: .fade)
                 }
             }
         }, completion: nil)
