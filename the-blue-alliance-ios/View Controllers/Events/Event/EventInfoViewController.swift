@@ -238,8 +238,8 @@ extension EventInfoViewController: Refreshable {
     }
 
     @objc func refresh() {
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchEvent(key: event.key!, completion: { (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchEvent(key: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 switch result {
@@ -253,11 +253,10 @@ extension EventInfoViewController: Refreshable {
                     break
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
         })
-        addRequest(request: request!)
+        addRefreshOperations([operation])
     }
 
 }

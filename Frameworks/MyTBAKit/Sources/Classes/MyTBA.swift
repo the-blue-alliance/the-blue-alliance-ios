@@ -70,7 +70,7 @@ open class MyTBA {
         return jsonDecoder
     }
 
-    func callApi<T: MyTBAResponse>(method: String, bodyData: Data? = nil, completion: @escaping (T?, Error?) -> Void) -> URLSessionDataTask {
+    func createRequest(_ method: String, _ bodyData: Data? = nil) -> URLRequest {
         let apiURL = URL(string: method, relativeTo: Constants.APIConstants.baseURL)!
         var request = URLRequest(url: apiURL)
         request.httpMethod = "POST"
@@ -87,35 +87,11 @@ open class MyTBA {
 
         request.httpBody = bodyData
 
-        let task = urlSession.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            if let error = error {
-                completion(nil, error)
-            } else if let data = data {
-                #if DEBUG
-                if let dataString = try? JSONSerialization.jsonObject(with: data, options: []) {
-                    print(dataString)
-                }
-                #endif
+        return request
+    }
 
-                var decodedResponse: T?
-                do {
-                    decodedResponse = try MyTBA.jsonDecoder.decode(T.self, from: data)
-                } catch {
-                    completion(nil, error)
-                    return
-                }
-
-                if let myTBAResponse = decodedResponse as? MyTBABaseResponse {
-                    completion(decodedResponse, error ?? myTBAResponse.error)
-                } else {
-                    completion(decodedResponse, error)
-                }
-            } else {
-                completion(nil, MyTBAError.error("Unexpected response from myTBA API"))
-            }
-        }
-        task.resume()
-        return task
+    func callApi<T: MyTBAResponse>(method: String, bodyData: Data? = nil, completion: @escaping (T?, Error?) -> Void) -> MyTBAOperation {
+        return MyTBAOperation(myTBA: self, method: method, bodyData: bodyData, completion: completion)
     }
 
 }

@@ -36,6 +36,11 @@ Run MyTBAKit unit tests
 fastlane ios test_tbakit
 ```
 Run TBAKit unit tests
+### ios test_tbaoperation
+```
+fastlane ios test_tbaoperation
+```
+Run TBAOperation unit tests
 ### ios test
 ```
 fastlane ios test

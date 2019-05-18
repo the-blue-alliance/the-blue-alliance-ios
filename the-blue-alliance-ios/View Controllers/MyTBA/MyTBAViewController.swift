@@ -113,19 +113,21 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
             return
         }
 
-        let signOutOperation = MyTBASignOutOperation(myTBA: myTBA, pushToken: fcmToken)
-        signOutOperation.completionBlock = { [unowned signOutOperation] in
-            self.isLoggingOut = false
+        let signOutOperation = myTBA.unregister(fcmToken) { [weak self] (_, error) in
+            self?.isLoggingOut = false
 
-            if let error = signOutOperation.completionError {
+            if let error = error {
                 Crashlytics.sharedInstance().recordError(error)
-                self.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
+                self?.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
             } else {
-                self.logoutSuccessful()
+                // Run on main thread, since we delete our Core Data objects on the main thread.
+                DispatchQueue.main.async {
+                    self?.logoutSuccessful()
+                }
             }
         }
         isLoggingOut = true
-        OperationQueue.main.addOperation(signOutOperation)
+        OperationQueue.main.addOperation(signOutOperation!)
     }
 
     private func logoutSuccessful() {

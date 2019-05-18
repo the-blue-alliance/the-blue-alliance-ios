@@ -86,8 +86,6 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         if traitCollection.forceTouchCapability == .available {
             registerForPreviewing(with: self, sourceView: mediaViewController.collectionView)
         }
-
-        refreshYearsParticipated()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -135,21 +133,6 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
     private func updateInterface() {
         navigationSubtitle = ContainerViewController.yearSubtitle(year)
-    }
-
-    private func refreshYearsParticipated() {
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchTeamYearsParticipated(key: team.key!, completion: { (result, notModified) in
-            let context = self.persistentContainer.newBackgroundContext()
-            context.performChangesAndWait({
-                if !notModified, let years = try? result.get() {
-                    let team = context.object(with: self.team.objectID) as! Team
-                    team.yearsParticipated = years.sorted().reversed()
-                }
-            }, saved: {
-                self.tbaKit.storeCacheHeaders(request!)
-            })
-        })
     }
 
     private func showSelectYear() {

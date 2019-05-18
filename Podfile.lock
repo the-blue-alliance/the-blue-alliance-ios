@@ -132,9 +132,11 @@ PODS:
   - iOSSnapshotTestCase/Core (4.0.1)
   - iOSSnapshotTestCase/SwiftSupport (4.0.1):
     - iOSSnapshotTestCase/Core
-  - MyTBAKit (1.0.0-LOCAL)
+  - MyTBAKit (1.0.0-LOCAL):
+    - TBAOperation
   - MyTBAKit/Tests (1.0.0-LOCAL):
     - MyTBAKitTesting
+    - TBAOperation
   - MyTBAKitTesting (1.0.0-LOCAL):
     - MyTBAKit
     - TBATestingMocks
@@ -206,12 +208,19 @@ PODS:
     - React/fishhook
     - React/RCTBlob
   - Reveal-SDK (22)
-  - TBAKit (1.0.0-LOCAL)
+  - TBAKit (1.0.0-LOCAL):
+    - TBAOperation
   - TBAKit/Tests (1.0.0-LOCAL):
     - TBAKitTesting
+    - TBAOperation
   - TBAKitTesting (1.0.0-LOCAL):
     - TBAKit
     - TBATestingMocks
+  - TBAOperation (1.0.0-LOCAL)
+  - TBAOperation/Tests (1.0.0-LOCAL):
+    - TBAOperationTesting
+  - TBAOperationTesting (1.0.0-LOCAL):
+    - TBAOperation
   - TBATestingMocks (1.0.0-LOCAL)
   - XCDYouTubeKit (2.7.4)
   - yoga (0.59.0.React)
@@ -248,6 +257,9 @@ DEPENDENCIES:
   - TBAKit (from `Frameworks/TBAKit`)
   - TBAKit/Tests (from `Frameworks/TBAKit`)
   - TBAKitTesting (from `Frameworks/TBAKit`)
+  - TBAOperation (from `Frameworks/TBAOperation`)
+  - TBAOperation/Tests (from `Frameworks/TBAOperation`)
+  - TBAOperationTesting (from `Frameworks/TBAOperation`)
   - TBATestingMocks (from `Frameworks/TBATestingMocks`)
   - XCDYouTubeKit (~> 2.7)
   - yoga (from `subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga`)
@@ -305,6 +317,10 @@ EXTERNAL SOURCES:
     :path: Frameworks/TBAKit
   TBAKitTesting:
     :path: Frameworks/TBAKit
+  TBAOperation:
+    :path: Frameworks/TBAOperation
+  TBAOperationTesting:
+    :path: Frameworks/TBAOperation
   TBATestingMocks:
     :path: Frameworks/TBATestingMocks
   yoga:
@@ -337,7 +353,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 111a012f4c3a29c9e7c954c082fafd6ee3c999c0
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
   iOSSnapshotTestCase: f3b2b7e606fe03fdbe49af84316bd235df32dc44
-  MyTBAKit: 3a16f0982b145e1a86dc808df0f59ee390f529ad
+  MyTBAKit: 9e70178b610b322651c9c31485115fd1a25a74ce
   MyTBAKitTesting: cd6dbb57eef130b8d15692d86d3af767a051a403
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   PINCache: d195fdba255283f7e9900a55e3cced377f431f9b
@@ -347,13 +363,15 @@ SPEC CHECKSUMS:
   PureLayout: f08c01b8dec00bb14a1fefa3de4c7d9c265df85e
   React: 0d6c719d9549bea0bd5676f8170b0e5c56e2c3c7
   Reveal-SDK: 1385ab77aa15e9a3e21f798c74bd8e94cb54c651
-  TBAKit: 75bbe21fe4c1ceef84c91a47799f9b8e896d42d2
+  TBAKit: 6f993ebc3971dc91c09e5f50366d6b6c40de874d
   TBAKitTesting: 01d2be262383a8978c11cb886f9782d0acfb219e
+  TBAOperation: ebb2d46042aed6c2fa29d8ec15e863e2fa53c7af
+  TBAOperationTesting: 19e52290745b4f5f82424f51032caa15e33ec7bf
   TBATestingMocks: c43f0abc435cd9950a448c08755062d35e0c7ce9
   XCDYouTubeKit: a38534160e092d87c8ea983a8d92939020501551
   yoga: 26673abd38bbdf0c33e134ad9e690c5fbf16e8fc
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: 345bc6d899eba3f585e7fc4aeb93a4057df91fbc
+PODFILE CHECKSUM: ae5a60c6769129d8cf410ec1e029291f47392257
 
 COCOAPODS: 1.6.1

@@ -1,8 +1,8 @@
 import Foundation
 
-class TBAOperation: Operation {
+open class TBAOperation: Operation {
 
-    var completionError: Error?
+    public var completionError: Error?
 
     internal var _executing = false {
         willSet {
@@ -32,27 +32,27 @@ class TBAOperation: Operation {
         }
     }
 
-    override var isExecuting: Bool {
+    override open var isExecuting: Bool {
         return _executing
     }
 
-    override var isFinished: Bool {
+    override open var isFinished: Bool {
         return _finished
     }
 
-    override var isCancelled: Bool {
+    override open var isCancelled: Bool {
         return _cancelled
     }
 
-    override var isAsynchronous: Bool {
+    override open var isAsynchronous: Bool {
         return true
     }
 
-    override var isConcurrent: Bool {
+    override open var isConcurrent: Bool {
         return true
     }
 
-    override func start() {
+    override open func start() {
         if _cancelled {
             finish()
             return
@@ -62,17 +62,17 @@ class TBAOperation: Operation {
         execute()
     }
 
-    override func cancel() {
+    override open func cancel() {
         _cancelled = true
 
         super.cancel()
     }
 
-    func execute() {
+    open func execute() {
         assertionFailure("Implement execute in superclass")
     }
 
-    internal func finish() {
+    open func finish() {
         _executing = false
         _finished = true
     }

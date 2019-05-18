@@ -119,8 +119,8 @@ extension DistrictTeamSummaryViewController: Refreshable {
     }
 
     @objc func refresh() {
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchDistrictRankings(key: ranking.district!.key!, completion: { (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchDistrictRankings(key: ranking.district!.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let rankings = try? result.get() {
@@ -128,11 +128,10 @@ extension DistrictTeamSummaryViewController: Refreshable {
                     district.insert(rankings)
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
         })
-        addRequest(request: request!)
+        addRefreshOperations([operation])
     }
 
 }

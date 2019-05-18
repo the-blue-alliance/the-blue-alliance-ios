@@ -46,8 +46,8 @@ public class MockTBAKit: TBAKit {
         return etag(for: url)
     }
 
-    public func sendUnauthorizedStub(for task: URLSessionDataTask) {
-        guard let mockRequest = task as? MockURLSessionDataTask else {
+    public func sendUnauthorizedStub(for operation: TBAKitOperation) {
+        guard let mockRequest = operation.task as? MockURLSessionDataTask else {
             XCTFail()
             return
         }
@@ -73,8 +73,8 @@ public class MockTBAKit: TBAKit {
         mockRequest.completionHandler?(data, response, nil)
     }
 
-    public func sendUnmodifiedStub(for task: URLSessionDataTask) {
-        guard let mockRequest = task as? MockURLSessionDataTask else {
+    public func sendUnmodifiedStub(for operation: TBAKitOperation) {
+        guard let mockRequest = operation.task as? MockURLSessionDataTask else {
             XCTFail()
             return
         }
@@ -92,8 +92,8 @@ public class MockTBAKit: TBAKit {
         mockRequest.completionHandler?(nil, response, nil)
     }
 
-    public func sendSuccessStub(for task: URLSessionDataTask, with code: Int = 200) {
-        guard let mockRequest = task as? MockURLSessionDataTask else {
+    public func sendSuccessStub(for operation: TBAKitOperation, with code: Int = 200) {
+        guard let mockRequest = operation.task as? MockURLSessionDataTask else {
             XCTFail()
             return
         }

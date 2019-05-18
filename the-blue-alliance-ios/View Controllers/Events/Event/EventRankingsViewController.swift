@@ -87,8 +87,8 @@ extension EventRankingsViewController: Refreshable {
     @objc func refresh() {
         removeNoDataView()
 
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchEventRankings(key: event.key!, completion: { (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchEventRankings(key: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let (rankings, sortOrder, extraStats) = try? result.get() {
@@ -96,11 +96,10 @@ extension EventRankingsViewController: Refreshable {
                     event.insert(rankings, sortOrderInfo: sortOrder, extraStatsInfo: extraStats)
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
         })
-        self.addRequest(request: request!)
+        addRefreshOperations([operation])
     }
 
 }

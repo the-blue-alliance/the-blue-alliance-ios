@@ -18,8 +18,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     let myTBA: MyTBA
     weak var delegate: MyTBATableViewControllerDelegate?
 
-    private(set) var backgroundFetchKeys: Set<String> = []
-
     // MARK: - Init
 
     init(myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
@@ -37,7 +35,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.registerReusableCell(LoadingTableViewCell.self)
         tableView.registerReusableCell(EventTableViewCell.self)
         tableView.registerReusableCell(TeamTableViewCell.self)
         tableView.registerReusableCell(MatchTableViewCell.self)
@@ -99,8 +96,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         guard let obj = fetchedResultsController?.object(at: indexPath) else {
             return fallbackCell
         }
-
-        let myTBACell = self.tableView(tableView, cellForRowAt: indexPath, for: obj)
+        fallbackCell.textLabel?.text = obj.modelKey
 
         // TODO: All Cell subclasses need gear icons
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/179
@@ -108,21 +104,21 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         switch obj.modelType {
         case .event:
             guard let event = obj.tbaObject as? Event else {
-                return myTBACell
+                return fallbackCell
             }
             return self.tableView(tableView, cellForRowAt: indexPath, for: event)
         case .team:
             guard let team = obj.tbaObject as? Team else {
-                return myTBACell
+                return fallbackCell
             }
             return self.tableView(tableView, cellForRowAt: indexPath, for: team)
         case .match:
             guard let match = obj.tbaObject as? Match else {
-                return myTBACell
+                return fallbackCell
             }
             return self.tableView(tableView, cellForRowAt: indexPath, for: match)
         default:
-            return myTBACell
+            return fallbackCell
         }
     }
 
@@ -177,13 +173,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     // MARK: - Table Views
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, for myTBA: MyTBAEntity) -> LoadingTableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as LoadingTableViewCell
-        cell.keyLabel.text = myTBA.modelKey
-        cell.backgroundFetchActivityIndicator.isHidden = !backgroundFetchKeys.contains(myTBA.modelKey!)
-        return cell
-    }
-
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, for event: Event) -> EventTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
         cell.viewModel = EventCellViewModel(event: event)
@@ -213,7 +202,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     // MARK: NSFetchedResultsControllerDelegate
 
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.reloadData()
     }
 
@@ -231,26 +220,32 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
         removeNoDataView()
 
-        var request: URLSessionDataTask?
-        request = J.fetch(myTBA)() { (models, error) in
+        var finalOperation: Operation!
+
+        var operation: MyTBAOperation!
+        operation = J.fetch(myTBA)() { [unowned self] (models, error) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if let models = models as? [T.RemoteType] {
-                    let myTBAObjects = T.insert(models, in: context) as! [T]
+                    T.insert(models, in: context)
                     // Kickoff fetch for myTBA objects that don't exist
-                    for myTBAObject in myTBAObjects {
-                        let key = myTBAObject.modelKey!
+                    let operations = models.compactMap({ (myTBAObject) -> TBAKitOperation? in
+                        let key = myTBAObject.modelKey
                         switch myTBAObject.modelType {
                         case .event:
-                            self.fetchEvent(key)
+                            return self.fetchEvent(key)
                         case .team:
-                            self.fetchTeam(key)
+                            return self.fetchTeam(key)
                         case .match:
-                            self.fetchMatch(key)
+                            return self.fetchMatch(key)
                         default:
-                            break
+                            return nil
                         }
+                    })
+                    for op in operations {
+                        finalOperation.addDependency(op)
                     }
+                    self.refreshOperationQueue.addOperations(operations, waitUntilFinished: false)
                 } else if error == nil {
                     // If we don't get any models and we don't have an error, we probably don't have any models upstream
                     context.deleteAllObjectsForEntity(entity: T.entity())
@@ -258,78 +253,56 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             }, saved: {
                 self.markRefreshSuccessful()
             })
-            self.removeRequest(request: request!)
         }
-        addRequest(request: request!)
+        finalOperation = addRefreshOperations([operation])
     }
 
     @discardableResult
-    func fetchEvent(_ key: String) -> URLSessionDataTask {
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchEvent(key: key) { (result, notModified) in
+    func fetchEvent(_ key: String) -> TBAKitOperation {
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchEvent(key: key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if let event = try? result.get() {
                     Event.insert(event, in: context)
                 }
             }, saved: {
-                self.tbaKit.storeCacheHeaders(request!)
+                self.tbaKit.storeCacheHeaders(operation)
             })
-
-            self.backgroundFetchKeys.remove(key)
-
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
         }
-        backgroundFetchKeys.insert(key)
-        return request!
+        return operation
     }
 
     @discardableResult
-    func fetchTeam(_ key: String) -> URLSessionDataTask {
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchTeam(key: key) { (result, notModified) in
+    func fetchTeam(_ key: String) -> TBAKitOperation {
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchTeam(key: key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if let team = try? result.get() {
                     Team.insert(team, in: context)
                 }
             }, saved: {
-                self.tbaKit.storeCacheHeaders(request!)
+                self.tbaKit.storeCacheHeaders(operation)
             })
-
-            self.backgroundFetchKeys.remove(key)
-
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
         }
-        backgroundFetchKeys.insert(key)
-        return request!
+        return operation
     }
 
     @discardableResult
-    func fetchMatch(_ key: String) -> URLSessionDataTask {
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchMatch(key: key) { (result, notModified) in
+    func fetchMatch(_ key: String) -> TBAKitOperation {
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchMatch(key: key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if let match = try? result.get() {
                     Match.insert(match, in: context)
                 }
             }, saved: {
-                self.tbaKit.storeCacheHeaders(request!)
+                self.tbaKit.storeCacheHeaders(operation)
             })
-
-            self.backgroundFetchKeys.remove(key)
-
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
         }
-        backgroundFetchKeys.insert(key)
-        return request!
+        return operation
     }
 
 }

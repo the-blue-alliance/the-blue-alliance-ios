@@ -1,6 +1,6 @@
-import MyTBAKit
 import TBATestingMocks
 import XCTest
+@testable import MyTBAKit
 
 public class MockMyTBA: MyTBA {
 
@@ -20,8 +20,8 @@ public class MockMyTBA: MyTBA {
         super.init(uuid: "abcd123", deviceName: "MyTBATesting", urlSession: session)
     }
 
-    public func sendStub(for task: URLSessionDataTask, code: Int = 200) {
-        guard let mockRequest = task as? MockURLSessionDataTask else {
+    public func sendStub(for operation: MyTBAOperation, code: Int = 200) {
+        guard let mockRequest = operation.task as? MockURLSessionDataTask else {
             XCTFail()
             return
         }

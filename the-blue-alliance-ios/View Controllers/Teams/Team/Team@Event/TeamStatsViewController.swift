@@ -116,8 +116,8 @@ extension TeamStatsViewController: Refreshable {
     @objc func refresh() {
         removeNoDataView()
 
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchEventTeamStats(key: event.key!, completion: { (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchEventTeamStats(key: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let stats = try? result.get() {
@@ -125,11 +125,10 @@ extension TeamStatsViewController: Refreshable {
                     event.insert(stats)
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
         })
-        addRequest(request: request!)
+        addRefreshOperations([operation])
     }
 
 }

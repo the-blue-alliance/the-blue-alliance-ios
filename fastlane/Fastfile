@@ -24,10 +24,16 @@ platform :ios do
     scan(project: "Pods/Pods.xcodeproj", scheme: "TBAKit-Unit-Tests")
   end
 
+  desc "Run TBAOperation unit tests"
+  lane :test_tbaoperation do
+    scan(project: "Pods/Pods.xcodeproj", scheme: "TBAOperation-Unit-Tests")
+  end
+
   desc "Run all of our tests"
   lane :test do
     test_mytbakit
     test_tbakit
+    test_tbaoperation
     test_unit
   end
 
@@ -35,7 +41,7 @@ platform :ios do
 
   desc "Setup Secrets.plist file (used by CI)"
   lane :setup_secrets do
-    set_info_plist_value(path: "the-blue-alliance-ios/Secrets.plist", key: "tba_api_key", value: ENV['TBA_API_KEY'])
+    set_info_plist_value(path: "the-blue-alliance-ios/Secrets.plist", key: "tba_api_key", value: ENV["TBA_API_KEY"])
   end
 
   desc "Configure code signing"
@@ -80,7 +86,7 @@ platform :ios do
       build_configuration: "Release",
       code_signing_identity: "iPhone Distribution"
     )
-    gym(buildlog_path: 'logs')
+    gym(buildlog_path: "logs")
     upload_symbols_to_crashlytics(dsym_path: "The Blue Alliance.app.dSYM.zip", gsp_path: "the-blue-alliance-ios/GoogleService-Info.plist")
   end
 
