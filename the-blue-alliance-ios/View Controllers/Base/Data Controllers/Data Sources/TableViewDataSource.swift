@@ -75,9 +75,8 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
                 case .insert(let indexPath):
                     self.delegate.tableView.insertRows(at: [indexPath], with: .fade)
                 case .update(let indexPath, let object):
-                    if let cell = self.delegate.tableView.cellForRow(at: indexPath) as? Cell {
-                        self.delegate.configure(cell, for: object, at: indexPath)
-                    }
+                    let cell = self.delegate.tableView.dequeueReusableCell(indexPath: indexPath) as Cell
+                    self.delegate.configure(cell, for: object, at: indexPath)
                 case .move(let indexPath, let newIndexPath):
                     self.delegate.tableView.deleteRows(at: [indexPath], with: .fade)
                     self.delegate.tableView.insertRows(at: [newIndexPath], with: .fade)

@@ -68,9 +68,8 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
                 case .insert(let indexPath):
                     self.delegate.collectionView.insertItems(at: [indexPath])
                 case .update(let indexPath, let object):
-                    if let cell = self.delegate.collectionView.cellForItem(at: indexPath) as? Cell {
-                        self.delegate.configure(cell, for: object, at: indexPath)
-                    }
+                    let cell = self.delegate.collectionView.dequeueReusableCell(indexPath: indexPath) as Cell
+                    self.delegate.configure(cell, for: object, at: indexPath)
                 case .move(let indexPath, let newIndexPath):
                     self.delegate.collectionView.deleteItems(at: [indexPath])
                     self.delegate.collectionView.insertItems(at: [newIndexPath])
