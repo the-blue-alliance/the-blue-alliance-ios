@@ -16,6 +16,8 @@ stages:
   if: (type == cron)
 - name: test
   if: NOT ((type == push AND commit_message =~ \[clowntown\]) OR (type == cron))
+- name: app_store
+  if: (type == push) AND (branch == master) AND (commit_message =~ \[app_store\])
 - name: beta
   if: (type == push) AND (branch == master) AND (commit_message =~ \[beta\])
 
@@ -50,6 +52,10 @@ jobs:
     script:
     - bundle exec fastlane setup_secrets
     - bundle exec fastlane beta_ci
+  - stage: app_store
+    script:
+    - bundle exec fastlane setup_secrets
+    - bundle exec fastlane app_store
 
 after_failure:
 - gem install second_curtain

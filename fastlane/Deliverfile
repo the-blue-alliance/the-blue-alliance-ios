@@ -2,6 +2,6 @@
 # For more information, check out the docs
 # https://docs.fastlane.tools/actions/deliver/
 
-build_number(99)
+force(true)
 submit_for_review(true)
 automatic_release(true)

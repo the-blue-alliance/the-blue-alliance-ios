@@ -65,7 +65,6 @@ platform :ios do
 
     slack(channel: "#github-ios", message: "Shipping #{current_git_tag} to TestFlight...", default_payloads: [])
     pilot(changelog: commit_changelog, distribute_external: true, groups: ["Beta"], reject_build_waiting_for_review: true)
-
     slack(
       channel: "#github-ios",
       message: "#{current_git_tag} uploaded to TestFlight 🎉",
@@ -75,12 +74,12 @@ platform :ios do
 
   desc "Upload a new build to the App Store"
   lane :app_store do
-    setup_secrets
-
+    preship
     build
+
     deliver
     ship_github(is_prerelease: false) # Create GitHub release
-    slack(channel: "#app-releases", message: "Shipping iOS #{current_version} to the App Store 🎉\nhttps://github.com/the-blue-alliance/the-blue-alliance-ios/releases/tag/#{current_version}")
+    slack(channel: "#app-releases", message: "Shipping iOS #{current_version} to the App Store 🎉\n```\n#{commit_changelog}\n```\nhttps://github.com/the-blue-alliance/the-blue-alliance-ios/releases/tag/#{current_version}")
 
     new_version(version_type: 'patch')
     beta_ci
@@ -107,6 +106,12 @@ platform :ios do
     # Bump our build number for TestFlight
     testflight_build_number = latest_testflight_build_number(version: get_version_number, initial_build_number: 0)
     increment_build_number(build_number: testflight_build_number + 1)
+  end
+
+  desc "Perform pre-App Store tasks"
+  private_lane :preship do
+    # Set our build number to 99 for the App Store
+    increment_build_number(build_number: 99)
   end
 
   desc "Perform codesign/build tasks"
