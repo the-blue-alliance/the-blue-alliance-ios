@@ -35,8 +35,6 @@ class DistrictEventsViewController: EventsViewController {
     }
 
     @objc override func refresh() {
-        removeNoDataView()
-
         var operation: TBAKitOperation!
         operation = tbaKit.fetchDistrictEvents(key: district.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()

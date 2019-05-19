@@ -86,8 +86,6 @@ extension DistrictRankingsViewController: Refreshable {
 
     // TODO: Think about building a way to "chain" requests together for a refresh...
     @objc func refresh() {
-        removeNoDataView()
-
         var operation: TBAKitOperation!
         operation = tbaKit.fetchDistrictRankings(key: district.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()

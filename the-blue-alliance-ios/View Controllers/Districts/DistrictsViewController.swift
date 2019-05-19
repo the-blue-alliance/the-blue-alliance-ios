@@ -96,8 +96,6 @@ extension DistrictsViewController: Refreshable {
     }
 
     @objc func refresh() {
-        removeNoDataView()
-
         var operation: TBAKitOperation!
         operation = tbaKit.fetchDistricts(year: year, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()

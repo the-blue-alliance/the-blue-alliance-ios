@@ -37,8 +37,6 @@ class DistrictTeamsViewController: TeamsViewController {
     }
 
     @objc override func refresh() {
-        removeNoDataView()
-
         var operation: TBAKitOperation!
         operation = tbaKit.fetchDistrictTeams(key: district.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()

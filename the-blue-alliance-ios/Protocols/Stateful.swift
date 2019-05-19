@@ -20,6 +20,17 @@ protocol Stateful: AnyObject {
     func removeNoDataView(_ noDataView: UIView)
 }
 
+extension Stateful {
+
+    /**
+     Remove the no data view from the view hiearchy.
+     */
+    func removeNoDataView() {
+        removeNoDataView(noDataViewController.view)
+    }
+
+}
+
 extension Stateful where Self: Refreshable {
 
     /**
@@ -45,13 +56,6 @@ extension Stateful where Self: Refreshable {
         UIView.animate(withDuration: 0.25, animations: {
             noDataView.alpha = 1.0
         })
-    }
-
-    /**
-     Remove the no data view from the view hiearchy.
-     */
-    func removeNoDataView() {
-        removeNoDataView(noDataViewController.view)
     }
 
 }

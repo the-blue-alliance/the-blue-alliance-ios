@@ -243,6 +243,12 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
             let shouldHide = !(containedView == showView)
             if !shouldHide {
                 let refreshViewController = viewControllers[index]
+
+                // Reload our view on subsequent appears, since we don't process table view updates in the background.
+                // This can mean our view state falls out of sync with our data state while backgrounded.
+                // Kickoff a reload to make sure our states match up.
+                reloadViewController(refreshViewController)
+
                 if refreshViewController.shouldRefresh() {
                     refreshViewController.refresh()
                 }
@@ -251,6 +257,16 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
             containedView.isHidden = shouldHide
         }
         switchedToIndex(switchedIndex)
+    }
+
+    private func reloadViewController(_ viewController: UIViewController) {
+        if let viewController = viewController as? TBAViewController {
+            viewController.reloadData()
+        } else if let viewController = viewController as? UITableViewController {
+            viewController.tableView.reloadData()
+        } else if let viewController = viewController as? UICollectionViewController {
+            viewController.collectionView.reloadData()
+        }
     }
 
     private func cancelRefreshes() {

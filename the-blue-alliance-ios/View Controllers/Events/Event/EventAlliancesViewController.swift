@@ -148,8 +148,6 @@ extension EventAlliancesViewController: Refreshable {
     }
 
     @objc func refresh() {
-        removeNoDataView()
-
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEventAlliances(key: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()

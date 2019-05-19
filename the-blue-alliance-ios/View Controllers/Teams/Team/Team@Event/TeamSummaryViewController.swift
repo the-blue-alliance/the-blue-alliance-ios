@@ -267,8 +267,6 @@ extension TeamSummaryViewController: Refreshable {
     }
 
     @objc func refresh() {
-        removeNoDataView()
-
         var finalOperation: Operation!
 
         // Refresh team status

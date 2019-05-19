@@ -194,13 +194,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
     // MARK: TableViewDataSourceDelegate
 
     func controllerDidChangeContent() {
-        // Don't update our interface if we're in the background - since updating the search bar count is expensive
-        guard let nav = navigationController, nav.visibleViewController == parent else {
-            return
-        }
-        DispatchQueue.main.async { [weak self] in
-            self?.updateInterface()
-        }
+        updateInterface()
     }
 
     // MARK: - EventsViewControllerDataSourceConfiguration

@@ -45,6 +45,8 @@ protocol Refreshable: AnyObject {
     func refresh()
 
     func updateRefresh()
+
+    func hideNoData()
     func noDataReload()
 }
 
@@ -135,9 +137,8 @@ extension Refreshable {
     @discardableResult
     func addRefreshOperations(_ operations: [Operation]) -> Operation? {
         // Create an operation to update our refresh indicator - should happen last.
-        let updateRefreshOperation = BlockOperation { [weak self] in
-            self?.updateRefresh()
-            self?.noDataReload()
+        let updateRefreshOperation = BlockOperation {
+            self.updateRefresh()
         }
         for op in operations {
             updateRefreshOperation.addDependency(op)
@@ -158,7 +159,6 @@ extension Refreshable {
 
         refreshOperationQueue.cancelAllOperations()
         updateRefresh()
-        noDataReload()
     }
 
     /**
@@ -167,11 +167,15 @@ extension Refreshable {
     func updateRefresh() {
         DispatchQueue.main.async {
             if self.isRefreshing {
+                self.hideNoData()
+
                 let refreshControlHeight = self.refreshControl?.frame.size.height ?? 0
                 self.refreshView.setContentOffset(CGPoint(x: 0, y: -refreshControlHeight), animated: true)
                 self.refreshControl?.beginRefreshing()
             } else {
                 self.refreshControl?.endRefreshing()
+
+                self.noDataReload()
             }
         }
     }

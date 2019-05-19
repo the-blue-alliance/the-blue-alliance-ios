@@ -11,6 +11,8 @@ protocol CollectionViewDataSourceDelegate: class {
 
     var collectionView: UICollectionView! { get }
 
+    var shouldProcessUpdates: Bool { get }
+
     func configure(_ cell: Cell, for object: Object, at indexPath: IndexPath)
 }
 
@@ -63,12 +65,26 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
 
     public let fetchedResultsController: NSFetchedResultsController<Result>
     fileprivate weak var delegate: Delegate!
-    fileprivate var updates: [RowUpdate<Object>] = []
 
-    fileprivate func processUpdates(_ updates: [RowUpdate<Object>]?) {
-        guard let updates = updates else { return delegate.collectionView.reloadData() }
+    fileprivate var sectionUpdates: [SectionUpdate] = []
+    fileprivate var rowUpdates: [RowUpdate<Object>] = []
+
+    fileprivate func processUpdates(sections sectionUpdates: [SectionUpdate]?, rows rowUpdates: [RowUpdate<Object>]?) {
+        guard let sectionUpdates = sectionUpdates else { return delegate.collectionView.reloadData() }
+        guard let rowUpdates = rowUpdates else { return delegate.collectionView.reloadData() }
+        if sectionUpdates.isEmpty, rowUpdates.isEmpty {
+            return
+        }
         delegate.collectionView.performBatchUpdates({
-            for update in updates {
+            for update in sectionUpdates {
+                switch update {
+                case .insert(let indexSet):
+                    self.delegate.collectionView.insertSections(indexSet)
+                case .delete(let indexSet):
+                    self.delegate.collectionView.deleteSections(indexSet)
+                }
+            }
+            for update in rowUpdates {
                 switch update {
                 case .insert(let indexPath):
                     self.delegate.collectionView.insertItems(at: [indexPath])
@@ -121,33 +137,47 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
     // MARK: NSFetchedResultsControllerDelegate
 
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        updates = []
+        sectionUpdates = []
+        rowUpdates = []
+    }
+
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        switch type {
+        case .insert:
+            sectionUpdates.append(.insert(IndexSet(integer: sectionIndex)))
+        case .delete:
+            sectionUpdates.append(.delete(IndexSet(integer: sectionIndex)))
+        default:
+            return
+        }
     }
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
             guard let indexPath = newIndexPath else { fatalError("Index path should be not nil") }
-            updates.append(.insert(indexPath))
+            rowUpdates.append(.insert(indexPath))
         case .update:
             guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
             let object = self.object(at: indexPath)
-            updates.append(.update(indexPath, object))
+            rowUpdates.append(.update(indexPath, object))
         case .move:
             guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
             guard let newIndexPath = newIndexPath else { fatalError("New index path should be not nil") }
             if indexPath == newIndexPath { return }
-            updates.append(.move(indexPath, newIndexPath))
+            rowUpdates.append(.move(indexPath, newIndexPath))
         case .delete:
             guard let indexPath = indexPath else { fatalError("Index path should be not nil") }
-            updates.append(.delete(indexPath))
+            rowUpdates.append(.delete(indexPath))
         @unknown default:
             fatalError()
         }
     }
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        processUpdates(updates)
+        if delegate.shouldProcessUpdates {
+            processUpdates(sections: sectionUpdates, rows: rowUpdates)
+        }
     }
 
 }

@@ -121,8 +121,6 @@ extension DistrictBreakdownViewController: Refreshable {
     }
 
     @objc func refresh() {
-        removeNoDataView()
-
         var operation: TBAKitOperation!
         operation = tbaKit.fetchDistrictRankings(key: ranking.district!.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()

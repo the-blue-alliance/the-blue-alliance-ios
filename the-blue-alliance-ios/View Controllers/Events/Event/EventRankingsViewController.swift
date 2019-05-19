@@ -85,8 +85,6 @@ extension EventRankingsViewController: Refreshable {
     }
 
     @objc func refresh() {
-        removeNoDataView()
-
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEventRankings(key: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()

@@ -10,6 +10,8 @@ protocol TableViewDataSourceDelegate: class {
 
     var tableView: UITableView! { get }
 
+    var shouldProcessUpdates: Bool { get }
+
     func configure(_ cell: Cell, for object: Object, at indexPath: IndexPath)
     func title(for section: Int) -> String?
     func controllerDidChangeContent()
@@ -72,6 +74,9 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
     fileprivate func processUpdates(sections sectionUpdates: [SectionUpdate]?, rows rowUpdates: [RowUpdate<Object>]?) {
         guard let sectionUpdates = sectionUpdates else { return delegate.tableView.reloadData() }
         guard let rowUpdates = rowUpdates else { return delegate.tableView.reloadData() }
+        if sectionUpdates.isEmpty, rowUpdates.isEmpty {
+            return
+        }
         delegate.tableView.performBatchUpdates({
             for update in sectionUpdates {
                 switch update {
@@ -175,8 +180,10 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
     }
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        processUpdates(sections: sectionUpdates, rows: rowUpdates)
-        delegate.controllerDidChangeContent()
+        if delegate.shouldProcessUpdates {
+            processUpdates(sections: sectionUpdates, rows: rowUpdates)
+            delegate.controllerDidChangeContent()
+        }
     }
 
 }
