@@ -75,6 +75,8 @@ platform :ios do
 
   desc "Upload a new build to the App Store"
   lane :app_store do
+    setup_secrets
+
     build
     deliver
     ship_github(is_prerelease: false) # Create GitHub release
