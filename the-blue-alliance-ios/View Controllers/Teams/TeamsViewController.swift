@@ -218,6 +218,7 @@ extension TeamsViewController: UISearchResultsUpdating {
 
     public func updateSearchResults(for searchController: UISearchController) {
         updateDataSource()
+        updateInterface()
     }
 
 }
