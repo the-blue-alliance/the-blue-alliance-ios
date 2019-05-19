@@ -66,11 +66,11 @@ Upload a new beta build to TestFlight (for CI machine)
 fastlane ios app_store
 ```
 Upload a new build to the App Store
-### ios new_git_tag
+### ios github_changelog
 ```
-fastlane ios new_git_tag
+fastlane ios github_changelog
 ```
-Create a new tag and push to GitHub
+
 ### ios new_version
 ```
 fastlane ios new_version

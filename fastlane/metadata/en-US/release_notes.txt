@@ -1,1 +1,3 @@
+Hey y’all - another update with lots of bug fixes and performance improvements.
 
+The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance

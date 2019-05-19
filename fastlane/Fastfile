@@ -60,48 +60,41 @@ platform :ios do
 
   desc "Upload a new beta build to TestFlight (for CI machine)"
   lane :beta_ci do
-    beta_internal
+    prebeta
+    build
 
-    slack(channel: "#dev-ios", message: "Shipping #{current_git_tag} to TestFlight...", default_payloads: [])
-    beta_testflight
+    slack(channel: "#github-ios", message: "Shipping #{current_git_tag} to TestFlight...", default_payloads: [])
+    pilot(changelog: commit_changelog, distribute_external: true, groups: ["Beta"], reject_build_waiting_for_review: true)
 
     slack(
-      channel: "#dev-ios",
+      channel: "#github-ios",
       message: "#{current_git_tag} uploaded to TestFlight 🎉",
       default_payloads: []
     )
-
-    new_git_tag
-  end
-
-  desc "Internal beta lane - use `beta` or `beta_ci`"
-  private_lane :beta_internal do
-    prebeta
-
-    configure_code_signing
-    update_project_team(teamid: ENV["sigh_com.the-blue-alliance.tba_appstore_team-id"])
-    update_project_provisioning(
-      profile: ENV["sigh_com.the-blue-alliance.tba_appstore_profile-path"],
-      target_filter: "The Blue Alliance",
-      build_configuration: "Release",
-      code_signing_identity: "iPhone Distribution"
-    )
-    gym(buildlog_path: "logs")
-    upload_symbols_to_crashlytics(dsym_path: "The Blue Alliance.app.dSYM.zip", gsp_path: "the-blue-alliance-ios/GoogleService-Info.plist")
-  end
-
-  desc "Ship a compiled build to TestFlight"
-  private_lane :beta_testflight do
-    pilot(changelog: commit_changelog_short, distribute_external: true, groups: ["Beta"], reject_build_waiting_for_review: true)
   end
 
   desc "Upload a new build to the App Store"
   lane :app_store do
-    # ship
-    # deliver
-    # ship_github(is_prerelease: false) # Create GitHub release
-    # slack(message: "#{current_git_tag} shipped to the App Store 🎉")
+    build
+    deliver
+    ship_github(is_prerelease: false) # Create GitHub release
+    slack(channel: "#app-releases", message: "Shipping iOS #{current_version} to the App Store 🎉\nhttps://github.com/the-blue-alliance/the-blue-alliance-ios/releases/tag/#{current_version}")
+
+    new_version(version_type: 'patch')
+    beta_ci
   end
+
+  private_lane :ship_github do |options|
+   set_github_release(
+     repository_name: "the-blue-alliance/the-blue-alliance-ios",
+     api_token: ENV["GITHUB_TOKEN"],
+     name: current_version,
+     tag_name: current_version,
+     description: commit_changelog,
+     is_prerelease: options[:is_prerelease] ? true : false,
+     upload_assets: ["The Blue Alliance.ipa"]
+   )
+ end
 
   ## End Release Lanes ##
 
@@ -114,10 +107,18 @@ platform :ios do
     increment_build_number(build_number: testflight_build_number + 1)
   end
 
-  desc "Create a new tag and push to GitHub"
-  lane :new_git_tag do
-    add_git_tag(tag: current_git_tag)
-    push_git_tags
+  desc "Perform codesign/build tasks"
+  private_lane :build do
+    configure_code_signing
+    update_project_team(teamid: ENV["sigh_com.the-blue-alliance.tba_appstore_team-id"])
+    update_project_provisioning(
+      profile: ENV["sigh_com.the-blue-alliance.tba_appstore_profile-path"],
+      target_filter: "The Blue Alliance",
+      build_configuration: "Release",
+      code_signing_identity: "iPhone Distribution"
+    )
+    gym(buildlog_path: "logs")
+    upload_symbols_to_crashlytics(dsym_path: "The Blue Alliance.app.dSYM.zip", gsp_path: "the-blue-alliance-ios/GoogleService-Info.plist")
   end
 
   ## End Shipping Lanes for Release Lanes ##
@@ -132,7 +133,7 @@ platform :ios do
     "v#{get_version_number}"
   end
 
-  private_lane :commit_changelog_short do
+  private_lane :commit_changelog do
     changelog_from_git_commits(
       pretty: "%s",
       merge_commit_filtering: "exclude_merges"
@@ -143,7 +144,7 @@ platform :ios do
 
   ## Utility Lanes ##
 
-  desc "Create a new app version (major, minor, patch) by bumping the version number and creating a changelog"
+  desc "Create a new app version (major, minor, patch) by bumping the version number"
   lane :new_version do |options|
     version_type = options[:version_type]
     # Bump version accordingly
