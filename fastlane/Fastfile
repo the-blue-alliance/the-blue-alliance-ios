@@ -79,7 +79,14 @@ platform :ios do
 
     deliver
     ship_github(is_prerelease: false) # Create GitHub release
-    slack(channel: "#app-releases", message: "Shipping iOS #{current_version} to the App Store 🎉\n```\n#{commit_changelog}\n```\nhttps://github.com/the-blue-alliance/the-blue-alliance-ios/releases/tag/#{current_version}")
+    slack(
+      channel: "#app-releases",
+      message: "Shipping iOS #{current_version} to the App Store 🎉\n```\n#{commit_changelog}\n```\nhttps://github.com/the-blue-alliance/the-blue-alliance-ios/releases/tag/#{current_version}",
+      default_payloads: [],
+      username: "release-bot",
+      icon_url: "https://raw.githubusercontent.com/the-blue-alliance/the-blue-alliance-logo/master/ios/tba-icon-60%403x.png",
+      attachment_properties: {}
+    )
 
     new_version(version_type: 'patch')
     beta_ci

@@ -66,16 +66,11 @@ Upload a new beta build to TestFlight (for CI machine)
 fastlane ios app_store
 ```
 Upload a new build to the App Store
-### ios github_changelog
-```
-fastlane ios github_changelog
-```
-
 ### ios new_version
 ```
 fastlane ios new_version
 ```
-Create a new app version (major, minor, patch) by bumping the version number and creating a changelog
+Create a new app version (major, minor, patch) by bumping the version number
 ### ios refresh_dsyms
 ```
 fastlane ios refresh_dsyms
