@@ -178,8 +178,6 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
     }
 
     @objc override func refresh() {
-        removeNoDataView()
-
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEvents(year: year, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()

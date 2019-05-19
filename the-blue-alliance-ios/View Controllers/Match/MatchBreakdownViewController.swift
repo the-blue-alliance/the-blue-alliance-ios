@@ -102,8 +102,6 @@ extension MatchBreakdownViewController: Refreshable {
     }
 
     @objc func refresh() {
-        removeNoDataView()
-
         var operation: TBAKitOperation!
         operation = tbaKit.fetchMatch(key: match.key!, { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()

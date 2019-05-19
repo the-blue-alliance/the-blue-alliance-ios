@@ -50,18 +50,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         }
     }
 
-    // MARK: - Public methods
-
-    public func clearFRC() {
-        fetchedResultsController = nil
-
-        DispatchQueue.main.async {
-            try! self.fetchedResultsController!.performFetch()
-            self.tableView.reloadData()
-        }
-    }
-
-
     // MARK: FRC
 
     fileprivate var fetchedResultsController: NSFetchedResultsController<T>?
@@ -217,8 +205,6 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         if T.self == Subscription.self {
             return
         }
-
-        removeNoDataView()
 
         var finalOperation: Operation!
 

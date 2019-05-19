@@ -114,8 +114,6 @@ extension TeamStatsViewController: Refreshable {
     }
 
     @objc func refresh() {
-        removeNoDataView()
-
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEventTeamStats(key: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()

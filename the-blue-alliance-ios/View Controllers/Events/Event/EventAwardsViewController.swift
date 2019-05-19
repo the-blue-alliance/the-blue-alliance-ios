@@ -164,8 +164,6 @@ extension EventAwardsViewController: Refreshable {
     }
 
     @objc func refresh() {
-        removeNoDataView()
-
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEventAwards(key: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()

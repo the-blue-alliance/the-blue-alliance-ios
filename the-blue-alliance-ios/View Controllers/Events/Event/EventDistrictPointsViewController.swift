@@ -137,8 +137,6 @@ extension EventDistrictPointsViewController: Refreshable {
     }
 
     @objc func refresh() {
-        removeNoDataView()
-
         let eventKey = event.key!
 
         var operation: TBAKitOperation!

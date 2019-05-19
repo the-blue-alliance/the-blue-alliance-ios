@@ -107,8 +107,6 @@ extension MatchesViewController: Refreshable {
     }
 
     @objc func refresh() {
-        removeNoDataView()
-
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEventMatches(key: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()

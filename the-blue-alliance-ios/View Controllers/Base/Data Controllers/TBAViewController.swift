@@ -72,11 +72,12 @@ extension Refreshable where Self: TBAViewController {
         return scrollView
     }
 
+    func hideNoData() {
+        // Does not conform to Stateful - probably no no data view
+    }
+
     func noDataReload() {
-        // TODO: https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/133
-        DispatchQueue.main.async {
-            self.reloadData()
-        }
+        // Does not conform to Stateful - probably no no data view
     }
 
 }
@@ -93,6 +94,22 @@ extension Stateful where Self: TBAViewController {
     func removeNoDataView(_ noDataView: UIView) {
         DispatchQueue.main.async {
             noDataView.removeFromSuperview()
+        }
+    }
+
+}
+
+extension Refreshable where Self: TBAViewController & Stateful {
+
+    func hideNoData() {
+        removeNoDataView()
+    }
+
+    func noDataReload() {
+        if isDataSourceEmpty {
+            showNoDataView()
+        } else {
+            removeNoDataView()
         }
     }
 

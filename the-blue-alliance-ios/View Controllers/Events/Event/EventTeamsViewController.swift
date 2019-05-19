@@ -35,8 +35,6 @@ class EventTeamsViewController: TeamsViewController {
     }
 
     @objc override func refresh() {
-        removeNoDataView()
-
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEventTeams(key: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()

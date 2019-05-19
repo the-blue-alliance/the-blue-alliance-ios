@@ -11,6 +11,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     private let spacerSize: CGFloat = 3.0
 
     private let team: Team
+    private let fetchMediaOperationQueue = OperationQueue()
 
     var year: Int? {
         didSet {
@@ -42,6 +43,12 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         super.viewDidLoad()
 
         collectionView.registerReusableCell(MediaCollectionViewCell.self)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        fetchMediaOperationQueue.cancelAllOperations()
     }
 
     // MARK: Rotation
@@ -189,12 +196,27 @@ extension TeamMediaCollectionViewController: Refreshable {
 
     @objc func refresh() {
         guard let year = year else {
-            showNoDataView()
-            refreshControl?.endRefreshing()
+            updateRefresh()
             return
         }
 
-        removeNoDataView()
+        // Order of operations here is a little confusing - the ideas is:
+        // 1) Show spinner, to show that we're refreshing.
+        // 2) Fetch/Insert Team Media happens first, since we need to know what URLs to be fetching.
+        // 3) Kickoff Media downloads for each URL - switch to the main thread for this, so we can query.
+        //    `team.media` and we can get main-thread objects, not background thread objects. This will be
+        //    important later when we're updating our cell states.
+        // 4) Download Media, with the addition of updating our TeamMedia object.
+        // 5) Refresh our Team Media cell - this is the important part for using main thread objects, since
+        //    we query for this information using our `dataSource.fetchedResultsController`, which is tied
+        //    to our `persistentContainer.viewContext`. We also do individual refreshes as opposed to a full
+        //    collection view refresh so our media gently loads in, as opposed to several harsh refreshes.
+        // 6) End refreshing, after all of our individual cells have some state. We could end earlier and
+        //    default to letting the cell loading spinners do the UI work to indicate we're still downloading
+        //    some information, but keeping the view refreshing has two benifits. First, it shows some activity
+        //    in the case that the previous cells have some state (we don't unload images from cells on refresh),
+        //    and second, it prevents a user from refreshing again and queueing duplicate media download actions,
+        //    which can be expensive.
 
         var finalOperation: Operation!
 
@@ -204,23 +226,43 @@ extension TeamMediaCollectionViewController: Refreshable {
             context.performChangesAndWait({
                 if !notModified, let media = try? result.get() {
                     let team = context.object(with: self.team.objectID) as! Team
-                    let operations = team.insert(media, year: year).map({ (m) -> FetchMediaOperation in
-                        return self.fetchMedia(m)
-                    })
-                    operations.forEach {
-                        finalOperation.addDependency($0)
-                    }
-                    self.refreshOperationQueue.addOperations(operations, waitUntilFinished: false)
+                    team.insert(media, year: year)
                 }
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
         })
+        let fetchMediaOperation = BlockOperation {
+            guard let teamMedia = self.team.media?.allObjects as? [TeamMedia] else {
+                return
+            }
+            for media in teamMedia {
+                self.fetchMedia(media, finalOperation)
+            }
+        }
+        fetchMediaOperation.addDependency(operation)
+        OperationQueue.main.addOperation(fetchMediaOperation)
+
         finalOperation = addRefreshOperations([operation])
+        finalOperation.addDependency(fetchMediaOperation)
     }
 
-    private func fetchMedia(_ media: TeamMedia) -> FetchMediaOperation {
-        return FetchMediaOperation(media: media, persistentContainer: persistentContainer)
+    private func fetchMedia(_ media: TeamMedia, _ dependentOperation: Operation) {
+        let refreshOperation = BlockOperation {
+            // Reload our cell, so we can get rid of our loading state
+            if let indexPath = self.indexPath(for: media) {
+                self.collectionView.reloadItems(at: [indexPath])
+            }
+        }
+
+        let fetchMediaOperation = FetchMediaOperation(media: media, persistentContainer: persistentContainer)
+        refreshOperation.addDependency(fetchMediaOperation)
+        [fetchMediaOperation, refreshOperation].forEach {
+            dependentOperation.addDependency($0)
+        }
+
+        OperationQueue.main.addOperation(refreshOperation)
+        fetchMediaOperationQueue.addOperation(fetchMediaOperation)
     }
 
 }

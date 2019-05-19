@@ -57,8 +57,6 @@ class WeekEventsViewController: EventsViewController {
     }
 
     @objc override func refresh() {
-        removeNoDataView()
-
         // Default to refreshing the currently selected year
         // Fall back to the init'd year (used during initial refresh)
         var year = self.year
