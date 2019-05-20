@@ -13,6 +13,8 @@ class MockRefreshable: Refreshable {
 
     var updateRefreshExpectation: XCTestExpectation?
 
+    var hideNoDataExpectation: XCTestExpectation?
+
     var noDataReloadExpectation: XCTestExpectation?
 
     var mockRefreshKey: String?
@@ -47,6 +49,10 @@ class MockRefreshable: Refreshable {
 
     func refresh() {
         // TODO: Pass
+    }
+
+    func hideNoData() {
+        hideNoDataExpectation?.fulfill()
     }
 
     func noDataReload() {
