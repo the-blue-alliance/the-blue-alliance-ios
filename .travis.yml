@@ -1,43 +1,32 @@
 osx_image: xcode10.2
 language: swift
 gemfile: Gemfile
-
-# addons:
-#   artifacts
-#   paths:
-#   - logs
-
 branches:
   only:
   - master
-
 stages:
 - name: cron
-  if: (type == cron)
+  if: "(type == cron)"
 - name: test
   if: NOT ((type == push AND commit_message =~ \[clowntown\]) OR (type == cron))
 - name: app_store
-  if: (type == push) AND (branch == master) AND (commit_message =~ \[app_store\])
+  if: "(type == push) AND (branch == master) AND (commit_message =~ \\[app_store\\])"
 - name: beta
-  if: (type == push) AND (branch == master) AND (commit_message =~ \[beta\])
-
+  if: "(type == push) AND (branch == master) AND (commit_message =~ \\[beta\\])"
 cache:
   bundler: true
   cocoapods: true
   directories:
   - subtrees/the-blue-alliance-react/node_modules
-
 install:
 - brew install watchman
 - cd subtrees/the-blue-alliance-react && npm install && cd ../..
 - bundle install
 - bundle exec pod install --repo-update
-
 before_script:
 - cp mock-Secrets.plist the-blue-alliance-ios/Secrets.plist
 - bundle exec fastlane run setup_travis
 - echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
-
 jobs:
   include:
   - stage: cron
@@ -56,13 +45,9 @@ jobs:
     script:
     - bundle exec fastlane setup_secrets
     - bundle exec fastlane app_store
-
 after_failure:
 - gem install second_curtain
 - cat build/reports/tba-unit-tests-tba-unit-tests.log | second_curtain > /dev/null
-
 notifications:
   slack:
-    secure: hBTFXrG237C6bpI0RWztRcTZFT8E5NNzBkx9/QQvheW04pid0ftXo/t2rHjoXORDoEsNa5sO2fXJJh86kQrK1REaCklmGVneJ3IVF7urTmIsWC4CjtMOmp1vhYBqck369VEKn0CoP9NlF254Rzh1A/sTuGM/dkOG+YPFz91rPKs=
-    on_success: always
-    on_failure: always
+    secure: iNpsZadDEVp0CTeCqsNAbYtBincUOiTtGR0fTXEXeLl5ZhaxtG/HNNcNtX5DXZwCc/c1ie08wm41S9av6ivZfHQz9T+o2S8e0RIvdYwihmvmr2z27dhFvtJFg3yPNmqejBmraR2h/Wfv91OFVzGy9bl9GeoqvmGer8PlzKEA44I=
