@@ -65,7 +65,6 @@ class NotificationsViewController: TBATableViewController {
         title = "Troubleshoot Notifications"
         hidesBottomBarWhenPushed = true
 
-        // TODO: We should probably just ignore this, or at least fix so we don't dispatch a second notification
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(checkDeviceAuthorization),
                                                name: UIApplication.willEnterForegroundNotification,
@@ -191,8 +190,8 @@ class NotificationsViewController: TBATableViewController {
             if deviceAuthorizationStatus == .denied {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
             } else if deviceAuthorizationStatus == .notDetermined {
-                PushService.requestAuthorizationForNotifications({ (_, _) in
-                    self.checkDeviceAuthorization()
+                PushService.requestAuthorizationForNotifications({ [weak self] (_, _) in
+                    self?.checkDeviceAuthorization()
                 })
             } else {
                 showError("Unable to resolve device settings - check push notification settings in Settings.app")
@@ -229,12 +228,12 @@ class NotificationsViewController: TBATableViewController {
         }
 
         fetchingRemoteNotificationRegistrationStatus = true
-        PushService.registerForRemoteNotifications { (error) in
-            self.fetchingRemoteNotificationRegistrationStatus = false
-            self.hasCheckedRemoteNotificationRegistration = true
-            self.remoteNotificationRegistrationError = error
+        PushService.registerForRemoteNotifications { [weak self] (error) in
+            self?.fetchingRemoteNotificationRegistrationStatus = false
+            self?.hasCheckedRemoteNotificationRegistration = true
+            self?.remoteNotificationRegistrationError = error
 
-            self.reloadMain()
+            self?.reloadMain()
         }
         reloadMain()
     }
@@ -248,12 +247,12 @@ class NotificationsViewController: TBATableViewController {
         }
 
         fetchingDeviceAuthorizationStatus = true
-        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
-            self.fetchingDeviceAuthorizationStatus = false
-            self.deviceAuthorizationStatus = settings.authorizationStatus
+        UNUserNotificationCenter.current().getNotificationSettings { [weak self] (settings) in
+            self?.fetchingDeviceAuthorizationStatus = false
+            self?.deviceAuthorizationStatus = settings.authorizationStatus
 
-            self.sendPing()
-            self.reloadMain()
+            self?.sendPing()
+            self?.reloadMain()
         }
         reloadMain()
     }
@@ -291,13 +290,13 @@ class NotificationsViewController: TBATableViewController {
             return
         }
 
-        myTBARegisterOperation = myTBA.register(fcmToken) { (response, error) in
-            self.myTBARegisterOperation = nil
-            self.myTBARegisterResponse = response
-            self.myTBARegisterError = error
+        myTBARegisterOperation = myTBA.register(fcmToken) { [weak self] (response, error) in
+            self?.myTBARegisterOperation = nil
+            self?.myTBARegisterResponse = response
+            self?.myTBARegisterError = error
 
-            self.sendPing()
-            self.reloadMain()
+            self?.sendPing()
+            self?.reloadMain()
         }
         refreshOperationQueue.addOperation(myTBARegisterOperation!)
 
@@ -351,12 +350,12 @@ class NotificationsViewController: TBATableViewController {
             return
         }
 
-        myTBAPingOperation = myTBA.ping(fcmToken, completion: { (response, error) in
-            self.myTBAPingOperation = nil
-            self.myTBAPingResponse = response
-            self.myTBAPingError = error
+        myTBAPingOperation = myTBA.ping(fcmToken, completion: { [weak self] (response, error) in
+            self?.myTBAPingOperation = nil
+            self?.myTBAPingResponse = response
+            self?.myTBAPingError = error
 
-            self.reloadMain()
+            self?.reloadMain()
         })
         refreshOperationQueue.addOperation(myTBAPingOperation!)
 
@@ -380,8 +379,8 @@ class NotificationsViewController: TBATableViewController {
     // MARK: - UI Methods
 
     func reloadMain() {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
         }
     }
 
@@ -390,8 +389,8 @@ class NotificationsViewController: TBATableViewController {
         let alert = UIAlertController(title: "Error", message: error, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
 
-        DispatchQueue.main.async {
-            self.present(alert, animated: true, completion: nil)
+        DispatchQueue.main.async { [weak self] in
+            self?.present(alert, animated: true, completion: nil)
         }
     }
 
@@ -406,8 +405,8 @@ class NotificationsViewController: TBATableViewController {
         })
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
 
-        DispatchQueue.main.async {
-            self.present(actionSheet, animated: true, completion: nil)
+        DispatchQueue.main.async { [weak self] in
+            self?.present(actionSheet, animated: true, completion: nil)
         }
     }
 
