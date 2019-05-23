@@ -1,5 +1,6 @@
 import CoreData
 import Crashlytics
+import Fabric
 import Firebase
 import FirebaseAuth
 import FirebaseMessaging
@@ -132,6 +133,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Setup our Firebase app - make sure this is called before other Firebase setup
         FirebaseApp.configure()
+
+        // Disable Crashlytics during debug
+        #if DEBUG
+        Fabric.sharedSDK().debug = true
+        #else
+        Fabric.with([Crashlytics.self])
+        #endif
 
         let secrets = Secrets()
         tbaKit = TBAKit(apiKey: secrets.tbaAPIKey, userDefaults: userDefaults)
