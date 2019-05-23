@@ -41,10 +41,11 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
         fetchedResultsController.delegate = self
         try! fetchedResultsController.performFetch()
 
-        DispatchQueue.main.async {
-            delegate.collectionView.registerReusableCell(Cell.self)
-            delegate.collectionView.dataSource = self
-            delegate.collectionView.reloadData()
+        delegate.collectionView.registerReusableCell(Cell.self)
+        delegate.collectionView.dataSource = self
+
+        DispatchQueue.main.async { [weak delegate] in
+            delegate?.collectionView.reloadData()
         }
     }
 
@@ -56,8 +57,8 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
         NSFetchedResultsController<NSFetchRequestResult>.deleteCache(withName: fetchedResultsController.cacheName)
         configure(fetchedResultsController.fetchRequest)
         try! fetchedResultsController.performFetch()
-        DispatchQueue.main.async {
-            self.delegate.collectionView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.delegate.collectionView.reloadData()
         }
     }
 
@@ -75,27 +76,30 @@ class CollectionViewDataSource<Result: NSFetchRequestResult, Delegate: Collectio
         if sectionUpdates.isEmpty, rowUpdates.isEmpty {
             return
         }
-        delegate.collectionView.performBatchUpdates({
+        delegate.collectionView.performBatchUpdates({ [weak self] in
             for update in sectionUpdates {
                 switch update {
                 case .insert(let indexSet):
-                    self.delegate.collectionView.insertSections(indexSet)
+                    self?.delegate.collectionView.insertSections(indexSet)
                 case .delete(let indexSet):
-                    self.delegate.collectionView.deleteSections(indexSet)
+                    self?.delegate.collectionView.deleteSections(indexSet)
                 }
             }
             for update in rowUpdates {
                 switch update {
                 case .insert(let indexPath):
-                    self.delegate.collectionView.insertItems(at: [indexPath])
+                    self?.delegate.collectionView.insertItems(at: [indexPath])
                 case .update(let indexPath, let object):
-                    let cell = self.delegate.collectionView.dequeueReusableCell(indexPath: indexPath) as Cell
-                    self.delegate.configure(cell, for: object, at: indexPath)
+                    guard let collectionView = self?.delegate.collectionView else {
+                        continue
+                    }
+                    let cell = collectionView.dequeueReusableCell(indexPath: indexPath) as Cell
+                    self?.delegate.configure(cell, for: object, at: indexPath)
                 case .move(let indexPath, let newIndexPath):
-                    self.delegate.collectionView.deleteItems(at: [indexPath])
-                    self.delegate.collectionView.insertItems(at: [newIndexPath])
+                    self?.delegate.collectionView.deleteItems(at: [indexPath])
+                    self?.delegate.collectionView.insertItems(at: [newIndexPath])
                 case .delete(let indexPath):
-                    self.delegate.collectionView.deleteItems(at: [indexPath])
+                    self?.delegate.collectionView.deleteItems(at: [indexPath])
                 }
             }
         }, completion: nil)

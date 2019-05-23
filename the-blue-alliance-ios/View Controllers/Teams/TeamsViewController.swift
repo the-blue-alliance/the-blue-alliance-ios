@@ -54,8 +54,6 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
 
         // Used to make sure the UISearchBar stays in our root VC (this VC) when presented and doesn't overlay in push
         definesPresentationContext = true
-
-        updateInterface()
     }
 
     override func viewDidAppear(_ animated: Bool) {
