@@ -43,10 +43,11 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         fetchedResultsController.delegate = self
         try! fetchedResultsController.performFetch()
 
-        DispatchQueue.main.async {
-            delegate.tableView.registerReusableCell(Cell.self)
-            delegate.tableView.dataSource = self
-            delegate.tableView.reloadData()
+        delegate.tableView.registerReusableCell(Cell.self)
+        delegate.tableView.dataSource = self
+
+        DispatchQueue.main.async { [weak delegate] in
+            delegate?.tableView.reloadData()
         }
     }
 
@@ -58,8 +59,8 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         NSFetchedResultsController<NSFetchRequestResult>.deleteCache(withName: fetchedResultsController.cacheName)
         configure(fetchedResultsController.fetchRequest)
         try! fetchedResultsController.performFetch()
-        DispatchQueue.main.async {
-            self.delegate.tableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.delegate.tableView.reloadData()
         }
     }
 
@@ -77,27 +78,30 @@ class TableViewDataSource<Result: NSFetchRequestResult, Delegate: TableViewDataS
         if sectionUpdates.isEmpty, rowUpdates.isEmpty {
             return
         }
-        delegate.tableView.performBatchUpdates({
+        delegate.tableView.performBatchUpdates({ [weak self] in
             for update in sectionUpdates {
                 switch update {
                 case .insert(let indexSet):
-                    self.delegate.tableView.insertSections(indexSet, with: .fade)
+                    self?.delegate.tableView.insertSections(indexSet, with: .fade)
                 case .delete(let indexSet):
-                    self.delegate.tableView.deleteSections(indexSet, with: .fade)
+                    self?.delegate.tableView.deleteSections(indexSet, with: .fade)
                 }
             }
             for update in rowUpdates {
                 switch update {
                 case .insert(let indexPath):
-                    self.delegate.tableView.insertRows(at: [indexPath], with: .fade)
+                    self?.delegate.tableView.insertRows(at: [indexPath], with: .fade)
                 case .update(let indexPath, let object):
-                    let cell = self.delegate.tableView.dequeueReusableCell(indexPath: indexPath) as Cell
-                    self.delegate.configure(cell, for: object, at: indexPath)
+                    guard let tableView = self?.delegate.tableView else {
+                        continue
+                    }
+                    let cell = tableView.dequeueReusableCell(indexPath: indexPath) as Cell
+                    self?.delegate.configure(cell, for: object, at: indexPath)
                 case .move(let indexPath, let newIndexPath):
-                    self.delegate.tableView.deleteRows(at: [indexPath], with: .fade)
-                    self.delegate.tableView.insertRows(at: [newIndexPath], with: .fade)
+                    self?.delegate.tableView.deleteRows(at: [indexPath], with: .fade)
+                    self?.delegate.tableView.insertRows(at: [newIndexPath], with: .fade)
                 case .delete(let indexPath):
-                    self.delegate.tableView.deleteRows(at: [indexPath], with: .fade)
+                    self?.delegate.tableView.deleteRows(at: [indexPath], with: .fade)
                 }
             }
         }, completion: nil)
