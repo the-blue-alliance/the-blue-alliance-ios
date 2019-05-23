@@ -165,18 +165,18 @@ extension Refreshable {
      WARNING: This method should not be called directly - exposed for testing, used internally
      */
     func updateRefresh() {
-        DispatchQueue.main.async {
-            if self.isRefreshing {
-                self.hideNoData()
+        if self.isRefreshing {
+            self.hideNoData()
 
-                let refreshControlHeight = self.refreshControl?.frame.size.height ?? 0
-                self.refreshView.setContentOffset(CGPoint(x: 0, y: -refreshControlHeight), animated: true)
-                self.refreshControl?.beginRefreshing()
-            } else {
-                self.refreshControl?.endRefreshing()
-
-                self.noDataReload()
+            let refreshControlHeight = self.refreshControl?.frame.size.height ?? 0
+            UIView.animate(withDuration: 0.5) { [weak refreshView] in
+                refreshView?.setContentOffset(CGPoint(x: 0, y: -refreshControlHeight), animated: true)
             }
+            self.refreshControl?.beginRefreshing()
+        } else {
+            self.refreshControl?.endRefreshing()
+
+            self.noDataReload()
         }
     }
 
