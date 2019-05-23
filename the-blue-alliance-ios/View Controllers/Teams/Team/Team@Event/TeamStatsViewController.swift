@@ -16,6 +16,9 @@ class TeamStatsViewController: TBATableViewController, Observable {
                         self?.tableView.reloadData()
                     }
                 }
+                DispatchQueue.main.async { [weak self] in
+                    self?.tableView.reloadData()
+                }
             } else {
                 contextObserver.observeInsertions { [weak self] (teamStats) in
                     self?.teamStat = teamStats.first
