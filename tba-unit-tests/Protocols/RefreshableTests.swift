@@ -1,4 +1,5 @@
 import XCTest
+import TBAOperationTesting
 @testable import The_Blue_Alliance
 
 class MockRefreshable: Refreshable {
@@ -158,8 +159,11 @@ class RefreshableTests: TBATestCase {
     }
 
     func test_isRefreshing() {
-        XCTAssertFalse(refreshable.isRefreshing)
-        refreshable.addRefreshOperations([Operation()])
+        let neverFinishOp = Operation()
+        let op = Operation()
+        op.addDependency(neverFinishOp)
+
+        refreshable.addRefreshOperations([op])
         XCTAssert(refreshable.isRefreshing)
     }
 
