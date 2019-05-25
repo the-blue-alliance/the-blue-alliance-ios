@@ -11,27 +11,27 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="86" id="RfV-sp-lW5" customClass="EventTableViewCell" customModule="The_Blue_Alliance" customModuleProvider="target">
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="86" id="6Ei-NV-mcG" customClass="EventTableViewCell" customModule="The_Blue_Alliance" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="417" height="86"/>
             <autoresizingMask key="autoresizingMask"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RfV-sp-lW5" id="JLI-Bp-jBp">
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6Ei-NV-mcG" id="gYB-Ec-Voq">
                 <rect key="frame" x="0.0" y="0.0" width="379" height="85.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="uRU-9b-pBx">
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="GwE-Hs-Xld">
                         <rect key="frame" x="16" y="8" width="355" height="69.5"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wqv-PD-z9x">
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bo2-A7-1DY">
                                 <rect key="frame" x="0.0" y="0.0" width="355" height="20.5"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="751" text="Kettering University District" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MWI-Oa-cyJ">
-                                        <rect key="frame" x="0.0" y="0.0" width="282" height="20.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="751" text="Kettering University District" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GKx-wX-05m">
+                                        <rect key="frame" x="0.0" y="0.0" width="306" height="20.5"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="   Week 1   " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="57" translatesAutoresizingMaskIntoConstraints="NO" id="LIL-hn-7XO" userLabel="Week Label">
-                                        <rect key="frame" x="282" y="0.0" width="73" height="20.5"/>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Week 1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NlZ-zh-eFr" userLabel="Week Label" customClass="EventWeekLabel" customModule="The_Blue_Alliance" customModuleProvider="target">
+                                        <rect key="frame" x="306" y="0.0" width="49" height="20.5"/>
                                         <color key="backgroundColor" red="0.46666666670000001" green="0.46666666670000001" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -39,19 +39,19 @@
                                     </label>
                                 </subviews>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="y5g-xa-Nud">
+                            <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="Pde-dP-5b5">
                                 <rect key="frame" x="0.0" y="20.5" width="355" height="49"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Flint, MI, USA" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wpq-KZ-UDU">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Flint, MI, USA" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OQy-pk-nGH">
                                         <rect key="frame" x="0.0" y="0.0" width="236" height="49"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Mar 02 to Mar 05" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tf8-tH-lcU">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Mar 02 to Mar 05" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ira-s0-gfh">
                                         <rect key="frame" x="236" y="0.0" width="119" height="49"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -60,19 +60,19 @@
                     </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="uRU-9b-pBx" firstAttribute="top" secondItem="JLI-Bp-jBp" secondAttribute="top" constant="8" id="96x-4R-mqk"/>
-                    <constraint firstAttribute="trailing" secondItem="uRU-9b-pBx" secondAttribute="trailing" constant="8" id="F1g-bN-uWi"/>
-                    <constraint firstAttribute="bottom" secondItem="uRU-9b-pBx" secondAttribute="bottom" constant="8" id="W1b-48-TEU"/>
-                    <constraint firstItem="uRU-9b-pBx" firstAttribute="leading" secondItem="JLI-Bp-jBp" secondAttribute="leading" constant="16" id="wJn-v5-qFT"/>
+                    <constraint firstAttribute="trailing" secondItem="GwE-Hs-Xld" secondAttribute="trailing" constant="8" id="0CI-rp-jKC"/>
+                    <constraint firstItem="GwE-Hs-Xld" firstAttribute="top" secondItem="gYB-Ec-Voq" secondAttribute="top" constant="8" id="hhV-pY-74o"/>
+                    <constraint firstAttribute="bottom" secondItem="GwE-Hs-Xld" secondAttribute="bottom" constant="8" id="jCw-3T-0DT"/>
+                    <constraint firstItem="GwE-Hs-Xld" firstAttribute="leading" secondItem="gYB-Ec-Voq" secondAttribute="leading" constant="16" id="ywK-Rt-2pd"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="dateLabel" destination="Tf8-tH-lcU" id="vBK-bb-zw5"/>
-                <outlet property="locationLabel" destination="Wpq-KZ-UDU" id="fDR-1j-T03"/>
-                <outlet property="nameLabel" destination="MWI-Oa-cyJ" id="8V7-1u-lgS"/>
-                <outlet property="weekLabel" destination="LIL-hn-7XO" id="OVt-lx-OFE"/>
+                <outlet property="dateLabel" destination="ira-s0-gfh" id="njN-g5-xhw"/>
+                <outlet property="locationLabel" destination="OQy-pk-nGH" id="FGm-uB-fLw"/>
+                <outlet property="nameLabel" destination="GKx-wX-05m" id="Fod-Ij-yME"/>
+                <outlet property="weekLabel" destination="NlZ-zh-eFr" id="tPi-Tg-ACP"/>
             </connections>
-            <point key="canvasLocation" x="-100.5" y="11"/>
+            <point key="canvasLocation" x="-103.2" y="114.24287856071965"/>
         </tableViewCell>
     </objects>
 </document>
