@@ -65,8 +65,14 @@ private class EventAlliancesViewController: TBATableViewController {
 
     private let event: Event
 
+    // MARK: - Observable
+
+    typealias ManagedType = DistrictRanking
+    lazy var contextObserver: CoreDataContextObserver<Event> = {
+        return CoreDataContextObserver(context: persistentContainer.viewContext)
+    }()
+
     weak var delegate: EventAlliancesViewControllerDelegate?
-    private var dataSource: TableViewDataSource<EventAlliance, EventAlliancesViewController>!
 
     // MARK: - Init
 
@@ -75,7 +81,11 @@ private class EventAlliancesViewController: TBATableViewController {
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
-        setupDataSource()
+        contextObserver.observeObject(object: event, state: .updated) { [weak self] (_, _) in
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -87,33 +97,27 @@ private class EventAlliancesViewController: TBATableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.registerReusableCell(EventAllianceTableViewCell.self)
+
         // Override automatic rowHeight - these will be smaller than 44 by default, and we want to open them up
         tableView.rowHeight = 44
     }
 
     // MARK: Table View Data Source
 
-    private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<EventAlliance> = EventAlliance.fetchRequest()
-        // This seems like a poor sort descriptor... since this could be nil
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(EventAlliance.name), ascending: true)]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let rows = event.alliances?.count ?? 0
+        if rows == 0 {
+            showNoDataView()
+        }
+        return rows
     }
 
-    private func setupFetchRequest(_ request: NSFetchRequest<EventAlliance>) {
-        request.predicate = NSPredicate(format: "%K == %@",
-                                        #keyPath(EventAlliance.event), event)
-    }
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> EventAllianceTableViewCell {
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventAllianceTableViewCell
+        let alliance = event.alliances!.object(at: indexPath.row) as! EventAlliance
 
-}
-
-extension EventAlliancesViewController: TableViewDataSourceDelegate {
-
-    func configure(_ cell: EventAllianceTableViewCell, for object: EventAlliance, at indexPath: IndexPath) {
-        cell.viewModel = EventAllianceCellViewModel(alliance: object, allianceNumber: indexPath.row + 1)
+        cell.viewModel = EventAllianceCellViewModel(alliance: alliance, allianceNumber: indexPath.row + 1)
         cell.teamKeySelected = { [weak self] (teamKey) in
             guard let context = self?.persistentContainer.viewContext else {
                 return
@@ -121,6 +125,8 @@ extension EventAlliancesViewController: TableViewDataSourceDelegate {
             let teamKey = TeamKey.insert(withKey: teamKey, in: context)
             self?.delegate?.teamKeySelected(teamKey)
         }
+
+        return cell
     }
 
 }
@@ -141,10 +147,10 @@ extension EventAlliancesViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        if let alliances = dataSource.fetchedResultsController.fetchedObjects, alliances.isEmpty {
+        guard let alliances = event.alliances else {
             return true
         }
-        return false
+        return alliances.count == 0
     }
 
     @objc func refresh() {
