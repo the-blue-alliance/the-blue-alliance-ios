@@ -82,7 +82,6 @@ class MyTBAPreferenceViewController: UITableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        print(operationQueue.operations)
         operationQueue.cancelAllOperations()
     }
 
