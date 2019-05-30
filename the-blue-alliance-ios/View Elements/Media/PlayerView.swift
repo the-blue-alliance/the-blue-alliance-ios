@@ -12,8 +12,7 @@ class PlayerView: UIView {
         }
     }
 
-    var observation: NSKeyValueObservation?
-    @objc lazy var playerViewController: TBAPlayerViewController = {
+    lazy var playerViewController: TBAPlayerViewController = {
         let playerViewController = TBAPlayerViewController()
         playerViewController.entersFullScreenWhenPlaybackBegins = true
         playerViewController.exitsFullScreenWhenPlaybackEnds = true
@@ -69,9 +68,6 @@ class PlayerView: UIView {
         }
 
         if let youtubeKey = playable.youtubeKey {
-            observation = observe(\.playerViewController.isReadyForDisplay, changeHandler: { [weak self] (old, new) in
-                self?.playerReadyToPlay()
-            })
             youtubeVideoOperation = XCDYouTubeClient.default().getVideoWithIdentifier(youtubeKey) { [weak self] (video, error) in
                 self?.youtubeVideoOperation = nil
                 guard let streamURLs = video?.streamURLs else {
@@ -83,6 +79,8 @@ class PlayerView: UIView {
                     return
                 }
                 self?.playerViewController.player = AVPlayer(url: streamURL)
+                self?.playerViewController.showsPlaybackControls = true
+                self?.loadingActivityIndicator.stopAnimating()
             }
         } else {
             // TODO: Handle other video types, yeah?
@@ -90,16 +88,7 @@ class PlayerView: UIView {
         }
     }
 
-    private func playerReadyToPlay() {
-        observation?.invalidate()
-
-        playerViewController.showsPlaybackControls = true
-        loadingActivityIndicator.stopAnimating()
-    }
-
     private func showErrorView(error: String) {
-        observation?.invalidate()
-
         playerViewController.player = nil
         playerViewController.showsPlaybackControls = false
         loadingActivityIndicator.stopAnimating()
