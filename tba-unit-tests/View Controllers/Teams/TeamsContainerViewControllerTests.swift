@@ -31,6 +31,7 @@ class TeamsContainerViewControllerTests: TBATestCase {
     }
 
     func test_snapshot() {
+        waitOneSecond()
         verifyLayer(viewControllerTester.window.layer)
     }
 

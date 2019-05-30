@@ -33,10 +33,12 @@ class TeamViewControllerTests: TBATestCase {
     }
 
     func test_snapshot() {
+        waitOneSecond()
         verifyLayer(viewControllerTester.window.layer)
 
         // myTBA authed
         myTBA.authToken = "abcd123"
+        waitOneSecond()
         verifyLayer(viewControllerTester.window.layer, identifier: "mytba")
     }
 
