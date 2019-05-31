@@ -8,6 +8,7 @@ import UIKit
 class EventAlliancesContainerViewController: ContainerViewController {
 
     private(set) var event: Event
+    private let messaging: Messaging
     private let myTBA: MyTBA
     private let statusService: StatusService
     private let urlOpener: URLOpener
@@ -16,8 +17,9 @@ class EventAlliancesContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(event: Event, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, messaging: Messaging, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
+        self.messaging = messaging
         self.myTBA = myTBA
         self.statusService = statusService
         self.urlOpener = urlOpener
@@ -51,7 +53,7 @@ class EventAlliancesContainerViewController: ContainerViewController {
 extension EventAlliancesContainerViewController: EventAlliancesViewControllerDelegate {
 
     func teamKeySelected(_ teamKey: TeamKey) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, messaging: messaging, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

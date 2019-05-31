@@ -23,19 +23,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy private var rootSplitViewController: UISplitViewController = { [unowned self] in
         let splitViewController = UISplitViewController()
 
-        let eventsViewController = EventsContainerViewController(myTBA: myTBA,
+        let eventsViewController = EventsContainerViewController(messaging: messaging,
+                                                                 myTBA: myTBA,
                                                                  statusService: statusService,
                                                                  urlOpener: urlOpener,
                                                                  persistentContainer: persistentContainer,
                                                                  tbaKit: tbaKit,
                                                                  userDefaults: userDefaults)
-        let teamsViewController = TeamsContainerViewController(myTBA: myTBA,
+        let teamsViewController = TeamsContainerViewController(messaging: messaging,
+                                                               myTBA: myTBA,
                                                                statusService: statusService,
                                                                urlOpener: urlOpener,
                                                                persistentContainer: persistentContainer,
                                                                tbaKit: tbaKit,
                                                                userDefaults: userDefaults)
-        let districtsViewController = DistrictsContainerViewController(myTBA: myTBA,
+        let districtsViewController = DistrictsContainerViewController(messaging: messaging,
+                                                                       myTBA: myTBA,
                                                                        statusService: statusService,
                                                                        urlOpener: urlOpener,
                                                                        persistentContainer: persistentContainer,
@@ -287,7 +290,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func setupPushServiceDelegates() {
         messaging.delegate = pushService
-        // TODO: remoteMessageDelegate
         UNUserNotificationCenter.current().delegate = pushService
         myTBA.authenticationProvider.add(observer: pushService)
     }

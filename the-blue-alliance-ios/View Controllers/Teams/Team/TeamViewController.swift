@@ -44,7 +44,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
     // MARK: Init
 
-    init(team: Team, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(team: Team, statusService: StatusService, urlOpener: URLOpener, messaging: Messaging, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.team = team
         self.statusService = statusService
         self.urlOpener = urlOpener
@@ -59,6 +59,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
             navigationTitle: "Team \(team.teamNumber!.stringValue)",
             navigationSubtitle: ContainerViewController.yearSubtitle(year),
             segmentedControlTitles: ["Info", "Events", "Media"],
+            messaging: messaging,
             myTBA: myTBA,
             persistentContainer: persistentContainer,
             tbaKit: tbaKit,
@@ -200,7 +201,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, messaging: messaging, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

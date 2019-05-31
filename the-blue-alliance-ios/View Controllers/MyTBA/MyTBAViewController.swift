@@ -173,19 +173,19 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
         switch myTBAObject.modelType {
         case .event:
             if let event = myTBAObject.tbaObject as? Event {
-                viewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                viewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
             } else {
                 // TODO: Push using just key
             }
         case .team:
             if let team = myTBAObject.tbaObject as? Team {
-                viewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                viewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
             } else {
                 // TODO: Push using just key
             }
         case .match:
             if let match = myTBAObject.tbaObject as? Match {
-                viewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                viewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
             } else {
                 // TODO: Push using just key
             }
