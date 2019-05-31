@@ -8,6 +8,7 @@ import XCTest
 class TBATestCase: CoreDataTestCase {
 
     var testBundle: Bundle!
+    var messaging: Messaging!
     var myTBA: MockMyTBA!
     var tbaKit: MockTBAKit!
     var userDefaults: UserDefaults!
@@ -21,6 +22,7 @@ class TBATestCase: CoreDataTestCase {
 
         testBundle = Bundle(for: type(of: self))
         userDefaults = UserDefaults(suiteName: "TBATests")
+        messaging = Messaging.messaging()
         myTBA = MockMyTBA()
         tbaKit = MockTBAKit(userDefaults: userDefaults)
         urlOpener = MockURLOpener()

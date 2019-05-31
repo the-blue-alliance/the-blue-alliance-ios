@@ -19,6 +19,7 @@ class DistrictViewControllerTests: TBATestCase {
         let district = insertDistrict()
 
         districtViewController = DistrictViewController(district: district,
+                                                        messaging: messaging,
                                                         myTBA: myTBA,
                                                         statusService: statusService,
                                                         urlOpener: urlOpener,

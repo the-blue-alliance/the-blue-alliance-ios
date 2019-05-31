@@ -11,7 +11,8 @@ class EventsContainerViewControllerTests: TBATestCase {
     override func setUp() {
         super.setUp()
 
-        eventsContainerViewController = EventsContainerViewController(myTBA: myTBA,
+        eventsContainerViewController = EventsContainerViewController(messaging: messaging,
+                                                                      myTBA: myTBA,
                                                                       statusService: statusService,
                                                                       urlOpener: urlOpener,
                                                                       persistentContainer: persistentContainer,

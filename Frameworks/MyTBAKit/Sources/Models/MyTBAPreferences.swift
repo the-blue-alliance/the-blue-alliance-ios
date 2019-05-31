@@ -1,7 +1,7 @@
 import Foundation
 
 public struct MyTBAPreferences: Codable {
-    var deviceKey: String
+    var deviceKey: String?
     var favorite: Bool
     var modelKey: String
     var modelType: MyTBAModelType
@@ -19,8 +19,8 @@ extension MyTBA {
     // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/174
 
     @discardableResult
-    public func updatePreferences(modelKey: String, modelType: MyTBAModelType, favorite: Bool, notifications: [NotificationType], completion: @escaping (_ favoriteResponse: MyTBABaseResponse?, _ subscriptionResponse: MyTBABaseResponse?, _ error: Error?) -> Void) -> MyTBAOperation? {
-        let preferences = MyTBAPreferences(deviceKey: uuid,
+    public func updatePreferences(deviceKey: String?, modelKey: String, modelType: MyTBAModelType, favorite: Bool, notifications: [NotificationType], completion: @escaping (_ favoriteResponse: MyTBABaseResponse?, _ subscriptionResponse: MyTBABaseResponse?, _ error: Error?) -> Void) -> MyTBAOperation? {
+        let preferences = MyTBAPreferences(deviceKey: deviceKey,
                                            favorite: favorite,
                                            modelKey: modelKey,
                                            modelType: modelType,

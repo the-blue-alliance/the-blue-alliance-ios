@@ -7,6 +7,7 @@ import UIKit
 class DistrictViewController: ContainerViewController {
 
     private(set) var district: District
+    private let messaging: Messaging
     private let myTBA: MyTBA
     private let statusService: StatusService
     private let urlOpener: URLOpener
@@ -17,8 +18,9 @@ class DistrictViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(district: District, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(district: District, messaging: Messaging, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.district = district
+        self.messaging = messaging
         self.myTBA = myTBA
         self.statusService = statusService
         self.urlOpener = urlOpener
@@ -63,7 +65,7 @@ class DistrictViewController: ContainerViewController {
 extension DistrictViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let eventViewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let eventViewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(eventViewController, animated: true)
     }
 
@@ -76,7 +78,7 @@ extension DistrictViewController: EventsViewControllerDelegate {
 extension DistrictViewController: TeamsViewControllerDelegate {
 
     func teamSelected(_ team: Team) {
-        let teamViewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamViewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamViewController, animated: true)
     }
 
@@ -85,7 +87,7 @@ extension DistrictViewController: TeamsViewControllerDelegate {
 extension DistrictViewController: DistrictRankingsViewControllerDelegate {
 
     func districtRankingSelected(_ districtRanking: DistrictRanking) {
-        let teamAtDistrictViewController = TeamAtDistrictViewController(ranking: districtRanking, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtDistrictViewController = TeamAtDistrictViewController(ranking: districtRanking, messaging: messaging, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtDistrictViewController, animated: true)
     }
 
