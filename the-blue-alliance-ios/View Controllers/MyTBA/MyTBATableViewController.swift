@@ -194,6 +194,15 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         tableView.reloadData()
     }
 
+    // MARK: - Private Methods
+
+    private func indexPath(for myTBAObject: MyTBAModel) -> IndexPath? {
+        guard let object = fetchedResultsController?.fetchedObjects?.first(where: { $0.modelKey == myTBAObject.modelKey }) else {
+            return nil
+        }
+        return fetchedResultsController?.indexPath(forObject: object)
+    }
+
     // MARK: - Fetch Methods
 
     @objc func refresh() {
@@ -215,23 +224,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 if let models = models as? [T.RemoteType] {
                     T.insert(models, in: context)
                     // Kickoff fetch for myTBA objects that don't exist
-                    let operations = models.compactMap({ (myTBAObject) -> TBAKitOperation? in
-                        let key = myTBAObject.modelKey
-                        switch myTBAObject.modelType {
-                        case .event:
-                            return self.fetchEvent(key)
-                        case .team:
-                            return self.fetchTeam(key)
-                        case .match:
-                            return self.fetchMatch(key)
-                        default:
-                            return nil
-                        }
+                    models.forEach({
+                        self.fetchMyTBAObj($0, finalOperation)
                     })
-                    for op in operations {
-                        finalOperation.addDependency(op)
-                    }
-                    self.refreshOperationQueue.addOperations(operations, waitUntilFinished: false)
                 } else if error == nil {
                     // If we don't get any models and we don't have an error, we probably don't have any models upstream
                     context.deleteAllObjectsForEntity(entity: T.entity())
@@ -241,6 +236,39 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             })
         }
         finalOperation = addRefreshOperations([operation])
+    }
+
+    private func fetchMyTBAObj(_ myTBAModel: MyTBAModel, _ dependentOperation: Operation) {
+        guard let tbaKitOperation: TBAKitOperation = {
+            let key = myTBAModel.modelKey
+            switch myTBAModel.modelType {
+            case .event:
+                return self.fetchEvent(key)
+            case .team:
+                return self.fetchTeam(key)
+            case .match:
+                return self.fetchMatch(key)
+            default:
+                return nil
+            }
+            }() else {
+                return
+        }
+
+        let refreshOperation = BlockOperation { [weak self] in
+            guard let self = self else { return }
+            // Reload our cell, so we can get rid of our loading state
+            if let indexPath = self.indexPath(for: myTBAModel) {
+                self.tableView.reloadRows(at: [indexPath], with: .fade)
+            }
+        }
+        refreshOperation.addDependency(tbaKitOperation)
+        [tbaKitOperation, refreshOperation].forEach {
+            dependentOperation.addDependency($0)
+        }
+
+        OperationQueue.main.addOperation(refreshOperation)
+        refreshOperationQueue.addOperation(tbaKitOperation)
     }
 
     @discardableResult
