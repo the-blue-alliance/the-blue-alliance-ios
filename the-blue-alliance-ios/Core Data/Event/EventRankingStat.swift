@@ -32,6 +32,11 @@ extension EventRankingStat: Managed {
     public override func willSave() {
         super.willSave()
 
+        // If we're being delted - don't bother validating
+        if isDeleted {
+            return
+        }
+
         // Do some additional validation, since we can't do an either-or or neither sort of validation in Core Data
         if sortOrderRanking != nil, extraStatsRanking != nil {
             fatalError("EventRankingStat must not have a relationship to both an extraStat and sortOrder")

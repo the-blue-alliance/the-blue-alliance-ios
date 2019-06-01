@@ -110,43 +110,32 @@ extension EventRanking: Managed {
         }
 
         // Loop twice - once to cleanup our relationships, once to delete.
-        // Note to Zach: Test this with only one loop and confirm it doesn't work
+        // We can't delete when we clean up our relationships, since we need to clean up
+        // extraStatsInfoArray and sortOrdersInfoArray independently, and one EventRankingStatInfo
+        // could be connected to both an EventRanking extraStatsInfoArray and sortOrdersInfoArray.
+        // We need to drop relationships from both, then see if it's an orphan after.
+
+        // Store all of our StatInfo objects - once we drop the relationship between
+        // the EventRanking <-> the EventRankingStatInfo, we won't be able to check to
+        // see if they're orphans by using the relationships on EventRanking. This allows
+        // us to have a list of items we should check to see if they're orphaned.
+        var stats = Set(extraStatsInfoArray)
+        stats.formUnion(sortOrdersInfoArray)
+
+        // First pass - clean up our relationships.
         extraStatsInfoArray.forEach({
-            guard let extraStatsRankings = $0.extraStatsRankings else {
-                return
-            }
-            if extraStatsRankings.onlyObject(self) {
-                // Only mark for deletion if our sets are thinned out
-                guard let sortOrderRankings = $0.sortOrdersRankings else {
-                    // No sortOrderRankings - we're good for deletion
-                    managedObjectContext?.delete($0)
-                    return
-                }
-                if sortOrderRankings.onlyObject(self) || sortOrderRankings.count == 0 {
-                    managedObjectContext?.delete($0)
-                }
-            } else {
-                $0.removeFromExtraStatsRankings(self)
-            }
+            $0.removeFromExtraStatsRankings(self)
+        })
+        sortOrdersInfoArray.forEach({
+            $0.removeFromSortOrdersRankings(self)
         })
 
-        // Same as above (hopefully)
-        sortOrdersInfoArray.forEach({
-            guard let sortOrderRankings = $0.sortOrdersRankings else {
+        // Second pass - clean up orphaned EventRankingStatInfo objects that used to be connected to this EventRanking.
+        stats.forEach({
+            guard $0.isOrphaned else {
                 return
             }
-            if sortOrderRankings.onlyObject(self) {
-                guard let extraStatsRankings = $0.extraStatsRankings else {
-                    // No extraStatsRankings - we're good for deletion
-                    managedObjectContext?.delete($0)
-                    return
-                }
-                if extraStatsRankings.onlyObject(self) || extraStatsRankings.count == 0 {
-                    managedObjectContext?.delete($0)
-                }
-            } else {
-                $0.removeFromSortOrdersRankings(self)
-            }
+            managedObjectContext?.delete($0)
         })
     }
 

@@ -126,8 +126,64 @@ class EventRankingTestCase: CoreDataTestCase {
 
         // QualStatus is an orphan and should be deleted
         XCTAssertNil(qualStatus.managedObjectContext)
+    }
 
-        // TODO: Add extraStatsInfoArray/sortOrdersInfoArray logic here
+    func test_delete_orphan_statsInfo() {
+        let event = insertDistrictEvent()
+
+        let extraStatsInfoModel = [TBAEventRankingSortOrder(name: "Total Ranking Points", precision: 0)]
+        let sortOrderInfoModel = [
+            TBAEventRankingSortOrder(name: "Ranking Score", precision: 2),
+            TBAEventRankingSortOrder(name: "Total Ranking Points", precision: 0)
+        ]
+        let model = TBAEventRanking(teamKey: "frc1", rank: 2, dq: 10, matchesPlayed: 6, qualAverage: 20, record: TBAWLT(wins: 1, losses: 2, ties: 3), extraStats: [25], sortOrders: [2.08])
+        let ranking = EventRanking.insert(model, sortOrderInfo: sortOrderInfoModel, extraStatsInfo: extraStatsInfoModel, eventKey: event.key!, in: persistentContainer.viewContext)
+        event.addToRankings(ranking)
+
+        let extraStatsInfo = ranking.extraStatsInfoArray.first!
+        let firstSortOrderInfo = ranking.sortOrdersInfoArray.first(where: { $0.name == "Ranking Score" })!
+        let secondSortOrderInfo = ranking.sortOrdersInfoArray.first(where: { $0.name == "Total Ranking Points" })!
+
+        // Sanity check
+        XCTAssertEqual(secondSortOrderInfo.extraStatsRankings?.count, 1)
+        XCTAssertEqual(secondSortOrderInfo.sortOrdersRankings?.count, 1)
+        XCTAssertEqual(extraStatsInfo, secondSortOrderInfo)
+
+        // Connect a second ranking to the same extra stats - should not be deleted
+        let secondModel = TBAEventRanking(teamKey: "frc2", rank: 1, dq: 10, matchesPlayed: 6, qualAverage: 20, record: TBAWLT(wins: 1, losses: 2, ties: 3), extraStats: [25], sortOrders: nil)
+        let secondRanking = EventRanking.insert(secondModel, sortOrderInfo: nil, extraStatsInfo: extraStatsInfoModel, eventKey: event.key!, in: persistentContainer.viewContext)
+        event.addToRankings(secondRanking)
+
+        // Sanity check
+        XCTAssertEqual(event.rankings?.count, 2)
+        XCTAssertEqual(extraStatsInfo, secondSortOrderInfo)
+        XCTAssertEqual(extraStatsInfo.extraStatsRankings?.count, 2)
+        XCTAssertEqual(extraStatsInfo.sortOrdersRankings?.count, 1)
+        XCTAssertEqual(firstSortOrderInfo.extraStatsRankings?.count, 0)
+        XCTAssertEqual(firstSortOrderInfo.sortOrdersRankings?.count, 1)
+
+        // Should be able to delete
+        persistentContainer.viewContext.delete(ranking)
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // extraStatsInfo and secondSortOrderInfo should not be deleted - both (same obj) connected to a different ranking
+        XCTAssertNotNil(extraStatsInfo.managedObjectContext)
+        XCTAssertNotNil(secondSortOrderInfo.managedObjectContext)
+
+        XCTAssertEqual(extraStatsInfo, secondSortOrderInfo)
+        XCTAssertEqual(extraStatsInfo.extraStatsRankings?.count, 1)
+        XCTAssertEqual(extraStatsInfo.sortOrdersRankings?.count, 0)
+
+        // firstSortOrderInfo is an orphan and should be deleted
+        XCTAssertNil(firstSortOrderInfo.managedObjectContext)
+
+        // Should be able to delete
+        persistentContainer.viewContext.delete(secondRanking)
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // extraStatsInfo and secondSortOrderInfo are orphans and should be deleted
+        XCTAssertNil(extraStatsInfo.managedObjectContext)
+        XCTAssertNil(secondSortOrderInfo.managedObjectContext)
     }
 
     func test_delete_qualStatus() {
