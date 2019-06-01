@@ -4,23 +4,20 @@ import TBAKit
 
 extension EventRanking: Managed {
 
-    var extraStatsInfoArray: [EventRankingStatInfo]? {
-        return extraStatsInfo?.array as? [EventRankingStatInfo]
+    var extraStatsInfoArray: [EventRankingStatInfo] {
+        return extraStatsInfo?.array as? [EventRankingStatInfo] ?? []
     }
-    var extraStatsArray: [EventRankingStat]? {
-        return extraStats?.array as? [EventRankingStat]
+    var extraStatsArray: [EventRankingStat] {
+        return extraStats?.array as? [EventRankingStat] ?? []
     }
-    var sortOrdersInfoArray: [EventRankingStatInfo]? {
-        return sortOrdersInfo?.array as? [EventRankingStatInfo]
+    var sortOrdersInfoArray: [EventRankingStatInfo] {
+        return sortOrdersInfo?.array as? [EventRankingStatInfo] ?? []
     }
-    var sortOrdersArray: [EventRankingStat]? {
-        return sortOrders?.array as? [EventRankingStat]
+    var sortOrdersArray: [EventRankingStat] {
+        return sortOrders?.array as? [EventRankingStat] ?? []
     }
 
-    private func statString(statsInfo: [EventRankingStatInfo]?, stats: [EventRankingStat]?) -> String? {
-        guard let statsInfo = statsInfo, let stats = stats else {
-            return nil
-        }
+    private func statString(statsInfo: [EventRankingStatInfo], stats: [EventRankingStat]) -> String? {
         let parts = zip(statsInfo, stats).map({ (statsTuple) -> String? in
             let (statInfo, stat) = statsTuple
             guard let value = stat.value else {
@@ -114,7 +111,7 @@ extension EventRanking: Managed {
 
         // Loop twice - once to cleanup our relationships, once to delete.
         // Note to Zach: Test this with only one loop and confirm it doesn't work
-        extraStatsInfoArray?.forEach({
+        extraStatsInfoArray.forEach({
             guard let extraStatsRankings = $0.extraStatsRankings else {
                 return
             }
@@ -134,7 +131,7 @@ extension EventRanking: Managed {
         })
 
         // Same as above (hopefully)
-        sortOrdersInfoArray?.forEach({
+        sortOrdersInfoArray.forEach({
             guard let sortOrderRankings = $0.sortOrdersRankings else {
                 return
             }

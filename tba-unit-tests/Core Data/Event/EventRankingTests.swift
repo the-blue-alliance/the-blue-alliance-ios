@@ -23,13 +23,22 @@ class EventRankingTestCase: CoreDataTestCase {
         XCTAssertEqual(ranking.qualAverage, 20)
         XCTAssertNotNil(ranking.record)
 
-        // TODO: Fix these
-        /*
-        XCTAssertEqual(ranking.tiebreakerValues, [2.08, 530.0, 3])
-        XCTAssertEqual(ranking.tiebreakerNames, ["Ranking Score", "First Ranking", "Second Raking"])
-        XCTAssertEqual(ranking.extraStatsValues, [25.0, 3])
-        XCTAssertEqual(ranking.extraStatsNames, ["Total Ranking Points"])
-        */
+        XCTAssertEqual(ranking.extraStatsInfoArray.map({ $0.name }), ["Total Ranking Points"])
+        XCTAssertEqual(ranking.extraStatsInfoArray.map({ $0.precision }), [0])
+
+        XCTAssertEqual(ranking.extraStatsArray.map({ $0.value }), [25.0, 3])
+        XCTAssertEqual(ranking.extraStatsArray.compactMap({ $0.extraStatsRanking }).count, 2)
+        XCTAssertEqual(ranking.extraStatsArray.compactMap({ $0.sortOrderRanking }).count, 0)
+
+        XCTAssertEqual(ranking.sortOrdersInfoArray.map({ $0.name }), ["Ranking Score", "First Ranking", "Second Raking"])
+        XCTAssertEqual(ranking.sortOrdersInfoArray.map({ $0.precision }), [2, 0, 0])
+
+        XCTAssertEqual(ranking.sortOrdersArray.map({ $0.value }), [2.08, 530.0, 3])
+        XCTAssertEqual(ranking.sortOrdersArray.compactMap({ $0.extraStatsRanking }).count, 0)
+        XCTAssertEqual(ranking.sortOrdersArray.compactMap({ $0.sortOrderRanking }).count, 3)
+
+        // Since we've setup a complicated extraStats/sortOrder, we'll test the string
+        XCTAssertEqual(ranking.rankingInfoString, "Total Ranking Points: 25, Ranking Score: 2.08, First Ranking: 530, Second Raking: 3")
 
         // Should throw an error - must be attached to an Event
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
@@ -87,13 +96,10 @@ class EventRankingTestCase: CoreDataTestCase {
         XCTAssertEqual(rankingOne.matchesPlayed, 7)
         XCTAssertEqual(rankingOne.qualAverage, 10)
         XCTAssertNil(rankingOne.record)
-        /*
-        XCTAssertNil(rankingOne.tiebreakerValues)
-        XCTAssertNil(rankingOne.tiebreakerNames)
-        // extraStatsInfo should not be removed
-        XCTAssertNotNil(rankingOne.extraStatsValues)
-        XCTAssertNotNil(rankingOne.extraStatsNames)
-        */
+        XCTAssertEqual(rankingOne.sortOrdersArray.count, 0)
+        XCTAssertEqual(rankingOne.sortOrdersInfoArray.count, 0)
+        XCTAssertEqual(rankingOne.extraStatsArray.count, 0)
+        XCTAssertEqual(rankingOne.extraStatsInfoArray.count, 0)
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
@@ -120,6 +126,8 @@ class EventRankingTestCase: CoreDataTestCase {
 
         // QualStatus is an orphan and should be deleted
         XCTAssertNil(qualStatus.managedObjectContext)
+
+        // TODO: Add extraStatsInfoArray/sortOrdersInfoArray logic here
     }
 
     func test_delete_qualStatus() {
@@ -170,45 +178,89 @@ class EventRankingTestCase: CoreDataTestCase {
         let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
         XCTAssertNil(ranking.rankingInfoString)
 
-        let extraStatsNames = ["Value 4", "Value 6", "Value 5"]
-        let extraStatsValues: [NSNumber] = [2, 3.0, 49.999]
+        let extraStats = [("Value 4", 0), ("Value 6", 1), ("Value 5", 3), ("Value Extra", 4)]
+        let extraStatsValues: [NSNumber] = [2, 3, 49.999]
 
-        let tiebreakerNames = ["Value 1", "Value 2", "Value 3"]
-        let tiebreakerValues: [NSNumber] = [1.00, 2.2, 3.33]
+        let sortOrders = [("Value 1", 0), ("Value 2", 1), ("Value 3", 2)]
+        let sortOrderValues: [NSNumber] = [1.00, 2.2, 3.33, -1]
 
-        /*
         // Needs both keys and values
-        ranking.tiebreakerNames = tiebreakerNames
+        ranking.sortOrdersInfo = NSOrderedSet(array: sortOrders.map {
+            let (name, precision) = $0
+            let info = EventRankingStatInfo(entity: EventRankingStatInfo.entity(), insertInto: persistentContainer.viewContext)
+            info.name = name
+            info.precision = Int16(precision)
+            return info
+        })
         XCTAssertNil(ranking.rankingInfoString)
-        ranking.tiebreakerNames = nil
+        ranking.sortOrdersInfo = nil
 
-        ranking.tiebreakerValues = tiebreakerValues
+        ranking.sortOrders = NSOrderedSet(array: sortOrderValues.map {
+            let stat = EventRankingStat(entity: EventRankingStat.entity(), insertInto: persistentContainer.viewContext)
+            stat.value = $0
+            return stat
+        })
         XCTAssertNil(ranking.rankingInfoString)
-        ranking.tiebreakerValues = nil
+        ranking.sortOrders = nil
 
-        ranking.extraStatsNames = extraStatsNames
+        ranking.extraStatsInfo = NSOrderedSet(array: extraStats.map {
+            let (name, precision) = $0
+            let info = EventRankingStatInfo(entity: EventRankingStatInfo.entity(), insertInto: persistentContainer.viewContext)
+            info.name = name
+            info.precision = Int16(precision)
+            return info
+        })
         XCTAssertNil(ranking.rankingInfoString)
-        ranking.extraStatsNames = nil
+        ranking.extraStatsInfo = nil
 
-        ranking.extraStatsValues = extraStatsValues
+        ranking.extraStats = NSOrderedSet(array: extraStatsValues.map {
+            let stat = EventRankingStat(entity: EventRankingStat.entity(), insertInto: persistentContainer.viewContext)
+            stat.value = $0
+            return stat
+        })
         XCTAssertNil(ranking.rankingInfoString)
 
         // Only with extra stats
-        ranking.extraStatsNames = extraStatsNames
-        XCTAssertEqual(ranking.rankingInfoString, "Value 4: 2, Value 6: 3, Value 5: 49.999")
-        ranking.extraStatsNames = nil
-        ranking.extraStatsValues = nil
+        ranking.extraStatsInfo = NSOrderedSet(array: extraStats.map {
+            let (name, precision) = $0
+            let info = EventRankingStatInfo(entity: EventRankingStatInfo.entity(), insertInto: persistentContainer.viewContext)
+            info.name = name
+            info.precision = Int16(precision)
+            return info
+        })
+        XCTAssertEqual(ranking.rankingInfoString, "Value 4: 2, Value 6: 3.0, Value 5: 49.999")
+        ranking.extraStats = nil
+        ranking.extraStatsInfo = nil
 
         // Only with tiebreaker info
-        ranking.tiebreakerNames = tiebreakerNames
-        ranking.tiebreakerValues = tiebreakerValues
+        ranking.sortOrdersInfo = NSOrderedSet(array: sortOrders.map {
+            let (name, precision) = $0
+            let info = EventRankingStatInfo(entity: EventRankingStatInfo.entity(), insertInto: persistentContainer.viewContext)
+            info.name = name
+            info.precision = Int16(precision)
+            return info
+        })
+        ranking.sortOrders = NSOrderedSet(array: sortOrderValues.map {
+            let stat = EventRankingStat(entity: EventRankingStat.entity(), insertInto: persistentContainer.viewContext)
+            stat.value = $0
+            return stat
+        })
         XCTAssertEqual(ranking.rankingInfoString, "Value 1: 1, Value 2: 2.2, Value 3: 3.33")
 
         // Show with both
-        ranking.extraStatsNames = extraStatsNames
-        ranking.extraStatsValues = extraStatsValues
-        XCTAssertEqual(ranking.rankingInfoString, "Value 4: 2, Value 6: 3, Value 5: 49.999, Value 1: 1, Value 2: 2.2, Value 3: 3.33")
-        */
+        ranking.extraStatsInfo = NSOrderedSet(array: extraStats.map {
+            let (name, precision) = $0
+            let info = EventRankingStatInfo(entity: EventRankingStatInfo.entity(), insertInto: persistentContainer.viewContext)
+            info.name = name
+            info.precision = Int16(precision)
+            return info
+        })
+        ranking.extraStats = NSOrderedSet(array: extraStatsValues.map {
+            let stat = EventRankingStat(entity: EventRankingStat.entity(), insertInto: persistentContainer.viewContext)
+            stat.value = $0
+            return stat
+        })
+        XCTAssertEqual(ranking.rankingInfoString, "Value 4: 2, Value 6: 3.0, Value 5: 49.999, Value 1: 1, Value 2: 2.2, Value 3: 3.33")
     }
 
 }
