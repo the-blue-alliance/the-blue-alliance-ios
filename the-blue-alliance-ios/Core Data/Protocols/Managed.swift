@@ -82,15 +82,30 @@ extension Managed where Self: NSManagedObject {
     }
 
     func updateToManyRelationship<T: NSManagedObject & Managed>(relationship: String, newValues new: [T]?) {
+        let debugString = "\(String(describing: type(of: self))).\(relationship)"
+        guard let relationshipAttributeDescription = entity.relationshipsByName[relationship] else {
+            fatalError("Unable to update relationship \(debugString) - relationship not found")
+        }
+        assert(relationshipAttributeDescription.isToMany, "Unable to update relationship \(debugString) - relationship must be a To Many relationship")
+
+        let SetClass: SetManaged.Type = {
+            if relationshipAttributeDescription.isOrdered {
+                return NSOrderedSet.self
+            } else {
+                return NSSet.self
+            }
+        }()
+
         // Store our old values so we can reference them later
-        let oldSet = value(forKeyPath: relationship) as? NSSet
-        let oldValues = oldSet?.allObjects as? [T]
+        let oldSet = value(forKeyPath: relationship) as? SetManaged
+        let oldValues = oldSet?.items as? [T]
 
         // The ol' switcharoo
-        let newSet = Set(new ?? [])
-        setValue(NSSet(set: newSet), forKeyPath: relationship)
+        let newArray = new ?? []
+        setValue(SetClass.init(array: newArray), forKey: relationship)
 
         // Clean up orphans, if applicable
+        let newSet = Set(newArray)
         if let oldValues = oldValues {
             let oldSet = Set(oldValues)
             oldSet.subtracting(newSet).filter({ $0.isOrphaned }).forEach({
@@ -99,4 +114,21 @@ extension Managed where Self: NSManagedObject {
         }
     }
 
+}
+
+private protocol SetManaged {
+    init(array: [Any])
+    var items: [Any] { get }
+}
+
+extension NSSet: SetManaged {
+    var items: [Any] {
+        return allObjects
+    }
+}
+
+extension NSOrderedSet: SetManaged {
+    var items: [Any] {
+        return array
+    }
 }
