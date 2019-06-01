@@ -354,13 +354,13 @@ class MatchTestCase: CoreDataTestCase {
         XCTAssertEqual(match.compLevel?.level, "Qualification")
 
         match.compLevelString = "ef"
-        XCTAssertEqual(match.compLevel?.level, "Octofinal")
+        XCTAssertEqual(match.compLevel?.level, "Octofinals")
 
         match.compLevelString = "qf"
-        XCTAssertEqual(match.compLevel?.level, "Quarterfinal")
+        XCTAssertEqual(match.compLevel?.level, "Quarterfinals")
 
         match.compLevelString = "sf"
-        XCTAssertEqual(match.compLevel?.level, "Semifinal")
+        XCTAssertEqual(match.compLevel?.level, "Semifinals")
 
         match.compLevelString = "f"
         XCTAssertEqual(match.compLevel?.level, "Finals")
