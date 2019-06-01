@@ -25,33 +25,6 @@ class EventRankingStatTests: CoreDataTestCase {
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
 
-    func test_insert_extraStatsRanking_sortOrderRanking() {
-        let ranking = insertEventRaking()
-        let stat = EventRankingStat.init(entity: EventRankingStat.entity(), insertInto: persistentContainer.viewContext)
-        stat.value = NSNumber(value: 2.3232)
-        stat.extraStatsRanking = ranking
-        stat.sortOrderRanking = ranking
-
-        // Can only have either extraStatsRanking or sortOrderRanking
-        // NOTE: We're calling viewContext.save on a non-main thread because fatalError
-        // will hang our main thread forever
-        expectFatalError("EventRankingStat must not have a relationship to both an extraStat and sortOrder") {
-            try? self.persistentContainer.viewContext.save()
-        }
-    }
-
-    func test_insert_noStats() {
-        let stat = EventRankingStat.init(entity: EventRankingStat.entity(), insertInto: persistentContainer.viewContext)
-        stat.value = NSNumber(value: -1)
-
-        // Needs either an extraStatsRanking or sortOrderRanking
-        // NOTE: We're calling viewContext.save on a non-main thread because fatalError
-        // will hang our main thread forever
-        expectFatalError("EventRankingStat must have a relationship to either an extraStat and sortOrder") {
-            try? self.persistentContainer.viewContext.save()
-        }
-    }
-
     func test_insert() {
         let _ = EventRankingStat.init(entity: EventRankingStat.entity(), insertInto: persistentContainer.viewContext)
 
