@@ -33,6 +33,9 @@ class TeamInfoViewController: TBATableViewController {
         self.urlOpener = urlOpener
 
         super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+
+        // TODO: Add support for Pits
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/163
     }
 
     required init?(coder aDecoder: NSCoder) {
