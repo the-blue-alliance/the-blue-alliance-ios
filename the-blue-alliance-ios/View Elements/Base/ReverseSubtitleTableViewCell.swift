@@ -28,7 +28,7 @@ class ReverseSubtitleTableViewCell: UITableViewCell, Reusable {
     }
     @IBOutlet public var subtitleLabel: UILabel! {
         didSet {
-            subtitleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+            subtitleLabel.font = UIFont.preferredFont(forTextStyle: .body)
             subtitleLabel.adjustsFontForContentSizeCategory = true
             subtitleLabel.textColor = UIColor.black
         }
