@@ -140,7 +140,7 @@ class TeamSummaryViewController: TBATableViewController {
     }
 
     private func tableView(_ tableView: UITableView, cellForRecord record: WLT, at indexPath: IndexPath) -> UITableViewCell {
-        return self.tableView(tableView, reverseSubtitleCellWithTitle: "Qual Record", subtitle: record.displayString(), at: indexPath)
+        return self.tableView(tableView, reverseSubtitleCellWithTitle: "Qual Record", subtitle: record.stringValue, at: indexPath)
     }
 
     private func tableView(_ tableView: UITableView, cellForAllianceStatus allianceStatus: String, at indexPath: IndexPath) -> UITableViewCell {
