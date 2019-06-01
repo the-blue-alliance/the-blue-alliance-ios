@@ -4,21 +4,53 @@ import TBAKit
 
 extension EventRanking: Managed {
 
+    var extraStatsInfoArray: [EventRankingStatInfo]? {
+        return extraStatsInfo?.array as? [EventRankingStatInfo]
+    }
+    var extraStatsArray: [EventRankingStat]? {
+        return extraStats?.array as? [EventRankingStat]
+    }
+    var sortOrdersInfoArray: [EventRankingStatInfo]? {
+        return sortOrdersInfo?.array as? [EventRankingStatInfo]
+    }
+    var sortOrdersArray: [EventRankingStat]? {
+        return sortOrders?.array as? [EventRankingStat]
+    }
+
+    private func statString(statsInfo: [EventRankingStatInfo]?, stats: [EventRankingStat]?) -> String? {
+        guard let statsInfo = statsInfo, let stats = stats else {
+            return nil
+        }
+        let parts = zip(statsInfo, stats).map({ (statsTuple) -> String? in
+            let (statInfo, stat) = statsTuple
+            guard let value = stat.value else {
+                return nil
+            }
+            guard let name = statInfo.name else {
+                return nil
+            }
+            let precision = Int(statInfo.precision)
+
+            let numberFormatter = NumberFormatter()
+            numberFormatter.numberStyle = .decimal
+            numberFormatter.maximumFractionDigits = precision
+            numberFormatter.minimumFractionDigits = precision
+
+            guard let valueString = numberFormatter.string(from: value) else {
+                return nil
+            }
+            return "\(name): \(valueString)"
+        }).compactMap({ $0 })
+        return parts.isEmpty ? nil : parts.joined(separator: ", ")
+    }
+
     /// Description for an EventRanking's extraStats/sortOrders (ranking/tiebreaker names/values) as a comma separated string.
     var rankingInfoString: String? {
         get {
-            let rankingInformation: [([String]?, [NSNumber]?)] = [(extraStatsNames, extraStatsValues), (tiebreakerNames, tiebreakerValues)]
-            var rankingInfoStringParts: [String] = []
-            for (names, values) in rankingInformation {
-                guard let names = names, !names.isEmpty, let values = values, !values.isEmpty else {
-                    continue
-                }
-                var infoParts: [String] = []
-                for (name, value) in zip(names, values) {
-                    infoParts.append("\(name): \(value)")
-                }
-                rankingInfoStringParts.append(infoParts.joined(separator: ", "))
-            }
+            let rankingInfoStringParts = [(extraStatsInfoArray, extraStatsArray), (sortOrdersInfoArray, sortOrdersArray)].map({ (tuple) -> String? in
+                let (statsInfo, stats) = tuple
+                return statString(statsInfo: statsInfo, stats: stats)
+            }).compactMap({ $0 })
             return rankingInfoStringParts.isEmpty ? nil : rankingInfoStringParts.joined(separator: ", ")
         }
     }
@@ -43,36 +75,21 @@ extension EventRanking: Managed {
                 ranking.record = nil
             }
 
-            if let tiebreakerValues = model.sortOrders, !tiebreakerValues.isEmpty {
-                ranking.tiebreakerValues = tiebreakerValues
-            } else {
-                ranking.tiebreakerValues = nil
-            }
-
-            if let sortOrderInfo = sortOrderInfo {
-                // Note: We get rid of precision, because... we probably don't need it
-                let tiebreakerNames = sortOrderInfo.map { $0.name }
-                if !tiebreakerNames.isEmpty {
-                    ranking.tiebreakerNames = tiebreakerNames
-                }
-            } else {
-                ranking.tiebreakerNames = nil
-            }
-
             // Extra Stats exists on objects returned by /event/{event_key}/rankings
             // but not on models returned by /team/{team_key}/event/{event_key} `Team_Event_Status_rank` model
             // (This is true for any endpoint that returns a `Team_Event_Status_rank` model)
-            if let extraStatsValues = model.extraStats, !extraStatsValues.isEmpty {
-                ranking.extraStatsValues = extraStatsValues
-            }
-
-            if let extraStatsInfo = extraStatsInfo {
-                // Note: We get rid of precision, because... we probably don't need it
-                let extraStatsNames = extraStatsInfo.map { $0.name }
-                if !extraStatsNames.isEmpty {
-                    ranking.extraStatsNames = extraStatsNames
-                }
-            }
+            ranking.updateToManyRelationship(relationship: #keyPath(EventRanking.extraStatsInfo), newValues: extraStatsInfo?.map({
+                return EventRankingStatInfo.insert($0, in: context)
+            }))
+            ranking.updateToManyRelationship(relationship: #keyPath(EventRanking.extraStats), newValues: model.extraStats?.map({
+                return EventRankingStat.insert(value: $0, extraStatsRanking: ranking, in: context)
+            }))
+            ranking.updateToManyRelationship(relationship: #keyPath(EventRanking.sortOrdersInfo), newValues: sortOrderInfo?.map({
+                return EventRankingStatInfo.insert($0, in: context)
+            }))
+            ranking.updateToManyRelationship(relationship: #keyPath(EventRanking.sortOrders), newValues: model.sortOrders?.map({
+                return EventRankingStat.insert(value: $0, sortOrderRanking: ranking, in: context)
+            }))
         })
     }
 
@@ -94,6 +111,46 @@ extension EventRanking: Managed {
                 qualStatus.ranking = nil
             }
         }
+
+        // Loop twice - once to cleanup our relationships, once to delete.
+        // Note to Zach: Test this with only one loop and confirm it doesn't work
+        extraStatsInfoArray?.forEach({
+            guard let extraStatsRankings = $0.extraStatsRankings else {
+                return
+            }
+            if extraStatsRankings.onlyObject(self) {
+                // Only mark for deletion if our sets are thinned out
+                guard let sortOrderRankings = $0.sortOrdersRankings else {
+                    // No sortOrderRankings - we're good for deletion
+                    managedObjectContext?.delete($0)
+                    return
+                }
+                if sortOrderRankings.onlyObject(self) || sortOrderRankings.count == 0 {
+                    managedObjectContext?.delete($0)
+                }
+            } else {
+                $0.removeFromExtraStatsRankings(self)
+            }
+        })
+
+        // Same as above (hopefully)
+        sortOrdersInfoArray?.forEach({
+            guard let sortOrderRankings = $0.sortOrdersRankings else {
+                return
+            }
+            if sortOrderRankings.onlyObject(self) {
+                guard let extraStatsRankings = $0.extraStatsRankings else {
+                    // No extraStatsRankings - we're good for deletion
+                    managedObjectContext?.delete($0)
+                    return
+                }
+                if extraStatsRankings.onlyObject(self) || extraStatsRankings.count == 0 {
+                    managedObjectContext?.delete($0)
+                }
+            } else {
+                $0.removeFromSortOrdersRankings(self)
+            }
+        })
     }
 
 }

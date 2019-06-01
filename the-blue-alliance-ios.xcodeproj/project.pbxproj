@@ -61,6 +61,8 @@
 		924602AB1ECE8B1D0030EDBF /* AwardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924602AA1ECE8B1D0030EDBF /* AwardTableViewCell.swift */; };
 		924602AF1ECE8B580030EDBF /* AwardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924602AE1ECE8B580030EDBF /* AwardTableViewCell.xib */; };
 		924AFD792171AB1A00D7BE7E /* NoDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 924AFD782171AB1A00D7BE7E /* NoDataView.xib */; };
+		924E92CE22357D2D005C20E2 /* EventRankingStat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924E92CD22357D2D005C20E2 /* EventRankingStat.swift */; };
+		924E92D022357D6F005C20E2 /* EventRankingStatInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924E92CF22357D6F005C20E2 /* EventRankingStatInfo.swift */; };
 		925471F7208CC6F100AD3204 /* EventAllianceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925471F6208CC6F100AD3204 /* EventAllianceTableViewCell.swift */; };
 		925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 925471F8208CC73F00AD3204 /* EventAllianceTableViewCell.xib */; };
 		9255EB6D209AC9760006A745 /* RetryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9255EB6C209AC9760006A745 /* RetryService.swift */; };
@@ -125,6 +127,8 @@
 		929FCD981EC7F51B00A38E46 /* DistrictsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */; };
 		929FCD9A1EC7F52700A38E46 /* DistrictsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929FCD991EC7F52700A38E46 /* DistrictsViewController.swift */; };
 		92A04B912238868900F3599E /* WLTTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A04B902238868900F3599E /* WLTTests.swift */; };
+		92A04B8D2238641C00F3599E /* EventRankingStatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A04B8C2238641C00F3599E /* EventRankingStatTests.swift */; };
+		92A04B8F2238644000F3599E /* EventRankingStatInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A04B8E2238644000F3599E /* EventRankingStatInfoTests.swift */; };
 		92A2F5542156BD4B00267C63 /* NSManagedObjectContext+ExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A2F5532156BD4B00267C63 /* NSManagedObjectContext+ExtensionTests.swift */; };
 		92A321C7214EF83800FDADFB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A321C6214EF83800FDADFB /* SettingsViewController.swift */; };
 		92A4147C216DA76400E459A5 /* ReactNativeService_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A4147B216DA76400E459A5 /* ReactNativeService_Tests.swift */; };
@@ -315,6 +319,8 @@
 		924602AA1ECE8B1D0030EDBF /* AwardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AwardTableViewCell.swift; sourceTree = "<group>"; };
 		924602AE1ECE8B580030EDBF /* AwardTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AwardTableViewCell.xib; sourceTree = "<group>"; };
 		924AFD782171AB1A00D7BE7E /* NoDataView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoDataView.xib; sourceTree = "<group>"; };
+		924E92CD22357D2D005C20E2 /* EventRankingStat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRankingStat.swift; sourceTree = "<group>"; };
+		924E92CF22357D6F005C20E2 /* EventRankingStatInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRankingStatInfo.swift; sourceTree = "<group>"; };
 		925471F6208CC6F100AD3204 /* EventAllianceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceTableViewCell.swift; sourceTree = "<group>"; };
 		925471F8208CC73F00AD3204 /* EventAllianceTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventAllianceTableViewCell.xib; sourceTree = "<group>"; };
 		9255EB6C209AC9760006A745 /* RetryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryService.swift; sourceTree = "<group>"; };
@@ -382,6 +388,8 @@
 		929FCD971EC7F51B00A38E46 /* DistrictsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictsContainerViewController.swift; sourceTree = "<group>"; };
 		929FCD991EC7F52700A38E46 /* DistrictsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictsViewController.swift; sourceTree = "<group>"; };
 		92A04B902238868900F3599E /* WLTTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WLTTests.swift; sourceTree = "<group>"; };
+		92A04B8C2238641C00F3599E /* EventRankingStatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRankingStatTests.swift; sourceTree = "<group>"; };
+		92A04B8E2238644000F3599E /* EventRankingStatInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRankingStatInfoTests.swift; sourceTree = "<group>"; };
 		92A2F5532156BD4B00267C63 /* NSManagedObjectContext+ExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+ExtensionTests.swift"; sourceTree = "<group>"; };
 		92A321C6214EF83800FDADFB /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		92A4147B216DA76400E459A5 /* ReactNativeService_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeService_Tests.swift; sourceTree = "<group>"; };
@@ -728,6 +736,8 @@
 				925908B621863C3E00D7BFCE /* EventAllianceBackupTests.swift */,
 				1416D50B218E462500F1A4A3 /* EventInsightsTests.swift */,
 				148FF625218B90AC006202E6 /* EventRankingTests.swift */,
+				92A04B8C2238641C00F3599E /* EventRankingStatTests.swift */,
+				92A04B8E2238644000F3599E /* EventRankingStatInfoTests.swift */,
 				148FF627218BF42A006202E6 /* EventStatusTests.swift */,
 				14B520FA218CB96400F2EF4F /* EventStatusQualTests.swift */,
 				14B520F6218CA28B00F2EF4F /* EventStatusAllianceTests.swift */,
@@ -1247,6 +1257,8 @@
 				925908AC2184CFA900D7BFCE /* EventAllianceBackup.swift */,
 				1416D509218E422400F1A4A3 /* EventInsights.swift */,
 				92DF35E6217D438400B5246B /* EventRanking.swift */,
+				924E92CD22357D2D005C20E2 /* EventRankingStat.swift */,
+				924E92CF22357D6F005C20E2 /* EventRankingStatInfo.swift */,
 				92DF35E8217D438400B5246B /* EventStatus.swift */,
 				92DF35E4217D438400B5246B /* EventStatusQual.swift */,
 				92DF35E9217D438400B5246B /* EventStatusAlliance.swift */,
@@ -1884,6 +1896,7 @@
 				9275957521B7519C00560D81 /* EventTeamsViewController.swift in Sources */,
 				92DF35FE217D43A200B5246B /* TeamMedia.swift in Sources */,
 				92DF35F9217D439500B5246B /* MatchAlliance.swift in Sources */,
+				924E92CE22357D2D005C20E2 /* EventRankingStat.swift in Sources */,
 				304ED0421EF1D2D300E31791 /* RankingTableViewCell.swift in Sources */,
 				92DF35F1217D438400B5246B /* EventStatus.swift in Sources */,
 				92B55625215D69DE00C1D9A3 /* WeekEventsViewController.swift in Sources */,
@@ -1911,6 +1924,7 @@
 				92B0AA3B20CB837A0074FDF1 /* main.swift in Sources */,
 				92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */,
 				92FF110B21A61AF6003BC5C4 /* EventAwardsViewController.swift in Sources */,
+				924E92D022357D6F005C20E2 /* EventRankingStatInfo.swift in Sources */,
 				928DE032222AF10A00C6234A /* UIImage+TBA.swift in Sources */,
 				9275957321B7514700560D81 /* DistrictTeamsViewController.swift in Sources */,
 				92AF4D0C1E330790007E967D /* SelectTableViewController.swift in Sources */,
@@ -1962,11 +1976,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				924459C620CB796B0007570D /* EventTests.swift in Sources */,
+				92A04B8F2238644000F3599E /* EventRankingStatInfoTests.swift in Sources */,
 				929820CD216966890080C1C8 /* EventsContainerViewControllerTests.swift in Sources */,
 				92A4147C216DA76400E459A5 /* ReactNativeService_Tests.swift in Sources */,
 				927C93B2217D64300027ABEB /* DistrictEventPointsTests.swift in Sources */,
 				928030E62197806A0099CB65 /* EventAllianceCellViewModelTests.swift in Sources */,
 				921D0B66222B1D2B0056578A /* SurfableTests.swift in Sources */,
+				92A04B8D2238641C00F3599E /* EventRankingStatTests.swift in Sources */,
+				92A5E56921A1B7830025CC85 /* TBATeamTests.swift in Sources */,
+				92BB718420CE1E310081F4E5 /* Test.xcdatamodeld in Sources */,
 				921D0B53222AF36A0056578A /* UIImage+TBATests.swift in Sources */,
 				92C8CE5221AE4F7900683558 /* MyTBAViewControllerTests.swift in Sources */,
 				92C8CE5621AEF1AE00683558 /* TeamViewControllerTests.swift in Sources */,
