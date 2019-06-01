@@ -79,7 +79,6 @@
 		925908B721863C3E00D7BFCE /* EventAllianceBackupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925908B621863C3E00D7BFCE /* EventAllianceBackupTests.swift */; };
 		9266825221B058DA0077C75C /* TBAReactNativeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */; };
 		92688C2B2090091D00D12B7B /* ReactNativeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92688C2A2090091D00D12B7B /* ReactNativeService.swift */; };
-		927090A222A222A70050C35C /* XCTestCase+FatalError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927090A122A222A70050C35C /* XCTestCase+FatalError.swift */; };
 		9274E14121B1026900F5D5D0 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14021B1026900F5D5D0 /* NotificationsViewController.swift */; };
 		9274E14521B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */; };
 		9274E14721B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */; };
@@ -338,7 +337,6 @@
 		925908B621863C3E00D7BFCE /* EventAllianceBackupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAllianceBackupTests.swift; sourceTree = "<group>"; };
 		9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAReactNativeViewController.swift; sourceTree = "<group>"; };
 		92688C2A2090091D00D12B7B /* ReactNativeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactNativeService.swift; sourceTree = "<group>"; };
-		927090A122A222A70050C35C /* XCTestCase+FatalError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FatalError.swift"; sourceTree = "<group>"; };
 		9274E14021B1026900F5D5D0 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		9274E14421B10DA000F5D5D0 /* NotificationStatusTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusTableViewCell.swift; sourceTree = "<group>"; };
 		9274E14621B10DB700F5D5D0 /* NotificationStatusCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationStatusCellViewModel.swift; sourceTree = "<group>"; };
@@ -1203,7 +1201,6 @@
 		92D6483B20BE4CB8008F0DB3 /* tba-unit-tests */ = {
 			isa = PBXGroup;
 			children = (
-				927090A122A222A70050C35C /* XCTestCase+FatalError.swift */,
 				929820CE216968020080C1C8 /* TBATestCase.swift */,
 				92FF10CF21A25D86003BC5C4 /* TBAViewControllerTester.swift */,
 				14B6726D21529D6B00FDDAB2 /* Mocks */,
@@ -2016,7 +2013,6 @@
 				927B35E222265B6E0011B48C /* Test.xcdatamodeld in Sources */,
 				92564C70216456800047917F /* Secrets_Tests.swift in Sources */,
 				92A2F5542156BD4B00267C63 /* NSManagedObjectContext+ExtensionTests.swift in Sources */,
-				927090A222A222A70050C35C /* XCTestCase+FatalError.swift in Sources */,
 				9275956F21B4EF0600560D81 /* StatusTests.swift in Sources */,
 				929820CF216968020080C1C8 /* TBATestCase.swift in Sources */,
 				925908B32184F86700D7BFCE /* NSSet+OnlyTests.swift in Sources */,
