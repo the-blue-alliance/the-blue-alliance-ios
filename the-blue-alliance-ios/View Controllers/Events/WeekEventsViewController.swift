@@ -123,7 +123,7 @@ class WeekEventsViewController: EventsViewController {
                     // Conversion stuff, since Core Data still uses NSDate's
                     let firstDayOfMonth = NSDate(timeIntervalSince1970: weekEvent.startDate!.startOfMonth().timeIntervalSince1970)
                     let lastDayOfMonth = NSDate(timeIntervalSince1970: weekEvent.endDate!.endOfMonth().timeIntervalSince1970)
-                    return NSPredicate(format: "%K == %ld && %K == %@ && (%K > %@) AND (%K <= %@)",
+                    return NSPredicate(format: "%K == %ld && %K == %@ && (%K >= %@) AND (%K <= %@)",
                                        #keyPath(Event.eventType), EventType.offseason.rawValue,
                                        #keyPath(Event.year), year,
                                        #keyPath(Event.startDate), firstDayOfMonth,
