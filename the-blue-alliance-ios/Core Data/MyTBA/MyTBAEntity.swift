@@ -7,6 +7,7 @@ protocol MyTBAManaged: Managed {
 
     @discardableResult
     static func insert(_ models: [RemoteType], in context: NSManagedObjectContext) -> [MyType]
+    static func fetch(modelKey: String, modelType: MyTBAModelType, in context: NSManagedObjectContext) -> MyType?
 
     func toRemoteModel() -> RemoteType
 }

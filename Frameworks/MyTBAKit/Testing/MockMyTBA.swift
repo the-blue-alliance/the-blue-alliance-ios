@@ -40,7 +40,7 @@ public class MockMyTBA: MyTBA {
         }
 
         guard let resourceURL = bundle.url(forResource: filepath, withExtension: "json") else {
-            XCTFail()
+            XCTFail("Cannot find file \(filepath).json")
             return
         }
 

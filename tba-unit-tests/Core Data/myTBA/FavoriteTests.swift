@@ -4,11 +4,6 @@ import XCTest
 
 class FavoriteTestCase: CoreDataTestCase {
 
-    func test_predicate() {
-        let predicate = Favorite.favoritePredicate(modelKey: "frc2337", modelType: .team)
-        XCTAssertEqual(predicate.predicateFormat, "modelKey == \"frc2337\" AND modelTypeRaw == 1")
-    }
-
     func test_insert_array() {
         let modelFavoriteOne = MyTBAFavorite(modelKey: "2018miket", modelType: .event)
         let modelFavoriteTwo = MyTBAFavorite(modelKey: "2017miket", modelType: .event)
@@ -71,6 +66,26 @@ class FavoriteTestCase: CoreDataTestCase {
 
         persistentContainer.viewContext.delete(favorite)
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
+    }
+
+    func test_fetch() {
+        let modelKey = "2018miket"
+        let modelType = MyTBAModelType.event
+
+        var favorite = Favorite.fetch(modelKey: modelKey, modelType: modelType, in: persistentContainer.viewContext)
+        XCTAssertNil(favorite)
+
+        let model = MyTBAFavorite(modelKey: "2018miket", modelType: .event)
+        _ = Favorite.insert(model, in: persistentContainer.viewContext)
+
+        favorite = Favorite.fetch(modelKey: modelKey, modelType: modelType, in: persistentContainer.viewContext)
+        XCTAssertNotNil(favorite)
+
+        persistentContainer.viewContext.delete(favorite!)
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        favorite = Favorite.fetch(modelKey: modelKey, modelType: modelType, in: persistentContainer.viewContext)
+        XCTAssertNil(favorite)
     }
 
     func test_toRemoteModel() {

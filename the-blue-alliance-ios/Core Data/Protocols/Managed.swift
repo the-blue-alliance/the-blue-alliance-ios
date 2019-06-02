@@ -25,7 +25,6 @@ extension Managed where Self: NSManagedObject {
         guard let object = materializedObject(in: context, matching: predicate) else {
             return fetch(in: context) { request in
                 request.predicate = predicate
-                request.returnsObjectsAsFaults = false
                 request.fetchLimit = 1
                 }.first
         }

@@ -1,0 +1,4 @@
+{
+    "code": 808,
+    "message": "{\"favorite\": {\"message\": \"Favorite not found\", \"code\": 404}, \"subscription\": {\"message\": \"Subscription not found\", \"code\": 404}}"
+}

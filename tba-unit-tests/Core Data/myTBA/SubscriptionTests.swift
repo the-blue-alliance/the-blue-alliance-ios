@@ -14,11 +14,6 @@ class SubscriptionTestCase: CoreDataTestCase {
         XCTAssertEqual(subscription.notificationsRaw, ["alliance_selection"])
     }
 
-    func test_predicate() {
-        let predicate = Subscription.subscriptionPredicate(modelKey: "frc2337", modelType: .team)
-        XCTAssertEqual(predicate.predicateFormat, "modelKey == \"frc2337\" AND modelTypeRaw == 1")
-    }
-
     func test_insert_array() {
         let modelSubscriptionOne = MyTBASubscription(modelKey: "2018miket", modelType: .event, notifications: [.awards])
         let modelSubscriptionTwo = MyTBASubscription(modelKey: "2017miket", modelType: .event, notifications: [.finalResults])
@@ -88,6 +83,26 @@ class SubscriptionTestCase: CoreDataTestCase {
 
         persistentContainer.viewContext.delete(subscription)
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
+    }
+
+    func test_fetch() {
+        let modelKey = "2018miket"
+        let modelType = MyTBAModelType.event
+
+        var subscription = Subscription.fetch(modelKey: modelKey, modelType: modelType, in: persistentContainer.viewContext)
+        XCTAssertNil(subscription)
+
+        let model = MyTBASubscription(modelKey: modelKey, modelType: modelType, notifications: [.awards])
+        _ = Subscription.insert(model, in: persistentContainer.viewContext)
+
+        subscription = Subscription.fetch(modelKey: modelKey, modelType: modelType, in: persistentContainer.viewContext)
+        XCTAssertNotNil(subscription)
+
+        persistentContainer.viewContext.delete(subscription!)
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        subscription = Subscription.fetch(modelKey: modelKey, modelType: modelType, in: persistentContainer.viewContext)
+        XCTAssertNil(subscription)
     }
 
     func test_toRemoteModel() {
