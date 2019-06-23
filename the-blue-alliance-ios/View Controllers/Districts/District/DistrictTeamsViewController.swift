@@ -37,8 +37,8 @@ class DistrictTeamsViewController: TeamsViewController {
     }
 
     @objc override func refresh() {
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchDistrictTeams(key: district.key!, completion: { (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchDistrictTeams(key: district.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let teams = try? result.get() {
@@ -46,11 +46,10 @@ class DistrictTeamsViewController: TeamsViewController {
                     district.insert(teams)
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
         })
-        addRequest(request: request!)
+        addRefreshOperations([operation])
     }
 
     // MARK: - Stateful

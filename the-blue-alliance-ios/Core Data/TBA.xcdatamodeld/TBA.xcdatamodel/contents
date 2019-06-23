@@ -112,17 +112,28 @@
     </entity>
     <entity name="EventRanking" representedClassName="EventRanking" syncable="YES" codeGenerationType="class">
         <attribute name="dq" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="extraStatsNames" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
-        <attribute name="extraStatsValues" optional="YES" attributeType="Transformable" customClassName="[NSNumber]" syncable="YES"/>
         <attribute name="matchesPlayed" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="qualAverage" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="rank" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="record" optional="YES" attributeType="Transformable" customClassName="WLT" syncable="YES"/>
-        <attribute name="tiebreakerNames" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
-        <attribute name="tiebreakerValues" optional="YES" attributeType="Transformable" customClassName="[NSNumber]" syncable="YES"/>
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="rankings" inverseEntity="Event" syncable="YES"/>
+        <relationship name="extraStats" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="EventRankingStat" inverseName="extraStatsRanking" inverseEntity="EventRankingStat" syncable="YES"/>
+        <relationship name="extraStatsInfo" optional="YES" toMany="YES" deletionRule="Deny" ordered="YES" destinationEntity="EventRankingStatInfo" inverseName="extraStatsRankings" inverseEntity="EventRankingStatInfo" syncable="YES"/>
         <relationship name="qualStatus" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventStatusQual" inverseName="ranking" inverseEntity="EventStatusQual" syncable="YES"/>
+        <relationship name="sortOrders" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="EventRankingStat" inverseName="sortOrderRanking" inverseEntity="EventRankingStat" syncable="YES"/>
+        <relationship name="sortOrdersInfo" optional="YES" toMany="YES" deletionRule="Deny" ordered="YES" destinationEntity="EventRankingStatInfo" inverseName="sortOrdersRankings" inverseEntity="EventRankingStatInfo" syncable="YES"/>
         <relationship name="teamKey" maxCount="1" deletionRule="Nullify" destinationEntity="TeamKey" inverseName="eventRankings" inverseEntity="TeamKey" syncable="YES"/>
+    </entity>
+    <entity name="EventRankingStat" representedClassName="EventRankingStat" syncable="YES" codeGenerationType="class">
+        <attribute name="value" attributeType="Double" valueTransformerName="NSNumber" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="extraStatsRanking" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EventRanking" inverseName="extraStats" inverseEntity="EventRanking" syncable="YES"/>
+        <relationship name="sortOrderRanking" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EventRanking" inverseName="sortOrders" inverseEntity="EventRanking" syncable="YES"/>
+    </entity>
+    <entity name="EventRankingStatInfo" representedClassName="EventRankingStatInfo" syncable="YES" codeGenerationType="class">
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="precision" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="extraStatsRankings" toMany="YES" deletionRule="Deny" destinationEntity="EventRanking" inverseName="extraStatsInfo" inverseEntity="EventRanking" syncable="YES"/>
+        <relationship name="sortOrdersRankings" toMany="YES" deletionRule="Deny" destinationEntity="EventRanking" inverseName="sortOrdersInfo" inverseEntity="EventRanking" syncable="YES"/>
     </entity>
     <entity name="EventStatus" representedClassName="EventStatus" syncable="YES" codeGenerationType="class">
         <attribute name="allianceStatus" optional="YES" attributeType="String" syncable="YES"/>
@@ -284,6 +295,8 @@
         <element name="EventInsights" positionX="45" positionY="135" width="128" height="90"/>
         <element name="EventKey" positionX="45" positionY="135" width="128" height="120"/>
         <element name="EventRanking" positionX="160" positionY="192" width="128" height="225"/>
+        <element name="EventRankingStat" positionX="54" positionY="144" width="128" height="90"/>
+        <element name="EventRankingStatInfo" positionX="45" positionY="135" width="128" height="105"/>
         <element name="EventStatus" positionX="45" positionY="135" width="128" height="195"/>
         <element name="EventStatusAlliance" positionX="63" positionY="153" width="128" height="120"/>
         <element name="EventStatusPlayoff" positionX="72" positionY="162" width="128" height="150"/>

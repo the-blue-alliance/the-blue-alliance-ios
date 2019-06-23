@@ -33,6 +33,9 @@ class TeamInfoViewController: TBATableViewController {
         self.urlOpener = urlOpener
 
         super.init(style: .grouped, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+
+        // TODO: Add support for Pits
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/163
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -185,7 +188,7 @@ extension TeamInfoViewController: Refreshable {
     }
 
     var automaticRefreshInterval: DateComponents? {
-        return nil
+        return DateComponents(day: 7)
     }
 
     var automaticRefreshEndDate: Date? {
@@ -193,12 +196,13 @@ extension TeamInfoViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        return team.getValue(\Team.name) == nil
+        let years = team.getValue(\Team.yearsParticipated) ?? []
+        return team.getValue(\Team.name) == nil || years.isEmpty
     }
 
     @objc func refresh() {
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchTeam(key: team.key!, completion: { (result, notModified) in
+        var infoOperation: TBAKitOperation!
+        infoOperation = tbaKit.fetchTeam(key: team.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 switch result {
@@ -212,13 +216,25 @@ extension TeamInfoViewController: Refreshable {
                     break
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: infoOperation)
             })
-            self.removeRequest(request: request!)
         })
-        addRequest(request: request!)
 
-        // TODO: Refresh years participated?
+        var yearsOperation: TBAKitOperation!
+        yearsOperation = tbaKit.fetchTeamYearsParticipated(key: team.key!, completion: { (result, notModified) in
+            let context = self.persistentContainer.newBackgroundContext()
+            context.performChangesAndWait({
+                if !notModified, let years = try? result.get() {
+                    let team = context.object(with: self.team.objectID) as! Team
+                    team.yearsParticipated = years.sorted().reversed()
+                }
+            }, saved: {
+                self.tbaKit.storeCacheHeaders(yearsOperation)
+            })
+        })
+
+        // TODO: Think about how we go about refreshing the years, and maybe also move it to the year selector as well?
+        addRefreshOperations([infoOperation, yearsOperation])
     }
 
 }

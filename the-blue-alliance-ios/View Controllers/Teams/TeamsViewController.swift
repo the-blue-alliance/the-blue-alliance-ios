@@ -56,6 +56,12 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
         definesPresentationContext = true
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        updateInterface()
+    }
+
     // MARK: - Interface Methods
 
     func updateInterface() {
@@ -102,33 +108,35 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
     }
 
     @objc func refresh() {
-        var request: URLSessionDataTask?
-        request = fetchAllTeams(taskChanged: { [unowned self] (task, page, teams) in
-            self.addRequest(request: task)
+        var finalOperation: Operation!
 
-            let previousRequest = request
-            request = task
+        var op: TBAKitOperation!
+        op = fetchAllTeams(operationChanged: { [unowned self] (operation, page, teams) in
+            finalOperation.addDependency(operation)
+            self.refreshOperationQueue.addOperations([operation], waitUntilFinished: false)
+
+            let previousOperation = op
+            op = operation
 
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 Team.insert(teams, page: page, in: context)
+            }, saved: {
+                self.tbaKit.storeCacheHeaders(previousOperation!)
             })
-            self.removeRequest(request: previousRequest!)
         }) { (error) in
-            self.removeRequest(request: request!)
             if error == nil {
                 self.markRefreshSuccessful()
             }
         }
-        addRequest(request: request!)
+        finalOperation = addRefreshOperations([op])
     }
 
-    func fetchAllTeams(taskChanged: @escaping (URLSessionDataTask, Int, [TBATeam]) -> Void, completion: @escaping (Error?) -> Void) -> URLSessionDataTask {
-        return fetchAllTeams(taskChanged: taskChanged, page: 0, completion: completion)
+    func fetchAllTeams(operationChanged: @escaping (TBAKitOperation, Int, [TBATeam]) -> Void, completion: @escaping (Error?) -> Void) -> TBAKitOperation {
+        return fetchAllTeams(operationChanged: operationChanged, page: 0, completion: completion)
     }
 
-    private func fetchAllTeams(taskChanged: @escaping (URLSessionDataTask, Int, [TBATeam]) -> Void, page: Int, completion: @escaping (Error?) -> Void) -> URLSessionDataTask {
-        // TODO: This is problematic, and doesn't handle 304's properly
+    private func fetchAllTeams(operationChanged: @escaping (TBAKitOperation, Int, [TBATeam]) -> Void, page: Int, completion: @escaping (Error?) -> Void) -> TBAKitOperation {
         return tbaKit.fetchTeams(page: page, completion: { (result, notModified) in
             switch result {
             case .failure(let error):
@@ -137,7 +145,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
                 if teams.isEmpty {
                     completion(nil)
                 } else {
-                    taskChanged(self.fetchAllTeams(taskChanged: taskChanged, page: page + 1, completion: completion), page, teams)
+                    operationChanged(self.fetchAllTeams(operationChanged: operationChanged, page: page + 1, completion: completion), page, teams)
                 }
             }
         })
@@ -184,9 +192,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
     // MARK: TableViewDataSourceDelegate
 
     func controllerDidChangeContent() {
-        DispatchQueue.main.async { [weak self] in
-            self?.updateInterface()
-        }
+        updateInterface()
     }
 
     // MARK: - EventsViewControllerDataSourceConfiguration

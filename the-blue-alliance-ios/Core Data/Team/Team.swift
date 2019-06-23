@@ -131,10 +131,13 @@ extension Team: Locatable, Surfable, Managed {
      - Parameter media: The TBAKit Media representations to set values from.
 
      - Parameter year: The year the Team Media relates to.
+
+     - Returns: The inserted Media.
      */
-    func insert(_ media: [TBAMedia], year: Int) {
+    @discardableResult
+    func insert(_ media: [TBAMedia], year: Int) -> [TeamMedia] {
         guard let managedObjectContext = managedObjectContext else {
-            return
+            return []
         }
 
         // Fetch all of the previous TeamMedia for this Team and year
@@ -156,6 +159,8 @@ extension Team: Locatable, Surfable, Managed {
         Set(oldMedia).subtracting(Set(media)).forEach({
             managedObjectContext.delete($0)
         })
+
+        return media
     }
 
     var isOrphaned: Bool {

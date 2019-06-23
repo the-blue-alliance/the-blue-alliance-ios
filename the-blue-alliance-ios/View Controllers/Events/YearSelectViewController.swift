@@ -178,26 +178,23 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
     }
 
     @objc override func refresh() {
-        removeNoDataView()
-
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchEvents(year: year, completion: { (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchEvents(year: year, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let events = try? result.get() {
                     Event.insert(events, year: self.year, in: context)
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
 
             self.hasRefreshed = true
             DispatchQueue.main.async {
                 self.updateWeeks(in: self.persistentContainer.viewContext)
             }
         })
-        addRequest(request: request!)
+        addRefreshOperations([operation])
     }
 
     func updateWeeks(in context: NSManagedObjectContext) {

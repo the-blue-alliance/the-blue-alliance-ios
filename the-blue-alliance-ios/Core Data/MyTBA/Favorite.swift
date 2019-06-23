@@ -4,7 +4,7 @@ import MyTBAKit
 
 extension Favorite: MyTBAManaged {
 
-    static func favoritePredicate(modelKey: String, modelType: MyTBAModelType) -> NSPredicate {
+    private static func favoritePredicate(modelKey: String, modelType: MyTBAModelType) -> NSPredicate {
         return NSPredicate(format: "%K == %@ && %K == %ld",
                            #keyPath(Favorite.modelKey), modelKey,
                            #keyPath(Favorite.modelTypeRaw), modelType.rawValue)
@@ -62,6 +62,11 @@ extension Favorite: MyTBAManaged {
             favorite.modelKey = modelKey
             favorite.modelType = modelType
         }
+    }
+
+    static func fetch(modelKey: String, modelType: MyTBAModelType, in context: NSManagedObjectContext) -> Favorite? {
+        let predicate = favoritePredicate(modelKey: modelKey, modelType: modelType)
+        return findOrFetch(in: context, matching: predicate)
     }
 
     func toRemoteModel() -> MyTBAFavorite {

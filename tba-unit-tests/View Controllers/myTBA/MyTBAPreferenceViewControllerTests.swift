@@ -1,7 +1,8 @@
-import MyTBAKit
 import TBAKitTesting
 import TBATestingMocks
+import TBAOperationTesting
 import XCTest
+@testable import MyTBAKit
 @testable import The_Blue_Alliance
 
 class MyTBAPreferenceViewControllerTests: TBATestCase {
@@ -18,7 +19,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
 
         subscribableModel = insertDistrictEvent()
 
-        myTBAPreferencesViewController = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
+        myTBAPreferencesViewController = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
         navigationController = MockNavigationController(rootViewController: myTBAPreferencesViewController)
 
         viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
@@ -60,7 +61,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
 
         // Insert a Favorite
         Favorite.insert(MyTBAFavorite(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType), in: persistentContainer.viewContext)
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
         XCTAssertNotNil(newPreferences.favorite)
         XCTAssert(newPreferences.isFavorite)
         XCTAssert(newPreferences.isFavoriteInitially)
@@ -73,7 +74,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
 
         // Insert a Subscription
         Subscription.insert(MyTBASubscription(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, notifications: [.awards, .upcomingMatch]), in: persistentContainer.viewContext)
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
         XCTAssertNotNil(newPreferences.subscription)
         XCTAssertFalse(newPreferences.notifications.isEmpty)
         XCTAssertFalse(newPreferences.notificationsInitial.isEmpty)
@@ -81,10 +82,10 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
 
     func test_disappear_cancelsRequest() {
         let cancelExpectation = expectation(description: "Cancel called")
-        let mockRequest = MockURLSessionDataTask()
-        mockRequest.cancelExpectation = cancelExpectation
+        let mockOperation = MockOperation()
+        mockOperation.cancelExpectation = cancelExpectation
+        myTBAPreferencesViewController.operationQueue.addOperations([mockOperation], waitUntilFinished: false)
 
-        myTBAPreferencesViewController.preferencesRequest = mockRequest
         myTBAPreferencesViewController.viewWillDisappear(false)
         wait(for: [cancelExpectation], timeout: 1.0)
     }
@@ -139,7 +140,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
         // Save should be called at the end
         let saveExpectation = backgroundContextSaveExpectation()
 
-        myTBA.sendStub(for: myTBAPreferencesViewController.preferencesRequest!)
+        myTBA.sendStub(for: myTBAPreferencesViewController.preferencesOperation!)
         wait(for: [saveExpectation, dismissExpectation], timeout: 1.0, enforceOrder: true)
     }
 
@@ -147,7 +148,7 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
         let favorite = Favorite.insert(MyTBAFavorite(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType), in: persistentContainer.viewContext)
         try! persistentContainer.viewContext.save()
 
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.isFavorite = false
 
         let deletionExpectation = expectation(description: "Favorite deleted")
@@ -156,35 +157,128 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
             deletionExpectation.fulfill()
         }
 
+        // Sanity check
+        XCTAssertFalse(favorite.isDeleted)
+
         newPreferences.save()
 
         let saveExpectation = backgroundContextSaveExpectation()
-        myTBA.sendStub(for: newPreferences.preferencesRequest!)
+        myTBA.sendStub(for: newPreferences.preferencesOperation!)
         wait(for: [saveExpectation, deletionExpectation], timeout: 1.0)
+
+        XCTAssertTrue(favorite.isDeleted)
+    }
+
+    func test_save_hasChanges_favorite_delete_404() {
+        let favorite = Favorite.insert(MyTBAFavorite(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType), in: persistentContainer.viewContext)
+        try! persistentContainer.viewContext.save()
+
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        newPreferences.isFavorite = false
+
+        let deletionExpectation = expectation(description: "Favorite deleted")
+        let observer = CoreDataContextObserver(context: persistentContainer.viewContext)
+        observer.observeObject(object: favorite, state: .deleted) { (_, _) in
+            deletionExpectation.fulfill()
+        }
+
+        // Sanity check
+        XCTAssertFalse(favorite.isDeleted)
+
+        newPreferences.save()
+
+        let saveExpectation = backgroundContextSaveExpectation()
+        myTBA.sendStub(for: newPreferences.preferencesOperation!, code: 808)
+        wait(for: [saveExpectation, deletionExpectation], timeout: 1.0)
+
+        XCTAssertTrue(favorite.isDeleted)
+    }
+
+    func test_save_hasChanges_favorite_delete_500() {
+        let favorite = Favorite.insert(MyTBAFavorite(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType), in: persistentContainer.viewContext)
+        try! persistentContainer.viewContext.save()
+
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        newPreferences.isFavorite = false
+
+        let deletionExpectation = expectation(description: "Favorite deleted")
+        deletionExpectation.isInverted = true
+        let observer = CoreDataContextObserver(context: persistentContainer.viewContext)
+        observer.observeObject(object: favorite, state: .deleted) { (_, _) in
+            deletionExpectation.fulfill()
+        }
+
+        // Sanity check
+        XCTAssertFalse(favorite.isDeleted)
+
+        newPreferences.save()
+
+        let saveExpectation = backgroundContextSaveExpectation()
+        myTBA.sendStub(for: newPreferences.preferencesOperation!, code: 1000)
+        wait(for: [saveExpectation, deletionExpectation], timeout: 1.0)
+
+        XCTAssertFalse(favorite.isDeleted)
     }
 
     func test_save_hasChanges_favorite_insert() {
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.isFavorite = true
 
         // Sanity check
-        let favoritePredicate = Favorite.favoritePredicate(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType)
-        XCTAssertNil(Favorite.findOrFetch(in: persistentContainer.viewContext, matching: favoritePredicate))
+        var favorite = Favorite.fetch(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, in: persistentContainer.viewContext)
+        XCTAssertNil(favorite)
 
         newPreferences.save()
 
         let saveExpectation = backgroundContextSaveExpectation()
-        myTBA.sendStub(for: newPreferences.preferencesRequest!)
+        myTBA.sendStub(for: newPreferences.preferencesOperation!)
         wait(for: [saveExpectation], timeout: 1.0)
 
-        XCTAssertNotNil(Favorite.findOrFetch(in: persistentContainer.viewContext, matching: favoritePredicate))
+        favorite = Favorite.fetch(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, in: persistentContainer.viewContext)
+        XCTAssertNotNil(favorite)
+    }
+
+    func test_save_hasChanges_favorite_insert_304() {
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        newPreferences.isFavorite = true
+
+        // Sanity check
+        var favorite = Favorite.fetch(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, in: persistentContainer.viewContext)
+        XCTAssertNil(favorite)
+
+        newPreferences.save()
+
+        let saveExpectation = backgroundContextSaveExpectation()
+        myTBA.sendStub(for: newPreferences.preferencesOperation!, code: 608)
+        wait(for: [saveExpectation], timeout: 1.0)
+
+        favorite = Favorite.fetch(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, in: persistentContainer.viewContext)
+        XCTAssertNotNil(favorite)
+    }
+
+    func test_save_hasChanges_favorite_insert_500() {
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        newPreferences.isFavorite = true
+
+        // Sanity check
+        var favorite = Favorite.fetch(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, in: persistentContainer.viewContext)
+        XCTAssertNil(favorite)
+
+        newPreferences.save()
+
+        let saveExpectation = backgroundContextSaveExpectation()
+        myTBA.sendStub(for: newPreferences.preferencesOperation!, code: 1000)
+        wait(for: [saveExpectation], timeout: 1.0)
+
+        favorite = Favorite.fetch(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, in: persistentContainer.viewContext)
+        XCTAssertNil(favorite)
     }
 
     func test_save_hasChanges_subscription_delete() {
         let subscription = Subscription.insert(MyTBASubscription(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, notifications: [.awards, .upcomingMatch]), in: persistentContainer.viewContext)
         try! persistentContainer.viewContext.save()
 
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.notifications = []
 
         let deletionExpectation = expectation(description: "Subscription deleted")
@@ -193,11 +287,73 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
             deletionExpectation.fulfill()
         }
 
+        // Sanity check
+        XCTAssertFalse(subscription.isDeleted)
+
         newPreferences.save()
 
         let saveExpectation = backgroundContextSaveExpectation()
-        myTBA.sendStub(for: newPreferences.preferencesRequest!)
+        myTBA.sendStub(for: newPreferences.preferencesOperation!)
         wait(for: [saveExpectation, deletionExpectation], timeout: 1.0)
+
+        // Wait for our dismissOperation to complete
+        waitOneSecond()
+        XCTAssertTrue(subscription.isDeleted)
+    }
+
+    func test_save_hasChanges_subscription_delete_404() {
+        let subscription = Subscription.insert(MyTBASubscription(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, notifications: [.awards, .upcomingMatch]), in: persistentContainer.viewContext)
+        try! persistentContainer.viewContext.save()
+
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        newPreferences.notifications = []
+
+        let deletionExpectation = expectation(description: "Subscription deleted")
+        let observer = CoreDataContextObserver(context: persistentContainer.viewContext)
+        observer.observeObject(object: subscription, state: .deleted) { (_, _) in
+            deletionExpectation.fulfill()
+        }
+
+        // Sanity check
+        XCTAssertFalse(subscription.isDeleted)
+
+        newPreferences.save()
+
+        let saveExpectation = backgroundContextSaveExpectation()
+        myTBA.sendStub(for: newPreferences.preferencesOperation!, code: 608)
+        wait(for: [saveExpectation, deletionExpectation], timeout: 1.0)
+
+        // Wait for our dismissOperation to complete
+        waitOneSecond()
+        XCTAssertTrue(subscription.isDeleted)
+    }
+
+    func test_save_hasChanges_subscription_delete_500() {
+        let subscription = Subscription.insert(MyTBASubscription(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, notifications: [.awards, .upcomingMatch]), in: persistentContainer.viewContext)
+        try! persistentContainer.viewContext.save()
+
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        newPreferences.notifications = []
+
+        let deletionExpectation = expectation(description: "Subscription deleted")
+        deletionExpectation.isInverted = true
+        let observer = CoreDataContextObserver(context: persistentContainer.viewContext)
+        observer.observeObject(object: subscription, state: .deleted) { (_, _) in
+            deletionExpectation.fulfill()
+        }
+
+        // Sanity check
+        XCTAssertFalse(subscription.isDeleted)
+
+        newPreferences.save()
+
+        let saveExpectation = backgroundContextSaveExpectation()
+        myTBA.sendStub(for: newPreferences.preferencesOperation!, code: 1000)
+        wait(for: [saveExpectation, deletionExpectation], timeout: 1.0)
+
+        // Wait for our dismissOperation to complete
+        waitOneSecond()
+        XCTAssertFalse(subscription.isDeleted)
     }
 
     func test_save_hasChanges_subscription_update() {
@@ -207,34 +363,132 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
         // Sanity check
         XCTAssertEqual(subscription.notifications, [.awards, .upcomingMatch])
 
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
+        let updateExpectation = expectation(description: "Subscription updated")
+        let observer = CoreDataContextObserver(context: persistentContainer.viewContext)
+        observer.observeObject(object: subscription, state: .updated) { (_, _) in
+            updateExpectation.fulfill()
+        }
+
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.notifications = [.upcomingMatch]
 
         newPreferences.save()
 
         let backgroundSaveExpectation = backgroundContextSaveExpectation()
-        myTBA.sendStub(for: newPreferences.preferencesRequest!)
-        wait(for: [backgroundSaveExpectation], timeout: 1.0)
+        myTBA.sendStub(for: newPreferences.preferencesOperation!)
+        wait(for: [backgroundSaveExpectation, updateExpectation], timeout: 1.0)
 
-        persistentContainer.viewContext.refresh(subscription, mergeChanges: true)
+        // Wait for our dismissOperation to complete
+        waitOneSecond()
         XCTAssertEqual(subscription.notifications, [.upcomingMatch])
     }
 
+    func test_save_hasChanges_subscription_update_304() {
+        let subscription = Subscription.insert(MyTBASubscription(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, notifications: [.awards, .upcomingMatch]), in: persistentContainer.viewContext)
+        try! persistentContainer.viewContext.save()
+
+        // Sanity check
+        XCTAssertEqual(subscription.notifications, [.awards, .upcomingMatch])
+
+        let updateExpectation = expectation(description: "Subscription updated")
+        let observer = CoreDataContextObserver(context: persistentContainer.viewContext)
+        observer.observeObject(object: subscription, state: .updated) { (_, _) in
+            updateExpectation.fulfill()
+        }
+
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        newPreferences.notifications = [.upcomingMatch]
+
+        newPreferences.save()
+
+        let backgroundSaveExpectation = backgroundContextSaveExpectation()
+        myTBA.sendStub(for: newPreferences.preferencesOperation!, code: 608)
+        wait(for: [backgroundSaveExpectation, updateExpectation], timeout: 1.0)
+
+        // Wait for our dismissOperation to complete
+        waitOneSecond()
+        XCTAssertEqual(subscription.notifications, [.upcomingMatch])
+    }
+
+    func test_save_hasChanges_subscription_update_500() {
+        let subscription = Subscription.insert(MyTBASubscription(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, notifications: [.awards, .upcomingMatch]), in: persistentContainer.viewContext)
+        try! persistentContainer.viewContext.save()
+
+        // Sanity check
+        XCTAssertEqual(subscription.notifications, [.awards, .upcomingMatch])
+
+        let updateExpectation = expectation(description: "Subscription updated")
+        let observer = CoreDataContextObserver(context: persistentContainer.viewContext)
+        observer.observeObject(object: subscription, state: .updated) { (_, _) in
+            updateExpectation.fulfill()
+        }
+
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        newPreferences.notifications = [.upcomingMatch]
+
+        newPreferences.save()
+
+        let backgroundSaveExpectation = backgroundContextSaveExpectation()
+        myTBA.sendStub(for: newPreferences.preferencesOperation!, code: 1000)
+        wait(for: [backgroundSaveExpectation, updateExpectation], timeout: 1.0)
+
+        // Wait for our dismissOperation to complete
+        waitOneSecond()
+        XCTAssertEqual(subscription.notifications, [.awards, .upcomingMatch])
+    }
+
     func test_save_hasChanges_subscription_insert() {
-        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer)
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
         newPreferences.notifications = [.awards, .upcomingMatch]
 
         // Sanity check
-        let subscriptionPredicate = Subscription.subscriptionPredicate(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType)
-        XCTAssertNil(Subscription.findOrFetch(in: persistentContainer.viewContext, matching: subscriptionPredicate))
+        var subscription = Subscription.fetch(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, in: persistentContainer.viewContext)
+        XCTAssertNil(subscription)
 
         newPreferences.save()
 
         let saveExpectation = backgroundContextSaveExpectation()
-        myTBA.sendStub(for: newPreferences.preferencesRequest!)
+        myTBA.sendStub(for: newPreferences.preferencesOperation!)
         wait(for: [saveExpectation], timeout: 1.0)
 
-        XCTAssertNotNil(Subscription.findOrFetch(in: persistentContainer.viewContext, matching: subscriptionPredicate))
+        subscription = Subscription.fetch(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, in: persistentContainer.viewContext)
+        XCTAssertNotNil(subscription)
+    }
+
+    func test_save_hasChanges_subscription_insert_304() {
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        newPreferences.notifications = [.awards, .upcomingMatch]
+
+        // Sanity check
+        var subscription = Subscription.fetch(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, in: persistentContainer.viewContext)
+        XCTAssertNil(subscription)
+
+        newPreferences.save()
+
+        let saveExpectation = backgroundContextSaveExpectation()
+        myTBA.sendStub(for: newPreferences.preferencesOperation!, code: 608)
+        wait(for: [saveExpectation], timeout: 1.0)
+
+        subscription = Subscription.fetch(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, in: persistentContainer.viewContext)
+        XCTAssertNotNil(subscription)
+    }
+
+    func test_save_hasChanges_subscription_insert_500() {
+        let newPreferences = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
+        newPreferences.notifications = [.awards, .upcomingMatch]
+
+        // Sanity check
+        var subscription = Subscription.fetch(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, in: persistentContainer.viewContext)
+        XCTAssertNil(subscription)
+
+        newPreferences.save()
+
+        let saveExpectation = backgroundContextSaveExpectation()
+        myTBA.sendStub(for: newPreferences.preferencesOperation!, code: 1000)
+        wait(for: [saveExpectation], timeout: 1.0)
+
+        subscription = Subscription.fetch(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, in: persistentContainer.viewContext)
+        XCTAssertNil(subscription)
     }
 
     func test_close() {

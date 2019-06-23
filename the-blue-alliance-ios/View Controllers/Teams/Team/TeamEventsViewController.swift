@@ -46,10 +46,8 @@ class TeamEventsViewController: EventsViewController {
     }
 
     @objc override func refresh() {
-        removeNoDataView()
-
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchTeamEvents(key: team.key!, completion: { (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchTeamEvents(key: team.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let events = try? result.get() {
@@ -57,11 +55,10 @@ class TeamEventsViewController: EventsViewController {
                     team.insert(events)
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
         })
-        addRequest(request: request!)
+        addRefreshOperations([operation])
     }
 
     // MARK: - Stateful

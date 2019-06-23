@@ -1,1 +1,3 @@
+Hey y’all - this update fixes a bug where event alliances would sometimes show up sorted incorrectly, along with a handful of bug fixes.
 
+The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance

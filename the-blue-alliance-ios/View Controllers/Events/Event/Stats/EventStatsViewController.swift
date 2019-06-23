@@ -69,10 +69,8 @@ extension EventStatsViewController: Refreshable {
     }
 
     @objc func refresh() {
-        removeNoDataView()
-
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchEventInsights(key: event.key!, completion: { (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchEventInsights(key: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let insights = try? result.get() {
@@ -80,11 +78,10 @@ extension EventStatsViewController: Refreshable {
                     event.insert(insights)
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
         })
-        addRequest(request: request!)
+        addRefreshOperations([operation])
     }
 
 }

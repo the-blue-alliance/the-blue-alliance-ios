@@ -46,11 +46,11 @@ class NotificationsViewController: TBATableViewController {
     private var fetchingDeviceAuthorizationStatus = false
     private var deviceAuthorizationStatus: UNAuthorizationStatus?
 
-    private var myTBARegisterRequest: URLSessionDataTask?
+    private var myTBARegisterOperation: MyTBAOperation?
     private var myTBARegisterResponse: MyTBABaseResponse?
     private var myTBARegisterError: Error?
 
-    private var myTBAPingRequest: URLSessionDataTask?
+    private var myTBAPingOperation: MyTBAOperation?
     private var myTBAPingResponse: MyTBABaseResponse?
     private var myTBAPingError: Error?
 
@@ -87,8 +87,8 @@ class NotificationsViewController: TBATableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        myTBARegisterRequest?.cancel()
-        myTBAPingRequest?.cancel()
+        myTBARegisterOperation?.cancel()
+        myTBAPingOperation?.cancel()
     }
 
     // MARK: - Table View Data Source
@@ -133,14 +133,14 @@ class NotificationsViewController: TBATableViewController {
                 }()
                 return NotificationStatusCellViewModel(title: "Firebase Token", notificationStatus: status)
             case .myTBA:
-                if myTBARegisterRequest == nil {
+                if myTBARegisterOperation == nil {
                     let status = self.myTBARegistrationNotificationStatus()
                     return NotificationStatusCellViewModel(title: "myTBA Registration", notificationStatus: status)
                 } else {
                     return NotificationStatusCellViewModel(title: "Checking myTBA Registration...", notificationStatus: .loading)
                 }
             case .ping:
-                if myTBAPingRequest == nil {
+                if myTBAPingOperation == nil {
                     let status = self.myTBAPingNotificationStatus()
                     return NotificationStatusCellViewModel(title: "Ping Device", notificationStatus: status)
                 } else {
@@ -190,8 +190,8 @@ class NotificationsViewController: TBATableViewController {
             if deviceAuthorizationStatus == .denied {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
             } else if deviceAuthorizationStatus == .notDetermined {
-                PushService.requestAuthorizationForNotifications({ (_, _) in
-                    self.checkDeviceAuthorization()
+                PushService.requestAuthorizationForNotifications({ [weak self] (_, _) in
+                    self?.checkDeviceAuthorization()
                 })
             } else {
                 showError("Unable to resolve device settings - check push notification settings in Settings.app")
@@ -228,12 +228,12 @@ class NotificationsViewController: TBATableViewController {
         }
 
         fetchingRemoteNotificationRegistrationStatus = true
-        PushService.registerForRemoteNotifications { (error) in
-            self.fetchingRemoteNotificationRegistrationStatus = false
-            self.hasCheckedRemoteNotificationRegistration = true
-            self.remoteNotificationRegistrationError = error
+        PushService.registerForRemoteNotifications { [weak self] (error) in
+            self?.fetchingRemoteNotificationRegistrationStatus = false
+            self?.hasCheckedRemoteNotificationRegistration = true
+            self?.remoteNotificationRegistrationError = error
 
-            self.reloadMain()
+            self?.reloadMain()
         }
         reloadMain()
     }
@@ -247,12 +247,12 @@ class NotificationsViewController: TBATableViewController {
         }
 
         fetchingDeviceAuthorizationStatus = true
-        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
-            self.fetchingDeviceAuthorizationStatus = false
-            self.deviceAuthorizationStatus = settings.authorizationStatus
+        UNUserNotificationCenter.current().getNotificationSettings { [weak self] (settings) in
+            self?.fetchingDeviceAuthorizationStatus = false
+            self?.deviceAuthorizationStatus = settings.authorizationStatus
 
-            self.sendPing()
-            self.reloadMain()
+            self?.sendPing()
+            self?.reloadMain()
         }
         reloadMain()
     }
@@ -278,7 +278,7 @@ class NotificationsViewController: TBATableViewController {
 
     private func checkMyTBARegistration() {
         // Already checking myTBA registration
-        guard myTBARegisterRequest == nil else {
+        guard myTBARegisterOperation == nil else {
             return
         }
 
@@ -290,14 +290,16 @@ class NotificationsViewController: TBATableViewController {
             return
         }
 
-        myTBARegisterRequest = myTBA.register(fcmToken) { (response, error) in
-            self.myTBARegisterRequest = nil
-            self.myTBARegisterResponse = response
-            self.myTBARegisterError = error
+        myTBARegisterOperation = myTBA.register(fcmToken) { [weak self] (response, error) in
+            self?.myTBARegisterOperation = nil
+            self?.myTBARegisterResponse = response
+            self?.myTBARegisterError = error
 
-            self.sendPing()
-            self.reloadMain()
+            self?.sendPing()
+            self?.reloadMain()
         }
+        refreshOperationQueue.addOperation(myTBARegisterOperation!)
+
         reloadMain()
     }
 
@@ -340,7 +342,7 @@ class NotificationsViewController: TBATableViewController {
         }
 
         // Already pinging device
-        guard myTBAPingRequest == nil else {
+        guard myTBAPingOperation == nil else {
             return
         }
 
@@ -348,13 +350,15 @@ class NotificationsViewController: TBATableViewController {
             return
         }
 
-        myTBAPingRequest = myTBA.ping(fcmToken, completion: { (response, error) in
-            self.myTBAPingRequest = nil
-            self.myTBAPingResponse = response
-            self.myTBAPingError = error
+        myTBAPingOperation = myTBA.ping(fcmToken, completion: { [weak self] (response, error) in
+            self?.myTBAPingOperation = nil
+            self?.myTBAPingResponse = response
+            self?.myTBAPingError = error
 
-            self.reloadMain()
+            self?.reloadMain()
         })
+        refreshOperationQueue.addOperation(myTBAPingOperation!)
+
         reloadMain()
     }
 
@@ -375,8 +379,8 @@ class NotificationsViewController: TBATableViewController {
     // MARK: - UI Methods
 
     func reloadMain() {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
         }
     }
 
@@ -385,8 +389,8 @@ class NotificationsViewController: TBATableViewController {
         let alert = UIAlertController(title: "Error", message: error, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
 
-        DispatchQueue.main.async {
-            self.present(alert, animated: true, completion: nil)
+        DispatchQueue.main.async { [weak self] in
+            self?.present(alert, animated: true, completion: nil)
         }
     }
 
@@ -401,8 +405,8 @@ class NotificationsViewController: TBATableViewController {
         })
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
 
-        DispatchQueue.main.async {
-            self.present(actionSheet, animated: true, completion: nil)
+        DispatchQueue.main.async { [weak self] in
+            self?.present(actionSheet, animated: true, completion: nil)
         }
     }
 

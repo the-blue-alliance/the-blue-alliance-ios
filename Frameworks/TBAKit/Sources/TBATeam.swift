@@ -288,7 +288,7 @@ public struct TBAMedia: TBAModel {
 extension TBAKit {
 
     @discardableResult
-    public func fetchTeams(page: Int, year: Int? = nil, completion: @escaping (Result<[TBATeam], Error>, Bool) -> ()) -> URLSessionDataTask {
+    public func fetchTeams(page: Int, year: Int? = nil, completion: @escaping (Result<[TBATeam], Error>, Bool) -> ()) -> TBAKitOperation {
         var method = "teams"
         if let year = year {
             method = "\(method)/\(year)"
@@ -298,13 +298,13 @@ extension TBAKit {
     }
 
     @discardableResult
-    public func fetchTeam(key: String, completion: @escaping (Result<TBATeam?, Error>, Bool) -> ()) -> URLSessionDataTask {
+    public func fetchTeam(key: String, completion: @escaping (Result<TBATeam?, Error>, Bool) -> ()) -> TBAKitOperation {
         let method = "team/\(key)"
         return callObject(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchTeamYearsParticipated(key: String, completion: @escaping (Result<[Int], Error>, Bool) -> ()) -> URLSessionDataTask {
+    public func fetchTeamYearsParticipated(key: String, completion: @escaping (Result<[Int], Error>, Bool) -> ()) -> TBAKitOperation {
         let method = "team/\(key)/years_participated"
         return callArray(method: method) { (result, notModified) in
             switch result {
@@ -321,19 +321,19 @@ extension TBAKit {
     }
 
     @discardableResult
-    public func fetchTeamDistricts(key: String, completion: @escaping (Result<[TBADistrict], Error>, Bool) -> ()) -> URLSessionDataTask {
+    public func fetchTeamDistricts(key: String, completion: @escaping (Result<[TBADistrict], Error>, Bool) -> ()) -> TBAKitOperation {
         let method = "team/\(key)/districts"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchTeamRobots(key: String, completion: @escaping (Result<[TBARobot], Error>, Bool) -> ()) -> URLSessionDataTask {
+    public func fetchTeamRobots(key: String, completion: @escaping (Result<[TBARobot], Error>, Bool) -> ()) -> TBAKitOperation {
         let method = "team/\(key)/robots"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchTeamEvents(key: String, year: Int? = nil, completion: @escaping (Result<[TBAEvent], Error>, Bool) -> ()) -> URLSessionDataTask {
+    public func fetchTeamEvents(key: String, year: Int? = nil, completion: @escaping (Result<[TBAEvent], Error>, Bool) -> ()) -> TBAKitOperation {
         var method = "team/\(key)/events"
         if let year = year {
             method = "\(method)/\(year)"
@@ -342,7 +342,7 @@ extension TBAKit {
     }
 
     @discardableResult
-    public func fetchTeamStatuses(key: String, year: Int, completion: @escaping (Result<[TBAEventStatus], Error>, Bool) -> ()) -> URLSessionDataTask {
+    public func fetchTeamStatuses(key: String, year: Int, completion: @escaping (Result<[TBAEventStatus], Error>, Bool) -> ()) -> TBAKitOperation {
         let method = "team/\(key)/events/\(year)/statuses"
         return callDictionary(method: method, completion: { (result, notModified) in
             switch result {
@@ -365,19 +365,19 @@ extension TBAKit {
     }
 
     @discardableResult
-    public func fetchTeamMatches(key: String, eventKey: String, completion: @escaping (Result<[TBAMatch], Error>, Bool) -> ()) -> URLSessionDataTask {
+    public func fetchTeamMatches(key: String, eventKey: String, completion: @escaping (Result<[TBAMatch], Error>, Bool) -> ()) -> TBAKitOperation {
         let method = "team/\(key)/event/\(eventKey)/matches"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchTeamAwards(key: String, eventKey: String, completion: @escaping (Result<[TBAAward], Error>, Bool) -> ()) -> URLSessionDataTask {
+    public func fetchTeamAwards(key: String, eventKey: String, completion: @escaping (Result<[TBAAward], Error>, Bool) -> ()) -> TBAKitOperation {
         let method = "team/\(key)/event/\(eventKey)/awards"
         return callArray(method: method, completion: completion)
     }
 
     @discardableResult
-    public func fetchTeamStatus(key: String, eventKey: String, completion: @escaping (Result<TBAEventStatus?, Error>, Bool) -> ()) -> URLSessionDataTask {
+    public func fetchTeamStatus(key: String, eventKey: String, completion: @escaping (Result<TBAEventStatus?, Error>, Bool) -> ()) -> TBAKitOperation {
         let method = "team/\(key)/event/\(eventKey)/status"
         return callDictionary(method: method, completion: { (result, notModified) in
             switch result {
@@ -396,7 +396,7 @@ extension TBAKit {
         })
     }
     
-    public func fetchTeamAwards(key: String, year: Int? = nil, completion: @escaping (Result<[TBAAward], Error>, Bool) -> ()) -> URLSessionDataTask {
+    public func fetchTeamAwards(key: String, year: Int? = nil, completion: @escaping (Result<[TBAAward], Error>, Bool) -> ()) -> TBAKitOperation {
         var method = "team/\(key)/awards"
         if let year = year {
             method = "\(method)/\(year)"
@@ -404,17 +404,17 @@ extension TBAKit {
         return callArray(method: method, completion: completion)
     }
     
-    public func fetchTeamMatches(key: String, year: Int, completion: @escaping (Result<[TBAMatch], Error>, Bool) -> ()) -> URLSessionDataTask {
+    public func fetchTeamMatches(key: String, year: Int, completion: @escaping (Result<[TBAMatch], Error>, Bool) -> ()) -> TBAKitOperation {
         let method = "team/\(key)/matches/\(year)"
         return callArray(method: method, completion: completion)
     }
     
-    public func fetchTeamMedia(key: String, year: Int, completion: @escaping (Result<[TBAMedia], Error>, Bool) -> ()) -> URLSessionDataTask {
+    public func fetchTeamMedia(key: String, year: Int, completion: @escaping (Result<[TBAMedia], Error>, Bool) -> ()) -> TBAKitOperation {
         let method = "team/\(key)/media/\(year)"
         return callArray(method: method, completion: completion)
     }
     
-    public func fetchTeamSocialMedia(key: String, completion: @escaping (Result<[TBAMedia], Error>, Bool) -> ()) -> URLSessionDataTask {
+    public func fetchTeamSocialMedia(key: String, completion: @escaping (Result<[TBAMedia], Error>, Bool) -> ()) -> TBAKitOperation {
         let method = "team/\(key)/social_media"
         return callArray(method: method, completion: completion)
     }

@@ -7,6 +7,7 @@ protocol MyTBAManaged: Managed {
 
     @discardableResult
     static func insert(_ models: [RemoteType], in context: NSManagedObjectContext) -> [MyType]
+    static func fetch(modelKey: String, modelType: MyTBAModelType, in context: NSManagedObjectContext) -> MyType?
 
     func toRemoteModel() -> RemoteType
 }
@@ -56,13 +57,14 @@ extension MyTBAEntity: Managed {
             return
         }
 
-        if modelType == .match {
+        if let modelTypeRaw = modelTypeRaw, modelTypeRaw.intValue == MyTBAModelType.match.rawValue,
+            let modelKey = modelKey {
             let matchObjects = MyTBAEntity.fetch(in: managedObjectContext) {
-                $0.predicate = NSPredicate(format: "%K == %@ AND %K == %ld",
-                                           #keyPath(MyTBAEntity.modelKey), modelKey!,
-                                           #keyPath(MyTBAEntity.modelTypeRaw), modelType.rawValue)
+                $0.predicate = NSPredicate(format: "%K == %@ AND %K == %@",
+                                           #keyPath(MyTBAEntity.modelKey), modelKey,
+                                           #keyPath(MyTBAEntity.modelTypeRaw), modelTypeRaw)
             }
-            if matchObjects.isEmpty, let match = Match.findOrFetch(in: managedObjectContext, matching: Match.matchPredicate(key: modelKey!)), match.event == nil {
+            if matchObjects.isEmpty, let match = Match.findOrFetch(in: managedObjectContext, matching: Match.matchPredicate(key: modelKey)), match.event == nil {
                 // Match will become an orphan - delete
                 managedObjectContext.delete(match)
             }

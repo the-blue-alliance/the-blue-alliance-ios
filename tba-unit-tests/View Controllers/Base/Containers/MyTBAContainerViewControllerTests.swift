@@ -1,4 +1,5 @@
 import CoreData
+import FirebaseMessaging
 import TBAKit
 import XCTest
 @testable import MyTBAKit
@@ -13,10 +14,10 @@ class MockMyTBAContainerViewController: MyTBAContainerViewController {
 
     var updateFavoriteButtonExpectation: XCTestExpectation?
 
-    init(subscribableModel: MyTBASubscribable, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(subscribableModel: MyTBASubscribable, messaging: Messaging, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         _subscribableModel = subscribableModel
 
-        super.init(viewControllers: [], myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(viewControllers: [], messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -44,7 +45,7 @@ class MyTBAContainerViewControllerTests: TBATestCase {
 
         subscribableModel = insertDistrictEvent()
 
-        tbaContainerViewController = MockMyTBAContainerViewController(subscribableModel: subscribableModel, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        tbaContainerViewController = MockMyTBAContainerViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController = MockNavigationController(rootViewController: tbaContainerViewController)
 
         viewControllerTester = TBAViewControllerTester(withViewController: navigationController)

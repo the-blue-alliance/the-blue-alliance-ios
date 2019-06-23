@@ -28,26 +28,10 @@ class ReverseSubtitleTableViewCell: UITableViewCell, Reusable {
     }
     @IBOutlet public var subtitleLabel: UILabel! {
         didSet {
-            subtitleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+            subtitleLabel.font = UIFont.preferredFont(forTextStyle: .body)
             subtitleLabel.adjustsFontForContentSizeCategory = true
             subtitleLabel.textColor = UIColor.black
         }
-    }
-
-    public func setHTMLSubtitle(text: String) {
-        guard let data = text.data(using: String.Encoding.unicode) else { return }
-
-        let htmlString: String = {
-            do {
-                let htmlString = try NSAttributedString(data: data,
-                                                        options: [.documentType: NSAttributedString.DocumentType.html],
-                                                        documentAttributes: nil)
-                return htmlString.string
-            } catch {
-                return text
-            }
-        }()
-        subtitleLabel.text = htmlString
     }
 
 }

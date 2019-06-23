@@ -34,11 +34,11 @@ public enum MatchCompLevel: String, CaseIterable {
         case .qualification:
             return "Qualification"
         case .eightfinal:
-            return "Octofinal"
+            return "Octofinals"
         case .quarterfinal:
-            return "Quarterfinal"
+            return "Quarterfinals"
         case .semifinal:
-            return "Semifinal"
+            return "Semifinals"
         case .final:
             return "Finals"
         }

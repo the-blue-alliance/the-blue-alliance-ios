@@ -11,6 +11,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     private let spacerSize: CGFloat = 3.0
 
     private let team: Team
+    private let fetchMediaOperationQueue = OperationQueue()
 
     var year: Int? {
         didSet {
@@ -20,8 +21,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     }
     var dataSource: CollectionViewDataSource<TeamMedia, TeamMediaCollectionViewController>!
     weak var delegate: TeamMediaCollectionViewControllerDelegate?
-
-    var fetchingMedia: NSHashTable<TeamMedia> = NSHashTable.weakObjects()
 
     // MARK: Init
 
@@ -44,6 +43,12 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         super.viewDidLoad()
 
         collectionView.registerReusableCell(MediaCollectionViewCell.self)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        fetchMediaOperationQueue.cancelAllOperations()
     }
 
     // MARK: Rotation
@@ -107,50 +112,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         return dataSource.fetchedResultsController.indexPath(forObject: media)
     }
 
-    private func fetchMedia(_ media: TeamMedia) {
-        // Make sure we can attempt to fetch our media
-        guard let url = media.imageDirectURL else {
-            media.imageError = MediaError.error("No url for media")
-            return
-        }
-
-        // Check if we're already fetching for this media - then lock out other fetches
-        if fetchingMedia.contains(media) {
-            return
-        }
-        fetchingMedia.add(media)
-
-        // Reload our cell, so we can show a loading spinner
-        if let indexPath = indexPath(for: media) {
-            DispatchQueue.main.async {
-                self.collectionView.reloadItems(at: [indexPath])
-            }
-        }
-
-        let dataTask = URLSession.shared.dataTask(with: url, completionHandler: { [weak self] (data, _, error) in
-            self?.fetchingMedia.remove(media)
-
-            guard let backgroundContext = self?.persistentContainer.newBackgroundContext() else {
-                return
-            }
-            backgroundContext.performChanges {
-                let backgroundMedia = backgroundContext.object(with: media.objectID) as! TeamMedia
-                if let error = error {
-                    backgroundMedia.imageError = MediaError.error(error.localizedDescription)
-                } else if let data = data {
-                    if let image = UIImage(data: data) {
-                        backgroundMedia.image = image
-                    } else {
-                        backgroundMedia.imageError = MediaError.error("Invalid data for request")
-                    }
-                } else {
-                    backgroundMedia.imageError = MediaError.error("No data for request")
-                }
-            }
-        })
-        dataTask.resume()
-    }
-
 }
 
 extension TeamMediaCollectionViewController: UICollectionViewDelegateFlowLayout {
@@ -189,12 +150,12 @@ extension TeamMediaCollectionViewController: UICollectionViewDelegateFlowLayout 
 extension TeamMediaCollectionViewController: CollectionViewDataSourceDelegate {
 
     func configure(_ cell: MediaCollectionViewCell, for object: TeamMedia, at indexPath: IndexPath) {
-        if fetchingMedia.contains(object) {
-            cell.state = .loading
-        } else if let image = object.image {
+        if let image = object.image {
             cell.state = .loaded(image)
         } else if let error = object.imageError {
             cell.state = .error("Error loading media - \(error.localizedDescription)")
+        } else if isRefreshing {
+            cell.state = .loading
         } else {
             cell.state = .error("Error loading media - unknown error")
         }
@@ -235,23 +196,32 @@ extension TeamMediaCollectionViewController: Refreshable {
 
     @objc func refresh() {
         guard let year = year else {
-            showNoDataView()
-            refreshControl?.endRefreshing()
+            updateRefresh()
             return
         }
 
-        removeNoDataView()
+        // Order of operations here is a little confusing - the ideas is:
+        // 1) Show spinner, to show that we're refreshing.
+        // 2) Fetch/Insert Team Media happens first, since we need to know what URLs to be fetching.
+        // 3) Kickoff Media downloads for each URL - switch to the main thread for this, so we can query.
+        //    `team.media` and we can get main-thread objects, not background thread objects. This will be
+        //    important later when we're updating our cell states.
+        // 4) Download Media, with the addition of updating our TeamMedia object.
+        // 5) Refresh our Team Media cell - this is the important part for using main thread objects, since
+        //    we query for this information using our `dataSource.fetchedResultsController`, which is tied
+        //    to our `persistentContainer.viewContext`. We also do individual refreshes as opposed to a full
+        //    collection view refresh so our media gently loads in, as opposed to several harsh refreshes.
+        // 6) End refreshing, after all of our individual cells have some state. We could end earlier and
+        //    default to letting the cell loading spinners do the UI work to indicate we're still downloading
+        //    some information, but keeping the view refreshing has two benifits. First, it shows some activity
+        //    in the case that the previous cells have some state (we don't unload images from cells on refresh),
+        //    and second, it prevents a user from refreshing again and queueing duplicate media download actions,
+        //    which can be expensive.
 
-        let fetchTeamMedia: () -> () = { [weak self] in
-            if let teamMediaSet = self?.team.getValue(\Team.media), let teamMedia = teamMediaSet.allObjects as? [TeamMedia] {
-                teamMedia.forEach({ (media) in
-                    self?.fetchMedia(media)
-                })
-            }
-        }
+        var finalOperation: Operation!
 
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchTeamMedia(key: team.key!, year: year, completion: { (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchTeamMedia(key: team.key!, year: year, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let media = try? result.get() {
@@ -259,15 +229,41 @@ extension TeamMediaCollectionViewController: Refreshable {
                     team.insert(media, year: year)
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
-
-            DispatchQueue.main.async {
-                fetchTeamMedia()
-            }
         })
-        addRequest(request: request!)
+        let fetchMediaOperation = BlockOperation {
+            guard let teamMedia = self.team.media?.allObjects as? [TeamMedia] else {
+                return
+            }
+            for media in teamMedia {
+                self.fetchMedia(media, finalOperation)
+            }
+        }
+        fetchMediaOperation.addDependency(operation)
+        OperationQueue.main.addOperation(fetchMediaOperation)
+
+        finalOperation = addRefreshOperations([operation])
+        finalOperation.addDependency(fetchMediaOperation)
+    }
+
+    private func fetchMedia(_ media: TeamMedia, _ dependentOperation: Operation) {
+        let refreshOperation = BlockOperation { [weak self] in
+            guard let self = self else { return }
+            // Reload our cell, so we can get rid of our loading state
+            if let indexPath = self.indexPath(for: media) {
+                self.collectionView.reloadItems(at: [indexPath])
+            }
+        }
+
+        let fetchMediaOperation = FetchMediaOperation(media: media, persistentContainer: persistentContainer)
+        refreshOperation.addDependency(fetchMediaOperation)
+        [fetchMediaOperation, refreshOperation].forEach {
+            dependentOperation.addDependency($0)
+        }
+
+        OperationQueue.main.addOperation(refreshOperation)
+        fetchMediaOperationQueue.addOperation(fetchMediaOperation)
     }
 
 }

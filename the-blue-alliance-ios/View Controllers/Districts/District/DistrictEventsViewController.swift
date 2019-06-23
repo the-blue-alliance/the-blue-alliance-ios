@@ -35,10 +35,8 @@ class DistrictEventsViewController: EventsViewController {
     }
 
     @objc override func refresh() {
-        removeNoDataView()
-
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchDistrictEvents(key: district.key!, completion: { (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchDistrictEvents(key: district.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let events = try? result.get() {
@@ -46,11 +44,10 @@ class DistrictEventsViewController: EventsViewController {
                     district.insert(events)
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
         })
-        addRequest(request: request!)
+        addRefreshOperations([operation])
     }
 
     // MARK: - Stateful

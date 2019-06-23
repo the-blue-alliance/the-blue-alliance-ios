@@ -57,8 +57,6 @@ class WeekEventsViewController: EventsViewController {
     }
 
     @objc override func refresh() {
-        removeNoDataView()
-
         // Default to refreshing the currently selected year
         // Fall back to the init'd year (used during initial refresh)
         var year = self.year
@@ -66,17 +64,16 @@ class WeekEventsViewController: EventsViewController {
             year = weekEventYear
         }
 
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchEvents(year: year, completion: { [unowned self] (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchEvents(year: year, completion: { [unowned self] (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let events = try? result.get() {
                     Event.insert(events, year: year, in: context)
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
 
             // Only setup weeks if we don't have a currently selected week
             if self.weekEvent == nil {
@@ -90,7 +87,7 @@ class WeekEventsViewController: EventsViewController {
                 }
             }
         })
-        addRequest(request: request!)
+        addRefreshOperations([operation])
     }
 
     // MARK: - Stateful
@@ -126,7 +123,7 @@ class WeekEventsViewController: EventsViewController {
                     // Conversion stuff, since Core Data still uses NSDate's
                     let firstDayOfMonth = NSDate(timeIntervalSince1970: weekEvent.startDate!.startOfMonth().timeIntervalSince1970)
                     let lastDayOfMonth = NSDate(timeIntervalSince1970: weekEvent.endDate!.endOfMonth().timeIntervalSince1970)
-                    return NSPredicate(format: "%K == %ld && %K == %@ && (%K > %@) AND (%K <= %@)",
+                    return NSPredicate(format: "%K == %ld && %K == %@ && (%K >= %@) AND (%K <= %@)",
                                        #keyPath(Event.eventType), EventType.offseason.rawValue,
                                        #keyPath(Event.year), year,
                                        #keyPath(Event.startDate), firstDayOfMonth,

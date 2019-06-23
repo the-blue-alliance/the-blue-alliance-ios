@@ -1,5 +1,6 @@
 import CoreData
 import Crashlytics
+import Fabric
 import Firebase
 import FirebaseAuth
 import FirebaseMessaging
@@ -22,19 +23,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy private var rootSplitViewController: UISplitViewController = { [unowned self] in
         let splitViewController = UISplitViewController()
 
-        let eventsViewController = EventsContainerViewController(myTBA: myTBA,
+        let eventsViewController = EventsContainerViewController(messaging: messaging,
+                                                                 myTBA: myTBA,
                                                                  statusService: statusService,
                                                                  urlOpener: urlOpener,
                                                                  persistentContainer: persistentContainer,
                                                                  tbaKit: tbaKit,
                                                                  userDefaults: userDefaults)
-        let teamsViewController = TeamsContainerViewController(myTBA: myTBA,
+        let teamsViewController = TeamsContainerViewController(messaging: messaging,
+                                                               myTBA: myTBA,
                                                                statusService: statusService,
                                                                urlOpener: urlOpener,
                                                                persistentContainer: persistentContainer,
                                                                tbaKit: tbaKit,
                                                                userDefaults: userDefaults)
-        let districtsViewController = DistrictsContainerViewController(myTBA: myTBA,
+        let districtsViewController = DistrictsContainerViewController(messaging: messaging,
+                                                                       myTBA: myTBA,
                                                                        statusService: statusService,
                                                                        urlOpener: urlOpener,
                                                                        persistentContainer: persistentContainer,
@@ -132,6 +136,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Setup our Firebase app - make sure this is called before other Firebase setup
         FirebaseApp.configure()
+
+        // Disable Crashlytics during debug
+        #if DEBUG
+        Fabric.sharedSDK().debug = true
+        #else
+        Fabric.with([Crashlytics.self])
+        #endif
 
         let secrets = Secrets()
         tbaKit = TBAKit(apiKey: secrets.tbaAPIKey, userDefaults: userDefaults)
@@ -279,7 +290,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func setupPushServiceDelegates() {
         messaging.delegate = pushService
-        // TODO: remoteMessageDelegate
         UNUserNotificationCenter.current().delegate = pushService
         myTBA.authenticationProvider.add(observer: pushService)
     }

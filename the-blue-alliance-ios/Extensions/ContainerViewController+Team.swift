@@ -1,3 +1,4 @@
+import FirebaseMessaging
 import MyTBAKit
 import UIKit
 
@@ -5,9 +6,10 @@ import UIKit
 // Used for Team@Event and Team@District to push to a Team, when contextually available.
 protocol ContainerTeamPushable {
     var teamKey: TeamKey { get }
+    var myTBA: MyTBA { get }
+    var messaging: Messaging { get }
     var statusService: StatusService { get }
     var urlOpener: URLOpener { get }
-    var myTBA: MyTBA { get }
 }
 
 extension ContainerTeamPushable where Self: ContainerViewController {
@@ -48,7 +50,7 @@ extension ContainerTeamPushable where Self: ContainerViewController {
     }
 
     func _pushTeam(team: Team) {
-        let teamViewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamViewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(teamViewController, animated: true)
     }
 

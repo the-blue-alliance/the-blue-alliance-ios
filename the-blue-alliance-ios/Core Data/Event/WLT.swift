@@ -26,7 +26,7 @@ public class WLT: NSObject, NSCoding {
         aCoder.encode(self.ties, forKey: "ties")
     }
 
-    public func displayString() -> String {
+    var stringValue: String {
         return "\(wins)-\(losses)-\(ties)"
     }
 

@@ -8,15 +8,17 @@ class EventAwardsContainerViewController: ContainerViewController {
 
     private(set) var event: Event
     private(set) var teamKey: TeamKey?
+    private let messaging: Messaging
     private let myTBA: MyTBA
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
     // MARK: - Init
 
-    init(event: Event, teamKey: TeamKey? = nil, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, teamKey: TeamKey? = nil, messaging: Messaging, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
         self.teamKey = teamKey
+        self.messaging = messaging
         self.myTBA = myTBA
         self.statusService = statusService
         self.urlOpener = urlOpener
@@ -67,7 +69,7 @@ extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate 
         if teamKey == self.teamKey {
             return
         }
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, messaging: messaging, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -164,10 +166,8 @@ extension EventAwardsViewController: Refreshable {
     }
 
     @objc func refresh() {
-        removeNoDataView()
-
-        var request: URLSessionDataTask?
-        request = tbaKit.fetchEventAwards(key: event.key!, completion: { (result, notModified) in
+        var operation: TBAKitOperation!
+        operation = tbaKit.fetchEventAwards(key: event.key!, completion: { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let awards = try? result.get() {
@@ -175,11 +175,10 @@ extension EventAwardsViewController: Refreshable {
                     event.insert(awards)
                 }
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, request: request!)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             })
-            self.removeRequest(request: request!)
         })
-        addRequest(request: request!)
+        addRefreshOperations([operation])
     }
 
 }

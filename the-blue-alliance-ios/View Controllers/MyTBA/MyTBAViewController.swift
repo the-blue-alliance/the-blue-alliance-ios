@@ -113,19 +113,21 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
             return
         }
 
-        let signOutOperation = MyTBASignOutOperation(myTBA: myTBA, pushToken: fcmToken)
-        signOutOperation.completionBlock = { [unowned signOutOperation] in
-            self.isLoggingOut = false
+        let signOutOperation = myTBA.unregister(fcmToken) { [weak self] (_, error) in
+            self?.isLoggingOut = false
 
-            if let error = signOutOperation.completionError {
+            if let error = error {
                 Crashlytics.sharedInstance().recordError(error)
-                self.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
+                self?.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
             } else {
-                self.logoutSuccessful()
+                // Run on main thread, since we delete our Core Data objects on the main thread.
+                DispatchQueue.main.async {
+                    self?.logoutSuccessful()
+                }
             }
         }
         isLoggingOut = true
-        OperationQueue.main.addOperation(signOutOperation)
+        OperationQueue.main.addOperation(signOutOperation!)
     }
 
     private func logoutSuccessful() {
@@ -171,19 +173,19 @@ extension MyTBAViewController: MyTBATableViewControllerDelegate {
         switch myTBAObject.modelType {
         case .event:
             if let event = myTBAObject.tbaObject as? Event {
-                viewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                viewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
             } else {
                 // TODO: Push using just key
             }
         case .team:
             if let team = myTBAObject.tbaObject as? Team {
-                viewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                viewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
             } else {
                 // TODO: Push using just key
             }
         case .match:
             if let match = myTBAObject.tbaObject as? Match {
-                viewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+                viewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
             } else {
                 // TODO: Push using just key
             }

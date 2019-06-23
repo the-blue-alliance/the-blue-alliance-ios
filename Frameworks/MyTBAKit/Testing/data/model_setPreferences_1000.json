@@ -1,0 +1,4 @@
+{
+    "code": 1000,
+    "message": "{\"favorite\": {\"message\": \"Unknown error adding favorite\", \"code\": 500}, \"subscription\": {\"message\": \"Unknown error adding subscription\", \"code\": 500}}"
+}

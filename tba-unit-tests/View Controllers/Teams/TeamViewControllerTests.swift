@@ -18,7 +18,7 @@ class TeamViewControllerTests: TBATestCase {
 
         let team = insertTeam()
 
-        teamViewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        teamViewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController = MockNavigationController(rootViewController: teamViewController)
 
         viewControllerTester = TBAViewControllerTester(withViewController: navigationController)

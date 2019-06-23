@@ -8,7 +8,7 @@ protocol RefreshView {
 
 // Refreshable describes a class that has some data that can be refreshed from the server
 protocol Refreshable: AnyObject {
-    var requests: [URLSessionDataTask] { get set }
+    var refreshOperationQueue: OperationQueue { get set }
 
     var refreshControl: UIRefreshControl? { get set }
     var refreshView: UIScrollView { get }
@@ -45,6 +45,8 @@ protocol Refreshable: AnyObject {
     func refresh()
 
     func updateRefresh()
+
+    func hideNoData()
     func noDataReload()
 }
 
@@ -76,8 +78,8 @@ extension Refreshable {
     }
 
     var isRefreshing: Bool {
-        // We're not refreshing if our requests array is empty
-        return !requests.isEmpty
+        // We're not refreshing if our operation queue is empty
+        return !refreshOperationQueue.operations.isEmpty
     }
 
     func shouldRefresh() -> Bool {
@@ -110,8 +112,8 @@ extension Refreshable {
     /**
      Set our LastModified in TBAKit as well as setting our last successful refresh data for Refreshable.
      */
-    func markTBARefreshSuccessful(_ tbaKit: TBAKit, request: URLSessionDataTask, lastRefresh: Date = Date()) {
-        tbaKit.storeCacheHeaders(request)
+    func markTBARefreshSuccessful(_ tbaKit: TBAKit, operation: TBAKitOperation, lastRefresh: Date = Date()) {
+        tbaKit.storeCacheHeaders(operation)
         markRefreshSuccessful()
     }
 
@@ -128,37 +130,35 @@ extension Refreshable {
 
     // TODO: Add a method to add an observer on a single core data object for changes
 
+    /**
+     * Add several operations to be executed in parallel. This method will return the last operation to be executed,
+     * which reloads a view and updates the refresh indicator.
+     */
+    @discardableResult
+    func addRefreshOperations(_ operations: [Operation]) -> Operation? {
+        // Create an operation to update our refresh indicator - should happen last.
+        let updateRefreshOperation = BlockOperation {
+            self.updateRefresh()
+        }
+        for op in operations {
+            updateRefreshOperation.addDependency(op)
+        }
+
+        OperationQueue.main.addOperations([updateRefreshOperation], waitUntilFinished: false)
+        refreshOperationQueue.addOperations(operations, waitUntilFinished: false)
+
+        updateRefresh()
+
+        return updateRefreshOperation
+    }
+
     func cancelRefresh() {
-        if requests.isEmpty {
+        if refreshOperationQueue.operations.isEmpty {
             return
         }
 
-        for request in requests {
-            request.cancel()
-        }
-        requests.removeAll()
-
+        refreshOperationQueue.cancelAllOperations()
         updateRefresh()
-    }
-
-    func addRequest(request: URLSessionDataTask) {
-        if requests.contains(request) {
-            return
-        }
-        requests.append(request)
-        updateRefresh()
-    }
-
-    func removeRequest(request: URLSessionDataTask) {
-        guard let index = requests.firstIndex(of: request) else {
-            return
-        }
-        requests.remove(at: index)
-        updateRefresh()
-
-        if requests.isEmpty {
-            noDataReload()
-        }
     }
 
     /**
@@ -167,11 +167,15 @@ extension Refreshable {
     func updateRefresh() {
         DispatchQueue.main.async {
             if self.isRefreshing {
+                self.hideNoData()
+
                 let refreshControlHeight = self.refreshControl?.frame.size.height ?? 0
                 self.refreshView.setContentOffset(CGPoint(x: 0, y: -refreshControlHeight), animated: true)
                 self.refreshControl?.beginRefreshing()
             } else {
                 self.refreshControl?.endRefreshing()
+
+                self.noDataReload()
             }
         }
     }

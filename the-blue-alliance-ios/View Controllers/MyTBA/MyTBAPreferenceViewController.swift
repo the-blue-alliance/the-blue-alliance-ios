@@ -1,4 +1,5 @@
 import CoreData
+import FirebaseMessaging
 import MyTBAKit
 import UIKit
 
@@ -16,16 +17,18 @@ class MyTBAPreferenceViewController: UITableViewController {
 
     var favorite: Favorite?
     let isFavoriteInitially: Bool
-    var isFavorite: Bool = false
+    var isFavorite: Bool
 
     var subscription: Subscription?
     let notificationsInitial: [NotificationType]
-    var notifications: [NotificationType] = []
+    var notifications: [NotificationType]
 
+    let messaging: Messaging
     let myTBA: MyTBA
     let persistentContainer: NSPersistentContainer
 
-    var preferencesRequest: URLSessionDataTask?
+    var preferencesOperation: MyTBAOperation?
+    let operationQueue = OperationQueue()
 
     private var isSaving: Bool = false {
         didSet {
@@ -42,24 +45,19 @@ class MyTBAPreferenceViewController: UITableViewController {
                                                                            action: #selector(save))
     internal var saveActivityIndicatorBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
 
-    init(subscribableModel: MyTBASubscribable, myTBA: MyTBA, persistentContainer: NSPersistentContainer) {
+    init(subscribableModel: MyTBASubscribable, messaging: Messaging, myTBA: MyTBA, persistentContainer: NSPersistentContainer) {
         self.subscribableModel = subscribableModel
+        self.messaging = messaging
         self.myTBA = myTBA
         self.persistentContainer = persistentContainer
 
-        let favoritePredicate = Favorite.favoritePredicate(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType)
-        if let favorite = Favorite.findOrFetch(in: persistentContainer.viewContext, matching: favoritePredicate) {
-            self.favorite = favorite
-            isFavorite = true
-        }
-        self.isFavoriteInitially = isFavorite
+        favorite = Favorite.fetch(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, in: persistentContainer.viewContext)
+        isFavorite = (favorite != nil)
+        isFavoriteInitially = isFavorite
 
-        let subscriptionPredicate = Subscription.subscriptionPredicate(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType)
-        if let subscription = Subscription.findOrFetch(in: persistentContainer.viewContext, matching: subscriptionPredicate) {
-            self.subscription = subscription
-            notifications = subscription.notifications
-        }
-        self.notificationsInitial = notifications
+        subscription = Subscription.fetch(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, in: persistentContainer.viewContext)
+        notifications = subscription?.notifications ?? []
+        notificationsInitial = notifications
 
         super.init(style: .grouped)
 
@@ -81,7 +79,7 @@ class MyTBAPreferenceViewController: UITableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        preferencesRequest?.cancel()
+        operationQueue.cancelAllOperations()
     }
 
     // MARK: - Interface Methods
@@ -133,20 +131,23 @@ class MyTBAPreferenceViewController: UITableViewController {
 
         isSaving = true
 
-        preferencesRequest = myTBA.updatePreferences(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, favorite: isFavorite, notifications: notifications, completion: { [unowned self] (favoriteResponse, subscriptionResponse, error) in
+        let fcmToken = messaging.fcmToken
+        preferencesOperation = myTBA.updatePreferences(deviceKey: fcmToken, modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, favorite: isFavorite, notifications: notifications, completion: { [weak self] (favoriteResponse, subscriptionResponse, error) in
+            guard let self = self else { return }
             let context = self.persistentContainer.newBackgroundContext()
+
             context.performChangesAndWait({
-                if let favoriteResponse = favoriteResponse, favoriteResponse.code < 400 {
-                    if !self.isFavorite, let fav = self.favorite {
+                if let favoriteResponse = favoriteResponse, favoriteResponse.code < 500 {
+                    if !self.isFavorite, let favorite = self.favorite {
                         // Delete
-                        context.delete(context.object(with: fav.objectID))
-                    } else if self.isFavorite, self.favorite == nil {
+                        context.delete(context.object(with: favorite.objectID))
+                    } else if self.isFavorite {
                         // Insert
                         Favorite.insert(modelKey: self.subscribableModel.modelKey, modelType: self.subscribableModel.modelType, in: context)
                     }
                 }
 
-                if let subscriptionResponse = subscriptionResponse, subscriptionResponse.code < 400 {
+                if let subscriptionResponse = subscriptionResponse, subscriptionResponse.code < 500 {
                     let hasNotifications = !self.notifications.isEmpty
                     if !hasNotifications, let subscription = self.subscription {
                         // Delete
@@ -163,13 +164,25 @@ class MyTBAPreferenceViewController: UITableViewController {
                     }
                 }
             })
+        })
+
+        let dismissOperation = BlockOperation(block: { [weak self] in
+            guard let self = self else { return }
 
             self.isSaving = false
-
             DispatchQueue.main.async {
+                if let favorite = self.favorite {
+                    self.persistentContainer.viewContext.refresh(favorite, mergeChanges: true)
+                }
+                if let subscription = self.subscription {
+                    self.persistentContainer.viewContext.refresh(subscription, mergeChanges: true)
+                }
                 self.dismiss(animated: true)
             }
         })
+        dismissOperation.addDependency(preferencesOperation!)
+
+        operationQueue.addOperations([preferencesOperation!, dismissOperation], waitUntilFinished: false)
     }
 
     @objc func close() {

@@ -38,11 +38,13 @@ class TBAKitTests: TBAKitTestCase {
         let ex = expectation(description: "auth_header_api_key")
         kit.session.resumeExpectation = ex
 
-        let task = kit.fetchStatus { (result, notModified) in
+        let operation = kit.fetchStatus { (result, notModified) in
             XCTFail() // shouldn't be called
         }
+        let operationQueue = OperationQueue()
+        operationQueue.addOperation(operation)
 
-        guard let headers = task.currentRequest?.allHTTPHeaderFields else {
+        guard let headers = operation.task.currentRequest?.allHTTPHeaderFields else {
             XCTFail()
             return
         }
@@ -67,11 +69,11 @@ class TBAKitTests: TBAKitTestCase {
         let ex = expectation(description: "cancel_task")
         kit.session.cancelExpectation = ex
 
-        let task = kit.fetchStatus { (result, notModified) in
+        let operation = kit.fetchStatus { (result, notModified) in
             XCTFail()
             return
         }
-        task.cancel()
+        operation.cancel()
 
         wait(for: [ex], timeout: 2.0)
 
@@ -80,30 +82,30 @@ class TBAKitTests: TBAKitTestCase {
 
     func testStoreCacheHeaders() {
         let storeCacheHeadersExpectation = expectation(description: "store_cache_headers")
-        var storeCacheHeadersTask: URLSessionDataTask?
-        storeCacheHeadersTask = kit.fetchStatus { (result, notModified) in
+        var storeCacheHeadersOperation: TBAKitOperation?
+        storeCacheHeadersOperation = kit.fetchStatus { (result, notModified) in
             let status = try! result.get()
             XCTAssertFalse(notModified)
 
-            self.kit.storeCacheHeaders(storeCacheHeadersTask!)
+            self.kit.storeCacheHeaders(storeCacheHeadersOperation!)
 
             storeCacheHeadersExpectation.fulfill()
         }
-        kit.sendSuccessStub(for: storeCacheHeadersTask!)
+        kit.sendSuccessStub(for: storeCacheHeadersOperation!)
         wait(for: [storeCacheHeadersExpectation], timeout: 1.0)
 
         let notModifiedExpectation = expectation(description: "not_modified")
-        let notModifiedTask = kit.fetchStatus { (result, notModified) in
+        let notModifiedOperation = kit.fetchStatus { (result, notModified) in
             let status = try! result.get()
             XCTAssert(notModified)
             XCTAssertNil(status)
 
             notModifiedExpectation.fulfill()
         }
-        kit.sendSuccessStub(for: notModifiedTask, with: 304)
+        kit.sendSuccessStub(for: notModifiedOperation, with: 304)
         wait(for: [notModifiedExpectation], timeout: 1.0)
 
-        guard let headers = notModifiedTask.currentRequest?.allHTTPHeaderFields else {
+        guard let headers = notModifiedOperation.task.currentRequest?.allHTTPHeaderFields else {
             XCTFail()
             return
         }
@@ -123,19 +125,19 @@ class TBAKitTests: TBAKitTestCase {
 
     func testDoesNotStoreErrorLastModified() {
         let setCacheHeadersExpectation = expectation(description: "set_cache_headers")
-        let setCacheHeadersTask = kit.fetchStatus { (result, notModified) in
+        let setCacheHeadersOperation = kit.fetchStatus { (result, notModified) in
             let status = try! result.get()
             XCTAssertFalse(notModified)
 
             setCacheHeadersExpectation.fulfill()
         }
-        kit.sendSuccessStub(for: setCacheHeadersTask, with: 404)
+        kit.sendSuccessStub(for: setCacheHeadersOperation, with: 404)
         wait(for: [setCacheHeadersExpectation], timeout: 1.0)
 
         let setIfModifiedSinceTask = kit.fetchStatus { (result, notModified) in
             XCTFail()
         }
-        guard let headers = setIfModifiedSinceTask.currentRequest?.allHTTPHeaderFields else {
+        guard let headers = setCacheHeadersOperation.task.currentRequest?.allHTTPHeaderFields else {
             XCTFail()
             return
         }
@@ -146,11 +148,11 @@ class TBAKitTests: TBAKitTestCase {
     func testClearCacheHeaders() {
         kit.clearCacheHeaders()
 
-        let storeCacheHeadersTask = kit.fetchStatus { (result, notModified) in
+        let storeCacheHeadersOperation = kit.fetchStatus { (result, notModified) in
             XCTFail()
         }
 
-        guard let headers = storeCacheHeadersTask.currentRequest?.allHTTPHeaderFields else {
+        guard let headers = storeCacheHeadersOperation.task.currentRequest?.allHTTPHeaderFields else {
             XCTFail()
             return
         }

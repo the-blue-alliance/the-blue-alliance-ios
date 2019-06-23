@@ -7,6 +7,7 @@ import UIKit
 
 class EventsContainerViewController: ContainerViewController {
 
+    private let messaging: Messaging
     private let myTBA: MyTBA
     private let statusService: StatusService
     private let urlOpener: URLOpener
@@ -16,7 +17,8 @@ class EventsContainerViewController: ContainerViewController {
 
     // MARK: - Init
 
-    init(myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(messaging: Messaging, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.messaging = messaging
         self.myTBA = myTBA
         self.statusService = statusService
         self.urlOpener = urlOpener
@@ -102,7 +104,7 @@ extension EventsContainerViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
         // Show detail wrapped in a UINavigationController for our split view controller
-        let eventViewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let eventViewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let nav = UINavigationController(rootViewController: eventViewController)
         navigationController?.showDetailViewController(nav, sender: nil)
     }

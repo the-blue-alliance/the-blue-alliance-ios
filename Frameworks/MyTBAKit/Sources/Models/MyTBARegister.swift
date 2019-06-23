@@ -10,16 +10,16 @@ public struct MyTBARegisterRequest: Codable {
 extension MyTBA {
 
     @discardableResult
-    public func register(_ token: String, completion: @escaping MyTBABaseCompletionBlock) -> URLSessionDataTask? {
+    public func register(_ token: String, completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
         return registerUnregister("register", token: token, completion: completion)
     }
 
     @discardableResult
-    public func unregister(_ token: String, completion: @escaping MyTBABaseCompletionBlock) -> URLSessionDataTask? {
+    public func unregister(_ token: String, completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
         return registerUnregister("unregister", token: token, completion: completion)
     }
 
-    private func registerUnregister(_ method: String, token: String, completion: @escaping MyTBABaseCompletionBlock) -> URLSessionDataTask? {
+    private func registerUnregister(_ method: String, token: String, completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
         let registration = MyTBARegisterRequest(deviceUuid: uuid, mobileId: token, name: deviceName)
 
         guard let encodedRegistration = try? MyTBA.jsonEncoder.encode(registration) else {

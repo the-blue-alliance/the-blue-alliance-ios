@@ -13,7 +13,7 @@ extension Subscription: MyTBAManaged {
         }
     }
 
-    static func subscriptionPredicate(modelKey: String, modelType: MyTBAModelType) -> NSPredicate {
+    private static func subscriptionPredicate(modelKey: String, modelType: MyTBAModelType) -> NSPredicate {
         return NSPredicate(format: "%K == %@ && %K == %ld",
                            #keyPath(Subscription.modelKey), modelKey,
                            #keyPath(Subscription.modelTypeRaw), modelType.rawValue)
@@ -72,6 +72,11 @@ extension Subscription: MyTBAManaged {
             subscription.modelType = modelType
             subscription.notificationsRaw = notifications.map({ $0.rawValue })
         }
+    }
+
+    static func fetch(modelKey: String, modelType: MyTBAModelType, in context: NSManagedObjectContext) -> Subscription? {
+        let predicate = subscriptionPredicate(modelKey: modelKey, modelType: modelType)
+        return findOrFetch(in: context, matching: predicate)
     }
 
     func toRemoteModel() -> MyTBASubscription {

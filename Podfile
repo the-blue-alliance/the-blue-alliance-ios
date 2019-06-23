@@ -45,6 +45,7 @@ target 'The Blue Alliance' do
   # Local Deps
   pod 'MyTBAKit', :path => 'Frameworks/MyTBAKit', :testspecs => ['Tests']
   pod 'TBAKit', :path => 'Frameworks/TBAKit', :testspecs => ['Tests']
+  pod 'TBAOperation', :path => 'Frameworks/TBAOperation', :testspecs => ['Tests']
 
   # myTBA
   pod 'GoogleSignIn'
@@ -63,6 +64,7 @@ target 'The Blue Alliance' do
     pod 'MyTBAKitTesting', :path => 'Frameworks/MyTBAKit'
     pod 'TBAKitTesting', :path => 'Frameworks/TBAKit'
     pod 'TBATestingMocks', :path => 'Frameworks/TBATestingMocks'
+    pod 'TBAOperationTesting', :path => 'Frameworks/TBAOperation'
   end
 end
 
