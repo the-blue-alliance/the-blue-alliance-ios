@@ -10,19 +10,27 @@ target 'The Blue Alliance' do
   use_frameworks!
 
   # React Native
-  pod 'React', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native', :subspecs => [
-    'Core',
-    'CxxBridge', # Include this for RN >= 0.47
-    'DevSupport', # Include this to enable In-App Devmenu if RN >= 0.43
-    'RCTText',
-    'RCTNetwork',
-    'RCTImage',
-    'RCTWebSocket', # needed for debugging
-    # Add any other subspecs you want to use in your project
-  ]
-  # Explicitly include Yoga if you are using RN >= 0.42.0
-  pod "yoga", :path => "subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga"
-  # Third party deps podspec link
+  pod 'React', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native'
+  pod 'React-Core', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/React'
+  pod 'React-DevSupport', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/React'
+  pod 'React-fishhook', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/fishhook'
+  pod 'React-RCTActionSheet', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/ActionSheetIOS'
+  pod 'React-RCTAnimation', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/NativeAnimation'
+  pod 'React-RCTBlob', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Blob'
+  pod 'React-RCTImage', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Image'
+  pod 'React-RCTLinking', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/LinkingIOS'
+  pod 'React-RCTNetwork', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Network'
+  pod 'React-RCTSettings', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Settings'
+  pod 'React-RCTText', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Text'
+  pod 'React-RCTVibration', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Vibration'
+  pod 'React-RCTWebSocket', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/WebSocket'
+
+  pod 'React-cxxreact', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/cxxreact'
+  pod 'React-jsi', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/jsi'
+  pod 'React-jsiexecutor', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/jsiexecutor'
+  pod 'React-jsinspector', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/jsinspector'
+  pod 'yoga', :path => 'subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga'
+
   pod 'DoubleConversion', :podspec => 'subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => 'subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => 'subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/Folly.podspec'

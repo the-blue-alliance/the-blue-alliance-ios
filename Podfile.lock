@@ -83,6 +83,11 @@ PODS:
   - Folly (2018.10.22.00):
     - boost-for-react-native
     - DoubleConversion
+    - Folly/Default (= 2018.10.22.00)
+    - glog
+  - Folly/Default (2018.10.22.00):
+    - boost-for-react-native
+    - DoubleConversion
     - glog
   - glog (0.3.5)
   - GoogleAppMeasurement (5.6.0):
@@ -166,47 +171,76 @@ PODS:
     - PINRemoteImage/Core
   - Protobuf (3.6.1)
   - PureLayout (3.1.4)
-  - React/Core (0.59.0):
-    - yoga (= 0.59.0.React)
-  - React/CxxBridge (0.59.0):
+  - React (0.60.4):
+    - React-Core (= 0.60.4)
+    - React-DevSupport (= 0.60.4)
+    - React-RCTActionSheet (= 0.60.4)
+    - React-RCTAnimation (= 0.60.4)
+    - React-RCTBlob (= 0.60.4)
+    - React-RCTImage (= 0.60.4)
+    - React-RCTLinking (= 0.60.4)
+    - React-RCTNetwork (= 0.60.4)
+    - React-RCTSettings (= 0.60.4)
+    - React-RCTText (= 0.60.4)
+    - React-RCTVibration (= 0.60.4)
+    - React-RCTWebSocket (= 0.60.4)
+  - React-Core (0.60.4):
     - Folly (= 2018.10.22.00)
-    - React/Core
-    - React/cxxreact
-    - React/jsiexecutor
-  - React/cxxreact (0.59.0):
+    - React-cxxreact (= 0.60.4)
+    - React-jsiexecutor (= 0.60.4)
+    - yoga (= 0.60.4.React)
+  - React-cxxreact (0.60.4):
     - boost-for-react-native (= 1.63.0)
     - DoubleConversion
     - Folly (= 2018.10.22.00)
     - glog
-    - React/jsinspector
-  - React/DevSupport (0.59.0):
-    - React/Core
-    - React/RCTWebSocket
-  - React/fishhook (0.59.0)
-  - React/jsi (0.59.0):
+    - React-jsinspector (= 0.60.4)
+  - React-DevSupport (0.60.4):
+    - React-Core (= 0.60.4)
+    - React-RCTWebSocket (= 0.60.4)
+  - React-fishhook (0.60.4)
+  - React-jsi (0.60.4):
+    - boost-for-react-native (= 1.63.0)
     - DoubleConversion
     - Folly (= 2018.10.22.00)
     - glog
-  - React/jsiexecutor (0.59.0):
+    - React-jsi/Default (= 0.60.4)
+  - React-jsi/Default (0.60.4):
+    - boost-for-react-native (= 1.63.0)
     - DoubleConversion
     - Folly (= 2018.10.22.00)
     - glog
-    - React/cxxreact
-    - React/jsi
-  - React/jsinspector (0.59.0)
-  - React/RCTBlob (0.59.0):
-    - React/Core
-  - React/RCTImage (0.59.0):
-    - React/Core
-    - React/RCTNetwork
-  - React/RCTNetwork (0.59.0):
-    - React/Core
-  - React/RCTText (0.59.0):
-    - React/Core
-  - React/RCTWebSocket (0.59.0):
-    - React/Core
-    - React/fishhook
-    - React/RCTBlob
+  - React-jsiexecutor (0.60.4):
+    - DoubleConversion
+    - Folly (= 2018.10.22.00)
+    - glog
+    - React-cxxreact (= 0.60.4)
+    - React-jsi (= 0.60.4)
+  - React-jsinspector (0.60.4)
+  - React-RCTActionSheet (0.60.4):
+    - React-Core (= 0.60.4)
+  - React-RCTAnimation (0.60.4):
+    - React-Core (= 0.60.4)
+  - React-RCTBlob (0.60.4):
+    - React-Core (= 0.60.4)
+    - React-RCTNetwork (= 0.60.4)
+    - React-RCTWebSocket (= 0.60.4)
+  - React-RCTImage (0.60.4):
+    - React-Core (= 0.60.4)
+    - React-RCTNetwork (= 0.60.4)
+  - React-RCTLinking (0.60.4):
+    - React-Core (= 0.60.4)
+  - React-RCTNetwork (0.60.4):
+    - React-Core (= 0.60.4)
+  - React-RCTSettings (0.60.4):
+    - React-Core (= 0.60.4)
+  - React-RCTText (0.60.4):
+    - React-Core (= 0.60.4)
+  - React-RCTVibration (0.60.4):
+    - React-Core (= 0.60.4)
+  - React-RCTWebSocket (0.60.4):
+    - React-Core (= 0.60.4)
+    - React-fishhook (= 0.60.4)
   - Reveal-SDK (22)
   - TBAKit (1.0.0-LOCAL):
     - TBAOperation
@@ -223,7 +257,7 @@ PODS:
     - TBAOperation
   - TBATestingMocks (1.0.0-LOCAL)
   - XCDYouTubeKit (2.7.4)
-  - yoga (0.59.0.React)
+  - yoga (0.60.4.React)
   - Zip (1.1.0)
 
 DEPENDENCIES:
@@ -246,13 +280,24 @@ DEPENDENCIES:
   - MyTBAKitTesting (from `Frameworks/MyTBAKit`)
   - PINRemoteImage (= 3.0.0-beta.13)
   - PureLayout
-  - React/Core (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
-  - React/CxxBridge (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
-  - React/DevSupport (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
-  - React/RCTImage (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
-  - React/RCTNetwork (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
-  - React/RCTText (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
-  - React/RCTWebSocket (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
+  - React (from `subtrees/the-blue-alliance-react/node_modules/react-native`)
+  - React-Core (from `subtrees/the-blue-alliance-react/node_modules/react-native/React`)
+  - React-cxxreact (from `subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/cxxreact`)
+  - React-DevSupport (from `subtrees/the-blue-alliance-react/node_modules/react-native/React`)
+  - React-fishhook (from `subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/fishhook`)
+  - React-jsi (from `subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/jsi`)
+  - React-jsiexecutor (from `subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/jsiexecutor`)
+  - React-jsinspector (from `subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/jsinspector`)
+  - React-RCTActionSheet (from `subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/ActionSheetIOS`)
+  - React-RCTAnimation (from `subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/NativeAnimation`)
+  - React-RCTBlob (from `subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Blob`)
+  - React-RCTImage (from `subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Image`)
+  - React-RCTLinking (from `subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/LinkingIOS`)
+  - React-RCTNetwork (from `subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Network`)
+  - React-RCTSettings (from `subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Settings`)
+  - React-RCTText (from `subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Text`)
+  - React-RCTVibration (from `subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Vibration`)
+  - React-RCTWebSocket (from `subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/WebSocket`)
   - Reveal-SDK
   - TBAKit (from `Frameworks/TBAKit`)
   - TBAKit/Tests (from `Frameworks/TBAKit`)
@@ -313,6 +358,40 @@ EXTERNAL SOURCES:
     :path: Frameworks/MyTBAKit
   React:
     :path: subtrees/the-blue-alliance-react/node_modules/react-native
+  React-Core:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/React
+  React-cxxreact:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/cxxreact
+  React-DevSupport:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/React
+  React-fishhook:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/fishhook
+  React-jsi:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/jsi
+  React-jsiexecutor:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/jsiexecutor
+  React-jsinspector:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/jsinspector
+  React-RCTActionSheet:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/ActionSheetIOS
+  React-RCTAnimation:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/NativeAnimation
+  React-RCTBlob:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Blob
+  React-RCTImage:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Image
+  React-RCTLinking:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/LinkingIOS
+  React-RCTNetwork:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Network
+  React-RCTSettings:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Settings
+  React-RCTText:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Text
+  React-RCTVibration:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Vibration
+  React-RCTWebSocket:
+    :path: subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/WebSocket
   TBAKit:
     :path: Frameworks/TBAKit
   TBAKitTesting:
@@ -330,7 +409,7 @@ SPEC CHECKSUMS:
   BFRImageViewer: 647b91e4c9956d1ffc66245614aca22f10b0d370
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
-  DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
+  DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   Fabric: f988e33c97f08930a413e08123064d2e5f68d655
   Firebase: 59d557e064217fab6a03ff00baa73c06e73832e6
   FirebaseABTesting: 1f50b8d50f5e3469eea54e7463a7b7fe221d1f5e
@@ -345,33 +424,50 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfig: 7e11c65f0769c09bff6947997c209515058c5318
   FirebaseStorage: 29075f874c2b3cf61e5221a62c4ceefc809e5412
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  Folly: de497beb10f102453a1afa9edbf8cf8a251890de
-  glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
+  Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
+  glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   GoogleAppMeasurement: 008e04ecd8efedd97a693aea8634aefe220bd26e
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
   GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
   GoogleUtilities: 111a012f4c3a29c9e7c954c082fafd6ee3c999c0
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
   iOSSnapshotTestCase: f3b2b7e606fe03fdbe49af84316bd235df32dc44
-  MyTBAKit: 9e70178b610b322651c9c31485115fd1a25a74ce
-  MyTBAKitTesting: cd6dbb57eef130b8d15692d86d3af767a051a403
+  MyTBAKit: 1887c15fe95766021aab1fb636d2b6d013ace78b
+  MyTBAKitTesting: 542474dedc456a027c6870bd7c5dd9dff0a52038
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   PINCache: d195fdba255283f7e9900a55e3cced377f431f9b
   PINOperation: a6219e6fc9db9c269eb7a7b871ac193bcf400aac
   PINRemoteImage: d6d51c5d2adda55f1ce30c96e850b6c4ebd2856a
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
   PureLayout: f08c01b8dec00bb14a1fefa3de4c7d9c265df85e
-  React: 0d6c719d9549bea0bd5676f8170b0e5c56e2c3c7
+  React: ff7ee2ae5ee1c1d9ae2183b4111045b25294bb01
+  React-Core: 8e0ea421cae5609d2562850f98421b15030476fa
+  React-cxxreact: 326880209990151a7182a813311054e9772ba510
+  React-DevSupport: e9f10e6721e78e87622fc985db695c0c0168db8a
+  React-fishhook: 1f0e5b08449403fa75c3fb3881a0beefbada14af
+  React-jsi: 21d3153b1153fbf6510a92b6b11e33e725cb7432
+  React-jsiexecutor: 7549641e48bafae7bfee3f3ea19bf4901639c5de
+  React-jsinspector: 73f24a02fa684ed6a2b828ba116874a2191ded88
+  React-RCTActionSheet: 9f71d7ae3e8fb10e08d162cbf14c621349dbfab3
+  React-RCTAnimation: 981d8c95b0e30918a9832ccac32af83562a27fae
+  React-RCTBlob: 21e73d1020a302a75fed30dbaee9f15287b80baa
+  React-RCTImage: c0bc6ac0926517b6fb7e4c279b04843113e99d1d
+  React-RCTLinking: 1af3f3c59114bed3deec0107c62e7efad0932ee5
+  React-RCTNetwork: 35df9de46e19cda5c56380be1a7759b9b8cb2fcd
+  React-RCTSettings: f580504c2cd1f44e25add10fb9ed3954f67f8ac5
+  React-RCTText: e0f224898b13af9aa036ea7cb3d438daa68c1044
+  React-RCTVibration: 0bea40cd51bd089bd591a8f74c86e91fdf2666c5
+  React-RCTWebSocket: 163873f4cdd5f1058a9483443404fc3801581cb6
   Reveal-SDK: 1385ab77aa15e9a3e21f798c74bd8e94cb54c651
-  TBAKit: 6f993ebc3971dc91c09e5f50366d6b6c40de874d
-  TBAKitTesting: 01d2be262383a8978c11cb886f9782d0acfb219e
-  TBAOperation: ebb2d46042aed6c2fa29d8ec15e863e2fa53c7af
-  TBAOperationTesting: 19e52290745b4f5f82424f51032caa15e33ec7bf
-  TBATestingMocks: c43f0abc435cd9950a448c08755062d35e0c7ce9
+  TBAKit: ae37dcd3daa052ffd1dcf6d2fe5c982d1ea26a5e
+  TBAKitTesting: 09caf1efd2561d641efd4de3d4fd29e9bdc9f54a
+  TBAOperation: f325b9e11d51bb2fe1dc239aedc38ea08084c513
+  TBAOperationTesting: 10bb381e70cc25107e44d4ff3801cedee520c99e
+  TBATestingMocks: 842b4e8ed857c19c40bc1033cbec862138f0120a
   XCDYouTubeKit: a38534160e092d87c8ea983a8d92939020501551
-  yoga: 26673abd38bbdf0c33e134ad9e690c5fbf16e8fc
+  yoga: c2c050f6ae6e222534760cc82f559b89214b67e2
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: ae5a60c6769129d8cf410ec1e029291f47392257
+PODFILE CHECKSUM: 9fdd09aa748680dcac037f2e50da291fb54d2262
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.7.1
