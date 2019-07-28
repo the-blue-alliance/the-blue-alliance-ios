@@ -83,6 +83,11 @@ PODS:
   - Folly (2018.10.22.00):
     - boost-for-react-native
     - DoubleConversion
+    - Folly/Default (= 2018.10.22.00)
+    - glog
+  - Folly/Default (2018.10.22.00):
+    - boost-for-react-native
+    - DoubleConversion
     - glog
   - glog (0.3.5)
   - GoogleAppMeasurement (5.6.0):
@@ -330,7 +335,7 @@ SPEC CHECKSUMS:
   BFRImageViewer: 647b91e4c9956d1ffc66245614aca22f10b0d370
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
-  DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
+  DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   Fabric: f988e33c97f08930a413e08123064d2e5f68d655
   Firebase: 59d557e064217fab6a03ff00baa73c06e73832e6
   FirebaseABTesting: 1f50b8d50f5e3469eea54e7463a7b7fe221d1f5e
@@ -345,16 +350,16 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfig: 7e11c65f0769c09bff6947997c209515058c5318
   FirebaseStorage: 29075f874c2b3cf61e5221a62c4ceefc809e5412
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  Folly: de497beb10f102453a1afa9edbf8cf8a251890de
-  glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
+  Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
+  glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   GoogleAppMeasurement: 008e04ecd8efedd97a693aea8634aefe220bd26e
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
   GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
   GoogleUtilities: 111a012f4c3a29c9e7c954c082fafd6ee3c999c0
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
   iOSSnapshotTestCase: f3b2b7e606fe03fdbe49af84316bd235df32dc44
-  MyTBAKit: 9e70178b610b322651c9c31485115fd1a25a74ce
-  MyTBAKitTesting: cd6dbb57eef130b8d15692d86d3af767a051a403
+  MyTBAKit: 1887c15fe95766021aab1fb636d2b6d013ace78b
+  MyTBAKitTesting: 542474dedc456a027c6870bd7c5dd9dff0a52038
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   PINCache: d195fdba255283f7e9900a55e3cced377f431f9b
   PINOperation: a6219e6fc9db9c269eb7a7b871ac193bcf400aac
@@ -363,15 +368,15 @@ SPEC CHECKSUMS:
   PureLayout: f08c01b8dec00bb14a1fefa3de4c7d9c265df85e
   React: 0d6c719d9549bea0bd5676f8170b0e5c56e2c3c7
   Reveal-SDK: 1385ab77aa15e9a3e21f798c74bd8e94cb54c651
-  TBAKit: 6f993ebc3971dc91c09e5f50366d6b6c40de874d
-  TBAKitTesting: 01d2be262383a8978c11cb886f9782d0acfb219e
-  TBAOperation: ebb2d46042aed6c2fa29d8ec15e863e2fa53c7af
-  TBAOperationTesting: 19e52290745b4f5f82424f51032caa15e33ec7bf
-  TBATestingMocks: c43f0abc435cd9950a448c08755062d35e0c7ce9
+  TBAKit: ae37dcd3daa052ffd1dcf6d2fe5c982d1ea26a5e
+  TBAKitTesting: 09caf1efd2561d641efd4de3d4fd29e9bdc9f54a
+  TBAOperation: f325b9e11d51bb2fe1dc239aedc38ea08084c513
+  TBAOperationTesting: 10bb381e70cc25107e44d4ff3801cedee520c99e
+  TBATestingMocks: 842b4e8ed857c19c40bc1033cbec862138f0120a
   XCDYouTubeKit: a38534160e092d87c8ea983a8d92939020501551
   yoga: 26673abd38bbdf0c33e134ad9e690c5fbf16e8fc
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
 PODFILE CHECKSUM: ae5a60c6769129d8cf410ec1e029291f47392257
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.7.1
