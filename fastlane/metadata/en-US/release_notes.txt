@@ -1,3 +1,5 @@
-Hey y’all - this update fixes a bug where event alliances would sometimes show up sorted incorrectly, along with a handful of bug fixes.
+Hey y’all - this update introduces a new Team@Event view!
+
+This update also fixes a bug where myTBA cells wouldn't update properly, fixes a bug where off season events on the first of the month wouldn't show up in the events list, fixes showing incorrect precision for 2015 data, and fixes a crash when singing out of myTBA.
 
 The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
