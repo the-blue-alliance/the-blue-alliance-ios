@@ -17,7 +17,7 @@ class EventTableViewCell: UITableViewCell, Reusable {
     // MARK: - Interface Builder
 
     @IBOutlet private weak var nameLabel: UILabel!
-    @IBOutlet private weak var weekLabel: EventWeekLabel!
+    @IBOutlet private weak var weekLabel: UILabel!
     @IBOutlet private weak var locationLabel: UILabel!
     @IBOutlet private weak var dateLabel: UILabel!
 
@@ -32,6 +32,8 @@ class EventTableViewCell: UITableViewCell, Reusable {
         weekLabel.text = viewModel.eventWeek
         locationLabel.text = viewModel.eventLocation
         dateLabel.text = viewModel.eventDate
+        
+        weekLabel.isHidden = viewModel.eventWeek == nil
     }
 
 }

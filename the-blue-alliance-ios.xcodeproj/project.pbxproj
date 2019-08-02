@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		078AA3D92298FFDE001F2D24 /* EventWeekLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078AA3D82298FFDE001F2D24 /* EventWeekLabel.swift */; };
 		1416D50A218E422400F1A4A3 /* EventInsights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1416D509218E422400F1A4A3 /* EventInsights.swift */; };
 		1416D50C218E462500F1A4A3 /* EventInsightsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1416D50B218E462500F1A4A3 /* EventInsightsTests.swift */; };
 		1416D50E218E4B8200F1A4A3 /* EventTeamStatsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1416D50D218E4B8200F1A4A3 /* EventTeamStatsTests.swift */; };
@@ -266,7 +265,6 @@
 
 /* Begin PBXFileReference section */
 		0759E7B4E6EFF9A67209A156 /* Pods_tba_ui_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tba_ui_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		078AA3D82298FFDE001F2D24 /* EventWeekLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventWeekLabel.swift; sourceTree = "<group>"; };
 		1416D509218E422400F1A4A3 /* EventInsights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsights.swift; sourceTree = "<group>"; };
 		1416D50B218E462500F1A4A3 /* EventInsightsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInsightsTests.swift; sourceTree = "<group>"; };
 		1416D50D218E4B8200F1A4A3 /* EventTeamStatsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTeamStatsTests.swift; sourceTree = "<group>"; };
@@ -1467,7 +1465,6 @@
 				304ED03F1EF1D2D300E31791 /* RankingTableViewCell.xib */,
 				304ED0401EF1D2D300E31791 /* RankingTableViewCell.swift */,
 				14796945215EB0B90075AF4E /* RankingCellViewModel.swift */,
-				078AA3D82298FFDE001F2D24 /* EventWeekLabel.swift */,
 				92FFE5241E7C994B0037E48C /* EventTableViewCell.xib */,
 				92FFE5261E7C9A1F0037E48C /* EventTableViewCell.swift */,
 				14796947215EBD6C0075AF4E /* EventCellViewModel.swift */,
@@ -1785,8 +1782,6 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-tba-unit-tests/Pods-tba-unit-tests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/MyTBAKit/MyTBAKit.framework",
@@ -1799,8 +1794,6 @@
 				"${BUILT_PRODUCTS_DIR}/iOSSnapshotTestCase/FBSnapshotTestCase.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MyTBAKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MyTBAKitTesting.framework",
@@ -1956,7 +1949,6 @@
 				92FF10EC21A61A1B003BC5C4 /* TeamEventsViewController.swift in Sources */,
 				92858F27208D444700811614 /* CoreDataContextObserver.swift in Sources */,
 				92FF110921A61AF6003BC5C4 /* EventAlliancesViewController.swift in Sources */,
-				078AA3D92298FFDE001F2D24 /* EventWeekLabel.swift in Sources */,
 				928018F42096431200693447 /* MyTBASignInViewController.swift in Sources */,
 				92942DB11E215B06008E79CA /* EventsViewController.swift in Sources */,
 				92CFF55D1EB548E3008D2348 /* TableViewDataSource.swift in Sources */,
