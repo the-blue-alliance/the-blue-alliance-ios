@@ -74,6 +74,10 @@ post_install do | installer |
   'the-blue-alliance-ios/Settings.bundle/Acknowledgements.plist', :remove_destination => true)
 
   installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['WARNING_CFLAGS'] ||= ['"-Wno-nullability-completeness"']
+    end
+
     if "#{target}" == "AppAuth"
       target.build_configurations.each do |config|
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '9.3'
