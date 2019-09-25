@@ -98,9 +98,7 @@ class TBAReactNativeViewController: TBAViewController {
         guard let sourceURL = sourceURL else {
             return nil
         }
-        guard let rootView = RCTRootView(bundleURL: sourceURL, moduleName: moduleName, initialProperties: initialProperties, launchOptions: [:]) else {
-            return nil
-        }
+        let rootView = RCTRootView(bundleURL: sourceURL, moduleName: moduleName, initialProperties: initialProperties, launchOptions: [:])
         rootView.delegate = self
         rootView.sizeFlexibility = .height
         return rootView
