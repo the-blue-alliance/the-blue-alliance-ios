@@ -14,9 +14,6 @@ const Image = ({ style, ...props }) => (
   <ReactNative.Image style={[breakdownStyle.imageSize, style]} {...props} />
 );
 
-// Override our Image and Text to have specific sizes
-const Image = ({ style, ...props }) => <ReactNative.Image style={[breakdownStyle.imageSize, style]} {...props} />;
-
 export default class MatchBreakdown2019 extends MatchBreakdown {
   nullHatchPanelImage() {
     return (
@@ -39,24 +36,6 @@ export default class MatchBreakdown2019 extends MatchBreakdown {
   cargoImage() {
     return (
       <Image source={images[2019].cargo} style={{ tintColor: "#ff6d00" }} />
-    );
-  }
-
-  nullHatchPanelImage() {
-    return (
-      <Image source={images[2019].hatchPanel} style={{ tintColor: '#616161' }} />
-    );
-  }
-
-  hatchPanelImage() {
-    return (
-      <Image source={images[2019].hatchPanel} style={{ tintColor: '#ffeb3b' }} />
-    );
-  }
-
-  cargoImage() {
-    return (
-      <Image source={images[2019].cargo} style={{ tintColor: '#ff6d00' }} />
     );
   }
 
