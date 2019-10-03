@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
-  s.name             = 'TBATestingMocks'
+  s.name             = 'TBANetworkTestingMocks'
   s.version          = '1.0.0-LOCAL'
-  s.summary          = 'Shared mock classes to use for testing in TBA frameworks.'
-  s.homepage         = 'https://github.com/the-blue-alliance/the-blue-alliance-ios/tree/master/Frameworks/TBAMocks'
+  s.summary          = 'Shared network mock classes to use for testing in TBA networking frameworks.'
+  s.homepage         = 'https://github.com/the-blue-alliance/the-blue-alliance-ios/tree/master/Frameworks/TBANetworkTestingMocks'
   s.author           = 'ZachOrr'
   s.source           = { :git => 'https://thebluealliance.com/', :tag => s.version.to_s }
   s.swift_version    = '5.0'

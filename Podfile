@@ -76,7 +76,7 @@ target 'The Blue Alliance' do
     pod 'iOSSnapshotTestCase', '4.0.1' # TODO: Update to 6.0
     pod 'MyTBAKitTesting', :path => 'Frameworks/MyTBAKit'
     pod 'TBAKitTesting', :path => 'Frameworks/TBAKit'
-    pod 'TBATestingMocks', :path => 'Frameworks/TBATestingMocks'
+    pod 'TBANetworkTestingMocks', :path => 'Frameworks/TBANetworkTestingMocks'
     pod 'TBAOperationTesting', :path => 'Frameworks/TBAOperation'
   end
 end

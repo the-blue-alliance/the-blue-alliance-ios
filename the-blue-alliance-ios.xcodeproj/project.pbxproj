@@ -1822,9 +1822,9 @@
 				"${BUILT_PRODUCTS_DIR}/MyTBAKitTesting/MyTBAKitTesting.framework",
 				"${BUILT_PRODUCTS_DIR}/TBAKit/TBAKit.framework",
 				"${BUILT_PRODUCTS_DIR}/TBAKitTesting/TBAKitTesting.framework",
+				"${BUILT_PRODUCTS_DIR}/TBANetworkTestingMocks/TBANetworkTestingMocks.framework",
 				"${BUILT_PRODUCTS_DIR}/TBAOperation/TBAOperation.framework",
 				"${BUILT_PRODUCTS_DIR}/TBAOperationTesting/TBAOperationTesting.framework",
-				"${BUILT_PRODUCTS_DIR}/TBATestingMocks/TBATestingMocks.framework",
 				"${BUILT_PRODUCTS_DIR}/iOSSnapshotTestCase/FBSnapshotTestCase.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -1833,9 +1833,9 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MyTBAKitTesting.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAKitTesting.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBANetworkTestingMocks.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAOperation.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBAOperationTesting.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TBATestingMocks.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSnapshotTestCase.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;

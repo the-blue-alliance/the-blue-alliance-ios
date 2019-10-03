@@ -1,5 +1,5 @@
 import TBAKitTesting
-import TBATestingMocks
+import TBANetworkTestingMocks
 import XCTest
 @testable import TBAKit
 
