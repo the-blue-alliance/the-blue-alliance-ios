@@ -1,6 +1,8 @@
 import CoreData
+import Crashlytics
 import FirebaseMessaging
 import MyTBAKit
+import TBAData
 import UIKit
 
 // Two sections are a single no-title section for "Favorite" cell,
@@ -163,7 +165,7 @@ class MyTBAPreferenceViewController: UITableViewController {
                         }
                     }
                 }
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         })
 
         let dismissOperation = BlockOperation(block: { [weak self] in

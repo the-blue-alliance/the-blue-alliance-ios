@@ -5,9 +5,6 @@ import XCTest
 class SettingsViewControllerTests: TBATestCase {
 
     var settingsViewController: SettingsViewController!
-    var navigationController: MockNavigationController!
-
-    var viewControllerTester: TBAViewControllerTester<UINavigationController>!
 
     override func setUp() {
         super.setUp()
@@ -20,20 +17,12 @@ class SettingsViewControllerTests: TBATestCase {
                                                         persistentContainer: persistentContainer,
                                                         tbaKit: tbaKit,
                                                         userDefaults: userDefaults)
-        navigationController = MockNavigationController(rootViewController: settingsViewController)
-
-        viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
     }
 
     override func tearDown() {
         settingsViewController = nil
 
         super.tearDown()
-    }
-
-    func test_snapshot() {
-        // TODO: Mock bundle and fix snapshot tests
-        // verifyLayer(viewControllerTester.window.layer)
     }
 
     func test_title() {

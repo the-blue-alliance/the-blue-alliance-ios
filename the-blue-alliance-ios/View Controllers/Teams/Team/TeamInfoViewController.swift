@@ -1,4 +1,6 @@
 import CoreData
+import Crashlytics
+import TBAData
 import TBAKit
 import UIKit
 
@@ -217,7 +219,7 @@ extension TeamInfoViewController: Refreshable {
                 }
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: infoOperation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         })
 
         var yearsOperation: TBAKitOperation!
@@ -230,7 +232,7 @@ extension TeamInfoViewController: Refreshable {
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(yearsOperation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         })
 
         // TODO: Think about how we go about refreshing the years, and maybe also move it to the year selector as well?

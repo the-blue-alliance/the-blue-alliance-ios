@@ -1,7 +1,9 @@
+import TBAData
+import TBADataTesting
 import XCTest
 @testable import The_Blue_Alliance
 
-class EventAllianceCellViewModelTestCase: CoreDataTestCase {
+class EventAllianceCellViewModelTestCase: TBADataTestCase {
 
     func test_init() {
         let alliance = EventAlliance.init(entity: EventAlliance.entity(), insertInto: persistentContainer.viewContext)

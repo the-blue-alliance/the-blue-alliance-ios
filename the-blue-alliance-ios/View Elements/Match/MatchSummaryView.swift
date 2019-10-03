@@ -1,4 +1,5 @@
 import Foundation
+import TBAData
 import UIKit
 
 protocol MatchSummaryViewDelegate:class {

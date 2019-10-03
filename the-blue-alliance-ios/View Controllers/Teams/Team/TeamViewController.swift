@@ -3,6 +3,7 @@ import CoreData
 import Firebase
 import MyTBAKit
 import Photos
+import TBAData
 import TBAKit
 import UIKit
 

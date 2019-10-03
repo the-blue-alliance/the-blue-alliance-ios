@@ -1,7 +1,9 @@
 import CoreData
+import Crashlytics
 import Firebase
 import Foundation
 import MyTBAKit
+import TBAData
 import TBAKit
 import UIKit
 
@@ -166,7 +168,7 @@ extension EventAlliancesViewController: Refreshable {
                 }
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         })
         addRefreshOperations([operation])
     }

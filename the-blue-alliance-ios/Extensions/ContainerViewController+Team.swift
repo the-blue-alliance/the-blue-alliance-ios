@@ -1,5 +1,7 @@
+import Crashlytics
 import FirebaseMessaging
 import MyTBAKit
+import TBAData
 import UIKit
 
 // An protocol/extension for Container view controllers that can push to a Team view controller.
@@ -35,7 +37,7 @@ extension ContainerTeamPushable where Self: ContainerViewController {
                         DispatchQueue.main.async {
                             self._pushTeam(attemptedToLoadTeam: true) // Try again - but don't get in to a cycle if the request is failing
                         }
-                    })
+                    }, errorRecorder: Crashlytics.sharedInstance())
 
                     // Reset our nav bar item
                     DispatchQueue.main.async {

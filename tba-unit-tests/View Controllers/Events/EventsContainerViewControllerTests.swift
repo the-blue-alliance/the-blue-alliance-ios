@@ -3,10 +3,8 @@ import XCTest
 
 class EventsContainerViewControllerTests: TBATestCase {
 
-    var eventsContainerViewController: EventsContainerViewController!
     var navigationController: MockNavigationController!
-
-    var viewControllerTester: TBAViewControllerTester<UINavigationController>!
+    var eventsContainerViewController: EventsContainerViewController!
 
     override func setUp() {
         super.setUp()
@@ -19,20 +17,13 @@ class EventsContainerViewControllerTests: TBATestCase {
                                                                       tbaKit: tbaKit,
                                                                       userDefaults: userDefaults)
         navigationController = MockNavigationController(rootViewController: eventsContainerViewController)
-
-        viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
     }
 
     override func tearDown() {
-        viewControllerTester = nil
         navigationController = nil
         eventsContainerViewController = nil
 
         super.tearDown()
-    }
-
-    func test_snapshot() {
-        verifyLayer(viewControllerTester.window.layer)
     }
 
     func test_delegates() {
@@ -53,6 +44,7 @@ class EventsContainerViewControllerTests: TBATestCase {
     }
 
     func test_showsWeekEvents() {
+        eventsContainerViewController.viewDidLoad()
         XCTAssert(eventsContainerViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is WeekEventsViewController
         }))

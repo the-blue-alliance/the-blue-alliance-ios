@@ -3,10 +3,8 @@ import XCTest
 
 class DistrictsContainerViewControllerTests: TBATestCase {
 
-    var districtsContainerViewController: DistrictsContainerViewController!
     var navigationController: MockNavigationController!
-
-    var viewControllerTester: TBAViewControllerTester<UINavigationController>!
+    var districtsContainerViewController: DistrictsContainerViewController!
 
     override func setUp() {
         super.setUp()
@@ -19,22 +17,15 @@ class DistrictsContainerViewControllerTests: TBATestCase {
                                                                             tbaKit: tbaKit,
                                                                             userDefaults: userDefaults)
         navigationController = MockNavigationController(rootViewController: districtsContainerViewController)
-
-        viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
     }
 
     override func tearDown() {
-        viewControllerTester = nil
         navigationController = nil
         districtsContainerViewController = nil
 
         super.tearDown()
     }
 
-    func test_snapshot() {
-        verifyLayer(viewControllerTester.window.layer)
-    }
-    
     func test_delegates() {
         XCTAssertNotNil(districtsContainerViewController.navigationTitleDelegate)
         XCTAssertNotNil(districtsContainerViewController.districtsViewController.delegate)
@@ -52,6 +43,7 @@ class DistrictsContainerViewControllerTests: TBATestCase {
     }
 
     func test_showsDistricts() {
+        districtsContainerViewController.viewDidLoad()
         XCTAssert(districtsContainerViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is DistrictsViewController
         }))

@@ -1,5 +1,7 @@
 import CoreData
+import Crashlytics
 import Foundation
+import TBAData
 import TBAKit
 import UIKit
 
@@ -105,7 +107,7 @@ extension DistrictsViewController: Refreshable {
                 }
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         })
         addRefreshOperations([operation])
     }

@@ -36,9 +36,6 @@ class MyTBAContainerViewControllerTests: TBATestCase {
     var subscribableModel: MyTBASubscribable!
 
     var tbaContainerViewController: MockMyTBAContainerViewController!
-    var navigationController: MockNavigationController!
-
-    var viewControllerTester: TBAViewControllerTester<UINavigationController>!
 
     override func setUp() {
         super.setUp()
@@ -46,27 +43,13 @@ class MyTBAContainerViewControllerTests: TBATestCase {
         subscribableModel = insertDistrictEvent()
 
         tbaContainerViewController = MockMyTBAContainerViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        navigationController = MockNavigationController(rootViewController: tbaContainerViewController)
-
-        viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
     }
 
     override func tearDown() {
-        viewControllerTester = nil
-        navigationController = nil
         tbaContainerViewController = nil
         subscribableModel = nil
 
         super.tearDown()
-    }
-
-    func test_snapshot() {
-        verifyLayer(navigationController.navigationBar.layer, identifier: "unauthenticated")
-
-        myTBA.authToken = "abcd123"
-        waitOneSecond()
-
-        verifyLayer(navigationController.navigationBar.layer, identifier: "authenticated")
     }
 
     func test_myTBAAuthenticationObservable_authenticated() {

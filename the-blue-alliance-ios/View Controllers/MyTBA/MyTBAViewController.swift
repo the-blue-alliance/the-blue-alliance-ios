@@ -5,6 +5,7 @@ import FirebaseMessaging
 import GoogleSignIn
 import MyTBAKit
 import PureLayout
+import TBAData
 import TBAKit
 import UIKit
 import UserNotifications
@@ -148,7 +149,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         persistentContainer.viewContext.deleteAllObjectsForEntity(entity: Subscription.entity())
 
         // Clear notifications
-        persistentContainer.viewContext.performSaveOrRollback()
+        persistentContainer.viewContext.performSaveOrRollback(errorRecorder: Crashlytics.sharedInstance())
     }
 
     // MARK: - Interface Methods

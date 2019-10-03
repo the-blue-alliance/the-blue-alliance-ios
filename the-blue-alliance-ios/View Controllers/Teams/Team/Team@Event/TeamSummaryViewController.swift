@@ -1,5 +1,7 @@
 import CoreData
+import Crashlytics
 import Foundation
+import TBAData
 import TBAKit
 import UIKit
 
@@ -465,7 +467,7 @@ extension TeamSummaryViewController: Refreshable {
                         event.insert(status)
                     }, saved: {
                         self.markTBARefreshSuccessful(self.tbaKit, operation: teamStatusOperation)
-                    })
+                    }, errorRecorder: Crashlytics.sharedInstance())
                 } else if !notModified {
                     // TODO: Delete status, move back up our hiearchy
                 }
@@ -486,7 +488,7 @@ extension TeamSummaryViewController: Refreshable {
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(awardsOperation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         })
 
         let reloadOperation = BlockOperation { [weak self] in
@@ -520,7 +522,7 @@ extension TeamSummaryViewController: Refreshable {
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         }
         return operation
     }

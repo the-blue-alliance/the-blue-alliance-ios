@@ -1,4 +1,6 @@
 import CoreData
+import Crashlytics
+import TBAData
 import Foundation
 import TBAKit
 
@@ -45,7 +47,7 @@ class EventTeamsViewController: TeamsViewController {
                 }
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         })
         addRefreshOperations([operation])
     }

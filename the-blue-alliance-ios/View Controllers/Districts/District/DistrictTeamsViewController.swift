@@ -1,5 +1,7 @@
 import CoreData
+import Crashlytics
 import Foundation
+import TBAData
 import TBAKit
 
 class DistrictTeamsViewController: TeamsViewController {
@@ -47,7 +49,7 @@ class DistrictTeamsViewController: TeamsViewController {
                 }
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         })
         addRefreshOperations([operation])
     }

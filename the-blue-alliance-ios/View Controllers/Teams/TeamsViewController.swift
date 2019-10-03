@@ -1,5 +1,7 @@
 import CoreData
+import Crashlytics
 import Foundation
+import TBAData
 import TBAKit
 import UIKit
 
@@ -123,7 +125,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
                 Team.insert(teams, page: page, in: context)
             }, saved: {
                 self.tbaKit.storeCacheHeaders(previousOperation!)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         }) { (error) in
             if error == nil {
                 self.markRefreshSuccessful()

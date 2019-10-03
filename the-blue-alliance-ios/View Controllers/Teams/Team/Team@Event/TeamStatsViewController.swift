@@ -1,5 +1,7 @@
 import CoreData
+import Crashlytics
 import Foundation
+import TBAData
 import TBAKit
 import UIKit
 
@@ -127,7 +129,7 @@ extension TeamStatsViewController: Refreshable {
                 }
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         })
         addRefreshOperations([operation])
     }

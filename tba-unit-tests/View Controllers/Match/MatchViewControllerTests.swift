@@ -1,3 +1,4 @@
+import TBAData
 import XCTest
 @testable import MyTBAKit
 @testable import The_Blue_Alliance
@@ -9,9 +10,6 @@ class MatchViewControllerTests: TBATestCase {
     }
 
     var matchViewController: MatchViewController!
-    var navigationController: MockNavigationController!
-
-    var viewControllerTester: TBAViewControllerTester<UINavigationController>!
 
     override func setUp() {
         super.setUp()
@@ -19,25 +17,12 @@ class MatchViewControllerTests: TBATestCase {
         let match = insertMatch()
 
         matchViewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        navigationController = MockNavigationController(rootViewController: matchViewController)
-
-        viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
     }
 
     override func tearDown() {
-        viewControllerTester = nil
-        navigationController = nil
         matchViewController = nil
 
         super.tearDown()
-    }
-
-    func test_snapshot() {
-        verifyLayer(viewControllerTester.window.layer)
-
-        // myTBA authed
-        myTBA.authToken = "abcd123"
-        verifyLayer(viewControllerTester.window.layer, identifier: "mytba")
     }
 
     func test_title() {
@@ -55,12 +40,14 @@ class MatchViewControllerTests: TBATestCase {
     }
 
     func test_showsInfo() {
+        matchViewController.viewDidLoad()
         XCTAssert(matchViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is MatchInfoViewController
         }))
     }
 
     func test_showsBreakdown() {
+        matchViewController.viewDidLoad()
         XCTAssert(matchViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is MatchBreakdownViewController
         }))

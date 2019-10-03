@@ -1,4 +1,5 @@
 import CoreData
+import TBAData
 import TBAKit
 import UIKit
 

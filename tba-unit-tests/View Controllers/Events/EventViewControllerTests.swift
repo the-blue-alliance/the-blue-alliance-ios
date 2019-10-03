@@ -1,3 +1,4 @@
+import TBAData
 import XCTest
 @testable import MyTBAKit
 @testable import The_Blue_Alliance
@@ -8,10 +9,8 @@ class EventViewControllerTests: TBATestCase {
         return eventViewController.event
     }
 
-    var eventViewController: EventViewController!
     var navigationController: MockNavigationController!
-
-    var viewControllerTester: TBAViewControllerTester<UINavigationController>!
+    var eventViewController: EventViewController!
 
     override func setUp() {
         super.setUp()
@@ -20,34 +19,13 @@ class EventViewControllerTests: TBATestCase {
 
         eventViewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController = MockNavigationController(rootViewController: eventViewController)
-
-        viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
     }
 
     override func tearDown() {
-        viewControllerTester = nil
         navigationController = nil
         eventViewController = nil
 
         super.tearDown()
-    }
-
-    func test_snapshot() {
-        // Stop our VC from refreshing
-        eventViewController.infoViewController.markRefreshSuccessful()
-
-        verifyLayer(viewControllerTester.window.layer)
-
-        // Event offline
-        statusService.dispatchEvents(downEventKeys: [event.key!])
-        waitOneSecond()
-        verifyLayer(viewControllerTester.window.layer, identifier: "event_offline")
-        statusService.dispatchEvents(downEventKeys: [])
-        waitOneSecond()
-
-        // myTBA authed
-        myTBA.authToken = "abcd123"
-        verifyLayer(viewControllerTester.window.layer, identifier: "mytba")
     }
 
     func test_subscribableModel() {
@@ -66,24 +44,28 @@ class EventViewControllerTests: TBATestCase {
     }
 
     func test_showsInfo() {
+        eventViewController.viewDidLoad()
         XCTAssert(eventViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is EventInfoViewController
         }))
     }
 
     func test_showsTeams() {
+        eventViewController.viewDidLoad()
         XCTAssert(eventViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is EventTeamsViewController
         }))
     }
 
     func test_showsRankings() {
+        eventViewController.viewDidLoad()
         XCTAssert(eventViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is EventRankingsViewController
         }))
     }
 
     func test_showsMatches() {
+        eventViewController.viewDidLoad()
         XCTAssert(eventViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is MatchesViewController
         }))

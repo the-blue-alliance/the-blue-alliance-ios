@@ -1,6 +1,8 @@
 import CoreData
+import Crashlytics
 import Foundation
 import PureLayout
+import TBAData
 import TBAKit
 import UIKit
 
@@ -234,7 +236,7 @@ extension MatchInfoViewController: Refreshable {
 
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         })
         addRefreshOperations([operation])
     }

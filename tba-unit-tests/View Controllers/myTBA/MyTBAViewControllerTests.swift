@@ -1,42 +1,26 @@
 import FirebaseMessaging
+import TBAData
 import XCTest
 @testable import MyTBAKit
 @testable import The_Blue_Alliance
 
 class MyTBAViewControllerTests: TBATestCase {
 
-    var myTBAViewController: MyTBAViewController!
     var navigationController: MockNavigationController!
-
-    var viewControllerTester: TBAViewControllerTester<UINavigationController>!
+    var myTBAViewController: MyTBAViewController!
 
     override func setUp() {
         super.setUp()
 
         myTBAViewController = MyTBAViewController(messaging: Messaging.messaging(), myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController = MockNavigationController(rootViewController: myTBAViewController)
-
-        viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
     }
 
     override func tearDown() {
-        viewControllerTester = nil
         navigationController = nil
         myTBAViewController = nil
 
         super.tearDown()
-    }
-
-    func test_snapshot() {
-        verifyLayer(viewControllerTester.window.layer, identifier: "signed_out")
-
-        myTBA.authToken = "abcd123"
-        waitOneSecond()
-        verifyLayer(viewControllerTester.window.layer, identifier: "signed_in")
-
-        myTBAViewController.isLoggingOut = true
-        waitOneSecond()
-        verifyLayer(viewControllerTester.window.layer, identifier: "signing_out")
     }
 
     func test_delegates() {
@@ -53,12 +37,14 @@ class MyTBAViewControllerTests: TBATestCase {
     }
 
     func test_showsFavorites() {
+        myTBAViewController.viewDidLoad()
         XCTAssert(myTBAViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is MyTBATableViewController<Favorite, MyTBAFavorite>
         }))
     }
 
     func test_showsSubscriptions() {
+        myTBAViewController.viewDidLoad()
         XCTAssert(myTBAViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is MyTBATableViewController<Subscription, MyTBASubscription>
         }))
