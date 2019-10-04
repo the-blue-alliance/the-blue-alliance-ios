@@ -12,7 +12,7 @@ stages:
 - name: app_store
   if: "(type == push) AND (branch == master) AND (commit_message =~ \\[app_store\\])"
 - name: beta
-  if: "(type == push) AND (branch == master) AND (commit_message =~ \\[beta\\])"
+  if: "(type == push) AND (branch == master OR branch == ios13) AND (commit_message =~ \\[beta\\])"
 cache:
   bundler: true
   cocoapods: true
