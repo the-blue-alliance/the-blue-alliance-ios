@@ -32,7 +32,7 @@ class MatchSummaryView: UIView {
     @IBOutlet private weak var redStackView: UIStackView!
     @IBOutlet weak var redContainerView: UIView! {
         didSet {
-            redContainerView.layer.borderColor = UIColor.red.cgColor
+            redContainerView.layer.borderColor = UIColor.systemRed.cgColor
         }
     }
     @IBOutlet weak var redScoreView: UIView!
@@ -42,7 +42,7 @@ class MatchSummaryView: UIView {
     @IBOutlet weak private var blueStackView: UIStackView!
     @IBOutlet weak var blueContainerView: UIView! {
         didSet {
-            blueContainerView.layer.borderColor = UIColor.blue.cgColor
+            blueContainerView.layer.borderColor = UIColor.systemBlue.cgColor
         }
     }
     @IBOutlet weak var blueScoreView: UIView!
@@ -176,7 +176,7 @@ class MatchSummaryView: UIView {
     private func button(text: String, isBold: Bool, isStrikethrough: Bool = false) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(text, for: [])
-        button.setTitleColor(.primaryBlue, for: .normal)
+        button.setTitleColor(UIColor.primaryBlue, for: .normal)
         
         if let teamNumber = Int(text) {
             button.tag = teamNumber

@@ -39,7 +39,7 @@ class MyTBASignInViewController: UIViewController {
     // MARK: - Interface Methods
 
     func styleInterface() {
-        view.backgroundColor = .backgroundGray
+        view.backgroundColor = UIColor.systemGroupedBackground
     }
 
     func hideOrShowImageViews(for traitCollection: UITraitCollection) {

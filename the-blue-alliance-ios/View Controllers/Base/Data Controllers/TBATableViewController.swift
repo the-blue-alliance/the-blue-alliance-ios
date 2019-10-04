@@ -38,7 +38,7 @@ class TBATableViewController: UITableViewController, DataController {
 
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 64.0
-        tableView.backgroundColor = .backgroundGray
+        tableView.backgroundColor = UIColor.systemGroupedBackground
         tableView.tableFooterView = UIView.init(frame: .zero)
         tableView.delegate = self
         tableView.registerReusableCell(BasicTableViewCell.self)
@@ -49,12 +49,12 @@ class TBATableViewController: UITableViewController, DataController {
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let view = view as? UITableViewHeaderFooterView {
             // Setup text
-            view.textLabel?.textColor = .white
+            view.textLabel?.textColor = UIColor.white
             view.textLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
 
             // Set custom background color
             let headerView = UIView()
-            headerView.backgroundColor = .primaryDarkBlue
+            headerView.backgroundColor = UIColor.darkBlue
             view.backgroundView = headerView
         }
     }

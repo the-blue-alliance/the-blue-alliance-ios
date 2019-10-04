@@ -321,10 +321,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationBarAppearance.shadowImage = UIImage()
         navigationBarAppearance.setBackgroundImage(UIImage(), for: .default)
         navigationBarAppearance.isTranslucent = false
-        navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
 
-        let tabBarAppearance = UITabBar.appearance()
-        tabBarAppearance.barTintColor = .white
+
+        navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
     }
 
 }

@@ -43,7 +43,7 @@ class InfoTableViewCell: UITableViewCell, Reusable {
     private func subtitleLabelWithText(_ text: String) -> UILabel {
         let label = labelWithText(text)
         label.font = .systemFont(ofSize: 16)
-        label.textColor = .darkGray
+        label.textColor = UIColor.secondaryLabel
         return label
     }
 
