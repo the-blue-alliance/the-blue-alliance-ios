@@ -476,8 +476,4 @@ extension AppDelegate: UISplitViewControllerDelegate {
 }
 
 // Make Crashlytics conform to ErrorRecorder for TBAData
-extension Crashlytics: ErrorRecorder {
-    public func recordError(error: Error) {
-        Crashlytics.sharedInstance().recordError(error: error)
-    }
-}
+extension Crashlytics: ErrorRecorder {}
