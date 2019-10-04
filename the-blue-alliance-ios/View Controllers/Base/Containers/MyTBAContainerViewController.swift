@@ -38,10 +38,10 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
     // MARK: - Interface Methods
 
     func updateFavoriteButton() {
-        if myTBA.isAuthenticated, navigationItem.rightBarButtonItem == nil {
-            navigationItem.rightBarButtonItem = favoriteBarButtonItem
-        } else if !myTBA.isAuthenticated, navigationItem.rightBarButtonItem != nil {
-            navigationItem.rightBarButtonItem = nil
+        if myTBA.isAuthenticated {
+            rightBarButtonItems = [favoriteBarButtonItem]
+        } else {
+            rightBarButtonItems = []
         }
     }
 

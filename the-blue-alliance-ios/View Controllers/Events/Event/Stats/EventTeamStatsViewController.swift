@@ -6,6 +6,7 @@ import TBAKit
 import UIKit
 
 protocol EventTeamStatsSelectionDelegate: AnyObject {
+    func filterSelected()
     func eventTeamStatSelected(_ eventTeamStat: EventTeamStat)
 }
 
@@ -34,6 +35,17 @@ class EventTeamStatsTableViewController: TBATableViewController {
 
             updateDataSource()
         }
+    }
+
+    lazy private var filerBarButtonItem: UIBarButtonItem = {
+        return UIBarButtonItem(image: UIImage(named: "ic_sort_white"),
+                               style: .plain,
+                               target: self,
+                               action: #selector(showFilter))
+    }()
+
+    override var additionalRightBarButtonItems: [UIBarButtonItem] {
+        return [filerBarButtonItem]
     }
 
     // MARK: - Init
@@ -95,6 +107,12 @@ class EventTeamStatsTableViewController: TBATableViewController {
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/279
         }
         request.sortDescriptors = [sortDescriptor!]
+    }
+
+    // MARK: - Interface Actions
+
+    @objc private func showFilter() {
+        delegate?.filterSelected()
     }
 
 }

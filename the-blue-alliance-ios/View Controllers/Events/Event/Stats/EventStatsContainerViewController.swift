@@ -16,13 +16,6 @@ class EventStatsContainerViewController: ContainerViewController {
 
     private let teamStatsViewController: EventTeamStatsTableViewController
 
-    lazy private var filerBarButtonItem: UIBarButtonItem = {
-        return UIBarButtonItem(image: UIImage(named: "ic_sort_white"),
-                               style: .plain,
-                               target: self,
-                               action: #selector(showFilter))
-    }()
-
     // MARK: - Init
 
     init(event: Event, messaging: Messaging, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
@@ -65,9 +58,9 @@ class EventStatsContainerViewController: ContainerViewController {
         Analytics.logEvent("event_stats", parameters: ["event": event.key!])
     }
 
-    // MARK: - Interface Actions
+    // MARK: - Private Methods
 
-    @objc private func showFilter() {
+    private func showFilter() {
         let selectTableViewController = SelectTableViewController<EventStatsContainerViewController>(current: teamStatsViewController.filter, options: EventTeamStatFilter.allCases, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         selectTableViewController.title = "Sort stats by"
         selectTableViewController.delegate = self
@@ -79,20 +72,10 @@ class EventStatsContainerViewController: ContainerViewController {
         navigationController?.present(nav, animated: true, completion: nil)
     }
 
+    // MARK: - Interface Actions
+
     @objc private func dismissFilter() {
         navigationController?.dismiss(animated: true, completion: nil)
-    }
-
-    // MARK: - Container
-
-    override func switchedToIndex(_ index: Int) {
-        // Show filter button if we switched to the team stats view controller
-        // Otherwise, hide the filter button
-        if index == 0 {
-            navigationItem.rightBarButtonItem = filerBarButtonItem
-        } else {
-            navigationItem.rightBarButtonItem = nil
-        }
     }
 
 }
@@ -112,6 +95,10 @@ extension EventStatsContainerViewController: SelectTableViewControllerDelegate {
 }
 
 extension EventStatsContainerViewController: EventTeamStatsSelectionDelegate {
+
+    func filterSelected() {
+        showFilter()
+    }
 
     func eventTeamStatSelected(_ eventTeamStat: EventTeamStat) {
         let teamAtEventViewController = TeamAtEventViewController(teamKey: eventTeamStat.teamKey!, event: event, messaging: messaging, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
