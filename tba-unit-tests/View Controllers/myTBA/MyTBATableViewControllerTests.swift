@@ -1,5 +1,6 @@
 import CoreData
 import XCTest
+@testable import TBAData
 @testable import TBAKit
 @testable import MyTBAKit
 @testable import The_Blue_Alliance
@@ -7,40 +8,17 @@ import XCTest
 class MyTBATableViewControllerTests: TBATestCase {
 
     var myTBATableViewController: MyTBATableViewController<Favorite, MyTBAFavorite>!
-    var viewControllerTester: TBAViewControllerTester<MyTBATableViewController<Favorite, MyTBAFavorite>>!
 
     override func setUp() {
         super.setUp()
 
         myTBATableViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
-        viewControllerTester = TBAViewControllerTester(withViewController: myTBATableViewController)
     }
 
     override func tearDown() {
-        viewControllerTester = nil
         myTBATableViewController = nil
 
         super.tearDown()
-    }
-
-    func test_snapshot() {
-        myTBATableViewController.tableView.reloadData()
-        waitOneSecond()
-        verifyLayer(viewControllerTester.window.layer, identifier: "no_data")
-
-        Favorite.insert([MyTBAFavorite(modelKey: "2018miket", modelType: .event), MyTBAFavorite(modelKey: "2018ctsc_qm1", modelType: .match), MyTBAFavorite(modelKey: "frc7332", modelType: .team), MyTBAFavorite(modelKey: "2018miket_frc2337", modelType: .eventTeam), MyTBAFavorite(modelKey: "frc7332", modelType: .team)], in: persistentContainer.viewContext)
-        myTBATableViewController.fetchMatch("2018ctsc_qm1")
-        waitOneSecond()
-
-        verifyLayer(viewControllerTester.window.layer, identifier: "partial_data")
-
-        _ = insertTeam()
-        _ = insertDistrictEvent()
-        _ = insertMatch()
-        myTBATableViewController.tableView.reloadData()
-
-        verifyLayer(viewControllerTester.window.layer, identifier: "data")
     }
 
     func test_refersh_unauthenticated() {
@@ -182,6 +160,8 @@ class MyTBATableViewControllerTests: TBATestCase {
     }
 
     func test_isDataSourceEmpty() {
+        myTBATableViewController.viewDidLoad()
+
         // No objects, myTBA not auth'd
         XCTAssertFalse(myTBATableViewController.isDataSourceEmpty)
 

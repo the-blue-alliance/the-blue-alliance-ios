@@ -1,4 +1,5 @@
 import Foundation
+import TBAData
 
 struct Recipient {
     let teamKey: String?

@@ -1,4 +1,6 @@
 import CoreData
+import Crashlytics
+import TBAData
 import TBAKit
 import UIKit
 
@@ -254,7 +256,7 @@ extension EventInfoViewController: Refreshable {
                 }
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         })
         addRefreshOperations([operation])
     }

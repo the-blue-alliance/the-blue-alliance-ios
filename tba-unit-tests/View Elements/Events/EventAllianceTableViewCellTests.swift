@@ -1,7 +1,9 @@
+import TBAData
+import TBADataTesting
 import XCTest
 @testable import The_Blue_Alliance
 
-class EventAllianceTableViewCellTestCase: CoreDataTestCase {
+class EventAllianceTableViewCellTestCase: TBADataTestCase {
 
     override func setUp() {
         super.setUp()
@@ -31,9 +33,6 @@ class EventAllianceTableViewCellTestCase: CoreDataTestCase {
 
         XCTAssertEqual(cell.nameLabel.text, "Alliance 2")
 
-        // Snapshot
-        verifyView(cell, identifier: "alliance_two_three_teams_no_status")
-
         alliance.name = "Alliance 3"
         cell.viewModel = EventAllianceCellViewModel(alliance: alliance, allianceNumber: 2)
 
@@ -44,9 +43,6 @@ class EventAllianceTableViewCellTestCase: CoreDataTestCase {
 
         var numberLabels = cell.allianceTeamsStackView.arrangedSubviews as! [UILabel]
         XCTAssertEqual(numberLabels.map({ $0.text }), ["1", "3", "2"])
-
-        // Snapshot
-        verifyView(cell, identifier: "alliance_three_three_teams_no_status")
 
         let status = EventStatusPlayoff.init(entity: EventStatusPlayoff.entity(), insertInto: persistentContainer.viewContext)
         status.level = "f"
@@ -59,9 +55,6 @@ class EventAllianceTableViewCellTestCase: CoreDataTestCase {
 
         XCTAssertEqual(cell.nameLabel.text, "Alliance 3")
 
-        // Snapshot
-        verifyView(cell, identifier: "alliance_three_three_teams_status")
-
         alliance.addToPicks(TeamKey.insert(withKey: "frc4b", in: persistentContainer.viewContext))
 
         cell.viewModel = EventAllianceCellViewModel(alliance: alliance, allianceNumber: 2)
@@ -73,9 +66,6 @@ class EventAllianceTableViewCellTestCase: CoreDataTestCase {
 
         numberLabels = cell.allianceTeamsStackView.arrangedSubviews as! [UILabel]
         XCTAssertEqual(numberLabels.map({ $0.text }), ["1", "3", "2", "4B"])
-
-        // Snapshot
-        verifyView(cell, identifier: "alliance_three_four_teams_status")
     }
 
     func test_gestureRecognizers() {

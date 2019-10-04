@@ -1,4 +1,6 @@
 import CoreData
+import Crashlytics
+import TBAData
 import TBAKit
 import UIKit
 
@@ -230,7 +232,7 @@ extension TeamMediaCollectionViewController: Refreshable {
                 }
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         })
         let fetchMediaOperation = BlockOperation {
             guard let teamMedia = self.team.media?.allObjects as? [TeamMedia] else {

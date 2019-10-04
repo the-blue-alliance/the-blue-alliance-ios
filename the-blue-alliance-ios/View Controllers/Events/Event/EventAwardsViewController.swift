@@ -1,6 +1,7 @@
 import CoreData
 import Firebase
 import MyTBAKit
+import TBAData
 import TBAKit
 import UIKit
 
@@ -176,7 +177,7 @@ extension EventAwardsViewController: Refreshable {
                 }
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         })
         addRefreshOperations([operation])
     }

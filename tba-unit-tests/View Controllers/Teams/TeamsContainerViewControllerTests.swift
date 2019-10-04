@@ -3,10 +3,8 @@ import XCTest
 
 class TeamsContainerViewControllerTests: TBATestCase {
 
-    var teamsContainerViewController: TeamsContainerViewController!
     var navigationController: MockNavigationController!
-
-    var viewControllerTester: TBAViewControllerTester<UINavigationController>!
+    var teamsContainerViewController: TeamsContainerViewController!
 
     override func setUp() {
         super.setUp()
@@ -19,20 +17,13 @@ class TeamsContainerViewControllerTests: TBATestCase {
                                                                     tbaKit: tbaKit,
                                                                     userDefaults: userDefaults)
         navigationController = MockNavigationController(rootViewController: teamsContainerViewController)
-
-        viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
     }
 
     override func tearDown() {
-        viewControllerTester = nil
         navigationController = nil
         teamsContainerViewController = nil
 
         super.tearDown()
-    }
-
-    func test_snapshot() {
-        verifyLayer(viewControllerTester.window.layer)
     }
 
     func test_delegates() {
@@ -48,6 +39,7 @@ class TeamsContainerViewControllerTests: TBATestCase {
     }
 
     func test_showsTeams() {
+        teamsContainerViewController.viewDidLoad()
         XCTAssert(teamsContainerViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is TeamsViewController
         }))

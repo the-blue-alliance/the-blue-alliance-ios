@@ -2,6 +2,7 @@ import CoreData
 import Firebase
 import Foundation
 import MyTBAKit
+import TBAData
 import TBAKit
 import UIKit
 

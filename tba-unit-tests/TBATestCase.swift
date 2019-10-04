@@ -1,11 +1,13 @@
 import CoreData
 import FirebaseMessaging
 import MyTBAKitTesting
+import TBAData
+import TBADataTesting
 import TBAKitTesting
 import XCTest
 @testable import The_Blue_Alliance
 
-class TBATestCase: CoreDataTestCase {
+class TBATestCase: TBADataTestCase {
 
     var testBundle: Bundle!
     var messaging: Messaging!
@@ -27,7 +29,7 @@ class TBATestCase: CoreDataTestCase {
         tbaKit = MockTBAKit(userDefaults: userDefaults)
         urlOpener = MockURLOpener()
         pushService = PushService(messaging: Messaging.messaging(), myTBA: myTBA, retryService: RetryService(), userDefaults: userDefaults)
-        statusService = StatusService(bundle: testBundle, persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
+        statusService = StatusService(bundle: StatusBundle.bundle, persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
     }
 
     override func tearDown() {

@@ -1,6 +1,8 @@
 import CoreData
+import Crashlytics
 import Foundation
 import MyTBAKit
+import TBAData
 import TBAKit
 import UIKit
 
@@ -233,7 +235,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 }
             }, saved: {
                 self.markRefreshSuccessful()
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         }
         finalOperation = addRefreshOperations([operation])
     }
@@ -282,7 +284,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         }
         return operation
     }
@@ -298,7 +300,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         }
         return operation
     }
@@ -314,7 +316,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
         }
         return operation
     }

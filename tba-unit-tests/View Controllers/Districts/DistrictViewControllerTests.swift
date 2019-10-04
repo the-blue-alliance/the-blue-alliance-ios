@@ -1,5 +1,6 @@
 import TBAKit
 import XCTest
+@testable import TBAData
 @testable import The_Blue_Alliance
 
 class DistrictViewControllerTests: TBATestCase {
@@ -8,10 +9,8 @@ class DistrictViewControllerTests: TBATestCase {
         return districtViewController.district
     }
 
-    var districtViewController: DistrictViewController!
     var navigationController: MockNavigationController!
-
-    var viewControllerTester: TBAViewControllerTester<UINavigationController>!
+    var districtViewController: DistrictViewController!
 
     override func setUp() {
         super.setUp()
@@ -27,20 +26,13 @@ class DistrictViewControllerTests: TBATestCase {
                                                         tbaKit: tbaKit,
                                                         userDefaults: userDefaults)
         navigationController = MockNavigationController(rootViewController: districtViewController)
-
-        viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
     }
 
     override func tearDown() {
-        viewControllerTester = nil
         navigationController = nil
         districtViewController = nil
 
         super.tearDown()
-    }
-
-    func test_snapshot() {
-        verifyLayer(viewControllerTester.window.layer)
     }
 
     private func insertDistrictEvents(district: District) {
@@ -134,18 +126,21 @@ class DistrictViewControllerTests: TBATestCase {
     }
 
     func test_showsEvents() {
+        districtViewController.viewDidLoad()
         XCTAssert(districtViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is DistrictEventsViewController
         }))
     }
 
     func test_showsTeams() {
+        districtViewController.viewDidLoad()
         XCTAssert(districtViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is DistrictTeamsViewController
         }))
     }
 
     func test_showsRankings() {
+        districtViewController.viewDidLoad()
         XCTAssert(districtViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is DistrictRankingsViewController
         }))

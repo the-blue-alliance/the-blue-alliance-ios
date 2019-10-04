@@ -1,6 +1,8 @@
 import CoreData
+import Crashlytics
 import Firebase
 import Foundation
+import TBAData
 import TBAKit
 import UIKit
 
@@ -187,7 +189,7 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
                 }
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
 
             self.hasRefreshed = true
             DispatchQueue.main.async {

@@ -57,8 +57,10 @@ target 'The Blue Alliance' do
 
   # Local Deps
   pod 'MyTBAKit', :path => 'Frameworks/MyTBAKit', :testspecs => ['Tests']
+  pod 'TBAData', :path => 'Frameworks/TBAData', :testspecs => ['Tests']
   pod 'TBAKit', :path => 'Frameworks/TBAKit', :testspecs => ['Tests']
   pod 'TBAOperation', :path => 'Frameworks/TBAOperation', :testspecs => ['Tests']
+  pod 'TBAUtils', :path => 'Frameworks/TBAUtils', :testspecs => ['Tests']
 
   # myTBA
   pod 'GoogleSignIn'
@@ -73,8 +75,8 @@ target 'The Blue Alliance' do
   target 'tba-unit-tests' do
     inherit! :search_paths
 
-    pod 'iOSSnapshotTestCase', '4.0.1' # TODO: Update to 6.0
     pod 'MyTBAKitTesting', :path => 'Frameworks/MyTBAKit'
+    pod 'TBADataTesting', :path => 'Frameworks/TBAData'
     pod 'TBAKitTesting', :path => 'Frameworks/TBAKit'
     pod 'TBATestingMocks', :path => 'Frameworks/TBATestingMocks'
     pod 'TBAOperationTesting', :path => 'Frameworks/TBAOperation'

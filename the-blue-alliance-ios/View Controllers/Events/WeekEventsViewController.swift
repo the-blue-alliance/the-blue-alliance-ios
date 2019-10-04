@@ -1,5 +1,7 @@
 import CoreData
+import Crashlytics
 import Foundation
+import TBAData
 import TBAKit
 
 /**
@@ -73,7 +75,7 @@ class WeekEventsViewController: EventsViewController {
                 }
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
 
             // Only setup weeks if we don't have a currently selected week
             if self.weekEvent == nil {

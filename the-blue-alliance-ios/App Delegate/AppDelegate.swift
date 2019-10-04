@@ -6,6 +6,7 @@ import FirebaseAuth
 import FirebaseMessaging
 import GoogleSignIn
 import MyTBAKit
+import TBAData
 import TBAKit
 import UIKit
 import UserNotifications
@@ -472,4 +473,11 @@ extension AppDelegate: UISplitViewControllerDelegate {
         return emptyNavigationController
     }
 
+}
+
+// Make Crashlytics conform to ErrorRecorder for TBAData
+extension Crashlytics: ErrorRecorder {
+    public func recordError(error: Error) {
+        Crashlytics.sharedInstance().recordError(error: error)
+    }
 }

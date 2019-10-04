@@ -1,4 +1,6 @@
 import CoreData
+import Crashlytics
+import TBAData
 import TBAKit
 import Foundation
 
@@ -20,7 +22,7 @@ class StatusService: NSObject {
             guard let status = Status.fromPlist(bundle: bundle, in: persistentContainer.viewContext) else {
                 fatalError("Cannot setup Status for StatusService")
             }
-            _ = persistentContainer.viewContext.saveOrRollback()
+            _ = persistentContainer.viewContext.saveOrRollback(errorRecorder: Crashlytics.sharedInstance())
             return status
         }
     }()
@@ -80,7 +82,7 @@ class StatusService: NSObject {
                     if !notModified, let status = status {
                         Status.insert(status, in: context)
                     }
-                })
+                }, errorRecorder: Crashlytics.sharedInstance())
                 completion?(nil)
             }
         }

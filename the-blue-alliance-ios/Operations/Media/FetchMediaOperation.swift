@@ -1,5 +1,7 @@
 import CoreData
+import Crashlytics
 import Foundation
+import TBAData
 import TBAOperation
 
 class FetchMediaOperation: TBAOperation {
@@ -22,7 +24,7 @@ class FetchMediaOperation: TBAOperation {
             if let managedObjectContext = media.managedObjectContext {
                 managedObjectContext.performChangesAndWait({ [weak self] in
                     self?.media.imageError = MediaError.error("No url for media")
-                })
+                }, errorRecorder: Crashlytics.sharedInstance())
             }
             self.finish()
             return
@@ -43,7 +45,7 @@ class FetchMediaOperation: TBAOperation {
                 } else {
                     backgroundMedia.imageError = MediaError.error("No data for request")
                 }
-            })
+            }, errorRecorder: Crashlytics.sharedInstance())
             self.finish()
         })
         task?.resume()

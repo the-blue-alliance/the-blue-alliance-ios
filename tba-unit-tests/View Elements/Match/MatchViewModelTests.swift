@@ -1,7 +1,9 @@
+import TBAData
+import TBADataTesting
 import XCTest
 @testable import The_Blue_Alliance
 
-class MatchViewModelTestCase: CoreDataTestCase {
+class MatchViewModelTestCase: TBADataTestCase {
 
     func test_no_breakdown() {
         let match = insertMatch(eventKey: "2018inwla")

@@ -1,4 +1,5 @@
 import Foundation
+import TBAData
 import UIKit
 
 class EventAllianceTableViewCell: UITableViewCell, Reusable {

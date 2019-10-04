@@ -1,3 +1,4 @@
+import TBAData
 import TBAKitTesting
 import TBATestingMocks
 import TBAOperationTesting
@@ -9,10 +10,8 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
 
     var subscribableModel: MyTBASubscribable!
 
-    var myTBAPreferencesViewController: MyTBAPreferenceViewController!
     var navigationController: MockNavigationController!
-
-    var viewControllerTester: TBAViewControllerTester<UINavigationController>!
+    var myTBAPreferencesViewController: MyTBAPreferenceViewController!
 
     override func setUp() {
         super.setUp()
@@ -21,37 +20,14 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
 
         myTBAPreferencesViewController = MyTBAPreferenceViewController(subscribableModel: subscribableModel, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer)
         navigationController = MockNavigationController(rootViewController: myTBAPreferencesViewController)
-
-        viewControllerTester = TBAViewControllerTester(withViewController: navigationController)
     }
 
     override func tearDown() {
-        viewControllerTester = nil
         navigationController = nil
         myTBAPreferencesViewController = nil
         subscribableModel = nil
 
         super.tearDown()
-    }
-
-    func test_snapshot() {
-        verifyLayer(viewControllerTester.window.layer)
-
-        // Turn our Favorite switch on
-        myTBAPreferencesViewController.isFavorite = true
-        myTBAPreferencesViewController.tableView.reloadData()
-        verifyLayer(viewControllerTester.window.layer, identifier: "is_favorite")
-        myTBAPreferencesViewController.isFavorite = false
-
-        // Turn some of our Notifications switches on
-        myTBAPreferencesViewController.notifications = [.upcomingMatch, .awards]
-        myTBAPreferencesViewController.tableView.reloadData()
-        verifyLayer(viewControllerTester.window.layer, identifier: "notifications")
-
-        // Kickoff a Save
-        myTBAPreferencesViewController.save()
-        waitOneSecond()
-        verifyLayer(viewControllerTester.window.layer, identifier: "saving")
     }
 
     func test_init_fetchFavorite() {
