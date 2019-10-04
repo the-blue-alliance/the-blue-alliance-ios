@@ -47,7 +47,7 @@ class StatusService: NSObject {
         return status.maxSeason!.intValue
     }
 
-    init(bundle: Bundle = Bundle.main, persistentContainer: NSPersistentContainer, retryService: RetryService, tbaKit: TBAKit) {
+    init(bundle: Bundle = StatusBundle.bundle, persistentContainer: NSPersistentContainer, retryService: RetryService, tbaKit: TBAKit) {
         self.bundle = bundle
         self.persistentContainer = persistentContainer
         self.retryService = retryService
