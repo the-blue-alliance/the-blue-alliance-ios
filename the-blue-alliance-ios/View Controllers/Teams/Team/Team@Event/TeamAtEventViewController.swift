@@ -23,6 +23,10 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
     let statusService: StatusService
     let urlOpener: URLOpener
 
+    // MARK:  - ContainerTeamPushable
+
+    var fetchTeamOperationQueue: OperationQueue = OperationQueue()
+
     // MARK: - Init
 
     init(teamKey: TeamKey, event: Event, messaging: Messaging, myTBA: MyTBA, showDetailEvent: Bool, showDetailTeam: Bool, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
@@ -74,6 +78,13 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
         super.viewWillAppear(animated)
 
         Analytics.logEvent("team_at_event", parameters: ["event": event.key!, "team": teamKey.key!])
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        // TODO: Move this out in to some shared class with TeamAtDistrict
+        fetchTeamOperationQueue.cancelAllOperations()
     }
 
     // MARK: - Private Methods

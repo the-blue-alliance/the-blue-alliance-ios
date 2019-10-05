@@ -21,6 +21,10 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
 
     private var summaryViewController: DistrictTeamSummaryViewController!
 
+    // MARK:  - ContainerTeamPushable
+
+    var fetchTeamOperationQueue: OperationQueue = OperationQueue()
+
     // MARK: Init
 
     init(ranking: DistrictRanking, messaging: Messaging, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
@@ -59,6 +63,13 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
         super.viewWillAppear(animated)
 
         Analytics.logEvent("team_at_district", parameters: ["district": ranking.district!.key!, "team": ranking.teamKey!.key!])
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        // TODO: Move this out in to some shared class with TeamAtEvent
+        fetchTeamOperationQueue.cancelAllOperations()
     }
 
     // MARK: - Private Methods
