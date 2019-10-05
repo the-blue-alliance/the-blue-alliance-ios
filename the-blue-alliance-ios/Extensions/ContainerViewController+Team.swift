@@ -8,6 +8,7 @@ import UIKit
 // Used for Team@Event and Team@District to push to a Team, when contextually available.
 protocol ContainerTeamPushable {
     var pushTeamBarButtonItem: UIBarButtonItem? { get }
+    var fetchTeamOperationQueue: OperationQueue { get }
 
     var teamKey: TeamKey { get }
     var myTBA: MyTBA { get }
@@ -27,7 +28,7 @@ extension ContainerTeamPushable where Self: ContainerViewController {
                     self.rightBarButtonItems = [UIBarButtonItem.activityIndicatorBarButtonItem()]
                 }
 
-                tbaKit.fetchTeam(key: teamKey.key!, completion: { (result, notModified) in
+                let operation = tbaKit.fetchTeam(key: teamKey.key!, completion: { (result, notModified) in
                     let context = self.persistentContainer.newBackgroundContext()
                     context.performChangesAndWait({
                         if let team = try? result.get() {
@@ -45,6 +46,7 @@ extension ContainerTeamPushable where Self: ContainerViewController {
                         self.rightBarButtonItems = [self.pushTeamBarButtonItem].compactMap({ $0 })
                     }
                 })
+                fetchTeamOperationQueue.addOperation(operation)
             }
             return
         }
