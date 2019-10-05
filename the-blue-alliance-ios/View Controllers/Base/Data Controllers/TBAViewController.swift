@@ -5,7 +5,7 @@ import UIKit
 
 typealias DataController = Persistable & Alertable
 
-class TBAViewController: UIViewController, DataController {
+class TBAViewController: UIViewController, DataController, Navigatable {
 
     var persistentContainer: NSPersistentContainer
     let tbaKit: TBAKit
@@ -25,6 +25,12 @@ class TBAViewController: UIViewController, DataController {
     // MARK: - Stateful
 
     var noDataViewController: NoDataViewController = NoDataViewController()
+
+    // MARK: - Navigatable
+
+    var additionalRightBarButtonItems: [UIBarButtonItem] {
+        return []
+    }
 
     // MARK: - Init
 

@@ -12,6 +12,7 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
         return ranking.teamKey!
     }
 
+    var pushTeamBarButtonItem: UIBarButtonItem?
     private(set) var ranking: DistrictRanking
     let statusService: StatusService
     let messaging: Messaging
@@ -42,7 +43,8 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
             userDefaults: userDefaults
         )
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.teamIcon, style: .plain, target: self, action: #selector(pushTeam))
+        pushTeamBarButtonItem = UIBarButtonItem(image: UIImage.teamIcon, style: .plain, target: self, action: #selector(pushTeam))
+        rightBarButtonItems = [pushTeamBarButtonItem].compactMap({ $0 })
 
         summaryViewController.delegate = self
     }

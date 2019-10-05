@@ -45,8 +45,6 @@ class SelectTableViewController<Delegate: SelectTableViewControllerDelegate>: TB
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         tableView.tableFooterView = UIView()
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissModal(_:)))
     }
 
     // MARK: - Table view data source

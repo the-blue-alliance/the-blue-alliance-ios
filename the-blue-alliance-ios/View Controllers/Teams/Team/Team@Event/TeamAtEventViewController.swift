@@ -16,6 +16,8 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
     private let showDetailEvent: Bool
     private let showDetailTeam: Bool
 
+    var pushTeamBarButtonItem: UIBarButtonItem?
+
     let messaging: Messaging
     let myTBA: MyTBA
     let statusService: StatusService
@@ -46,11 +48,16 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
-        if showDetailEvent {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.eventIcon, style: .plain, target: self, action: #selector(pushEvent))
-        } else if showDetailTeam {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.teamIcon, style: .plain, target: self, action: #selector(pushTeam))
-        }
+        pushTeamBarButtonItem = {
+            if showDetailEvent {
+                return UIBarButtonItem(image: UIImage.eventIcon, style: .plain, target: self, action: #selector(pushEvent))
+            } else if showDetailTeam {
+                return UIBarButtonItem(image: UIImage.teamIcon, style: .plain, target: self, action: #selector(pushTeam))
+            } else {
+                return nil
+            }
+        }()
+        rightBarButtonItems = [pushTeamBarButtonItem].compactMap({ $0 })
 
         summaryViewController.delegate = self
         matchesViewController.delegate = self

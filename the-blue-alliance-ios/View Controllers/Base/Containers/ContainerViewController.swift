@@ -7,7 +7,12 @@ protocol NavigationTitleDelegate: AnyObject {
     func navigationTitleTapped()
 }
 
-typealias ContainableViewController = UIViewController & Refreshable & Persistable
+protocol Navigatable {
+    // Protocol to allow container views to show right bar button items in their container view
+    var additionalRightBarButtonItems: [UIBarButtonItem] { get }
+}
+
+typealias ContainableViewController = UIViewController & Refreshable & Persistable & Navigatable
 
 class ContainerViewController: UIViewController, Persistable, Alertable {
 
@@ -26,6 +31,12 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
             DispatchQueue.main.async {
                 self.navigationSubtitleLabel.text = self.navigationSubtitle
             }
+        }
+    }
+
+    var rightBarButtonItems: [UIBarButtonItem] = [] {
+        didSet {
+            updateBarButtonItems()
         }
     }
 
@@ -111,6 +122,8 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
             navigationSubtitleLabel.text = navigationSubtitle
             navigationItem.titleView = navigationStackView
         }
+
+        updateBarButtonItems()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -235,6 +248,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         if let viewController = currentViewController() {
             show(view: viewController.view)
         }
+        updateBarButtonItems()
     }
 
     private func show(view showView: UIView) {
@@ -257,6 +271,14 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
             containedView.isHidden = shouldHide
         }
         switchedToIndex(switchedIndex)
+    }
+
+    private func updateBarButtonItems() {
+        var rightBarButtonItems: [UIBarButtonItem] = self.rightBarButtonItems
+        if let viewController = currentViewController() {
+            rightBarButtonItems.append(contentsOf: viewController.additionalRightBarButtonItems)
+        }
+        navigationItem.setRightBarButtonItems(rightBarButtonItems, animated: false)
     }
 
     private func reloadViewController(_ viewController: UIViewController) {

@@ -139,6 +139,7 @@
 		92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E9F0AA216C439700C1F916 /* NoDataViewController.swift */; };
 		92F481F11E7DA04B00B4ED7E /* EventsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */; };
 		92F8E356209AAE890094213F /* PushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F8E355209AAE890094213F /* PushService.swift */; };
+		92FCE587234839AA00DD284B /* ContainerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCE586234839AA00DD284B /* ContainerViewControllerTests.swift */; };
 		92FF10EB21A61A1B003BC5C4 /* TeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E321A61A1B003BC5C4 /* TeamViewController.swift */; };
 		92FF10EC21A61A1B003BC5C4 /* TeamEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E421A61A1B003BC5C4 /* TeamEventsViewController.swift */; };
 		92FF10ED21A61A1B003BC5C4 /* TeamAtEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FF10E621A61A1B003BC5C4 /* TeamAtEventViewController.swift */; };
@@ -320,6 +321,7 @@
 		92E9F0AA216C439700C1F916 /* NoDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataViewController.swift; sourceTree = "<group>"; };
 		92F481F01E7DA04B00B4ED7E /* EventsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsContainerViewController.swift; sourceTree = "<group>"; };
 		92F8E355209AAE890094213F /* PushService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushService.swift; sourceTree = "<group>"; };
+		92FCE586234839AA00DD284B /* ContainerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewControllerTests.swift; sourceTree = "<group>"; };
 		92FF10E321A61A1B003BC5C4 /* TeamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamViewController.swift; sourceTree = "<group>"; };
 		92FF10E421A61A1B003BC5C4 /* TeamEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamEventsViewController.swift; sourceTree = "<group>"; };
 		92FF10E621A61A1B003BC5C4 /* TeamAtEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamAtEventViewController.swift; sourceTree = "<group>"; };
@@ -863,6 +865,7 @@
 		92C8CE4A21ADAE2400683558 /* Containers */ = {
 			isa = PBXGroup;
 			children = (
+				92FCE586234839AA00DD284B /* ContainerViewControllerTests.swift */,
 				92C8CE4B21ADAE4500683558 /* MyTBAContainerViewControllerTests.swift */,
 			);
 			path = Containers;
@@ -1567,6 +1570,7 @@
 				92C1F2E02169A3B800BD8445 /* MockNavigationController.swift in Sources */,
 				923AEE8C21658C5800EF50C8 /* Bundle+Version_Tests.swift in Sources */,
 				92BB717F20CE19F40081F4E5 /* PersistentContainerOperationTests.swift in Sources */,
+				92FCE587234839AA00DD284B /* ContainerViewControllerTests.swift in Sources */,
 				92CC6D36234588810085867D /* Test.xcdatamodeld in Sources */,
 				92C8CE4621ACB05900683558 /* SubscribableTests.swift in Sources */,
 				921D0B5B222AFFE40056578A /* UIBarButtonItem+TBATests.swift in Sources */,

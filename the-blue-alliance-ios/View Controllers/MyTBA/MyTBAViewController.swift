@@ -97,9 +97,9 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
     private func updateInterface() {
         if isLoggingOut {
-            navigationItem.rightBarButtonItem = signOutActivityIndicatorBarButtonItem
+            rightBarButtonItems = [signOutActivityIndicatorBarButtonItem]
         } else {
-            navigationItem.rightBarButtonItem = isLoggedIn ? signOutBarButtonItem : nil
+            rightBarButtonItems = isLoggedIn ? [signOutBarButtonItem] : []
         }
 
         // Disable interaction with our view while logging out

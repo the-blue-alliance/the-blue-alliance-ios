@@ -3,7 +3,7 @@ import Foundation
 import TBAKit
 import UIKit
 
-class TBACollectionViewController: UICollectionViewController, DataController {
+class TBACollectionViewController: UICollectionViewController, DataController, Navigatable {
 
     var persistentContainer: NSPersistentContainer
     let tbaKit: TBAKit
@@ -16,6 +16,12 @@ class TBACollectionViewController: UICollectionViewController, DataController {
     // MARK: - Stateful
 
     var noDataViewController: NoDataViewController = NoDataViewController()
+
+    // MARK: - Navigatable
+
+    var additionalRightBarButtonItems: [UIBarButtonItem] {
+        return []
+    }
 
     // MARK: - Init
 

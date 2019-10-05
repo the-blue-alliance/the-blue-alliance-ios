@@ -7,6 +7,8 @@ import UIKit
 // An protocol/extension for Container view controllers that can push to a Team view controller.
 // Used for Team@Event and Team@District to push to a Team, when contextually available.
 protocol ContainerTeamPushable {
+    var pushTeamBarButtonItem: UIBarButtonItem? { get }
+
     var teamKey: TeamKey { get }
     var myTBA: MyTBA { get }
     var messaging: Messaging { get }
@@ -21,9 +23,8 @@ extension ContainerTeamPushable where Self: ContainerViewController {
             if attemptedToLoadTeam {
                 showErrorAlert(with: "Unable to load team.")
             } else {
-                let oldRightBarButtonIcon = navigationItem.rightBarButtonItem
                 DispatchQueue.main.async {
-                    self.navigationItem.rightBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
+                    self.rightBarButtonItems = [UIBarButtonItem.activityIndicatorBarButtonItem()]
                 }
 
                 tbaKit.fetchTeam(key: teamKey.key!, completion: { (result, notModified) in
@@ -41,7 +42,7 @@ extension ContainerTeamPushable where Self: ContainerViewController {
 
                     // Reset our nav bar item
                     DispatchQueue.main.async {
-                        self.navigationItem.rightBarButtonItem = oldRightBarButtonIcon
+                        self.rightBarButtonItems = [self.pushTeamBarButtonItem].compactMap({ $0 })
                     }
                 })
             }

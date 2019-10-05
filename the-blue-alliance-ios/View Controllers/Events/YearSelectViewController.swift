@@ -124,7 +124,7 @@ private class EventWeekSelectViewController: ContainerViewController {
         selectViewController.delegate = self
         selectViewController.enableRefreshing()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
+        rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))]
     }
 
     required init?(coder aDecoder: NSCoder) {
