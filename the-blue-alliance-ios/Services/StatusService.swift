@@ -11,6 +11,8 @@ class StatusService: NSObject {
 
     var retryService: RetryService
 
+    private let operationQueue = OperationQueue()
+
     private let bundle: Bundle
     private let persistentContainer: NSPersistentContainer
     private let tbaKit: TBAKit
@@ -70,7 +72,6 @@ class StatusService: NSObject {
         }
     }
 
-    @discardableResult
     internal func fetchStatus(completion: ((_ error: Error?) -> Void)? = nil) -> TBAKitOperation {
         return tbaKit.fetchStatus { (result, notModified) in
             switch result {
@@ -163,7 +164,8 @@ extension StatusService: Retryable {
     }
 
     func retry() {
-        fetchStatus()
+        let op = fetchStatus()
+        operationQueue.addOperation(op)
     }
 
 }
