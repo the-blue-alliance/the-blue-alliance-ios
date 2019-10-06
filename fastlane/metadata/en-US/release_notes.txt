@@ -1,5 +1,5 @@
-Hey y’all - this update introduces a new Team@Event view!
+Hey y’all - just a small bug fix update to hold ya over between seasons.
 
-This update also fixes a bug where myTBA cells wouldn't update properly, fixes a bug where off season events on the first of the month wouldn't show up in the events list, fixes showing incorrect precision for 2015 data, and fixes a crash when singing out of myTBA.
+This update also fixes a bug where the max event year (along with some other information) wasn't updating, and a bug where going from the Team@Event view to a Team view would never fetch the Team. This update also fixes the table view header colors on iOS 13.
 
 The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
