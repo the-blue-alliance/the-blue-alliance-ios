@@ -650,14 +650,14 @@ SPEC CHECKSUMS:
   React-RCTVibration: 8be61459e3749d1fb02cf414edd05b3007622882
   ReactCommon: 4fba5be89efdf0b5720e0adb3d8d7edf6e532db0
   Reveal-SDK: 5d7e56b8f018c0a88b3a2c10bf68d598bbd3b071
-  TBAData: 54459498f36cff804ed6028b4ae9162d8dbeec6b
-  TBADataTesting: b7ff27a734f566c8b30c8be6e7ca4bd47b4eaf73
+  TBAData: d3fbf18509b94d89a11c94cab13d9a94c4f323ca
+  TBADataTesting: 6b3ecfbbb224274aeb85b7f3a1069f3d73bbd1fa
   TBAKit: dd89e24f8748a3597fd1f4ca2ca71d78f5c06153
   TBAKitTesting: 600746936dc27a9186499dfba8d7112d7393b2d3
   TBAOperation: 4fc7e208e6c48d02d98f3fa4f34eb291a9ae68e8
   TBAOperationTesting: f6be36759c419928770d7aaa9ae1c61b0a312ca1
   TBATestingMocks: 004d7f4bab4999d78da0609d6bcb58a01acca78d
-  TBAUtils: e023491a47821acc90812b3824ba226ce9dd6d14
+  TBAUtils: a259341ea3f098a8e727e734ada7af71a3aaeaf1
   XCDYouTubeKit: 207fa50f3648fc0fd1558b2496c74c3b34af982c
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
