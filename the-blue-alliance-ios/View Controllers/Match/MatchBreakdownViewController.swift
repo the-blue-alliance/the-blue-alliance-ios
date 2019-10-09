@@ -49,7 +49,7 @@ class MatchBreakdownViewController: TBAReactNativeViewController, Observable {
 
     func styleInterface() {
         // Override our default background color to match the match breakdown background color
-        view.backgroundColor = UIColor.colorWithRGB(rgbValue: 0xdddddd)
+        // TODO: Figure out what we want here
     }
 
 }

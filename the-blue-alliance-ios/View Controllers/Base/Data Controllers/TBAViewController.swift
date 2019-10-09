@@ -13,7 +13,7 @@ class TBAViewController: UIViewController, DataController, Navigatable {
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView(forAutoLayout: ())
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.backgroundColor = .clear
+        scrollView.backgroundColor = UIColor.clear
         return scrollView
     }()
 
@@ -51,7 +51,7 @@ class TBAViewController: UIViewController, DataController, Navigatable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .backgroundGray
+        view.backgroundColor = UIColor.systemGroupedBackground
         view.addSubview(scrollView)
         scrollView.autoPinEdgesToSuperviewEdges()
     }

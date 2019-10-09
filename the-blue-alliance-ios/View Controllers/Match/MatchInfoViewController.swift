@@ -32,7 +32,7 @@ class MatchInfoViewController: TBAViewController, Observable {
         for label in labels {
             label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
             label.textAlignment = .center
-            label.backgroundColor = .backgroundGray
+            label.backgroundColor = UIColor.systemGroupedBackground
             label.translatesAutoresizingMaskIntoConstraints = false
         }
         let infoStackView = UIStackView(arrangedSubviews: labels)
@@ -133,7 +133,7 @@ class MatchInfoViewController: TBAViewController, Observable {
         videoStackView.autoPinEdge(toSuperviewEdge: .bottom)
 
         // Override our default background color to be white
-        view.backgroundColor = .white
+        view.backgroundColor = .systemGray6
 
         updateInterface()
 
