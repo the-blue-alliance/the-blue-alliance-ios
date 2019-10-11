@@ -69,11 +69,25 @@ class MatchSummaryView: UIView {
         initMatchView()
     }
 
-    func initMatchView() {
+    private func initMatchView() {
         Bundle.main.loadNibNamed(String(describing: MatchSummaryView.self), owner: self, options: nil)
         summaryView.frame = self.bounds
         summaryView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         self.addSubview(summaryView)
+
+        styleInterface()
+    }
+
+    private func styleInterface() {
+        redContainerView.backgroundColor = UIColor.redAllianceBackgroundColor
+        redScoreLabel.backgroundColor = UIColor.redAllianceScoreColor
+
+        blueContainerView.backgroundColor = UIColor.blueAllianceBackgroundColor
+        blueScoreLabel.backgroundColor = UIColor.blueAllianceScoreColor
+
+        // TODO: Convert to SF Symbol
+        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/653
+        playIconImageView.tintColor = UIColor.label
     }
 
     // MARK: - Public Methods
@@ -177,7 +191,7 @@ class MatchSummaryView: UIView {
     private func button(text: String, isBold: Bool, isStrikethrough: Bool = false) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(text, for: [])
-        button.setTitleColor(UIColor.primaryBlue, for: .normal)
+        button.setTitleColor(UIColor.highlightColor, for: .normal)
         
         if let teamNumber = Int(text) {
             button.tag = teamNumber
@@ -195,6 +209,7 @@ class MatchSummaryView: UIView {
         label.textAlignment = .center
         label.attributedText = customAttributedString(text: text, isBold: isBold, isStrikethrough: isStrikethrough)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor.label
         return label
     }
     

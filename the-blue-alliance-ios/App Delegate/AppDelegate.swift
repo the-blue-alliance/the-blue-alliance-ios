@@ -335,7 +335,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tabBarAppearance = UITabBar.appearance()
         tabBarAppearance.barTintColor = UIColor.systemGray6
         tabBarAppearance.isTranslucent = false
-        tabBarAppearance.tintColor = UIColor.systemBlue
+        tabBarAppearance.tintColor = UIColor.tabBarTintColor
     }
 
 }

@@ -32,7 +32,7 @@ class MatchInfoViewController: TBAViewController, Observable {
         for label in labels {
             label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
             label.textAlignment = .center
-            label.backgroundColor = UIColor.systemGroupedBackground
+            label.backgroundColor = UIColor.systemFill
             label.translatesAutoresizingMaskIntoConstraints = false
         }
         let infoStackView = UIStackView(arrangedSubviews: labels)

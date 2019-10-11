@@ -9,21 +9,57 @@ extension UIColor {
         return dynamicColor(primaryBlue, primaryBlue, UIColor.darkModePrimaryBlue, UIColor.darkModePrimaryBlue)
     }
 
+    public class var primaryYellow: UIColor {
+        return UIColor.colorWithRGB(rgbValue: 0xFFC107)
+    }
+
     private class var darkModePrimaryBlue: UIColor {
         return UIColor.colorWithRGB(rgbValue: 0x5C6BC0) // Muted cool color
+    }
+
+    public class var highlightColor: UIColor {
+        return dynamicColor(primaryBlue, primaryBlue, primaryYellow, primaryYellow)
     }
 
     public class var navigationBarTintColor: UIColor {
         return dynamicColor(UIColor.primaryBlue, UIColor.primaryBlue, UIColor.systemGray6, UIColor.systemGray6)
     }
 
+    public class var tabBarTintColor: UIColor {
+        return dynamicColor(UIColor.systemBlue, UIColor.systemBlue, UIColor.primaryYellow, UIColor.primaryYellow)
+    }
+
     public class var tableViewHeaderColor: UIColor {
         let lightModeDarkBlue = UIColor.colorWithRGB(rgbValue: 0x303F9F)
-        return dynamicColor(lightModeDarkBlue, lightModeDarkBlue, UIColor.darkModePrimaryBlue, UIColor.darkModePrimaryBlue)
+        return dynamicColor(lightModeDarkBlue, lightModeDarkBlue, UIColor.systemGray5, UIColor.systemGray5)
     }
 
     public class var segmentedControlSelectedColor: UIColor {
         return dynamicColor(UIColor.primaryBlue, UIColor.primaryBlue, UIColor.white, UIColor.white)
+    }
+
+    public class var redAllianceBackgroundColor: UIColor {
+        let lightModeColor = UIColor.colorWithRGB(rgbValue: 0xFFEEEE)
+        let darkModeColor = UIColor.colorWithRGB(rgbValue: 0x550000)
+        return dynamicColor(lightModeColor, lightModeColor, darkModeColor, darkModeColor)
+    }
+
+    public class var redAllianceScoreColor: UIColor {
+        let lightModeColor = UIColor.colorWithRGB(rgbValue: 0xFFDDDD)
+        let darkModeColor = UIColor.colorWithRGB(rgbValue: 0x660000)
+        return dynamicColor(lightModeColor, lightModeColor, darkModeColor, darkModeColor)
+    }
+
+    public class var blueAllianceBackgroundColor: UIColor {
+        let lightModeColor = UIColor.colorWithRGB(rgbValue: 0xEEEEFF)
+        let darkModeColor = UIColor.colorWithRGB(rgbValue: 0x000055)
+        return dynamicColor(lightModeColor, lightModeColor, darkModeColor, darkModeColor)
+    }
+
+    public class var blueAllianceScoreColor: UIColor {
+        let lightModeColor = UIColor.colorWithRGB(rgbValue: 0xDDDDFF)
+        let darkModeColor = UIColor.colorWithRGB(rgbValue: 0x000066)
+        return dynamicColor(lightModeColor, lightModeColor, darkModeColor, darkModeColor)
     }
 
     public class var dangerRed: UIColor {
@@ -42,8 +78,7 @@ extension UIColor {
         return dynamicColor(lightModeColor, lightModeColor, darkModeColor, darkModeColor)
     }
 
-    // TODO: private
-    public static func dynamicColor(_ lightMode: UIColor, _ lightModeHighContrast: UIColor, _ darkMode: UIColor, _ darkModeHighContrast: UIColor) -> UIColor {
+    private static func dynamicColor(_ lightMode: UIColor, _ lightModeHighContrast: UIColor, _ darkMode: UIColor, _ darkModeHighContrast: UIColor) -> UIColor {
         return UIColor { (traitCollection: UITraitCollection) -> UIColor in
             switch(traitCollection.userInterfaceStyle,
                    traitCollection.accessibilityContrast)
