@@ -10,7 +10,7 @@ import TBAKit
 import UIKit
 import UserNotifications
 
-class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
+class MyTBAViewController: ContainerViewController {
 
     private let messaging: Messaging
     private let myTBA: MyTBA
@@ -61,7 +61,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         favoritesViewController.delegate = self
         subscriptionsViewController.delegate = self
 
-        GIDSignIn.sharedInstance().uiDelegate = self
+        GIDSignIn.sharedInstance()?.presentingViewController = self
         myTBA.authenticationProvider.add(observer: self)
     }
     
@@ -84,6 +84,8 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     // MARK: - Private Methods
 
     private func styleInterface() {
+        addChild(signInViewController)
+
         view.addSubview(signInView)
         for edge in [ALEdge.top, ALEdge.bottom] {
             signInView.autoPinEdge(toSuperviewSafeArea: edge)
@@ -116,6 +118,14 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
         let signOutOperation = myTBA.unregister(fcmToken) { [weak self] (_, error) in
             self?.isLoggingOut = false
+
+            // Always allow sign out in Debug, since it'll fail because of mismatches
+            #if DEBUG
+            DispatchQueue.main.async {
+                self?.logoutSuccessful()
+            }
+            return
+            #endif
 
             if let error = error {
                 Crashlytics.sharedInstance().recordError(error)
