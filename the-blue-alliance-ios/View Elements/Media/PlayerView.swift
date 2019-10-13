@@ -30,7 +30,7 @@ class PlayerView: UIView {
 
     lazy var noDataViewController: NoDataViewController = {
         let noDataViewController = NoDataViewController()
-        noDataViewController.textLabel.textColor = .white
+        noDataViewController.textLabel.textColor = UIColor.systemGray6
         return noDataViewController
     }()
 
@@ -40,7 +40,7 @@ class PlayerView: UIView {
         self.playable = playable
 
         super.init(frame: .zero)
-        backgroundColor = .white
+        backgroundColor = UIColor.systemGray6
         configureView()
     }
 

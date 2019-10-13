@@ -106,7 +106,7 @@ class TeamInfoViewController: TBATableViewController {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as BasicTableViewCell
 
         cell.textLabel?.text = team.name
-        cell.textLabel?.textColor = .darkGray
+        cell.textLabel?.textColor = UIColor.secondaryLabel
 
         if sponsorsExpanded {
             cell.textLabel?.numberOfLines = 0
