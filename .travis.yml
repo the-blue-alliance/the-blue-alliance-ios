@@ -4,6 +4,7 @@ gemfile: Gemfile
 branches:
   only:
   - master
+  - ios13
 stages:
 - name: cron
   if: "(type == cron)"
