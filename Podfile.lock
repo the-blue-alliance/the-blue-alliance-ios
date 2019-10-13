@@ -486,7 +486,7 @@ DEPENDENCIES:
   - Zip (~> 1.1)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - AppAuth
     - BFRImageViewer
     - boost-for-react-native
@@ -673,4 +673,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 08153113edd19de401d7a40a41279ea494ca329f
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.8.3
