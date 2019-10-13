@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -12,6 +10,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyTBASignInViewController" customModule="The_Blue_Alliance" customModuleProvider="target">
             <connections>
                 <outlet property="favoriteImageView" destination="V9P-3O-rGH" id="fy3-zh-SBn"/>
+                <outlet property="signInButton" destination="PCK-YF-VW6" id="1PY-Z8-Fey"/>
                 <outlet property="starImageView" destination="g4n-2a-hdA" id="hej-fJ-PJL"/>
                 <outlet property="subscriptionImageView" destination="kK2-7h-yg5" id="HJV-ED-UAH"/>
                 <outlet property="view" destination="t8S-eI-yHk" id="D5w-pZ-piN"/>
@@ -85,12 +84,12 @@
                                 <constraint firstAttribute="height" constant="48" id="cUJ-A7-t2S"/>
                             </constraints>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                            <state key="normal" title="Sign in with Google" backgroundImage="btn_google_signin_light_normal_ios">
+                            <state key="normal" title="Sign in with Google" backgroundImage="btn_google_signin_normal">
                                 <color key="titleColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
-                            <state key="disabled" backgroundImage="btn_google_signin_light_disabled_ios"/>
-                            <state key="selected" backgroundImage="btn_google_signin_light_focus_ios"/>
-                            <state key="highlighted" backgroundImage="btn_google_signin_light_pressed_ios"/>
+                            <state key="disabled" backgroundImage="btn_google_signin_disabled"/>
+                            <state key="selected" backgroundImage="btn_google_signin_focus"/>
+                            <state key="highlighted" backgroundImage="btn_google_signin_pressed"/>
                             <connections>
                                 <action selector="signIn" destination="-1" eventType="touchUpInside" id="j7V-xA-bYK"/>
                             </connections>
@@ -112,15 +111,16 @@
                 <constraint firstItem="GHm-jo-SWw" firstAttribute="leading" secondItem="TKa-b7-SsL" secondAttribute="leading" constant="20" id="qJQ-QS-wpP"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="TKa-b7-SsL"/>
+            <point key="canvasLocation" x="132" y="154"/>
         </view>
     </objects>
     <resources>
-        <image name="btn_google_signin_light_disabled_ios" width="38.5" height="48"/>
-        <image name="btn_google_signin_light_focus_ios" width="39.5" height="48"/>
-        <image name="btn_google_signin_light_normal_ios" width="39.5" height="48"/>
-        <image name="btn_google_signin_light_pressed_ios" width="39.5" height="48"/>
-        <image name="ic_favorite_border" width="48" height="48"/>
-        <image name="ic_notifications_none" width="48" height="48"/>
+        <image name="btn_google_signin_disabled" width="38.5" height="48"/>
+        <image name="btn_google_signin_focus" width="39.5" height="48"/>
+        <image name="btn_google_signin_normal" width="39.5" height="48"/>
+        <image name="btn_google_signin_pressed" width="39.5" height="48"/>
+        <image name="ic_favorite_border" width="24" height="24"/>
+        <image name="ic_notifications_none" width="24" height="24"/>
         <image name="star_yellow" width="102" height="97"/>
     </resources>
 </document>

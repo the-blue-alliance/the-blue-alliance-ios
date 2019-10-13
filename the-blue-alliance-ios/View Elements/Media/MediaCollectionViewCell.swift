@@ -36,7 +36,7 @@ class MediaCollectionViewCell: UICollectionViewCell, Reusable {
     // MARK: - UI
 
     private var loadingActivityIndicator: UIActivityIndicatorView = {
-        return UIActivityIndicatorView(style: .gray)
+        return UIActivityIndicatorView(style: .medium)
     }()
     private var imageView: UIImageView = {
         let imageView = UIImageView()
@@ -54,7 +54,7 @@ class MediaCollectionViewCell: UICollectionViewCell, Reusable {
         let noDataLabel = UILabel(forAutoLayout: ())
         noDataLabel.font = UIFont.systemFont(ofSize: 14)
         noDataLabel.numberOfLines = 0
-        noDataLabel.textColor = .black
+        noDataLabel.textColor = UIColor.label
         noDataLabel.alpha = 0.5
         noDataLabel.textAlignment = .center
         return noDataLabel
@@ -87,7 +87,7 @@ class MediaCollectionViewCell: UICollectionViewCell, Reusable {
     // MARK: - Private Methods
 
     private func setUpView() {
-        backgroundColor = .white
+        backgroundColor = .systemGray6
 
         contentView.addSubview(imageView)
         imageView.autoPinEdgesToSuperviewEdges()
