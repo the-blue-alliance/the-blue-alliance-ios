@@ -42,7 +42,7 @@ class TBACollectionViewController: UICollectionViewController, DataController, N
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView.backgroundColor = .backgroundGray
+        collectionView.backgroundColor = UIColor.systemGroupedBackground
         collectionView.delegate = self
         collectionView.registerReusableCell(BasicCollectionViewCell.self)
     }
