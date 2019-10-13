@@ -1,4 +1,4 @@
-devices(["iPhone X (13.0)"])
+devices(["iPhone 11 Pro (13.0)"])
 buildlog_path("build/reports")
 disable_concurrent_testing(true)
 skip_slack(true)
