@@ -39,10 +39,10 @@
                             <rect key="frame" x="0.0" y="0.0" width="60" height="138"/>
                             <subviews>
                                 <view contentMode="scaleToFill" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="IRh-sF-Phh">
-                                    <rect key="frame" x="0.0" y="0.0" width="60" height="40.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="60" height="42.5"/>
                                 </view>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="tkL-p5-dZ1">
-                                    <rect key="frame" x="0.0" y="40.5" width="60" height="57.5"/>
+                                    <rect key="frame" x="0.0" y="42.5" width="60" height="53.5"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Quarters 1-1" textAlignment="center" lineBreakMode="clip" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="yPd-Gy-NoB">
                                             <rect key="frame" x="0.0" y="0.0" width="60" height="33.5"/>
@@ -50,13 +50,14 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="750" image="ic_action_play_over_video" translatesAutoresizingMaskIntoConstraints="NO" id="mRu-M0-eMP">
-                                            <rect key="frame" x="0.0" y="33.5" width="60" height="24"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="750" image="play.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mRu-M0-eMP">
+                                            <rect key="frame" x="0.0" y="34" width="60" height="19"/>
+                                            <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                         </imageView>
                                     </subviews>
                                 </stackView>
                                 <view contentMode="scaleToFill" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="F1U-is-RmS">
-                                    <rect key="frame" x="0.0" y="98" width="60" height="40"/>
+                                    <rect key="frame" x="0.0" y="96" width="60" height="42"/>
                                 </view>
                             </subviews>
                             <constraints>
@@ -250,6 +251,6 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_action_play_over_video" width="24" height="24"/>
+        <image name="play.circle" catalog="system" width="64" height="60"/>
     </resources>
 </document>
