@@ -20,7 +20,11 @@ class RankingTableViewCell: UITableViewCell, Reusable {
     @IBOutlet private weak var rankLabel: UILabel!
     @IBOutlet private weak var numberLabel: UILabel!
     @IBOutlet private weak var nameLabel: UILabel!
-    @IBOutlet private weak var wltLabel: UILabel!
+    @IBOutlet private weak var wltLabel: UILabel! {
+        didSet {
+            wltLabel.textColor = UIColor.highlightColor
+        }
+    }
     @IBOutlet private weak var detailLabel: UILabel!
 
     // MARK: - Private Methods
