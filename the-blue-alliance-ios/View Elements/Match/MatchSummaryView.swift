@@ -84,10 +84,6 @@ class MatchSummaryView: UIView {
 
         blueContainerView.backgroundColor = UIColor.blueAllianceBackgroundColor
         blueScoreLabel.backgroundColor = UIColor.blueAllianceScoreColor
-
-        // TODO: Convert to SF Symbol
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/653
-        playIconImageView.tintColor = UIColor.label
     }
 
     // MARK: - Public Methods

@@ -41,7 +41,7 @@ class DistrictsContainerViewController: ContainerViewController {
                    userDefaults: userDefaults)
 
         title = "Districts"
-        tabBarItem.image = UIImage(named: "ic_assignment")
+        tabBarItem.image = UIImage.districtIcon
 
         navigationTitleDelegate = self
         districtsViewController.delegate = self

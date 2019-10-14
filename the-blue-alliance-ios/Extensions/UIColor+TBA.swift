@@ -72,6 +72,10 @@ extension UIColor {
         return UIColor.colorWithRGB(rgbValue: 0xa94442)
     }
 
+    public class var myTBAStarColor: UIColor {
+        return UIColor.colorWithRGB(rgbValue: 0xFFC108)
+    }
+
     public class var googleSignInTextColor: UIColor {
         let lightModeColor = UIColor.color(red: 68, green: 68, blue: 68)
         let darkModeColor = UIColor.white
