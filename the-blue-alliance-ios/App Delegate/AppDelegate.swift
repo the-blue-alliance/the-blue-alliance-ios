@@ -333,7 +333,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
 
         let tabBarAppearance = UITabBar.appearance()
-        tabBarAppearance.barTintColor = UIColor.systemGray6
         tabBarAppearance.isTranslucent = false
         tabBarAppearance.tintColor = UIColor.tabBarTintColor
     }
