@@ -38,7 +38,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
     }
 
     lazy private var filerBarButtonItem: UIBarButtonItem = {
-        return UIBarButtonItem(image: UIImage(named: "ic_sort_white"),
+        return UIBarButtonItem(image: UIImage.sortFilterIcon,
                                style: .plain,
                                target: self,
                                action: #selector(showFilter))

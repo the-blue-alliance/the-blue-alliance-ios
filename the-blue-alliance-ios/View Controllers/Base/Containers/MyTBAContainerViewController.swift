@@ -11,7 +11,7 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
     let myTBA: MyTBA
 
     lazy var favoriteBarButtonItem: UIBarButtonItem = {
-        return UIBarButtonItem(image: UIImage(named: "ic_star"), style: .plain, target: self, action: #selector(myTBAPreferencesTapped))
+        return UIBarButtonItem(image: UIImage.starIcon, style: .plain, target: self, action: #selector(myTBAPreferencesTapped))
     }()
 
     var subscribableModel: MyTBASubscribable {
