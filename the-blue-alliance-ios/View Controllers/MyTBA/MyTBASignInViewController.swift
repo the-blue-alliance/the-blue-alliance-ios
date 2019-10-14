@@ -4,7 +4,11 @@ import GoogleSignIn
 
 class MyTBASignInViewController: UIViewController {
 
-    @IBOutlet var starImageView: UIImageView!
+    @IBOutlet var starImageView: UIImageView! {
+        didSet {
+            starImageView.tintColor = UIColor.myTBAStarColor
+        }
+    }
     @IBOutlet var favoriteImageView: UIImageView!
     @IBOutlet var subscriptionImageView: UIImageView!
     @IBOutlet var signInButton: UIButton!
