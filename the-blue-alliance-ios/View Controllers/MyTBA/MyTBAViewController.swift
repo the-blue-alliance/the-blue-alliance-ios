@@ -56,7 +56,7 @@ class MyTBAViewController: ContainerViewController {
                    userDefaults: userDefaults)
 
         title = "myTBA"
-        tabBarItem.image = UIImage(named: "ic_star")
+        tabBarItem.image = UIImage.starIcon
 
         favoritesViewController.delegate = self
         subscriptionsViewController.delegate = self
