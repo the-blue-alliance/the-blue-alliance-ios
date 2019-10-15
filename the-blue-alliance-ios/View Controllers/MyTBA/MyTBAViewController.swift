@@ -10,7 +10,7 @@ import TBAKit
 import UIKit
 import UserNotifications
 
-class MyTBAViewController: ContainerViewController {
+class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
     private let messaging: Messaging
     private let myTBA: MyTBA
@@ -61,7 +61,7 @@ class MyTBAViewController: ContainerViewController {
         favoritesViewController.delegate = self
         subscriptionsViewController.delegate = self
 
-        GIDSignIn.sharedInstance()?.presentingViewController = self
+        GIDSignIn.sharedInstance()?.uiDelegate = self
         myTBA.authenticationProvider.add(observer: self)
     }
 
