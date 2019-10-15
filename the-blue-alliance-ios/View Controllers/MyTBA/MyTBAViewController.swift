@@ -10,7 +10,7 @@ import TBAKit
 import UIKit
 import UserNotifications
 
-class MyTBAViewController: ContainerViewController {
+class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
 
     private let messaging: Messaging
     private let myTBA: MyTBA
@@ -61,7 +61,7 @@ class MyTBAViewController: ContainerViewController {
         favoritesViewController.delegate = self
         subscriptionsViewController.delegate = self
 
-        GIDSignIn.sharedInstance()?.presentingViewController = self
+        GIDSignIn.sharedInstance()?.uiDelegate = self
         myTBA.authenticationProvider.add(observer: self)
     }
     
@@ -118,14 +118,6 @@ class MyTBAViewController: ContainerViewController {
 
         let signOutOperation = myTBA.unregister(fcmToken) { [weak self] (_, error) in
             self?.isLoggingOut = false
-
-            // Always allow sign out in Debug, since it'll fail because of mismatches
-            #if DEBUG
-            DispatchQueue.main.async {
-                self?.logoutSuccessful()
-            }
-            return
-            #endif
 
             if let error = error {
                 Crashlytics.sharedInstance().recordError(error)
