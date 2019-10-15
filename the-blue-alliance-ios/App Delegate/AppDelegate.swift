@@ -303,13 +303,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If we're authenticated with Google but don't have a Firebase user, get a Firebase user
         if signIn.hasPreviousSignIn() {
             signIn.restorePreviousSignIn()
-
-            // If you ever changed the client ID you use for Google Sign-in, or
-            // requested a different set of scopes, then also confirm that they
-            // have the values you expect before proceeding.
-            if signIn.currentUser.authentication.clientID != clientID {
-                signIn.signOut()
-            }
         }
     }
 

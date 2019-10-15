@@ -119,14 +119,6 @@ class MyTBAViewController: ContainerViewController {
         let signOutOperation = myTBA.unregister(fcmToken) { [weak self] (_, error) in
             self?.isLoggingOut = false
 
-            // Always allow sign out in Debug, since it'll fail because of mismatches
-            #if DEBUG
-            DispatchQueue.main.async {
-                self?.logoutSuccessful()
-            }
-            return
-            #endif
-
             if let error = error {
                 Crashlytics.sharedInstance().recordError(error)
                 self?.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")

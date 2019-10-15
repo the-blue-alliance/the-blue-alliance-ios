@@ -441,7 +441,7 @@ DEPENDENCIES:
   - Firebase/Storage
   - Folly (from `subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - GoogleSignIn
+  - GoogleSignIn (~> 5)
   - MyTBAKit (from `Frameworks/MyTBAKit`)
   - MyTBAKit/Tests (from `Frameworks/MyTBAKit`)
   - MyTBAKitTesting (from `Frameworks/MyTBAKit`)
@@ -671,6 +671,6 @@ SPEC CHECKSUMS:
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: 08153113edd19de401d7a40a41279ea494ca329f
+PODFILE CHECKSUM: 20e28f5b6b0f4375157db401662ea411deb9d2c8
 
 COCOAPODS: 1.7.5
