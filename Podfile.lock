@@ -1,4 +1,9 @@
 PODS:
+  - AppAuth (1.2.0):
+    - AppAuth/Core (= 1.2.0)
+    - AppAuth/ExternalUserAgent (= 1.2.0)
+  - AppAuth/Core (1.2.0)
+  - AppAuth/ExternalUserAgent (1.2.0)
   - BFRImageViewer (1.2.3):
     - PINRemoteImage (~> 3.0.0-beta.12)
   - boost-for-react-native (1.63.0)
@@ -120,22 +125,15 @@ PODS:
   - GoogleDataTransportCCTSupport (1.0.0):
     - GoogleDataTransport (~> 1.0)
     - nanopb
-  - GoogleSignIn (4.4.0):
-    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
-    - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
+  - GoogleSignIn (5.0.1):
+    - AppAuth (~> 1.2)
+    - GTMAppAuth (~> 1.0)
     - GTMSessionFetcher/Core (~> 1.1)
-  - GoogleToolboxForMac/DebugUtils (2.2.1):
-    - GoogleToolboxForMac/Defines (= 2.2.1)
   - GoogleToolboxForMac/Defines (2.2.1)
   - GoogleToolboxForMac/Logger (2.2.1):
     - GoogleToolboxForMac/Defines (= 2.2.1)
   - "GoogleToolboxForMac/NSData+zlib (2.2.1)":
     - GoogleToolboxForMac/Defines (= 2.2.1)
-  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.2.1)":
-    - GoogleToolboxForMac/DebugUtils (= 2.2.1)
-    - GoogleToolboxForMac/Defines (= 2.2.1)
-    - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.1)"
-  - "GoogleToolboxForMac/NSString+URLArguments (2.2.1)"
   - GoogleUtilities/AppDelegateSwizzler (6.2.4):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -155,7 +153,14 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (6.2.4):
     - GoogleUtilities/Logger
+  - GTMAppAuth (1.0.0):
+    - AppAuth/Core (~> 1.0)
+    - GTMSessionFetcher (~> 1.1)
+  - GTMSessionFetcher (1.2.2):
+    - GTMSessionFetcher/Full (= 1.2.2)
   - GTMSessionFetcher/Core (1.2.2)
+  - GTMSessionFetcher/Full (1.2.2):
+    - GTMSessionFetcher/Core (= 1.2.2)
   - MyTBAKit (1.0.0-LOCAL):
     - TBAOperation
   - MyTBAKit/Tests (1.0.0-LOCAL):
@@ -438,7 +443,7 @@ DEPENDENCIES:
   - Firebase/Storage
   - Folly (from `subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - GoogleSignIn (~> 4)
+  - GoogleSignIn (~> 5)
   - MyTBAKit (from `Frameworks/MyTBAKit`)
   - MyTBAKit/Tests (from `Frameworks/MyTBAKit`)
   - MyTBAKitTesting (from `Frameworks/MyTBAKit`)
@@ -485,6 +490,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - AppAuth
     - BFRImageViewer
     - boost-for-react-native
     - Crashlytics
@@ -510,6 +516,7 @@ SPEC REPOS:
     - GoogleSignIn
     - GoogleToolboxForMac
     - GoogleUtilities
+    - GTMAppAuth
     - GTMSessionFetcher
     - nanopb
     - PINCache
@@ -596,6 +603,7 @@ EXTERNAL SOURCES:
     :path: subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga
 
 SPEC CHECKSUMS:
+  AppAuth: bce82c76043657c99d91e7882e8a9e1a93650cd4
   BFRImageViewer: 647b91e4c9956d1ffc66245614aca22f10b0d370
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   Crashlytics: 2dfd686bcb918dc10ee0e76f7f853fe42c7bd552
@@ -623,9 +631,10 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 47285fa897e5a125df56b9ef8750a1d81e4598a8
   GoogleDataTransport: fe6af28a312ae5a56d5cec00ff14f6e3ded3beef
   GoogleDataTransportCCTSupport: e6fa721757b147d7f1481d7367b8dab3e9010889
-  GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
+  GoogleSignIn: 3a51b9bb8e48b635fd7f4272cee06ca260345b86
   GoogleToolboxForMac: b3553629623a3b1bff17f555e736cd5a6d95ad55
   GoogleUtilities: 64b5e3982b1b01bda26712affd5c523ef32563cf
+  GTMAppAuth: 4deac854479704f348309e7b66189e604cf5e01e
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
   MyTBAKit: 4e8f384aaf97da0c961fcf1dc9f4d1d4def03f41
   MyTBAKitTesting: 18372d015ffbf4dae4e504227da76081a0fb9e46
@@ -668,6 +677,6 @@ SPEC CHECKSUMS:
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: 41168feafff127f431072b7152db959db4118055
+PODFILE CHECKSUM: 989be47238c4866f7c75c9ae5e1235847aa3b9f2
 
 COCOAPODS: 1.7.5

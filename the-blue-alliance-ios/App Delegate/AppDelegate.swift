@@ -248,9 +248,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
-        return GIDSignIn.sharedInstance().handle(url,
-                                                 sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
-                                                 annotation: options[UIApplication.OpenURLOptionsKey.annotation])
+        GIDSignIn.sharedInstance().handle(url)
     }
 
     // MARK: Push Delegate Methods
@@ -302,8 +300,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         signIn.clientID = clientID
         signIn.delegate = self
 
-        if signIn.hasAuthInKeychain() {
-            signIn.signInSilently()
+        // If we're authenticated with Google but don't have a Firebase user, get a Firebase user
+        if signIn.hasPreviousSignIn() {
+            signIn.restorePreviousSignIn()
         }
     }
 
@@ -341,7 +340,7 @@ extension AppDelegate: GIDSignInDelegate {
             return
         } else if let error = error {
             Crashlytics.sharedInstance().recordError(error)
-            if let signInDelegate = GIDSignIn.sharedInstance()?.uiDelegate as? ContainerViewController & Alertable {
+            if let signInDelegate = GIDSignIn.sharedInstance()?.presentingViewController as? ContainerViewController & Alertable {
                 signInDelegate.showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
             }
             return
@@ -354,7 +353,7 @@ extension AppDelegate: GIDSignInDelegate {
         Auth.auth().signIn(with: credential) { (_, error) in
             if let error = error {
                 Crashlytics.sharedInstance().recordError(error)
-                if let signInDelegate = GIDSignIn.sharedInstance()?.uiDelegate as? ContainerViewController & Alertable {
+                if let signInDelegate = GIDSignIn.sharedInstance()?.presentingViewController as? ContainerViewController & Alertable {
                     signInDelegate.showErrorAlert(with: "Error signing in to Firebase - \(error.localizedDescription)")
                 }
             } else {
