@@ -18,12 +18,13 @@ class MatchesViewController: TBATableViewController {
     private var myTBA: MyTBA
 
     var query: MatchQueryOptions = MatchQueryOptions(sort: MatchQueryOptions.MatchSortOptions(reverse: false), filter: MatchQueryOptions.MatchFilterOptions(favorites: false))
+    private var favoriteTeamKeys: [String] = []
 
     weak var delegate: MatchesViewControllerDelegate?
     private var dataSource: TableViewDataSource<Match, MatchesViewController>!
 
     lazy var matchQueryBarButtonItem: UIBarButtonItem = {
-        return UIBarButtonItem(image: UIImage(named: "ic_filter"), style: .plain, target: self, action: #selector(showFilter))
+        return UIBarButtonItem(image: UIImage.sortFilterIcon, style: .plain, target: self, action: #selector(showFilter))
     }()
     override var additionalRightBarButtonItems: [UIBarButtonItem] {
         return [matchQueryBarButtonItem]
@@ -43,6 +44,20 @@ class MatchesViewController: TBATableViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        updateInterface()
+    }
+
+    private func updateInterface() {
+        if query.isDefault {
+            matchQueryBarButtonItem.image = UIImage.sortFilterIcon
+        } else {
+            matchQueryBarButtonItem.image = UIImage.sortFilterIconActive
+        }
     }
 
     // MARK: Table View Data Source
@@ -83,7 +98,6 @@ class MatchesViewController: TBATableViewController {
             guard query.filter.favorites else {
                 return nil
             }
-            let favoriteTeamKeys = Favorite.favoriteTeamKeys(in: persistentContainer.viewContext)
             return NSPredicate(format: "SUBQUERY(%K, $a, ANY $a.teams.key IN %@).@count > 0",
                                #keyPath(Match.alliances), favoriteTeamKeys)
         }()
@@ -106,6 +120,10 @@ class MatchesViewController: TBATableViewController {
 
     func updateWithQuery(query: MatchQueryOptions) {
         self.query = query
+        // Save favoriteTeamKeys when query changes - since this can be expensive
+        favoriteTeamKeys = Favorite.favoriteTeamKeys(in: persistentContainer.viewContext)
+
+        updateInterface()
         updateDataSource()
     }
 
@@ -130,8 +148,6 @@ extension MatchesViewController: TableViewDataSourceDelegate {
             baseTeamKeys.insert(teamKey.key!)
         }
         if query.filter.favorites {
-            // TODO: Fetching this is EXPENSIVE - we should probably fetch/set when our query changes
-            let favoriteTeamKeys = Favorite.favoriteTeamKeys(in: persistentContainer.viewContext)
             baseTeamKeys.formUnion(favoriteTeamKeys)
         }
         cell.viewModel = MatchViewModel(match: object, baseTeamKeys: Array(baseTeamKeys))

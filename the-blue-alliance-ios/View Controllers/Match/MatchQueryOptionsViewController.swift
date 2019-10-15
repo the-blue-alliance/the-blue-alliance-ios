@@ -82,7 +82,7 @@ class MatchQueryOptionsViewController: TBATableViewController {
 
         title = "Match Sort/Filter"
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(saveMatchQuery))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissMatchQuery))
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -120,7 +120,9 @@ class MatchQueryOptionsViewController: TBATableViewController {
             switch querySection {
             case .sort:
                 let switchCell = SwitchTableViewCell(switchToggled: { [weak self] (_ sender: UISwitch) in
-                    self?.query.sort.reverse = sender.isOn
+                    guard let self = self else { return }
+                    self.query.sort.reverse = sender.isOn
+                    self.delegate?.updateQuery(query: self.query)
                 })
                 switchCell.textLabel?.text = "Reverse"
                 switchCell.detailTextLabel?.text = "Show matches in ascending order"
@@ -128,7 +130,9 @@ class MatchQueryOptionsViewController: TBATableViewController {
                 return switchCell
             case .filter:
                 let switchCell = SwitchTableViewCell(switchToggled: { [weak self] (_ sender: UISwitch) in
-                    self?.query.filter.favorites = sender.isOn
+                    guard let self = self else { return }
+                    self.query.filter.favorites = sender.isOn
+                    self.delegate?.updateQuery(query: self.query)
                 })
                 switchCell.textLabel?.text = "Favorites"
                 switchCell.detailTextLabel?.text = "Show only matches with myTBA favorite teams playing"
@@ -158,8 +162,7 @@ class MatchQueryOptionsViewController: TBATableViewController {
         return index < sections.count ? sections[index] : nil
     }
 
-    @objc private func saveMatchQuery() {
-        delegate?.updateQuery(query: query)
+    @objc private func dismissMatchQuery() {
         navigationController?.dismiss(animated: true, completion: nil)
     }
 
