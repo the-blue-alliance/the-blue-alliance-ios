@@ -63,7 +63,7 @@ target 'The Blue Alliance' do
   pod 'TBAUtils', :path => 'Frameworks/TBAUtils', :testspecs => ['Tests']
 
   # myTBA
-  pod 'GoogleSignIn', '~> 4'
+  pod 'GoogleSignIn'
 
   # Crash reporting
   pod 'Fabric'
