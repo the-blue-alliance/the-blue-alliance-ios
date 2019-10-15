@@ -34,7 +34,6 @@
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="5aq-oV-8Pq">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" name="tabBarTintColor"/>
                     </tabBar>
                     <connections>
                         <segue destination="WeK-vk-JHW" kind="relationship" relationship="viewControllers" id="7Cr-K1-EAj"/>
@@ -68,9 +67,6 @@
     <resources>
         <namedColor name="navigationBarTintColor">
             <color red="0.10999999940395355" green="0.10999999940395355" blue="0.11800000071525574" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="tabBarTintColor">
-            <color red="1" green="0.75686274509803919" blue="0.027450980392156862" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
