@@ -104,7 +104,7 @@
                     </constraints>
                 </stackView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
                 <constraint firstItem="TKa-b7-SsL" firstAttribute="trailing" secondItem="GHm-jo-SWw" secondAttribute="trailing" constant="20" id="3Yu-u8-BDf"/>
                 <constraint firstItem="GHm-jo-SWw" firstAttribute="top" relation="greaterThanOrEqual" secondItem="TKa-b7-SsL" secondAttribute="top" id="AnT-5C-QnK"/>
@@ -120,8 +120,8 @@
         <image name="bell" catalog="system" width="64" height="62"/>
         <image name="btn_google_signin_disabled" width="38.5" height="48"/>
         <image name="btn_google_signin_focus" width="49.5" height="48"/>
-        <image name="btn_google_signin_normal" width="49.5" height="48"/>
-        <image name="btn_google_signin_pressed" width="49.5" height="48"/>
+        <image name="btn_google_signin_normal" width="39.5" height="48"/>
+        <image name="btn_google_signin_pressed" width="39.5" height="48"/>
         <image name="heart" catalog="system" width="64" height="54"/>
         <image name="star.fill" catalog="system" width="64" height="58"/>
     </resources>
