@@ -89,6 +89,21 @@ class FavoriteTestCase: TBADataTestCase {
         XCTAssertNil(favorite)
     }
 
+    func test_favoriteTeamKeys() {
+        var favoriteTeamKeys = Favorite.favoriteTeamKeys(in: persistentContainer.viewContext)
+        XCTAssertEqual(favoriteTeamKeys, [])
+
+        let favoriteEventModel = MyTBAFavorite(modelKey: "2018miket", modelType: .event)
+        _ = Favorite.insert(favoriteEventModel, in: persistentContainer.viewContext)
+        favoriteTeamKeys = Favorite.favoriteTeamKeys(in: persistentContainer.viewContext)
+        XCTAssertEqual(favoriteTeamKeys, [])
+
+        let favoriteTeamModel = MyTBAFavorite(modelKey: "frc7332", modelType: .team)
+        _ = Favorite.insert(favoriteTeamModel, in: persistentContainer.viewContext)
+        favoriteTeamKeys = Favorite.favoriteTeamKeys(in: persistentContainer.viewContext)
+        XCTAssertEqual(favoriteTeamKeys, ["frc7332"])
+    }
+
     func test_toRemoteModel() {
         let model = MyTBAFavorite(modelKey: "2018miket", modelType: .event)
         let favorite = Favorite.insert(model, in: persistentContainer.viewContext)
