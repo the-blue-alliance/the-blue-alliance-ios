@@ -47,7 +47,7 @@ target 'The Blue Alliance' do
   pod 'BFRImageViewer'
   pod 'PINRemoteImage', '3.0.0-beta.13'
   pod 'PureLayout'
-  pod 'XCDYouTubeKit', '~> 2.7'
+  pod 'XCDYouTubeKit', '~> 2.8'
   pod 'Zip', '~> 1.1'
 
   # Firebase
