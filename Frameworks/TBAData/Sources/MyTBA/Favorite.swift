@@ -69,6 +69,12 @@ extension Favorite: MyTBAManaged {
         return findOrFetch(in: context, matching: predicate)
     }
 
+    public static func favoriteTeamKeys(in context: NSManagedObjectContext) -> [String] {
+        return Favorite.fetch(in: context, configurationBlock: { (fetchRequest) in
+            fetchRequest.predicate = NSPredicate(format: "%K == %ld", #keyPath(Favorite.modelTypeRaw), MyTBAModelType.team.rawValue)
+        }).compactMap({ $0.modelKey })
+    }
+
     public func toRemoteModel() -> MyTBAFavorite {
         return MyTBAFavorite(modelKey: modelKey!, modelType: modelType)
     }

@@ -22,6 +22,7 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
     let myTBA: MyTBA
     let statusService: StatusService
     let urlOpener: URLOpener
+    var matchesViewController: MatchesViewController
 
     // MARK:  - ContainerTeamPushable
 
@@ -40,7 +41,7 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
         self.urlOpener = urlOpener
 
         let summaryViewController = TeamSummaryViewController(teamKey: teamKey, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        let matchesViewController = MatchesViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        matchesViewController = MatchesViewController(event: event, teamKey: teamKey, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let statsViewController = TeamStatsViewController(teamKey: teamKey, event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let awardsViewController = EventAwardsViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
@@ -100,7 +101,7 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
 
 }
 
-extension TeamAtEventViewController: MatchesViewControllerDelegate, TeamSummaryViewControllerDelegate {
+extension TeamAtEventViewController: MatchesViewControllerDelegate, MatchesViewControllerQueryable, TeamSummaryViewControllerDelegate {
 
     func awardsSelected() {
         let awardsViewController = EventAwardsContainerViewController(event: event, teamKey: teamKey, messaging: messaging, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
