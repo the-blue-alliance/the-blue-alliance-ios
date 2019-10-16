@@ -17,7 +17,7 @@ class MatchesViewController: TBATableViewController {
     private let teamKey: TeamKey?
     private var myTBA: MyTBA
 
-    var query: MatchQueryOptions = MatchQueryOptions(sort: MatchQueryOptions.MatchSortOptions(reverse: false), filter: MatchQueryOptions.MatchFilterOptions(favorites: false))
+    var query: MatchQueryOptions = MatchQueryOptions.defaultQuery()
     private var favoriteTeamKeys: [String] = []
 
     weak var delegate: MatchesViewControllerDelegate?
