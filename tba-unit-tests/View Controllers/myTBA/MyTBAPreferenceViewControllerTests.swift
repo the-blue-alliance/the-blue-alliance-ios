@@ -95,23 +95,16 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
         XCTAssert(myTBAPreferencesViewController.notifications.isEmpty)
     }
 
-    func test_preferencesHaveChanged() {
-        XCTAssertFalse(myTBAPreferencesViewController.preferencesHaveChanged)
+    func test_hasChanges() {
+        XCTAssertFalse(myTBAPreferencesViewController.hasChanges)
         myTBAPreferencesViewController.isFavorite = true
-        XCTAssert(myTBAPreferencesViewController.preferencesHaveChanged)
+        XCTAssert(myTBAPreferencesViewController.hasChanges)
         myTBAPreferencesViewController.isFavorite = false
-        XCTAssertFalse(myTBAPreferencesViewController.preferencesHaveChanged)
+        XCTAssertFalse(myTBAPreferencesViewController.hasChanges)
         myTBAPreferencesViewController.notifications = [.awards]
-        XCTAssert(myTBAPreferencesViewController.preferencesHaveChanged)
+        XCTAssert(myTBAPreferencesViewController.hasChanges)
         myTBAPreferencesViewController.isFavorite = true
-        XCTAssert(myTBAPreferencesViewController.preferencesHaveChanged)
-    }
-
-    func test_save_noChanges() {
-        let dismissExpectation = expectation(description: "Dismiss called")
-        navigationController.dismissExpectation = dismissExpectation
-        myTBAPreferencesViewController.save()
-        wait(for: [dismissExpectation], timeout: 1.0)
+        XCTAssert(myTBAPreferencesViewController.hasChanges)
     }
 
     func test_save_hasChanges() {
