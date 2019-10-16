@@ -30,7 +30,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
         infoViewController = EventInfoViewController(event: event, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         teamsViewController = EventTeamsViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         rankingsViewController = EventRankingsViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        matchesViewController = MatchesViewController(event: event, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        matchesViewController = MatchesViewController(event: event, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [infoViewController, teamsViewController, rankingsViewController, matchesViewController],
                    segmentedControlTitles: ["Info", "Teams", "Rankings", "Matches"],
@@ -124,7 +124,7 @@ extension EventViewController: EventRankingsViewControllerDelegate {
 
 }
 
-extension EventViewController: MatchesViewControllerDelegate {
+extension EventViewController: MatchesViewControllerDelegate, MatchesViewControllerQueryable {
 
     func matchSelected(_ match: Match) {
         let matchViewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)

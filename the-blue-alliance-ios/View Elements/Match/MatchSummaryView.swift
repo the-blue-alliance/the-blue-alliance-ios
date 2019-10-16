@@ -130,14 +130,14 @@ class MatchSummaryView: UIView {
         removeTeams()
         removeRPs()
 
-        let baseTeamKey = viewModel.baseTeamKey
+        let baseTeamKeys = viewModel.baseTeamKeys
         for (alliance, stackView) in [(viewModel.redAlliance, redStackView!), (viewModel.blueAlliance, blueStackView!)] {
             for teamKey in alliance {
                 let dq = viewModel.dqs.contains(teamKey)
                 // if teams are tappable, load the team #s as buttons to link to the team page
                 let label = teamsTappable
-                    ? teamButton(for: teamKey, baseTeamKey: baseTeamKey, dq: dq)
-                    : teamLabel(for: teamKey, baseTeamKey: baseTeamKey, dq: dq)
+                    ? teamButton(for: teamKey, baseTeamKeys: baseTeamKeys, dq: dq)
+                    : teamLabel(for: teamKey, baseTeamKeys: baseTeamKeys, dq: dq)
                 // Insert each new stack view at the index just before the score view
                 stackView.insertArrangedSubview(label, at: stackView.arrangedSubviews.count - 1)
             }
@@ -170,16 +170,16 @@ class MatchSummaryView: UIView {
         }
     }
     
-    private func teamLabel(for teamKey: String, baseTeamKey: String?, dq: Bool) -> UILabel {
+    private func teamLabel(for teamKey: String, baseTeamKeys: [String], dq: Bool) -> UILabel {
         let text: String = "\(Team.trimFRCPrefix(teamKey))"
-        let isBold: Bool = (teamKey == baseTeamKey)
+        let isBold: Bool = baseTeamKeys.contains(teamKey)
 
         return label(text: text, isBold: isBold, isStrikethrough: dq)
     }
     
-    private func teamButton(for teamKey: String, baseTeamKey: String?, dq: Bool) -> UIButton {
+    private func teamButton(for teamKey: String, baseTeamKeys: [String], dq: Bool) -> UIButton {
         let text: String = "\(Team.trimFRCPrefix(teamKey))"
-        let isBold: Bool = (teamKey == baseTeamKey)
+        let isBold: Bool = baseTeamKeys.contains(teamKey)
 
         return button(text: text, isBold: isBold, isStrikethrough: dq)
     }
