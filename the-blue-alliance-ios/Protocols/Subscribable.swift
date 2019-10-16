@@ -21,10 +21,11 @@ extension Subscribable where Self: UIViewController, Self: Persistable {
                                                                            messaging: messaging,
                                                                            myTBA: myTBA,
                                                                            persistentContainer: persistentContainer)
-        let navController = UINavigationController(rootViewController: myTBAPreferencesViewController)
-        navController.modalPresentationStyle = .formSheet
+        let navigationController = UINavigationController(rootViewController: myTBAPreferencesViewController)
+        navigationController.modalPresentationStyle = .formSheet
+        navigationController.presentationController?.delegate = myTBAPreferencesViewController
 
-        present(navController, animated: true, completion: nil)
+        present(navigationController, animated: true, completion: nil)
     }
 
 }
