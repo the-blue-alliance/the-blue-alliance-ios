@@ -67,22 +67,31 @@ class MyTBAPreferenceViewControllerTests: TBATestCase {
     }
 
     func test_favoriteSwitchToggled() {
-        let testSwitch = UISwitch(frame: .zero)
-        testSwitch.isOn = true
+        let indexPath = IndexPath(row: 0, section: 0)
+        guard let cell = myTBAPreferencesViewController.tableView(myTBAPreferencesViewController.tableView, cellForRowAt: indexPath) as? SwitchTableViewCell else {
+            XCTFail("Unable to get SwitchTableViewCell from MyTBAPreferencesViewController")
+            return
+        }
 
         XCTAssertFalse(myTBAPreferencesViewController.isFavorite)
-        myTBAPreferencesViewController.favoriteSwitchToggled(testSwitch)
+        cell.switchView.isOn = true
+        cell.switchValueChanged(cell.switchView)
         XCTAssert(myTBAPreferencesViewController.isFavorite)
     }
 
     func test_notificationSwitchToggled() {
-        let testSwitch = UISwitch(frame: .zero)
-        testSwitch.tag = 0
+        let indexPath = IndexPath(row: 0, section: 1)
+        guard let cell = myTBAPreferencesViewController.tableView(myTBAPreferencesViewController.tableView, cellForRowAt: indexPath) as? SwitchTableViewCell else {
+            XCTFail("Unable to get SwitchTableViewCell from MyTBAPreferencesViewController")
+            return
+        }
 
         XCTAssert(myTBAPreferencesViewController.notifications.isEmpty)
-        myTBAPreferencesViewController.notificationSwitchToggled(testSwitch)
+        cell.switchView.isOn = true
+        cell.switchValueChanged(cell.switchView)
         XCTAssertEqual(myTBAPreferencesViewController.notifications.count, 1)
-        myTBAPreferencesViewController.notificationSwitchToggled(testSwitch)
+        cell.switchView.isOn = false
+        cell.switchValueChanged(cell.switchView)
         XCTAssert(myTBAPreferencesViewController.notifications.isEmpty)
     }
 
