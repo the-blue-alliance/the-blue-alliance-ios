@@ -27,4 +27,8 @@ extension UIImage {
         return UIImage(systemName: "line.horizontal.3.decrease.circle")
     }
 
+    static var sortFilterIconActive: UIImage? {
+        return UIImage(systemName: "line.horizontal.3.decrease.circle.fill")
+    }
+
 }

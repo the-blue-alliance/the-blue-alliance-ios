@@ -103,21 +103,6 @@ class MyTBAPreferenceViewController: UITableViewController {
         }
     }
 
-    @objc func favoriteSwitchToggled(_ sender: UISwitch) {
-        isFavorite = sender.isOn
-    }
-
-    @objc func notificationSwitchToggled(_ sender: UISwitch) {
-        let index = sender.tag
-        let notificationType = notificationTypes[index]
-
-        if let removeIndex = notifications.firstIndex(of: notificationType) {
-            notifications.remove(at: removeIndex)
-        } else {
-            notifications.append(notificationType)
-        }
-    }
-
     // MARK: Navigation Methods
 
     var preferencesHaveChanged: Bool {
@@ -202,26 +187,39 @@ class MyTBAPreferenceViewController: UITableViewController {
     // MARK: Table View Data Source
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+        let cell: SwitchTableViewCell = {
+            if indexPath.section == 0 {
+                let switchCell = SwitchTableViewCell(switchToggled: { [weak self] (_ sender: UISwitch) in
+                    self?.isFavorite = sender.isOn
+                })
+                switchCell.textLabel?.text = "Favorite"
+                switchCell.detailTextLabel?.text = "You can save teams, events, and matches for easy access in the myTBA tab by marking them as favorites"
+                switchCell.detailTextLabel?.numberOfLines = 0
+                switchCell.switchView.isOn = isFavorite
+                return switchCell
+            } else {
+                let switchCell = SwitchTableViewCell(switchToggled: { [weak self] (_ sender: UISwitch) in
+                    let index = sender.tag
+                    guard let notificationType = self?.notificationTypes[index] else {
+                        return
+                    }
 
-        let switchView = UISwitch(frame: .zero)
-        switchView.isEnabled = !isSaving
-        cell.accessoryView = switchView
+                    if let removeIndex = self?.notifications.firstIndex(of: notificationType) {
+                        self?.notifications.remove(at: removeIndex)
+                    } else {
+                        self?.notifications.append(notificationType)
+                    }
+                })
+                let notificationType = notificationTypes[indexPath.row]
+                switchCell.textLabel?.text = notificationType.displayString()
+                switchCell.switchView.tag = indexPath.row
+                switchCell.switchView.isOn = notifications.contains(notificationType)
+                return switchCell
+            }
 
-        if indexPath.section == 0 {
-            cell.textLabel?.text = "Favorite"
-            cell.detailTextLabel?.text = "You can save teams, events, and matches for easy access in the myTBA tab by marking them as favorites"
-            cell.detailTextLabel?.numberOfLines = 0
-            switchView.isOn = isFavorite
-            switchView.addTarget(self, action: #selector(favoriteSwitchToggled(_:)), for: .valueChanged)
-        } else {
-            let notificationType = notificationTypes[indexPath.row]
-            cell.textLabel?.text = notificationType.displayString()
-            switchView.tag = indexPath.row
-            switchView.isOn = notifications.contains(notificationType)
-            switchView.addTarget(self, action: #selector(notificationSwitchToggled(_:)), for: .valueChanged)
-        }
+        }()
 
+        cell.switchView.isEnabled = !isSaving
         cell.selectionStyle = .none
 
         return cell
