@@ -197,7 +197,7 @@ PODS:
     - PINCache (= 3.0.1-beta.6)
     - PINRemoteImage/Core
   - Protobuf (3.10.0)
-  - PureLayout (3.1.4)
+  - PureLayout (3.1.5)
   - RCTRequired (0.61.1)
   - RCTTypeSafety (0.61.1):
     - FBLazyVector (= 0.61.1)
@@ -427,7 +427,7 @@ PODS:
   - TBATestingMocks (1.0.0-LOCAL)
   - TBAUtils (1.0.0-LOCAL)
   - TBAUtils/Tests (1.0.0-LOCAL)
-  - XCDYouTubeKit (2.8.0)
+  - XCDYouTubeKit (2.8.1)
   - Yoga (1.14.0)
   - Zip (1.1.0)
 
@@ -487,7 +487,7 @@ DEPENDENCIES:
   - TBATestingMocks (from `Frameworks/TBATestingMocks`)
   - TBAUtils (from `Frameworks/TBAUtils`)
   - TBAUtils/Tests (from `Frameworks/TBAUtils`)
-  - XCDYouTubeKit (~> 2.7)
+  - XCDYouTubeKit (~> 2.8)
   - Yoga (from `subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon/yoga`)
   - Zip (~> 1.1)
 
@@ -646,7 +646,7 @@ SPEC CHECKSUMS:
   PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
   PINRemoteImage: d6d51c5d2adda55f1ce30c96e850b6c4ebd2856a
   Protobuf: a4dc852ad69c027ca2166ed287b856697814375b
-  PureLayout: f08c01b8dec00bb14a1fefa3de4c7d9c265df85e
+  PureLayout: 9b4ad47b2f0388c84ff534af23d96e720c1b875a
   RCTRequired: 53825815218847d3e9c7b6d92ad2d197a926d51e
   RCTTypeSafety: d886540c518e53064dfa081bf7693fd650699b92
   React: 5dea58967c421bd1fdf6b94c18b9ed0f5134683c
@@ -676,10 +676,10 @@ SPEC CHECKSUMS:
   TBAOperationTesting: f6be36759c419928770d7aaa9ae1c61b0a312ca1
   TBATestingMocks: 004d7f4bab4999d78da0609d6bcb58a01acca78d
   TBAUtils: a259341ea3f098a8e727e734ada7af71a3aaeaf1
-  XCDYouTubeKit: 207fa50f3648fc0fd1558b2496c74c3b34af982c
+  XCDYouTubeKit: 4ca4e3322fa556ec1c32932d378365c15ce1386e
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: 989be47238c4866f7c75c9ae5e1235847aa3b9f2
+PODFILE CHECKSUM: 279cdf009034812d5449fa3b5825ad104dca8789
 
 COCOAPODS: 1.7.5
