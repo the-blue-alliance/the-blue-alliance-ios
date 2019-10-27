@@ -71,7 +71,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     private lazy var segmentedControlView: UIView = {
         let segmentedControlView = UIView(forAutoLayout: ())
         segmentedControlView.autoSetDimension(.height, toSize: 44.0)
-        segmentedControlView.backgroundColor = .primaryBlue
+        segmentedControlView.backgroundColor = UIColor.navigationBarTintColor
         segmentedControlView.addSubview(segmentedControl)
         segmentedControl.autoAlignAxis(toSuperviewAxis: .horizontal)
         segmentedControl.autoPinEdge(toSuperviewEdge: .leading, withInset: 16.0)
@@ -87,7 +87,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
     private lazy var offlineEventView: UIView = {
         let offlineEventLabel = UILabel(forAutoLayout: ())
         offlineEventLabel.text = "It looks like this event hasn't posted any results recently. It's possible that the internet connection at the event is down. The event's information might be out of date."
-        offlineEventLabel.textColor = .dangerDarkRed
+        offlineEventLabel.textColor = UIColor.dangerDarkRed
         offlineEventLabel.numberOfLines = 0
         offlineEventLabel.textAlignment = .center
         offlineEventLabel.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.footnote)
@@ -95,7 +95,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         let offlineEventView = UIView(forAutoLayout: ())
         offlineEventView.addSubview(offlineEventLabel)
         offlineEventLabel.autoPinEdgesToSuperviewSafeArea(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
-        offlineEventView.backgroundColor = .dangerRed
+        offlineEventView.backgroundColor = UIColor.dangerRed
         return offlineEventView
     }()
 
@@ -111,7 +111,8 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         segmentedControl = UISegmentedControl(items: segmentedControlTitles)
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        segmentedControl.tintColor = .white
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.segmentedControlSelectedColor], for: .selected)
 
         super.init(nibName: nil, bundle: nil)
 
@@ -305,7 +306,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
 
     private static func createNavigationLabel() -> UILabel {
         let label = UILabel(forAutoLayout: ())
-        label.textColor = .white
+        label.textColor = UIColor.white
         label.textAlignment = .center
         return label
     }

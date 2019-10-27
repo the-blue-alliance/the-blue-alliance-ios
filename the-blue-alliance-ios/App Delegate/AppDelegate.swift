@@ -248,9 +248,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
-        return GIDSignIn.sharedInstance().handle(url,
-                                                 sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
-                                                 annotation: options[UIApplication.OpenURLOptionsKey.annotation])
+        GIDSignIn.sharedInstance().handle(url)
     }
 
     // MARK: Push Delegate Methods
@@ -296,12 +294,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func setupGoogleAuthentication() {
-        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
-        GIDSignIn.sharedInstance().delegate = self
+        guard let signIn = GIDSignIn.sharedInstance() else { return }
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+
+        signIn.clientID = clientID
+        signIn.delegate = self
 
         // If we're authenticated with Google but don't have a Firebase user, get a Firebase user
-        if GIDSignIn.sharedInstance().hasAuthInKeychain() && Auth.auth().currentUser == nil {
-            GIDSignIn.sharedInstance().signInSilently()
+        if signIn.hasPreviousSignIn() {
+            signIn.restorePreviousSignIn()
         }
     }
 
@@ -316,7 +317,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static func setupAppearance() {
         let navigationBarAppearance = UINavigationBar.appearance()
 
-        navigationBarAppearance.barTintColor = UIColor.primaryBlue
+        navigationBarAppearance.barTintColor = UIColor.navigationBarTintColor
         navigationBarAppearance.tintColor = UIColor.white
         // Remove the shadow for a more seamless split between navigation bar and segmented controls
         navigationBarAppearance.shadowImage = UIImage()
@@ -325,7 +326,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationBarAppearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
 
         let tabBarAppearance = UITabBar.appearance()
-        tabBarAppearance.barTintColor = .white
+        tabBarAppearance.isTranslucent = false
+        tabBarAppearance.tintColor = UIColor.tabBarTintColor
     }
 
 }
@@ -334,12 +336,12 @@ extension AppDelegate: GIDSignInDelegate {
 
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error?) {
         // Don't respond to errors from signInSilently or a user cancelling a sign in
-        if let error = error as NSError?, (error.code == GIDSignInErrorCode.canceled.rawValue || error.code == GIDSignInErrorCode.canceled.rawValue) {
+        if let error = error as NSError?, error.code == GIDSignInErrorCode.canceled.rawValue {
             return
         } else if let error = error {
             Crashlytics.sharedInstance().recordError(error)
-            if let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? ContainerViewController & Alertable {
-                signInDelegate.showErrorAlert(with: "Error authorizing notifications - \(error.localizedDescription)")
+            if let signInDelegate = GIDSignIn.sharedInstance()?.presentingViewController as? ContainerViewController & Alertable {
+                signInDelegate.showErrorAlert(with: "Error signing in to Google - \(error.localizedDescription)")
             }
             return
         }
@@ -351,7 +353,7 @@ extension AppDelegate: GIDSignInDelegate {
         Auth.auth().signIn(with: credential) { (_, error) in
             if let error = error {
                 Crashlytics.sharedInstance().recordError(error)
-                if let signInDelegate = GIDSignIn.sharedInstance().uiDelegate as? ContainerViewController & Alertable {
+                if let signInDelegate = GIDSignIn.sharedInstance()?.presentingViewController as? ContainerViewController & Alertable {
                     signInDelegate.showErrorAlert(with: "Error signing in to Firebase - \(error.localizedDescription)")
                 }
             } else {

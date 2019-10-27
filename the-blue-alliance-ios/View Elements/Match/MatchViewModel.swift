@@ -23,9 +23,17 @@ struct MatchViewModel {
     var redRPCount: Int = 0
     var blueRPCount: Int = 0
 
-    let baseTeamKey: String?
+    let baseTeamKeys: [String]
 
     init(match: Match, teamKey: TeamKey? = nil) {
+        var baseTeamKeys: [String] = []
+        if let teamKey = teamKey {
+            baseTeamKeys.append(teamKey.key!)
+        }
+        self.init(match: match, baseTeamKeys: baseTeamKeys)
+    }
+
+    init(match: Match, baseTeamKeys: [String]) {
         // TODO: Support all alliances
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/274
         matchName = match.friendlyName
@@ -56,7 +64,7 @@ struct MatchViewModel {
         redAllianceWon = hasWinnersAndLosers && match.winningAlliance == "red"
         blueAllianceWon = hasWinnersAndLosers && match.winningAlliance == "blue"
 
-        baseTeamKey = teamKey?.key
+        self.baseTeamKeys = baseTeamKeys
         
         // TODO: Support all alliances
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/274

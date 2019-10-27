@@ -10,7 +10,7 @@ import TBAKit
 import UIKit
 import UserNotifications
 
-class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
+class MyTBAViewController: ContainerViewController {
 
     private let messaging: Messaging
     private let myTBA: MyTBA
@@ -56,12 +56,12 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
                    userDefaults: userDefaults)
 
         title = "myTBA"
-        tabBarItem.image = UIImage(named: "ic_star")
+        tabBarItem.image = UIImage.starIcon
 
         favoritesViewController.delegate = self
         subscriptionsViewController.delegate = self
 
-        GIDSignIn.sharedInstance().uiDelegate = self
+        GIDSignIn.sharedInstance()?.presentingViewController = self
         myTBA.authenticationProvider.add(observer: self)
     }
     
@@ -84,6 +84,8 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
     // MARK: - Private Methods
 
     private func styleInterface() {
+        addChild(signInViewController)
+
         view.addSubview(signInView)
         for edge in [ALEdge.top, ALEdge.bottom] {
             signInView.autoPinEdge(toSuperviewSafeArea: edge)

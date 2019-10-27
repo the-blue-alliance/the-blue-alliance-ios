@@ -44,14 +44,14 @@ class NotificationStatusTableViewCell: UITableViewCell {
             activityIndicator.isHidden = false
             activityIndicator.startAnimating()
         case .valid:
-            statusImageView.image = UIImage(named: "baseline_check_circle")
-            statusImageView.tintColor = .primaryBlue
+            statusImageView.image = UIImage(systemName: "checkmark.circle.fill")
+            statusImageView.tintColor = UIColor.primaryBlue
         case .invalid:
             selectionStyle = .default
             accessoryType = .disclosureIndicator
             isUserInteractionEnabled = true
-            statusImageView.image = UIImage(named: "baseline_cancel")
-            statusImageView.tintColor = .red
+            statusImageView.image = UIImage(systemName: "xmark.circle.fill")
+            statusImageView.tintColor = UIColor.systemRed
         }
     }
 

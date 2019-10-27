@@ -8,7 +8,7 @@ class NoDataViewController: UIViewController {
     init() {
         super.init(nibName: "NoDataView", bundle: nil)
 
-        view.backgroundColor = .clear
+        view.backgroundColor = UIColor.clear
     }
 
     required init?(coder aDecoder: NSCoder) {

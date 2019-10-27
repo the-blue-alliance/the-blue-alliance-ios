@@ -33,7 +33,7 @@ class MatchSummaryView: UIView {
     @IBOutlet private weak var redStackView: UIStackView!
     @IBOutlet weak var redContainerView: UIView! {
         didSet {
-            redContainerView.layer.borderColor = UIColor.red.cgColor
+            redContainerView.layer.borderColor = UIColor.systemRed.cgColor
         }
     }
     @IBOutlet weak var redScoreView: UIView!
@@ -43,7 +43,7 @@ class MatchSummaryView: UIView {
     @IBOutlet weak private var blueStackView: UIStackView!
     @IBOutlet weak var blueContainerView: UIView! {
         didSet {
-            blueContainerView.layer.borderColor = UIColor.blue.cgColor
+            blueContainerView.layer.borderColor = UIColor.systemBlue.cgColor
         }
     }
     @IBOutlet weak var blueScoreView: UIView!
@@ -69,11 +69,21 @@ class MatchSummaryView: UIView {
         initMatchView()
     }
 
-    func initMatchView() {
+    private func initMatchView() {
         Bundle.main.loadNibNamed(String(describing: MatchSummaryView.self), owner: self, options: nil)
         summaryView.frame = self.bounds
         summaryView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         self.addSubview(summaryView)
+
+        styleInterface()
+    }
+
+    private func styleInterface() {
+        redContainerView.backgroundColor = UIColor.redAllianceBackgroundColor
+        redScoreLabel.backgroundColor = UIColor.redAllianceScoreColor
+
+        blueContainerView.backgroundColor = UIColor.blueAllianceBackgroundColor
+        blueScoreLabel.backgroundColor = UIColor.blueAllianceScoreColor
     }
 
     // MARK: - Public Methods
@@ -120,14 +130,14 @@ class MatchSummaryView: UIView {
         removeTeams()
         removeRPs()
 
-        let baseTeamKey = viewModel.baseTeamKey
+        let baseTeamKeys = viewModel.baseTeamKeys
         for (alliance, stackView) in [(viewModel.redAlliance, redStackView!), (viewModel.blueAlliance, blueStackView!)] {
             for teamKey in alliance {
                 let dq = viewModel.dqs.contains(teamKey)
                 // if teams are tappable, load the team #s as buttons to link to the team page
                 let label = teamsTappable
-                    ? teamButton(for: teamKey, baseTeamKey: baseTeamKey, dq: dq)
-                    : teamLabel(for: teamKey, baseTeamKey: baseTeamKey, dq: dq)
+                    ? teamButton(for: teamKey, baseTeamKeys: baseTeamKeys, dq: dq)
+                    : teamLabel(for: teamKey, baseTeamKeys: baseTeamKeys, dq: dq)
                 // Insert each new stack view at the index just before the score view
                 stackView.insertArrangedSubview(label, at: stackView.arrangedSubviews.count - 1)
             }
@@ -160,16 +170,16 @@ class MatchSummaryView: UIView {
         }
     }
     
-    private func teamLabel(for teamKey: String, baseTeamKey: String?, dq: Bool) -> UILabel {
+    private func teamLabel(for teamKey: String, baseTeamKeys: [String], dq: Bool) -> UILabel {
         let text: String = "\(Team.trimFRCPrefix(teamKey))"
-        let isBold: Bool = (teamKey == baseTeamKey)
+        let isBold: Bool = baseTeamKeys.contains(teamKey)
 
         return label(text: text, isBold: isBold, isStrikethrough: dq)
     }
     
-    private func teamButton(for teamKey: String, baseTeamKey: String?, dq: Bool) -> UIButton {
+    private func teamButton(for teamKey: String, baseTeamKeys: [String], dq: Bool) -> UIButton {
         let text: String = "\(Team.trimFRCPrefix(teamKey))"
-        let isBold: Bool = (teamKey == baseTeamKey)
+        let isBold: Bool = baseTeamKeys.contains(teamKey)
 
         return button(text: text, isBold: isBold, isStrikethrough: dq)
     }
@@ -177,7 +187,7 @@ class MatchSummaryView: UIView {
     private func button(text: String, isBold: Bool, isStrikethrough: Bool = false) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(text, for: [])
-        button.setTitleColor(.primaryBlue, for: .normal)
+        button.setTitleColor(UIColor.highlightColor, for: .normal)
         
         if let teamNumber = Int(text) {
             button.tag = teamNumber
@@ -195,6 +205,7 @@ class MatchSummaryView: UIView {
         label.textAlignment = .center
         label.attributedText = customAttributedString(text: text, isBold: isBold, isStrikethrough: isStrikethrough)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor.label
         return label
     }
     

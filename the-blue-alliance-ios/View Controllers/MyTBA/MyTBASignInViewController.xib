@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -12,6 +10,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyTBASignInViewController" customModule="The_Blue_Alliance" customModuleProvider="target">
             <connections>
                 <outlet property="favoriteImageView" destination="V9P-3O-rGH" id="fy3-zh-SBn"/>
+                <outlet property="signInButton" destination="PCK-YF-VW6" id="1PY-Z8-Fey"/>
                 <outlet property="starImageView" destination="g4n-2a-hdA" id="hej-fJ-PJL"/>
                 <outlet property="subscriptionImageView" destination="kK2-7h-yg5" id="HJV-ED-UAH"/>
                 <outlet property="view" destination="t8S-eI-yHk" id="D5w-pZ-piN"/>
@@ -23,20 +22,20 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" axis="vertical" distribution="equalSpacing" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="GHm-jo-SWw">
-                    <rect key="frame" x="20" y="191.5" width="335" height="284.5"/>
+                    <rect key="frame" x="20" y="190.5" width="335" height="286.5"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gJS-sF-yoy">
-                            <rect key="frame" x="58.5" y="0.0" width="218" height="91.5"/>
+                            <rect key="frame" x="50.5" y="0.0" width="234" height="93.5"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" verticalHuggingPriority="750" image="star_yellow" translatesAutoresizingMaskIntoConstraints="NO" id="g4n-2a-hdA">
-                                    <rect key="frame" x="77.5" y="0.0" width="63" height="60"/>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" verticalHuggingPriority="750" image="star.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="g4n-2a-hdA">
+                                    <rect key="frame" x="85.5" y="0.0" width="63" height="60"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="60" id="7oq-xo-qmg"/>
                                         <constraint firstAttribute="width" secondItem="g4n-2a-hdA" secondAttribute="height" multiplier="102:97" id="igA-M6-mt1"/>
                                     </constraints>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Welcome to myTBA" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eLD-y8-UJK">
-                                    <rect key="frame" x="0.0" y="60" width="218" height="31.5"/>
+                                    <rect key="frame" x="0.0" y="60" width="234" height="33.5"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -44,10 +43,11 @@
                             </subviews>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="kDf-bN-XDK">
-                            <rect key="frame" x="8" y="111.5" width="319.5" height="42.5"/>
+                            <rect key="frame" x="8" y="113.5" width="319.5" height="42.5"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="ic_favorite_border" translatesAutoresizingMaskIntoConstraints="NO" id="V9P-3O-rGH">
-                                    <rect key="frame" x="0.0" y="7" width="28" height="28"/>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="heart" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="V9P-3O-rGH">
+                                    <rect key="frame" x="0.0" y="8.5" width="28" height="25.5"/>
+                                    <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="28" id="11f-u2-ecU"/>
                                         <constraint firstAttribute="width" constant="28" id="Maa-CY-KJ0"/>
@@ -62,10 +62,11 @@
                             </subviews>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="1000" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="DWy-Wv-irC">
-                            <rect key="frame" x="8" y="174" width="319.5" height="42.5"/>
+                            <rect key="frame" x="8" y="176" width="319.5" height="42.5"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" image="ic_notifications_none" translatesAutoresizingMaskIntoConstraints="NO" id="kK2-7h-yg5">
-                                    <rect key="frame" x="0.0" y="7" width="28" height="28"/>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" image="bell" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="kK2-7h-yg5">
+                                    <rect key="frame" x="0.0" y="7" width="28" height="27.5"/>
+                                    <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="28" id="CG5-Kv-Luh"/>
                                         <constraint firstAttribute="width" constant="28" id="bTG-lG-kXZ"/>
@@ -80,17 +81,17 @@
                             </subviews>
                         </stackView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PCK-YF-VW6">
-                            <rect key="frame" x="8" y="236.5" width="319.5" height="48"/>
+                            <rect key="frame" x="8" y="238.5" width="319.5" height="48"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="48" id="cUJ-A7-t2S"/>
                             </constraints>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                            <state key="normal" title="Sign in with Google" backgroundImage="btn_google_signin_light_normal_ios">
+                            <state key="normal" title="Sign in with Google" backgroundImage="btn_google_signin_normal">
                                 <color key="titleColor" red="0.2666666667" green="0.2666666667" blue="0.2666666667" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
-                            <state key="disabled" backgroundImage="btn_google_signin_light_disabled_ios"/>
-                            <state key="selected" backgroundImage="btn_google_signin_light_focus_ios"/>
-                            <state key="highlighted" backgroundImage="btn_google_signin_light_pressed_ios"/>
+                            <state key="disabled" backgroundImage="btn_google_signin_disabled"/>
+                            <state key="selected" backgroundImage="btn_google_signin_focus"/>
+                            <state key="highlighted" backgroundImage="btn_google_signin_pressed"/>
                             <connections>
                                 <action selector="signIn" destination="-1" eventType="touchUpInside" id="j7V-xA-bYK"/>
                             </connections>
@@ -103,7 +104,7 @@
                     </constraints>
                 </stackView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
                 <constraint firstItem="TKa-b7-SsL" firstAttribute="trailing" secondItem="GHm-jo-SWw" secondAttribute="trailing" constant="20" id="3Yu-u8-BDf"/>
                 <constraint firstItem="GHm-jo-SWw" firstAttribute="top" relation="greaterThanOrEqual" secondItem="TKa-b7-SsL" secondAttribute="top" id="AnT-5C-QnK"/>
@@ -112,15 +113,16 @@
                 <constraint firstItem="GHm-jo-SWw" firstAttribute="leading" secondItem="TKa-b7-SsL" secondAttribute="leading" constant="20" id="qJQ-QS-wpP"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="TKa-b7-SsL"/>
+            <point key="canvasLocation" x="132" y="154"/>
         </view>
     </objects>
     <resources>
-        <image name="btn_google_signin_light_disabled_ios" width="38.5" height="48"/>
-        <image name="btn_google_signin_light_focus_ios" width="39.5" height="48"/>
-        <image name="btn_google_signin_light_normal_ios" width="39.5" height="48"/>
-        <image name="btn_google_signin_light_pressed_ios" width="39.5" height="48"/>
-        <image name="ic_favorite_border" width="48" height="48"/>
-        <image name="ic_notifications_none" width="48" height="48"/>
-        <image name="star_yellow" width="102" height="97"/>
+        <image name="bell" catalog="system" width="64" height="62"/>
+        <image name="btn_google_signin_disabled" width="38.5" height="48"/>
+        <image name="btn_google_signin_focus" width="49.5" height="48"/>
+        <image name="btn_google_signin_normal" width="39.5" height="48"/>
+        <image name="btn_google_signin_pressed" width="39.5" height="48"/>
+        <image name="heart" catalog="system" width="64" height="54"/>
+        <image name="star.fill" catalog="system" width="64" height="58"/>
     </resources>
 </document>
