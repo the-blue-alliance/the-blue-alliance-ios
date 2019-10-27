@@ -31,8 +31,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         self.year = year
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
-        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -44,7 +42,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView.registerReusableCell(MediaCollectionViewCell.self)
+        setupDataSource()
     }
 
     override func viewWillDisappear(_ animated: Bool) {

@@ -31,19 +31,9 @@ extension EventsViewControllerDelegate {
 class EventsViewController: TBATableViewController, Refreshable, Stateful, EventsViewControllerDataSourceConfiguration {
 
     weak var delegate: EventsViewControllerDelegate?
-    private var dataSource: TableViewDataSource<Event, EventsViewController>!
 
-    // MARK: Init
-
-    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
-        setupDataSource()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private var dataSource: TableViewDataSource<String, Event>!
+    private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Event>!
 
     // MARK: - View Lifecycle
 
@@ -51,6 +41,9 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
         super.viewDidLoad()
 
         tableView.registerReusableCell(EventTableViewCell.self)
+
+        setupDataSource()
+        tableView.dataSource = dataSource
     }
 
     // MARK: - Refreshable
@@ -68,10 +61,7 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
     }
 
     var isDataSourceEmpty: Bool {
-        if let events = dataSource.fetchedResultsController.fetchedObjects, events.isEmpty {
-            return true
-        }
-        return false
+        return fetchedResultsController.isDataSourceEmpty
     }
 
     func refresh() {
@@ -87,58 +77,47 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let event = dataSource.object(at: indexPath)
+        guard let event = fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
         delegate?.eventSelected(event)
     }
 
     // MARK: Table View Data Source
 
     private func setupDataSource() {
+        let dataSource = UITableViewDiffableDataSource<String, Event>(tableView: tableView) { (tableView, indexPath, event) -> UITableViewCell? in
+            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventTableViewCell
+            cell.viewModel = EventCellViewModel(event: event)
+            return cell
+        }
+        self.dataSource = TableViewDataSource(dataSource: dataSource)
+        self.dataSource.delegate = self
+
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
         fetchRequest.sortDescriptors = [firstSortDescriptor,
                                         NSSortDescriptor(key: #keyPath(Event.startDate), ascending: true),
                                         NSSortDescriptor(key: #keyPath(Event.name), ascending: true)]
         setupFetchRequest(fetchRequest)
 
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                             managedObjectContext: persistentContainer.viewContext,
-                                             sectionNameKeyPath: sectionNameKeyPath,
-                                             cacheName: nil)
-        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
+        fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
     }
 
     func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
+        fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<Event>) {
         request.predicate = fetchRequestPredicate
     }
 
-    // MARK: - EventsViewControllerDataSourceConfiguration
+    // MARK: TableViewDataSourceDelegate
 
-    var firstSortDescriptor: NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(Event.hybridType), ascending: true)
-    }
-
-    var sectionNameKeyPath: String {
-        return #keyPath(Event.hybridType)
-    }
-
-    var fetchRequestPredicate: NSPredicate {
-        fatalError("Implement in subclass")
-    }
-
-}
-
-extension EventsViewController: TableViewDataSourceDelegate {
-
-    func configure(_ cell: EventTableViewCell, for object: Event, at indexPath: IndexPath) {
-        cell.viewModel = EventCellViewModel(event: object)
-    }
-
-    func title(for section: Int) -> String? {
-        let event = dataSource.object(at: IndexPath(item: 0, section: section))
+    override func title(forSection section: Int) -> String? {
+        guard let event = fetchedResultsController.dataSource.itemIdentifier(for: IndexPath(item: 0, section: section)) else {
+            return "Events"
+        }
 
         if let title = delegate?.title(for: event) {
             return title
@@ -172,6 +151,20 @@ extension EventsViewController: TableViewDataSourceDelegate {
         } else {
             return "Regional Events"
         }
+    }
+
+    // MARK: - EventsViewControllerDataSourceConfiguration
+
+    var firstSortDescriptor: NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(Event.hybridType), ascending: true)
+    }
+
+    var sectionNameKeyPath: String {
+        return #keyPath(Event.hybridType)
+    }
+
+    var fetchRequestPredicate: NSPredicate {
+        fatalError("Implement in subclass")
     }
 
 }

@@ -11,10 +11,12 @@ protocol DistrictRankingsViewControllerDelegate: AnyObject {
 
 class DistrictRankingsViewController: TBATableViewController {
 
+    weak var delegate: DistrictRankingsViewControllerDelegate?
+
     private let district: District
 
-    weak var delegate: DistrictRankingsViewControllerDelegate?
-    private var dataSource: TableViewDataSource<DistrictRanking, DistrictRankingsViewController>!
+    private var dataSource: TableViewDataSource<String, DistrictRanking>!
+    private var fetchedResultsController: TableViewDataSourceFetchedResultsController<DistrictRanking>!
 
     // MARK: - Init
 
@@ -22,43 +24,50 @@ class DistrictRankingsViewController: TBATableViewController {
         self.district = district
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
-        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: View Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        tableView.registerReusableCell(RankingTableViewCell.self)
+
+        setupDataSource()
+        tableView.dataSource = dataSource
+    }
+
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let ranking = dataSource.object(at: indexPath)
+        guard let ranking = fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
         delegate?.districtRankingSelected(ranking)
     }
 
     // MARK: Table View Data Source
 
     private func setupDataSource() {
+        let dataSource = UITableViewDiffableDataSource<String, DistrictRanking>(tableView: tableView) { (tableView, indexPath, districtRanking) -> UITableViewCell? in
+            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
+            cell.viewModel = RankingCellViewModel(districtRanking: districtRanking)
+            return cell
+        }
+        self.dataSource = TableViewDataSource(dataSource: dataSource)
+        self.dataSource.delegate = self
+
         let fetchRequest: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(DistrictRanking.rank), ascending: true)]
-        setupFetchRequest(fetchRequest)
+        fetchRequest.predicate = NSPredicate(format: "%K == %@",
+                                        #keyPath(DistrictRanking.district), district)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
-    }
-
-    private func setupFetchRequest(_ request: NSFetchRequest<DistrictRanking>) {
-        request.predicate = NSPredicate(format: "%K == %@",
-                                        #keyPath(DistrictRanking.district), district)
-    }
-
-}
-
-extension DistrictRankingsViewController: TableViewDataSourceDelegate {
-
-    func configure(_ cell: RankingTableViewCell, for object: DistrictRanking, at indexPath: IndexPath) {
-        cell.viewModel = RankingCellViewModel(districtRanking: object)
+        fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
     }
 
 }
@@ -80,13 +89,9 @@ extension DistrictRankingsViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        if let rankings = dataSource.fetchedResultsController.fetchedObjects, rankings.isEmpty {
-            return true
-        }
-        return false
+        return fetchedResultsController.isDataSourceEmpty
     }
 
-    // TODO: Think about building a way to "chain" requests together for a refresh...
     @objc func refresh() {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchDistrictRankings(key: district.key!, completion: { (result, notModified) in

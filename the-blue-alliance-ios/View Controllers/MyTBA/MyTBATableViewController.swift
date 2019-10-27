@@ -192,9 +192,10 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
 
     // MARK: NSFetchedResultsControllerDelegate
 
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.reloadData()
-    }
+    // TODO: Fix
+    // func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    //    tableView.reloadData()
+    // }
 
     // MARK: - Private Methods
 
