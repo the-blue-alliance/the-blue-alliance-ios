@@ -5,8 +5,8 @@ node_modules
 *.log
 .nvm
 
-ios/
-android/
+/ios/
+/android/
 react-native.zip
 gcp-service-key.json
 *-tba-dev-*.json
