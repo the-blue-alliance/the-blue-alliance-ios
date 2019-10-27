@@ -9,6 +9,7 @@ import UIKit
 class MatchBreakdownViewController: TBAReactNativeViewController, Observable {
 
     private let match: Match
+    private var matchBreakdownUnsupported = false
 
     // MARK: - Observable
 
@@ -22,7 +23,7 @@ class MatchBreakdownViewController: TBAReactNativeViewController, Observable {
     init(match: Match, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.match = match
 
-        super.init(moduleName: "MatchBreakdown\(match.year)", persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(moduleName: "MatchBreakdown", persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         delegate = self
 
@@ -56,6 +57,11 @@ class MatchBreakdownViewController: TBAReactNativeViewController, Observable {
 
 extension MatchBreakdownViewController: TBAReactNativeViewControllerDelegate {
 
+    func showUnsupportedView() {
+        matchBreakdownUnsupported = true
+        showNoDataView(disableRefreshing: true)
+    }
+
     var appProperties: [String: Any]? {
         // TODO: Support all alliances
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/273
@@ -76,7 +82,8 @@ extension MatchBreakdownViewController: TBAReactNativeViewControllerDelegate {
             blueBreakdown["coopertition_points"] = coopertitionPoints
         }
 
-        return ["redTeams": match.redAllianceTeamNumbers,
+        return ["year": match.year,
+                "redTeams": match.redAllianceTeamNumbers,
                 "redBreakdown": redBreakdown,
                 "blueTeams": match.blueAllianceTeamNumbers,
                 "blueBreakdown": blueBreakdown,
@@ -135,6 +142,9 @@ extension MatchBreakdownViewController: Refreshable {
 extension MatchBreakdownViewController: Stateful {
 
     var noDataText: String {
+        if matchBreakdownUnsupported {
+            return "\(match.year) Match Breakdown is not supported"
+        }
         return "No breakdown for match"
     }
 

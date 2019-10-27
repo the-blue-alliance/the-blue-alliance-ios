@@ -7,7 +7,6 @@ import ImageCount from "../../components/ImageCount";
 import ScoredLocationImage from "../../components/ScoredLocationImage";
 import MatchBreakdown from "../breakdowns/MatchBreakdown";
 import breakdownStyle from "../../styles/breakdown";
-import { safeRender } from "../../helpers/safeRender";
 
 // Override our Image and Text to have specific sizes
 const Image = ({ style, ...props }) => (
@@ -656,7 +655,7 @@ export default class MatchBreakdown2019 extends MatchBreakdown {
   }
 
   render() {
-    return safeRender(
+    return(
       <View style={breakdownStyle.container}>
         {this.renderTeamSection()}
 

@@ -10,6 +10,7 @@
     "merge": ">=1.2.1",
     "npm": "^6.11.3",
     "react": "^16.9.0",
-    "react-native": "^0.61.1"
+    "react-native": "^0.61.1",
+    "react-native-tba-callback-manager": "file:react-native-tba-callback-manager"
   }
 }
