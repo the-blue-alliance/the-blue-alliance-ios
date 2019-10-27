@@ -4,7 +4,7 @@ import TBAKit
 
 extension EventInsights: Managed {
 
-    public var insightsDictionary: [String: [String: Any]] {
+    public var insightsDictionary: [String: Any] {
         var insights: [String: [String: Any]] = [:]
 
         if let qual = qual {
