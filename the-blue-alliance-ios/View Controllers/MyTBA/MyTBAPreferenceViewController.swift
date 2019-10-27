@@ -8,7 +8,7 @@ import UIKit
 // Two sections are a single no-title section for "Favorite" cell,
 // and a "Notification Settings" section with option cells
 // This view assume it's bein
-class MyTBAPreferenceViewController: UITableViewController {
+class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentationControllerDelegate {
 
     var subscribableModel: MyTBASubscribable
 
@@ -19,11 +19,19 @@ class MyTBAPreferenceViewController: UITableViewController {
 
     var favorite: Favorite?
     let isFavoriteInitially: Bool
-    var isFavorite: Bool
+    var isFavorite: Bool {
+        didSet {
+            updateInterface()
+        }
+    }
 
     var subscription: Subscription?
     let notificationsInitial: [NotificationType]
-    var notifications: [NotificationType]
+    var notifications: [NotificationType] {
+        didSet {
+            updateInterface()
+        }
+    }
 
     let messaging: Messaging
     let myTBA: MyTBA
@@ -31,6 +39,10 @@ class MyTBAPreferenceViewController: UITableViewController {
 
     var preferencesOperation: MyTBAOperation?
     let operationQueue = OperationQueue()
+
+    var hasChanges: Bool {
+        return (notifications != notificationsInitial) || (isFavorite != isFavoriteInitially)
+    }
 
     private var isSaving: Bool = false {
         didSet {
@@ -40,11 +52,14 @@ class MyTBAPreferenceViewController: UITableViewController {
             }
         }
     }
-
-    internal lazy var saveBarButtonItem: UIBarButtonItem = UIBarButtonItem(title: "Save",
-                                                                           style: .done,
-                                                                           target: self,
-                                                                           action: #selector(save))
+    internal lazy var closeBarButtonItem = UIBarButtonItem(title: "Close",
+                                                           style: .plain,
+                                                           target: self,
+                                                           action: #selector(close))
+    internal lazy var saveBarButtonItem = UIBarButtonItem(title: "Save",
+                                                          style: .done,
+                                                          target: self,
+                                                          action: #selector(save))
     internal var saveActivityIndicatorBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
 
     init(subscribableModel: MyTBASubscribable, messaging: Messaging, myTBA: MyTBA, persistentContainer: NSPersistentContainer) {
@@ -87,15 +102,14 @@ class MyTBAPreferenceViewController: UITableViewController {
     // MARK: - Interface Methods
 
     func styleInterface() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Close",
-                                                           style: .plain,
-                                                           target: self,
-                                                           action: #selector(close))
-
+        navigationItem.leftBarButtonItem = closeBarButtonItem
         updateInterface()
     }
 
     func updateInterface() {
+        saveBarButtonItem.isEnabled = hasChanges
+        isModalInPresentation = hasChanges
+        
         if isSaving {
             navigationItem.rightBarButtonItem = saveActivityIndicatorBarButtonItem
         } else {
@@ -103,34 +117,16 @@ class MyTBAPreferenceViewController: UITableViewController {
         }
     }
 
-    @objc func favoriteSwitchToggled(_ sender: UISwitch) {
-        isFavorite = sender.isOn
-    }
-
-    @objc func notificationSwitchToggled(_ sender: UISwitch) {
-        let index = sender.tag
-        let notificationType = notificationTypes[index]
-
-        if let removeIndex = notifications.firstIndex(of: notificationType) {
-            notifications.remove(at: removeIndex)
-        } else {
-            notifications.append(notificationType)
-        }
-    }
-
     // MARK: Navigation Methods
 
-    var preferencesHaveChanged: Bool {
-        return (notifications != notificationsInitial) || (isFavorite != isFavoriteInitially)
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        if isSaving {
+            return
+        }
+        confirmClose()
     }
 
     @objc func save() {
-        // Nothing has changed - go ahead and dismiss without saving
-        if !preferencesHaveChanged {
-            self.dismiss(animated: true)
-            return
-        }
-
         isSaving = true
 
         let fcmToken = messaging.fcmToken
@@ -191,6 +187,22 @@ class MyTBAPreferenceViewController: UITableViewController {
         dismiss(animated: true)
     }
 
+    func confirmClose() {
+        let alert = UIAlertController(title: "You have unsaved changes", message: "Do you want to save your myTBA preferences?", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Save", style: .default) { [weak self] _ in
+            self?.save()
+        })
+        alert.addAction(UIAlertAction(title: "Close", style: .destructive) { [weak self] _ in
+            self?.close()
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+
+        // The popover should point at the Close button
+        alert.popoverPresentationController?.barButtonItem = closeBarButtonItem
+
+        present(alert, animated: true, completion: nil)
+    }
+
     override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         if let navigationController = navigationController {
             navigationController.dismiss(animated: true, completion: nil)
@@ -202,33 +214,46 @@ class MyTBAPreferenceViewController: UITableViewController {
     // MARK: Table View Data Source
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+        let cell: SwitchTableViewCell = {
+            if indexPath.section == 0 {
+                let switchCell = SwitchTableViewCell(switchToggled: { [weak self] (_ sender: UISwitch) in
+                    self?.isFavorite = sender.isOn
+                })
+                switchCell.textLabel?.text = "Favorite"
+                switchCell.detailTextLabel?.text = "You can save teams, events, and matches for easy access in the myTBA tab by marking them as favorites"
+                switchCell.detailTextLabel?.numberOfLines = 0
+                switchCell.switchView.isOn = isFavorite
+                return switchCell
+            } else {
+                let switchCell = SwitchTableViewCell(switchToggled: { [weak self] (_ sender: UISwitch) in
+                    let index = sender.tag
+                    guard let notificationType = self?.notificationTypes[index] else {
+                        return
+                    }
 
-        let switchView = UISwitch(frame: .zero)
-        switchView.isEnabled = !isSaving
-        cell.accessoryView = switchView
+                    if let removeIndex = self?.notifications.firstIndex(of: notificationType) {
+                        self?.notifications.remove(at: removeIndex)
+                    } else {
+                        self?.notifications.append(notificationType)
+                    }
+                })
+                let notificationType = notificationTypes[indexPath.row]
+                switchCell.textLabel?.text = notificationType.displayString()
+                switchCell.switchView.tag = indexPath.row
+                switchCell.switchView.isOn = notifications.contains(notificationType)
+                return switchCell
+            }
 
-        if indexPath.section == 0 {
-            cell.textLabel?.text = "Favorite"
-            cell.detailTextLabel?.text = "You can save teams, events, and matches for easy access in the myTBA tab by marking them as favorites"
-            cell.detailTextLabel?.numberOfLines = 0
-            switchView.isOn = isFavorite
-            switchView.addTarget(self, action: #selector(favoriteSwitchToggled(_:)), for: .valueChanged)
-        } else {
-            let notificationType = notificationTypes[indexPath.row]
-            cell.textLabel?.text = notificationType.displayString()
-            switchView.tag = indexPath.row
-            switchView.isOn = notifications.contains(notificationType)
-            switchView.addTarget(self, action: #selector(notificationSwitchToggled(_:)), for: .valueChanged)
-        }
+        }()
 
+        cell.switchView.isEnabled = !isSaving
         cell.selectionStyle = .none
 
         return cell
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // Disable subscriptions
+        // Disable Subscriptions
         return 1
     }
 

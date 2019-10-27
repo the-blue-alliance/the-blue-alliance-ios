@@ -1,4 +1,4 @@
-platform :ios, '11.0'
+platform :ios, '13.0'
 
 inhibit_all_warnings!
 
@@ -47,7 +47,7 @@ target 'The Blue Alliance' do
   pod 'BFRImageViewer'
   pod 'PINRemoteImage', '3.0.0-beta.13'
   pod 'PureLayout'
-  pod 'XCDYouTubeKit', '~> 2.7'
+  pod 'XCDYouTubeKit', '~> 2.8'
   pod 'Zip', '~> 1.1'
 
   # Firebase
@@ -66,7 +66,7 @@ target 'The Blue Alliance' do
   pod 'TBAUtils', :path => 'Frameworks/TBAUtils', :testspecs => ['Tests']
 
   # myTBA
-  pod 'GoogleSignIn'
+  pod 'GoogleSignIn', '~> 5'
 
   # Crash reporting
   pod 'Fabric'

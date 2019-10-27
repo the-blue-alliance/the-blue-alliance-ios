@@ -1,9 +1,10 @@
-osx_image: xcode10.2
+osx_image: xcode11
 language: swift
 gemfile: Gemfile
 branches:
   only:
   - master
+  - ios13
 stages:
 - name: cron
   if: "(type == cron)"
@@ -12,7 +13,7 @@ stages:
 - name: app_store
   if: "(type == push) AND (branch == master) AND (commit_message =~ \\[app_store\\])"
 - name: beta
-  if: "(type == push) AND (branch == master) AND (commit_message =~ \\[beta\\])"
+  if: "(type == push) AND (branch == master OR branch == ios13) AND (commit_message =~ \\[beta\\])"
 cache:
   bundler: true
   cocoapods: true
