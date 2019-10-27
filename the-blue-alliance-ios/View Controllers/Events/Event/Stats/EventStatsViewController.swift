@@ -9,6 +9,7 @@ import UIKit
 class EventStatsViewController: TBAReactNativeViewController, Observable {
 
     private let event: Event
+    private var eventStatsUnsupported = false
 
     // MARK: - Observable
 
@@ -22,7 +23,7 @@ class EventStatsViewController: TBAReactNativeViewController, Observable {
     init(event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
 
-        super.init(moduleName: "EventInsights\(event.year!.stringValue)", persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        super.init(moduleName: "EventInsights", persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         delegate = self
 
@@ -41,8 +42,15 @@ class EventStatsViewController: TBAReactNativeViewController, Observable {
 
 extension EventStatsViewController: TBAReactNativeViewControllerDelegate {
 
+    func showUnsupportedView() {
+        eventStatsUnsupported = true
+        showNoDataView(disableRefreshing: true)
+    }
+
     var appProperties: [String : Any]? {
-        return event.insights?.insightsDictionary
+        var insights = event.insights?.insightsDictionary
+        insights?["year"] = event.year!.stringValue
+        return insights
     }
 
 }
@@ -91,6 +99,9 @@ extension EventStatsViewController: Refreshable {
 extension EventStatsViewController: Stateful {
 
     var noDataText: String {
+        if eventStatsUnsupported {
+            return "\(event.year!.stringValue) Event Insights is not supported"
+        }
         return "No stats for event"
     }
 

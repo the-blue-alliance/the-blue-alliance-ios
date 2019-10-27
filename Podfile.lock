@@ -392,6 +392,8 @@ PODS:
     - React-jsi (= 0.61.1)
     - ReactCommon/jscallinvoker (= 0.61.1)
   - Reveal-SDK (24)
+  - TBACallbackManager (1.0.0):
+    - React
   - TBAData (1.0.0-LOCAL):
     - MyTBAKit
     - TBAKit
@@ -467,6 +469,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon`)
   - Reveal-SDK
+  - TBACallbackManager (from `subtrees/the-blue-alliance-react/react-native-tba-callback-manager`)
   - TBAData (from `Frameworks/TBAData`)
   - TBAData/Tests (from `Frameworks/TBAData`)
   - TBADataTesting (from `Frameworks/TBAData`)
@@ -574,6 +577,8 @@ EXTERNAL SOURCES:
     :path: subtrees/the-blue-alliance-react/node_modules/react-native/Libraries/Vibration
   ReactCommon:
     :path: subtrees/the-blue-alliance-react/node_modules/react-native/ReactCommon
+  TBACallbackManager:
+    :path: subtrees/the-blue-alliance-react/react-native-tba-callback-manager
   TBAData:
     :path: Frameworks/TBAData
   TBADataTesting:
@@ -653,6 +658,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 8be61459e3749d1fb02cf414edd05b3007622882
   ReactCommon: 4fba5be89efdf0b5720e0adb3d8d7edf6e532db0
   Reveal-SDK: 5d7e56b8f018c0a88b3a2c10bf68d598bbd3b071
+  TBACallbackManager: 8d0cf474ffefb9072fc42360ac36b65a3400cc89
   TBAData: 54459498f36cff804ed6028b4ae9162d8dbeec6b
   TBADataTesting: b7ff27a734f566c8b30c8be6e7ca4bd47b4eaf73
   TBAKit: ae37dcd3daa052ffd1dcf6d2fe5c982d1ea26a5e
@@ -665,6 +671,6 @@ SPEC CHECKSUMS:
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
   Zip: 8877eede3dda76bcac281225c20e71c25270774c
 
-PODFILE CHECKSUM: 78068a2f33cede06cf2bfbc5b45c2de96dfa8733
+PODFILE CHECKSUM: 695df428abf09a82b5e0610ee2635ee38dc7124c
 
 COCOAPODS: 1.7.5

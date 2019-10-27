@@ -2,10 +2,12 @@ import CoreData
 import Crashlytics
 import Foundation
 import React
+import TBACallbackManager
 import TBAKit
 import UIKit
 
 protocol TBAReactNativeViewControllerDelegate: AnyObject {
+    func showUnsupportedView()
     var appProperties: [String: Any]? { get }
 }
 
@@ -13,6 +15,14 @@ class TBAReactNativeViewController: TBAViewController {
 
     // MARK: - React Native
 
+    lazy private var callbackManager: TBACallbackManager = { [unowned self] in
+        let callbackManager = TBACallbackManager()
+        callbackManager.delegate = self
+        return callbackManager
+    }()
+    lazy private var bridge: RCTBridge = { [unowned self] in
+        return RCTBridge(delegate: self, launchOptions: [:])
+    }()
     var moduleName: String
 
     // MARK: - TBAReactNativeVC
@@ -95,10 +105,7 @@ class TBAReactNativeViewController: TBAViewController {
         guard let initialProperties = delegate?.appProperties else {
             return nil
         }
-        guard let sourceURL = sourceURL else {
-            return nil
-        }
-        let rootView = RCTRootView(bundleURL: sourceURL, moduleName: moduleName, initialProperties: initialProperties, launchOptions: [:])
+        let rootView = RCTRootView(bridge: bridge, moduleName: moduleName, initialProperties: initialProperties)
         rootView.delegate = self
         rootView.sizeFlexibility = .height
         return rootView
@@ -110,7 +117,7 @@ class TBAReactNativeViewController: TBAViewController {
         rootView.autoPinEdgesToSuperviewEdges()
     }
 
-    private func showNoDataView(disableRefreshing: Bool = false) {
+    internal func showNoDataView(disableRefreshing: Bool = false) {
         guard let vc = self as? Stateful & Refreshable else {
             return
         }
@@ -168,10 +175,30 @@ class TBAReactNativeViewController: TBAViewController {
 
 }
 
+extension TBAReactNativeViewController: RCTBridgeDelegate {
+
+    func sourceURL(for bridge: RCTBridge!) -> URL! {
+        return sourceURL!
+    }
+
+    func extraModules(for bridge: RCTBridge!) -> [RCTBridgeModule]! {
+        return [callbackManager]
+    }
+
+}
+
 extension TBAReactNativeViewController: RCTRootViewDelegate {
 
     func rootViewDidChangeIntrinsicSize(_ rootView: RCTRootView!) {
         rootView.autoSetDimension(.height, toSize: rootView.intrinsicContentSize.height)
+    }
+
+}
+
+extension TBAReactNativeViewController: TBACallbackManagerDelegate {
+
+    func moduleUnsupported() {
+        delegate?.showUnsupportedView()
     }
 
 }

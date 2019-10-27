@@ -40,6 +40,9 @@ target 'The Blue Alliance' do
   pod 'glog', :podspec => 'subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => 'subtrees/the-blue-alliance-react/node_modules/react-native/third-party-podspecs/Folly.podspec'
 
+  # Custom RN Deps
+  pod 'TBACallbackManager', :path => 'subtrees/the-blue-alliance-react/react-native-tba-callback-manager'
+
   # Deps
   pod 'BFRImageViewer'
   pod 'PINRemoteImage', '3.0.0-beta.13'
