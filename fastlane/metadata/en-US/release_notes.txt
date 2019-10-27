@@ -1,3 +1,3 @@
-Hey y’all - this update bumps some problematic dependency versions to less problematic versions.
+Hey y’all - this update gets the match breakdown and event stats views ready for 2020 and beyond.
 
 The Blue Alliance is built and maintained by volunteers - help us build The Blue Alliance for iOS at https://github.com/the-blue-alliance
