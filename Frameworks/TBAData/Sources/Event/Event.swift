@@ -357,6 +357,13 @@ extension Event: Locatable, Surfable, Managed {
         })
     }
 
+    public func awards(for teamKey: TeamKey) -> [Award] {
+        guard let awards = awards else {
+            return []
+        }
+        return Array(NSMutableSet(set: awards).filtered(using: NSPredicate(format: "ANY recipients.teamKey.key == %@", teamKey.key!))) as? [Award] ?? []
+    }
+
     // hybridType is used a mechanism for sorting Events properly in fetch result controllers... they use a variety
     // of event data to kinda "move around" events in our data model to get groups/order right
     func calculateHybridType() -> String {

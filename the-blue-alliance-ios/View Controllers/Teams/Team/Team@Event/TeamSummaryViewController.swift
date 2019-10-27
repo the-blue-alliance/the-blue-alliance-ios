@@ -18,7 +18,7 @@ private enum TeamSummarySection: Int {
     case lastMatch
 }
 
-private enum TeamSummaryItemType {
+private enum TeamSummaryItem: Hashable {
     case status(status: String)
     case awards(count: Int)
     case rank(rank: Int, total: Int)
@@ -27,51 +27,52 @@ private enum TeamSummaryItemType {
     case breakdown(rankingInfo: String)
     case alliance(allianceStatus: String)
     case match(match: Match, teamKey: TeamKey? = nil)
-}
-
-private struct TeamSummaryItem: Hashable {
-
-    let identifier = UUID()
-    let type: TeamSummaryItemType
-
-    init(status: String) {
-        type = .status(status: status)
-    }
-
-    init(awardsCount: Int) {
-        type = .awards(count: awardsCount)
-    }
-
-    init(rank: Int, total: Int) {
-        type = .rank(rank: rank, total: total)
-    }
-
-    init(wlt: WLT, dqs: Int? = nil) {
-        type = .record(wlt: wlt, dqs: dqs)
-    }
-
-    init(average: NSNumber) {
-        type = .average(average: average)
-    }
-
-    init(rankingInfo: String) {
-        type = .breakdown(rankingInfo: rankingInfo)
-    }
-
-    init(allianceStatus: String) {
-        type = .alliance(allianceStatus: allianceStatus)
-    }
-
-    init(match: Match, teamKey: TeamKey? = nil) {
-        type = .match(match: match, teamKey: teamKey)
-    }
 
     func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
+        switch self {
+        case .status(let status):
+            hasher.combine(status)
+        case .awards(let count):
+            hasher.combine(count)
+        case .rank(let rank, let total):
+            hasher.combine(rank)
+            hasher.combine(total)
+        case .record(let wlt, let dqs):
+            hasher.combine(wlt)
+            hasher.combine(dqs)
+        case .average(let average):
+            hasher.combine(average)
+        case .breakdown(let rankingInfo):
+            hasher.combine(rankingInfo)
+        case .alliance(let allianceStatus):
+            hasher.combine(allianceStatus)
+        case .match(let match, let teamKey):
+            hasher.combine(match)
+            hasher.combine(teamKey)
+        }
     }
 
     static func == (lhs: TeamSummaryItem, rhs: TeamSummaryItem) -> Bool {
-        return lhs.identifier == rhs.identifier
+        switch (lhs, rhs) {
+        case (.status(let lhsStatus), .status(let rhsStatus)):
+            return lhsStatus == rhsStatus
+        case (.awards(let lhsCount), .awards(let rhsCount)):
+            return lhsCount == rhsCount
+        case (.rank(let lhsRank, let lhsTotal), .rank(let rhsRank, let rhsTotal)):
+            return lhsRank == rhsRank && lhsTotal == rhsTotal
+        case (.record(let lhsWlt, let lhsDqs), .record(let rhsWlt, let rhsDqs)):
+            return lhsWlt.wins == rhsWlt.wins && lhsWlt.losses == rhsWlt.losses && lhsWlt.ties == rhsWlt.ties && lhsDqs == rhsDqs
+        case (.average(let lhsAverage), .average(let rhsAverage)):
+            return lhsAverage == rhsAverage
+        case (.breakdown(let lhsRankingInfo), .breakdown(let rhsRankingInfo)):
+            return lhsRankingInfo == rhsRankingInfo
+        case (.alliance(let lhsAllianceStatus), .alliance(let rhsAllianceStatus)):
+            return lhsAllianceStatus == rhsAllianceStatus
+        case (.match(let lhsMatch, let lhsTeamKey), .match(let rhsMatch, let rhsTeamKey)):
+            return lhsMatch == rhsMatch && lhsTeamKey == rhsTeamKey
+        default:
+            return false
+        }
     }
 }
 
@@ -85,32 +86,35 @@ class TeamSummaryViewController: TBATableViewController {
     private var dataSource: UITableViewDiffableDataSource<TeamSummarySection, TeamSummaryItem>!
     private var _dataSource: TableViewDataSource<TeamSummarySection, TeamSummaryItem>!
 
-    // TODO: Move in to Event
-    private var teamAwards: Set<Award> {
-        guard let awards = event.awards else {
-            return []
-        }
-        return awards.filtered(using: NSPredicate(format: "%K == %@ AND (ANY recipients.teamKey.key == %@)",
-                                                  #keyPath(Award.event), event,
-                                                  teamKey.key!)) as? Set<Award> ?? []
-    }
-
     private var eventStatus: EventStatus? {
         didSet {
             if let eventStatus = eventStatus {
-                contextObserver.observeObject(object: eventStatus, state: .updated) { [weak self] (_, _) in
-                    DispatchQueue.main.async {
-                        self?.updateEventStatusItems()
-                        self?.updateNextMatchItem()
-                        self?.updateLastMatchItem()
-                    }
+                contextObserver.observeObject(object: eventStatus, state: .updated) { (_, _) in
+                    self.executeUpdate(self.updateEventStatusItems)
                 }
             } else {
-                contextObserver.observeInsertions { [weak self] (eventStatuses) in
-                    self?.eventStatus = eventStatuses.first
+                contextObserver.observeInsertions { (eventStatuses) in
+                    self.eventStatus = eventStatuses.first
+                    self.executeUpdate(self.updateEventStatusItems)
                 }
             }
         }
+    }
+    private var teamAwards: [Award] {
+        return event.awards(for: teamKey)
+    }
+    private let updateOperationQueue: OperationQueue = {
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        queue.qualityOfService = .userInitiated
+        return queue
+    }()
+
+    private func executeUpdate(_ update: @escaping () -> ()) {
+        let op = BlockOperation {
+            update()
+        }
+        updateOperationQueue.addOperation(op)
     }
 
     // MARK: - Observable
@@ -150,17 +154,21 @@ class TeamSummaryViewController: TBATableViewController {
         // Since we leverage didSet, we need to do this *after* initilization
         eventStatus = EventStatus.findOrFetch(in: persistentContainer.viewContext, matching: observerPredicate)
 
-        updateEventStatusItems()
-        updateNextMatchItem()
-        updateLastMatchItem()
-        // updateAwardsItem()
+        executeUpdate(updateEventStatusItems)
+        executeUpdate(updateNextMatchItem)
+        executeUpdate(updateLastMatchItem)
+        executeUpdate(updateAwardsItem)
+    }
+
+    deinit {
+        updateOperationQueue.cancelAllOperations()
     }
 
     // MARK: - Private Methods
 
     private func setupDataSource() {
         dataSource = UITableViewDiffableDataSource<TeamSummarySection, TeamSummaryItem>(tableView: tableView, cellProvider: { (tableView, indexPath, item) -> UITableViewCell? in
-            switch item.type {
+            switch item {
             case .awards(let count):
                 return TeamSummaryViewController.tableView(tableView, cellForAwardCount: count, at: indexPath)
             case .status(let status):
@@ -193,27 +201,29 @@ class TeamSummaryViewController: TBATableViewController {
             if let status = eventStatus?.playoff?.status, let level = eventStatus?.playoff?.level {
                 let compLevel = MatchCompLevel(rawValue: level)?.level ?? level
                 if status == "playing", let record = eventStatus?.playoff?.currentRecord {
-                    return TeamSummaryItem(status: "Currently \(record.stringValue) in the \(compLevel)")
+                    return .status(status: "Currently \(record.stringValue) in the \(compLevel)")
                 } else if status == "eliminated" {
-                    return TeamSummaryItem(status: "Eliminated in the \(compLevel)")
+                    return .status(status: "Eliminated in the \(compLevel)")
                 } else if status == "won" {
                     if level == "f" {
-                        return TeamSummaryItem(status: "Won the event")
+                        return .status(status: "Won the event")
                     } else {
-                        return TeamSummaryItem(status: "Won the \(compLevel)")
+                        return .status(status: "Won the \(compLevel)")
                     }
                 }
             }
             return nil
         }()
 
+        let eventInfoItems = snapshot.itemIdentifiers(inSection: .eventInfo)
+        let existingTeamStatusSummaryItems = eventInfoItems.filter({ switch $0 { case .status(_): return true; default: return false } })
+        snapshot.deleteItems(existingTeamStatusSummaryItems)
+
         if let teamStatusSummaryItem = teamStatusSummaryItem {
             snapshot.insertSection(.eventInfo, atIndex: TeamSummarySection.eventInfo.rawValue)
-            // TODO: Remove previous item, if it exists
             snapshot.insertItem(teamStatusSummaryItem, inSection: .eventInfo, atIndex: 0)
-        } else {
-            // TODO: Remove previous item
-            // TODO: Remove previous section, if it's empty
+        } else if snapshot.itemIdentifiers(inSection: .eventInfo).isEmpty {
+            snapshot.deleteSections([.eventInfo])
         }
 
         // MARK: - Playoff Info
@@ -222,26 +232,24 @@ class TeamSummaryViewController: TBATableViewController {
 
         // Alliance
         if let allianceStatus = eventStatus?.allianceStatus, allianceStatus != "--" {
-            playoffInfoItems.append(TeamSummaryItem(allianceStatus: allianceStatus))
+            playoffInfoItems.append(.alliance(allianceStatus: allianceStatus))
         }
 
         // Record
         if let record = eventStatus?.playoff?.record {
-            playoffInfoItems.append(TeamSummaryItem(wlt: record))
+            playoffInfoItems.append(.record(wlt: record))
         }
 
         // Average
         if let average = eventStatus?.playoff?.playoffAverage {
-            playoffInfoItems.append(TeamSummaryItem(average: average))
+            playoffInfoItems.append(.average(average: average))
         }
 
+        snapshot.deleteSections([.playoffInfo])
+
         if !playoffInfoItems.isEmpty {
-            snapshot.deleteSections([.playoffInfo])
             snapshot.insertSection(.playoffInfo, atIndex: TeamSummarySection.playoffInfo.rawValue)
             snapshot.appendItems(playoffInfoItems, toSection: .playoffInfo)
-        } else {
-            // TODO: Double check these deletes are safe if the section doesn't exist
-            snapshot.deleteSections([.playoffInfo])
         }
 
         // MARK: - Qual Info
@@ -250,65 +258,56 @@ class TeamSummaryViewController: TBATableViewController {
 
         // Rank
         if let rank = eventStatus?.qual?.ranking?.rank, let total = eventStatus?.qual?.numTeams {
-            qualInfoItems.append(TeamSummaryItem(rank: rank.intValue, total: total.intValue))
+            qualInfoItems.append(.rank(rank: rank.intValue, total: total.intValue))
         }
 
         // Record
         if let record = eventStatus?.qual?.ranking?.record {
-            qualInfoItems.append(TeamSummaryItem(wlt: record, dqs: eventStatus?.qual?.ranking?.dq?.intValue))
+            qualInfoItems.append(.record(wlt: record, dqs: eventStatus?.qual?.ranking?.dq?.intValue))
         }
 
         // Average
         if let average = eventStatus?.qual?.ranking?.qualAverage {
-            qualInfoItems.append(TeamSummaryItem(average: average))
+            qualInfoItems.append(.average(average: average))
         }
 
         // Breakdown
         if let rankingInfo = eventStatus?.qual?.ranking?.rankingInfoString {
-            qualInfoItems.append(TeamSummaryItem(rankingInfo: rankingInfo))
+            qualInfoItems.append(.breakdown(rankingInfo: rankingInfo))
         }
+
+        snapshot.deleteSections([.qualInfo])
 
         if !qualInfoItems.isEmpty {
-            snapshot.deleteSections([.qualInfo])
             snapshot.insertSection(.qualInfo, atIndex: TeamSummarySection.qualInfo.rawValue)
             snapshot.appendItems(qualInfoItems, toSection: .qualInfo)
-        } else {
-            // TODO: Double check these deletes are safe if the section doesn't exist
-            snapshot.deleteSections([.qualInfo])
         }
 
-        dataSource.apply(snapshot)
+        dataSource.apply(snapshot, animatingDifferences: false)
+
+        executeUpdate(updateNextMatchItem)
+        executeUpdate(updateLastMatchItem)
     }
 
     private func updateAwardsItem() {
         var snapshot = dataSource.snapshot()
 
         let teamAwardsSummaryItem: TeamSummaryItem? = {
-            return teamAwards.count > 0 ? TeamSummaryItem(awardsCount: teamAwards.count) : nil
+            return teamAwards.count > 0 ? .awards(count: teamAwards.count) : nil
         }()
+
+        let items = snapshot.itemIdentifiers(inSection: .eventInfo)
+        let existingTeamAwardsSummaryItems = items.filter({ switch $0 { case .awards(_): return true; default: return false } })
+        snapshot.deleteItems(existingTeamAwardsSummaryItems)
 
         if let teamAwardsSummaryItem = teamAwardsSummaryItem {
             snapshot.insertSection(.eventInfo, atIndex: TeamSummarySection.eventInfo.rawValue)
-
-            // Remove existing awards item
-            let items = snapshot.itemIdentifiers(inSection: .eventInfo)
-            let existingTeamAwardsSummaryItem = items.first // TODO: Fix this - how do we filter for just Awards?
-            if let existingTeamAwardsSummaryItem = existingTeamAwardsSummaryItem {
-                snapshot.deleteItems([existingTeamAwardsSummaryItem])
-            }
-
             snapshot.insertItem(teamAwardsSummaryItem, inSection: .eventInfo, atIndex: 1)
-        } else if let item = snapshot.itemIdentifiers.first {
-            // Remove our existing awards item
-            snapshot.deleteItems([item])
-            // If our event info section is empty, remove it
-            let items = snapshot.itemIdentifiers(inSection: .eventInfo)
-            if items.isEmpty {
-                snapshot.deleteSections([.eventInfo])
-            }
+        } else if snapshot.itemIdentifiers(inSection: .eventInfo).isEmpty {
+            snapshot.deleteSections([.eventInfo])
         }
 
-        dataSource.apply(snapshot)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     private func updateNextMatchItem() {
@@ -323,20 +322,19 @@ class TeamSummaryViewController: TBATableViewController {
 
         let nextMatchItem: TeamSummaryItem? = {
             if let nextMatch = nextMatch, event.isHappeningNow {
-                return TeamSummaryItem(match: nextMatch, teamKey: teamKey)
+                return .match(match: nextMatch, teamKey: teamKey)
             }
             return nil
         }()
 
+        snapshot.deleteSections([.nextMatch])
+
         if let nextMatchItem = nextMatchItem {
             snapshot.insertSection(.nextMatch, atIndex: TeamSummarySection.nextMatch.rawValue)
-            // TODO: Remove if the old one previously exists
             snapshot.appendItems([nextMatchItem], toSection: .nextMatch)
-        } else {
-
         }
 
-        dataSource.apply(snapshot)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     private func updateLastMatchItem() {
@@ -351,20 +349,19 @@ class TeamSummaryViewController: TBATableViewController {
 
         let lastMatchItem: TeamSummaryItem? = {
             if let lastMatch = lastMatch, event.isHappeningNow {
-                return TeamSummaryItem(match: lastMatch, teamKey: teamKey)
+                return .match(match: lastMatch, teamKey: teamKey)
             }
             return nil
         }()
 
+        snapshot.deleteSections([.lastMatch])
+
         if let lastMatchItem = lastMatchItem {
             snapshot.insertSection(.lastMatch, atIndex: TeamSummarySection.lastMatch.rawValue)
-            // TODO: Remove if the old one previously exists
             snapshot.appendItems([lastMatchItem], toSection: .nextMatch)
-        } else {
-
         }
 
-        dataSource.apply(snapshot)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     // MARK: TableViewDataSourceDelegate
@@ -455,31 +452,14 @@ class TeamSummaryViewController: TBATableViewController {
         return cell
     }
 
-    /*
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == TeamSummarySection.nextMatch {
-            return "Next Match"
-        } else if section == TeamSummarySection.playoffInfo {
-            return "Playoffs"
-        } else if section == TeamSummarySection.qualInfo {
-            return "Qualifications"
-        } else if section == TeamSummarySection.lastMatch {
-            return "Most Recent Match"
-        }
-        return nil
-    }
-    */
-
     // MARK: - Table View Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let item = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
-        // TODO: Do we need to deselect?
-        tableView.deselectRow(at: indexPath, animated: true)
 
-        switch item.type {
+        switch item {
         case .awards:
             delegate?.awardsSelected()
         case .match(let match, _):
@@ -507,11 +487,12 @@ extension TeamSummaryViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        // TODO: Probably change this yeah?
         return eventStatus == nil || teamAwards.count == 0
     }
 
     @objc func refresh() {
+        updateOperationQueue.cancelAllOperations()
+
         // Refresh Team@Event status
         var teamStatusOperation: TBAKitOperation!
         teamStatusOperation = tbaKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!, completion: { (result, notModified) in
@@ -548,9 +529,7 @@ extension TeamSummaryViewController: Refreshable {
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(awardsOperation)
-                DispatchQueue.main.async {
-                    // self.updateAwardsItem()
-                }
+                self.executeUpdate(self.updateAwardsItem)
             }, errorRecorder: Crashlytics.sharedInstance())
         })
 
@@ -562,7 +541,7 @@ extension TeamSummaryViewController: Refreshable {
         let ops = callSets.compactMap { [weak self] in
             return self?.fetchMatch($0, $1)
         }
-        refreshOperationQueue.addOperations(ops, waitUntilFinished: false)
+        addRefreshOperations(ops)
     }
 
     func fetchMatch(_ key: String, _ update: @escaping () -> ()) -> TBAKitOperation? {
@@ -575,9 +554,7 @@ extension TeamSummaryViewController: Refreshable {
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
-                DispatchQueue.main.async {
-                    update()
-                }
+                self.executeUpdate(update)
             }, errorRecorder: Crashlytics.sharedInstance())
         }
         return operation
@@ -597,22 +574,29 @@ private extension NSDiffableDataSourceSnapshot {
 
     mutating func insertSection(_ identifier: SectionIdentifierType, atIndex index: Int) {
         if sectionIdentifiers.contains(identifier) {
-            return
-        }
-        if sectionIdentifiers.count <= index {
+            if let oldIndex = indexOfSection(identifier), oldIndex != index {
+                let section = sectionIdentifiers[index]
+                moveSection(identifier, beforeSection: section)
+            }
+        } else if sectionIdentifiers.count <= index {
             appendSections([identifier])
         } else {
-            let section = sectionIdentifiers[index - 1]
+            let section = sectionIdentifiers[index]
             insertSections([identifier], beforeSection: section)
         }
     }
 
     mutating func insertItem(_ identifier: ItemIdentifierType, inSection section: SectionIdentifierType, atIndex index: Int) {
         let items = itemIdentifiers(inSection: section)
-        if items.count <= index {
-            appendItems([identifier])
+        if items.contains(identifier) {
+            if let oldIndex = indexOfItem(identifier), oldIndex != index {
+                let item = items[index]
+                moveItem(identifier, beforeItem: item)
+            }
+        } else if items.count <= index {
+            appendItems([identifier], toSection: section)
         } else {
-            let item = items[index - 1]
+            let item = items[index]
             insertItems([identifier], beforeItem: item)
         }
     }
