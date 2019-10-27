@@ -47,33 +47,6 @@ class TBACollectionViewController: UICollectionViewController, DataController, N
         collectionView.registerReusableCell(BasicCollectionViewCell.self)
     }
 
-    // MARK: - TableViewDataSourceDelegate
-
-    var shouldProcessUpdates: Bool {
-        // Don't update our interface if we're in the background
-
-        // Only respond to updates if we're the selected element in the tab bar
-        guard let selectedViewController = tabBarController?.selectedViewController else {
-            return false
-        }
-        guard let navigationController = navigationController else {
-            return false
-        }
-        guard selectedViewController == navigationController else {
-            return false
-        }
-
-        // Only respond to updates if we're the top item in the navigation stack
-        if let topViewController = navigationController.topViewController {
-            if let parent = parent, topViewController == parent {
-                return true
-            } else if topViewController == self {
-                return true
-            }
-        }
-        return false
-    }
-
 }
 
 extension Refreshable where Self: TBACollectionViewController {

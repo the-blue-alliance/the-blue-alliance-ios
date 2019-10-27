@@ -1,14 +1,14 @@
 import CoreData
 import UIKit
 
-/// TableViewFetchedResultsController implements NSFetchedResultsControllerDelegate
-/// and keeps the underlying data in sync with a UITableViewDiffableDataSource
-class TableViewDataSourceFetchedResultsController<Result: NSFetchRequestResult & Hashable>: NSObject, NSFetchedResultsControllerDelegate {
+/// CollectionViewDataSourceFetchedResultsController implements NSFetchedResultsControllerDelegate
+/// and keeps the underlying data in sync with a UICollectionViewDiffableDataSource
+class CollectionViewDataSourceFetchedResultsController<Result: NSFetchRequestResult & Hashable>: NSObject, NSFetchedResultsControllerDelegate {
 
-    private(set) var dataSource: UITableViewDiffableDataSource<String, Result>
+    private(set) var dataSource: UICollectionViewDiffableDataSource<String, Result>
     let fetchedResultsController: NSFetchedResultsController<Result>
 
-    init(dataSource: UITableViewDiffableDataSource<String, Result>, fetchedResultsController: NSFetchedResultsController<Result>) {
+    init(dataSource: UICollectionViewDiffableDataSource<String, Result>, fetchedResultsController: NSFetchedResultsController<Result>) {
         self.dataSource = dataSource
         self.fetchedResultsController = fetchedResultsController
 

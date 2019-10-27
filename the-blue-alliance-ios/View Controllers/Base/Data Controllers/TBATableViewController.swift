@@ -5,8 +5,6 @@ import UIKit
 
 class TBATableViewController: UITableViewController, TableViewDataSourceDelegate, DataController, Navigatable {
 
-    // TODO: Data Source or nah?
-
     var persistentContainer: NSPersistentContainer
     let tbaKit: TBAKit
 

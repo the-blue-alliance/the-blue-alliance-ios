@@ -5,8 +5,8 @@ protocol TableViewDataSourceDelegate: AnyObject {
     func title(forSection section: Int) -> String?
 }
 
-/// TableViewDataSource is a wrapper around a UITableViewDiffableDataSource that implements UITableViewDataSource
-/// for TBA where we manage no data states and whatnot for table views
+/// TableViewDataSource is a wrapper around a UITableViewDiffableDataSource that implements
+/// UITableViewDataSource for TBA where we manage no data states and whatnot for table views
 class TableViewDataSource<Section: Hashable, Item: Hashable>: NSObject, UITableViewDataSource {
 
     private weak var dataSource: UITableViewDiffableDataSource<Section, Item>?
