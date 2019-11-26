@@ -9,8 +9,8 @@
     "hoek": "^5.0.3",
     "merge": ">=1.2.1",
     "npm": "^6.13.0",
-    "react": "^16.12.0",
-    "react-native": "^0.61.4",
+    "react": "^16.9.0",
+    "react-native": "^0.61.5",
     "react-native-tba-callback-manager": "file:react-native-tba-callback-manager"
   }
 }
