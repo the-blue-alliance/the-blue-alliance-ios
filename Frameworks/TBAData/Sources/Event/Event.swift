@@ -54,6 +54,12 @@ extension Event: Locatable, Surfable, Managed {
         })
     }
 
+    public static func predicate(key: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Event.key), key)
+
+    }
+
     /**
      Insert an Event with values from a TBAKit Event model in to the managed object context.
 
@@ -67,8 +73,7 @@ extension Event: Locatable, Surfable, Managed {
      */
     @discardableResult
     public static func insert(_ model: TBAEvent, in context: NSManagedObjectContext) -> Event {
-        let predicate = NSPredicate(format: "%K == %@",
-                                    #keyPath(Event.key), model.key)
+        let predicate = Event.predicate(key: model.key)
         return findOrCreate(in: context, matching: predicate) { (event) in
             // Required: endDate, eventCode, eventType, key, name, startDate, year
             event.address = model.address

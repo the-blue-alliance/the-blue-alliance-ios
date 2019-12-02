@@ -103,18 +103,11 @@ class TeamSummaryViewController: TBATableViewController {
     private var teamAwards: [Award] {
         return event.awards(for: teamKey)
     }
-    private let updateOperationQueue: OperationQueue = {
-        let queue = OperationQueue()
-        queue.maxConcurrentOperationCount = 1
-        queue.qualityOfService = .userInitiated
-        return queue
-    }()
 
     private func executeUpdate(_ update: @escaping () -> ()) {
-        let op = BlockOperation {
+        OperationQueue.main.addOperation {
             update()
         }
-        updateOperationQueue.addOperation(op)
     }
 
     // MARK: - Observable
@@ -140,6 +133,8 @@ class TeamSummaryViewController: TBATableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // TODO: deinit, cancel tasks, weak array maybe?
+
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
@@ -158,10 +153,6 @@ class TeamSummaryViewController: TBATableViewController {
         executeUpdate(updateNextMatchItem)
         executeUpdate(updateLastMatchItem)
         executeUpdate(updateAwardsItem)
-    }
-
-    deinit {
-        updateOperationQueue.cancelAllOperations()
     }
 
     // MARK: - Private Methods
@@ -491,7 +482,8 @@ extension TeamSummaryViewController: Refreshable {
     }
 
     @objc func refresh() {
-        updateOperationQueue.cancelAllOperations()
+        // TODO: Hmmmm... think about this...
+        // updateOperationQueue.cancelAllOperations()
 
         // Refresh Team@Event status
         var teamStatusOperation: TBAKitOperation!
@@ -566,39 +558,6 @@ extension TeamSummaryViewController: Stateful {
 
     var noDataText: String {
         return "No status for team at event"
-    }
-
-}
-
-private extension NSDiffableDataSourceSnapshot {
-
-    mutating func insertSection(_ identifier: SectionIdentifierType, atIndex index: Int) {
-        if sectionIdentifiers.contains(identifier) {
-            if let oldIndex = indexOfSection(identifier), oldIndex != index {
-                let section = sectionIdentifiers[index]
-                moveSection(identifier, beforeSection: section)
-            }
-        } else if sectionIdentifiers.count <= index {
-            appendSections([identifier])
-        } else {
-            let section = sectionIdentifiers[index]
-            insertSections([identifier], beforeSection: section)
-        }
-    }
-
-    mutating func insertItem(_ identifier: ItemIdentifierType, inSection section: SectionIdentifierType, atIndex index: Int) {
-        let items = itemIdentifiers(inSection: section)
-        if items.contains(identifier) {
-            if let oldIndex = indexOfItem(identifier), oldIndex != index {
-                let item = items[index]
-                moveItem(identifier, beforeItem: item)
-            }
-        } else if items.count <= index {
-            appendItems([identifier], toSection: section)
-        } else {
-            let item = items[index]
-            insertItems([identifier], beforeItem: item)
-        }
     }
 
 }

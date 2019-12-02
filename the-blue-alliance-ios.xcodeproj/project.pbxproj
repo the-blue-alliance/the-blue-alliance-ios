@@ -44,6 +44,7 @@
 		92564C6D21644ACA0047917F /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C6C21644ACA0047917F /* Secrets.plist */; };
 		92564C70216456800047917F /* Secrets_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92564C6F216456800047917F /* Secrets_Tests.swift */; };
 		92564C72216457060047917F /* TestSecrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C71216457060047917F /* TestSecrets.plist */; };
+		925D10EB2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */; };
 		9266825221B058DA0077C75C /* TBAReactNativeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */; };
 		92688C2B2090091D00D12B7B /* ReactNativeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92688C2A2090091D00D12B7B /* ReactNativeService.swift */; };
 		9274E14121B1026900F5D5D0 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14021B1026900F5D5D0 /* NotificationsViewController.swift */; };
@@ -226,6 +227,7 @@
 		92564C6C21644ACA0047917F /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
 		92564C6F216456800047917F /* Secrets_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets_Tests.swift; sourceTree = "<group>"; };
 		92564C71216457060047917F /* TestSecrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestSecrets.plist; sourceTree = "<group>"; };
+		925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDiffableDataSourceSnapshot+TBA.swift"; sourceTree = "<group>"; };
 		9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAReactNativeViewController.swift; sourceTree = "<group>"; };
 		92688C2A2090091D00D12B7B /* ReactNativeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactNativeService.swift; sourceTree = "<group>"; };
 		9274E14021B1026900F5D5D0 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
@@ -763,6 +765,7 @@
 				928DE031222AF10A00C6234A /* UIImage+TBA.swift */,
 				921D0B54222AF94C0056578A /* UIBarButtonItem+TBA.swift */,
 				921D0B5E222B13480056578A /* ContainerViewController+Team.swift */,
+				925D10EA2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1545,6 +1548,7 @@
 				92B0AA3B20CB837A0074FDF1 /* main.swift in Sources */,
 				92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */,
 				92FF110B21A61AF6003BC5C4 /* EventAwardsViewController.swift in Sources */,
+				925D10EB2394C7F300191D92 /* NSDiffableDataSourceSnapshot+TBA.swift in Sources */,
 				928DE032222AF10A00C6234A /* UIImage+TBA.swift in Sources */,
 				9275957321B7514700560D81 /* DistrictTeamsViewController.swift in Sources */,
 				92AF4D0C1E330790007E967D /* SelectTableViewController.swift in Sources */,

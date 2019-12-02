@@ -63,7 +63,7 @@ extension Team: Locatable, Surfable, Managed {
         })
     }
 
-    static func predicate(key: String) -> NSPredicate {
+    public static func predicate(key: String) -> NSPredicate {
         return NSPredicate(format: "%K == %@",
                            #keyPath(Team.key), key)
     }
