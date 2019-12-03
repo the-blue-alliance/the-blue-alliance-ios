@@ -44,6 +44,8 @@
 		92564C6D21644ACA0047917F /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C6C21644ACA0047917F /* Secrets.plist */; };
 		92564C70216456800047917F /* Secrets_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92564C6F216456800047917F /* Secrets_Tests.swift */; };
 		92564C72216457060047917F /* TestSecrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 92564C71216457060047917F /* TestSecrets.plist */; };
+		925D10F02396C1B100191D92 /* 2020InfiniteRechargeIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 925D10EE2396C1B100191D92 /* 2020InfiniteRechargeIcon@3x.png */; };
+		925D10F12396C1B100191D92 /* 2020InfiniteRechargeIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 925D10EF2396C1B100191D92 /* 2020InfiniteRechargeIcon@2x.png */; };
 		9266825221B058DA0077C75C /* TBAReactNativeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */; };
 		92688C2B2090091D00D12B7B /* ReactNativeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92688C2A2090091D00D12B7B /* ReactNativeService.swift */; };
 		9274E14121B1026900F5D5D0 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9274E14021B1026900F5D5D0 /* NotificationsViewController.swift */; };
@@ -224,6 +226,8 @@
 		92564C6C21644ACA0047917F /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
 		92564C6F216456800047917F /* Secrets_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets_Tests.swift; sourceTree = "<group>"; };
 		92564C71216457060047917F /* TestSecrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestSecrets.plist; sourceTree = "<group>"; };
+		925D10EE2396C1B100191D92 /* 2020InfiniteRechargeIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2020InfiniteRechargeIcon@3x.png"; sourceTree = "<group>"; };
+		925D10EF2396C1B100191D92 /* 2020InfiniteRechargeIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "2020InfiniteRechargeIcon@2x.png"; sourceTree = "<group>"; };
 		9266825121B058DA0077C75C /* TBAReactNativeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBAReactNativeViewController.swift; sourceTree = "<group>"; };
 		92688C2A2090091D00D12B7B /* ReactNativeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactNativeService.swift; sourceTree = "<group>"; };
 		9274E14021B1026900F5D5D0 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
@@ -426,6 +430,7 @@
 		92004C6221C21BC600A858C8 /* App Icons */ = {
 			isa = PBXGroup;
 			children = (
+				925D10ED2396C15B00191D92 /* 2020InfiniteRechargeIcon */,
 				92004C6721C21C8B00A858C8 /* 2019DeepSpaceIcon */,
 			);
 			path = "App Icons";
@@ -500,6 +505,15 @@
 				145C57BC1ED3C3AA004955B2 /* PlayerView.swift */,
 			);
 			path = Media;
+			sourceTree = "<group>";
+		};
+		925D10ED2396C15B00191D92 /* 2020InfiniteRechargeIcon */ = {
+			isa = PBXGroup;
+			children = (
+				925D10EF2396C1B100191D92 /* 2020InfiniteRechargeIcon@2x.png */,
+				925D10EE2396C1B100191D92 /* 2020InfiniteRechargeIcon@3x.png */,
+			);
+			path = 2020InfiniteRechargeIcon;
 			sourceTree = "<group>";
 		};
 		9274E14221B1027100F5D5D0 /* Notifications */ = {
@@ -1198,6 +1212,7 @@
 				145C57B71ED378E2004955B2 /* MatchTableViewCell.xib in Resources */,
 				92004C6621C21C7F00A858C8 /* 2019DeepSpaceIcon@3x.png in Resources */,
 				92C8CE5021ADCC5F00683558 /* MyTBASignInViewController.xib in Resources */,
+				925D10F12396C1B100191D92 /* 2020InfiniteRechargeIcon@2x.png in Resources */,
 				92942DAF1E2158EC008E79CA /* Settings.bundle in Resources */,
 				9274E14921B1AAD300F5D5D0 /* NotificationStatusTableViewCell.xib in Resources */,
 				304ED0411EF1D2D300E31791 /* RankingTableViewCell.xib in Resources */,
@@ -1216,6 +1231,7 @@
 				92564C6D21644ACA0047917F /* Secrets.plist in Resources */,
 				925471F9208CC73F00AD3204 /* EventAllianceTableViewCell.xib in Resources */,
 				929DB38E2095640C00FB575F /* ReverseSubtitleTableViewCell.xib in Resources */,
+				925D10F02396C1B100191D92 /* 2020InfiniteRechargeIcon@3x.png in Resources */,
 				92D8CD1320C2634200777D93 /* GoogleService-Info.plist in Resources */,
 				92943B0A222E1E0600EA35B2 /* SwitchTableViewCell.xib in Resources */,
 			);
