@@ -34,16 +34,6 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
         return searchController
     }()
 
-    // MARK: Init
-
-    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
