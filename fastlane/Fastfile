@@ -89,7 +89,6 @@ platform :ios do
     preship
     build
 
-    deliver
     ship_github(is_prerelease: false) # Create GitHub release
     slack(
       channel: "#app-releases",
@@ -99,6 +98,7 @@ platform :ios do
       icon_url: "https://raw.githubusercontent.com/the-blue-alliance/the-blue-alliance-logo/master/ios/tba-icon-60%403x.png",
       attachment_properties: {}
     )
+    deliver
 
     new_version(version_type: 'patch')
     beta_ci
