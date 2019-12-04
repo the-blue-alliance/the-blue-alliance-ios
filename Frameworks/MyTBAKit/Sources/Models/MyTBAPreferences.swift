@@ -18,7 +18,6 @@ extension MyTBA {
     // TODO: Android has some local rate limiting, which is probably smart
     // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/174
 
-    @discardableResult
     public func updatePreferences(deviceKey: String?, modelKey: String, modelType: MyTBAModelType, favorite: Bool, notifications: [NotificationType], completion: @escaping (_ favoriteResponse: MyTBABaseResponse?, _ subscriptionResponse: MyTBABaseResponse?, _ error: Error?) -> Void) -> MyTBAOperation? {
         let preferences = MyTBAPreferences(deviceKey: deviceKey,
                                            favorite: favorite,
@@ -27,7 +26,7 @@ extension MyTBA {
                                            notifications: notifications)
 
         guard let encodedPreferences = try? MyTBA.jsonEncoder.encode(preferences) else {
-            completion(nil, nil, MyTBAError.error("Unable to update myTBA preferences - invalid data"))
+            completion(nil, nil, MyTBAError.error(nil, "Unable to update myTBA preferences - invalid data"))
             return nil
         }
 
@@ -36,7 +35,7 @@ extension MyTBA {
         return callApi(method: method, bodyData: encodedPreferences, completion: { (preferencesResponse: MyTBABaseResponse?, error: Error?) in
             if let preferencesResponse = preferencesResponse, let data = preferencesResponse.message.data(using: .utf8) {
                 guard let messageResponse = try? JSONDecoder().decode(MyTBAPreferencesMessageResponse.self, from: data) else {
-                    completion(nil, nil, MyTBAError.error("Error decoding myTBA preferences response"))
+                    completion(nil, nil, MyTBAError.error(nil, "Error decoding myTBA preferences response"))
                     return
                 }
                 completion(messageResponse.favorite, messageResponse.subscription, error)

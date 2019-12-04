@@ -9,13 +9,20 @@ private struct Constants {
 }
 
 public enum MyTBAError: Error {
-    case error(String)
+    case error(Int?, String)
+
+    public var code: Int? {
+        switch self {
+        case .error(let code, _):
+            return code
+        }
+    }
 }
 
 extension MyTBAError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .error(message: let message):
+        case .error(_, let message):
             // TODO: This, unlike the name says, isn't localized
             return message
         }

@@ -27,7 +27,6 @@ public struct MyTBAFavorite: MyTBAModel, Equatable, Codable {
 
 extension MyTBA {
 
-    @discardableResult
     public func fetchFavorites(_ completion: @escaping (_ favorites: [MyTBAFavorite]?, _ error: Error?) -> Void) -> MyTBAOperation {
         let method = "\(MyTBAFavorite.arrayKey)/list"
 

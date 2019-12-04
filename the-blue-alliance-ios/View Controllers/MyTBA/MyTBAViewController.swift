@@ -117,7 +117,7 @@ class MyTBAViewController: ContainerViewController, GIDSignInUIDelegate {
         let signOutOperation = myTBA.unregister(fcmToken) { [weak self] (_, error) in
             self?.isLoggingOut = false
 
-            if let error = error {
+            if let error = error as? MyTBAError, error.code != 404 {
                 Crashlytics.sharedInstance().recordError(error)
                 self?.showErrorAlert(with: "Unable to sign out of myTBA - \(error.localizedDescription)")
             } else {

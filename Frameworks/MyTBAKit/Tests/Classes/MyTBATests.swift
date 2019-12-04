@@ -3,9 +3,17 @@ import XCTest
 
 class MyTBAErrorTests: XCTestCase {
 
+    func test_code() {
+        let errorNoCode = MyTBAError.error(nil, "")
+        XCTAssertNil(errorNoCode.code)
+
+        let error = MyTBAError.error(210, "")
+        XCTAssertEqual(error.code, 210)
+    }
+
     func test_errorMessage() {
         let errorMessage = "Testing error message"
-        let error = MyTBAError.error(errorMessage)
+        let error = MyTBAError.error(nil, errorMessage)
         XCTAssertEqual(error.localizedDescription, errorMessage)
     }
 
