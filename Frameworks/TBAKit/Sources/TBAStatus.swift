@@ -84,7 +84,6 @@ public struct TBAAppInfo: TBAModel, Equatable {
 
 extension TBAKit {
 
-    @discardableResult
     public func fetchStatus(_ completion: @escaping (Result<TBAStatus?, Error>, Bool) -> ()) -> TBAKitOperation {
         let method = "status"
         return callObject(method: method, completion: completion)

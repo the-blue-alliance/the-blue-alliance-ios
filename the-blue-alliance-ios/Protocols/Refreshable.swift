@@ -135,7 +135,7 @@ extension Refreshable {
      * which reloads a view and updates the refresh indicator.
      */
     @discardableResult
-    func addRefreshOperations(_ operations: [Operation]) -> Operation? {
+    func addRefreshOperations(_ operations: [Operation]) -> Operation {
         // Create an operation to update our refresh indicator - should happen last.
         let updateRefreshOperation = BlockOperation {
             self.updateRefresh()

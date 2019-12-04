@@ -28,7 +28,7 @@ public struct MyTBABaseResponse: MyTBAResponse, Codable {
 
     public var error: MyTBAError? {
         if code >= 400 {
-            return MyTBAError.error(message)
+            return MyTBAError.error(code, message)
         }
         return nil
     }

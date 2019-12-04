@@ -34,7 +34,7 @@ public class MyTBAOperation: TBAOperation {
                     completion(decodedResponse, error)
                 }
             } else {
-                completion(nil, MyTBAError.error("Unexpected response from myTBA API"))
+                completion(nil, MyTBAError.error(nil, "Unexpected response from myTBA API"))
             }
 
             self?.finish()

@@ -77,7 +77,6 @@ public struct MyTBASubscription: MyTBAModel, Equatable, Codable {
 
 extension MyTBA {
 
-    @discardableResult
     public func fetchSubscriptions(_ completion: @escaping (_ subscriptions: [MyTBASubscription]?, _ error: Error?) -> Void) -> MyTBAOperation {
         let method = "\(MyTBASubscription.arrayKey)/list"
 

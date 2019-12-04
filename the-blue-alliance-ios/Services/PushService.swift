@@ -27,6 +27,8 @@ class PushService: NSObject {
     internal var retryService: RetryService
     private var userDefaults: UserDefaults
 
+    private let operationQueue = OperationQueue()
+
     init(messaging: Messaging, myTBA: MyTBA, retryService: RetryService, userDefaults: UserDefaults) {
         self.messaging = messaging
         self.myTBA = myTBA
@@ -41,7 +43,7 @@ class PushService: NSObject {
             // Not authenticated to myTBA - save token for registration once we're auth'd
             pendingRegisterPushToken = token
         } else {
-            myTBA.register(token) { (_, error) in
+            let op = myTBA.register(token) { (_, error) in
                 if let error = error {
                     Crashlytics.sharedInstance().recordError(error)
                     if !self.retryService.isRetryRegistered {
@@ -54,6 +56,9 @@ class PushService: NSObject {
                 }
                 // Either save or remove our pending push token as necessary
                 self.pendingRegisterPushToken = (error != nil ? token : nil)
+            }
+            if let op = op {
+                operationQueue.addOperation(op)
             }
         }
     }
