@@ -23,10 +23,10 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-** Your Environment (please complete the following information):**
+**Your Environment (please complete the following information):**
  - Device: [e.g. iPhone XS]
  - OS: [e.g. iOS 12.1]
- - TBA for iOS Version [e.g. 1.1.5]
+ - TBA for iOS Version: [e.g. 1.1.5]
 
 **Additional context**
 Add any other context about the problem here.
