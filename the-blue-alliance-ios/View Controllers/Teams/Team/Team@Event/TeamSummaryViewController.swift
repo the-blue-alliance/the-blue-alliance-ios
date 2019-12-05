@@ -480,6 +480,8 @@ extension TeamSummaryViewController: Refreshable {
     }
 
     @objc func refresh() {
+        var finalOperation: Operation!
+
         // Refresh Team@Event status
         var teamStatusOperation: TBAKitOperation!
         teamStatusOperation = tbaKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!, completion: { (result, notModified) in
@@ -487,7 +489,7 @@ extension TeamSummaryViewController: Refreshable {
             case .success(let status):
                 if let status = status {
                     // Kickoff refreshes for our Match objects, add them as dependents for reloading data
-                    self.refreshStatusMatches(status)
+                    self.refreshStatusMatches(status, finalOperation)
 
                     let context = self.persistentContainer.newBackgroundContext()
                     context.performChangesAndWait({
@@ -520,15 +522,18 @@ extension TeamSummaryViewController: Refreshable {
             }, errorRecorder: Crashlytics.sharedInstance())
         })
 
-        addRefreshOperations([teamStatusOperation, awardsOperation])
+        finalOperation = addRefreshOperations([teamStatusOperation, awardsOperation])
     }
 
-    func refreshStatusMatches(_ status: TBAEventStatus) {
+    func refreshStatusMatches(_ status: TBAEventStatus, _ dependentOperation: Operation) {
         let callSets = zip([status.lastMatchKey, status.nextMatchKey].compactMap({ $0 }), [updateLastMatchItem, updateNextMatchItem])
         let ops = callSets.compactMap { [weak self] in
             return self?.fetchMatch($0, $1)
         }
-        addRefreshOperations(ops)
+        ops.forEach {
+            dependentOperation.addDependency($0)
+        }
+        refreshOperationQueue.addOperations(ops, waitUntilFinished: false)
     }
 
     func fetchMatch(_ key: String, _ update: @escaping () -> ()) -> TBAKitOperation? {
