@@ -206,8 +206,9 @@ extension Match {
 
 extension Match: Managed {
 
-    static func matchPredicate(key: String) -> NSPredicate {
-        return NSPredicate(format: "%K == %@", #keyPath(Match.key), key)
+    public static func predicate(key: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Match.key), key)
     }
 
     /**
@@ -223,7 +224,7 @@ extension Match: Managed {
      */
     @discardableResult
     public static func insert(_ model: TBAMatch, in context: NSManagedObjectContext) -> Match {
-        let predicate = matchPredicate(key: model.key)
+        let predicate = Match.predicate(key: model.key)
 
         return findOrCreate(in: context, matching: predicate) { (match) in
             // Required: compLevel, eventKey, key, matchNumber, setNumber

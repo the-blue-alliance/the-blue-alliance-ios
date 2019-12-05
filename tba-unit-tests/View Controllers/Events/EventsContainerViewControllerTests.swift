@@ -16,6 +16,8 @@ class EventsContainerViewControllerTests: TBATestCase {
                                                                       persistentContainer: persistentContainer,
                                                                       tbaKit: tbaKit,
                                                                       userDefaults: userDefaults)
+        eventsContainerViewController.viewDidLoad()
+
         navigationController = MockNavigationController(rootViewController: eventsContainerViewController)
     }
 
@@ -44,7 +46,6 @@ class EventsContainerViewControllerTests: TBATestCase {
     }
 
     func test_showsWeekEvents() {
-        eventsContainerViewController.viewDidLoad()
         XCTAssert(eventsContainerViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is WeekEventsViewController
         }))

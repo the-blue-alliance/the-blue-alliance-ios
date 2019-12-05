@@ -26,7 +26,7 @@ extension MyTBAEntity: Managed {
     /**
      Get the corresponding object for this myTBA Entity, if it exists locally - a Event, Team, or Match
      */
-    public var tbaObject: Managed? {
+    public var tbaObject: (NSManagedObject & Managed)? {
         guard let managedObjectContext = managedObjectContext else {
             return nil
         }
@@ -64,7 +64,7 @@ extension MyTBAEntity: Managed {
                                            #keyPath(MyTBAEntity.modelKey), modelKey,
                                            #keyPath(MyTBAEntity.modelTypeRaw), modelTypeRaw)
             }
-            if matchObjects.isEmpty, let match = Match.findOrFetch(in: managedObjectContext, matching: Match.matchPredicate(key: modelKey)), match.event == nil {
+            if matchObjects.isEmpty, let match = Match.findOrFetch(in: managedObjectContext, matching: Match.predicate(key: modelKey)), match.event == nil {
                 // Match will become an orphan - delete
                 managedObjectContext.delete(match)
             }

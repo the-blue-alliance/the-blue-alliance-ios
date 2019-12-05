@@ -160,6 +160,7 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
         rootStackView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
     }
 
+    // TODO: This isn't being called in iOS 13 when dismissing modal view controllers
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -259,7 +260,8 @@ class ContainerViewController: UIViewController, Persistable, Alertable {
             if !shouldHide {
                 let refreshViewController = viewControllers[index]
 
-                // Reload our view on subsequent appears, since we don't process table view updates in the background.
+                // Reload our view on subsequent appears, since backing relationships
+                // for objects might have changed while the view is in the background.
                 // This can mean our view state falls out of sync with our data state while backgrounded.
                 // Kickoff a reload to make sure our states match up.
                 reloadViewController(refreshViewController)

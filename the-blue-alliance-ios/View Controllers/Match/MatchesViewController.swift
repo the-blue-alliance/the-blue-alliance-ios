@@ -13,15 +13,16 @@ protocol MatchesViewControllerDelegate: AnyObject {
 
 class MatchesViewController: TBATableViewController {
 
+    weak var delegate: MatchesViewControllerDelegate?
+    var query: MatchQueryOptions = MatchQueryOptions.defaultQuery()
+
     private let event: Event
     private let teamKey: TeamKey?
     private var myTBA: MyTBA
 
-    var query: MatchQueryOptions = MatchQueryOptions.defaultQuery()
+    private var dataSource: TableViewDataSource<String, Match>!
+    private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Match>!
     private var favoriteTeamKeys: [String] = []
-
-    weak var delegate: MatchesViewControllerDelegate?
-    private var dataSource: TableViewDataSource<Match, MatchesViewController>!
 
     lazy var matchQueryBarButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(image: UIImage.sortFilterIcon, style: .plain, target: self, action: #selector(showFilter))
@@ -38,16 +39,21 @@ class MatchesViewController: TBATableViewController {
         self.myTBA = myTBA
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
-        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: View Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        tableView.registerReusableCell(MatchTableViewCell.self)
+
+        setupDataSource()
+        tableView.dataSource = dataSource
 
         updateInterface()
     }
@@ -63,16 +69,32 @@ class MatchesViewController: TBATableViewController {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
-        let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
+        let dataSource = UITableViewDiffableDataSource<String, Match>(tableView: tableView) { [weak self] (tableView, indexPath, match) -> UITableViewCell? in
+            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
 
+            var baseTeamKeys: Set<String> = Set()
+            if let teamKey = self?.teamKey {
+                baseTeamKeys.insert(teamKey.key!)
+            }
+            if let query = self?.query, query.filter.favorites, let favoriteTeamKeys = self?.favoriteTeamKeys {
+                baseTeamKeys.formUnion(favoriteTeamKeys)
+            }
+            cell.viewModel = MatchViewModel(match: match, baseTeamKeys: Array(baseTeamKeys))
+
+            return cell
+        }
+        self.dataSource = TableViewDataSource(dataSource: dataSource)
+        self.dataSource.delegate = self
+
+        let fetchRequest: NSFetchRequest<Match> = Match.fetchRequest()
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: "compLevelSortOrder", cacheName: nil)
-        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+        fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
     }
 
     private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
+        fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<Match>) {
@@ -105,10 +127,21 @@ class MatchesViewController: TBATableViewController {
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [matchPredicate, myTBAFavoritesPredicate].compactMap({ $0 }))
     }
 
+    // MARK: TableViewDataSourceDelegate
+
+    override func title(forSection section: Int) -> String? {
+        guard let firstMatch = fetchedResultsController.dataSource.itemIdentifier(for: IndexPath(row: 0, section: section)) else {
+            return "Matches"
+        }
+        return "\(firstMatch.compLevel?.level ?? firstMatch.compLevelString!) Matches"
+    }
+
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let match = dataSource.object(at: indexPath)
+        guard let match = fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
         delegate?.matchSelected(match)
     }
 
@@ -131,26 +164,6 @@ class MatchesViewController: TBATableViewController {
 
     @objc func showFilter(_ sender: UIBarButtonItem) {
         delegate?.showFilter()
-    }
-
-}
-
-extension MatchesViewController: TableViewDataSourceDelegate {
-
-    func title(for section: Int) -> String? {
-        let firstMatch = dataSource.object(at: IndexPath(row: 0, section: section))
-        return "\(firstMatch.compLevel?.level ?? firstMatch.compLevelString!) Matches"
-    }
-
-    func configure(_ cell: MatchTableViewCell, for object: Match, at indexPath: IndexPath) {
-        var baseTeamKeys: Set<String> = Set()
-        if let teamKey = teamKey {
-            baseTeamKeys.insert(teamKey.key!)
-        }
-        if query.filter.favorites {
-            baseTeamKeys.formUnion(favoriteTeamKeys)
-        }
-        cell.viewModel = MatchViewModel(match: object, baseTeamKeys: Array(baseTeamKeys))
     }
 
 }
@@ -178,10 +191,7 @@ extension MatchesViewController: Refreshable {
         if !query.filter.isDefault {
             return false
         }
-        if let matches = dataSource.fetchedResultsController.fetchedObjects, matches.isEmpty {
-            return true
-        }
-        return false
+        return fetchedResultsController.isDataSourceEmpty
     }
 
     @objc func refresh() {
