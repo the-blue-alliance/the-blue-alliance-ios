@@ -163,9 +163,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Auth.auth().addIDTokenDidChangeListener { (_, user) in
             if let user = user {
                 user.getIDToken(completion: { (token, _) in
-                    if let token = token {
-                        print("Token: \(token)")
-                    }
                     self.myTBA.authToken = token
                 })
             } else {

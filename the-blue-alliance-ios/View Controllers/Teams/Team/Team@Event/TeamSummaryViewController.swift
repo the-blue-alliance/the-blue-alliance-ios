@@ -133,8 +133,6 @@ class TeamSummaryViewController: TBATableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // TODO: deinit, cancel tasks, weak array maybe?
-
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
@@ -482,9 +480,6 @@ extension TeamSummaryViewController: Refreshable {
     }
 
     @objc func refresh() {
-        // TODO: Hmmmm... think about this...
-        // updateOperationQueue.cancelAllOperations()
-
         // Refresh Team@Event status
         var teamStatusOperation: TBAKitOperation!
         teamStatusOperation = tbaKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!, completion: { (result, notModified) in
