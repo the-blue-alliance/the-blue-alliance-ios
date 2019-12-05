@@ -38,6 +38,7 @@ class NotificationsViewController: TBATableViewController {
     private let urlOpener: URLOpener
 
     private lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(showCopyFCMToken))
+    private var notificationTokenFooter: UIView?
 
     private var fetchingRemoteNotificationRegistrationStatus = false
     private var hasCheckedRemoteNotificationRegistration = false
@@ -171,6 +172,7 @@ class NotificationsViewController: TBATableViewController {
 
     override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
         if section == 0, !(view.gestureRecognizers?.contains(longPressGestureRecognizer) ?? false) {
+            notificationTokenFooter = view
             view.addGestureRecognizer(longPressGestureRecognizer)
         }
     }
@@ -404,6 +406,9 @@ class NotificationsViewController: TBATableViewController {
             self?.copyFCMTokenToPasteboard(fcmToken)
         })
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        if let notificationTokenFooter = notificationTokenFooter {
+            actionSheet.popoverPresentationController?.sourceView = notificationTokenFooter
+        }
 
         DispatchQueue.main.async { [weak self] in
             self?.present(actionSheet, animated: true, completion: nil)
