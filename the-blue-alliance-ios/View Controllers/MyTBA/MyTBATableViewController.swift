@@ -26,7 +26,9 @@ public enum MyTBASection: String {
 }
 
 protocol MyTBATableViewControllerDelegate: AnyObject {
-    func myTBAObjectSelected(_ myTBAObject: MyTBAEntity)
+    func eventSelected(_ event: Event)
+    func teamSelected(_ team: Team)
+    func matchSelected(_ match: Match)
 }
 
 /**
@@ -176,12 +178,18 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO: Uhhh something here
-        // Maybe we actually change this to pass up the full object not the favorite - probably better?
-//        guard let myTBAObject = fetchedResultsController.itemIdentifier(for: indexPath) else {
-//            return
-//        }
-//        delegate?.myTBAObjectSelected(myTBAObject)
+        guard let obj = dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
+        if let event = obj as? Event {
+            delegate?.eventSelected(event)
+        } else if let team = obj as? Team {
+            delegate?.teamSelected(team)
+        } else if let match = obj as? Match {
+            delegate?.matchSelected(match)
+        } else {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
     }
 
     // MARK: - Fetch Methods

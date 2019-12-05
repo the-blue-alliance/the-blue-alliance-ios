@@ -169,38 +169,22 @@ class MyTBAViewController: ContainerViewController {
 
 extension MyTBAViewController: MyTBATableViewControllerDelegate {
 
-    func myTBAObjectSelected(_ myTBAObject: MyTBAEntity) {
-        // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/177
-        var viewController: UIViewController?
+    func eventSelected(_ event: Event) {
+        let viewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let navigationController = UINavigationController(rootViewController: viewController)
+        self.navigationController?.showDetailViewController(navigationController, sender: nil)
+    }
 
-        switch myTBAObject.modelType {
-        case .event:
-            if let event = myTBAObject.tbaObject as? Event {
-                viewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-            } else {
-                // TODO: Push using just key
-            }
-        case .team:
-            if let team = myTBAObject.tbaObject as? Team {
-                viewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-            } else {
-                // TODO: Push using just key
-            }
-        case .match:
-            if let match = myTBAObject.tbaObject as? Match {
-                viewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-            } else {
-                // TODO: Push using just key
-            }
-        default:
-            break
-        }
+    func teamSelected(_ team: Team) {
+        let viewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let navigationController = UINavigationController(rootViewController: viewController)
+        self.navigationController?.showDetailViewController(navigationController, sender: nil)
+    }
 
-        guard let vc = viewController else {
-            return
-        }
-        let nav = UINavigationController(rootViewController: vc)
-        navigationController?.showDetailViewController(nav, sender: nil)
+    func matchSelected(_ match: Match) {
+        let viewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let navigationController = UINavigationController(rootViewController: viewController)
+        self.navigationController?.showDetailViewController(navigationController, sender: nil)
     }
 
 }
