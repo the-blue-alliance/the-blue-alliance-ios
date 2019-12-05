@@ -6,7 +6,7 @@ import XCTest
 class MatchTestCase: TBADataTestCase {
 
     func test_predicate() {
-        let predicate = Match.matchPredicate(key: "2018miket_qm1")
+        let predicate = Match.predicate(key: "2018miket_qm1")
         XCTAssertEqual(predicate.predicateFormat, "key == \"2018miket_qm1\"")
     }
 

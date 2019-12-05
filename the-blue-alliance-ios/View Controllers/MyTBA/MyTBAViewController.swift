@@ -1,5 +1,6 @@
 import CoreData
 import Crashlytics
+import FirebaseAnalytics
 import FirebaseAuth
 import FirebaseMessaging
 import GoogleSignIn
@@ -79,6 +80,12 @@ class MyTBAViewController: ContainerViewController {
         // modalPresentationCapturesStatusBarAppearance = true
 
         styleInterface()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        Analytics.logEvent("mytba", parameters: nil)
     }
 
     // MARK: - Private Methods

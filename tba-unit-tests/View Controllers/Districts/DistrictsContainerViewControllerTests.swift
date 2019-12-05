@@ -16,6 +16,8 @@ class DistrictsContainerViewControllerTests: TBATestCase {
                                                                             persistentContainer: persistentContainer,
                                                                             tbaKit: tbaKit,
                                                                             userDefaults: userDefaults)
+        districtsContainerViewController.viewDidLoad()
+
         navigationController = MockNavigationController(rootViewController: districtsContainerViewController)
     }
 
@@ -43,7 +45,6 @@ class DistrictsContainerViewControllerTests: TBATestCase {
     }
 
     func test_showsDistricts() {
-        districtsContainerViewController.viewDidLoad()
         XCTAssert(districtsContainerViewController.children.contains(where: { (viewController) -> Bool in
             return viewController is DistrictsViewController
         }))

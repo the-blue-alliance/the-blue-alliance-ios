@@ -244,7 +244,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         refreshOperationQueue.addOperation(tbaKitOperation)
     }
 
-    private func fetchEvent(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
+    func fetchEvent(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEvent(key: myTBAModel.modelKey) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
@@ -260,7 +260,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         return operation
     }
 
-    private func fetchTeam(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
+    func fetchTeam(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchTeam(key: myTBAModel.modelKey) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
@@ -276,7 +276,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         return operation
     }
 
-    private func fetchMatch(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
+    func fetchMatch(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
         var operation: TBAKitOperation!
         operation = tbaKit.fetchMatch(key: myTBAModel.modelKey) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
@@ -292,7 +292,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         return operation
     }
 
-    private func executeUpdate(_ myTBAModel: MyTBAModel) {
+    internal func executeUpdate(_ myTBAModel: MyTBAModel) {
         guard let updateOperation: Operation = {
             let key = myTBAModel.modelKey
             switch myTBAModel.modelType {
@@ -323,8 +323,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         guard let section = MyTBASection.section(for: model.modelType) else {
             return nil
         }
-        return BlockOperation { [weak self] in
-            guard let self = self else { return }
+        return BlockOperation {
             var snapshot = self.dataSource.snapshot()
 
             snapshot.insertSection(section, atIndex: model.modelType.rawValue)
