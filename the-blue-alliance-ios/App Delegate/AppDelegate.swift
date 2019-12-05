@@ -160,15 +160,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Register for remote notifications - don't worry if we fail here
         PushService.registerForRemoteNotifications(nil)
 
-        // Register our myTBA object with Firebase Auth listener
-        // Block gets called on init - ignore the init call
-        var initCall = true
         Auth.auth().addIDTokenDidChangeListener { (_, user) in
-            if initCall {
-                initCall = false
-                return
-            }
-
             if let user = user {
                 user.getIDToken(completion: { (token, _) in
                     self.myTBA.authToken = token
@@ -301,7 +293,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         signIn.delegate = self
 
         // If we're authenticated with Google but don't have a Firebase user, get a Firebase user
-        if signIn.hasPreviousSignIn() {
+        if Auth.auth().currentUser == nil, signIn.hasPreviousSignIn() {
             signIn.restorePreviousSignIn()
         }
     }

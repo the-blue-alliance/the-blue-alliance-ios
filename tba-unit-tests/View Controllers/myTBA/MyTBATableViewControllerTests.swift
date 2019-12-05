@@ -13,6 +13,7 @@ class MyTBATableViewControllerTests: TBATestCase {
         super.setUp()
 
         myTBATableViewController = MyTBATableViewController<Favorite, MyTBAFavorite>(myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        myTBATableViewController.viewDidLoad()
     }
 
     override func tearDown() {
@@ -57,8 +58,9 @@ class MyTBATableViewControllerTests: TBATestCase {
     func test_refresh_delete() {
         myTBA.authToken = "abcd123"
 
-        Favorite.insert([MyTBAFavorite(modelKey: "2018miket", modelType: .event), MyTBAFavorite(modelKey: "2018ctsc_qm1", modelType: .match), MyTBAFavorite(modelKey: "frc7332", modelType: .team)], in: persistentContainer.viewContext)
-        Subscription.insert(modelKey: "2018miket", modelType: .event, notifications: [.awards], in: persistentContainer.viewContext)
+        let event = insertEvent()
+        Favorite.insert([MyTBAFavorite(modelKey: event.key!, modelType: .event), MyTBAFavorite(modelKey: "2018ctsc_qm1", modelType: .match), MyTBAFavorite(modelKey: "frc7332", modelType: .team)], in: persistentContainer.viewContext)
+        Subscription.insert(modelKey: event.key!, modelType: .event, notifications: [.awards], in: persistentContainer.viewContext)
         try! persistentContainer.viewContext.save()
 
         // Sanity check
@@ -76,13 +78,14 @@ class MyTBATableViewControllerTests: TBATestCase {
     }
 
     func test_select() {
-        Favorite.insert([MyTBAFavorite(modelKey: "2018miket", modelType: .event)], in: persistentContainer.viewContext)
+        let event = insertEvent()
+        Favorite.insert([MyTBAFavorite(modelKey: event.key!, modelType: .event)], in: persistentContainer.viewContext)
         waitOneSecond() // Wait for our FRC to refetch
 
-        let ex = expectation(description: "myTBAObjectSelected called")
+        let ex = expectation(description: "eventSelectedExpectation called")
 
         let mockDelegate = MockMyTBATableViewControllerDelegate()
-        mockDelegate.myTBAObjectSelectedExpectation = ex
+        mockDelegate.eventSelectedExpectation = ex
         myTBATableViewController.delegate = mockDelegate
 
         myTBATableViewController.tableView(myTBATableViewController.tableView, didSelectRowAt: IndexPath(item: 0, section: 0))
@@ -90,37 +93,45 @@ class MyTBATableViewControllerTests: TBATestCase {
     }
 
     func test_fetchEvent() {
-        testRefresh(Event.self, key: "2017micmp", fetch: myTBATableViewController.fetchEvent)
+        let model = MyTBAFavorite(modelKey: "2017micmp", modelType: .event)
+        testRefresh(Event.self, model: model, fetch: myTBATableViewController.fetchEvent)
     }
 
     func test_fetchEvent_nil() {
-        testRefresh(Event.self, key: "2017micmp", fetch: myTBATableViewController.fetchEvent, unmodified: true)
+        let model = MyTBAFavorite(modelKey: "2017micmp", modelType: .event)
+        testRefresh(Event.self, model: model, fetch: myTBATableViewController.fetchEvent, unmodified: true)
     }
 
     func test_fetchTeam() {
-        testRefresh(Team.self, key: "frc2337", fetch: myTBATableViewController.fetchTeam)
+        let model = MyTBAFavorite(modelKey: "frc2337", modelType: .team)
+        testRefresh(Team.self, model: model, fetch: myTBATableViewController.fetchTeam)
     }
 
     func test_fetchTeam_nil() {
-        testRefresh(Team.self, key: "frc2337", fetch: myTBATableViewController.fetchTeam, unmodified: true)
+        let model = MyTBAFavorite(modelKey: "frc2337", modelType: .team)
+        testRefresh(Team.self, model: model, fetch: myTBATableViewController.fetchTeam, unmodified: true)
     }
 
     func test_fetchMatch() {
-        testRefresh(Match.self, key: "2017mike2_qm1", fetch: myTBATableViewController.fetchMatch)
+        let model = MyTBAFavorite(modelKey: "2017mike2_qm1", modelType: .match)
+        testRefresh(Match.self, model: model, fetch: myTBATableViewController.fetchMatch)
     }
 
     func test_fetchMatch_nil() {
-        testRefresh(Match.self, key: "2017mike2_qm1", fetch: myTBATableViewController.fetchMatch, unmodified: true)
+        let model = MyTBAFavorite(modelKey: "2017mike2_qm1", modelType: .match)
+        testRefresh(Match.self, model: model, fetch: myTBATableViewController.fetchMatch, unmodified: true)
     }
 
     // MARK: - Private testing methods
 
-    private func testRefresh<T: Managed & NSManagedObject>(_ Type: T.Type, key: String, fetch: ((String) -> TBAKitOperation), unmodified: Bool = false) {
+    private func testRefresh<T: Managed & NSManagedObject>(_ Type: T.Type, model: MyTBAModel, fetch: ((MyTBAModel) -> TBAKitOperation), unmodified: Bool = false) {
+        let key = model.modelKey
+
         // Sanity check pre-fetch
         checkKey(T.self, key: key, shouldBeNil: true)
 
         // Kickoff our fetch
-        let operation = fetch(key)
+        let operation = fetch(model)
         let task = operation.task! as! URLSessionDataTask
         XCTAssertNil(tbaKit.lastModified(task))
 
@@ -160,8 +171,6 @@ class MyTBATableViewControllerTests: TBATestCase {
     }
 
     func test_isDataSourceEmpty() {
-        myTBATableViewController.viewDidLoad()
-
         // No objects, myTBA not auth'd
         XCTAssertFalse(myTBATableViewController.isDataSourceEmpty)
 
@@ -171,7 +180,10 @@ class MyTBATableViewControllerTests: TBATestCase {
 
         // myTBA not auth'd, with objects
         myTBA.authToken = nil
-        Favorite.insert([MyTBAFavorite(modelKey: "2018miket", modelType: .event)], in: persistentContainer.viewContext)
+
+        let event = insertEvent()
+        Favorite.insert([MyTBAFavorite(modelKey: event.key!, modelType: .event)], in: persistentContainer.viewContext)
+
         waitOneSecond() // Wait for our FRC to refetch
         XCTAssertFalse(myTBATableViewController.isDataSourceEmpty)
 
@@ -196,29 +208,39 @@ private class MockMyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyT
     var fetchTeamExpectation: XCTestExpectation?
     var fetchMatchExpectation: XCTestExpectation?
 
-    override func fetchEvent(_ key: String) -> TBAKitOperation {
+    override func fetchEvent(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
         fetchEventExpectation?.fulfill()
-        return super.fetchEvent(key)
+        return super.fetchEvent(myTBAModel)
     }
 
-    override func fetchTeam(_ key: String) -> TBAKitOperation {
+    override func fetchTeam(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
         fetchTeamExpectation?.fulfill()
-        return super.fetchTeam(key)
+        return super.fetchTeam(myTBAModel)
     }
 
-    override func fetchMatch(_ key: String) -> TBAKitOperation {
+    override func fetchMatch(_ myTBAModel: MyTBAModel) -> TBAKitOperation {
         fetchMatchExpectation?.fulfill()
-        return super.fetchMatch(key)
+        return super.fetchMatch(myTBAModel)
     }
 
 }
 
 private class MockMyTBATableViewControllerDelegate: NSObject, MyTBATableViewControllerDelegate {
 
-    var myTBAObjectSelectedExpectation: XCTestExpectation?
+    var eventSelectedExpectation: XCTestExpectation?
+    var teamSelectedExpectation: XCTestExpectation?
+    var matchSelectedExpectation: XCTestExpectation?
 
-    func myTBAObjectSelected(_ myTBAObject: MyTBAEntity) {
-        myTBAObjectSelectedExpectation?.fulfill()
+    func eventSelected(_ event: Event) {
+        eventSelectedExpectation?.fulfill()
+    }
+
+    func teamSelected(_ team: Team) {
+        teamSelectedExpectation?.fulfill()
+    }
+
+    func matchSelected(_ match: Match) {
+        matchSelectedExpectation?.fulfill()
     }
 
 }

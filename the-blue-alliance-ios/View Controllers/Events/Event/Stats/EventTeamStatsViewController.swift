@@ -23,10 +23,12 @@ enum EventTeamStatFilter: String, Comparable, CaseIterable {
 
 class EventTeamStatsTableViewController: TBATableViewController {
 
+    weak var delegate: EventTeamStatsSelectionDelegate?
+
     private let event: Event
 
-    weak var delegate: EventTeamStatsSelectionDelegate?
-    private var dataSource: TableViewDataSource<EventTeamStat, EventTeamStatsTableViewController>!
+    private var dataSource: TableViewDataSource<String, EventTeamStat>!
+    private var fetchedResultsController: TableViewDataSourceFetchedResultsController<EventTeamStat>!
 
     var filter: EventTeamStatFilter {
         didSet {
@@ -60,18 +62,29 @@ class EventTeamStatsTableViewController: TBATableViewController {
         }
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
-        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: View Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        tableView.registerReusableCell(RankingTableViewCell.self)
+
+        setupDataSource()
+        tableView.dataSource = dataSource
+    }
+
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let eventTeamStats = dataSource.object(at: indexPath)
+        guard let eventTeamStats = fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
         delegate?.eventTeamStatSelected(eventTeamStats)
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -79,15 +92,23 @@ class EventTeamStatsTableViewController: TBATableViewController {
     // MARK: Table View Data Source
 
     private func setupDataSource() {
+        let dataSource = UITableViewDiffableDataSource<String, EventTeamStat>(tableView: tableView) { (tableView, indexPath, eventTeamStat) -> UITableViewCell? in
+            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
+            cell.viewModel = RankingCellViewModel(eventTeamStat: eventTeamStat)
+            return cell
+        }
+        self.dataSource = TableViewDataSource(dataSource: dataSource)
+        self.dataSource.delegate = self
+
         let fetchRequest: NSFetchRequest<EventTeamStat> = EventTeamStat.fetchRequest()
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+        fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
     }
 
     private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
+        fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<EventTeamStat>) {
@@ -117,14 +138,6 @@ class EventTeamStatsTableViewController: TBATableViewController {
 
 }
 
-extension EventTeamStatsTableViewController: TableViewDataSourceDelegate {
-
-    func configure(_ cell: RankingTableViewCell, for object: EventTeamStat, at indexPath: IndexPath) {
-        cell.viewModel = RankingCellViewModel(eventTeamStat: object)
-    }
-
-}
-
 extension EventTeamStatsTableViewController: Refreshable {
 
     var refreshKey: String? {
@@ -142,10 +155,7 @@ extension EventTeamStatsTableViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        if let stats = dataSource.fetchedResultsController.fetchedObjects, stats.isEmpty {
-            return true
-        }
-        return false
+        return fetchedResultsController.isDataSourceEmpty
     }
 
     @objc func refresh() {

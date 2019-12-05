@@ -64,10 +64,12 @@ protocol EventDistrictPointsViewControllerDelegate: AnyObject {
 
 private class EventDistrictPointsViewController: TBATableViewController {
 
+    weak var delegate: EventDistrictPointsViewControllerDelegate?
+
     private let event: Event
 
-    weak var delegate: EventDistrictPointsViewControllerDelegate?
-    private var dataSource: TableViewDataSource<DistrictEventPoints, EventDistrictPointsViewController>!
+    private var dataSource: TableViewDataSource<String, DistrictEventPoints>!
+    private var fetchedResultsController: TableViewDataSourceFetchedResultsController<DistrictEventPoints>!
 
     // MARK: - Init
 
@@ -75,44 +77,54 @@ private class EventDistrictPointsViewController: TBATableViewController {
         self.event = event
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
-        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: View Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        tableView.registerReusableCell(RankingTableViewCell.self)
+
+        setupDataSource()
+        tableView.dataSource = dataSource
+    }
 
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let eventPoints = dataSource.object(at: indexPath)
+        guard let eventPoints = fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
         delegate?.districtEventPointsSelected(eventPoints)
     }
 
     // MARK: Table View Data Source
 
     private func setupDataSource() {
+        let dataSource = UITableViewDiffableDataSource<String, DistrictEventPoints>(tableView: tableView) { (tableView, indexPath, districtEventPoints) -> UITableViewCell? in
+            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as RankingTableViewCell
+            cell.viewModel = RankingCellViewModel(rank: "Rank \(indexPath.row + 1)", districtEventPoints: districtEventPoints)
+            return cell
+        }
+        self.dataSource = TableViewDataSource(dataSource: dataSource)
+        self.dataSource.delegate = self
+
         let fetchRequest: NSFetchRequest<DistrictEventPoints> = DistrictEventPoints.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(DistrictEventPoints.total), ascending: false)]
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+        fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<DistrictEventPoints>) {
         request.predicate = NSPredicate(format: "%K == %@",
                                         #keyPath(DistrictEventPoints.eventKey.key), event.key!)
-    }
-
-}
-
-extension EventDistrictPointsViewController: TableViewDataSourceDelegate {
-
-    func configure(_ cell: RankingTableViewCell, for object: DistrictEventPoints, at indexPath: IndexPath) {
-        cell.viewModel = RankingCellViewModel(rank: "Rank \(indexPath.row + 1)", districtEventPoints: object)
     }
 
 }
@@ -133,10 +145,7 @@ extension EventDistrictPointsViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        if let points = dataSource.fetchedResultsController.fetchedObjects, points.isEmpty {
-            return true
-        }
-        return false
+        return fetchedResultsController.isDataSourceEmpty
     }
 
     @objc func refresh() {

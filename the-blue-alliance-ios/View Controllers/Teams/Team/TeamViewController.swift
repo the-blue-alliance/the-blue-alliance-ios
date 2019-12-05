@@ -230,7 +230,9 @@ extension TeamViewController: UIViewControllerPreviewingDelegate {
             return nil
         }
 
-        let media = mediaViewController.dataSource.object(at: indexPath)
+        guard let media = mediaViewController.fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
+            return nil
+        }
 
         let imageViewController = self.imageViewController(media: media, peek: true)
         if let image = media.image {

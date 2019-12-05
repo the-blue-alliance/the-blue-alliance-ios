@@ -22,7 +22,9 @@ protocol TeamsViewControllerDataSourceConfiguration {
 class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsViewControllerDataSourceConfiguration {
 
     weak var delegate: TeamsViewControllerDelegate?
-    private var dataSource: TableViewDataSource<Team, TeamsViewController>!
+
+    private var dataSource: TableViewDataSource<String, Team>!
+    private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Team>!
 
     lazy private var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
@@ -32,53 +34,28 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
         return searchController
     }()
 
-    // MARK: Init
-
-    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
-        setupDataSource()
-        updateInterface()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.tableHeaderView = searchController.searchBar
-
         tableView.registerReusableCell(TeamTableViewCell.self)
+
+        setupDataSource()
+        tableView.dataSource = dataSource
+
+        tableView.tableHeaderView = searchController.searchBar
 
         // Used to make sure the UISearchBar stays in our root VC (this VC) when presented and doesn't overlay in push
         definesPresentationContext = true
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        updateInterface()
-    }
-
-    // MARK: - Interface Methods
-
-    func updateInterface() {
-        searchController.searchBar.placeholder = {
-            guard let numberOfTeams = dataSource.fetchedResultsController.fetchedObjects?.count else {
-                return nil
-            }
-            return "Search \(numberOfTeams) Teams"
-        }()
-    }
-
     // MARK: UITableView Delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let team = dataSource.object(at: indexPath)
+        guard let team = fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
         delegate?.teamSelected(team)
     }
 
@@ -103,10 +80,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
     }
 
     var isDataSourceEmpty: Bool {
-        if let teams = dataSource.fetchedResultsController.fetchedObjects, teams.isEmpty {
-            return true
-        }
-        return false
+        return fetchedResultsController.isDataSourceEmpty
     }
 
     @objc func refresh() {
@@ -162,20 +136,25 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
     // MARK: Table View Data Source
 
     private func setupDataSource() {
+        let dataSource = UITableViewDiffableDataSource<String, Team>(tableView: tableView) { (tableView, indexPath, team) -> UITableViewCell? in
+            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as TeamTableViewCell
+            cell.viewModel = TeamCellViewModel(team: team)
+            return cell
+        }
+        self.dataSource = TableViewDataSource(dataSource: dataSource)
+        self.dataSource.delegate = self
+
         let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Team.teamNumber), ascending: true)]
         fetchRequest.fetchBatchSize = 50
         setupFetchRequest(fetchRequest)
 
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                             managedObjectContext: persistentContainer.viewContext,
-                                             sectionNameKeyPath: nil,
-                                             cacheName: nil)
-        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
     }
 
     private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
+        fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<Team>) {
@@ -191,12 +170,6 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [searchPredicate, fetchRequestPredicate].compactMap({ $0 }))
     }
 
-    // MARK: TableViewDataSourceDelegate
-
-    func controllerDidChangeContent() {
-        updateInterface()
-    }
-
     // MARK: - EventsViewControllerDataSourceConfiguration
 
     var fetchRequestPredicate: NSPredicate? {
@@ -205,20 +178,10 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
 
 }
 
-extension TeamsViewController: TableViewDataSourceDelegate {
-
-    func configure(_ cell: TeamTableViewCell, for object: Team, at indexPath: IndexPath) {
-        cell.viewModel = TeamCellViewModel(team: object)
-    }
-
-}
-
-
 extension TeamsViewController: UISearchResultsUpdating {
 
     public func updateSearchResults(for searchController: UISearchController) {
         updateDataSource()
-        updateInterface()
     }
 
 }

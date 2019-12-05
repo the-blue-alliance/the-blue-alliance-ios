@@ -82,11 +82,13 @@ protocol EventAwardsViewControllerDelegate: AnyObject {
 
 class EventAwardsViewController: TBATableViewController {
 
+    weak var delegate: EventAwardsViewControllerDelegate?
+
     private let event: Event
     private let teamKey: TeamKey?
 
-    weak var delegate: EventAwardsViewControllerDelegate?
-    private var dataSource: TableViewDataSource<Award, EventAwardsViewController>!
+    private var dataSource: TableViewDataSource<String, Award>!
+    private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Award>!
 
     // MARK: - Init
 
@@ -95,51 +97,56 @@ class EventAwardsViewController: TBATableViewController {
         self.teamKey = teamKey
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
-        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: View Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        tableView.registerReusableCell(AwardTableViewCell.self)
+
+        setupDataSource()
+        tableView.dataSource = dataSource
+    }
+
     // MARK: Table View Data Source
 
     private func setupDataSource() {
+        let dataSource = UITableViewDiffableDataSource<String, Award>(tableView: tableView) { (tableView, indexPath, award) -> UITableViewCell? in
+            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as AwardTableViewCell
+            cell.selectionStyle = .none
+            cell.viewModel = AwardCellViewModel(award: award)
+            cell.teamKeySelected = { [weak self] (teamKey) in
+                guard let context = self?.persistentContainer.viewContext else {
+                    return
+                }
+                let teamKey = TeamKey.insert(withKey: teamKey, in: context)
+                self?.delegate?.teamKeySelected(teamKey)
+            }
+            return cell
+        }
+        self.dataSource = TableViewDataSource(dataSource: dataSource)
+        self.dataSource.delegate = self
+
         let fetchRequest: NSFetchRequest<Award> = Award.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Award.awardType), ascending: true)]
-        setupFetchRequest(fetchRequest)
-
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        dataSource = TableViewDataSource(fetchedResultsController: frc, delegate: self)
-    }
-
-    private func setupFetchRequest(_ request: NSFetchRequest<Award>) {
         if let teamKey = teamKey {
             // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/pull/169
-            request.predicate = NSPredicate(format: "%K == %@ AND (ANY recipients.teamKey.key == %@)",
-                                            #keyPath(Award.event), event,
-                                            teamKey.key!)
+            fetchRequest.predicate = NSPredicate(format: "%K == %@ AND (ANY recipients.teamKey.key == %@)",
+                                                 #keyPath(Award.event), event,
+                                                 teamKey.key!)
         } else {
-            request.predicate = NSPredicate(format: "%K == %@",
-                                            #keyPath(Award.event), event)
+            fetchRequest.predicate = NSPredicate(format: "%K == %@",
+                                                 #keyPath(Award.event), event)
         }
-    }
 
-}
-
-extension EventAwardsViewController: TableViewDataSourceDelegate {
-
-    func configure(_ cell: AwardTableViewCell, for object: Award, at indexPath: IndexPath) {
-        cell.selectionStyle = .none
-        cell.viewModel = AwardCellViewModel(award: object)
-        cell.teamKeySelected = { [weak self] (teamKey) in
-            guard let context = self?.persistentContainer.viewContext else {
-                return
-            }
-            let teamKey = TeamKey.insert(withKey: teamKey, in: context)
-            self?.delegate?.teamKeySelected(teamKey)
-        }
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
     }
 
 }
@@ -160,10 +167,7 @@ extension EventAwardsViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        if let awards = dataSource.fetchedResultsController.fetchedObjects, awards.isEmpty {
-            return true
-        }
-        return false
+        return fetchedResultsController.isDataSourceEmpty
     }
 
     @objc func refresh() {

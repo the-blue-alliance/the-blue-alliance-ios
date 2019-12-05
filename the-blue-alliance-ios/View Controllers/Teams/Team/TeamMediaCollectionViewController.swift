@@ -15,14 +15,15 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     private let team: Team
     private let fetchMediaOperationQueue = OperationQueue()
 
+    weak var delegate: TeamMediaCollectionViewControllerDelegate?
     var year: Int? {
         didSet {
             cancelRefresh()
             updateDataSource()
         }
     }
-    var dataSource: CollectionViewDataSource<TeamMedia, TeamMediaCollectionViewController>!
-    weak var delegate: TeamMediaCollectionViewControllerDelegate?
+    private var dataSource: CollectionViewDataSource<String, TeamMedia>!
+    var fetchedResultsController: CollectionViewDataSourceFetchedResultsController<TeamMedia>!
 
     // MARK: Init
 
@@ -31,8 +32,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         self.year = year
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-
-        setupDataSource()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -45,6 +44,9 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         super.viewDidLoad()
 
         collectionView.registerReusableCell(MediaCollectionViewCell.self)
+
+        setupDataSource()
+        collectionView.dataSource = dataSource
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -66,23 +68,41 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     // MARK: UICollectionView Delegate
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let media = dataSource.object(at: indexPath)
+        guard let media = fetchedResultsController.dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
         delegate?.mediaSelected(media)
     }
 
     // MARK: Table View Data Source
 
     private func setupDataSource() {
+        let dataSource = UICollectionViewDiffableDataSource<String, TeamMedia>(collectionView: collectionView) { [weak self ] (collectionView, indexPath, media) -> UICollectionViewCell? in
+            let cell = collectionView.dequeueReusableCell(indexPath: indexPath) as MediaCollectionViewCell
+            if let image = media.image {
+                cell.state = .loaded(image)
+            } else if let error = media.imageError {
+                cell.state = .error("Error loading media - \(error.localizedDescription)")
+            } else if self?.isRefreshing ?? false {
+                cell.state = .loading
+            } else {
+                cell.state = .error("Error loading media - unknown error")
+            }
+            return cell
+        }
+        self.dataSource = CollectionViewDataSource(dataSource: dataSource)
+        self.dataSource.delegate = self
+
         let fetchRequest: NSFetchRequest<TeamMedia> = TeamMedia.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(TeamMedia.type), ascending: true)]
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        dataSource = CollectionViewDataSource(fetchedResultsController: frc, delegate: self)
+        fetchedResultsController = CollectionViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
     }
 
     private func updateDataSource() {
-        dataSource.reconfigureFetchRequest(setupFetchRequest(_:))
+        fetchedResultsController.reconfigureFetchRequest(setupFetchRequest(_:))
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<TeamMedia>) {
@@ -111,7 +131,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     // MARK: - Private Methods
 
     private func indexPath(for media: TeamMedia) -> IndexPath? {
-        return dataSource.fetchedResultsController.indexPath(forObject: media)
+        return fetchedResultsController.fetchedResultsController.indexPath(forObject: media)
     }
 
 }
@@ -149,22 +169,6 @@ extension TeamMediaCollectionViewController: UICollectionViewDelegateFlowLayout 
 
 }
 
-extension TeamMediaCollectionViewController: CollectionViewDataSourceDelegate {
-
-    func configure(_ cell: MediaCollectionViewCell, for object: TeamMedia, at indexPath: IndexPath) {
-        if let image = object.image {
-            cell.state = .loaded(image)
-        } else if let error = object.imageError {
-            cell.state = .error("Error loading media - \(error.localizedDescription)")
-        } else if isRefreshing {
-            cell.state = .loading
-        } else {
-            cell.state = .error("Error loading media - unknown error")
-        }
-    }
-
-}
-
 extension TeamMediaCollectionViewController: Refreshable {
 
     var refreshKey: String? {
@@ -190,10 +194,7 @@ extension TeamMediaCollectionViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        if let media = dataSource.fetchedResultsController.fetchedObjects, media.isEmpty {
-            return true
-        }
-        return false
+        return fetchedResultsController.isDataSourceEmpty
     }
 
     @objc func refresh() {
