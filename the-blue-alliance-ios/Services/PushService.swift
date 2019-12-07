@@ -8,73 +8,37 @@ import UserNotifications
 // Has to be an NSObject subclass so we can be a UNUserNotificationCenterDelegate
 class PushService: NSObject {
 
-    private enum DefaultKeys: String {
-        case pendingRegisterPushToken = "kPendingPushToken"
-    }
-
-    private var pendingRegisterPushToken: String? {
-        get {
-            return userDefaults.string(forKey: DefaultKeys.pendingRegisterPushToken.rawValue)
-        }
-        set {
-            userDefaults.set(newValue, forKey: DefaultKeys.pendingRegisterPushToken.rawValue)
-            userDefaults.synchronize()
-        }
-    }
-
-    private var messaging: Messaging
     private var myTBA: MyTBA
     internal var retryService: RetryService
-    private var userDefaults: UserDefaults
 
     private let operationQueue = OperationQueue()
 
-    init(messaging: Messaging, myTBA: MyTBA, retryService: RetryService, userDefaults: UserDefaults) {
-        self.messaging = messaging
+    init(myTBA: MyTBA, retryService: RetryService) {
         self.myTBA = myTBA
         self.retryService = retryService
-        self.userDefaults = userDefaults
 
         super.init()
     }
 
-    fileprivate func registerPushToken(_ token: String) {
+    fileprivate func registerPushToken() {
         if !myTBA.isAuthenticated {
-            // Not authenticated to myTBA - save token for registration once we're auth'd
-            pendingRegisterPushToken = token
-        } else {
-            let op = myTBA.register(token) { (_, error) in
-                if let error = error {
-                    Crashlytics.sharedInstance().recordError(error)
-                    if !self.retryService.isRetryRegistered {
-                        DispatchQueue.main.async {
-                            self.registerRetryable()
-                        }
+            // Not authenticated to myTBA - we'll try again when we're auth'd
+            return
+        }
+        let registerOperation = myTBA.register { (_, error) in
+            if let error = error {
+                Crashlytics.sharedInstance().recordError(error)
+                if !self.retryService.isRetryRegistered {
+                    DispatchQueue.main.async {
+                        self.registerRetryable()
                     }
-                } else {
-                    self.unregisterRetryable()
                 }
-                // Either save or remove our pending push token as necessary
-                self.pendingRegisterPushToken = (error != nil ? token : nil)
-            }
-            if let op = op {
-                operationQueue.addOperation(op)
+            } else {
+                self.unregisterRetryable()
             }
         }
-    }
-
-    func registerFCMToken() {
-        guard let fcmToken = messaging.fcmToken else {
-            return
-        }
-        registerPushToken(fcmToken)
-    }
-
-    private func registerPendingPushToken() {
-        guard let pendingRegisterPushToken = pendingRegisterPushToken else {
-            return
-        }
-        registerPushToken(pendingRegisterPushToken)
+        guard let op = registerOperation else { return }
+        operationQueue.addOperation(op)
     }
 
     static func requestAuthorizationForNotifications(_ completion: ((Bool, Error?) -> Void)?) {
@@ -98,11 +62,13 @@ class PushService: NSObject {
 extension PushService: MyTBAAuthenticationObservable {
 
     func authenticated() {
-        registerFCMToken()
+        registerPushToken()
     }
 
     func unauthenticated() {
-        // unregister isn't asynchronous, so we don't subscribe to it
+        if self.retryService.isRetryRegistered {
+            self.unregisterRetryable()
+        }
     }
 }
 
@@ -110,7 +76,7 @@ extension PushService: MessagingDelegate {
 
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
         print("Firebase registration token: \(fcmToken)")
-        registerPushToken(fcmToken)
+        registerPushToken()
     }
 
     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
@@ -151,7 +117,7 @@ extension PushService: Retryable {
     }
 
     func retry() {
-        registerPendingPushToken()
+        registerPushToken()
     }
 
 }

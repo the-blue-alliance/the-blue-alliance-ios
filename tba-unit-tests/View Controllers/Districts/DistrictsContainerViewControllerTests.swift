@@ -9,8 +9,7 @@ class DistrictsContainerViewControllerTests: TBATestCase {
     override func setUp() {
         super.setUp()
 
-        districtsContainerViewController = DistrictsContainerViewController(messaging: messaging,
-                                                                            myTBA: myTBA,
+        districtsContainerViewController = DistrictsContainerViewController(myTBA: myTBA,
                                                                             statusService: statusService,
                                                                             urlOpener: urlOpener,
                                                                             persistentContainer: persistentContainer,

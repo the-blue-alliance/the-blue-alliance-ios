@@ -113,7 +113,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
     }
 
     private func fetchAllTeams(operationChanged: @escaping (TBAKitOperation, Int, [TBATeam]) -> Void, page: Int, completion: @escaping (Error?) -> Void) -> TBAKitOperation {
-        return tbaKit.fetchTeams(page: page, completion: { (result, notModified) in
+        return tbaKit.fetchTeams(page: page) { (result, notModified) in
             switch result {
             case .failure(let error):
                 completion(error)
@@ -124,7 +124,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
                     operationChanged(self.fetchAllTeams(operationChanged: operationChanged, page: page + 1, completion: completion), page, teams)
                 }
             }
-        })
+        }
     }
 
     // MARK: - Stateful

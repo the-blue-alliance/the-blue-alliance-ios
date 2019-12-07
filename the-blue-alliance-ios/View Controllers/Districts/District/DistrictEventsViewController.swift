@@ -38,7 +38,7 @@ class DistrictEventsViewController: EventsViewController {
 
     @objc override func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistrictEvents(key: district.key!, completion: { (result, notModified) in
+        operation = tbaKit.fetchDistrictEvents(key: district.key!) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let events = try? result.get() {
@@ -48,7 +48,7 @@ class DistrictEventsViewController: EventsViewController {
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())
-        })
+        }
         addRefreshOperations([operation])
     }
 

@@ -181,7 +181,7 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
 
     @objc override func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEvents(year: year, completion: { (result, notModified) in
+        operation = tbaKit.fetchEvents(year: year) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let events = try? result.get() {
@@ -195,7 +195,7 @@ private class WeeksSelectTableViewController: SelectTableViewController<EventWee
             DispatchQueue.main.async {
                 self.updateWeeks(in: self.persistentContainer.viewContext)
             }
-        })
+        }
         addRefreshOperations([operation])
     }
 

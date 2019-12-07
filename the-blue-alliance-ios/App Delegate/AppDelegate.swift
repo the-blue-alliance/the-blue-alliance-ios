@@ -24,28 +24,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy private var rootSplitViewController: UISplitViewController = { [unowned self] in
         let splitViewController = UISplitViewController()
 
-        let eventsViewController = EventsContainerViewController(messaging: messaging,
-                                                                 myTBA: myTBA,
+        let eventsViewController = EventsContainerViewController(myTBA: myTBA,
                                                                  statusService: statusService,
                                                                  urlOpener: urlOpener,
                                                                  persistentContainer: persistentContainer,
                                                                  tbaKit: tbaKit,
                                                                  userDefaults: userDefaults)
-        let teamsViewController = TeamsContainerViewController(messaging: messaging,
-                                                               myTBA: myTBA,
+        let teamsViewController = TeamsContainerViewController(myTBA: myTBA,
                                                                statusService: statusService,
                                                                urlOpener: urlOpener,
                                                                persistentContainer: persistentContainer,
                                                                tbaKit: tbaKit,
                                                                userDefaults: userDefaults)
-        let districtsViewController = DistrictsContainerViewController(messaging: messaging,
-                                                                       myTBA: myTBA,
+        let districtsViewController = DistrictsContainerViewController(myTBA: myTBA,
                                                                        statusService: statusService,
                                                                        urlOpener: urlOpener,
                                                                        persistentContainer: persistentContainer,
                                                                        tbaKit: tbaKit,
                                                                        userDefaults: userDefaults)
-        let settingsViewController = SettingsViewController(messaging: messaging,
+        let settingsViewController = SettingsViewController(fcmTokenProvider: messaging,
                                                             metadata: reactNativeMetadata,
                                                             myTBA: myTBA,
                                                             pushService: pushService,
@@ -53,8 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                             persistentContainer: persistentContainer,
                                                             tbaKit: tbaKit,
                                                             userDefaults: userDefaults)
-        let myTBAViewController = MyTBAViewController(messaging: messaging,
-                                                      myTBA: myTBA,
+        let myTBAViewController = MyTBAViewController(myTBA: myTBA,
                                                       statusService: statusService,
                                                       urlOpener: urlOpener,
                                                       persistentContainer: persistentContainer,
@@ -89,7 +85,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     lazy var messaging: Messaging = Messaging.messaging()
     lazy var myTBA: MyTBA = {
-        return MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString, deviceName: UIDevice.current.name)
+        return MyTBA(uuid: UIDevice.current.identifierForVendor!.uuidString,
+                     deviceName: UIDevice.current.name,
+                     fcmTokenProvider: messaging)
     }()
     lazy var persistentContainer: TBAPersistenceContainer = {
         return TBAPersistenceContainer()
@@ -99,10 +97,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let urlOpener: URLOpener = UIApplication.shared
 
     lazy var pushService: PushService = {
-        return PushService(messaging: messaging,
-                           myTBA: myTBA,
-                           retryService: RetryService(),
-                           userDefaults: userDefaults)
+        return PushService(myTBA: myTBA,
+                           retryService: RetryService())
     }()
     lazy var statusService: StatusService = {
         return StatusService(persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
@@ -162,9 +158,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         Auth.auth().addIDTokenDidChangeListener { (_, user) in
             if let user = user {
-                user.getIDToken(completion: { (token, _) in
+                user.getIDToken { (token, _) in
                     self.myTBA.authToken = token
-                })
+                }
             } else {
                 self.myTBA.authToken = nil
             }
@@ -471,3 +467,5 @@ extension AppDelegate: UISplitViewControllerDelegate {
 
 // Make Crashlytics conform to ErrorRecorder for TBAData
 extension Crashlytics: ErrorRecorder {}
+// Make Messaging conform to FCMTokenProvider for MyTBAKit
+extension Messaging: FCMTokenProvider {}

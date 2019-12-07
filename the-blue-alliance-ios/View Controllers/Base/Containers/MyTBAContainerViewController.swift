@@ -1,5 +1,4 @@
 import CoreData
-import FirebaseMessaging
 import Foundation
 import MyTBAKit
 import TBAKit
@@ -7,7 +6,6 @@ import UIKit
 
 class MyTBAContainerViewController: ContainerViewController, Subscribable {
 
-    let messaging: Messaging
     let myTBA: MyTBA
 
     lazy var favoriteBarButtonItem: UIBarButtonItem = {
@@ -20,8 +18,7 @@ class MyTBAContainerViewController: ContainerViewController, Subscribable {
 
     // MARK: - Init
 
-    init(viewControllers: [ContainableViewController], navigationTitle: String? = nil, navigationSubtitle: String?  = nil, segmentedControlTitles: [String]? = nil, messaging: Messaging, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        self.messaging = messaging
+    init(viewControllers: [ContainableViewController], navigationTitle: String? = nil, navigationSubtitle: String?  = nil, segmentedControlTitles: [String]? = nil, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.myTBA = myTBA
 
         super.init(viewControllers: viewControllers, navigationTitle: navigationTitle, navigationSubtitle: navigationSubtitle, segmentedControlTitles: segmentedControlTitles, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)

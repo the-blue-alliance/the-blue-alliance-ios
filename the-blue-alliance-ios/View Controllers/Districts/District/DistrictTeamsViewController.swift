@@ -40,7 +40,7 @@ class DistrictTeamsViewController: TeamsViewController {
 
     @objc override func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistrictTeams(key: district.key!, completion: { (result, notModified) in
+        operation = tbaKit.fetchDistrictTeams(key: district.key!) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let teams = try? result.get() {
@@ -50,7 +50,7 @@ class DistrictTeamsViewController: TeamsViewController {
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())
-        })
+        }
         addRefreshOperations([operation])
     }
 

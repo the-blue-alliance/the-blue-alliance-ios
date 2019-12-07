@@ -1,5 +1,4 @@
 import CoreData
-import FirebaseMessaging
 import MyTBAKitTesting
 import TBAData
 import TBADataTesting
@@ -10,10 +9,10 @@ import XCTest
 class TBATestCase: TBADataTestCase {
 
     var testBundle: Bundle!
-    var messaging: Messaging!
+    var fcmTokenProvider: MockFCMTokenProvider!
     var myTBA: MockMyTBA!
-    var tbaKit: MockTBAKit!
     var userDefaults: UserDefaults!
+    var tbaKit: MockTBAKit!
     var urlOpener: MockURLOpener!
     var reactNativeMetadata: ReactNativeMetadata!
     var pushService: PushService!
@@ -23,12 +22,12 @@ class TBATestCase: TBADataTestCase {
         super.setUp()
 
         testBundle = Bundle(for: type(of: self))
+        fcmTokenProvider = MockFCMTokenProvider(fcmToken: nil)
+        myTBA = MockMyTBA(fcmTokenProvider: fcmTokenProvider)
         userDefaults = UserDefaults(suiteName: "TBATests")
-        messaging = Messaging.messaging()
-        myTBA = MockMyTBA()
         tbaKit = MockTBAKit(userDefaults: userDefaults)
         urlOpener = MockURLOpener()
-        pushService = PushService(messaging: Messaging.messaging(), myTBA: myTBA, retryService: RetryService(), userDefaults: userDefaults)
+        pushService = PushService(myTBA: myTBA, retryService: RetryService())
         statusService = StatusService(bundle: StatusBundle.bundle, persistentContainer: persistentContainer, retryService: RetryService(), tbaKit: tbaKit)
     }
 

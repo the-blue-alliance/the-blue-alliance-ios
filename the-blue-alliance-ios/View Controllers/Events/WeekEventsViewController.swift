@@ -67,7 +67,7 @@ class WeekEventsViewController: EventsViewController {
         }
 
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEvents(year: year, completion: { [unowned self] (result, notModified) in
+        operation = tbaKit.fetchEvents(year: year) { [unowned self] (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let events = try? result.get() {
@@ -88,7 +88,7 @@ class WeekEventsViewController: EventsViewController {
                     }
                 }
             }
-        })
+        }
         addRefreshOperations([operation])
     }
 

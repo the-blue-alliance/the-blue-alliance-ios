@@ -6,7 +6,7 @@ class MyTBAPreferencesTests: MyTBATestCase {
 
     func test_preferences() {
         let ex = expectation(description: "model/setPreferences called")
-        let operation = myTBA.updatePreferences(deviceKey: nil, modelKey: "2018ckw0", modelType: .event, favorite: true, notifications: []) { (favoriteResponse, subscriptionResponse, error) in
+        let operation = myTBA.updatePreferences(modelKey: "2018ckw0", modelType: .event, favorite: true, notifications: []) { (favoriteResponse, subscriptionResponse, error) in
             XCTAssertNotNil(favoriteResponse)
             XCTAssertNotNil(subscriptionResponse)
             XCTAssertNil(error)
@@ -18,7 +18,7 @@ class MyTBAPreferencesTests: MyTBATestCase {
 
     func test_preferences_error() {
         let ex = expectation(description: "model/setPreferences called")
-        let operation = myTBA.updatePreferences(deviceKey: "abc", modelKey: "2018ckw0", modelType: .event, favorite: true, notifications: []) { (favoriteResponse, subscriptionResponse, error) in
+        let operation = myTBA.updatePreferences(modelKey: "2018ckw0", modelType: .event, favorite: true, notifications: []) { (favoriteResponse, subscriptionResponse, error) in
             XCTAssertNotNil(error)
             XCTAssertNil(favoriteResponse)
             XCTAssertNil(subscriptionResponse)

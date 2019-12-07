@@ -9,19 +9,21 @@ public struct MyTBARegisterRequest: Codable {
 
 extension MyTBA {
 
-    public func register(_ token: String, completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
-        return registerUnregister("register", token: token, completion: completion)
+    public func register(completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
+        return registerUnregister("register", completion: completion)
     }
 
-    public func unregister(_ token: String, completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
-        return registerUnregister("unregister", token: token, completion: completion)
+    public func unregister(completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
+        return registerUnregister("unregister", completion: completion)
     }
 
-    private func registerUnregister(_ method: String, token: String, completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
+    private func registerUnregister(_ method: String, completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
+        guard let token = fcmToken else {
+            return nil
+        }
         let registration = MyTBARegisterRequest(deviceUuid: uuid, mobileId: token, name: deviceName)
 
         guard let encodedRegistration = try? MyTBA.jsonEncoder.encode(registration) else {
-            completion(nil, MyTBAError.error(nil, "Unable to update myTBA registration - invalid data"))
             return nil
         }
         return callApi(method: method, bodyData: encodedRegistration, completion: completion)

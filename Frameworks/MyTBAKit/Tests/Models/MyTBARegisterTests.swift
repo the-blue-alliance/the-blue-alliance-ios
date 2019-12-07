@@ -5,8 +5,10 @@ import XCTest
 class MyTBARegisterTests: MyTBATestCase {
 
     func test_register() {
+        fcmTokenProvider.fcmToken = "abc"
+
         let ex = expectation(description: "Register called")
-        let operation = myTBA.register("abcd123") { (_, error) in
+        let operation = myTBA.register { (_, error) in
             XCTAssertNil(error)
             ex.fulfill()
         }
@@ -15,8 +17,10 @@ class MyTBARegisterTests: MyTBATestCase {
     }
 
     func test_register_error() {
+        fcmTokenProvider.fcmToken = "abc"
+
         let ex = expectation(description: "Register called")
-        let operation = myTBA.register("abcd123") { (_, error) in
+        let operation = myTBA.register { (_, error) in
             XCTAssertNotNil(error)
             ex.fulfill()
         }
