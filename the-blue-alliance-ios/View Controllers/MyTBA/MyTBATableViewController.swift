@@ -127,6 +127,16 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
         var s = NSDiffableDataSourceSnapshot<MyTBASection, NSManagedObject>()
         for section in snapshot.sectionIdentifiers.compactMap({ $0 as? String }) {
+            let items = snapshot.itemIdentifiersInSection(withIdentifier: section)
+                .compactMap { $0 as? NSManagedObjectID }
+                .compactMap { fetchedResultsController.managedObjectContext.object(with: $0) }
+                .compactMap { $0 as? T }
+                .compactMap { $0.tbaObject }
+            // Only add our section if we have items in the section
+            if items.isEmpty {
+                continue
+            }
+
             guard let modelTypeRaw = Int(section) else {
                 continue
             }
@@ -136,13 +146,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             guard let sectionType = MyTBASection.section(for: modelType) else {
                 continue
             }
+
             s.appendSections([sectionType])
-            s.appendItems(snapshot.itemIdentifiersInSection(withIdentifier: section)
-                .compactMap { $0 as? NSManagedObjectID }
-                .compactMap { fetchedResultsController.managedObjectContext.object(with: $0) }
-                .compactMap { $0 as? T }
-                .compactMap { $0.tbaObject },
-                          toSection: sectionType)
+            s.appendItems(items, toSection: sectionType)
         }
         dataSource.apply(s, animatingDifferences: false)
     }
