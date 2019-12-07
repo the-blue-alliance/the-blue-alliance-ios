@@ -21,7 +21,7 @@ class MatchViewController: MyTBAContainerViewController {
 
     // MARK: Init
 
-    init(match: Match, teamKey: TeamKey? = nil, statusService: StatusService, urlOpener: URLOpener, messaging: Messaging, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(match: Match, teamKey: TeamKey? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.match = match
         self.statusService = statusService
         self.urlOpener = urlOpener
@@ -39,7 +39,6 @@ class MatchViewController: MyTBAContainerViewController {
             navigationTitle: "\(match.friendlyName)",
             navigationSubtitle: "@ \(match.event?.friendlyNameWithYear ?? match.key!)", // TODO: Use EventKey
             segmentedControlTitles: titles,
-            messaging: messaging,
             myTBA: myTBA,
             persistentContainer: persistentContainer,
             tbaKit: tbaKit,
@@ -71,7 +70,7 @@ extension MatchViewController: MatchSummaryViewDelegate {
         // get team key that matches the target teamNumber
         guard let teamKey = match.teamKeys.first(where: { $0.teamNumber == "\(teamNumber)"}) else { return }
         
-        let teamAtEventVC = TeamAtEventViewController(teamKey: teamKey, event: event, messaging: messaging, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventVC = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(teamAtEventVC, animated: true)
     }
     

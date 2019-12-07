@@ -120,7 +120,7 @@ extension TeamStatsViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventTeamStats(key: event.key!, completion: { (result, notModified) in
+        operation = tbaKit.fetchEventTeamStats(key: event.key!) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let stats = try? result.get() {
@@ -130,7 +130,7 @@ extension TeamStatsViewController: Refreshable {
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())
-        })
+        }
         addRefreshOperations([operation])
     }
 

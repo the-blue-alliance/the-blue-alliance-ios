@@ -224,7 +224,7 @@ extension TeamMediaCollectionViewController: Refreshable {
         var finalOperation: Operation!
 
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchTeamMedia(key: team.key!, year: year, completion: { (result, notModified) in
+        operation = tbaKit.fetchTeamMedia(key: team.key!, year: year) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let media = try? result.get() {
@@ -234,7 +234,7 @@ extension TeamMediaCollectionViewController: Refreshable {
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())
-        })
+        }
         let fetchMediaOperation = BlockOperation {
             guard let teamMedia = self.team.media?.allObjects as? [TeamMedia] else {
                 return

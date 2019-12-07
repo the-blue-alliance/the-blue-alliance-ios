@@ -1,6 +1,5 @@
 import CoreData
 import Crashlytics
-import FirebaseMessaging
 import MyTBAKit
 import TBAData
 import UIKit
@@ -33,7 +32,6 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
         }
     }
 
-    let messaging: Messaging
     let myTBA: MyTBA
     let persistentContainer: NSPersistentContainer
 
@@ -62,9 +60,8 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
                                                           action: #selector(save))
     internal var saveActivityIndicatorBarButtonItem = UIBarButtonItem.activityIndicatorBarButtonItem()
 
-    init(subscribableModel: MyTBASubscribable, messaging: Messaging, myTBA: MyTBA, persistentContainer: NSPersistentContainer) {
+    init(subscribableModel: MyTBASubscribable, myTBA: MyTBA, persistentContainer: NSPersistentContainer) {
         self.subscribableModel = subscribableModel
-        self.messaging = messaging
         self.myTBA = myTBA
         self.persistentContainer = persistentContainer
 
@@ -127,10 +124,7 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
     }
 
     @objc func save() {
-        isSaving = true
-
-        let fcmToken = messaging.fcmToken
-        preferencesOperation = myTBA.updatePreferences(deviceKey: fcmToken, modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, favorite: isFavorite, notifications: notifications, completion: { [weak self] (favoriteResponse, subscriptionResponse, error) in
+        preferencesOperation = myTBA.updatePreferences(modelKey: subscribableModel.modelKey, modelType: subscribableModel.modelType, favorite: isFavorite, notifications: notifications) { [weak self] (favoriteResponse, subscriptionResponse, error) in
             guard let self = self else { return }
             let context = self.persistentContainer.newBackgroundContext()
 
@@ -162,7 +156,7 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
                     }
                 }
             }, errorRecorder: Crashlytics.sharedInstance())
-        })
+        }
 
         let dismissOperation = BlockOperation(block: { [weak self] in
             guard let self = self else { return }
@@ -178,9 +172,11 @@ class MyTBAPreferenceViewController: UITableViewController, UIAdaptivePresentati
                 self.dismiss(animated: true)
             }
         })
-        dismissOperation.addDependency(preferencesOperation!)
+        guard let op = preferencesOperation else { return }
 
-        operationQueue.addOperations([preferencesOperation!, dismissOperation], waitUntilFinished: false)
+        isSaving = true
+        dismissOperation.addDependency(op)
+        operationQueue.addOperations([op, dismissOperation], waitUntilFinished: false)
     }
 
     @objc func close() {

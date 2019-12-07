@@ -241,7 +241,7 @@ extension EventInfoViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEvent(key: event.key!, completion: { (result, notModified) in
+        operation = tbaKit.fetchEvent(key: event.key!) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 switch result {
@@ -257,7 +257,7 @@ extension EventInfoViewController: Refreshable {
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())
-        })
+        }
         addRefreshOperations([operation])
     }
 

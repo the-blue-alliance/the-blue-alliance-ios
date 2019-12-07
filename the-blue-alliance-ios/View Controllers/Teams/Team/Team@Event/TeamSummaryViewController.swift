@@ -484,7 +484,7 @@ extension TeamSummaryViewController: Refreshable {
 
         // Refresh Team@Event status
         var teamStatusOperation: TBAKitOperation!
-        teamStatusOperation = tbaKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!, completion: { (result, notModified) in
+        teamStatusOperation = tbaKit.fetchTeamStatus(key: teamKey.key!, eventKey: event.key!) { (result, notModified) in
             switch result {
             case .success(let status):
                 if let status = status {
@@ -504,12 +504,12 @@ extension TeamSummaryViewController: Refreshable {
             default:
                 break
             }
-        })
+        }
 
         // Refresh awards
         let teamKeyKey = teamKey.key!
         var awardsOperation: TBAKitOperation!
-        awardsOperation = tbaKit.fetchTeamAwards(key: teamKeyKey, eventKey: event.key!, completion: { (result, notModified) in
+        awardsOperation = tbaKit.fetchTeamAwards(key: teamKeyKey, eventKey: event.key!) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let awards = try? result.get() {
@@ -520,7 +520,7 @@ extension TeamSummaryViewController: Refreshable {
                 self.tbaKit.storeCacheHeaders(awardsOperation)
                 self.executeUpdate(self.updateAwardsItem)
             }, errorRecorder: Crashlytics.sharedInstance())
-        })
+        }
 
         finalOperation = addRefreshOperations([teamStatusOperation, awardsOperation])
     }

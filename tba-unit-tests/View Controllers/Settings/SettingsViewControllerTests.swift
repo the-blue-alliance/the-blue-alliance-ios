@@ -1,4 +1,3 @@
-import FirebaseMessaging
 import XCTest
 @testable import The_Blue_Alliance
 
@@ -9,7 +8,7 @@ class SettingsViewControllerTests: TBATestCase {
     override func setUp() {
         super.setUp()
 
-        settingsViewController = SettingsViewController(messaging: Messaging.messaging(),
+        settingsViewController = SettingsViewController(fcmTokenProvider: fcmTokenProvider,
                                                         metadata: ReactNativeMetadata(userDefaults: userDefaults),
                                                         myTBA: myTBA,
                                                         pushService: pushService,

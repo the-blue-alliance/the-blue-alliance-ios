@@ -54,16 +54,23 @@ open class MyTBA {
         return authToken != nil
     }
 
-    public init(uuid: String, deviceName: String, urlSession: URLSession? = nil) {
+    public init(uuid: String, deviceName: String, fcmTokenProvider: FCMTokenProvider, urlSession: URLSession? = nil) {
         self.uuid = uuid
         self.deviceName = deviceName
+        self.fcmTokenProvider = fcmTokenProvider
         self.urlSession = urlSession ?? URLSession(configuration: .default)
     }
+
     public var authenticationProvider = Provider<MyTBAAuthenticationObservable>()
+
+    internal var fcmToken: String? {
+        return fcmTokenProvider.fcmToken
+    }
 
     internal var urlSession: URLSession
     internal var uuid: String
     internal var deviceName: String
+    private var fcmTokenProvider: FCMTokenProvider
 
     static var jsonEncoder: JSONEncoder {
         let jsonEncoder = JSONEncoder()

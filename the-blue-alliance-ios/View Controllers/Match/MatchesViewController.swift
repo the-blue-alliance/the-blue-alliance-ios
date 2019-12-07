@@ -196,7 +196,7 @@ extension MatchesViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventMatches(key: event.key!, completion: { (result, notModified) in
+        operation = tbaKit.fetchEventMatches(key: event.key!) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let matches = try? result.get() {
@@ -206,7 +206,7 @@ extension MatchesViewController: Refreshable {
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())
-        })
+        }
         addRefreshOperations([operation])
     }
 

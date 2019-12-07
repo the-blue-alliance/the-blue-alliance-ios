@@ -1,5 +1,4 @@
 import Crashlytics
-import FirebaseMessaging
 import MyTBAKit
 import TBAData
 import UIKit
@@ -12,7 +11,6 @@ protocol ContainerTeamPushable {
 
     var teamKey: TeamKey { get }
     var myTBA: MyTBA { get }
-    var messaging: Messaging { get }
     var statusService: StatusService { get }
     var urlOpener: URLOpener { get }
 }
@@ -28,7 +26,7 @@ extension ContainerTeamPushable where Self: ContainerViewController {
                     self.rightBarButtonItems = [UIBarButtonItem.activityIndicatorBarButtonItem()]
                 }
 
-                let operation = tbaKit.fetchTeam(key: teamKey.key!, completion: { (result, notModified) in
+                let operation = tbaKit.fetchTeam(key: teamKey.key!) { (result, notModified) in
                     let context = self.persistentContainer.newBackgroundContext()
                     context.performChangesAndWait({
                         if let team = try? result.get() {
@@ -45,7 +43,7 @@ extension ContainerTeamPushable where Self: ContainerViewController {
                     DispatchQueue.main.async {
                         self.rightBarButtonItems = [self.pushTeamBarButtonItem].compactMap({ $0 })
                     }
-                })
+                }
                 fetchTeamOperationQueue.addOperation(operation)
             }
             return
@@ -55,7 +53,7 @@ extension ContainerTeamPushable where Self: ContainerViewController {
     }
 
     func _pushTeam(team: Team) {
-        let teamViewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamViewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(teamViewController, animated: true)
     }
 

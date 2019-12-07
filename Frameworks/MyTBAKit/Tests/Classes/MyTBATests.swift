@@ -1,3 +1,4 @@
+import MyTBAKitTesting
 import XCTest
 @testable import MyTBAKit
 
@@ -24,10 +25,13 @@ class MyTBATests: MyTBATestCase {
     func test_init() {
         let uuid = "abcd123"
         let deviceName = "My Device"
+        let fcmToken = "abc"
 
-        let zz = MyTBA(uuid: uuid, deviceName: deviceName)
+        var mfcm = MockFCMTokenProvider(fcmToken: fcmToken)
+        let zz = MyTBA(uuid: uuid, deviceName: deviceName, fcmTokenProvider: mfcm)
         XCTAssertEqual(zz.uuid, uuid)
         XCTAssertEqual(zz.deviceName, deviceName)
+        XCTAssertEqual(zz.fcmToken, fcmToken)
     }
 
     func test_authenticationProvider_authenticated() {

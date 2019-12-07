@@ -1,5 +1,4 @@
 import CoreData
-import FirebaseMessaging
 import MyTBAKit
 import TBAKit
 import UIKit
@@ -23,7 +22,7 @@ private enum DebugRow: Int, CaseIterable {
 
 class SettingsViewController: TBATableViewController {
 
-    private let messaging: Messaging
+    private let fcmTokenProvider: FCMTokenProvider
     private let metadata: ReactNativeMetadata
     private let myTBA: MyTBA
     private let pushService: PushService
@@ -37,8 +36,8 @@ class SettingsViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(messaging: Messaging, metadata: ReactNativeMetadata, myTBA: MyTBA, pushService: PushService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        self.messaging = messaging
+    init(fcmTokenProvider: FCMTokenProvider, metadata: ReactNativeMetadata, myTBA: MyTBA, pushService: PushService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.fcmTokenProvider = fcmTokenProvider
         self.metadata = metadata
         self.myTBA = myTBA
         self.pushService = pushService
@@ -349,7 +348,7 @@ class SettingsViewController: TBATableViewController {
     }
 
     private func pushTroubleshootNotifications() {
-        let notificationsViewController = NotificationsViewController(messaging: messaging, myTBA: myTBA, pushService: pushService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let notificationsViewController = NotificationsViewController(fcmTokenProvider: fcmTokenProvider, myTBA: myTBA, pushService: pushService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let nav = UINavigationController(rootViewController: notificationsViewController)
         navigationController?.showDetailViewController(nav, sender: nil)
     }

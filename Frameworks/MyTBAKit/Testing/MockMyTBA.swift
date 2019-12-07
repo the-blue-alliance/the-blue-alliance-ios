@@ -2,12 +2,20 @@ import TBATestingMocks
 import XCTest
 @testable import MyTBAKit
 
+public class MockFCMTokenProvider: FCMTokenProvider {
+    public var fcmToken: String?
+
+    public init(fcmToken: String?) {
+        self.fcmToken = fcmToken
+    }
+}
+
 public class MockMyTBA: MyTBA {
 
     let session: MockURLSession
     private let bundle: Bundle
 
-    public init() {
+    public init(fcmTokenProvider: FCMTokenProvider) {
         self.session = MockURLSession()
 
         let selfBundle = Bundle(for: type(of: self))
@@ -17,7 +25,10 @@ public class MockMyTBA: MyTBA {
         }
         self.bundle = bundle
 
-        super.init(uuid: "abcd123", deviceName: "MyTBATesting", urlSession: session)
+        super.init(uuid: "abcd123",
+                   deviceName: "MyTBATesting",
+                   fcmTokenProvider: fcmTokenProvider,
+                   urlSession: session)
     }
 
     public func sendStub(for operation: MyTBAOperation, code: Int = 200) {
