@@ -156,7 +156,7 @@ class ReactNativeService {
     }
 
     private func downloadReactNativeBundle(remoteBundleReference: StorageReference, completion: @escaping (Error?) -> Void) {
-        remoteBundleReference.write(toFile: compressedBundleURL, completion: { [unowned self] (url, error) in
+        remoteBundleReference.write(toFile: compressedBundleURL) { [unowned self] (url, error) in
             var downloadError: Error?
             if let error = error {
                 downloadError = error
@@ -169,7 +169,7 @@ class ReactNativeService {
                 }
             }
             completion(downloadError)
-        })
+        }
     }
 
     private func updateMetadata(storageMetadata: StorageMetadata) {

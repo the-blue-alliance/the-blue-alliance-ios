@@ -2,7 +2,6 @@ import CoreData
 import Crashlytics
 import FirebaseAnalytics
 import FirebaseAuth
-import FirebaseMessaging
 import GoogleSignIn
 import MyTBAKit
 import PureLayout
@@ -13,7 +12,6 @@ import UserNotifications
 
 class MyTBAViewController: ContainerViewController {
 
-    private let messaging: Messaging
     private let myTBA: MyTBA
     private let statusService: StatusService
     private let urlOpener: URLOpener
@@ -41,8 +39,7 @@ class MyTBAViewController: ContainerViewController {
         return myTBA.isAuthenticated
     }
 
-    init(messaging: Messaging, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        self.messaging = messaging
+    init(myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.myTBA = myTBA
         self.statusService = statusService
         self.urlOpener = urlOpener
@@ -118,12 +115,7 @@ class MyTBAViewController: ContainerViewController {
     }
 
     private func logout() {
-        guard let fcmToken = messaging.fcmToken else {
-            // No FCM token to unregister
-            return
-        }
-
-        let signOutOperation = myTBA.unregister(fcmToken) { [weak self] (_, error) in
+        let signOutOperation = myTBA.unregister { [weak self] (_, error) in
             self?.isLoggingOut = false
 
             if let error = error as? MyTBAError, error.code != 404 {
@@ -136,8 +128,10 @@ class MyTBAViewController: ContainerViewController {
                 }
             }
         }
+        guard let op = signOutOperation else { return }
+
         isLoggingOut = true
-        OperationQueue.main.addOperation(signOutOperation!)
+        OperationQueue.main.addOperation(op)
     }
 
     private func logoutSuccessful() {
@@ -177,19 +171,19 @@ class MyTBAViewController: ContainerViewController {
 extension MyTBAViewController: MyTBATableViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let viewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let viewController = EventViewController(event: event, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let navigationController = UINavigationController(rootViewController: viewController)
         self.navigationController?.showDetailViewController(navigationController, sender: nil)
     }
 
     func teamSelected(_ team: Team) {
-        let viewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let viewController = TeamViewController(team: team, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let navigationController = UINavigationController(rootViewController: viewController)
         self.navigationController?.showDetailViewController(navigationController, sender: nil)
     }
 
     func matchSelected(_ match: Match) {
-        let viewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, messaging: messaging, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let viewController = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         let navigationController = UINavigationController(rootViewController: viewController)
         self.navigationController?.showDetailViewController(navigationController, sender: nil)
     }

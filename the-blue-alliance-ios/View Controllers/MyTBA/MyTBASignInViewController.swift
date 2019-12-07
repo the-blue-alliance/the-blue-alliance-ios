@@ -41,7 +41,7 @@ class MyTBASignInViewController: UIViewController {
                 $0.alpha = newImageAlpha
                 $0.isHidden = shouldHideImages
             }
-        }, completion: nil)
+        })
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

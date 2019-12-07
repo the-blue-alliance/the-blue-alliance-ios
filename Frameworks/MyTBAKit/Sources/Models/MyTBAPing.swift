@@ -6,11 +6,13 @@ struct MyTBAPingRequest: Codable {
 
 extension MyTBA {
 
-    public func ping(_ token: String, completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
+    public func ping(completion: @escaping MyTBABaseCompletionBlock) -> MyTBAOperation? {
+        guard let token = fcmToken else {
+            return nil
+        }
         let ping = MyTBAPingRequest(mobileId: token)
 
         guard let encodedPing = try? MyTBA.jsonEncoder.encode(ping) else {
-            completion(nil, MyTBAError.error(nil, "Unable to ping device - invalid data"))
             return nil
         }
         return callApi(method: "ping", bodyData: encodedPing, completion: completion)

@@ -204,7 +204,7 @@ extension TeamInfoViewController: Refreshable {
 
     @objc func refresh() {
         var infoOperation: TBAKitOperation!
-        infoOperation = tbaKit.fetchTeam(key: team.key!, completion: { (result, notModified) in
+        infoOperation = tbaKit.fetchTeam(key: team.key!) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 switch result {
@@ -220,10 +220,10 @@ extension TeamInfoViewController: Refreshable {
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: infoOperation)
             }, errorRecorder: Crashlytics.sharedInstance())
-        })
+        }
 
         var yearsOperation: TBAKitOperation!
-        yearsOperation = tbaKit.fetchTeamYearsParticipated(key: team.key!, completion: { (result, notModified) in
+        yearsOperation = tbaKit.fetchTeamYearsParticipated(key: team.key!) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let years = try? result.get() {
@@ -233,7 +233,7 @@ extension TeamInfoViewController: Refreshable {
             }, saved: {
                 self.tbaKit.storeCacheHeaders(yearsOperation)
             }, errorRecorder: Crashlytics.sharedInstance())
-        })
+        }
 
         // TODO: Think about how we go about refreshing the years, and maybe also move it to the year selector as well?
         addRefreshOperations([infoOperation, yearsOperation])

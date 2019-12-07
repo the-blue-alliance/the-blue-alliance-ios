@@ -15,7 +15,6 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
     var pushTeamBarButtonItem: UIBarButtonItem?
     private(set) var ranking: DistrictRanking
     let statusService: StatusService
-    let messaging: Messaging
     let myTBA: MyTBA
     let urlOpener: URLOpener
 
@@ -27,9 +26,8 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
 
     // MARK: Init
 
-    init(ranking: DistrictRanking, messaging: Messaging, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(ranking: DistrictRanking, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.ranking = ranking
-        self.messaging = messaging
         self.myTBA = myTBA
         self.statusService = statusService
         self.urlOpener = urlOpener
@@ -89,7 +87,7 @@ extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegat
         }
 
         // TODO: Let's see what we can to do not force-unwrap these from Core Data
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventPoints.teamKey!, event: event, messaging: messaging, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventPoints.teamKey!, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

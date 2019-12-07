@@ -1,6 +1,5 @@
 import CoreData
 import Foundation
-import FirebaseMessaging
 import MyTBAKit
 import TBAKit
 import UIKit
@@ -32,7 +31,7 @@ enum NotificationStatus {
 
 class NotificationsViewController: TBATableViewController {
 
-    private let messaging: Messaging
+    private let fcmTokenProvider: FCMTokenProvider
     private let myTBA: MyTBA
     private let pushService: PushService
     private let urlOpener: URLOpener
@@ -55,8 +54,8 @@ class NotificationsViewController: TBATableViewController {
     private var myTBAPingResponse: MyTBABaseResponse?
     private var myTBAPingError: Error?
 
-    init(messaging: Messaging, myTBA: MyTBA, pushService: PushService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        self.messaging = messaging
+    init(fcmTokenProvider: FCMTokenProvider, myTBA: MyTBA, pushService: PushService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.fcmTokenProvider = fcmTokenProvider
         self.myTBA = myTBA
         self.pushService = pushService
         self.urlOpener = urlOpener
@@ -126,7 +125,7 @@ class NotificationsViewController: TBATableViewController {
                 }
             case .firebase:
                 let status: NotificationStatus = {
-                    if messaging.fcmToken == nil {
+                    if fcmTokenProvider.fcmToken == nil {
                         return .invalid("No FCM token from Firebase")
                     } else {
                         return .valid
@@ -164,7 +163,7 @@ class NotificationsViewController: TBATableViewController {
     }
 
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        if let fcmToken = messaging.fcmToken {
+        if let fcmToken = fcmTokenProvider.fcmToken {
             return "FCM Token: \(fcmToken)"
         }
         return nil
@@ -288,11 +287,7 @@ class NotificationsViewController: TBATableViewController {
             return
         }
 
-        guard let fcmToken = messaging.fcmToken else {
-            return
-        }
-
-        myTBARegisterOperation = myTBA.register(fcmToken) { [weak self] (response, error) in
+        myTBARegisterOperation = myTBA.register { [weak self] (response, error) in
             self?.myTBARegisterOperation = nil
             self?.myTBARegisterResponse = response
             self?.myTBARegisterError = error
@@ -300,7 +295,8 @@ class NotificationsViewController: TBATableViewController {
             self?.sendPing()
             self?.reloadMain()
         }
-        refreshOperationQueue.addOperation(myTBARegisterOperation!)
+        guard let op = myTBARegisterOperation else { return }
+        refreshOperationQueue.addOperation(op)
 
         reloadMain()
     }
@@ -308,7 +304,7 @@ class NotificationsViewController: TBATableViewController {
     private func myTBARegistrationNotificationStatus() -> NotificationStatus {
         if !myTBA.isAuthenticated {
             return .invalid("Not signed in to myTBA. Sign in under the myTBA tab.")
-        } else if messaging.fcmToken == nil {
+        } else if fcmTokenProvider.fcmToken == nil {
             return .invalid("No FCM token from Firebase.")
         } else if let myTBARegisterError = myTBARegisterError {
             return .invalid(myTBARegisterError.localizedDescription)
@@ -348,18 +344,15 @@ class NotificationsViewController: TBATableViewController {
             return
         }
 
-        guard let fcmToken = messaging.fcmToken else {
-            return
-        }
-
-        myTBAPingOperation = myTBA.ping(fcmToken, completion: { [weak self] (response, error) in
+        myTBAPingOperation = myTBA.ping { [weak self] (response, error) in
             self?.myTBAPingOperation = nil
             self?.myTBAPingResponse = response
             self?.myTBAPingError = error
 
             self?.reloadMain()
-        })
-        refreshOperationQueue.addOperation(myTBAPingOperation!)
+        }
+        guard let op = myTBAPingOperation else { return }
+        refreshOperationQueue.addOperation(op)
 
         reloadMain()
     }
@@ -367,7 +360,7 @@ class NotificationsViewController: TBATableViewController {
     private func myTBAPingNotificationStatus() -> NotificationStatus {
         if !myTBA.isAuthenticated {
             return .unknown
-        } else if messaging.fcmToken == nil {
+        } else if fcmTokenProvider.fcmToken == nil {
             return .unknown
         } else if let myTBAPingError = myTBAPingError {
             return .invalid(myTBAPingError.localizedDescription)
@@ -397,7 +390,7 @@ class NotificationsViewController: TBATableViewController {
     }
 
     @objc func showCopyFCMToken() {
-        guard let fcmToken = messaging.fcmToken else {
+        guard let fcmToken = fcmTokenProvider.fcmToken else {
             return
         }
 

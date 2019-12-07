@@ -106,7 +106,7 @@ extension DistrictsViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistricts(year: year, completion: { (result, notModified) in
+        operation = tbaKit.fetchDistricts(year: year) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let districts = try? result.get() {
@@ -115,7 +115,7 @@ extension DistrictsViewController: Refreshable {
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())
-        })
+        }
         addRefreshOperations([operation])
     }
 

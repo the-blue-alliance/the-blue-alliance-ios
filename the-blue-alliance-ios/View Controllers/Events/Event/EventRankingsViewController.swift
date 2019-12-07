@@ -94,7 +94,7 @@ extension EventRankingsViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventRankings(key: event.key!, completion: { (result, notModified) in
+        operation = tbaKit.fetchEventRankings(key: event.key!) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let (rankings, sortOrder, extraStats) = try? result.get() {
@@ -104,7 +104,7 @@ extension EventRankingsViewController: Refreshable {
             }, saved: {
                 self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
             }, errorRecorder: Crashlytics.sharedInstance())
-        })
+        }
         addRefreshOperations([operation])
     }
 
