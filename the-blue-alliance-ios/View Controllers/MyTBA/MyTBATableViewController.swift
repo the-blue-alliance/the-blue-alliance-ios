@@ -6,10 +6,10 @@ import TBAData
 import TBAKit
 import UIKit
 
-public enum MyTBASection: String {
-    case event = "Events"
-    case team = "Teams"
-    case match = "Matches"
+public enum MyTBASection {
+    case event
+    case team
+    case match
 
     static func section(for modelType: MyTBAModelType) -> MyTBASection? {
         switch modelType {
@@ -176,9 +176,19 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     // MARK: TableViewDataSourceDelegate
 
     override func title(forSection sectionIndex: Int) -> String? {
-        let snapshot = dataSource.snapshot()
-        let section = snapshot.sectionIdentifiers[sectionIndex]
-        return section.rawValue
+        let indexPath = IndexPath(item: 0, section: sectionIndex)
+        guard let item = dataSource.itemIdentifier(for: indexPath) else {
+            return nil
+        }
+        if item is Event {
+            return "Events"
+        } else if item is Team {
+            return "Teams"
+        } else if item is Match {
+            return "Matches"
+        } else {
+            return nil
+        }
     }
 
     // MARK: UITableView Delegate
