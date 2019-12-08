@@ -118,8 +118,8 @@ class DistrictTestCase: TBADataTestCase {
         district.insert([modelRankingOne, modelRankingTwo])
 
         let rankings = district.rankings!.allObjects as! [DistrictRanking]
-        let rankingOne = rankings.first(where: { $0.teamKey?.key == "frc1" })!
-        let rankingTwo = rankings.first(where: { $0.teamKey?.key == "frc2" })!
+        let rankingOne = rankings.first(where: { $0.team?.key == "frc1" })!
+        let rankingTwo = rankings.first(where: { $0.team?.key == "frc2" })!
 
         // Sanity check
         XCTAssertEqual(district.rankings?.count, 2)

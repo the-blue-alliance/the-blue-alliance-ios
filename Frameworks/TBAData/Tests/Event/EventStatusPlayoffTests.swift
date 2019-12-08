@@ -30,7 +30,7 @@ class EventStatusPlayoffTestCase: TBADataTestCase {
 
         // Test inserting an EventStatus where EventStatusPlayoff.eventStatus.event.key == eventKey
         let eventStatus = EventStatus.init(entity: EventStatus.entity(), insertInto: persistentContainer.viewContext)
-        eventStatus.teamKey = TeamKey.insert(withKey: teamKey, in: persistentContainer.viewContext)
+        eventStatus.team = Team.insert(teamKey, in: persistentContainer.viewContext)
         eventStatus.event = event
         eventStatus.playoff = status
 

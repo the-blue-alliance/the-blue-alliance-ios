@@ -9,18 +9,20 @@ extension AwardRecipient {
      */
     public var awardText: [String] {
         var awardText: [String] = []
-        if let teamKey = teamKey, let awardee = awardee {
+        if let team = team, let awardee = awardee {
+            // Zachary Orr
+            // Team 7332
             awardText.append(awardee)
-            awardText.append(teamKey.name)
-        } else if let teamKey = teamKey {
+            awardText.append(team.fallbackNickname)
+        } else if let team = team {
             // If we have a nickname for the team, add the team number beforehand, so the cell reads as...
             // Team 7332
             // The Rawrbotz
-            if let nickname = teamKey.team?.nickname {
-                awardText.append("\(teamKey.name)")
+            if let nickname = team.nickname {
+                awardText.append(team.fallbackNickname)
                 awardText.append(nickname)
             } else {
-                awardText.append(teamKey.name)
+                awardText.append(team.fallbackNickname)
             }
         } else if let awardee = awardee {
             awardText.append(awardee)
@@ -53,23 +55,23 @@ extension AwardRecipient: Managed {
             if let awardee = model.awardee, let teamKey = model.teamKey {
                 return NSPredicate(format: "%K == %@ AND %K == %@",
                                    #keyPath(AwardRecipient.awardee), awardee,
-                                   #keyPath(AwardRecipient.teamKey.key), teamKey)
+                                   #keyPath(AwardRecipient.team.key), teamKey)
             } else if let teamKey = model.teamKey {
                 return NSPredicate(format: "%K == %@",
-                                   #keyPath(AwardRecipient.teamKey.key), teamKey)
+                                   #keyPath(AwardRecipient.team.key), teamKey)
             } else if let awardee = model.awardee {
                 return NSPredicate(format: "%K == %@",
                                    #keyPath(AwardRecipient.awardee), awardee)
             } else {
                 return NSPredicate(format: "%K == nil AND %K == nil",
                                    #keyPath(AwardRecipient.awardee),
-                                   #keyPath(AwardRecipient.teamKey.key))
+                                   #keyPath(AwardRecipient.team.key))
             }
         }
 
         return findOrCreate(in: context, matching: predicate) { (awardRecipient) in
-            awardRecipient.updateToOneRelationship(relationship: #keyPath(AwardRecipient.teamKey), newValue: model.teamKey, newObject: {
-                return TeamKey.insert(withKey: $0, in: context)
+            awardRecipient.updateToOneRelationship(relationship: #keyPath(AwardRecipient.team), newValue: model.teamKey, newObject: {
+                return Team.insert($0, in: context)
             })
             awardRecipient.awardee = model.awardee
         }

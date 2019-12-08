@@ -13,6 +13,12 @@ class PersistentContainerOperation: TBAOperation {
     }
 
     override func execute() {
+        // TODO: Make this conditional
+        if let storeURL = persistentContainer.persistentStoreCoordinator.persistentStores.first?.url {
+            print(storeURL)
+            // TODO: Type?
+            try! persistentContainer.persistentStoreCoordinator.destroyPersistentStore(at: storeURL, ofType: "")
+        }
         persistentContainer.loadPersistentStores(completionHandler: { (_, error) in
             /*
              Typical reasons for an error here include:

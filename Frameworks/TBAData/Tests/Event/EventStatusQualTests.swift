@@ -28,7 +28,7 @@ class EventStatusQualTestCase: TBADataTestCase {
 
         // Test inserting EventStatusQual.ranking.teamKey.key == eventKey
         let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
-        ranking.teamKey = TeamKey.insert(withKey: teamKey, in: persistentContainer.viewContext)
+        ranking.team = Team.insert(teamKey, in: persistentContainer.viewContext)
         ranking.event = event
         ranking.qualStatus = status
 
@@ -39,7 +39,7 @@ class EventStatusQualTestCase: TBADataTestCase {
 
         // Test inserting EventStatusQual.eventStatus.event.key == eventKey
         let eventStatus = EventStatus.init(entity: EventStatus.entity(), insertInto: persistentContainer.viewContext)
-        eventStatus.teamKey = TeamKey.insert(withKey: teamKey, in: persistentContainer.viewContext)
+        eventStatus.team = Team.insert(teamKey, in: persistentContainer.viewContext)
         eventStatus.event = event
         eventStatus.qual = status
 

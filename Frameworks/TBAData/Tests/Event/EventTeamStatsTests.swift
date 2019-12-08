@@ -11,7 +11,7 @@ class EventTeamStatTestCase: TBADataTestCase {
         let model = TBAStat(teamKey: "frc1", ccwm: 2.2, dpr: 3.3, opr: 4.44)
         let stat = EventTeamStat.insert(model, eventKey: event.key!, in: persistentContainer.viewContext)
 
-        XCTAssertEqual(stat.teamKey?.key, "frc1")
+        XCTAssertEqual(stat.team?.key, "frc1")
         XCTAssertEqual(stat.opr, 4.44)
         XCTAssertEqual(stat.dpr, 3.3)
         XCTAssertEqual(stat.ccwm, 2.2)
@@ -48,14 +48,14 @@ class EventTeamStatTestCase: TBADataTestCase {
         let stat = EventTeamStat.insert(model, eventKey: event.key!, in: persistentContainer.viewContext)
         stat.event = event
 
-        let teamKey = stat.teamKey!
+        let team = stat.team!
 
         persistentContainer.viewContext.delete(stat)
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
         // Event and TeamKey should both not be deleted
         XCTAssertNotNil(event.managedObjectContext)
-        XCTAssertNotNil(teamKey.managedObjectContext)
+        XCTAssertNotNil(team.managedObjectContext)
     }
 
     func test_isOrphaned() {

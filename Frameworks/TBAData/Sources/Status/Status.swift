@@ -30,7 +30,7 @@ extension Status: Managed {
             status.currentSeason = model.currentSeason as NSNumber
 
             status.updateToManyRelationship(relationship: #keyPath(Status.downEvents), newValues: model.downEvents.map({
-                return EventKey.insert(withKey: $0, in: context)
+                return Event.insert($0, in: context)
             }))
 
             status.latestAppVersion = model.ios.latestAppVersion as NSNumber

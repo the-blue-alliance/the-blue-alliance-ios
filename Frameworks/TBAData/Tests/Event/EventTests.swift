@@ -68,8 +68,8 @@ class EventTestCase: TBADataTestCase {
                                   firstEventID: "123",
                                   firstEventCode: "something",
                                   webcasts: [TBAWebcast(type: "twitch", channel: "channel")],
-                                  divisionKeys: ["2018mike1", "2018mike2", "2018mike3", "2018mike4"],
-                                  parentEventKey: "2018mike2",
+                                  divisionKeys: [],
+                                  parentEventKey: "2019micmp",
                                   playoffType: 1,
                                   playoffTypeString: "playoff string")
 
@@ -101,12 +101,51 @@ class EventTestCase: TBADataTestCase {
         XCTAssertEqual(event.firstEventID, "123")
         XCTAssertEqual(event.firstEventCode, "something")
         XCTAssertEqual(event.webcasts?.count, 1)
-        XCTAssertEqual(event.divisions?.count, 4)
-        XCTAssertEqual(event.parentEvent?.key, "2018mike2")
+        XCTAssertEqual(event.divisions?.count, 0)
+        XCTAssertEqual(event.parentEvent?.key, "2019micmp")
         XCTAssertEqual(event.playoffType, 1)
         XCTAssertEqual(event.playoffTypeString, "playoff string")
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
+    }
+
+    func test_insert_divisions() {
+        let divisionKeys = ["2019micmp1", "2019micmp2", "2019micmp3", "2019micmp4"]
+        let dcmpModel = TBAEvent(key: "2019micmp",
+                                 name: "Michigan State Championship",
+                                 eventCode: "micmp",
+                                 eventType: EventType.districtChampionship.rawValue,
+                                 startDate: Event.dateFormatter.date(from: "2018-03-01")!,
+                                 endDate: Event.dateFormatter.date(from: "2018-03-03")!,
+                                 year: 2019,
+                                 eventTypeString: "District Championship",
+                                 divisionKeys: divisionKeys)
+
+        let dcmp = Event.insert(dcmpModel, in: persistentContainer.viewContext)
+
+        XCTAssertEqual(dcmp.key, "2019micmp")
+        XCTAssertEqual(Set((dcmp.divisions?.allObjects as? [Event] ?? []).map({ $0.key! })), Set(divisionKeys))
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        let divisionModel = TBAEvent(key: "2019micmp1",
+                                     name: "Michigan State Championship - DTE Energy Foundation Division",
+                                     eventCode: "micmp1",
+                                     eventType: EventType.districtChampionshipDivision.rawValue,
+                                     startDate: Event.dateFormatter.date(from: "2018-03-01")!,
+                                     endDate: Event.dateFormatter.date(from: "2018-03-03")!,
+                                     year: 2019,
+                                     eventTypeString: "District Championship Division",
+                                     divisionKeys: [],
+                                     parentEventKey: "2019micmp")
+
+        let division = Event.insert(divisionModel, in: persistentContainer.viewContext)
+
+        XCTAssertEqual(division, (dcmp.divisions?.allObjects as? [Event])?.first(where: { $0.key == division.key }))
+        XCTAssertEqual(dcmp, division.parentEvent)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
     }
 
     func test_insert_alliances() {
@@ -165,8 +204,8 @@ class EventTestCase: TBADataTestCase {
         let awards = event.awards!.allObjects as! [Award]
         let awardOne = awards.first(where: { $0.awardType?.intValue == 2 })!
         let awardTwo = awards.first(where: { $0.awardType?.intValue == 3 })!
-        let frc1 = (awardOne.recipients!.allObjects as! [AwardRecipient]).first(where: { $0.teamKey?.key == "frc1" })!
-        let frc2 = (awardOne.recipients!.allObjects as! [AwardRecipient]).first(where: { $0.teamKey?.key == "frc2" })!
+        let frc1 = (awardOne.recipients!.allObjects as! [AwardRecipient]).first(where: { $0.team?.key == "frc1" })!
+        let frc2 = (awardOne.recipients!.allObjects as! [AwardRecipient]).first(where: { $0.team?.key == "frc2" })!
 
         // Sanity check
         XCTAssertEqual(event.awards?.count, 2)
@@ -223,13 +262,13 @@ class EventTestCase: TBADataTestCase {
         let awardTwo = awards.first(where: { $0.awardType?.intValue == 3 })!
         let awardThree = awards.first(where: { $0.awardType?.intValue == 4 })!
 
-        let frc1TeamKey = TeamKey.findOrFetch(in: persistentContainer.viewContext, matching: NSPredicate(format: "%K == %@", #keyPath(TeamKey.key), frc1Model.teamKey!))!
+        let frc1Team = Team.findOrFetch(in: persistentContainer.viewContext, matching: NSPredicate(format: "%K == %@", #keyPath(Team.key), frc1Model.teamKey!))!
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
         let awardsFirst = Award.fetch(in: persistentContainer.viewContext) {
-            $0.predicate = NSPredicate(format: "SUBQUERY(%K, $r, $r.teamKey.key == %@).@count == 1",
-                                       #keyPath(Award.recipients), frc1TeamKey.key!)
+            $0.predicate = NSPredicate(format: "SUBQUERY(%K, $r, $r.team.key == %@).@count == 1",
+                                       #keyPath(Award.recipients), frc1Team.key!)
         }
 
         // Sanity check
@@ -240,13 +279,13 @@ class EventTestCase: TBADataTestCase {
         XCTAssertEqual(event.awards?.count, 3)
         XCTAssertEqual(awardsFirst.count, 2)
 
-        event.insert([modelAwardOne], teamKey: frc1TeamKey.key!)
+        event.insert([modelAwardOne], teamKey: frc1Team.key!)
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
         let awardsSecond = Award.fetch(in: persistentContainer.viewContext) {
-            $0.predicate = NSPredicate(format: "SUBQUERY(%K, $r, $r.teamKey.key == %@).@count == 1",
-                                       #keyPath(Award.recipients), frc1TeamKey.key!)
+            $0.predicate = NSPredicate(format: "SUBQUERY(%K, $r, $r.team.key == %@).@count == 1",
+                                       #keyPath(Award.recipients), frc1Team.key!)
         }
 
         XCTAssertEqual(event.awards?.count, 2)
@@ -366,8 +405,8 @@ class EventTestCase: TBADataTestCase {
         event.insert([modelRankingOne, modelRankingTwo], sortOrderInfo: nil, extraStatsInfo: nil)
 
         let rankings = event.rankings?.allObjects as! [EventRanking]
-        let rankingOne = rankings.first(where: { $0.teamKey?.key == "frc1" })!
-        let rankingTwo = rankings.first(where: { $0.teamKey?.key == "frc2" })!
+        let rankingOne = rankings.first(where: { $0.team?.key == "frc1" })!
+        let rankingTwo = rankings.first(where: { $0.team?.key == "frc2" })!
 
         // Sanity check
         XCTAssertEqual(event.rankings?.count, 2)
@@ -396,8 +435,8 @@ class EventTestCase: TBADataTestCase {
         event.insert([modelStatsOne, modelStatsTwo])
 
         let stats = event.stats?.allObjects as! [EventTeamStat]
-        let statsOne = stats.first(where: { $0.teamKey?.key == "frc1" })!
-        let statsTwo = stats.first(where: { $0.teamKey?.key == "frc2" })!
+        let statsOne = stats.first(where: { $0.team?.key == "frc1" })!
+        let statsTwo = stats.first(where: { $0.team?.key == "frc2" })!
 
         // Sanity check
         XCTAssertEqual(event.stats?.count, 2)
@@ -427,8 +466,8 @@ class EventTestCase: TBADataTestCase {
         event.insert(modelEventStatusTwo)
 
         let statuses = event.statuses!.allObjects as! [EventStatus]
-        let eventStatusOne = statuses.first(where: { $0.teamKey?.key == "frc1" })!
-        let eventStatusTwo = statuses.first(where: { $0.teamKey?.key == "frc2" })!
+        let eventStatusOne = statuses.first(where: { $0.team?.key == "frc1" })!
+        let eventStatusTwo = statuses.first(where: { $0.team?.key == "frc2" })!
 
         // Ensure we setup a relationship to the ranking and the event properly
         XCTAssertEqual(eventStatusOne.qual?.ranking?.event, event)
@@ -548,90 +587,74 @@ class EventTestCase: TBADataTestCase {
     }
 
     func test_hybridType_regional() {
-        let eventType = EventType.regional
-        let regional = event(type: eventType)
-        XCTAssertEqual(regional.calculateHybridType(), "0")
+        XCTAssertEqual(Event.calculateHybridType(eventType: EventType.regional.rawValue,
+                                                 startDate: nil,
+                                                 district: nil), "0")
     }
 
     func test_hybridType_district() {
-        let eventType = EventType.district
-        let districtAbbreviation = "fim"
-
-        let district = District(entity: District.entity(), insertInto: persistentContainer.viewContext)
-        district.abbreviation = districtAbbreviation
-
-        let districtEvent = event(type: eventType)
-        districtEvent.district = district
-
-        XCTAssertEqual(districtEvent.calculateHybridType(), "1.fim")
+        let district = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2022fim", year: 2022)
+        XCTAssertEqual(Event.calculateHybridType(eventType: EventType.district.rawValue,
+                                                 startDate: nil,
+                                                 district: district), "1.fim")
     }
 
     func test_hybridType_districtChampionship() {
-        let eventType = EventType.districtChampionship
-        let districtChampionship = event(type: eventType)
-        XCTAssertEqual(districtChampionship.calculateHybridType(), "2.dcmp")
+        let district = District(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        district.abbreviation = "fim"
+
+        XCTAssertEqual(Event.calculateHybridType(eventType: EventType.districtChampionship.rawValue,
+                                                 startDate: nil,
+                                                 district: nil), "2.dcmp")
     }
 
     func test_hybridType_championshipDivision() {
-        let eventType = EventType.championshipDivision
-        let championshipDivision = event(type: eventType)
-        XCTAssertEqual(championshipDivision.calculateHybridType(), "3")
+        XCTAssertEqual(Event.calculateHybridType(eventType: EventType.championshipDivision.rawValue,
+                                                 startDate: nil,
+                                                 district: nil), "3")
     }
 
     func test_hybridType_championshipFinals() {
-        let eventType = EventType.championshipFinals
-        let championshipFinals = event(type: eventType)
-        XCTAssertEqual(championshipFinals.calculateHybridType(), "4")
+        XCTAssertEqual(Event.calculateHybridType(eventType: EventType.championshipFinals.rawValue,
+                                                 startDate: nil,
+                                                 district: nil), "4")
     }
 
     func test_hybridType_districtChampionshipDivision() {
-        let eventType = EventType.districtChampionshipDivision
-        let districtAbbreviation = "fim"
-
-        let district = District(entity: District.entity(), insertInto: persistentContainer.viewContext)
-        district.abbreviation = districtAbbreviation
-
-        let districtChampionshipDivision = event(type: eventType)
-        districtChampionshipDivision.district = district
-
-        XCTAssertEqual(districtChampionshipDivision.calculateHybridType(), "2..fim.dcmpd")
-
-        let districtChampionship = event(type: EventType.districtChampionship)
-        // Ensure district championship divisions appear before district championships
-        XCTAssert(districtChampionshipDivision.calculateHybridType() < districtChampionship.calculateHybridType())
+        let district = TBADistrict(abbreviation: "fim", name: "FIRST In Michigan", key: "2022fim", year: 2022)
+        XCTAssertEqual(Event.calculateHybridType(eventType: EventType.districtChampionshipDivision.rawValue,
+                                                 startDate: nil,
+                                                 district: district), "5..fim.dcmpd")
     }
 
     func test_hybridType_festivalOfChampions() {
-        let eventType = EventType.festivalOfChampions
-        let festivalOfChampions = event(type: eventType)
-        XCTAssertEqual(festivalOfChampions.calculateHybridType(), "6")
+        XCTAssertEqual(Event.calculateHybridType(eventType: EventType.festivalOfChampions.rawValue,
+                                                 startDate: nil,
+                                                 district: nil), "6")
     }
 
     func test_hybridType_offseason() {
-        let eventType = EventType.offseason
-
-        let novermberOffseason = event(type: eventType)
-        novermberOffseason.startDate = Calendar.current.date(from: DateComponents(year: 2015, month: 11, day: 1))
-        XCTAssertEqual(novermberOffseason.calculateHybridType(), "99.11")
-
-        let septemberOffseason = event(type: eventType)
-        septemberOffseason.startDate = Calendar.current.date(from: DateComponents(year: 2015, month: 9, day: 1))
-        XCTAssertEqual(septemberOffseason.calculateHybridType(), "99.9")
+        XCTAssertEqual(Event.calculateHybridType(eventType: EventType.offseason.rawValue,
+                                                 startDate: Calendar.current.date(from: DateComponents(year: 2015, month: 11, day: 1)),
+                                                 district: nil), "99.11")
+        XCTAssertEqual(Event.calculateHybridType(eventType: EventType.offseason.rawValue,
+                                                 startDate: Calendar.current.date(from: DateComponents(year: 2015, month: 9, day: 1)),
+                                                 district: nil), "99.9")
 
         // Ensure single-digit month offseason events show up before double-digit month offseason events
-        XCTAssert(septemberOffseason.calculateHybridType() > novermberOffseason.calculateHybridType())
+        XCTAssert("99.9" > "99.11")
     }
 
     func test_hybridType_preseason() {
-        let eventType = EventType.preseason
-        let preseason = event(type: eventType)
-        XCTAssertEqual(preseason.calculateHybridType(), "100")
+        XCTAssertEqual(Event.calculateHybridType(eventType: EventType.preseason.rawValue,
+                                                 startDate: nil,
+                                                 district: nil), "100")
     }
 
     func test_hybridType_unlabeled() {
-        let eventType = EventType.unlabeled
-        let unlabeled = event(type: eventType)
-        XCTAssertEqual(unlabeled.calculateHybridType(), "-1")
+        XCTAssertEqual(Event.calculateHybridType(eventType: EventType.unlabeled.rawValue,
+                                                 startDate: nil,
+                                                 district: nil), "-1")
     }
 
     func test_myTBASubscribable() {
@@ -706,8 +729,8 @@ class EventTestCase: TBADataTestCase {
         // Sanity check
         XCTAssertEqual(event.awards?.count, 1)
 
-        let frc1TeamKey = TeamKey.insert(withKey: "frc1", in: persistentContainer.viewContext)
-        let frc2TeamKey = TeamKey.insert(withKey: "frc2", in: persistentContainer.viewContext)
+        let frc1TeamKey = Team.insert("frc1", in: persistentContainer.viewContext)
+        let frc2TeamKey = Team.insert("frc2", in: persistentContainer.viewContext)
 
         // Should be one award for frc1
         XCTAssertEqual(event.awards(for: frc1TeamKey).count, 1)

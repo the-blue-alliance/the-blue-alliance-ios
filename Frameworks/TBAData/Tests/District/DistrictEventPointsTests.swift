@@ -9,8 +9,8 @@ class DistrictEventPointsTestCase: TBADataTestCase {
         let modelEventPoints = TBADistrictEventPoints(teamKey: "frc7332", eventKey: "2018miket", districtCMP: true, alliancePoints: 10, awardPoints: 20, qualPoints: 30, elimPoints: 40, total: 50)
         let eventPoints = DistrictEventPoints.insert(modelEventPoints, in: persistentContainer.viewContext)
 
-        XCTAssertEqual(eventPoints.teamKey?.key, "frc7332")
-        XCTAssertEqual(eventPoints.eventKey?.key!, "2018miket")
+        XCTAssertEqual(eventPoints.team?.key, "frc7332")
+        XCTAssertEqual(eventPoints.event?.key!, "2018miket")
         XCTAssertEqual(eventPoints.alliancePoints, 10)
         XCTAssertEqual(eventPoints.awardPoints, 20)
         XCTAssert(eventPoints.districtCMP!.boolValue)
@@ -28,7 +28,7 @@ class DistrictEventPointsTestCase: TBADataTestCase {
         DistrictEventPoints.insert([modelPointsOne], eventKey: event.key!, in: persistentContainer.viewContext)
         let pointsOne = DistrictEventPoints.fetch(in: persistentContainer.viewContext) {
             $0.predicate = NSPredicate(format: "%K == %@",
-                                       #keyPath(DistrictEventPoints.eventKey.key), event.key!)
+                                       #keyPath(DistrictEventPoints.event.key), event.key!)
         }.first!
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
@@ -38,7 +38,7 @@ class DistrictEventPointsTestCase: TBADataTestCase {
         DistrictEventPoints.insert([modelPointsTwo], eventKey: event.key!, in: persistentContainer.viewContext)
         let pointsTwo = DistrictEventPoints.fetch(in: persistentContainer.viewContext) {
             $0.predicate = NSPredicate(format: "%K == %@",
-                                       #keyPath(DistrictEventPoints.eventKey.key), event.key!)
+                                       #keyPath(DistrictEventPoints.event.key), event.key!)
         }.first!
 
         // Sanity check
@@ -69,8 +69,7 @@ class DistrictEventPointsTestCase: TBADataTestCase {
         let districtRanking = event.district!.rankings!.allObjects.first as! DistrictRanking
 
         let points = districtRanking.eventPoints!.allObjects.first! as! DistrictEventPoints
-        let teamKey = points.teamKey!
-        let eventKey = points.eventKey!
+        let team = points.team!
 
         // Should throw an error - cannot deleted District Event Points when attached to a District Ranking
         persistentContainer.viewContext.delete(points)
@@ -89,13 +88,13 @@ class DistrictEventPointsTestCase: TBADataTestCase {
         XCTAssertNotNil(event.managedObjectContext)
         XCTAssertEqual(event.rankings!.count, 0)
 
-        // TeamKey should not be deleted
-        XCTAssertNotNil(teamKey.managedObjectContext)
-        XCTAssertEqual(teamKey.eventPoints!.count, 0)
+        // Team should not be deleted
+        XCTAssertNotNil(team.managedObjectContext)
+        XCTAssertEqual(team.eventPoints!.count, 0)
 
-        // EventKey should not be deleted
-        XCTAssertNotNil(eventKey.managedObjectContext)
-        XCTAssertEqual(eventKey.points!.count, 0)
+        // Event should not be deleted
+        XCTAssertNotNil(event.managedObjectContext)
+        XCTAssertEqual(event.points!.count, 0)
     }
 
     func test_isOrphaned() {
@@ -113,8 +112,7 @@ class DistrictEventPointsTestCase: TBADataTestCase {
         let key = "2018miket"
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         event.key = key
-        let eventKey = EventKey.insert(withKey: key, in: persistentContainer.viewContext)
-        eventPoints.eventKey = eventKey
+        eventPoints.event = event
         // Attached to a Event - should not be orphaned
         XCTAssertFalse(eventPoints.isOrphaned)
 

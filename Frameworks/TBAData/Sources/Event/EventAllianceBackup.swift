@@ -21,8 +21,8 @@ extension EventAllianceBackup: Managed {
                                     #keyPath(EventAllianceBackup.outTeam.key), model.teamOut)
 
         return findOrCreate(in: context, matching: predicate, configure: { (allianceBackup) in
-            allianceBackup.inTeam = TeamKey.insert(withKey: model.teamIn, in: context)
-            allianceBackup.outTeam = TeamKey.insert(withKey: model.teamOut, in: context)
+            allianceBackup.inTeam = Team.insert(model.teamIn, in: context)
+            allianceBackup.outTeam = Team.insert(model.teamOut, in: context)
         })
     }
 

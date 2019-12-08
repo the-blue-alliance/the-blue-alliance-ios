@@ -12,7 +12,7 @@ class DistrictRankingTestCase: TBADataTestCase {
         let modelDistrictRanking = TBADistrictRanking(teamKey: "frc7332", rank: 1, rookieBonus: 10, pointTotal: 30, eventPoints: [eventPoints])
         let districtRanking = DistrictRanking.insert(modelDistrictRanking, districtKey: event.district!.key!, in: persistentContainer.viewContext)
 
-        XCTAssertEqual(districtRanking.teamKey?.key, "frc7332")
+        XCTAssertEqual(districtRanking.team?.key, "frc7332")
         XCTAssertEqual(districtRanking.pointTotal, 30)
         XCTAssertEqual(districtRanking.rank, 1)
         XCTAssertEqual(districtRanking.eventPoints?.count, 1)
@@ -74,7 +74,7 @@ class DistrictRankingTestCase: TBADataTestCase {
         let districtRanking = DistrictRanking.insert(modelDistrictRanking, districtKey: event.district!.key!, in: persistentContainer.viewContext)
 
         let points = districtRanking.eventPoints!.allObjects.first! as! DistrictEventPoints
-        let teamKey = districtRanking.teamKey!
+        let team = districtRanking.team!
 
         persistentContainer.viewContext.delete(districtRanking)
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
@@ -82,7 +82,7 @@ class DistrictRankingTestCase: TBADataTestCase {
         // Check that District Ranking handles it's relationships properly
         XCTAssertNil(points.districtRanking)
         XCTAssertFalse(district.rankings!.contains(districtRanking))
-        XCTAssertFalse(teamKey.districtRankings!.contains(districtRanking))
+        XCTAssertFalse(team.districtRankings!.contains(districtRanking))
 
         // District points should delete
         XCTAssertNil(points.managedObjectContext)
@@ -91,7 +91,7 @@ class DistrictRankingTestCase: TBADataTestCase {
         XCTAssertNotNil(district.managedObjectContext)
 
         // Team key should not delete
-        XCTAssertNotNil(teamKey.managedObjectContext)
+        XCTAssertNotNil(team.managedObjectContext)
     }
 
     func test_sortedEventPoints() {
@@ -120,7 +120,7 @@ class DistrictRankingTestCase: TBADataTestCase {
         })))
 
         let sortedEventPoints = ranking.sortedEventPoints
-        XCTAssertEqual(sortedEventPoints.map({ $0.eventKey!.key! }), ["2018miket", "2018mike2", "2018mike3"])
+        XCTAssertEqual(sortedEventPoints.map({ $0.event!.key! }), ["2018miket", "2018mike2", "2018mike3"])
     }
 
     func test_isOrphaned() {

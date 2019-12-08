@@ -8,14 +8,20 @@ extension MatchAlliance: Managed {
      Returns team keys for the alliance.
      */
     public var teamKeys: [String] {
-        return (teams!.array as? [TeamKey])?.map({ $0.key! }) ?? []
+        guard let teams = teams?.array as? [Team] else {
+            return []
+        }
+        return teams.map({ $0.key! })
     }
 
     /**
      Returns team keys for DQ'd teams for the alliance.
      */
     public var dqTeamKeys: [String] {
-        return (dqTeams?.array as? [TeamKey])?.map({ $0.key! }) ?? []
+        guard let dqTeams = dqTeams?.array as? [Team] else {
+            return []
+        }
+        return dqTeams.map({ $0.key! })
     }
 
     /**
@@ -52,22 +58,22 @@ extension MatchAlliance: Managed {
             // Don't use updateToManyRelationship to set these up, since Team Key's will never be orphaned.
             // Additionally, updateToManyRelationship doesn't support ordered sets
 
-            matchAlliance.teams = NSOrderedSet(array: model.teams.map({ (key) -> TeamKey in
-                return TeamKey.insert(withKey: key, in: context)
-            }))
+            matchAlliance.teams = NSOrderedSet(array: model.teams.map {
+                return Team.insert($0, in: context)
+            })
 
             if let surrogateTeams = model.surrogateTeams {
-                matchAlliance.surrogateTeams = NSOrderedSet(array: surrogateTeams.map({ (key) -> TeamKey in
-                    return TeamKey.insert(withKey: key, in: context)
-                }))
+                matchAlliance.surrogateTeams = NSOrderedSet(array: surrogateTeams.map {
+                    return Team.insert($0, in: context)
+                })
             } else {
                 matchAlliance.surrogateTeams = nil
             }
 
             if let dqTeams = model.dqTeams {
-                matchAlliance.dqTeams = NSOrderedSet(array: dqTeams.map({ (key) -> TeamKey in
-                    return TeamKey.insert(withKey: key, in: context)
-                }))
+                matchAlliance.dqTeams = NSOrderedSet(array: dqTeams.map {
+                    return Team.insert($0, in: context)
+                })
             } else {
                 matchAlliance.dqTeams = nil
             }

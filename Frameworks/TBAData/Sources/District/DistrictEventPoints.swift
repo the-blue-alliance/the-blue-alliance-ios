@@ -17,12 +17,12 @@ extension DistrictEventPoints: Managed {
      */
     public static func insert(_ model: TBADistrictEventPoints, in context: NSManagedObjectContext) -> DistrictEventPoints {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(DistrictEventPoints.eventKey.key), model.eventKey,
-                                    #keyPath(DistrictEventPoints.teamKey.key), model.teamKey)
+                                    #keyPath(DistrictEventPoints.event.key), model.eventKey,
+                                    #keyPath(DistrictEventPoints.team.key), model.teamKey)
 
         return findOrCreate(in: context, matching: predicate) { (eventPoints) in
-            eventPoints.teamKey = TeamKey.insert(withKey: model.teamKey, in: context)
-            eventPoints.eventKey = EventKey.insert(withKey: model.eventKey, in: context)
+            eventPoints.team = Team.insert(model.teamKey, in: context)
+            eventPoints.event = Event.insert(model.eventKey, in: context)
 
             eventPoints.alliancePoints = model.alliancePoints as NSNumber
             eventPoints.awardPoints = model.awardPoints as NSNumber
@@ -52,7 +52,7 @@ extension DistrictEventPoints: Managed {
         // Fetch all of the previous DistrictEventPoints for this Event
         let oldPoints = DistrictEventPoints.fetch(in: context) {
             $0.predicate = NSPredicate(format: "%K == %@",
-                                       #keyPath(DistrictEventPoints.eventKey.key), eventKey)
+                                       #keyPath(DistrictEventPoints.event.key), eventKey)
         }
 
         // Insert new DistrictEventPoints for this Event
@@ -68,7 +68,7 @@ extension DistrictEventPoints: Managed {
 
     public var isOrphaned: Bool {
         // If the Event doesn't exist and it's not attached to a District Ranking, it's an orphan
-        return districtRanking == nil && eventKey?.event == nil
+        return districtRanking == nil && event == nil
     }
 
 }

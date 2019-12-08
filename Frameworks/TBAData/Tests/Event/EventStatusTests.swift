@@ -15,7 +15,7 @@ class EventStatusTestCase: TBADataTestCase {
         let model = TBAEventStatus(teamKey: "frc1", eventKey: event.key!, qual: qual, alliance: alliance, playoff: playoff, allianceStatusString: "Alliance string", playoffStatusString: "Playoff string", overallStatusString: "Overall string", nextMatchKey: "2018miket_qm1", lastMatchKey: "2018miket_qm80")
         let status = EventStatus.insert(model, in: persistentContainer.viewContext)
 
-        XCTAssertEqual(status.teamKey?.key, "frc1")
+        XCTAssertEqual(status.team?.key, "frc1")
         XCTAssertEqual(status.allianceStatus, "Alliance string")
         XCTAssertEqual(status.playoffStatus, "Playoff string")
         XCTAssertEqual(status.overallStatus, "Overall string")
@@ -54,7 +54,7 @@ class EventStatusTestCase: TBADataTestCase {
         XCTAssertEqual(statusOne, statusTwo)
 
         // Make sure our values got updated properly
-        XCTAssertEqual(statusOne.teamKey?.key, "frc1")
+        XCTAssertEqual(statusOne.team?.key, "frc1")
         XCTAssertNil(statusOne.allianceStatus)
         XCTAssertNil(statusOne.playoffStatus)
         XCTAssertNil(statusOne.overallStatus)

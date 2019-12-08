@@ -17,7 +17,7 @@ class EventRankingTestCase: TBADataTestCase {
         let model = TBAEventRanking(teamKey: "frc1", rank: 2, dq: 10, matchesPlayed: 6, qualAverage: 20, record: TBAWLT(wins: 1, losses: 2, ties: 3), extraStats: [25.0, 3], sortOrders: [2.08, 530.0, 3])
         let ranking = EventRanking.insert(model, sortOrderInfo: sortOrderInfo, extraStatsInfo: extraStatsInfo, eventKey: event.key!, in: persistentContainer.viewContext)
 
-        XCTAssertEqual(ranking.teamKey?.key, "frc1")
+        XCTAssertEqual(ranking.team?.key, "frc1")
         XCTAssertEqual(ranking.rank, 2)
         XCTAssertEqual(ranking.dq, 10)
         XCTAssertEqual(ranking.matchesPlayed, 6)
@@ -53,7 +53,7 @@ class EventRankingTestCase: TBADataTestCase {
         let model = TBAEventRanking(teamKey: "frc1", rank: 2)
 
         let ranking = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
-        ranking.teamKey = TeamKey.insert(withKey: "frc1", in: persistentContainer.viewContext)
+        ranking.team = Team.insert("frc1", in: persistentContainer.viewContext)
 
         // Test inserting a Ranking where EventRanking.qualStatus.eventStatus.event.key == eventKey
         let qualStatus = EventStatusQual.init(entity: EventStatusQual.entity(), insertInto: persistentContainer.viewContext)
@@ -112,7 +112,7 @@ class EventRankingTestCase: TBADataTestCase {
         let ranking = EventRanking.insert(model, sortOrderInfo: nil, extraStatsInfo: nil, eventKey: event.key!, in: persistentContainer.viewContext)
         event.addToRankings(ranking)
 
-        let teamKey = ranking.teamKey!
+        let team = ranking.team!
 
         let qualStatus = EventStatusQual.insert(qualStatusModel, eventKey: event.key!, teamKey: "frc1", in: persistentContainer.viewContext)
         ranking.qualStatus = qualStatus
@@ -121,9 +121,9 @@ class EventRankingTestCase: TBADataTestCase {
         persistentContainer.viewContext.delete(ranking)
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
-        // Event and TeamKey should not be deleted
+        // Event and Team should not be deleted
         XCTAssertNotNil(event.managedObjectContext)
-        XCTAssertNotNil(teamKey.managedObjectContext)
+        XCTAssertNotNil(team.managedObjectContext)
 
         // QualStatus is an orphan and should be deleted
         XCTAssertNil(qualStatus.managedObjectContext)

@@ -56,11 +56,11 @@ extension EventRanking: Managed {
         let predicate = NSPredicate(format: "(%K == %@ OR %K == %@) AND %K == %@",
                                     #keyPath(EventRanking.event.key), eventKey,
                                     #keyPath(EventRanking.qualStatus.eventStatus.event.key), eventKey,
-                                    #keyPath(EventRanking.teamKey.key), model.teamKey)
+                                    #keyPath(EventRanking.team.key), model.teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (ranking) in
             // Required: teamKey, rank
-            ranking.teamKey = TeamKey.insert(withKey: model.teamKey, in: context)
+            ranking.team = Team.insert(model.teamKey, in: context)
             ranking.dq = model.dq as NSNumber?
             ranking.matchesPlayed = model.matchesPlayed as NSNumber?
             ranking.qualAverage = model.qualAverage as NSNumber?

@@ -10,7 +10,7 @@ class AwardRecipientTestCase: AwardTestCase {
         let recipient = AwardRecipient.insert(modelRecipient, in: persistentContainer.viewContext)
 
         XCTAssertEqual(recipient.awardee, "Zachary Orr")
-        XCTAssertEqual(recipient.teamKey?.key, "frc7332")
+        XCTAssertEqual(recipient.team?.key, "frc7332")
 
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
     }
@@ -31,7 +31,7 @@ class AwardRecipientTestCase: AwardTestCase {
         let recipient = AwardRecipient.insert(modelRecipient, in: persistentContainer.viewContext)
 
         XCTAssertNil(recipient.awardee)
-        XCTAssertEqual(recipient.teamKey?.key, "frc7332")
+        XCTAssertEqual(recipient.team?.key, "frc7332")
 
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
     }
@@ -75,7 +75,7 @@ class AwardRecipientTestCase: AwardTestCase {
         let modelRecipient = TBAAwardRecipient(awardee: "Zachary Orr")
         let recipient = AwardRecipient.insert(modelRecipient, in: persistentContainer.viewContext)
 
-        XCTAssertNil(recipient.teamKey)
+        XCTAssertNil(recipient.team)
         XCTAssertEqual(recipient.awardee, "Zachary Orr")
 
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
@@ -85,7 +85,7 @@ class AwardRecipientTestCase: AwardTestCase {
         let modelRecipient = TBAAwardRecipient(teamKey: nil, awardee: nil)
         let recipient = AwardRecipient.insert(modelRecipient, in: persistentContainer.viewContext)
 
-        XCTAssertNil(recipient.teamKey)
+        XCTAssertNil(recipient.team)
         XCTAssertNil(recipient.awardee)
 
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
@@ -108,7 +108,7 @@ class AwardRecipientTestCase: AwardTestCase {
         let modelRecipient = TBAAwardRecipient(teamKey: "frc7332")
         let recipient = AwardRecipient.insert(modelRecipient, in: persistentContainer.viewContext)
 
-        let teamKey = recipient.teamKey!
+        let team = recipient.team!
 
         let modelAward = TBAAward(name: "The Fake Award",
                                   awardType: 2,
@@ -133,8 +133,8 @@ class AwardRecipientTestCase: AwardTestCase {
         XCTAssertNil(award.managedObjectContext)
 
         // Our team key shouldn't be deleted
-        XCTAssertNotNil(teamKey.managedObjectContext)
-        XCTAssertFalse(teamKey.awards!.contains(recipient))
+        XCTAssertNotNil(team.managedObjectContext)
+        XCTAssertFalse(team.awards!.contains(recipient))
     }
 
     func test_delete_deny() {
@@ -187,9 +187,7 @@ class AwardRecipientTestCase: AwardTestCase {
         let recipient = AwardRecipient.insert(modelRecipient, in: persistentContainer.viewContext)
         XCTAssertEqual(recipient.awardText, ["Team 7332"])
 
-        let teamKey = recipient.teamKey!
-        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
-        team.key = teamKey.key
+        let team = Team.insert(modelRecipient.teamKey!, in: persistentContainer.viewContext)
         team.nickname = "The Rawrbotz"
 
         XCTAssertEqual(recipient.awardText, ["Team 7332", "The Rawrbotz"])

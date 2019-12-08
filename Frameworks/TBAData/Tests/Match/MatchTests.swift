@@ -13,17 +13,13 @@ class MatchTestCase: TBADataTestCase {
     func alliance(allianceKey: String, dqs: [String]? = nil) -> MatchAlliance {
         let alliance = MatchAlliance(entity: MatchAlliance.entity(), insertInto: persistentContainer.viewContext)
         alliance.allianceKey = allianceKey
-        alliance.teams = NSOrderedSet(array: ["frc2337", "frc7332", "frc3333"].map({ (key) -> TeamKey in
-            let teamKey = TeamKey.init(entity: TeamKey.entity(), insertInto: persistentContainer.viewContext)
-            teamKey.key = key
-            return teamKey
-        }))
+        alliance.teams = NSOrderedSet(array: ["frc2337", "frc7332", "frc3333"].map {
+            return Team.insert($0, in: persistentContainer.viewContext)
+        })
         if let dqs = dqs {
-            alliance.dqTeams = NSOrderedSet(array: dqs.map({ (key) -> TeamKey in
-                let teamKey = TeamKey.init(entity: TeamKey.entity(), insertInto: persistentContainer.viewContext)
-                teamKey.key = key
-                return teamKey
-            }))
+            alliance.dqTeams = NSOrderedSet(array: dqs.map {
+                return Team.insert($0, in: persistentContainer.viewContext)
+            })
         }
         return alliance
     }
@@ -510,7 +506,7 @@ class MatchTestCase: TBADataTestCase {
     func test_teamKeys() {
         let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
         match.alliances = Set([alliance(allianceKey: "blue"), alliance(allianceKey: "red")]) as NSSet
-        XCTAssertEqual(match.teamKeys.map({$0.key}), ["frc2337", "frc7332", "frc3333", "frc2337", "frc7332", "frc3333"])
+        XCTAssertEqual(match.teams.map({ $0.key }), ["frc2337", "frc7332", "frc3333", "frc2337", "frc7332", "frc3333"])
     }
 
     func test_dqTeamKeys() {

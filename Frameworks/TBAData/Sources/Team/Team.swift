@@ -6,7 +6,14 @@ import TBAKit
 extension Team: Locatable, Surfable, Managed {
 
     public var fallbackNickname: String {
-        return "Team \(teamNumber!.stringValue)"
+        let teamNumber: String = {
+            if let teamNumber = self.teamNumber {
+                return teamNumber.stringValue
+            } else {
+                return Team.trimFRCPrefix(key!)
+            }
+        }()
+        return "Team \(teamNumber)"
     }
 
     /**
@@ -16,14 +23,62 @@ extension Team: Locatable, Surfable, Managed {
         return key.trimPrefix("frc").uppercased()
     }
 
-    /**
-     A TeamKey for the Team object.
+    public static func predicate(key: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Team.key), key)
+    }
 
-     This may seem backwards, providing a TeamKey from a Team, but since TeamAtEventViewController doesn't handle either a Team *or* a TeamKey, we need to pull a TeamKey for controllers that have full Team objects (ex: TeamsViewController)
+    /**
+     Insert a Team with a specified key in to the managed object context.
+
+     - Parameter key: The key for the Team.
+
+     - Parameter context: The NSManagedContext to insert the Event in to.
+
+     - Returns: The inserted Team.
      */
-    public var teamKey: TeamKey {
-        let key = getValue(\Team.key!)
-        return TeamKey.insert(withKey: key, in: managedObjectContext!)
+    public static func insert(_ key: String, in context: NSManagedObjectContext) -> Team {
+        let predicate = Team.predicate(key: key)
+        return findOrCreate(in: context, matching: predicate) { (team) in
+            // Required: key
+            team.key = key
+        }
+    }
+
+    /**
+     Insert a Team with values from a TBAKit Team model in to the managed object context.
+
+     - Parameter model: The TBAKit Team representation to set values from.
+
+     - Parameter context: The NSManagedContext to insert the Favorite in to.
+
+     - Returns: The inserted Team.
+     */
+    @discardableResult
+    public static func insert(_ model: TBATeam, in context: NSManagedObjectContext) -> Team {
+        let predicate = Team.predicate(key: model.key)
+
+        return findOrCreate(in: context, matching: predicate) { (team) in
+            // Required: key, name, teamNumber, rookieYear
+            team.address = model.address
+            team.city = model.city
+            team.country = model.country
+            team.gmapsPlaceID = model.gmapsPlaceID
+            team.gmapsURL = model.gmapsURL
+            team.homeChampionship = model.homeChampionship
+            team.key = model.key
+            team.lat = model.lat as NSNumber?
+            team.lng = model.lng as NSNumber?
+            team.locationName = model.locationName
+            team.name = model.name
+            team.nickname = model.nickname
+            team.postalCode = model.postalCode
+            team.rookieYear = model.rookieYear as NSNumber
+            team.stateProv = model.stateProv
+            team.teamNumber = model.teamNumber as NSNumber
+            team.website = model.website
+            team.homeChampionship = model.homeChampionship
+        }
     }
 
     /**
@@ -61,47 +116,6 @@ extension Team: Locatable, Surfable, Managed {
         Set(oldTeams).subtracting(Set(teams)).forEach({
             context.delete($0)
         })
-    }
-
-    public static func predicate(key: String) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(Team.key), key)
-    }
-
-    /**
-     Insert a Team with values from a TBAKit Team model in to the managed object context.
-
-     - Parameter model: The TBAKit Team representation to set values from.
-
-     - Parameter context: The NSManagedContext to insert the Favorite in to.
-
-     - Returns: The inserted Team.
-     */
-    @discardableResult
-    public static func insert(_ model: TBATeam, in context: NSManagedObjectContext) -> Team {
-        let predicate = Team.predicate(key: model.key)
-
-        return findOrCreate(in: context, matching: predicate) { (team) in
-            // Required: key, name, teamNumber, rookieYear
-            team.address = model.address
-            team.city = model.city
-            team.country = model.country
-            team.gmapsPlaceID = model.gmapsPlaceID
-            team.gmapsURL = model.gmapsURL
-            team.homeChampionship = model.homeChampionship
-            team.key = model.key
-            team.lat = model.lat as NSNumber?
-            team.lng = model.lng as NSNumber?
-            team.locationName = model.locationName
-            team.name = model.name
-            team.nickname = model.nickname
-            team.postalCode = model.postalCode
-            team.rookieYear = model.rookieYear as NSNumber
-            team.stateProv = model.stateProv
-            team.teamNumber = model.teamNumber as NSNumber
-            team.website = model.website
-            team.homeChampionship = model.homeChampionship
-        }
     }
 
     /**

@@ -148,10 +148,13 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
             return "\(event.weekString) Events"
         } else if event.isPreseason {
             return "Preseason Events"
-        } else {
+        } else if event.isRegional {
             return "Regional Events"
+        } else {
+            return "Other Events"
         }
     }
+    // TODO: Think about what if one of these don't match...?
 
     // MARK: - EventsViewControllerDataSourceConfiguration
 

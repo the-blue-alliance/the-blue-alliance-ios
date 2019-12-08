@@ -34,14 +34,14 @@ extension EventAlliance: Managed {
                 return EventAllianceBackup.insert($0, in: context)
             })
 
-            alliance.picks = NSOrderedSet(array: model.picks.map({ (teamKey) -> TeamKey in
-                return TeamKey.insert(withKey: teamKey, in: context)
-            }))
+            alliance.picks = NSOrderedSet(array: model.picks.map {
+                return Team.insert($0, in: context)
+            })
 
             if let declines = model.declines {
-                alliance.declines = NSOrderedSet(array: declines.map({ (teamKey) -> TeamKey in
-                    return TeamKey.insert(withKey: teamKey, in: context)
-                }))
+                alliance.declines = NSOrderedSet(array: declines.map {
+                    return Team.insert($0, in: context)
+                })
             } else {
                 alliance.declines = nil
             }

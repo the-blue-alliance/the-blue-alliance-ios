@@ -15,10 +15,10 @@ class EventAllianceTestCase: TBADataTestCase {
         XCTAssertEqual(alliance.name, "Alliance 1")
         XCTAssertNil(alliance.backup)
 
-        let pickKeys = (alliance.picks!.array as! [TeamKey]).map({ $0.key! })
+        let pickKeys = (alliance.picks!.array as! [Team]).map({ $0.key! })
         XCTAssertEqual(pickKeys, ["frc1", "frc2", "frc3"])
 
-        let declineKeys = (alliance.declines!.array as! [TeamKey]).map({ $0.key! })
+        let declineKeys = (alliance.declines!.array as! [Team]).map({ $0.key! })
         XCTAssertEqual(declineKeys, ["frc5"])
 
         XCTAssertNotNil(alliance.status)
@@ -76,7 +76,7 @@ class EventAllianceTestCase: TBADataTestCase {
         let alliance = EventAlliance.insert(model, eventKey: event.key!, in: persistentContainer.viewContext)
         event.addToAlliances(alliance)
 
-        let teamKey = alliance.picks!.firstObject! as! TeamKey
+        let teamKey = alliance.picks!.firstObject! as! Team
         let status = alliance.status!
         let backup = alliance.backup!
 

@@ -67,9 +67,9 @@ class AwardTestCase: TBADataTestCase {
         let recipients = awardOne.recipients!.allObjects as! [AwardRecipient]
         event.addToAwards(awardOne)
 
-        let frc1 = recipients.first(where: { $0.teamKey?.key == "frc1" })!
-        let frc2 = recipients.first(where: { $0.teamKey?.key == "frc2" })!
-        let frc3 = recipients.first(where: { $0.teamKey?.key == "frc3" })!
+        let frc1 = recipients.first(where: { $0.team?.key == "frc1" })!
+        let frc2 = recipients.first(where: { $0.team?.key == "frc2" })!
+        let frc3 = recipients.first(where: { $0.team?.key == "frc3" })!
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
@@ -129,8 +129,8 @@ class AwardTestCase: TBADataTestCase {
 
         event.addToAwards(awardOne)
 
-        let frc1 = recipients.first(where: { $0.teamKey?.key == "frc1" })!
-        let frc2 = recipients.first(where: { $0.teamKey?.key == "frc2" })!
+        let frc1 = recipients.first(where: { $0.team?.key == "frc1" })!
+        let frc2 = recipients.first(where: { $0.team?.key == "frc2" })!
 
         let modelAwardTwo = TBAAward(name: "Some New Award",
                                      awardType: 3,

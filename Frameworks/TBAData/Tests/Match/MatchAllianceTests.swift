@@ -13,9 +13,9 @@ class MatchAllianceTestCase: TBADataTestCase {
 
     func test_dqTeamKeys() {
         let alliance = MatchAlliance.init(entity: MatchAlliance.entity(), insertInto: persistentContainer.viewContext)
-        alliance.dqTeams = NSOrderedSet(array: ["frc3", "frc2"].map({ (key) -> TeamKey in
-            return TeamKey.insert(withKey: key, in: persistentContainer.viewContext)
-        }))
+        alliance.dqTeams = NSOrderedSet(array: ["frc3", "frc2"].map {
+            return Team.insert($0, in: persistentContainer.viewContext)
+        })
         XCTAssertEqual(alliance.dqTeamKeys, ["frc3", "frc2"])
     }
 
@@ -27,9 +27,9 @@ class MatchAllianceTestCase: TBADataTestCase {
 
         XCTAssertEqual(alliance.allianceKey, "red")
         XCTAssertEqual(alliance.score, 200)
-        XCTAssertEqual((alliance.teams!.array as! [TeamKey]).map({ $0.key }), ["frc1", "frc2"])
-        XCTAssertEqual((alliance.surrogateTeams!.array as! [TeamKey]).map({ $0.key }), ["frc3", "frc4"])
-        XCTAssertEqual((alliance.dqTeams!.array as! [TeamKey]).map({ $0.key }), ["frc5", "frc6"])
+        XCTAssertEqual((alliance.teams!.array as! [Team]).map({ $0.key }), ["frc1", "frc2"])
+        XCTAssertEqual((alliance.surrogateTeams!.array as! [Team]).map({ $0.key }), ["frc3", "frc4"])
+        XCTAssertEqual((alliance.dqTeams!.array as! [Team]).map({ $0.key }), ["frc5", "frc6"])
 
         // Should throw - needs to be attached to a Match
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
@@ -46,9 +46,9 @@ class MatchAllianceTestCase: TBADataTestCase {
 
         XCTAssertEqual(alliance.allianceKey, "red")
         XCTAssertEqual(alliance.score, nil)
-        XCTAssertEqual((alliance.teams!.array as! [TeamKey]).map({ $0.key }), ["frc1", "frc2"])
-        XCTAssertEqual((alliance.surrogateTeams!.array as! [TeamKey]).map({ $0.key }), ["frc3", "frc4"])
-        XCTAssertEqual((alliance.dqTeams!.array as! [TeamKey]).map({ $0.key }), ["frc5", "frc6"])
+        XCTAssertEqual((alliance.teams!.array as! [Team]).map({ $0.key }), ["frc1", "frc2"])
+        XCTAssertEqual((alliance.surrogateTeams!.array as! [Team]).map({ $0.key }), ["frc3", "frc4"])
+        XCTAssertEqual((alliance.dqTeams!.array as! [Team]).map({ $0.key }), ["frc5", "frc6"])
 
         // Should throw - needs to be attached to a Match
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
@@ -65,9 +65,9 @@ class MatchAllianceTestCase: TBADataTestCase {
         let allianceOne = MatchAlliance.insert(modelOne, allianceKey: "red", matchKey: match.key!, in: persistentContainer.viewContext)
         allianceOne.match = match
 
-        let teams = allianceOne.teams!.array as! [TeamKey]
-        let surrogateTeams = allianceOne.surrogateTeams!.array as! [TeamKey]
-        let dqTeams = allianceOne.dqTeams!.array as! [TeamKey]
+        let teams = allianceOne.teams!.array as! [Team]
+        let surrogateTeams = allianceOne.surrogateTeams!.array as! [Team]
+        let dqTeams = allianceOne.dqTeams!.array as! [Team]
 
         let modelTwo = TBAMatchAlliance(score: -1, teams: ["frc1"], surrogateTeams: nil, dqTeams: nil)
         let allianceTwo = MatchAlliance.insert(modelTwo, allianceKey: "red", matchKey: match.key!, in: persistentContainer.viewContext)
@@ -77,7 +77,7 @@ class MatchAllianceTestCase: TBADataTestCase {
 
         // Ensure our Match Alliance got updated properly
         XCTAssertNil(allianceOne.score)
-        XCTAssertEqual((allianceOne.teams!.array as! [TeamKey]).map({ $0.key }), ["frc1"])
+        XCTAssertEqual((allianceOne.teams!.array as! [Team]).map({ $0.key }), ["frc1"])
         XCTAssertEqual(allianceOne.surrogateTeams?.count, 0)
         XCTAssertEqual(allianceOne.dqTeams?.count, 0)
 
@@ -98,9 +98,9 @@ class MatchAllianceTestCase: TBADataTestCase {
         let match = Match.insert(matchModel, in: persistentContainer.viewContext)
         alliance.match = match
 
-        let teams = alliance.teams!.array as! [TeamKey]
-        let surrogateTeams = alliance.surrogateTeams!.array as! [TeamKey]
-        let dqTeams = alliance.dqTeams!.array as! [TeamKey]
+        let teams = alliance.teams!.array as! [Team]
+        let surrogateTeams = alliance.surrogateTeams!.array as! [Team]
+        let dqTeams = alliance.dqTeams!.array as! [Team]
 
         persistentContainer.viewContext.delete(alliance)
         // Should throw - Match Alliance must not be related to a Match when deleting

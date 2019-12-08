@@ -8,16 +8,16 @@ extension DistrictRanking {
         // TODO: This sort is going to be problematic if we don't have Event objects
         let eventPointsSet = getValue(\DistrictRanking.eventPoints)
         return (eventPointsSet?.allObjects as? [DistrictEventPoints])?.sorted(by: { (lhs, rhs) -> Bool in
-            guard let lhsEventKey = lhs.getValue(\DistrictEventPoints.eventKey) else {
+            guard let lhsEvent = lhs.getValue(\DistrictEventPoints.event) else {
                 return false
             }
-            guard let lhsStartDate = lhsEventKey.event?.getValue(\Event.startDate) else {
+            guard let lhsStartDate = lhsEvent.getValue(\Event.startDate) else {
                 return false
             }
-            guard let rhsEventKey = rhs.getValue(\DistrictEventPoints.eventKey) else {
+            guard let rhsEvent = rhs.getValue(\DistrictEventPoints.event) else {
                 return false
             }
-            guard let rhsStartDate = rhsEventKey.event?.getValue(\Event.startDate) else {
+            guard let rhsStartDate = rhsEvent.getValue(\Event.startDate) else {
                 return false
             }
             return rhsStartDate > lhsStartDate
@@ -46,10 +46,10 @@ extension DistrictRanking: Managed {
     public static func insert(_ model: TBADistrictRanking, districtKey: String, in context: NSManagedObjectContext) -> DistrictRanking {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
                                     #keyPath(DistrictRanking.district.key), districtKey,
-                                    #keyPath(DistrictRanking.teamKey.key), model.teamKey)
+                                    #keyPath(DistrictRanking.team.key), model.teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (ranking) in
-            ranking.teamKey = TeamKey.insert(withKey: model.teamKey, in: context)
+            ranking.team = Team.insert(model.teamKey, in: context)
 
             ranking.pointTotal = model.pointTotal as NSNumber
             ranking.rank = model.rank as NSNumber
