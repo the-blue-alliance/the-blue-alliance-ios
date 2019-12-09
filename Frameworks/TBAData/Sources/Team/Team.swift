@@ -40,8 +40,13 @@ extension Team: Locatable, Surfable, Managed {
     public static func insert(_ key: String, in context: NSManagedObjectContext) -> Team {
         let predicate = Team.predicate(key: key)
         return findOrCreate(in: context, matching: predicate) { (team) in
-            // Required: key
+            // Required: key, teamNumber
             team.key = key
+
+            let teamNumberString = Team.trimFRCPrefix(key)
+            if team.teamNumber == nil, let teamNumber = Int(teamNumberString) {
+                team.teamNumber = NSNumber(value: teamNumber)
+            }
         }
     }
 

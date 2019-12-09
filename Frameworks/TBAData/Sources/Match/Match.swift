@@ -241,6 +241,10 @@ extension Match: Managed {
                 match.compLevelSortOrder = nil
             }
 
+            match.updateToOneRelationship(relationship: #keyPath(Match.event), newValue: model.eventKey) {
+                return Event.insert($0, in: context)
+            }
+
             match.setNumber = model.setNumber as NSNumber
             match.matchNumber = model.matchNumber as NSNumber
 

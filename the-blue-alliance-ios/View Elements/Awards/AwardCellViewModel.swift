@@ -15,7 +15,7 @@ struct AwardCellViewModel {
     init(award: Award) {
         awardName = award.name
         recipients = (award.recipients?.allObjects as? [AwardRecipient])?.map({ (recipient) -> Recipient in
-            return Recipient(teamKey: recipient.teamKey?.key, awardText: recipient.awardText)
+            return Recipient(teamKey: recipient.team?.key, awardText: recipient.awardText)
         }) ?? []
     }
 }

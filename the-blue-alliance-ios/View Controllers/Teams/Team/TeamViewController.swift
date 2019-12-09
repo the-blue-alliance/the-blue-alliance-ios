@@ -57,7 +57,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
 
         super.init(
             viewControllers: [infoViewController, eventsViewController, mediaViewController],
-            navigationTitle: "Team \(team.teamNumber!.stringValue)",
+            navigationTitle: team.fallbackNickname,
             navigationSubtitle: ContainerViewController.yearSubtitle(year),
             segmentedControlTitles: ["Info", "Events", "Media"],
             myTBA: myTBA,
@@ -201,7 +201,7 @@ extension TeamViewController: SelectTableViewControllerDelegate {
 extension TeamViewController: EventsViewControllerDelegate {
 
     func eventSelected(_ event: Event) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

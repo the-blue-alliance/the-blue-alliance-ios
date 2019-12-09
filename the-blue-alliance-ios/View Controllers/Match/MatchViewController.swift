@@ -21,11 +21,11 @@ class MatchViewController: MyTBAContainerViewController {
 
     // MARK: Init
 
-    init(match: Match, teamKey: TeamKey? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(match: Match, team: Team? = nil, statusService: StatusService, urlOpener: URLOpener, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.match = match
         self.statusService = statusService
         self.urlOpener = urlOpener
-        infoViewController = MatchInfoViewController(match: match, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        infoViewController = MatchInfoViewController(match: match, team: team, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         // Only show match breakdown if year is 2015 or onward
         var titles: [String]  = ["Info"]
@@ -37,7 +37,7 @@ class MatchViewController: MyTBAContainerViewController {
         super.init(
             viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }) as! [ContainableViewController],
             navigationTitle: "\(match.friendlyName)",
-            navigationSubtitle: "@ \(match.event?.friendlyNameWithYear ?? match.key!)", // TODO: Use EventKey
+            navigationSubtitle: "@ \(match.event?.friendlyNameWithYear ?? match.key!)",
             segmentedControlTitles: titles,
             myTBA: myTBA,
             persistentContainer: persistentContainer,
@@ -66,11 +66,11 @@ extension MatchViewController: MatchSummaryViewDelegate {
     
     func teamPressed(teamNumber: Int) {
         guard let event = match.event else { return }
-        
+
         // get team key that matches the target teamNumber
-        guard let teamKey = match.teamKeys.first(where: { $0.teamNumber == "\(teamNumber)"}) else { return }
-        
-        let teamAtEventVC = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        guard let team = match.teams.first(where: { $0.teamNumber?.intValue == teamNumber }) else { return }
+
+        let teamAtEventVC = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(teamAtEventVC, animated: true)
     }
     

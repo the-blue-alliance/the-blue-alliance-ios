@@ -7,7 +7,7 @@ import TBAKit
 import UIKit
 
 protocol YearSelectViewControllerDelegate: AnyObject {
-    func weekEventSelected(_ weekEvent: Event)
+    func weekEventSelected(year: Int, weekEvent: Event)
 }
 
 class YearSelectViewController: ContainerViewController {
@@ -144,11 +144,12 @@ extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
     typealias OptionType = Event
 
     func optionSelected(_ option: OptionType) {
-        delegate?.weekEventSelected(option)
+        delegate?.weekEventSelected(year: year, weekEvent: option)
     }
 
     func titleForOption(_ option: OptionType) -> String {
-        return option.weekString
+        // TODO: Fix this force unwrap...
+        return option.weekString!
     }
 
 }

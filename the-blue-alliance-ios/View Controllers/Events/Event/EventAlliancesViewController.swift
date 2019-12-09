@@ -52,15 +52,15 @@ class EventAlliancesContainerViewController: ContainerViewController {
 
 extension EventAlliancesContainerViewController: EventAlliancesViewControllerDelegate {
 
-    func teamKeySelected(_ teamKey: TeamKey) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+    func teamSelected(_ team: Team) {
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
 }
 
 protocol EventAlliancesViewControllerDelegate: AnyObject {
-    func teamKeySelected(_ teamKey: TeamKey)
+    func teamSelected(_ team: Team)
 }
 
 private class EventAlliancesViewController: TBATableViewController {
@@ -124,8 +124,8 @@ private class EventAlliancesViewController: TBATableViewController {
             guard let context = self?.persistentContainer.viewContext else {
                 return
             }
-            let teamKey = TeamKey.insert(withKey: teamKey, in: context)
-            self?.delegate?.teamKeySelected(teamKey)
+            let team = Team.insert(teamKey, in: context)
+            self?.delegate?.teamSelected(team)
         }
 
         return cell

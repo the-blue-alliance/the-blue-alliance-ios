@@ -69,7 +69,11 @@ extension DistrictViewController: EventsViewControllerDelegate {
     }
 
     func title(for event: Event) -> String? {
-        return "\(event.weekString) Events"
+        if let weekString = event.weekString {
+            return "\(weekString) Events"
+        } else {
+            return "--- Events"
+        }
     }
 
 }

@@ -170,7 +170,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupGoogleAuthentication()
 
         // Our app setup operation will load our persistent stores, propogate persistance container
-        let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer)
+        let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer, userDefaults: userDefaults)
         weak var weakAppSetupOperation = appSetupOperation
         appSetupOperation.completionBlock = { [unowned self] in
             if let error = weakAppSetupOperation?.completionError as NSError? {

@@ -9,7 +9,7 @@ import UIKit
 class MatchInfoViewController: TBAViewController, Observable {
 
     private let match: Match
-    private let teamKey: TeamKey?
+    private let team: Team?
 
     // MARK: - UI
 
@@ -90,9 +90,9 @@ class MatchInfoViewController: TBAViewController, Observable {
 
     // MARK: Init
 
-    init(match: Match, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(match: Match, team: Team? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.match = match
-        self.teamKey = teamKey
+        self.team = team
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
@@ -156,7 +156,7 @@ class MatchInfoViewController: TBAViewController, Observable {
     func updateMatchSummaryView() {
         matchSummaryView.resetView()
 
-        let viewModel = MatchViewModel(match: match, teamKey: teamKey)
+        let viewModel = MatchViewModel(match: match, team: team)
         matchSummaryView.viewModel = viewModel
 
         if !viewModel.hasScores {

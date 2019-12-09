@@ -108,7 +108,7 @@ extension EventViewController: EventInfoViewControllerDelegate {
 extension EventViewController: TeamsViewControllerDelegate {
 
     func teamSelected(_ team: Team) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: team.teamKey, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -117,7 +117,7 @@ extension EventViewController: TeamsViewControllerDelegate {
 extension EventViewController: EventRankingsViewControllerDelegate {
 
     func rankingSelected(_ ranking: EventRanking) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: ranking.teamKey!, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: ranking.team!, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

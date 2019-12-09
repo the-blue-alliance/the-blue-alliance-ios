@@ -43,8 +43,13 @@ extension Event: Locatable, Surfable, Managed {
     public static func insert(_ key: String, in context: NSManagedObjectContext) -> Event {
         let predicate = Event.predicate(key: key)
         return findOrCreate(in: context, matching: predicate) { (event) in
-            // Required: key
+            // Required: key, year
             event.key = key
+
+            let yearString = String(key.prefix(4))
+            if event.year == nil, let year = Int(yearString) {
+                event.year = NSNumber(value: year)
+            }
         }
     }
 
@@ -190,13 +195,13 @@ extension Event: Locatable, Surfable, Managed {
     }
 
     /**
-     Insert Awards for a given TeamKey with values from a TBAKit Award models in to the managed object context.
+     Insert Awards for a given Team key with values from a TBAKit Award models in to the managed object context.
 
-     This method will manage setting up an Award's relationship to an Event and the deletion of oprhaned Awards for a TeamKey on the Event.
+     This method will manage setting up an Award's relationship to an Event and the deletion of oprhaned Awards for a Team key on the Event.
 
      - Parameter awards: The TBAKit Award representations to set values from.
 
-     - Parameter teamKey: The TeamKey the Awards belong to.
+     - Parameter teamKey: The key for the Team the Awards belong to.
      */
     public func insert(_ awards: [TBAAward], teamKey: String) {
         guard let managedObjectContext = managedObjectContext else {
@@ -457,16 +462,28 @@ extension Event: Locatable, Surfable, Managed {
         }
     }
 
-//    public var safeShortName: String {
-//        guard let shortName = shortName else {
-//            return name!
-//        }
-//        return shortName.isEmpty ? name! : shortName
-//    }
-//
-//    public var friendlyNameWithYear: String {
-//        return "\(year!.stringValue) \(safeShortName) \(eventTypeString ?? "Event")"
-//    }
+    // TODO: Add tests
+    public var safeShortName: String {
+        guard let name = name else {
+            return String(key!.dropFirst(4)) // Drop year from key
+        }
+        guard let shortName = shortName else {
+            return name
+        }
+        return shortName.isEmpty ? name : shortName
+    }
+
+    // TODO: Add tests
+    public var friendlyNameWithYear: String {
+        let year: String = {
+            if let year = self.year {
+                return year.stringValue
+            } else {
+                return String(key!.prefix(4))
+            }
+        }()
+        return "\(year) \(safeShortName) \(eventTypeString ?? "Event")"
+    }
 
     /**
      If the event is a CMP division or a CMP finals field.

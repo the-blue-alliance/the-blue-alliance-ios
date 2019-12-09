@@ -25,10 +25,10 @@ struct MatchViewModel {
 
     let baseTeamKeys: [String]
 
-    init(match: Match, teamKey: TeamKey? = nil) {
+    init(match: Match, team: Team? = nil) {
         var baseTeamKeys: [String] = []
-        if let teamKey = teamKey {
-            baseTeamKeys.append(teamKey.key!)
+        if let team = team {
+            baseTeamKeys.append(team.key!)
         }
         self.init(match: match, baseTeamKeys: baseTeamKeys)
     }

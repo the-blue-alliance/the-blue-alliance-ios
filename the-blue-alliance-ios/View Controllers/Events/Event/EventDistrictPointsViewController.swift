@@ -50,7 +50,7 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
 extension EventDistrictPointsContainerViewController: EventDistrictPointsViewControllerDelegate {
 
     func districtEventPointsSelected(_ districtEventPoints: DistrictEventPoints) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: districtEventPoints.teamKey!, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: districtEventPoints.team!, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
@@ -122,7 +122,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
 
     private func setupFetchRequest(_ request: NSFetchRequest<DistrictEventPoints>) {
         request.predicate = NSPredicate(format: "%K == %@",
-                                        #keyPath(DistrictEventPoints.eventKey.key), event.key!)
+                                        #keyPath(DistrictEventPoints.event.key), event.key!)
     }
 
 }

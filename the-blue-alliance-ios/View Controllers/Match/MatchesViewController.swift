@@ -17,7 +17,7 @@ class MatchesViewController: TBATableViewController {
     var query: MatchQueryOptions = MatchQueryOptions.defaultQuery()
 
     private let event: Event
-    private let teamKey: TeamKey?
+    private let team: Team?
     private var myTBA: MyTBA
 
     private var dataSource: TableViewDataSource<String, Match>!
@@ -33,9 +33,9 @@ class MatchesViewController: TBATableViewController {
 
     // MARK: - Init
 
-    init(event: Event, teamKey: TeamKey? = nil, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, team: Team? = nil, myTBA: MyTBA, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
-        self.teamKey = teamKey
+        self.team = team
         self.myTBA = myTBA
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
@@ -73,8 +73,8 @@ class MatchesViewController: TBATableViewController {
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MatchTableViewCell
 
             var baseTeamKeys: Set<String> = Set()
-            if let teamKey = self?.teamKey {
-                baseTeamKeys.insert(teamKey.key!)
+            if let team = self?.team {
+                baseTeamKeys.insert(team.key!)
             }
             if let query = self?.query, query.filter.favorites, let favoriteTeamKeys = self?.favoriteTeamKeys {
                 baseTeamKeys.formUnion(favoriteTeamKeys)
@@ -104,11 +104,11 @@ class MatchesViewController: TBATableViewController {
                                         NSSortDescriptor(key: #keyPath(Match.matchNumber), ascending: ascending)]
 
         let matchPredicate: NSPredicate = {
-            if let teamKey = teamKey {
+            if let team = team {
                 // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
                 return NSPredicate(format: "%K == %@ AND SUBQUERY(%K, $a, ANY $a.teams.key == %@).@count > 0",
                                    #keyPath(Match.event), event,
-                                   #keyPath(Match.alliances), teamKey.key!)
+                                   #keyPath(Match.alliances), team.key!)
             } else {
                 return NSPredicate(format: "%K == %@",
                                    #keyPath(Match.event), event)

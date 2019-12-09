@@ -67,7 +67,7 @@
         <attribute name="timezone" optional="YES" attributeType="String"/>
         <attribute name="website" optional="YES" attributeType="String"/>
         <attribute name="week" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
-        <attribute name="year" optional="YES" attributeType="Integer 16" minValueString="1992" usesScalarValueType="NO"/>
+        <attribute name="year" attributeType="Integer 16" minValueString="1992" usesScalarValueType="NO"/>
         <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="EventAlliance" inverseName="event" inverseEntity="EventAlliance"/>
         <relationship name="awards" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Award" inverseName="event" inverseEntity="Award"/>
         <relationship name="district" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="District" inverseName="events" inverseEntity="District"/>
@@ -232,7 +232,7 @@
         <attribute name="postalCode" optional="YES" attributeType="String"/>
         <attribute name="rookieYear" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
         <attribute name="stateProv" optional="YES" attributeType="String"/>
-        <attribute name="teamNumber" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="teamNumber" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="website" optional="YES" attributeType="String"/>
         <attribute name="yearsParticipated" optional="YES" attributeType="Transformable" customClassName="[Int]"/>
         <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MatchAlliance" inverseName="teams" inverseEntity="MatchAlliance"/>

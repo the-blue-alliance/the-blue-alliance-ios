@@ -99,7 +99,7 @@ extension EventStatsContainerViewController: EventTeamStatsSelectionDelegate {
     }
 
     func eventTeamStatSelected(_ eventTeamStat: EventTeamStat) {
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventTeamStat.teamKey!, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: eventTeamStat.team!, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

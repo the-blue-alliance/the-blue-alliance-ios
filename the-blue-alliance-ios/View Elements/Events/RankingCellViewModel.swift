@@ -14,8 +14,8 @@ struct RankingCellViewModel {
     init(districtRanking: DistrictRanking) {
         rankText = "Rank \(districtRanking.rank!.stringValue)"
 
-        teamNumber = String(describing: districtRanking.teamKey!.teamNumber)
-        teamName = districtRanking.teamKey!.team?.nickname ?? districtRanking.teamKey!.name
+        teamNumber = String(describing: districtRanking.team!.teamNumber) // TODO: Make sure this isn't nil....
+        teamName = districtRanking.team!.nickname ?? districtRanking.team!.fallbackNickname
 
         detailText = "\(districtRanking.pointTotal!.stringValue) Points"
         wltText = nil
@@ -24,8 +24,8 @@ struct RankingCellViewModel {
     init(rank: String, districtEventPoints: DistrictEventPoints) {
         rankText = rank
 
-        teamNumber = String(describing: districtEventPoints.teamKey!.teamNumber)
-        teamName = districtEventPoints.teamKey!.team?.nickname ?? districtEventPoints.teamKey!.name
+        teamNumber = String(describing: districtEventPoints.team!.teamNumber)
+        teamName = districtEventPoints.team!.nickname ?? districtEventPoints.team!.fallbackNickname
 
         detailText = "\(districtEventPoints.total!.stringValue) Points"
         wltText = nil
@@ -34,8 +34,8 @@ struct RankingCellViewModel {
     init(eventRanking: EventRanking) {
         rankText = "Rank \(eventRanking.rank!.intValue)"
 
-        teamNumber = String(describing: eventRanking.teamKey!.teamNumber)
-        teamName = eventRanking.teamKey!.team?.nickname ?? eventRanking.teamKey!.name
+        teamNumber = String(describing: eventRanking.team!.teamNumber) // TODO: Make sure this isn't nil...
+        teamName = eventRanking.team!.nickname ?? eventRanking.team!.fallbackNickname
 
         detailText = eventRanking.rankingInfoString
 
@@ -51,8 +51,8 @@ struct RankingCellViewModel {
     init(eventTeamStat: EventTeamStat) {
         rankText = nil
 
-        teamNumber = eventTeamStat.teamKey!.teamNumber
-        teamName = eventTeamStat.teamKey!.team?.nickname ?? eventTeamStat.teamKey!.name
+        teamNumber = String(describing: eventTeamStat.team!.teamNumber) // TODO: Make sure this isn't nil
+        teamName = eventTeamStat.team!.nickname ?? eventTeamStat.team!.fallbackNickname
 
         detailText = String(format: "OPR: %.2f, DPR: %.2f, CCWM: %.2f", eventTeamStat.opr!.floatValue, eventTeamStat.dpr!.floatValue, eventTeamStat.ccwm!.floatValue)
         wltText = nil

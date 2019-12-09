@@ -8,25 +8,25 @@ import UIKit
 class EventAwardsContainerViewController: ContainerViewController {
 
     private(set) var event: Event
-    private(set) var teamKey: TeamKey?
+    private(set) var team: Team?
     private let myTBA: MyTBA
     private let statusService: StatusService
     private let urlOpener: URLOpener
 
     // MARK: - Init
 
-    init(event: Event, teamKey: TeamKey? = nil, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, team: Team? = nil, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
-        self.teamKey = teamKey
+        self.team = team
         self.myTBA = myTBA
         self.statusService = statusService
         self.urlOpener = urlOpener
 
-        let awardsViewController = EventAwardsViewController(event: event, teamKey: teamKey, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let awardsViewController = EventAwardsViewController(event: event, team: team, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         let navigationSubtitle: String = {
-            if let teamKey = teamKey {
-                return "Team \(teamKey.teamNumber) @ \(event.friendlyNameWithYear)"
+            if let team = team {
+                return "\(team.fallbackNickname) @ \(event.friendlyNameWithYear)"
             } else {
                 return "@ \(event.friendlyNameWithYear)"
             }
@@ -54,8 +54,8 @@ class EventAwardsContainerViewController: ContainerViewController {
         var parameters = [
             "event": event.key!,
         ]
-        if let teamKey = teamKey {
-            parameters["team"] = teamKey.key!
+        if let team = team {
+            parameters["team"] = team.key!
         }
         Analytics.logEvent("event_awards", parameters: parameters)
     }
@@ -64,18 +64,18 @@ class EventAwardsContainerViewController: ContainerViewController {
 
 extension EventAwardsContainerViewController: EventAwardsViewControllerDelegate {
 
-    func teamKeySelected(_ teamKey: TeamKey) {
-        if teamKey == self.teamKey {
+    func teamSelected(_ team: Team) {
+        if team == self.team {
             return
         }
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: teamKey, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, showDetailEvent: false, showDetailTeam: true, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
 }
 
 protocol EventAwardsViewControllerDelegate: AnyObject {
-    func teamKeySelected(_ teamKey: TeamKey)
+    func teamSelected(_ team: Team)
 }
 
 class EventAwardsViewController: TBATableViewController {
@@ -83,16 +83,16 @@ class EventAwardsViewController: TBATableViewController {
     weak var delegate: EventAwardsViewControllerDelegate?
 
     private let event: Event
-    private let teamKey: TeamKey?
+    private let team: Team?
 
     private var dataSource: TableViewDataSource<String, Award>!
     private var fetchedResultsController: TableViewDataSourceFetchedResultsController<Award>!
 
     // MARK: - Init
 
-    init(event: Event, teamKey: TeamKey? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(event: Event, team: Team? = nil, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.event = event
-        self.teamKey = teamKey
+        self.team = team
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
     }
@@ -123,8 +123,8 @@ class EventAwardsViewController: TBATableViewController {
                 guard let context = self?.persistentContainer.viewContext else {
                     return
                 }
-                let teamKey = TeamKey.insert(withKey: teamKey, in: context)
-                self?.delegate?.teamKeySelected(teamKey)
+                let team = Team.insert(teamKey, in: context)
+                self?.delegate?.teamSelected(team)
             }
             return cell
         }
@@ -133,11 +133,11 @@ class EventAwardsViewController: TBATableViewController {
 
         let fetchRequest: NSFetchRequest<Award> = Award.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Award.awardType), ascending: true)]
-        if let teamKey = teamKey {
+        if let team = team {
             // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/pull/169
-            fetchRequest.predicate = NSPredicate(format: "%K == %@ AND (ANY recipients.teamKey.key == %@)",
+            fetchRequest.predicate = NSPredicate(format: "%K == %@ AND (ANY recipients.team.key == %@)",
                                                  #keyPath(Award.event), event,
-                                                 teamKey.key!)
+                                                 team.key!)
         } else {
             fetchRequest.predicate = NSPredicate(format: "%K == %@",
                                                  #keyPath(Award.event), event)
@@ -189,7 +189,7 @@ extension EventAwardsViewController: Refreshable {
 extension EventAwardsViewController: Stateful {
 
     var noDataText: String {
-        return "No awards for \(teamKey != nil ? "team at event" : "event")"
+        return "No awards for \(team != nil ? "team at event" : "event")"
     }
 
 }

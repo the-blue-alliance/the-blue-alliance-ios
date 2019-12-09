@@ -8,8 +8,8 @@ import UIKit
 
 class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushable {
 
-    internal var teamKey: TeamKey {
-        return ranking.teamKey!
+    internal var team: Team {
+        return ranking.team!
     }
 
     var pushTeamBarButtonItem: UIBarButtonItem?
@@ -37,7 +37,7 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
 
         super.init(
             viewControllers: [summaryViewController, breakdownViewController],
-            navigationTitle: "Team \(ranking.teamKey!.teamNumber)",
+            navigationTitle: ranking.team!.fallbackNickname,
             navigationSubtitle: "@ \(ranking.district!.abbreviationWithYear)",
             segmentedControlTitles: ["Summary", "Breakdown"],
             persistentContainer: persistentContainer,
@@ -60,7 +60,7 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("team_at_district", parameters: ["district": ranking.district!.key!, "team": ranking.teamKey!.key!])
+        Analytics.logEvent("team_at_district", parameters: ["district": ranking.district!.key!, "team": team.key!])
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -73,7 +73,7 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
     // MARK: - Private Methods
 
     @objc private func pushTeam() {
-        _pushTeam(attemptedToLoadTeam: false)
+        pushTeam(team: team)
     }
 
 }
@@ -81,13 +81,12 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
 extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegate {
 
     func eventPointsSelected(_ eventPoints: DistrictEventPoints) {
-        // TODO: Support Team@Event taking a EventKey
-        guard let event = eventPoints.eventKey?.event else {
+        guard let event = eventPoints.event else {
             return
         }
 
         // TODO: Let's see what we can to do not force-unwrap these from Core Data
-        let teamAtEventViewController = TeamAtEventViewController(teamKey: eventPoints.teamKey!, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: eventPoints.team!, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

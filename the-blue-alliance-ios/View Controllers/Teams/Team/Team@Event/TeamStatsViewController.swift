@@ -7,7 +7,7 @@ import UIKit
 
 class TeamStatsViewController: TBATableViewController, Observable {
 
-    private let teamKey: TeamKey
+    private let team: Team
     private let event: Event
 
     private var teamStat: EventTeamStat? {
@@ -38,13 +38,13 @@ class TeamStatsViewController: TBATableViewController, Observable {
     lazy var observerPredicate: NSPredicate = {
         return NSPredicate(format: "%K == %@ AND %K == %@",
                            #keyPath(EventTeamStat.event), event,
-                           #keyPath(EventTeamStat.teamKey), teamKey)
+                           #keyPath(EventTeamStat.team), team)
     }()
 
     // MARK: - Init
 
-    init(teamKey: TeamKey, event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
-        self.teamKey = teamKey
+    init(team: Team, event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.team = team
         self.event = event
 
         super.init(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)

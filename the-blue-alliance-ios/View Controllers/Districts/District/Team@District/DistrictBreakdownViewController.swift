@@ -94,7 +94,7 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let eventPoints = ranking.sortedEventPoints[section]
-        return eventPoints.eventKey!.event?.name ?? eventPoints.eventKey!.key!
+        return eventPoints.event!.name ?? eventPoints.event!.key!
     }
 
 }

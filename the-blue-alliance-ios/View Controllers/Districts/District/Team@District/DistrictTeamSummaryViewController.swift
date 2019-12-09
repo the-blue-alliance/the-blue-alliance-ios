@@ -60,7 +60,7 @@ class DistrictTeamSummaryViewController: TBATableViewController {
         if isEventPointsRow(row: indexPath.row) {
             // Event Points row
             let eventPoints = ranking.sortedEventPoints[indexPath.row - 1]
-            cell.titleLabel.text = "\(eventPoints.eventKey!.event?.safeShortName ?? eventPoints.eventKey!.key!)"
+            cell.titleLabel.text = "\(eventPoints.event!.safeShortName)"
             cell.subtitleLabel.text = "\(eventPoints.total!.stringValue) Points"
             cell.selectionStyle = .default
             cell.accessoryType = .disclosureIndicator

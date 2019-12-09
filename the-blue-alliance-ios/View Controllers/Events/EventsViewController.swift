@@ -145,7 +145,11 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
         } else if event.isFoC {
             return "Festival of Champions"
         } else if event.isOffseason {
-            return "\(event.weekString) Events"
+            if let weekString = event.weekString {
+                return "\(weekString) Events"
+            } else {
+                return "Offseason Events"
+            }
         } else if event.isPreseason {
             return "Preseason Events"
         } else if event.isRegional {

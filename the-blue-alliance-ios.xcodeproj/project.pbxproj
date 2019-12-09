@@ -97,6 +97,7 @@
 		92A5E5DB21A22D550025CC85 /* UINavigationController+SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5D021A22D550025CC85 /* UINavigationController+SplitView.swift */; };
 		92A5E5DC21A22D550025CC85 /* URL+Reachable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5D121A22D550025CC85 /* URL+Reachable.swift */; };
 		92A5E5DD21A22D550025CC85 /* Int16+Suffix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5E5D221A22D550025CC85 /* Int16+Suffix.swift */; };
+		92AB6CB5239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB6CB4239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift */; };
 		92AF4D0C1E330790007E967D /* SelectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AF4D0B1E330790007E967D /* SelectTableViewController.swift */; };
 		92B07371235CB47800967FC3 /* TableViewDataSourceFetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B07370235CB47800967FC3 /* TableViewDataSourceFetchedResultsController.swift */; };
 		92B076F320FF948D00F9B2D7 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */; };
@@ -283,6 +284,7 @@
 		92A5E5D021A22D550025CC85 /* UINavigationController+SplitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationController+SplitView.swift"; sourceTree = "<group>"; };
 		92A5E5D121A22D550025CC85 /* URL+Reachable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+Reachable.swift"; sourceTree = "<group>"; };
 		92A5E5D221A22D550025CC85 /* Int16+Suffix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int16+Suffix.swift"; sourceTree = "<group>"; };
+		92AB6CB4239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestroyPersistentStoreOperation.swift; sourceTree = "<group>"; };
 		92AF4D0B1E330790007E967D /* SelectTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectTableViewController.swift; sourceTree = "<group>"; };
 		92B07370235CB47800967FC3 /* TableViewDataSourceFetchedResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDataSourceFetchedResultsController.swift; sourceTree = "<group>"; };
 		92B076F220FF948D00F9B2D7 /* TestAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppDelegate.swift; sourceTree = "<group>"; };
@@ -809,6 +811,7 @@
 			isa = PBXGroup;
 			children = (
 				92BB717520CDD78D0081F4E5 /* AppSetupOperation.swift */,
+				92AB6CB4239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift */,
 				9287014420CD8C070077D6DA /* PersistentContainerOperation.swift */,
 			);
 			path = "App Setup";
@@ -1544,6 +1547,7 @@
 				92A5E5D321A22D550025CC85 /* UIApplication+URLOpener.swift in Sources */,
 				14796948215EBD6C0075AF4E /* EventCellViewModel.swift in Sources */,
 				92BB717620CDD78D0081F4E5 /* AppSetupOperation.swift in Sources */,
+				92AB6CB5239D6B9800DF0EFA /* DestroyPersistentStoreOperation.swift in Sources */,
 				92B55631215FDA9000C1D9A3 /* BasicTableViewCell.swift in Sources */,
 				92B0AA3B20CB837A0074FDF1 /* main.swift in Sources */,
 				92E9F0AB216C439700C1F916 /* NoDataViewController.swift in Sources */,
