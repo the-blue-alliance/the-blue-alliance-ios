@@ -377,7 +377,7 @@ extension Event: Locatable, Surfable, Managed {
         super.prepareForDeletion()
 
         (webcasts?.allObjects as? [Webcast])?.forEach({
-            if $0.events!.onlyObject(self) {
+            if $0.events.onlyObject(self) {
                 // Webcast will become an orphan - delete
                 managedObjectContext?.delete($0)
             } else {

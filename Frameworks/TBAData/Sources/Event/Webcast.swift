@@ -2,7 +2,38 @@ import CoreData
 import Foundation
 import TBAKit
 
-extension Webcast: Managed {
+@objc(Webcast)
+public class Webcast: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Webcast> {
+        return NSFetchRequest<Webcast>(entityName: "Webcast")
+    }
+
+    @NSManaged public fileprivate(set) var channel: String
+    @NSManaged public fileprivate(set) var file: String?
+    @NSManaged public fileprivate(set) var type: String
+    @NSManaged public fileprivate(set) var events: NSSet
+    
+}
+
+// MARK: Generated accessors for events
+extension Webcast {
+
+    @objc(addEventsObject:)
+    @NSManaged internal func addToEvents(_ value: Event)
+
+    @objc(removeEventsObject:)
+    @NSManaged internal func removeFromEvents(_ value: Event)
+
+    @objc(addEvents:)
+    @NSManaged internal func addToEvents(_ values: NSSet)
+
+    @objc(removeEvents:)
+    @NSManaged internal func removeFromEvents(_ values: NSSet)
+
+}
+
+extension Webcast {
 
     /**
      Insert a Webcast with values from a TBAKit Webcast model in to the managed object context.
@@ -28,10 +59,6 @@ extension Webcast: Managed {
             webcast.channel = model.channel
             webcast.file = model.file
         })
-    }
-
-    public var isOrphaned: Bool {
-        return events?.count == 0
     }
 
 }

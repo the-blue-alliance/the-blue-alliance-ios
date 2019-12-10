@@ -1,5 +1,5 @@
-import Foundation
 import CoreData
+import Foundation
 import TBAKit
 
 @objc(Team)
@@ -49,12 +49,20 @@ public class Team: NSManagedObject {
 // MARK: Generated accessors for media
 extension Team {
 
+    @objc(addMediaObject:)
+    @NSManaged fileprivate func addToMedia(_ value: TeamMedia)
+
+    @objc(removeMediaObject:)
+    @NSManaged fileprivate func removeFromMedia(_ value: TeamMedia)
+
     @objc(addMedia:)
     @NSManaged fileprivate func addToMedia(_ values: NSSet)
 
+    @objc(removeMedia:)
+    @NSManaged fileprivate func removeFromMedia(_ values: NSSet)
+
 }
 
-// Methods for inserting events - in here so we can keep setters fileprivate
 extension Team {
 
     /**
@@ -107,49 +115,12 @@ extension Team {
             team.name = model.name
             team.nickname = model.nickname
             team.postalCode = model.postalCode
-            team.rookieYear = model.rookieYear as NSNumber
+            team.rookieYear = NSNumber(value: model.rookieYear)
             team.stateProv = model.stateProv
-            team.teamNumber = model.teamNumber as NSNumber
+            team.teamNumber = NSNumber(value: model.teamNumber)
             team.website = model.website
             team.homeChampionship = model.homeChampionship
         }
-    }
-
-    /**
-     Insert Teams for a page with values from TBAKit Team models in to the managed object context.
-
-     This method manages deleting orphaned Teams for a page.
-
-     - Parameter teams: The TBAKit Team representations to set values from.
-
-     - Parameter page: The page for the Teams.
-
-     - Parameter context: The NSManagedContext to insert the Event in to.
-     */
-    public static func insert(_ teams: [TBATeam], page: Int, in context: NSManagedObjectContext) {
-        /**
-         Pages are sets of 500 teams
-         Page 0: Teams 0-499
-         Page 1: Teams 500-999
-         Page 2: Teams 1000-1499
-         */
-
-        // Fetch all of the previous Teams for this page
-        let oldTeams = Team.fetch(in: context) {
-            $0.predicate = NSPredicate(format: "%K >= %ld AND %K < %ld",
-                                       #keyPath(Team.teamNumber), (page * 500),
-                                       #keyPath(Team.teamNumber), ((page + 1) * 500))
-        }
-
-        // Insert new Teams for this page
-        let teams = teams.map {
-            return Team.insert($0, in: context)
-        }
-
-        // Delete orphaned Teams for this year
-        Set(oldTeams).subtracting(Set(teams)).forEach({
-            context.delete($0)
-        })
     }
 
     /**

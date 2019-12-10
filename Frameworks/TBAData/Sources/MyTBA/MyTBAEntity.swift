@@ -1,73 +1,30 @@
 import CoreData
+import Foundation
 import MyTBAKit
 
-public protocol MyTBAManaged: Managed {
-    associatedtype MyType: NSManagedObject
-    associatedtype RemoteType: MyTBAModel
+@objc(MyTBAEntity)
+public class MyTBAEntity: NSManagedObject {
 
-    @discardableResult
-    static func insert(_ models: [RemoteType], in context: NSManagedObjectContext) -> [MyType]
-    static func fetch(modelKey: String, modelType: MyTBAModelType, in context: NSManagedObjectContext) -> MyType?
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<MyTBAEntity> {
+        return NSFetchRequest<MyTBAEntity>(entityName: "MyTBAEntity")
+    }
 
-    func toRemoteModel() -> RemoteType
+    @NSManaged public internal(set) var modelKey: String
+    @NSManaged internal var modelTypeRaw: NSNumber
+
 }
 
-extension MyTBAEntity: Managed {
+extension MyTBAEntity {
 
     public var modelType: MyTBAModelType {
         get {
-            return MyTBAModelType(rawValue: modelTypeRaw!.intValue)!
+            guard let modelType = MyTBAModelType(rawValue: modelTypeRaw.intValue) else {
+                fatalError("Unsupported myTBA model type \(modelTypeRaw.intValue)")
+            }
+            return modelType
         }
         set {
-            modelTypeRaw = newValue.rawValue as NSNumber
-        }
-    }
-
-    /**
-     Get the corresponding object for this myTBA Entity, if it exists locally - a Event, Team, or Match
-     */
-    public var tbaObject: (NSManagedObject & Managed)? {
-        guard let managedObjectContext = managedObjectContext else {
-            return nil
-        }
-
-        switch modelType {
-        case .event:
-            let predicate = NSPredicate(format: "%K == %@", #keyPath(Event.key), modelKey!)
-            return Event.findOrFetch(in: managedObjectContext, matching: predicate)
-        case .team:
-            let predicate = NSPredicate(format: "%K == %@", #keyPath(Team.key), modelKey!)
-            return Team.findOrFetch(in: managedObjectContext, matching: predicate)
-        case .match:
-            let predicate = NSPredicate(format: "%K == %@", #keyPath(Match.key), modelKey!)
-            return Match.findOrFetch(in: managedObjectContext, matching: predicate)
-        default:
-            return nil
-        }
-    }
-
-    public var isOrphaned: Bool {
-        return false
-    }
-
-    public override func prepareForDeletion() {
-        super.prepareForDeletion()
-
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        if let modelTypeRaw = modelTypeRaw, modelTypeRaw.intValue == MyTBAModelType.match.rawValue,
-            let modelKey = modelKey {
-            let matchObjects = MyTBAEntity.fetch(in: managedObjectContext) {
-                $0.predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                           #keyPath(MyTBAEntity.modelKey), modelKey,
-                                           #keyPath(MyTBAEntity.modelTypeRaw), modelTypeRaw)
-            }
-            if matchObjects.isEmpty, let match = Match.findOrFetch(in: managedObjectContext, matching: Match.predicate(key: modelKey)), match.event == nil {
-                // Match will become an orphan - delete
-                managedObjectContext.delete(match)
-            }
+            modelTypeRaw = NSNumber(value: newValue.rawValue)
         }
     }
 

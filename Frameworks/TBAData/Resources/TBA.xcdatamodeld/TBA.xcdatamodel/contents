@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15508" systemVersion="19B88" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15508" systemVersion="18E226" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Award" representedClassName="Award" syncable="YES" codeGenerationType="class">
         <attribute name="awardType" attributeType="Integer 16" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
@@ -171,7 +171,7 @@
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="stats" inverseEntity="Event"/>
         <relationship name="team" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="stats" inverseEntity="Team"/>
     </entity>
-    <entity name="Favorite" representedClassName="Favorite" parentEntity="MyTBAEntity" syncable="YES" codeGenerationType="class"/>
+    <entity name="Favorite" representedClassName="Favorite" parentEntity="MyTBAEntity" syncable="YES"/>
     <entity name="Match" representedClassName="Match" syncable="YES" codeGenerationType="class">
         <attribute name="actualTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="breakdown" optional="YES" attributeType="Transformable" customClassName="[String: Any]"/>
@@ -201,7 +201,7 @@
         <attribute name="typeString" attributeType="String"/>
         <relationship name="matches" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="Match" inverseName="videos" inverseEntity="Match"/>
     </entity>
-    <entity name="MyTBAEntity" representedClassName="MyTBAEntity" syncable="YES" codeGenerationType="class">
+    <entity name="MyTBAEntity" representedClassName="MyTBAEntity" syncable="YES">
         <attribute name="modelKey" attributeType="String"/>
         <attribute name="modelTypeRaw" attributeType="Integer 16" usesScalarValueType="NO"/>
     </entity>
@@ -213,7 +213,7 @@
         <attribute name="minAppVersion" attributeType="Integer 64" usesScalarValueType="NO"/>
         <relationship name="downEvents" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="status" inverseEntity="Event"/>
     </entity>
-    <entity name="Subscription" representedClassName="Subscription" parentEntity="MyTBAEntity" syncable="YES" codeGenerationType="class">
+    <entity name="Subscription" representedClassName="Subscription" parentEntity="MyTBAEntity" syncable="YES">
         <attribute name="notificationsRaw" attributeType="Transformable" customClassName="[String]"/>
     </entity>
     <entity name="Team" representedClassName="Team" syncable="YES">
@@ -255,22 +255,20 @@
             <fetchIndexElement property="key" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
-    <entity name="TeamMedia" representedClassName="TeamMedia" syncable="YES" codeGenerationType="class">
+    <entity name="TeamMedia" representedClassName="TeamMedia" syncable="YES">
         <attribute name="details" optional="YES" attributeType="Transformable" customClassName="[String: Any]"/>
         <attribute name="directURL" optional="YES" attributeType="String"/>
-        <attribute name="foreignKey" optional="YES" attributeType="String"/>
-        <attribute name="key" optional="YES" attributeType="String"/>
+        <attribute name="foreignKey" attributeType="String"/>
         <attribute name="mediaData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="mediaError" optional="YES" attributeType="Transformable" customClassName="Error"/>
-        <attribute name="preferred" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="preferred" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="type" attributeType="String"/>
         <attribute name="viewURL" optional="YES" attributeType="String"/>
         <attribute name="year" attributeType="Integer 16" usesScalarValueType="NO"/>
         <relationship name="team" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="media" inverseEntity="Team"/>
     </entity>
-    <entity name="Webcast" representedClassName="Webcast" syncable="YES" codeGenerationType="class">
+    <entity name="Webcast" representedClassName="Webcast" syncable="YES">
         <attribute name="channel" attributeType="String"/>
-        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="file" optional="YES" attributeType="String"/>
         <attribute name="type" attributeType="String"/>
         <relationship name="events" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="webcasts" inverseEntity="Event"/>
@@ -293,15 +291,15 @@
         <element name="EventStatusPlayoff" positionX="72" positionY="162" width="128" height="150"/>
         <element name="EventStatusQual" positionX="54" positionY="144" width="128" height="105"/>
         <element name="EventTeamStat" positionX="-54" positionY="135" width="128" height="118"/>
-        <element name="Favorite" positionX="45" positionY="135" width="128" height="45"/>
+        <element name="Favorite" positionX="45" positionY="135" width="128" height="43"/>
         <element name="Match" positionX="-54" positionY="135" width="128" height="255"/>
         <element name="MatchAlliance" positionX="45" positionY="135" width="128" height="133"/>
         <element name="MatchVideo" positionX="45" positionY="135" width="128" height="90"/>
-        <element name="MyTBAEntity" positionX="45" positionY="135" width="128" height="75"/>
+        <element name="MyTBAEntity" positionX="45" positionY="135" width="128" height="73"/>
         <element name="Status" positionX="45" positionY="135" width="128" height="133"/>
-        <element name="Subscription" positionX="54" positionY="144" width="128" height="60"/>
+        <element name="Subscription" positionX="54" positionY="144" width="128" height="58"/>
         <element name="Team" positionX="-54" positionY="135" width="128" height="553"/>
-        <element name="TeamMedia" positionX="-45" positionY="144" width="128" height="210"/>
-        <element name="Webcast" positionX="-45" positionY="144" width="128" height="120"/>
+        <element name="TeamMedia" positionX="-45" positionY="144" width="128" height="193"/>
+        <element name="Webcast" positionX="-45" positionY="144" width="128" height="103"/>
     </elements>
 </model>
