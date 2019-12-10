@@ -14,7 +14,7 @@ struct RankingCellViewModel {
     init(districtRanking: DistrictRanking) {
         rankText = "Rank \(districtRanking.rank!.stringValue)"
 
-        teamNumber = String(describing: districtRanking.team!.teamNumber!)
+        teamNumber = String(describing: districtRanking.team!.teamNumber)
         teamName = districtRanking.team!.nickname ?? districtRanking.team!.fallbackNickname
 
         detailText = "\(districtRanking.pointTotal!.stringValue) Points"
@@ -24,7 +24,7 @@ struct RankingCellViewModel {
     init(rank: String, districtEventPoints: DistrictEventPoints) {
         rankText = rank
 
-        teamNumber = String(describing: districtEventPoints.team!.teamNumber!)
+        teamNumber = String(describing: districtEventPoints.team!.teamNumber)
         teamName = districtEventPoints.team!.nickname ?? districtEventPoints.team!.fallbackNickname
 
         detailText = "\(districtEventPoints.total!.stringValue) Points"
@@ -34,7 +34,7 @@ struct RankingCellViewModel {
     init(eventRanking: EventRanking) {
         rankText = "Rank \(eventRanking.rank!.intValue)"
 
-        teamNumber = String(describing: eventRanking.team!.teamNumber!)
+        teamNumber = String(describing: eventRanking.team!.teamNumber)
         teamName = eventRanking.team!.nickname ?? eventRanking.team!.fallbackNickname
 
         detailText = eventRanking.rankingInfoString
@@ -51,7 +51,7 @@ struct RankingCellViewModel {
     init(eventTeamStat: EventTeamStat) {
         rankText = nil
 
-        teamNumber = String(describing: eventTeamStat.team!.teamNumber!)
+        teamNumber = String(describing: eventTeamStat.team!.teamNumber)
         teamName = eventTeamStat.team!.nickname ?? eventTeamStat.team!.fallbackNickname
 
         detailText = String(format: "OPR: %.2f, DPR: %.2f, CCWM: %.2f", eventTeamStat.opr!.floatValue, eventTeamStat.dpr!.floatValue, eventTeamStat.ccwm!.floatValue)

@@ -170,7 +170,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupGoogleAuthentication()
 
         // Our app setup operation will load our persistent stores, propogate persistance container
-        let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer, userDefaults: userDefaults)
+        let appSetupOperation = AppSetupOperation(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         weak var weakAppSetupOperation = appSetupOperation
         appSetupOperation.completionBlock = { [unowned self] in
             if let error = weakAppSetupOperation?.completionError as NSError? {
@@ -184,9 +184,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     self.statusService.registerRetryable(initiallyRetry: true)
 
                     // Check our minimum app version
-                    let mininmumAppVersion = self.statusService.status.safeMinAppVersion
-                    if !AppDelegate.isAppVersionSupported(minimumAppVersion: mininmumAppVersion) {
-                        self.showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion!.intValue)
+                    if !AppDelegate.isAppVersionSupported(minimumAppVersion: Int(self.statusService.status.minAppVersion)) {
+                        self.showMinimumAppVersionAlert(currentAppVersion: Int(self.statusService.status.latestAppVersion))
                         return
                     }
 
@@ -377,8 +376,8 @@ extension AppDelegate: GIDSignInDelegate {
 extension AppDelegate: StatusSubscribable {
 
     func statusChanged(status: Status) {
-        if !AppDelegate.isAppVersionSupported(minimumAppVersion: status.safeMinAppVersion) {
-            showMinimumAppVersionAlert(currentAppVersion: self.statusService.status.latestAppVersion!.intValue)
+        if !AppDelegate.isAppVersionSupported(minimumAppVersion: Int(status.minAppVersion)) {
+            showMinimumAppVersionAlert(currentAppVersion: Int(self.statusService.status.latestAppVersion))
         }
     }
 

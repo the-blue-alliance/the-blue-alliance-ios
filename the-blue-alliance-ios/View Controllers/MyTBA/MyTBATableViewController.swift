@@ -107,17 +107,20 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
     private func setupFetchedResultsController() {
         let fetchRequest = NSFetchRequest<T>(entityName: T.entityName)
 
-        fetchRequest.sortDescriptors = [
-            NSSortDescriptor(key: #keyPath(MyTBAEntity.modelTypeRaw), ascending: true),
-            NSSortDescriptor(key: #keyPath(MyTBAEntity.modelKey), ascending: true)
-        ]
-
         // Only show supported myTBA entities (basically, exclude team@event)
         fetchRequest.predicate = NSPredicate(format: "%K IN %@",
                                              #keyPath(MyTBAEntity.modelTypeRaw),
                                              [MyTBAModelType.event, MyTBAModelType.team, MyTBAModelType.match].map({ $0.rawValue }))
 
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: #keyPath(MyTBAEntity.modelTypeRaw), cacheName: nil)
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: #keyPath(MyTBAEntity.modelTypeRaw), ascending: true),
+            NSSortDescriptor(key: #keyPath(MyTBAEntity.modelKey), ascending: true)
+        ]
+
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                              managedObjectContext: persistentContainer.viewContext,
+                                                              sectionNameKeyPath: #keyPath(MyTBAEntity.modelTypeRaw),
+                                                              cacheName: nil)
         fetchedResultsController!.delegate = self
         try! fetchedResultsController!.performFetch()
     }
@@ -345,10 +348,7 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
             snapshot.insertSection(section, atIndex: model.modelType.rawValue)
             // Insert the object so it's in the same order as it's MyTBAEntity
             guard let obj = self.fetchedResultsController.fetchedObjects?.first(where: { (o) -> Bool in
-                guard let modelKey = o.modelKey else {
-                    return false
-                }
-                return o.modelType == model.modelType && modelKey == model.modelKey
+                return o.modelType == model.modelType && o.modelKey == model.modelKey
             }) else { return }
             if let indexPath = self.fetchedResultsController.indexPath(forObject: obj) {
                 snapshot.insertItem(object, inSection: section, atIndex: indexPath.row)

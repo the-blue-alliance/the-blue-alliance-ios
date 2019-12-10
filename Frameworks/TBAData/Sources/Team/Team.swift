@@ -81,7 +81,7 @@ extension Team {
             team.key = key
 
             let teamNumberString = Team.trimFRCPrefix(key)
-            if team.teamNumber == nil, let teamNumber = Int64(teamNumberString) {
+            if let teamNumber = Int64(teamNumberString) {
                 team.teamNumber = teamNumber
             }
         }

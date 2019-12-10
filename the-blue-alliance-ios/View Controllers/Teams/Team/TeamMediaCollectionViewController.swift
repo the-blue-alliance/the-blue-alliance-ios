@@ -123,8 +123,7 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         // images don't jump from to different places because the sort is too general
         request.sortDescriptors = [
             NSSortDescriptor(key: #keyPath(TeamMedia.type), ascending: false),
-            NSSortDescriptor(key: #keyPath(TeamMedia.foreignKey), ascending: false),
-            NSSortDescriptor(key: #keyPath(TeamMedia.key), ascending: false)
+            NSSortDescriptor(key: #keyPath(TeamMedia.foreignKey), ascending: false)
         ]
     }
 

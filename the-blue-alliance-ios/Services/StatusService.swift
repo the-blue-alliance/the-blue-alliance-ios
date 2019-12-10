@@ -42,11 +42,11 @@ class StatusService: NSObject {
     private var previouslyDownEventKeys: [String] = []
 
     var currentSeason: Int {
-        return status.currentSeason!.intValue
+        return Int(status.currentSeason)
     }
 
     var maxSeason: Int {
-        return status.maxSeason!.intValue
+        return Int(status.maxSeason)
     }
 
     init(bundle: Bundle = Bundle.main, persistentContainer: NSPersistentContainer, retryService: RetryService, tbaKit: TBAKit) {
@@ -59,14 +59,13 @@ class StatusService: NSObject {
     }
 
     func setupStatusObservers() {
+        // TODO: We should be able to look at the old value, see if things are different, and dispatch accordingly
         contextObserver.observeObject(object: status, state: .updated) { [weak self] (status, _) in
             self?.dispatchStatusChanged(status)
 
-            if let isDatafeedDown = status.isDatafeedDown {
-                self?.dispatchFMSDown(isDatafeedDown.boolValue)
-            }
+            self?.dispatchFMSDown(status.isDatafeedDown)
 
-            if let downEvents = status.downEvents?.allObjects as? [Event] {
+            if let downEvents = status.downEvents.allObjects as? [Event] {
                 self?.dispatchEvents(downEventKeys: downEvents.map({ $0.key! }))
             }
         }
@@ -211,7 +210,7 @@ extension EventStatusSubscribable {
     }
 
     func isEventDown(eventKey: String) -> Bool {
-        let downEventKeys = (statusService.status.downEvents?.allObjects as? [Event] ?? []).map({ $0.key! })
+        let downEventKeys = (statusService.status.downEvents.allObjects as? [Event] ?? []).map({ $0.key! })
         return downEventKeys.contains(eventKey)
     }
 

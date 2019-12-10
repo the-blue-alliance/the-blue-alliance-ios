@@ -68,7 +68,7 @@ extension MatchViewController: MatchSummaryViewDelegate {
         guard let event = match.event else { return }
 
         // get team key that matches the target teamNumber
-        guard let team = match.teams.first(where: { $0.teamNumber?.intValue == teamNumber }) else { return }
+        guard let team = match.teams.first(where: { Int($0.teamNumber) == teamNumber }) else { return }
 
         let teamAtEventVC = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(teamAtEventVC, animated: true)

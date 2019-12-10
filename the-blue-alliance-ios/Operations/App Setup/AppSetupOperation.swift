@@ -1,5 +1,6 @@
 import CoreData
 import Foundation
+import TBAKit
 import TBAOperation
 import UIKit
 
@@ -10,8 +11,8 @@ class AppSetupOperation: TBAOperation {
 
     let appSetupOperationQueue = OperationQueue()
 
-    init(persistentContainer: NSPersistentContainer, userDefaults: UserDefaults) {
-        self.destroyPersistentStoreOperation = DestroyPersistentStoreOperation(persistentContainer: persistentContainer, userDefaults: userDefaults)
+    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+        self.destroyPersistentStoreOperation = DestroyPersistentStoreOperation(persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         self.persistentContainerOperation = PersistentContainerOperation(persistentContainer: persistentContainer)
         self.persistentContainerOperation.addDependency(self.destroyPersistentStoreOperation)

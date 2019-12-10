@@ -10,7 +10,7 @@ public class MyTBAEntity: NSManagedObject {
     }
 
     @NSManaged public internal(set) var modelKey: String
-    @NSManaged internal var modelTypeRaw: Int16
+    @NSManaged public internal(set) var modelTypeRaw: Int16
 
 }
 

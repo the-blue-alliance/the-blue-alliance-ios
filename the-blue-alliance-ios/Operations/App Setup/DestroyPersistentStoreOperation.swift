@@ -1,5 +1,6 @@
 import CoreData
 import Foundation
+import TBAKit
 import TBAOperation
 
 class DestroyPersistentStoreOperation: TBAOperation {
@@ -8,10 +9,12 @@ class DestroyPersistentStoreOperation: TBAOperation {
     private static let CoreDataVersion: Int = 2
 
     var persistentContainer: NSPersistentContainer
+    var tbaKit: TBAKit
     var userDefaults: UserDefaults
 
-    init(persistentContainer: NSPersistentContainer, userDefaults: UserDefaults) {
+    init(persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.persistentContainer = persistentContainer
+        self.tbaKit = tbaKit
         self.userDefaults = userDefaults
 
         super.init()
@@ -34,6 +37,7 @@ class DestroyPersistentStoreOperation: TBAOperation {
                 }
             }
             if success {
+                tbaKit.clearCacheHeaders()
                 userDefaults.set(DestroyPersistentStoreOperation.CoreDataVersion, forKey: DestroyPersistentStoreOperation.CoreDataVersionKey)
                 userDefaults.synchronize()
             }
