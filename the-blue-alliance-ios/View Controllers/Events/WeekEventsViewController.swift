@@ -161,10 +161,11 @@ class WeekEventsViewController: EventsViewController {
 
         // Find the first non-finished event for the selected year
         let event = Event.fetchSingleObject(in: context) { (fetchRequest) in
-            fetchRequest.predicate = NSPredicate(format: "%K == %ld && %K >= %@ && %K != %ld",
-                                                 #keyPath(Event.year), year,
-                                                 #keyPath(Event.endDate), coreDataDate,
-                                                 #keyPath(Event.eventType), EventType.championshipDivision.rawValue)
+            let predicate = NSPredicate(format: "%K == %ld && %K >= %@ && %K != %ld",
+                                        #keyPath(Event.year), year,
+                                        #keyPath(Event.endDate), coreDataDate,
+                                        #keyPath(Event.eventType), EventType.championshipDivision.rawValue)
+            fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, Event.populatedEventsPredicate()])
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Event.endDate), ascending: true)]
         }
         // Find the first overall event for the selected year

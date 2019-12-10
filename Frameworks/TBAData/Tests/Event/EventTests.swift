@@ -268,7 +268,7 @@ class EventTestCase: TBADataTestCase {
 
         let awardsFirst = Award.fetch(in: persistentContainer.viewContext) {
             $0.predicate = NSPredicate(format: "SUBQUERY(%K, $r, $r.team.key == %@).@count == 1",
-                                       #keyPath(Award.recipients), frc1Team.key!)
+                                       #keyPath(Award.recipients), frc1team.key)
         }
 
         // Sanity check
@@ -279,13 +279,13 @@ class EventTestCase: TBADataTestCase {
         XCTAssertEqual(event.awards?.count, 3)
         XCTAssertEqual(awardsFirst.count, 2)
 
-        event.insert([modelAwardOne], teamKey: frc1Team.key!)
+        event.insert([modelAwardOne], teamKey: frc1team.key)
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
 
         let awardsSecond = Award.fetch(in: persistentContainer.viewContext) {
             $0.predicate = NSPredicate(format: "SUBQUERY(%K, $r, $r.team.key == %@).@count == 1",
-                                       #keyPath(Award.recipients), frc1Team.key!)
+                                       #keyPath(Award.recipients), frc1team.key)
         }
 
         XCTAssertEqual(event.awards?.count, 2)

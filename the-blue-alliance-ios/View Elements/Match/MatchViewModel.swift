@@ -28,7 +28,7 @@ struct MatchViewModel {
     init(match: Match, team: Team? = nil) {
         var baseTeamKeys: [String] = []
         if let team = team {
-            baseTeamKeys.append(team.key!)
+            baseTeamKeys.append(team.key)
         }
         self.init(match: match, baseTeamKeys: baseTeamKeys)
     }

@@ -55,6 +55,8 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         eventsViewController = TeamEventsViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         mediaViewController = TeamMediaCollectionViewController(team: team, year: year, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
+        // TODO: We need to update these navigation titles and whatnot
+        // once we fetch this data
         super.init(
             viewControllers: [infoViewController, eventsViewController, mediaViewController],
             navigationTitle: team.fallbackNickname,
@@ -92,7 +94,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("team", parameters: ["team": team.key!])
+        Analytics.logEvent("team", parameters: ["team": team.key])
     }
 
     // MARK: - Private

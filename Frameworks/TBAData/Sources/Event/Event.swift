@@ -390,7 +390,7 @@ extension Event: Locatable, Surfable, Managed {
         guard let awards = awards else {
             return []
         }
-        return Array(NSMutableSet(set: awards).filtered(using: NSPredicate(format: "ANY recipients.team.key == %@", team.key!))) as? [Award] ?? []
+        return Array(NSMutableSet(set: awards).filtered(using: NSPredicate(format: "ANY recipients.team.key == %@", team.key))) as? [Award] ?? []
     }
 
     public func dateString() -> String? {
@@ -574,6 +574,24 @@ extension Event: Locatable, Surfable, Managed {
         return dateFormatter.string(from: startDate)
     }
 
+    /**
+     Returns an NSPredicate for full Event objects - aka, they have all required API fields.
+     This includes endDate, eventCode, eventType, key, name, startDate, year
+     */
+    public static func populatedEventsPredicate() -> NSPredicate {
+        var keys = [#keyPath(Event.endDate),
+                    #keyPath(Event.eventCode),
+                    #keyPath(Event.eventType),
+                    #keyPath(Event.key),
+                    #keyPath(Event.name),
+                    #keyPath(Event.startDate),
+                    #keyPath(Event.year)]
+        let format = keys.map {
+            return String("\($0) != nil")
+        }.joined(separator: " && ")
+        return NSPredicate(format: format)
+    }
+
     // An array of events that are used to represent their corresponding week in the Week selector
     // We need a full object as opposed to a number because of CMP, off-season, etc.
     // TODO: Convert this to a data model that uses a Core Data model for init but isn't a Core Data model
@@ -581,10 +599,10 @@ extension Event: Locatable, Surfable, Managed {
         let events = Event.fetch(in: managedObjectContext) { (fetchRequest) in
             // Filter out CMP divisions - we don't want them below for our weeks calculation
             // Only fetch events with values for `eventType` so we can force-unwrap that value
-            fetchRequest.predicate = NSPredicate(format: "%K == %ld && %K != %ld && %K != nil",
-                                                 #keyPath(Event.year), year,
-                                                 #keyPath(Event.eventType), EventType.championshipDivision.rawValue,
-                                                 #keyPath(Event.eventType))
+            let predicate = NSPredicate(format: "%K == %ld && %K != %ld",
+                                        #keyPath(Event.year), year,
+                                        #keyPath(Event.eventType), EventType.championshipDivision.rawValue)
+            fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, Event.populatedEventsPredicate()])
             fetchRequest.sortDescriptors = [
                 NSSortDescriptor(key: #keyPath(Event.week), ascending: true),
                 NSSortDescriptor(key: #keyPath(Event.eventType), ascending: true),

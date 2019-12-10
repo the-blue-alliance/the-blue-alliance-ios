@@ -1,32 +1,61 @@
-import CoreData
 import Foundation
-import MyTBAKit
+import CoreData
 import TBAKit
 
-extension Team: Locatable, Surfable, Managed {
+@objc(Team)
+public class Team: NSManagedObject {
 
-    public var fallbackNickname: String {
-        let teamNumber: String = {
-            if let teamNumber = self.teamNumber {
-                return teamNumber.stringValue
-            } else {
-                return Team.trimFRCPrefix(key!)
-            }
-        }()
-        return "Team \(teamNumber)"
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Team> {
+        return NSFetchRequest<Team>(entityName: "Team")
     }
 
-    /**
-     Returns an uppercased team number by removing the `frc` prefix on the key
-     */
-    public static func trimFRCPrefix(_ key: String) -> String {
-        return key.trimPrefix("frc").uppercased()
-    }
+    @NSManaged public fileprivate(set) var address: String?
+    @NSManaged public fileprivate(set) var city: String?
+    @NSManaged public fileprivate(set) var country: String?
+    @NSManaged public fileprivate(set) var gmapsPlaceID: String?
+    @NSManaged public fileprivate(set) var gmapsURL: String?
+    @NSManaged public fileprivate(set) var homeChampionship: [String: String]?
+    @NSManaged public fileprivate(set) var key: String
+    @NSManaged public fileprivate(set) var lat: NSNumber?
+    @NSManaged public fileprivate(set) var lng: NSNumber?
+    @NSManaged public fileprivate(set) var locationName: String?
+    @NSManaged public fileprivate(set) var name: String?
+    @NSManaged public fileprivate(set) var nickname: String?
+    @NSManaged public fileprivate(set) var postalCode: String?
+    @NSManaged public fileprivate(set) var rookieYear: NSNumber?
+    @NSManaged public fileprivate(set) var stateProv: String?
+    @NSManaged public fileprivate(set) var teamNumber: NSNumber?
+    @NSManaged public fileprivate(set) var website: String?
+    @NSManaged public fileprivate(set) var yearsParticipated: [Int]?
+    @NSManaged public fileprivate(set) var alliances: NSSet?
+    @NSManaged public fileprivate(set) var awards: NSSet?
+    @NSManaged public fileprivate(set) var declinedAlliances: NSSet?
+    @NSManaged public fileprivate(set) var districtRankings: NSSet?
+    @NSManaged public fileprivate(set) var districts: NSSet?
+    @NSManaged public fileprivate(set) var dqAlliances: NSSet?
+    @NSManaged public fileprivate(set) var eventPoints: NSSet?
+    @NSManaged public fileprivate(set) var eventRankings: NSSet?
+    @NSManaged public fileprivate(set) var events: NSSet?
+    @NSManaged public fileprivate(set) var eventStatuses: NSSet?
+    @NSManaged public fileprivate(set) var inBackupAlliances: NSSet?
+    @NSManaged public fileprivate(set) var media: NSSet?
+    @NSManaged public fileprivate(set) var outBackupAlliances: NSSet?
+    @NSManaged public fileprivate(set) var pickedAlliances: NSSet?
+    @NSManaged public fileprivate(set) var stats: NSSet?
+    @NSManaged public fileprivate(set) var surrogateAlliances: NSSet?
 
-    public static func predicate(key: String) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(Team.key), key)
-    }
+}
+
+// MARK: Generated accessors for media
+extension Team {
+
+    @objc(addMedia:)
+    @NSManaged fileprivate func addToMedia(_ values: NSSet)
+
+}
+
+// Methods for inserting events - in here so we can keep setters fileprivate
+extension Team {
 
     /**
      Insert a Team with a specified key in to the managed object context.
@@ -113,9 +142,9 @@ extension Team: Locatable, Surfable, Managed {
         }
 
         // Insert new Teams for this page
-        let teams = teams.map({
+        let teams = teams.map {
             return Team.insert($0, in: context)
-        })
+        }
 
         // Delete orphaned Teams for this year
         Set(oldTeams).subtracting(Set(teams)).forEach({
@@ -135,9 +164,9 @@ extension Team: Locatable, Surfable, Managed {
             return
         }
 
-        self.events = NSSet(array: events.map({
+        self.events = NSSet(array: events.map {
             return Event.insert($0, in: managedObjectContext)
-        }))
+        })
     }
 
     /**
@@ -162,17 +191,16 @@ extension Team: Locatable, Surfable, Managed {
         // Fetch all of the previous TeamMedia for this Team and year
         let oldMedia = TeamMedia.fetch(in: managedObjectContext) {
             $0.predicate = NSPredicate(format: "%K == %@ AND %K == %ld",
-                                       #keyPath(TeamMedia.team.key), key!,
+                                       #keyPath(TeamMedia.team.key), key,
                                        #keyPath(TeamMedia.year), year)
         }
 
 
         // Insert new TeamMedia for this year
-        let media = media.map({ (model: TBAMedia) -> TeamMedia in
-            let m = TeamMedia.insert(model, year: year, in: managedObjectContext)
-            addToMedia(m)
-            return m
-        })
+        let media = media.map {
+            return TeamMedia.insert($0, year: year, in: managedObjectContext)
+        }
+        addToMedia(NSSet(array: media))
 
         // Delete orphaned TeamMedia for this Event
         Set(oldMedia).subtracting(Set(media)).forEach({
@@ -182,32 +210,17 @@ extension Team: Locatable, Surfable, Managed {
         return media
     }
 
-    public var isOrphaned: Bool {
-        // Team is a root object, so it should never be an orphan
-        return false
-    }
+    /**
+     Set the years participated for a Team.
 
-}
-
-
-extension Team: MyTBASubscribable {
-
-    public var modelKey: String {
-        return getValue(\Team.key!)
-    }
-
-    public var modelType: MyTBAModelType {
-        return .team
-    }
-
-    public static var notificationTypes: [NotificationType] {
-        return [
-            NotificationType.upcomingMatch,
-            NotificationType.matchScore,
-            NotificationType.allianceSelection,
-            NotificationType.awards,
-            NotificationType.matchVideo
-        ]
+     - Parameter years: The years participated for this Team.
+     */
+    @discardableResult
+    public func setYearsParticipated(_ yearsParticipated: [Int]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+        self.yearsParticipated = yearsParticipated.reversed().sorted()
     }
 
 }

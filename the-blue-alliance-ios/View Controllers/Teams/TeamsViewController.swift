@@ -145,6 +145,7 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
         self.dataSource.delegate = self
 
         let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
+        fetchRequest.predicate = Team.populatedTeamsPredicate()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Team.teamNumber), ascending: true)]
         fetchRequest.fetchBatchSize = 50
         setupFetchRequest(fetchRequest)

@@ -55,7 +55,7 @@ class EventAwardsContainerViewController: ContainerViewController {
             "event": event.key!,
         ]
         if let team = team {
-            parameters["team"] = team.key!
+            parameters["team"] = team.key
         }
         Analytics.logEvent("event_awards", parameters: parameters)
     }
@@ -137,7 +137,7 @@ class EventAwardsViewController: TBATableViewController {
             // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/pull/169
             fetchRequest.predicate = NSPredicate(format: "%K == %@ AND (ANY recipients.team.key == %@)",
                                                  #keyPath(Award.event), event,
-                                                 team.key!)
+                                                 team.key)
         } else {
             fetchRequest.predicate = NSPredicate(format: "%K == %@",
                                                  #keyPath(Award.event), event)

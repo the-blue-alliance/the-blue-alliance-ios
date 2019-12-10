@@ -39,6 +39,7 @@ class EventViewController: MyTBAContainerViewController, EventStatusSubscribable
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
+        // TODO: We'll absolutely need to update this title
         title = event.friendlyNameWithYear
 
         infoViewController.delegate = self

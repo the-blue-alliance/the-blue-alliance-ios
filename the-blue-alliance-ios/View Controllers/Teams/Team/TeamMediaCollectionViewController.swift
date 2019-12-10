@@ -109,13 +109,13 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         // TODO: Split section by photos/videos like we do on the web
         if let year = year {
             request.predicate = NSPredicate(format: "%K == %@ AND %K == %ld AND %K in %@",
-                                            #keyPath(TeamMedia.team.key), team.key!,
+                                            #keyPath(TeamMedia.team.key), team.key,
                                             #keyPath(TeamMedia.year), year,
                                             #keyPath(TeamMedia.type), MediaType.imageTypes)
         } else {
             // Match none by passing a bosus year
             request.predicate = NSPredicate(format: "%K == %@ AND %K == 0",
-                                            #keyPath(TeamMedia.team.key), team.key!,
+                                            #keyPath(TeamMedia.team.key), team.key,
                                             #keyPath(TeamMedia.type))
         }
 
@@ -175,7 +175,7 @@ extension TeamMediaCollectionViewController: Refreshable {
         guard let year = year else {
             return nil
         }
-        let key = team.getValue(\Team.key!)
+        let key = team.getValue(\Team.key)
         return "\(year)_\(key)_media"
     }
 
@@ -224,7 +224,7 @@ extension TeamMediaCollectionViewController: Refreshable {
         var finalOperation: Operation!
 
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchTeamMedia(key: team.key!, year: year) { (result, notModified) in
+        operation = tbaKit.fetchTeamMedia(key: team.key, year: year) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let media = try? result.get() {

@@ -133,9 +133,9 @@ class TeamInfoViewController: TBATableViewController {
         case TeamLinkRow.website.rawValue:
             cell.textLabel?.text = "View team's website"
         case TeamLinkRow.twitter.rawValue:
-            cell.textLabel?.text = "View #\(team.key!) on Twitter"
+            cell.textLabel?.text = "View #\(team.key) on Twitter"
         case TeamLinkRow.youtube.rawValue:
-            cell.textLabel?.text = "View \(team.key!) on YouTube"
+            cell.textLabel?.text = "View \(team.key) on YouTube"
         case TeamLinkRow.chiefDelphi.rawValue:
             cell.textLabel?.text = "View photos on Chief Delphi"
         default:
@@ -164,11 +164,11 @@ class TeamInfoViewController: TBATableViewController {
             case TeamLinkRow.website.rawValue:
                 urlString = team.website
             case TeamLinkRow.twitter.rawValue:
-                urlString = "https://twitter.com/search?q=%23\(team.key!)"
+                urlString = "https://twitter.com/search?q=%23\(team.key)"
             case TeamLinkRow.youtube.rawValue:
-                urlString = "https://www.youtube.com/results?search_query=\(team.key!)"
+                urlString = "https://www.youtube.com/results?search_query=\(team.key)"
             case TeamLinkRow.chiefDelphi.rawValue:
-                urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(team.key!)"
+                urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(team.key)"
             default:
                 break
             }
@@ -186,7 +186,7 @@ class TeamInfoViewController: TBATableViewController {
 extension TeamInfoViewController: Refreshable {
 
     var refreshKey: String? {
-        return team.getValue(\Team.key!)
+        return team.getValue(\Team.key)
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -204,7 +204,7 @@ extension TeamInfoViewController: Refreshable {
 
     @objc func refresh() {
         var infoOperation: TBAKitOperation!
-        infoOperation = tbaKit.fetchTeam(key: team.key!) { (result, notModified) in
+        infoOperation = tbaKit.fetchTeam(key: team.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 switch result {
@@ -223,12 +223,12 @@ extension TeamInfoViewController: Refreshable {
         }
 
         var yearsOperation: TBAKitOperation!
-        yearsOperation = tbaKit.fetchTeamYearsParticipated(key: team.key!) { (result, notModified) in
+        yearsOperation = tbaKit.fetchTeamYearsParticipated(key: team.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let years = try? result.get() {
                     let team = context.object(with: self.team.objectID) as! Team
-                    team.yearsParticipated = years.sorted().reversed()
+                    team.setYearsParticipated(years)
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(yearsOperation)

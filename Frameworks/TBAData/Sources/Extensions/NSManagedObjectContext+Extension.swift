@@ -12,7 +12,14 @@ extension NSManagedObject {
         guard let context = managedObjectContext else {
             fatalError("No managedObjectContext for object.")
         }
-        return context.getKeyPathAndWait(obj: self, keyPath: keyPath)!
+        if Thread.isMainThread {
+            assert(context.concurrencyType == .mainQueueConcurrencyType,
+                   "Must access value for NSManagedObject on the proper thread (main thread).")
+        }
+        guard let value = context.getKeyPathAndWait(obj: self, keyPath: keyPath) else {
+            fatalError("No value exists for \(keyPath) keypath")
+        }
+        return value
     }
 
 }

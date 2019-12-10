@@ -28,7 +28,7 @@ class TeamEventsViewController: EventsViewController {
     // MARK: - Refreshable
 
     override var refreshKey: String? {
-        let key = team.getValue(\Team.key!)
+        let key = team.getValue(\Team.key)
         return "\(key)_events"
     }
 
@@ -47,7 +47,7 @@ class TeamEventsViewController: EventsViewController {
 
     @objc override func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchTeamEvents(key: team.key!) { (result, notModified) in
+        operation = tbaKit.fetchTeamEvents(key: team.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let events = try? result.get() {

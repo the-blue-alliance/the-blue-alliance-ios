@@ -76,7 +76,7 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("team_at_event", parameters: ["event": event.key!, "team": team.key!])
+        Analytics.logEvent("team_at_event", parameters: ["event": event.key!, "team": team.key])
     }
 
     override func viewWillDisappear(_ animated: Bool) {

@@ -463,7 +463,7 @@ class TeamSummaryViewController: TBATableViewController {
 extension TeamSummaryViewController: Refreshable {
 
     var refreshKey: String? {
-        return "\(team.getValue(\Team.key!))@\(event.getValue(\Event.key!))_status"
+        return "\(team.getValue(\Team.key))@\(event.getValue(\Event.key!))_status"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -484,7 +484,7 @@ extension TeamSummaryViewController: Refreshable {
 
         // TODO: Refresh Team? Refresh Event?
 
-        let teamKey = team.key!
+        let teamKey = team.key
 
         // Refresh Team@Event status
         var teamStatusOperation: TBAKitOperation!

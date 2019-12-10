@@ -7,7 +7,7 @@ struct InfoCellViewModel {
     let subtitleStrings: [String]
 
     init(event: Event) {
-        nameString = event.name!
+        nameString = event.name ?? event.key ?? ""
         subtitleStrings = [event.locationString, event.dateString()].compactMap({ $0 })
     }
 

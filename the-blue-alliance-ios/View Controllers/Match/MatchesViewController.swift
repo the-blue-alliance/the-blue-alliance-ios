@@ -74,7 +74,7 @@ class MatchesViewController: TBATableViewController {
 
             var baseTeamKeys: Set<String> = Set()
             if let team = self?.team {
-                baseTeamKeys.insert(team.key!)
+                baseTeamKeys.insert(team.key)
             }
             if let query = self?.query, query.filter.favorites, let favoriteTeamKeys = self?.favoriteTeamKeys {
                 baseTeamKeys.formUnion(favoriteTeamKeys)
@@ -108,7 +108,7 @@ class MatchesViewController: TBATableViewController {
                 // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
                 return NSPredicate(format: "%K == %@ AND SUBQUERY(%K, $a, ANY $a.teams.key == %@).@count > 0",
                                    #keyPath(Match.event), event,
-                                   #keyPath(Match.alliances), team.key!)
+                                   #keyPath(Match.alliances), team.key)
             } else {
                 return NSPredicate(format: "%K == %@",
                                    #keyPath(Match.event), event)

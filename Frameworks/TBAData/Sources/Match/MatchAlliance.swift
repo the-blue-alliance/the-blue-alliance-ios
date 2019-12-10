@@ -11,7 +11,7 @@ extension MatchAlliance: Managed {
         guard let teams = teams?.array as? [Team] else {
             return []
         }
-        return teams.map({ $0.key! })
+        return teams.map({ $0.key })
     }
 
     /**
@@ -21,7 +21,7 @@ extension MatchAlliance: Managed {
         guard let dqTeams = dqTeams?.array as? [Team] else {
             return []
         }
-        return dqTeams.map({ $0.key! })
+        return dqTeams.map({ $0.key })
     }
 
     /**

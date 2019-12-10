@@ -204,7 +204,10 @@ extension MatchInfoViewController: Refreshable {
         guard let event = match.getValue(\Match.event) else {
             return nil
         }
-        return Calendar.current.date(byAdding: DateComponents(day: 7), to: event.getValue(\Event.endDate!))!
+        guard let endDate = event.getValue(\Event.endDate) else {
+            return nil
+        }
+        return Calendar.current.date(byAdding: DateComponents(day: 7), to: endDate)
     }
 
     var isDataSourceEmpty: Bool {

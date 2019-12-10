@@ -148,8 +148,10 @@ extension EventWeekSelectViewController: SelectTableViewControllerDelegate {
     }
 
     func titleForOption(_ option: OptionType) -> String {
-        // TODO: Fix this force unwrap...
-        return option.weekString!
+        if let weekString = option.weekString {
+            return weekString
+        }
+        return "---"
     }
 
 }
