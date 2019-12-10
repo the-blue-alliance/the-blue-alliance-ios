@@ -10,7 +10,7 @@ public class MyTBAEntity: NSManagedObject {
     }
 
     @NSManaged public internal(set) var modelKey: String
-    @NSManaged internal var modelTypeRaw: NSNumber
+    @NSManaged internal var modelTypeRaw: Int16
 
 }
 
@@ -18,13 +18,13 @@ extension MyTBAEntity {
 
     public var modelType: MyTBAModelType {
         get {
-            guard let modelType = MyTBAModelType(rawValue: modelTypeRaw.intValue) else {
-                fatalError("Unsupported myTBA model type \(modelTypeRaw.intValue)")
+            guard let modelType = MyTBAModelType(rawValue: Int(modelTypeRaw)) else {
+                fatalError("Unsupported myTBA model type \(modelTypeRaw)")
             }
             return modelType
         }
         set {
-            modelTypeRaw = NSNumber(value: newValue.rawValue)
+            modelTypeRaw = Int16(newValue.rawValue)
         }
     }
 

@@ -17,7 +17,7 @@ public class TeamMedia: NSManagedObject {
     @NSManaged public fileprivate(set) var preferred: Bool
     @NSManaged public fileprivate(set) var type: String
     @NSManaged public fileprivate(set) var viewURL: String?
-    @NSManaged public fileprivate(set) var year: NSNumber
+    @NSManaged public fileprivate(set) var year: Int16
     @NSManaged public fileprivate(set) var team: Team
 
 }
@@ -70,7 +70,7 @@ extension TeamMedia {
         return findOrCreate(in: context, matching: NSCompoundPredicate(andPredicateWithSubpredicates: [mediaPredicate, yearPredicate])) { (media) in
             // Required: type, year, foreignKey
             media.type = model.type
-            media.year = NSNumber(value: year)
+            media.year = Int16(year)
             media.foreignKey = model.foreignKey
             media.details = model.details
             media.preferred = model.preferred ?? false

@@ -52,7 +52,7 @@ extension MyTBAEntity: Managed {
             return
         }
 
-        if modelTypeRaw.intValue == MyTBAModelType.match.rawValue {
+        if modelType == .match {
             let matchObjects = MyTBAEntity.fetch(in: managedObjectContext) {
                 $0.predicate = NSPredicate(format: "%K == %@ AND %K == %@",
                                            #keyPath(MyTBAEntity.modelKey), modelKey,

@@ -203,14 +203,14 @@
     </entity>
     <entity name="MyTBAEntity" representedClassName="MyTBAEntity" syncable="YES">
         <attribute name="modelKey" attributeType="String"/>
-        <attribute name="modelTypeRaw" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="modelTypeRaw" attributeType="Integer 16" usesScalarValueType="YES"/>
     </entity>
-    <entity name="Status" representedClassName="Status" syncable="YES" codeGenerationType="class">
-        <attribute name="currentSeason" attributeType="Integer 16" usesScalarValueType="NO"/>
-        <attribute name="isDatafeedDown" attributeType="Boolean" usesScalarValueType="NO"/>
-        <attribute name="latestAppVersion" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="maxSeason" attributeType="Integer 16" usesScalarValueType="NO"/>
-        <attribute name="minAppVersion" attributeType="Integer 64" usesScalarValueType="NO"/>
+    <entity name="Status" representedClassName="Status" syncable="YES">
+        <attribute name="currentSeason" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="isDatafeedDown" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="latestAppVersion" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="maxSeason" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="minAppVersion" attributeType="Integer 64" usesScalarValueType="YES"/>
         <relationship name="downEvents" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="status" inverseEntity="Event"/>
     </entity>
     <entity name="Subscription" representedClassName="Subscription" parentEntity="MyTBAEntity" syncable="YES">
@@ -232,7 +232,7 @@
         <attribute name="postalCode" optional="YES" attributeType="String"/>
         <attribute name="rookieYear" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
         <attribute name="stateProv" optional="YES" attributeType="String"/>
-        <attribute name="teamNumber" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="teamNumber" attributeType="Integer 64" usesScalarValueType="YES"/>
         <attribute name="website" optional="YES" attributeType="String"/>
         <attribute name="yearsParticipated" optional="YES" attributeType="Transformable" customClassName="[Int]"/>
         <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MatchAlliance" inverseName="teams" inverseEntity="MatchAlliance"/>
@@ -264,7 +264,7 @@
         <attribute name="preferred" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="type" attributeType="String"/>
         <attribute name="viewURL" optional="YES" attributeType="String"/>
-        <attribute name="year" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="year" attributeType="Integer 16" usesScalarValueType="YES"/>
         <relationship name="team" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="media" inverseEntity="Team"/>
     </entity>
     <entity name="Webcast" representedClassName="Webcast" syncable="YES">

@@ -42,14 +42,8 @@ extension Team {
         })
     }
 
+    // TODO: Rename to `team number nickname` maybe
     public var fallbackNickname: String {
-        let teamNumber: String = {
-            if let teamNumber = self.teamNumber {
-                return teamNumber.stringValue
-            } else {
-                return Team.trimFRCPrefix(key)
-            }
-        }()
         return "Team \(teamNumber)"
     }
 

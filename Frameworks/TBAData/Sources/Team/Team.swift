@@ -24,7 +24,7 @@ public class Team: NSManagedObject {
     @NSManaged public fileprivate(set) var postalCode: String?
     @NSManaged public fileprivate(set) var rookieYear: NSNumber?
     @NSManaged public fileprivate(set) var stateProv: String?
-    @NSManaged public fileprivate(set) var teamNumber: NSNumber?
+    @NSManaged public fileprivate(set) var teamNumber: Int64
     @NSManaged public fileprivate(set) var website: String?
     @NSManaged public fileprivate(set) var yearsParticipated: [Int]?
     @NSManaged public fileprivate(set) var alliances: NSSet?
@@ -81,8 +81,8 @@ extension Team {
             team.key = key
 
             let teamNumberString = Team.trimFRCPrefix(key)
-            if team.teamNumber == nil, let teamNumber = Int(teamNumberString) {
-                team.teamNumber = NSNumber(value: teamNumber)
+            if team.teamNumber == nil, let teamNumber = Int64(teamNumberString) {
+                team.teamNumber = teamNumber
             }
         }
     }
@@ -109,15 +109,25 @@ extension Team {
             team.gmapsURL = model.gmapsURL
             team.homeChampionship = model.homeChampionship
             team.key = model.key
-            team.lat = model.lat as NSNumber?
-            team.lng = model.lng as NSNumber?
+            team.lat = {
+                if let lat = model.lat {
+                    return NSNumber(value: lat)
+                }
+                return nil
+            }()
+            team.lng = {
+                if let lng = model.lng {
+                    return NSNumber(value: lng)
+                }
+                return nil
+            }()
             team.locationName = model.locationName
             team.name = model.name
             team.nickname = model.nickname
             team.postalCode = model.postalCode
             team.rookieYear = NSNumber(value: model.rookieYear)
             team.stateProv = model.stateProv
-            team.teamNumber = NSNumber(value: model.teamNumber)
+            team.teamNumber = Int64(model.teamNumber)
             team.website = model.website
             team.homeChampionship = model.homeChampionship
         }
