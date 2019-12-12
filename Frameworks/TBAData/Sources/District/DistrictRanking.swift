@@ -5,18 +5,13 @@ import TBAKit
 extension DistrictRanking {
 
     public var sortedEventPoints: [DistrictEventPoints] {
-        // TODO: This sort is going to be problematic if we don't have Event objects
         let eventPointsSet = getValue(\DistrictRanking.eventPoints)
         return (eventPointsSet?.allObjects as? [DistrictEventPoints])?.sorted(by: { (lhs, rhs) -> Bool in
-            guard let lhsEvent = lhs.getValue(\DistrictEventPoints.event) else {
-                return false
-            }
+            let lhsEvent = lhs.getValue(\DistrictEventPoints.event)
             guard let lhsStartDate = lhsEvent.getValue(\Event.startDate) else {
                 return false
             }
-            guard let rhsEvent = rhs.getValue(\DistrictEventPoints.event) else {
-                return false
-            }
+            let rhsEvent = rhs.getValue(\DistrictEventPoints.event)
             guard let rhsStartDate = rhsEvent.getValue(\Event.startDate) else {
                 return false
             }

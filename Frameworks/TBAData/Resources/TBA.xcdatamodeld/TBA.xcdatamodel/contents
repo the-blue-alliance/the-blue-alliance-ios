@@ -21,13 +21,13 @@
         <relationship name="rankings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DistrictRanking" inverseName="district" inverseEntity="DistrictRanking"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="districts" inverseEntity="Team"/>
     </entity>
-    <entity name="DistrictEventPoints" representedClassName="DistrictEventPoints" syncable="YES" codeGenerationType="class">
-        <attribute name="alliancePoints" attributeType="Integer 16" usesScalarValueType="NO"/>
-        <attribute name="awardPoints" attributeType="Integer 16" usesScalarValueType="NO"/>
+    <entity name="DistrictEventPoints" representedClassName="DistrictEventPoints" syncable="YES">
+        <attribute name="alliancePoints" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="awardPoints" attributeType="Integer 16" usesScalarValueType="YES"/>
         <attribute name="districtCMP" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
-        <attribute name="elimPoints" attributeType="Integer 16" usesScalarValueType="NO"/>
-        <attribute name="qualPoints" attributeType="Integer 16" usesScalarValueType="NO"/>
-        <attribute name="total" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="elimPoints" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="qualPoints" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="total" attributeType="Integer 16" usesScalarValueType="YES"/>
         <relationship name="districtRanking" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="DistrictRanking" inverseName="eventPoints" inverseEntity="DistrictRanking"/>
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="points" inverseEntity="Event"/>
         <relationship name="team" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="eventPoints" inverseEntity="Team"/>
