@@ -172,20 +172,20 @@
         <relationship name="team" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="stats" inverseEntity="Team"/>
     </entity>
     <entity name="Favorite" representedClassName="Favorite" parentEntity="MyTBAEntity" syncable="YES"/>
-    <entity name="Match" representedClassName="Match" syncable="YES" codeGenerationType="class">
+    <entity name="Match" representedClassName="Match" syncable="YES">
         <attribute name="actualTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="breakdown" optional="YES" attributeType="Transformable" customClassName="[String: Any]"/>
         <attribute name="compLevelSortOrder" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
         <attribute name="compLevelString" attributeType="String"/>
         <attribute name="key" attributeType="String"/>
-        <attribute name="matchNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="matchNumber" attributeType="Integer 16" usesScalarValueType="YES"/>
         <attribute name="postResultTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="predictedTime" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
-        <attribute name="setNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="setNumber" attributeType="Integer 16" usesScalarValueType="YES"/>
         <attribute name="time" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="winningAlliance" optional="YES" attributeType="String"/>
         <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MatchAlliance" inverseName="match" inverseEntity="MatchAlliance"/>
-        <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="matches" inverseEntity="Event"/>
+        <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="matches" inverseEntity="Event"/>
         <relationship name="videos" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="MatchVideo" inverseName="matches" inverseEntity="MatchVideo"/>
     </entity>
     <entity name="MatchAlliance" representedClassName="MatchAlliance" syncable="YES">
@@ -292,7 +292,7 @@
         <element name="EventStatusQual" positionX="54" positionY="144" width="128" height="105"/>
         <element name="EventTeamStat" positionX="-54" positionY="135" width="128" height="118"/>
         <element name="Favorite" positionX="45" positionY="135" width="128" height="43"/>
-        <element name="Match" positionX="-54" positionY="135" width="128" height="255"/>
+        <element name="Match" positionX="-54" positionY="135" width="128" height="253"/>
         <element name="MatchAlliance" positionX="45" positionY="135" width="128" height="133"/>
         <element name="MatchVideo" positionX="45" positionY="135" width="128" height="88"/>
         <element name="MyTBAEntity" positionX="45" positionY="135" width="128" height="73"/>
