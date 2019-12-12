@@ -13,16 +13,16 @@ extension AwardRecipient {
             // Zachary Orr
             // Team 7332
             awardText.append(awardee)
-            awardText.append(team.fallbackNickname)
+            awardText.append(team.teamNumberNickname)
         } else if let team = team {
             // If we have a nickname for the team, add the team number beforehand, so the cell reads as...
             // Team 7332
             // The Rawrbotz
             if let nickname = team.nickname {
-                awardText.append(team.fallbackNickname)
+                awardText.append(team.teamNumberNickname)
                 awardText.append(nickname)
             } else {
-                awardText.append(team.fallbackNickname)
+                awardText.append(team.teamNumberNickname)
             }
         } else if let awardee = awardee {
             awardText.append(awardee)

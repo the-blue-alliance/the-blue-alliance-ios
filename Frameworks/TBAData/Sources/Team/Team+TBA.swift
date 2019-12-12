@@ -42,8 +42,7 @@ extension Team {
         })
     }
 
-    // TODO: Rename to `team number nickname` maybe
-    public var fallbackNickname: String {
+    public var teamNumberNickname: String {
         return "Team \(teamNumber)"
     }
 
