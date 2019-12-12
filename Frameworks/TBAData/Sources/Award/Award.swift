@@ -70,3 +70,10 @@ extension Award {
 
 }
 
+extension Award: Managed {
+
+    public var isOrphaned: Bool {
+        return event == nil
+    }
+
+}

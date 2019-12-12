@@ -4,6 +4,91 @@ import MyTBAKit
 import TBAKit
 import TBAUtils
 
+@objc(Event)
+public class Event: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Event> {
+        return NSFetchRequest<Event>(entityName: "Event")
+    }
+
+    @NSManaged public fileprivate(set) var address: String?
+    @NSManaged public fileprivate(set) var city: String?
+    @NSManaged public fileprivate(set) var country: String?
+    @NSManaged public fileprivate(set) var endDate: Date?
+    @NSManaged public fileprivate(set) var eventCode: String?
+    @NSManaged public fileprivate(set) var eventType: NSNumber?
+    @NSManaged public fileprivate(set) var eventTypeString: String?
+    @NSManaged public fileprivate(set) var firstEventCode: String?
+    @NSManaged public fileprivate(set) var firstEventID: String?
+    @NSManaged public fileprivate(set) var gmapsPlaceID: String?
+    @NSManaged public fileprivate(set) var gmapsURL: String?
+    @NSManaged public fileprivate(set) var hybridType: String?
+    @NSManaged public fileprivate(set) var key: String
+    @NSManaged public fileprivate(set) var lat: NSNumber?
+    @NSManaged public fileprivate(set) var lng: NSNumber?
+    @NSManaged public fileprivate(set) var locationName: String?
+    @NSManaged public fileprivate(set) var name: String?
+    @NSManaged public fileprivate(set) var playoffType: NSNumber?
+    @NSManaged public fileprivate(set) var playoffTypeString: String?
+    @NSManaged public fileprivate(set) var postalCode: String?
+    @NSManaged public fileprivate(set) var shortName: String?
+    @NSManaged public fileprivate(set) var startDate: Date?
+    @NSManaged public fileprivate(set) var stateProv: String?
+    @NSManaged public fileprivate(set) var timezone: String?
+    @NSManaged public fileprivate(set) var website: String?
+    @NSManaged public fileprivate(set) var week: NSNumber?
+    @NSManaged public fileprivate(set) var year: Int16
+    @NSManaged public fileprivate(set) var alliances: NSOrderedSet?
+    @NSManaged public fileprivate(set) var awards: NSSet?
+    @NSManaged public fileprivate(set) var district: District?
+    @NSManaged public fileprivate(set) var divisions: NSSet?
+    @NSManaged public fileprivate(set) var insights: EventInsights?
+    @NSManaged public fileprivate(set) var matches: NSSet?
+    @NSManaged public fileprivate(set) var parentEvent: Event?
+    @NSManaged public fileprivate(set) var points: NSSet?
+    @NSManaged public fileprivate(set) var rankings: NSSet?
+    @NSManaged public fileprivate(set) var stats: NSSet?
+    @NSManaged public fileprivate(set) var status: Status?
+    @NSManaged public fileprivate(set) var statuses: NSSet?
+    @NSManaged public fileprivate(set) var teams: NSSet?
+    @NSManaged public fileprivate(set) var webcasts: NSSet?
+
+}
+
+// MARK: Generated accessors for awards
+extension Event {
+
+    @objc(addAwardsObject:)
+    @NSManaged fileprivate func addToAwards(_ value: Award)
+
+    @objc(removeAwardsObject:)
+    @NSManaged private func removeFromAwards(_ value: Award)
+
+    @objc(addAwards:)
+    @NSManaged private func addToAwards(_ values: NSSet)
+
+    @objc(removeAwards:)
+    @NSManaged private func removeFromAwards(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for statuses
+extension Event {
+
+    @objc(addStatusesObject:)
+    @NSManaged fileprivate func addToStatuses(_ value: EventStatus)
+
+    @objc(removeStatusesObject:)
+    @NSManaged private func removeFromStatuses(_ value: EventStatus)
+
+    @objc(addStatuses:)
+    @NSManaged private func addToStatuses(_ values: NSSet)
+
+    @objc(removeStatuses:)
+    @NSManaged private func removeFromStatuses(_ values: NSSet)
+
+}
+
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/event_type.py
 public enum EventType: Int {
     case regional = 0
@@ -18,7 +103,7 @@ public enum EventType: Int {
     case unlabeled = -1
 }
 
-extension Event: Locatable, Surfable, Managed {
+extension Event {
 
     static var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
@@ -29,6 +114,35 @@ extension Event: Locatable, Surfable, Managed {
     public static func predicate(key: String) -> NSPredicate {
         return NSPredicate(format: "%K == %@",
                            #keyPath(Event.key), key)
+    }
+
+    /**
+     Insert Events for a year with values from TBAKit Event models in to the managed object context.
+
+     This method manages deleting orphaned Events for a year.
+
+     - Parameter events: The TBAKit Event representations to set values from.
+
+     - Parameter year: The year for the Events.
+
+     - Parameter context: The NSManagedContext to insert the Event in to.
+     */
+    public static func insert(_ events: [TBAEvent], year: Int, in context: NSManagedObjectContext) {
+        // Fetch all of the previous Events for this year
+        let oldEvents = Event.fetch(in: context) {
+            $0.predicate = NSPredicate(format: "%K == %ld",
+                                       #keyPath(Event.year), year)
+        }
+
+        // Insert new Events for this year
+        let events = events.map({
+            return Event.insert($0, in: context)
+        })
+
+        // Delete orphaned Events for this year
+        Set(oldEvents).subtracting(Set(events)).forEach({
+            context.delete($0)
+        })
     }
 
     /**
@@ -48,7 +162,7 @@ extension Event: Locatable, Surfable, Managed {
 
             let yearString = String(key.prefix(4))
             if event.year == nil, let year = Int(yearString) {
-                event.year = NSNumber(value: year)
+                event.year = Int16(year)
             }
         }
     }
@@ -83,7 +197,7 @@ extension Event: Locatable, Surfable, Managed {
 
             event.endDate = model.endDate
             event.eventCode = model.eventCode
-            event.eventType = model.eventType as NSNumber
+            event.eventType = NSNumber(value: model.eventType)
             event.eventTypeString = model.eventTypeString
             event.firstEventID = model.firstEventID
             event.firstEventCode = model.firstEventCode
@@ -91,8 +205,16 @@ extension Event: Locatable, Surfable, Managed {
             event.gmapsURL = model.gmapsURL
 
             event.key = model.key
-            event.lat = model.lat as NSNumber?
-            event.lng = model.lng as NSNumber?
+            if let lat = model.lat {
+                event.lat = NSNumber(value: lat)
+            } else {
+                event.lat = nil
+            }
+            if let lng = model.lng {
+                event.lng = NSNumber(value: lng)
+            } else {
+                event.lng = nil
+            }
 
             event.locationName = model.locationName
             event.name = model.name
@@ -100,7 +222,11 @@ extension Event: Locatable, Surfable, Managed {
             event.updateToOneRelationship(relationship: #keyPath(Event.parentEvent), newValue: model.parentEventKey, newObject: {
                 return Event.insert($0, in: context)
             })
-            event.playoffType = model.playoffType as NSNumber?
+            if let playoffType = model.playoffType {
+                event.playoffType = NSNumber(value: playoffType)
+            } else {
+                event.playoffType = nil
+            }
             event.playoffTypeString = model.playoffTypeString
 
             event.postalCode = model.postalCode
@@ -112,42 +238,17 @@ extension Event: Locatable, Surfable, Managed {
             event.insert(model.webcasts ?? [])
 
             event.website = model.website
-            event.week = model.week as NSNumber?
-            event.year = model.year as NSNumber
+            if let week = model.week {
+                event.week = NSNumber(value: week)
+            } else {
+                event.week = nil
+            }
+            event.year = Int16(model.year)
 
             event.hybridType = calculateHybridType(eventType: model.eventType,
                                                    startDate: model.startDate,
                                                    district: model.district)
         }
-    }
-
-    /**
-     Insert Events for a year with values from TBAKit Event models in to the managed object context.
-
-     This method manages deleting orphaned Events for a year.
-
-     - Parameter events: The TBAKit Event representations to set values from.
-
-     - Parameter year: The year for the Events.
-
-     - Parameter context: The NSManagedContext to insert the Event in to.
-     */
-    public static func insert(_ events: [TBAEvent], year: Int, in context: NSManagedObjectContext) {
-        // Fetch all of the previous Events for this year
-        let oldEvents = Event.fetch(in: context) {
-            $0.predicate = NSPredicate(format: "%K == %ld",
-                                       #keyPath(Event.year), year)
-        }
-
-        // Insert new Events for this year
-        let events = events.map({
-            return Event.insert($0, in: context)
-        })
-
-        // Delete orphaned Events for this year
-        Set(oldEvents).subtracting(Set(events)).forEach({
-            context.delete($0)
-        })
     }
 
     /**
@@ -167,7 +268,7 @@ extension Event: Locatable, Surfable, Managed {
 
         // Insert new EventAlliances for this year
         let alliances = alliances.map({
-            return EventAlliance.insert($0, eventKey: key!, in: managedObjectContext)
+            return EventAlliance.insert($0, eventKey: key, in: managedObjectContext)
         })
 
         // Delete orphaned EventAlliances for this Event
@@ -241,7 +342,7 @@ extension Event: Locatable, Surfable, Managed {
         }
 
         updateToOneRelationship(relationship: #keyPath(Event.insights), newValue: insights, newObject: {
-            return EventInsights.insert($0, eventKey: key!, in: managedObjectContext)
+            return EventInsights.insert($0, eventKey: key, in: managedObjectContext)
         })
     }
 
@@ -279,7 +380,7 @@ extension Event: Locatable, Surfable, Managed {
         }
 
         updateToManyRelationship(relationship: #keyPath(Event.rankings), newValues: rankings.map({
-            return EventRanking.insert($0, sortOrderInfo: sortOrderInfo, extraStatsInfo: extraStatsInfo, eventKey: key!, in: managedObjectContext)
+            return EventRanking.insert($0, sortOrderInfo: sortOrderInfo, extraStatsInfo: extraStatsInfo, eventKey: key, in: managedObjectContext)
         }))
     }
 
@@ -296,7 +397,7 @@ extension Event: Locatable, Surfable, Managed {
         }
 
         updateToManyRelationship(relationship: #keyPath(Event.stats), newValues: stats.map({
-            return EventTeamStat.insert($0, eventKey: key!, in: managedObjectContext)
+            return EventTeamStat.insert($0, eventKey: key, in: managedObjectContext)
         }))
     }
 
@@ -352,11 +453,6 @@ extension Event: Locatable, Surfable, Managed {
         }))
     }
 
-    public var isOrphaned: Bool {
-        // Event is a root object, so it should never be an orphan
-        return false
-    }
-    
     /// Event's shouldn't really be deleted, but sometimes they can be
     public override func prepareForDeletion() {
         super.prepareForDeletion()
@@ -370,6 +466,12 @@ extension Event: Locatable, Surfable, Managed {
             }
         })
     }
+
+}
+
+extension Event: Locatable, Surfable {}
+
+extension Event {
 
     public func awards(for team: Team) -> [Award] {
         guard let awards = awards else {
@@ -401,7 +503,7 @@ extension Event: Locatable, Surfable, Managed {
     }
 
     public var weekString: String? {
-        guard let eventType = eventType?.intValue, let year = year?.intValue else {
+        guard let eventType = eventType?.intValue else {
             return nil
         }
 
@@ -450,7 +552,7 @@ extension Event: Locatable, Surfable, Managed {
     // TODO: Add tests
     public var safeShortName: String {
         guard let name = name else {
-            return String(key!.dropFirst(4)) // Drop year from key
+            return String(key.dropFirst(4)) // Drop year from key
         }
         guard let shortName = shortName else {
             return name
@@ -460,19 +562,12 @@ extension Event: Locatable, Surfable, Managed {
 
     // TODO: Add tests
     public var friendlyNameWithYear: String {
-        let year: String = {
-            if let year = self.year {
-                return year.stringValue
-            } else {
-                return String(key!.prefix(4))
-            }
-        }()
         return "\(year) \(safeShortName) \(eventTypeString ?? "Event")"
     }
 
     /**
      If the event is a CMP division or a CMP finals field.
-    */
+     */
     public var isChampionship: Bool {
         guard let type = getValue(\Event.eventType)?.intValue else {
             return false
@@ -669,15 +764,12 @@ extension Event: Comparable {
     // (type: 99, week: nil) < (type: -1, week: nil)
 
     public static func <(lhs: Event, rhs: Event) -> Bool {
-        guard let lhsYear = lhs.year, let rhsYear = rhs.year else {
-            return false
-        }
-        if lhsYear != rhsYear {
-            return lhsYear.intValue < rhsYear.intValue
+        if lhs.year != rhs.year {
+            return lhs.year < rhs.year
         }
 
         guard let lhsType = lhs.eventType?.intValue, let rhsType = rhs.eventType?.intValue else {
-            return false
+            return lhs.key < rhs.key // Fallback to comparing key strings if we don't have the event type
         }
 
         // Preseason events should always come first
@@ -738,11 +830,19 @@ extension Event: Comparable {
 
 }
 
+extension Event: Managed {
+
+    public var isOrphaned: Bool {
+        // Event is a root object, so it should never be an orphan
+        return false
+    }
+
+}
 
 extension Event: MyTBASubscribable {
 
     public var modelKey: String {
-        return getValue(\Event.key!)
+        return getValue(\Event.key)
     }
 
     public var modelType: MyTBAModelType {

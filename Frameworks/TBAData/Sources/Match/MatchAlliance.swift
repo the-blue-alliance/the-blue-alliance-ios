@@ -98,3 +98,10 @@ extension MatchAlliance {
 
 }
 
+extension MatchAlliance: Managed {
+
+    public var isOrphaned: Bool {
+        return match == nil
+    }
+
+}

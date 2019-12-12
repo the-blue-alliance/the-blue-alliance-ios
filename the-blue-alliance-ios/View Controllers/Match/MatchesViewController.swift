@@ -173,7 +173,7 @@ extension MatchesViewController: Refreshable {
     // MARK: - Refreshable
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key!)
+        let key = event.getValue(\Event.key)
         return "\(key)_matches"
     }
 
@@ -196,7 +196,7 @@ extension MatchesViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventMatches(key: event.key!) { (result, notModified) in
+        operation = tbaKit.fetchEventMatches(key: event.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let matches = try? result.get() {

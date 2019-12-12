@@ -29,7 +29,7 @@ class MatchViewController: MyTBAContainerViewController {
 
         // Only show match breakdown if year is 2015 or onward
         var titles: [String]  = ["Info"]
-        if match.event.year!.intValue >= 2015 {
+        if match.event.year >= 2015 {
             titles.append("Breakdown")
             breakdownViewController = MatchBreakdownViewController(match: match, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         }

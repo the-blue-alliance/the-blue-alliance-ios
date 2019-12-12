@@ -141,7 +141,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
 extension EventTeamStatsTableViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key!)
+        let key = event.getValue(\Event.key)
         return "\(key)_team_stats"
     }
 
@@ -160,7 +160,7 @@ extension EventTeamStatsTableViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventTeamStats(key: event.key!) { (result, notModified) in
+        operation = tbaKit.fetchEventTeamStats(key: event.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let stats = try? result.get() {

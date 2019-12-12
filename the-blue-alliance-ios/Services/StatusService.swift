@@ -66,7 +66,7 @@ class StatusService: NSObject {
             self?.dispatchFMSDown(status.isDatafeedDown)
 
             if let downEvents = status.downEvents.allObjects as? [Event] {
-                self?.dispatchEvents(downEventKeys: downEvents.map({ $0.key! }))
+                self?.dispatchEvents(downEventKeys: downEvents.map({ $0.key }))
             }
         }
     }
@@ -210,7 +210,7 @@ extension EventStatusSubscribable {
     }
 
     func isEventDown(eventKey: String) -> Bool {
-        let downEventKeys = (statusService.status.downEvents.allObjects as? [Event] ?? []).map({ $0.key! })
+        let downEventKeys = (statusService.status.downEvents.allObjects as? [Event] ?? []).map({ $0.key })
         return downEventKeys.contains(eventKey)
     }
 

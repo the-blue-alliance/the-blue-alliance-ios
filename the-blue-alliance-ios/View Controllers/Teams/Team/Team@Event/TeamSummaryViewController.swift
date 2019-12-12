@@ -463,7 +463,7 @@ class TeamSummaryViewController: TBATableViewController {
 extension TeamSummaryViewController: Refreshable {
 
     var refreshKey: String? {
-        return "\(team.getValue(\Team.key))@\(event.getValue(\Event.key!))_status"
+        return "\(team.getValue(\Team.key))@\(event.getValue(\Event.key))_status"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -488,7 +488,7 @@ extension TeamSummaryViewController: Refreshable {
 
         // Refresh Team@Event status
         var teamStatusOperation: TBAKitOperation!
-        teamStatusOperation = tbaKit.fetchTeamStatus(key: teamKey, eventKey: event.key!) { (result, notModified) in
+        teamStatusOperation = tbaKit.fetchTeamStatus(key: teamKey, eventKey: event.key) { (result, notModified) in
             switch result {
             case .success(let status):
                 if let status = status {
@@ -512,7 +512,7 @@ extension TeamSummaryViewController: Refreshable {
 
         // Refresh awards
         var awardsOperation: TBAKitOperation!
-        awardsOperation = tbaKit.fetchTeamAwards(key: teamKey, eventKey: event.key!) { (result, notModified) in
+        awardsOperation = tbaKit.fetchTeamAwards(key: teamKey, eventKey: event.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let awards = try? result.get() {

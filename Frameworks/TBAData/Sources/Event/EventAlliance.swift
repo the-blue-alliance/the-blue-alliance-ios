@@ -3,7 +3,23 @@ import Foundation
 import TBAKit
 import TBAUtils
 
-extension EventAlliance: Managed {
+@objc(EventAlliance)
+public class EventAlliance: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<EventAlliance> {
+        return NSFetchRequest<EventAlliance>(entityName: "EventAlliance")
+    }
+
+    @NSManaged public fileprivate(set) var name: String?
+    @NSManaged public fileprivate(set) var backup: EventAllianceBackup?
+    @NSManaged public fileprivate(set) var declines: NSOrderedSet?
+    @NSManaged public fileprivate(set) var event: Event
+    @NSManaged public fileprivate(set) var picks: NSOrderedSet
+    @NSManaged public fileprivate(set) var status: EventStatusPlayoff?
+
+}
+
+extension EventAlliance {
 
     /**
      Insert an Event Alliance with values from a TBAKit Alliance model in to the managed object context.
@@ -53,10 +69,6 @@ extension EventAlliance: Managed {
         })
     }
 
-    public var isOrphaned: Bool {
-        return event == nil
-    }
-
     public override func prepareForDeletion() {
         super.prepareForDeletion()
 
@@ -77,6 +89,15 @@ extension EventAlliance: Managed {
                 backup.removeFromAlliances(self)
             }
         }
+    }
+
+}
+
+extension EventAlliance: Managed {
+
+    public var isOrphaned: Bool {
+        // TODO: Confirm this can be nil
+        return event == nil
     }
 
 }

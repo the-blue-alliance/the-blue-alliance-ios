@@ -2,7 +2,38 @@ import CoreData
 import Foundation
 import TBAKit
 
-extension EventAllianceBackup: Managed {
+@objc(EventAllianceBackup)
+public class EventAllianceBackup: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<EventAllianceBackup> {
+        return NSFetchRequest<EventAllianceBackup>(entityName: "EventAllianceBackup")
+    }
+
+    @NSManaged public fileprivate(set) var alliances: NSSet?
+    @NSManaged public internal(set) var allianceStatus: EventStatusAlliance?
+    @NSManaged public fileprivate(set) var inTeam: Team
+    @NSManaged public fileprivate(set) var outTeam: Team
+
+}
+
+// MARK: Generated accessors for alliances
+extension EventAllianceBackup {
+
+    @objc(addAlliancesObject:)
+    @NSManaged private func addToAlliances(_ value: EventAlliance)
+
+    @objc(removeAlliancesObject:)
+    @NSManaged internal func removeFromAlliances(_ value: EventAlliance)
+
+    @objc(addAlliances:)
+    @NSManaged private func addToAlliances(_ values: NSSet)
+
+    @objc(removeAlliances:)
+    @NSManaged private func removeFromAlliances(_ values: NSSet)
+
+}
+
+extension EventAllianceBackup {
 
     /**
      Insert a Event Alliance Backup with values from a TBAKit Alliance Backup model in to the managed object context.
@@ -25,6 +56,10 @@ extension EventAllianceBackup: Managed {
             allianceBackup.outTeam = Team.insert(model.teamOut, in: context)
         })
     }
+
+}
+
+extension EventAllianceBackup: Managed {
 
     public var isOrphaned: Bool {
         // An EventAllianceBackup is an orphan if it isn't attached to any EventAlliances or an EventAllianceStatus.

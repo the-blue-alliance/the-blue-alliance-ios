@@ -65,7 +65,7 @@ class YearSelectViewController: ContainerViewController {
 
         var parameters = ["year": NSNumber(value: year), "years": NSArray(array: years)]
         if let week = week {
-            parameters["week"] = NSString(string: week.key!)
+            parameters["week"] = NSString(string: week.key)
         }
         Analytics.logEvent("year_select", parameters: parameters)
     }

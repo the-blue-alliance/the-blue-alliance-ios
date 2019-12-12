@@ -52,7 +52,7 @@ class EventAwardsContainerViewController: ContainerViewController {
         super.viewWillAppear(animated)
 
         var parameters = [
-            "event": event.key!,
+            "event": event.key,
         ]
         if let team = team {
             parameters["team"] = team.key
@@ -152,7 +152,7 @@ class EventAwardsViewController: TBATableViewController {
 extension EventAwardsViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key!)
+        let key = event.getValue(\Event.key)
         return "\(key)_awards"
     }
 
@@ -170,7 +170,7 @@ extension EventAwardsViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventAwards(key: event.key!) { (result, notModified) in
+        operation = tbaKit.fetchEventAwards(key: event.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let awards = try? result.get() {

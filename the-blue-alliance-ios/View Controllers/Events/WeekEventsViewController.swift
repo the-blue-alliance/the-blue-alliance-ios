@@ -62,8 +62,8 @@ class WeekEventsViewController: EventsViewController {
         // Default to refreshing the currently selected year
         // Fall back to the init'd year (used during initial refresh)
         var year = self.year
-        if let weekEventYear = weekEvent?.year?.intValue {
-            year = weekEventYear
+        if let weekEventYear = weekEvent?.year {
+            year = Int(weekEventYear)
         }
 
         var operation: TBAKitOperation!
@@ -103,23 +103,21 @@ class WeekEventsViewController: EventsViewController {
     override var fetchRequestPredicate: NSPredicate {
         if let weekEvent = weekEvent {
             let eventType = weekEvent.eventType!.intValue
-            let key = weekEvent.key!
-            let year = weekEvent.year!
 
             if let week = weekEvent.week {
                 // Event has a week - filter based on the week
                 return NSPredicate(format: "%K == %@ && %K == %@",
                                    #keyPath(Event.week), week,
-                                   #keyPath(Event.year), year)
+                                   #keyPath(Event.year), weekEvent.year)
             } else {
                 if eventType == EventType.championshipFinals.rawValue {
                     // 2017 and onward - handle multiple CMPs
                     return NSPredicate(format: "(%K == %ld || %K == %ld) && %K == %@ && (%K == %@ || %K == %@)",
                                        #keyPath(Event.eventType), EventType.championshipFinals.rawValue,
                                        #keyPath(Event.eventType), EventType.championshipDivision.rawValue,
-                                       #keyPath(Event.year), year,
-                                       #keyPath(Event.key), key,
-                                       #keyPath(Event.parentEvent.key), key)
+                                       #keyPath(Event.year), weekEvent.year,
+                                       #keyPath(Event.key), weekEvent.key,
+                                       #keyPath(Event.parentEvent.key), weekEvent.key)
                 } else if eventType == EventType.offseason.rawValue {
                     // Get all off season events for selected month
                     // Conversion stuff, since Core Data still uses NSDate's
@@ -127,13 +125,13 @@ class WeekEventsViewController: EventsViewController {
                     let lastDayOfMonth = NSDate(timeIntervalSince1970: weekEvent.endDate!.endOfMonth().timeIntervalSince1970)
                     return NSPredicate(format: "%K == %ld && %K == %@ && (%K >= %@) AND (%K <= %@)",
                                        #keyPath(Event.eventType), EventType.offseason.rawValue,
-                                       #keyPath(Event.year), year,
+                                       #keyPath(Event.year), weekEvent.year,
                                        #keyPath(Event.startDate), firstDayOfMonth,
                                        #keyPath(Event.endDate), lastDayOfMonth)
                 } else {
                     return NSPredicate(format: "%K == %ld && %K == %@",
                                        #keyPath(Event.eventType), eventType,
-                                       #keyPath(Event.year), year)
+                                       #keyPath(Event.year), weekEvent.year)
                 }
             }
         }

@@ -49,7 +49,7 @@ extension EventStatsViewController: TBAReactNativeViewControllerDelegate {
 
     var appProperties: [String : Any]? {
         var insights = event.insights?.insightsDictionary
-        insights?["year"] = event.year!.stringValue
+        insights?["year"] = event.year
         return insights
     }
 
@@ -58,7 +58,7 @@ extension EventStatsViewController: TBAReactNativeViewControllerDelegate {
 extension EventStatsViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key!)
+        let key = event.getValue(\Event.key)
         return "\(key)_insights"
     }
 
@@ -80,7 +80,7 @@ extension EventStatsViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventInsights(key: event.key!) { (result, notModified) in
+        operation = tbaKit.fetchEventInsights(key: event.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let insights = try? result.get() {
@@ -100,7 +100,7 @@ extension EventStatsViewController: Stateful {
 
     var noDataText: String {
         if eventStatsUnsupported {
-            return "\(event.year!.stringValue) Event Insights is not supported"
+            return "\(event.year) Event Insights is not supported"
         }
         return "No stats for event"
     }

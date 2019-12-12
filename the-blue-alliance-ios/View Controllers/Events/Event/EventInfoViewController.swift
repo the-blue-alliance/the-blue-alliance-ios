@@ -151,14 +151,13 @@ class EventInfoViewController: TBATableViewController, Observable {
             row += 1
         }
 
-        let eventKey = event.key!
         switch row {
         case EventLinkRow.website.rawValue:
             cell.textLabel?.text = "View event's website"
         case EventLinkRow.twitter.rawValue:
-            cell.textLabel?.text = "View #\(eventKey) on Twitter"
+            cell.textLabel?.text = "View #\(event.key) on Twitter"
         case EventLinkRow.youtube.rawValue:
-            cell.textLabel?.text = "View \(eventKey) on YouTube"
+            cell.textLabel?.text = "View \(event.key) on YouTube"
         case EventLinkRow.chiefDelphi.rawValue:
             cell.textLabel?.text = "View photos on Chief Delphi"
         default:
@@ -196,17 +195,16 @@ class EventInfoViewController: TBATableViewController, Observable {
                 row += 1
             }
 
-            let eventKey = event.key!
             var urlString: String?
             switch row {
             case EventLinkRow.website.rawValue:
                 urlString = event.website
             case EventLinkRow.twitter.rawValue:
-                urlString = "https://twitter.com/search?q=%23\(eventKey)"
+                urlString = "https://twitter.com/search?q=%23\(event.key)"
             case EventLinkRow.youtube.rawValue:
-                urlString = "https://www.youtube.com/results?search_query=\(eventKey)"
+                urlString = "https://www.youtube.com/results?search_query=\(event.key)"
             case EventLinkRow.chiefDelphi.rawValue:
-                urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(eventKey)"
+                urlString = "https://www.chiefdelphi.com/search?q=category%3A11%20tags%3A\(event.key)"
             default:
                 break
             }
@@ -241,7 +239,7 @@ extension EventInfoViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEvent(key: event.key!) { (result, notModified) in
+        operation = tbaKit.fetchEvent(key: event.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 switch result {

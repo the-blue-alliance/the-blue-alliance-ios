@@ -45,7 +45,7 @@ class EventAlliancesContainerViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("event_alliances", parameters: ["event": event.key!])
+        Analytics.logEvent("event_alliances", parameters: ["event": event.key])
     }
 
 }
@@ -136,7 +136,7 @@ private class EventAlliancesViewController: TBATableViewController {
 extension EventAlliancesViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key!)
+        let key = event.getValue(\Event.key)
         return "\(key)_alliances"
     }
 
@@ -157,7 +157,7 @@ extension EventAlliancesViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventAlliances(key: event.key!) { (result, notModified) in
+        operation = tbaKit.fetchEventAlliances(key: event.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let alliances = try? result.get() {

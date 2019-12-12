@@ -42,7 +42,7 @@ class EventDistrictPointsContainerViewController: ContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("event_district_points", parameters: ["event": event.key!])
+        Analytics.logEvent("event_district_points", parameters: ["event": event.key])
     }
 
 }
@@ -122,7 +122,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
 
     private func setupFetchRequest(_ request: NSFetchRequest<DistrictEventPoints>) {
         request.predicate = NSPredicate(format: "%K == %@",
-                                        #keyPath(DistrictEventPoints.event.key), event.key!)
+                                        #keyPath(DistrictEventPoints.event.key), event.key)
     }
 
 }
@@ -130,7 +130,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
 extension EventDistrictPointsViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key!)
+        let key = event.getValue(\Event.key)
         return "\(key)_district_points"
     }
 
@@ -147,7 +147,7 @@ extension EventDistrictPointsViewController: Refreshable {
     }
 
     @objc func refresh() {
-        let eventKey = event.key!
+        let eventKey = event.key
 
         var operation: TBAKitOperation!
         operation = tbaKit.fetchEventDistrictPoints(key: eventKey) { (result, notModified) in

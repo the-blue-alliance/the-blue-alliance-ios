@@ -75,7 +75,7 @@ class EventRankingsViewController: TBATableViewController {
 extension EventRankingsViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key!)
+        let key = event.getValue(\Event.key)
         return "\(key)_rankings"
     }
 
@@ -94,7 +94,7 @@ extension EventRankingsViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchEventRankings(key: event.key!) { (result, notModified) in
+        operation = tbaKit.fetchEventRankings(key: event.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let (rankings, sortOrder, extraStats) = try? result.get() {
