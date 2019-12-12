@@ -2,34 +2,44 @@ import CoreData
 import Foundation
 import TBAKit
 
-public enum MatchVideoType: String {
-    case youtube = "youtube"
-    case tba = "tba"
+@objc(MatchVideo)
+public class MatchVideo: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<MatchVideo> {
+        return NSFetchRequest<MatchVideo>(entityName: "MatchVideo")
+    }
+
+    @NSManaged public fileprivate(set) var key: String
+    @NSManaged private var typeString: String
+    @NSManaged internal var matches: NSSet
+
+}
+
+// MARK: Generated accessors for matches
+extension MatchVideo {
+
+    @objc(addMatchesObject:)
+    @NSManaged private func addToMatches(_ value: Match)
+
+    @objc(removeMatchesObject:)
+    @NSManaged internal func removeFromMatches(_ value: Match)
+
+    @objc(addMatches:)
+    @NSManaged private func addToMatches(_ values: NSSet)
+
+    @objc(removeMatches:)
+    @NSManaged private func removeFromMatches(_ values: NSSet)
+
 }
 
 extension MatchVideo {
 
     public var type: MatchVideoType? {
-        guard let typeString = typeString else {
+        guard let type = MatchVideoType(rawValue: typeString) else {
             return nil
         }
-        return MatchVideoType(rawValue: typeString)
+        return type
     }
-
-}
-
-extension MatchVideo: Playable {
-
-    public var youtubeKey: String? {
-        if type == .youtube {
-            return key
-        }
-        return nil
-    }
-
-}
-
-extension MatchVideo: Managed {
 
     /**
      Insert a Match Video with values from a TBAKit Match Video model in to the managed object context.
@@ -52,10 +62,6 @@ extension MatchVideo: Managed {
             matchVideo.key = model.key
             matchVideo.typeString = model.type
         }
-    }
-
-    public var isOrphaned: Bool {
-        return matches?.count == 0
     }
 
 }

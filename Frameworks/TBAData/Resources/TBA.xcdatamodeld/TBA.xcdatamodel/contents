@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15508" systemVersion="18E226" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="18E226" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Award" representedClassName="Award" syncable="YES" codeGenerationType="class">
         <attribute name="awardType" attributeType="Integer 16" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
@@ -196,7 +196,7 @@
         <relationship name="surrogateTeams" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="surrogateAlliances" inverseEntity="Team"/>
         <relationship name="teams" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="alliances" inverseEntity="Team"/>
     </entity>
-    <entity name="MatchVideo" representedClassName="MatchVideo" syncable="YES" codeGenerationType="class">
+    <entity name="MatchVideo" representedClassName="MatchVideo" syncable="YES">
         <attribute name="key" attributeType="String"/>
         <attribute name="typeString" attributeType="String"/>
         <relationship name="matches" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="Match" inverseName="videos" inverseEntity="Match"/>
@@ -294,7 +294,7 @@
         <element name="Favorite" positionX="45" positionY="135" width="128" height="43"/>
         <element name="Match" positionX="-54" positionY="135" width="128" height="255"/>
         <element name="MatchAlliance" positionX="45" positionY="135" width="128" height="133"/>
-        <element name="MatchVideo" positionX="45" positionY="135" width="128" height="90"/>
+        <element name="MatchVideo" positionX="45" positionY="135" width="128" height="88"/>
         <element name="MyTBAEntity" positionX="45" positionY="135" width="128" height="73"/>
         <element name="Status" positionX="45" positionY="135" width="128" height="133"/>
         <element name="Subscription" positionX="54" positionY="144" width="128" height="58"/>

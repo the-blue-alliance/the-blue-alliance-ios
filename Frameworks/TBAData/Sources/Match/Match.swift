@@ -283,7 +283,7 @@ extension Match: Managed {
         super.prepareForDeletion()
 
         (videos?.allObjects as? [MatchVideo])?.forEach({
-            if $0.matches!.onlyObject(self) {
+            if $0.matches.onlyObject(self) {
                 // Match Video will become an orphan - delete
                 managedObjectContext?.delete($0)
             } else {
