@@ -1,7 +1,6 @@
 import CoreData
 import MyTBAKit
 import TBAKit
-import TBAUtils
 
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/1324e9e5b7c4ab21315bd00a768112991bada108/models/match.py#L25
 public enum MatchCompLevel: String, CaseIterable {
@@ -211,20 +210,8 @@ extension Match: Managed {
                                          #keyPath(MyTBAEntity.modelKey), key)
         let myTBAObject = MyTBAEntity.findOrFetch(in: managedObjectContext, matching: myTBAPredicate)
 
+        // TODO: Confirm this `event == nil` can ever be true
         return event == nil && myTBAObject == nil
-    }
-
-    override public func prepareForDeletion() {
-        super.prepareForDeletion()
-
-        (videos?.allObjects as? [MatchVideo])?.forEach({
-            if $0.matches.onlyObject(self) {
-                // Match Video will become an orphan - delete
-                managedObjectContext?.delete($0)
-            } else {
-                $0.removeFromMatches(self)
-            }
-        })
     }
 
 }

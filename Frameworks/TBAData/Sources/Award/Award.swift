@@ -59,7 +59,7 @@ extension Award {
         super.prepareForDeletion()
 
         (recipients.allObjects as? [AwardRecipient])?.forEach({
-            if $0.awards!.onlyObject(self) {
+            if $0.awards.onlyObject(self) {
                 // Recipient will become an orphan - delete
                 managedObjectContext?.delete($0)
             } else {

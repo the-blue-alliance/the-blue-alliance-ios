@@ -2,45 +2,43 @@ import CoreData
 import Foundation
 import TBAKit
 
-extension AwardRecipient {
+@objc(AwardRecipient)
+public class AwardRecipient: NSManagedObject {
 
-    /**
-     A sorted array of strings describing the award recipient.
-     */
-    public var awardText: [String] {
-        var awardText: [String] = []
-        if let team = team, let awardee = awardee {
-            // Zachary Orr
-            // Team 7332
-            awardText.append(awardee)
-            awardText.append(team.teamNumberNickname)
-        } else if let team = team {
-            // If we have a nickname for the team, add the team number beforehand, so the cell reads as...
-            // Team 7332
-            // The Rawrbotz
-            if let nickname = team.nickname {
-                awardText.append(team.teamNumberNickname)
-                awardText.append(nickname)
-            } else {
-                awardText.append(team.teamNumberNickname)
-            }
-        } else if let awardee = awardee {
-            awardText.append(awardee)
-        } else {
-            awardText.append("--")
-        }
-        return awardText
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<AwardRecipient> {
+        return NSFetchRequest<AwardRecipient>(entityName: "AwardRecipient")
     }
+
+    @NSManaged public fileprivate(set) var awardee: String?
+    @NSManaged public fileprivate(set) var awards: NSSet
+    @NSManaged public fileprivate(set) var team: Team?
 
 }
 
-extension AwardRecipient: Managed {
+// MARK: Generated accessors for awards
+extension AwardRecipient {
+
+    @objc(addAwardsObject:)
+    @NSManaged private func addToAwards(_ value: Award)
+
+    @objc(removeAwardsObject:)
+    @NSManaged internal func removeFromAwards(_ value: Award)
+
+    @objc(addAwards:)
+    @NSManaged private func addToAwards(_ values: NSSet)
+
+    @objc(removeAwards:)
+    @NSManaged private func removeFromAwards(_ values: NSSet)
+
+}
+
+extension AwardRecipient {
 
     /**
      Insert an Award Recipient with values from a TBAKit Award Recipient model in to the managed object context.
 
      Award Recipients will never be 'updated'. They can be deleted from Award, but the predicates for this
-      won't allow matching an existing Award Recipient for updates.
+     won't allow matching an existing Award Recipient for updates.
 
      - Important: This method does not setup it's relationship to an Award.
 
@@ -75,10 +73,6 @@ extension AwardRecipient: Managed {
             })
             awardRecipient.awardee = model.awardee
         }
-    }
-
-    public var isOrphaned: Bool {
-        return awards?.count == 0
     }
 
 }

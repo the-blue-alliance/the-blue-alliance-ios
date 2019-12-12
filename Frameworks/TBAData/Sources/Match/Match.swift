@@ -1,6 +1,7 @@
 import CoreData
 import Foundation
 import TBAKit
+import TBAUtils
 
 @objc(Match)
 public class Match: NSManagedObject {
@@ -78,6 +79,19 @@ extension Match {
                 return MatchVideo.insert($0, in: context)
             }))
         }
+    }
+
+    override public func prepareForDeletion() {
+        super.prepareForDeletion()
+
+        (videos?.allObjects as? [MatchVideo])?.forEach({
+            if $0.matches.onlyObject(self) {
+                // Match Video will become an orphan - delete
+                managedObjectContext?.delete($0)
+            } else {
+                $0.removeFromMatches(self)
+            }
+        })
     }
 
 }

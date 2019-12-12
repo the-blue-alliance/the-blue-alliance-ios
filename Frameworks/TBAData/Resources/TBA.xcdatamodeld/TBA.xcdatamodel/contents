@@ -7,7 +7,7 @@
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="awards" inverseEntity="Event"/>
         <relationship name="recipients" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="AwardRecipient" inverseName="awards" inverseEntity="AwardRecipient"/>
     </entity>
-    <entity name="AwardRecipient" representedClassName="AwardRecipient" syncable="YES" codeGenerationType="class">
+    <entity name="AwardRecipient" representedClassName="AwardRecipient" syncable="YES">
         <attribute name="awardee" optional="YES" attributeType="String"/>
         <relationship name="awards" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="Award" inverseName="recipients" inverseEntity="Award"/>
         <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="awards" inverseEntity="Team"/>
