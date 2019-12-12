@@ -63,24 +63,24 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
         let eventPoints = ranking.sortedEventPoints[indexPath.section]
 
         var pointsType = ""
-        var points = 0
+        var points: Int16 = 0
 
         switch indexPath.row {
         case 0:
             pointsType = "Qualification"
-            points = eventPoints.qualPoints!.intValue
+            points = eventPoints.qualPoints
         case 1:
             pointsType = "Elimination"
-            points = eventPoints.elimPoints!.intValue
+            points = eventPoints.elimPoints
         case 2:
             pointsType = "Alliance"
-            points = eventPoints.alliancePoints!.intValue
+            points = eventPoints.alliancePoints
         case 3:
             pointsType = "Award"
-            points = eventPoints.awardPoints!.intValue
+            points = eventPoints.awardPoints
         case 4:
             pointsType = "Total"
-            points = eventPoints.total!.intValue
+            points = eventPoints.total
         default: break
         }
 
@@ -94,7 +94,7 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let eventPoints = ranking.sortedEventPoints[section]
-        return eventPoints.event!.name ?? eventPoints.event!.key!
+        return eventPoints.event.name ?? eventPoints.event.key
     }
 
 }
@@ -102,8 +102,8 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
 extension DistrictBreakdownViewController: Refreshable {
 
     var refreshKey: String? {
-        let district = ranking.getValue(\DistrictRanking.district!)
-        let key = district.getValue(\District.key!)
+        let district = ranking.getValue(\DistrictRanking.district)
+        let key = district.getValue(\District.key)
         return "\(key)_breakdown"
     }
 
@@ -114,7 +114,7 @@ extension DistrictBreakdownViewController: Refreshable {
     var automaticRefreshEndDate: Date? {
         // Automatically refresh team's district breakdown until district is over
         let district = ranking.getValue(\DistrictRanking.district)
-        return district?.endDate?.endOfDay()
+        return district.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {
@@ -124,11 +124,11 @@ extension DistrictBreakdownViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistrictRankings(key: ranking.district!.key!) { (result, notModified) in
+        operation = tbaKit.fetchDistrictRankings(key: ranking.district.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let rankings = try? result.get() {
-                    let district = context.object(with: self.ranking.getValue(\DistrictRanking.district!).objectID) as! District
+                    let district = context.object(with: self.ranking.getValue(\DistrictRanking.district).objectID) as! District
                     district.insert(rankings)
                 }
             }, saved: {

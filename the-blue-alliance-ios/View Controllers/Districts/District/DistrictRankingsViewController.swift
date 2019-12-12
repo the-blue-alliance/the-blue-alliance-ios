@@ -75,7 +75,7 @@ class DistrictRankingsViewController: TBATableViewController {
 extension DistrictRankingsViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = district.getValue(\District.key!)
+        let key = district.getValue(\District.key)
         return "\(key)_rankings"
     }
 
@@ -94,7 +94,7 @@ extension DistrictRankingsViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistrictRankings(key: district.key!) { (result, notModified) in
+        operation = tbaKit.fetchDistrictRankings(key: district.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let rankings = try? result.get() {

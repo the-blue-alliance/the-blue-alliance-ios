@@ -55,7 +55,7 @@ struct MatchViewModel {
         // If we can't figure out a piece of information, default to yes, the match is a regular match,
         // where someone wins, and someone loses
         let hasWinnersAndLosers: Bool = {
-            if match.year == 2015 && match.compLevel != .final {
+            if match.event.year == 2015 && match.compLevel != .final {
                 return false
             }
             return true
@@ -74,7 +74,7 @@ struct MatchViewModel {
         var rpName1: String?
         var rpName2: String?
 
-        switch match.year {
+        switch match.event.year {
         case 2016:
             rpName1 = "teleopDefensesBreached"
             rpName2 = "teleopTowerCaptured"

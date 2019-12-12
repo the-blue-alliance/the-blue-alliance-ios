@@ -60,18 +60,18 @@ class DistrictTeamSummaryViewController: TBATableViewController {
         if isEventPointsRow(row: indexPath.row) {
             // Event Points row
             let eventPoints = ranking.sortedEventPoints[indexPath.row - 1]
-            cell.titleLabel.text = "\(eventPoints.event!.safeShortName)"
-            cell.subtitleLabel.text = "\(eventPoints.total!.stringValue) Points"
+            cell.titleLabel.text = "\(eventPoints.event.safeShortName)"
+            cell.subtitleLabel.text = "\(eventPoints.total) Points"
             cell.selectionStyle = .default
             cell.accessoryType = .disclosureIndicator
         } else if indexPath.row == 0 {
             // Rank row
             cell.titleLabel.text = "District Rank"
-            cell.subtitleLabel.text = "\(ranking.rank!.stringValue)\(ranking.rank!.intValue.suffix)"
+            cell.subtitleLabel.text = "\(ranking.rank)\(Int(ranking.rank).suffix)"
         } else {
             // Total Points row
             cell.titleLabel.text = "Total Points"
-            cell.subtitleLabel.text = "\(ranking.pointTotal!.stringValue) Points"
+            cell.subtitleLabel.text = "\(ranking.pointTotal) Points"
         }
         return cell
     }
@@ -101,7 +101,7 @@ class DistrictTeamSummaryViewController: TBATableViewController {
 extension DistrictTeamSummaryViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = ranking.getValue(\DistrictRanking.district!.key!)
+        let key = ranking.getValue(\DistrictRanking.district.key)
         return "\(key)_rankings"
     }
 
@@ -112,7 +112,7 @@ extension DistrictTeamSummaryViewController: Refreshable {
     var automaticRefreshEndDate: Date? {
         // Automatically refresh district team summary until the district is over
         let district = ranking.getValue(\DistrictRanking.district)
-        let endDate = district?.endDate
+        let endDate = district.endDate
         return endDate?.endOfDay()
     }
 
@@ -122,11 +122,11 @@ extension DistrictTeamSummaryViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchDistrictRankings(key: ranking.district!.key!) { (result, notModified) in
+        operation = tbaKit.fetchDistrictRankings(key: ranking.district.key) { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let rankings = try? result.get() {
-                    let district = context.object(with: self.ranking.getValue(\DistrictRanking.district!).objectID) as! District
+                    let district = context.object(with: self.ranking.getValue(\DistrictRanking.district).objectID) as! District
                     district.insert(rankings)
                 }
             }, saved: {

@@ -9,7 +9,7 @@ import UIKit
 class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushable {
 
     internal var team: Team {
-        return ranking.team!
+        return ranking.team
     }
 
     var pushTeamBarButtonItem: UIBarButtonItem?
@@ -37,8 +37,8 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
 
         super.init(
             viewControllers: [summaryViewController, breakdownViewController],
-            navigationTitle: ranking.team!.teamNumberNickname,
-            navigationSubtitle: "@ \(ranking.district!.abbreviationWithYear)",
+            navigationTitle: ranking.team.teamNumberNickname,
+            navigationSubtitle: "@ \(ranking.district.abbreviationWithYear)",
             segmentedControlTitles: ["Summary", "Breakdown"],
             persistentContainer: persistentContainer,
             tbaKit: tbaKit,
@@ -60,7 +60,7 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("team_at_district", parameters: ["district": ranking.district!.key!, "team": team.key])
+        Analytics.logEvent("team_at_district", parameters: ["district": ranking.district.key, "team": team.key])
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -81,12 +81,7 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
 extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegate {
 
     func eventPointsSelected(_ eventPoints: DistrictEventPoints) {
-        guard let event = eventPoints.event else {
-            return
-        }
-
-        // TODO: Let's see what we can to do not force-unwrap these from Core Data
-        let teamAtEventViewController = TeamAtEventViewController(team: eventPoints.team!, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: eventPoints.team, event: eventPoints.event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

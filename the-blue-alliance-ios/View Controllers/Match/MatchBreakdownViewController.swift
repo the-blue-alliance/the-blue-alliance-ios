@@ -82,7 +82,7 @@ extension MatchBreakdownViewController: TBAReactNativeViewControllerDelegate {
             blueBreakdown["coopertition_points"] = coopertitionPoints
         }
 
-        return ["year": match.year,
+        return ["year": match.event.year,
                 "redTeams": match.redAllianceTeamNumbers,
                 "redBreakdown": redBreakdown,
                 "blueTeams": match.blueAllianceTeamNumbers,
@@ -138,7 +138,7 @@ extension MatchBreakdownViewController: Stateful {
 
     var noDataText: String {
         if matchBreakdownUnsupported {
-            return "\(match.year) Match Breakdown is not supported"
+            return "\(match.event.year) Match Breakdown is not supported"
         }
         return "No breakdown for match"
     }
