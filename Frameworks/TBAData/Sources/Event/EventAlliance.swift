@@ -19,7 +19,7 @@ public class EventAlliance: NSManagedObject {
 
 }
 
-extension EventAlliance {
+extension EventAlliance: Managed {
 
     /**
      Insert an Event Alliance with values from a TBAKit Alliance model in to the managed object context.
@@ -93,12 +93,10 @@ extension EventAlliance {
 
 }
 
-extension EventAlliance: Managed {
+extension EventAlliance: Orphanable {
 
-    public var isOrphaned: Bool {
-        // TODO: Confirm this can be nil
+    var isOrphaned: Bool {
         return event == nil
     }
 
 }
-

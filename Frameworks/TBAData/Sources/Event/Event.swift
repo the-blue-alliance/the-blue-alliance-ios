@@ -103,7 +103,7 @@ public enum EventType: Int {
     case unlabeled = -1
 }
 
-extension Event {
+extension Event: Managed {
 
     static var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
@@ -187,13 +187,15 @@ extension Event {
             event.city = model.city
             event.country = model.country
 
-            event.updateToOneRelationship(relationship: #keyPath(Event.district), newValue: model.district, newObject: {
-                return District.insert($0, in: context)
-            })
+            if let district = model.district {
+                event.district = District.insert(district, in: context)
+            } else {
+                event.district = nil
+            }
 
-            event.updateToManyRelationship(relationship: #keyPath(Event.divisions), newValues: model.divisionKeys.map({
+            event.divisions = NSSet(array: model.divisionKeys.map {
                 return Event.insert($0, in: context)
-            }))
+            })
 
             event.endDate = model.endDate
             event.eventCode = model.eventCode
@@ -205,6 +207,7 @@ extension Event {
             event.gmapsURL = model.gmapsURL
 
             event.key = model.key
+
             if let lat = model.lat {
                 event.lat = NSNumber(value: lat)
             } else {
@@ -219,9 +222,11 @@ extension Event {
             event.locationName = model.locationName
             event.name = model.name
 
-            event.updateToOneRelationship(relationship: #keyPath(Event.parentEvent), newValue: model.parentEventKey, newObject: {
-                return Event.insert($0, in: context)
-            })
+            if let parentEventKey = model.parentEventKey {
+                event.parentEvent = Event.insert(parentEventKey, in: context)
+            } else {
+                event.parentEvent = nil
+            }
             if let playoffType = model.playoffType {
                 event.playoffType = NSNumber(value: playoffType)
             } else {
@@ -263,19 +268,9 @@ extension Event {
             return
         }
 
-        // Fetch all of the previous EventAlliances for this Event
-        let oldAlliances = self.alliances?.array as? [EventAlliance] ?? []
-
-        // Insert new EventAlliances for this year
-        let alliances = alliances.map({
+        updateToManyRelationship(relationship: #keyPath(Event.awards), newValues: alliances.map {
             return EventAlliance.insert($0, eventKey: key, in: managedObjectContext)
         })
-
-        // Delete orphaned EventAlliances for this Event
-        Set(oldAlliances).subtracting(Set(alliances)).forEach({
-            managedObjectContext.delete($0)
-        })
-        self.alliances = NSOrderedSet(array: alliances)
     }
 
     /**
@@ -313,7 +308,7 @@ extension Event {
         let oldAwards = Award.fetch(in: managedObjectContext) {
             // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
             $0.predicate = NSPredicate(format: "SUBQUERY(%K, $r, $r.team.key == %@).@count == 1",
-                                       #keyPath(Award.recipients), teamKey)
+                                       #keyPath(Award.recipientsMany), teamKey)
         }
 
         // Insert new Awards
@@ -825,15 +820,6 @@ extension Event: Comparable {
                 return lhsWeek.intValue < rhsWeek.intValue
             }
         }
-        return false
-    }
-
-}
-
-extension Event: Managed {
-
-    public var isOrphaned: Bool {
-        // Event is a root object, so it should never be an orphan
         return false
     }
 

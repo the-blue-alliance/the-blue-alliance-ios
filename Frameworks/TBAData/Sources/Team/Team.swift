@@ -64,7 +64,7 @@ extension Team {
 
 }
 
-extension Team {
+extension Team: Managed {
 
     /**
      Insert Teams for a page with values from TBAKit Team models in to the managed object context.
@@ -280,15 +280,6 @@ extension Team {
      */
     public var teamNumberNickname: String {
         return "Team \(teamNumber)"
-    }
-
-}
-
-extension Team: Managed {
-
-    public var isOrphaned: Bool {
-        // Team is a root object, so it should never be an orphan
-        return false
     }
 
 }

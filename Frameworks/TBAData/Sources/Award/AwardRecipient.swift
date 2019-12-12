@@ -5,34 +5,32 @@ import TBAKit
 @objc(AwardRecipient)
 public class AwardRecipient: NSManagedObject {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<AwardRecipient> {
-        return NSFetchRequest<AwardRecipient>(entityName: "AwardRecipient")
+    public var awards: [Award] {
+        guard let awardsMany = awardsMany, let awards = awardsMany.allObjects as? [Award] else {
+            fatalError("Save AwardRecipient before accessing awards")
+        }
+        return awards
     }
 
-    @NSManaged public fileprivate(set) var awardee: String?
-    @NSManaged public fileprivate(set) var awards: NSSet
-    @NSManaged public fileprivate(set) var team: Team?
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<AwardRecipient> {
+        return NSFetchRequest<AwardRecipient>(entityName: AwardRecipient.entityName)
+    }
+
+    @NSManaged public private(set) var awardee: String?
+    @NSManaged private var awardsMany: NSSet?
+    @NSManaged public private(set) var team: Team?
 
 }
 
-// MARK: Generated accessors for awards
+// MARK: Generated accessors for awardsMany
 extension AwardRecipient {
 
-    @objc(addAwardsObject:)
-    @NSManaged private func addToAwards(_ value: Award)
-
-    @objc(removeAwardsObject:)
-    @NSManaged internal func removeFromAwards(_ value: Award)
-
-    @objc(addAwards:)
-    @NSManaged private func addToAwards(_ values: NSSet)
-
-    @objc(removeAwards:)
-    @NSManaged private func removeFromAwards(_ values: NSSet)
+    @objc(removeAwardsManyObject:)
+    @NSManaged internal func removeFromAwardsMany(_ value: Award)
 
 }
 
-extension AwardRecipient {
+extension AwardRecipient: Managed {
 
     /**
      Insert an Award Recipient with values from a TBAKit Award Recipient model in to the managed object context.
@@ -68,9 +66,11 @@ extension AwardRecipient {
         }
 
         return findOrCreate(in: context, matching: predicate) { (awardRecipient) in
-            awardRecipient.updateToOneRelationship(relationship: #keyPath(AwardRecipient.team), newValue: model.teamKey, newObject: {
-                return Team.insert($0, in: context)
-            })
+            if let teamKey = model.teamKey {
+                awardRecipient.team = Team.insert(teamKey, in: context)
+            } else {
+                awardRecipient.team = nil
+            }
             awardRecipient.awardee = model.awardee
         }
     }
@@ -109,7 +109,7 @@ extension AwardRecipient {
 
 }
 
-extension AwardRecipient: Managed {
+extension AwardRecipient: Orphanable {
 
     public var isOrphaned: Bool {
         return awards.count == 0

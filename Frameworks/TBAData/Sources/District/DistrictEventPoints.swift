@@ -5,23 +5,72 @@ import TBAKit
 @objc(DistrictEventPoints)
 public class DistrictEventPoints: NSManagedObject {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<DistrictEventPoints> {
-        return NSFetchRequest<DistrictEventPoints>(entityName: "DistrictEventPoints")
+    public var alliancePoints: Int {
+        guard let alliancePoints = alliancePointsNumber?.intValue else {
+            fatalError("Save DistrictEventPoints before accessing alliancePoints")
+        }
+        return alliancePoints
     }
 
-    @NSManaged public fileprivate(set) var alliancePoints: Int16
-    @NSManaged public fileprivate(set) var awardPoints: Int16
-    @NSManaged public fileprivate(set) var districtCMP: NSNumber?
-    @NSManaged public fileprivate(set) var elimPoints: Int16
-    @NSManaged public fileprivate(set) var qualPoints: Int16
-    @NSManaged public fileprivate(set) var total: Int16
-    @NSManaged public fileprivate(set) var districtRanking: DistrictRanking?
-    @NSManaged public fileprivate(set) var event: Event
-    @NSManaged public fileprivate(set) var team: Team
+    public var awardPoints: Int {
+        guard let awardPoints = awardPointsNumber?.intValue else {
+            fatalError("Save DistrictEventPoints before accessing awardPoints")
+        }
+        return awardPoints
+    }
+
+    public var elimPoints: Int {
+        guard let elimPoints = elimPointsNumber?.intValue else {
+            fatalError("Save DistrictEventPoints before accessing elimPoints")
+        }
+        return elimPoints
+    }
+
+    public var qualPoints: Int {
+        guard let qualPoints = qualPointsNumber?.intValue else {
+            fatalError("Save DistrictEventPoints before accessing qualPoints")
+        }
+        return qualPoints
+    }
+
+    public var total: Int {
+        guard let total = totalNumber?.intValue else {
+            fatalError("Save DistrictEventPoints before accessing total")
+        }
+        return total
+    }
+
+    public var event: Event {
+        guard let event = eventOne else {
+            fatalError("Save DistrictEventPoints before accessing event")
+        }
+        return event
+    }
+
+    public var team: Team {
+        guard let team = teamOne else {
+            fatalError("Save DistrictEventPoints before accessing team")
+        }
+        return team
+    }
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<DistrictEventPoints> {
+        return NSFetchRequest<DistrictEventPoints>(entityName: DistrictEventPoints.entityName)
+    }
+
+    @NSManaged private var alliancePointsNumber: NSNumber?
+    @NSManaged private var awardPointsNumber: NSNumber?
+    @NSManaged public private(set) var districtCMP: NSNumber?
+    @NSManaged private var elimPointsNumber: NSNumber?
+    @NSManaged private var qualPointsNumber: NSNumber?
+    @NSManaged private var totalNumber: NSNumber?
+    @NSManaged public private(set) var districtRanking: DistrictRanking?
+    @NSManaged private var eventOne: Event?
+    @NSManaged private var teamOne: Team?
 
 }
 
-extension DistrictEventPoints {
+extension DistrictEventPoints: Managed {
 
     /**
      Insert an array of District Event Points for an Event with values from TBAKit District Event Points models in to the managed object context.
@@ -42,7 +91,7 @@ extension DistrictEventPoints {
         // Fetch all of the previous DistrictEventPoints for this Event
         let oldPoints = DistrictEventPoints.fetch(in: context) {
             $0.predicate = NSPredicate(format: "%K == %@",
-                                       #keyPath(DistrictEventPoints.event.key), eventKey)
+                                       #keyPath(DistrictEventPoints.eventOne.key), eventKey)
         }
 
         // Insert new DistrictEventPoints for this Event
@@ -69,34 +118,33 @@ extension DistrictEventPoints {
      */
     public static func insert(_ model: TBADistrictEventPoints, in context: NSManagedObjectContext) -> DistrictEventPoints {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(DistrictEventPoints.event.key), model.eventKey,
-                                    #keyPath(DistrictEventPoints.team.key), model.teamKey)
+                                    #keyPath(DistrictEventPoints.eventOne.key), model.eventKey,
+                                    #keyPath(DistrictEventPoints.teamOne.key), model.teamKey)
 
         return findOrCreate(in: context, matching: predicate) { (eventPoints) in
-            eventPoints.team = Team.insert(model.teamKey, in: context)
-            eventPoints.event = Event.insert(model.eventKey, in: context)
+            eventPoints.teamOne = Team.insert(model.teamKey, in: context)
+            eventPoints.eventOne = Event.insert(model.eventKey, in: context)
 
-            eventPoints.alliancePoints = Int16(model.alliancePoints)
-            eventPoints.awardPoints = Int16(model.awardPoints)
+            eventPoints.alliancePointsNumber = NSNumber(value: model.alliancePoints)
+            eventPoints.awardPointsNumber = NSNumber(value: model.awardPoints)
             if let districtCMP = model.districtCMP {
                 eventPoints.districtCMP = NSNumber(value: districtCMP)
             } else {
                 eventPoints.districtCMP = nil
             }
-            eventPoints.elimPoints = Int16(model.elimPoints)
-            eventPoints.qualPoints = Int16(model.qualPoints)
-            eventPoints.total = Int16(model.total)
+            eventPoints.elimPointsNumber = NSNumber(value: model.elimPoints)
+            eventPoints.qualPointsNumber = NSNumber(value: model.qualPoints)
+            eventPoints.totalNumber = NSNumber(value: model.total)
         }
     }
 
 }
 
-extension DistrictEventPoints: Managed {
+extension DistrictEventPoints: Orphanable {
 
     public var isOrphaned: Bool {
         // If the Event doesn't exist and it's not attached to a District Ranking, it's an orphan
-        // TODO: Can `event` ever be nil here?
-        return districtRanking == nil && event == nil
+        return districtRanking == nil && eventOne == nil
     }
 
 }

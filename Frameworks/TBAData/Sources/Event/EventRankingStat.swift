@@ -14,7 +14,7 @@ public class EventRankingStat: NSManagedObject {
 
 }
 
-extension EventRankingStat {
+extension EventRankingStat: Managed {
 
     internal static func insert(value: Double, sortOrderRanking: EventRanking, in context: NSManagedObjectContext) -> EventRankingStat {
         let eventRankingStat = EventRankingStat.init(entity: entity(), insertInto: context)
@@ -56,7 +56,7 @@ extension EventRankingStat {
 
 }
 
-extension EventRankingStat: Managed {
+extension EventRankingStat: Orphanable {
 
     public var isOrphaned: Bool {
         return sortOrderRanking == nil && extraStatsRanking == nil

@@ -17,7 +17,7 @@ public class EventTeamStat: NSManagedObject {
 
 }
 
-extension EventTeamStat {
+extension EventTeamStat: Managed {
 
     public static func insert(_ model: TBAStat, eventKey: String, in context: NSManagedObjectContext) -> EventTeamStat {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
@@ -35,11 +35,10 @@ extension EventTeamStat {
 
 }
 
-extension EventTeamStat: Managed {
+extension EventTeamStat: Orphanable {
 
     public var isOrphaned: Bool {
         // Should not be orphaned, since we cascade on Event deletion
-        // TODO: Can this ever be nil?
         return event == nil
     }
 

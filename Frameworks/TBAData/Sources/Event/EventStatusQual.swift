@@ -16,7 +16,7 @@ public class EventStatusQual: NSManagedObject {
 
 }
 
-extension EventStatusQual {
+extension EventStatusQual: Managed {
 
     public static func insert(_ model: TBAEventStatusQual, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusQual {
         let predicate = NSPredicate(format: "(%K == %@ AND %K == %@) OR (%K == %@ AND %K == %@)",
@@ -37,7 +37,7 @@ extension EventStatusQual {
 
 }
 
-extension EventStatusQual: Managed {
+extension EventStatusQual: Orphanable {
 
     public var isOrphaned: Bool {
         // EventStatusQual is an orphan if it's not attached to a Ranking or an EventStatus

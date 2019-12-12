@@ -25,7 +25,7 @@ public class EventRanking: NSManagedObject {
 
 }
 
-extension EventRanking {
+extension EventRanking: Managed {
 
     public static func insert(_ model: TBAEventRanking, sortOrderInfo: [TBAEventRankingSortOrder]?, extraStatsInfo: [TBAEventRankingSortOrder]?, eventKey: String, in context: NSManagedObjectContext) -> EventRanking {
         let predicate = NSPredicate(format: "(%K == %@ OR %K == %@) AND %K == %@",
@@ -167,7 +167,7 @@ extension EventRanking {
 
 }
 
-extension EventRanking: Managed {
+extension EventRanking: Orphanable {
 
     public var isOrphaned: Bool {
         // Ranking is an orphan if it's not attached to an Event or a EventStatusQual

@@ -32,10 +32,10 @@ struct RankingCellViewModel {
     }
 
     init(eventRanking: EventRanking) {
-        rankText = "Rank \(eventRanking.rank!.intValue)"
+        rankText = "Rank \(eventRanking.rank)"
 
-        teamNumber = String(describing: eventRanking.team!.teamNumber)
-        teamName = eventRanking.team!.nickname ?? eventRanking.team!.teamNumberNickname
+        teamNumber = String(describing: eventRanking.team.teamNumber)
+        teamName = eventRanking.team.nickname ?? eventRanking.team.teamNumberNickname
 
         detailText = eventRanking.rankingInfoString
 
@@ -51,10 +51,11 @@ struct RankingCellViewModel {
     init(eventTeamStat: EventTeamStat) {
         rankText = nil
 
-        teamNumber = String(describing: eventTeamStat.team!.teamNumber)
-        teamName = eventTeamStat.team!.nickname ?? eventTeamStat.team!.teamNumberNickname
+        teamNumber = String(describing: eventTeamStat.team.teamNumber)
+        teamName = eventTeamStat.team.nickname ?? eventTeamStat.team.teamNumberNickname
 
-        detailText = String(format: "OPR: %.2f, DPR: %.2f, CCWM: %.2f", eventTeamStat.opr!.floatValue, eventTeamStat.dpr!.floatValue, eventTeamStat.ccwm!.floatValue)
+        // TODO: Confirm these look okay
+        detailText = String(format: "OPR: %.2f, DPR: %.2f, CCWM: %.2f", eventTeamStat.opr, eventTeamStat.dpr, eventTeamStat.ccwm)
         wltText = nil
     }
 

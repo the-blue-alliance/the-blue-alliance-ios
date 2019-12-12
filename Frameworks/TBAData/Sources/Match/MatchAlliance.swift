@@ -18,7 +18,7 @@ public class MatchAlliance: NSManagedObject {
 
 }
 
-extension MatchAlliance {
+extension MatchAlliance: Managed {
 
     /**
      Returns team keys for the alliance.
@@ -98,7 +98,7 @@ extension MatchAlliance {
 
 }
 
-extension MatchAlliance: Managed {
+extension MatchAlliance: Orphanable {
 
     public var isOrphaned: Bool {
         return match == nil

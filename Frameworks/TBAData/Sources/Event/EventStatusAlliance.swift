@@ -17,7 +17,7 @@ public class EventStatusAlliance: NSManagedObject {
 
 }
 
-extension EventStatusAlliance {
+extension EventStatusAlliance: Managed {
 
     public static func insert(_ model: TBAEventStatusAlliance, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusAlliance {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
@@ -50,7 +50,7 @@ extension EventStatusAlliance {
 
 }
 
-extension EventStatusAlliance: Managed {
+extension EventStatusAlliance: Orphanable {
 
     public var isOrphaned: Bool {
         return eventStatus == nil

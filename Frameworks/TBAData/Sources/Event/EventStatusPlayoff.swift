@@ -19,7 +19,7 @@ public class EventStatusPlayoff: NSManagedObject {
 
 }
 
-extension EventStatusPlayoff {
+extension EventStatusPlayoff: Managed {
 
     public static func insert(_ model: TBAAllianceStatus, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusPlayoff {
         // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
@@ -72,7 +72,7 @@ extension EventStatusPlayoff {
 
 }
 
-extension EventStatusPlayoff: Managed {
+extension EventStatusPlayoff: Orphanable {
 
     public var isOrphaned: Bool {
         // An EventStatusPlayoff is an orphan if it isn't attached to any EventAlliance or an EventStatus.

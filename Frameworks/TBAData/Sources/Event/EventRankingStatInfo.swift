@@ -50,7 +50,7 @@ extension EventRankingStatInfo {
 
 }
 
-extension EventRankingStatInfo {
+extension EventRankingStatInfo: Managed {
 
     public static func insert(_ model: TBAEventRankingSortOrder, in context: NSManagedObjectContext) -> EventRankingStatInfo {
         let predicate = NSPredicate(format: "%K == %@ && %K == %ld",
@@ -65,7 +65,7 @@ extension EventRankingStatInfo {
 
 }
 
-extension EventRankingStatInfo: Managed {
+extension EventRankingStatInfo: Orphanable {
 
     public var isOrphaned: Bool {
         return sortOrdersRankings.count == 0 && extraStatsRankings.count == 0

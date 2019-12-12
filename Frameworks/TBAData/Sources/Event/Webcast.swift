@@ -33,7 +33,7 @@ extension Webcast {
 
 }
 
-extension Webcast {
+extension Webcast: Managed {
 
     /**
      Insert a Webcast with values from a TBAKit Webcast model in to the managed object context.
@@ -63,7 +63,7 @@ extension Webcast {
 
 }
 
-extension Webcast: Managed {
+extension Webcast: Orphanable {
 
     public var isOrphaned: Bool {
         return events.count == 0

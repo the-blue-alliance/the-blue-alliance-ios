@@ -5,6 +5,29 @@ import TBAKit
 @objc(TeamMedia)
 public class TeamMedia: NSManagedObject {
 
+    public var image: UIImage? {
+        get {
+            if let mediaData = mediaData {
+                return UIImage(data: mediaData)
+            }
+            return nil
+        }
+        set {
+            mediaData = newValue?.pngData()
+            mediaError = nil
+        }
+    }
+
+    public var imageError: Error? {
+        get {
+            return mediaError
+        }
+        set {
+            mediaError = newValue
+            mediaData = nil
+        }
+    }
+
     @nonobjc public class func fetchRequest() -> NSFetchRequest<TeamMedia> {
         return NSFetchRequest<TeamMedia>(entityName: "TeamMedia")
     }
@@ -74,30 +97,7 @@ public enum MediaType: String {
 
 }
 
-extension TeamMedia {
-
-    public var image: UIImage? {
-        get {
-            if let mediaData = mediaData {
-                return UIImage(data: mediaData)
-            }
-            return nil
-        }
-        set {
-            mediaData = newValue?.pngData()
-            mediaError = nil
-        }
-    }
-
-    public var imageError: Error? {
-        get {
-            return mediaError
-        }
-        set {
-            mediaError = newValue
-            mediaData = nil
-        }
-    }
+extension TeamMedia: Managed {
 
     /**
      Insert a Team Media with values from a TBAKit Media model in to the managed object context.
@@ -151,14 +151,6 @@ extension TeamMedia: Playable {
             return getValue(\TeamMedia.foreignKey)
         }
         return nil
-    }
-
-}
-
-extension TeamMedia: Managed {
-
-    public var isOrphaned: Bool {
-        return team == nil
     }
 
 }

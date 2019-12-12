@@ -91,7 +91,7 @@ public enum MatchCompLevel: String, CaseIterable {
 
 }
 
-extension Match {
+extension Match: Managed {
 
     /**
      Insert a Match with values from a TBAKit Match model in to the managed object context.
@@ -120,10 +120,7 @@ extension Match {
                 match.compLevelSortOrder = nil
             }
 
-            match.updateToOneRelationship(relationship: #keyPath(Match.event), newValue: model.eventKey) {
-                return Event.insert($0, in: context)
-            }
-
+            match.event = Event.insert(model.eventKey, in: context)
             match.setNumber = Int16(model.setNumber)
             match.matchNumber = Int16(model.matchNumber)
 
@@ -293,7 +290,7 @@ extension Match {
 
 }
 
-extension Match: Managed {
+extension Match: Orphanable {
 
     public var isOrphaned: Bool {
         guard let managedObjectContext = managedObjectContext else {
@@ -305,7 +302,6 @@ extension Match: Managed {
                                          #keyPath(MyTBAEntity.modelKey), key)
         let myTBAObject = MyTBAEntity.findOrFetch(in: managedObjectContext, matching: myTBAPredicate)
 
-        // TODO: Confirm this `event == nil` can ever be true
         return event == nil && myTBAObject == nil
     }
 

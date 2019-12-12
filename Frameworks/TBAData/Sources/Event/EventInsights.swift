@@ -9,13 +9,13 @@ public class EventInsights: NSManagedObject {
         return NSFetchRequest<EventInsights>(entityName: "EventInsights")
     }
 
-    @NSManaged private var playoff: [String: Any]?
-    @NSManaged private var qual: [String: Any]?
+    @NSManaged public fileprivate(set) var playoff: [String: Any]?
+    @NSManaged public fileprivate(set) var qual: [String: Any]?
     @NSManaged public fileprivate(set) var event: Event
 
 }
 
-extension EventInsights {
+extension EventInsights: Managed {
 
     /**
      Insert an EventInsights with values from a TBAKit EventInsights model in to the managed object context.
@@ -62,7 +62,7 @@ extension EventInsights {
 
 }
 
-extension EventInsights: Managed {
+extension EventInsights: Orphanable {
 
     public var isOrphaned: Bool {
         // EventInsights should never be orphaned because they'll cascade with an Event's deletion

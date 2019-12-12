@@ -1,7 +1,8 @@
 import Foundation
 
 protocol Only {
-    func onlyObject(_ only: Any) -> Bool
+    associatedtype Element
+    func onlyObject(_ only: Element) -> Bool
 }
 
 extension NSSet: Only {

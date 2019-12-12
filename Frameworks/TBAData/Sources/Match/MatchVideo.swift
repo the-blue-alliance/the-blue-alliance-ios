@@ -5,6 +5,13 @@ import TBAKit
 @objc(MatchVideo)
 public class MatchVideo: NSManagedObject {
 
+    public var type: MatchVideoType? {
+        guard let type = MatchVideoType(rawValue: typeString) else {
+            return nil
+        }
+        return type
+    }
+
     @nonobjc public class func fetchRequest() -> NSFetchRequest<MatchVideo> {
         return NSFetchRequest<MatchVideo>(entityName: "MatchVideo")
     }
@@ -37,14 +44,7 @@ public enum MatchVideoType: String {
     case tba = "tba"
 }
 
-extension MatchVideo {
-
-    public var type: MatchVideoType? {
-        guard let type = MatchVideoType(rawValue: typeString) else {
-            return nil
-        }
-        return type
-    }
+extension MatchVideo: Managed {
 
     /**
      Insert a Match Video with values from a TBAKit Match Video model in to the managed object context.
@@ -82,7 +82,7 @@ extension MatchVideo: Playable {
 
 }
 
-extension MatchVideo: Managed {
+extension MatchVideo: Orphanable {
 
     public var isOrphaned: Bool {
         return matches.count == 0

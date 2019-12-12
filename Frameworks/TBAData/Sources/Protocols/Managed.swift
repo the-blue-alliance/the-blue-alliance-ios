@@ -3,6 +3,9 @@ import CoreData
 public protocol Managed: class, NSFetchRequestResult {
     static var entity: NSEntityDescription { get }
     static var entityName: String { get }
+}
+
+internal protocol Orphanable {
     var isOrphaned: Bool { get }
 }
 
@@ -63,7 +66,7 @@ extension Managed where Self: NSManagedObject {
         }
     }
 
-    func updateToOneRelationship<J: Any, T: NSManagedObject & Managed>(relationship: String, newValue: J?, newObject: (J) -> T) {
+    func updateToOneRelationship<J: Any, T: NSManagedObject & Orphanable>(relationship: String, newValue: J?, newObject: (J) -> T) {
         // Store our old value so we can reference it later
         let oldValue = value(forKeyPath: relationship) as? T
 
@@ -80,7 +83,7 @@ extension Managed where Self: NSManagedObject {
         }
     }
 
-    func updateToManyRelationship<T: NSManagedObject & Managed>(relationship: String, newValues new: [T]?) {
+    func updateToManyRelationship<T: NSManagedObject & Orphanable>(relationship: String, newValues new: [T]?) {
         let debugString = "\(String(describing: type(of: self))).\(relationship)"
         guard let relationshipAttributeDescription = entity.relationshipsByName[relationship] else {
             fatalError("Unable to update relationship \(debugString) - relationship not found")

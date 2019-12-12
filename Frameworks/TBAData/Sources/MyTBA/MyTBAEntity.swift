@@ -25,7 +25,7 @@ public protocol MyTBAManaged: Managed {
     func toRemoteModel() -> RemoteType
 }
 
-extension MyTBAEntity {
+extension MyTBAEntity: Managed {
 
     public var modelType: MyTBAModelType {
         get {
@@ -84,14 +84,6 @@ extension MyTBAEntity {
         default:
             return nil
         }
-    }
-
-}
-
-extension MyTBAEntity: Managed {
-
-    public var isOrphaned: Bool {
-        return false
     }
 
 }

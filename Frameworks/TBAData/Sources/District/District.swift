@@ -6,21 +6,70 @@ import TBAUtils
 @objc(District)
 public class District: NSManagedObject {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<District> {
-        return NSFetchRequest<District>(entityName: "District")
+    public var abbreviation: String {
+        guard let abbreviation = abbreviationString else {
+            fatalError("Save District before accessing abbreviation")
+        }
+        return abbreviation
     }
 
-    @NSManaged public fileprivate(set) var abbreviation: String
-    @NSManaged public fileprivate(set) var key: String
-    @NSManaged public fileprivate(set) var name: String
-    @NSManaged public fileprivate(set) var year: Int16
-    @NSManaged public fileprivate(set) var events: NSSet?
-    @NSManaged public fileprivate(set) var rankings: NSSet?
-    @NSManaged public fileprivate(set) var teams: NSSet?
+    public var key: String {
+        guard let key = keyString else {
+            fatalError("Save District before accessing key")
+        }
+        return key
+    }
+
+    public var name: String {
+        guard let name = nameString else {
+            fatalError("Save District before accessing name")
+        }
+        return name
+    }
+
+    public var year: Int {
+        guard let year = yearNumber?.intValue else {
+            fatalError("Save District before accessing year")
+        }
+        return year
+    }
+
+    public var events: [Event] {
+        guard let eventsMany = eventsMany, let events = eventsMany.allObjects as? [Event] else {
+            return []
+        }
+        return events
+    }
+
+    public var rankings: [EventRanking] {
+        guard let rankingsMany = rankingsMany, let rankings = rankingsMany.allObjects as? [EventRanking] else {
+            return []
+        }
+        return rankings
+    }
+
+    public var teams: [Team] {
+        guard let teamsMany = teamsMany, let teams = teamsMany.allObjects as? [Team] else {
+            return []
+        }
+        return teams
+    }
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<District> {
+        return NSFetchRequest<District>(entityName: District.entityName)
+    }
+
+    @NSManaged private var abbreviationString: String?
+    @NSManaged internal private(set) var keyString: String?
+    @NSManaged private var nameString: String?
+    @NSManaged private var yearNumber: NSNumber?
+    @NSManaged private var eventsMany: NSSet?
+    @NSManaged private var rankingsMany: NSSet?
+    @NSManaged private var teamsMany: NSSet?
 
 }
 
-extension District {
+extension District: Managed {
 
     /**
      Insert Districts for a year with values from TBAKit District models in to the managed object context.
@@ -37,7 +86,7 @@ extension District {
         // Fetch all of the previous Districts for this year
         let oldDistricts = District.fetch(in: context) {
             $0.predicate = NSPredicate(format: "%K == %ld",
-                                       #keyPath(District.year), year)
+                                       #keyPath(District.yearNumber), year)
         }
 
         // Insert new Districts for this year
@@ -63,14 +112,14 @@ extension District {
     @discardableResult
     public static func insert(_ model: TBADistrict, in context: NSManagedObjectContext) -> District {
         let predicate = NSPredicate(format: "%K == %@",
-                                    #keyPath(District.key), model.key)
+                                    #keyPath(District.keyString), model.key)
 
         return findOrCreate(in: context, matching: predicate, configure: { (district) in
             // Required: abbreviation, name, key, year
-            district.abbreviation = model.abbreviation
-            district.name = model.name
-            district.key = model.key
-            district.year = Int16(model.year)
+            district.abbreviationString = model.abbreviation
+            district.nameString = model.name
+            district.keyString = model.key
+            district.yearNumber = NSNumber(value: model.year)
         })
     }
 
@@ -90,7 +139,7 @@ extension District {
             return
         }
 
-        updateToManyRelationship(relationship: #keyPath(District.rankings), newValues: rankings.map {
+        updateToManyRelationship(relationship: #keyPath(District.rankingsMany), newValues: rankings.map {
             return DistrictRanking.insert($0, districtKey: key, in: managedObjectContext)
         })
     }
@@ -107,7 +156,7 @@ extension District {
             return
         }
 
-        self.events = NSSet(array: events.map({
+        self.eventsMany = NSSet(array: events.map({
             return Event.insert($0, in: managedObjectContext)
         }))
     }
@@ -124,7 +173,7 @@ extension District {
             return
         }
 
-        self.teams = NSSet(array: teams.map({
+        self.teamsMany = NSSet(array: teams.map({
             return Team.insert($0, in: managedObjectContext)
         }))
     }
@@ -144,9 +193,7 @@ extension District {
      The district championship for a district. A nil value means the DCMP hasn't been fetched yet.
      */
     private var districtChampionship: Event? {
-        guard let eventsSet = getValue(\District.events), let events = eventsSet.allObjects as? [Event] else {
-            return nil
-        }
+        // TODO: Confirm we're doing this in a thread-safe place
         return events.first(where: { (event) -> Bool in
             return event.isDistrictChampionship
         })
@@ -156,10 +203,6 @@ extension District {
      If the district is currently "in season", meaning it's after stop build day, but before the district CMP is over
      */
     public var isHappeningNow: Bool {
-        let year = getValue(\District.year)
-        if year != Calendar.current.year {
-            return false
-        }
         // If we can't find the district championship, we don't know if we're in season or not
         guard let dcmpEndDate = endDate else {
             return false
@@ -172,16 +215,8 @@ extension District {
      The 'end date' for the district - the end date of the district championship
      */
     public var endDate: Date? {
-        return districtChampionship?.getValue(\Event.endDate)
-    }
-
-}
-
-extension District: Managed {
-
-    public var isOrphaned: Bool {
-        // District is a root object, so it should never be an orphan
-        return false
+        // TODO: Confirm we're doing this in a thread safe palce
+        return districtChampionship?.endDate
     }
 
 }

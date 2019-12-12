@@ -18,7 +18,7 @@ public class Status: NSManagedObject {
 
 }
 
-extension Status {
+extension Status: Managed {
 
     /**
      Insert an Status with values from a TBAKit Status model in to the managed object context.
@@ -33,11 +33,9 @@ extension Status {
     public static func insert(_ model: TBAStatus, in context: NSManagedObjectContext) -> Status {
         return findOrCreate(in: context, matching: statusPredicate) { (status) in
             status.currentSeason = Int16(model.currentSeason)
-
-            status.updateToManyRelationship(relationship: #keyPath(Status.downEvents), newValues: model.downEvents.map {
+            status.downEvents = NSSet(array: model.downEvents.map {
                 return Event.insert($0, in: context)
             })
-
             status.latestAppVersion = Int64(model.ios.latestAppVersion)
             status.minAppVersion = Int64(model.ios.minAppVersion)
             status.isDatafeedDown = model.datafeedDown
@@ -88,14 +86,6 @@ extension Status {
                                     datafeedDown: false,
                                     maxSeason: maxSeason)
         return insert(localStatus, in: context)
-    }
-
-}
-
-extension Status: Managed {
-
-    public var isOrphaned: Bool {
-        return false
     }
 
 }

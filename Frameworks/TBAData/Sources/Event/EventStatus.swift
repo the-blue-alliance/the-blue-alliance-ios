@@ -22,7 +22,7 @@ public class EventStatus: NSManagedObject {
 
 }
 
-extension EventStatus {
+extension EventStatus: Managed {
 
     @discardableResult
     public static func insert(_ model: TBAEventStatus, in context: NSManagedObjectContext) -> EventStatus {
@@ -76,10 +76,4 @@ extension EventStatus {
 
 }
 
-extension EventStatus: Managed {
-
-    public var isOrphaned: Bool {
-        return event == nil
-    }
-
-}
+// TODO: Orphable?

@@ -247,7 +247,7 @@ class TeamSummaryViewController: TBATableViewController {
 
         // Rank
         if let rank = eventStatus?.qual?.ranking?.rank, let total = eventStatus?.qual?.numTeams {
-            qualInfoItems.append(.rank(rank: rank.intValue, total: total.intValue))
+            qualInfoItems.append(.rank(rank: Int(rank), total: total.intValue))
         }
 
         // Record

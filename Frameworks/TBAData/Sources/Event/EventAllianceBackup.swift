@@ -33,7 +33,7 @@ extension EventAllianceBackup {
 
 }
 
-extension EventAllianceBackup {
+extension EventAllianceBackup: Managed {
 
     /**
      Insert a Event Alliance Backup with values from a TBAKit Alliance Backup model in to the managed object context.
@@ -59,7 +59,7 @@ extension EventAllianceBackup {
 
 }
 
-extension EventAllianceBackup: Managed {
+extension EventAllianceBackup: Orphanable {
 
     public var isOrphaned: Bool {
         // An EventAllianceBackup is an orphan if it isn't attached to any EventAlliances or an EventAllianceStatus.
