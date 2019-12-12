@@ -26,42 +26,6 @@ public class Match: NSManagedObject {
 
 }
 
-/*
-// MARK: Generated accessors for alliances
-extension Match {
-
-    @objc(addAlliancesObject:)
-    @NSManaged public func addToAlliances(_ value: MatchAlliance)
-
-    @objc(removeAlliancesObject:)
-    @NSManaged public func removeFromAlliances(_ value: MatchAlliance)
-
-    @objc(addAlliances:)
-    @NSManaged public func addToAlliances(_ values: NSSet)
-
-    @objc(removeAlliances:)
-    @NSManaged public func removeFromAlliances(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for videos
-extension Match {
-
-    @objc(addVideosObject:)
-    @NSManaged public func addToVideos(_ value: MatchVideo)
-
-    @objc(removeVideosObject:)
-    @NSManaged public func removeFromVideos(_ value: MatchVideo)
-
-    @objc(addVideos:)
-    @NSManaged public func addToVideos(_ values: NSSet)
-
-    @objc(removeVideos:)
-    @NSManaged public func removeFromVideos(_ values: NSSet)
-
-}
-*/
-
 extension Match {
 
     /**

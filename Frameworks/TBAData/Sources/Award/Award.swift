@@ -3,7 +3,22 @@ import Foundation
 import TBAKit
 import TBAUtils
 
-extension Award: Managed {
+@objc(Award)
+public class Award: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Award> {
+        return NSFetchRequest<Award>(entityName: "Award")
+    }
+
+    @NSManaged public fileprivate(set) var awardType: Int16
+    @NSManaged public fileprivate(set) var name: String?
+    @NSManaged public fileprivate(set) var year: Int16
+    @NSManaged public fileprivate(set) var event: Event
+    @NSManaged public fileprivate(set) var recipients: NSSet
+
+}
+
+extension Award {
 
     /**
      Insert an Award with values from a TBAKit Award model in to the managed object context.
@@ -27,19 +42,23 @@ extension Award: Managed {
         return findOrCreate(in: context, matching: predicate) { (award) in
             // Required: awardType, event, name, year, recipients
             award.name = model.name
-            award.awardType = model.awardType as NSNumber
-            award.year = model.year as NSNumber
+            award.awardType = Int16(model.awardType)
+            award.year = Int16(model.year)
 
             award.updateToManyRelationship(relationship: #keyPath(Award.recipients), newValues: model.recipients.map({
                 return AwardRecipient.insert($0, in: context)
             }))
+
+            award.updateToOneRelationship(relationship: #keyPath(Award.event), newValue: model.eventKey) {
+                return Event.insert($0, in: context)
+            }
         }
     }
 
     override public func prepareForDeletion() {
         super.prepareForDeletion()
 
-        (recipients?.allObjects as? [AwardRecipient])?.forEach({
+        (recipients.allObjects as? [AwardRecipient])?.forEach({
             if $0.awards!.onlyObject(self) {
                 // Recipient will become an orphan - delete
                 managedObjectContext?.delete($0)
@@ -49,8 +68,5 @@ extension Award: Managed {
         })
     }
 
-    public var isOrphaned: Bool {
-        return event == nil
-    }
-
 }
+
