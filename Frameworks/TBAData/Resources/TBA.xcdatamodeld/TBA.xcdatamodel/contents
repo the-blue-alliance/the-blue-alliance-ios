@@ -188,7 +188,7 @@
         <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="matches" inverseEntity="Event"/>
         <relationship name="videos" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="MatchVideo" inverseName="matches" inverseEntity="MatchVideo"/>
     </entity>
-    <entity name="MatchAlliance" representedClassName="MatchAlliance" syncable="YES" codeGenerationType="class">
+    <entity name="MatchAlliance" representedClassName="MatchAlliance" syncable="YES">
         <attribute name="allianceKey" attributeType="String"/>
         <attribute name="score" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <relationship name="dqTeams" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="dqAlliances" inverseEntity="Team"/>

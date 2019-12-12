@@ -178,7 +178,7 @@ extension Match {
         guard let alliances = alliances?.allObjects as? [MatchAlliance] else {
             return []
         }
-        return alliances.reduce([], { $0 + ($1.teams?.array as? [Team] ?? []) })
+        return alliances.reduce([], { $0 + ($1.teams.array as? [Team] ?? []) })
     }
 
     /**

@@ -1,14 +1,30 @@
 import CoreData
-import TBAKit
 import Foundation
+import TBAKit
 
-extension MatchAlliance: Managed {
+@objc(MatchAlliance)
+public class MatchAlliance: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<MatchAlliance> {
+        return NSFetchRequest<MatchAlliance>(entityName: "MatchAlliance")
+    }
+
+    @NSManaged public fileprivate(set) var allianceKey: String
+    @NSManaged public fileprivate(set) var score: NSNumber?
+    @NSManaged public fileprivate(set) var dqTeams: NSOrderedSet?
+    @NSManaged public fileprivate(set) var match: Match
+    @NSManaged public fileprivate(set) var surrogateTeams: NSOrderedSet?
+    @NSManaged public fileprivate(set) var teams: NSOrderedSet
+
+}
+
+extension MatchAlliance {
 
     /**
      Returns team keys for the alliance.
      */
     public var teamKeys: [String] {
-        guard let teams = teams?.array as? [Team] else {
+        guard let teams = teams.array as? [Team] else {
             return []
         }
         return teams.map({ $0.key })
@@ -80,8 +96,5 @@ extension MatchAlliance: Managed {
         }
     }
 
-    public var isOrphaned: Bool {
-        return match == nil
-    }
-
 }
+
