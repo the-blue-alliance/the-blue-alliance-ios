@@ -12,11 +12,11 @@
         <relationship name="awards" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="Award" inverseName="recipients" inverseEntity="Award"/>
         <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="awards" inverseEntity="Team"/>
     </entity>
-    <entity name="District" representedClassName="District" syncable="YES" codeGenerationType="class">
+    <entity name="District" representedClassName="District" syncable="YES">
         <attribute name="abbreviation" attributeType="String"/>
         <attribute name="key" attributeType="String"/>
         <attribute name="name" attributeType="String"/>
-        <attribute name="year" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="year" attributeType="Integer 16" usesScalarValueType="YES"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="district" inverseEntity="Event"/>
         <relationship name="rankings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DistrictRanking" inverseName="district" inverseEntity="DistrictRanking"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="districts" inverseEntity="Team"/>
@@ -276,7 +276,7 @@
     <elements>
         <element name="Award" positionX="-54" positionY="135" width="128" height="118"/>
         <element name="AwardRecipient" positionX="-54" positionY="135" width="128" height="88"/>
-        <element name="District" positionX="-63" positionY="135" width="128" height="150"/>
+        <element name="District" positionX="-63" positionY="135" width="128" height="28"/>
         <element name="DistrictEventPoints" positionX="-54" positionY="135" width="128" height="178"/>
         <element name="DistrictRanking" positionX="-54" positionY="135" width="128" height="133"/>
         <element name="Event" positionX="-63" positionY="-18" width="128" height="658"/>

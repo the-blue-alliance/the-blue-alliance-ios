@@ -1,84 +1,78 @@
 import CoreData
 import Foundation
 import TBAKit
-import TBAUtils
 
-extension District {
+@objc(District)
+public class District: NSManagedObject {
 
-    /**
-     A string concatenating the district's year and abbrevation.
-     */
-    public var abbreviationWithYear: String {
-        return "\(year!.stringValue) \(abbreviation!.uppercased())"
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<District> {
+        return NSFetchRequest<District>(entityName: "District")
     }
 
-    /**
-     The district championship for a district. A nil value means the DCMP hasn't been fetched yet.
-     */
-    private var districtChampionship: Event? {
-        guard let eventsSet = getValue(\District.events), let events = eventsSet.allObjects as? [Event] else {
-            return nil
-        }
-        return events.first(where: { (event) -> Bool in
-            return event.isDistrictChampionship
-        })
-    }
-
-    /**
-     If the district is currently "in season", meaning it's after stop build day, but before the district CMP is over
-     */
-    public var isHappeningNow: Bool {
-        let year = getValue(\District.year!.intValue)
-        if year != Calendar.current.year {
-            return false
-        }
-        // If we can't find the district championship, we don't know if we're in season or not
-        guard let dcmpEndDate = endDate else {
-            return false
-        }
-        let startOfEvents = Calendar.current.stopBuildDay()
-        return Date().isBetween(date: startOfEvents, andDate: dcmpEndDate.endOfDay())
-    }
-
-    /**
-     The 'end date' for the district - the end date of the district championship
-     */
-    public var endDate: Date? {
-        return districtChampionship?.getValue(\Event.endDate)
-    }
+    @NSManaged public fileprivate(set) var abbreviation: String
+    @NSManaged public fileprivate(set) var key: String
+    @NSManaged public fileprivate(set) var name: String
+    @NSManaged public fileprivate(set) var year: Int16
+    @NSManaged public fileprivate(set) var events: NSSet?
+    @NSManaged public fileprivate(set) var rankings: NSSet?
+    @NSManaged public fileprivate(set) var teams: NSSet?
 
 }
 
-extension District: Managed {
+/*
+// MARK: Generated accessors for events
+extension District {
 
-    /**
-     Insert Districts for a year with values from TBAKit District models in to the managed object context.
+    @objc(addEventsObject:)
+    @NSManaged public func addToEvents(_ value: Event)
 
-     This method manages deleting orphaned Districts for a year.
+    @objc(removeEventsObject:)
+    @NSManaged public func removeFromEvents(_ value: Event)
 
-     - Parameter districts: The TBAKit District representations to set values from.
+    @objc(addEvents:)
+    @NSManaged public func addToEvents(_ values: NSSet)
 
-     - Parameter year: The year for the Districts.
+    @objc(removeEvents:)
+    @NSManaged public func removeFromEvents(_ values: NSSet)
 
-     - Parameter context: The NSManagedContext to insert the District in to.
-     */
-    public static func insert(_ districts: [TBADistrict], year: Int, in context: NSManagedObjectContext) {
-        // Fetch all of the previous Districts for this year
-        let oldDistricts = District.fetch(in: context) {
-            $0.predicate = NSPredicate(format: "%K == %ld",
-                                       #keyPath(District.year), year)
-        }
+}
 
-        // Insert new Districts for this year
-        let districts = districts.map({
-            return District.insert($0, in: context)
-        })
+// MARK: Generated accessors for rankings
+extension District {
 
-        // Delete orphaned Districts for this year
-        Set(oldDistricts).subtracting(Set(districts)).forEach({
-            context.delete($0)
-        })
-    }
+    @objc(addRankingsObject:)
+    @NSManaged public func addToRankings(_ value: DistrictRanking)
+
+    @objc(removeRankingsObject:)
+    @NSManaged public func removeFromRankings(_ value: DistrictRanking)
+
+    @objc(addRankings:)
+    @NSManaged public func addToRankings(_ values: NSSet)
+
+    @objc(removeRankings:)
+    @NSManaged public func removeFromRankings(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for teams
+extension District {
+
+    @objc(addTeamsObject:)
+    @NSManaged public func addToTeams(_ value: Team)
+
+    @objc(removeTeamsObject:)
+    @NSManaged public func removeFromTeams(_ value: Team)
+
+    @objc(addTeams:)
+    @NSManaged public func addToTeams(_ values: NSSet)
+
+    @objc(removeTeams:)
+    @NSManaged public func removeFromTeams(_ values: NSSet)
+
+}
+*/
+
+extension District {
 
     /**
      Insert a District with values from a TBAKit District model in to the managed object context.
@@ -99,7 +93,7 @@ extension District: Managed {
             district.abbreviation = model.abbreviation
             district.name = model.name
             district.key = model.key
-            district.year = model.year as NSNumber
+            district.year = Int16(model.year)
         })
     }
 
@@ -135,32 +129,6 @@ extension District: Managed {
         self.teams = NSSet(array: teams.map({
             return Team.insert($0, in: managedObjectContext)
         }))
-    }
-
-    /**
-     Insert an array of District Rankings with values from TBAKit District Ranking models in to the managed object context for a District.
-
-     This method manages setting up a District Ranking's relationship to a District and deleting orphaned District Rankings.
-
-     - Parameter rankings: The TBAKit District Ranking representations to set values from.
-
-     - Parameter district: The District the District Rankings belong to.
-
-     - Parameter context: The NSManagedContext to insert the District Ranking in to.
-     */
-    public func insert(_ rankings: [TBADistrictRanking]) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        updateToManyRelationship(relationship: #keyPath(District.rankings), newValues: rankings.map({
-            return DistrictRanking.insert($0, districtKey: key!, in: managedObjectContext)
-        }))
-    }
-
-    public var isOrphaned: Bool {
-        // District is a root object, so it should never be an orphan
-        return false
     }
 
 }
