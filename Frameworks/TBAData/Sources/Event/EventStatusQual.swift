@@ -2,7 +2,21 @@ import CoreData
 import Foundation
 import TBAKit
 
-extension EventStatusQual: Managed {
+@objc(EventStatusQual)
+public class EventStatusQual: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<EventStatusQual> {
+        return NSFetchRequest<EventStatusQual>(entityName: "EventStatusQual")
+    }
+
+    @NSManaged public fileprivate(set) var numTeams: NSNumber?
+    @NSManaged public fileprivate(set) var status: String?
+    @NSManaged public internal(set) var eventStatus: EventStatus?
+    @NSManaged public internal(set) var ranking: EventRanking?
+
+}
+
+extension EventStatusQual {
 
     public static func insert(_ model: TBAEventStatusQual, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusQual {
         let predicate = NSPredicate(format: "(%K == %@ AND %K == %@) OR (%K == %@ AND %K == %@)",
@@ -20,6 +34,10 @@ extension EventStatusQual: Managed {
             }
         })
     }
+
+}
+
+extension EventStatusQual: Managed {
 
     public var isOrphaned: Bool {
         // EventStatusQual is an orphan if it's not attached to a Ranking or an EventStatus

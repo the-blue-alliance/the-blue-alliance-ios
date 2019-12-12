@@ -2,24 +2,24 @@ import CoreData
 import Foundation
 import TBAKit
 
-extension EventStatusPlayoff: Managed {
+@objc(EventStatusPlayoff)
+public class EventStatusPlayoff: NSManagedObject {
 
-    /**
-     How far an alliance got in the eliminiations.
-
-     Used in EventAllianceTableViewCell.
-     */
-    public var allianceLevel: String? {
-        get {
-            guard let level = level else {
-                return nil
-            }
-            if level == MatchCompLevel.final.rawValue, let status = status {
-                return status == "won" ? "W" : "F"
-            }
-            return level.uppercased()
-        }
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<EventStatusPlayoff> {
+        return NSFetchRequest<EventStatusPlayoff>(entityName: "EventStatusPlayoff")
     }
+
+    @NSManaged public fileprivate(set) var currentRecord: WLT?
+    @NSManaged public fileprivate(set) var level: String?
+    @NSManaged public fileprivate(set) var playoffAverage: NSNumber?
+    @NSManaged public fileprivate(set) var record: WLT?
+    @NSManaged public fileprivate(set) var status: String?
+    @NSManaged public internal(set) var alliance: EventAlliance?
+    @NSManaged public internal(set) var eventStatus: EventStatus?
+
+}
+
+extension EventStatusPlayoff {
 
     public static func insert(_ model: TBAAllianceStatus, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusPlayoff {
         // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
@@ -48,6 +48,31 @@ extension EventStatusPlayoff: Managed {
             statusPlayoff.status = model.status
         })
     }
+
+}
+
+extension EventStatusPlayoff {
+
+    /**
+     How far an alliance got in the eliminiations.
+
+     Used in EventAllianceTableViewCell.
+     */
+    public var allianceLevel: String? {
+        get {
+            guard let level = level else {
+                return nil
+            }
+            if level == MatchCompLevel.final.rawValue, let status = status {
+                return status == "won" ? "W" : "F"
+            }
+            return level.uppercased()
+        }
+    }
+
+}
+
+extension EventStatusPlayoff: Managed {
 
     public var isOrphaned: Bool {
         // An EventStatusPlayoff is an orphan if it isn't attached to any EventAlliance or an EventStatus.

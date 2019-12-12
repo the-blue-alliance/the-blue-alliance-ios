@@ -2,7 +2,22 @@ import CoreData
 import Foundation
 import TBAKit
 
-extension EventStatusAlliance: Managed {
+@objc(EventStatusAlliance)
+public class EventStatusAlliance: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<EventStatusAlliance> {
+        return NSFetchRequest<EventStatusAlliance>(entityName: "EventStatusAlliance")
+    }
+
+    @NSManaged public fileprivate(set) var name: String?
+    @NSManaged public fileprivate(set) var number: Int16
+    @NSManaged public fileprivate(set) var pick: Int16
+    @NSManaged public fileprivate(set) var backup: EventAllianceBackup?
+    @NSManaged public fileprivate(set) var eventStatus: EventStatus
+
+}
+
+extension EventStatusAlliance {
 
     public static func insert(_ model: TBAEventStatusAlliance, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusAlliance {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
@@ -10,18 +25,14 @@ extension EventStatusAlliance: Managed {
                                     #keyPath(EventStatusAlliance.eventStatus.team.key), teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (allianceStatus) in
-            allianceStatus.number = model.number as NSNumber
-            allianceStatus.pick = model.pick as NSNumber
+            allianceStatus.number = Int16(model.number)
+            allianceStatus.pick = Int16(model.pick)
             allianceStatus.name = model.name
 
             allianceStatus.updateToOneRelationship(relationship: #keyPath(EventStatusAlliance.backup), newValue: model.backup, newObject: {
                 return EventAllianceBackup.insert($0, in: context)
             })
         })
-    }
-
-    public var isOrphaned: Bool {
-        return eventStatus == nil
     }
 
     public override func prepareForDeletion() {
@@ -35,6 +46,14 @@ extension EventStatusAlliance: Managed {
                 backup.allianceStatus = nil
             }
         }
+    }
+
+}
+
+extension EventStatusAlliance: Managed {
+
+    public var isOrphaned: Bool {
+        return eventStatus == nil
     }
 
 }

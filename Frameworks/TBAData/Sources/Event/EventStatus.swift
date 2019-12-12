@@ -2,7 +2,27 @@ import CoreData
 import Foundation
 import TBAKit
 
-extension EventStatus: Managed {
+@objc(EventStatus)
+public class EventStatus: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<EventStatus> {
+        return NSFetchRequest<EventStatus>(entityName: "EventStatus")
+    }
+
+    @NSManaged public fileprivate(set) var allianceStatus: String?
+    @NSManaged public fileprivate(set) var lastMatchKey: String?
+    @NSManaged public fileprivate(set) var nextMatchKey: String?
+    @NSManaged public fileprivate(set) var overallStatus: String?
+    @NSManaged public fileprivate(set) var playoffStatus: String?
+    @NSManaged public fileprivate(set) var alliance: EventStatusAlliance?
+    @NSManaged public fileprivate(set) var event: Event
+    @NSManaged public fileprivate(set) var playoff: EventStatusPlayoff?
+    @NSManaged public fileprivate(set) var qual: EventStatusQual?
+    @NSManaged public fileprivate(set) var team: Team
+
+}
+
+extension EventStatus {
 
     @discardableResult
     public static func insert(_ model: TBAEventStatus, in context: NSManagedObjectContext) -> EventStatus {
@@ -32,10 +52,6 @@ extension EventStatus: Managed {
         })
     }
 
-    public var isOrphaned: Bool {
-        return event == nil
-    }
-
     public override func prepareForDeletion() {
         super.prepareForDeletion()
 
@@ -56,6 +72,14 @@ extension EventStatus: Managed {
                 playoff.eventStatus = nil
             }
         }
+    }
+
+}
+
+extension EventStatus: Managed {
+
+    public var isOrphaned: Bool {
+        return event == nil
     }
 
 }
