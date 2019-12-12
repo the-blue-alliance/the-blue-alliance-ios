@@ -87,7 +87,7 @@ extension MatchBreakdownViewController: TBAReactNativeViewControllerDelegate {
                 "redBreakdown": redBreakdown,
                 "blueTeams": match.blueAllianceTeamNumbers,
                 "blueBreakdown": blueBreakdown,
-                "compLevel": match.compLevelString!]
+                "compLevel": match.compLevelString]
     }
 
 }
@@ -112,18 +112,13 @@ extension MatchBreakdownViewController: Refreshable {
 
     @objc func refresh() {
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchMatch(key: match.key!, { (result, notModified) in
+        operation = tbaKit.fetchMatch(key: match.key, { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 switch result {
                 case .success(let match):
                     if let match = match {
-                        if let event = self.match.getValue(\Match.event) {
-                            let event = context.object(with: event.objectID) as! Event
-                            event.insert(match)
-                        } else {
-                            Match.insert(match, in: context)
-                        }
+                        Match.insert(match, in: context)
                     } else if !notModified {
                         // TODO: Delete match, move back up our hiearchy
                     }

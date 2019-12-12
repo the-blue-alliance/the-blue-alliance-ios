@@ -12,7 +12,7 @@ struct InfoCellViewModel {
     }
 
     init(team: Team) {
-        nameString = team.nickname ?? team.fallbackNickname
+        nameString = team.nickname ?? team.teamNumberNickname
         subtitleStrings = [team.locationString].compactMap({ $0 })
     }
 

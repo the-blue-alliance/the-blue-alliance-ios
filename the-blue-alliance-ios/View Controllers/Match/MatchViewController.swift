@@ -37,7 +37,7 @@ class MatchViewController: MyTBAContainerViewController {
         super.init(
             viewControllers: [infoViewController, breakdownViewController].compactMap({ $0 }) as! [ContainableViewController],
             navigationTitle: "\(match.friendlyName)",
-            navigationSubtitle: "@ \(match.event?.friendlyNameWithYear ?? match.key!)",
+            navigationSubtitle: "@ \(match.event.friendlyNameWithYear)",
             segmentedControlTitles: titles,
             myTBA: myTBA,
             persistentContainer: persistentContainer,
@@ -57,7 +57,7 @@ class MatchViewController: MyTBAContainerViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        Analytics.logEvent("match", parameters: ["match": match.key!])
+        Analytics.logEvent("match", parameters: ["match": match.key])
     }
 
 }
@@ -65,12 +65,10 @@ class MatchViewController: MyTBAContainerViewController {
 extension MatchViewController: MatchSummaryViewDelegate {
     
     func teamPressed(teamNumber: Int) {
-        guard let event = match.event else { return }
-
         // get team key that matches the target teamNumber
         guard let team = match.teams.first(where: { Int($0.teamNumber) == teamNumber }) else { return }
 
-        let teamAtEventVC = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventVC = TeamAtEventViewController(team: team, event: match.event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         navigationController?.pushViewController(teamAtEventVC, animated: true)
     }
     

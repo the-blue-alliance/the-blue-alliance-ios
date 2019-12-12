@@ -9,7 +9,7 @@ struct TeamCellViewModel {
 
     init(team: Team) {
         teamNumber = "\(team.teamNumber)"
-        teamNickname = team.nickname ?? team.fallbackNickname
+        teamNickname = team.nickname ?? team.teamNumberNickname
         teamLocation = team.locationString
     }
 

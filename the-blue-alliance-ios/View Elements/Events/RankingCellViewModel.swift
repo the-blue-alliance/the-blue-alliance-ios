@@ -15,7 +15,7 @@ struct RankingCellViewModel {
         rankText = "Rank \(districtRanking.rank!.stringValue)"
 
         teamNumber = String(describing: districtRanking.team!.teamNumber)
-        teamName = districtRanking.team!.nickname ?? districtRanking.team!.fallbackNickname
+        teamName = districtRanking.team!.nickname ?? districtRanking.team!.teamNumberNickname
 
         detailText = "\(districtRanking.pointTotal!.stringValue) Points"
         wltText = nil
@@ -25,7 +25,7 @@ struct RankingCellViewModel {
         rankText = rank
 
         teamNumber = String(describing: districtEventPoints.team!.teamNumber)
-        teamName = districtEventPoints.team!.nickname ?? districtEventPoints.team!.fallbackNickname
+        teamName = districtEventPoints.team!.nickname ?? districtEventPoints.team!.teamNumberNickname
 
         detailText = "\(districtEventPoints.total!.stringValue) Points"
         wltText = nil
@@ -35,7 +35,7 @@ struct RankingCellViewModel {
         rankText = "Rank \(eventRanking.rank!.intValue)"
 
         teamNumber = String(describing: eventRanking.team!.teamNumber)
-        teamName = eventRanking.team!.nickname ?? eventRanking.team!.fallbackNickname
+        teamName = eventRanking.team!.nickname ?? eventRanking.team!.teamNumberNickname
 
         detailText = eventRanking.rankingInfoString
 
@@ -52,7 +52,7 @@ struct RankingCellViewModel {
         rankText = nil
 
         teamNumber = String(describing: eventTeamStat.team!.teamNumber)
-        teamName = eventTeamStat.team!.nickname ?? eventTeamStat.team!.fallbackNickname
+        teamName = eventTeamStat.team!.nickname ?? eventTeamStat.team!.teamNumberNickname
 
         detailText = String(format: "OPR: %.2f, DPR: %.2f, CCWM: %.2f", eventTeamStat.opr!.floatValue, eventTeamStat.dpr!.floatValue, eventTeamStat.ccwm!.floatValue)
         wltText = nil

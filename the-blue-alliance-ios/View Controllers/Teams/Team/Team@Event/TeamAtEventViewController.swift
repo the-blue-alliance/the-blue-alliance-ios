@@ -44,7 +44,7 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
         let awardsViewController = EventAwardsViewController(event: event, team: team, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         super.init(viewControllers: [summaryViewController, matchesViewController, statsViewController, awardsViewController],
-                   navigationTitle: team.fallbackNickname,
+                   navigationTitle: team.teamNumberNickname,
                    navigationSubtitle: "@ \(event.friendlyNameWithYear)",
                    segmentedControlTitles: ["Summary", "Matches", "Stats", "Awards"],
                    persistentContainer: persistentContainer,

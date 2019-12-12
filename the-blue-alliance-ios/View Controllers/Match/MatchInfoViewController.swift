@@ -201,9 +201,7 @@ extension MatchInfoViewController: Refreshable {
     var automaticRefreshEndDate: Date? {
         // Automatically refresh the match info until a few days after the match has been played
         // (Mostly looking for new videos)
-        guard let event = match.getValue(\Match.event) else {
-            return nil
-        }
+        let event = match.getValue(\Match.event)
         guard let endDate = event.getValue(\Event.endDate) else {
             return nil
         }
@@ -217,19 +215,16 @@ extension MatchInfoViewController: Refreshable {
     }
 
     @objc func refresh() {
+        // TODO: Refresh Event
+
         var operation: TBAKitOperation!
-        operation = tbaKit.fetchMatch(key: match.key!, { (result, notModified) in
+        operation = tbaKit.fetchMatch(key: match.key, { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 switch result {
                 case .success(let match):
                     if let match = match {
-                        if let event = self.match.getValue(\Match.event) {
-                            let event = context.object(with: event.objectID) as! Event
-                            event.insert(match)
-                        } else {
-                            Match.insert(match, in: context)
-                        }
+                        Match.insert(match, in: context)
                     } else if !notModified {
                         // TODO: Delete match, bump back up navigation stack
                     }

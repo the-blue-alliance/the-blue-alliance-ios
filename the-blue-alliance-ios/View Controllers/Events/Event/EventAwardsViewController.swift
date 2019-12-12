@@ -26,7 +26,7 @@ class EventAwardsContainerViewController: ContainerViewController {
 
         let navigationSubtitle: String = {
             if let team = team {
-                return "\(team.fallbackNickname) @ \(event.friendlyNameWithYear)"
+                return "\(team.teamNumberNickname) @ \(event.friendlyNameWithYear)"
             } else {
                 return "@ \(event.friendlyNameWithYear)"
             }

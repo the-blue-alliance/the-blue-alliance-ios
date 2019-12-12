@@ -59,7 +59,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
         // once we fetch this data
         super.init(
             viewControllers: [infoViewController, eventsViewController, mediaViewController],
-            navigationTitle: team.fallbackNickname,
+            navigationTitle: team.teamNumberNickname,
             navigationSubtitle: ContainerViewController.yearSubtitle(year),
             segmentedControlTitles: ["Info", "Events", "Media"],
             myTBA: myTBA,

@@ -133,7 +133,7 @@ class MatchesViewController: TBATableViewController {
         guard let firstMatch = fetchedResultsController.dataSource.itemIdentifier(for: IndexPath(row: 0, section: section)) else {
             return "Matches"
         }
-        return "\(firstMatch.compLevel?.level ?? firstMatch.compLevelString!) Matches"
+        return "\(firstMatch.compLevel?.level ?? firstMatch.compLevelString) Matches"
     }
 
     // MARK: UITableView Delegate

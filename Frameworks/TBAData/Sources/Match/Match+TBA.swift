@@ -68,7 +68,7 @@ public enum MatchCompLevel: String, CaseIterable {
 
 extension Match {
 
-    internal static func predicate(key: String) -> NSPredicate {
+    public static func predicate(key: String) -> NSPredicate {
         return NSPredicate(format: "%K == %@",
                            #keyPath(Match.key), key)
     }

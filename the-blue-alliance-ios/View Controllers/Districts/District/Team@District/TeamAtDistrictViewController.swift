@@ -37,7 +37,7 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
 
         super.init(
             viewControllers: [summaryViewController, breakdownViewController],
-            navigationTitle: ranking.team!.fallbackNickname,
+            navigationTitle: ranking.team!.teamNumberNickname,
             navigationSubtitle: "@ \(ranking.district!.abbreviationWithYear)",
             segmentedControlTitles: ["Summary", "Breakdown"],
             persistentContainer: persistentContainer,
