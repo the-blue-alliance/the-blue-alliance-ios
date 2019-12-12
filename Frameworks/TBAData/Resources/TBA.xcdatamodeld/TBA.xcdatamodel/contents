@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="18E226" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15508" systemVersion="18G1012" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Award" representedClassName="Award" syncable="YES">
         <attribute name="awardType" attributeType="Integer 16" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
@@ -100,7 +100,7 @@
         <relationship name="inTeam" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="inBackupAlliances" inverseEntity="Team"/>
         <relationship name="outTeam" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="outBackupAlliances" inverseEntity="Team"/>
     </entity>
-    <entity name="EventInsights" representedClassName="EventInsights" syncable="YES" codeGenerationType="class">
+    <entity name="EventInsights" representedClassName="EventInsights" syncable="YES">
         <attribute name="playoff" optional="YES" attributeType="Transformable" customClassName="[String: Any]"/>
         <attribute name="qual" optional="YES" attributeType="Transformable" customClassName="[String: Any]"/>
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="insights" inverseEntity="Event"/>
@@ -282,7 +282,7 @@
         <element name="Event" positionX="-63" positionY="-18" width="128" height="658"/>
         <element name="EventAlliance" positionX="54" positionY="144" width="128" height="133"/>
         <element name="EventAllianceBackup" positionX="63" positionY="153" width="128" height="103"/>
-        <element name="EventInsights" positionX="45" positionY="135" width="128" height="90"/>
+        <element name="EventInsights" positionX="45" positionY="135" width="128" height="88"/>
         <element name="EventRanking" positionX="160" positionY="192" width="128" height="223"/>
         <element name="EventRankingStat" positionX="54" positionY="144" width="128" height="90"/>
         <element name="EventRankingStatInfo" positionX="45" positionY="135" width="128" height="105"/>

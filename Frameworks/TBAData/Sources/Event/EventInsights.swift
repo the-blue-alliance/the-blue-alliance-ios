@@ -2,21 +2,20 @@ import CoreData
 import Foundation
 import TBAKit
 
-extension EventInsights: Managed {
+@objc(EventInsights)
+public class EventInsights: NSManagedObject {
 
-    public var insightsDictionary: [String: Any] {
-        var insights: [String: [String: Any]] = [:]
-
-        if let qual = qual {
-            insights["qual"] = qual
-        }
-
-        if let playoff = playoff {
-            insights["playoff"] = playoff
-        }
-
-        return insights
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<EventInsights> {
+        return NSFetchRequest<EventInsights>(entityName: "EventInsights")
     }
+
+    @NSManaged private var playoff: [String: Any]?
+    @NSManaged private var qual: [String: Any]?
+    @NSManaged public fileprivate(set) var event: Event
+
+}
+
+extension EventInsights {
 
     /**
      Insert an EventInsights with values from a TBAKit EventInsights model in to the managed object context.
@@ -42,6 +41,28 @@ extension EventInsights: Managed {
             insights.playoff = model.playoff
         }
     }
+
+}
+
+extension EventInsights {
+
+    public var insightsDictionary: [String: Any] {
+        var insights: [String: [String: Any]] = [:]
+
+        if let qual = qual {
+            insights["qual"] = qual
+        }
+
+        if let playoff = playoff {
+            insights["playoff"] = playoff
+        }
+
+        return insights
+    }
+
+}
+
+extension EventInsights: Managed {
 
     public var isOrphaned: Bool {
         // EventInsights should never be orphaned because they'll cascade with an Event's deletion
