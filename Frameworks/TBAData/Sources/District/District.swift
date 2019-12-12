@@ -19,59 +19,6 @@ public class District: NSManagedObject {
 
 }
 
-/*
-// MARK: Generated accessors for events
-extension District {
-
-    @objc(addEventsObject:)
-    @NSManaged public func addToEvents(_ value: Event)
-
-    @objc(removeEventsObject:)
-    @NSManaged public func removeFromEvents(_ value: Event)
-
-    @objc(addEvents:)
-    @NSManaged public func addToEvents(_ values: NSSet)
-
-    @objc(removeEvents:)
-    @NSManaged public func removeFromEvents(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for rankings
-extension District {
-
-    @objc(addRankingsObject:)
-    @NSManaged public func addToRankings(_ value: DistrictRanking)
-
-    @objc(removeRankingsObject:)
-    @NSManaged public func removeFromRankings(_ value: DistrictRanking)
-
-    @objc(addRankings:)
-    @NSManaged public func addToRankings(_ values: NSSet)
-
-    @objc(removeRankings:)
-    @NSManaged public func removeFromRankings(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for teams
-extension District {
-
-    @objc(addTeamsObject:)
-    @NSManaged public func addToTeams(_ value: Team)
-
-    @objc(removeTeamsObject:)
-    @NSManaged public func removeFromTeams(_ value: Team)
-
-    @objc(addTeams:)
-    @NSManaged public func addToTeams(_ values: NSSet)
-
-    @objc(removeTeams:)
-    @NSManaged public func removeFromTeams(_ values: NSSet)
-
-}
-*/
-
 extension District {
 
     /**

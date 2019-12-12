@@ -1,27 +1,24 @@
-import CoreData
 import Foundation
+import CoreData
 import TBAKit
 
-extension DistrictRanking {
+@objc(DistrictRanking)
+public class DistrictRanking: NSManagedObject {
 
-    public var sortedEventPoints: [DistrictEventPoints] {
-        let eventPointsSet = getValue(\DistrictRanking.eventPoints)
-        return (eventPointsSet?.allObjects as? [DistrictEventPoints])?.sorted(by: { (lhs, rhs) -> Bool in
-            let lhsEvent = lhs.getValue(\DistrictEventPoints.event)
-            guard let lhsStartDate = lhsEvent.getValue(\Event.startDate) else {
-                return false
-            }
-            let rhsEvent = rhs.getValue(\DistrictEventPoints.event)
-            guard let rhsStartDate = rhsEvent.getValue(\Event.startDate) else {
-                return false
-            }
-            return rhsStartDate > lhsStartDate
-        }) ?? []
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<DistrictRanking> {
+        return NSFetchRequest<DistrictRanking>(entityName: "DistrictRanking")
     }
+
+    @NSManaged public fileprivate(set) var pointTotal: Int16
+    @NSManaged public fileprivate(set) var rank: Int16
+    @NSManaged public fileprivate(set) var rookieBonus: NSNumber?
+    @NSManaged public fileprivate(set) var district: District
+    @NSManaged public fileprivate(set) var eventPoints: NSSet
+    @NSManaged public fileprivate(set) var team: Team
 
 }
 
-extension DistrictRanking: Managed {
+extension DistrictRanking {
 
     /**
      Insert a District Ranking with values from a TBAKit District Ranking model in to the managed object context.
@@ -46,18 +43,15 @@ extension DistrictRanking: Managed {
         return findOrCreate(in: context, matching: predicate, configure: { (ranking) in
             ranking.team = Team.insert(model.teamKey, in: context)
 
-            ranking.pointTotal = model.pointTotal as NSNumber
-            ranking.rank = model.rank as NSNumber
+            ranking.pointTotal = Int16(model.pointTotal)
+            ranking.rank = Int16(model.rank)
             ranking.rookieBonus = model.rookieBonus as NSNumber?
 
-            ranking.updateToManyRelationship(relationship: #keyPath(DistrictRanking.eventPoints), newValues: model.eventPoints.compactMap({
+            ranking.updateToManyRelationship(relationship: #keyPath(DistrictRanking.eventPoints), newValues: model.eventPoints.compactMap {
                 return DistrictEventPoints.insert($0, in: context)
-            }))
+            })
         })
     }
 
-    public var isOrphaned: Bool {
-        return district == nil
-    }
-
 }
+

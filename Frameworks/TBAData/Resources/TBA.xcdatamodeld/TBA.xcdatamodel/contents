@@ -32,7 +32,7 @@
         <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="points" inverseEntity="Event"/>
         <relationship name="team" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="eventPoints" inverseEntity="Team"/>
     </entity>
-    <entity name="DistrictRanking" representedClassName="DistrictRanking" syncable="YES" codeGenerationType="class">
+    <entity name="DistrictRanking" representedClassName="DistrictRanking" syncable="YES">
         <attribute name="pointTotal" attributeType="Integer 16" usesScalarValueType="NO"/>
         <attribute name="rank" attributeType="Integer 16" usesScalarValueType="NO"/>
         <attribute name="rookieBonus" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
