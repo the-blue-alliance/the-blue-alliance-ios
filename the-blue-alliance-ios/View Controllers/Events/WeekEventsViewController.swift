@@ -106,13 +106,13 @@ class WeekEventsViewController: EventsViewController {
 
             if let week = weekEvent.week {
                 // Event has a week - filter based on the week
-                return NSPredicate(format: "%K == %@ && %K == %@",
+                return NSPredicate(format: "%K == %@ && %K == %ld",
                                    #keyPath(Event.week), week,
                                    #keyPath(Event.year), weekEvent.year)
             } else {
                 if eventType == EventType.championshipFinals.rawValue {
                     // 2017 and onward - handle multiple CMPs
-                    return NSPredicate(format: "(%K == %ld || %K == %ld) && %K == %@ && (%K == %@ || %K == %@)",
+                    return NSPredicate(format: "(%K == %ld || %K == %ld) && %K == %ld && (%K == %@ || %K == %@)",
                                        #keyPath(Event.eventType), EventType.championshipFinals.rawValue,
                                        #keyPath(Event.eventType), EventType.championshipDivision.rawValue,
                                        #keyPath(Event.year), weekEvent.year,
@@ -123,13 +123,13 @@ class WeekEventsViewController: EventsViewController {
                     // Conversion stuff, since Core Data still uses NSDate's
                     let firstDayOfMonth = NSDate(timeIntervalSince1970: weekEvent.startDate!.startOfMonth().timeIntervalSince1970)
                     let lastDayOfMonth = NSDate(timeIntervalSince1970: weekEvent.endDate!.endOfMonth().timeIntervalSince1970)
-                    return NSPredicate(format: "%K == %ld && %K == %@ && (%K >= %@) AND (%K <= %@)",
+                    return NSPredicate(format: "%K == %ld && %K == %ld && (%K >= %@) AND (%K <= %@)",
                                        #keyPath(Event.eventType), EventType.offseason.rawValue,
                                        #keyPath(Event.year), weekEvent.year,
                                        #keyPath(Event.startDate), firstDayOfMonth,
                                        #keyPath(Event.endDate), lastDayOfMonth)
                 } else {
-                    return NSPredicate(format: "%K == %ld && %K == %@",
+                    return NSPredicate(format: "%K == %ld && %K == %ld",
                                        #keyPath(Event.eventType), eventType,
                                        #keyPath(Event.year), weekEvent.year)
                 }

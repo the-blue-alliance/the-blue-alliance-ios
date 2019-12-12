@@ -161,7 +161,7 @@ extension Event {
             event.key = key
 
             let yearString = String(key.prefix(4))
-            if event.year == nil, let year = Int(yearString) {
+            if let year = Int(yearString) {
                 event.year = Int16(year)
             }
         }
