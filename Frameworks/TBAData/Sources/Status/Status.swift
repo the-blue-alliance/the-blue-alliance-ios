@@ -5,16 +5,58 @@ import TBAKit
 @objc(Status)
 public class Status: NSManagedObject {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Status> {
-        return NSFetchRequest<Status>(entityName: "Status")
+    public var currentSeason: Int {
+        guard let currentSeason = currentSeasonNumber?.intValue else {
+            fatalError("Save Status before accessing currentSeason")
+        }
+        return currentSeason
     }
 
-    @NSManaged public fileprivate(set) var currentSeason: Int16
-    @NSManaged public fileprivate(set) var isDatafeedDown: Bool
-    @NSManaged public fileprivate(set) var latestAppVersion: Int64
-    @NSManaged public fileprivate(set) var maxSeason: Int16
-    @NSManaged public fileprivate(set) var minAppVersion: Int64
-    @NSManaged public fileprivate(set) var downEvents: NSSet
+    public var isDatafeedDown: Bool {
+        guard let isDatafeedDown = isDatafeedDownNumber?.boolValue else {
+            fatalError("Save Status before accessing isDatafeedDown")
+        }
+        return isDatafeedDown
+    }
+
+    public var latestAppVersion: Int {
+        guard let latestAppVersion = latestAppVersionNumber?.intValue else {
+            fatalError("Save Status before accessing latestAppVersion")
+        }
+        return latestAppVersion
+    }
+
+    public var maxSeason: Int {
+        guard let maxSeason = maxSeasonNumber?.intValue else {
+            fatalError("Save Status before accessing maxSeason")
+        }
+        return maxSeason
+    }
+
+    public var minAppVersion: Int {
+        guard let minAppVersion = minAppVersionNumber?.intValue else {
+            fatalError("Save Status before accessing minAppVersion")
+        }
+        return minAppVersion
+    }
+
+    public var downEvents: [Event] {
+        guard let downEventsMany = downEventsMany, let downEvents = downEventsMany.allObjects as? [Event] else {
+            return []
+        }
+        return downEvents
+    }
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Status> {
+        return NSFetchRequest<Status>(entityName: Status.entityName)
+    }
+
+    @NSManaged private var currentSeasonNumber: NSNumber?
+    @NSManaged private var isDatafeedDownNumber: NSNumber?
+    @NSManaged private var latestAppVersionNumber: NSNumber?
+    @NSManaged private var maxSeasonNumber: NSNumber?
+    @NSManaged private var minAppVersionNumber: NSNumber?
+    @NSManaged private var downEventsMany: NSSet?
 
 }
 
@@ -32,14 +74,14 @@ extension Status: Managed {
     @discardableResult
     public static func insert(_ model: TBAStatus, in context: NSManagedObjectContext) -> Status {
         return findOrCreate(in: context, matching: statusPredicate) { (status) in
-            status.currentSeason = Int16(model.currentSeason)
-            status.downEvents = NSSet(array: model.downEvents.map {
+            status.currentSeasonNumber = NSNumber(value: model.currentSeason)
+            status.downEventsMany = NSSet(array: model.downEvents.map {
                 return Event.insert($0, in: context)
             })
-            status.latestAppVersion = Int64(model.ios.latestAppVersion)
-            status.minAppVersion = Int64(model.ios.minAppVersion)
-            status.isDatafeedDown = model.datafeedDown
-            status.maxSeason = Int16(model.maxSeason)
+            status.latestAppVersionNumber = NSNumber(value: model.ios.latestAppVersion)
+            status.minAppVersionNumber = NSNumber(value: model.ios.minAppVersion)
+            status.isDatafeedDownNumber = NSNumber(value: model.datafeedDown)
+            status.maxSeasonNumber = NSNumber(value: model.maxSeason)
         }
     }
 
@@ -47,7 +89,7 @@ extension Status: Managed {
 
 extension Status {
 
-    fileprivate static var statusPredicate: NSPredicate {
+    private static var statusPredicate: NSPredicate {
         return NSPredicate(value: true)
     }
 

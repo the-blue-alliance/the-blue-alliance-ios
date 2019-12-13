@@ -78,7 +78,7 @@
         <relationship name="points" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictEventPoints" inverseName="eventOne" inverseEntity="DistrictEventPoints"/>
         <relationship name="rankings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventRanking" inverseName="event" inverseEntity="EventRanking"/>
         <relationship name="stats" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventTeamStat" inverseName="event" inverseEntity="EventTeamStat"/>
-        <relationship name="status" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Status" inverseName="downEvents" inverseEntity="Status"/>
+        <relationship name="status" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Status" inverseName="downEventsMany" inverseEntity="Status"/>
         <relationship name="statuses" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventStatus" inverseName="event" inverseEntity="EventStatus"/>
         <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="events" inverseEntity="Team"/>
         <relationship name="webcasts" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="Webcast" inverseName="events" inverseEntity="Webcast"/>
@@ -206,12 +206,12 @@
         <attribute name="modelTypeRaw" attributeType="Integer 16" usesScalarValueType="YES"/>
     </entity>
     <entity name="Status" representedClassName="Status" syncable="YES">
-        <attribute name="currentSeason" attributeType="Integer 16" usesScalarValueType="YES"/>
-        <attribute name="isDatafeedDown" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="latestAppVersion" attributeType="Integer 64" usesScalarValueType="YES"/>
-        <attribute name="maxSeason" attributeType="Integer 16" usesScalarValueType="YES"/>
-        <attribute name="minAppVersion" attributeType="Integer 64" usesScalarValueType="YES"/>
-        <relationship name="downEvents" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="status" inverseEntity="Event"/>
+        <attribute name="currentSeasonNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="isDatafeedDownNumber" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="latestAppVersionNumber" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="maxSeasonNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="minAppVersionNumber" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <relationship name="downEventsMany" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="status" inverseEntity="Event"/>
     </entity>
     <entity name="Subscription" representedClassName="Subscription" parentEntity="MyTBAEntity" syncable="YES">
         <attribute name="notificationsRaw" attributeType="Transformable" customClassName="[String]"/>
