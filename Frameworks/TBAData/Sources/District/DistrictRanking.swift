@@ -19,6 +19,10 @@ public class DistrictRanking: NSManagedObject {
         return rank
     }
 
+    public var rookieBonus: Int? {
+        return rookieBonusNumber?.intValue
+    }
+
     public var district: District {
         guard let district = districtOne else {
             fatalError("Save DistrictRanking before accessing district")
@@ -46,7 +50,7 @@ public class DistrictRanking: NSManagedObject {
 
     @NSManaged private var pointTotalNumber: NSNumber?
     @NSManaged private var rankNumber: NSNumber?
-    @NSManaged public private(set) var rookieBonus: NSNumber?
+    @NSManaged private var rookieBonusNumber: NSNumber?
     @NSManaged private var districtOne: District?
     @NSManaged private var eventPointsMany: NSSet?
     @NSManaged private var teamOne: Team?
@@ -82,9 +86,9 @@ extension DistrictRanking: Managed {
             ranking.rankNumber = NSNumber(value: model.rank)
 
             if let rookieBonus = model.rookieBonus {
-                ranking.rookieBonus = NSNumber(value: rookieBonus)
+                ranking.rookieBonusNumber = NSNumber(value: rookieBonus)
             } else {
-                ranking.rookieBonus = nil
+                ranking.rookieBonusNumber = nil
             }
 
             ranking.updateToManyRelationship(relationship: #keyPath(DistrictRanking.eventPointsMany), newValues: model.eventPoints.compactMap {

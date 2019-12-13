@@ -19,6 +19,10 @@ public class DistrictEventPoints: NSManagedObject {
         return awardPoints
     }
 
+    public var districtCMP: Bool? {
+        return districtCMPNumber?.boolValue
+    }
+
     public var elimPoints: Int {
         guard let elimPoints = elimPointsNumber?.intValue else {
             fatalError("Save DistrictEventPoints before accessing elimPoints")
@@ -60,7 +64,7 @@ public class DistrictEventPoints: NSManagedObject {
 
     @NSManaged private var alliancePointsNumber: NSNumber?
     @NSManaged private var awardPointsNumber: NSNumber?
-    @NSManaged public private(set) var districtCMP: NSNumber?
+    @NSManaged private var districtCMPNumber: NSNumber?
     @NSManaged private var elimPointsNumber: NSNumber?
     @NSManaged private var qualPointsNumber: NSNumber?
     @NSManaged private var totalNumber: NSNumber?
@@ -128,9 +132,9 @@ extension DistrictEventPoints: Managed {
             eventPoints.alliancePointsNumber = NSNumber(value: model.alliancePoints)
             eventPoints.awardPointsNumber = NSNumber(value: model.awardPoints)
             if let districtCMP = model.districtCMP {
-                eventPoints.districtCMP = NSNumber(value: districtCMP)
+                eventPoints.districtCMPNumber = NSNumber(value: districtCMP)
             } else {
-                eventPoints.districtCMP = nil
+                eventPoints.districtCMPNumber = nil
             }
             eventPoints.elimPointsNumber = NSNumber(value: model.elimPoints)
             eventPoints.qualPointsNumber = NSNumber(value: model.qualPoints)

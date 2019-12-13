@@ -7,24 +7,99 @@ import TBAUtils
 @objc(Match)
 public class Match: NSManagedObject {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Match> {
-        return NSFetchRequest<Match>(entityName: "Match")
+    public var actualTime: Int? {
+        return actualTimeNumber?.intValue
     }
 
-    @NSManaged public fileprivate(set) var actualTime: NSNumber?
-    @NSManaged public fileprivate(set) var breakdown: [String: Any]?
-    @NSManaged public fileprivate(set) var compLevelSortOrder: NSNumber?
-    @NSManaged public fileprivate(set) var compLevelString: String
-    @NSManaged public fileprivate(set) var key: String
-    @NSManaged public fileprivate(set) var matchNumber: Int16
-    @NSManaged public fileprivate(set) var postResultTime: NSNumber?
-    @NSManaged public fileprivate(set) var predictedTime: NSNumber?
-    @NSManaged public fileprivate(set) var setNumber: Int16
-    @NSManaged public fileprivate(set) var time: NSNumber?
-    @NSManaged public fileprivate(set) var winningAlliance: String?
-    @NSManaged public fileprivate(set) var alliances: NSSet?
-    @NSManaged public fileprivate(set) var event: Event
-    @NSManaged public fileprivate(set) var videos: NSSet?
+    public var compLevelSortOrder: Int? {
+        return compLevelSortOrderNumber?.intValue
+    }
+
+    /**
+     Returns the MatchCompLevel for the Match's compLevelString.
+     */
+    public var compLevel: MatchCompLevel? {
+        guard let compLevelString = compLevelString else {
+            fatalError("Save Match before accessing compLevel")
+        }
+        guard let compLevel = MatchCompLevel(rawValue: compLevelString) else {
+            return nil
+        }
+        return compLevel
+    }
+
+    public var key: String {
+        guard let key = keyString else {
+            fatalError("Save Match before accessing key")
+        }
+        return key
+    }
+
+    public var matchNumber: Int {
+        guard let matchNumber = matchNumberNumber?.intValue else {
+            fatalError("Save Match before accessing matchNumber")
+        }
+        return matchNumber
+    }
+
+    public var postResultTime: Int? {
+        return postResultTimeNumber?.intValue
+    }
+
+    public var predictedTime: Int? {
+        return predictedTimeNumber?.intValue
+    }
+
+    public var setNumber: Int {
+        guard let setNumber = setNumberNumber?.intValue else {
+            fatalError("Save Match before accessing setNumber")
+        }
+        return setNumber
+    }
+
+    public var time: Int? {
+        return timeNumber?.intValue
+    }
+
+    public var alliances: [MatchAlliance] {
+        guard let alliancesMany = alliancesMany, let alliances = alliancesMany.allObjects as? [MatchAlliance] else {
+            return []
+        }
+        return alliances
+    }
+
+    public var event: Event {
+        guard let event = eventOne else {
+            fatalError("Save Match before accessing event")
+        }
+        return event
+    }
+
+    public var videos: [MatchVideo] {
+        guard let videosMany = videosMany, let videos = videosMany.allObjects as? [MatchVideo] else {
+            return []
+        }
+        return videos
+    }
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Match> {
+        return NSFetchRequest<Match>(entityName: Match.entityName)
+    }
+
+    @NSManaged private var actualTimeNumber: NSNumber?
+    @NSManaged private var breakdown: [String: Any]?
+    @NSManaged private var compLevelSortOrderNumber: NSNumber?
+    @NSManaged private var compLevelString: String?
+    @NSManaged internal private(set) var keyString: String?
+    @NSManaged private var matchNumberNumber: NSNumber?
+    @NSManaged private var postResultTimeNumber: NSNumber?
+    @NSManaged private var predictedTimeNumber: NSNumber?
+    @NSManaged private var setNumberNumber: NSNumber?
+    @NSManaged private var timeNumber: NSNumber?
+    @NSManaged public private(set) var winningAlliance: String?
+    @NSManaged private var alliancesMany: NSSet?
+    @NSManaged private var eventOne: Event?
+    @NSManaged private var videosMany: NSSet?
 
 }
 
@@ -93,6 +168,11 @@ public enum MatchCompLevel: String, CaseIterable {
 
 extension Match: Managed {
 
+    public static func predicate(key: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Match.keyString), key)
+    }
+
     /**
      Insert a Match with values from a TBAKit Match model in to the managed object context.
 
@@ -110,33 +190,49 @@ extension Match: Managed {
 
         return findOrCreate(in: context, matching: predicate) { (match) in
             // Required: compLevel, key, matchNumber, setNumber, event
-            match.key = model.key
+            match.keyString = model.key
             match.compLevelString = model.compLevel
 
             // When adding a new MatchCompLevel, models will need a migration to update this
             if let compLevel = MatchCompLevel(rawValue: model.compLevel) {
-                match.compLevelSortOrder = compLevel.sortOrder as NSNumber
+                match.compLevelSortOrderNumber = NSNumber(value: compLevel.sortOrder)
             } else {
-                match.compLevelSortOrder = nil
+                match.compLevelSortOrderNumber = nil
             }
 
-            match.event = Event.insert(model.eventKey, in: context)
-            match.setNumber = Int16(model.setNumber)
-            match.matchNumber = Int16(model.matchNumber)
+            match.eventOne = Event.insert(model.eventKey, in: context)
+            match.setNumberNumber = NSNumber(value: model.setNumber)
+            match.matchNumberNumber = NSNumber(value: model.matchNumber)
 
-            match.updateToManyRelationship(relationship: #keyPath(Match.alliances), newValues: model.alliances?.map({ (key: String, value: TBAMatchAlliance) -> MatchAlliance in
+            match.updateToManyRelationship(relationship: #keyPath(Match.alliancesMany), newValues: model.alliances?.map({ (key: String, value: TBAMatchAlliance) -> MatchAlliance in
                 return MatchAlliance.insert(value, allianceKey: key, matchKey: model.key, in: context)
             }))
 
             match.winningAlliance = model.winningAlliance
 
-            match.time = model.time as NSNumber?
-            match.actualTime = model.actualTime as NSNumber?
-            match.predictedTime = model.predictedTime as NSNumber?
-            match.postResultTime = model.postResultTime as NSNumber?
+            if let time = model.time {
+                match.timeNumber = NSNumber(value: time)
+            } else {
+                match.timeNumber = nil
+            }
+            if let actualTime = model.actualTime {
+                match.actualTimeNumber = NSNumber(value: actualTime)
+            } else {
+                match.actualTimeNumber = nil
+            }
+            if let predictedTime = model.predictedTime {
+                match.predictedTimeNumber = NSNumber(value: predictedTime)
+            } else {
+                match.predictedTimeNumber = nil
+            }
+            if let postResultTime = model.postResultTime {
+                match.postResultTimeNumber = NSNumber(value: postResultTime)
+            } else {
+                match.postResultTimeNumber = nil
+            }
             match.breakdown = model.breakdown
 
-            match.updateToManyRelationship(relationship: #keyPath(Match.videos), newValues: model.videos?.map({
+            match.updateToManyRelationship(relationship: #keyPath(Match.videosMany), newValues: model.videos?.map({
                 return MatchVideo.insert($0, in: context)
             }))
         }
@@ -145,12 +241,12 @@ extension Match: Managed {
     override public func prepareForDeletion() {
         super.prepareForDeletion()
 
-        (videos?.allObjects as? [MatchVideo])?.forEach({
+        videos.forEach({
             if $0.matches.onlyObject(self) {
                 // Match Video will become an orphan - delete
                 managedObjectContext?.delete($0)
             } else {
-                $0.removeFromMatches(self)
+                $0.removeFromMatchesMany(self)
             }
         })
     }
@@ -159,24 +255,9 @@ extension Match: Managed {
 
 extension Match {
 
-    public static func predicate(key: String) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(Match.key), key)
-    }
-
     public static func forKey(_ key: String, in context: NSManagedObjectContext) -> Match? {
         let predicate = Match.predicate(key: key)
         return Match.findOrFetch(in: context, matching: predicate)
-    }
-
-    /**
-     Returns the MatchCompLevel for the Match's compLevelString.
-     */
-    public var compLevel: MatchCompLevel? {
-        guard let compLevel = MatchCompLevel(rawValue: compLevelString) else {
-            return nil
-        }
-        return compLevel
     }
 
     /**
@@ -185,16 +266,8 @@ extension Match {
      - Returns predicted start time for the match
      - Returns scheduled start time for the match
      */
-    public var startTime: NSNumber? {
-        if let actualTime = actualTime {
-            return actualTime
-        } else if let predictedTime = predictedTime {
-            return predictedTime
-        } else if let time = time {
-            return time
-        } else {
-            return nil
-        }
+    public var startTime: Int? {
+        return actualTime ?? predictedTime ?? time ?? nil
     }
 
     /**
@@ -208,7 +281,7 @@ extension Match {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEE h:mm a"
 
-        let date = Date(timeIntervalSince1970: startTime.doubleValue)
+        let date = Date(timeIntervalSince1970: TimeInterval(startTime))
         return dateFormatter.string(from: date)
     }
 
@@ -258,9 +331,6 @@ extension Match {
      Returns the team keys for all alliances
      */
     public var teams: [Team] {
-        guard let alliances = alliances?.allObjects as? [MatchAlliance] else {
-            return []
-        }
         return alliances.reduce([], { $0 + ($1.teams.array as? [Team] ?? []) })
     }
 
@@ -272,7 +342,7 @@ extension Match {
     }
 
     private func alliance(with allianceKey: String) -> MatchAlliance? {
-        return (alliances?.allObjects as? [MatchAlliance])?.first(where: { $0.allianceKey == allianceKey })
+        return alliances.first(where: { $0.allianceKey == allianceKey })
     }
 
     public var friendlyName: String {
@@ -302,7 +372,7 @@ extension Match: Orphanable {
                                          #keyPath(MyTBAEntity.modelKey), key)
         let myTBAObject = MyTBAEntity.findOrFetch(in: managedObjectContext, matching: myTBAPredicate)
 
-        return event == nil && myTBAObject == nil
+        return eventOne == nil && myTBAObject == nil
     }
 
 }
