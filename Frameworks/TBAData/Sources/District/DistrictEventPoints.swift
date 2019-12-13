@@ -144,6 +144,19 @@ extension DistrictEventPoints: Managed {
 
 }
 
+extension DistrictEventPoints {
+
+    public static func eventPredicate(eventKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(DistrictEventPoints.eventOne.key), eventKey)
+    }
+
+    public static func totalSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(DistrictEventPoints.totalNumber), ascending: false)
+    }
+
+}
+
 extension DistrictEventPoints: Orphanable {
 
     public var isOrphaned: Bool {

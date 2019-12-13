@@ -69,8 +69,7 @@ class DistrictEventsViewController: EventsViewController {
     }
 
     override var fetchRequestPredicate: NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(Event.district.key), district.key)
+        return District.predicate(key: district.key)
     }
 
 }

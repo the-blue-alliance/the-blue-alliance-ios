@@ -101,6 +101,15 @@ extension DistrictRanking: Managed {
 
 extension DistrictRanking {
 
+    public static func districtPredicate(district: District) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(DistrictRanking.districtOne), district)
+    }
+
+    public static func rankSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(DistrictRanking.rankNumber), ascending: true)
+    }
+
     // TODO: Audit the uses of this to see if we can have empty events when using this
     // TODO: Make sure we're doing this in a thread safe place
     public var sortedEventPoints: [DistrictEventPoints] {

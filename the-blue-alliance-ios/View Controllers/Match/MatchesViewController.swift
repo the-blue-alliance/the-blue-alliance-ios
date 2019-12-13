@@ -99,19 +99,13 @@ class MatchesViewController: TBATableViewController {
 
     private func setupFetchRequest(_ request: NSFetchRequest<Match>) {
         let ascending = !query.sort.reverse
-        request.sortDescriptors = [NSSortDescriptor(key: #keyPath(Match.compLevelSortOrder), ascending: ascending),
-                                        NSSortDescriptor(key: #keyPath(Match.setNumber), ascending: ascending),
-                                        NSSortDescriptor(key: #keyPath(Match.matchNumber), ascending: ascending)]
+        request.sortDescriptors = Match.sortDescriptors(ascending: ascending)
 
         let matchPredicate: NSPredicate = {
             if let team = team {
-                // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
-                return NSPredicate(format: "%K == %@ AND SUBQUERY(%K, $a, ANY $a.teams.key == %@).@count > 0",
-                                   #keyPath(Match.event), event,
-                                   #keyPath(Match.alliances), team.key)
+                return Match.eventTeamPredicate(event: event, team: team)
             } else {
-                return NSPredicate(format: "%K == %@",
-                                   #keyPath(Match.event), event)
+                return Match.eventPredicate(event: event)
             }
         }()
 
@@ -120,8 +114,7 @@ class MatchesViewController: TBATableViewController {
             guard query.filter.favorites else {
                 return nil
             }
-            return NSPredicate(format: "SUBQUERY(%K, $a, ANY $a.teams.key IN %@).@count > 0",
-                               #keyPath(Match.alliances), favoriteTeamKeys)
+            return Match.teamKeysPredicate(teamKeys: favoriteTeamKeys)
         }()
 
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [matchPredicate, myTBAFavoritesPredicate].compactMap({ $0 }))

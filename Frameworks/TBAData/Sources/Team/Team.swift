@@ -33,6 +33,13 @@ public class Team: NSManagedObject {
         return Int(teamNumberNumber)
     }
 
+    public var media: [TeamMedia] {
+        guard let mediaMany = mediaMany, let media = mediaMany.allObjects as? [TeamMedia] else {
+            return []
+        }
+        return media
+    }
+
     @NSManaged public private(set) var address: String?
     @NSManaged public private(set) var city: String?
     @NSManaged public private(set) var country: String?
@@ -229,7 +236,7 @@ extension Team: Managed {
 
         // Fetch all of the previous TeamMedia for this Team and year
         let oldMedia = TeamMedia.fetch(in: managedObjectContext) {
-            $0.predicate = TeamMedia.prediate(teamKey: key, year: year)
+            $0.predicate = TeamMedia.teamYearPrediate(teamKey: key, year: year)
         }
 
 
@@ -263,6 +270,27 @@ extension Team: Managed {
 }
 
 extension Team {
+
+    public static func districtPredicate(district: District) -> NSPredicate {
+        return NSPredicate(format: "ANY %K = %@",
+                           #keyPath(Team.districtsMany), district)
+    }
+
+    public static func eventPredicate(event: Event) -> NSPredicate {
+        return NSPredicate(format: "ANY %K = %@",
+                           #keyPath(Team.eventsMany), event)
+    }
+
+    public static func searchPredicate(searchText: String) -> NSPredicate {
+        return NSPredicate(format: "(%K contains[cd] %@ OR %K beginswith[cd] %@ OR %K contains[cd] %@)",
+                           #keyPath(Team.nickname), searchText,
+                           #keyPath(Team.teamNumberNumber.stringValue), searchText,
+                           #keyPath(Team.city), searchText)
+    }
+
+    public static func teamNumberSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(Team.teamNumberNumber), ascending: true)
+    }
 
     /**
      Returns an uppercased team number by removing the `frc` prefix on the key

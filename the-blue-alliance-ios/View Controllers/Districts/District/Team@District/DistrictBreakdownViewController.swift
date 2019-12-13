@@ -63,7 +63,7 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
         let eventPoints = ranking.sortedEventPoints[indexPath.section]
 
         var pointsType = ""
-        var points: Int16 = 0
+        var points = 0
 
         switch indexPath.row {
         case 0:

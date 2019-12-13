@@ -87,9 +87,9 @@ public class Match: NSManagedObject {
     }
 
     @NSManaged private var actualTimeNumber: NSNumber?
-    @NSManaged private var breakdown: [String: Any]?
+    @NSManaged public private(set) var breakdown: [String: Any]?
     @NSManaged private var compLevelSortOrderNumber: NSNumber?
-    @NSManaged private var compLevelString: String?
+    @NSManaged public private(set) var compLevelString: String?
     @NSManaged internal private(set) var keyString: String?
     @NSManaged private var matchNumberNumber: NSNumber?
     @NSManaged private var postResultTimeNumber: NSNumber?
@@ -254,6 +254,32 @@ extension Match: Managed {
 }
 
 extension Match {
+
+    public static func sortDescriptors(ascending: Bool) -> [NSSortDescriptor] {
+        // TODO: Support play-by order during event
+        return [
+            NSSortDescriptor(key: #keyPath(Match.compLevelSortOrderNumber), ascending: ascending),
+            NSSortDescriptor(key: #keyPath(Match.setNumberNumber), ascending: ascending),
+            NSSortDescriptor(key: #keyPath(Match.matchNumberNumber), ascending: ascending)
+        ]
+    }
+
+    public static func eventPredicate(event: Event) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Match.eventOne), event)
+    }
+
+    public static func eventTeamPredicate(event: Event, team: Team) -> NSPredicate {
+        // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
+        return NSPredicate(format: "%K == %@ AND SUBQUERY(%K, $a, ANY $a.teams.keyString == %@).@count > 0",
+                           #keyPath(Match.eventOne), event,
+                           #keyPath(Match.alliancesMany), team.key)
+    }
+
+    public static func teamKeysPredicate(teamKeys: [String]) -> NSPredicate {
+        return NSPredicate(format: "SUBQUERY(%K, $a, ANY $a.teams.keyString IN %@).@count > 0",
+                           #keyPath(Match.alliancesMany), teamKeys)
+    }
 
     public static func forKey(_ key: String, in context: NSManagedObjectContext) -> Match? {
         let predicate = Match.predicate(key: key)

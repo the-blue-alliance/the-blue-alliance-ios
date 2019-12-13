@@ -103,6 +103,26 @@ extension Award: Managed {
 
 }
 
+extension Award {
+
+    public static func typeSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(Award.awardTypeNumber), ascending: true)
+    }
+
+    public static func teamEventPredicate(team: Team, event: Event) -> NSPredicate {
+        // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/pull/169
+        let teamPredicate = NSPredicate(format: "(ANY recipients.team.keyString == %@)", team.key)
+        let eventPredicate = Award.eventPredicate(event: event)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [eventPredicate, teamPredicate])
+    }
+
+    public static func eventPredicate(event: Event) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Award.eventOne), event)
+    }
+
+}
+
 extension Award: Orphanable {
 
     public var isOrphaned: Bool {

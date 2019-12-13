@@ -94,7 +94,6 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
         self.dataSource.delegate = self
 
         let fetchRequest: NSFetchRequest<TeamMedia> = TeamMedia.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(TeamMedia.type), ascending: true)]
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
@@ -108,23 +107,15 @@ class TeamMediaCollectionViewController: TBACollectionViewController {
     private func setupFetchRequest(_ request: NSFetchRequest<TeamMedia>) {
         // TODO: Split section by photos/videos like we do on the web
         if let year = year {
-            request.predicate = NSPredicate(format: "%K == %@ AND %K == %ld AND %K in %@",
-                                            #keyPath(TeamMedia.team.key), team.key,
-                                            #keyPath(TeamMedia.year), year,
-                                            #keyPath(TeamMedia.type), MediaType.imageTypes)
+            request.predicate = TeamMedia.teamYearImagesPrediate(teamKey: team.key, year: year)
         } else {
             // Match none by passing a bosus year
-            request.predicate = NSPredicate(format: "%K == %@ AND %K == 0",
-                                            #keyPath(TeamMedia.team.key), team.key,
-                                            #keyPath(TeamMedia.type))
+            request.predicate = TeamMedia.nonePredicate(teamKey: team.key)
         }
 
         // Sort these by a lot of things, in an attempt to make sure that when refreshing,
         // images don't jump from to different places because the sort is too general
-        request.sortDescriptors = [
-            NSSortDescriptor(key: #keyPath(TeamMedia.type), ascending: false),
-            NSSortDescriptor(key: #keyPath(TeamMedia.foreignKey), ascending: false)
-        ]
+        request.sortDescriptors = TeamMedia.sortDescriptors()
     }
 
     // MARK: - Private Methods
@@ -235,10 +226,7 @@ extension TeamMediaCollectionViewController: Refreshable {
             }, errorRecorder: Crashlytics.sharedInstance())
         }
         let fetchMediaOperation = BlockOperation {
-            guard let teamMedia = self.team.media?.allObjects as? [TeamMedia] else {
-                return
-            }
-            for media in teamMedia {
+            for media in self.team.media {
                 self.fetchMedia(media, finalOperation)
             }
         }

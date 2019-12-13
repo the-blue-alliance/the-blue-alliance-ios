@@ -172,11 +172,7 @@ class MatchInfoViewController: TBAViewController, Observable {
             view.removeFromSuperview()
         }
 
-        guard let videos = match.videos?.allObjects as? [MatchVideo] else {
-            return
-        }
-
-        for video in videos {
+        for video in match.videos {
             let playerView = MatchInfoViewController.playerView(for: video)
             videoStackView.addArrangedSubview(playerView)
         }
@@ -211,7 +207,7 @@ extension MatchInfoViewController: Refreshable {
     var isDataSourceEmpty: Bool {
         // TODO: Think about doing a quiet refresh in the background for match videos on initial load...
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/135
-        return (match.getValue(\Match.videos)?.count ?? 0) == 0
+        return match.getValue(\Match.videos).count == 0
     }
 
     @objc func refresh() {

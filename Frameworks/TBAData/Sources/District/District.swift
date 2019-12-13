@@ -111,9 +111,7 @@ extension District: Managed {
      */
     @discardableResult
     public static func insert(_ model: TBADistrict, in context: NSManagedObjectContext) -> District {
-        let predicate = NSPredicate(format: "%K == %@",
-                                    #keyPath(District.keyString), model.key)
-
+        let predicate = District.predicate(key: model.key)
         return findOrCreate(in: context, matching: predicate, configure: { (district) in
             // Required: abbreviation, name, key, year
             district.abbreviationString = model.abbreviation
@@ -181,6 +179,20 @@ extension District: Managed {
 }
 
 extension District {
+
+    public static func predicate(key: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(District.keyString), key)
+    }
+
+    public static func yearPredicate(year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %ld",
+                           #keyPath(District.yearNumber), year)
+    }
+
+    public static func nameSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(District.nameString), ascending: true)
+    }
 
     /**
      A string concatenating the district's year and abbrevation.

@@ -8,10 +8,10 @@ struct MatchViewModel {
     let hasVideos: Bool
 
     let redAlliance: [String]
-    let redScore: String?
+    let redScore: Int?
 
     let blueAlliance: [String]
-    let blueScore: String?
+    let blueScore: Int?
 
     let dqs: [String]
 
@@ -38,13 +38,13 @@ struct MatchViewModel {
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/274
         matchName = match.friendlyName
 
-        hasVideos = match.videos?.count == 0
+        hasVideos = match.videos.count == 0
 
         redAlliance = match.redAllianceTeamKeys
-        redScore = match.redAlliance?.score?.stringValue
+        redScore = match.redAlliance?.score
 
         blueAlliance = match.blueAllianceTeamKeys
-        blueScore = match.blueAlliance?.score?.stringValue
+        blueScore = match.blueAlliance?.score
 
         dqs = match.dqTeamKeys
 

@@ -61,8 +61,7 @@ class EventTeamsViewController: TeamsViewController {
     // MARK: - EventsViewControllerDataSourceConfiguration
 
     override var fetchRequestPredicate: NSPredicate? {
-        return NSPredicate(format: "ANY %K = %@",
-                           #keyPath(Team.events), event)
+        return Team.eventPredicate(event: event)
     }
 
 }

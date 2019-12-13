@@ -63,8 +63,7 @@ class DistrictTeamsViewController: TeamsViewController {
     // MARK: - EventsViewControllerDataSourceConfiguration
 
     override var fetchRequestPredicate: NSPredicate? {
-        return NSPredicate(format: "ANY %K = %@",
-                           #keyPath(Team.districts), district)
+        return Team.districtPredicate(district: district)
     }
 
 }

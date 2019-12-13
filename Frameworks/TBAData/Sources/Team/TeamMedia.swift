@@ -163,10 +163,30 @@ extension TeamMedia: Managed {
 
 extension TeamMedia {
 
-    public static func prediate(teamKey: String, year: Int) -> NSPredicate {
+    public static func teamYearPrediate(teamKey: String, year: Int) -> NSPredicate {
         return NSPredicate(format: "%K == %@ AND %K == %ld",
                            #keyPath(TeamMedia.teamOne.keyString), teamKey,
                            #keyPath(TeamMedia.yearNumber), year)
+    }
+
+    public static func teamYearImagesPrediate(teamKey: String, year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %@ AND %K == %ld AND %K in %@",
+                           #keyPath(TeamMedia.teamOne.keyString), teamKey,
+                           #keyPath(TeamMedia.yearNumber), year,
+                           #keyPath(TeamMedia.typeString), MediaType.imageTypes)
+    }
+
+    public static func nonePredicate(teamKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@ AND %K == nil",
+                           #keyPath(TeamMedia.teamOne.keyString), teamKey,
+                           #keyPath(TeamMedia.typeString))
+    }
+
+    public static func sortDescriptors() -> [NSSortDescriptor] {
+        return [
+            NSSortDescriptor(key: #keyPath(TeamMedia.typeString), ascending: false),
+            NSSortDescriptor(key: #keyPath(TeamMedia.foreignKey), ascending: false)
+        ]
     }
 
     public var imageDirectURL: URL? {
