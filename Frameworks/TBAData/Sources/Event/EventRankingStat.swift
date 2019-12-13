@@ -8,9 +8,16 @@ public class EventRankingStat: NSManagedObject {
         return NSFetchRequest<EventRankingStat>(entityName: "EventRankingStat")
     }
 
-    @NSManaged public fileprivate(set) var value: Double
-    @NSManaged public fileprivate(set) var extraStatsRanking: EventRanking?
-    @NSManaged public fileprivate(set) var sortOrderRanking: EventRanking?
+    public var value: Double {
+        guard let value = valueNumber?.doubleValue else {
+            fatalError("Save EventRankingStat before accessing value")
+        }
+        return value
+    }
+
+    @NSManaged private var valueNumber: NSNumber?
+    @NSManaged public private(set) var extraStatsRanking: EventRanking?
+    @NSManaged public private(set) var sortOrderRanking: EventRanking?
 
 }
 
@@ -18,21 +25,21 @@ extension EventRankingStat: Managed {
 
     internal static func insert(value: Double, sortOrderRanking: EventRanking, in context: NSManagedObjectContext) -> EventRankingStat {
         let eventRankingStat = EventRankingStat.init(entity: entity(), insertInto: context)
-        eventRankingStat.value = value
+        eventRankingStat.valueNumber = NSNumber(value: value)
         eventRankingStat.sortOrderRanking = sortOrderRanking
         return eventRankingStat
     }
 
     internal static func insert(value: Double, extraStatsRanking: EventRanking, in context: NSManagedObjectContext) -> EventRankingStat {
         let eventRankingStat = EventRankingStat.init(entity: entity(), insertInto: context)
-        eventRankingStat.value = value
+        eventRankingStat.valueNumber = NSNumber(value: value)
         eventRankingStat.extraStatsRanking = extraStatsRanking
         return eventRankingStat
     }
 
     internal static func insert(value: Double, sortOrderRanking: EventRanking?, extraStatsRanking: EventRanking?, in context: NSManagedObjectContext) -> EventRankingStat {
         let eventRankingStat = EventRankingStat.init(entity: entity(), insertInto: context)
-        eventRankingStat.value = value
+        eventRankingStat.valueNumber = NSNumber(value: value)
         eventRankingStat.sortOrderRanking = sortOrderRanking
         eventRankingStat.extraStatsRanking = extraStatsRanking
         return eventRankingStat

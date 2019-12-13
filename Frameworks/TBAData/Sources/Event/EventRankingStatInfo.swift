@@ -9,44 +9,54 @@ public class EventRankingStatInfo: NSManagedObject {
         return NSFetchRequest<EventRankingStatInfo>(entityName: "EventRankingStatInfo")
     }
 
-    @NSManaged public fileprivate(set) var name: String
-    @NSManaged public fileprivate(set) var precision: Int16
-    @NSManaged public fileprivate(set) var extraStatsRankings: NSSet
-    @NSManaged public fileprivate(set) var sortOrdersRankings: NSSet
+    public var name: String {
+        guard let name = nameString else {
+            fatalError("Save EventRankingStatInfo before accessing name")
+        }
+        return name
+    }
+
+    public var precision: Int {
+        guard let precision = precisionNumber?.intValue else {
+            fatalError("Save EventRankingStatInfo before accessing precision")
+        }
+        return precision
+    }
+
+    public var extraStatsRankings: [EventRanking] {
+        guard let extraStatsRankingsMany = extraStatsRankingsMany, let extraStatsRankings = extraStatsRankingsMany.allObjects as? [EventRanking] else {
+            return []
+        }
+        return extraStatsRankings
+    }
+
+    public var sortOrdersRankings: [EventRanking] {
+        guard let sortOrdersRankingsMany = sortOrdersRankingsMany, let sortOrdersRankings = sortOrdersRankingsMany.allObjects as? [EventRanking] else {
+            return []
+        }
+        return sortOrdersRankings
+    }
+
+    @NSManaged private var nameString: String?
+    @NSManaged private var precisionNumber: NSNumber?
+    @NSManaged private var extraStatsRankingsMany: NSSet?
+    @NSManaged private var sortOrdersRankingsMany: NSSet?
 
 }
 
-// MARK: Generated accessors for extraStatsRankings
+// MARK: Generated accessors for extraStatsRankingsMany
 extension EventRankingStatInfo {
 
-    @objc(addExtraStatsRankingsObject:)
-    @NSManaged internal func addToExtraStatsRankings(_ value: EventRanking)
-
-    @objc(removeExtraStatsRankingsObject:)
-    @NSManaged internal func removeFromExtraStatsRankings(_ value: EventRanking)
-
-    @objc(addExtraStatsRankings:)
-    @NSManaged internal func addToExtraStatsRankings(_ values: NSSet)
-
-    @objc(removeExtraStatsRankings:)
-    @NSManaged internal func removeFromExtraStatsRankings(_ values: NSSet)
+    @objc(removeExtraStatsRankingsManyObject:)
+    @NSManaged internal func removeFromExtraStatsRankingsMany(_ value: EventRanking)
 
 }
 
-// MARK: Generated accessors for sortOrdersRankings
+// MARK: Generated accessors for sortOrdersRankingsMany
 extension EventRankingStatInfo {
 
-    @objc(addSortOrdersRankingsObject:)
-    @NSManaged internal func addToSortOrdersRankings(_ value: EventRanking)
-
-    @objc(removeSortOrdersRankingsObject:)
-    @NSManaged internal func removeFromSortOrdersRankings(_ value: EventRanking)
-
-    @objc(addSortOrdersRankings:)
-    @NSManaged internal func addToSortOrdersRankings(_ values: NSSet)
-
-    @objc(removeSortOrdersRankings:)
-    @NSManaged internal func removeFromSortOrdersRankings(_ values: NSSet)
+    @objc(removeSortOrdersRankingsManyObject:)
+    @NSManaged internal func removeFromSortOrdersRankingsMany(_ value: EventRanking)
 
 }
 
@@ -54,12 +64,12 @@ extension EventRankingStatInfo: Managed {
 
     public static func insert(_ model: TBAEventRankingSortOrder, in context: NSManagedObjectContext) -> EventRankingStatInfo {
         let predicate = NSPredicate(format: "%K == %@ && %K == %ld",
-                                    #keyPath(EventRankingStatInfo.name), model.name,
-                                    #keyPath(EventRankingStatInfo.precision), model.precision)
+                                    #keyPath(EventRankingStatInfo.nameString), model.name,
+                                    #keyPath(EventRankingStatInfo.precisionNumber), model.precision)
 
         return findOrCreate(in: context, matching: predicate, configure: { (eventRankingStatInfo) in
-            eventRankingStatInfo.name = model.name
-            eventRankingStatInfo.precision = Int16(model.precision)
+            eventRankingStatInfo.nameString = model.name
+            eventRankingStatInfo.precisionNumber = NSNumber(value: model.precision)
         })
     }
 

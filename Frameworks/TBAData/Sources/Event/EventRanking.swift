@@ -9,19 +9,19 @@ public class EventRanking: NSManagedObject {
         return NSFetchRequest<EventRanking>(entityName: "EventRanking")
     }
 
-    // TODO: See what we can make private/public here
-    @NSManaged public fileprivate(set) var dq: NSNumber?
-    @NSManaged public fileprivate(set) var matchesPlayed: NSNumber?
-    @NSManaged public fileprivate(set) var qualAverage: NSNumber?
-    @NSManaged public fileprivate(set) var rank: Int16
-    @NSManaged public fileprivate(set) var record: WLT?
-    @NSManaged public internal(set) var event: Event
-    @NSManaged fileprivate var extraStats: NSOrderedSet?
-    @NSManaged fileprivate var extraStatsInfo: NSOrderedSet?
-    @NSManaged fileprivate var qualStatus: EventStatusQual?
-    @NSManaged fileprivate var sortOrders: NSOrderedSet?
-    @NSManaged fileprivate var sortOrdersInfo: NSOrderedSet?
-    @NSManaged public fileprivate(set) var team: Team
+    // TODO: See what we can make private here
+    @NSManaged private var dqNumber: NSNumber?
+    @NSManaged private var matchesPlayedNumber: NSNumber?
+    @NSManaged private var qualAverageNumber: NSNumber?
+    @NSManaged private var rankNumber: NSNumber?
+    @NSManaged public private(set) var record: WLT?
+    @NSManaged internal var eventOne: Event?
+    @NSManaged public private(set) var extraStats: NSOrderedSet?
+    @NSManaged public private(set) var extraStatsInfo: NSOrderedSet?
+    @NSManaged public var qualStatus: EventStatusQual?
+    @NSManaged public private(set) var sortOrders: NSOrderedSet?
+    @NSManaged public private(set) var sortOrdersInfo: NSOrderedSet?
+    @NSManaged internal private(set) var teamOne: Team?
 
 }
 
@@ -29,29 +29,29 @@ extension EventRanking: Managed {
 
     public static func insert(_ model: TBAEventRanking, sortOrderInfo: [TBAEventRankingSortOrder]?, extraStatsInfo: [TBAEventRankingSortOrder]?, eventKey: String, in context: NSManagedObjectContext) -> EventRanking {
         let predicate = NSPredicate(format: "(%K == %@ OR %K == %@) AND %K == %@",
-                                    #keyPath(EventRanking.event.keyString), eventKey,
+                                    #keyPath(EventRanking.eventOne.keyString), eventKey,
                                     #keyPath(EventRanking.qualStatus.eventStatus.event.keyString), eventKey,
-                                    #keyPath(EventRanking.team.keyString), model.teamKey)
+                                    #keyPath(EventRanking.teamOne.keyString), model.teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (ranking) in
             // Required: teamKey, rank
-            ranking.team = Team.insert(model.teamKey, in: context)
+            ranking.teamOne = Team.insert(model.teamKey, in: context)
             if let dq = model.dq {
-                ranking.dq = NSNumber(value: dq)
+                ranking.dqNumber = NSNumber(value: dq)
             } else {
-                ranking.dq = nil
+                ranking.dqNumber = nil
             }
             if let matchesPlayed = model.matchesPlayed {
-                ranking.matchesPlayed = NSNumber(value: matchesPlayed)
+                ranking.matchesPlayedNumber = NSNumber(value: matchesPlayed)
             } else {
-                ranking.matchesPlayed = nil
+                ranking.matchesPlayedNumber = nil
             }
             if let qualAverage = model.qualAverage {
-                ranking.qualAverage = NSNumber(value: qualAverage)
+                ranking.qualAverageNumber = NSNumber(value: qualAverage)
             } else {
-                ranking.qualAverage = nil
+                ranking.qualAverageNumber = nil
             }
-            ranking.rank = Int16(model.rank)
+            ranking.rankNumber = NSNumber(value: model.rank)
 
             if let record = model.record {
                 ranking.record = WLT(wins: record.wins, losses: record.losses, ties: record.ties)
@@ -104,10 +104,10 @@ extension EventRanking: Managed {
 
         // First pass - clean up our relationships.
         extraStatsInfoArray.forEach({
-            $0.removeFromExtraStatsRankings(self)
+            $0.removeFromExtraStatsRankingsMany(self)
         })
         sortOrdersInfoArray.forEach({
-            $0.removeFromSortOrdersRankings(self)
+            $0.removeFromSortOrdersRankingsMany(self)
         })
 
         // Second pass - clean up orphaned EventRankingStatInfo objects that used to be connected to this EventRanking.
@@ -171,7 +171,7 @@ extension EventRanking: Orphanable {
 
     public var isOrphaned: Bool {
         // Ranking is an orphan if it's not attached to an Event or a EventStatusQual
-        let hasEvent = (event != nil)
+        let hasEvent = (eventOne != nil)
         let hasStatus = (qualStatus != nil)
         return !hasEvent && !hasStatus
     }

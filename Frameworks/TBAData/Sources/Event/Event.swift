@@ -450,7 +450,7 @@ extension Event: Managed {
         }
 
         let status = EventStatus.insert(status, in: managedObjectContext)
-        status.qual?.ranking?.event = self
+        status.qual?.ranking?.eventOne = self
 
         addToStatusesMany(status)
     }
