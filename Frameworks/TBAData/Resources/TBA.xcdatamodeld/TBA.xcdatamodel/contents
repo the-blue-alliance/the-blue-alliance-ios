@@ -16,7 +16,7 @@
         <attribute name="abbreviationString" attributeType="String"/>
         <attribute name="keyString" attributeType="String"/>
         <attribute name="nameString" attributeType="String"/>
-        <attribute name="yearNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="yearNumber" attributeType="Integer 64" usesScalarValueType="YES"/>
         <relationship name="eventsMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="district" inverseEntity="Event"/>
         <relationship name="rankingsMany" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DistrictRanking" inverseName="districtOne" inverseEntity="DistrictRanking"/>
         <relationship name="teamsMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="districtsMany" inverseEntity="Team"/>

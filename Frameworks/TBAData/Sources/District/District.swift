@@ -6,6 +6,10 @@ import TBAUtils
 @objc(District)
 public class District: NSManagedObject {
 
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<District> {
+        return NSFetchRequest<District>(entityName: District.entityName)
+    }
+
     public var abbreviation: String {
         guard let abbreviation = abbreviationString else {
             fatalError("Save District before accessing abbreviation")
@@ -34,6 +38,11 @@ public class District: NSManagedObject {
         return year
     }
 
+    @NSManaged private var abbreviationString: String?
+    @NSManaged internal private(set) var keyString: String?
+    @NSManaged private var nameString: String?
+    @NSManaged private var yearNumber: NSNumber?
+
     public var events: [Event] {
         guard let eventsMany = eventsMany, let events = eventsMany.allObjects as? [Event] else {
             return []
@@ -55,14 +64,6 @@ public class District: NSManagedObject {
         return teams
     }
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<District> {
-        return NSFetchRequest<District>(entityName: District.entityName)
-    }
-
-    @NSManaged private var abbreviationString: String?
-    @NSManaged internal private(set) var keyString: String?
-    @NSManaged private var nameString: String?
-    @NSManaged private var yearNumber: NSNumber?
     @NSManaged private var eventsMany: NSSet?
     @NSManaged private var rankingsMany: NSSet?
     @NSManaged private var teamsMany: NSSet?
@@ -85,8 +86,7 @@ extension District: Managed {
     public static func insert(_ districts: [TBADistrict], year: Int, in context: NSManagedObjectContext) {
         // Fetch all of the previous Districts for this year
         let oldDistricts = District.fetch(in: context) {
-            $0.predicate = NSPredicate(format: "%K == %ld",
-                                       #keyPath(District.yearNumber), year)
+            $0.predicate = District.yearPredicate(year: year)
         }
 
         // Insert new Districts for this year
