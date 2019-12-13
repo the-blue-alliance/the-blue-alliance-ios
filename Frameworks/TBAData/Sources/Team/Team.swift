@@ -30,7 +30,10 @@ public class Team: NSManagedObject {
     }
 
     public var teamNumber: Int {
-        return Int(teamNumberNumber)
+        guard let teamNumber = teamNumberNumber?.intValue else {
+            fatalError("Save Team before accessing teamNumber")
+        }
+        return teamNumber
     }
 
     public var media: [TeamMedia] {
@@ -55,7 +58,7 @@ public class Team: NSManagedObject {
     @NSManaged public private(set) var postalCode: String?
     @NSManaged private var rookieYearNumber: NSNumber?
     @NSManaged public private(set) var stateProv: String?
-    @NSManaged private var teamNumberNumber: Int64
+    @NSManaged private var teamNumberNumber: NSNumber?
     @NSManaged public private(set) var website: String?
     @NSManaged public private(set) var yearsParticipated: [Int]?
 
@@ -146,8 +149,8 @@ extension Team: Managed {
             team.keyString = key
 
             let teamNumberString = Team.trimFRCPrefix(key)
-            if let teamNumber = Int64(teamNumberString) {
-                team.teamNumberNumber = teamNumber
+            if let teamNumber = Int(teamNumberString) {
+                team.teamNumberNumber = NSNumber(value: teamNumber)
             }
         }
     }
@@ -192,7 +195,7 @@ extension Team: Managed {
             team.postalCode = model.postalCode
             team.rookieYearNumber = NSNumber(value: model.rookieYear)
             team.stateProv = model.stateProv
-            team.teamNumberNumber = Int64(model.teamNumber)
+            team.teamNumberNumber = NSNumber(value: model.teamNumber)
             team.website = model.website
             team.homeChampionship = model.homeChampionship
         }

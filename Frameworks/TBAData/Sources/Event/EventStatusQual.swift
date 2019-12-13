@@ -9,8 +9,8 @@ public class EventStatusQual: NSManagedObject {
         return NSFetchRequest<EventStatusQual>(entityName: "EventStatusQual")
     }
 
-    @NSManaged public fileprivate(set) var numTeams: NSNumber?
-    @NSManaged public fileprivate(set) var status: String?
+    @NSManaged private var numTeamsNumber: NSNumber?
+    @NSManaged private var status: String?
     @NSManaged public internal(set) var eventStatus: EventStatus?
     @NSManaged public internal(set) var ranking: EventRanking?
 
@@ -22,11 +22,15 @@ extension EventStatusQual: Managed {
         let predicate = NSPredicate(format: "(%K == %@ AND %K == %@) OR (%K == %@ AND %K == %@)",
                                     #keyPath(EventStatusQual.ranking.eventOne.keyString), eventKey,
                                     #keyPath(EventStatusQual.ranking.teamOne.keyString), teamKey,
-                                    #keyPath(EventStatusQual.eventStatus.event.keyString), eventKey,
-                                    #keyPath(EventStatusQual.eventStatus.team.keyString), teamKey)
+                                    #keyPath(EventStatusQual.eventStatus.eventOne.keyString), eventKey,
+                                    #keyPath(EventStatusQual.eventStatus.teamOne.keyString), teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (eventStatusQual) in
-            eventStatusQual.numTeams = model.numTeams as NSNumber?
+            if let numTeams = model.numTeams {
+                eventStatusQual.numTeamsNumber = NSNumber(value: numTeams)
+            } else {
+                eventStatusQual.numTeamsNumber = nil
+            }
             eventStatusQual.status = model.status
 
             eventStatusQual.updateToOneRelationship(relationship: #keyPath(EventStatusQual.ranking), newValue: model.ranking) {

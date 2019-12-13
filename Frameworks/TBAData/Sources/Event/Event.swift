@@ -498,7 +498,7 @@ extension Event: Managed {
                 // Webcast will become an orphan - delete
                 managedObjectContext?.delete($0)
             } else {
-                $0.removeFromEvents(self)
+                $0.removeFromEventsMany(self)
             }
         }
     }

@@ -30,7 +30,7 @@ extension EventRanking: Managed {
     public static func insert(_ model: TBAEventRanking, sortOrderInfo: [TBAEventRankingSortOrder]?, extraStatsInfo: [TBAEventRankingSortOrder]?, eventKey: String, in context: NSManagedObjectContext) -> EventRanking {
         let predicate = NSPredicate(format: "(%K == %@ OR %K == %@) AND %K == %@",
                                     #keyPath(EventRanking.eventOne.keyString), eventKey,
-                                    #keyPath(EventRanking.qualStatus.eventStatus.event.keyString), eventKey,
+                                    #keyPath(EventRanking.qualStatus.eventStatus.eventOne.keyString), eventKey,
                                     #keyPath(EventRanking.teamOne.keyString), model.teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (ranking) in

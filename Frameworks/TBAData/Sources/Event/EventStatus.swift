@@ -6,19 +6,19 @@ import TBAKit
 public class EventStatus: NSManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<EventStatus> {
-        return NSFetchRequest<EventStatus>(entityName: "EventStatus")
+        return NSFetchRequest<EventStatus>(entityName: EventStatus.entityName)
     }
 
-    @NSManaged public fileprivate(set) var allianceStatus: String?
-    @NSManaged public fileprivate(set) var lastMatchKey: String?
-    @NSManaged public fileprivate(set) var nextMatchKey: String?
-    @NSManaged public fileprivate(set) var overallStatus: String?
-    @NSManaged public fileprivate(set) var playoffStatus: String?
-    @NSManaged public fileprivate(set) var alliance: EventStatusAlliance?
-    @NSManaged public fileprivate(set) var event: Event
-    @NSManaged public fileprivate(set) var playoff: EventStatusPlayoff?
-    @NSManaged public fileprivate(set) var qual: EventStatusQual?
-    @NSManaged public fileprivate(set) var team: Team
+    @NSManaged public private(set) var allianceStatus: String?
+    @NSManaged public private(set) var lastMatchKey: String?
+    @NSManaged public private(set) var nextMatchKey: String?
+    @NSManaged public private(set) var overallStatus: String?
+    @NSManaged public private(set) var playoffStatus: String?
+    @NSManaged public private(set) var alliance: EventStatusAlliance?
+    @NSManaged internal private(set) var eventOne: Event?
+    @NSManaged public private(set) var playoff: EventStatusPlayoff?
+    @NSManaged public private(set) var qual: EventStatusQual?
+    @NSManaged internal private(set) var teamOne: Team?
 
 }
 
@@ -27,11 +27,11 @@ extension EventStatus: Managed {
     @discardableResult
     public static func insert(_ model: TBAEventStatus, in context: NSManagedObjectContext) -> EventStatus {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(EventStatus.event.keyString), model.eventKey,
-                                    #keyPath(EventStatus.team.keyString), model.teamKey)
+                                    #keyPath(EventStatus.eventOne.keyString), model.eventKey,
+                                    #keyPath(EventStatus.teamOne.keyString), model.teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (eventStatus) in
-            eventStatus.team = Team.insert(model.teamKey, in: context)
+            eventStatus.teamOne = Team.insert(model.teamKey, in: context)
 
             eventStatus.allianceStatus = model.allianceStatusString
             eventStatus.playoffStatus = model.playoffStatusString
@@ -75,5 +75,3 @@ extension EventStatus: Managed {
     }
 
 }
-
-// TODO: Orphable?

@@ -9,11 +9,11 @@ public class EventStatusPlayoff: NSManagedObject {
         return NSFetchRequest<EventStatusPlayoff>(entityName: "EventStatusPlayoff")
     }
 
-    @NSManaged public fileprivate(set) var currentRecord: WLT?
-    @NSManaged public fileprivate(set) var level: String?
-    @NSManaged public fileprivate(set) var playoffAverage: NSNumber?
-    @NSManaged public fileprivate(set) var record: WLT?
-    @NSManaged public fileprivate(set) var status: String?
+    @NSManaged private var currentRecord: WLT?
+    @NSManaged private var level: String?
+    @NSManaged private var playoffAverageNumber: NSNumber?
+    @NSManaged private var record: WLT?
+    @NSManaged private var status: String?
     @NSManaged public internal(set) var alliance: EventAlliance?
     @NSManaged public internal(set) var eventStatus: EventStatus?
 
@@ -26,8 +26,8 @@ extension EventStatusPlayoff: Managed {
         let predicate = NSPredicate(format: "(%K == %@ AND SUBQUERY(%K, $pick, $pick.keyString == %@).@count == 1) OR (%K == %@ AND %K == %@)",
                                     #keyPath(EventStatusPlayoff.alliance.eventOne.keyString), eventKey,
                                     #keyPath(EventStatusPlayoff.alliance.picks), teamKey,
-                                    #keyPath(EventStatusPlayoff.eventStatus.event.keyString), eventKey,
-                                    #keyPath(EventStatusPlayoff.eventStatus.team.keyString), teamKey)
+                                    #keyPath(EventStatusPlayoff.eventStatus.eventOne.keyString), eventKey,
+                                    #keyPath(EventStatusPlayoff.eventStatus.teamOne.keyString), teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (statusPlayoff) in
             if let currentRecord = model.currentRecord {
@@ -37,7 +37,11 @@ extension EventStatusPlayoff: Managed {
             }
 
             statusPlayoff.level = model.level
-            statusPlayoff.playoffAverage = model.playoffAverage as NSNumber?
+            if let playoffAverage = model.playoffAverage {
+                statusPlayoff.playoffAverageNumber = NSNumber(value: playoffAverage)
+            } else {
+                statusPlayoff.playoffAverageNumber = nil
+            }
 
             if let record = model.record {
                 statusPlayoff.record = WLT(wins: record.wins, losses: record.losses, ties: record.ties)
