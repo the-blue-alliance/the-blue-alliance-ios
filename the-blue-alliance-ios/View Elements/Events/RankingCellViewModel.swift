@@ -41,7 +41,7 @@ struct RankingCellViewModel {
 
         wltText = {
             if let qualAverage = eventRanking.qualAverage {
-                return qualAverage.stringValue
+                return "\(qualAverage)"
             } else {
                 return eventRanking.record?.stringValue
             }

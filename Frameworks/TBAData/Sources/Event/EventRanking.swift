@@ -9,16 +9,49 @@ public class EventRanking: NSManagedObject {
         return NSFetchRequest<EventRanking>(entityName: "EventRanking")
     }
 
-    // TODO: See what we can make private here
+    public var dq: Int? {
+        return dqNumber?.intValue
+    }
+
+    public var matchesPlayed: Int? {
+        return matchesPlayedNumber?.intValue
+    }
+
+    public var qualAverage: Double? {
+        return qualAverageNumber?.doubleValue
+    }
+
+    public var rank: Int {
+        guard let rank = rankNumber?.intValue else {
+            fatalError("Save EventRanking before accessing rank")
+        }
+        return rank
+    }
+
     @NSManaged private var dqNumber: NSNumber?
     @NSManaged private var matchesPlayedNumber: NSNumber?
     @NSManaged private var qualAverageNumber: NSNumber?
     @NSManaged private var rankNumber: NSNumber?
     @NSManaged public private(set) var record: WLT?
+
+    public var event: Event {
+        guard let event = eventOne else {
+            fatalError("Save EventRanking before accessing event")
+        }
+        return event
+    }
+
+    public var team: Team {
+        guard let team = teamOne else {
+            fatalError("Save EventRanking before accessing team")
+        }
+        return team
+    }
+
     @NSManaged internal var eventOne: Event?
     @NSManaged public private(set) var extraStats: NSOrderedSet?
     @NSManaged public private(set) var extraStatsInfo: NSOrderedSet?
-    @NSManaged public var qualStatus: EventStatusQual?
+    @NSManaged public private(set) var qualStatus: EventStatusQual?
     @NSManaged public private(set) var sortOrders: NSOrderedSet?
     @NSManaged public private(set) var sortOrdersInfo: NSOrderedSet?
     @NSManaged internal private(set) var teamOne: Team?
@@ -122,6 +155,15 @@ extension EventRanking: Managed {
 }
 
 extension EventRanking {
+
+    public static func eventPredicate(event: Event) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(EventRanking.eventOne), event)
+    }
+
+    public static func rankSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(EventRanking.rankNumber), ascending: true)
+    }
 
     public var extraStatsInfoArray: [EventRankingStatInfo] {
         return extraStatsInfo?.array as? [EventRankingStatInfo] ?? []

@@ -9,11 +9,15 @@ public class EventStatusPlayoff: NSManagedObject {
         return NSFetchRequest<EventStatusPlayoff>(entityName: "EventStatusPlayoff")
     }
 
-    @NSManaged private var currentRecord: WLT?
-    @NSManaged private var level: String?
+    public var playoffAverage: Double? {
+        return playoffAverageNumber?.doubleValue
+    }
+
+    @NSManaged public private(set) var currentRecord: WLT?
+    @NSManaged public private(set) var level: String?
     @NSManaged private var playoffAverageNumber: NSNumber?
-    @NSManaged private var record: WLT?
-    @NSManaged private var status: String?
+    @NSManaged public private(set) var record: WLT?
+    @NSManaged public private(set) var status: String?
     @NSManaged public internal(set) var alliance: EventAlliance?
     @NSManaged public internal(set) var eventStatus: EventStatus?
 

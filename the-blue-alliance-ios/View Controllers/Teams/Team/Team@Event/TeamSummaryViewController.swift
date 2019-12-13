@@ -23,7 +23,7 @@ private enum TeamSummaryItem: Hashable {
     case awards(count: Int)
     case rank(rank: Int, total: Int)
     case record(wlt: WLT, dqs: Int? = nil)
-    case average(average: NSNumber)
+    case average(average: Double)
     case breakdown(rankingInfo: String)
     case alliance(allianceStatus: String)
     case match(match: Match, team: Team? = nil)
@@ -117,9 +117,7 @@ class TeamSummaryViewController: TBATableViewController {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
     lazy var observerPredicate: NSPredicate = {
-        return NSPredicate(format: "%K == %@ AND %K == %@",
-                           #keyPath(EventStatus.event), event,
-                           #keyPath(EventStatus.team), team)
+        return EventStatus.predicate(event: event, team: team)
     }()
 
     init(team: Team, event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
@@ -247,12 +245,12 @@ class TeamSummaryViewController: TBATableViewController {
 
         // Rank
         if let rank = eventStatus?.qual?.ranking?.rank, let total = eventStatus?.qual?.numTeams {
-            qualInfoItems.append(.rank(rank: Int(rank), total: total.intValue))
+            qualInfoItems.append(.rank(rank: rank, total: total))
         }
 
         // Record
         if let record = eventStatus?.qual?.ranking?.record {
-            qualInfoItems.append(.record(wlt: record, dqs: eventStatus?.qual?.ranking?.dq?.intValue))
+            qualInfoItems.append(.record(wlt: record, dqs: eventStatus?.qual?.ranking?.dq))
         }
 
         // Average
@@ -405,11 +403,11 @@ class TeamSummaryViewController: TBATableViewController {
         )
     }
 
-    private static func tableView(_ tableView: UITableView, cellForAverage average: NSNumber, at indexPath: IndexPath) -> UITableViewCell {
+    private static func tableView(_ tableView: UITableView, cellForAverage average: Double, at indexPath: IndexPath) -> UITableViewCell {
         return self.tableView(
             tableView,
             reverseSubtitleCellWithTitle: "Average",
-            subtitle: average.stringValue,
+            subtitle: "\(average)",
             at: indexPath
         )
     }

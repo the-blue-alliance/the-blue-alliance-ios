@@ -9,6 +9,10 @@ public class EventStatusQual: NSManagedObject {
         return NSFetchRequest<EventStatusQual>(entityName: "EventStatusQual")
     }
 
+    public var numTeams: Int? {
+        return numTeamsNumber?.intValue
+    }
+
     @NSManaged private var numTeamsNumber: NSNumber?
     @NSManaged private var status: String?
     @NSManaged public internal(set) var eventStatus: EventStatus?

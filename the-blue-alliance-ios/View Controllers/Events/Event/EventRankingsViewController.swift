@@ -62,9 +62,10 @@ class EventRankingsViewController: TBATableViewController {
         self.dataSource.delegate = self
 
         let fetchRequest: NSFetchRequest<EventRanking> = EventRanking.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(EventRanking.rank), ascending: true)]
-        fetchRequest.predicate = NSPredicate(format: "%K == %@",
-                                             #keyPath(EventRanking.event), event)
+        fetchRequest.sortDescriptors = [
+            EventRanking.rankSortDescriptor()
+        ]
+        fetchRequest.predicate = EventRanking.eventPredicate(event: event)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)

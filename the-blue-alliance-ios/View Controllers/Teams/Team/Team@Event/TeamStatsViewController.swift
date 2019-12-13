@@ -36,9 +36,7 @@ class TeamStatsViewController: TBATableViewController, Observable {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
     lazy var observerPredicate: NSPredicate = {
-        return NSPredicate(format: "%K == %@ AND %K == %@",
-                           #keyPath(EventTeamStat.event), event,
-                           #keyPath(EventTeamStat.team), team)
+        return EventTeamStat.predicate(event: event, team: team)
     }()
 
     // MARK: - Init

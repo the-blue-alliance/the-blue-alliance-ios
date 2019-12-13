@@ -112,18 +112,17 @@ class EventTeamStatsTableViewController: TBATableViewController {
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<EventTeamStat>) {
-        request.predicate = NSPredicate(format: "%K == %@",
-                                        #keyPath(EventTeamStat.event), event)
+        request.predicate = EventTeamStat.eventPredicate(event: event)
 
         // Switch based on user prefs
         var sortDescriptor: NSSortDescriptor?
         switch filter {
         case .opr:
-            sortDescriptor = NSSortDescriptor(key: #keyPath(EventTeamStat.opr), ascending: false)
+            sortDescriptor = EventTeamStat.oprSortDescriptor()
         case .dpr:
-            sortDescriptor = NSSortDescriptor(key: #keyPath(EventTeamStat.dpr), ascending: false)
+            sortDescriptor = EventTeamStat.dprSortDescriptor()
         case .ccwm:
-            sortDescriptor = NSSortDescriptor(key: #keyPath(EventTeamStat.ccwm), ascending: false)
+            sortDescriptor = EventTeamStat.ccwmSortDescriptor()
         // TODO: Add back in sorting by Team Number
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/279
         }

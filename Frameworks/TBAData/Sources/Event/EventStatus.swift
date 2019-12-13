@@ -75,3 +75,13 @@ extension EventStatus: Managed {
     }
 
 }
+
+extension EventStatus {
+
+    public static func predicate(event: Event, team: Team) -> NSPredicate {
+        return NSPredicate(format: "%K == %@ AND %K == %@",
+                           #keyPath(EventStatus.eventOne), event,
+                           #keyPath(EventStatus.teamOne), team)
+    }
+
+}
