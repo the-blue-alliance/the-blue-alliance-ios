@@ -5,6 +5,10 @@ import TBAKit
 @objc(DistrictRanking)
 public class DistrictRanking: NSManagedObject {
 
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<DistrictRanking> {
+        return NSFetchRequest<DistrictRanking>(entityName: DistrictRanking.entityName)
+    }
+
     public var pointTotal: Int {
         guard let pointTotal = pointTotalNumber?.intValue else {
             fatalError("Save DistrictRanking before accessing pointTotal")
@@ -22,6 +26,10 @@ public class DistrictRanking: NSManagedObject {
     public var rookieBonus: Int? {
         return rookieBonusNumber?.intValue
     }
+
+    @NSManaged private var pointTotalNumber: NSNumber?
+    @NSManaged private var rankNumber: NSNumber?
+    @NSManaged private var rookieBonusNumber: NSNumber?
 
     public var district: District {
         guard let district = districtOne else {
@@ -44,13 +52,6 @@ public class DistrictRanking: NSManagedObject {
         return team
     }
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<DistrictRanking> {
-        return NSFetchRequest<DistrictRanking>(entityName: DistrictRanking.entityName)
-    }
-
-    @NSManaged private var pointTotalNumber: NSNumber?
-    @NSManaged private var rankNumber: NSNumber?
-    @NSManaged private var rookieBonusNumber: NSNumber?
     @NSManaged private var districtOne: District?
     @NSManaged private var eventPointsMany: NSSet?
     @NSManaged private var teamOne: Team?
@@ -113,7 +114,7 @@ extension DistrictRanking {
     // TODO: Audit the uses of this to see if we can have empty events when using this
     // TODO: Make sure we're doing this in a thread safe place
     public var sortedEventPoints: [DistrictEventPoints] {
-        let eventPointsSet = getValue(\DistrictRanking.eventPoints)
+        let eventPointsSet = getValue(\DistrictRanking.eventPointsMany)
         return eventPoints.sorted(by: { (lhs, rhs) -> Bool in
             guard let lhsStartDate = lhs.event.startDate else {
                 return false

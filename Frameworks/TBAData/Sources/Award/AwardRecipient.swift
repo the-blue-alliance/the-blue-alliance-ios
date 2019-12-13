@@ -113,7 +113,10 @@ extension AwardRecipient {
 extension AwardRecipient: Orphanable {
 
     public var isOrphaned: Bool {
-        return awards.count == 0
+        guard let awardsMany = awardsMany else {
+            return true
+        }
+        return awardsMany.count == 0
     }
 
 }

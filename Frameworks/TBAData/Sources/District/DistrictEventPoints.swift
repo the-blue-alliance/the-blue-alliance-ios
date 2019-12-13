@@ -5,6 +5,10 @@ import TBAKit
 @objc(DistrictEventPoints)
 public class DistrictEventPoints: NSManagedObject {
 
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<DistrictEventPoints> {
+        return NSFetchRequest<DistrictEventPoints>(entityName: DistrictEventPoints.entityName)
+    }
+
     public var alliancePoints: Int {
         guard let alliancePoints = alliancePointsNumber?.intValue else {
             fatalError("Save DistrictEventPoints before accessing alliancePoints")
@@ -44,6 +48,13 @@ public class DistrictEventPoints: NSManagedObject {
         return total
     }
 
+    @NSManaged private var alliancePointsNumber: NSNumber?
+    @NSManaged private var awardPointsNumber: NSNumber?
+    @NSManaged private var districtCMPNumber: NSNumber?
+    @NSManaged private var elimPointsNumber: NSNumber?
+    @NSManaged private var qualPointsNumber: NSNumber?
+    @NSManaged private var totalNumber: NSNumber?
+
     public var event: Event {
         guard let event = eventOne else {
             fatalError("Save DistrictEventPoints before accessing event")
@@ -58,16 +69,6 @@ public class DistrictEventPoints: NSManagedObject {
         return team
     }
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<DistrictEventPoints> {
-        return NSFetchRequest<DistrictEventPoints>(entityName: DistrictEventPoints.entityName)
-    }
-
-    @NSManaged private var alliancePointsNumber: NSNumber?
-    @NSManaged private var awardPointsNumber: NSNumber?
-    @NSManaged private var districtCMPNumber: NSNumber?
-    @NSManaged private var elimPointsNumber: NSNumber?
-    @NSManaged private var qualPointsNumber: NSNumber?
-    @NSManaged private var totalNumber: NSNumber?
     @NSManaged public private(set) var districtRanking: DistrictRanking?
     @NSManaged private var eventOne: Event?
     @NSManaged private var teamOne: Team?
@@ -94,8 +95,7 @@ extension DistrictEventPoints: Managed {
     public static func insert(_ points: [TBADistrictEventPoints], eventKey: String, in context: NSManagedObjectContext) {
         // Fetch all of the previous DistrictEventPoints for this Event
         let oldPoints = DistrictEventPoints.fetch(in: context) {
-            $0.predicate = NSPredicate(format: "%K == %@",
-                                       #keyPath(DistrictEventPoints.eventOne.keyString), eventKey)
+            $0.predicate = DistrictEventPoints.eventPredicate(eventKey: eventKey)
         }
 
         // Insert new DistrictEventPoints for this Event

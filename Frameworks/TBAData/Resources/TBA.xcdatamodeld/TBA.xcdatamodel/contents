@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="18G1012" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Award" representedClassName="Award" syncable="YES">
-        <attribute name="awardTypeNumber" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="awardTypeNumber" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="nameString" attributeType="String"/>
-        <attribute name="yearNumber" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="yearNumber" attributeType="Integer 64" usesScalarValueType="NO"/>
         <relationship name="eventOne" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="awardsMany" inverseEntity="Event"/>
         <relationship name="recipientsMany" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="AwardRecipient" inverseName="awardsMany" inverseEntity="AwardRecipient"/>
     </entity>
@@ -16,26 +16,26 @@
         <attribute name="abbreviationString" attributeType="String"/>
         <attribute name="keyString" attributeType="String"/>
         <attribute name="nameString" attributeType="String"/>
-        <attribute name="yearNumber" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="yearNumber" attributeType="Integer 64" usesScalarValueType="NO"/>
         <relationship name="eventsMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="district" inverseEntity="Event"/>
         <relationship name="rankingsMany" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DistrictRanking" inverseName="districtOne" inverseEntity="DistrictRanking"/>
         <relationship name="teamsMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="districtsMany" inverseEntity="Team"/>
     </entity>
     <entity name="DistrictEventPoints" representedClassName="DistrictEventPoints" syncable="YES">
-        <attribute name="alliancePointsNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
-        <attribute name="awardPointsNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="alliancePointsNumber" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="awardPointsNumber" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="districtCMPNumber" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
-        <attribute name="elimPointsNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
-        <attribute name="qualPointsNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
-        <attribute name="totalNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="elimPointsNumber" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="qualPointsNumber" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="totalNumber" attributeType="Integer 64" usesScalarValueType="NO"/>
         <relationship name="districtRanking" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="DistrictRanking" inverseName="eventPointsMany" inverseEntity="DistrictRanking"/>
         <relationship name="eventOne" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="pointsMany" inverseEntity="Event"/>
         <relationship name="teamOne" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="eventPointsMany" inverseEntity="Team"/>
     </entity>
     <entity name="DistrictRanking" representedClassName="DistrictRanking" syncable="YES">
-        <attribute name="pointTotalNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
-        <attribute name="rankNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
-        <attribute name="rookieBonusNumber" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="pointTotalNumber" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="rankNumber" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="rookieBonusNumber" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <relationship name="districtOne" maxCount="1" deletionRule="Nullify" destinationEntity="District" inverseName="rankingsMany" inverseEntity="District"/>
         <relationship name="eventPointsMany" toMany="YES" deletionRule="Cascade" destinationEntity="DistrictEventPoints" inverseName="districtRanking" inverseEntity="DistrictEventPoints"/>
         <relationship name="teamOne" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="districtRankingsMany" inverseEntity="Team"/>
