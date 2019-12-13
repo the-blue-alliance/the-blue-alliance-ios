@@ -345,11 +345,10 @@ extension Event: Managed {
             return
         }
 
-        // Fetch all of the previous Awards for this Event/TeamKey
-        let oldAwards = Award.fetch(in: managedObjectContext) {
-            // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
-            $0.predicate = NSPredicate(format: "SUBQUERY(%K, $r, $r.team.keyString == %@).@count == 1",
-                                       #keyPath(Award.recipientsMany), teamKey)
+        // Fetch all of the previous Awards for this Team at this Event
+        let teamPredicate = Award.teamPredicate(teamKey: teamKey)
+        let oldAwards = self.awards.filter {
+            return teamPredicate.evaluate(with: $0)
         }
 
         // Insert new Awards
@@ -360,9 +359,9 @@ extension Event: Managed {
         })
 
         // Delete orphaned Awards for this Event/TeamKey
-        Set(oldAwards).subtracting(Set(awards)).forEach({
+        Set(oldAwards).subtracting(Set(awards)).forEach {
             managedObjectContext.delete($0)
-        })
+        }
     }
 
     /**

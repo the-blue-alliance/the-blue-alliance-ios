@@ -6,6 +6,10 @@ import TBAUtils
 @objc(Award)
 public class Award: NSManagedObject {
 
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Award> {
+        return NSFetchRequest<Award>(entityName: Award.entityName)
+    }
+
     public var awardType: Int {
         guard let awardType = awardTypeNumber?.intValue else {
             fatalError("Save Award before accessing awardType")
@@ -27,6 +31,10 @@ public class Award: NSManagedObject {
         return year
     }
 
+    @NSManaged private var awardTypeNumber: NSNumber?
+    @NSManaged private var nameString: String?
+    @NSManaged private var yearNumber: NSNumber?
+
     public var event: Event {
         guard let event = eventOne else {
             fatalError("Save Award before accessing event")
@@ -42,15 +50,8 @@ public class Award: NSManagedObject {
         return recipients
     }
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Award> {
-        return NSFetchRequest<Award>(entityName: Award.entityName)
-    }
-
-    @NSManaged private var awardTypeNumber: NSNumber?
-    @NSManaged private var nameString: String?
-    @NSManaged private var yearNumber: NSNumber?
     @NSManaged private var eventOne: Event?
-    @NSManaged internal private(set) var recipientsMany: NSSet?
+    @NSManaged private var recipientsMany: NSSet?
 
 }
 
@@ -70,9 +71,9 @@ extension Award: Managed {
      - Returns: The inserted Award.
      */
     public static func insert(_ model: TBAAward, in context: NSManagedObjectContext) -> Award {
-        let predicate = NSPredicate(format: "%K == %@ && %K == %@ && %K == %@",
-                                    #keyPath(Award.awardTypeNumber), model.awardType as NSNumber,
-                                    #keyPath(Award.yearNumber), model.year as NSNumber,
+        let predicate = NSPredicate(format: "%K == %ld && %K == %ld && %K == %@",
+                                    #keyPath(Award.awardTypeNumber), model.awardType,
+                                    #keyPath(Award.yearNumber), model.year,
                                     #keyPath(Award.eventOne.keyString), model.eventKey)
 
         return findOrCreate(in: context, matching: predicate) { (award) in
@@ -105,20 +106,24 @@ extension Award: Managed {
 
 extension Award {
 
-    public static func typeSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(Award.awardTypeNumber), ascending: true)
+    public static func eventPredicate(eventKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Award.eventOne.keyString), eventKey)
+    }
+
+    public static func teamPredicate(teamKey: String) -> NSPredicate {
+        return NSPredicate(format: "(ANY %K == %@)",
+                           #keyPath(Award.recipientsMany.team.keyString), teamKey)
     }
 
     public static func teamEventPredicate(team: Team, event: Event) -> NSPredicate {
-        // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/pull/169
-        let teamPredicate = NSPredicate(format: "(ANY recipients.team.keyString == %@)", team.key)
-        let eventPredicate = Award.eventPredicate(event: event)
+        let teamPredicate = Award.teamPredicate(teamKey: team.key)
+        let eventPredicate = Award.eventPredicate(eventKey: event.key)
         return NSCompoundPredicate(andPredicateWithSubpredicates: [eventPredicate, teamPredicate])
     }
 
-    public static func eventPredicate(event: Event) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(Award.eventOne), event)
+    public static func typeSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(Award.awardTypeNumber), ascending: true)
     }
 
 }
