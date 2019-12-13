@@ -5,6 +5,12 @@ import TBAKit
 @objc(AwardRecipient)
 public class AwardRecipient: NSManagedObject {
 
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<AwardRecipient> {
+        return NSFetchRequest<AwardRecipient>(entityName: AwardRecipient.entityName)
+    }
+
+    @NSManaged public private(set) var awardee: String?
+
     public var awards: [Award] {
         guard let awardsMany = awardsMany, let awards = awardsMany.allObjects as? [Award] else {
             fatalError("Save AwardRecipient before accessing awards")
@@ -12,11 +18,6 @@ public class AwardRecipient: NSManagedObject {
         return awards
     }
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<AwardRecipient> {
-        return NSFetchRequest<AwardRecipient>(entityName: AwardRecipient.entityName)
-    }
-
-    @NSManaged public private(set) var awardee: String?
     @NSManaged private var awardsMany: NSSet?
     @NSManaged public private(set) var team: Team?
 
