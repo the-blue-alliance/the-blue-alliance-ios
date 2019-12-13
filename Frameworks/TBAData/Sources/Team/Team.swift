@@ -10,61 +10,81 @@ public class Team: NSManagedObject {
         return NSFetchRequest<Team>(entityName: "Team")
     }
 
-    @NSManaged public fileprivate(set) var address: String?
-    @NSManaged public fileprivate(set) var city: String?
-    @NSManaged public fileprivate(set) var country: String?
-    @NSManaged public fileprivate(set) var gmapsPlaceID: String?
-    @NSManaged public fileprivate(set) var gmapsURL: String?
-    @NSManaged public fileprivate(set) var homeChampionship: [String: String]?
-    @NSManaged public fileprivate(set) var key: String
-    @NSManaged public fileprivate(set) var lat: NSNumber?
-    @NSManaged public fileprivate(set) var lng: NSNumber?
-    @NSManaged public fileprivate(set) var locationName: String?
-    @NSManaged public fileprivate(set) var name: String?
-    @NSManaged public fileprivate(set) var nickname: String?
-    @NSManaged public fileprivate(set) var postalCode: String?
-    @NSManaged public fileprivate(set) var rookieYear: NSNumber?
-    @NSManaged public fileprivate(set) var stateProv: String?
-    @NSManaged public fileprivate(set) var teamNumber: Int64
-    @NSManaged public fileprivate(set) var website: String?
-    @NSManaged public fileprivate(set) var yearsParticipated: [Int]?
-    @NSManaged public fileprivate(set) var alliances: NSSet?
-    @NSManaged public fileprivate(set) var awards: NSSet?
-    @NSManaged public fileprivate(set) var declinedAlliances: NSSet?
-    @NSManaged public fileprivate(set) var districtRankings: NSSet?
-    @NSManaged public fileprivate(set) var districts: NSSet?
-    @NSManaged public fileprivate(set) var dqAlliances: NSSet?
-    @NSManaged public fileprivate(set) var eventPoints: NSSet?
-    @NSManaged public fileprivate(set) var eventRankings: NSSet?
-    @NSManaged public fileprivate(set) var events: NSSet?
-    @NSManaged public fileprivate(set) var eventStatuses: NSSet?
-    @NSManaged public fileprivate(set) var inBackupAlliances: NSSet?
-    @NSManaged public fileprivate(set) var media: NSSet?
-    @NSManaged public fileprivate(set) var outBackupAlliances: NSSet?
-    @NSManaged public fileprivate(set) var pickedAlliances: NSSet?
-    @NSManaged public fileprivate(set) var stats: NSSet?
-    @NSManaged public fileprivate(set) var surrogateAlliances: NSSet?
+    public var key: String {
+        guard let key = keyString else {
+            fatalError("Save Team before accessing key")
+        }
+        return key
+    }
+
+    public var lat: Double? {
+        return latNumber?.doubleValue
+    }
+
+    public var lng: Double? {
+        return lngNumber?.doubleValue
+    }
+
+    public var rookieYear: Int? {
+        return rookieYearNumber?.intValue
+    }
+
+    public var teamNumber: Int {
+        return Int(teamNumberNumber)
+    }
+
+    @NSManaged public private(set) var address: String?
+    @NSManaged public private(set) var city: String?
+    @NSManaged public private(set) var country: String?
+    @NSManaged public private(set) var gmapsPlaceID: String?
+    @NSManaged public private(set) var gmapsURL: String?
+    @NSManaged public private(set) var homeChampionship: [String: String]?
+    @NSManaged internal private(set) var keyString: String?
+    @NSManaged private var latNumber: NSNumber?
+    @NSManaged private var lngNumber: NSNumber?
+    @NSManaged public private(set) var locationName: String?
+    @NSManaged public private(set) var name: String?
+    @NSManaged public private(set) var nickname: String?
+    @NSManaged public private(set) var postalCode: String?
+    @NSManaged private var rookieYearNumber: NSNumber?
+    @NSManaged public private(set) var stateProv: String?
+    @NSManaged private var teamNumberNumber: Int64
+    @NSManaged public private(set) var website: String?
+    @NSManaged public private(set) var yearsParticipated: [Int]?
+
+    @NSManaged private var alliancesMany: NSSet?
+    @NSManaged private var awardsMany: NSSet?
+    @NSManaged private var declinedAlliancesMany: NSSet?
+    @NSManaged private var districtRankingsMany: NSSet?
+    @NSManaged private var districtsMany: NSSet?
+    @NSManaged private var dqAlliancesMany: NSSet?
+    @NSManaged private var eventPointsMany: NSSet?
+    @NSManaged private var eventRankingsMany: NSSet?
+    @NSManaged private var eventsMany: NSSet?
+    @NSManaged private var eventStatusesMany: NSSet?
+    @NSManaged private var inBackupAlliancesMany: NSSet?
+    @NSManaged private var mediaMany: NSSet?
+    @NSManaged private var outBackupAlliancesMany: NSSet?
+    @NSManaged private var pickedAlliancesMany: NSSet?
+    @NSManaged private var statsMany: NSSet?
+    @NSManaged private var surrogateAlliancesMany: NSSet?
 
 }
 
 // MARK: Generated accessors for media
 extension Team {
 
-    @objc(addMediaObject:)
-    @NSManaged fileprivate func addToMedia(_ value: TeamMedia)
-
-    @objc(removeMediaObject:)
-    @NSManaged fileprivate func removeFromMedia(_ value: TeamMedia)
-
     @objc(addMedia:)
-    @NSManaged fileprivate func addToMedia(_ values: NSSet)
-
-    @objc(removeMedia:)
-    @NSManaged fileprivate func removeFromMedia(_ values: NSSet)
+    @NSManaged private func addToMediaMany(_ values: NSSet)
 
 }
 
 extension Team: Managed {
+
+    public static func predicate(key: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Team.keyString), key)
+    }
 
     /**
      Insert Teams for a page with values from TBAKit Team models in to the managed object context.
@@ -88,8 +108,8 @@ extension Team: Managed {
         // Fetch all of the previous Teams for this page
         let oldTeams = Team.fetch(in: context) {
             $0.predicate = NSPredicate(format: "%K >= %ld AND %K < %ld",
-                                       #keyPath(Team.teamNumber), (page * 500),
-                                       #keyPath(Team.teamNumber), ((page + 1) * 500))
+                                       #keyPath(Team.teamNumberNumber), (page * 500),
+                                       #keyPath(Team.teamNumberNumber), ((page + 1) * 500))
         }
 
         // Insert new Teams for this page
@@ -116,11 +136,11 @@ extension Team: Managed {
         let predicate = Team.predicate(key: key)
         return findOrCreate(in: context, matching: predicate) { (team) in
             // Required: key, teamNumber
-            team.key = key
+            team.keyString = key
 
             let teamNumberString = Team.trimFRCPrefix(key)
             if let teamNumber = Int64(teamNumberString) {
-                team.teamNumber = teamNumber
+                team.teamNumberNumber = teamNumber
             }
         }
     }
@@ -146,14 +166,14 @@ extension Team: Managed {
             team.gmapsPlaceID = model.gmapsPlaceID
             team.gmapsURL = model.gmapsURL
             team.homeChampionship = model.homeChampionship
-            team.key = model.key
-            team.lat = {
+            team.keyString = model.key
+            team.latNumber = {
                 if let lat = model.lat {
                     return NSNumber(value: lat)
                 }
                 return nil
             }()
-            team.lng = {
+            team.lngNumber = {
                 if let lng = model.lng {
                     return NSNumber(value: lng)
                 }
@@ -163,9 +183,9 @@ extension Team: Managed {
             team.name = model.name
             team.nickname = model.nickname
             team.postalCode = model.postalCode
-            team.rookieYear = NSNumber(value: model.rookieYear)
+            team.rookieYearNumber = NSNumber(value: model.rookieYear)
             team.stateProv = model.stateProv
-            team.teamNumber = Int64(model.teamNumber)
+            team.teamNumberNumber = Int64(model.teamNumber)
             team.website = model.website
             team.homeChampionship = model.homeChampionship
         }
@@ -183,7 +203,7 @@ extension Team: Managed {
             return
         }
 
-        self.events = NSSet(array: events.map {
+        self.eventsMany = NSSet(array: events.map {
             return Event.insert($0, in: managedObjectContext)
         })
     }
@@ -209,9 +229,7 @@ extension Team: Managed {
 
         // Fetch all of the previous TeamMedia for this Team and year
         let oldMedia = TeamMedia.fetch(in: managedObjectContext) {
-            $0.predicate = NSPredicate(format: "%K == %@ AND %K == %ld",
-                                       #keyPath(TeamMedia.team.key), key,
-                                       #keyPath(TeamMedia.year), year)
+            $0.predicate = TeamMedia.prediate(teamKey: key, year: year)
         }
 
 
@@ -219,7 +237,7 @@ extension Team: Managed {
         let media = media.map {
             return TeamMedia.insert($0, year: year, in: managedObjectContext)
         }
-        addToMedia(NSSet(array: media))
+        addToMediaMany(NSSet(array: media))
 
         // Delete orphaned TeamMedia for this Event
         Set(oldMedia).subtracting(Set(media)).forEach({
@@ -253,21 +271,14 @@ extension Team {
         return key.trimPrefix("frc").uppercased()
     }
 
-    public static func predicate(key: String) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(Team.key), key)
-    }
-
     /**
      Returns an NSPredicate for full Team objects - aka, they have all required API fields.
      This includes key, name, teamNumber, rookieYear
      */
     public static func populatedTeamsPredicate() -> NSPredicate {
-        var keys = [#keyPath(Team.key),
+        var keys = [#keyPath(Team.keyString),
                     #keyPath(Team.name),
-                    #keyPath(Team.teamNumber),
-                    #keyPath(Team.rookieYear)]
-        // TODO: year?
+                    #keyPath(Team.rookieYearNumber)]
         let format = keys.map {
             return String("\($0) != nil")
         }.joined(separator: " && ")
@@ -287,7 +298,8 @@ extension Team {
 extension Team: MyTBASubscribable {
 
     public var modelKey: String {
-        return getValue(\Team.key)
+        // TODO: Confirm these access are thread safe
+        return key
     }
 
     public var modelType: MyTBAModelType {

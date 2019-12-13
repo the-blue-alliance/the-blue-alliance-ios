@@ -123,7 +123,7 @@ extension DistrictEventPoints: Managed {
     public static func insert(_ model: TBADistrictEventPoints, in context: NSManagedObjectContext) -> DistrictEventPoints {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
                                     #keyPath(DistrictEventPoints.eventOne.key), model.eventKey,
-                                    #keyPath(DistrictEventPoints.teamOne.key), model.teamKey)
+                                    #keyPath(DistrictEventPoints.teamOne.keyString), model.teamKey)
 
         return findOrCreate(in: context, matching: predicate) { (eventPoints) in
             eventPoints.teamOne = Team.insert(model.teamKey, in: context)

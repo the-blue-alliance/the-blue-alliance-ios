@@ -22,7 +22,7 @@ extension EventStatusAlliance: Managed {
     public static func insert(_ model: TBAEventStatusAlliance, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusAlliance {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
                                     #keyPath(EventStatusAlliance.eventStatus.event.key), eventKey,
-                                    #keyPath(EventStatusAlliance.eventStatus.team.key), teamKey)
+                                    #keyPath(EventStatusAlliance.eventStatus.team.keyString), teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (allianceStatus) in
             allianceStatus.number = Int16(model.number)

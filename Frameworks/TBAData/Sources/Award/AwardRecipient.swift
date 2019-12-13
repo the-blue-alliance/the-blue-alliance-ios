@@ -51,17 +51,17 @@ extension AwardRecipient: Managed {
             if let awardee = model.awardee, let teamKey = model.teamKey {
                 return NSPredicate(format: "%K == %@ AND %K == %@",
                                    #keyPath(AwardRecipient.awardee), awardee,
-                                   #keyPath(AwardRecipient.team.key), teamKey)
+                                   #keyPath(AwardRecipient.team.keyString), teamKey)
             } else if let teamKey = model.teamKey {
                 return NSPredicate(format: "%K == %@",
-                                   #keyPath(AwardRecipient.team.key), teamKey)
+                                   #keyPath(AwardRecipient.team.keyString), teamKey)
             } else if let awardee = model.awardee {
                 return NSPredicate(format: "%K == %@",
                                    #keyPath(AwardRecipient.awardee), awardee)
             } else {
                 return NSPredicate(format: "%K == nil AND %K == nil",
                                    #keyPath(AwardRecipient.awardee),
-                                   #keyPath(AwardRecipient.team.key))
+                                   #keyPath(AwardRecipient.team.keyString))
             }
         }
 

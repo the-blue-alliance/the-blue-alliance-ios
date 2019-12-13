@@ -27,7 +27,7 @@ extension EventStatusPlayoff: Managed {
                                     #keyPath(EventStatusPlayoff.alliance.event.key), eventKey,
                                     #keyPath(EventStatusPlayoff.alliance.picks), teamKey,
                                     #keyPath(EventStatusPlayoff.eventStatus.event.key), eventKey,
-                                    #keyPath(EventStatusPlayoff.eventStatus.team.key), teamKey)
+                                    #keyPath(EventStatusPlayoff.eventStatus.team.keyString), teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (statusPlayoff) in
             if let currentRecord = model.currentRecord {

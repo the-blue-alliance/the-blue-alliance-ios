@@ -5,6 +5,16 @@ import TBAKit
 @objc(TeamMedia)
 public class TeamMedia: NSManagedObject {
 
+    public var type: MediaType? {
+        guard let typeString = typeString else {
+            fatalError("Save TeamMedia before accessing type")
+        }
+        guard let type = MediaType(rawValue: typeString) else {
+            return nil
+        }
+        return type
+    }
+
     public var image: UIImage? {
         get {
             if let mediaData = mediaData {
@@ -28,20 +38,38 @@ public class TeamMedia: NSManagedObject {
         }
     }
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<TeamMedia> {
-        return NSFetchRequest<TeamMedia>(entityName: "TeamMedia")
+    public var preferred: Bool? {
+        return preferredNumber?.boolValue
     }
 
-    @NSManaged public fileprivate(set) var details: [String: Any]?
-    @NSManaged public fileprivate(set) var directURL: String?
-    @NSManaged public fileprivate(set) var foreignKey: String
+    public var year: Int {
+        guard let year = yearNumber?.intValue else {
+            fatalError("Save TeamMedia before accessing year")
+        }
+        return year
+    }
+
+    public var team: Team {
+        guard let team = teamOne else {
+            fatalError("Save TeamMedia before accessing team")
+        }
+        return team
+    }
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<TeamMedia> {
+        return NSFetchRequest<TeamMedia>(entityName: TeamMedia.entityName)
+    }
+
+    @NSManaged public private(set) var details: [String: Any]?
+    @NSManaged public private(set) var directURL: String?
+    @NSManaged public private(set) var foreignKey: String?
     @NSManaged private var mediaData: Data?
     @NSManaged private var mediaError: Error?
-    @NSManaged public fileprivate(set) var preferred: Bool
-    @NSManaged public fileprivate(set) var type: String
-    @NSManaged public fileprivate(set) var viewURL: String?
-    @NSManaged public fileprivate(set) var year: Int16
-    @NSManaged public fileprivate(set) var team: Team
+    @NSManaged private var preferredNumber: NSNumber?
+    @NSManaged public private(set) var typeString: String?
+    @NSManaged public private(set) var viewURL: String?
+    @NSManaged private var yearNumber: NSNumber?
+    @NSManaged private var teamOne: Team?
 
 }
 
@@ -114,18 +142,18 @@ extension TeamMedia: Managed {
     public static func insert(_ model: TBAMedia, year: Int, in context: NSManagedObjectContext) -> TeamMedia {
         var mediaPredicate = NSPredicate(format: "%K == %@ AND %K == %@",
                                          #keyPath(TeamMedia.foreignKey), model.foreignKey,
-                                         #keyPath(TeamMedia.type), model.type)
+                                         #keyPath(TeamMedia.typeString), model.type)
 
         let yearPredicate = NSPredicate(format: "%K == %ld",
-                                        #keyPath(TeamMedia.year), year)
+                                        #keyPath(TeamMedia.yearNumber), year)
 
         return findOrCreate(in: context, matching: NSCompoundPredicate(andPredicateWithSubpredicates: [mediaPredicate, yearPredicate])) { (media) in
             // Required: type, year, foreignKey
-            media.type = model.type
-            media.year = Int16(year)
+            media.typeString = model.type
+            media.yearNumber = NSNumber(value: year)
             media.foreignKey = model.foreignKey
             media.details = model.details
-            media.preferred = model.preferred ?? false
+            media.preferredNumber = NSNumber(value: model.preferred)
             media.viewURL = model.viewURL
             media.directURL = model.directURL
         }
@@ -134,6 +162,12 @@ extension TeamMedia: Managed {
 }
 
 extension TeamMedia {
+
+    public static func prediate(teamKey: String, year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %@ AND %K == %ld",
+                           #keyPath(TeamMedia.teamOne.keyString), teamKey,
+                           #keyPath(TeamMedia.yearNumber), year)
+    }
 
     public var imageDirectURL: URL? {
         guard let directURL = getValue(\TeamMedia.directURL) else {
@@ -147,8 +181,8 @@ extension TeamMedia {
 extension TeamMedia: Playable {
 
     public var youtubeKey: String? {
-        if type == MediaType.youtubeVideo.rawValue {
-            return getValue(\TeamMedia.foreignKey)
+        if type == .youtubeVideo {
+            return foreignKey
         }
         return nil
     }

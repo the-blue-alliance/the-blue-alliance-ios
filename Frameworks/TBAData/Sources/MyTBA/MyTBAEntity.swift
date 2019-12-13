@@ -76,7 +76,7 @@ extension MyTBAEntity {
             let predicate = NSPredicate(format: "%K == %@", #keyPath(Event.key), modelKey)
             return Event.findOrFetch(in: managedObjectContext, matching: predicate)
         case .team:
-            let predicate = NSPredicate(format: "%K == %@", #keyPath(Team.key), modelKey)
+            let predicate = NSPredicate(format: "%K == %@", #keyPath(Team.keyString), modelKey)
             return Team.findOrFetch(in: managedObjectContext, matching: predicate)
         case .match:
             let predicate = NSPredicate(format: "%K == %@", #keyPath(Match.keyString), modelKey)
