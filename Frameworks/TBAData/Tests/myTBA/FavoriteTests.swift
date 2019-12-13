@@ -104,12 +104,6 @@ class FavoriteTestCase: TBADataTestCase {
         XCTAssertEqual(favoriteTeamKeys, ["frc7332"])
     }
 
-    func test_toRemoteModel() {
-        let model = MyTBAFavorite(modelKey: "2018miket", modelType: .event)
-        let favorite = Favorite.insert(model, in: persistentContainer.viewContext)
-        XCTAssertEqual(model, favorite.toRemoteModel())
-    }
-
     func test_isOrphaned() {
         let favorite = Favorite.init(entity: Favorite.entity(), insertInto: persistentContainer.viewContext)
         // Favorite should never be orphaned

@@ -108,18 +108,12 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
         let fetchRequest = NSFetchRequest<T>(entityName: T.entityName)
 
         // Only show supported myTBA entities (basically, exclude team@event)
-        fetchRequest.predicate = NSPredicate(format: "%K IN %@",
-                                             #keyPath(MyTBAEntity.modelTypeRaw),
-                                             [MyTBAModelType.event, MyTBAModelType.team, MyTBAModelType.match].map({ $0.rawValue }))
-
-        fetchRequest.sortDescriptors = [
-            NSSortDescriptor(key: #keyPath(MyTBAEntity.modelTypeRaw), ascending: true),
-            NSSortDescriptor(key: #keyPath(MyTBAEntity.modelKey), ascending: true)
-        ]
+        fetchRequest.predicate = T.supportedModelTypePredicate()
+        fetchRequest.sortDescriptors = T.sortDescriptors()
 
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                               managedObjectContext: persistentContainer.viewContext,
-                                                              sectionNameKeyPath: #keyPath(MyTBAEntity.modelTypeRaw),
+                                                              sectionNameKeyPath: T.modelTypeKeyPath(),
                                                               cacheName: nil)
         fetchedResultsController!.delegate = self
         try! fetchedResultsController!.performFetch()

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15508" systemVersion="18G1012" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="18E226" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Award" representedClassName="Award" syncable="YES">
         <attribute name="awardTypeNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
         <attribute name="nameString" attributeType="String"/>
         <attribute name="yearNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
-        <relationship name="eventOne" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="awards" inverseEntity="Event"/>
+        <relationship name="eventOne" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="awardsMany" inverseEntity="Event"/>
         <relationship name="recipientsMany" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="AwardRecipient" inverseName="awardsMany" inverseEntity="AwardRecipient"/>
     </entity>
     <entity name="AwardRecipient" representedClassName="AwardRecipient" syncable="YES">
@@ -29,7 +29,7 @@
         <attribute name="qualPointsNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
         <attribute name="totalNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
         <relationship name="districtRanking" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="DistrictRanking" inverseName="eventPointsMany" inverseEntity="DistrictRanking"/>
-        <relationship name="eventOne" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="points" inverseEntity="Event"/>
+        <relationship name="eventOne" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="pointsMany" inverseEntity="Event"/>
         <relationship name="teamOne" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="eventPointsMany" inverseEntity="Team"/>
     </entity>
     <entity name="DistrictRanking" representedClassName="DistrictRanking" syncable="YES">
@@ -46,19 +46,19 @@
         <attribute name="country" optional="YES" attributeType="String"/>
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="eventCode" optional="YES" attributeType="String"/>
-        <attribute name="eventType" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="eventTypeNumber" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
         <attribute name="eventTypeString" optional="YES" attributeType="String"/>
         <attribute name="firstEventCode" optional="YES" attributeType="String"/>
         <attribute name="firstEventID" optional="YES" attributeType="String"/>
         <attribute name="gmapsPlaceID" optional="YES" attributeType="String"/>
         <attribute name="gmapsURL" optional="YES" attributeType="String"/>
         <attribute name="hybridType" optional="YES" attributeType="String"/>
-        <attribute name="key" attributeType="String"/>
-        <attribute name="lat" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
-        <attribute name="lng" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="keyString" attributeType="String"/>
+        <attribute name="latNumber" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="lngNumber" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="locationName" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="playoffType" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="playoffTypeNumber" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
         <attribute name="playoffTypeString" optional="YES" attributeType="String"/>
         <attribute name="postalCode" optional="YES" attributeType="String"/>
         <attribute name="shortName" optional="YES" attributeType="String"/>
@@ -66,39 +66,39 @@
         <attribute name="stateProv" optional="YES" attributeType="String"/>
         <attribute name="timezone" optional="YES" attributeType="String"/>
         <attribute name="website" optional="YES" attributeType="String"/>
-        <attribute name="week" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
-        <attribute name="year" attributeType="Integer 16" minValueString="1992" usesScalarValueType="YES"/>
-        <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="EventAlliance" inverseName="event" inverseEntity="EventAlliance"/>
-        <relationship name="awards" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Award" inverseName="eventOne" inverseEntity="Award"/>
+        <attribute name="weekNumber" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="yearNumber" attributeType="Integer 16" minValueString="1992" usesScalarValueType="NO"/>
+        <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="EventAlliance" inverseName="eventOne" inverseEntity="EventAlliance"/>
+        <relationship name="awardsMany" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Award" inverseName="eventOne" inverseEntity="Award"/>
         <relationship name="district" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="District" inverseName="eventsMany" inverseEntity="District"/>
-        <relationship name="divisions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="parentEvent" inverseEntity="Event"/>
+        <relationship name="divisionsMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="parentEvent" inverseEntity="Event"/>
         <relationship name="insights" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="EventInsights" inverseName="event" inverseEntity="EventInsights"/>
-        <relationship name="matches" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Match" inverseName="eventOne" inverseEntity="Match"/>
-        <relationship name="parentEvent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="divisions" inverseEntity="Event"/>
-        <relationship name="points" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictEventPoints" inverseName="eventOne" inverseEntity="DistrictEventPoints"/>
-        <relationship name="rankings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventRanking" inverseName="event" inverseEntity="EventRanking"/>
-        <relationship name="stats" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventTeamStat" inverseName="event" inverseEntity="EventTeamStat"/>
+        <relationship name="matchesMany" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Match" inverseName="eventOne" inverseEntity="Match"/>
+        <relationship name="parentEvent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="divisionsMany" inverseEntity="Event"/>
+        <relationship name="pointsMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictEventPoints" inverseName="eventOne" inverseEntity="DistrictEventPoints"/>
+        <relationship name="rankingsMany" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventRanking" inverseName="event" inverseEntity="EventRanking"/>
+        <relationship name="statsMany" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventTeamStat" inverseName="event" inverseEntity="EventTeamStat"/>
         <relationship name="status" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Status" inverseName="downEventsMany" inverseEntity="Status"/>
-        <relationship name="statuses" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventStatus" inverseName="event" inverseEntity="EventStatus"/>
-        <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="eventsMany" inverseEntity="Team"/>
-        <relationship name="webcasts" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="Webcast" inverseName="events" inverseEntity="Webcast"/>
+        <relationship name="statusesMany" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EventStatus" inverseName="event" inverseEntity="EventStatus"/>
+        <relationship name="teamsMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="eventsMany" inverseEntity="Team"/>
+        <relationship name="webcastsMany" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="Webcast" inverseName="events" inverseEntity="Webcast"/>
         <fetchIndex name="byKeyIndex">
-            <fetchIndexElement property="key" type="Binary" order="ascending"/>
+            <fetchIndexElement property="keyString" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
     <entity name="EventAlliance" representedClassName="EventAlliance" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="backup" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventAllianceBackup" inverseName="alliances" inverseEntity="EventAllianceBackup"/>
+        <relationship name="backup" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventAllianceBackup" inverseName="alliancesMany" inverseEntity="EventAllianceBackup"/>
         <relationship name="declines" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="declinedAlliancesMany" inverseEntity="Team"/>
-        <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="alliances" inverseEntity="Event"/>
+        <relationship name="eventOne" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="alliances" inverseEntity="Event"/>
         <relationship name="picks" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="pickedAlliancesMany" inverseEntity="Team"/>
         <relationship name="status" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventStatusPlayoff" inverseName="alliance" inverseEntity="EventStatusPlayoff"/>
     </entity>
     <entity name="EventAllianceBackup" representedClassName="EventAllianceBackup" syncable="YES">
-        <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="EventAlliance" inverseName="backup" inverseEntity="EventAlliance"/>
+        <relationship name="alliancesMany" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="EventAlliance" inverseName="backup" inverseEntity="EventAlliance"/>
         <relationship name="allianceStatus" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventStatusAlliance" inverseName="backup" inverseEntity="EventStatusAlliance"/>
-        <relationship name="inTeam" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="inBackupAlliancesMany" inverseEntity="Team"/>
-        <relationship name="outTeam" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="outBackupAlliancesMany" inverseEntity="Team"/>
+        <relationship name="inTeamOne" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="inBackupAlliancesMany" inverseEntity="Team"/>
+        <relationship name="outTeamOne" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="outBackupAlliancesMany" inverseEntity="Team"/>
     </entity>
     <entity name="EventInsights" representedClassName="EventInsights" syncable="YES">
         <attribute name="playoff" optional="YES" attributeType="Transformable" customClassName="[String: Any]"/>
@@ -111,7 +111,7 @@
         <attribute name="qualAverage" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="rank" attributeType="Integer 16" usesScalarValueType="YES"/>
         <attribute name="record" optional="YES" attributeType="Transformable" customClassName="WLT"/>
-        <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="rankings" inverseEntity="Event"/>
+        <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="rankingsMany" inverseEntity="Event"/>
         <relationship name="extraStats" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="EventRankingStat" inverseName="extraStatsRanking" inverseEntity="EventRankingStat"/>
         <relationship name="extraStatsInfo" optional="YES" toMany="YES" deletionRule="Deny" ordered="YES" destinationEntity="EventRankingStatInfo" inverseName="extraStatsRankings" inverseEntity="EventRankingStatInfo"/>
         <relationship name="qualStatus" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventStatusQual" inverseName="ranking" inverseEntity="EventStatusQual"/>
@@ -137,7 +137,7 @@
         <attribute name="overallStatus" optional="YES" attributeType="String"/>
         <attribute name="playoffStatus" optional="YES" attributeType="String"/>
         <relationship name="alliance" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="EventStatusAlliance" inverseName="eventStatus" inverseEntity="EventStatusAlliance"/>
-        <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="statuses" inverseEntity="Event"/>
+        <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="statusesMany" inverseEntity="Event"/>
         <relationship name="playoff" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventStatusPlayoff" inverseName="eventStatus" inverseEntity="EventStatusPlayoff"/>
         <relationship name="qual" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="EventStatusQual" inverseName="eventStatus" inverseEntity="EventStatusQual"/>
         <relationship name="team" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="eventStatusesMany" inverseEntity="Team"/>
@@ -168,7 +168,7 @@
         <attribute name="ccwm" attributeType="Double" usesScalarValueType="YES"/>
         <attribute name="dpr" attributeType="Double" usesScalarValueType="YES"/>
         <attribute name="opr" attributeType="Double" usesScalarValueType="YES"/>
-        <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="stats" inverseEntity="Event"/>
+        <relationship name="event" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="statsMany" inverseEntity="Event"/>
         <relationship name="team" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="statsMany" inverseEntity="Team"/>
     </entity>
     <entity name="Favorite" representedClassName="Favorite" parentEntity="MyTBAEntity" syncable="YES"/>
@@ -185,7 +185,7 @@
         <attribute name="timeNumber" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="winningAlliance" optional="YES" attributeType="String"/>
         <relationship name="alliancesMany" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MatchAlliance" inverseName="matchOne" inverseEntity="MatchAlliance"/>
-        <relationship name="eventOne" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="matches" inverseEntity="Event"/>
+        <relationship name="eventOne" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="matchesMany" inverseEntity="Event"/>
         <relationship name="videosMany" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="MatchVideo" inverseName="matchesMany" inverseEntity="MatchVideo"/>
     </entity>
     <entity name="MatchAlliance" representedClassName="MatchAlliance" syncable="YES">
@@ -202,8 +202,8 @@
         <relationship name="matchesMany" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="Match" inverseName="videosMany" inverseEntity="Match"/>
     </entity>
     <entity name="MyTBAEntity" representedClassName="MyTBAEntity" syncable="YES">
-        <attribute name="modelKey" attributeType="String"/>
-        <attribute name="modelTypeRaw" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="modelKeyString" attributeType="String"/>
+        <attribute name="modelTypeNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
     </entity>
     <entity name="Status" representedClassName="Status" syncable="YES">
         <attribute name="currentSeasonNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
@@ -243,11 +243,11 @@
         <relationship name="dqAlliancesMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MatchAlliance" inverseName="dqTeams" inverseEntity="MatchAlliance"/>
         <relationship name="eventPointsMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DistrictEventPoints" inverseName="teamOne" inverseEntity="DistrictEventPoints"/>
         <relationship name="eventRankingsMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventRanking" inverseName="team" inverseEntity="EventRanking"/>
-        <relationship name="eventsMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="teams" inverseEntity="Event"/>
+        <relationship name="eventsMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="teamsMany" inverseEntity="Event"/>
         <relationship name="eventStatusesMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventStatus" inverseName="team" inverseEntity="EventStatus"/>
-        <relationship name="inBackupAlliancesMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventAllianceBackup" inverseName="inTeam" inverseEntity="EventAllianceBackup"/>
+        <relationship name="inBackupAlliancesMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventAllianceBackup" inverseName="inTeamOne" inverseEntity="EventAllianceBackup"/>
         <relationship name="mediaMany" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TeamMedia" inverseName="teamOne" inverseEntity="TeamMedia"/>
-        <relationship name="outBackupAlliancesMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventAllianceBackup" inverseName="outTeam" inverseEntity="EventAllianceBackup"/>
+        <relationship name="outBackupAlliancesMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventAllianceBackup" inverseName="outTeamOne" inverseEntity="EventAllianceBackup"/>
         <relationship name="pickedAlliancesMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventAlliance" inverseName="picks" inverseEntity="EventAlliance"/>
         <relationship name="statsMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventTeamStat" inverseName="team" inverseEntity="EventTeamStat"/>
         <relationship name="surrogateAlliancesMany" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MatchAlliance" inverseName="surrogateTeams" inverseEntity="MatchAlliance"/>
@@ -271,7 +271,7 @@
         <attribute name="channel" attributeType="String"/>
         <attribute name="file" optional="YES" attributeType="String"/>
         <attribute name="type" attributeType="String"/>
-        <relationship name="events" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="webcasts" inverseEntity="Event"/>
+        <relationship name="events" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="webcastsMany" inverseEntity="Event"/>
     </entity>
     <elements>
         <element name="Award" positionX="-54" positionY="135" width="128" height="118"/>

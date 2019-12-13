@@ -73,7 +73,7 @@ extension Award: Managed {
         let predicate = NSPredicate(format: "%K == %@ && %K == %@ && %K == %@",
                                     #keyPath(Award.awardTypeNumber), model.awardType as NSNumber,
                                     #keyPath(Award.yearNumber), model.year as NSNumber,
-                                    #keyPath(Award.eventOne.key), model.eventKey)
+                                    #keyPath(Award.eventOne.keyString), model.eventKey)
 
         return findOrCreate(in: context, matching: predicate) { (award) in
             // Required: awardType, event, name, year, recipients

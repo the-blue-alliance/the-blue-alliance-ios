@@ -61,11 +61,11 @@ class DistrictEventsViewController: EventsViewController {
     // MARK: - EventsViewControllerDataSourceConfiguration
 
     override var firstSortDescriptor: NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(Event.week), ascending: true)
+        return Event.weekSortDescriptor()
     }
 
     override var sectionNameKeyPath: String {
-        return #keyPath(Event.week)
+        return Event.weekKeyPath()
     }
 
     override var fetchRequestPredicate: NSPredicate {

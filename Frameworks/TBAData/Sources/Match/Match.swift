@@ -394,8 +394,7 @@ extension Match: Orphanable {
         }
 
         // Match is orphaned if it isn't associated with an Event and isn't associated with a myTBA object
-        let myTBAPredicate = NSPredicate(format: "%K == %@",
-                                         #keyPath(MyTBAEntity.modelKey), key)
+        let myTBAPredicate = MyTBAEntity.modelKeyPredicate(key: key)
         let myTBAObject = MyTBAEntity.findOrFetch(in: managedObjectContext, matching: myTBAPredicate)
 
         return eventOne == nil && myTBAObject == nil
@@ -407,7 +406,7 @@ extension Match: Orphanable {
 extension Match: MyTBASubscribable {
 
     public var modelKey: String {
-        return getValue(\Match.key)
+        return key
     }
 
     public var modelType: MyTBAModelType {

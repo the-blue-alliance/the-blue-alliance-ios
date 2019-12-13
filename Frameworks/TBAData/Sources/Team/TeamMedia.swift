@@ -190,7 +190,7 @@ extension TeamMedia {
     }
 
     public var imageDirectURL: URL? {
-        guard let directURL = getValue(\TeamMedia.directURL) else {
+        guard let directURL = directURL else {
             return nil
         }
         return URL(string: directURL)

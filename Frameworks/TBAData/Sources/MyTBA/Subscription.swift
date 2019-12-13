@@ -9,7 +9,7 @@ public class Subscription: MyTBAEntity {
         return NSFetchRequest<Subscription>(entityName: "Subscription")
     }
 
-    @NSManaged fileprivate var notificationsRaw: [String]
+    @NSManaged public var notificationsRaw: [String]?
 
 }
 
@@ -64,8 +64,8 @@ extension Subscription {
 
         return findOrCreate(in: context, matching: predicate) { (subscription) in
             // Required: key, type, notifications
-            subscription.modelKey = modelKey
-            subscription.modelType = modelType
+            subscription.modelKeyString = modelKey
+            subscription.modelTypeNumber = NSNumber(value: modelType.rawValue)
             subscription.notificationsRaw = notifications.map({ $0.rawValue })
         }
     }
@@ -76,7 +76,7 @@ extension Subscription {
 
     public var notifications: [NotificationType] {
         get {
-            return notificationsRaw.compactMap({ NotificationType(rawValue: $0) }) ?? []
+            return notificationsRaw?.compactMap({ NotificationType(rawValue: $0) }) ?? []
         }
         set {
             notificationsRaw = newValue.map({ $0.rawValue })
@@ -85,8 +85,8 @@ extension Subscription {
 
     fileprivate static func subscriptionPredicate(modelKey: String, modelType: MyTBAModelType) -> NSPredicate {
         return NSPredicate(format: "%K == %@ && %K == %ld",
-                           #keyPath(Subscription.modelKey), modelKey,
-                           #keyPath(Subscription.modelTypeRaw), modelType.rawValue)
+                           #keyPath(Subscription.modelKeyString), modelKey,
+                           #keyPath(Subscription.modelTypeNumber), modelType.rawValue)
     }
 
     public static func fetch(modelKey: String, modelType: MyTBAModelType, in context: NSManagedObjectContext) -> Subscription? {
@@ -96,10 +96,4 @@ extension Subscription {
 
 }
 
-extension Subscription: MyTBAManaged {
-
-    public func toRemoteModel() -> MyTBASubscription {
-        return MyTBASubscription(modelKey: modelKey, modelType: modelType, notifications: notifications)
-    }
-
-}
+extension Subscription: MyTBAManaged {}

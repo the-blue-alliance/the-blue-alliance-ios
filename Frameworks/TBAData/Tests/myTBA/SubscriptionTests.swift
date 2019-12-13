@@ -106,12 +106,6 @@ class SubscriptionTestCase: TBADataTestCase {
         XCTAssertNil(subscription)
     }
 
-    func test_toRemoteModel() {
-        let model = MyTBASubscription(modelKey: "2018miket", modelType: .event, notifications: [.awards])
-        let subscription = Subscription.insert(model, in: persistentContainer.viewContext)
-        XCTAssertEqual(model, subscription.toRemoteModel())
-    }
-
     func test_isOrphaned() {
         let subscription = Subscription.init(entity: Subscription.entity(), insertInto: persistentContainer.viewContext)
         // Subscription should never be orphaned

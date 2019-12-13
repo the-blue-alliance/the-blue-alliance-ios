@@ -5,12 +5,29 @@ import MyTBAKit
 @objc(MyTBAEntity)
 public class MyTBAEntity: NSManagedObject {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<MyTBAEntity> {
-        return NSFetchRequest<MyTBAEntity>(entityName: "MyTBAEntity")
+    public var modelKey: String {
+        guard let modelKey = modelKeyString else {
+            fatalError("Save MyTBAEntity before accessing modelKey")
+        }
+        return modelKey
     }
 
-    @NSManaged public internal(set) var modelKey: String
-    @NSManaged public internal(set) var modelTypeRaw: Int16
+    public var modelType: MyTBAModelType? {
+        guard let modelTypeInt = modelTypeNumber?.intValue else {
+            fatalError("Save MyTBAEntity before accessing modelType")
+        }
+        guard let modelType = MyTBAModelType(rawValue: modelTypeInt) else {
+            return nil
+        }
+        return modelType
+    }
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<MyTBAEntity> {
+        return NSFetchRequest<MyTBAEntity>(entityName: MyTBAEntity.entityName)
+    }
+
+    @NSManaged internal var modelKeyString: String?
+    @NSManaged internal var modelTypeNumber: NSNumber?
 
 }
 
@@ -21,23 +38,9 @@ public protocol MyTBAManaged: Managed {
     @discardableResult
     static func insert(_ models: [RemoteType], in context: NSManagedObjectContext) -> [MyType]
     static func fetch(modelKey: String, modelType: MyTBAModelType, in context: NSManagedObjectContext) -> MyType?
-
-    func toRemoteModel() -> RemoteType
 }
 
 extension MyTBAEntity: Managed {
-
-    public var modelType: MyTBAModelType {
-        get {
-            guard let modelType = MyTBAModelType(rawValue: Int(modelTypeRaw)) else {
-                fatalError("Unsupported myTBA model type \(modelTypeRaw)")
-            }
-            return modelType
-        }
-        set {
-            modelTypeRaw = Int16(newValue.rawValue)
-        }
-    }
 
     public override func prepareForDeletion() {
         super.prepareForDeletion()
@@ -48,9 +51,9 @@ extension MyTBAEntity: Managed {
 
         if modelType == .match {
             let matchObjects = MyTBAEntity.fetch(in: managedObjectContext) {
-                $0.predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                           #keyPath(MyTBAEntity.modelKey), modelKey,
-                                           #keyPath(MyTBAEntity.modelTypeRaw), modelTypeRaw)
+                $0.predicate = NSPredicate(format: "%K == %@ AND %K == %ld",
+                                           #keyPath(MyTBAEntity.modelKeyString), modelKey,
+                                           #keyPath(MyTBAEntity.modelTypeNumber), MyTBAModelType.match.rawValue)
             }
             if matchObjects.isEmpty, let match = Match.findOrFetch(in: managedObjectContext, matching: Match.predicate(key: modelKey)), match.event == nil {
                 // Match will become an orphan - delete
@@ -63,6 +66,28 @@ extension MyTBAEntity: Managed {
 
 extension MyTBAEntity {
 
+    public static func supportedModelTypePredicate() -> NSPredicate {
+        return NSPredicate(format: "%K IN %@",
+                           #keyPath(MyTBAEntity.modelTypeNumber),
+                           [MyTBAModelType.event, MyTBAModelType.team, MyTBAModelType.match].map({ $0.rawValue }))
+    }
+
+    public static func sortDescriptors() -> [NSSortDescriptor] {
+        return [
+            NSSortDescriptor(key: #keyPath(MyTBAEntity.modelTypeNumber), ascending: true),
+            NSSortDescriptor(key: #keyPath(MyTBAEntity.modelKeyString), ascending: true)
+        ]
+    }
+
+    public static func modelTypeKeyPath() -> String {
+        return #keyPath(MyTBAEntity.modelTypeNumber)
+    }
+
+    internal static func modelKeyPredicate(key: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(MyTBAEntity.modelKeyString), key)
+    }
+
     /**
      Get the corresponding object for this myTBA Entity, if it exists locally - a Event, Team, or Match
      */
@@ -73,14 +98,11 @@ extension MyTBAEntity {
 
         switch modelType {
         case .event:
-            let predicate = NSPredicate(format: "%K == %@", #keyPath(Event.key), modelKey)
-            return Event.findOrFetch(in: managedObjectContext, matching: predicate)
+            return Event.findOrFetch(in: managedObjectContext, matching: Event.predicate(key: modelKey))
         case .team:
-            let predicate = NSPredicate(format: "%K == %@", #keyPath(Team.keyString), modelKey)
-            return Team.findOrFetch(in: managedObjectContext, matching: predicate)
+            return Team.findOrFetch(in: managedObjectContext, matching: Team.predicate(key: modelKey))
         case .match:
-            let predicate = NSPredicate(format: "%K == %@", #keyPath(Match.keyString), modelKey)
-            return Match.findOrFetch(in: managedObjectContext, matching: predicate)
+            return Match.findOrFetch(in: managedObjectContext, matching: Match.predicate(key: modelKey))
         default:
             return nil
         }

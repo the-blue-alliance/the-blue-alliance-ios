@@ -126,20 +126,20 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
         let district = event.district
         let districtName = district?.name
 
-        let eventType = event.eventType!.intValue
+        let eventType = event.eventType!
         let eventTypeString = event.eventTypeString
 
         if event.isDistrictChampionshipEvent {
             guard let districtName = districtName, let eventTypeString = eventTypeString else {
                 return nil
             }
-            return eventType == EventType.districtChampionshipDivision.rawValue ? "\(districtName) \(eventTypeString)s" : "\(eventTypeString)s"
+            return eventType == .districtChampionshipDivision ? "\(districtName) \(eventTypeString)s" : "\(eventTypeString)s"
         } else if event.isChampionship {
             guard let eventTypeString = eventTypeString else {
                 return nil
             }
             // CMP Finals are already plural
-            return eventType == EventType.championshipFinals.rawValue ? eventTypeString : "\(eventTypeString)s"
+            return eventType == .championshipFinals ? eventTypeString : "\(eventTypeString)s"
         } else if let districtName = districtName {
             return "\(districtName) District Events"
         } else if event.isFoC {
@@ -163,11 +163,11 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
     // MARK: - EventsViewControllerDataSourceConfiguration
 
     var firstSortDescriptor: NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(Event.hybridType), ascending: true)
+        return Event.hybridTypeSortDescriptor()
     }
 
     var sectionNameKeyPath: String {
-        return #keyPath(Event.hybridType)
+        return Event.hybridTypeKeyPath()
     }
 
     var fetchRequestPredicate: NSPredicate {

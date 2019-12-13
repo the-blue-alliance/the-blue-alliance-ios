@@ -23,10 +23,10 @@ extension EventStatusPlayoff: Managed {
 
     public static func insert(_ model: TBAAllianceStatus, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusPlayoff {
         // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
-        let predicate = NSPredicate(format: "(%K == %@ AND SUBQUERY(%K, $pick, $pick.key == %@).@count == 1) OR (%K == %@ AND %K == %@)",
-                                    #keyPath(EventStatusPlayoff.alliance.event.key), eventKey,
+        let predicate = NSPredicate(format: "(%K == %@ AND SUBQUERY(%K, $pick, $pick.keyString == %@).@count == 1) OR (%K == %@ AND %K == %@)",
+                                    #keyPath(EventStatusPlayoff.alliance.eventOne.keyString), eventKey,
                                     #keyPath(EventStatusPlayoff.alliance.picks), teamKey,
-                                    #keyPath(EventStatusPlayoff.eventStatus.event.key), eventKey,
+                                    #keyPath(EventStatusPlayoff.eventStatus.event.keyString), eventKey,
                                     #keyPath(EventStatusPlayoff.eventStatus.team.keyString), teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (statusPlayoff) in

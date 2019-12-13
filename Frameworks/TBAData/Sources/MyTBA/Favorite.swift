@@ -62,8 +62,8 @@ extension Favorite {
 
         return findOrCreate(in: context, matching: predicate) { (favorite) in
             // Required: key, type
-            favorite.modelKey = modelKey
-            favorite.modelType = modelType
+            favorite.modelKeyString = modelKey
+            favorite.modelTypeNumber = NSNumber(value: modelType.rawValue)
         }
     }
 
@@ -73,8 +73,8 @@ extension Favorite {
 
     fileprivate static func favoritePredicate(modelKey: String, modelType: MyTBAModelType) -> NSPredicate {
         return NSPredicate(format: "%K == %@ && %K == %ld",
-                           #keyPath(Favorite.modelKey), modelKey,
-                           #keyPath(Favorite.modelTypeRaw), modelType.rawValue)
+                           #keyPath(Favorite.modelKeyString), modelKey,
+                           #keyPath(Favorite.modelTypeNumber), modelType.rawValue)
     }
 
     public static func fetch(modelKey: String, modelType: MyTBAModelType, in context: NSManagedObjectContext) -> Favorite? {
@@ -85,16 +85,10 @@ extension Favorite {
     public static func favoriteTeamKeys(in context: NSManagedObjectContext) -> [String] {
         return Favorite.fetch(in: context, configurationBlock: { (fetchRequest) in
             fetchRequest.predicate = NSPredicate(format: "%K == %ld",
-                                                 #keyPath(Favorite.modelTypeRaw), MyTBAModelType.team.rawValue)
+                                                 #keyPath(Favorite.modelTypeNumber), MyTBAModelType.team.rawValue)
         }).compactMap({ $0.modelKey })
     }
 
 }
 
-extension Favorite: MyTBAManaged {
-
-    public func toRemoteModel() -> MyTBAFavorite {
-        return MyTBAFavorite(modelKey: modelKey, modelType: modelType)
-    }
-
-}
+extension Favorite: MyTBAManaged {}

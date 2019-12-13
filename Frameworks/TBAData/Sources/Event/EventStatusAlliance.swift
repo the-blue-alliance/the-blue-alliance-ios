@@ -21,7 +21,7 @@ extension EventStatusAlliance: Managed {
 
     public static func insert(_ model: TBAEventStatusAlliance, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusAlliance {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(EventStatusAlliance.eventStatus.event.key), eventKey,
+                                    #keyPath(EventStatusAlliance.eventStatus.event.keyString), eventKey,
                                     #keyPath(EventStatusAlliance.eventStatus.team.keyString), teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (allianceStatus) in
@@ -39,7 +39,7 @@ extension EventStatusAlliance: Managed {
         super.prepareForDeletion()
 
         if let backup = backup {
-            if backup.alliances?.count == 0 && backup.allianceStatus == self {
+            if backup.alliances.count == 0 && backup.allianceStatus == self {
                 // AllianceBackup will become an orphan - delete
                 managedObjectContext?.delete(backup)
             } else {

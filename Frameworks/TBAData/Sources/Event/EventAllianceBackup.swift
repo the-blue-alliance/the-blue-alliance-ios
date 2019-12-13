@@ -9,27 +9,39 @@ public class EventAllianceBackup: NSManagedObject {
         return NSFetchRequest<EventAllianceBackup>(entityName: "EventAllianceBackup")
     }
 
-    @NSManaged public fileprivate(set) var alliances: NSSet?
+    var alliances: [EventAlliance] {
+        guard let alliancesMany = alliancesMany, let alliances = alliancesMany.allObjects as? [EventAlliance] else {
+            return []
+        }
+        return alliances
+    }
+
+    var inTeam: Team {
+        guard let inTeam = inTeamOne else {
+            fatalError("Save EventAllianceBackup before accessing inTeam")
+        }
+        return inTeam
+    }
+
+    var outTeam: Team {
+        guard let outTeam = outTeamOne else {
+            fatalError("Save EventAllianceBackup before accessing outTeam")
+        }
+        return outTeam
+    }
+
+    @NSManaged private var alliancesMany: NSSet?
     @NSManaged public internal(set) var allianceStatus: EventStatusAlliance?
-    @NSManaged public fileprivate(set) var inTeam: Team
-    @NSManaged public fileprivate(set) var outTeam: Team
+    @NSManaged private var inTeamOne: Team?
+    @NSManaged private var outTeamOne: Team?
 
 }
 
-// MARK: Generated accessors for alliances
+// MARK: Generated accessors for alliancesMany
 extension EventAllianceBackup {
 
-    @objc(addAlliancesObject:)
-    @NSManaged private func addToAlliances(_ value: EventAlliance)
-
-    @objc(removeAlliancesObject:)
-    @NSManaged internal func removeFromAlliances(_ value: EventAlliance)
-
-    @objc(addAlliances:)
-    @NSManaged private func addToAlliances(_ values: NSSet)
-
-    @objc(removeAlliances:)
-    @NSManaged private func removeFromAlliances(_ values: NSSet)
+    @objc(removeAlliancesManyObject:)
+    @NSManaged internal func removeFromAlliancesMany(_ value: EventAlliance)
 
 }
 
@@ -48,12 +60,12 @@ extension EventAllianceBackup: Managed {
      */
     public static func insert(_ model: TBAAllianceBackup, in context: NSManagedObjectContext) -> EventAllianceBackup {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(EventAllianceBackup.inTeam.keyString), model.teamIn,
-                                    #keyPath(EventAllianceBackup.outTeam.keyString), model.teamOut)
+                                    #keyPath(EventAllianceBackup.inTeamOne.keyString), model.teamIn,
+                                    #keyPath(EventAllianceBackup.outTeamOne.keyString), model.teamOut)
 
         return findOrCreate(in: context, matching: predicate, configure: { (allianceBackup) in
-            allianceBackup.inTeam = Team.insert(model.teamIn, in: context)
-            allianceBackup.outTeam = Team.insert(model.teamOut, in: context)
+            allianceBackup.inTeamOne = Team.insert(model.teamIn, in: context)
+            allianceBackup.outTeamOne = Team.insert(model.teamOut, in: context)
         })
     }
 
@@ -63,12 +75,7 @@ extension EventAllianceBackup: Orphanable {
 
     public var isOrphaned: Bool {
         // An EventAllianceBackup is an orphan if it isn't attached to any EventAlliances or an EventAllianceStatus.
-        var hasAlliances: Bool {
-            guard let alliances = alliances else {
-                return false
-            }
-            return alliances.count > 0
-        }
+        let hasAlliances = (alliances.count > 0)
         let hasStatus = (allianceStatus != nil)
         return !hasAlliances && !hasStatus
     }

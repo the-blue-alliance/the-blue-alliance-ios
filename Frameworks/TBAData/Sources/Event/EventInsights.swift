@@ -33,7 +33,7 @@ extension EventInsights: Managed {
     @discardableResult
     public static func insert(_ model: TBAEventInsights, eventKey: String, in context: NSManagedObjectContext) -> EventInsights {
         let predicate = NSPredicate(format: "%K == %@",
-                                    #keyPath(EventInsights.event.key), eventKey)
+                                    #keyPath(EventInsights.event.keyString), eventKey)
 
         return findOrCreate(in: context, matching: predicate) { (insights) in
             // TODO: Handle NSNull? At least write a test
