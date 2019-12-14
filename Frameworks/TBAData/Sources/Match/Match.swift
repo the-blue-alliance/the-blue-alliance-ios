@@ -4,107 +4,8 @@ import MyTBAKit
 import TBAKit
 import TBAUtils
 
-@objc(Match)
-public class Match: NSManagedObject {
-
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Match> {
-        return NSFetchRequest<Match>(entityName: Match.entityName)
-    }
-
-    public var actualTime: Int? {
-        return actualTimeNumber?.intValue
-    }
-
-    public var compLevelSortOrder: Int? {
-        return compLevelSortOrderNumber?.intValue
-    }
-
-    /**
-     Returns the MatchCompLevel for the Match's compLevelString.
-     */
-    public var compLevel: MatchCompLevel? {
-        guard let compLevelString = compLevelString else {
-            fatalError("Save Match before accessing compLevel")
-        }
-        guard let compLevel = MatchCompLevel(rawValue: compLevelString) else {
-            return nil
-        }
-        return compLevel
-    }
-
-    public var key: String {
-        guard let key = keyString else {
-            fatalError("Save Match before accessing key")
-        }
-        return key
-    }
-
-    public var matchNumber: Int {
-        guard let matchNumber = matchNumberNumber?.intValue else {
-            fatalError("Save Match before accessing matchNumber")
-        }
-        return matchNumber
-    }
-
-    public var postResultTime: Int? {
-        return postResultTimeNumber?.intValue
-    }
-
-    public var predictedTime: Int? {
-        return predictedTimeNumber?.intValue
-    }
-
-    public var setNumber: Int {
-        guard let setNumber = setNumberNumber?.intValue else {
-            fatalError("Save Match before accessing setNumber")
-        }
-        return setNumber
-    }
-
-    public var time: Int? {
-        return timeNumber?.intValue
-    }
-
-    @NSManaged private var actualTimeNumber: NSNumber?
-    @NSManaged public private(set) var breakdown: [String: Any]?
-    @NSManaged private var compLevelSortOrderNumber: NSNumber?
-    @NSManaged public private(set) var compLevelString: String?
-    @NSManaged var keyString: String?
-    @NSManaged private var matchNumberNumber: NSNumber?
-    @NSManaged private var postResultTimeNumber: NSNumber?
-    @NSManaged private var predictedTimeNumber: NSNumber?
-    @NSManaged private var setNumberNumber: NSNumber?
-    @NSManaged private var timeNumber: NSNumber?
-    @NSManaged public private(set) var winningAlliance: String?
-
-    public var alliances: [MatchAlliance] {
-        guard let alliancesMany = alliancesMany, let alliances = alliancesMany.allObjects as? [MatchAlliance] else {
-            return []
-        }
-        return alliances
-    }
-
-    public var event: Event {
-        guard let event = eventOne else {
-            fatalError("Save Match before accessing event")
-        }
-        return event
-    }
-
-    public var videos: [MatchVideo] {
-        guard let videosMany = videosMany, let videos = videosMany.allObjects as? [MatchVideo] else {
-            return []
-        }
-        return videos
-    }
-
-    @NSManaged private var alliancesMany: NSSet?
-    @NSManaged private var eventOne: Event?
-    @NSManaged private var videosMany: NSSet?
-
-}
-
-// https://github.com/the-blue-alliance/the-blue-alliance/blob/1324e9e5b7c4ab21315bd00a768112991bada108/models/match.py#L25
+// https://github.com/the-blue-alliance/the-blue-alliance/blob/
+// 1324e9e5b7c4ab21315bd00a768112991bada108/models/match.py#L25
 public enum MatchCompLevel: String, CaseIterable {
     case qualification = "qm"
     case eightfinal = "ef"
@@ -127,7 +28,8 @@ public enum MatchCompLevel: String, CaseIterable {
         }
     }
 
-    // https://github.com/the-blue-alliance/the-blue-alliance/blob/1324e9e5b7c4ab21315bd00a768112991bada108/models/match.py#L34
+    // https://github.com/the-blue-alliance/the-blue-alliance/blob/
+    // 1324e9e5b7c4ab21315bd00a768112991bada108/models/match.py#L34
     /**
      Human readable string representing the compLevel for the match.
      */
@@ -146,7 +48,8 @@ public enum MatchCompLevel: String, CaseIterable {
         }
     }
 
-    // https://github.com/the-blue-alliance/the-blue-alliance/blob/1324e9e5b7c4ab21315bd00a768112991bada108/models/match.py#L27
+    // https://github.com/the-blue-alliance/the-blue-alliance/blob/
+    // 1324e9e5b7c4ab21315bd00a768112991bada108/models/match.py#L27
     /**
      Abbreviated human readable string representing the compLevel for the match.
      */
@@ -167,123 +70,91 @@ public enum MatchCompLevel: String, CaseIterable {
 
 }
 
-extension Match: Managed {
+extension Match {
 
-    public static func predicate(key: String) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(Match.keyString), key)
+    public var actualTime: Int? {
+        return getValue(\Match.actualTimeRaw)?.intValue
+    }
+
+    public var breakdown: [String: Any]? {
+        return getValue(\Match.breakdownRaw)
+    }
+
+    public var compLevelSortOrder: Int? {
+        return getValue(\Match.compLevelSortOrderRaw)?.intValue
     }
 
     /**
-     Insert a Match with values from a TBAKit Match model in to the managed object context.
-
-     This method will manage the deletion of oprhaned Match Alliances and Match Videos on a Match.
-
-     - Parameter model: The TBAKit Match representation to set values from.
-
-     - Parameter context: The NSManagedContext to insert the Match in to.
-
-     - Returns: The inserted Match.
+     Returns the MatchCompLevel for the Match's compLevelString.
      */
-    @discardableResult
-    public static func insert(_ model: TBAMatch, in context: NSManagedObjectContext) -> Match {
-        let predicate = Match.predicate(key: model.key)
-        return findOrCreate(in: context, matching: predicate) { (match) in
-            // Required: compLevel, key, matchNumber, setNumber, event
-            match.keyString = model.key
-            match.compLevelString = model.compLevel
-
-            // When adding a new MatchCompLevel, models will need a migration to update this
-            if let compLevel = MatchCompLevel(rawValue: model.compLevel) {
-                match.compLevelSortOrderNumber = NSNumber(value: compLevel.sortOrder)
-            } else {
-                match.compLevelSortOrderNumber = nil
-            }
-
-            match.eventOne = Event.insert(model.eventKey, in: context)
-            match.setNumberNumber = NSNumber(value: model.setNumber)
-            match.matchNumberNumber = NSNumber(value: model.matchNumber)
-
-            match.updateToManyRelationship(relationship: #keyPath(Match.alliancesMany), newValues: model.alliances?.map({ (key: String, value: TBAMatchAlliance) -> MatchAlliance in
-                return MatchAlliance.insert(value, allianceKey: key, matchKey: model.key, in: context)
-            }))
-
-            match.winningAlliance = model.winningAlliance
-
-            if let time = model.time {
-                match.timeNumber = NSNumber(value: time)
-            } else {
-                match.timeNumber = nil
-            }
-            if let actualTime = model.actualTime {
-                match.actualTimeNumber = NSNumber(value: actualTime)
-            } else {
-                match.actualTimeNumber = nil
-            }
-            if let predictedTime = model.predictedTime {
-                match.predictedTimeNumber = NSNumber(value: predictedTime)
-            } else {
-                match.predictedTimeNumber = nil
-            }
-            if let postResultTime = model.postResultTime {
-                match.postResultTimeNumber = NSNumber(value: postResultTime)
-            } else {
-                match.postResultTimeNumber = nil
-            }
-            match.breakdown = model.breakdown
-
-            match.updateToManyRelationship(relationship: #keyPath(Match.videosMany), newValues: model.videos?.map({
-                return MatchVideo.insert($0, in: context)
-            }))
+    public var compLevel: MatchCompLevel? {
+        guard let compLevelString = getValue(\Match.compLevelStringRaw) else {
+            fatalError("Save Match before accessing compLevel")
         }
+        guard let compLevel = MatchCompLevel(rawValue: compLevelString) else {
+            return nil
+        }
+        return compLevel
     }
 
-    override public func prepareForDeletion() {
-        super.prepareForDeletion()
-
-        videos.forEach({
-            if $0.matches.onlyObject(self) {
-                // Match Video will become an orphan - delete
-                managedObjectContext?.delete($0)
-            } else {
-                $0.removeFromMatchesMany(self)
-            }
-        })
+    public var key: String {
+        guard let key = getValue(\Match.keyRaw) else {
+            fatalError("Save Match before accessing key")
+        }
+        return key
     }
 
-}
-
-extension Match {
-
-    public static func sortDescriptors(ascending: Bool) -> [NSSortDescriptor] {
-        // TODO: Support play-by order during event
-        return [
-            NSSortDescriptor(key: #keyPath(Match.compLevelSortOrderNumber), ascending: ascending),
-            NSSortDescriptor(key: #keyPath(Match.setNumberNumber), ascending: ascending),
-            NSSortDescriptor(key: #keyPath(Match.matchNumberNumber), ascending: ascending)
-        ]
+    public var matchNumber: Int {
+        guard let matchNumber = getValue(\Match.matchNumberRaw)?.intValue else {
+            fatalError("Save Match before accessing matchNumber")
+        }
+        return matchNumber
     }
 
-    public static func eventPredicate(eventKey: String) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(Match.eventOne.keyRaw), eventKey)
+    public var postResultTime: Int? {
+        return getValue(\Match.postResultTimeRaw)?.intValue
     }
 
-    public static func eventTeamPredicate(eventKey: String, teamKey: String) -> NSPredicate {
-        let eventPredicate = Match.eventPredicate(eventKey: eventKey)
-        let teamPredicate = Match.teamKeysPredicate(teamKeys: [teamKey])
-        return NSCompoundPredicate(andPredicateWithSubpredicates: [eventPredicate, teamPredicate])
+    public var predictedTime: Int? {
+        return getValue(\Match.predictedTimeRaw)?.intValue
     }
 
-    public static func teamKeysPredicate(teamKeys: [String]) -> NSPredicate {
-        return NSPredicate(format: "SUBQUERY(%K, $a, ANY $a.%K.%K IN %@).@count > 0",
-                           #keyPath(Match.alliancesMany),
-                           #keyPath(MatchAlliance.teamsMany), #keyPath(Team.keyString), teamKeys)
+    public var setNumber: Int {
+        guard let setNumber = getValue(\Match.setNumberRaw)?.intValue else {
+            fatalError("Save Match before accessing setNumber")
+        }
+        return setNumber
     }
 
-    public static func forKey(_ key: String, in context: NSManagedObjectContext) -> Match? {
-        let predicate = Match.predicate(key: key)
-        return Match.findOrFetch(in: context, matching: predicate)
+    public var time: Int? {
+        return getValue(\Match.timeRaw)?.intValue
+    }
+
+    public var winningAlliance: String? {
+        return getValue(\Match.winningAllianceRaw)
+    }
+
+    public var alliances: [MatchAlliance] {
+        guard let alliancesRaw = getValue(\Match.alliancesRaw),
+            let alliances = alliancesRaw.allObjects as? [MatchAlliance] else {
+                return []
+        }
+        return alliances
+    }
+
+    public var event: Event {
+        guard let event = getValue(\Match.eventRaw) else {
+            fatalError("Save Match before accessing event")
+        }
+        return event
+    }
+
+    public var videos: [MatchVideo] {
+        guard let videosRaw = getValue(\Match.videosRaw),
+            let videos = videosRaw.allObjects as? [MatchVideo] else {
+                return []
+        }
+        return videos
     }
 
     /**
@@ -386,6 +257,151 @@ extension Match {
 
 }
 
+@objc(Match)
+public class Match: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Match> {
+        return NSFetchRequest<Match>(entityName: Match.entityName)
+    }
+
+    @NSManaged public var actualTimeRaw: NSNumber?
+    @NSManaged public var breakdownRaw: [String: Any]?
+    @NSManaged public var compLevelSortOrderRaw: NSNumber?
+    @NSManaged public var compLevelStringRaw: String?
+    @NSManaged public var keyRaw: String?
+    @NSManaged public var matchNumberRaw: NSNumber?
+    @NSManaged public var postResultTimeRaw: NSNumber?
+    @NSManaged public var predictedTimeRaw: NSNumber?
+    @NSManaged public var setNumberRaw: NSNumber?
+    @NSManaged public var timeRaw: NSNumber?
+    @NSManaged public var winningAllianceRaw: String?
+    @NSManaged public var alliancesRaw: NSSet?
+    @NSManaged public var eventRaw: Event?
+    @NSManaged public var videosRaw: NSSet?
+
+}
+
+extension Match: Managed {
+
+    public static func predicate(key: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Match.keyRaw), key)
+    }
+
+    /**
+     Insert a Match with values from a TBAKit Match model in to the managed object context.
+
+     This method will manage the deletion of oprhaned Match Alliances and Match Videos on a Match.
+
+     - Parameter model: The TBAKit Match representation to set values from.
+
+     - Parameter context: The NSManagedContext to insert the Match in to.
+
+     - Returns: The inserted Match.
+     */
+    @discardableResult
+    public static func insert(_ model: TBAMatch, in context: NSManagedObjectContext) -> Match {
+        let predicate = Match.predicate(key: model.key)
+        return findOrCreate(in: context, matching: predicate) { (match) in
+            // Required: compLevel, key, matchNumber, setNumber, event
+            match.keyRaw = model.key
+            match.compLevelStringRaw = model.compLevel
+
+            // When adding a new MatchCompLevel, models will need a migration to update this
+            if let compLevel = MatchCompLevel(rawValue: model.compLevel) {
+                match.compLevelSortOrderRaw = NSNumber(value: compLevel.sortOrder)
+            } else {
+                match.compLevelSortOrderRaw = nil
+            }
+
+            match.eventRaw = Event.insert(model.eventKey, in: context)
+            match.setNumberRaw = NSNumber(value: model.setNumber)
+            match.matchNumberRaw = NSNumber(value: model.matchNumber)
+
+            match.updateToManyRelationship(relationship: #keyPath(Match.alliancesRaw), newValues: model.alliances?.map({ (key: String, value: TBAMatchAlliance) -> MatchAlliance in
+                return MatchAlliance.insert(value, allianceKey: key, matchKey: model.key, in: context)
+            }))
+
+            match.winningAllianceRaw = model.winningAlliance
+
+            if let time = model.time {
+                match.timeRaw = NSNumber(value: time)
+            } else {
+                match.timeRaw = nil
+            }
+            if let actualTime = model.actualTime {
+                match.actualTimeRaw = NSNumber(value: actualTime)
+            } else {
+                match.actualTimeRaw = nil
+            }
+            if let predictedTime = model.predictedTime {
+                match.predictedTimeRaw = NSNumber(value: predictedTime)
+            } else {
+                match.predictedTimeRaw = nil
+            }
+            if let postResultTime = model.postResultTime {
+                match.postResultTimeRaw = NSNumber(value: postResultTime)
+            } else {
+                match.postResultTimeRaw = nil
+            }
+            match.breakdownRaw = model.breakdown
+
+            match.updateToManyRelationship(relationship: #keyPath(Match.videosRaw), newValues: model.videos?.map({
+                return MatchVideo.insert($0, in: context)
+            }))
+        }
+    }
+
+    override public func prepareForDeletion() {
+        super.prepareForDeletion()
+
+        videos.forEach({
+            if $0.matches.onlyObject(self) {
+                // Match Video will become an orphan - delete
+                managedObjectContext?.delete($0)
+            } else {
+                $0.removeFromMatchesRaw(self)
+            }
+        })
+    }
+
+}
+
+extension Match {
+
+    public static func sortDescriptors(ascending: Bool) -> [NSSortDescriptor] {
+        // TODO: Support play-by order during event
+        return [
+            NSSortDescriptor(key: #keyPath(Match.compLevelSortOrderRaw), ascending: ascending),
+            NSSortDescriptor(key: #keyPath(Match.setNumberRaw), ascending: ascending),
+            NSSortDescriptor(key: #keyPath(Match.matchNumberRaw), ascending: ascending)
+        ]
+    }
+
+    public static func eventPredicate(eventKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Match.eventRaw.keyRaw), eventKey)
+    }
+
+    public static func eventTeamPredicate(eventKey: String, teamKey: String) -> NSPredicate {
+        let eventPredicate = Match.eventPredicate(eventKey: eventKey)
+        let teamPredicate = Match.teamKeysPredicate(teamKeys: [teamKey])
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [eventPredicate, teamPredicate])
+    }
+
+    public static func teamKeysPredicate(teamKeys: [String]) -> NSPredicate {
+        return NSPredicate(format: "SUBQUERY(%K, $a, ANY $a.%K.%K IN %@).@count > 0",
+                           #keyPath(Match.alliancesRaw),
+                           #keyPath(MatchAlliance.teamsRaw), #keyPath(Team.keyString), teamKeys)
+    }
+
+    public static func forKey(_ key: String, in context: NSManagedObjectContext) -> Match? {
+        let predicate = Match.predicate(key: key)
+        return Match.findOrFetch(in: context, matching: predicate)
+    }
+
+}
+
 extension Match: Orphanable {
 
     public var isOrphaned: Bool {
@@ -397,7 +413,7 @@ extension Match: Orphanable {
         let myTBAPredicate = MyTBAEntity.modelKeyPredicate(key: key)
         let myTBAObject = MyTBAEntity.findOrFetch(in: managedObjectContext, matching: myTBAPredicate)
 
-        return eventOne == nil && myTBAObject == nil
+        return eventRaw == nil && myTBAObject == nil
     }
 
 }

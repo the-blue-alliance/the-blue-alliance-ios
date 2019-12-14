@@ -2,57 +2,39 @@ import CoreData
 import Foundation
 import TBAKit
 
-@objc(MatchAlliance)
-public class MatchAlliance: NSManagedObject {
+extension MatchAlliance {
 
     public var allianceKey: String {
-        guard let allianceKey = allianceKeyString else {
+        guard let allianceKey = getValue(\MatchAlliance.allianceKeyRaw) else {
             fatalError("Save MatchAlliance before accessing allianceKey")
         }
         return allianceKey
     }
 
     public var score: Int? {
-        return scoreNumber?.intValue
+        return getValue(\MatchAlliance.scoreRaw)?.intValue
+    }
+
+    public var dqTeams: NSOrderedSet? {
+        return getValue(\MatchAlliance.dqTeamsRaw)
     }
 
     public var match: Match {
-        guard let match = matchOne else {
+        guard let match = getValue(\MatchAlliance.matchRaw) else {
             fatalError("Save MatchAlliance before accessing match")
         }
         return match
     }
 
+    public var surrogateTeams: NSOrderedSet? {
+        return getValue(\MatchAlliance.surrogateTeamsRaw)
+    }
+
     public var teams: NSOrderedSet {
-        guard let teams = teamsMany else {
+        guard let teams = getValue(\MatchAlliance.teamsRaw) else {
             fatalError("Save MatchAlliance before accessing teams")
         }
         return teams
-    }
-
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<MatchAlliance> {
-        return NSFetchRequest<MatchAlliance>(entityName: MatchAlliance.entityName)
-    }
-
-    @NSManaged var allianceKeyString: String?
-    @NSManaged var scoreNumber: NSNumber?
-    @NSManaged var dqTeams: NSOrderedSet?
-    @NSManaged var matchOne: Match?
-    @NSManaged var surrogateTeams: NSOrderedSet?
-    @NSManaged var teamsMany: NSOrderedSet?
-
-}
-
-extension MatchAlliance: Managed {
-
-    /**
-     Returns team keys for the alliance.
-     */
-    public var teamKeys: [String] {
-        guard let teams = teams.array as? [Team] else {
-            return []
-        }
-        return teams.map({ $0.key })
     }
 
     /**
@@ -64,6 +46,36 @@ extension MatchAlliance: Managed {
         }
         return dqTeams.map({ $0.key })
     }
+
+    /**
+     Returns team keys for the alliance.
+     */
+    public var teamKeys: [String] {
+        guard let teams = teams.array as? [Team] else {
+            return []
+        }
+        return teams.map({ $0.key })
+    }
+
+}
+
+@objc(MatchAlliance)
+public class MatchAlliance: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<MatchAlliance> {
+        return NSFetchRequest<MatchAlliance>(entityName: MatchAlliance.entityName)
+    }
+
+    @NSManaged var allianceKeyRaw: String?
+    @NSManaged var scoreRaw: NSNumber?
+    @NSManaged var dqTeamsRaw: NSOrderedSet?
+    @NSManaged var matchRaw: Match?
+    @NSManaged var surrogateTeamsRaw: NSOrderedSet?
+    @NSManaged var teamsRaw: NSOrderedSet?
+
+}
+
+extension MatchAlliance: Managed {
 
     /**
      Insert a Match Alliance with values from a TBAKit Match Alliance model in to the managed object context.
@@ -82,52 +94,48 @@ extension MatchAlliance: Managed {
      */
     public static func insert(_ model: TBAMatchAlliance, allianceKey: String, matchKey: String, in context: NSManagedObjectContext) -> MatchAlliance {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(MatchAlliance.allianceKeyString), allianceKey,
-                                    #keyPath(MatchAlliance.matchOne.keyString), matchKey)
+                                    #keyPath(MatchAlliance.allianceKeyRaw), allianceKey,
+                                    #keyPath(MatchAlliance.matchRaw.keyRaw), matchKey)
 
         return findOrCreate(in: context, matching: predicate) { (matchAlliance) in
             // Required: allianceKey, score, teams
-            matchAlliance.allianceKeyString = allianceKey
+            matchAlliance.allianceKeyRaw = allianceKey
 
             // Match scores for unplayed matches are returned as -1 from the API
             if model.score > -1 {
-                matchAlliance.scoreNumber = NSNumber(value: model.score)
+                matchAlliance.scoreRaw = NSNumber(value: model.score)
             } else {
-                matchAlliance.scoreNumber = nil
+                matchAlliance.scoreRaw = nil
             }
 
-            matchAlliance.teamsMany = NSOrderedSet(array: model.teams.map {
+            matchAlliance.teamsRaw = NSOrderedSet(array: model.teams.map {
                 return Team.insert($0, in: context)
             })
 
             if let surrogateTeams = model.surrogateTeams {
-                matchAlliance.surrogateTeams = NSOrderedSet(array: surrogateTeams.map {
+                matchAlliance.surrogateTeamsRaw = NSOrderedSet(array: surrogateTeams.map {
                     return Team.insert($0, in: context)
                 })
             } else {
-                matchAlliance.surrogateTeams = nil
+                matchAlliance.surrogateTeamsRaw = nil
             }
 
             if let dqTeams = model.dqTeams {
-                matchAlliance.dqTeams = NSOrderedSet(array: dqTeams.map {
+                matchAlliance.dqTeamsRaw = NSOrderedSet(array: dqTeams.map {
                     return Team.insert($0, in: context)
                 })
             } else {
-                matchAlliance.dqTeams = nil
+                matchAlliance.dqTeamsRaw = nil
             }
         }
     }
 
 }
 
-extension MatchAlliance {
-    
-}
-
 extension MatchAlliance: Orphanable {
 
     public var isOrphaned: Bool {
-        return matchOne == nil
+        return matchRaw == nil
     }
 
 }

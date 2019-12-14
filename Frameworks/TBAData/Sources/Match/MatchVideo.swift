@@ -2,18 +2,17 @@ import CoreData
 import Foundation
 import TBAKit
 
-@objc(MatchVideo)
-public class MatchVideo: NSManagedObject {
+extension MatchVideo {
 
     public var key: String {
-        guard let key = keyString else {
+        guard let key = getValue(\MatchVideo.keyRaw) else {
             fatalError("Save MatchVideo before accessing key")
         }
         return key
     }
 
     public var type: MatchVideoType? {
-        guard let typeString = typeString else {
+        guard let typeString = getValue(\MatchVideo.typeRaw) else {
             fatalError("Save MatchVideo before accessing type")
         }
         guard let type = MatchVideoType(rawValue: typeString) else {
@@ -23,27 +22,33 @@ public class MatchVideo: NSManagedObject {
     }
 
     public var matches: [Match] {
-        guard let matchesMany = matchesMany, let matches = matchesMany.allObjects as? [Match] else {
-            return []
+        guard let matchesRaw = getValue(\MatchVideo.matchesRaw),
+            let matches = matchesRaw.allObjects as? [Match] else {
+                return []
         }
         return matches
     }
+
+}
+
+@objc(MatchVideo)
+public class MatchVideo: NSManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<MatchVideo> {
         return NSFetchRequest<MatchVideo>(entityName: MatchVideo.entityName)
     }
 
-    @NSManaged private var keyString: String?
-    @NSManaged private var typeString: String?
-    @NSManaged private var matchesMany: NSSet?
+    @NSManaged private var keyRaw: String?
+    @NSManaged private var typeRaw: String?
+    @NSManaged private var matchesRaw: NSSet?
 
 }
 
 // MARK: Generated accessors for matches
 extension MatchVideo {
 
-    @objc(removeMatchesObject:)
-    @NSManaged internal func removeFromMatchesMany(_ value: Match)
+    @objc(removeFromMatchesRawObject:)
+    @NSManaged internal func removeFromMatchesRaw(_ value: Match)
 
 }
 
@@ -67,13 +72,13 @@ extension MatchVideo: Managed {
      */
     public static func insert(_ model: TBAMatchVideo, in context: NSManagedObjectContext) -> MatchVideo {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(MatchVideo.keyString), model.key,
-                                    #keyPath(MatchVideo.typeString), model.type)
+                                    #keyPath(MatchVideo.keyRaw), model.key,
+                                    #keyPath(MatchVideo.typeRaw), model.type)
 
         return findOrCreate(in: context, matching: predicate) { (matchVideo) in
             // Required: key, type
-            matchVideo.keyString = model.key
-            matchVideo.typeString = model.type
+            matchVideo.keyRaw = model.key
+            matchVideo.typeRaw = model.type
         }
     }
 
