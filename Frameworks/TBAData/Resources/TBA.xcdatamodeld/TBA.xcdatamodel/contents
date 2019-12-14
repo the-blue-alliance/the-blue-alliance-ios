@@ -202,8 +202,8 @@
         <relationship name="matchesRaw" toMany="YES" minCount="1" deletionRule="Deny" destinationEntity="Match" inverseName="videosRaw" inverseEntity="Match"/>
     </entity>
     <entity name="MyTBAEntity" representedClassName="MyTBAEntity" syncable="YES">
-        <attribute name="modelKeyString" attributeType="String"/>
-        <attribute name="modelTypeNumber" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="modelKeyRaw" attributeType="String"/>
+        <attribute name="modelTypeRaw" attributeType="Integer 64" usesScalarValueType="NO"/>
     </entity>
     <entity name="Status" representedClassName="Status" syncable="YES">
         <attribute name="currentSeasonNumber" attributeType="Integer 16" usesScalarValueType="NO"/>

@@ -6,7 +6,7 @@ import MyTBAKit
 public class Favorite: MyTBAEntity {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Favorite> {
-        return NSFetchRequest<Favorite>(entityName: "Favorite")
+        return NSFetchRequest<Favorite>(entityName: Favorite.entityName)
     }
 
 }
@@ -62,8 +62,8 @@ extension Favorite {
 
         return findOrCreate(in: context, matching: predicate) { (favorite) in
             // Required: key, type
-            favorite.modelKeyString = modelKey
-            favorite.modelTypeNumber = NSNumber(value: modelType.rawValue)
+            favorite.modelKeyRaw = modelKey
+            favorite.modelTypeRaw = NSNumber(value: modelType.rawValue)
         }
     }
 
@@ -73,8 +73,8 @@ extension Favorite {
 
     fileprivate static func favoritePredicate(modelKey: String, modelType: MyTBAModelType) -> NSPredicate {
         return NSPredicate(format: "%K == %@ && %K == %ld",
-                           #keyPath(Favorite.modelKeyString), modelKey,
-                           #keyPath(Favorite.modelTypeNumber), modelType.rawValue)
+                           #keyPath(Favorite.modelKeyRaw), modelKey,
+                           #keyPath(Favorite.modelTypeRaw), modelType.rawValue)
     }
 
     public static func fetch(modelKey: String, modelType: MyTBAModelType, in context: NSManagedObjectContext) -> Favorite? {
@@ -85,7 +85,7 @@ extension Favorite {
     public static func favoriteTeamKeys(in context: NSManagedObjectContext) -> [String] {
         return Favorite.fetch(in: context, configurationBlock: { (fetchRequest) in
             fetchRequest.predicate = NSPredicate(format: "%K == %ld",
-                                                 #keyPath(Favorite.modelTypeNumber), MyTBAModelType.team.rawValue)
+                                                 #keyPath(Favorite.modelTypeRaw), MyTBAModelType.team.rawValue)
         }).compactMap({ $0.modelKey })
     }
 

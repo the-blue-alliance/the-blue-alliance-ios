@@ -2,6 +2,17 @@ import CoreData
 import Foundation
 import MyTBAKit
 
+extension Subscription {
+
+    public var notifications: [NotificationType] {
+        guard let notificationsRaw = getValue(\Subscription.notificationsRaw) else {
+            fatalError("Save Subscription before accessing notifications")
+        }
+        return notificationsRaw.compactMap({ NotificationType(rawValue: $0) })
+    }
+
+}
+
 @objc(Subscription)
 public class Subscription: MyTBAEntity {
 
@@ -64,8 +75,8 @@ extension Subscription {
 
         return findOrCreate(in: context, matching: predicate) { (subscription) in
             // Required: key, type, notifications
-            subscription.modelKeyString = modelKey
-            subscription.modelTypeNumber = NSNumber(value: modelType.rawValue)
+            subscription.modelKeyRaw = modelKey
+            subscription.modelTypeRaw = NSNumber(value: modelType.rawValue)
             subscription.notificationsRaw = notifications.map({ $0.rawValue })
         }
     }
@@ -74,19 +85,10 @@ extension Subscription {
 
 extension Subscription {
 
-    public var notifications: [NotificationType] {
-        get {
-            return notificationsRaw?.compactMap({ NotificationType(rawValue: $0) }) ?? []
-        }
-        set {
-            notificationsRaw = newValue.map({ $0.rawValue })
-        }
-    }
-
     fileprivate static func subscriptionPredicate(modelKey: String, modelType: MyTBAModelType) -> NSPredicate {
         return NSPredicate(format: "%K == %@ && %K == %ld",
-                           #keyPath(Subscription.modelKeyString), modelKey,
-                           #keyPath(Subscription.modelTypeNumber), modelType.rawValue)
+                           #keyPath(Subscription.modelKeyRaw), modelKey,
+                           #keyPath(Subscription.modelTypeRaw), modelType.rawValue)
     }
 
     public static func fetch(modelKey: String, modelType: MyTBAModelType, in context: NSManagedObjectContext) -> Subscription? {
