@@ -20,7 +20,7 @@ public class Subscription: MyTBAEntity {
         return NSFetchRequest<Subscription>(entityName: "Subscription")
     }
 
-    @NSManaged public var notificationsRaw: [String]?
+    @NSManaged var notificationsRaw: [String]?
 
 }
 

@@ -264,20 +264,20 @@ public class Match: NSManagedObject {
         return NSFetchRequest<Match>(entityName: Match.entityName)
     }
 
-    @NSManaged public var actualTimeRaw: NSNumber?
-    @NSManaged public var breakdownRaw: [String: Any]?
-    @NSManaged public var compLevelSortOrderRaw: NSNumber?
-    @NSManaged public var compLevelStringRaw: String?
-    @NSManaged public var keyRaw: String?
-    @NSManaged public var matchNumberRaw: NSNumber?
-    @NSManaged public var postResultTimeRaw: NSNumber?
-    @NSManaged public var predictedTimeRaw: NSNumber?
-    @NSManaged public var setNumberRaw: NSNumber?
-    @NSManaged public var timeRaw: NSNumber?
-    @NSManaged public var winningAllianceRaw: String?
-    @NSManaged public var alliancesRaw: NSSet?
-    @NSManaged public var eventRaw: Event?
-    @NSManaged public var videosRaw: NSSet?
+    @NSManaged var actualTimeRaw: NSNumber?
+    @NSManaged var breakdownRaw: [String: Any]?
+    @NSManaged var compLevelSortOrderRaw: NSNumber?
+    @NSManaged var compLevelStringRaw: String?
+    @NSManaged var keyRaw: String?
+    @NSManaged var matchNumberRaw: NSNumber?
+    @NSManaged var postResultTimeRaw: NSNumber?
+    @NSManaged var predictedTimeRaw: NSNumber?
+    @NSManaged var setNumberRaw: NSNumber?
+    @NSManaged var timeRaw: NSNumber?
+    @NSManaged var winningAllianceRaw: String?
+    @NSManaged var alliancesRaw: NSSet?
+    @NSManaged var eventRaw: Event?
+    @NSManaged var videosRaw: NSSet?
 
 }
 

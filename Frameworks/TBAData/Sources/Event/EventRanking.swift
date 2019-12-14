@@ -89,11 +89,11 @@ public class EventRanking: NSManagedObject {
     @NSManaged var rankRaw: NSNumber?
     @NSManaged var recordRaw: WLT?
     @NSManaged var eventRaw: Event?
-    @NSManaged public var extraStatsRaw: NSOrderedSet?
-    @NSManaged public var extraStatsInfoRaw: NSOrderedSet?
-    @NSManaged public var qualStatusRaw: EventStatusQual?
-    @NSManaged public var sortOrdersRaw: NSOrderedSet?
-    @NSManaged public var sortOrdersInfoRaw: NSOrderedSet?
+    @NSManaged var extraStatsRaw: NSOrderedSet?
+    @NSManaged var extraStatsInfoRaw: NSOrderedSet?
+    @NSManaged var qualStatusRaw: EventStatusQual?
+    @NSManaged var sortOrdersRaw: NSOrderedSet?
+    @NSManaged var sortOrdersInfoRaw: NSOrderedSet?
     @NSManaged var teamRaw: Team?
 
 }

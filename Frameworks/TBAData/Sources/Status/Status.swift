@@ -2,61 +2,66 @@ import CoreData
 import Foundation
 import TBAKit
 
-@objc(Status)
-public class Status: NSManagedObject {
+extension Status {
 
     public var currentSeason: Int {
-        guard let currentSeason = currentSeasonNumber?.intValue else {
+        guard let currentSeason = getValue(\Status.currentSeasonRaw)?.intValue else {
             fatalError("Save Status before accessing currentSeason")
         }
         return currentSeason
     }
 
     public var isDatafeedDown: Bool {
-        guard let isDatafeedDown = isDatafeedDownNumber?.boolValue else {
+        guard let isDatafeedDown = getValue(\Status.isDatafeedDownRaw)?.boolValue else {
             fatalError("Save Status before accessing isDatafeedDown")
         }
         return isDatafeedDown
     }
 
     public var latestAppVersion: Int {
-        guard let latestAppVersion = latestAppVersionNumber?.intValue else {
+        guard let latestAppVersion = getValue(\Status.latestAppVersionRaw)?.intValue else {
             fatalError("Save Status before accessing latestAppVersion")
         }
         return latestAppVersion
     }
 
     public var maxSeason: Int {
-        guard let maxSeason = maxSeasonNumber?.intValue else {
+        guard let maxSeason = getValue(\Status.maxSeasonRaw)?.intValue else {
             fatalError("Save Status before accessing maxSeason")
         }
         return maxSeason
     }
 
     public var minAppVersion: Int {
-        guard let minAppVersion = minAppVersionNumber?.intValue else {
+        guard let minAppVersion = getValue(\Status.minAppVersionRaw)?.intValue else {
             fatalError("Save Status before accessing minAppVersion")
         }
         return minAppVersion
     }
 
     public var downEvents: [Event] {
-        guard let downEventsMany = downEventsMany, let downEvents = downEventsMany.allObjects as? [Event] else {
-            return []
+        guard let downEventsRaw = getValue(\Status.downEventsRaw),
+            let downEvents = downEventsRaw.allObjects as? [Event] else {
+                return []
         }
         return downEvents
     }
+
+}
+
+@objc(Status)
+public class Status: NSManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Status> {
         return NSFetchRequest<Status>(entityName: Status.entityName)
     }
 
-    @NSManaged private var currentSeasonNumber: NSNumber?
-    @NSManaged private var isDatafeedDownNumber: NSNumber?
-    @NSManaged private var latestAppVersionNumber: NSNumber?
-    @NSManaged private var maxSeasonNumber: NSNumber?
-    @NSManaged private var minAppVersionNumber: NSNumber?
-    @NSManaged private var downEventsMany: NSSet?
+    @NSManaged var currentSeasonRaw: NSNumber?
+    @NSManaged var isDatafeedDownRaw: NSNumber?
+    @NSManaged var latestAppVersionRaw: NSNumber?
+    @NSManaged var maxSeasonRaw: NSNumber?
+    @NSManaged var minAppVersionRaw: NSNumber?
+    @NSManaged var downEventsRaw: NSSet?
 
 }
 
@@ -74,14 +79,14 @@ extension Status: Managed {
     @discardableResult
     public static func insert(_ model: TBAStatus, in context: NSManagedObjectContext) -> Status {
         return findOrCreate(in: context, matching: statusPredicate) { (status) in
-            status.currentSeasonNumber = NSNumber(value: model.currentSeason)
-            status.downEventsMany = NSSet(array: model.downEvents.map {
+            status.currentSeasonRaw = NSNumber(value: model.currentSeason)
+            status.downEventsRaw = NSSet(array: model.downEvents.map {
                 return Event.insert($0, in: context)
             })
-            status.latestAppVersionNumber = NSNumber(value: model.ios.latestAppVersion)
-            status.minAppVersionNumber = NSNumber(value: model.ios.minAppVersion)
-            status.isDatafeedDownNumber = NSNumber(value: model.datafeedDown)
-            status.maxSeasonNumber = NSNumber(value: model.maxSeason)
+            status.latestAppVersionRaw = NSNumber(value: model.ios.latestAppVersion)
+            status.minAppVersionRaw = NSNumber(value: model.ios.minAppVersion)
+            status.isDatafeedDownRaw = NSNumber(value: model.datafeedDown)
+            status.maxSeasonRaw = NSNumber(value: model.maxSeason)
         }
     }
 
