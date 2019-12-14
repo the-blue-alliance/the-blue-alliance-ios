@@ -7,6 +7,10 @@ import TBAUtils
 @objc(Match)
 public class Match: NSManagedObject {
 
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Match> {
+        return NSFetchRequest<Match>(entityName: Match.entityName)
+    }
+
     public var actualTime: Int? {
         return actualTimeNumber?.intValue
     }
@@ -61,6 +65,18 @@ public class Match: NSManagedObject {
         return timeNumber?.intValue
     }
 
+    @NSManaged private var actualTimeNumber: NSNumber?
+    @NSManaged public private(set) var breakdown: [String: Any]?
+    @NSManaged private var compLevelSortOrderNumber: NSNumber?
+    @NSManaged public private(set) var compLevelString: String?
+    @NSManaged private var keyString: String?
+    @NSManaged private var matchNumberNumber: NSNumber?
+    @NSManaged private var postResultTimeNumber: NSNumber?
+    @NSManaged private var predictedTimeNumber: NSNumber?
+    @NSManaged private var setNumberNumber: NSNumber?
+    @NSManaged private var timeNumber: NSNumber?
+    @NSManaged public private(set) var winningAlliance: String?
+
     public var alliances: [MatchAlliance] {
         guard let alliancesMany = alliancesMany, let alliances = alliancesMany.allObjects as? [MatchAlliance] else {
             return []
@@ -82,21 +98,6 @@ public class Match: NSManagedObject {
         return videos
     }
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Match> {
-        return NSFetchRequest<Match>(entityName: Match.entityName)
-    }
-
-    @NSManaged private var actualTimeNumber: NSNumber?
-    @NSManaged public private(set) var breakdown: [String: Any]?
-    @NSManaged private var compLevelSortOrderNumber: NSNumber?
-    @NSManaged public private(set) var compLevelString: String?
-    @NSManaged internal private(set) var keyString: String?
-    @NSManaged private var matchNumberNumber: NSNumber?
-    @NSManaged private var postResultTimeNumber: NSNumber?
-    @NSManaged private var predictedTimeNumber: NSNumber?
-    @NSManaged private var setNumberNumber: NSNumber?
-    @NSManaged private var timeNumber: NSNumber?
-    @NSManaged public private(set) var winningAlliance: String?
     @NSManaged private var alliancesMany: NSSet?
     @NSManaged private var eventOne: Event?
     @NSManaged private var videosMany: NSSet?
@@ -187,7 +188,6 @@ extension Match: Managed {
     @discardableResult
     public static func insert(_ model: TBAMatch, in context: NSManagedObjectContext) -> Match {
         let predicate = Match.predicate(key: model.key)
-
         return findOrCreate(in: context, matching: predicate) { (match) in
             // Required: compLevel, key, matchNumber, setNumber, event
             match.keyString = model.key
@@ -264,21 +264,20 @@ extension Match {
         ]
     }
 
-    public static func eventPredicate(event: Event) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(Match.eventOne), event)
+    public static func eventPredicate(eventKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K.%K == %@",
+                           #keyPath(Match.eventOne), Event.keyPath(), eventKey)
     }
 
-    public static func eventTeamPredicate(event: Event, team: Team) -> NSPredicate {
-        // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
-        return NSPredicate(format: "%K == %@ AND SUBQUERY(%K, $a, ANY $a.teams.keyString == %@).@count > 0",
-                           #keyPath(Match.eventOne), event,
-                           #keyPath(Match.alliancesMany), team.key)
+    public static func eventTeamPredicate(eventKey: String, teamKey: String) -> NSPredicate {
+        let eventPredicate = Match.eventPredicate(eventKey: eventKey)
+        let teamPredicate = Match.teamKeysPredicate(teamKeys: [teamKey])
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [eventPredicate, teamPredicate])
     }
 
     public static func teamKeysPredicate(teamKeys: [String]) -> NSPredicate {
-        return NSPredicate(format: "SUBQUERY(%K, $a, ANY $a.teams.keyString IN %@).@count > 0",
-                           #keyPath(Match.alliancesMany), teamKeys)
+        return NSPredicate(format: "SUBQUERY(%K, $a, ANY $a.%K.%K IN %@).@count > 0",
+                           #keyPath(Match.alliancesMany), #keyPath(MatchAlliance.teams), #keyPath(Team.keyString), teamKeys)
     }
 
     public static func forKey(_ key: String, in context: NSManagedObjectContext) -> Match? {

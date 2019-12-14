@@ -120,6 +120,10 @@ extension MatchAlliance: Managed {
 
 }
 
+extension MatchAlliance {
+    
+}
+
 extension MatchAlliance: Orphanable {
 
     public var isOrphaned: Bool {
