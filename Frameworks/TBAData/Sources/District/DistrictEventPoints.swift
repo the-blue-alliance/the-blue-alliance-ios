@@ -2,6 +2,67 @@ import CoreData
 import Foundation
 import TBAKit
 
+extension DistrictEventPoints {
+
+    public var alliancePoints: Int {
+        guard let alliancePoints = getValue(\DistrictEventPoints.alliancePointsRaw)?.intValue else {
+            fatalError("Save DistrictEventPoints before accessing alliancePoints")
+        }
+        return alliancePoints
+    }
+
+    public var awardPoints: Int {
+        guard let awardPoints = getValue(\DistrictEventPoints.awardPointsRaw)?.intValue else {
+            fatalError("Save DistrictEventPoints before accessing awardPoints")
+        }
+        return awardPoints
+    }
+
+    public var districtCMP: Bool? {
+        return getValue(\DistrictEventPoints.districtCMPRaw)?.boolValue
+    }
+
+    public var elimPoints: Int {
+        guard let elimPoints = getValue(\DistrictEventPoints.elimPointsRaw)?.intValue else {
+            fatalError("Save DistrictEventPoints before accessing elimPoints")
+        }
+        return elimPoints
+    }
+
+    public var qualPoints: Int {
+        guard let qualPoints = getValue(\DistrictEventPoints.qualPointsRaw)?.intValue else {
+            fatalError("Save DistrictEventPoints before accessing qualPoints")
+        }
+        return qualPoints
+    }
+
+    public var total: Int {
+        guard let total = getValue(\DistrictEventPoints.totalRaw)?.intValue else {
+            fatalError("Save DistrictEventPoints before accessing total")
+        }
+        return total
+    }
+
+    public var districtRanking: DistrictRanking? {
+        return getValue(\DistrictEventPoints.districtRankingRaw)
+    }
+
+    public var event: Event {
+        guard let event = getValue(\DistrictEventPoints.eventRaw) else {
+            fatalError("Save DistrictEventPoints before accessing event")
+        }
+        return event
+    }
+
+    public var team: Team {
+        guard let team = getValue(\DistrictEventPoints.teamRaw) else {
+            fatalError("Save DistrictEventPoints before accessing team")
+        }
+        return team
+    }
+
+}
+
 @objc(DistrictEventPoints)
 public class DistrictEventPoints: NSManagedObject {
 
@@ -9,69 +70,25 @@ public class DistrictEventPoints: NSManagedObject {
         return NSFetchRequest<DistrictEventPoints>(entityName: DistrictEventPoints.entityName)
     }
 
-    public var alliancePoints: Int {
-        guard let alliancePoints = alliancePointsNumber?.intValue else {
-            fatalError("Save DistrictEventPoints before accessing alliancePoints")
-        }
-        return alliancePoints
+    @NSManaged var alliancePointsRaw: NSNumber?
+    @NSManaged var awardPointsRaw: NSNumber?
+    @NSManaged var districtCMPRaw: NSNumber?
+    @NSManaged var elimPointsRaw: NSNumber?
+    @NSManaged var qualPointsRaw: NSNumber?
+    @NSManaged var totalRaw: NSNumber?
+    @NSManaged var districtRankingRaw: DistrictRanking?
+    @NSManaged var eventRaw: Event?
+    @NSManaged var teamRaw: Team?
+
+}
+
+extension DistrictEventPoints {
+
+    /*
+    public static func totalSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(DistrictEventPoints.totalNumber), ascending: false)
     }
-
-    public var awardPoints: Int {
-        guard let awardPoints = awardPointsNumber?.intValue else {
-            fatalError("Save DistrictEventPoints before accessing awardPoints")
-        }
-        return awardPoints
-    }
-
-    public var districtCMP: Bool? {
-        return districtCMPNumber?.boolValue
-    }
-
-    public var elimPoints: Int {
-        guard let elimPoints = elimPointsNumber?.intValue else {
-            fatalError("Save DistrictEventPoints before accessing elimPoints")
-        }
-        return elimPoints
-    }
-
-    public var qualPoints: Int {
-        guard let qualPoints = qualPointsNumber?.intValue else {
-            fatalError("Save DistrictEventPoints before accessing qualPoints")
-        }
-        return qualPoints
-    }
-
-    public var total: Int {
-        guard let total = totalNumber?.intValue else {
-            fatalError("Save DistrictEventPoints before accessing total")
-        }
-        return total
-    }
-
-    @NSManaged private var alliancePointsNumber: NSNumber?
-    @NSManaged private var awardPointsNumber: NSNumber?
-    @NSManaged private var districtCMPNumber: NSNumber?
-    @NSManaged private var elimPointsNumber: NSNumber?
-    @NSManaged private var qualPointsNumber: NSNumber?
-    @NSManaged private var totalNumber: NSNumber?
-
-    public var event: Event {
-        guard let event = eventOne else {
-            fatalError("Save DistrictEventPoints before accessing event")
-        }
-        return event
-    }
-
-    public var team: Team {
-        guard let team = teamOne else {
-            fatalError("Save DistrictEventPoints before accessing team")
-        }
-        return team
-    }
-
-    @NSManaged private var districtRanking: DistrictRanking?
-    @NSManaged private var eventOne: Event?
-    @NSManaged private var teamOne: Team?
+    */
 
 }
 
@@ -95,7 +112,8 @@ extension DistrictEventPoints: Managed {
     public static func insert(_ points: [TBADistrictEventPoints], eventKey: String, in context: NSManagedObjectContext) {
         // Fetch all of the previous DistrictEventPoints for this Event
         let oldPoints = DistrictEventPoints.fetch(in: context) {
-            $0.predicate = DistrictEventPoints.eventPredicate(eventKey: eventKey)
+            $0.predicate = NSPredicate(format: "%K == %@",
+                                       #keyPath(DistrictEventPoints.eventRaw.keyRaw), eventKey)
         }
 
         // Insert new DistrictEventPoints for this Event
@@ -121,38 +139,24 @@ extension DistrictEventPoints: Managed {
      - Returns: The inserted District Event Points.
      */
     public static func insert(_ model: TBADistrictEventPoints, in context: NSManagedObjectContext) -> DistrictEventPoints {
-        let predicate = NSPredicate(format: "%K.%K == %@ AND %K == %@",
-                                    #keyPath(DistrictEventPoints.eventOne), Event.keyPath(), model.eventKey,
-                                    #keyPath(DistrictEventPoints.teamOne.keyString), model.teamKey)
-
+        let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
+                                    #keyPath(DistrictEventPoints.eventRaw.keyRaw), model.eventKey,
+                                    #keyPath(DistrictEventPoints.teamRaw.keyString), model.teamKey)
         return findOrCreate(in: context, matching: predicate) { (eventPoints) in
-            eventPoints.teamOne = Team.insert(model.teamKey, in: context)
-            eventPoints.eventOne = Event.insert(model.eventKey, in: context)
+            eventPoints.teamRaw = Team.insert(model.teamKey, in: context)
+            eventPoints.eventRaw = Event.insert(model.eventKey, in: context)
 
-            eventPoints.alliancePointsNumber = NSNumber(value: model.alliancePoints)
-            eventPoints.awardPointsNumber = NSNumber(value: model.awardPoints)
+            eventPoints.alliancePointsRaw = NSNumber(value: model.alliancePoints)
+            eventPoints.awardPointsRaw = NSNumber(value: model.awardPoints)
             if let districtCMP = model.districtCMP {
-                eventPoints.districtCMPNumber = NSNumber(value: districtCMP)
+                eventPoints.districtCMPRaw = NSNumber(value: districtCMP)
             } else {
-                eventPoints.districtCMPNumber = nil
+                eventPoints.districtCMPRaw = nil
             }
-            eventPoints.elimPointsNumber = NSNumber(value: model.elimPoints)
-            eventPoints.qualPointsNumber = NSNumber(value: model.qualPoints)
-            eventPoints.totalNumber = NSNumber(value: model.total)
+            eventPoints.elimPointsRaw = NSNumber(value: model.elimPoints)
+            eventPoints.qualPointsRaw = NSNumber(value: model.qualPoints)
+            eventPoints.totalRaw = NSNumber(value: model.total)
         }
-    }
-
-}
-
-extension DistrictEventPoints {
-
-    public static func eventPredicate(eventKey: String) -> NSPredicate {
-        return NSPredicate(format: "%K.%K == %@",
-                           #keyPath(DistrictEventPoints.eventOne), Event.keyPath(), eventKey)
-    }
-
-    public static func totalSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(DistrictEventPoints.totalNumber), ascending: false)
     }
 
 }
@@ -161,7 +165,7 @@ extension DistrictEventPoints: Orphanable {
 
     public var isOrphaned: Bool {
         // If the Event doesn't exist and it's not attached to a District Ranking, it's an orphan
-        return districtRanking == nil && eventOne == nil
+        return districtRankingRaw == nil && eventRaw == nil
     }
 
 }

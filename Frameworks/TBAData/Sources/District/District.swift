@@ -3,6 +3,97 @@ import Foundation
 import TBAKit
 import TBAUtils
 
+extension District {
+
+    public var abbreviation: String {
+        guard let abbreviation = getValue(\District.abbreviationRaw) else {
+            fatalError("Save District before accessing abbreviation")
+        }
+        return abbreviation
+    }
+
+    public var key: String {
+        guard let key = getValue(\District.keyRaw) else {
+            fatalError("Save District before accessing key")
+        }
+        return key
+    }
+
+    public var name: String {
+        guard let name = getValue(\District.nameRaw) else {
+            fatalError("Save District before accessing name")
+        }
+        return name
+    }
+
+    public var year: Int {
+        guard let year = getValue(\District.yearRaw)?.intValue else {
+            fatalError("Save District before accessing year")
+        }
+        return year
+    }
+
+    public var events: [Event] {
+        guard let eventsMany = getValue(\District.eventsRaw),
+            let events = eventsMany.allObjects as? [Event] else {
+                return []
+        }
+        return events
+    }
+
+    public var rankings: [EventRanking] {
+        guard let rankingsMany = getValue(\District.rankingsRaw),
+            let rankings = rankingsMany.allObjects as? [EventRanking] else {
+                return []
+        }
+        return rankings
+    }
+
+    public var teams: [Team] {
+        guard let teamsMany = getValue(\District.teamsRaw),
+            let teams = teamsMany.allObjects as? [Team] else {
+                return []
+        }
+        return teams
+    }
+
+    /**
+     A string concatenating the district's year and abbrevation.
+     */
+    public var abbreviationWithYear: String {
+        return "\(year) \(abbreviation.uppercased())"
+    }
+
+    /**
+     The district championship for a district. A nil value means the DCMP hasn't been fetched yet.
+     */
+    private var districtChampionship: Event? {
+        return events.first(where: { (event) -> Bool in
+            return event.isDistrictChampionship
+        })
+    }
+
+    /**
+     If the district is currently "in season", meaning it's after stop build day, but before the district CMP is over
+     */
+    public var isHappeningNow: Bool {
+        // If we can't find the district championship, we don't know if we're in season or not
+        guard let dcmpEndDate = endDate else {
+            return false
+        }
+        let startOfEvents = Calendar.current.stopBuildDay()
+        return Date().isBetween(date: startOfEvents, andDate: dcmpEndDate.endOfDay())
+    }
+
+    /**
+     The 'end date' for the district - the end date of the district championship
+     */
+    public var endDate: Date? {
+        return districtChampionship?.endDate
+    }
+
+}
+
 @objc(District)
 public class District: NSManagedObject {
 
@@ -10,63 +101,29 @@ public class District: NSManagedObject {
         return NSFetchRequest<District>(entityName: District.entityName)
     }
 
-    public var abbreviation: String {
-        guard let abbreviation = abbreviationString else {
-            fatalError("Save District before accessing abbreviation")
-        }
-        return abbreviation
+    @NSManaged var abbreviationRaw: String?
+    @NSManaged var keyRaw: String?
+    @NSManaged var nameRaw: String?
+    @NSManaged var yearRaw: NSNumber?
+    @NSManaged var eventsRaw: NSSet?
+    @NSManaged var rankingsRaw: NSSet?
+    @NSManaged var teamsRaw: NSSet?
+
+}
+
+extension District {
+
+    // TODO: Do we use this anywhere?
+    public static func predicate(key: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(District.keyRaw), key)
     }
 
-    public var key: String {
-        guard let key = keyString else {
-            fatalError("Save District before accessing key")
-        }
-        return key
+    /*
+    public static func nameSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(District.nameString), ascending: true)
     }
-
-    public var name: String {
-        guard let name = nameString else {
-            fatalError("Save District before accessing name")
-        }
-        return name
-    }
-
-    public var year: Int {
-        guard let year = yearNumber?.intValue else {
-            fatalError("Save District before accessing year")
-        }
-        return year
-    }
-
-    @NSManaged private var abbreviationString: String?
-    @NSManaged private var keyString: String?
-    @NSManaged private var nameString: String?
-    @NSManaged private var yearNumber: NSNumber?
-
-    public var events: [Event] {
-        guard let eventsMany = eventsMany, let events = eventsMany.allObjects as? [Event] else {
-            return []
-        }
-        return events
-    }
-
-    public var rankings: [EventRanking] {
-        guard let rankingsMany = rankingsMany, let rankings = rankingsMany.allObjects as? [EventRanking] else {
-            return []
-        }
-        return rankings
-    }
-
-    public var teams: [Team] {
-        guard let teamsMany = teamsMany, let teams = teamsMany.allObjects as? [Team] else {
-            return []
-        }
-        return teams
-    }
-
-    @NSManaged private var eventsMany: NSSet?
-    @NSManaged private var rankingsMany: NSSet?
-    @NSManaged private var teamsMany: NSSet?
+    */
 
 }
 
@@ -86,7 +143,8 @@ extension District: Managed {
     public static func insert(_ districts: [TBADistrict], year: Int, in context: NSManagedObjectContext) {
         // Fetch all of the previous Districts for this year
         let oldDistricts = District.fetch(in: context) {
-            $0.predicate = District.yearPredicate(year: year)
+            $0.predicate = NSPredicate(format: "%K == %ld",
+                                       #keyPath(District.yearRaw), year)
         }
 
         // Insert new Districts for this year
@@ -114,10 +172,10 @@ extension District: Managed {
         let predicate = District.predicate(key: model.key)
         return findOrCreate(in: context, matching: predicate, configure: { (district) in
             // Required: abbreviation, name, key, year
-            district.abbreviationString = model.abbreviation
-            district.nameString = model.name
-            district.keyString = model.key
-            district.yearNumber = NSNumber(value: model.year)
+            district.abbreviationRaw = model.abbreviation
+            district.nameRaw = model.name
+            district.keyRaw = model.key
+            district.yearRaw = NSNumber(value: model.year)
         })
     }
 
@@ -137,7 +195,7 @@ extension District: Managed {
             return
         }
 
-        updateToManyRelationship(relationship: #keyPath(District.rankingsMany), newValues: rankings.map {
+        updateToManyRelationship(relationship: #keyPath(District.rankingsRaw), newValues: rankings.map {
             return DistrictRanking.insert($0, districtKey: key, in: managedObjectContext)
         })
     }
@@ -154,7 +212,7 @@ extension District: Managed {
             return
         }
 
-        self.eventsMany = NSSet(array: events.map({
+        self.eventsRaw = NSSet(array: events.map({
             return Event.insert($0, in: managedObjectContext)
         }))
     }
@@ -171,68 +229,9 @@ extension District: Managed {
             return
         }
 
-        self.teamsMany = NSSet(array: teams.map({
+        self.teamsRaw = NSSet(array: teams.map({
             return Team.insert($0, in: managedObjectContext)
         }))
-    }
-
-}
-
-extension District {
-
-    public static func keyPath() -> NSString {
-        return #keyPath(District.keyString)
-    }
-
-    public static func predicate(key: String) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(District.keyString), key)
-    }
-
-    public static func yearPredicate(year: Int) -> NSPredicate {
-        return NSPredicate(format: "%K == %ld",
-                           #keyPath(District.yearNumber), year)
-    }
-
-    public static func nameSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(District.nameString), ascending: true)
-    }
-
-    /**
-     A string concatenating the district's year and abbrevation.
-     */
-    public var abbreviationWithYear: String {
-        return "\(year) \(abbreviation.uppercased())"
-    }
-
-    /**
-     The district championship for a district. A nil value means the DCMP hasn't been fetched yet.
-     */
-    private var districtChampionship: Event? {
-        // TODO: Confirm we're doing this in a thread-safe place
-        return events.first(where: { (event) -> Bool in
-            return event.isDistrictChampionship
-        })
-    }
-
-    /**
-     If the district is currently "in season", meaning it's after stop build day, but before the district CMP is over
-     */
-    public var isHappeningNow: Bool {
-        // If we can't find the district championship, we don't know if we're in season or not
-        guard let dcmpEndDate = endDate else {
-            return false
-        }
-        let startOfEvents = Calendar.current.stopBuildDay()
-        return Date().isBetween(date: startOfEvents, andDate: dcmpEndDate.endOfDay())
-    }
-
-    /**
-     The 'end date' for the district - the end date of the district championship
-     */
-    public var endDate: Date? {
-        // TODO: Confirm we're doing this in a thread safe palce
-        return districtChampionship?.endDate
     }
 
 }

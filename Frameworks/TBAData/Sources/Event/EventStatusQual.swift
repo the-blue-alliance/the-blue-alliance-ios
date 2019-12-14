@@ -13,23 +13,21 @@ public class EventStatusQual: NSManagedObject {
         return numTeamsNumber?.intValue
     }
 
-    @NSManaged private var numTeamsNumber: NSNumber?
-    @NSManaged private var status: String?
-
-    @NSManaged internal var eventStatus: EventStatus?
-    @NSManaged internal var ranking: EventRanking?
+    @NSManaged var numTeamsNumber: NSNumber?
+    @NSManaged var status: String?
+    @NSManaged var eventStatus: EventStatus?
+    @NSManaged var ranking: EventRanking?
 
 }
 
 extension EventStatusQual: Managed {
 
     public static func insert(_ model: TBAEventStatusQual, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusQual {
-        let predicate = NSPredicate(format: "(%K.%K.%K == %@ AND %K.%K.%K == %@) OR (%K.%K.%K == %@ AND %K.%K.%K == %@)",
-                                    #keyPath(EventStatusQual.ranking), EventRanking.eventKeyPath(), Event.keyPath(), eventKey,
-                                    #keyPath(EventStatusQual.ranking), EventRanking.teamKeyPath(), #keyPath(Team.keyString), teamKey,
-                                    EventStatusQual.eventStatusKeyPath(), EventStatus.eventKeyPath(), Event.keyPath(), eventKey,
-                                    EventStatusQual.eventStatusKeyPath(), EventStatus.teamKeyPath(), #keyPath(Team.keyString), teamKey)
-
+        let predicate = NSPredicate(format: "(%K == %@ AND %K == %@) OR (%K == %@ AND %K == %@)",
+                                    #keyPath(EventStatusQual.ranking.eventOne.keyRaw), eventKey,
+                                    #keyPath(EventStatusQual.ranking.teamOne.keyString), teamKey,
+                                    #keyPath(EventStatusQual.eventStatus.eventOne.keyRaw), eventKey,
+                                    #keyPath(EventStatusQual.eventStatus.teamOne.keyString), teamKey)
         return findOrCreate(in: context, matching: predicate, configure: { (eventStatusQual) in
             if let numTeams = model.numTeams {
                 eventStatusQual.numTeamsNumber = NSNumber(value: numTeams)
@@ -42,14 +40,6 @@ extension EventStatusQual: Managed {
                 return EventRanking.insert($0, sortOrderInfo: model.sortOrder, extraStatsInfo: nil, eventKey: eventKey, in: context)
             }
         })
-    }
-
-}
-
-extension EventStatusQual {
-
-    public static func eventStatusKeyPath() -> String {
-        return #keyPath(EventStatusQual.eventStatus)
     }
 
 }

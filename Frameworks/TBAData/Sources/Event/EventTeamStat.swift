@@ -30,10 +30,6 @@ public class EventTeamStat: NSManagedObject {
         return ccwm
     }
 
-    @NSManaged private var ccwmNumber: NSNumber?
-    @NSManaged private var dprNumber: NSNumber?
-    @NSManaged private var oprNumber: NSNumber?
-
     public var event: Event {
         guard let event = eventOne else {
             fatalError("Save EventTeamStat before accessing event")
@@ -48,8 +44,11 @@ public class EventTeamStat: NSManagedObject {
         return team
     }
 
-    @NSManaged private var eventOne: Event?
-    @NSManaged private var teamOne: Team?
+    @NSManaged var ccwmNumber: NSNumber?
+    @NSManaged var dprNumber: NSNumber?
+    @NSManaged var oprNumber: NSNumber?
+    @NSManaged var eventOne: Event?
+    @NSManaged var teamOne: Team?
 
 }
 
@@ -71,14 +70,15 @@ extension EventTeamStat: Managed {
 extension EventTeamStat {
 
     public static func predicate(eventKey: String, teamKey: String) -> NSPredicate {
-        return NSPredicate(format: "%K.%K == %@ AND %K.%K == %@",
-                           #keyPath(EventTeamStat.eventOne), Event.keyPath(), eventKey,
-                           #keyPath(EventTeamStat.teamOne), #keyPath(Team.keyString), teamKey)
+        let eventPredicate = EventTeamStat.eventPredicate(eventKey: eventKey)
+        let teamPredicate = NSPredicate(format: "%K == %@",
+                                        #keyPath(EventTeamStat.teamOne.keyString), teamKey)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [eventPredicate, teamPredicate])
     }
 
     public static func eventPredicate(eventKey: String) -> NSPredicate {
-        return NSPredicate(format: "%K.%K == %@",
-                           #keyPath(EventTeamStat.eventOne), Event.keyPath(), eventKey)
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(EventTeamStat.eventOne.keyRaw), eventKey)
     }
 
     public static func oprSortDescriptor() -> NSSortDescriptor {

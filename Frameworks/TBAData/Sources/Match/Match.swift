@@ -69,7 +69,7 @@ public class Match: NSManagedObject {
     @NSManaged public private(set) var breakdown: [String: Any]?
     @NSManaged private var compLevelSortOrderNumber: NSNumber?
     @NSManaged public private(set) var compLevelString: String?
-    @NSManaged private var keyString: String?
+    @NSManaged var keyString: String?
     @NSManaged private var matchNumberNumber: NSNumber?
     @NSManaged private var postResultTimeNumber: NSNumber?
     @NSManaged private var predictedTimeNumber: NSNumber?
@@ -265,8 +265,8 @@ extension Match {
     }
 
     public static func eventPredicate(eventKey: String) -> NSPredicate {
-        return NSPredicate(format: "%K.%K == %@",
-                           #keyPath(Match.eventOne), Event.keyPath(), eventKey)
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Match.eventOne.keyRaw), eventKey)
     }
 
     public static func eventTeamPredicate(eventKey: String, teamKey: String) -> NSPredicate {
@@ -277,7 +277,8 @@ extension Match {
 
     public static func teamKeysPredicate(teamKeys: [String]) -> NSPredicate {
         return NSPredicate(format: "SUBQUERY(%K, $a, ANY $a.%K.%K IN %@).@count > 0",
-                           #keyPath(Match.alliancesMany), #keyPath(MatchAlliance.teams), #keyPath(Team.keyString), teamKeys)
+                           #keyPath(Match.alliancesMany),
+                           #keyPath(MatchAlliance.teamsMany), #keyPath(Team.keyString), teamKeys)
     }
 
     public static func forKey(_ key: String, in context: NSManagedObjectContext) -> Match? {

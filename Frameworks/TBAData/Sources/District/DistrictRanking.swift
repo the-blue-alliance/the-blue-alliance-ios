@@ -2,6 +2,63 @@ import Foundation
 import CoreData
 import TBAKit
 
+extension DistrictRanking {
+
+    public var pointTotal: Int {
+        guard let pointTotal = getValue(\DistrictRanking.pointTotalRaw)?.intValue else {
+            fatalError("Save DistrictRanking before accessing pointTotal")
+        }
+        return pointTotal
+    }
+
+    public var rank: Int {
+        guard let rank = getValue(\DistrictRanking.rankRaw)?.intValue else {
+            fatalError("Save DistrictRanking before accessing rank")
+        }
+        return rank
+    }
+
+    public var rookieBonus: Int? {
+        return getValue(\DistrictRanking.rookieBonusRaw)?.intValue
+    }
+
+    public var district: District {
+        guard let district = getValue(\DistrictRanking.districtRaw) else {
+            fatalError("Save DistrictRanking before accessing district")
+        }
+        return district
+    }
+
+    public var eventPoints: [DistrictEventPoints] {
+        guard let eventPointsMany = getValue(\DistrictRanking.eventPointsRaw),
+            let eventPoints = eventPointsMany.allObjects as? [DistrictEventPoints] else {
+                fatalError("Save DistrictRanking before accessing eventPoints")
+        }
+        return eventPoints
+    }
+
+    public var team: Team {
+        guard let team = getValue(\DistrictRanking.teamRaw) else {
+            fatalError("Save DistrictRanking before accessing team")
+        }
+        return team
+    }
+
+    // TODO: Audit the uses of this to see if we can have empty events when using this
+    public var sortedEventPoints: [DistrictEventPoints] {
+        return eventPoints.sorted(by: { (lhs, rhs) -> Bool in
+            guard let lhsStartDate = lhs.event.startDate else {
+                return false
+            }
+            guard let rhsStartDate = rhs.event.startDate else {
+                return false
+            }
+            return rhsStartDate > lhsStartDate
+        })
+    }
+
+}
+
 @objc(DistrictRanking)
 public class DistrictRanking: NSManagedObject {
 
@@ -9,52 +66,22 @@ public class DistrictRanking: NSManagedObject {
         return NSFetchRequest<DistrictRanking>(entityName: DistrictRanking.entityName)
     }
 
-    public var pointTotal: Int {
-        guard let pointTotal = pointTotalNumber?.intValue else {
-            fatalError("Save DistrictRanking before accessing pointTotal")
-        }
-        return pointTotal
+    @NSManaged var pointTotalRaw: NSNumber?
+    @NSManaged var rankRaw: NSNumber?
+    @NSManaged var rookieBonusRaw: NSNumber?
+    @NSManaged var districtRaw: District?
+    @NSManaged var eventPointsRaw: NSSet?
+    @NSManaged var teamRaw: Team?
+
+}
+
+extension DistrictRanking {
+
+    /*
+    public static func rankSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(DistrictRanking.rankNumber), ascending: true)
     }
-
-    public var rank: Int {
-        guard let rank = rankNumber?.intValue else {
-            fatalError("Save DistrictRanking before accessing rank")
-        }
-        return rank
-    }
-
-    public var rookieBonus: Int? {
-        return rookieBonusNumber?.intValue
-    }
-
-    @NSManaged private var pointTotalNumber: NSNumber?
-    @NSManaged private var rankNumber: NSNumber?
-    @NSManaged private var rookieBonusNumber: NSNumber?
-
-    public var district: District {
-        guard let district = districtOne else {
-            fatalError("Save DistrictRanking before accessing district")
-        }
-        return district
-    }
-
-    public var eventPoints: [DistrictEventPoints] {
-        guard let eventPointsMany = eventPointsMany, let eventPoints = eventPointsMany.allObjects as? [DistrictEventPoints] else {
-            fatalError("Save DistrictRanking before accessing eventPoints")
-        }
-        return eventPoints
-    }
-
-    public var team: Team {
-        guard let team = teamOne else {
-            fatalError("Save DistrictRanking before accessing team")
-        }
-        return team
-    }
-
-    @NSManaged private var districtOne: District?
-    @NSManaged private var eventPointsMany: NSSet?
-    @NSManaged private var teamOne: Team?
+    */
 
 }
 
@@ -76,53 +103,24 @@ extension DistrictRanking: Managed {
      - Returns: The inserted District Ranking.
      */
     public static func insert(_ model: TBADistrictRanking, districtKey: String, in context: NSManagedObjectContext) -> DistrictRanking {
-        let predicate = NSPredicate(format: "%K.%K == %@ AND %K == %@",
-                                    #keyPath(DistrictRanking.districtOne), District.keyPath(), districtKey,
-                                    #keyPath(DistrictRanking.teamOne.keyString), model.teamKey)
-
+        let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
+                                    #keyPath(DistrictRanking.districtRaw.keyRaw), districtKey,
+                                    #keyPath(DistrictRanking.teamRaw.keyString), model.teamKey)
         return findOrCreate(in: context, matching: predicate, configure: { (ranking) in
-            ranking.teamOne = Team.insert(model.teamKey, in: context)
+            ranking.teamRaw = Team.insert(model.teamKey, in: context)
 
-            ranking.pointTotalNumber = NSNumber(value: model.pointTotal)
-            ranking.rankNumber = NSNumber(value: model.rank)
+            ranking.pointTotalRaw = NSNumber(value: model.pointTotal)
+            ranking.rankRaw = NSNumber(value: model.rank)
 
             if let rookieBonus = model.rookieBonus {
-                ranking.rookieBonusNumber = NSNumber(value: rookieBonus)
+                ranking.rookieBonusRaw = NSNumber(value: rookieBonus)
             } else {
-                ranking.rookieBonusNumber = nil
+                ranking.rookieBonusRaw = nil
             }
 
-            ranking.updateToManyRelationship(relationship: #keyPath(DistrictRanking.eventPointsMany), newValues: model.eventPoints.compactMap {
+            ranking.updateToManyRelationship(relationship: #keyPath(DistrictRanking.eventPointsRaw), newValues: model.eventPoints.compactMap {
                 return DistrictEventPoints.insert($0, in: context)
             })
-        })
-    }
-
-}
-
-extension DistrictRanking {
-
-    public static func districtPredicate(districtKey: String) -> NSPredicate {
-        return NSPredicate(format: "%K.%K == %@",
-                           #keyPath(DistrictRanking.districtOne), District.keyPath(), districtKey)
-    }
-
-    public static func rankSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(DistrictRanking.rankNumber), ascending: true)
-    }
-
-    // TODO: Audit the uses of this to see if we can have empty events when using this
-    // TODO: Make sure we're doing this in a thread safe place
-    public var sortedEventPoints: [DistrictEventPoints] {
-        let eventPointsSet = getValue(\DistrictRanking.eventPointsMany)
-        return eventPoints.sorted(by: { (lhs, rhs) -> Bool in
-            guard let lhsStartDate = lhs.event.startDate else {
-                return false
-            }
-            guard let rhsStartDate = rhs.event.startDate else {
-                return false
-            }
-            return rhsStartDate > lhsStartDate
         })
     }
 
@@ -131,7 +129,7 @@ extension DistrictRanking {
 extension DistrictRanking: Orphanable {
 
     public var isOrphaned: Bool {
-        return districtOne == nil
+        return districtRaw == nil
     }
 
 }

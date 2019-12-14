@@ -4,124 +4,6 @@ import MyTBAKit
 import TBAKit
 import TBAUtils
 
-@objc(Event)
-public class Event: NSManagedObject {
-
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Event> {
-        return NSFetchRequest<Event>(entityName: Event.entityName)
-    }
-
-    public var eventType: EventType? {
-        guard let eventTypeInt = eventTypeNumber?.intValue else {
-            return nil
-        }
-        guard let eventType = EventType(rawValue: eventTypeInt) else {
-            return nil
-        }
-        return eventType
-    }
-
-    public var key: String {
-        guard let key = keyString else {
-            fatalError("Save Event before accessing key")
-        }
-        return key
-    }
-
-    public var lat: Double? {
-        return latNumber?.doubleValue
-    }
-
-    public var lng: Double? {
-        return lngNumber?.doubleValue
-    }
-
-    public var week: Int? {
-        return weekNumber?.intValue
-    }
-
-    public var year: Int {
-        guard let year = yearNumber?.intValue else {
-            fatalError("Save Event before accessing year")
-        }
-        return year
-    }
-
-    @NSManaged public private(set) var address: String?
-    @NSManaged public private(set) var city: String?
-    @NSManaged public private(set) var country: String?
-    @NSManaged public private(set) var endDate: Date?
-    @NSManaged public private(set) var eventCode: String?
-    @NSManaged private var eventTypeNumber: NSNumber?
-    @NSManaged public private(set) var eventTypeString: String?
-    @NSManaged public private(set) var firstEventCode: String?
-    @NSManaged public private(set) var firstEventID: String?
-    @NSManaged public private(set) var gmapsPlaceID: String?
-    @NSManaged public private(set) var gmapsURL: String?
-    @NSManaged private var hybridType: String?
-    @NSManaged private var keyString: String?
-    @NSManaged private var latNumber: NSNumber?
-    @NSManaged private var lngNumber: NSNumber?
-    @NSManaged public private(set) var locationName: String?
-    @NSManaged public private(set) var name: String?
-    @NSManaged private var playoffTypeNumber: NSNumber?
-    @NSManaged private var playoffTypeString: String?
-    @NSManaged public private(set) var postalCode: String?
-    @NSManaged public private(set) var shortName: String?
-    @NSManaged public private(set) var startDate: Date?
-    @NSManaged public private(set) var stateProv: String?
-    @NSManaged public private(set) var timezone: String?
-    @NSManaged public private(set) var website: String?
-    @NSManaged private var weekNumber: NSNumber?
-    @NSManaged private var yearNumber: NSNumber?
-
-    public var awards: [Award] {
-        guard let awardsMany = awardsMany, let awards = awardsMany.allObjects as? [Award] else {
-            return []
-        }
-        return awards
-    }
-
-    public var webcasts: [Webcast] {
-        guard let webcastsMany = webcastsMany, let webcasts = webcastsMany.allObjects as? [Webcast] else {
-            return []
-        }
-        return webcasts
-    }
-
-    @NSManaged public private(set) var alliances: NSOrderedSet?
-    @NSManaged private var awardsMany: NSSet?
-    @NSManaged public private(set) var district: District?
-    @NSManaged private var divisionsMany: NSSet?
-    @NSManaged public private(set) var insights: EventInsights?
-    @NSManaged private var matchesMany: NSSet?
-    @NSManaged private var parentEvent: Event?
-    @NSManaged private var pointsMany: NSSet?
-    @NSManaged private var rankingsMany: NSSet?
-    @NSManaged private var statsMany: NSSet?
-    @NSManaged private var status: Status?
-    @NSManaged private var statusesMany: NSSet?
-    @NSManaged private var teamsMany: NSSet?
-    @NSManaged private var webcastsMany: NSSet?
-
-}
-
-// MARK: Generated accessors for awardsMany
-extension Event {
-
-    @objc(addAwardsManyObject:)
-    @NSManaged private func addToAwardsMany(_ value: Award)
-
-}
-
-// MARK: Generated accessors for statusesMany
-extension Event {
-
-    @objc(addStatusesManyObject:)
-    @NSManaged private func addToStatusesMany(_ value: EventStatus)
-
-}
-
 // https://github.com/the-blue-alliance/the-blue-alliance/blob/master/consts/event_type.py
 public enum EventType: Int {
     case regional = 0
@@ -144,477 +26,214 @@ extension EventType: Comparable {
 
 }
 
-extension Event: Managed {
-
-    static var dateFormatter: DateFormatter {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        return dateFormatter
-    }
-
-    /**
-     Insert Events for a year with values from TBAKit Event models in to the managed object context.
-
-     This method manages deleting orphaned Events for a year.
-
-     - Parameter events: The TBAKit Event representations to set values from.
-
-     - Parameter year: The year for the Events.
-
-     - Parameter context: The NSManagedContext to insert the Event in to.
-     */
-    public static func insert(_ events: [TBAEvent], year: Int, in context: NSManagedObjectContext) {
-        // Fetch all of the previous Events for this year
-        let oldEvents = Event.fetch(in: context) {
-            $0.predicate = Event.yearPredicate(year: year)
-        }
-
-        // Insert new Events for this year
-        let events = events.map({
-            return Event.insert($0, in: context)
-        })
-
-        // Delete orphaned Events for this year
-        Set(oldEvents).subtracting(Set(events)).forEach({
-            context.delete($0)
-        })
-    }
-
-    /**
-     Insert an Event with a specified key in to the managed object context.
-
-     - Parameter key: The key for the Event.
-
-     - Parameter context: The NSManagedContext to insert the Event in to.
-
-     - Returns: The inserted Event.
-     */
-    public static func insert(_ key: String, in context: NSManagedObjectContext) -> Event {
-        let predicate = Event.predicate(key: key)
-        return findOrCreate(in: context, matching: predicate) { (event) in
-            // Required: key, year
-            event.keyString = key
-
-            let yearString = String(key.prefix(4))
-            if let year = Int(yearString) {
-                event.yearNumber = NSNumber(value: year)
-            }
-        }
-    }
-
-    /**
-     Insert an Event with values from a TBAKit Event model in to the managed object context.
-
-     This method manages deleting orphaned Webcasts.
-
-     - Parameter model: The TBAKit Event representation to set values from.
-
-     - Parameter context: The NSManagedContext to insert the Event in to.
-
-     - Returns: The inserted Event.
-     */
-    @discardableResult
-    public static func insert(_ model: TBAEvent, in context: NSManagedObjectContext) -> Event {
-        let predicate = Event.predicate(key: model.key)
-        return findOrCreate(in: context, matching: predicate) { (event) in
-            // Required: endDate, eventCode, eventType, key, name, startDate, year
-            event.address = model.address
-            event.city = model.city
-            event.country = model.country
-
-            if let district = model.district {
-                event.district = District.insert(district, in: context)
-            } else {
-                event.district = nil
-            }
-
-            event.divisionsMany = NSSet(array: model.divisionKeys.map {
-                return Event.insert($0, in: context)
-            })
-
-            event.endDate = model.endDate
-            event.eventCode = model.eventCode
-            event.eventTypeNumber = NSNumber(value: model.eventType)
-            event.eventTypeString = model.eventTypeString
-            event.firstEventID = model.firstEventID
-            event.firstEventCode = model.firstEventCode
-            event.gmapsPlaceID = model.gmapsPlaceID
-            event.gmapsURL = model.gmapsURL
-
-            event.keyString = model.key
-
-            if let lat = model.lat {
-                event.latNumber = NSNumber(value: lat)
-            } else {
-                event.latNumber = nil
-            }
-            if let lng = model.lng {
-                event.lngNumber = NSNumber(value: lng)
-            } else {
-                event.lngNumber = nil
-            }
-
-            event.locationName = model.locationName
-            event.name = model.name
-
-            if let parentEventKey = model.parentEventKey {
-                event.parentEvent = Event.insert(parentEventKey, in: context)
-            } else {
-                event.parentEvent = nil
-            }
-            if let playoffType = model.playoffType {
-                event.playoffTypeNumber = NSNumber(value: playoffType)
-            } else {
-                event.playoffTypeNumber = nil
-            }
-            event.playoffTypeString = model.playoffTypeString
-
-            event.postalCode = model.postalCode
-            event.shortName = model.shortName
-            event.startDate = model.startDate
-            event.stateProv = model.stateProv
-            event.timezone = model.timezone
-
-            event.insert(model.webcasts ?? [])
-
-            event.website = model.website
-            if let week = model.week {
-                event.weekNumber = NSNumber(value: week)
-            } else {
-                event.weekNumber = nil
-            }
-            event.yearNumber = NSNumber(value: model.year)
-
-            event.hybridType = calculateHybridType(eventType: model.eventType,
-                                                   startDate: model.startDate,
-                                                   district: model.district)
-        }
-    }
-
-    /**
-     Insert Event Alliances with values from a TBAKit Alliance models in to the managed object context.
-
-     This method will manage setting up an Event Alliance's relationship to an Event and the deletion of oprhaned Event Alliances on the Event.
-
-     - Parameter alliances: The TBAKit Alliance representations to set values from.
-     */
-    public func insert(_ alliances: [TBAAlliance]) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        updateToManyRelationship(relationship: #keyPath(Event.alliances), newValues: alliances.map {
-            return EventAlliance.insert($0, eventKey: key, in: managedObjectContext)
-        })
-    }
-
-    /**
-     Insert Awards with values from a TBAKit Award models in to the managed object context.
-
-     This method will manage setting up an Award's relationship to an Event and the deletion of oprhaned Awards on the Event.
-
-     - Parameter awards: The TBAKit Award representations to set values from.
-     */
-    public func insert(_ awards: [TBAAward]) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        updateToManyRelationship(relationship: #keyPath(Event.awardsMany), newValues: awards.map({
-            return Award.insert($0, in: managedObjectContext)
-        }))
-    }
-
-    /**
-     Insert Awards for a given Team key with values from a TBAKit Award models in to the managed object context.
-
-     This method will manage setting up an Award's relationship to an Event and the deletion of oprhaned Awards for a Team key on the Event.
-
-     - Parameter awards: The TBAKit Award representations to set values from.
-
-     - Parameter teamKey: The key for the Team the Awards belong to.
-     */
-    public func insert(_ awards: [TBAAward], teamKey: String) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        // Fetch all of the previous Awards for this Team at this Event
-        let teamPredicate = Award.teamPredicate(teamKey: teamKey)
-        let oldAwards = self.awards.filter {
-            return teamPredicate.evaluate(with: $0)
-        }
-
-        // Insert new Awards
-        let awards = awards.map({ (model: TBAAward) -> Award in
-            let a = Award.insert(model, in: managedObjectContext)
-            addToAwardsMany(a)
-            return a
-        })
-
-        // Delete orphaned Awards for this Event/TeamKey
-        Set(oldAwards).subtracting(Set(awards)).forEach {
-            managedObjectContext.delete($0)
-        }
-    }
-
-    /**
-     Insert an EventInsight with values from TBAKit EventInsight model in to the managed object context.
-
-     This method will manage setting up an EventInsight's relationship to an Event.
-
-     - Parameter insights: The TBAKit EventInsights representations to set values from.
-     */
-    public func insert(_ insights: TBAEventInsights) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        let key = self.key
-        updateToOneRelationship(relationship: #keyPath(Event.insights), newValue: insights, newObject: {
-            return EventInsights.insert($0, eventKey: key, in: managedObjectContext)
-        })
-    }
-
-    /**
-     Insert Matches with values from TBAKit Match models in to the managed object context.
-
-     This method will manage setting up a Match's relationship to an Event and the deletion of oprhaned Matches on the Event.
-
-     - Parameter matches: The TBAKit Match representations to set values from.
-     */
-    public func insert(_ matches: [TBAMatch]) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        updateToManyRelationship(relationship: #keyPath(Event.matchesMany), newValues: matches.map({
-            return Match.insert($0, in: managedObjectContext)
-        }))
-    }
-
-    /**
-     Insert Rankings with values from TBAKit Event Ranking models in to the managed object context.
-
-     This method manages setting up an Event's relationship to Rankings.
-
-     - Parameter rankings: The TBAKit Event Ranking representations to set values from.
-
-     - Parameter sortOrderInfo: The TBA EventRankingSortOrder representations for this Ranking info
-
-     - Parameter extraStatsInfo: The TBA EventRankingSortOrder representations for this Ranking info
-     */
-    public func insert(_ rankings: [TBAEventRanking], sortOrderInfo: [TBAEventRankingSortOrder]?, extraStatsInfo: [TBAEventRankingSortOrder]?) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        updateToManyRelationship(relationship: #keyPath(Event.rankingsMany), newValues: rankings.map({
-            return EventRanking.insert($0, sortOrderInfo: sortOrderInfo, extraStatsInfo: extraStatsInfo, eventKey: key, in: managedObjectContext)
-        }))
-    }
-
-    /**
-     Insert EventTeamStats with values from a TBAKit Stat models in to the managed object context.
-
-     This method manages setting up an Event's relationship to an EventTeamStats as well as deleting orphaned EventTeamStats
-
-     - Parameter stats: The TBAKit Stat representation to set values from.
-     */
-    public func insert(_ stats: [TBAStat]) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        updateToManyRelationship(relationship: #keyPath(Event.statsMany), newValues: stats.map({
-            return EventTeamStat.insert($0, eventKey: key, in: managedObjectContext)
-        }))
-    }
-
-    /**
-     Insert an Event Status with values from a TBAKit Event Status model in to the managed object context.
-
-     This method manages setting up an Event's relationship to an Event Status, as well as setting up an EventStatusQual's Ranking's relationship to the Event
-
-     - Parameter status: The TBAKit Event Status representation to set values from.
-     */
-    public func insert(_ status: TBAEventStatus) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        let status = EventStatus.insert(status, in: managedObjectContext)
-        status.qual?.ranking?.setEvent(event: self)
-
-        addToStatusesMany(status)
-    }
-
-    /**
-     Insert Teams with values from TBAKit Team models in to the managed object context.
-
-     This method manages setting up an Event's relationship to Teams.
-
-     - Parameter teams: The TBAKit Team representations to set values from.
-     */
-    public func insert(_ teams: [TBATeam]) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        self.teamsMany = NSSet(array: teams.map({
-            return Team.insert($0, in: managedObjectContext)
-        }))
-    }
-
-    /**
-     Insert Webcasts with values from TBAKit Webcast models in to the managed object context.
-
-     This method manages setting up an Event's relationship to Webcasts and deleting orphaned Webcasts.
-
-     - Parameter webcasts: The TBAKit Webcast representations to set values from.
-     */
-    public func insert(_ webcasts: [TBAWebcast]) {
-        guard let managedObjectContext = managedObjectContext else {
-            return
-        }
-
-        updateToManyRelationship(relationship: #keyPath(Event.webcastsMany), newValues: webcasts.map({
-            return Webcast.insert($0, in: managedObjectContext)
-        }))
-    }
-
-    /// Event's shouldn't really be deleted, but sometimes they can be
-    public override func prepareForDeletion() {
-        super.prepareForDeletion()
-
-        webcasts.forEach {
-            if $0.events.onlyObject(self) {
-                // Webcast will become an orphan - delete
-                managedObjectContext?.delete($0)
-            } else {
-                $0.removeFromEventsMany(self)
-            }
-        }
-    }
-
-}
-
-extension Event: Locatable, Surfable {}
-
 extension Event {
 
-    public static func predicate(key: String) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(Event.keyString), key)
+    public var address: String? {
+        return getValue(\Event.addressRaw)
     }
 
-    public static func subqueryPredicate(keyPath: String, eventKey: String) -> NSPredicate {
-        return NSPredicate(format: "SUBQUERY(%K, $e, $e.%K == %@)",
-                           keyPath,
-                           #keyPath(Event.keyString), eventKey)
+    public var city: String? {
+        return getValue(\Event.cityRaw)
     }
 
-    public static func keyPath() -> String {
-        return #keyPath(Event.keyString)
+    public var country: String? {
+        return getValue(\Event.countryRaw)
     }
 
-    public static func champsYearPredicate(key: String, year: Int) -> NSPredicate {
-        // 2017 and onward - handle multiple CMPs
-        let yearPredicate = Event.yearPredicate(year: year)
-        let predicate = NSPredicate(format: "(%K == %ld || %K == %ld) && (%K == %@ || %K == %@)",
-                                    #keyPath(Event.eventTypeNumber), EventType.championshipFinals.rawValue,
-                                    #keyPath(Event.eventTypeNumber), EventType.championshipDivision.rawValue,
-                                    #keyPath(Event.keyString), key,
-                                    #keyPath(Event.parentEvent.keyString), key)
-        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, predicate])
+    public var endDate: Date? {
+        return getValue(\Event.endDateRaw)
     }
 
-    public static func eventTypeYearPredicate(eventType: EventType, year: Int) -> NSPredicate {
-        let yearPredicate = Event.yearPredicate(year: year)
-        let predicate = NSPredicate(format: "%K == %ld",
-                                    #keyPath(Event.eventTypeNumber), eventType.rawValue)
-        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, predicate])
+    public var eventCode: String? {
+        return getValue(\Event.eventCodeRaw)
     }
 
-    public static func offseasonYearPredicate(startDate: Date, endDate: Date, year: Int) -> NSPredicate {
-        let yearPredicate = Event.yearPredicate(year: year)
-
-        // Conversion stuff, since Core Data still uses NSDate's
-        let firstDayOfMonth = NSDate(timeIntervalSince1970: startDate.startOfMonth().timeIntervalSince1970)
-        let lastDayOfMonth = NSDate(timeIntervalSince1970: endDate.endOfMonth().timeIntervalSince1970)
-        let predicate = NSPredicate(format: "%K == %ld && (%K >= %@) AND (%K <= %@)",
-                                    #keyPath(Event.eventTypeNumber), EventType.offseason.rawValue,
-                                    #keyPath(Event.startDate), firstDayOfMonth,
-                                    #keyPath(Event.endDate), lastDayOfMonth)
-        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, predicate])
+    public var eventType: EventType? {
+        guard let eventTypeInt = getValue(\Event.eventTypeRaw)?.intValue else {
+            return nil
+        }
+        guard let eventType = EventType(rawValue: eventTypeInt) else {
+            return nil
+        }
+        return eventType
     }
 
-    private static func teamPredicate(teamKey: String) -> NSPredicate {
-        return NSPredicate(format: "SUBQUERY(%K, $t, $t.%K == %@)",
-                           #keyPath(Event.teamsMany),
-                           #keyPath(Team.keyString), teamKey)
+    public var eventTypeString: String? {
+        return getValue(\Event.eventTypeStringRaw)
     }
 
-    public static func teamYearPredicate(teamKey: String, year: Int) -> NSPredicate {
-        let teamPredicate = Event.teamPredicate(teamKey: teamKey)
-        let yearPredicate = Event.yearPredicate(year: year)
-        return NSCompoundPredicate(andPredicateWithSubpredicates: [teamPredicate, yearPredicate])
+    public var firstEventCode: String? {
+        return getValue(\Event.firstEventCodeRaw)
     }
 
-    public static func teamYearNonePredicate(teamKey: String) -> NSPredicate {
-        let teamPredicate = Event.teamPredicate(teamKey: teamKey)
-        let yearPredicate = Event.yearPredicate(year: -1)
-        return NSCompoundPredicate(andPredicateWithSubpredicates: [teamPredicate, yearPredicate])
+    public var firstEventID: String? {
+        return getValue(\Event.firstEventIDRaw)
     }
 
-    public static func unplayedEventPredicate(date: Date, year: Int) -> NSPredicate {
-        let yearPredicate = Event.yearPredicate(year: year)
-
-        let coreDataDate = NSDate(timeIntervalSince1970: date.timeIntervalSince1970)
-        let beforeEndDatePredicate = NSPredicate(format: "%K >= %@ && %K != %ld",
-                                                 #keyPath(Event.endDate), coreDataDate,
-                                                 #keyPath(Event.eventTypeNumber), EventType.championshipDivision.rawValue)
-        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, beforeEndDatePredicate])
+    public var gmapsPlaceID: String? {
+        return getValue(\Event.gmapsPlaceIDRaw)
     }
 
-    public static func weekYearPredicate(week: Int, year: Int) -> NSPredicate {
-        let yearPredicate = Event.yearPredicate(year: year)
-        // Event has a week - filter based on the week
-        let weekPredicate = NSPredicate(format: "%K == %ld",
-                                        #keyPath(Event.weekNumber), week)
-        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, weekPredicate])
+    public var gmapsURL: String? {
+        return getValue(\Event.gmapsURLRaw)
     }
 
-    public static func yearPredicate(year: Int) -> NSPredicate {
-        return NSPredicate(format: "%K == %ld", #keyPath(Event.yearNumber), year)
+    public var key: String {
+        guard let key = getValue(\Event.keyRaw) else {
+            fatalError("Save Event before accessing key")
+        }
+        return key
     }
 
-    public static func nonePredicate() -> NSPredicate {
-        return NSPredicate(format: "%K == -1", #keyPath(Event.yearNumber))
+    public var lat: Double? {
+        return getValue(\Event.latRaw)?.doubleValue
     }
 
-    public static func endDateSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(Event.endDate), ascending: true)
+    public var lng: Double? {
+        return getValue(\Event.lngRaw)?.doubleValue
     }
 
-    public static func hybridTypeSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(Event.hybridType), ascending: true)
+    public var locationName: String? {
+        return getValue(\Event.locationNameRaw)
     }
 
-    public static func startDateSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(Event.startDate), ascending: true)
+    public var name: String? {
+        return getValue(\Event.nameRaw)
     }
 
-    public static func weekSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(Event.weekNumber), ascending: true)
+    public var playoffType: Int? {
+        return getValue(\Event.playoffTypeRaw)?.intValue
     }
 
-    public static func hybridTypeKeyPath() -> String {
-        return #keyPath(Event.hybridType)
+    public var playoffTypeString: String? {
+        return getValue(\Event.playoffTypeStringRaw)
     }
 
-    public static func weekKeyPath() -> String {
-        return #keyPath(Event.weekNumber)
+    public var postalCode: String? {
+        return getValue(\Event.postalCodeRaw)
+    }
+
+    public var shortName: String? {
+        return getValue(\Event.shortNameRaw)
+    }
+
+    public var startDate: Date? {
+        return getValue(\Event.startDateRaw)
+    }
+
+    public var stateProv: String? {
+        return getValue(\Event.stateProvRaw)
+    }
+
+    public var timezone: String? {
+        return getValue(\Event.timezoneRaw)
+    }
+
+    public var website: String? {
+        return getValue(\Event.websiteRaw)
+    }
+
+    public var week: Int? {
+        return getValue(\Event.weekRaw)?.intValue
+    }
+
+    public var year: Int {
+        guard let year = getValue(\Event.yearRaw)?.intValue else {
+            fatalError("Save Event before accessing year")
+        }
+        return year
+    }
+
+    public var alliances: NSOrderedSet? {
+        return getValue(\Event.alliancesRaw)
+    }
+
+    public var awards: [Award] {
+        guard let awardsRaw = getValue(\Event.awardsRaw),
+            let awards = awardsRaw.allObjects as? [Award] else {
+                return []
+        }
+        return awards
+    }
+
+    public var district: District? {
+        return getValue(\Event.districtRaw)
+    }
+
+    public var divisions: [Event] {
+        guard let divisionsRaw = getValue(\Event.divisionsRaw),
+            let divisions = divisionsRaw.allObjects as? [Event] else {
+                return []
+        }
+        return divisions
+    }
+
+    public var insights: EventInsights? {
+        return getValue(\Event.insightsRaw)
+    }
+
+    public var matches: [Match] {
+        guard let matchesRaw = getValue(\Event.matchesRaw),
+            let matches = matchesRaw.allObjects as? [Match] else {
+                return []
+        }
+        return matches
+    }
+
+    public var parentEvent: Event? {
+        return getValue(\Event.parentEventRaw)
+    }
+
+    public var points: [DistrictEventPoints] {
+        guard let pointsRaw = getValue(\Event.pointsRaw),
+            let points = pointsRaw.allObjects as? [DistrictEventPoints] else {
+                return []
+        }
+        return points
+    }
+
+    public var rankings: [EventRanking] {
+        guard let rankingsRaw = getValue(\Event.rankingsRaw),
+            let rankings = rankingsRaw.allObjects as? [EventRanking] else {
+                return []
+        }
+        return rankings
+    }
+
+    public var stats: [EventTeamStat] {
+        guard let statsRaw = getValue(\Event.statsRaw),
+            let stats = statsRaw.allObjects as? [EventTeamStat] else {
+                return []
+        }
+        return stats
+    }
+
+    public var status: Status? {
+        return getValue(\Event.statusRaw)
+    }
+
+    public var statuses: [EventStatus] {
+        guard let statusesRaw = getValue(\Event.statusesRaw),
+            let statuses = statusesRaw.allObjects as? [EventStatus] else {
+                return []
+        }
+        return statuses
+    }
+
+    public var teams: [Team] {
+        guard let teamsRaw = getValue(\Event.teamsRaw),
+            let teams = teamsRaw.allObjects as? [Team] else {
+                return []
+        }
+        return teams
+    }
+
+    public var webcasts: [Webcast] {
+        guard let webcastsRaw = getValue(\Event.webcastsRaw),
+            let webcasts = webcastsRaw.allObjects as? [Webcast] else {
+                return []
+        }
+        return webcasts
     }
 
     public func awards(for teamKey: String) -> [Award] {
@@ -650,6 +269,7 @@ extension Event {
         guard let eventType = eventType else {
             return nil
         }
+        let year = self.year
 
         if eventType == .championshipDivision || eventType == .championshipFinals {
             if year >= 2017, let city = city {
@@ -693,10 +313,10 @@ extension Event {
         }
     }
 
-    // TODO: Add tests
     public var safeShortName: String {
         guard let name = name else {
-            return String(key.dropFirst(4)) // Drop year from key
+            // Drop year from key
+            return String(key.dropFirst(4))
         }
         guard let shortName = shortName else {
             return name
@@ -704,7 +324,6 @@ extension Event {
         return shortName.isEmpty ? name : shortName
     }
 
-    // TODO: Add tests
     public var friendlyNameWithYear: String {
         return "\(year) \(safeShortName) \(eventTypeString ?? "Event")"
     }
@@ -712,7 +331,7 @@ extension Event {
     /**
      If the event is a CMP division or a CMP finals field.
      */
-    public var isChampionship: Bool {
+    public var isChampionshipEvent: Bool {
         return isChampionshipDivision || isChampionshipFinals
     }
 
@@ -832,18 +451,558 @@ extension Event {
         return dateFormatter.string(from: startDate)
     }
 
+}
+
+@objc(Event)
+public class Event: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Event> {
+        return NSFetchRequest<Event>(entityName: Event.entityName)
+    }
+
+    @NSManaged var addressRaw: String?
+    @NSManaged var cityRaw: String?
+    @NSManaged var countryRaw: String?
+    @NSManaged var endDateRaw: Date?
+    @NSManaged var eventCodeRaw: String?
+    @NSManaged var eventTypeRaw: NSNumber?
+    @NSManaged var eventTypeStringRaw: String?
+    @NSManaged var firstEventCodeRaw: String?
+    @NSManaged var firstEventIDRaw: String?
+    @NSManaged var gmapsPlaceIDRaw: String?
+    @NSManaged var gmapsURLRaw: String?
+    @NSManaged private var hybridType: String?
+    @NSManaged var keyRaw: String?
+    @NSManaged var latRaw: NSNumber?
+    @NSManaged var lngRaw: NSNumber?
+    @NSManaged var locationNameRaw: String?
+    @NSManaged var nameRaw: String?
+    @NSManaged var playoffTypeRaw: NSNumber?
+    @NSManaged var playoffTypeStringRaw: String?
+    @NSManaged var postalCodeRaw: String?
+    @NSManaged var shortNameRaw: String?
+    @NSManaged var startDateRaw: Date?
+    @NSManaged var stateProvRaw: String?
+    @NSManaged var timezoneRaw: String?
+    @NSManaged var websiteRaw: String?
+    @NSManaged var weekRaw: NSNumber?
+    @NSManaged var yearRaw: NSNumber?
+    @NSManaged var alliancesRaw: NSOrderedSet?
+    @NSManaged var awardsRaw: NSSet?
+    @NSManaged var districtRaw: District?
+    @NSManaged var divisionsRaw: NSSet?
+    @NSManaged var insightsRaw: EventInsights?
+    @NSManaged var matchesRaw: NSSet?
+    @NSManaged var parentEventRaw: Event?
+    @NSManaged var pointsRaw: NSSet?
+    @NSManaged var rankingsRaw: NSSet?
+    @NSManaged var statsRaw: NSSet?
+    @NSManaged var statusRaw: Status?
+    @NSManaged var statusesRaw: NSSet?
+    @NSManaged var teamsRaw: NSSet?
+    @NSManaged var webcastsRaw: NSSet?
+
+}
+
+// MARK: Generated accessors for awardsMany
+extension Event {
+
+    @objc(addToAwardsRawObject:)
+    @NSManaged private func addToAwardsRaw(_ value: Award)
+
+}
+
+// MARK: Generated accessors for statusesMany
+extension Event {
+
+    @objc(addToStatusesRawObject:)
+    @NSManaged private func addToStatusesRaw(_ value: EventStatus)
+
+}
+
+extension Event: Managed {
+
+    static var dateFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        return dateFormatter
+    }
+
+    /**
+     Insert Events for a year with values from TBAKit Event models in to the managed object context.
+
+     This method manages deleting orphaned Events for a year.
+
+     - Parameter events: The TBAKit Event representations to set values from.
+
+     - Parameter year: The year for the Events.
+
+     - Parameter context: The NSManagedContext to insert the Event in to.
+     */
+    public static func insert(_ events: [TBAEvent], year: Int, in context: NSManagedObjectContext) {
+        // Fetch all of the previous Events for this year
+        let oldEvents = Event.fetch(in: context) {
+            $0.predicate = NSPredicate(format: "%K == %ld",
+                                       #keyPath(Event.yearRaw), year)
+        }
+
+        // Insert new Events for this year
+        let events = events.map({
+            return Event.insert($0, in: context)
+        })
+
+        // Delete orphaned Events for this year
+        Set(oldEvents).subtracting(Set(events)).forEach({
+            context.delete($0)
+        })
+    }
+
+    /**
+     Insert an Event with a specified key in to the managed object context.
+
+     - Parameter key: The key for the Event.
+
+     - Parameter context: The NSManagedContext to insert the Event in to.
+
+     - Returns: The inserted Event.
+     */
+    public static func insert(_ key: String, in context: NSManagedObjectContext) -> Event {
+        let predicate = Event.predicate(key: key)
+        return findOrCreate(in: context, matching: predicate) { (event) in
+            // Required: key, year
+            event.keyRaw = key
+
+            let yearString = String(key.prefix(4))
+            if let year = Int(yearString) {
+                event.yearRaw = NSNumber(value: year)
+            }
+        }
+    }
+
+    /**
+     Insert an Event with values from a TBAKit Event model in to the managed object context.
+
+     This method manages deleting orphaned Webcasts.
+
+     - Parameter model: The TBAKit Event representation to set values from.
+
+     - Parameter context: The NSManagedContext to insert the Event in to.
+
+     - Returns: The inserted Event.
+     */
+    @discardableResult
+    public static func insert(_ model: TBAEvent, in context: NSManagedObjectContext) -> Event {
+        let predicate = Event.predicate(key: model.key)
+        return findOrCreate(in: context, matching: predicate) { (event) in
+            // Required: endDate, eventCode, eventType, key, name, startDate, year
+            event.addressRaw = model.address
+            event.cityRaw = model.city
+            event.countryRaw = model.country
+
+            if let district = model.district {
+                event.districtRaw = District.insert(district, in: context)
+            } else {
+                event.districtRaw = nil
+            }
+
+            event.divisionsRaw = NSSet(array: model.divisionKeys.map {
+                return Event.insert($0, in: context)
+            })
+
+            event.endDateRaw = model.endDate
+            event.eventCodeRaw = model.eventCode
+            event.eventTypeRaw = NSNumber(value: model.eventType)
+            event.eventTypeStringRaw = model.eventTypeString
+            event.firstEventIDRaw = model.firstEventID
+            event.firstEventCodeRaw = model.firstEventCode
+            event.gmapsPlaceIDRaw = model.gmapsPlaceID
+            event.gmapsURLRaw = model.gmapsURL
+
+            event.keyRaw = model.key
+
+            if let lat = model.lat {
+                event.latRaw = NSNumber(value: lat)
+            } else {
+                event.latRaw = nil
+            }
+            if let lng = model.lng {
+                event.lngRaw = NSNumber(value: lng)
+            } else {
+                event.lngRaw = nil
+            }
+
+            event.locationNameRaw = model.locationName
+            event.nameRaw = model.name
+
+            if let parentEventKey = model.parentEventKey {
+                event.parentEventRaw = Event.insert(parentEventKey, in: context)
+            } else {
+                event.parentEventRaw = nil
+            }
+            if let playoffType = model.playoffType {
+                event.playoffTypeRaw = NSNumber(value: playoffType)
+            } else {
+                event.playoffTypeRaw = nil
+            }
+            event.playoffTypeStringRaw = model.playoffTypeString
+
+            event.postalCodeRaw = model.postalCode
+            event.shortNameRaw = model.shortName
+            event.startDateRaw = model.startDate
+            event.stateProvRaw = model.stateProv
+            event.timezoneRaw = model.timezone
+
+            event.insert(model.webcasts ?? [])
+
+            event.websiteRaw = model.website
+
+            if let week = model.week {
+                event.weekRaw = NSNumber(value: week)
+            } else {
+                event.weekRaw = nil
+            }
+
+            event.yearRaw = NSNumber(value: model.year)
+
+            event.hybridType = calculateHybridType(eventType: model.eventType,
+                                                   startDate: model.startDate,
+                                                   district: model.district)
+        }
+    }
+
+    /**
+     Insert Event Alliances with values from a TBAKit Alliance models in to the managed object context.
+
+     This method will manage setting up an Event Alliance's relationship to an Event and the deletion of oprhaned Event Alliances on the Event.
+
+     - Parameter alliances: The TBAKit Alliance representations to set values from.
+     */
+    public func insert(_ alliances: [TBAAlliance]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        updateToManyRelationship(relationship: #keyPath(Event.alliancesRaw), newValues: alliances.map {
+            return EventAlliance.insert($0, eventKey: key, in: managedObjectContext)
+        })
+    }
+
+    /**
+     Insert Awards with values from a TBAKit Award models in to the managed object context.
+
+     This method will manage setting up an Award's relationship to an Event and the deletion of oprhaned Awards on the Event.
+
+     - Parameter awards: The TBAKit Award representations to set values from.
+     */
+    public func insert(_ awards: [TBAAward]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        updateToManyRelationship(relationship: #keyPath(Event.awardsRaw), newValues: awards.map({
+            return Award.insert($0, in: managedObjectContext)
+        }))
+    }
+
+    /**
+     Insert Awards for a given Team key with values from a TBAKit Award models in to the managed object context.
+
+     This method will manage setting up an Award's relationship to an Event and the deletion of oprhaned Awards for a Team key on the Event.
+
+     - Parameter awards: The TBAKit Award representations to set values from.
+
+     - Parameter teamKey: The key for the Team the Awards belong to.
+     */
+    public func insert(_ awards: [TBAAward], teamKey: String) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        let teamPredicate = Award.teamPredicate(teamKey: teamKey)
+        let oldAwards = self.awards.filter {
+            return teamPredicate.evaluate(with: $0)
+        }
+
+        // Insert new Awards
+        let awards = awards.map({ (model: TBAAward) -> Award in
+            let a = Award.insert(model, in: managedObjectContext)
+            addToAwardsRaw(a)
+            return a
+        })
+
+        // Delete orphaned Awards for this Event/TeamKey
+        Set(oldAwards).subtracting(Set(awards)).forEach {
+            managedObjectContext.delete($0)
+        }
+    }
+
+    /**
+     Insert an EventInsight with values from TBAKit EventInsight model in to the managed object context.
+
+     This method will manage setting up an EventInsight's relationship to an Event.
+
+     - Parameter insights: The TBAKit EventInsights representations to set values from.
+     */
+    public func insert(_ insights: TBAEventInsights) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        let key = self.key
+        updateToOneRelationship(relationship: #keyPath(Event.insightsRaw), newValue: insights, newObject: {
+            return EventInsights.insert($0, eventKey: key, in: managedObjectContext)
+        })
+    }
+
+    /**
+     Insert Matches with values from TBAKit Match models in to the managed object context.
+
+     This method will manage setting up a Match's relationship to an Event and the deletion of oprhaned Matches on the Event.
+
+     - Parameter matches: The TBAKit Match representations to set values from.
+     */
+    public func insert(_ matches: [TBAMatch]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        updateToManyRelationship(relationship: #keyPath(Event.matchesRaw), newValues: matches.map({
+            return Match.insert($0, in: managedObjectContext)
+        }))
+    }
+
+    /**
+     Insert Rankings with values from TBAKit Event Ranking models in to the managed object context.
+
+     This method manages setting up an Event's relationship to Rankings.
+
+     - Parameter rankings: The TBAKit Event Ranking representations to set values from.
+
+     - Parameter sortOrderInfo: The TBA EventRankingSortOrder representations for this Ranking info
+
+     - Parameter extraStatsInfo: The TBA EventRankingSortOrder representations for this Ranking info
+     */
+    public func insert(_ rankings: [TBAEventRanking], sortOrderInfo: [TBAEventRankingSortOrder]?, extraStatsInfo: [TBAEventRankingSortOrder]?) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        updateToManyRelationship(relationship: #keyPath(Event.rankingsRaw), newValues: rankings.map({
+            return EventRanking.insert($0, sortOrderInfo: sortOrderInfo, extraStatsInfo: extraStatsInfo, eventKey: key, in: managedObjectContext)
+        }))
+    }
+
+    /**
+     Insert EventTeamStats with values from a TBAKit Stat models in to the managed object context.
+
+     This method manages setting up an Event's relationship to an EventTeamStats as well as deleting orphaned EventTeamStats
+
+     - Parameter stats: The TBAKit Stat representation to set values from.
+     */
+    public func insert(_ stats: [TBAStat]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        updateToManyRelationship(relationship: #keyPath(Event.statsRaw), newValues: stats.map({
+            return EventTeamStat.insert($0, eventKey: key, in: managedObjectContext)
+        }))
+    }
+
+    /**
+     Insert an Event Status with values from a TBAKit Event Status model in to the managed object context.
+
+     This method manages setting up an Event's relationship to an Event Status, as well as setting up an EventStatusQual's Ranking's relationship to the Event
+
+     - Parameter status: The TBAKit Event Status representation to set values from.
+     */
+    public func insert(_ status: TBAEventStatus) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        let status = EventStatus.insert(status, in: managedObjectContext)
+        status.qual?.ranking?.setEvent(event: self)
+
+        addToStatusesRaw(status)
+    }
+
+    /**
+     Insert Teams with values from TBAKit Team models in to the managed object context.
+
+     This method manages setting up an Event's relationship to Teams.
+
+     - Parameter teams: The TBAKit Team representations to set values from.
+     */
+    public func insert(_ teams: [TBATeam]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        self.teamsRaw = NSSet(array: teams.map({
+            return Team.insert($0, in: managedObjectContext)
+        }))
+    }
+
+    /**
+     Insert Webcasts with values from TBAKit Webcast models in to the managed object context.
+
+     This method manages setting up an Event's relationship to Webcasts and deleting orphaned Webcasts.
+
+     - Parameter webcasts: The TBAKit Webcast representations to set values from.
+     */
+    public func insert(_ webcasts: [TBAWebcast]) {
+        guard let managedObjectContext = managedObjectContext else {
+            return
+        }
+
+        updateToManyRelationship(relationship: #keyPath(Event.webcastsRaw), newValues: webcasts.map({
+            return Webcast.insert($0, in: managedObjectContext)
+        }))
+    }
+
+    /// Event's shouldn't really be deleted, but sometimes they can be
+    public override func prepareForDeletion() {
+        super.prepareForDeletion()
+
+        webcasts.forEach {
+            if $0.events.onlyObject(self) {
+                // Webcast will become an orphan - delete
+                managedObjectContext?.delete($0)
+            } else {
+                $0.removeFromEventsMany(self)
+            }
+        }
+    }
+
+}
+
+extension Event: Locatable, Surfable {}
+
+extension Event {
+
+    public static func predicate(key: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Event.keyRaw), key)
+    }
+
+//    public static func subqueryPredicate(keyPath: String, eventKey: String) -> NSPredicate {
+//        return NSPredicate(format: "SUBQUERY(%K, $e, $e.%K == %@)",
+//                           keyPath,
+//                           #keyPath(Event.keyString), eventKey)
+//    }
+
+    public static func champsYearPredicate(key: String, year: Int) -> NSPredicate {
+        // 2017 and onward - handle multiple CMPs
+        let yearPredicate = Event.yearPredicate(year: year)
+        let predicate = NSPredicate(format: "(%K == %ld || %K == %ld) && (%K == %@ || %K == %@)",
+                                    #keyPath(Event.eventTypeRaw), EventType.championshipFinals.rawValue,
+                                    #keyPath(Event.eventTypeRaw), EventType.championshipDivision.rawValue,
+                                    #keyPath(Event.keyRaw), key,
+                                    #keyPath(Event.parentEventRaw.keyRaw), key)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, predicate])
+    }
+
+    public static func eventTypeYearPredicate(eventType: EventType, year: Int) -> NSPredicate {
+        let yearPredicate = Event.yearPredicate(year: year)
+        let predicate = NSPredicate(format: "%K == %ld",
+                                    #keyPath(Event.eventTypeRaw), eventType.rawValue)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, predicate])
+    }
+
+    public static func offseasonYearPredicate(startDate: Date, endDate: Date, year: Int) -> NSPredicate {
+        let yearPredicate = Event.yearPredicate(year: year)
+
+        // Conversion stuff, since Core Data still uses NSDate's
+        let firstDayOfMonth = NSDate(timeIntervalSince1970: startDate.startOfMonth().timeIntervalSince1970)
+        let lastDayOfMonth = NSDate(timeIntervalSince1970: endDate.endOfMonth().timeIntervalSince1970)
+        let predicate = NSPredicate(format: "%K == %ld && (%K >= %@) AND (%K <= %@)",
+                                    #keyPath(Event.eventTypeRaw), EventType.offseason.rawValue,
+                                    #keyPath(Event.startDateRaw), firstDayOfMonth,
+                                    #keyPath(Event.endDateRaw), lastDayOfMonth)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, predicate])
+    }
+
+    private static func teamPredicate(teamKey: String) -> NSPredicate {
+        return NSPredicate(format: "SUBQUERY(%K, $t, $t.%K == %@)",
+                           #keyPath(Event.teamsRaw),
+                           #keyPath(Team.keyString), teamKey)
+    }
+
+    public static func teamYearPredicate(teamKey: String, year: Int) -> NSPredicate {
+        let teamPredicate = Event.teamPredicate(teamKey: teamKey)
+        let yearPredicate = Event.yearPredicate(year: year)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [teamPredicate, yearPredicate])
+    }
+
+    public static func teamYearNonePredicate(teamKey: String) -> NSPredicate {
+        let teamPredicate = Event.teamPredicate(teamKey: teamKey)
+        let yearPredicate = Event.yearPredicate(year: -1)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [teamPredicate, yearPredicate])
+    }
+
+    public static func unplayedEventPredicate(date: Date, year: Int) -> NSPredicate {
+        let yearPredicate = Event.yearPredicate(year: year)
+
+        let coreDataDate = NSDate(timeIntervalSince1970: date.timeIntervalSince1970)
+        let beforeEndDatePredicate = NSPredicate(format: "%K >= %@ && %K != %ld",
+                                                 #keyPath(Event.endDateRaw), coreDataDate,
+                                                 #keyPath(Event.eventTypeRaw), EventType.championshipDivision.rawValue)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, beforeEndDatePredicate])
+    }
+
+    public static func weekYearPredicate(week: Int, year: Int) -> NSPredicate {
+        let yearPredicate = Event.yearPredicate(year: year)
+        // Event has a week - filter based on the week
+        let weekPredicate = NSPredicate(format: "%K == %ld",
+                                        #keyPath(Event.weekRaw), week)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, weekPredicate])
+    }
+
+    public static func yearPredicate(year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %ld", #keyPath(Event.yearRaw), year)
+    }
+
+    public static func nonePredicate() -> NSPredicate {
+        return NSPredicate(format: "%K == -1", #keyPath(Event.yearRaw))
+    }
+
+    public static func endDateSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(Event.endDateRaw), ascending: true)
+    }
+
+    public static func hybridTypeSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(Event.hybridType), ascending: true)
+    }
+
+    public static func startDateSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(Event.startDateRaw), ascending: true)
+    }
+
+    public static func weekSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(Event.weekRaw), ascending: true)
+    }
+
+    public static func hybridTypeKeyPath() -> String {
+        return #keyPath(Event.hybridType)
+    }
+
+    public static func weekKeyPath() -> String {
+        return #keyPath(Event.weekRaw)
+    }
+
     /**
      Returns an NSPredicate for full Event objects - aka, they have all required API fields.
      This includes endDate, eventCode, eventType, key, name, startDate, year
      */
     public static func populatedEventsPredicate() -> NSPredicate {
-        var keys = [#keyPath(Event.endDate),
-                    #keyPath(Event.eventCode),
-                    #keyPath(Event.eventTypeNumber),
-                    #keyPath(Event.keyString),
-                    #keyPath(Event.name),
-                    #keyPath(Event.startDate),
-                    #keyPath(Event.yearNumber)]
+        var keys = [#keyPath(Event.endDateRaw),
+                    #keyPath(Event.eventCodeRaw),
+                    #keyPath(Event.eventTypeRaw),
+                    #keyPath(Event.keyRaw),
+                    #keyPath(Event.nameRaw),
+                    #keyPath(Event.startDateRaw),
+                    #keyPath(Event.yearRaw)]
         let format = keys.map {
             return String("\($0) != nil")
         }.joined(separator: " && ")
@@ -858,13 +1017,13 @@ extension Event {
             // Filter out CMP divisions - we don't want them below for our weeks calculation
             // Only fetch events with values for `eventType` so we can force-unwrap that value
             let predicate = NSPredicate(format: "%K == %ld && %K != %ld",
-                                        #keyPath(Event.yearNumber), year,
-                                        #keyPath(Event.eventTypeNumber), EventType.championshipDivision.rawValue)
+                                        #keyPath(Event.yearRaw), year,
+                                        #keyPath(Event.eventTypeRaw), EventType.championshipDivision.rawValue)
             fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, Event.populatedEventsPredicate()])
             fetchRequest.sortDescriptors = [
-                NSSortDescriptor(key: #keyPath(Event.weekNumber), ascending: true),
-                NSSortDescriptor(key: #keyPath(Event.eventTypeNumber), ascending: true),
-                NSSortDescriptor(key: #keyPath(Event.endDate), ascending: true)
+                NSSortDescriptor(key: #keyPath(Event.weekRaw), ascending: true),
+                NSSortDescriptor(key: #keyPath(Event.eventTypeRaw), ascending: true),
+                NSSortDescriptor(key: #keyPath(Event.endDateRaw), ascending: true)
             ]
         }
 

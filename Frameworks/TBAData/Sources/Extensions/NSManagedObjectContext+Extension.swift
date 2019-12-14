@@ -8,16 +8,12 @@ public protocol ErrorRecorder {
 extension NSManagedObject {
 
     /** Syncronous, thread-safe method to get a typed value from a NSManagedObject. **/
-    public func getValue<T, J>(_ keyPath: KeyPath<T, J>) -> J {
+    func getValue<T, J>(_ keyPath: KeyPath<T, J>) -> J {
         guard let context = managedObjectContext else {
             fatalError("No managedObjectContext for object.")
         }
-        if Thread.isMainThread {
-            assert(context.concurrencyType == .mainQueueConcurrencyType,
-                   "Must access value for NSManagedObject on the proper thread (main thread).")
-        }
         guard let value = context.getKeyPathAndWait(obj: self, keyPath: keyPath) else {
-            fatalError("No value exists for \(keyPath) keypath")
+            fatalError("No value for keyPath \(keyPath)")
         }
         return value
     }

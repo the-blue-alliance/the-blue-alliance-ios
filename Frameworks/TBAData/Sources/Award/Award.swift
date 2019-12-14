@@ -3,6 +3,46 @@ import Foundation
 import TBAKit
 import TBAUtils
 
+extension Award {
+
+    public var awardType: Int {
+        guard let awardType = getValue(\Award.awardTypeRaw)?.intValue else {
+            fatalError("Save Award before accessing awardType")
+        }
+        return awardType
+    }
+
+    public var name: String {
+        guard let name = getValue(\Award.nameRaw) else {
+            fatalError("Save Award before accessing name")
+        }
+        return name
+    }
+
+    public var year: Int {
+        guard let year = getValue(\Award.yearRaw)?.intValue else {
+            fatalError("Save Award before accessing year")
+        }
+        return year
+    }
+
+    public var event: Event {
+        guard let event = getValue(\Award.eventRaw) else {
+            fatalError("Save Award before accessing event")
+        }
+        return event
+    }
+
+    public var recipients: [AwardRecipient] {
+        guard let recipientsMany = getValue(\Award.recipientsRaw),
+            let recipients = recipientsMany.allObjects as? [AwardRecipient] else {
+                fatalError("Save Award before accessing recipients")
+        }
+        return recipients
+    }
+    
+}
+
 @objc(Award)
 public class Award: NSManagedObject {
 
@@ -10,48 +50,11 @@ public class Award: NSManagedObject {
         return NSFetchRequest<Award>(entityName: Award.entityName)
     }
 
-    public var awardType: Int {
-        guard let awardType = awardTypeNumber?.intValue else {
-            fatalError("Save Award before accessing awardType")
-        }
-        return awardType
-    }
-
-    public var name: String {
-        guard let name = nameString else {
-            fatalError("Save Award before accessing name")
-        }
-        return name
-    }
-
-    public var year: Int {
-        guard let year = yearNumber?.intValue else {
-            fatalError("Save Award before accessing year")
-        }
-        return year
-    }
-
-    @NSManaged private var awardTypeNumber: NSNumber?
-    @NSManaged private var nameString: String?
-    @NSManaged private var yearNumber: NSNumber?
-
-    public var event: Event {
-        guard let event = eventOne else {
-            fatalError("Save Award before accessing event")
-        }
-        return event
-    }
-
-    public var recipients: [AwardRecipient] {
-        guard let recipientsMany = recipientsMany,
-            let recipients = recipientsMany.allObjects as? [AwardRecipient] else {
-                fatalError("Save Award before accessing recipients")
-        }
-        return recipients
-    }
-
-    @NSManaged private var eventOne: Event?
-    @NSManaged private var recipientsMany: NSSet?
+    @NSManaged var awardTypeRaw: NSNumber?
+    @NSManaged var nameRaw: String?
+    @NSManaged var yearRaw: NSNumber?
+    @NSManaged var eventRaw: Event?
+    @NSManaged var recipientsRaw: NSSet?
 
 }
 
@@ -71,19 +74,19 @@ extension Award: Managed {
      - Returns: The inserted Award.
      */
     public static func insert(_ model: TBAAward, in context: NSManagedObjectContext) -> Award {
-        let predicate = NSPredicate(format: "%K == %ld && %K == %ld && %K.%K == %@",
-                                    #keyPath(Award.awardTypeNumber), model.awardType,
-                                    #keyPath(Award.yearNumber), model.year,
-                                    #keyPath(Award.eventOne), Event.keyPath(), model.eventKey)
+        let predicate = NSPredicate(format: "%K == %ld && %K == %ld && %K == %@",
+                                    #keyPath(Award.awardTypeRaw), model.awardType,
+                                    #keyPath(Award.yearRaw), model.year,
+                                    #keyPath(Award.eventRaw.keyRaw), model.eventKey)
 
         return findOrCreate(in: context, matching: predicate) { (award) in
             // Required: awardType, event, name, year, recipients
-            award.nameString = model.name
-            award.awardTypeNumber = NSNumber(value: model.awardType)
-            award.yearNumber = NSNumber(value: model.year)
-            award.eventOne = Event.insert(model.eventKey, in: context)
+            award.nameRaw = model.name
+            award.awardTypeRaw = NSNumber(value: model.awardType)
+            award.yearRaw = NSNumber(value: model.year)
+            award.eventRaw = Event.insert(model.eventKey, in: context)
 
-            award.updateToManyRelationship(relationship: #keyPath(Award.recipientsMany), newValues: model.recipients.map {
+            award.updateToManyRelationship(relationship: #keyPath(Award.recipientsRaw), newValues: model.recipients.map {
                 return AwardRecipient.insert($0, in: context)
             })
         }
@@ -97,7 +100,7 @@ extension Award: Managed {
                 // Recipient will become an orphan - delete
                 managedObjectContext?.delete($0)
             } else {
-                $0.removeFromAwardsMany(self)
+                $0.removeFromAwardsRaw(self)
             }
         }
     }
@@ -106,16 +109,19 @@ extension Award: Managed {
 
 extension Award {
 
+    /*
     public static func eventPredicate(eventKey: String) -> NSPredicate {
         return NSPredicate(format: "%K.%K == %@",
                            #keyPath(Award.eventOne), Event.keyPath(), eventKey)
     }
+    */
 
     public static func teamPredicate(teamKey: String) -> NSPredicate {
-        return NSPredicate(format: "(ANY %K.%K.%K == %@)",
-                           #keyPath(Award.recipientsMany), AwardRecipient.teamKeyPath(), #keyPath(Team.keyString),  teamKey)
+        return NSPredicate(format: "ANY %K.%K == %@",
+                           #keyPath(Award.recipientsRaw), #keyPath(AwardRecipient.teamRaw.keyString), teamKey)
     }
 
+    /*
     public static func teamEventPredicate(teamKey: String, eventKey: String) -> NSPredicate {
         let teamPredicate = Award.teamPredicate(teamKey: teamKey)
         let eventPredicate = Award.eventPredicate(eventKey: eventKey)
@@ -125,13 +131,14 @@ extension Award {
     public static func typeSortDescriptor() -> NSSortDescriptor {
         return NSSortDescriptor(key: #keyPath(Award.awardTypeNumber), ascending: true)
     }
+    */
 
 }
 
 extension Award: Orphanable {
 
     public var isOrphaned: Bool {
-        return eventOne == nil
+        return eventRaw == nil
     }
 
 }

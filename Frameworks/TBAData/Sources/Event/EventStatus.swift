@@ -9,17 +9,16 @@ public class EventStatus: NSManagedObject {
         return NSFetchRequest<EventStatus>(entityName: EventStatus.entityName)
     }
 
-    @NSManaged public private(set) var allianceStatus: String?
-    @NSManaged public private(set) var lastMatchKey: String?
-    @NSManaged public private(set) var nextMatchKey: String?
-    @NSManaged public private(set) var overallStatus: String?
-    @NSManaged public private(set) var playoffStatus: String?
-
-    @NSManaged private var alliance: EventStatusAlliance?
-    @NSManaged private var eventOne: Event?
-    @NSManaged private var playoff: EventStatusPlayoff?
-    @NSManaged internal private(set) var qual: EventStatusQual?
-    @NSManaged private var teamOne: Team?
+    @NSManaged var allianceStatus: String?
+    @NSManaged var lastMatchKey: String?
+    @NSManaged var nextMatchKey: String?
+    @NSManaged var overallStatus: String?
+    @NSManaged var playoffStatus: String?
+    @NSManaged var alliance: EventStatusAlliance?
+    @NSManaged var eventOne: Event?
+    @NSManaged var playoff: EventStatusPlayoff?
+    @NSManaged var qual: EventStatusQual?
+    @NSManaged var teamOne: Team?
 
 }
 
@@ -76,18 +75,10 @@ extension EventStatus: Managed {
 
 extension EventStatus {
 
-    public static func eventKeyPath() -> String {
-        return #keyPath(EventStatus.eventOne)
-    }
-
-    public static func teamKeyPath() -> String {
-        return #keyPath(EventStatus.teamOne)
-    }
-
     public static func predicate(eventKey: String, teamKey: String) -> NSPredicate {
-        return NSPredicate(format: "%K.%K == %@ AND %K.%K == %@",
-                           EventStatus.eventKeyPath(), Event.keyPath(), eventKey,
-                           EventStatus.teamKeyPath(), #keyPath(Team.keyString), teamKey)
+        return NSPredicate(format: "%K == %@ AND %K == %@",
+                           #keyPath(EventStatus.eventOne.keyRaw), eventKey,
+                           #keyPath(EventStatus.teamOne.keyString), teamKey)
     }
 
 }

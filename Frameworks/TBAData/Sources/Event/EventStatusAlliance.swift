@@ -23,21 +23,20 @@ public class EventStatusAlliance: NSManagedObject {
         return pick
     }
 
-    @NSManaged private var name: String?
-    @NSManaged private var numberNumber: NSNumber?
-    @NSManaged private var pickNumber: NSNumber?
-
-    @NSManaged private var backup: EventAllianceBackup?
-    @NSManaged private var eventStatusOne: EventStatus?
+    @NSManaged var name: String?
+    @NSManaged var numberNumber: NSNumber?
+    @NSManaged var pickNumber: NSNumber?
+    @NSManaged var backup: EventAllianceBackup?
+    @NSManaged var eventStatusOne: EventStatus?
 
 }
 
 extension EventStatusAlliance: Managed {
 
     public static func insert(_ model: TBAEventStatusAlliance, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusAlliance {
-        let predicate = NSPredicate(format: "%K.%K.%K == %@ AND %K.%K.%K == %@",
-                                    #keyPath(EventStatusAlliance.eventStatusOne), EventStatus.eventKeyPath(), Event.keyPath(), eventKey,
-                                    #keyPath(EventStatusAlliance.eventStatusOne), EventStatus.teamKeyPath(), #keyPath(Team.keyString), teamKey)
+        let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
+                                    #keyPath(EventStatusAlliance.eventStatusOne.eventOne.keyRaw), eventKey,
+                                    #keyPath(EventStatusAlliance.eventStatusOne.teamOne.keyString), teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (allianceStatus) in
             allianceStatus.numberNumber = NSNumber(value: model.number)

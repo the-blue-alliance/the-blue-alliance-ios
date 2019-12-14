@@ -19,11 +19,11 @@ public class EventAlliance: NSManagedObject {
         return event
     }
 
-    @NSManaged public private(set) var backup: EventAllianceBackup?
-    @NSManaged public private(set) var declines: NSOrderedSet?
-    @NSManaged private var eventOne: Event?
-    @NSManaged public private(set) var picks: NSOrderedSet?
-    @NSManaged public private(set) var status: EventStatusPlayoff?
+    @NSManaged var backup: EventAllianceBackup?
+    @NSManaged var declines: NSOrderedSet?
+    @NSManaged var eventOne: Event?
+    @NSManaged var picks: NSOrderedSet?
+    @NSManaged var status: EventStatusPlayoff?
 
 }
 
@@ -45,9 +45,10 @@ extension EventAlliance: Managed {
      - Returns: The inserted Event Alliance.
      */
     public static func insert(_ model: TBAAlliance, eventKey: String, in context: NSManagedObjectContext) -> EventAlliance {
-        let predicate = NSPredicate(format: "%K.%K == %@ AND SUBQUERY(%K, $pick, $pick.%K IN %@).@count == %d",
-                                    EventAlliance.eventKeyPath(), Event.keyPath(), eventKey,
-                                    EventAlliance.picksKeyPath(), #keyPath(Team.keyString), model.picks, model.picks.count)
+        let predicate = NSPredicate(format: "%K == %@ AND SUBQUERY(%K, $pick, $pick.%K IN %@).@count == %d",
+                                    #keyPath(EventAlliance.eventOne.keyRaw), eventKey,
+                                    #keyPath(EventAlliance.picks),
+                                    #keyPath(Team.keyString), model.picks, model.picks.count)
 
         return findOrCreate(in: context, matching: predicate, configure: { (alliance) in
             // Required: picks
@@ -102,18 +103,6 @@ extension EventAlliance: Managed {
                 backup.removeFromAlliancesMany(self)
             }
         }
-    }
-
-}
-
-extension EventAlliance {
-
-    public static func eventKeyPath() -> String {
-        return #keyPath(EventAlliance.eventOne)
-    }
-
-    public static func picksKeyPath() -> String {
-        return #keyPath(EventAlliance.picks)
     }
 
 }

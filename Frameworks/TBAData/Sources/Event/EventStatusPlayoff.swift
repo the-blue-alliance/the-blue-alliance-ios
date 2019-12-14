@@ -13,25 +13,24 @@ public class EventStatusPlayoff: NSManagedObject {
         return playoffAverageNumber?.doubleValue
     }
 
-    @NSManaged public private(set) var currentRecord: WLT?
-    @NSManaged public private(set) var level: String?
-    @NSManaged private var playoffAverageNumber: NSNumber?
-    @NSManaged public private(set) var record: WLT?
-    @NSManaged public private(set) var status: String?
-
-    @NSManaged internal var alliance: EventAlliance?
-    @NSManaged internal var eventStatus: EventStatus?
+    @NSManaged var currentRecord: WLT?
+    @NSManaged var level: String?
+    @NSManaged var playoffAverageNumber: NSNumber?
+    @NSManaged var record: WLT?
+    @NSManaged var status: String?
+    @NSManaged var alliance: EventAlliance?
+    @NSManaged var eventStatus: EventStatus?
 
 }
 
 extension EventStatusPlayoff: Managed {
 
     public static func insert(_ model: TBAAllianceStatus, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusPlayoff {
-        let predicate = NSPredicate(format: "(%K.%K.%K == %@ AND SUBQUERY(%K.%K, $pick, $pick.%K == %@).@count == 1) OR (%K.%K.%K == %@ AND %K.%K.%K == %@)",
-                                    #keyPath(EventStatusPlayoff.alliance), EventAlliance.eventKeyPath(), Event.keyPath(), eventKey,
-                                    #keyPath(EventStatusPlayoff.alliance), EventAlliance.picksKeyPath(), #keyPath(Team.keyString), teamKey,
-                                    #keyPath(EventStatusPlayoff.eventStatus), EventStatus.eventKeyPath(), Event.keyPath(), eventKey,
-                                    #keyPath(EventStatusPlayoff.eventStatus), EventStatus.teamKeyPath(), #keyPath(Team.keyString), teamKey)
+        let predicate = NSPredicate(format: "(%K == %@ AND SUBQUERY(%K, $pick, $pick.%K == %@).@count == 1) OR (%K == %@ AND %K == %@)",
+                                    #keyPath(EventStatusPlayoff.alliance.eventOne.keyRaw), eventKey,
+                                    #keyPath(EventStatusPlayoff.alliance.picks), #keyPath(Team.keyString), teamKey,
+                                    #keyPath(EventStatusPlayoff.eventStatus.eventOne.keyRaw), eventKey,
+                                    #keyPath(EventStatusPlayoff.eventStatus.teamOne.keyString), teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (statusPlayoff) in
             if let currentRecord = model.currentRecord {

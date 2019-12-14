@@ -34,12 +34,12 @@ public class MatchAlliance: NSManagedObject {
         return NSFetchRequest<MatchAlliance>(entityName: MatchAlliance.entityName)
     }
 
-    @NSManaged private var allianceKeyString: String?
-    @NSManaged private var scoreNumber: NSNumber?
-    @NSManaged public private(set) var dqTeams: NSOrderedSet?
-    @NSManaged private var matchOne: Match?
-    @NSManaged public private(set) var surrogateTeams: NSOrderedSet?
-    @NSManaged private var teamsMany: NSOrderedSet?
+    @NSManaged var allianceKeyString: String?
+    @NSManaged var scoreNumber: NSNumber?
+    @NSManaged var dqTeams: NSOrderedSet?
+    @NSManaged var matchOne: Match?
+    @NSManaged var surrogateTeams: NSOrderedSet?
+    @NSManaged var teamsMany: NSOrderedSet?
 
 }
 

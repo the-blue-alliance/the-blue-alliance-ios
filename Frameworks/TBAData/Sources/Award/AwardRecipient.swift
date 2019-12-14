@@ -2,92 +2,22 @@ import CoreData
 import Foundation
 import TBAKit
 
-@objc(AwardRecipient)
-public class AwardRecipient: NSManagedObject {
+extension AwardRecipient {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<AwardRecipient> {
-        return NSFetchRequest<AwardRecipient>(entityName: AwardRecipient.entityName)
+    public var awardee: String? {
+        return getValue(\AwardRecipient.awardeeRaw)
     }
 
-    @NSManaged public private(set) var awardee: String?
-
     public var awards: [Award] {
-        guard let awardsMany = awardsMany, let awards = awardsMany.allObjects as? [Award] else {
-            fatalError("Save AwardRecipient before accessing awards")
+        guard let awardsMany = getValue(\AwardRecipient.awardsRaw),
+            let awards = awardsMany.allObjects as? [Award] else {
+                fatalError("Save AwardRecipient before accessing awards")
         }
         return awards
     }
 
-    @NSManaged private var awardsMany: NSSet?
-    @NSManaged private var team: Team?
-
-}
-
-// MARK: Generated accessors for awardsMany
-extension AwardRecipient {
-
-    @objc(removeAwardsManyObject:)
-    @NSManaged internal func removeFromAwardsMany(_ value: Award)
-
-}
-
-extension AwardRecipient: Managed {
-
-    /**
-     Insert an Award Recipient with values from a TBAKit Award Recipient model in to the managed object context.
-
-     Award Recipients will never be 'updated'. They can be deleted from Award, but the predicates for this
-     won't allow matching an existing Award Recipient for updates.
-
-     - Important: This method does not setup it's relationship to an Award.
-
-     - Parameter model: The TBAKit Award Recipient representation to set values from.
-
-     - Parameter context: The NSManagedContext to insert the Award Recipient in to.
-
-     - Returns: The inserted Award Recipient.
-     */
-    public static func insert(_ model: TBAAwardRecipient, in context: NSManagedObjectContext) -> AwardRecipient {
-        var predicate: NSPredicate {
-            // TODO: Fix
-            if let awardee = model.awardee, let teamKey = model.teamKey {
-                return NSPredicate(format: "%K == %@ AND %K == %@",
-                                   #keyPath(AwardRecipient.awardee), awardee,
-                                   #keyPath(AwardRecipient.team.keyString), teamKey)
-            } else if let teamKey = model.teamKey {
-                return NSPredicate(format: "%K == %@",
-                                   #keyPath(AwardRecipient.team.keyString), teamKey)
-            } else if let awardee = model.awardee {
-                return NSPredicate(format: "%K == %@",
-                                   #keyPath(AwardRecipient.awardee), awardee)
-            } else {
-                return NSPredicate(format: "%K == nil AND %K == nil",
-                                   #keyPath(AwardRecipient.awardee),
-                                   #keyPath(AwardRecipient.team.keyString))
-            }
-        }
-
-        return findOrCreate(in: context, matching: predicate) { (awardRecipient) in
-            if let teamKey = model.teamKey {
-                awardRecipient.team = Team.insert(teamKey, in: context)
-            } else {
-                awardRecipient.team = nil
-            }
-            awardRecipient.awardee = model.awardee
-        }
-    }
-
-}
-
-extension AwardRecipient {
-
-    public static func teamKeyPath() -> String {
-        return #keyPath(AwardRecipient.team)
-    }
-
-    public static func teamPredicate(teamKey: String) -> NSPredicate {
-        return NSPredicate(format: "%K.%K == %@",
-                           #keyPath(AwardRecipient.team), #keyPath(Team.keyString), teamKey)
+    public var team: Team? {
+        return getValue(\AwardRecipient.teamRaw)
     }
 
     /**
@@ -120,13 +50,92 @@ extension AwardRecipient {
 
 }
 
+@objc(AwardRecipient)
+public class AwardRecipient: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<AwardRecipient> {
+        return NSFetchRequest<AwardRecipient>(entityName: AwardRecipient.entityName)
+    }
+
+    @NSManaged var awardeeRaw: String?
+    @NSManaged var awardsRaw: NSSet?
+    @NSManaged var teamRaw: Team?
+
+}
+
+// MARK: Generated accessors for awardsMany
+extension AwardRecipient {
+
+    @objc(removeFromAwardsRawObject:)
+    @NSManaged func removeFromAwardsRaw(_ value: Award)
+
+}
+
+extension AwardRecipient: Managed {
+
+    /**
+     Insert an Award Recipient with values from a TBAKit Award Recipient model in to the managed object context.
+
+     Award Recipients will never be 'updated'. They can be deleted from Award, but the predicates for this
+     won't allow matching an existing Award Recipient for updates.
+
+     - Important: This method does not setup it's relationship to an Award.
+
+     - Parameter model: The TBAKit Award Recipient representation to set values from.
+
+     - Parameter context: The NSManagedContext to insert the Award Recipient in to.
+
+     - Returns: The inserted Award Recipient.
+     */
+    public static func insert(_ model: TBAAwardRecipient, in context: NSManagedObjectContext) -> AwardRecipient {
+        var predicate: NSPredicate {
+            if let awardee = model.awardee, let teamKey = model.teamKey {
+                return NSPredicate(format: "%K == %@ AND %K == %@",
+                                   #keyPath(AwardRecipient.awardeeRaw), awardee,
+                                   #keyPath(AwardRecipient.teamRaw.keyString), teamKey)
+            } else if let teamKey = model.teamKey {
+                return NSPredicate(format: "%K == %@",
+                                   #keyPath(AwardRecipient.teamRaw.keyString), teamKey)
+            } else if let awardee = model.awardee {
+                return NSPredicate(format: "%K == %@",
+                                   #keyPath(AwardRecipient.awardeeRaw), awardee)
+            } else {
+                return NSPredicate(format: "%K == nil AND %K == nil",
+                                   #keyPath(AwardRecipient.awardeeRaw),
+                                   #keyPath(AwardRecipient.teamRaw.keyString))
+            }
+        }
+
+        return findOrCreate(in: context, matching: predicate) { (awardRecipient) in
+            if let teamKey = model.teamKey {
+                awardRecipient.teamRaw = Team.insert(teamKey, in: context)
+            } else {
+                awardRecipient.teamRaw = nil
+            }
+            awardRecipient.awardeeRaw = model.awardee
+        }
+    }
+
+}
+
+extension AwardRecipient {
+
+    /*
+    public static func teamPredicate(teamKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(AwardRecipient.teamOne.keyString), teamKey)
+    }
+    */
+
+}
+
 extension AwardRecipient: Orphanable {
 
     public var isOrphaned: Bool {
-        guard let awardsMany = awardsMany else {
+        guard let awards = getValue(\AwardRecipient.awardsRaw) else {
             return true
         }
-        return awardsMany.count == 0
+        return awards.count == 0
     }
 
 }
