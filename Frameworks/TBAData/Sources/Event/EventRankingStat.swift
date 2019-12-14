@@ -5,7 +5,7 @@ import Foundation
 public class EventRankingStat: NSManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<EventRankingStat> {
-        return NSFetchRequest<EventRankingStat>(entityName: "EventRankingStat")
+        return NSFetchRequest<EventRankingStat>(entityName: EventRankingStat.entityName)
     }
 
     public var value: Double {
@@ -16,8 +16,9 @@ public class EventRankingStat: NSManagedObject {
     }
 
     @NSManaged private var valueNumber: NSNumber?
-    @NSManaged public private(set) var extraStatsRanking: EventRanking?
-    @NSManaged public private(set) var sortOrderRanking: EventRanking?
+
+    @NSManaged private var extraStatsRanking: EventRanking?
+    @NSManaged private var sortOrderRanking: EventRanking?
 
 }
 

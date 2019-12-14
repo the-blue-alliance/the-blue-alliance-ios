@@ -6,7 +6,7 @@ import TBAKit
 public class EventTeamStat: NSManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<EventTeamStat> {
-        return NSFetchRequest<EventTeamStat>(entityName: "EventTeamStat")
+        return NSFetchRequest<EventTeamStat>(entityName: EventTeamStat.entityName)
     }
 
     public var opr: Double {
@@ -30,6 +30,10 @@ public class EventTeamStat: NSManagedObject {
         return ccwm
     }
 
+    @NSManaged private var ccwmNumber: NSNumber?
+    @NSManaged private var dprNumber: NSNumber?
+    @NSManaged private var oprNumber: NSNumber?
+
     public var event: Event {
         guard let event = eventOne else {
             fatalError("Save EventTeamStat before accessing event")
@@ -44,9 +48,6 @@ public class EventTeamStat: NSManagedObject {
         return team
     }
 
-    @NSManaged private var ccwmNumber: NSNumber?
-    @NSManaged private var dprNumber: NSNumber?
-    @NSManaged private var oprNumber: NSNumber?
     @NSManaged private var eventOne: Event?
     @NSManaged private var teamOne: Team?
 
@@ -55,10 +56,7 @@ public class EventTeamStat: NSManagedObject {
 extension EventTeamStat: Managed {
 
     public static func insert(_ model: TBAStat, eventKey: String, in context: NSManagedObjectContext) -> EventTeamStat {
-        let predicate = NSPredicate(format: "%K == %@ AND %K.%K == %@",
-                                    #keyPath(EventTeamStat.teamOne.keyString), model.teamKey,
-                                    #keyPath(EventTeamStat.eventOne), Event.keyPath(), eventKey)
-
+        let predicate = EventTeamStat.predicate(eventKey: eventKey, teamKey: model.teamKey)
         return findOrCreate(in: context, matching: predicate) { (stat) in
             stat.teamOne = Team.insert(model.teamKey, in: context)
 
@@ -72,15 +70,15 @@ extension EventTeamStat: Managed {
 
 extension EventTeamStat {
 
-    public static func predicate(event: Event, team: Team) -> NSPredicate {
-        return NSPredicate(format: "%K == %@ AND %K == %@",
-                           #keyPath(EventTeamStat.eventOne), event,
-                           #keyPath(EventTeamStat.teamOne), team)
+    public static func predicate(eventKey: String, teamKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K.%K == %@ AND %K.%K == %@",
+                           #keyPath(EventTeamStat.eventOne), Event.keyPath(), eventKey,
+                           #keyPath(EventTeamStat.teamOne), #keyPath(Team.keyString), teamKey)
     }
 
-    public static func eventPredicate(event: Event) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(EventTeamStat.eventOne), event)
+    public static func eventPredicate(eventKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K.%K == %@",
+                           #keyPath(EventTeamStat.eventOne), Event.keyPath(), eventKey)
     }
 
     public static func oprSortDescriptor() -> NSSortDescriptor {

@@ -6,6 +6,12 @@ import TBAUtils
 @objc(EventAlliance)
 public class EventAlliance: NSManagedObject {
 
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<EventAlliance> {
+        return NSFetchRequest<EventAlliance>(entityName: EventAlliance.entityName)
+    }
+
+    @NSManaged public private(set) var name: String?
+
     public var event: Event {
         guard let event = eventOne else {
             fatalError("Save EventAlliance before accessing event")
@@ -13,14 +19,9 @@ public class EventAlliance: NSManagedObject {
         return event
     }
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<EventAlliance> {
-        return NSFetchRequest<EventAlliance>(entityName: "EventAlliance")
-    }
-
-    @NSManaged public private(set) var name: String?
     @NSManaged public private(set) var backup: EventAllianceBackup?
     @NSManaged public private(set) var declines: NSOrderedSet?
-    @NSManaged internal private(set) var eventOne: Event?
+    @NSManaged private var eventOne: Event?
     @NSManaged public private(set) var picks: NSOrderedSet?
     @NSManaged public private(set) var status: EventStatusPlayoff?
 
@@ -44,10 +45,9 @@ extension EventAlliance: Managed {
      - Returns: The inserted Event Alliance.
      */
     public static func insert(_ model: TBAAlliance, eventKey: String, in context: NSManagedObjectContext) -> EventAlliance {
-        // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
-        let predicate = NSPredicate(format: "%K.%K == %@ AND SUBQUERY(picks, $pick, $pick.key IN %@).@count == %d",
-                                    #keyPath(EventAlliance.eventOne), Event.keyPath(), eventKey,
-                                    model.picks, model.picks.count)
+        let predicate = NSPredicate(format: "%K.%K == %@ AND SUBQUERY(%K, $pick, $pick.%K IN %@).@count == %d",
+                                    EventAlliance.eventKeyPath(), Event.keyPath(), eventKey,
+                                    EventAlliance.picksKeyPath(), #keyPath(Team.keyString), model.picks, model.picks.count)
 
         return findOrCreate(in: context, matching: predicate, configure: { (alliance) in
             // Required: picks
@@ -106,10 +106,22 @@ extension EventAlliance: Managed {
 
 }
 
+extension EventAlliance {
+
+    public static func eventKeyPath() -> String {
+        return #keyPath(EventAlliance.eventOne)
+    }
+
+    public static func picksKeyPath() -> String {
+        return #keyPath(EventAlliance.picks)
+    }
+
+}
+
 extension EventAlliance: Orphanable {
 
     var isOrphaned: Bool {
-        return event == nil
+        return eventOne == nil
     }
 
 }

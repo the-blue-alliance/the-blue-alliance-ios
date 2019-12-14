@@ -112,8 +112,8 @@ extension Award {
     }
 
     public static func teamPredicate(teamKey: String) -> NSPredicate {
-        return NSPredicate(format: "(ANY %K == %@)",
-                           #keyPath(Award.recipientsMany.team.keyString), teamKey)
+        return NSPredicate(format: "(ANY %K.%K.%K == %@)",
+                           #keyPath(Award.recipientsMany), AwardRecipient.teamKeyPath(), #keyPath(Team.keyString),  teamKey)
     }
 
     public static func teamEventPredicate(teamKey: String, eventKey: String) -> NSPredicate {

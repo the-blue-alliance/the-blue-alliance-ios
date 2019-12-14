@@ -370,6 +370,7 @@ extension Event: Managed {
             return
         }
 
+        let key = self.key
         updateToOneRelationship(relationship: #keyPath(Event.insights), newValue: insights, newObject: {
             return EventInsights.insert($0, eventKey: key, in: managedObjectContext)
         })
@@ -443,7 +444,7 @@ extension Event: Managed {
         }
 
         let status = EventStatus.insert(status, in: managedObjectContext)
-        status.qual?.ranking?.eventOne = self
+        status.qual?.ranking?.setEvent(event: self)
 
         addToStatusesMany(status)
     }
@@ -616,9 +617,10 @@ extension Event {
         return #keyPath(Event.weekNumber)
     }
 
-    public func awards(for team: Team) -> [Award] {
+    public func awards(for teamKey: String) -> [Award] {
+        let teamPredicate = Award.teamPredicate(teamKey: teamKey)
         return awards.filter {
-            $0.recipients.contains(where: { $0.team?.keyString == team.key })
+            return teamPredicate.evaluate(with: $0)
         }
     }
 

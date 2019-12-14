@@ -19,7 +19,7 @@ public class AwardRecipient: NSManagedObject {
     }
 
     @NSManaged private var awardsMany: NSSet?
-    @NSManaged public private(set) var team: Team?
+    @NSManaged private var team: Team?
 
 }
 
@@ -49,6 +49,7 @@ extension AwardRecipient: Managed {
      */
     public static func insert(_ model: TBAAwardRecipient, in context: NSManagedObjectContext) -> AwardRecipient {
         var predicate: NSPredicate {
+            // TODO: Fix
             if let awardee = model.awardee, let teamKey = model.teamKey {
                 return NSPredicate(format: "%K == %@ AND %K == %@",
                                    #keyPath(AwardRecipient.awardee), awardee,
@@ -79,6 +80,15 @@ extension AwardRecipient: Managed {
 }
 
 extension AwardRecipient {
+
+    public static func teamKeyPath() -> String {
+        return #keyPath(AwardRecipient.team)
+    }
+
+    public static func teamPredicate(teamKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K.%K == %@",
+                           #keyPath(AwardRecipient.team), #keyPath(Team.keyString), teamKey)
+    }
 
     /**
      A sorted array of strings describing the award recipient.

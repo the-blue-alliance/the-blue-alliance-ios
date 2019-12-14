@@ -6,7 +6,7 @@ import TBAKit
 public class EventRankingStatInfo: NSManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<EventRankingStatInfo> {
-        return NSFetchRequest<EventRankingStatInfo>(entityName: "EventRankingStatInfo")
+        return NSFetchRequest<EventRankingStatInfo>(entityName: EventRankingStatInfo.entityName)
     }
 
     public var name: String {
@@ -23,6 +23,9 @@ public class EventRankingStatInfo: NSManagedObject {
         return precision
     }
 
+    @NSManaged private var nameString: String?
+    @NSManaged private var precisionNumber: NSNumber?
+
     public var extraStatsRankings: [EventRanking] {
         guard let extraStatsRankingsMany = extraStatsRankingsMany, let extraStatsRankings = extraStatsRankingsMany.allObjects as? [EventRanking] else {
             return []
@@ -37,8 +40,6 @@ public class EventRankingStatInfo: NSManagedObject {
         return sortOrdersRankings
     }
 
-    @NSManaged private var nameString: String?
-    @NSManaged private var precisionNumber: NSNumber?
     @NSManaged private var extraStatsRankingsMany: NSSet?
     @NSManaged private var sortOrdersRankingsMany: NSSet?
 

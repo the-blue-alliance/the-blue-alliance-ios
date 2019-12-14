@@ -6,8 +6,11 @@ import TBAKit
 public class EventInsights: NSManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<EventInsights> {
-        return NSFetchRequest<EventInsights>(entityName: "EventInsights")
+        return NSFetchRequest<EventInsights>(entityName: EventInsights.entityName)
     }
+
+    @NSManaged public private(set) var playoff: [String: Any]?
+    @NSManaged public private(set) var qual: [String: Any]?
 
     var event: Event {
         guard let event = eventOne else {
@@ -16,8 +19,6 @@ public class EventInsights: NSManagedObject {
         return event
     }
 
-    @NSManaged public private(set) var playoff: [String: Any]?
-    @NSManaged public private(set) var qual: [String: Any]?
     @NSManaged private var eventOne: Event?
 
 }
@@ -73,7 +74,7 @@ extension EventInsights: Orphanable {
 
     public var isOrphaned: Bool {
         // EventInsights should never be orphaned because they'll cascade with an Event's deletion
-        return event == nil
+        return eventOne == nil
     }
 
 }

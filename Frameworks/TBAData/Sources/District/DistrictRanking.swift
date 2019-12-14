@@ -76,8 +76,8 @@ extension DistrictRanking: Managed {
      - Returns: The inserted District Ranking.
      */
     public static func insert(_ model: TBADistrictRanking, districtKey: String, in context: NSManagedObjectContext) -> DistrictRanking {
-        let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(DistrictRanking.districtOne.keyString), districtKey,
+        let predicate = NSPredicate(format: "%K.%K == %@ AND %K == %@",
+                                    #keyPath(DistrictRanking.districtOne), District.keyPath(), districtKey,
                                     #keyPath(DistrictRanking.teamOne.keyString), model.teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (ranking) in
@@ -102,9 +102,9 @@ extension DistrictRanking: Managed {
 
 extension DistrictRanking {
 
-    public static func districtPredicate(district: District) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(DistrictRanking.districtOne), district)
+    public static func districtPredicate(districtKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K.%K == %@",
+                           #keyPath(DistrictRanking.districtOne), District.keyPath(), districtKey)
     }
 
     public static func rankSortDescriptor() -> NSSortDescriptor {

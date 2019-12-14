@@ -6,7 +6,7 @@ import TBAKit
 public class EventAllianceBackup: NSManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<EventAllianceBackup> {
-        return NSFetchRequest<EventAllianceBackup>(entityName: "EventAllianceBackup")
+        return NSFetchRequest<EventAllianceBackup>(entityName: EventAllianceBackup.entityName)
     }
 
     var alliances: [EventAlliance] {

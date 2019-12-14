@@ -6,7 +6,7 @@ import TBAKit
 public class EventRanking: NSManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<EventRanking> {
-        return NSFetchRequest<EventRanking>(entityName: "EventRanking")
+        return NSFetchRequest<EventRanking>(entityName: EventRanking.entityName)
     }
 
     public var dq: Int? {
@@ -48,23 +48,23 @@ public class EventRanking: NSManagedObject {
         return team
     }
 
-    @NSManaged internal var eventOne: Event?
-    @NSManaged public private(set) var extraStats: NSOrderedSet?
-    @NSManaged public private(set) var extraStatsInfo: NSOrderedSet?
-    @NSManaged public private(set) var qualStatus: EventStatusQual?
-    @NSManaged public private(set) var sortOrders: NSOrderedSet?
-    @NSManaged public private(set) var sortOrdersInfo: NSOrderedSet?
-    @NSManaged internal private(set) var teamOne: Team?
+    @NSManaged private var eventOne: Event?
+    @NSManaged private var extraStats: NSOrderedSet?
+    @NSManaged private var extraStatsInfo: NSOrderedSet?
+    @NSManaged private var qualStatus: EventStatusQual?
+    @NSManaged private var sortOrders: NSOrderedSet?
+    @NSManaged private var sortOrdersInfo: NSOrderedSet?
+    @NSManaged private var teamOne: Team?
 
 }
 
 extension EventRanking: Managed {
 
     public static func insert(_ model: TBAEventRanking, sortOrderInfo: [TBAEventRankingSortOrder]?, extraStatsInfo: [TBAEventRankingSortOrder]?, eventKey: String, in context: NSManagedObjectContext) -> EventRanking {
-        let predicate = NSPredicate(format: "(%K.%K == %@ OR %K.%K == %@) AND %K == %@",
-                                    #keyPath(EventRanking.eventOne), Event.keyPath(), eventKey,
-                                    #keyPath(EventRanking.qualStatus.eventStatus.eventOne), Event.keyPath(), eventKey,
-                                    #keyPath(EventRanking.teamOne.keyString), model.teamKey)
+        let predicate = NSPredicate(format: "(%K.%K == %@ OR %K.%K.%K.%K == %@) AND %K.%K == %@",
+                                    EventRanking.eventKeyPath(), Event.keyPath(), eventKey,
+                                    #keyPath(EventRanking.qualStatus), EventStatusQual.eventStatusKeyPath(), EventStatus.eventKeyPath(), Event.keyPath(), eventKey,
+                                    EventRanking.teamKeyPath(), #keyPath(Team.keyString), model.teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (ranking) in
             // Required: teamKey, rank
@@ -156,9 +156,17 @@ extension EventRanking: Managed {
 
 extension EventRanking {
 
-    public static func eventPredicate(event: Event) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(EventRanking.eventOne), event)
+    public static func eventKeyPath() -> String {
+        return #keyPath(EventRanking.eventOne)
+    }
+
+    public static func teamKeyPath() -> String {
+        return #keyPath(EventRanking.teamOne)
+    }
+
+    public static func eventPredicate(eventKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K.%K == %@",
+                           EventRanking.eventKeyPath(), Event.keyPath(), eventKey)
     }
 
     public static func rankSortDescriptor() -> NSSortDescriptor {
@@ -205,6 +213,10 @@ extension EventRanking {
             }).compactMap({ $0 })
             return rankingInfoStringParts.isEmpty ? nil : rankingInfoStringParts.joined(separator: ", ")
         }
+    }
+
+    public func setEvent(event: Event) {
+        self.eventOne = event
     }
 
 }

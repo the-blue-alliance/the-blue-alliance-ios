@@ -39,7 +39,7 @@ public class District: NSManagedObject {
     }
 
     @NSManaged private var abbreviationString: String?
-    @NSManaged internal private(set) var keyString: String?
+    @NSManaged private var keyString: String?
     @NSManaged private var nameString: String?
     @NSManaged private var yearNumber: NSNumber?
 
@@ -179,6 +179,10 @@ extension District: Managed {
 }
 
 extension District {
+
+    public static func keyPath() -> NSString {
+        return #keyPath(District.keyString)
+    }
 
     public static func predicate(key: String) -> NSPredicate {
         return NSPredicate(format: "%K == %@",

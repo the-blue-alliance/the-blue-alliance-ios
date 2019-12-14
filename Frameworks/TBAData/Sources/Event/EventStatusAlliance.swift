@@ -6,7 +6,7 @@ import TBAKit
 public class EventStatusAlliance: NSManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<EventStatusAlliance> {
-        return NSFetchRequest<EventStatusAlliance>(entityName: "EventStatusAlliance")
+        return NSFetchRequest<EventStatusAlliance>(entityName: EventStatusAlliance.entityName)
     }
 
     public var number: Int {
@@ -23,9 +23,10 @@ public class EventStatusAlliance: NSManagedObject {
         return pick
     }
 
-    @NSManaged public private(set) var name: String?
+    @NSManaged private var name: String?
     @NSManaged private var numberNumber: NSNumber?
     @NSManaged private var pickNumber: NSNumber?
+
     @NSManaged private var backup: EventAllianceBackup?
     @NSManaged private var eventStatusOne: EventStatus?
 
@@ -34,9 +35,9 @@ public class EventStatusAlliance: NSManagedObject {
 extension EventStatusAlliance: Managed {
 
     public static func insert(_ model: TBAEventStatusAlliance, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusAlliance {
-        let predicate = NSPredicate(format: "%K.%K == %@ AND %K == %@",
-                                    #keyPath(EventStatusAlliance.eventStatusOne.eventOne), Event.keyPath(), eventKey,
-                                    #keyPath(EventStatusAlliance.eventStatusOne.teamOne.keyString), teamKey)
+        let predicate = NSPredicate(format: "%K.%K.%K == %@ AND %K.%K.%K == %@",
+                                    #keyPath(EventStatusAlliance.eventStatusOne), EventStatus.eventKeyPath(), Event.keyPath(), eventKey,
+                                    #keyPath(EventStatusAlliance.eventStatusOne), EventStatus.teamKeyPath(), #keyPath(Team.keyString), teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (allianceStatus) in
             allianceStatus.numberNumber = NSNumber(value: model.number)

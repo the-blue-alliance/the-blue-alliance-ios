@@ -14,11 +14,12 @@ public class EventStatus: NSManagedObject {
     @NSManaged public private(set) var nextMatchKey: String?
     @NSManaged public private(set) var overallStatus: String?
     @NSManaged public private(set) var playoffStatus: String?
-    @NSManaged public private(set) var alliance: EventStatusAlliance?
-    @NSManaged internal private(set) var eventOne: Event?
-    @NSManaged public private(set) var playoff: EventStatusPlayoff?
-    @NSManaged public private(set) var qual: EventStatusQual?
-    @NSManaged internal private(set) var teamOne: Team?
+
+    @NSManaged private var alliance: EventStatusAlliance?
+    @NSManaged private var eventOne: Event?
+    @NSManaged private var playoff: EventStatusPlayoff?
+    @NSManaged internal private(set) var qual: EventStatusQual?
+    @NSManaged private var teamOne: Team?
 
 }
 
@@ -26,10 +27,7 @@ extension EventStatus: Managed {
 
     @discardableResult
     public static func insert(_ model: TBAEventStatus, in context: NSManagedObjectContext) -> EventStatus {
-        let predicate = NSPredicate(format: "%K.%K == %@ AND %K == %@",
-                                    #keyPath(EventStatus.eventOne), Event.keyPath(), model.eventKey,
-                                    #keyPath(EventStatus.teamOne.keyString), model.teamKey)
-
+        let predicate = EventStatus.predicate(eventKey: model.eventKey, teamKey: model.teamKey)
         return findOrCreate(in: context, matching: predicate, configure: { (eventStatus) in
             eventStatus.teamOne = Team.insert(model.teamKey, in: context)
 
@@ -78,10 +76,18 @@ extension EventStatus: Managed {
 
 extension EventStatus {
 
-    public static func predicate(event: Event, team: Team) -> NSPredicate {
-        return NSPredicate(format: "%K == %@ AND %K == %@",
-                           #keyPath(EventStatus.eventOne), event,
-                           #keyPath(EventStatus.teamOne), team)
+    public static func eventKeyPath() -> String {
+        return #keyPath(EventStatus.eventOne)
+    }
+
+    public static func teamKeyPath() -> String {
+        return #keyPath(EventStatus.teamOne)
+    }
+
+    public static func predicate(eventKey: String, teamKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K.%K == %@ AND %K.%K == %@",
+                           EventStatus.eventKeyPath(), Event.keyPath(), eventKey,
+                           EventStatus.teamKeyPath(), #keyPath(Team.keyString), teamKey)
     }
 
 }

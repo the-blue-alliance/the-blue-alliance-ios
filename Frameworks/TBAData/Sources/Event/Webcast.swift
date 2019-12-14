@@ -6,7 +6,7 @@ import TBAKit
 public class Webcast: NSManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Webcast> {
-        return NSFetchRequest<Webcast>(entityName: "Webcast")
+        return NSFetchRequest<Webcast>(entityName: Webcast.entityName)
     }
 
     public var channel: String {
@@ -23,6 +23,10 @@ public class Webcast: NSManagedObject {
         return type
     }
 
+    @NSManaged private var channelString: String?
+    @NSManaged public private(set) var file: String?
+    @NSManaged private var typeString: String?
+
     public var events: [Event] {
         guard let eventsMany = eventsMany, let events = eventsMany.allObjects as? [Event] else {
             return []
@@ -30,9 +34,6 @@ public class Webcast: NSManagedObject {
         return events
     }
 
-    @NSManaged private var channelString: String?
-    @NSManaged public private(set) var file: String?
-    @NSManaged private var typeString: String?
     @NSManaged private var eventsMany: NSSet?
 
 }

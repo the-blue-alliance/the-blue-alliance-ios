@@ -69,7 +69,7 @@ public class DistrictEventPoints: NSManagedObject {
         return team
     }
 
-    @NSManaged public private(set) var districtRanking: DistrictRanking?
+    @NSManaged private var districtRanking: DistrictRanking?
     @NSManaged private var eventOne: Event?
     @NSManaged private var teamOne: Team?
 

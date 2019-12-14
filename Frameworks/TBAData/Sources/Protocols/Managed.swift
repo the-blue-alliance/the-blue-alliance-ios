@@ -66,12 +66,12 @@ extension Managed where Self: NSManagedObject {
         }
     }
 
-    func updateToOneRelationship<J: Any, T: NSManagedObject & Orphanable>(relationship: String, newValue: J?, newObject: (J) -> T) {
+    func updateToOneRelationship<J: Any, T: NSManagedObject & Orphanable>(relationship: String, newValue: J?, newObject: ((J) -> T)? = nil) {
         // Store our old value so we can reference it later
         let oldValue = value(forKeyPath: relationship) as? T
 
         // The ol' switcharoo
-        if let newValue = newValue {
+        if let newValue = newValue, let newObject = newObject {
             setValue(newObject(newValue), forKeyPath: relationship)
         } else {
             setValue(nil, forKeyPath: relationship)
