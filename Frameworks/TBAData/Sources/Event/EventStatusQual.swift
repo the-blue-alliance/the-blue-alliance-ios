@@ -2,6 +2,26 @@ import CoreData
 import Foundation
 import TBAKit
 
+extension EventStatusQual {
+
+    public var numTeams: Int? {
+        return getValue(\EventStatusQual.numTeamsRaw)?.intValue
+    }
+
+    public var status: String? {
+        return getValue(\EventStatusQual.statusRaw)
+    }
+
+    public var eventStatus: EventStatus? {
+        return getValue(\EventStatusQual.eventStatusRaw)
+    }
+
+    public var ranking: EventRanking? {
+        return getValue(\EventStatusQual.rankingRaw)
+    }
+
+}
+
 @objc(EventStatusQual)
 public class EventStatusQual: NSManagedObject {
 
@@ -9,14 +29,10 @@ public class EventStatusQual: NSManagedObject {
         return NSFetchRequest<EventStatusQual>(entityName: EventStatusQual.entityName)
     }
 
-    public var numTeams: Int? {
-        return numTeamsNumber?.intValue
-    }
-
-    @NSManaged var numTeamsNumber: NSNumber?
-    @NSManaged var status: String?
-    @NSManaged var eventStatus: EventStatus?
-    @NSManaged var ranking: EventRanking?
+    @NSManaged var numTeamsRaw: NSNumber?
+    @NSManaged var statusRaw: String?
+    @NSManaged var eventStatusRaw: EventStatus?
+    @NSManaged var rankingRaw: EventRanking?
 
 }
 
@@ -24,19 +40,19 @@ extension EventStatusQual: Managed {
 
     public static func insert(_ model: TBAEventStatusQual, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusQual {
         let predicate = NSPredicate(format: "(%K == %@ AND %K == %@) OR (%K == %@ AND %K == %@)",
-                                    #keyPath(EventStatusQual.ranking.eventOne.keyRaw), eventKey,
-                                    #keyPath(EventStatusQual.ranking.teamOne.keyString), teamKey,
-                                    #keyPath(EventStatusQual.eventStatus.eventOne.keyRaw), eventKey,
-                                    #keyPath(EventStatusQual.eventStatus.teamOne.keyString), teamKey)
+                                    #keyPath(EventStatusQual.rankingRaw.eventRaw.keyRaw), eventKey,
+                                    #keyPath(EventStatusQual.rankingRaw.teamRaw.keyString), teamKey,
+                                    #keyPath(EventStatusQual.eventStatusRaw.eventRaw.keyRaw), eventKey,
+                                    #keyPath(EventStatusQual.eventStatusRaw.teamRaw.keyString), teamKey)
         return findOrCreate(in: context, matching: predicate, configure: { (eventStatusQual) in
             if let numTeams = model.numTeams {
-                eventStatusQual.numTeamsNumber = NSNumber(value: numTeams)
+                eventStatusQual.numTeamsRaw = NSNumber(value: numTeams)
             } else {
-                eventStatusQual.numTeamsNumber = nil
+                eventStatusQual.numTeamsRaw = nil
             }
-            eventStatusQual.status = model.status
+            eventStatusQual.statusRaw = model.status
 
-            eventStatusQual.updateToOneRelationship(relationship: #keyPath(EventStatusQual.ranking), newValue: model.ranking) {
+            eventStatusQual.updateToOneRelationship(relationship: #keyPath(EventStatusQual.rankingRaw), newValue: model.ranking) {
                 return EventRanking.insert($0, sortOrderInfo: model.sortOrder, extraStatsInfo: nil, eventKey: eventKey, in: context)
             }
         })
@@ -48,8 +64,8 @@ extension EventStatusQual: Orphanable {
 
     public var isOrphaned: Bool {
         // EventStatusQual is an orphan if it's not attached to a Ranking or an EventStatus
-        let hasRanking = (ranking != nil)
-        let hasStatus = (eventStatus != nil)
+        let hasRanking = (rankingRaw != nil)
+        let hasStatus = (eventStatusRaw != nil)
         return !hasRanking && !hasStatus
     }
 

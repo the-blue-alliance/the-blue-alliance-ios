@@ -2,6 +2,25 @@ import CoreData
 import Foundation
 import TBAKit
 
+extension EventInsights {
+
+    var playoff: [String: Any]? {
+        return getValue(\EventInsights.playoffRaw)
+    }
+
+    var qual: [String: Any]? {
+        return getValue(\EventInsights.qualRaw)
+    }
+
+    var event: Event {
+        guard let event = getValue(\EventInsights.eventRaw) else {
+            fatalError("Save EventInsights before accessing event")
+        }
+        return event
+    }
+
+}
+
 @objc(EventInsights)
 public class EventInsights: NSManagedObject {
 
@@ -9,17 +28,9 @@ public class EventInsights: NSManagedObject {
         return NSFetchRequest<EventInsights>(entityName: EventInsights.entityName)
     }
 
-    @NSManaged public private(set) var playoff: [String: Any]?
-    @NSManaged public private(set) var qual: [String: Any]?
-
-    var event: Event {
-        guard let event = eventOne else {
-            fatalError("Save EventInsights before accessing event")
-        }
-        return event
-    }
-
-    @NSManaged private var eventOne: Event?
+    @NSManaged var playoffRaw: [String: Any]?
+    @NSManaged var qualRaw: [String: Any]?
+    @NSManaged var eventRaw: Event?
 
 }
 
@@ -40,13 +51,13 @@ extension EventInsights: Managed {
      */
     @discardableResult
     public static func insert(_ model: TBAEventInsights, eventKey: String, in context: NSManagedObjectContext) -> EventInsights {
-        let predicate = NSPredicate(format: "%K.%K == %@",
-                                    #keyPath(EventInsights.eventOne.keyRaw), eventKey)
+        let predicate = NSPredicate(format: "%K == %@",
+                                    #keyPath(EventInsights.eventRaw.keyRaw), eventKey)
 
         return findOrCreate(in: context, matching: predicate) { (insights) in
             // TODO: Handle NSNull? At least write a test
-            insights.qual = model.qual
-            insights.playoff = model.playoff
+            insights.qualRaw = model.qual
+            insights.playoffRaw = model.playoff
         }
     }
 
@@ -74,7 +85,7 @@ extension EventInsights: Orphanable {
 
     public var isOrphaned: Bool {
         // EventInsights should never be orphaned because they'll cascade with an Event's deletion
-        return eventOne == nil
+        return eventRaw == nil
     }
 
 }

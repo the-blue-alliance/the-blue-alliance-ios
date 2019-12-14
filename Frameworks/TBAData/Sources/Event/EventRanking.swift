@@ -2,6 +2,80 @@ import CoreData
 import Foundation
 import TBAKit
 
+extension EventRanking {
+
+    public var dq: Int? {
+        return getValue(\EventRanking.dqRaw)?.intValue
+    }
+
+    public var matchesPlayed: Int? {
+        return getValue(\EventRanking.matchesPlayedRaw)?.intValue
+    }
+
+    public var qualAverage: Double? {
+        return getValue(\EventRanking.qualAverageRaw)?.doubleValue
+    }
+
+    public var rank: Int {
+        guard let rank = getValue(\EventRanking.rankRaw)?.intValue else {
+            fatalError("Save EventRanking before accessing rank")
+        }
+        return rank
+    }
+
+    public var record: WLT? {
+        return getValue(\EventRanking.recordRaw)
+    }
+
+    public var event: Event {
+        guard let event = getValue(\EventRanking.eventRaw) else {
+            fatalError("Save EventRanking before accessing event")
+        }
+        return event
+    }
+
+    public var extraStats: NSOrderedSet? {
+        return getValue(\EventRanking.extraStatsRaw)
+    }
+
+    public var extraStatsInfo: NSOrderedSet? {
+        return getValue(\EventRanking.extraStatsInfoRaw)
+    }
+
+    public var qualStatus: EventStatusQual? {
+        return getValue(\EventRanking.qualStatusRaw)
+    }
+
+    public var sortOrders: NSOrderedSet? {
+        return getValue(\EventRanking.sortOrdersRaw)
+    }
+
+    public var sortOrdersInfo: NSOrderedSet? {
+        return getValue(\EventRanking.sortOrdersInfoRaw)
+    }
+
+    public var team: Team {
+        guard let team = getValue(\EventRanking.teamRaw) else {
+            fatalError("Save EventRanking before accessing team")
+        }
+        return team
+    }
+
+    public var extraStatsInfoArray: [EventRankingStatInfo] {
+        return extraStatsInfo?.array as? [EventRankingStatInfo] ?? []
+    }
+    public var extraStatsArray: [EventRankingStat] {
+        return extraStats?.array as? [EventRankingStat] ?? []
+    }
+    public var sortOrdersInfoArray: [EventRankingStatInfo] {
+        return sortOrdersInfo?.array as? [EventRankingStatInfo] ?? []
+    }
+    public var sortOrdersArray: [EventRankingStat] {
+        return sortOrders?.array as? [EventRankingStat] ?? []
+    }
+
+}
+
 @objc(EventRanking)
 public class EventRanking: NSManagedObject {
 
@@ -9,51 +83,18 @@ public class EventRanking: NSManagedObject {
         return NSFetchRequest<EventRanking>(entityName: EventRanking.entityName)
     }
 
-    public var dq: Int? {
-        return dqNumber?.intValue
-    }
-
-    public var matchesPlayed: Int? {
-        return matchesPlayedNumber?.intValue
-    }
-
-    public var qualAverage: Double? {
-        return qualAverageNumber?.doubleValue
-    }
-
-    public var rank: Int {
-        guard let rank = rankNumber?.intValue else {
-            fatalError("Save EventRanking before accessing rank")
-        }
-        return rank
-    }
-
-    public var event: Event {
-        guard let event = eventOne else {
-            fatalError("Save EventRanking before accessing event")
-        }
-        return event
-    }
-
-    public var team: Team {
-        guard let team = teamOne else {
-            fatalError("Save EventRanking before accessing team")
-        }
-        return team
-    }
-
-    @NSManaged var dqNumber: NSNumber?
-    @NSManaged var matchesPlayedNumber: NSNumber?
-    @NSManaged var qualAverageNumber: NSNumber?
-    @NSManaged var rankNumber: NSNumber?
-    @NSManaged var record: WLT?
-    @NSManaged var eventOne: Event?
-    @NSManaged var extraStats: NSOrderedSet?
-    @NSManaged var extraStatsInfo: NSOrderedSet?
-    @NSManaged var qualStatus: EventStatusQual?
-    @NSManaged var sortOrders: NSOrderedSet?
-    @NSManaged var sortOrdersInfo: NSOrderedSet?
-    @NSManaged var teamOne: Team?
+    @NSManaged var dqRaw: NSNumber?
+    @NSManaged var matchesPlayedRaw: NSNumber?
+    @NSManaged var qualAverageRaw: NSNumber?
+    @NSManaged var rankRaw: NSNumber?
+    @NSManaged var recordRaw: WLT?
+    @NSManaged var eventRaw: Event?
+    @NSManaged public var extraStatsRaw: NSOrderedSet?
+    @NSManaged public var extraStatsInfoRaw: NSOrderedSet?
+    @NSManaged public var qualStatusRaw: EventStatusQual?
+    @NSManaged public var sortOrdersRaw: NSOrderedSet?
+    @NSManaged public var sortOrdersInfoRaw: NSOrderedSet?
+    @NSManaged var teamRaw: Team?
 
 }
 
@@ -61,48 +102,48 @@ extension EventRanking: Managed {
 
     public static func insert(_ model: TBAEventRanking, sortOrderInfo: [TBAEventRankingSortOrder]?, extraStatsInfo: [TBAEventRankingSortOrder]?, eventKey: String, in context: NSManagedObjectContext) -> EventRanking {
         let predicate = NSPredicate(format: "(%K == %@ OR %K == %@) AND %K == %@",
-                                    #keyPath(EventRanking.eventOne.keyRaw), eventKey,
-                                    #keyPath(EventRanking.qualStatus.eventStatus.eventOne.keyRaw), eventKey,
-                                    #keyPath(EventRanking.teamOne.keyString), model.teamKey)
+                                    #keyPath(EventRanking.eventRaw.keyRaw), eventKey,
+                                    #keyPath(EventRanking.qualStatusRaw.eventStatusRaw.eventRaw.keyRaw), eventKey,
+                                    #keyPath(EventRanking.teamRaw.keyString), model.teamKey)
         return findOrCreate(in: context, matching: predicate, configure: { (ranking) in
             // Required: teamKey, rank
-            ranking.teamOne = Team.insert(model.teamKey, in: context)
+            ranking.teamRaw = Team.insert(model.teamKey, in: context)
             if let dq = model.dq {
-                ranking.dqNumber = NSNumber(value: dq)
+                ranking.dqRaw = NSNumber(value: dq)
             } else {
-                ranking.dqNumber = nil
+                ranking.dqRaw = nil
             }
             if let matchesPlayed = model.matchesPlayed {
-                ranking.matchesPlayedNumber = NSNumber(value: matchesPlayed)
+                ranking.matchesPlayedRaw = NSNumber(value: matchesPlayed)
             } else {
-                ranking.matchesPlayedNumber = nil
+                ranking.matchesPlayedRaw = nil
             }
             if let qualAverage = model.qualAverage {
-                ranking.qualAverageNumber = NSNumber(value: qualAverage)
+                ranking.qualAverageRaw = NSNumber(value: qualAverage)
             } else {
-                ranking.qualAverageNumber = nil
+                ranking.qualAverageRaw = nil
             }
-            ranking.rankNumber = NSNumber(value: model.rank)
+            ranking.rankRaw = NSNumber(value: model.rank)
 
             if let record = model.record {
-                ranking.record = WLT(wins: record.wins, losses: record.losses, ties: record.ties)
+                ranking.recordRaw = WLT(wins: record.wins, losses: record.losses, ties: record.ties)
             } else {
-                ranking.record = nil
+                ranking.recordRaw = nil
             }
 
             // Extra Stats exists on objects returned by /event/{event_key}/rankings
             // but not on models returned by /team/{team_key}/event/{event_key} `Team_Event_Status_rank` model
             // (This is true for any endpoint that returns a `Team_Event_Status_rank` model)
-            ranking.updateToManyRelationship(relationship: #keyPath(EventRanking.extraStatsInfo), newValues: extraStatsInfo?.map({
+            ranking.updateToManyRelationship(relationship: #keyPath(EventRanking.extraStatsInfoRaw), newValues: extraStatsInfo?.map({
                 return EventRankingStatInfo.insert($0, in: context)
             }))
-            ranking.updateToManyRelationship(relationship: #keyPath(EventRanking.extraStats), newValues: model.extraStats?.map {
+            ranking.updateToManyRelationship(relationship: #keyPath(EventRanking.extraStatsRaw), newValues: model.extraStats?.map {
                 return EventRankingStat.insert(value: $0.doubleValue, extraStatsRanking: ranking, in: context)
             })
-            ranking.updateToManyRelationship(relationship: #keyPath(EventRanking.sortOrdersInfo), newValues: sortOrderInfo?.map {
+            ranking.updateToManyRelationship(relationship: #keyPath(EventRanking.sortOrdersInfoRaw), newValues: sortOrderInfo?.map {
                 return EventRankingStatInfo.insert($0, in: context)
             })
-            ranking.updateToManyRelationship(relationship: #keyPath(EventRanking.sortOrders), newValues: model.sortOrders?.map {
+            ranking.updateToManyRelationship(relationship: #keyPath(EventRanking.sortOrdersRaw), newValues: model.sortOrders?.map {
                 return EventRankingStat.insert(value: $0.doubleValue, sortOrderRanking: ranking, in: context)
             })
         })
@@ -116,7 +157,7 @@ extension EventRanking: Managed {
                 // qualStatus will become an orphan - delete
                 managedObjectContext?.delete(qualStatus)
             } else {
-                qualStatus.ranking = nil
+                qualStatus.rankingRaw = nil
             }
         }
 
@@ -135,10 +176,10 @@ extension EventRanking: Managed {
 
         // First pass - clean up our relationships.
         extraStatsInfoArray.forEach({
-            $0.removeFromExtraStatsRankingsMany(self)
+            $0.removeFromExtraStatsRankingsRaw(self)
         })
         sortOrdersInfoArray.forEach({
-            $0.removeFromSortOrdersRankingsMany(self)
+            $0.removeFromSortOrdersRankingsRaw(self)
         })
 
         // Second pass - clean up orphaned EventRankingStatInfo objects that used to be connected to this EventRanking.
@@ -153,31 +194,6 @@ extension EventRanking: Managed {
 }
 
 extension EventRanking {
-
-    public static func eventKeyPath() -> String {
-        return #keyPath(EventRanking.eventOne)
-    }
-
-    public static func teamKeyPath() -> String {
-        return #keyPath(EventRanking.teamOne)
-    }
-
-    public static func rankSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(EventRanking.rankNumber), ascending: true)
-    }
-
-    public var extraStatsInfoArray: [EventRankingStatInfo] {
-        return extraStatsInfo?.array as? [EventRankingStatInfo] ?? []
-    }
-    public var extraStatsArray: [EventRankingStat] {
-        return extraStats?.array as? [EventRankingStat] ?? []
-    }
-    public var sortOrdersInfoArray: [EventRankingStatInfo] {
-        return sortOrdersInfo?.array as? [EventRankingStatInfo] ?? []
-    }
-    public var sortOrdersArray: [EventRankingStat] {
-        return sortOrders?.array as? [EventRankingStat] ?? []
-    }
 
     private func statString(statsInfo: [EventRankingStatInfo], stats: [EventRankingStat]) -> String? {
         let parts = zip(statsInfo, stats).map({ (statsTuple) -> String? in
@@ -209,7 +225,7 @@ extension EventRanking {
     }
 
     public func setEvent(event: Event) {
-        self.eventOne = event
+        self.eventRaw = event
     }
 
 }
@@ -218,8 +234,8 @@ extension EventRanking: Orphanable {
 
     public var isOrphaned: Bool {
         // Ranking is an orphan if it's not attached to an Event or a EventStatusQual
-        let hasEvent = (eventOne != nil)
-        let hasStatus = (qualStatus != nil)
+        let hasEvent = (eventRaw != nil)
+        let hasStatus = (qualStatusRaw != nil)
         return !hasEvent && !hasStatus
     }
 

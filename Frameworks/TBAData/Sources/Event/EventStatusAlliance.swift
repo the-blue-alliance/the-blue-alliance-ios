@@ -2,6 +2,39 @@ import CoreData
 import Foundation
 import TBAKit
 
+extension EventStatusAlliance {
+
+    public var name: String? {
+        return getValue(\EventStatusAlliance.nameRaw)
+    }
+
+    public var number: Int {
+        guard let number = getValue(\EventStatusAlliance.numberRaw)?.intValue else {
+            fatalError("Save EventStatusAlliance before accessing number")
+        }
+        return number
+    }
+
+    public var pick: Int {
+        guard let pick = getValue(\EventStatusAlliance.pickRaw)?.intValue else {
+            fatalError("Save EventStatusAlliance before accessing pick")
+        }
+        return pick
+    }
+
+    public var backup: EventAllianceBackup? {
+        return getValue(\EventStatusAlliance.backupRaw)
+    }
+
+    public var eventStatus: EventStatus {
+        guard let eventStatus = getValue(\EventStatusAlliance.eventStatusRaw) else {
+            fatalError("Save EventStatusAlliance before accessing eventStatus")
+        }
+        return eventStatus
+    }
+
+}
+
 @objc(EventStatusAlliance)
 public class EventStatusAlliance: NSManagedObject {
 
@@ -9,25 +42,11 @@ public class EventStatusAlliance: NSManagedObject {
         return NSFetchRequest<EventStatusAlliance>(entityName: EventStatusAlliance.entityName)
     }
 
-    public var number: Int {
-        guard let number = numberNumber?.intValue else {
-            fatalError("Save EventStatusAlliance before accessing number")
-        }
-        return number
-    }
-
-    public var pick: Int {
-        guard let pick = pickNumber?.intValue else {
-            fatalError("Save EventStatusAlliance before accessing pick")
-        }
-        return pick
-    }
-
-    @NSManaged var name: String?
-    @NSManaged var numberNumber: NSNumber?
-    @NSManaged var pickNumber: NSNumber?
-    @NSManaged var backup: EventAllianceBackup?
-    @NSManaged var eventStatusOne: EventStatus?
+    @NSManaged var nameRaw: String?
+    @NSManaged var numberRaw: NSNumber?
+    @NSManaged var pickRaw: NSNumber?
+    @NSManaged var backupRaw: EventAllianceBackup?
+    @NSManaged var eventStatusRaw: EventStatus?
 
 }
 
@@ -35,15 +54,15 @@ extension EventStatusAlliance: Managed {
 
     public static func insert(_ model: TBAEventStatusAlliance, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusAlliance {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(EventStatusAlliance.eventStatusOne.eventOne.keyRaw), eventKey,
-                                    #keyPath(EventStatusAlliance.eventStatusOne.teamOne.keyString), teamKey)
+                                    #keyPath(EventStatusAlliance.eventStatusRaw.eventRaw.keyRaw), eventKey,
+                                    #keyPath(EventStatusAlliance.eventStatusRaw.teamRaw.keyString), teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (allianceStatus) in
-            allianceStatus.numberNumber = NSNumber(value: model.number)
-            allianceStatus.pickNumber = NSNumber(value: model.pick)
-            allianceStatus.name = model.name
+            allianceStatus.numberRaw = NSNumber(value: model.number)
+            allianceStatus.pickRaw = NSNumber(value: model.pick)
+            allianceStatus.nameRaw = model.name
 
-            allianceStatus.updateToOneRelationship(relationship: #keyPath(EventStatusAlliance.backup), newValue: model.backup, newObject: {
+            allianceStatus.updateToOneRelationship(relationship: #keyPath(EventStatusAlliance.backupRaw), newValue: model.backup, newObject: {
                 return EventAllianceBackup.insert($0, in: context)
             })
         })
@@ -57,7 +76,7 @@ extension EventStatusAlliance: Managed {
                 // AllianceBackup will become an orphan - delete
                 managedObjectContext?.delete(backup)
             } else {
-                backup.allianceStatus = nil
+                backup.allianceStatusRaw = nil
             }
         }
     }
@@ -67,7 +86,7 @@ extension EventStatusAlliance: Managed {
 extension EventStatusAlliance: Orphanable {
 
     public var isOrphaned: Bool {
-        return eventStatusOne == nil
+        return eventStatusRaw == nil
     }
 
 }

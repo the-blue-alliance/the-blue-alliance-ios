@@ -2,6 +2,45 @@ import CoreData
 import Foundation
 import TBAKit
 
+extension EventTeamStat {
+
+    public var opr: Double {
+        guard let opr = getValue(\EventTeamStat.oprRaw)?.doubleValue else {
+            fatalError("Save EventTeamStat before accessing opr")
+        }
+        return opr
+    }
+
+    public var dpr: Double {
+        guard let dpr = getValue(\EventTeamStat.dprRaw)?.doubleValue else {
+            fatalError("Save EventTeamStat before accessing dpr")
+        }
+        return dpr
+    }
+
+    public var ccwm: Double {
+        guard let ccwm = getValue(\EventTeamStat.ccwmRaw)?.doubleValue else {
+            fatalError("Save EventTeamStat before accessing ccwm")
+        }
+        return ccwm
+    }
+
+    public var event: Event {
+        guard let event = getValue(\EventTeamStat.eventRaw) else {
+            fatalError("Save EventTeamStat before accessing event")
+        }
+        return event
+    }
+
+    public var team: Team {
+        guard let team = getValue(\EventTeamStat.teamRaw) else {
+            fatalError("Save EventTeamStat before accessing team")
+        }
+        return team
+    }
+
+}
+
 @objc(EventTeamStat)
 public class EventTeamStat: NSManagedObject {
 
@@ -9,59 +48,26 @@ public class EventTeamStat: NSManagedObject {
         return NSFetchRequest<EventTeamStat>(entityName: EventTeamStat.entityName)
     }
 
-    public var opr: Double {
-        guard let opr = oprNumber?.doubleValue else {
-            fatalError("Save EventTeamStat before accessing opr")
-        }
-        return opr
-    }
-
-    public var dpr: Double {
-        guard let dpr = dprNumber?.doubleValue else {
-            fatalError("Save EventTeamStat before accessing dpr")
-        }
-        return dpr
-    }
-
-    public var ccwm: Double {
-        guard let ccwm = ccwmNumber?.doubleValue else {
-            fatalError("Save EventTeamStat before accessing ccwm")
-        }
-        return ccwm
-    }
-
-    public var event: Event {
-        guard let event = eventOne else {
-            fatalError("Save EventTeamStat before accessing event")
-        }
-        return event
-    }
-
-    public var team: Team {
-        guard let team = teamOne else {
-            fatalError("Save EventTeamStat before accessing team")
-        }
-        return team
-    }
-
-    @NSManaged var ccwmNumber: NSNumber?
-    @NSManaged var dprNumber: NSNumber?
-    @NSManaged var oprNumber: NSNumber?
-    @NSManaged var eventOne: Event?
-    @NSManaged var teamOne: Team?
+    @NSManaged var ccwmRaw: NSNumber?
+    @NSManaged var dprRaw: NSNumber?
+    @NSManaged var oprRaw: NSNumber?
+    @NSManaged var eventRaw: Event?
+    @NSManaged var teamRaw: Team?
 
 }
 
 extension EventTeamStat: Managed {
 
     public static func insert(_ model: TBAStat, eventKey: String, in context: NSManagedObjectContext) -> EventTeamStat {
-        let predicate = EventTeamStat.predicate(eventKey: eventKey, teamKey: model.teamKey)
+        let predicate = NSPredicate(format: "%K == %@ && %K == %@",
+                                    #keyPath(EventTeamStat.eventRaw.keyRaw), eventKey,
+                                    #keyPath(EventTeamStat.teamRaw.keyString), model.teamKey)
         return findOrCreate(in: context, matching: predicate) { (stat) in
-            stat.teamOne = Team.insert(model.teamKey, in: context)
+            stat.teamRaw = Team.insert(model.teamKey, in: context)
 
-            stat.oprNumber = NSNumber(value: model.opr)
-            stat.dprNumber = NSNumber(value: model.dpr)
-            stat.ccwmNumber = NSNumber(value: model.ccwm)
+            stat.oprRaw = NSNumber(value: model.opr)
+            stat.dprRaw = NSNumber(value: model.dpr)
+            stat.ccwmRaw = NSNumber(value: model.ccwm)
         }
     }
 
@@ -69,28 +75,16 @@ extension EventTeamStat: Managed {
 
 extension EventTeamStat {
 
-    public static func predicate(eventKey: String, teamKey: String) -> NSPredicate {
-        let eventPredicate = EventTeamStat.eventPredicate(eventKey: eventKey)
-        let teamPredicate = NSPredicate(format: "%K == %@",
-                                        #keyPath(EventTeamStat.teamOne.keyString), teamKey)
-        return NSCompoundPredicate(andPredicateWithSubpredicates: [eventPredicate, teamPredicate])
-    }
-
-    public static func eventPredicate(eventKey: String) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(EventTeamStat.eventOne.keyRaw), eventKey)
-    }
-
     public static func oprSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(EventTeamStat.oprNumber), ascending: false)
+        return NSSortDescriptor(key: #keyPath(EventTeamStat.oprRaw), ascending: false)
     }
 
     public static func dprSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(EventTeamStat.dprNumber), ascending: false)
+        return NSSortDescriptor(key: #keyPath(EventTeamStat.dprRaw), ascending: false)
     }
 
     public static func ccwmSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(EventTeamStat.ccwmNumber), ascending: false)
+        return NSSortDescriptor(key: #keyPath(EventTeamStat.ccwmRaw), ascending: false)
     }
 
 }
@@ -99,7 +93,7 @@ extension EventTeamStat: Orphanable {
 
     public var isOrphaned: Bool {
         // Should not be orphaned, since we cascade on Event deletion
-        return eventOne == nil
+        return eventRaw == nil
     }
 
 }

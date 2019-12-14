@@ -3,6 +3,41 @@ import Foundation
 import TBAKit
 import TBAUtils
 
+extension EventAlliance {
+
+
+    public var name: String? {
+        return getValue(\EventAlliance.nameRaw)
+    }
+
+    public var backup: EventAllianceBackup? {
+        return getValue(\EventAlliance.backupRaw)
+    }
+
+    public var declines: NSOrderedSet? {
+        return getValue(\EventAlliance.declinesRaw)
+    }
+
+    public var event: Event {
+        guard let event = getValue(\EventAlliance.eventRaw) else {
+            fatalError("Save EventAlliance before accessing event")
+        }
+        return event
+    }
+
+    public var picks: NSOrderedSet {
+        guard let picks = getValue(\EventAlliance.picksRaw) else {
+            fatalError("Save EventAlliance before accessing picks")
+        }
+        return picks
+    }
+
+    public var status: EventStatusPlayoff? {
+        return getValue(\EventAlliance.statusRaw)
+    }
+
+}
+
 @objc(EventAlliance)
 public class EventAlliance: NSManagedObject {
 
@@ -10,20 +45,12 @@ public class EventAlliance: NSManagedObject {
         return NSFetchRequest<EventAlliance>(entityName: EventAlliance.entityName)
     }
 
-    @NSManaged public private(set) var name: String?
-
-    public var event: Event {
-        guard let event = eventOne else {
-            fatalError("Save EventAlliance before accessing event")
-        }
-        return event
-    }
-
-    @NSManaged var backup: EventAllianceBackup?
-    @NSManaged var declines: NSOrderedSet?
-    @NSManaged var eventOne: Event?
-    @NSManaged var picks: NSOrderedSet?
-    @NSManaged var status: EventStatusPlayoff?
+    @NSManaged var nameRaw: String?
+    @NSManaged var backupRaw: EventAllianceBackup?
+    @NSManaged var declinesRaw: NSOrderedSet?
+    @NSManaged var eventRaw: Event?
+    @NSManaged var picksRaw: NSOrderedSet?
+    @NSManaged var statusRaw: EventStatusPlayoff?
 
 }
 
@@ -46,39 +73,39 @@ extension EventAlliance: Managed {
      */
     public static func insert(_ model: TBAAlliance, eventKey: String, in context: NSManagedObjectContext) -> EventAlliance {
         let predicate = NSPredicate(format: "%K == %@ AND SUBQUERY(%K, $pick, $pick.%K IN %@).@count == %d",
-                                    #keyPath(EventAlliance.eventOne.keyRaw), eventKey,
-                                    #keyPath(EventAlliance.picks),
+                                    #keyPath(EventAlliance.eventRaw.keyRaw), eventKey,
+                                    #keyPath(EventAlliance.picksRaw),
                                     #keyPath(Team.keyString), model.picks, model.picks.count)
 
         return findOrCreate(in: context, matching: predicate, configure: { (alliance) in
             // Required: picks
-            alliance.name = model.name
+            alliance.nameRaw = model.name
 
-            alliance.updateToOneRelationship(relationship: #keyPath(EventAlliance.backup), newValue: model.backup, newObject: {
+            alliance.updateToOneRelationship(relationship: #keyPath(EventAlliance.backupRaw), newValue: model.backup, newObject: {
                 return EventAllianceBackup.insert($0, in: context)
             })
 
-            alliance.picks = NSOrderedSet(array: model.picks.map {
+            alliance.picksRaw = NSOrderedSet(array: model.picks.map {
                 return Team.insert($0, in: context)
             })
 
             if let declines = model.declines {
-                alliance.declines = NSOrderedSet(array: declines.map {
+                alliance.declinesRaw = NSOrderedSet(array: declines.map {
                     return Team.insert($0, in: context)
                 })
             } else {
-                alliance.declines = nil
+                alliance.declinesRaw = nil
             }
 
             if let teamKey = model.picks.first {
-                alliance.updateToOneRelationship(relationship: #keyPath(EventAlliance.status), newValue: model.status, newObject: {
+                alliance.updateToOneRelationship(relationship: #keyPath(EventAlliance.statusRaw), newValue: model.status, newObject: {
                     return EventStatusPlayoff.insert($0, eventKey: eventKey, teamKey: teamKey, in: context)
                 })
             } else {
-                if let status = alliance.status {
+                if let status = alliance.statusRaw {
                     context.delete(status)
                 }
-                alliance.status = nil
+                alliance.statusRaw = nil
             }
         })
     }
@@ -91,7 +118,7 @@ extension EventAlliance: Managed {
                 // EventStatusPlayoff will become an orphan - delete
                 managedObjectContext?.delete(status)
             } else {
-                status.alliance = nil
+                status.allianceRaw = nil
             }
         }
 
@@ -100,7 +127,7 @@ extension EventAlliance: Managed {
                 // AllianceBackup will become an orphan - delete
                 managedObjectContext?.delete(backup)
             } else {
-                backup.removeFromAlliancesMany(self)
+                backup.removeFromalliancesRaw(self)
             }
         }
     }
@@ -110,7 +137,7 @@ extension EventAlliance: Managed {
 extension EventAlliance: Orphanable {
 
     var isOrphaned: Bool {
-        return eventOne == nil
+        return eventRaw == nil
     }
 
 }

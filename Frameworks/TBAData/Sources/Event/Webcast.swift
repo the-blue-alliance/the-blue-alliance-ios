@@ -2,6 +2,36 @@ import CoreData
 import Foundation
 import TBAKit
 
+extension Webcast {
+
+    public var channel: String {
+        guard let channel = getValue(\Webcast.channelRaw) else {
+            fatalError("Save Webcast before accessing channel")
+        }
+        return channel
+    }
+
+    public var file: String? {
+        return getValue(\Webcast.fileRaw)
+    }
+
+    public var type: String {
+        guard let type = getValue(\Webcast.typeRaw) else {
+            fatalError("Save Webcast before accessing type")
+        }
+        return type
+    }
+
+    public var events: [Event] {
+        guard let eventsRaw = getValue(\Webcast.eventsRaw),
+            let events = eventsRaw.allObjects as? [Event] else {
+                return []
+        }
+        return events
+    }
+
+}
+
 @objc(Webcast)
 public class Webcast: NSManagedObject {
 
@@ -9,40 +39,18 @@ public class Webcast: NSManagedObject {
         return NSFetchRequest<Webcast>(entityName: Webcast.entityName)
     }
 
-    public var channel: String {
-        guard let channel = channelString else {
-            fatalError("Save Webcast before accessing channel")
-        }
-        return channel
-    }
-
-    public var type: String {
-        guard let type = typeString else {
-            fatalError("Save Webcast before accessing type")
-        }
-        return type
-    }
-
-    @NSManaged private var channelString: String?
-    @NSManaged public private(set) var file: String?
-    @NSManaged private var typeString: String?
-
-    public var events: [Event] {
-        guard let eventsMany = eventsMany, let events = eventsMany.allObjects as? [Event] else {
-            return []
-        }
-        return events
-    }
-
-    @NSManaged private var eventsMany: NSSet?
+    @NSManaged var channelRaw: String?
+    @NSManaged var fileRaw: String?
+    @NSManaged var typeRaw: String?
+    @NSManaged var eventsRaw: NSSet?
 
 }
 
 // MARK: Generated accessors for eventsMany
 extension Webcast {
 
-    @objc(removeEventsManyObject:)
-    @NSManaged internal func removeFromEventsMany(_ value: Event)
+    @objc(removeFromEventsRawObject:)
+    @NSManaged internal func removeFromEventsRaw(_ value: Event)
 
 }
 
@@ -63,14 +71,14 @@ extension Webcast: Managed {
      */
     public static func insert(_ model: TBAWebcast, in context: NSManagedObjectContext) -> Webcast {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(Webcast.typeString), model.type,
-                                    #keyPath(Webcast.channelString), model.channel)
+                                    #keyPath(Webcast.typeRaw), model.type,
+                                    #keyPath(Webcast.channelRaw), model.channel)
 
         return findOrCreate(in: context, matching: predicate, configure: { (webcast) in
             // Required: type, channel
-            webcast.typeString = model.type
-            webcast.channelString = model.channel
-            webcast.file = model.file
+            webcast.typeRaw = model.type
+            webcast.channelRaw = model.channel
+            webcast.fileRaw = model.file
         })
     }
 

@@ -1,6 +1,17 @@
 import CoreData
 import Foundation
 
+extension EventRankingStat {
+
+    public var value: Double {
+        guard let value = getValue(\EventRankingStat.valueRaw)?.doubleValue else {
+            fatalError("Save EventRankingStat before accessing value")
+        }
+        return value
+    }
+
+}
+
 @objc(EventRankingStat)
 public class EventRankingStat: NSManagedObject {
 
@@ -8,17 +19,9 @@ public class EventRankingStat: NSManagedObject {
         return NSFetchRequest<EventRankingStat>(entityName: EventRankingStat.entityName)
     }
 
-    public var value: Double {
-        guard let value = valueNumber?.doubleValue else {
-            fatalError("Save EventRankingStat before accessing value")
-        }
-        return value
-    }
-
-    @NSManaged private var valueNumber: NSNumber?
-
-    @NSManaged private var extraStatsRanking: EventRanking?
-    @NSManaged private var sortOrderRanking: EventRanking?
+    @NSManaged var valueRaw: NSNumber?
+    @NSManaged var extraStatsRankingRaw: EventRanking?
+    @NSManaged var sortOrderRankingRaw: EventRanking?
 
 }
 
@@ -26,23 +29,23 @@ extension EventRankingStat: Managed {
 
     internal static func insert(value: Double, sortOrderRanking: EventRanking, in context: NSManagedObjectContext) -> EventRankingStat {
         let eventRankingStat = EventRankingStat.init(entity: entity(), insertInto: context)
-        eventRankingStat.valueNumber = NSNumber(value: value)
-        eventRankingStat.sortOrderRanking = sortOrderRanking
+        eventRankingStat.valueRaw = NSNumber(value: value)
+        eventRankingStat.sortOrderRankingRaw = sortOrderRanking
         return eventRankingStat
     }
 
     internal static func insert(value: Double, extraStatsRanking: EventRanking, in context: NSManagedObjectContext) -> EventRankingStat {
         let eventRankingStat = EventRankingStat.init(entity: entity(), insertInto: context)
-        eventRankingStat.valueNumber = NSNumber(value: value)
-        eventRankingStat.extraStatsRanking = extraStatsRanking
+        eventRankingStat.valueRaw = NSNumber(value: value)
+        eventRankingStat.extraStatsRankingRaw = extraStatsRanking
         return eventRankingStat
     }
 
     internal static func insert(value: Double, sortOrderRanking: EventRanking?, extraStatsRanking: EventRanking?, in context: NSManagedObjectContext) -> EventRankingStat {
         let eventRankingStat = EventRankingStat.init(entity: entity(), insertInto: context)
-        eventRankingStat.valueNumber = NSNumber(value: value)
-        eventRankingStat.sortOrderRanking = sortOrderRanking
-        eventRankingStat.extraStatsRanking = extraStatsRanking
+        eventRankingStat.valueRaw = NSNumber(value: value)
+        eventRankingStat.sortOrderRankingRaw = sortOrderRanking
+        eventRankingStat.extraStatsRankingRaw = extraStatsRanking
         return eventRankingStat
     }
 
@@ -55,9 +58,9 @@ extension EventRankingStat: Managed {
         }
 
         // Do some additional validation, since we can't do an either-or or neither sort of validation in Core Data
-        if sortOrderRanking != nil, extraStatsRanking != nil {
+        if sortOrderRankingRaw != nil, extraStatsRankingRaw != nil {
             fatalError("EventRankingStat must not have a relationship to both an extraStat and sortOrder")
-        } else if sortOrderRanking == nil, extraStatsRanking == nil {
+        } else if sortOrderRankingRaw == nil, extraStatsRankingRaw == nil {
             fatalError("EventRankingStat must have a relationship to either an extraStat and sortOrder")
         }
     }
@@ -67,7 +70,7 @@ extension EventRankingStat: Managed {
 extension EventRankingStat: Orphanable {
 
     public var isOrphaned: Bool {
-        return sortOrderRanking == nil && extraStatsRanking == nil
+        return sortOrderRankingRaw == nil && extraStatsRankingRaw == nil
     }
 
 }

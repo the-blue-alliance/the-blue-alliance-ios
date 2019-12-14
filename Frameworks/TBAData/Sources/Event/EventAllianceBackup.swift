@@ -2,6 +2,36 @@ import CoreData
 import Foundation
 import TBAKit
 
+extension EventAllianceBackup {
+
+    var alliances: [EventAlliance] {
+        guard let alliancesRaw = getValue(\EventAllianceBackup.alliancesRaw),
+            let alliances = alliancesRaw.allObjects as? [EventAlliance] else {
+                return []
+        }
+        return alliances
+    }
+
+    var allianceStatus: EventStatusAlliance? {
+        return getValue(\EventAllianceBackup.allianceStatusRaw)
+    }
+
+    var inTeam: Team {
+        guard let inTeam = getValue(\EventAllianceBackup.inTeamRaw) else {
+            fatalError("Save EventAllianceBackup before accessing inTeam")
+        }
+        return inTeam
+    }
+
+    var outTeam: Team {
+        guard let outTeam = getValue(\EventAllianceBackup.outTeamRaw) else {
+            fatalError("Save EventAllianceBackup before accessing outTeam")
+        }
+        return outTeam
+    }
+
+}
+
 @objc(EventAllianceBackup)
 public class EventAllianceBackup: NSManagedObject {
 
@@ -9,39 +39,18 @@ public class EventAllianceBackup: NSManagedObject {
         return NSFetchRequest<EventAllianceBackup>(entityName: EventAllianceBackup.entityName)
     }
 
-    var alliances: [EventAlliance] {
-        guard let alliancesMany = alliancesMany, let alliances = alliancesMany.allObjects as? [EventAlliance] else {
-            return []
-        }
-        return alliances
-    }
-
-    var inTeam: Team {
-        guard let inTeam = inTeamOne else {
-            fatalError("Save EventAllianceBackup before accessing inTeam")
-        }
-        return inTeam
-    }
-
-    var outTeam: Team {
-        guard let outTeam = outTeamOne else {
-            fatalError("Save EventAllianceBackup before accessing outTeam")
-        }
-        return outTeam
-    }
-
-    @NSManaged private var alliancesMany: NSSet?
-    @NSManaged public internal(set) var allianceStatus: EventStatusAlliance?
-    @NSManaged private var inTeamOne: Team?
-    @NSManaged private var outTeamOne: Team?
+    @NSManaged var alliancesRaw: NSSet?
+    @NSManaged var allianceStatusRaw: EventStatusAlliance?
+    @NSManaged var inTeamRaw: Team?
+    @NSManaged var outTeamRaw: Team?
 
 }
 
 // MARK: Generated accessors for alliancesMany
 extension EventAllianceBackup {
 
-    @objc(removeAlliancesManyObject:)
-    @NSManaged internal func removeFromAlliancesMany(_ value: EventAlliance)
+    @objc(removeFromalliancesRawObject:)
+    @NSManaged internal func removeFromalliancesRaw(_ value: EventAlliance)
 
 }
 
@@ -60,12 +69,12 @@ extension EventAllianceBackup: Managed {
      */
     public static func insert(_ model: TBAAllianceBackup, in context: NSManagedObjectContext) -> EventAllianceBackup {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(EventAllianceBackup.inTeamOne.keyString), model.teamIn,
-                                    #keyPath(EventAllianceBackup.outTeamOne.keyString), model.teamOut)
+                                    #keyPath(EventAllianceBackup.inTeamRaw.keyString), model.teamIn,
+                                    #keyPath(EventAllianceBackup.outTeamRaw.keyString), model.teamOut)
 
         return findOrCreate(in: context, matching: predicate, configure: { (allianceBackup) in
-            allianceBackup.inTeamOne = Team.insert(model.teamIn, in: context)
-            allianceBackup.outTeamOne = Team.insert(model.teamOut, in: context)
+            allianceBackup.inTeamRaw = Team.insert(model.teamIn, in: context)
+            allianceBackup.outTeamRaw = Team.insert(model.teamOut, in: context)
         })
     }
 
