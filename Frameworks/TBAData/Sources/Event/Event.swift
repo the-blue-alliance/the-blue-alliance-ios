@@ -8,7 +8,7 @@ import TBAUtils
 public class Event: NSManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Event> {
-        return NSFetchRequest<Event>(entityName: "Event")
+        return NSFetchRequest<Event>(entityName: Event.entityName)
     }
 
     public var eventType: EventType? {
@@ -59,7 +59,7 @@ public class Event: NSManagedObject {
     @NSManaged public private(set) var gmapsPlaceID: String?
     @NSManaged public private(set) var gmapsURL: String?
     @NSManaged private var hybridType: String?
-    @NSManaged internal private(set) var keyString: String?
+    @NSManaged private var keyString: String?
     @NSManaged private var latNumber: NSNumber?
     @NSManaged private var lngNumber: NSNumber?
     @NSManaged public private(set) var locationName: String?
@@ -95,11 +95,11 @@ public class Event: NSManagedObject {
     @NSManaged private var divisionsMany: NSSet?
     @NSManaged public private(set) var insights: EventInsights?
     @NSManaged private var matchesMany: NSSet?
-    @NSManaged public private(set) var parentEvent: Event?
+    @NSManaged private var parentEvent: Event?
     @NSManaged private var pointsMany: NSSet?
     @NSManaged private var rankingsMany: NSSet?
     @NSManaged private var statsMany: NSSet?
-    @NSManaged public private(set) var status: Status?
+    @NSManaged private var status: Status?
     @NSManaged private var statusesMany: NSSet?
     @NSManaged private var teamsMany: NSSet?
     @NSManaged private var webcastsMany: NSSet?
@@ -152,11 +152,6 @@ extension Event: Managed {
         return dateFormatter
     }
 
-    public static func predicate(key: String) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(Event.keyString), key)
-    }
-
     /**
      Insert Events for a year with values from TBAKit Event models in to the managed object context.
 
@@ -171,8 +166,7 @@ extension Event: Managed {
     public static func insert(_ events: [TBAEvent], year: Int, in context: NSManagedObjectContext) {
         // Fetch all of the previous Events for this year
         let oldEvents = Event.fetch(in: context) {
-            $0.predicate = NSPredicate(format: "%K == %ld",
-                                       #keyPath(Event.yearNumber), year)
+            $0.predicate = Event.yearPredicate(year: year)
         }
 
         // Insert new Events for this year
@@ -508,58 +502,86 @@ extension Event: Locatable, Surfable {}
 
 extension Event {
 
+    public static func predicate(key: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Event.keyString), key)
+    }
+
+    public static func subqueryPredicate(keyPath: String, eventKey: String) -> NSPredicate {
+        return NSPredicate(format: "SUBQUERY(%K, $e, $e.%K == %@)",
+                           keyPath,
+                           #keyPath(Event.keyString), eventKey)
+    }
+
+    public static func keyPath() -> String {
+        return #keyPath(Event.keyString)
+    }
+
     public static func champsYearPredicate(key: String, year: Int) -> NSPredicate {
         // 2017 and onward - handle multiple CMPs
-        return NSPredicate(format: "(%K == %ld || %K == %ld) && %K == %ld && (%K == %@ || %K == %@)",
-                           #keyPath(Event.eventTypeNumber), EventType.championshipFinals.rawValue,
-                           #keyPath(Event.eventTypeNumber), EventType.championshipDivision.rawValue,
-                           #keyPath(Event.yearNumber), year,
-                           #keyPath(Event.keyString), key,
-                           #keyPath(Event.parentEvent.keyString), key)
+        let yearPredicate = Event.yearPredicate(year: year)
+        let predicate = NSPredicate(format: "(%K == %ld || %K == %ld) && (%K == %@ || %K == %@)",
+                                    #keyPath(Event.eventTypeNumber), EventType.championshipFinals.rawValue,
+                                    #keyPath(Event.eventTypeNumber), EventType.championshipDivision.rawValue,
+                                    #keyPath(Event.keyString), key,
+                                    #keyPath(Event.parentEvent.keyString), key)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, predicate])
     }
 
     public static func eventTypeYearPredicate(eventType: EventType, year: Int) -> NSPredicate {
-        return NSPredicate(format: "%K == %ld && %K == %ld",
-                           #keyPath(Event.eventTypeNumber), eventType.rawValue,
-                           #keyPath(Event.yearNumber), year)
+        let yearPredicate = Event.yearPredicate(year: year)
+        let predicate = NSPredicate(format: "%K == %ld",
+                                    #keyPath(Event.eventTypeNumber), eventType.rawValue)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, predicate])
     }
 
     public static func offseasonYearPredicate(startDate: Date, endDate: Date, year: Int) -> NSPredicate {
+        let yearPredicate = Event.yearPredicate(year: year)
+
         // Conversion stuff, since Core Data still uses NSDate's
         let firstDayOfMonth = NSDate(timeIntervalSince1970: startDate.startOfMonth().timeIntervalSince1970)
         let lastDayOfMonth = NSDate(timeIntervalSince1970: endDate.endOfMonth().timeIntervalSince1970)
-        return NSPredicate(format: "%K == %ld && %K == %ld && (%K >= %@) AND (%K <= %@)",
-                           #keyPath(Event.eventTypeNumber), EventType.offseason.rawValue,
-                           #keyPath(Event.yearNumber), year,
-                           #keyPath(Event.startDate), firstDayOfMonth,
-                           #keyPath(Event.endDate), lastDayOfMonth)
+        let predicate = NSPredicate(format: "%K == %ld && (%K >= %@) AND (%K <= %@)",
+                                    #keyPath(Event.eventTypeNumber), EventType.offseason.rawValue,
+                                    #keyPath(Event.startDate), firstDayOfMonth,
+                                    #keyPath(Event.endDate), lastDayOfMonth)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, predicate])
     }
 
-    public static func teamYearPredicate(team: Team, year: Int) -> NSPredicate {
-        return NSPredicate(format: "%K == %ld AND ANY %K == %@",
-                           #keyPath(Event.yearNumber), year,
-                           #keyPath(Event.teamsMany), team)
+    private static func teamPredicate(teamKey: String) -> NSPredicate {
+        return NSPredicate(format: "SUBQUERY(%K, $t, $t.%K == %@)",
+                           #keyPath(Event.teamsMany),
+                           #keyPath(Team.keyString), teamKey)
     }
 
-    public static func teamYearNonePredicate(team: Team) -> NSPredicate {
-        return NSPredicate(format: "%K == -1 AND ANY %K == %@",
-                           #keyPath(Event.yearNumber),
-                           #keyPath(Event.teamsMany), team)
+    public static func teamYearPredicate(teamKey: String, year: Int) -> NSPredicate {
+        let teamPredicate = Event.teamPredicate(teamKey: teamKey)
+        let yearPredicate = Event.yearPredicate(year: year)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [teamPredicate, yearPredicate])
+    }
+
+    public static func teamYearNonePredicate(teamKey: String) -> NSPredicate {
+        let teamPredicate = Event.teamPredicate(teamKey: teamKey)
+        let yearPredicate = Event.yearPredicate(year: -1)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [teamPredicate, yearPredicate])
     }
 
     public static func unplayedEventPredicate(date: Date, year: Int) -> NSPredicate {
+        let yearPredicate = Event.yearPredicate(year: year)
+
         let coreDataDate = NSDate(timeIntervalSince1970: date.timeIntervalSince1970)
-        return NSPredicate(format: "%K == %ld && %K >= %@ && %K != %ld",
-                           #keyPath(Event.yearNumber), year,
-                           #keyPath(Event.endDate), coreDataDate,
-                           #keyPath(Event.eventTypeNumber), EventType.championshipDivision.rawValue)
+        let beforeEndDatePredicate = NSPredicate(format: "%K >= %@ && %K != %ld",
+                                                 #keyPath(Event.endDate), coreDataDate,
+                                                 #keyPath(Event.eventTypeNumber), EventType.championshipDivision.rawValue)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, beforeEndDatePredicate])
     }
 
     public static func weekYearPredicate(week: Int, year: Int) -> NSPredicate {
+        let yearPredicate = Event.yearPredicate(year: year)
         // Event has a week - filter based on the week
-        return NSPredicate(format: "%K == %ld && %K == %ld",
-                           #keyPath(Event.weekNumber), week,
-                           #keyPath(Event.yearNumber), year)
+        let weekPredicate = NSPredicate(format: "%K == %ld",
+                                        #keyPath(Event.weekNumber), week)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, weekPredicate])
     }
 
     public static func yearPredicate(year: Int) -> NSPredicate {

@@ -136,9 +136,9 @@ class EventAwardsViewController: TBATableViewController {
             Award.typeSortDescriptor()
         ]
         if let team = team {
-            fetchRequest.predicate = Award.teamEventPredicate(team: team, event: event)
+            fetchRequest.predicate = Award.teamEventPredicate(teamKey: team.key, eventKey: event.key)
         } else {
-            fetchRequest.predicate = Award.eventPredicate(event: event)
+            fetchRequest.predicate = Award.eventPredicate(eventKey: event.key)
         }
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
@@ -150,8 +150,9 @@ class EventAwardsViewController: TBATableViewController {
 extension EventAwardsViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key)
-        return "\(key)_awards"
+        // let key = event.getValue(\Event.key)
+        // return "\(key)_awards"
+        return "\(event.key)_awards"
     }
 
     var automaticRefreshInterval: DateComponents? {

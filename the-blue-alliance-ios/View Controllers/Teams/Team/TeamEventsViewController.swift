@@ -71,9 +71,9 @@ class TeamEventsViewController: EventsViewController {
 
     override var fetchRequestPredicate: NSPredicate {
         if let year = year {
-            return Event.teamYearPredicate(team: team, year: year)
+            return Event.teamYearPredicate(teamKey: team.key, year: year)
         } else {
-            return Event.teamYearNonePredicate(team: team)
+            return Event.teamYearNonePredicate(teamKey: team.key)
         }
     }
 

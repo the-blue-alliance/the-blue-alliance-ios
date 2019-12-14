@@ -55,9 +55,9 @@ public class EventTeamStat: NSManagedObject {
 extension EventTeamStat: Managed {
 
     public static func insert(_ model: TBAStat, eventKey: String, in context: NSManagedObjectContext) -> EventTeamStat {
-        let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
+        let predicate = NSPredicate(format: "%K == %@ AND %K.%K == %@",
                                     #keyPath(EventTeamStat.teamOne.keyString), model.teamKey,
-                                    #keyPath(EventTeamStat.eventOne.keyString), eventKey)
+                                    #keyPath(EventTeamStat.eventOne), Event.keyPath(), eventKey)
 
         return findOrCreate(in: context, matching: predicate) { (stat) in
             stat.teamOne = Team.insert(model.teamKey, in: context)

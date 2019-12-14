@@ -71,10 +71,10 @@ extension Award: Managed {
      - Returns: The inserted Award.
      */
     public static func insert(_ model: TBAAward, in context: NSManagedObjectContext) -> Award {
-        let predicate = NSPredicate(format: "%K == %ld && %K == %ld && %K == %@",
+        let predicate = NSPredicate(format: "%K == %ld && %K == %ld && %K.%K == %@",
                                     #keyPath(Award.awardTypeNumber), model.awardType,
                                     #keyPath(Award.yearNumber), model.year,
-                                    #keyPath(Award.eventOne.keyString), model.eventKey)
+                                    #keyPath(Award.eventOne), Event.keyPath(), model.eventKey)
 
         return findOrCreate(in: context, matching: predicate) { (award) in
             // Required: awardType, event, name, year, recipients
@@ -107,8 +107,8 @@ extension Award: Managed {
 extension Award {
 
     public static func eventPredicate(eventKey: String) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(Award.eventOne.keyString), eventKey)
+        return NSPredicate(format: "%K.%K == %@",
+                           #keyPath(Award.eventOne), Event.keyPath(), eventKey)
     }
 
     public static func teamPredicate(teamKey: String) -> NSPredicate {
@@ -116,9 +116,9 @@ extension Award {
                            #keyPath(Award.recipientsMany.team.keyString), teamKey)
     }
 
-    public static func teamEventPredicate(team: Team, event: Event) -> NSPredicate {
-        let teamPredicate = Award.teamPredicate(teamKey: team.key)
-        let eventPredicate = Award.eventPredicate(eventKey: event.key)
+    public static func teamEventPredicate(teamKey: String, eventKey: String) -> NSPredicate {
+        let teamPredicate = Award.teamPredicate(teamKey: teamKey)
+        let eventPredicate = Award.eventPredicate(eventKey: eventKey)
         return NSCompoundPredicate(andPredicateWithSubpredicates: [eventPredicate, teamPredicate])
     }
 

@@ -34,8 +34,8 @@ public class EventStatusAlliance: NSManagedObject {
 extension EventStatusAlliance: Managed {
 
     public static func insert(_ model: TBAEventStatusAlliance, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusAlliance {
-        let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(EventStatusAlliance.eventStatusOne.eventOne.keyString), eventKey,
+        let predicate = NSPredicate(format: "%K.%K == %@ AND %K == %@",
+                                    #keyPath(EventStatusAlliance.eventStatusOne.eventOne), Event.keyPath(), eventKey,
                                     #keyPath(EventStatusAlliance.eventStatusOne.teamOne.keyString), teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (allianceStatus) in

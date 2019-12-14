@@ -26,8 +26,8 @@ extension EventStatus: Managed {
 
     @discardableResult
     public static func insert(_ model: TBAEventStatus, in context: NSManagedObjectContext) -> EventStatus {
-        let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(EventStatus.eventOne.keyString), model.eventKey,
+        let predicate = NSPredicate(format: "%K.%K == %@ AND %K == %@",
+                                    #keyPath(EventStatus.eventOne), Event.keyPath(), model.eventKey,
                                     #keyPath(EventStatus.teamOne.keyString), model.teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (eventStatus) in

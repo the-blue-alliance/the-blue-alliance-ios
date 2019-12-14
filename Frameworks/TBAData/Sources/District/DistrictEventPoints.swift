@@ -121,8 +121,8 @@ extension DistrictEventPoints: Managed {
      - Returns: The inserted District Event Points.
      */
     public static func insert(_ model: TBADistrictEventPoints, in context: NSManagedObjectContext) -> DistrictEventPoints {
-        let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(DistrictEventPoints.eventOne.keyString), model.eventKey,
+        let predicate = NSPredicate(format: "%K.%K == %@ AND %K == %@",
+                                    #keyPath(DistrictEventPoints.eventOne), Event.keyPath(), model.eventKey,
                                     #keyPath(DistrictEventPoints.teamOne.keyString), model.teamKey)
 
         return findOrCreate(in: context, matching: predicate) { (eventPoints) in
@@ -147,8 +147,8 @@ extension DistrictEventPoints: Managed {
 extension DistrictEventPoints {
 
     public static func eventPredicate(eventKey: String) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(DistrictEventPoints.eventOne.keyString), eventKey)
+        return NSPredicate(format: "%K.%K == %@",
+                           #keyPath(DistrictEventPoints.eventOne), Event.keyPath(), eventKey)
     }
 
     public static func totalSortDescriptor() -> NSSortDescriptor {

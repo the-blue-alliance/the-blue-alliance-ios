@@ -23,10 +23,10 @@ public class EventStatusQual: NSManagedObject {
 extension EventStatusQual: Managed {
 
     public static func insert(_ model: TBAEventStatusQual, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusQual {
-        let predicate = NSPredicate(format: "(%K == %@ AND %K == %@) OR (%K == %@ AND %K == %@)",
-                                    #keyPath(EventStatusQual.ranking.eventOne.keyString), eventKey,
+        let predicate = NSPredicate(format: "(%K.%K == %@ AND %K == %@) OR (%K.%K == %@ AND %K == %@)",
+                                    #keyPath(EventStatusQual.ranking.eventOne), Event.keyPath(), eventKey,
                                     #keyPath(EventStatusQual.ranking.teamOne.keyString), teamKey,
-                                    #keyPath(EventStatusQual.eventStatus.eventOne.keyString), eventKey,
+                                    #keyPath(EventStatusQual.eventStatus.eventOne), Event.keyPath(), eventKey,
                                     #keyPath(EventStatusQual.eventStatus.teamOne.keyString), teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (eventStatusQual) in

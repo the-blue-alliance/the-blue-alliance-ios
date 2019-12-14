@@ -222,7 +222,8 @@ class EventInfoViewController: TBATableViewController, Observable {
 extension EventInfoViewController: Refreshable {
 
     var refreshKey: String? {
-        return event.getValue(\Event.key)
+        return event.key
+        // return event.getValue(\Event.key)
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -234,7 +235,8 @@ extension EventInfoViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        return event.getValue(\Event.name) == nil
+        return event.name == nil
+        // return event.getValue(\Event.name) == nil
     }
 
     @objc func refresh() {

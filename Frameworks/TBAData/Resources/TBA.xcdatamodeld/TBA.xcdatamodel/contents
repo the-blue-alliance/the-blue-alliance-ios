@@ -46,7 +46,7 @@
         <attribute name="country" optional="YES" attributeType="String"/>
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="eventCode" optional="YES" attributeType="String"/>
-        <attribute name="eventTypeNumber" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="eventTypeNumber" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="eventTypeString" optional="YES" attributeType="String"/>
         <attribute name="firstEventCode" optional="YES" attributeType="String"/>
         <attribute name="firstEventID" optional="YES" attributeType="String"/>
@@ -58,7 +58,7 @@
         <attribute name="lngNumber" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="locationName" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="playoffTypeNumber" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="playoffTypeNumber" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="playoffTypeString" optional="YES" attributeType="String"/>
         <attribute name="postalCode" optional="YES" attributeType="String"/>
         <attribute name="shortName" optional="YES" attributeType="String"/>
@@ -66,8 +66,8 @@
         <attribute name="stateProv" optional="YES" attributeType="String"/>
         <attribute name="timezone" optional="YES" attributeType="String"/>
         <attribute name="website" optional="YES" attributeType="String"/>
-        <attribute name="weekNumber" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
-        <attribute name="yearNumber" attributeType="Integer 16" minValueString="1992" usesScalarValueType="NO"/>
+        <attribute name="weekNumber" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="yearNumber" attributeType="Integer 64" minValueString="1992" usesScalarValueType="NO"/>
         <relationship name="alliances" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="EventAlliance" inverseName="eventOne" inverseEntity="EventAlliance"/>
         <relationship name="awardsMany" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Award" inverseName="eventOne" inverseEntity="Award"/>
         <relationship name="district" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="District" inverseName="eventsMany" inverseEntity="District"/>

@@ -45,8 +45,8 @@ extension EventAlliance: Managed {
      */
     public static func insert(_ model: TBAAlliance, eventKey: String, in context: NSManagedObjectContext) -> EventAlliance {
         // TODO: Use KeyPath https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/162
-        let predicate = NSPredicate(format: "%K == %@ AND SUBQUERY(picks, $pick, $pick.key IN %@).@count == %d",
-                                    #keyPath(EventAlliance.eventOne.keyString), eventKey,
+        let predicate = NSPredicate(format: "%K.%K == %@ AND SUBQUERY(picks, $pick, $pick.key IN %@).@count == %d",
+                                    #keyPath(EventAlliance.eventOne), Event.keyPath(), eventKey,
                                     model.picks, model.picks.count)
 
         return findOrCreate(in: context, matching: predicate, configure: { (alliance) in
