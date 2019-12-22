@@ -73,9 +73,9 @@ extension EventStatusPlayoff: Managed {
     public static func insert(_ model: TBAAllianceStatus, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusPlayoff {
         let predicate = NSPredicate(format: "(%K == %@ AND SUBQUERY(%K, $pick, $pick.%K == %@).@count == 1) OR (%K == %@ AND %K == %@)",
                                     #keyPath(EventStatusPlayoff.allianceRaw.eventRaw.keyRaw), eventKey,
-                                    #keyPath(EventStatusPlayoff.allianceRaw.picksRaw), #keyPath(Team.keyString), teamKey,
+                                    #keyPath(EventStatusPlayoff.allianceRaw.picksRaw), #keyPath(Team.keyRaw), teamKey,
                                     #keyPath(EventStatusPlayoff.eventStatusRaw.eventRaw.keyRaw), eventKey,
-                                    #keyPath(EventStatusPlayoff.eventStatusRaw.teamRaw.keyString), teamKey)
+                                    #keyPath(EventStatusPlayoff.eventStatusRaw.teamRaw.keyRaw), teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (statusPlayoff) in
             if let currentRecord = model.currentRecord {

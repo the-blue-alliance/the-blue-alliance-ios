@@ -392,7 +392,7 @@ extension Match {
     public static func teamKeysPredicate(teamKeys: [String]) -> NSPredicate {
         return NSPredicate(format: "SUBQUERY(%K, $a, ANY $a.%K.%K IN %@).@count > 0",
                            #keyPath(Match.alliancesRaw),
-                           #keyPath(MatchAlliance.teamsRaw), #keyPath(Team.keyString), teamKeys)
+                           #keyPath(MatchAlliance.teamsRaw), #keyPath(Team.keyRaw), teamKeys)
     }
 
     public static func forKey(_ key: String, in context: NSManagedObjectContext) -> Match? {

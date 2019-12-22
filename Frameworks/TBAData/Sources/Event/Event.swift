@@ -926,7 +926,7 @@ extension Event {
     private static func teamPredicate(teamKey: String) -> NSPredicate {
         return NSPredicate(format: "SUBQUERY(%K, $t, $t.%K == %@)",
                            #keyPath(Event.teamsRaw),
-                           #keyPath(Team.keyString), teamKey)
+                           #keyPath(Team.keyRaw), teamKey)
     }
 
     public static func teamYearPredicate(teamKey: String, year: Int) -> NSPredicate {

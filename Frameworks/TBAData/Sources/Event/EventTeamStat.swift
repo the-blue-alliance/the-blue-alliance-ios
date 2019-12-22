@@ -61,7 +61,7 @@ extension EventTeamStat: Managed {
     public static func insert(_ model: TBAStat, eventKey: String, in context: NSManagedObjectContext) -> EventTeamStat {
         let predicate = NSPredicate(format: "%K == %@ && %K == %@",
                                     #keyPath(EventTeamStat.eventRaw.keyRaw), eventKey,
-                                    #keyPath(EventTeamStat.teamRaw.keyString), model.teamKey)
+                                    #keyPath(EventTeamStat.teamRaw.keyRaw), model.teamKey)
         return findOrCreate(in: context, matching: predicate) { (stat) in
             stat.teamRaw = Team.insert(model.teamKey, in: context)
 

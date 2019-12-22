@@ -69,8 +69,8 @@ extension EventAllianceBackup: Managed {
      */
     public static func insert(_ model: TBAAllianceBackup, in context: NSManagedObjectContext) -> EventAllianceBackup {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                    #keyPath(EventAllianceBackup.inTeamRaw.keyString), model.teamIn,
-                                    #keyPath(EventAllianceBackup.outTeamRaw.keyString), model.teamOut)
+                                    #keyPath(EventAllianceBackup.inTeamRaw.keyRaw), model.teamIn,
+                                    #keyPath(EventAllianceBackup.outTeamRaw.keyRaw), model.teamOut)
 
         return findOrCreate(in: context, matching: predicate, configure: { (allianceBackup) in
             allianceBackup.inTeamRaw = Team.insert(model.teamIn, in: context)

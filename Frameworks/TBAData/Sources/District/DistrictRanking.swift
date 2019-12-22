@@ -105,7 +105,7 @@ extension DistrictRanking: Managed {
     public static func insert(_ model: TBADistrictRanking, districtKey: String, in context: NSManagedObjectContext) -> DistrictRanking {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
                                     #keyPath(DistrictRanking.districtRaw.keyRaw), districtKey,
-                                    #keyPath(DistrictRanking.teamRaw.keyString), model.teamKey)
+                                    #keyPath(DistrictRanking.teamRaw.keyRaw), model.teamKey)
         return findOrCreate(in: context, matching: predicate, configure: { (ranking) in
             ranking.teamRaw = Team.insert(model.teamKey, in: context)
 

@@ -75,7 +75,7 @@ extension EventAlliance: Managed {
         let predicate = NSPredicate(format: "%K == %@ AND SUBQUERY(%K, $pick, $pick.%K IN %@).@count == %d",
                                     #keyPath(EventAlliance.eventRaw.keyRaw), eventKey,
                                     #keyPath(EventAlliance.picksRaw),
-                                    #keyPath(Team.keyString), model.picks, model.picks.count)
+                                    #keyPath(Team.keyRaw), model.picks, model.picks.count)
 
         return findOrCreate(in: context, matching: predicate, configure: { (alliance) in
             // Required: picks

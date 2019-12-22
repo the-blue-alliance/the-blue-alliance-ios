@@ -104,7 +104,7 @@ extension EventRanking: Managed {
         let predicate = NSPredicate(format: "(%K == %@ OR %K == %@) AND %K == %@",
                                     #keyPath(EventRanking.eventRaw.keyRaw), eventKey,
                                     #keyPath(EventRanking.qualStatusRaw.eventStatusRaw.eventRaw.keyRaw), eventKey,
-                                    #keyPath(EventRanking.teamRaw.keyString), model.teamKey)
+                                    #keyPath(EventRanking.teamRaw.keyRaw), model.teamKey)
         return findOrCreate(in: context, matching: predicate, configure: { (ranking) in
             // Required: teamKey, rank
             ranking.teamRaw = Team.insert(model.teamKey, in: context)

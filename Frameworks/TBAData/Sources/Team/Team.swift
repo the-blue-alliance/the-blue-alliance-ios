@@ -3,89 +3,249 @@ import Foundation
 import MyTBAKit
 import TBAKit
 
-@objc(Team)
-public class Team: NSManagedObject {
+extension Team {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Team> {
-        return NSFetchRequest<Team>(entityName: "Team")
+    public var address: String? {
+        return getValue(\Team.addressRaw)
+    }
+
+    public var city: String? {
+        return getValue(\Team.cityRaw)
+    }
+
+    public var country: String? {
+        return getValue(\Team.countryRaw)
+    }
+
+    public var gmapsPlaceID: String? {
+        return getValue(\Team.gmapsPlaceIDRaw)
+    }
+
+    public var gmapsURL: String? {
+        return getValue(\Team.gmapsURLRaw)
+    }
+
+    public var homeChampionship: [String: String]? {
+        return getValue(\Team.homeChampionshipRaw)
     }
 
     public var key: String {
-        guard let key = keyString else {
+        guard let key = getValue(\Team.keyRaw) else {
             fatalError("Save Team before accessing key")
         }
         return key
     }
 
     public var lat: Double? {
-        return latNumber?.doubleValue
+        return getValue(\Team.latRaw)?.doubleValue
     }
 
     public var lng: Double? {
-        return lngNumber?.doubleValue
+        return getValue(\Team.lngRaw)?.doubleValue
+    }
+
+    public var locationName: String? {
+        return getValue(\Team.locationNameRaw)
+    }
+
+    public var name: String? {
+        return getValue(\Team.nameRaw)
+    }
+
+    public var nickname: String? {
+        return getValue(\Team.nicknameRaw)
+    }
+
+    public var postalCode: String? {
+        return getValue(\Team.postalCodeRaw)
     }
 
     public var rookieYear: Int? {
-        return rookieYearNumber?.intValue
+        return getValue(\Team.rookieYearRaw)?.intValue
+    }
+
+    public var stateProv: String? {
+        return getValue(\Team.stateProvRaw)
     }
 
     public var teamNumber: Int {
-        guard let teamNumber = teamNumberNumber?.intValue else {
+        guard let teamNumber = getValue(\Team.teamNumberRaw)?.intValue else {
             fatalError("Save Team before accessing teamNumber")
         }
         return teamNumber
     }
 
+    public var website: String? {
+        return getValue(\Team.websiteRaw)
+    }
+
+    public var yearsParticipated: [Int]? {
+        return getValue(\Team.yearsParticipatedRaw)
+    }
+
+    public var alliances: [MatchAlliance] {
+        guard let alliancesRaw = alliancesRaw, let alliances = alliancesRaw.allObjects as? [MatchAlliance] else {
+            return []
+        }
+        return alliances
+    }
+
+    public var awards: [AwardRecipient] {
+        guard let awardsRaw = awardsRaw, let awards = awardsRaw.allObjects as? [AwardRecipient] else {
+            return []
+        }
+        return awards
+    }
+
+    public var declinedAlliances: [EventAlliance] {
+        guard let declinedAlliancesRaw = declinedAlliancesRaw, let declinedAlliances = declinedAlliancesRaw.allObjects as? [EventAlliance] else {
+            return []
+        }
+        return declinedAlliances
+    }
+
+    public var districtRankings: [DistrictRanking] {
+        guard let districtRankingsRaw = districtRankingsRaw, let districtRankings = districtRankingsRaw.allObjects as? [DistrictRanking] else {
+            return []
+        }
+        return districtRankings
+    }
+
+    public var districts: [District] {
+        guard let districtsRaw = districtsRaw, let districts = districtsRaw.allObjects as? [District] else {
+            return []
+        }
+        return districts
+    }
+
+    public var dqAlliances: [MatchAlliance] {
+        guard let dqAlliancesRaw = dqAlliancesRaw, let dqAlliances = dqAlliancesRaw.allObjects as? [MatchAlliance] else {
+            return []
+        }
+        return dqAlliances
+    }
+
+    public var eventPoints: [DistrictEventPoints] {
+        guard let eventPointsRaw = eventPointsRaw, let eventPoints = eventPointsRaw.allObjects as? [DistrictEventPoints] else {
+            return []
+        }
+        return eventPoints
+    }
+
+    public var eventRankings: [EventRanking] {
+        guard let eventRankingsRaw = eventRankingsRaw, let eventRankings = eventRankingsRaw.allObjects as? [EventRanking] else {
+            return []
+        }
+        return eventRankings
+    }
+
+    public var events: [Event] {
+        guard let eventsRaw = eventsRaw, let events = eventsRaw.allObjects as? [Event] else {
+            return []
+        }
+        return events
+    }
+
+    public var eventStatuses: [EventStatus] {
+        guard let eventStatusesRaw = eventStatusesRaw, let eventStatuses = eventStatusesRaw.allObjects as? [EventStatus] else {
+            return []
+        }
+        return eventStatuses
+    }
+
+    public var inBackupAlliances: [EventAllianceBackup] {
+        guard let inBackupAlliancesRaw = inBackupAlliancesRaw, let inBackupAlliances = inBackupAlliancesRaw.allObjects as? [EventAllianceBackup] else {
+            return []
+        }
+        return inBackupAlliances
+    }
+
     public var media: [TeamMedia] {
-        guard let mediaMany = mediaMany, let media = mediaMany.allObjects as? [TeamMedia] else {
+        guard let mediaRaw = mediaRaw, let media = mediaRaw.allObjects as? [TeamMedia] else {
             return []
         }
         return media
     }
 
-    @NSManaged public private(set) var address: String?
-    @NSManaged public private(set) var city: String?
-    @NSManaged public private(set) var country: String?
-    @NSManaged public private(set) var gmapsPlaceID: String?
-    @NSManaged public private(set) var gmapsURL: String?
-    @NSManaged public private(set) var homeChampionship: [String: String]?
-    @NSManaged internal private(set) var keyString: String?
-    @NSManaged private var latNumber: NSNumber?
-    @NSManaged private var lngNumber: NSNumber?
-    @NSManaged public private(set) var locationName: String?
-    @NSManaged public private(set) var name: String?
-    @NSManaged public private(set) var nickname: String?
-    @NSManaged public private(set) var postalCode: String?
-    @NSManaged private var rookieYearNumber: NSNumber?
-    @NSManaged public private(set) var stateProv: String?
-    @NSManaged private var teamNumberNumber: NSNumber?
-    @NSManaged public private(set) var website: String?
-    @NSManaged public private(set) var yearsParticipated: [Int]?
+    public var outBackupAlliances: [EventAllianceBackup] {
+        guard let outBackupAlliancesRaw = outBackupAlliancesRaw, let outBackupAlliances = outBackupAlliancesRaw.allObjects as? [EventAllianceBackup] else {
+            return []
+        }
+        return outBackupAlliances
+    }
 
-    @NSManaged private var alliancesMany: NSSet?
-    @NSManaged private var awardsMany: NSSet?
-    @NSManaged private var declinedAlliancesMany: NSSet?
-    @NSManaged private var districtRankingsMany: NSSet?
-    @NSManaged private var districtsMany: NSSet?
-    @NSManaged private var dqAlliancesMany: NSSet?
-    @NSManaged private var eventPointsMany: NSSet?
-    @NSManaged private var eventRankingsMany: NSSet?
-    @NSManaged private var eventsMany: NSSet?
-    @NSManaged private var eventStatusesMany: NSSet?
-    @NSManaged private var inBackupAlliancesMany: NSSet?
-    @NSManaged private var mediaMany: NSSet?
-    @NSManaged private var outBackupAlliancesMany: NSSet?
-    @NSManaged private var pickedAlliancesMany: NSSet?
-    @NSManaged private var statsMany: NSSet?
-    @NSManaged private var surrogateAlliancesMany: NSSet?
+    public var pickedAlliances: [EventAlliance] {
+        guard let pickedAlliancesRaw = pickedAlliancesRaw, let pickedAlliances = pickedAlliancesRaw.allObjects as? [EventAlliance] else {
+            return []
+        }
+        return pickedAlliances
+    }
+
+    public var stats: [EventTeamStat] {
+        guard let statsRaw = statsRaw, let stats = statsRaw.allObjects as? [EventTeamStat] else {
+            return []
+        }
+        return stats
+    }
+
+    public var surrogateAlliances: [MatchAlliance] {
+        guard let surrogateAlliancesRaw = surrogateAlliancesRaw, let surrogateAlliances = surrogateAlliancesRaw.allObjects as? [MatchAlliance] else {
+            return []
+        }
+        return surrogateAlliances
+    }
+
+}
+
+@objc(Team)
+public class Team: NSManagedObject {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Team> {
+        return NSFetchRequest<Team>(entityName: Team.entityName)
+    }
+
+    @NSManaged var addressRaw: String?
+    @NSManaged var cityRaw: String?
+    @NSManaged var countryRaw: String?
+    @NSManaged var gmapsPlaceIDRaw: String?
+    @NSManaged var gmapsURLRaw: String?
+    @NSManaged var homeChampionshipRaw: [String: String]?
+    @NSManaged var keyRaw: String?
+    @NSManaged var latRaw: NSNumber?
+    @NSManaged var lngRaw: NSNumber?
+    @NSManaged var locationNameRaw: String?
+    @NSManaged var nameRaw: String?
+    @NSManaged var nicknameRaw: String?
+    @NSManaged var postalCodeRaw: String?
+    @NSManaged var rookieYearRaw: NSNumber?
+    @NSManaged var stateProvRaw: String?
+    @NSManaged var teamNumberRaw: NSNumber?
+    @NSManaged var websiteRaw: String?
+    @NSManaged var yearsParticipatedRaw: [Int]?
+    @NSManaged var alliancesRaw: NSSet?
+    @NSManaged var awardsRaw: NSSet?
+    @NSManaged var declinedAlliancesRaw: NSSet?
+    @NSManaged var districtRankingsRaw: NSSet?
+    @NSManaged var districtsRaw: NSSet?
+    @NSManaged var dqAlliancesRaw: NSSet?
+    @NSManaged var eventPointsRaw: NSSet?
+    @NSManaged var eventRankingsRaw: NSSet?
+    @NSManaged var eventsRaw: NSSet?
+    @NSManaged var eventStatusesRaw: NSSet?
+    @NSManaged var inBackupAlliancesRaw: NSSet?
+    @NSManaged var mediaRaw: NSSet?
+    @NSManaged var outBackupAlliancesRaw: NSSet?
+    @NSManaged var pickedAlliancesRaw: NSSet?
+    @NSManaged var statsRaw: NSSet?
+    @NSManaged var surrogateAlliancesRaw: NSSet?
 
 }
 
 // MARK: Generated accessors for media
 extension Team {
 
-    @objc(addMedia:)
-    @NSManaged private func addToMediaMany(_ values: NSSet)
+    @objc(addMediaRaw:)
+    @NSManaged private func addToMediaRaw(_ values: NSSet)
 
 }
 
@@ -93,7 +253,7 @@ extension Team: Managed {
 
     public static func predicate(key: String) -> NSPredicate {
         return NSPredicate(format: "%K == %@",
-                           #keyPath(Team.keyString), key)
+                           #keyPath(Team.keyRaw), key)
     }
 
     /**
@@ -118,8 +278,8 @@ extension Team: Managed {
         // Fetch all of the previous Teams for this page
         let oldTeams = Team.fetch(in: context) {
             $0.predicate = NSPredicate(format: "%K >= %ld AND %K < %ld",
-                                       #keyPath(Team.teamNumberNumber), (page * 500),
-                                       #keyPath(Team.teamNumberNumber), ((page + 1) * 500))
+                                       #keyPath(Team.teamNumberRaw), (page * 500),
+                                       #keyPath(Team.teamNumberRaw), ((page + 1) * 500))
         }
 
         // Insert new Teams for this page
@@ -146,11 +306,11 @@ extension Team: Managed {
         let predicate = Team.predicate(key: key)
         return findOrCreate(in: context, matching: predicate) { (team) in
             // Required: key, teamNumber
-            team.keyString = key
+            team.keyRaw = key
 
             let teamNumberString = Team.trimFRCPrefix(key)
             if let teamNumber = Int(teamNumberString) {
-                team.teamNumberNumber = NSNumber(value: teamNumber)
+                team.teamNumberRaw = NSNumber(value: teamNumber)
             }
         }
     }
@@ -170,34 +330,34 @@ extension Team: Managed {
 
         return findOrCreate(in: context, matching: predicate) { (team) in
             // Required: key, name, teamNumber, rookieYear
-            team.address = model.address
-            team.city = model.city
-            team.country = model.country
-            team.gmapsPlaceID = model.gmapsPlaceID
-            team.gmapsURL = model.gmapsURL
-            team.homeChampionship = model.homeChampionship
-            team.keyString = model.key
-            team.latNumber = {
+            team.addressRaw = model.address
+            team.cityRaw = model.city
+            team.countryRaw = model.country
+            team.gmapsPlaceIDRaw = model.gmapsPlaceID
+            team.gmapsURLRaw = model.gmapsURL
+            team.homeChampionshipRaw = model.homeChampionship
+            team.keyRaw = model.key
+            team.latRaw = {
                 if let lat = model.lat {
                     return NSNumber(value: lat)
                 }
                 return nil
             }()
-            team.lngNumber = {
+            team.lngRaw = {
                 if let lng = model.lng {
                     return NSNumber(value: lng)
                 }
                 return nil
             }()
-            team.locationName = model.locationName
-            team.name = model.name
-            team.nickname = model.nickname
-            team.postalCode = model.postalCode
-            team.rookieYearNumber = NSNumber(value: model.rookieYear)
-            team.stateProv = model.stateProv
-            team.teamNumberNumber = NSNumber(value: model.teamNumber)
-            team.website = model.website
-            team.homeChampionship = model.homeChampionship
+            team.locationNameRaw = model.locationName
+            team.nameRaw = model.name
+            team.nicknameRaw = model.nickname
+            team.postalCodeRaw = model.postalCode
+            team.rookieYearRaw = NSNumber(value: model.rookieYear)
+            team.stateProvRaw = model.stateProv
+            team.teamNumberRaw = NSNumber(value: model.teamNumber)
+            team.websiteRaw = model.website
+            team.homeChampionshipRaw = model.homeChampionship
         }
     }
 
@@ -213,7 +373,7 @@ extension Team: Managed {
             return
         }
 
-        self.eventsMany = NSSet(array: events.map {
+        self.eventsRaw = NSSet(array: events.map {
             return Event.insert($0, in: managedObjectContext)
         })
     }
@@ -247,7 +407,7 @@ extension Team: Managed {
         let media = media.map {
             return TeamMedia.insert($0, year: year, in: managedObjectContext)
         }
-        addToMediaMany(NSSet(array: media))
+        addToMediaRaw(NSSet(array: media))
 
         // Delete orphaned TeamMedia for this Event
         Set(oldMedia).subtracting(Set(media)).forEach({
@@ -267,7 +427,7 @@ extension Team: Managed {
         guard let managedObjectContext = managedObjectContext else {
             return
         }
-        self.yearsParticipated = yearsParticipated.reversed().sorted()
+        self.yearsParticipatedRaw = yearsParticipated.reversed().sorted()
     }
 
 }
@@ -276,23 +436,23 @@ extension Team {
 
     public static func districtPredicate(district: District) -> NSPredicate {
         return NSPredicate(format: "ANY %K = %@",
-                           #keyPath(Team.districtsMany), district)
+                           #keyPath(Team.districtsRaw), district)
     }
 
     public static func eventPredicate(event: Event) -> NSPredicate {
         return NSPredicate(format: "ANY %K = %@",
-                           #keyPath(Team.eventsMany), event)
+                           #keyPath(Team.eventsRaw), event)
     }
 
     public static func searchPredicate(searchText: String) -> NSPredicate {
         return NSPredicate(format: "(%K contains[cd] %@ OR %K beginswith[cd] %@ OR %K contains[cd] %@)",
-                           #keyPath(Team.nickname), searchText,
-                           #keyPath(Team.teamNumberNumber.stringValue), searchText,
-                           #keyPath(Team.city), searchText)
+                           #keyPath(Team.nicknameRaw), searchText,
+                           #keyPath(Team.teamNumberRaw.stringValue), searchText,
+                           #keyPath(Team.cityRaw), searchText)
     }
 
     public static func teamNumberSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(Team.teamNumberNumber), ascending: true)
+        return NSSortDescriptor(key: #keyPath(Team.teamNumberRaw), ascending: true)
     }
 
     /**
@@ -307,9 +467,9 @@ extension Team {
      This includes key, name, teamNumber, rookieYear
      */
     public static func populatedTeamsPredicate() -> NSPredicate {
-        var keys = [#keyPath(Team.keyString),
-                    #keyPath(Team.name),
-                    #keyPath(Team.rookieYearNumber)]
+        var keys = [#keyPath(Team.keyRaw),
+                    #keyPath(Team.nameRaw),
+                    #keyPath(Team.rookieYearRaw)]
         let format = keys.map {
             return String("\($0) != nil")
         }.joined(separator: " && ")

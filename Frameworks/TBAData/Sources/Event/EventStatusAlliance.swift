@@ -55,7 +55,7 @@ extension EventStatusAlliance: Managed {
     public static func insert(_ model: TBAEventStatusAlliance, eventKey: String, teamKey: String, in context: NSManagedObjectContext) -> EventStatusAlliance {
         let predicate = NSPredicate(format: "%K == %@ AND %K == %@",
                                     #keyPath(EventStatusAlliance.eventStatusRaw.eventRaw.keyRaw), eventKey,
-                                    #keyPath(EventStatusAlliance.eventStatusRaw.teamRaw.keyString), teamKey)
+                                    #keyPath(EventStatusAlliance.eventStatusRaw.teamRaw.keyRaw), teamKey)
 
         return findOrCreate(in: context, matching: predicate, configure: { (allianceStatus) in
             allianceStatus.numberRaw = NSNumber(value: model.number)
