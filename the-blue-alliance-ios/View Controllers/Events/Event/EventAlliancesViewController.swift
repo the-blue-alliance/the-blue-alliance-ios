@@ -136,8 +136,7 @@ private class EventAlliancesViewController: TBATableViewController {
 extension EventAlliancesViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key)
-        return "\(key)_alliances"
+        return "\(event.key)_alliances"
     }
 
     var automaticRefreshInterval: DateComponents? {

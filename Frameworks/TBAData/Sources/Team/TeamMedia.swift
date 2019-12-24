@@ -57,15 +57,15 @@ public enum MediaType: String {
 extension TeamMedia {
 
     public var details: [String: Any]? {
-        return detailsRaw
+        return getValue(\TeamMedia.detailsRaw)
     }
 
     public var directURL: String? {
-        return directURLRaw
+        return getValue(\TeamMedia.directURLRaw)
     }
 
     public var foreignKey: String {
-        guard let foreignKey = foreignKeyRaw else {
+        guard let foreignKey = getValue(\TeamMedia.foreignKeyRaw) else {
             fatalError("Save TeamMedia before accessing foreignKey")
         }
         return foreignKey
@@ -73,7 +73,7 @@ extension TeamMedia {
 
     public var image: UIImage? {
         get {
-            if let mediaData = mediaData {
+            if let mediaData = getValue(\TeamMedia.mediaData) {
                 return UIImage(data: mediaData)
             }
             return nil
@@ -86,7 +86,7 @@ extension TeamMedia {
 
     public var imageError: Error? {
         get {
-            return mediaError
+            return getValue(\TeamMedia.mediaError)
         }
         set {
             mediaError = newValue
@@ -95,14 +95,14 @@ extension TeamMedia {
     }
 
     public var preferred: Bool {
-        guard let preferred = preferredRaw?.boolValue else {
+        guard let preferred = getValue(\TeamMedia.preferredRaw)?.boolValue else {
             fatalError("Save TeamMedia before accessing preferred")
         }
         return preferred
     }
 
     public var type: MediaType? {
-        guard let typeString = typeStringRaw else {
+        guard let typeString = getValue(\TeamMedia.typeStringRaw) else {
             fatalError("Save TeamMedia before accessing type")
         }
         guard let type = MediaType(rawValue: typeString) else {
@@ -112,18 +112,18 @@ extension TeamMedia {
     }
 
     public var viewURL: String? {
-        return viewURLRaw
+        return getValue(\TeamMedia.viewURLRaw)
     }
 
     public var year: Int {
-        guard let year = yearRaw?.intValue else {
+        guard let year = getValue(\TeamMedia.yearRaw)?.intValue else {
             fatalError("Save TeamMedia before accessing year")
         }
         return year
     }
 
     public var team: Team {
-        guard let team = teamRaw else {
+        guard let team = getValue(\TeamMedia.teamRaw) else {
             fatalError("Save TeamMedia before accessing team")
         }
         return team

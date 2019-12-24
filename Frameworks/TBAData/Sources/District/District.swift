@@ -113,17 +113,19 @@ public class District: NSManagedObject {
 
 extension District {
 
-    // TODO: Do we use this anywhere?
     public static func predicate(key: String) -> NSPredicate {
         return NSPredicate(format: "%K == %@",
                            #keyPath(District.keyRaw), key)
     }
 
-    /*
-    public static func nameSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(District.nameString), ascending: true)
+    public static func yearPredicate(year: Int) -> NSPredicate {
+        return NSPredicate(format: "%K == %ld",
+                           #keyPath(District.yearRaw), year)
     }
-    */
+
+    public static func nameSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(District.nameRaw), ascending: true)
+    }
 
 }
 

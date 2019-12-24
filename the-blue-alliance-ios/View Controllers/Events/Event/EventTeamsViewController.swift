@@ -23,8 +23,7 @@ class EventTeamsViewController: TeamsViewController {
     // MARK: - Refreshable
 
     override var refreshKey: String? {
-        let key = event.getValue(\Event.key)
-        return "\(key)_teams"
+        return "\(event.key)_teams"
     }
 
     override var automaticRefreshInterval: DateComponents? {
@@ -33,7 +32,7 @@ class EventTeamsViewController: TeamsViewController {
 
     override var automaticRefreshEndDate: Date? {
         // Refresh event teams until the event is over
-        return event.getValue(\Event.endDate)?.endOfDay()
+        return event.endDate?.endOfDay()
     }
 
     @objc override func refresh() {

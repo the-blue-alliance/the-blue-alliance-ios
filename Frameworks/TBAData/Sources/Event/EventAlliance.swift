@@ -5,7 +5,6 @@ import TBAUtils
 
 extension EventAlliance {
 
-
     public var name: String? {
         return getValue(\EventAlliance.nameRaw)
     }

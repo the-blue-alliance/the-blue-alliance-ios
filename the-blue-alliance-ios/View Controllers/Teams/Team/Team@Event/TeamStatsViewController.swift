@@ -36,7 +36,7 @@ class TeamStatsViewController: TBATableViewController, Observable {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
     lazy var observerPredicate: NSPredicate = {
-        return EventTeamStat.predicate(event: event, team: team)
+        return EventTeamStat.predicate(eventKey: event.key, teamKey: team.key)
     }()
 
     // MARK: - Init
@@ -99,8 +99,7 @@ class TeamStatsViewController: TBATableViewController, Observable {
 extension TeamStatsViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key)
-        return "\(key)_team_stats"
+        return "\(event.key)_team_stats"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -109,7 +108,7 @@ extension TeamStatsViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh team stats until the event is over
-        return event.getValue(\Event.endDate)?.endOfDay()
+        return event.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {

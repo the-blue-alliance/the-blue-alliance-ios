@@ -967,12 +967,20 @@ extension Event {
         return NSPredicate(format: "%K == -1", #keyPath(Event.yearRaw))
     }
 
+    public static func sortDescriptors() -> [NSSortDescriptor] {
+        return [Event.startDateSortDescriptor(), Event.nameSortDescriptor()]
+    }
+
     public static func endDateSortDescriptor() -> NSSortDescriptor {
         return NSSortDescriptor(key: #keyPath(Event.endDateRaw), ascending: true)
     }
 
     public static func hybridTypeSortDescriptor() -> NSSortDescriptor {
         return NSSortDescriptor(key: #keyPath(Event.hybridType), ascending: true)
+    }
+
+    public static func nameSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(Event.nameRaw), ascending: true)
     }
 
     public static func startDateSortDescriptor() -> NSSortDescriptor {

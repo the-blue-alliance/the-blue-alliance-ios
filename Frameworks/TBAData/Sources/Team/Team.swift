@@ -84,112 +84,112 @@ extension Team {
     }
 
     public var alliances: [MatchAlliance] {
-        guard let alliancesRaw = alliancesRaw, let alliances = alliancesRaw.allObjects as? [MatchAlliance] else {
+        guard let alliancesRaw = getValue(\Team.alliancesRaw), let alliances = alliancesRaw.allObjects as? [MatchAlliance] else {
             return []
         }
         return alliances
     }
 
     public var awards: [AwardRecipient] {
-        guard let awardsRaw = awardsRaw, let awards = awardsRaw.allObjects as? [AwardRecipient] else {
+        guard let awardsRaw = getValue(\Team.awardsRaw), let awards = awardsRaw.allObjects as? [AwardRecipient] else {
             return []
         }
         return awards
     }
 
     public var declinedAlliances: [EventAlliance] {
-        guard let declinedAlliancesRaw = declinedAlliancesRaw, let declinedAlliances = declinedAlliancesRaw.allObjects as? [EventAlliance] else {
+        guard let declinedAlliancesRaw = getValue(\Team.declinedAlliancesRaw), let declinedAlliances = declinedAlliancesRaw.allObjects as? [EventAlliance] else {
             return []
         }
         return declinedAlliances
     }
 
     public var districtRankings: [DistrictRanking] {
-        guard let districtRankingsRaw = districtRankingsRaw, let districtRankings = districtRankingsRaw.allObjects as? [DistrictRanking] else {
+        guard let districtRankingsRaw = getValue(\Team.districtRankingsRaw), let districtRankings = districtRankingsRaw.allObjects as? [DistrictRanking] else {
             return []
         }
         return districtRankings
     }
 
     public var districts: [District] {
-        guard let districtsRaw = districtsRaw, let districts = districtsRaw.allObjects as? [District] else {
+        guard let districtsRaw = getValue(\Team.districtsRaw), let districts = districtsRaw.allObjects as? [District] else {
             return []
         }
         return districts
     }
 
     public var dqAlliances: [MatchAlliance] {
-        guard let dqAlliancesRaw = dqAlliancesRaw, let dqAlliances = dqAlliancesRaw.allObjects as? [MatchAlliance] else {
+        guard let dqAlliancesRaw = getValue(\Team.dqAlliancesRaw), let dqAlliances = dqAlliancesRaw.allObjects as? [MatchAlliance] else {
             return []
         }
         return dqAlliances
     }
 
     public var eventPoints: [DistrictEventPoints] {
-        guard let eventPointsRaw = eventPointsRaw, let eventPoints = eventPointsRaw.allObjects as? [DistrictEventPoints] else {
+        guard let eventPointsRaw = getValue(\Team.eventPointsRaw), let eventPoints = eventPointsRaw.allObjects as? [DistrictEventPoints] else {
             return []
         }
         return eventPoints
     }
 
     public var eventRankings: [EventRanking] {
-        guard let eventRankingsRaw = eventRankingsRaw, let eventRankings = eventRankingsRaw.allObjects as? [EventRanking] else {
+        guard let eventRankingsRaw = getValue(\Team.eventRankingsRaw), let eventRankings = eventRankingsRaw.allObjects as? [EventRanking] else {
             return []
         }
         return eventRankings
     }
 
     public var events: [Event] {
-        guard let eventsRaw = eventsRaw, let events = eventsRaw.allObjects as? [Event] else {
+        guard let eventsRaw = getValue(\Team.eventsRaw), let events = eventsRaw.allObjects as? [Event] else {
             return []
         }
         return events
     }
 
     public var eventStatuses: [EventStatus] {
-        guard let eventStatusesRaw = eventStatusesRaw, let eventStatuses = eventStatusesRaw.allObjects as? [EventStatus] else {
+        guard let eventStatusesRaw = getValue(\Team.eventStatusesRaw), let eventStatuses = eventStatusesRaw.allObjects as? [EventStatus] else {
             return []
         }
         return eventStatuses
     }
 
     public var inBackupAlliances: [EventAllianceBackup] {
-        guard let inBackupAlliancesRaw = inBackupAlliancesRaw, let inBackupAlliances = inBackupAlliancesRaw.allObjects as? [EventAllianceBackup] else {
+        guard let inBackupAlliancesRaw = getValue(\Team.inBackupAlliancesRaw), let inBackupAlliances = inBackupAlliancesRaw.allObjects as? [EventAllianceBackup] else {
             return []
         }
         return inBackupAlliances
     }
 
     public var media: [TeamMedia] {
-        guard let mediaRaw = mediaRaw, let media = mediaRaw.allObjects as? [TeamMedia] else {
+        guard let mediaRaw = getValue(\Team.mediaRaw), let media = mediaRaw.allObjects as? [TeamMedia] else {
             return []
         }
         return media
     }
 
     public var outBackupAlliances: [EventAllianceBackup] {
-        guard let outBackupAlliancesRaw = outBackupAlliancesRaw, let outBackupAlliances = outBackupAlliancesRaw.allObjects as? [EventAllianceBackup] else {
+        guard let outBackupAlliancesRaw = getValue(\Team.outBackupAlliancesRaw), let outBackupAlliances = outBackupAlliancesRaw.allObjects as? [EventAllianceBackup] else {
             return []
         }
         return outBackupAlliances
     }
 
     public var pickedAlliances: [EventAlliance] {
-        guard let pickedAlliancesRaw = pickedAlliancesRaw, let pickedAlliances = pickedAlliancesRaw.allObjects as? [EventAlliance] else {
+        guard let pickedAlliancesRaw = getValue(\Team.pickedAlliancesRaw), let pickedAlliances = pickedAlliancesRaw.allObjects as? [EventAlliance] else {
             return []
         }
         return pickedAlliances
     }
 
     public var stats: [EventTeamStat] {
-        guard let statsRaw = statsRaw, let stats = statsRaw.allObjects as? [EventTeamStat] else {
+        guard let statsRaw = getValue(\Team.statsRaw), let stats = statsRaw.allObjects as? [EventTeamStat] else {
             return []
         }
         return stats
     }
 
     public var surrogateAlliances: [MatchAlliance] {
-        guard let surrogateAlliancesRaw = surrogateAlliancesRaw, let surrogateAlliances = surrogateAlliancesRaw.allObjects as? [MatchAlliance] else {
+        guard let surrogateAlliancesRaw = getValue(\Team.surrogateAlliancesRaw), let surrogateAlliances = surrogateAlliancesRaw.allObjects as? [MatchAlliance] else {
             return []
         }
         return surrogateAlliances

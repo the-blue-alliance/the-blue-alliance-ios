@@ -102,9 +102,7 @@ class DistrictBreakdownViewController: TBATableViewController, Observable {
 extension DistrictBreakdownViewController: Refreshable {
 
     var refreshKey: String? {
-        let district = ranking.getValue(\DistrictRanking.district)
-        let key = district.getValue(\District.key)
-        return "\(key)_breakdown"
+        return "\(ranking.district.key)_breakdown"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -113,8 +111,7 @@ extension DistrictBreakdownViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh team's district breakdown until district is over
-        let district = ranking.getValue(\DistrictRanking.district)
-        return district.endDate?.endOfDay()
+        return ranking.district.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {
@@ -128,7 +125,7 @@ extension DistrictBreakdownViewController: Refreshable {
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 if !notModified, let rankings = try? result.get() {
-                    let district = context.object(with: self.ranking.getValue(\DistrictRanking.district).objectID) as! District
+                    let district = context.object(with: self.ranking.district.objectID) as! District
                     district.insert(rankings)
                 }
             }, saved: {

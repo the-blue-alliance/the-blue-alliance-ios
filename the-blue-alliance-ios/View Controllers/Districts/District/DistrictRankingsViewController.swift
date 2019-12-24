@@ -76,8 +76,7 @@ class DistrictRankingsViewController: TBATableViewController {
 extension DistrictRankingsViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = district.getValue(\District.key)
-        return "\(key)_rankings"
+        return "\(district.key)_rankings"
     }
 
     var automaticRefreshInterval: DateComponents? {

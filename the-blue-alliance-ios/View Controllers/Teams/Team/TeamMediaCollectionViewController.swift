@@ -165,8 +165,7 @@ extension TeamMediaCollectionViewController: Refreshable {
         guard let year = year else {
             return nil
         }
-        let key = team.getValue(\Team.key)
-        return "\(year)_\(key)_media"
+        return "\(year)_\(team.key)_media"
     }
 
     var automaticRefreshInterval: DateComponents? {

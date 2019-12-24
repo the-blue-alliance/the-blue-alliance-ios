@@ -230,6 +230,19 @@ extension EventRanking {
 
 }
 
+extension EventRanking {
+
+    public static func eventPredicate(eventKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(EventRanking.eventRaw.keyRaw), eventKey)
+    }
+
+    public static func rankSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(EventRanking.rankRaw), ascending: true)
+    }
+
+}
+
 extension EventRanking: Orphanable {
 
     public var isOrphaned: Bool {

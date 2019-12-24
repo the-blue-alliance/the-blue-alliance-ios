@@ -84,6 +84,10 @@ extension Match {
         return getValue(\Match.compLevelSortOrderRaw)?.intValue
     }
 
+    public var compLevelString: String? {
+        return getValue(\Match.compLevelStringRaw)
+    }
+
     /**
      Returns the MatchCompLevel for the Match's compLevelString.
      */

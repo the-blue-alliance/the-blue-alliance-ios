@@ -95,9 +95,8 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
         self.dataSource.delegate = self
 
         let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
-        fetchRequest.sortDescriptors = [firstSortDescriptor,
-                                        NSSortDescriptor(key: #keyPath(Event.startDate), ascending: true),
-                                        NSSortDescriptor(key: #keyPath(Event.name), ascending: true)]
+        let sortDescriptors = [firstSortDescriptor] + Event.sortDescriptors()
+        fetchRequest.sortDescriptors = sortDescriptors
         setupFetchRequest(fetchRequest)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
@@ -134,7 +133,7 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
                 return nil
             }
             return eventType == .districtChampionshipDivision ? "\(districtName) \(eventTypeString)s" : "\(eventTypeString)s"
-        } else if event.isChampionship {
+        } else if event.isChampionshipEvent {
             guard let eventTypeString = eventTypeString else {
                 return nil
             }

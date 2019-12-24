@@ -65,7 +65,7 @@ class EventRankingsViewController: TBATableViewController {
         fetchRequest.sortDescriptors = [
             EventRanking.rankSortDescriptor()
         ]
-        fetchRequest.predicate = EventRanking.eventPredicate(event: event)
+        fetchRequest.predicate = EventRanking.eventPredicate(eventKey: event.key)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)
@@ -76,8 +76,7 @@ class EventRankingsViewController: TBATableViewController {
 extension EventRankingsViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key)
-        return "\(key)_rankings"
+        return "\(event.key)_rankings"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -86,7 +85,7 @@ extension EventRankingsViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh event rankings until the event is over
-        return event.getValue(\Event.endDate)?.endOfDay()
+        return event.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {

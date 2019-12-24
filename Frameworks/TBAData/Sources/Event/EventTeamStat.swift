@@ -59,9 +59,7 @@ public class EventTeamStat: NSManagedObject {
 extension EventTeamStat: Managed {
 
     public static func insert(_ model: TBAStat, eventKey: String, in context: NSManagedObjectContext) -> EventTeamStat {
-        let predicate = NSPredicate(format: "%K == %@ && %K == %@",
-                                    #keyPath(EventTeamStat.eventRaw.keyRaw), eventKey,
-                                    #keyPath(EventTeamStat.teamRaw.keyRaw), model.teamKey)
+        let predicate = EventTeamStat.predicate(eventKey: eventKey, teamKey: model.teamKey)
         return findOrCreate(in: context, matching: predicate) { (stat) in
             stat.teamRaw = Team.insert(model.teamKey, in: context)
 
@@ -74,6 +72,18 @@ extension EventTeamStat: Managed {
 }
 
 extension EventTeamStat {
+
+    public static func predicate(eventKey: String, teamKey: String) -> NSPredicate {
+        let eventPredicate = EventTeamStat.eventPredicate(eventKey: eventKey)
+        let teamPredicate = NSPredicate(format: "%K == %@",
+                                        #keyPath(EventTeamStat.teamRaw.keyRaw), teamKey)
+        return NSCompoundPredicate(andPredicateWithSubpredicates: [eventPredicate, teamPredicate])
+    }
+
+    public static func eventPredicate(eventKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(EventTeamStat.eventRaw.keyRaw), eventKey)
+    }
 
     public static func oprSortDescriptor() -> NSSortDescriptor {
         return NSSortDescriptor(key: #keyPath(EventTeamStat.oprRaw), ascending: false)

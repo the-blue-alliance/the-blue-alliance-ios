@@ -77,11 +77,14 @@ public class DistrictRanking: NSManagedObject {
 
 extension DistrictRanking {
 
-    /*
-    public static func rankSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(DistrictRanking.rankNumber), ascending: true)
+    public static func districtPredicate(district: District) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(District.keyRaw), district.key)
     }
-    */
+
+    public static func rankSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(DistrictRanking.rankRaw), ascending: true)
+    }
 
 }
 

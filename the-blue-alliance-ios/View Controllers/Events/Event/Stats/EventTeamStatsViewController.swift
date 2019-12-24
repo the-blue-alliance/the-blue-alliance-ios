@@ -112,7 +112,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<EventTeamStat>) {
-        request.predicate = EventTeamStat.eventPredicate(event: event)
+        request.predicate = EventTeamStat.eventPredicate(eventKey: event.key)
 
         // Switch based on user prefs
         var sortDescriptor: NSSortDescriptor?
@@ -140,8 +140,7 @@ class EventTeamStatsTableViewController: TBATableViewController {
 extension EventTeamStatsTableViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key)
-        return "\(key)_team_stats"
+        return "\(event.key)_team_stats"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -150,7 +149,7 @@ extension EventTeamStatsTableViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh team stats until the event is over
-        return event.getValue(\Event.endDate)?.endOfDay()
+        return event.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {
