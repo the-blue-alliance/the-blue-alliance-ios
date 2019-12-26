@@ -103,9 +103,9 @@ class MatchesViewController: TBATableViewController {
 
         let matchPredicate: NSPredicate = {
             if let team = team {
-                return Match.eventTeamPredicate(event: event, team: team)
+                return Match.eventTeamPredicate(eventKey: event.key, teamKey: team.key)
             } else {
-                return Match.eventPredicate(event: event)
+                return Match.eventPredicate(eventKey: event.key)
             }
         }()
 
@@ -166,8 +166,7 @@ extension MatchesViewController: Refreshable {
     // MARK: - Refreshable
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key)
-        return "\(key)_matches"
+        return "\(event.key)_matches"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -176,7 +175,7 @@ extension MatchesViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh event matches until the event is over
-        return event.getValue(\Event.endDate)?.endOfDay()
+        return event.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {

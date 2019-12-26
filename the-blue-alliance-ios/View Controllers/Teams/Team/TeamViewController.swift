@@ -110,7 +110,7 @@ class TeamViewController: MyTBAContainerViewController, Observable {
             if self.year == nil {
                 self.year = TeamViewController.latestYear(
                     currentSeason: self.statusService.currentSeason,
-                    years: team.getValue(\Team.yearsParticipated),
+                    years: team.yearsParticipated,
                     in: context
                 )
             } else {

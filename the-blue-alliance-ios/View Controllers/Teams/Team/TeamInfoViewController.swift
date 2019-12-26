@@ -186,7 +186,7 @@ class TeamInfoViewController: TBATableViewController {
 extension TeamInfoViewController: Refreshable {
 
     var refreshKey: String? {
-        return team.getValue(\Team.key)
+        return team.key
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -198,8 +198,8 @@ extension TeamInfoViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        let years = team.getValue(\Team.yearsParticipated) ?? []
-        return team.getValue(\Team.name) == nil || years.isEmpty
+        let years = team.yearsParticipated ?? []
+        return team.name == nil || years.isEmpty
     }
 
     @objc func refresh() {

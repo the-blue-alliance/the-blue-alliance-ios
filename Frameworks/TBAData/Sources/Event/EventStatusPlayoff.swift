@@ -4,31 +4,31 @@ import TBAKit
 
 extension EventStatusPlayoff {
 
-    var currentRecord: WLT? {
+    public var currentRecord: WLT? {
         return getValue(\EventStatusPlayoff.currentRecordRaw)
     }
 
-    var level: String? {
+    public var level: String? {
         return getValue(\EventStatusPlayoff.levelRaw)
     }
 
-    var playoffAverage: Double? {
+    public var playoffAverage: Double? {
         return getValue(\EventStatusPlayoff.playoffAverageRaw)?.doubleValue
     }
 
-    var record: WLT? {
+    public var record: WLT? {
         return getValue(\EventStatusPlayoff.recordRaw)
     }
 
-    var status: String? {
+    public var status: String? {
         return getValue(\EventStatusPlayoff.statusRaw)
     }
 
-    var alliance: EventAlliance? {
+    public var alliance: EventAlliance? {
         return getValue(\EventStatusPlayoff.allianceRaw)
     }
 
-    var eventStatus: EventStatus? {
+    public var eventStatus: EventStatus? {
         return getValue(\EventStatusPlayoff.eventStatusRaw)
     }
 

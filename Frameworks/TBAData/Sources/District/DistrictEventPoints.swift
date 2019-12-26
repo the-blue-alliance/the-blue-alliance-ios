@@ -84,11 +84,14 @@ public class DistrictEventPoints: NSManagedObject {
 
 extension DistrictEventPoints {
 
-    /*
-    public static func totalSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(DistrictEventPoints.totalNumber), ascending: false)
+    public static func eventPredicate(eventKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(DistrictEventPoints.eventRaw.keyRaw), eventKey)
     }
-    */
+
+    public static func totalSortDescriptor() -> NSSortDescriptor {
+        return NSSortDescriptor(key: #keyPath(DistrictEventPoints.totalRaw), ascending: false)
+    }
 
 }
 

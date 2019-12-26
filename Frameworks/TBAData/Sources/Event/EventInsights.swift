@@ -4,15 +4,15 @@ import TBAKit
 
 extension EventInsights {
 
-    var playoff: [String: Any]? {
+    public var playoff: [String: Any]? {
         return getValue(\EventInsights.playoffRaw)
     }
 
-    var qual: [String: Any]? {
+    public var qual: [String: Any]? {
         return getValue(\EventInsights.qualRaw)
     }
 
-    var event: Event {
+    public var event: Event {
         guard let event = getValue(\EventInsights.eventRaw) else {
             fatalError("Save EventInsights before accessing event")
         }

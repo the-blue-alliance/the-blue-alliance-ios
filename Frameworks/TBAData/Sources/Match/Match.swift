@@ -84,8 +84,11 @@ extension Match {
         return getValue(\Match.compLevelSortOrderRaw)?.intValue
     }
 
-    public var compLevelString: String? {
-        return getValue(\Match.compLevelStringRaw)
+    public var compLevelString: String {
+        guard let compLevelString = getValue(\Match.compLevelStringRaw) else {
+            fatalError("Save Match before accessing compLevelString")
+        }
+        return compLevelString
     }
 
     /**

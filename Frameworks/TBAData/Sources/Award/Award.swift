@@ -109,19 +109,16 @@ extension Award: Managed {
 
 extension Award {
 
-    /*
     public static func eventPredicate(eventKey: String) -> NSPredicate {
-        return NSPredicate(format: "%K.%K == %@",
-                           #keyPath(Award.eventOne), Event.keyPath(), eventKey)
+        return NSPredicate(format: "%K == %@",
+                           #keyPath(Award.eventRaw.keyRaw), eventKey)
     }
-    */
 
     public static func teamPredicate(teamKey: String) -> NSPredicate {
         return NSPredicate(format: "ANY %K.%K == %@",
                            #keyPath(Award.recipientsRaw), #keyPath(AwardRecipient.teamRaw.keyRaw), teamKey)
     }
 
-    /*
     public static func teamEventPredicate(teamKey: String, eventKey: String) -> NSPredicate {
         let teamPredicate = Award.teamPredicate(teamKey: teamKey)
         let eventPredicate = Award.eventPredicate(eventKey: eventKey)
@@ -129,9 +126,8 @@ extension Award {
     }
 
     public static func typeSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(Award.awardTypeNumber), ascending: true)
+        return NSSortDescriptor(key: #keyPath(Award.awardTypeRaw), ascending: true)
     }
-    */
 
 }
 

@@ -5,10 +5,15 @@ import MyTBAKit
 extension Subscription {
 
     public var notifications: [NotificationType] {
-        guard let notificationsRaw = getValue(\Subscription.notificationsRaw) else {
-            fatalError("Save Subscription before accessing notifications")
+        get {
+            guard let notificationsRaw = getValue(\Subscription.notificationsRaw) else {
+                fatalError("Save Subscription before accessing notifications")
+            }
+            return notificationsRaw.compactMap({ NotificationType(rawValue: $0) })
         }
-        return notificationsRaw.compactMap({ NotificationType(rawValue: $0) })
+        set {
+            notificationsRaw = newValue.map({ $0.rawValue })
+        }
     }
 
 }

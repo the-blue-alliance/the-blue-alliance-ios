@@ -101,7 +101,7 @@ class TeamSummaryViewController: TBATableViewController {
         }
     }
     private var teamAwards: [Award] {
-        return event.awards(for: team)
+        return event.awards(for: team.key)
     }
 
     private func executeUpdate(_ update: @escaping () -> ()) {
@@ -117,7 +117,7 @@ class TeamSummaryViewController: TBATableViewController {
         return CoreDataContextObserver(context: persistentContainer.viewContext)
     }()
     lazy var observerPredicate: NSPredicate = {
-        return EventStatus.predicate(event: event, team: team)
+        return EventStatus.predicate(eventKey: event.key, teamKey: team.key)
     }()
 
     init(team: Team, event: Event, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
@@ -461,7 +461,7 @@ class TeamSummaryViewController: TBATableViewController {
 extension TeamSummaryViewController: Refreshable {
 
     var refreshKey: String? {
-        return "\(team.getValue(\Team.key))@\(event.getValue(\Event.key))_status"
+        return "\(team.key)@\(event.key)_status"
     }
 
     var automaticRefreshInterval: DateComponents? {
@@ -470,7 +470,7 @@ extension TeamSummaryViewController: Refreshable {
 
     var automaticRefreshEndDate: Date? {
         // Automatically refresh team summary until the event is over
-        return event.getValue(\Event.endDate)?.endOfDay()
+        return event.endDate?.endOfDay()
     }
 
     var isDataSourceEmpty: Bool {

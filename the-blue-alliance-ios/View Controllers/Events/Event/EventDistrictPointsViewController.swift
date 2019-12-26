@@ -129,8 +129,7 @@ private class EventDistrictPointsViewController: TBATableViewController {
 extension EventDistrictPointsViewController: Refreshable {
 
     var refreshKey: String? {
-        let key = event.getValue(\Event.key)
-        return "\(key)_district_points"
+        return "\(event.key)_district_points"
     }
 
     var automaticRefreshInterval: DateComponents? {

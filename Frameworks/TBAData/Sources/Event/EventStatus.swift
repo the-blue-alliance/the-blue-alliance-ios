@@ -4,46 +4,46 @@ import TBAKit
 
 extension EventStatus {
 
-    var allianceStatus: String? {
+    public var allianceStatus: String? {
         return getValue(\EventStatus.allianceStatusRaw)
     }
 
-    var lastMatchKey: String? {
+    public var lastMatchKey: String? {
         return getValue(\EventStatus.lastMatchKeyRaw)
     }
 
-    var nextMatchKey: String? {
+    public var nextMatchKey: String? {
         return getValue(\EventStatus.nextMatchKeyRaw)
     }
 
-    var overallStatus: String? {
+    public var overallStatus: String? {
         return getValue(\EventStatus.overallStatusRaw)
     }
 
-    var playoffStatus: String? {
+    public var playoffStatus: String? {
         return getValue(\EventStatus.playoffStatusRaw)
     }
 
-    var alliance: EventStatusAlliance? {
+    public var alliance: EventStatusAlliance? {
         return getValue(\EventStatus.allianceRaw)
     }
 
-    var event: Event {
+    public var event: Event {
         guard let event = getValue(\EventStatus.eventRaw) else {
             fatalError("Save EventStatus before accessing event")
         }
         return event
     }
 
-    var playoff: EventStatusPlayoff? {
+    public var playoff: EventStatusPlayoff? {
         return getValue(\EventStatus.playoffRaw)
     }
 
-    var qual: EventStatusQual? {
+    public var qual: EventStatusQual? {
         return getValue(\EventStatus.qualRaw)
     }
 
-    var team: Team? {
+    public var team: Team? {
         guard let team = getValue(\EventStatus.teamRaw) else {
             fatalError("Save EventStatus before accessing team")
         }
@@ -122,6 +122,16 @@ extension EventStatus: Managed {
                 playoff.eventStatusRaw = nil
             }
         }
+    }
+
+}
+
+extension EventStatus {
+
+    public static func predicate(eventKey: String, teamKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K == %@ && %K == %@",
+                           #keyPath(EventStatus.eventRaw.keyRaw), eventKey,
+                           #keyPath(EventStatus.teamRaw.keyRaw), teamKey)
     }
 
 }
