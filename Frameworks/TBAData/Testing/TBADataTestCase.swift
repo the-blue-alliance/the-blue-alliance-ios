@@ -207,10 +207,9 @@ open class TBADataTestCase: XCTestCase {
         let event = insertEvent()
 
         let model = TBAEventRanking(teamKey: "frc1", rank: 2, dq: 10, matchesPlayed: 6, qualAverage: 20, record: TBAWLT(wins: 1, losses: 2, ties: 3), extraStats: [25.0, 3], sortOrders: [2.08, 530.0, 3])
-        let ranking = EventRanking.insert(model, sortOrderInfo: nil, extraStatsInfo: nil, eventKey: event.key!, in: persistentContainer.viewContext)
-        ranking.event = event
+        let ranking = EventRanking.insert(model, sortOrderInfo: nil, extraStatsInfo: nil, eventKey: event.key, in: persistentContainer.viewContext)
+        ranking.eventRaw = event
         return ranking
     }
 
 }
-

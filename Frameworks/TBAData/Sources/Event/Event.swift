@@ -504,19 +504,37 @@ public class Event: NSManagedObject {
 
 }
 
-// MARK: Generated accessors for awardsMany
+// MARK: Generated accessors for awardsRaw
 extension Event {
 
-    @objc(addToAwardsRawObject:)
-    @NSManaged private func addToAwardsRaw(_ value: Award)
+    @objc(addAwardsRawObject:)
+    @NSManaged internal func addToAwardsRaw(_ value: Award)
+
+    @objc(removeAwardsRawObject:)
+    @NSManaged internal func removeFromAwardsRaw(_ value: Award)
+
+    @objc(addAwardsRaw:)
+    @NSManaged internal func addToAwardsRaw(_ values: NSSet)
+
+    @objc(removeAwardsRaw:)
+    @NSManaged internal func removeFromAwardsRaw(_ values: NSSet)
 
 }
 
-// MARK: Generated accessors for statusesMany
+// MARK: Generated accessors for statusesRaw
 extension Event {
 
-    @objc(addToStatusesRawObject:)
-    @NSManaged private func addToStatusesRaw(_ value: EventStatus)
+    @objc(addStatusesRawObject:)
+    @NSManaged internal func addToStatusesRaw(_ value: EventStatus)
+
+    @objc(removeStatusesRawObject:)
+    @NSManaged internal func removeFromStatusesRaw(_ value: EventStatus)
+
+    @objc(addStatusesRaw:)
+    @NSManaged internal func addToStatusesRaw(_ values: NSSet)
+
+    @objc(removeStatusesRaw:)
+    @NSManaged internal func removeFromStatusesRaw(_ values: NSSet)
 
 }
 

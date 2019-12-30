@@ -58,6 +58,23 @@ public class Award: NSManagedObject {
 
 }
 
+// MARK: Generated accessors for recipientsRaw
+extension Award {
+
+    @objc(addRecipientsRawObject:)
+    @NSManaged internal func addToRecipientsRaw(_ value: AwardRecipient)
+
+    @objc(removeRecipientsRawObject:)
+    @NSManaged internal func removeFromRecipientsRaw(_ value: AwardRecipient)
+
+    @objc(addRecipientsRaw:)
+    @NSManaged internal func addToRecipientsRaw(_ values: NSSet)
+
+    @objc(removeRecipientsRaw:)
+    @NSManaged internal func removeFromRecipientsRaw(_ values: NSSet)
+
+}
+
 extension Award: Managed {
 
     /**

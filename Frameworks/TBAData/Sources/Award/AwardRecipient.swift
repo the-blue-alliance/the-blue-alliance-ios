@@ -63,11 +63,20 @@ public class AwardRecipient: NSManagedObject {
 
 }
 
-// MARK: Generated accessors for awardsMany
+// MARK: Generated accessors for awardsRaw
 extension AwardRecipient {
 
-    @objc(removeFromAwardsRawObject:)
-    @NSManaged func removeFromAwardsRaw(_ value: Award)
+    @objc(addAwardsRawObject:)
+    @NSManaged internal func addToAwardsRaw(_ value: Award)
+
+    @objc(removeAwardsRawObject:)
+    @NSManaged internal func removeFromAwardsRaw(_ value: Award)
+
+    @objc(addAwardsRaw:)
+    @NSManaged internal func addToAwardsRaw(_ values: NSSet)
+
+    @objc(removeAwardsRaw:)
+    @NSManaged internal func removeFromAwardsRaw(_ values: NSSet)
 
 }
 
@@ -115,17 +124,6 @@ extension AwardRecipient: Managed {
             awardRecipient.awardeeRaw = model.awardee
         }
     }
-
-}
-
-extension AwardRecipient {
-
-    /*
-    public static func teamPredicate(teamKey: String) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(AwardRecipient.teamOne.keyString), teamKey)
-    }
-    */
 
 }
 
