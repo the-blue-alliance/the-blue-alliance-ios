@@ -75,6 +75,23 @@ public class DistrictRanking: NSManagedObject {
 
 }
 
+// MARK: Generated accessors for eventPointsRaw
+extension DistrictRanking {
+
+    @objc(addEventPointsRawObject:)
+    @NSManaged internal func addToEventPointsRaw(_ value: DistrictEventPoints)
+
+    @objc(removeEventPointsRawObject:)
+    @NSManaged internal func removeFromEventPointsRaw(_ value: DistrictEventPoints)
+
+    @objc(addEventPointsRaw:)
+    @NSManaged internal func addToEventPointsRaw(_ values: NSSet)
+
+    @objc(removeEventPointsRaw:)
+    @NSManaged internal func removeFromEventPointsRaw(_ values: NSSet)
+
+}
+
 extension DistrictRanking {
 
     public static func districtPredicate(district: District) -> NSPredicate {

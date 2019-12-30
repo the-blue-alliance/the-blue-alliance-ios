@@ -41,9 +41,9 @@ extension District {
         return events
     }
 
-    public var rankings: [EventRanking] {
+    public var rankings: [DistrictRanking] {
         guard let rankingsMany = getValue(\District.rankingsRaw),
-            let rankings = rankingsMany.allObjects as? [EventRanking] else {
+            let rankings = rankingsMany.allObjects as? [DistrictRanking] else {
                 return []
         }
         return rankings
@@ -108,6 +108,40 @@ public class District: NSManagedObject {
     @NSManaged var eventsRaw: NSSet?
     @NSManaged var rankingsRaw: NSSet?
     @NSManaged var teamsRaw: NSSet?
+
+}
+
+// MARK: Generated accessors for eventsRaw
+extension District {
+
+    @objc(addEventsRawObject:)
+    @NSManaged internal func addToEventsRaw(_ value: Event)
+
+    @objc(removeEventsRawObject:)
+    @NSManaged internal func removeFromEventsRaw(_ value: Event)
+
+    @objc(addEventsRaw:)
+    @NSManaged internal func addToEventsRaw(_ values: NSSet)
+
+    @objc(removeEventsRaw:)
+    @NSManaged internal func removeFromEventsRaw(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for rankingsRaw
+extension District {
+
+    @objc(addRankingsRawObject:)
+    @NSManaged internal func addToRankingsRaw(_ value: DistrictRanking)
+
+    @objc(removeRankingsRawObject:)
+    @NSManaged internal func removeFromRankingsRaw(_ value: DistrictRanking)
+
+    @objc(addRankingsRaw:)
+    @NSManaged internal func addToRankingsRaw(_ values: NSSet)
+
+    @objc(removeRankingsRaw:)
+    @NSManaged internal func removeFromRankingsRaw(_ values: NSSet)
 
 }
 
