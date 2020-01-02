@@ -241,11 +241,37 @@ public class Team: NSManagedObject {
 
 }
 
-// MARK: Generated accessors for media
+// MARK: Generated accessors for eventsRaw
 extension Team {
 
+    @objc(addEventsRawObject:)
+    @NSManaged func addToEventsRaw(_ value: Event)
+
+    @objc(removeEventsRawObject:)
+    @NSManaged func removeFromEventsRaw(_ value: Event)
+
+    @objc(addEventsRaw:)
+    @NSManaged func addToEventsRaw(_ values: NSSet)
+
+    @objc(removeEventsRaw:)
+    @NSManaged func removeFromEventsRaw(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for mediaRaw
+extension Team {
+
+    @objc(addMediaRawObject:)
+    @NSManaged func addToMediaRaw(_ value: TeamMedia)
+
+    @objc(removeMediaRawObject:)
+    @NSManaged func removeFromMediaRaw(_ value: TeamMedia)
+
     @objc(addMediaRaw:)
-    @NSManaged private func addToMediaRaw(_ values: NSSet)
+    @NSManaged func addToMediaRaw(_ values: NSSet)
+
+    @objc(removeMediaRaw:)
+    @NSManaged func removeFromMediaRaw(_ values: NSSet)
 
 }
 
