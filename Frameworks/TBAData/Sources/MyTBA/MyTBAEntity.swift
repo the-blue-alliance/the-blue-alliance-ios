@@ -50,8 +50,8 @@ public class MyTBAEntity: NSManagedObject {
         return NSFetchRequest<MyTBAEntity>(entityName: MyTBAEntity.entityName)
     }
 
-    @NSManaged internal var modelKeyRaw: String?
-    @NSManaged internal var modelTypeRaw: NSNumber?
+    @NSManaged var modelKeyRaw: String?
+    @NSManaged var modelTypeRaw: NSNumber?
 
 }
 

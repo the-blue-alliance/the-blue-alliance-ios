@@ -54,7 +54,7 @@ public class EventRankingStatInfo: NSManagedObject {
 extension EventRankingStatInfo {
 
     @objc(removeFromExtraStatsRankingsRawObject:)
-    @NSManaged internal func removeFromExtraStatsRankingsRaw(_ value: EventRanking)
+    @NSManaged func removeFromExtraStatsRankingsRaw(_ value: EventRanking)
 
 }
 
@@ -62,7 +62,7 @@ extension EventRankingStatInfo {
 extension EventRankingStatInfo {
 
     @objc(removeFromSortOrdersRankingsRawObject:)
-    @NSManaged internal func removeFromSortOrdersRankingsRaw(_ value: EventRanking)
+    @NSManaged func removeFromSortOrdersRankingsRaw(_ value: EventRanking)
 
 }
 

@@ -115,16 +115,16 @@ public class District: NSManagedObject {
 extension District {
 
     @objc(addEventsRawObject:)
-    @NSManaged internal func addToEventsRaw(_ value: Event)
+    @NSManaged func addToEventsRaw(_ value: Event)
 
     @objc(removeEventsRawObject:)
-    @NSManaged internal func removeFromEventsRaw(_ value: Event)
+    @NSManaged func removeFromEventsRaw(_ value: Event)
 
     @objc(addEventsRaw:)
-    @NSManaged internal func addToEventsRaw(_ values: NSSet)
+    @NSManaged func addToEventsRaw(_ values: NSSet)
 
     @objc(removeEventsRaw:)
-    @NSManaged internal func removeFromEventsRaw(_ values: NSSet)
+    @NSManaged func removeFromEventsRaw(_ values: NSSet)
 
 }
 
@@ -132,16 +132,16 @@ extension District {
 extension District {
 
     @objc(addRankingsRawObject:)
-    @NSManaged internal func addToRankingsRaw(_ value: DistrictRanking)
+    @NSManaged func addToRankingsRaw(_ value: DistrictRanking)
 
     @objc(removeRankingsRawObject:)
-    @NSManaged internal func removeFromRankingsRaw(_ value: DistrictRanking)
+    @NSManaged func removeFromRankingsRaw(_ value: DistrictRanking)
 
     @objc(addRankingsRaw:)
-    @NSManaged internal func addToRankingsRaw(_ values: NSSet)
+    @NSManaged func addToRankingsRaw(_ values: NSSet)
 
     @objc(removeRankingsRaw:)
-    @NSManaged internal func removeFromRankingsRaw(_ values: NSSet)
+    @NSManaged func removeFromRankingsRaw(_ values: NSSet)
 
 }
 

@@ -144,6 +144,7 @@ extension Event {
         return year
     }
 
+    // TODO: Pretty sure this will never be nil
     public var alliances: NSOrderedSet? {
         return getValue(\Event.alliancesRaw)
     }
@@ -508,16 +509,33 @@ public class Event: NSManagedObject {
 extension Event {
 
     @objc(addAwardsRawObject:)
-    @NSManaged internal func addToAwardsRaw(_ value: Award)
+    @NSManaged func addToAwardsRaw(_ value: Award)
 
     @objc(removeAwardsRawObject:)
-    @NSManaged internal func removeFromAwardsRaw(_ value: Award)
+    @NSManaged func removeFromAwardsRaw(_ value: Award)
 
     @objc(addAwardsRaw:)
-    @NSManaged internal func addToAwardsRaw(_ values: NSSet)
+    @NSManaged func addToAwardsRaw(_ values: NSSet)
 
     @objc(removeAwardsRaw:)
-    @NSManaged internal func removeFromAwardsRaw(_ values: NSSet)
+    @NSManaged func removeFromAwardsRaw(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for matchesRaw
+extension Event {
+
+    @objc(addMatchesRawObject:)
+    @NSManaged func addToMatchesRaw(_ value: Match)
+
+    @objc(removeMatchesRawObject:)
+    @NSManaged func removeFromMatchesRaw(_ value: Match)
+
+    @objc(addMatchesRaw:)
+    @NSManaged func addToMatchesRaw(_ values: NSSet)
+
+    @objc(removeMatchesRaw:)
+    @NSManaged func removeFromMatchesRaw(_ values: NSSet)
 
 }
 
@@ -525,16 +543,16 @@ extension Event {
 extension Event {
 
     @objc(addStatusesRawObject:)
-    @NSManaged internal func addToStatusesRaw(_ value: EventStatus)
+    @NSManaged func addToStatusesRaw(_ value: EventStatus)
 
     @objc(removeStatusesRawObject:)
-    @NSManaged internal func removeFromStatusesRaw(_ value: EventStatus)
+    @NSManaged func removeFromStatusesRaw(_ value: EventStatus)
 
     @objc(addStatusesRaw:)
-    @NSManaged internal func addToStatusesRaw(_ values: NSSet)
+    @NSManaged func addToStatusesRaw(_ values: NSSet)
 
     @objc(removeStatusesRaw:)
-    @NSManaged internal func removeFromStatusesRaw(_ values: NSSet)
+    @NSManaged func removeFromStatusesRaw(_ values: NSSet)
 
 }
 

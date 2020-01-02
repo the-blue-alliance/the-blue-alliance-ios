@@ -50,7 +50,7 @@ public class EventAllianceBackup: NSManagedObject {
 extension EventAllianceBackup {
 
     @objc(removeFromalliancesRawObject:)
-    @NSManaged internal func removeFromalliancesRaw(_ value: EventAlliance)
+    @NSManaged func removeFromalliancesRaw(_ value: EventAlliance)
 
 }
 

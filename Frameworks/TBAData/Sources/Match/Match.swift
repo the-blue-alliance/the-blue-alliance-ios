@@ -95,9 +95,6 @@ extension Match {
      Returns the MatchCompLevel for the Match's compLevelString.
      */
     public var compLevel: MatchCompLevel? {
-        guard let compLevelString = getValue(\Match.compLevelStringRaw) else {
-            fatalError("Save Match before accessing compLevel")
-        }
         guard let compLevel = MatchCompLevel(rawValue: compLevelString) else {
             return nil
         }
@@ -285,6 +282,40 @@ public class Match: NSManagedObject {
     @NSManaged var alliancesRaw: NSSet?
     @NSManaged var eventRaw: Event?
     @NSManaged var videosRaw: NSSet?
+
+}
+
+// MARK: Generated accessors for alliancesRaw
+extension Match {
+
+    @objc(addAlliancesRawObject:)
+    @NSManaged func addToAlliancesRaw(_ value: MatchAlliance)
+
+    @objc(removeAlliancesRawObject:)
+    @NSManaged func removeFromAlliancesRaw(_ value: MatchAlliance)
+
+    @objc(addAlliancesRaw:)
+    @NSManaged func addToAlliancesRaw(_ values: NSSet)
+
+    @objc(removeAlliancesRaw:)
+    @NSManaged func removeFromAlliancesRaw(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for videosRaw
+extension Match {
+
+    @objc(addVideosRawObject:)
+    @NSManaged func addToVideosRaw(_ value: MatchVideo)
+
+    @objc(removeVideosRawObject:)
+    @NSManaged func removeFromVideosRaw(_ value: MatchVideo)
+
+    @objc(addVideosRaw:)
+    @NSManaged func addToVideosRaw(_ values: NSSet)
+
+    @objc(removeVideosRaw:)
+    @NSManaged func removeFromVideosRaw(_ values: NSSet)
 
 }
 

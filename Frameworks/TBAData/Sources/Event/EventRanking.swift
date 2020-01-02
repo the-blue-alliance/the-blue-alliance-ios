@@ -34,6 +34,7 @@ extension EventRanking {
         return event
     }
 
+    // TODO: Pretty sure these NSOrderedSet will never be nil
     public var extraStats: NSOrderedSet? {
         return getValue(\EventRanking.extraStatsRaw)
     }

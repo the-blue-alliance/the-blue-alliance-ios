@@ -13,6 +13,7 @@ extension EventAlliance {
         return getValue(\EventAlliance.backupRaw)
     }
 
+    // TODO: Pretty sure these will never be nil
     public var declines: NSOrderedSet? {
         return getValue(\EventAlliance.declinesRaw)
     }

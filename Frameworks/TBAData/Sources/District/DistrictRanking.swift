@@ -79,16 +79,16 @@ public class DistrictRanking: NSManagedObject {
 extension DistrictRanking {
 
     @objc(addEventPointsRawObject:)
-    @NSManaged internal func addToEventPointsRaw(_ value: DistrictEventPoints)
+    @NSManaged func addToEventPointsRaw(_ value: DistrictEventPoints)
 
     @objc(removeEventPointsRawObject:)
-    @NSManaged internal func removeFromEventPointsRaw(_ value: DistrictEventPoints)
+    @NSManaged func removeFromEventPointsRaw(_ value: DistrictEventPoints)
 
     @objc(addEventPointsRaw:)
-    @NSManaged internal func addToEventPointsRaw(_ values: NSSet)
+    @NSManaged func addToEventPointsRaw(_ values: NSSet)
 
     @objc(removeEventPointsRaw:)
-    @NSManaged internal func removeFromEventPointsRaw(_ values: NSSet)
+    @NSManaged func removeFromEventPointsRaw(_ values: NSSet)
 
 }
 

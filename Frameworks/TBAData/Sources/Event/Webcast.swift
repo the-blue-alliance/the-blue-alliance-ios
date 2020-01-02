@@ -50,7 +50,7 @@ public class Webcast: NSManagedObject {
 extension Webcast {
 
     @objc(removeFromEventsRawObject:)
-    @NSManaged internal func removeFromEventsRaw(_ value: Event)
+    @NSManaged func removeFromEventsRaw(_ value: Event)
 
 }
 

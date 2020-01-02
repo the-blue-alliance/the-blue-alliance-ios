@@ -62,16 +62,16 @@ public class Award: NSManagedObject {
 extension Award {
 
     @objc(addRecipientsRawObject:)
-    @NSManaged internal func addToRecipientsRaw(_ value: AwardRecipient)
+    @NSManaged func addToRecipientsRaw(_ value: AwardRecipient)
 
     @objc(removeRecipientsRawObject:)
-    @NSManaged internal func removeFromRecipientsRaw(_ value: AwardRecipient)
+    @NSManaged func removeFromRecipientsRaw(_ value: AwardRecipient)
 
     @objc(addRecipientsRaw:)
-    @NSManaged internal func addToRecipientsRaw(_ values: NSSet)
+    @NSManaged func addToRecipientsRaw(_ values: NSSet)
 
     @objc(removeRecipientsRaw:)
-    @NSManaged internal func removeFromRecipientsRaw(_ values: NSSet)
+    @NSManaged func removeFromRecipientsRaw(_ values: NSSet)
 
 }
 

@@ -15,8 +15,11 @@ extension MatchAlliance {
         return getValue(\MatchAlliance.scoreRaw)?.intValue
     }
 
-    public var dqTeams: NSOrderedSet? {
-        return getValue(\MatchAlliance.dqTeamsRaw)
+    public var dqTeams: NSOrderedSet {
+        guard let dqTeams = getValue(\MatchAlliance.dqTeamsRaw) else {
+            fatalError("Save MatchAlliance before accessing dqTeams")
+        }
+        return dqTeams
     }
 
     public var match: Match {
@@ -26,8 +29,11 @@ extension MatchAlliance {
         return match
     }
 
-    public var surrogateTeams: NSOrderedSet? {
-        return getValue(\MatchAlliance.surrogateTeamsRaw)
+    public var surrogateTeams: NSOrderedSet {
+        guard let surrogateTeams = getValue(\MatchAlliance.surrogateTeamsRaw) else {
+            fatalError("Save MatchAlliance before accessing surrogateTeams")
+        }
+        return surrogateTeams
     }
 
     public var teams: NSOrderedSet {
@@ -41,10 +47,20 @@ extension MatchAlliance {
      Returns team keys for DQ'd teams for the alliance.
      */
     public var dqTeamKeys: [String] {
-        guard let dqTeams = dqTeams?.array as? [Team] else {
+        guard let dqTeams = dqTeams.array as? [Team] else {
             return []
         }
         return dqTeams.map({ $0.key })
+    }
+
+    /**
+     Returns team keys for surrogate teams for the alliance.
+     */
+    public var surrogateTeamKeys: [String] {
+        guard let surrogateTeams = surrogateTeams.array as? [Team] else {
+            return []
+        }
+        return surrogateTeams.map({ $0.key })
     }
 
     /**

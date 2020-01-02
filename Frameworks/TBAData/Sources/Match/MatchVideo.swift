@@ -38,17 +38,26 @@ public class MatchVideo: NSManagedObject {
         return NSFetchRequest<MatchVideo>(entityName: MatchVideo.entityName)
     }
 
-    @NSManaged private var keyRaw: String?
-    @NSManaged private var typeRaw: String?
-    @NSManaged private var matchesRaw: NSSet?
+    @NSManaged var keyRaw: String?
+    @NSManaged var typeRaw: String?
+    @NSManaged var matchesRaw: NSSet?
 
 }
 
-// MARK: Generated accessors for matches
+// MARK: Generated accessors for matchesRaw
 extension MatchVideo {
 
-    @objc(removeFromMatchesRawObject:)
-    @NSManaged internal func removeFromMatchesRaw(_ value: Match)
+    @objc(addMatchesRawObject:)
+    @NSManaged func addToMatchesRaw(_ value: Match)
+
+    @objc(removeMatchesRawObject:)
+    @NSManaged func removeFromMatchesRaw(_ value: Match)
+
+    @objc(addMatchesRaw:)
+    @NSManaged func addToMatchesRaw(_ values: NSSet)
+
+    @objc(removeMatchesRaw:)
+    @NSManaged func removeFromMatchesRaw(_ values: NSSet)
 
 }
 
