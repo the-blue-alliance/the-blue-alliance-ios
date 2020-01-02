@@ -141,8 +141,8 @@ public class TeamMedia: NSManagedObject {
     @NSManaged var detailsRaw: [String: Any]?
     @NSManaged var directURLRaw: String?
     @NSManaged var foreignKeyRaw: String?
-    @NSManaged private var mediaData: Data?
-    @NSManaged private var mediaError: Error?
+    @NSManaged var mediaData: Data?
+    @NSManaged var mediaError: Error?
     @NSManaged var preferredRaw: NSNumber?
     @NSManaged var typeStringRaw: String?
     @NSManaged var viewURLRaw: String?
