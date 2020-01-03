@@ -47,6 +47,12 @@ class TeamTestCase: TBADataTestCase {
         XCTAssertEqual(team.homeChampionship, ["2019": "Detroit"])
     }
 
+    func test_key() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        team.keyRaw = "key"
+        XCTAssertEqual(team.key, "key")
+    }
+
     func test_lat() {
         let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
         XCTAssertNil(team.lat)
@@ -103,6 +109,12 @@ class TeamTestCase: TBADataTestCase {
         XCTAssertEqual(team.stateProv, "stateProv")
     }
 
+    func test_teamNumber() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        team.teamNumberRaw = NSNumber(value: 7332)
+        XCTAssertEqual(team.teamNumber, 7332)
+    }
+
     func test_website() {
         let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
         XCTAssertNil(team.website)
@@ -115,6 +127,134 @@ class TeamTestCase: TBADataTestCase {
         XCTAssertNil(team.yearsParticipated)
         team.yearsParticipatedRaw = [2019, 2020]
         XCTAssertEqual(team.yearsParticipated, [2019, 2020])
+    }
+
+    func test_alliances() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.alliances, [])
+        let a = MatchAlliance.init(entity: MatchAlliance.entity(), insertInto: persistentContainer.viewContext)
+        team.alliancesRaw = NSSet(array: [a])
+        XCTAssertEqual(team.alliances, [a])
+    }
+
+    func test_awards() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.awards, [])
+        let a = AwardRecipient.init(entity: AwardRecipient.entity(), insertInto: persistentContainer.viewContext)
+        team.awardsRaw = NSSet(array: [a])
+        XCTAssertEqual(team.awards, [a])
+    }
+
+    func test_declinedAlliances() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.declinedAlliances, [])
+        let a = EventAlliance.init(entity: EventAlliance.entity(), insertInto: persistentContainer.viewContext)
+        team.declinedAlliancesRaw = NSSet(array: [a])
+        XCTAssertEqual(team.declinedAlliances, [a])
+    }
+
+    func test_districtRankings() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.districtRankings, [])
+        let a = DistrictRanking.init(entity: DistrictRanking.entity(), insertInto: persistentContainer.viewContext)
+        team.districtRankingsRaw = NSSet(array: [a])
+        XCTAssertEqual(team.districtRankings, [a])
+    }
+
+    func test_districts() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.districts, [])
+        let a = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        team.districtsRaw = NSSet(array: [a])
+        XCTAssertEqual(team.districts, [a])
+    }
+
+    func test_dqAlliances() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.dqAlliances, [])
+        let a = MatchAlliance.init(entity: MatchAlliance.entity(), insertInto: persistentContainer.viewContext)
+        team.dqAlliancesRaw = NSSet(array: [a])
+        XCTAssertEqual(team.dqAlliances, [a])
+    }
+
+    func test_eventPoints() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.eventPoints, [])
+        let a = DistrictEventPoints.init(entity: DistrictEventPoints.entity(), insertInto: persistentContainer.viewContext)
+        team.eventPointsRaw = NSSet(array: [a])
+        XCTAssertEqual(team.eventPoints, [a])
+    }
+
+    func test_eventRankings() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.eventRankings, [])
+        let a = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
+        team.eventRankingsRaw = NSSet(array: [a])
+        XCTAssertEqual(team.eventRankings, [a])
+    }
+
+    func test_events() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.events, [])
+        let a = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        team.eventsRaw = NSSet(array: [a])
+        XCTAssertEqual(team.events, [a])
+    }
+
+    func test_eventStatuses() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.eventStatuses, [])
+        let a = EventStatus.init(entity: EventStatus.entity(), insertInto: persistentContainer.viewContext)
+        team.eventStatusesRaw = NSSet(array: [a])
+        XCTAssertEqual(team.eventStatuses, [a])
+    }
+
+    func test_inBackupAlliances() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.inBackupAlliances, [])
+        let a = EventAllianceBackup.init(entity: EventAllianceBackup.entity(), insertInto: persistentContainer.viewContext)
+        team.inBackupAlliancesRaw = NSSet(array: [a])
+        XCTAssertEqual(team.inBackupAlliances, [a])
+    }
+
+    func test_media() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.media, [])
+        let a = TeamMedia.init(entity: TeamMedia.entity(), insertInto: persistentContainer.viewContext)
+        team.mediaRaw = NSSet(array: [a])
+        XCTAssertEqual(team.media, [a])
+    }
+
+    func test_outBackupAlliances() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.outBackupAlliances, [])
+        let a = EventAllianceBackup.init(entity: EventAllianceBackup.entity(), insertInto: persistentContainer.viewContext)
+        team.outBackupAlliancesRaw = NSSet(array: [a])
+        XCTAssertEqual(team.outBackupAlliances, [a])
+    }
+
+    func test_pickedAlliances() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.pickedAlliances, [])
+        let a = EventAlliance.init(entity: EventAlliance.entity(), insertInto: persistentContainer.viewContext)
+        team.pickedAlliancesRaw = NSSet(array: [a])
+        XCTAssertEqual(team.pickedAlliances, [a])
+    }
+
+    func test_stats() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.stats, [])
+        let a = EventTeamStat.init(entity: EventTeamStat.entity(), insertInto: persistentContainer.viewContext)
+        team.statsRaw = NSSet(array: [a])
+        XCTAssertEqual(team.stats, [a])
+    }
+
+    func test_surrogateAlliances() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(team.surrogateAlliances, [])
+        let a = MatchAlliance.init(entity: MatchAlliance.entity(), insertInto: persistentContainer.viewContext)
+        team.surrogateAlliancesRaw = NSSet(array: [a])
+        XCTAssertEqual(team.surrogateAlliances, [a])
     }
 
     func test_predicate() {
