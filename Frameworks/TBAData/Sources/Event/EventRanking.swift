@@ -34,25 +34,36 @@ extension EventRanking {
         return event
     }
 
-    // TODO: Pretty sure these NSOrderedSet will never be nil
-    public var extraStats: NSOrderedSet? {
-        return getValue(\EventRanking.extraStatsRaw)
+    public var extraStats: NSOrderedSet {
+        guard let extraStats = getValue(\EventRanking.extraStatsRaw) else {
+            fatalError("Save EventRanking before accessing extraStats")
+        }
+        return extraStats
     }
 
-    public var extraStatsInfo: NSOrderedSet? {
-        return getValue(\EventRanking.extraStatsInfoRaw)
+    public var extraStatsInfo: NSOrderedSet {
+        guard let extraStatsInfo = getValue(\EventRanking.extraStatsInfoRaw) else {
+            fatalError("Save EventRanking before accessing extraStatsInfo")
+        }
+        return extraStatsInfo
     }
 
     public var qualStatus: EventStatusQual? {
         return getValue(\EventRanking.qualStatusRaw)
     }
 
-    public var sortOrders: NSOrderedSet? {
-        return getValue(\EventRanking.sortOrdersRaw)
+    public var sortOrders: NSOrderedSet {
+        guard let sortOrders = getValue(\EventRanking.sortOrdersRaw) else {
+            fatalError("Save EventRanking before accessing sortOrders")
+        }
+        return sortOrders
     }
 
-    public var sortOrdersInfo: NSOrderedSet? {
-        return getValue(\EventRanking.sortOrdersInfoRaw)
+    public var sortOrdersInfo: NSOrderedSet {
+        guard let sortOrdersInfo = getValue(\EventRanking.sortOrdersInfoRaw) else {
+            fatalError("Save EventRanking before accessing sortOrdersInfo")
+        }
+        return sortOrdersInfo
     }
 
     public var team: Team {
@@ -63,16 +74,16 @@ extension EventRanking {
     }
 
     public var extraStatsInfoArray: [EventRankingStatInfo] {
-        return extraStatsInfo?.array as? [EventRankingStatInfo] ?? []
+        return extraStatsInfo.array as? [EventRankingStatInfo] ?? []
     }
     public var extraStatsArray: [EventRankingStat] {
-        return extraStats?.array as? [EventRankingStat] ?? []
+        return extraStats.array as? [EventRankingStat] ?? []
     }
     public var sortOrdersInfoArray: [EventRankingStatInfo] {
-        return sortOrdersInfo?.array as? [EventRankingStatInfo] ?? []
+        return sortOrdersInfo.array as? [EventRankingStatInfo] ?? []
     }
     public var sortOrdersArray: [EventRankingStat] {
-        return sortOrders?.array as? [EventRankingStat] ?? []
+        return sortOrders.array as? [EventRankingStat] ?? []
     }
 
 }
@@ -96,6 +107,146 @@ public class EventRanking: NSManagedObject {
     @NSManaged var sortOrdersRaw: NSOrderedSet?
     @NSManaged var sortOrdersInfoRaw: NSOrderedSet?
     @NSManaged var teamRaw: Team?
+
+}
+
+// MARK: Generated accessors for extraStatsInfoRaw
+extension EventRanking {
+
+    @objc(insertObject:inExtraStatsInfoRawAtIndex:)
+    @NSManaged func insertIntoExtraStatsInfoRaw(_ value: EventRankingStatInfo, at idx: Int)
+
+    @objc(removeObjectFromExtraStatsInfoRawAtIndex:)
+    @NSManaged func removeFromExtraStatsInfoRaw(at idx: Int)
+
+    @objc(insertExtraStatsInfoRaw:atIndexes:)
+    @NSManaged func insertIntoExtraStatsInfoRaw(_ values: [EventRankingStatInfo], at indexes: NSIndexSet)
+
+    @objc(removeExtraStatsInfoRawAtIndexes:)
+    @NSManaged func removeFromExtraStatsInfoRaw(at indexes: NSIndexSet)
+
+    @objc(replaceObjectInExtraStatsInfoRawAtIndex:withObject:)
+    @NSManaged func replaceExtraStatsInfoRaw(at idx: Int, with value: EventRankingStatInfo)
+
+    @objc(replaceExtraStatsInfoRawAtIndexes:withExtraStatsInfoRaw:)
+    @NSManaged func replaceExtraStatsInfoRaw(at indexes: NSIndexSet, with values: [EventRankingStatInfo])
+
+    @objc(addExtraStatsInfoRawObject:)
+    @NSManaged func addToExtraStatsInfoRaw(_ value: EventRankingStatInfo)
+
+    @objc(removeExtraStatsInfoRawObject:)
+    @NSManaged func removeFromExtraStatsInfoRaw(_ value: EventRankingStatInfo)
+
+    @objc(addExtraStatsInfoRaw:)
+    @NSManaged func addToExtraStatsInfoRaw(_ values: NSOrderedSet)
+
+    @objc(removeExtraStatsInfoRaw:)
+    @NSManaged func removeFromExtraStatsInfoRaw(_ values: NSOrderedSet)
+
+}
+
+// MARK: Generated accessors for extraStatsRaw
+extension EventRanking {
+
+    @objc(insertObject:inExtraStatsRawAtIndex:)
+    @NSManaged func insertIntoExtraStatsRaw(_ value: EventRankingStat, at idx: Int)
+
+    @objc(removeObjectFromExtraStatsRawAtIndex:)
+    @NSManaged func removeFromExtraStatsRaw(at idx: Int)
+
+    @objc(insertExtraStatsRaw:atIndexes:)
+    @NSManaged func insertIntoExtraStatsRaw(_ values: [EventRankingStat], at indexes: NSIndexSet)
+
+    @objc(removeExtraStatsRawAtIndexes:)
+    @NSManaged func removeFromExtraStatsRaw(at indexes: NSIndexSet)
+
+    @objc(replaceObjectInExtraStatsRawAtIndex:withObject:)
+    @NSManaged func replaceExtraStatsRaw(at idx: Int, with value: EventRankingStat)
+
+    @objc(replaceExtraStatsRawAtIndexes:withExtraStatsRaw:)
+    @NSManaged func replaceExtraStatsRaw(at indexes: NSIndexSet, with values: [EventRankingStat])
+
+    @objc(addExtraStatsRawObject:)
+    @NSManaged func addToExtraStatsRaw(_ value: EventRankingStat)
+
+    @objc(removeExtraStatsRawObject:)
+    @NSManaged func removeFromExtraStatsRaw(_ value: EventRankingStat)
+
+    @objc(addExtraStatsRaw:)
+    @NSManaged func addToExtraStatsRaw(_ values: NSOrderedSet)
+
+    @objc(removeExtraStatsRaw:)
+    @NSManaged func removeFromExtraStatsRaw(_ values: NSOrderedSet)
+
+}
+
+// MARK: Generated accessors for sortOrdersInfoRaw
+extension EventRanking {
+
+    @objc(insertObject:inSortOrdersInfoRawAtIndex:)
+    @NSManaged func insertIntoSortOrdersInfoRaw(_ value: EventRankingStatInfo, at idx: Int)
+
+    @objc(removeObjectFromSortOrdersInfoRawAtIndex:)
+    @NSManaged func removeFromSortOrdersInfoRaw(at idx: Int)
+
+    @objc(insertSortOrdersInfoRaw:atIndexes:)
+    @NSManaged func insertIntoSortOrdersInfoRaw(_ values: [EventRankingStatInfo], at indexes: NSIndexSet)
+
+    @objc(removeSortOrdersInfoRawAtIndexes:)
+    @NSManaged func removeFromSortOrdersInfoRaw(at indexes: NSIndexSet)
+
+    @objc(replaceObjectInSortOrdersInfoRawAtIndex:withObject:)
+    @NSManaged func replaceSortOrdersInfoRaw(at idx: Int, with value: EventRankingStatInfo)
+
+    @objc(replaceSortOrdersInfoRawAtIndexes:withSortOrdersInfoRaw:)
+    @NSManaged func replaceSortOrdersInfoRaw(at indexes: NSIndexSet, with values: [EventRankingStatInfo])
+
+    @objc(addSortOrdersInfoRawObject:)
+    @NSManaged func addToSortOrdersInfoRaw(_ value: EventRankingStatInfo)
+
+    @objc(removeSortOrdersInfoRawObject:)
+    @NSManaged func removeFromSortOrdersInfoRaw(_ value: EventRankingStatInfo)
+
+    @objc(addSortOrdersInfoRaw:)
+    @NSManaged func addToSortOrdersInfoRaw(_ values: NSOrderedSet)
+
+    @objc(removeSortOrdersInfoRaw:)
+    @NSManaged func removeFromSortOrdersInfoRaw(_ values: NSOrderedSet)
+
+}
+
+// MARK: Generated accessors for sortOrdersRaw
+extension EventRanking {
+
+    @objc(insertObject:inSortOrdersRawAtIndex:)
+    @NSManaged func insertIntoSortOrdersRaw(_ value: EventRankingStat, at idx: Int)
+
+    @objc(removeObjectFromSortOrdersRawAtIndex:)
+    @NSManaged func removeFromSortOrdersRaw(at idx: Int)
+
+    @objc(insertSortOrdersRaw:atIndexes:)
+    @NSManaged func insertIntoSortOrdersRaw(_ values: [EventRankingStat], at indexes: NSIndexSet)
+
+    @objc(removeSortOrdersRawAtIndexes:)
+    @NSManaged func removeFromSortOrdersRaw(at indexes: NSIndexSet)
+
+    @objc(replaceObjectInSortOrdersRawAtIndex:withObject:)
+    @NSManaged func replaceSortOrdersRaw(at idx: Int, with value: EventRankingStat)
+
+    @objc(replaceSortOrdersRawAtIndexes:withSortOrdersRaw:)
+    @NSManaged func replaceSortOrdersRaw(at indexes: NSIndexSet, with values: [EventRankingStat])
+
+    @objc(addSortOrdersRawObject:)
+    @NSManaged func addToSortOrdersRaw(_ value: EventRankingStat)
+
+    @objc(removeSortOrdersRawObject:)
+    @NSManaged func removeFromSortOrdersRaw(_ value: EventRankingStat)
+
+    @objc(addSortOrdersRaw:)
+    @NSManaged func addToSortOrdersRaw(_ values: NSOrderedSet)
+
+    @objc(removeSortOrdersRaw:)
+    @NSManaged func removeFromSortOrdersRaw(_ values: NSOrderedSet)
 
 }
 

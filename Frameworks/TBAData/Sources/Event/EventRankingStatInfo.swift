@@ -43,26 +43,44 @@ public class EventRankingStatInfo: NSManagedObject {
         return NSFetchRequest<EventRankingStatInfo>(entityName: EventRankingStatInfo.entityName)
     }
 
-    @NSManaged private var nameRaw: String?
-    @NSManaged private var precisionRaw: NSNumber?
-    @NSManaged private var extraStatsRankingsRaw: NSSet?
-    @NSManaged private var sortOrdersRankingsRaw: NSSet?
+    @NSManaged var nameRaw: String?
+    @NSManaged var precisionRaw: NSNumber?
+    @NSManaged var extraStatsRankingsRaw: NSSet?
+    @NSManaged var sortOrdersRankingsRaw: NSSet?
 
 }
 
-// MARK: Generated accessors for extraStatsRankingsMany
+// MARK: Generated accessors for extraStatsRankingsRaw
 extension EventRankingStatInfo {
 
-    @objc(removeFromExtraStatsRankingsRawObject:)
+    @objc(addExtraStatsRankingsRawObject:)
+    @NSManaged func addToExtraStatsRankingsRaw(_ value: EventRanking)
+
+    @objc(removeExtraStatsRankingsRawObject:)
     @NSManaged func removeFromExtraStatsRankingsRaw(_ value: EventRanking)
 
+    @objc(addExtraStatsRankingsRaw:)
+    @NSManaged func addToExtraStatsRankingsRaw(_ values: NSSet)
+
+    @objc(removeExtraStatsRankingsRaw:)
+    @NSManaged func removeFromExtraStatsRankingsRaw(_ values: NSSet)
+
 }
 
-// MARK: Generated accessors for sortOrdersRankingsMany
+// MARK: Generated accessors for sortOrdersRankingsRaw
 extension EventRankingStatInfo {
 
-    @objc(removeFromSortOrdersRankingsRawObject:)
+    @objc(addSortOrdersRankingsRawObject:)
+    @NSManaged func addToSortOrdersRankingsRaw(_ value: EventRanking)
+
+    @objc(removeSortOrdersRankingsRawObject:)
     @NSManaged func removeFromSortOrdersRankingsRaw(_ value: EventRanking)
+
+    @objc(addSortOrdersRankingsRaw:)
+    @NSManaged func addToSortOrdersRankingsRaw(_ values: NSSet)
+
+    @objc(removeSortOrdersRankingsRaw:)
+    @NSManaged func removeFromSortOrdersRankingsRaw(_ values: NSSet)
 
 }
 

@@ -4,7 +4,7 @@ import TBAKit
 
 extension EventAllianceBackup {
 
-    var alliances: [EventAlliance] {
+    public var alliances: [EventAlliance] {
         guard let alliancesRaw = getValue(\EventAllianceBackup.alliancesRaw),
             let alliances = alliancesRaw.allObjects as? [EventAlliance] else {
                 return []
@@ -12,18 +12,18 @@ extension EventAllianceBackup {
         return alliances
     }
 
-    var allianceStatus: EventStatusAlliance? {
+    public var allianceStatus: EventStatusAlliance? {
         return getValue(\EventAllianceBackup.allianceStatusRaw)
     }
 
-    var inTeam: Team {
+    public var inTeam: Team {
         guard let inTeam = getValue(\EventAllianceBackup.inTeamRaw) else {
             fatalError("Save EventAllianceBackup before accessing inTeam")
         }
         return inTeam
     }
 
-    var outTeam: Team {
+    public var outTeam: Team {
         guard let outTeam = getValue(\EventAllianceBackup.outTeamRaw) else {
             fatalError("Save EventAllianceBackup before accessing outTeam")
         }
@@ -46,11 +46,20 @@ public class EventAllianceBackup: NSManagedObject {
 
 }
 
-// MARK: Generated accessors for alliancesMany
+// MARK: Generated accessors for alliancesRaw
 extension EventAllianceBackup {
 
-    @objc(removeFromalliancesRawObject:)
-    @NSManaged func removeFromalliancesRaw(_ value: EventAlliance)
+    @objc(addAlliancesRawObject:)
+    @NSManaged func addToAlliancesRaw(_ value: EventAlliance)
+
+    @objc(removeAlliancesRawObject:)
+    @NSManaged func removeFromAlliancesRaw(_ value: EventAlliance)
+
+    @objc(addAlliancesRaw:)
+    @NSManaged func addToAlliancesRaw(_ values: NSSet)
+
+    @objc(removeAlliancesRaw:)
+    @NSManaged func removeFromAlliancesRaw(_ values: NSSet)
 
 }
 

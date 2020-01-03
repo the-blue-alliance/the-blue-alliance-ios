@@ -43,13 +43,12 @@ extension EventStatus {
         return getValue(\EventStatus.qualRaw)
     }
 
-    public var team: Team? {
+    public var team: Team {
         guard let team = getValue(\EventStatus.teamRaw) else {
             fatalError("Save EventStatus before accessing team")
         }
         return team
     }
-
 
 }
 

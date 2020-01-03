@@ -144,9 +144,11 @@ extension Event {
         return year
     }
 
-    // TODO: Pretty sure this will never be nil
-    public var alliances: NSOrderedSet? {
-        return getValue(\Event.alliancesRaw)
+    public var alliances: NSOrderedSet {
+        guard let alliances = getValue(\Event.alliancesRaw) else {
+            fatalError("Save Event before accessing alliances")
+        }
+        return alliances
     }
 
     public var awards: [Award] {
@@ -505,6 +507,41 @@ public class Event: NSManagedObject {
 
 }
 
+// MARK: Generated accessors for alliancesRaw
+extension Event {
+
+    @objc(insertObject:inAlliancesRawAtIndex:)
+    @NSManaged func insertIntoAlliancesRaw(_ value: EventAlliance, at idx: Int)
+
+    @objc(removeObjectFromAlliancesRawAtIndex:)
+    @NSManaged func removeFromAlliancesRaw(at idx: Int)
+
+    @objc(insertAlliancesRaw:atIndexes:)
+    @NSManaged func insertIntoAlliancesRaw(_ values: [EventAlliance], at indexes: NSIndexSet)
+
+    @objc(removeAlliancesRawAtIndexes:)
+    @NSManaged func removeFromAlliancesRaw(at indexes: NSIndexSet)
+
+    @objc(replaceObjectInAlliancesRawAtIndex:withObject:)
+    @NSManaged func replaceAlliancesRaw(at idx: Int, with value: EventAlliance)
+
+    @objc(replaceAlliancesRawAtIndexes:withAlliancesRaw:)
+    @NSManaged func replaceAlliancesRaw(at indexes: NSIndexSet, with values: [EventAlliance])
+
+    @objc(addAlliancesRawObject:)
+    @NSManaged func addToAlliancesRaw(_ value: EventAlliance)
+
+    @objc(removeAlliancesRawObject:)
+    @NSManaged func removeFromAlliancesRaw(_ value: EventAlliance)
+
+    @objc(addAlliancesRaw:)
+    @NSManaged func addToAlliancesRaw(_ values: NSOrderedSet)
+
+    @objc(removeAlliancesRaw:)
+    @NSManaged func removeFromAlliancesRaw(_ values: NSOrderedSet)
+
+}
+
 // MARK: Generated accessors for awardsRaw
 extension Event {
 
@@ -539,6 +576,23 @@ extension Event {
 
 }
 
+// MARK: Generated accessors for rankingsRaw
+extension Event {
+
+    @objc(addRankingsRawObject:)
+    @NSManaged public func addToRankingsRaw(_ value: EventRanking)
+
+    @objc(removeRankingsRawObject:)
+    @NSManaged public func removeFromRankingsRaw(_ value: EventRanking)
+
+    @objc(addRankingsRaw:)
+    @NSManaged public func addToRankingsRaw(_ values: NSSet)
+
+    @objc(removeRankingsRaw:)
+    @NSManaged public func removeFromRankingsRaw(_ values: NSSet)
+
+}
+
 // MARK: Generated accessors for statusesRaw
 extension Event {
 
@@ -553,6 +607,23 @@ extension Event {
 
     @objc(removeStatusesRaw:)
     @NSManaged func removeFromStatusesRaw(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for webcastsRaw
+extension Event {
+
+    @objc(addWebcastsRawObject:)
+    @NSManaged func addToWebcastsRaw(_ value: Webcast)
+
+    @objc(removeWebcastsRawObject:)
+    @NSManaged func removeFromWebcastsRaw(_ value: Webcast)
+
+    @objc(addWebcastsRaw:)
+    @NSManaged func addToWebcastsRaw(_ values: NSSet)
+
+    @objc(removeWebcastsRaw:)
+    @NSManaged func removeFromWebcastsRaw(_ values: NSSet)
 
 }
 

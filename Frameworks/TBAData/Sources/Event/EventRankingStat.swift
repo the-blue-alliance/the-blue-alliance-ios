@@ -10,6 +10,14 @@ extension EventRankingStat {
         return value
     }
 
+    public var extraStatsRanking: EventRanking? {
+        return getValue(\EventRankingStat.extraStatsRankingRaw)
+    }
+
+    public var sortOrderRanking: EventRanking? {
+        return getValue(\EventRankingStat.sortOrderRankingRaw)
+    }
+
 }
 
 @objc(EventRankingStat)

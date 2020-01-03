@@ -13,9 +13,11 @@ extension EventAlliance {
         return getValue(\EventAlliance.backupRaw)
     }
 
-    // TODO: Pretty sure these will never be nil
-    public var declines: NSOrderedSet? {
-        return getValue(\EventAlliance.declinesRaw)
+    public var declines: NSOrderedSet {
+        guard let declines = getValue(\EventAlliance.declinesRaw) else {
+            fatalError("Save EventAlliance before accessing declines")
+        }
+        return declines
     }
 
     public var event: Event {
@@ -127,7 +129,7 @@ extension EventAlliance: Managed {
                 // AllianceBackup will become an orphan - delete
                 managedObjectContext?.delete(backup)
             } else {
-                backup.removeFromalliancesRaw(self)
+                backup.removeFromAlliancesRaw(self)
             }
         }
     }

@@ -46,11 +46,20 @@ public class Webcast: NSManagedObject {
 
 }
 
-// MARK: Generated accessors for eventsMany
+// MARK: Generated accessors for eventsRaw
 extension Webcast {
 
-    @objc(removeFromEventsRawObject:)
+    @objc(addEventsRawObject:)
+    @NSManaged func addToEventsRaw(_ value: Event)
+
+    @objc(removeEventsRawObject:)
     @NSManaged func removeFromEventsRaw(_ value: Event)
+
+    @objc(addEventsRaw:)
+    @NSManaged func addToEventsRaw(_ values: NSSet)
+
+    @objc(removeEventsRaw:)
+    @NSManaged func removeFromEventsRaw(_ values: NSSet)
 
 }
 
