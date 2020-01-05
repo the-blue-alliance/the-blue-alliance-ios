@@ -993,12 +993,6 @@ extension Event {
                            #keyPath(Event.keyRaw), key)
     }
 
-//    public static func subqueryPredicate(keyPath: String, eventKey: String) -> NSPredicate {
-//        return NSPredicate(format: "SUBQUERY(%K, $e, $e.%K == %@)",
-//                           keyPath,
-//                           #keyPath(Event.keyString), eventKey)
-//    }
-
     public static func champsYearPredicate(key: String, year: Int) -> NSPredicate {
         // 2017 and onward - handle multiple CMPs
         let yearPredicate = Event.yearPredicate(year: year)
@@ -1030,10 +1024,10 @@ extension Event {
         return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, predicate])
     }
 
+    // TODO: This is crashing...
     private static func teamPredicate(teamKey: String) -> NSPredicate {
         return NSPredicate(format: "SUBQUERY(%K, $t, $t.%K == %@)",
-                           #keyPath(Event.teamsRaw),
-                           #keyPath(Team.keyRaw), teamKey)
+                           #keyPath(Event.teamsRaw), #keyPath(Team.keyRaw), teamKey)
     }
 
     public static func teamYearPredicate(teamKey: String, year: Int) -> NSPredicate {

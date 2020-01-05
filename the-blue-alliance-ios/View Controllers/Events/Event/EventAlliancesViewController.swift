@@ -108,7 +108,7 @@ private class EventAlliancesViewController: TBATableViewController {
     // MARK: Table View Data Source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let rows = event.alliances?.count ?? 0
+        let rows = event.alliances.count
         if rows == 0 {
             showNoDataView()
         }
@@ -117,7 +117,7 @@ private class EventAlliancesViewController: TBATableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> EventAllianceTableViewCell {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as EventAllianceTableViewCell
-        let alliance = event.alliances!.object(at: indexPath.row) as! EventAlliance
+        let alliance = event.alliances.object(at: indexPath.row) as! EventAlliance
 
         cell.viewModel = EventAllianceCellViewModel(alliance: alliance, allianceNumber: indexPath.row + 1)
         cell.teamKeySelected = { [weak self] (teamKey) in
@@ -148,10 +148,7 @@ extension EventAlliancesViewController: Refreshable {
     }
 
     var isDataSourceEmpty: Bool {
-        guard let alliances = event.alliances else {
-            return true
-        }
-        return alliances.count == 0
+        return event.alliances.count == 0
     }
 
     @objc func refresh() {

@@ -407,6 +407,10 @@ extension Match: Managed {
 
 extension Match {
 
+    public static func compLevelSortOrderKeyPath() -> String {
+        return #keyPath(Match.compLevelSortOrderRaw)
+    }
+
     public static func sortDescriptors(ascending: Bool) -> [NSSortDescriptor] {
         // TODO: Support play-by order during event
         return [
