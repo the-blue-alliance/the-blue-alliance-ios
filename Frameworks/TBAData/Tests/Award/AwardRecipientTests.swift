@@ -1,9 +1,10 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
 @testable import TBAData
 
-class AwardRecipientTestCase: AwardTestCase {
+class AwardRecipientTestCase: TBADataTestCase {
 
     func test_awardee() {
         let recipient = AwardRecipient.init(entity: AwardRecipient.entity(), insertInto: persistentContainer.viewContext)
@@ -33,6 +34,11 @@ class AwardRecipientTestCase: AwardTestCase {
         let team = insertTeam()
         recipient.teamRaw = team
         XCTAssertEqual(recipient.team, team)
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<AwardRecipient> = AwardRecipient.fetchRequest()
+        XCTAssertEqual(fr.entityName, AwardRecipient.entityName)
     }
 
     func test_insert_awardee_team() {
@@ -66,7 +72,7 @@ class AwardRecipientTestCase: AwardTestCase {
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
     }
 
-    override func test_insert_validate() {
+    func test_insert_validate() {
         let modelAwardRecipient = TBAAwardRecipient(teamKey: "frc7332")
         let awardRecipient = AwardRecipient.insert(modelAwardRecipient, in: persistentContainer.viewContext)
 
@@ -133,7 +139,7 @@ class AwardRecipientTestCase: AwardTestCase {
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
     }
 
-    override func test_delete() {
+    func test_delete() {
         let event = insertDistrictEvent()
 
         let modelRecipient = TBAAwardRecipient(teamKey: "frc7332")
@@ -186,7 +192,7 @@ class AwardRecipientTestCase: AwardTestCase {
         XCTAssertThrowsError(try persistentContainer.viewContext.save())
     }
 
-    override func test_isOrphaned() {
+    func test_isOrphaned() {
         let recipient = AwardRecipient.init(entity: AwardRecipient.entity(), insertInto: persistentContainer.viewContext)
         // No Award - should be orphaned
         XCTAssert(recipient.isOrphaned)

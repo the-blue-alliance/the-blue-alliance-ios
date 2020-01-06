@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -43,6 +44,29 @@ class DistrictRankingTestCase: TBADataTestCase {
         let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
         rankings.teamRaw = team
         XCTAssertEqual(rankings.team, team)
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<DistrictRanking> = DistrictRanking.fetchRequest()
+        XCTAssertEqual(fr.entityName, DistrictRanking.entityName)
+    }
+
+    func test_districtPredicate() {
+        let ranking = DistrictRanking.init(entity: DistrictRanking.entity(), insertInto: persistentContainer.viewContext)
+        _ = DistrictRanking.init(entity: DistrictRanking.entity(), insertInto: persistentContainer.viewContext)
+        let district = insertDistrict()
+        ranking.districtRaw = district
+
+        let results = DistrictRanking.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = DistrictRanking.districtPredicate(districtKey: district.key)
+        }
+        XCTAssertEqual(results, [ranking])
+    }
+
+    func test_rankSortDescriptor() {
+        let sd = DistrictRanking.rankSortDescriptor()
+        XCTAssertEqual(sd.key, #keyPath(DistrictRanking.rankRaw))
+        XCTAssert(sd.ascending)
     }
 
     func test_insert() {

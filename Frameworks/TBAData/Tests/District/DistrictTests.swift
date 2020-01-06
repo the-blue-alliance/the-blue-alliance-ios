@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -54,6 +55,41 @@ class DistrictTestCase: TBADataTestCase {
         let team = insertTeam()
         district.teamsRaw = NSSet(array: [team])
         XCTAssertEqual(district.teams, [team])
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<District> = District.fetchRequest()
+        XCTAssertEqual(fr.entityName, District.entityName)
+    }
+
+    func test_predicate() {
+        let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        district.keyRaw = "2019zor"
+        let district2 = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        district2.keyRaw = "2020zor"
+
+        let results = District.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = District.predicate(key: "2019zor")
+        }
+        XCTAssertEqual(results, [district])
+    }
+
+    func test_yearPredicate() {
+        let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        district.yearRaw = NSNumber(value: 2019)
+        let district2 = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        district2.yearRaw = NSNumber(value: 2020)
+
+        let results = District.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = District.yearPredicate(year: 2019)
+        }
+        XCTAssertEqual(results, [district])
+    }
+
+    func test_nameSortDescriptor() {
+        let sd = District.nameSortDescriptor()
+        XCTAssertEqual(sd.key, #keyPath(District.nameRaw))
+        XCTAssert(sd.ascending)
     }
 
     func test_insert_year() {

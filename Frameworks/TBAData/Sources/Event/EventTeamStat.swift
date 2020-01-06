@@ -73,6 +73,18 @@ extension EventTeamStat: Managed {
 
 extension EventTeamStat {
 
+    public static func oprKeyPath() -> String {
+        return #keyPath(EventTeamStat.oprRaw)
+    }
+
+    public static func dprKeyPath() -> String {
+        return #keyPath(EventTeamStat.dprRaw)
+    }
+
+    public static func ccwmKeyPath() -> String {
+        return #keyPath(EventTeamStat.ccwmRaw)
+    }
+
     public static func predicate(eventKey: String, teamKey: String) -> NSPredicate {
         let eventPredicate = EventTeamStat.eventPredicate(eventKey: eventKey)
         let teamPredicate = NSPredicate(format: "%K == %@",
@@ -86,15 +98,15 @@ extension EventTeamStat {
     }
 
     public static func oprSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(EventTeamStat.oprRaw), ascending: false)
+        return NSSortDescriptor(key: oprKeyPath(), ascending: false)
     }
 
     public static func dprSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(EventTeamStat.dprRaw), ascending: false)
+        return NSSortDescriptor(key: dprKeyPath(), ascending: false)
     }
 
     public static func ccwmSortDescriptor() -> NSSortDescriptor {
-        return NSSortDescriptor(key: #keyPath(EventTeamStat.ccwmRaw), ascending: false)
+        return NSSortDescriptor(key: ccwmKeyPath(), ascending: false)
     }
 
 }

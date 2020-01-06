@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -36,6 +37,59 @@ class AwardTestCase: TBADataTestCase {
         let r = AwardRecipient.insert(rm, in: persistentContainer.viewContext)
         award.recipientsRaw = NSSet(array: [r])
         XCTAssertEqual(award.recipients, [r])
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<Award> = Award.fetchRequest()
+        XCTAssertEqual(fr.entityName, Award.entityName)
+    }
+
+    func test_eventPredicate() {
+        let event = insertEvent()
+        _ = Award.init(entity: Award.entity(), insertInto: persistentContainer.viewContext)
+        let award = Award.init(entity: Award.entity(), insertInto: persistentContainer.viewContext)
+        award.eventRaw = event
+
+        let results = Award.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = Award.eventPredicate(eventKey: event.key)
+        }
+        XCTAssertEqual(results, [award])
+    }
+
+    func test_teamPredicate() {
+        let team = insertTeam()
+        let recipient = AwardRecipient.init(entity: AwardRecipient.entity(), insertInto: persistentContainer.viewContext)
+        recipient.teamRaw = team
+        _ = Award.init(entity: Award.entity(), insertInto: persistentContainer.viewContext)
+        let award = Award.init(entity: Award.entity(), insertInto: persistentContainer.viewContext)
+        award.recipientsRaw = NSSet(array: [recipient])
+
+        let results = Award.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = Award.teamPredicate(teamKey: team.key)
+        }
+        XCTAssertEqual(results, [award])
+    }
+
+    func test_teamEventPredicate() {
+        let team = insertTeam()
+        let event = insertEvent()
+        let recipient = AwardRecipient.init(entity: AwardRecipient.entity(), insertInto: persistentContainer.viewContext)
+        recipient.teamRaw = team
+        let eventAward = Award.init(entity: Award.entity(), insertInto: persistentContainer.viewContext)
+        eventAward.eventRaw = event
+        let award = Award.init(entity: Award.entity(), insertInto: persistentContainer.viewContext)
+        award.recipientsRaw = NSSet(array: [recipient])
+        award.eventRaw = event
+        let results = Award.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = Award.teamEventPredicate(teamKey: team.key, eventKey: event.key)
+        }
+        XCTAssertEqual(results, [award])
+    }
+
+    func test_typeSortDescriptor() {
+        let sd = Award.typeSortDescriptor()
+        XCTAssertEqual(sd.key, #keyPath(Award.awardTypeRaw))
+        XCTAssert(sd.ascending)
     }
 
     func test_insert() {

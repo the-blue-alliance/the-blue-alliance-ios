@@ -108,11 +108,10 @@ extension AwardRecipient: Managed {
             } else if let awardee = model.awardee {
                 return NSPredicate(format: "%K == %@",
                                    #keyPath(AwardRecipient.awardeeRaw), awardee)
-            } else {
-                return NSPredicate(format: "%K == nil AND %K == nil",
-                                   #keyPath(AwardRecipient.awardeeRaw),
-                                   #keyPath(AwardRecipient.teamRaw.keyRaw))
             }
+            return NSPredicate(format: "%K == nil AND %K == nil",
+                               #keyPath(AwardRecipient.awardeeRaw),
+                               #keyPath(AwardRecipient.teamRaw.keyRaw))
         }
 
         return findOrCreate(in: context, matching: predicate) { (awardRecipient) in
@@ -130,9 +129,6 @@ extension AwardRecipient: Managed {
 extension AwardRecipient: Orphanable {
 
     public var isOrphaned: Bool {
-        guard let awards = getValue(\AwardRecipient.awardsRaw) else {
-            return true
-        }
         return awards.count == 0
     }
 

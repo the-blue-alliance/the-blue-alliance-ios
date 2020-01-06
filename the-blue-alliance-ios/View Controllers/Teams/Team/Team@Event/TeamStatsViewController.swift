@@ -80,11 +80,11 @@ class TeamStatsViewController: TBATableViewController, Observable {
         let statName: String = {
             switch indexPath.row {
             case 0:
-                return "opr"
+                return EventTeamStat.oprKeyPath()
             case 1:
-                return "dpr"
+                return EventTeamStat.dprKeyPath()
             case 2:
-                return "ccwm"
+                return EventTeamStat.ccwmKeyPath()
             default:
                 return ""
             }

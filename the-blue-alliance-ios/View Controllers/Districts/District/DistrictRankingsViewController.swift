@@ -65,7 +65,7 @@ class DistrictRankingsViewController: TBATableViewController {
         fetchRequest.sortDescriptors = [
             DistrictRanking.rankSortDescriptor()
         ]
-        fetchRequest.predicate = DistrictRanking.districtPredicate(district: district)
+        fetchRequest.predicate = DistrictRanking.districtPredicate(districtKey: district.key)
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController = TableViewDataSourceFetchedResultsController(dataSource: dataSource, fetchedResultsController: frc)

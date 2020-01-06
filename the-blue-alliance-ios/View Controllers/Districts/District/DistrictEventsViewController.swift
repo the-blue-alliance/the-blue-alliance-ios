@@ -67,7 +67,7 @@ class DistrictEventsViewController: EventsViewController {
     }
 
     override var fetchRequestPredicate: NSPredicate {
-        return District.predicate(key: district.key)
+        return Event.districtPredicate(districtKey: district.key)
     }
 
 }

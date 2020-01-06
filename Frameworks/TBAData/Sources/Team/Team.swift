@@ -80,7 +80,7 @@ extension Team {
     }
 
     public var yearsParticipated: [Int]? {
-        return getValue(\Team.yearsParticipatedRaw)
+        return getValue(\Team.yearsParticipatedRaw)?.sorted().reversed()
     }
 
     public var alliances: [MatchAlliance] {
@@ -453,7 +453,7 @@ extension Team: Managed {
         guard let managedObjectContext = managedObjectContext else {
             return
         }
-        self.yearsParticipatedRaw = yearsParticipated.reversed().sorted()
+        self.yearsParticipatedRaw = yearsParticipated
     }
 
 }

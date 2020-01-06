@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -62,6 +63,29 @@ class DistrictEventPointsTestCase: TBADataTestCase {
         let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
         eventPoints.teamRaw = team
         XCTAssertEqual(eventPoints.team, team)
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<DistrictEventPoints> = DistrictEventPoints.fetchRequest()
+        XCTAssertEqual(fr.entityName, DistrictEventPoints.entityName)
+    }
+
+    func test_eventPredicate() {
+        let eventPoints = DistrictEventPoints.init(entity: DistrictEventPoints.entity(), insertInto: persistentContainer.viewContext)
+        _ = DistrictEventPoints.init(entity: DistrictEventPoints.entity(), insertInto: persistentContainer.viewContext)
+        let event = insertEvent()
+        eventPoints.eventRaw = event
+
+        let results = DistrictEventPoints.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = DistrictEventPoints.eventPredicate(eventKey: event.key)
+        }
+        XCTAssertEqual(results, [eventPoints])
+    }
+
+    func test_totalSortDescriptor() {
+        let sd = DistrictEventPoints.totalSortDescriptor()
+        XCTAssertEqual(sd.key, #keyPath(DistrictEventPoints.totalRaw))
+        XCTAssertFalse(sd.ascending)
     }
 
     func test_insert() {

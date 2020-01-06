@@ -126,7 +126,7 @@ class TeamTestCase: TBADataTestCase {
         let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
         XCTAssertNil(team.yearsParticipated)
         team.yearsParticipatedRaw = [2019, 2020]
-        XCTAssertEqual(team.yearsParticipated, [2019, 2020])
+        XCTAssertEqual(team.yearsParticipated, [2020, 2019])
     }
 
     func test_alliances() {

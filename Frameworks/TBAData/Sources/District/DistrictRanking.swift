@@ -94,9 +94,9 @@ extension DistrictRanking {
 
 extension DistrictRanking {
 
-    public static func districtPredicate(district: District) -> NSPredicate {
-        return NSPredicate(format: "%K == %@",
-                           #keyPath(District.keyRaw), district.key)
+    public static func districtPredicate(districtKey: String) -> NSPredicate {
+        return NSPredicate(format: "%K.%K == %@",
+                           #keyPath(DistrictRanking.districtRaw), #keyPath(District.keyRaw), districtKey)
     }
 
     public static func rankSortDescriptor() -> NSSortDescriptor {
