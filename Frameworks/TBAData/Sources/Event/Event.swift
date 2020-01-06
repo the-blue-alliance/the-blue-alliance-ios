@@ -263,23 +263,20 @@ extension Event {
             return shortDateFormatter.string(from: endDate)
         } else if calendar.component(.year, from: startDate) == calendar.component(.year, from: endDate) {
             return "\(shortDateFormatter.string(from: startDate)) to \(shortDateFormatter.string(from: endDate))"
-        } else {
-            return "\(shortDateFormatter.string(from: startDate)) to \(longDateFormatter.string(from: endDate))"
         }
+        return "\(shortDateFormatter.string(from: startDate)) to \(longDateFormatter.string(from: endDate))"
     }
 
     public var weekString: String? {
         guard let eventType = eventType else {
             return nil
         }
-        let year = self.year
 
         if eventType == .championshipDivision || eventType == .championshipFinals {
-            if year >= 2017, let city = city {
+            if self.year >= 2017, let city = city {
                 return "Championship - \(city)"
-            } else {
-                return "Championship"
             }
+            return "Championship"
         } else {
             switch eventType {
             case .unlabeled:
@@ -306,12 +303,10 @@ extension Event {
                 if year == 2016 {
                     if week == 0 {
                         return "Week 0.5"
-                    } else {
-                        return "Week \(week)"
                     }
-                } else {
-                    return "Week \(week + 1)"
+                    return "Week \(week)"
                 }
+                return "Week \(week + 1)"
             }
         }
     }
@@ -474,7 +469,7 @@ public class Event: NSManagedObject {
     @NSManaged var firstEventIDRaw: String?
     @NSManaged var gmapsPlaceIDRaw: String?
     @NSManaged var gmapsURLRaw: String?
-    @NSManaged private var hybridType: String?
+    @NSManaged var hybridType: String?
     @NSManaged var keyRaw: String?
     @NSManaged var latRaw: NSNumber?
     @NSManaged var lngRaw: NSNumber?
@@ -1029,7 +1024,7 @@ extension Event {
         return NSCompoundPredicate(andPredicateWithSubpredicates: [yearPredicate, predicate])
     }
 
-    private static func teamPredicate(teamKey: String) -> NSPredicate {
+    public static func teamPredicate(teamKey: String) -> NSPredicate {
         return NSPredicate(format: "SUBQUERY(%K, $t, $t.%K == %@).@count > 0",
                            #keyPath(Event.teamsRaw), #keyPath(Team.keyRaw), teamKey)
     }
@@ -1190,9 +1185,8 @@ extension Event {
             // Future-proofing - group DCMP divisions together based on district
             if eventType == EventType.districtChampionshipDivision.rawValue, let district = district {
                 return "\(eventType)..\(district.abbreviation).dcmpd"
-            } else {
-                return "\(eventType).dcmp"
             }
+            return "\(eventType).dcmp"
         } else if let district = district, !isDistrictChampionshipEvent {
             return "\(eventType).\(district.abbreviation)"
         } else if eventType == EventType.offseason.rawValue, let startDate = startDate {
@@ -1237,26 +1231,24 @@ extension Event: Comparable {
             // We've already handled preseason (100) so now we can assume offseason's (99) will always be the highest type
             return lhsType < rhsType
         }
+        // Throw Festival of Champions at the end, since it's the last event
+        if lhs.isFoC || rhs.isFoC {
+            return lhsType < rhsType
+        }
         // CMP finals come after everything besides offseason, unlabeled
         if lhs.isChampionshipFinals || rhs.isChampionshipFinals {
             // Make sure we handle that districtCMPDivision case
             if lhs.isDistrictChampionshipDivision || rhs.isDistrictChampionshipDivision {
                 return lhsType > rhsType
-            } else {
-                return lhsType < rhsType
             }
+            return lhsType < rhsType
         }
         // CMP divisions are next
         if lhs.isChampionshipDivision || rhs.isChampionshipDivision {
             // Make sure we handle that districtCMPDivision case
             if lhs.isDistrictChampionshipDivision || rhs.isDistrictChampionshipDivision {
                 return lhsType > rhsType
-            } else {
-                return lhsType < rhsType
             }
-        }
-        // Throw Festival of Champions at the end, since it's the last event
-        if lhs.isFoC || rhs.isFoC {
             return lhsType < rhsType
         }
         // EVERYTHING ELSE (districts, regionals, DCMPs, DCMP divisions) has weeks. This is just an easy sort... which event has a first week
@@ -1265,14 +1257,12 @@ extension Event: Comparable {
         if let lhsWeek = lhs.week, let rhsWeek = rhs.week {
             if lhsWeek == rhsWeek {
                 // Make sure we handle the weird case of district championship divisions being a higher number than DCMPs
-                if lhs.isDistrictChampionshipEvent || rhs.isDistrictChampionshipEvent {
+                if lhs.isDistrictChampionshipEvent && rhs.isDistrictChampionshipEvent {
                     return lhsType > rhsType
-                } else {
-                    return lhsType < rhsType
                 }
-            } else {
-                return lhsWeek < rhsWeek
+                return lhsType < rhsType
             }
+            return lhsWeek < rhsWeek
         }
         return false
     }

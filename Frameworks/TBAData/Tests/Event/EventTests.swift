@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -189,6 +190,329 @@ class EventTestCase: TBADataTestCase {
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         event.yearRaw = NSNumber(value: 2020)
         XCTAssertEqual(event.year, 2020)
+    }
+
+    func test_alliances() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(event.alliances.array as! [EventAlliance], [])
+        let alliance = EventAlliance.init(entity: EventAlliance.entity(), insertInto: persistentContainer.viewContext)
+        event.alliancesRaw = NSOrderedSet(array: [alliance])
+        XCTAssertEqual(event.alliances.array as! [EventAlliance], [alliance])
+    }
+
+    func test_awards() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(event.awards, [])
+        let award = Award.init(entity: Award.entity(), insertInto: persistentContainer.viewContext)
+        event.awardsRaw = NSSet(array: [award])
+        XCTAssertEqual(event.awards, [award])
+    }
+
+    func test_district() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertNil(event.district)
+        let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
+        event.districtRaw = district
+        XCTAssertEqual(event.district, district)
+    }
+
+    func test_divisions() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(event.divisions, [])
+        let division = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.divisionsRaw = NSSet(array: [division])
+        XCTAssertEqual(event.divisions, [division])
+    }
+
+    func test_insights() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertNil(event.insights)
+        let insights = EventInsights(entity: EventInsights.entity(), insertInto: persistentContainer.viewContext)
+        event.insightsRaw = insights
+        XCTAssertEqual(event.insights, insights)
+    }
+
+    func test_matches() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(event.matches, [])
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        event.matchesRaw = NSSet(array: [match])
+        XCTAssertEqual(event.matches, [match])
+    }
+
+    func test_parentEvent() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertNil(event.parentEvent)
+        let parentEvent = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.parentEventRaw = parentEvent
+        XCTAssertEqual(event.parentEvent, parentEvent)
+    }
+
+    func test_points() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(event.points, [])
+        let points = DistrictEventPoints.init(entity: DistrictEventPoints.entity(), insertInto: persistentContainer.viewContext)
+        event.pointsRaw = NSSet(array: [points])
+        XCTAssertEqual(event.points, [points])
+    }
+
+    func test_rankings() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(event.rankings, [])
+        let rankings = EventRanking.init(entity: EventRanking.entity(), insertInto: persistentContainer.viewContext)
+        event.rankingsRaw = NSSet(array: [rankings])
+        XCTAssertEqual(event.rankings, [rankings])
+    }
+
+    func test_stats() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(event.stats, [])
+        let stats = EventTeamStat.init(entity: EventTeamStat.entity(), insertInto: persistentContainer.viewContext)
+        event.statsRaw = NSSet(array: [stats])
+        XCTAssertEqual(event.stats, [stats])
+    }
+
+    func test_status() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertNil(event.status)
+        let status = Status.init(entity: Status.entity(), insertInto: persistentContainer.viewContext)
+        event.statusRaw = status
+        XCTAssertEqual(event.status, status)
+    }
+
+    func test_statuses() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(event.statuses, [])
+        let status = EventStatus.init(entity: EventStatus.entity(), insertInto: persistentContainer.viewContext)
+        event.statusesRaw = NSSet(array: [status])
+        XCTAssertEqual(event.statuses, [status])
+    }
+
+    func test_teams() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(event.teams, [])
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        event.teamsRaw = NSSet(array: [team])
+        XCTAssertEqual(event.teams, [team])
+    }
+
+    func test_webcasts() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertEqual(event.webcasts, [])
+        let webcast = Webcast.init(entity: Webcast.entity(), insertInto: persistentContainer.viewContext)
+        event.webcastsRaw = NSSet(array: [webcast])
+        XCTAssertEqual(event.webcasts, [webcast])
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<Event> = Event.fetchRequest()
+        XCTAssertEqual(fr.entityName, Event.entityName)
+    }
+
+    func test_districtPredicate() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        _ = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        let district = insertDistrict()
+        event.districtRaw = district
+
+        let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = Event.districtPredicate(districtKey: district.key)
+        }
+        XCTAssertEqual(results, [event])
+    }
+
+    func test_champsYearPredicate() {
+        let parentEvent = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        parentEvent.eventTypeRaw = NSNumber(value: EventType.championshipFinals.rawValue)
+        parentEvent.yearRaw = NSNumber(value: 2020)
+        parentEvent.keyRaw = "2020cmpmi"
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.eventTypeRaw = NSNumber(value: EventType.championshipDivision.rawValue)
+        event.parentEventRaw = parentEvent
+        event.keyRaw = "2020arc"
+        event.yearRaw = NSNumber(value: 2020)
+        let otherEvent = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        otherEvent.eventTypeRaw = NSNumber(value: EventType.championshipFinals.rawValue)
+        otherEvent.keyRaw = "2020cmptx"
+        otherEvent.yearRaw = NSNumber(value: 2020)
+
+        let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = Event.champsYearPredicate(key: "2020cmpmi", year: 2020)
+        }
+        XCTAssert(results.contains(parentEvent))
+        XCTAssert(results.contains(event))
+    }
+
+    func test_eventTypeYearPredicate() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.eventTypeRaw = NSNumber(value: EventType.district.rawValue)
+        event.yearRaw = NSNumber(value: 2020)
+        let otherEvent = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        otherEvent.eventTypeRaw = NSNumber(value: EventType.regional.rawValue)
+        otherEvent.yearRaw = NSNumber(value: 2020)
+
+        let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = Event.eventTypeYearPredicate(eventType: .district, year: 2020)
+        }
+        XCTAssertEqual(results, [event])
+    }
+
+    func test_offseasonYearPredicate() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.eventTypeRaw = NSNumber(value: EventType.offseason.rawValue)
+        event.startDateRaw = Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 1))
+        event.endDateRaw = Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 3))
+        event.yearRaw = NSNumber(value: 2020)
+        let otherEvent = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        otherEvent.eventTypeRaw = NSNumber(value: EventType.offseason.rawValue)
+        otherEvent.startDateRaw = Calendar.current.date(from: DateComponents(year: 2020, month: 4, day: 1))
+        otherEvent.endDateRaw = Calendar.current.date(from: DateComponents(year: 2020, month: 4, day: 3))
+        otherEvent.yearRaw = NSNumber(value: 2020)
+
+        let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = Event.offseasonYearPredicate(startDate: Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 1))!,
+                                                        endDate: Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 31))!,
+                                                        year: 2020)
+        }
+        XCTAssertEqual(results, [event])
+    }
+
+    func test_teamPredicate() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        _ = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        team.keyRaw = "frc7332"
+        event.teamsRaw = NSSet(array: [team])
+
+        let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = Event.teamPredicate(teamKey: "frc7332")
+        }
+        XCTAssertEqual(results, [event])
+    }
+
+    func test_teamYearPredicate() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.yearRaw = NSNumber(value: 2020)
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        team.keyRaw = "frc7332"
+        event.teamsRaw = NSSet(array: [team])
+
+        let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = Event.teamYearPredicate(teamKey: "frc7332", year: 2020)
+        }
+        XCTAssertEqual(results, [event])
+    }
+
+    func test_teamYearNonePredicate() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.yearRaw = NSNumber(value: 2020)
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        team.keyRaw = "frc7332"
+        event.teamsRaw = NSSet(array: [team])
+
+        let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = Event.teamYearNonePredicate(teamKey: "frc7332")
+        }
+        XCTAssertEqual(results, [])
+    }
+
+    func test_unplayedEventPredicate() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.yearRaw = NSNumber(value: 2020)
+        event.endDateRaw = Calendar.current.date(from: DateComponents(year: 2020, month: 4, day: 1))
+        event.eventTypeRaw = NSNumber(value: EventType.district.rawValue)
+        let otherEvent = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        otherEvent.yearRaw = NSNumber(value: 2020)
+        otherEvent.endDateRaw = Calendar.current.date(from: DateComponents(year: 2020, month: 4, day: 1))
+        otherEvent.eventTypeRaw = NSNumber(value: EventType.championshipDivision.rawValue)
+        let thirdEvent = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        thirdEvent.yearRaw = NSNumber(value: 2020)
+        thirdEvent.endDateRaw = Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 30))
+        thirdEvent.eventTypeRaw = NSNumber(value: EventType.district.rawValue)
+
+        let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = Event.unplayedEventPredicate(date: Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 31))!, year: 2020)
+        }
+        XCTAssertEqual(results, [event])
+    }
+
+    func test_weekYearPredicate() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.weekRaw = NSNumber(value: 1)
+        event.yearRaw = NSNumber(value: 2020)
+        let otherEvent = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        otherEvent.weekRaw = NSNumber(value: 0)
+        otherEvent.yearRaw = NSNumber(value: 2020)
+
+        let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = Event.weekYearPredicate(week: 1, year: 2020)
+        }
+        XCTAssertEqual(results, [event])
+    }
+
+    func test_yearPredicate() {
+        let p = Event.yearPredicate(year: 2020)
+        print(p.predicateFormat)
+        XCTAssertEqual(p.predicateFormat, "yearRaw == 2020")
+    }
+
+    func test_nonePredicate() {
+        let p = Event.nonePredicate()
+        print(p.predicateFormat)
+        XCTAssertEqual(p.predicateFormat, "yearRaw == -1")
+    }
+
+    func test_sortDescriptors() {
+        let one = Event.startDateSortDescriptor()
+        let two = Event.nameSortDescriptor()
+        let sd = Event.sortDescriptors()
+        XCTAssert(sd.contains(one))
+        XCTAssert(sd.contains(two))
+    }
+
+    func test_endDateSortDescriptor() {
+        let sd = Event.endDateSortDescriptor()
+        XCTAssertEqual(sd.key, #keyPath(Event.endDateRaw))
+        XCTAssert(sd.ascending)
+    }
+
+    func test_hybridTypeSortDescriptor() {
+        let sd = Event.hybridTypeSortDescriptor()
+        XCTAssertEqual(sd.key, #keyPath(Event.hybridType))
+        XCTAssert(sd.ascending)
+    }
+
+    func test_nameSortDescriptor() {
+        let sd = Event.nameSortDescriptor()
+        XCTAssertEqual(sd.key, #keyPath(Event.nameRaw))
+        XCTAssert(sd.ascending)
+    }
+
+    func test_startDateSortDescriptor() {
+        let sd = Event.startDateSortDescriptor()
+        XCTAssertEqual(sd.key, #keyPath(Event.startDateRaw))
+        XCTAssert(sd.ascending)
+    }
+
+    func test_weekSortDescriptor() {
+        let sd = Event.weekSortDescriptor()
+        XCTAssertEqual(sd.key, #keyPath(Event.weekRaw))
+        XCTAssert(sd.ascending)
+    }
+
+    func test_hybridTypeKeyPath() {
+        let kp = Event.hybridTypeKeyPath()
+        XCTAssertEqual(kp, #keyPath(Event.hybridType))
+    }
+
+    func test_weekKeyPath() {
+        let kp = Event.weekKeyPath()
+        XCTAssertEqual(kp, #keyPath(Event.weekRaw))
+    }
+
+    func test_populatedEventsPredicate() {
+        let p = Event.populatedEventsPredicate()
+        XCTAssertEqual(p.predicateFormat, "endDateRaw != nil AND eventCodeRaw != nil AND eventTypeRaw != nil AND keyRaw != nil AND nameRaw != nil AND startDateRaw != nil AND yearRaw != nil")
     }
 
     func test_insert_year() {
@@ -734,6 +1058,11 @@ class EventTestCase: TBADataTestCase {
         return event
     }
 
+    func test_isHappeningNow_none() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertFalse(event.isHappeningNow)
+    }
+
     func test_isHappeningNow() {
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
 
@@ -752,16 +1081,6 @@ class EventTestCase: TBADataTestCase {
         event.startDateRaw = calendar.date(byAdding: DateComponents(day: -3), to: today)
         event.endDateRaw = calendar.date(byAdding: DateComponents(day: -1), to: today)
         XCTAssertFalse(event.isHappeningNow)
-    }
-
-    func test_isDistrictChampionshipEvent() {
-        let dcmp = event(type: EventType.districtChampionship)
-        XCTAssert(dcmp.isDistrictChampionshipEvent)
-        XCTAssert(dcmp.isDistrictChampionship)
-
-        let dcmpDivision = event(type: EventType.districtChampionshipDivision)
-        XCTAssert(dcmpDivision.isDistrictChampionshipEvent)
-        XCTAssertFalse(dcmpDivision.isDistrictChampionship)
     }
 
     func test_hybridType_regional() {
@@ -892,6 +1211,84 @@ class EventTestCase: TBADataTestCase {
         }
     }
 
+    func test_weekString_noEventType() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        // No eventType
+        XCTAssertNil(event.weekString)
+    }
+
+    func test_weekString_championship() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        // CMP/CMP Finals, pre-2017
+        event.yearRaw = NSNumber(value: 2016)
+        event.eventTypeRaw = NSNumber(value: EventType.championshipDivision.rawValue)
+        XCTAssertEqual(event.weekString, "Championship")
+        event.eventTypeRaw = NSNumber(value: EventType.championshipFinals.rawValue)
+        XCTAssertEqual(event.weekString, "Championship")
+
+        // CMP/CMP Finals, post-2017 (#2champs)
+        event.yearRaw = NSNumber(value: 2017)
+        event.eventTypeRaw = NSNumber(value: EventType.championshipDivision.rawValue)
+        // No city
+        event.cityRaw = nil
+        XCTAssertEqual(event.weekString, "Championship")
+        event.eventTypeRaw = NSNumber(value: EventType.championshipFinals.rawValue)
+        XCTAssertEqual(event.weekString, "Championship")
+
+        // City
+        event.cityRaw = "Detroit"
+        event.eventTypeRaw = NSNumber(value: EventType.championshipDivision.rawValue)
+        XCTAssertEqual(event.weekString, "Championship - Detroit")
+        event.eventTypeRaw = NSNumber(value: EventType.championshipFinals.rawValue)
+        XCTAssertEqual(event.weekString, "Championship - Detroit")
+    }
+
+    func test_weekString_unlabeled() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.eventTypeRaw = NSNumber(value: EventType.unlabeled.rawValue)
+        XCTAssertEqual(event.weekString, "Other")
+    }
+
+    func test_weekString_preseason() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.eventTypeRaw = NSNumber(value: EventType.preseason.rawValue)
+        XCTAssertEqual(event.weekString, "Preseason")
+    }
+
+    func test_weekString_offseason() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.eventTypeRaw = NSNumber(value: EventType.offseason.rawValue)
+        XCTAssertEqual(event.weekString, "Offseason")
+
+        event.startDateRaw = Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 1))
+        XCTAssertEqual(event.weekString, "March Offseason")
+    }
+
+    func test_weekString_festivalOfChampions() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.eventTypeRaw = NSNumber(value: EventType.festivalOfChampions.rawValue)
+        XCTAssertEqual(event.weekString, "Festival of Champions")
+    }
+
+    func test_weekString_week() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.eventTypeRaw = NSNumber(value: EventType.district.rawValue)
+        // No week
+        XCTAssertEqual(event.weekString, "Other")
+        // 2016 week 0
+        event.yearRaw = NSNumber(value: 2016)
+        event.weekRaw = NSNumber(value: 0)
+        XCTAssertEqual(event.weekString, "Week 0.5")
+        event.weekRaw = NSNumber(value: 1)
+        XCTAssertEqual(event.weekString, "Week 1")
+        // Other years - regular
+        event.yearRaw = NSNumber(value: 2017)
+        event.weekRaw = NSNumber(value: 0)
+        XCTAssertEqual(event.weekString, "Week 1")
+        event.weekRaw = NSNumber(value: 1)
+        XCTAssertEqual(event.weekString, "Week 2")
+    }
+
     func test_awards_forTeamKey() {
         let event = insertDistrictEvent()
 
@@ -914,6 +1311,190 @@ class EventTestCase: TBADataTestCase {
         XCTAssertEqual(event.awards(for: frc1TeamKey.key).count, 1)
         // Should be no awards for frc2
         XCTAssertEqual(event.awards(for: frc2TeamKey.key).count, 0)
+    }
+
+    func test_safeShortName() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.keyRaw = "2019miket"
+        // No name - use key
+        XCTAssertEqual(event.safeShortName, "miket")
+        // Name - use name
+        event.nameRaw = "FIM District Kettering University Event #1"
+        XCTAssertEqual(event.safeShortName, "FIM District Kettering University Event #1")
+        // Short name - but empty
+        event.shortNameRaw = ""
+        XCTAssertEqual(event.safeShortName, "FIM District Kettering University Event #1")
+        // Short name - use short name
+        event.shortNameRaw = "Kettering University #1"
+        XCTAssertEqual(event.safeShortName, "Kettering University #1")
+    }
+
+    func test_friendlyNameWithYear() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.keyRaw = "2019miket"
+        event.yearRaw = NSNumber(value: 2019)
+        // No info
+        XCTAssertEqual(event.friendlyNameWithYear, "2019 miket Event")
+        // Name
+        event.nameRaw = "FIM District Kettering University Event #1"
+        XCTAssertEqual(event.friendlyNameWithYear, "2019 FIM District Kettering University Event #1 Event")
+        // Short name
+        event.nameRaw = "Kettering University #1"
+        XCTAssertEqual(event.friendlyNameWithYear, "2019 Kettering University #1 Event")
+        // Event type
+        event.eventTypeStringRaw = "District"
+        XCTAssertEqual(event.friendlyNameWithYear, "2019 Kettering University #1 District")
+    }
+
+    func test_isChampionshipEvent() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertFalse(event.isChampionshipEvent)
+        event.eventTypeRaw = NSNumber(value: EventType.championshipDivision.rawValue)
+        XCTAssertTrue(event.isChampionshipEvent)
+        event.eventTypeRaw = NSNumber(value: EventType.championshipFinals.rawValue)
+        XCTAssertTrue(event.isChampionshipEvent)
+    }
+
+    func test_isChampionshipDivision() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertFalse(event.isChampionshipEvent)
+        event.eventTypeRaw = NSNumber(value: EventType.championshipDivision.rawValue)
+        XCTAssertTrue(event.isChampionshipDivision)
+    }
+
+    func test_isChampionshipFinals() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertFalse(event.isChampionshipEvent)
+        event.eventTypeRaw = NSNumber(value: EventType.championshipFinals.rawValue)
+        XCTAssertTrue(event.isChampionshipFinals)
+    }
+
+    func test_isDistrictChampionshipEvent() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertFalse(event.isDistrictChampionshipEvent)
+        event.eventTypeRaw = NSNumber(value: EventType.districtChampionshipDivision.rawValue)
+        XCTAssertTrue(event.isDistrictChampionshipEvent)
+        event.eventTypeRaw = NSNumber(value: EventType.districtChampionship.rawValue)
+        XCTAssertTrue(event.isDistrictChampionshipEvent)
+    }
+
+    func test_isDistrictChampionshipDivision() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertFalse(event.isDistrictChampionshipDivision)
+        event.eventTypeRaw = NSNumber(value: EventType.districtChampionshipDivision.rawValue)
+        XCTAssertTrue(event.isDistrictChampionshipDivision)
+    }
+
+    func test_isDistrictChampionship() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertFalse(event.isDistrictChampionship)
+        event.eventTypeRaw = NSNumber(value: EventType.districtChampionship.rawValue)
+        XCTAssertTrue(event.isDistrictChampionship)
+    }
+
+    func test_isFoC() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertFalse(event.isFoC)
+        event.eventTypeRaw = NSNumber(value: EventType.festivalOfChampions.rawValue)
+        XCTAssertTrue(event.isFoC)
+    }
+
+    func test_isPreseason() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertFalse(event.isPreseason)
+        event.eventTypeRaw = NSNumber(value: EventType.preseason.rawValue)
+        XCTAssertTrue(event.isPreseason)
+    }
+
+    func test_isOffseason() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertFalse(event.isOffseason)
+        event.eventTypeRaw = NSNumber(value: EventType.offseason.rawValue)
+        XCTAssertTrue(event.isOffseason)
+    }
+
+    func test_isRegional() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertFalse(event.isRegional)
+        event.eventTypeRaw = NSNumber(value: EventType.regional.rawValue)
+        XCTAssertTrue(event.isRegional)
+    }
+
+    func test_isUnlabeled() {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        XCTAssertFalse(event.isUnlabeled)
+        event.eventTypeRaw = NSNumber(value: EventType.unlabeled.rawValue)
+        XCTAssertTrue(event.isUnlabeled)
+    }
+
+    func _test_event(type: EventType, week: Int?, year: Int) -> Event {
+        let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        event.eventTypeRaw = NSNumber(value: type.rawValue)
+        if let week = week {
+            event.weekRaw = NSNumber(value: week)
+        }
+        event.yearRaw = NSNumber(value: year)
+        return event
+    }
+
+    func test_comparable_keys() {
+        let one = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        one.keyRaw = "2020a"
+        one.yearRaw = NSNumber(value: 2020)
+        let two = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
+        two.keyRaw = "2020b"
+        two.yearRaw = NSNumber(value: 2020)
+        XCTAssert(one < two)
+    }
+
+    func test_comparable() {
+        let future = _test_event(type: .preseason, week: nil, year: 2020)
+        let preseason = _test_event(type: .preseason, week: nil, year: 2017)
+        let zero = _test_event(type: .regional, week: 0, year: 2017)
+        let one = _test_event(type: .regional, week: 1, year: 2017)
+        let two = _test_event(type: .district, week: 2, year: 2017)
+        let three = _test_event(type: .regional, week: 3, year: 2017)
+        let four = _test_event(type: .regional, week: 4, year: 2017)
+        let five = _test_event(type: .district, week: 5, year: 2017)
+        let fiveDCMP = _test_event(type: .districtChampionship, week: 5, year: 2017)
+        let six = _test_event(type: .regional, week: 6, year: 2017)
+        let sixDistrict = _test_event(type: .district, week: 6, year: 2017)
+        let sixDCMP = _test_event(type: .districtChampionship, week: 6, year: 2017)
+        let sixDCMPDivision = _test_event(type: .districtChampionshipDivision, week: 6, year: 2017)
+        let cmp = _test_event(type: .championshipFinals, week: nil, year: 2017)
+        let cmpDivision = _test_event(type: .championshipDivision, week: nil, year: 2017)
+        let foc = _test_event(type: .festivalOfChampions, week: nil, year: 2017)
+        let offseason = _test_event(type: .offseason, week: 0, year: 2017)
+        let unlabeled = _test_event(type: .unlabeled, week: nil, year: 2017)
+
+        XCTAssert(preseason < future)
+        XCTAssert(preseason < offseason)
+        XCTAssert(preseason < zero)
+        XCTAssert(zero < one)
+        XCTAssert(one < two)
+        XCTAssert(two < three)
+        XCTAssert(three < four)
+        XCTAssert(four < five)
+        XCTAssert(five < six)
+        XCTAssert(five < fiveDCMP)
+        XCTAssert(six < sixDCMP)
+        XCTAssert(six < sixDistrict)
+        XCTAssert(sixDistrict < sixDCMPDivision)
+        XCTAssert(sixDistrict < sixDCMP)
+        XCTAssert(sixDCMPDivision < sixDCMP)
+        XCTAssert(fiveDCMP < sixDCMP)
+        XCTAssert(fiveDCMP < cmp)
+        XCTAssert(sixDCMPDivision < cmpDivision)
+        XCTAssert(sixDCMP < cmpDivision)
+        XCTAssert(sixDCMPDivision < cmp)
+        XCTAssert(sixDCMP < cmp)
+        XCTAssert(cmpDivision < cmp)
+        XCTAssert(cmp < foc)
+        XCTAssert(cmp < unlabeled)
+        XCTAssert(foc < offseason)
+        XCTAssert(offseason < unlabeled)
+        XCTAssert(two < unlabeled)
+        XCTAssert(two < offseason)
     }
 
 }
