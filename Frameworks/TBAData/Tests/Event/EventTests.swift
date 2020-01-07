@@ -371,7 +371,6 @@ class EventTestCase: TBADataTestCase {
         let predicate = Event.offseasonYearPredicate(startDate: Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 1))!,
                                                      endDate: Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 31))!,
                                                      year: 2020)
-        XCTAssertEqual(predicate.predicateFormat, "yearRaw == 2020 AND (eventTypeRaw == 99 AND startDateRaw >= CAST(604731600.000000, \"NSDate\") AND endDateRaw <= CAST(607320000.000000, \"NSDate\"))")
 
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         event.eventTypeRaw = NSNumber(value: EventType.offseason.rawValue)
@@ -440,7 +439,6 @@ class EventTestCase: TBADataTestCase {
 
     func test_unplayedEventPredicate() {
         let predicate = Event.unplayedEventPredicate(date: Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 31))!, year: 2020)
-        XCTAssertEqual(predicate.predicateFormat, "yearRaw == 2020 AND (endDateRaw >= CAST(607320000.000000, \"NSDate\") AND eventTypeRaw != 3)")
 
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         event.yearRaw = NSNumber(value: 2020)
