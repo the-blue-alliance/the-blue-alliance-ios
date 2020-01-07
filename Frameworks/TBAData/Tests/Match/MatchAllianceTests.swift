@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -69,6 +70,11 @@ class MatchAllianceTestCase: TBADataTestCase {
             return Team.insert($0, in: persistentContainer.viewContext)
         })
         XCTAssertEqual(alliance.surrogateTeamKeys, ["frc2", "frc1"])
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<MatchAlliance> = MatchAlliance.fetchRequest()
+        XCTAssertEqual(fr.entityName, MatchAlliance.entityName)
     }
 
     func test_insert() {

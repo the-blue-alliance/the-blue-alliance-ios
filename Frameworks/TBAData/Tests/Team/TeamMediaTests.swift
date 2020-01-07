@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -57,6 +58,64 @@ class TeamMediaTestCase: TBADataTestCase {
         let team = insertTeam()
         media.teamRaw = team
         XCTAssertEqual(media.team, team)
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<TeamMedia> = TeamMedia.fetchRequest()
+        XCTAssertEqual(fr.entityName, TeamMedia.entityName)
+    }
+
+    func test_teamYearPrediate() {
+        let team = insertTeam()
+        let predicate = TeamMedia.teamYearPrediate(teamKey: team.key, year: 2020)
+        XCTAssertEqual(predicate.predicateFormat, "teamRaw.keyRaw == \"frc7332\" AND yearRaw == 2020")
+
+        let one = TeamMedia.insert(TBAMedia(type: "imgur", foreignKey: "frc7332_robot"), year: 2020, in: persistentContainer.viewContext)
+        let two = TeamMedia.insert(TBAMedia(type: "youtube", foreignKey: "frc7332_video"), year: 2020, in: persistentContainer.viewContext)
+        _ = TeamMedia.init(entity: TeamMedia.entity(), insertInto: persistentContainer.viewContext)
+        team.mediaRaw = NSSet(array: [one, two])
+
+        let results = TeamMedia.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = predicate
+        }
+        XCTAssertEqual(results, [one, two])
+    }
+
+    func test_teamYearImagesPrediate() {
+        let team = insertTeam()
+        let predicate = TeamMedia.teamYearImagesPrediate(teamKey: team.key, year: 2020)
+        XCTAssertEqual(predicate.predicateFormat, "teamRaw.keyRaw == \"frc7332\" AND yearRaw == 2020 AND typeStringRaw IN {\"cdphotothread\", \"imgur\", \"instagram-image\", \"grabcad\"}")
+
+        let one = TeamMedia.insert(TBAMedia(type: "imgur", foreignKey: "frc7332_robot"), year: 2020, in: persistentContainer.viewContext)
+        let two = TeamMedia.insert(TBAMedia(type: "youtube", foreignKey: "frc7332_video"), year: 2020, in: persistentContainer.viewContext)
+        team.mediaRaw = NSSet(array: [one, two])
+
+        let results = TeamMedia.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = predicate
+        }
+        XCTAssertEqual(results, [one])
+    }
+
+    func test_nonePredicate() {
+        let team = insertTeam()
+        let predicate = TeamMedia.nonePredicate(teamKey: team.key)
+        XCTAssertEqual(predicate.predicateFormat, "teamRaw.keyRaw == \"frc7332\" AND typeStringRaw == nil")
+
+        let one = TeamMedia.insert(TBAMedia(type: "imgur", foreignKey: "frc7332_robot"), year: 2020, in: persistentContainer.viewContext)
+        let two = TeamMedia.insert(TBAMedia(type: "youtube", foreignKey: "frc7332_video"), year: 2020, in: persistentContainer.viewContext)
+        team.mediaRaw = NSSet(array: [one, two])
+
+        let results = TeamMedia.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = predicate
+        }
+        XCTAssertEqual(results, [])
+    }
+
+    func test_sortDescriptors() {
+        let sds = TeamMedia.sortDescriptors()
+        XCTAssertFalse(sds.reduce(false, { $0 || $1.ascending }))
+        XCTAssert(sds.contains(where: { $0.key == #keyPath(TeamMedia.typeStringRaw) }))
+        XCTAssert(sds.contains(where: { $0.key == #keyPath(TeamMedia.foreignKeyRaw) }))
     }
 
     func test_insert() {
@@ -161,6 +220,8 @@ class TeamMediaTestCase: TBADataTestCase {
         let media = TeamMedia.init(entity: TeamMedia.entity(), insertInto: persistentContainer.viewContext)
         let foreignKey = "foreign_key"
         media.foreignKeyRaw = foreignKey
+        media.typeStringRaw = MediaType.imgur.rawValue
+        XCTAssertNil(media.youtubeKey)
         media.typeStringRaw = MediaType.youtubeVideo.rawValue
         XCTAssertNotNil(media.youtubeKey)
         XCTAssertEqual(media.youtubeKey, foreignKey)

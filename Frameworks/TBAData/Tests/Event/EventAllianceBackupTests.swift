@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -33,6 +34,11 @@ class EventAllianceBackupTestCase: TBADataTestCase {
         let team = insertTeam()
         backup.outTeamRaw = team
         XCTAssertEqual(backup.outTeam, team)
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<EventAllianceBackup> = EventAllianceBackup.fetchRequest()
+        XCTAssertEqual(fr.entityName, EventAllianceBackup.entityName)
     }
 
     func test_insert() {

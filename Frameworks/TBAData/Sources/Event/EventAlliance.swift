@@ -78,6 +78,7 @@ extension EventAlliance: Managed {
                                     #keyPath(EventAlliance.eventRaw.keyRaw), eventKey,
                                     #keyPath(EventAlliance.picksRaw),
                                     #keyPath(Team.keyRaw), model.picks, model.picks.count)
+        print(predicate.predicateFormat)
 
         return findOrCreate(in: context, matching: predicate, configure: { (alliance) in
             // Required: picks

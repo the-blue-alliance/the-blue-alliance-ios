@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -50,6 +51,11 @@ class EventAllianceTestCase: TBADataTestCase {
         XCTAssertEqual(alliance.status, status)
     }
 
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<EventAlliance> = EventAlliance.fetchRequest()
+        XCTAssertEqual(fr.entityName, EventAlliance.entityName)
+    }
+
     func test_insert() {
         let event = insertDistrictEvent()
 
@@ -73,6 +79,34 @@ class EventAllianceTestCase: TBADataTestCase {
 
         event.addToAlliancesRaw(alliance)
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
+    }
+
+    func test_insert_noPicks() {
+        let event = insertDistrictEvent()
+
+        let status = TBAAllianceStatus(currentRecord: nil, level: nil, playoffAverage: nil, record: nil, status: nil)
+        let model = TBAAlliance(name: "Alliance 1", backup: nil, declines: [], picks: [], status: status)
+        let alliance = EventAlliance.insert(model, eventKey: event.key, in: persistentContainer.viewContext)
+        alliance.eventRaw = event
+        XCTAssertNil(alliance.status)
+
+        // Call insert again with a status, make sure status gets deleted
+        let s = EventStatusPlayoff.insert(status, eventKey: event.key, teamKey: "frc7332", in: persistentContainer.viewContext)
+        alliance.statusRaw = s
+
+        // Sanity check
+        XCTAssertNotNil(alliance.status)
+
+        let newAlliance = EventAlliance.insert(model, eventKey: event.key, in: persistentContainer.viewContext)
+
+        // Sanity check
+        XCTAssertEqual(alliance, newAlliance)
+        XCTAssertNil(alliance.status)
+
+        XCTAssertNoThrow(try persistentContainer.viewContext.save())
+
+        // Our status object should be deleted
+        XCTAssertNil(s.managedObjectContext)
     }
 
     func test_update() {

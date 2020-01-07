@@ -460,14 +460,14 @@ extension Team: Managed {
 
 extension Team {
 
-    public static func districtPredicate(district: District) -> NSPredicate {
-        return NSPredicate(format: "ANY %K = %@",
-                           #keyPath(Team.districtsRaw), district)
+    public static func districtPredicate(districtKey: String) -> NSPredicate {
+        return NSPredicate(format: "ANY %K.%K = %@",
+                           #keyPath(Team.districtsRaw), #keyPath(District.keyRaw), districtKey)
     }
 
-    public static func eventPredicate(event: Event) -> NSPredicate {
-        return NSPredicate(format: "ANY %K = %@",
-                           #keyPath(Team.eventsRaw), event)
+    public static func eventPredicate(eventKey: String) -> NSPredicate {
+        return NSPredicate(format: "ANY %K.%K = %@",
+                           #keyPath(Team.eventsRaw), #keyPath(Event.keyRaw), eventKey)
     }
 
     public static func searchPredicate(searchText: String) -> NSPredicate {

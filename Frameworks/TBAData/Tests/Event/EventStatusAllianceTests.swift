@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -37,6 +38,11 @@ class EventStatusAllianceTestCase: TBADataTestCase {
         let eventStatus = EventStatus.init(entity: EventStatus.entity(), insertInto: persistentContainer.viewContext)
         status.eventStatusRaw = eventStatus
         XCTAssertEqual(status.eventStatus, eventStatus)
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<EventStatusAlliance> = EventStatusAlliance.fetchRequest()
+        XCTAssertEqual(fr.entityName, EventStatusAlliance.entityName)
     }
 
     func test_insert() {

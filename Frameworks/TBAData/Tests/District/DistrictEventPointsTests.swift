@@ -71,13 +71,16 @@ class DistrictEventPointsTestCase: TBADataTestCase {
     }
 
     func test_eventPredicate() {
+        let event = insertEvent()
+        let predicate = DistrictEventPoints.eventPredicate(eventKey: event.key)
+        XCTAssertEqual(predicate.predicateFormat, "eventRaw.keyRaw == \"2015qcmo\"")
+
         let eventPoints = DistrictEventPoints.init(entity: DistrictEventPoints.entity(), insertInto: persistentContainer.viewContext)
         _ = DistrictEventPoints.init(entity: DistrictEventPoints.entity(), insertInto: persistentContainer.viewContext)
-        let event = insertEvent()
         eventPoints.eventRaw = event
 
         let results = DistrictEventPoints.fetch(in: persistentContainer.viewContext) { (fr) in
-            fr.predicate = DistrictEventPoints.eventPredicate(eventKey: event.key)
+            fr.predicate = predicate
         }
         XCTAssertEqual(results, [eventPoints])
     }

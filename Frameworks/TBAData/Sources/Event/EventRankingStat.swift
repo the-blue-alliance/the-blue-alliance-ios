@@ -36,17 +36,11 @@ public class EventRankingStat: NSManagedObject {
 extension EventRankingStat: Managed {
 
     internal static func insert(value: Double, sortOrderRanking: EventRanking, in context: NSManagedObjectContext) -> EventRankingStat {
-        let eventRankingStat = EventRankingStat.init(entity: entity(), insertInto: context)
-        eventRankingStat.valueRaw = NSNumber(value: value)
-        eventRankingStat.sortOrderRankingRaw = sortOrderRanking
-        return eventRankingStat
+        return insert(value: value, sortOrderRanking: sortOrderRanking, extraStatsRanking: nil, in: context)
     }
 
     internal static func insert(value: Double, extraStatsRanking: EventRanking, in context: NSManagedObjectContext) -> EventRankingStat {
-        let eventRankingStat = EventRankingStat.init(entity: entity(), insertInto: context)
-        eventRankingStat.valueRaw = NSNumber(value: value)
-        eventRankingStat.extraStatsRankingRaw = extraStatsRanking
-        return eventRankingStat
+        return insert(value: value, sortOrderRanking: nil, extraStatsRanking: extraStatsRanking, in: context)
     }
 
     internal static func insert(value: Double, sortOrderRanking: EventRanking?, extraStatsRanking: EventRanking?, in context: NSManagedObjectContext) -> EventRankingStat {

@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import XCTest
 @testable import TBAData
@@ -26,6 +27,11 @@ class EventRankingStatTests: TBADataTestCase {
         XCTAssertEqual(stat.sortOrderRanking, ranking)
     }
 
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<EventRankingStat> = EventRankingStat.fetchRequest()
+        XCTAssertEqual(fr.entityName, EventRankingStat.entityName)
+    }
+
     func test_insert_extraStatsRanking() {
         let ranking = insertEventRaking()
         let stat = EventRankingStat.insert(value: 20.2, extraStatsRanking: ranking, in: persistentContainer.viewContext)
@@ -47,7 +53,7 @@ class EventRankingStatTests: TBADataTestCase {
 
         XCTAssertNoThrow(try persistentContainer.viewContext.save())
     }
-
+    
     func test_insert() {
         let _ = EventRankingStat.init(entity: EventRankingStat.entity(), insertInto: persistentContainer.viewContext)
 

@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -47,6 +48,11 @@ class StatusTestCase: TBADataTestCase {
         XCTAssertNil(Status.status(in: persistentContainer.viewContext))
         let status = insertStatus()
         XCTAssertEqual(status, Status.status(in: persistentContainer.viewContext))
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<Status> = Status.fetchRequest()
+        XCTAssertEqual(fr.entityName, Status.entityName)
     }
 
     func test_insert() {

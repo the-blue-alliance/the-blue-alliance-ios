@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -30,6 +31,11 @@ class WebcastTestCase: TBADataTestCase {
         let event = insertEvent()
         webcast.eventsRaw = NSSet(array: [event])
         XCTAssertEqual(webcast.events, [event])
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<Webcast> = Webcast.fetchRequest()
+        XCTAssertEqual(fr.entityName, Webcast.entityName)
     }
 
     func test_insert() {

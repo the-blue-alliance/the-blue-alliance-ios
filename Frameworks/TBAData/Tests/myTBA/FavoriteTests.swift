@@ -1,9 +1,15 @@
+import CoreData
 import TBADataTesting
 import MyTBAKit
 import XCTest
 @testable import TBAData
 
 class FavoriteTestCase: TBADataTestCase {
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<Favorite> = Favorite.fetchRequest()
+        XCTAssertEqual(fr.entityName, Favorite.entityName)
+    }
 
     func test_insert_array() {
         let modelFavoriteOne = MyTBAFavorite(modelKey: "2018miket", modelType: .event)

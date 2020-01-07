@@ -310,18 +310,25 @@ class EventTestCase: TBADataTestCase {
     }
 
     func test_districtPredicate() {
+        let district = insertDistrict()
+        let predicate = Event.districtPredicate(districtKey: district.key)
+        XCTAssertEqual(predicate.predicateFormat, "districtRaw.keyRaw == \"2018fim\"")
+
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         _ = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
-        let district = insertDistrict()
         event.districtRaw = district
 
         let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
-            fr.predicate = Event.districtPredicate(districtKey: district.key)
+            fr.predicate = predicate
         }
         XCTAssertEqual(results, [event])
     }
 
     func test_champsYearPredicate() {
+        let predicate = Event.champsYearPredicate(key: "2020cmpmi", year: 2020)
+        print(predicate.predicateFormat)
+        XCTAssertEqual(predicate.predicateFormat, "yearRaw == 2020 AND ((eventTypeRaw == 4 OR eventTypeRaw == 3) AND (keyRaw == \"2020cmpmi\" OR parentEventRaw.keyRaw == \"2020cmpmi\"))")
+
         let parentEvent = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         parentEvent.eventTypeRaw = NSNumber(value: EventType.championshipFinals.rawValue)
         parentEvent.yearRaw = NSNumber(value: 2020)
@@ -337,13 +344,16 @@ class EventTestCase: TBADataTestCase {
         otherEvent.yearRaw = NSNumber(value: 2020)
 
         let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
-            fr.predicate = Event.champsYearPredicate(key: "2020cmpmi", year: 2020)
+            fr.predicate = predicate
         }
         XCTAssert(results.contains(parentEvent))
         XCTAssert(results.contains(event))
     }
 
     func test_eventTypeYearPredicate() {
+        let predicate = Event.eventTypeYearPredicate(eventType: .district, year: 2020)
+        XCTAssertEqual(predicate.predicateFormat, "yearRaw == 2020 AND eventTypeRaw == 1")
+
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         event.eventTypeRaw = NSNumber(value: EventType.district.rawValue)
         event.yearRaw = NSNumber(value: 2020)
@@ -352,12 +362,17 @@ class EventTestCase: TBADataTestCase {
         otherEvent.yearRaw = NSNumber(value: 2020)
 
         let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
-            fr.predicate = Event.eventTypeYearPredicate(eventType: .district, year: 2020)
+            fr.predicate = predicate
         }
         XCTAssertEqual(results, [event])
     }
 
     func test_offseasonYearPredicate() {
+        let predicate = Event.offseasonYearPredicate(startDate: Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 1))!,
+                                                     endDate: Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 31))!,
+                                                     year: 2020)
+        XCTAssertEqual(predicate.predicateFormat, "yearRaw == 2020 AND (eventTypeRaw == 99 AND startDateRaw >= CAST(604731600.000000, \"NSDate\") AND endDateRaw <= CAST(607320000.000000, \"NSDate\"))")
+
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         event.eventTypeRaw = NSNumber(value: EventType.offseason.rawValue)
         event.startDateRaw = Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 1))
@@ -370,14 +385,15 @@ class EventTestCase: TBADataTestCase {
         otherEvent.yearRaw = NSNumber(value: 2020)
 
         let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
-            fr.predicate = Event.offseasonYearPredicate(startDate: Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 1))!,
-                                                        endDate: Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 31))!,
-                                                        year: 2020)
+            fr.predicate = predicate
         }
         XCTAssertEqual(results, [event])
     }
 
     func test_teamPredicate() {
+        let predicate = Event.teamPredicate(teamKey: "frc7332")
+        XCTAssertEqual(predicate.predicateFormat, "SUBQUERY(teamsRaw, $t, $t.keyRaw == \"frc7332\").@count > 0")
+
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         _ = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
@@ -385,12 +401,15 @@ class EventTestCase: TBADataTestCase {
         event.teamsRaw = NSSet(array: [team])
 
         let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
-            fr.predicate = Event.teamPredicate(teamKey: "frc7332")
+            fr.predicate = predicate
         }
         XCTAssertEqual(results, [event])
     }
 
     func test_teamYearPredicate() {
+        let predicate = Event.teamYearPredicate(teamKey: "frc7332", year: 2020)
+        XCTAssertEqual(predicate.predicateFormat, "SUBQUERY(teamsRaw, $t, $t.keyRaw == \"frc7332\").@count > 0 AND yearRaw == 2020")
+
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         event.yearRaw = NSNumber(value: 2020)
         let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
@@ -398,12 +417,15 @@ class EventTestCase: TBADataTestCase {
         event.teamsRaw = NSSet(array: [team])
 
         let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
-            fr.predicate = Event.teamYearPredicate(teamKey: "frc7332", year: 2020)
+            fr.predicate = predicate
         }
         XCTAssertEqual(results, [event])
     }
 
     func test_teamYearNonePredicate() {
+        let predicate = Event.teamYearNonePredicate(teamKey: "frc7332")
+        XCTAssertEqual(predicate.predicateFormat, "SUBQUERY(teamsRaw, $t, $t.keyRaw == \"frc7332\").@count > 0 AND yearRaw == -1")
+
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         event.yearRaw = NSNumber(value: 2020)
         let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
@@ -411,12 +433,15 @@ class EventTestCase: TBADataTestCase {
         event.teamsRaw = NSSet(array: [team])
 
         let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
-            fr.predicate = Event.teamYearNonePredicate(teamKey: "frc7332")
+            fr.predicate = predicate
         }
         XCTAssertEqual(results, [])
     }
 
     func test_unplayedEventPredicate() {
+        let predicate = Event.unplayedEventPredicate(date: Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 31))!, year: 2020)
+        XCTAssertEqual(predicate.predicateFormat, "yearRaw == 2020 AND (endDateRaw >= CAST(607320000.000000, \"NSDate\") AND eventTypeRaw != 3)")
+
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         event.yearRaw = NSNumber(value: 2020)
         event.endDateRaw = Calendar.current.date(from: DateComponents(year: 2020, month: 4, day: 1))
@@ -431,12 +456,15 @@ class EventTestCase: TBADataTestCase {
         thirdEvent.eventTypeRaw = NSNumber(value: EventType.district.rawValue)
 
         let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
-            fr.predicate = Event.unplayedEventPredicate(date: Calendar.current.date(from: DateComponents(year: 2020, month: 3, day: 31))!, year: 2020)
+            fr.predicate = predicate
         }
         XCTAssertEqual(results, [event])
     }
 
     func test_weekYearPredicate() {
+        let predicate = Event.weekYearPredicate(week: 1, year: 2020)
+        XCTAssertEqual(predicate.predicateFormat, "yearRaw == 2020 AND weekRaw == 1")
+
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         event.weekRaw = NSNumber(value: 1)
         event.yearRaw = NSNumber(value: 2020)
@@ -445,7 +473,7 @@ class EventTestCase: TBADataTestCase {
         otherEvent.yearRaw = NSNumber(value: 2020)
 
         let results = Event.fetch(in: persistentContainer.viewContext) { (fr) in
-            fr.predicate = Event.weekYearPredicate(week: 1, year: 2020)
+            fr.predicate = predicate
         }
         XCTAssertEqual(results, [event])
     }

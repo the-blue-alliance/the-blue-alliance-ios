@@ -1,3 +1,4 @@
+import CoreData
 import MyTBAKit
 import TBADataTesting
 import TBAKit
@@ -22,6 +23,57 @@ class MyTBAEntityTestCase: TBADataTestCase {
         XCTAssertEqual(entity.modelTypeRaw, 2)
     }
 
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<MyTBAEntity> = MyTBAEntity.fetchRequest()
+        XCTAssertEqual(fr.entityName, MyTBAEntity.entityName)
+    }
+
+    func test_supportedModelTypePredicate() {
+        let predicate = MyTBAEntity.supportedModelTypePredicate()
+        XCTAssertEqual(predicate.predicateFormat, "modelTypeRaw IN {0, 1, 2}")
+
+        let one = MyTBAEntity.init(entity: MyTBAEntity.entity(), insertInto: persistentContainer.viewContext)
+        one.modelTypeRaw = NSNumber(value: 0)
+        let two = MyTBAEntity.init(entity: MyTBAEntity.entity(), insertInto: persistentContainer.viewContext)
+        two.modelTypeRaw = NSNumber(value: 1)
+        let three = MyTBAEntity.init(entity: MyTBAEntity.entity(), insertInto: persistentContainer.viewContext)
+        three.modelTypeRaw = NSNumber(value: 2)
+        let four = MyTBAEntity.init(entity: MyTBAEntity.entity(), insertInto: persistentContainer.viewContext)
+        four.modelTypeRaw = NSNumber(value: 3)
+
+        let results = MyTBAEntity.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = predicate
+        }
+        XCTAssertEqual(results.count, 3)
+        XCTAssertFalse(results.contains(four))
+    }
+
+    func test_sortDescriptors() {
+        let sds = MyTBAEntity.sortDescriptors()
+        XCTAssert(sds.reduce(true, { $0 && $1.ascending }))
+        XCTAssert(sds.contains(where: { $0.key == #keyPath(MyTBAEntity.modelTypeRaw) }))
+        XCTAssert(sds.contains(where: { $0.key == #keyPath(MyTBAEntity.modelKeyRaw) }))
+    }
+
+    func test_modelTypeKeyPath() {
+        let kp = MyTBAEntity.modelTypeKeyPath()
+        XCTAssertEqual(kp, #keyPath(MyTBAEntity.modelTypeRaw))
+    }
+
+    func test_modelKeyPredicate() {
+        let predicate = MyTBAEntity.modelKeyPredicate(key: "frc7332")
+        XCTAssertEqual(predicate.predicateFormat, "modelKeyRaw == \"frc7332\"")
+
+        let model = MyTBAEntity.init(entity: MyTBAEntity.entity(), insertInto: persistentContainer.viewContext)
+        model.modelKeyRaw = "frc7332"
+        _ = MyTBAEntity.init(entity: MyTBAEntity.entity(), insertInto: persistentContainer.viewContext)
+
+        let results = MyTBAEntity.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = predicate
+        }
+        XCTAssertEqual(results, [model])
+    }
+
     func test_tbaObject_event() {
         let favorite = Favorite.insert(MyTBAFavorite(modelKey: "2018miket", modelType: .event), in: persistentContainer.viewContext)
         XCTAssertNil(favorite.tbaObject)
@@ -44,6 +96,11 @@ class MyTBAEntityTestCase: TBADataTestCase {
 
         _ = insertMatch()
         XCTAssertNotNil(favorite.tbaObject)
+    }
+
+    func test_tbaObject_other() {
+        let favorite = Favorite.insert(MyTBAFavorite(modelKey: "2018ctsc_qm1", modelType: .eventTeam), in: persistentContainer.viewContext)
+        XCTAssertNil(favorite.tbaObject)
     }
 
     func test_prepareForDeletion_match_noEvent() {

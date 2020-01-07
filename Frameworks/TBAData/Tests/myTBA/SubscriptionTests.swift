@@ -1,9 +1,15 @@
+import CoreData
 import MyTBAKit
 import TBADataTesting
 import XCTest
 @testable import TBAData
 
 class SubscriptionTestCase: TBADataTestCase {
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<Subscription> = Subscription.fetchRequest()
+        XCTAssertEqual(fr.entityName, Subscription.entityName)
+    }
 
     func test_notifications() {
         let subscription = Subscription.init(entity: Subscription.entity(), insertInto: persistentContainer.viewContext)

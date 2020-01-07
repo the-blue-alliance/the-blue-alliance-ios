@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -23,6 +24,11 @@ class MatchVideoTestCase: TBADataTestCase {
         let match = insertMatch()
         video.matchesRaw = NSSet(array: [match])
         XCTAssertEqual(video.matches, [match])
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<MatchVideo> = MatchVideo.fetchRequest()
+        XCTAssertEqual(fr.entityName, MatchVideo.entityName)
     }
 
     func test_insert() {

@@ -46,18 +46,24 @@ class AwardTestCase: TBADataTestCase {
 
     func test_eventPredicate() {
         let event = insertEvent()
+        let predicate = Award.eventPredicate(eventKey: event.key)
+        XCTAssertEqual(predicate.predicateFormat, "eventRaw.keyRaw == \"2015qcmo\"")
+
         _ = Award.init(entity: Award.entity(), insertInto: persistentContainer.viewContext)
         let award = Award.init(entity: Award.entity(), insertInto: persistentContainer.viewContext)
         award.eventRaw = event
 
         let results = Award.fetch(in: persistentContainer.viewContext) { (fr) in
-            fr.predicate = Award.eventPredicate(eventKey: event.key)
+            fr.predicate = predicate
         }
         XCTAssertEqual(results, [award])
     }
 
     func test_teamPredicate() {
         let team = insertTeam()
+        let predicate = Award.teamPredicate(teamKey: team.key)
+        XCTAssertEqual(predicate.predicateFormat, "ANY recipientsRaw.teamRaw.keyRaw == \"frc7332\"")
+
         let recipient = AwardRecipient.init(entity: AwardRecipient.entity(), insertInto: persistentContainer.viewContext)
         recipient.teamRaw = team
         _ = Award.init(entity: Award.entity(), insertInto: persistentContainer.viewContext)
@@ -65,7 +71,7 @@ class AwardTestCase: TBADataTestCase {
         award.recipientsRaw = NSSet(array: [recipient])
 
         let results = Award.fetch(in: persistentContainer.viewContext) { (fr) in
-            fr.predicate = Award.teamPredicate(teamKey: team.key)
+            fr.predicate = predicate
         }
         XCTAssertEqual(results, [award])
     }
@@ -73,6 +79,9 @@ class AwardTestCase: TBADataTestCase {
     func test_teamEventPredicate() {
         let team = insertTeam()
         let event = insertEvent()
+        let predicate = Award.teamEventPredicate(teamKey: team.key, eventKey: event.key)
+        XCTAssertEqual(predicate.predicateFormat, "eventRaw.keyRaw == \"2015qcmo\" AND ANY recipientsRaw.teamRaw.keyRaw == \"frc7332\"")
+
         let recipient = AwardRecipient.init(entity: AwardRecipient.entity(), insertInto: persistentContainer.viewContext)
         recipient.teamRaw = team
         let eventAward = Award.init(entity: Award.entity(), insertInto: persistentContainer.viewContext)
@@ -81,7 +90,7 @@ class AwardTestCase: TBADataTestCase {
         award.recipientsRaw = NSSet(array: [recipient])
         award.eventRaw = event
         let results = Award.fetch(in: persistentContainer.viewContext) { (fr) in
-            fr.predicate = Award.teamEventPredicate(teamKey: team.key, eventKey: event.key)
+            fr.predicate = predicate
         }
         XCTAssertEqual(results, [award])
     }

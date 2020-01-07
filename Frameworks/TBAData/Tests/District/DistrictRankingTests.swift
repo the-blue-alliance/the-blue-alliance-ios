@@ -52,13 +52,16 @@ class DistrictRankingTestCase: TBADataTestCase {
     }
 
     func test_districtPredicate() {
+        let district = insertDistrict()
+        let predicate = DistrictRanking.districtPredicate(districtKey: district.key)
+        XCTAssertEqual(predicate.predicateFormat, "districtRaw.keyRaw == \"2018fim\"")
+
         let ranking = DistrictRanking.init(entity: DistrictRanking.entity(), insertInto: persistentContainer.viewContext)
         _ = DistrictRanking.init(entity: DistrictRanking.entity(), insertInto: persistentContainer.viewContext)
-        let district = insertDistrict()
         ranking.districtRaw = district
 
         let results = DistrictRanking.fetch(in: persistentContainer.viewContext) { (fr) in
-            fr.predicate = DistrictRanking.districtPredicate(districtKey: district.key)
+            fr.predicate = predicate
         }
         XCTAssertEqual(results, [ranking])
     }

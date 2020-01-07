@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -126,9 +127,85 @@ class MatchTestCase: TBADataTestCase {
         XCTAssertEqual(match.videos, [video])
     }
 
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<Match> = Match.fetchRequest()
+        XCTAssertEqual(fr.entityName, Match.entityName)
+    }
+
     func test_predicate() {
         let predicate = Match.predicate(key: "2018miket_qm1")
         XCTAssertEqual(predicate.predicateFormat, "keyRaw == \"2018miket_qm1\"")
+    }
+
+    func test_compLevelSortOrderKeyPath() {
+        let kp = Match.compLevelSortOrderKeyPath()
+        XCTAssertEqual(kp, #keyPath(Match.compLevelSortOrderRaw))
+    }
+
+    func test_sortDescriptors() {
+        let sds = Match.sortDescriptors(ascending: true)
+        XCTAssertEqual(sds.count, 3)
+        XCTAssert(sds.reduce(true, { $0 && $1.ascending }))
+
+        XCTAssert(sds.contains(where: { $0.key == #keyPath(Match.compLevelSortOrderRaw) }))
+        XCTAssert(sds.contains(where: { $0.key == #keyPath(Match.setNumberRaw) }))
+        XCTAssert(sds.contains(where: { $0.key == #keyPath(Match.matchNumberRaw) }))
+
+        let sdsFalse = Match.sortDescriptors(ascending: false)
+        XCTAssertFalse(sdsFalse.reduce(false, { $0 || $1.ascending }))
+    }
+
+    func test_eventPredicate() {
+        let event = insertEvent()
+        let predicate = Match.eventPredicate(eventKey: event.key)
+        XCTAssertEqual(predicate.predicateFormat, "eventRaw.keyRaw == \"2015qcmo\"")
+
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        match.eventRaw = event
+        _ = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+
+        let results = Match.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = predicate
+        }
+        XCTAssertEqual(results, [match])
+    }
+
+    func test_eventTeamPredicate() {
+        let event = insertEvent()
+        let team = insertTeam()
+        let predicate = Match.eventTeamPredicate(eventKey: event.key, teamKey: team.key)
+        XCTAssertEqual(predicate.predicateFormat, "eventRaw.keyRaw == \"2015qcmo\" AND SUBQUERY(alliancesRaw, $a, ANY $a.teamsRaw.keyRaw IN {\"frc7332\"}).@count > 0")
+
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        match.eventRaw = event
+        let alliance = MatchAlliance.init(entity: MatchAlliance.entity(), insertInto: persistentContainer.viewContext)
+        alliance.teamsRaw = NSOrderedSet(array: [team])
+        match.alliancesRaw = NSSet(array: [alliance])
+
+        _ = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+
+        let results = Match.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = predicate
+        }
+        XCTAssertEqual(results, [match])
+    }
+
+    func test_teamKeysPredicate() {
+        let team = insertTeam()
+        let predicate = Match.teamKeysPredicate(teamKeys: [team.key])
+        XCTAssertEqual(predicate.predicateFormat, "SUBQUERY(alliancesRaw, $a, ANY $a.teamsRaw.keyRaw IN {\"frc7332\"}).@count > 0")
+
+        let match = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+        let alliance = MatchAlliance.init(entity: MatchAlliance.entity(), insertInto: persistentContainer.viewContext)
+        alliance.teamsRaw = NSOrderedSet(array: [team])
+        match.alliancesRaw = NSSet(array: [alliance])
+
+        _ = Match.init(entity: Match.entity(), insertInto: persistentContainer.viewContext)
+
+        let results = Match.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = predicate
+        }
+        XCTAssertEqual(results, [match])
     }
 
     func alliance(allianceKey: String, dqs: [String]? = nil) -> MatchAlliance {

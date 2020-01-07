@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -24,6 +25,11 @@ class EventInsightsTestCase: TBADataTestCase {
         let event = insertEvent()
         insights.eventRaw = event
         XCTAssertEqual(insights.event, event)
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<EventInsights> = EventInsights.fetchRequest()
+        XCTAssertEqual(fr.entityName, EventInsights.entityName)
     }
 
     func test_insert() {

@@ -63,25 +63,31 @@ class DistrictTestCase: TBADataTestCase {
     }
 
     func test_predicate() {
+        let predicate = District.predicate(key: "2019zor")
+        XCTAssertEqual(predicate.predicateFormat, "keyRaw == \"2019zor\"")
+
         let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
         district.keyRaw = "2019zor"
         let district2 = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
         district2.keyRaw = "2020zor"
 
         let results = District.fetch(in: persistentContainer.viewContext) { (fr) in
-            fr.predicate = District.predicate(key: "2019zor")
+            fr.predicate = predicate
         }
         XCTAssertEqual(results, [district])
     }
 
     func test_yearPredicate() {
+        let predicate = District.yearPredicate(year: 2019)
+        XCTAssertEqual(predicate.predicateFormat, "yearRaw == 2019")
+
         let district = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
         district.yearRaw = NSNumber(value: 2019)
         let district2 = District.init(entity: District.entity(), insertInto: persistentContainer.viewContext)
         district2.yearRaw = NSNumber(value: 2020)
 
         let results = District.fetch(in: persistentContainer.viewContext) { (fr) in
-            fr.predicate = District.yearPredicate(year: 2019)
+            fr.predicate = predicate
         }
         XCTAssertEqual(results, [district])
     }

@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -125,8 +126,14 @@ class TeamTestCase: TBADataTestCase {
     func test_yearsParticipated() {
         let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
         XCTAssertNil(team.yearsParticipated)
-        team.yearsParticipatedRaw = [2019, 2020]
-        XCTAssertEqual(team.yearsParticipated, [2020, 2019])
+        team.yearsParticipatedRaw = [2019, 2018, 2020]
+        XCTAssertEqual(team.yearsParticipated, [2020, 2019, 2018])
+    }
+
+    func test_setYearsParticipated() {
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        team.setYearsParticipated([2019, 2018, 2020])
+        XCTAssertEqual(team.yearsParticipated, [2020, 2019, 2018])
     }
 
     func test_alliances() {
@@ -257,9 +264,69 @@ class TeamTestCase: TBADataTestCase {
         XCTAssertEqual(team.surrogateAlliances, [a])
     }
 
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<Team> = Team.fetchRequest()
+        XCTAssertEqual(fr.entityName, Team.entityName)
+    }
+
     func test_predicate() {
         let predicate = Team.predicate(key: "frc7332")
         XCTAssertEqual(predicate.predicateFormat, "keyRaw == \"frc7332\"")
+    }
+
+    func test_districtPredicate() {
+        let district = insertDistrict()
+        let predicate = Team.districtPredicate(districtKey: district.key)
+        XCTAssertEqual(predicate.predicateFormat, "ANY districtsRaw.keyRaw == \"2018fim\"")
+
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        team.districtsRaw = NSSet(array: [district])
+        _ = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+
+        let results = Team.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = predicate
+        }
+        XCTAssertEqual(results, [team])
+    }
+
+    func test_eventPredicate() {
+        let event = insertEvent()
+        let predicate = Team.eventPredicate(eventKey: event.key)
+        XCTAssertEqual(predicate.predicateFormat, "ANY eventsRaw.keyRaw == \"2015qcmo\"")
+
+        let team = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+        team.eventsRaw = NSSet(array: [event])
+        _ = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+
+        let results = Team.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = predicate
+        }
+        XCTAssertEqual(results, [team])
+    }
+
+    func test_searchPredicate() {
+        let predicate = Team.searchPredicate(searchText: "abc")
+        XCTAssertEqual(predicate.predicateFormat, "nicknameRaw CONTAINS[cd] \"abc\" OR teamNumberRaw.stringValue BEGINSWITH[cd] \"abc\" OR cityRaw CONTAINS[cd] \"abc\"")
+    }
+
+    func test_teamNumberSortDescriptor() {
+        let sd = Team.teamNumberSortDescriptor()
+        XCTAssertEqual(sd.key, #keyPath(Team.teamNumberRaw))
+        XCTAssert(sd.ascending)
+    }
+
+    func test_populatedTeamsPredicate() {
+        let predicate = Team.populatedTeamsPredicate()
+        XCTAssertEqual(predicate.predicateFormat, "keyRaw != nil AND nameRaw != nil AND rookieYearRaw != nil")
+
+        let model = TBATeam(key: "frc7332", teamNumber: 7332, name: "The Rawrbotz", rookieYear: 2010)
+        let team = Team.insert(model, in: persistentContainer.viewContext)
+        _ = Team.init(entity: Team.entity(), insertInto: persistentContainer.viewContext)
+
+        let results = Team.fetch(in: persistentContainer.viewContext) { (fr) in
+            fr.predicate = predicate
+        }
+        XCTAssertEqual(results, [team])
     }
 
     func test_trimFRCPrefix() {

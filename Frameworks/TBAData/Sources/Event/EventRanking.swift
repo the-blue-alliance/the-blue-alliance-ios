@@ -76,6 +76,7 @@ extension EventRanking {
     public var extraStatsInfoArray: [EventRankingStatInfo] {
         return extraStatsInfo.array as? [EventRankingStatInfo] ?? []
     }
+
     public var extraStatsArray: [EventRankingStat] {
         return extraStats.array as? [EventRankingStat] ?? []
     }

@@ -1,3 +1,4 @@
+import CoreData
 import TBADataTesting
 import TBAKit
 import XCTest
@@ -35,6 +36,44 @@ class EventTeamStatTestCase: TBADataTestCase {
         let team = insertTeam()
         stat.teamRaw = team
         XCTAssertEqual(stat.team, team)
+    }
+
+    func test_fetchRequest() {
+        let fr: NSFetchRequest<EventTeamStat> = EventTeamStat.fetchRequest()
+        XCTAssertEqual(fr.entityName, EventTeamStat.entityName)
+    }
+
+    func test_oprKeyPath() {
+        let kp = EventTeamStat.oprKeyPath()
+        XCTAssertEqual(kp, #keyPath(EventTeamStat.oprRaw))
+    }
+
+    func test_dprKeyPath() {
+        let kp = EventTeamStat.dprKeyPath()
+        XCTAssertEqual(kp, #keyPath(EventTeamStat.dprRaw))
+    }
+
+    func test_ccwmKeyPath() {
+        let kp = EventTeamStat.ccwmKeyPath()
+        XCTAssertEqual(kp, #keyPath(EventTeamStat.ccwmRaw))
+    }
+
+    func test_oprSortDescriptor() {
+        let sd = EventTeamStat.oprSortDescriptor()
+        XCTAssertEqual(sd.key, #keyPath(EventTeamStat.oprRaw))
+        XCTAssertFalse(sd.ascending)
+    }
+
+    func test_dprSortDescriptor() {
+        let sd = EventTeamStat.dprSortDescriptor()
+        XCTAssertEqual(sd.key, #keyPath(EventTeamStat.dprRaw))
+        XCTAssertFalse(sd.ascending)
+    }
+
+    func test_ccwmSortDescriptor() {
+        let sd = EventTeamStat.ccwmSortDescriptor()
+        XCTAssertEqual(sd.key, #keyPath(EventTeamStat.ccwmRaw))
+        XCTAssertFalse(sd.ascending)
     }
 
     func test_insert() {
