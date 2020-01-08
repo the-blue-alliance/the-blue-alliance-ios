@@ -1,6 +1,6 @@
-import TBAData
 import TBADataTesting
 import XCTest
+@testable import TBAData
 @testable import The_Blue_Alliance
 
 class EventAllianceTableViewCellTestCase: TBADataTestCase {
@@ -20,11 +20,12 @@ class EventAllianceTableViewCellTestCase: TBADataTestCase {
         let cell = nib?.instantiate(withOwner: self, options: nil).first as! EventAllianceTableViewCell
 
         let alliance = EventAlliance.init(entity: EventAlliance.entity(), insertInto: persistentContainer.viewContext)
-        alliance.addToPicks(NSOrderedSet(array: [
-            TeamKey.insert(withKey: "frc1", in: persistentContainer.viewContext),
-            TeamKey.insert(withKey: "frc3", in: persistentContainer.viewContext),
-            TeamKey.insert(withKey: "frc2", in: persistentContainer.viewContext)
-        ]))
+        var picks = [
+            Team.insert("frc1", in: persistentContainer.viewContext),
+            Team.insert("frc3", in: persistentContainer.viewContext),
+            Team.insert("frc2", in: persistentContainer.viewContext)
+        ]
+        alliance.picksRaw = NSOrderedSet(array: picks)
         cell.viewModel = EventAllianceCellViewModel(alliance: alliance, allianceNumber: 2)
 
         // Test just having Teams, and a default Alliance
@@ -33,7 +34,7 @@ class EventAllianceTableViewCellTestCase: TBADataTestCase {
 
         XCTAssertEqual(cell.nameLabel.text, "Alliance 2")
 
-        alliance.name = "Alliance 3"
+        alliance.nameRaw = "Alliance 3"
         cell.viewModel = EventAllianceCellViewModel(alliance: alliance, allianceNumber: 2)
 
         XCTAssert(cell.levelLabel.isHidden)
@@ -45,9 +46,9 @@ class EventAllianceTableViewCellTestCase: TBADataTestCase {
         XCTAssertEqual(numberLabels.map({ $0.text }), ["1", "3", "2"])
 
         let status = EventStatusPlayoff.init(entity: EventStatusPlayoff.entity(), insertInto: persistentContainer.viewContext)
-        status.level = "f"
-        status.status = "won"
-        alliance.status = status
+        status.levelRaw = "f"
+        status.statusRaw = "won"
+        alliance.statusRaw = status
         cell.viewModel = EventAllianceCellViewModel(alliance: alliance, allianceNumber: 2)
 
         XCTAssertFalse(cell.levelLabel.isHidden)
@@ -55,7 +56,8 @@ class EventAllianceTableViewCellTestCase: TBADataTestCase {
 
         XCTAssertEqual(cell.nameLabel.text, "Alliance 3")
 
-        alliance.addToPicks(TeamKey.insert(withKey: "frc4b", in: persistentContainer.viewContext))
+        picks.append(Team.insert("frc4b", in: persistentContainer.viewContext))
+        alliance.picksRaw = NSOrderedSet(array: [picks])
 
         cell.viewModel = EventAllianceCellViewModel(alliance: alliance, allianceNumber: 2)
 
@@ -73,11 +75,11 @@ class EventAllianceTableViewCellTestCase: TBADataTestCase {
         let cell = nib?.instantiate(withOwner: self, options: nil).first as! EventAllianceTableViewCell
 
         let alliance = EventAlliance.init(entity: EventAlliance.entity(), insertInto: persistentContainer.viewContext)
-        alliance.addToPicks(NSOrderedSet(array: [
-            TeamKey.insert(withKey: "frc1", in: persistentContainer.viewContext),
-            TeamKey.insert(withKey: "frc3", in: persistentContainer.viewContext),
-            TeamKey.insert(withKey: "frc2", in: persistentContainer.viewContext)
-            ]))
+        alliance.picksRaw = NSOrderedSet(array: [
+            Team.insert("frc1", in: persistentContainer.viewContext),
+            Team.insert("frc3", in: persistentContainer.viewContext),
+            Team.insert("frc2", in: persistentContainer.viewContext)
+        ])
         cell.viewModel = EventAllianceCellViewModel(alliance: alliance, allianceNumber: 2)
 
         let numberLabels = cell.allianceTeamsStackView.arrangedSubviews as! [UILabel]

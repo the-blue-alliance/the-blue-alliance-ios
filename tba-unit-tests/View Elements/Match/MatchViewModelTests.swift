@@ -1,6 +1,6 @@
-import TBAData
 import TBADataTesting
 import XCTest
+@testable import TBAData
 @testable import The_Blue_Alliance
 
 class MatchViewModelTestCase: TBADataTestCase {
@@ -15,7 +15,7 @@ class MatchViewModelTestCase: TBADataTestCase {
 
     func test_bad_bereakdown_keys() {
         let match = insertMatch(eventKey: "2018inwla")
-        match.breakdown = [
+        match.breakdownRaw = [
             "red": [
                 "notThere1": false,
                 "notThere2": false
@@ -33,7 +33,7 @@ class MatchViewModelTestCase: TBADataTestCase {
 
     func test_no_rp() {
         let match = insertMatch(eventKey: "2018inwla")
-        match.breakdown = [
+        match.breakdownRaw = [
             "red": [
                 "autoQuestRankingPoint": false,
                 "faceTheBossRankingPoint": false
@@ -51,7 +51,7 @@ class MatchViewModelTestCase: TBADataTestCase {
 
     func test_first_rp() {
         let match = insertMatch(eventKey: "2018inwla")
-        match.breakdown = [
+        match.breakdownRaw = [
             "red": [
                 "autoQuestRankingPoint": true,
                 "faceTheBossRankingPoint": false
@@ -69,7 +69,7 @@ class MatchViewModelTestCase: TBADataTestCase {
 
     func test_second_rp() {
         let match = insertMatch(eventKey: "2018inwla")
-        match.breakdown = [
+        match.breakdownRaw = [
             "red": [
                 "autoQuestRankingPoint": false,
                 "faceTheBossRankingPoint": true
@@ -87,7 +87,7 @@ class MatchViewModelTestCase: TBADataTestCase {
 
     func test_both_rp() {
         let match = insertMatch(eventKey: "2018inwla")
-        match.breakdown = [
+        match.breakdownRaw = [
             "red": [
                 "autoQuestRankingPoint": true,
                 "faceTheBossRankingPoint": true
@@ -105,7 +105,7 @@ class MatchViewModelTestCase: TBADataTestCase {
 
     func test_2018_rp() {
         let match = insertMatch(eventKey: "2018inwla")
-        match.breakdown = [
+        match.breakdownRaw = [
             "red": [
                 "autoQuestRankingPoint": true,
                 "faceTheBossRankingPoint": true
@@ -123,7 +123,7 @@ class MatchViewModelTestCase: TBADataTestCase {
 
     func test_2017_rp() {
         let match = insertMatch(eventKey: "2017inwla")
-        match.breakdown = [
+        match.breakdownRaw = [
             "red": [
                 "kPaRankingPointAchieved": true,
                 "rotorRankingPointAchieved": true
@@ -141,7 +141,7 @@ class MatchViewModelTestCase: TBADataTestCase {
 
     func test_2016_rp() {
         let match = insertMatch(eventKey: "2016inwla")
-        match.breakdown = [
+        match.breakdownRaw = [
             "red": [
                 "teleopDefensesBreached": true,
                 "teleopTowerCaptured": true

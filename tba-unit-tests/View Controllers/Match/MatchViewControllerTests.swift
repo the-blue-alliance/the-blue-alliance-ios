@@ -1,6 +1,6 @@
-import TBAData
 import XCTest
 @testable import MyTBAKit
+@testable import TBAData
 @testable import The_Blue_Alliance
 
 class MatchViewControllerTests: TBATestCase {
@@ -32,7 +32,7 @@ class MatchViewControllerTests: TBATestCase {
 
     func test_title_event() {
         let event = insertDistrictEvent()
-        match.event = event
+        match.eventRaw = event
         let vc = MatchViewController(match: match, statusService: statusService, urlOpener: urlOpener, myTBA: myTBA, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
 
         XCTAssertEqual(vc.navigationTitle, "Quals 1")
