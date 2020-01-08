@@ -78,7 +78,9 @@ class TeamMediaTestCase: TBADataTestCase {
         let results = TeamMedia.fetch(in: persistentContainer.viewContext) { (fr) in
             fr.predicate = predicate
         }
-        XCTAssertEqual(results, [one, two])
+        XCTAssertEqual(results.count, 2)
+        XCTAssert(results.contains(one))
+        XCTAssert(results.contains(two))
     }
 
     func test_teamYearImagesPrediate() {

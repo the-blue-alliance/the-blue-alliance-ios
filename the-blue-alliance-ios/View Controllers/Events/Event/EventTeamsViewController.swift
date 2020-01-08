@@ -60,7 +60,7 @@ class EventTeamsViewController: TeamsViewController {
     // MARK: - EventsViewControllerDataSourceConfiguration
 
     override var fetchRequestPredicate: NSPredicate? {
-        return Team.eventPredicate(event: event)
+        return Team.eventPredicate(eventKey: event.key)
     }
 
 }

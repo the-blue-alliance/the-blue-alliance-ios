@@ -6,8 +6,6 @@ import XCTest
 
 class EventTestCase: TBADataTestCase {
 
-    let calendar: Calendar = Calendar.current
-
     func test_address() {
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         XCTAssertNil(event.address)
@@ -1093,8 +1091,8 @@ class EventTestCase: TBADataTestCase {
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
 
         // Event started two days ago, ends today
-        let today = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
-        event.startDateRaw = calendar.date(byAdding: DateComponents(day: -2), to: today)
+        let today = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
+        event.startDateRaw = Calendar.current.date(byAdding: DateComponents(day: -2), to: today)
         event.endDateRaw = today
         XCTAssert(event.isHappeningNow)
     }
@@ -1103,9 +1101,9 @@ class EventTestCase: TBADataTestCase {
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
 
         // Event started three days ago, ended yesterday
-        let today = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
-        event.startDateRaw = calendar.date(byAdding: DateComponents(day: -3), to: today)
-        event.endDateRaw = calendar.date(byAdding: DateComponents(day: -1), to: today)
+        let today = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
+        event.startDateRaw = Calendar.current.date(byAdding: DateComponents(day: -3), to: today)
+        event.endDateRaw = Calendar.current.date(byAdding: DateComponents(day: -1), to: today)
         XCTAssertFalse(event.isHappeningNow)
     }
 
