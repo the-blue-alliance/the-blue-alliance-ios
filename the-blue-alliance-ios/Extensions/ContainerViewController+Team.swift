@@ -6,9 +6,6 @@ import UIKit
 // An protocol/extension for Container view controllers that can push to a Team view controller.
 // Used for Team@Event and Team@District to push to a Team, when contextually available.
 protocol ContainerTeamPushable {
-    var pushTeamBarButtonItem: UIBarButtonItem? { get }
-    var fetchTeamOperationQueue: OperationQueue { get }
-
     var team: Team { get }
     var myTBA: MyTBA { get }
     var statusService: StatusService { get }

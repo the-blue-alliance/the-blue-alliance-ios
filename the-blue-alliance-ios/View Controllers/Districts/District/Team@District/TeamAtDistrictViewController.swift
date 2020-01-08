@@ -12,17 +12,12 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
         return ranking.team
     }
 
-    var pushTeamBarButtonItem: UIBarButtonItem?
     private(set) var ranking: DistrictRanking
     let statusService: StatusService
     let myTBA: MyTBA
     let urlOpener: URLOpener
 
     private var summaryViewController: DistrictTeamSummaryViewController!
-
-    // MARK:  - ContainerTeamPushable
-
-    var fetchTeamOperationQueue: OperationQueue = OperationQueue()
 
     // MARK: Init
 
@@ -45,8 +40,9 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
             userDefaults: userDefaults
         )
 
-        pushTeamBarButtonItem = UIBarButtonItem(image: UIImage.teamIcon, style: .plain, target: self, action: #selector(pushTeam))
-        rightBarButtonItems = [pushTeamBarButtonItem].compactMap({ $0 })
+        rightBarButtonItems = [
+            UIBarButtonItem(image: UIImage.teamIcon, style: .plain, target: self, action: #selector(pushTeam))
+        ].compactMap({ $0 })
 
         summaryViewController.delegate = self
     }
@@ -63,13 +59,6 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
         Analytics.logEvent("team_at_district", parameters: ["district": ranking.district.key, "team": team.key])
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        // TODO: Move this out in to some shared class with TeamAtEvent
-        fetchTeamOperationQueue.cancelAllOperations()
-    }
-
     // MARK: - Private Methods
 
     @objc private func pushTeam() {
@@ -81,7 +70,7 @@ class TeamAtDistrictViewController: ContainerViewController, ContainerTeamPushab
 extension TeamAtDistrictViewController: DistrictTeamSummaryViewControllerDelegate {
 
     func eventPointsSelected(_ eventPoints: DistrictEventPoints) {
-        let teamAtEventViewController = TeamAtEventViewController(team: eventPoints.team, event: eventPoints.event, myTBA: myTBA, showDetailEvent: true, showDetailTeam: false, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: eventPoints.team, event: eventPoints.event, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 

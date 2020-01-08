@@ -9,31 +9,18 @@ import UIKit
 class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable {
 
     let team: Team
-    private let event: Event
-
-    // Where should we push to, when clicking the navigation bar from the top. Should be the opposite of what view sent us here
-    // Ex: A EventStats VC is contexted as an Event view controller, so showDetailTeam should be true
-    private let showDetailEvent: Bool
-    private let showDetailTeam: Bool
-
-    var pushTeamBarButtonItem: UIBarButtonItem?
+    let event: Event
 
     let myTBA: MyTBA
     let statusService: StatusService
     let urlOpener: URLOpener
     var matchesViewController: MatchesViewController
 
-    // MARK:  - ContainerTeamPushable
-
-    var fetchTeamOperationQueue: OperationQueue = OperationQueue()
-
     // MARK: - Init
 
-    init(team: Team, event: Event, myTBA: MyTBA, showDetailEvent: Bool, showDetailTeam: Bool, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
+    init(team: Team, event: Event, myTBA: MyTBA, statusService: StatusService, urlOpener: URLOpener, persistentContainer: NSPersistentContainer, tbaKit: TBAKit, userDefaults: UserDefaults) {
         self.team = team
         self.event = event
-        self.showDetailEvent = showDetailEvent
-        self.showDetailTeam = showDetailTeam
         self.myTBA = myTBA
         self.statusService = statusService
         self.urlOpener = urlOpener
@@ -51,16 +38,10 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
                    tbaKit: tbaKit,
                    userDefaults: userDefaults)
 
-        pushTeamBarButtonItem = {
-            if showDetailEvent {
-                return UIBarButtonItem(image: UIImage.eventIcon, style: .plain, target: self, action: #selector(pushEvent))
-            } else if showDetailTeam {
-                return UIBarButtonItem(image: UIImage.teamIcon, style: .plain, target: self, action: #selector(pushTeam))
-            } else {
-                return nil
-            }
-        }()
-        rightBarButtonItems = [pushTeamBarButtonItem].compactMap({ $0 })
+        rightBarButtonItems = [
+            UIBarButtonItem(image: UIImage.eventIcon, style: .plain, target: self, action: #selector(pushEvent)),
+            UIBarButtonItem(image: UIImage.teamIcon, style: .plain, target: self, action: #selector(pushTeam))
+        ]
 
         summaryViewController.delegate = self
         matchesViewController.delegate = self
@@ -77,13 +58,6 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
         super.viewWillAppear(animated)
 
         Analytics.logEvent("team_at_event", parameters: ["event": event.key, "team": team.key])
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        // TODO: Move this out in to some shared class with TeamAtDistrict
-        fetchTeamOperationQueue.cancelAllOperations()
     }
 
     // MARK: - Private Methods
@@ -121,7 +95,7 @@ extension TeamAtEventViewController: EventAwardsViewControllerDelegate {
             return
         }
 
-        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, showDetailEvent: showDetailEvent, showDetailTeam: showDetailTeam, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
+        let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }
 
