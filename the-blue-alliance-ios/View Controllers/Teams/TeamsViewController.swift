@@ -145,7 +145,6 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
         self.dataSource.delegate = self
 
         let fetchRequest: NSFetchRequest<Team> = Team.fetchRequest()
-        fetchRequest.predicate = Team.populatedTeamsPredicate()
         fetchRequest.sortDescriptors = [
             Team.teamNumberSortDescriptor()
         ]
@@ -167,10 +166,14 @@ class TeamsViewController: TBATableViewController, Refreshable, Stateful, TeamsV
             }
             return Team.searchPredicate(searchText: searchText)
         }()
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [searchPredicate, fetchRequestPredicate].compactMap({ $0 }))
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            searchPredicate,
+            fetchRequestPredicate,
+            Team.populatedTeamsPredicate()
+        ].compactMap({ $0 }))
     }
 
-    // MARK: - EventsViewControllerDataSourceConfiguration
+    // MARK: - TeamsViewControllerDataSourceConfiguration
 
     var fetchRequestPredicate: NSPredicate? {
         return nil

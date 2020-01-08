@@ -58,7 +58,7 @@ class DistrictTeamsViewController: TeamsViewController {
         return "No teams for district"
     }
 
-    // MARK: - EventsViewControllerDataSourceConfiguration
+    // MARK: - TeamsViewControllerDataSourceConfiguration
 
     override var fetchRequestPredicate: NSPredicate? {
         return Team.districtPredicate(districtKey: district.key)

@@ -108,7 +108,11 @@ class EventsViewController: TBATableViewController, Refreshable, Stateful, Event
     }
 
     private func setupFetchRequest(_ request: NSFetchRequest<Event>) {
-        request.predicate = fetchRequestPredicate
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            fetchRequestPredicate,
+            Event.populatedEventsPredicate()
+        ].compactMap({ $0 }))
+        request.predicate = predicate
     }
 
     // MARK: TableViewDataSourceDelegate
