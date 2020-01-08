@@ -21,12 +21,19 @@ private enum TeamLinkRow: Int, CaseIterable {
     case chiefDelphi
 }
 
-class TeamInfoViewController: TBATableViewController {
+class TeamInfoViewController: TBATableViewController, Observable {
 
     private var team: Team
     private let urlOpener: URLOpener
 
     private var sponsorsExpanded: Bool = false
+
+    // MARK: - Observable
+
+    typealias ManagedType = Team
+    lazy var contextObserver: CoreDataContextObserver<Team> = {
+        return CoreDataContextObserver(context: persistentContainer.viewContext)
+    }()
 
     // MARK: - Init
 
@@ -38,6 +45,12 @@ class TeamInfoViewController: TBATableViewController {
 
         // TODO: Add support for Pits
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/163
+
+        contextObserver.observeObject(object: team, state: .updated) { [weak self] (_, _) in
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -62,7 +75,7 @@ class TeamInfoViewController: TBATableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case TeamInfoSection.title.rawValue:
-            return TeamTitleRow.allCases.count
+            return team.name != nil ? max : max - 1
         case TeamInfoSection.link.rawValue:
             let max = TeamLinkRow.allCases.count
             return team.hasWebsite ? max : max - 1
