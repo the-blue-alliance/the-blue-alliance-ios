@@ -150,7 +150,7 @@ class MyTBATableViewControllerTests: TBATestCase {
     }
 
     private func checkKey<T: Managed & NSManagedObject>(_ Type: T.Type, key: String, shouldBeNil: Bool = false) {
-        let predicate = NSPredicate(format: "key == %@", key)
+        let predicate = NSPredicate(format: "keyRaw == %@", key)
         XCTAssertEqual(T.findOrFetch(in: persistentContainer.viewContext, matching: predicate) == nil, shouldBeNil)
     }
 

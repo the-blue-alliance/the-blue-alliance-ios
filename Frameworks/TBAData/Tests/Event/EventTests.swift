@@ -1341,7 +1341,7 @@ class EventTestCase: TBADataTestCase {
         let event = Event.init(entity: Event.entity(), insertInto: persistentContainer.viewContext)
         event.keyRaw = "2019miket"
         // No name - use key
-        XCTAssertEqual(event.safeShortName, "miket")
+        XCTAssertEqual(event.safeShortName, "2019miket")
         // Name - use name
         event.nameRaw = "FIM District Kettering University Event #1"
         XCTAssertEqual(event.safeShortName, "FIM District Kettering University Event #1")
@@ -1358,12 +1358,12 @@ class EventTestCase: TBADataTestCase {
         event.keyRaw = "2019miket"
         event.yearRaw = NSNumber(value: 2019)
         // No info
-        XCTAssertEqual(event.friendlyNameWithYear, "2019 miket Event")
+        XCTAssertEqual(event.friendlyNameWithYear, "2019miket")
         // Name
         event.nameRaw = "FIM District Kettering University Event #1"
-        XCTAssertEqual(event.friendlyNameWithYear, "2019 FIM District Kettering University Event #1 Event")
+        XCTAssertEqual(event.friendlyNameWithYear, "2019 FIM District Kettering University Event #1")
         // Short name
-        event.nameRaw = "Kettering University #1"
+        event.shortNameRaw = "Kettering University #1"
         XCTAssertEqual(event.friendlyNameWithYear, "2019 Kettering University #1 Event")
         // Event type
         event.eventTypeStringRaw = "District"

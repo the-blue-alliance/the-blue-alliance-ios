@@ -313,8 +313,7 @@ extension Event {
 
     public var safeShortName: String {
         guard let name = name else {
-            // Drop year from key
-            return String(key.dropFirst(4))
+            return key
         }
         guard let shortName = shortName else {
             return name
@@ -323,7 +322,23 @@ extension Event {
     }
 
     public var friendlyNameWithYear: String {
-        return "\(year) \(safeShortName) \(eventTypeString ?? "Event")"
+        guard let name = name else {
+            return key
+        }
+        var parts = [String(year)]
+        if let shortName = shortName {
+            parts.append(shortName)
+
+            // Append the event type if we have the shortname
+            if let eventTypeString = eventTypeString {
+                parts.append(eventTypeString)
+            } else {
+                parts.append("Event")
+            }
+        } else {
+            parts.append(name)
+        }
+        return parts.joined(separator: " ")
     }
 
     /**

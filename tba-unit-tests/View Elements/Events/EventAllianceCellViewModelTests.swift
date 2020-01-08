@@ -9,8 +9,8 @@ class EventAllianceCellViewModelTestCase: TBADataTestCase {
         let alliance = EventAlliance.init(entity: EventAlliance.entity(), insertInto: persistentContainer.viewContext)
         alliance.picksRaw = NSOrderedSet(array: [
             Team.insert("frc1", in: persistentContainer.viewContext),
-            Team.insert("frc2", in: persistentContainer.viewContext),
             Team.insert("frc3", in: persistentContainer.viewContext),
+            Team.insert("frc2", in: persistentContainer.viewContext),
             Team.insert("frc4", in: persistentContainer.viewContext)
         ])
 

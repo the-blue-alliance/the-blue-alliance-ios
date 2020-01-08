@@ -27,7 +27,7 @@ class MatchViewControllerTests: TBATestCase {
 
     func test_title() {
         XCTAssertEqual(matchViewController.navigationTitle, "Quals 1")
-        XCTAssertEqual(matchViewController.navigationSubtitle, "@ 2018ctsc_qm1")
+        XCTAssertEqual(matchViewController.navigationSubtitle, "@ 2018ctsc")
     }
 
     func test_title_event() {
