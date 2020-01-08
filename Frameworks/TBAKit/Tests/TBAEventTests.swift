@@ -294,7 +294,7 @@ class TBAEventTests: TBAKitTestCase {
 
             XCTAssertGreaterThan(awards.count, 0)
 
-            guard let deansListAwardIndex = awards.index(where: { $0.awardType == 4 }) else {
+            guard let deansListAwardIndex = awards.firstIndex(where: { $0.awardType == 4 }) else {
                 XCTFail()
                 return
             }
@@ -354,7 +354,7 @@ class TBAEventTests: TBAKitTestCase {
 
         let task = kit.fetchEventDistrictPoints(key: "2005ga") { (result, notModified) in
             do {
-                let (districtPoints, tiebreakers) = try result.get()
+                _ = try result.get()
                 XCTFail()
             } catch {
                 XCTAssertNotNil(error)
@@ -394,7 +394,7 @@ class TBAEventTests: TBAKitTestCase {
 
         let task = kit.fetchEventInsights(key: "2015miket") { (result, notModified) in
             do {
-                let insights = try result.get()
+                _ = try result.get()
                 XCTFail()
             } catch {
                 XCTAssertNotNil(error)
@@ -457,7 +457,7 @@ class TBAEventTests: TBAKitTestCase {
 
         let task = kit.fetchEventTeamStats(key: "1992cmp") { (result, notModified) in
             do {
-                let stats = try result.get()
+                _ = try result.get()
                 XCTFail()
             } catch {
                 XCTAssertNotNil(error)
@@ -561,7 +561,7 @@ class TBAEventTests: TBAKitTestCase {
 
         let task = kit.fetchEventRankings(key: "1992cmp") { (result, notModified) in
             do {
-                let (rankings, sortOrderInfo, extraStatsInfo) = try result.get()
+                _ = try result.get()
                 XCTFail()
             } catch {
                 XCTAssertNotNil(error)
