@@ -57,7 +57,7 @@ class EventAllianceTableViewCellTestCase: TBADataTestCase {
         XCTAssertEqual(cell.nameLabel.text, "Alliance 3")
 
         picks.append(Team.insert("frc4b", in: persistentContainer.viewContext))
-        alliance.picksRaw = NSOrderedSet(array: [picks])
+        alliance.picksRaw = NSOrderedSet(array: picks)
 
         cell.viewModel = EventAllianceCellViewModel(alliance: alliance, allianceNumber: 2)
 
