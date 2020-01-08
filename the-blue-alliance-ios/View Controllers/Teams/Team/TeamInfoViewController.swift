@@ -75,6 +75,7 @@ class TeamInfoViewController: TBATableViewController, Observable {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case TeamInfoSection.title.rawValue:
+            let max = TeamTitleRow.allCases.count
             return team.name != nil ? max : max - 1
         case TeamInfoSection.link.rawValue:
             let max = TeamLinkRow.allCases.count
