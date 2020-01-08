@@ -206,14 +206,31 @@ extension MatchInfoViewController: Refreshable {
     var isDataSourceEmpty: Bool {
         // TODO: Think about doing a quiet refresh in the background for match videos on initial load...
         // https://github.com/the-blue-alliance/the-blue-alliance-ios/issues/135
-        return match.videos.count == 0
+        return match.videos.count == 0 || match.event.name == nil
     }
 
     @objc func refresh() {
-        // TODO: Refresh Event
+        var eventOperation: TBAKitOperation?
+        if match.event.name == nil {
+            eventOperation = tbaKit.fetchEvent(key: match.event.key, completion: { (result, notModified) in
+                let context = self.persistentContainer.newBackgroundContext()
+                context.performChangesAndWait({
+                    switch result {
+                    case .success(let event):
+                        if !notModified, let event = event {
+                            Event.insert(event, in: context)
+                        }
+                    default:
+                        break
+                    }
+                }, saved: {
+                    self.markTBARefreshSuccessful(self.tbaKit, operation: eventOperation!)
+                }, errorRecorder: Crashlytics.sharedInstance())
+            })
+        }
 
-        var operation: TBAKitOperation!
-        operation = tbaKit.fetchMatch(key: match.key, { (result, notModified) in
+        var matchOperation: TBAKitOperation!
+        matchOperation = tbaKit.fetchMatch(key: match.key, { (result, notModified) in
             let context = self.persistentContainer.newBackgroundContext()
             context.performChangesAndWait({
                 switch result {
@@ -228,10 +245,10 @@ extension MatchInfoViewController: Refreshable {
                 }
 
             }, saved: {
-                self.markTBARefreshSuccessful(self.tbaKit, operation: operation)
+                self.markTBARefreshSuccessful(self.tbaKit, operation: matchOperation)
             }, errorRecorder: Crashlytics.sharedInstance())
         })
-        addRefreshOperations([operation])
+        addRefreshOperations([eventOperation, matchOperation].compactMap({ $0 }))
     }
 
 }

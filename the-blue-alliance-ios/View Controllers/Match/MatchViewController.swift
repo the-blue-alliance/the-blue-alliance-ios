@@ -8,6 +8,9 @@ import UIKit
 class MatchViewController: MyTBAContainerViewController {
 
     private(set) var match: Match
+    private lazy var contextObserver: CoreDataContextObserver<Event> = {
+        return CoreDataContextObserver(context: persistentContainer.viewContext)
+    }()
 
     private(set) var infoViewController: MatchInfoViewController
     private(set) var breakdownViewController: MatchBreakdownViewController?
@@ -44,8 +47,10 @@ class MatchViewController: MyTBAContainerViewController {
             tbaKit: tbaKit,
             userDefaults: userDefaults
         )
-        
+
         infoViewController.matchSummaryDelegate = self
+
+        setupObservers()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -58,6 +63,24 @@ class MatchViewController: MyTBAContainerViewController {
         super.viewWillAppear(animated)
 
         Analytics.logEvent("match", parameters: ["match": match.key])
+    }
+
+    // MARK: - Interface Methods
+
+    // TODO: Remove this in favor of the new big navigation headers and some new sub-header
+    private func updateInterface() {
+        navigationSubtitle = "@ \(match.event.friendlyNameWithYear)"
+    }
+
+    // MARK: - Private
+
+    private func setupObservers() {
+        contextObserver.observeObject(object: match.event, state: .updated) { [weak self] (_, _) in
+            guard let self = self else {
+                return
+            }
+            self.updateInterface()
+        }
     }
 
 }
