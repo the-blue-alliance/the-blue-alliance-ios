@@ -267,7 +267,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(myTBAModel)
+                DispatchQueue.main.async {
+                    self.executeUpdate(myTBAModel)
+                }
             }, errorRecorder: Crashlytics.sharedInstance())
         }
         return operation
@@ -283,7 +285,9 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(myTBAModel)
+                DispatchQueue.main.async {
+                    self.executeUpdate(myTBAModel)
+                }
             }, errorRecorder: Crashlytics.sharedInstance())
         }
         return operation
@@ -299,37 +303,39 @@ class MyTBATableViewController<T: MyTBAEntity & MyTBAManaged, J: MyTBAModel>: TB
                 }
             }, saved: {
                 self.tbaKit.storeCacheHeaders(operation)
-                self.executeUpdate(myTBAModel)
+                DispatchQueue.main.async {
+                    self.executeUpdate(myTBAModel)
+                }
             }, errorRecorder: Crashlytics.sharedInstance())
         }
         return operation
     }
 
     internal func executeUpdate(_ myTBAModel: MyTBAModel) {
-        guard let updateOperation: Operation = {
-            let key = myTBAModel.modelKey
+        let key = myTBAModel.modelKey
+        guard let op: Operation = {
             switch myTBAModel.modelType {
             case .event:
-                guard let event = Event.findOrFetch(in: persistentContainer.viewContext, matching: Event.predicate(key: key)) else {
-                    return nil
+                if let event = Event.findOrFetch(in: persistentContainer.viewContext, matching: Event.predicate(key: key)) {
+                    return self.updateObject(event, for: myTBAModel)
                 }
-                return self.updateObject(event, for: myTBAModel)
+                return nil
             case .team:
-                guard let team = Team.findOrFetch(in: persistentContainer.viewContext, matching: Team.predicate(key: key)) else {
-                    return nil
+                if let team = Team.findOrFetch(in: persistentContainer.viewContext, matching: Team.predicate(key: key)) {
+                    return self.updateObject(team, for: myTBAModel)
                 }
-                return self.updateObject(team, for: myTBAModel)
+                return nil
             case .match:
-                guard let match = Match.findOrFetch(in: persistentContainer.viewContext, matching: Match.predicate(key: key)) else {
-                    return nil
+                if let match = Match.findOrFetch(in: persistentContainer.viewContext, matching: Match.predicate(key: key)) {
+                    return self.updateObject(match, for: myTBAModel)
                 }
-                return self.updateObject(match, for: myTBAModel)
+                return nil
             default:
                 return nil
             }
-            }() else { return }
+        }() else { return }
 
-        OperationQueue.main.addOperation(updateOperation)
+        OperationQueue.main.addOperation(op)
     }
 
     private func updateObject(_ object: NSManagedObject, for model: MyTBAModel) -> Operation? {
