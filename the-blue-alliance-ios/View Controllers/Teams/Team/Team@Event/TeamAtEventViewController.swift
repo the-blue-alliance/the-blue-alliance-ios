@@ -43,8 +43,7 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
                    userDefaults: userDefaults)
 
         rightBarButtonItems = [
-            UIBarButtonItem(image: UIImage.eventIcon, style: .plain, target: self, action: #selector(pushEvent)),
-            UIBarButtonItem(image: UIImage.teamIcon, style: .plain, target: self, action: #selector(pushTeam))
+            UIBarButtonItem(image: UIImage.eventIcon, style: .plain, target: self, action: #selector(pushEvent))
         ]
 
         summaryViewController.delegate = self
@@ -76,17 +75,12 @@ class TeamAtEventViewController: ContainerViewController, ContainerTeamPushable 
         navigationController?.pushViewController(eventViewController, animated: true)
     }
 
-    @objc private func pushTeam() {
-        pushTeam(team: team)
-    }
-
 }
 
 extension TeamAtEventViewController: MatchesViewControllerDelegate, MatchesViewControllerQueryable, TeamSummaryViewControllerDelegate {
 
-    func awardsSelected() {
-        let awardsViewController = EventAwardsContainerViewController(event: event, team: team, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
-        self.navigationController?.pushViewController(awardsViewController, animated: true)
+    func teamInfoSelected(_ team: Team) {
+        pushTeam(team: team)
     }
 
     func matchSelected(_ match: Match) {
@@ -103,7 +97,6 @@ extension TeamAtEventViewController: EventAwardsViewControllerDelegate {
         if self.team == team {
             return
         }
-
         let teamAtEventViewController = TeamAtEventViewController(team: team, event: event, myTBA: myTBA, statusService: statusService, urlOpener: urlOpener, persistentContainer: persistentContainer, tbaKit: tbaKit, userDefaults: userDefaults)
         self.navigationController?.pushViewController(teamAtEventViewController, animated: true)
     }

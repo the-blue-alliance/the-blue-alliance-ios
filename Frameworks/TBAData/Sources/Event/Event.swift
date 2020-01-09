@@ -239,13 +239,6 @@ extension Event {
         return webcasts
     }
 
-    public func awards(for teamKey: String) -> [Award] {
-        let teamPredicate = Award.teamPredicate(teamKey: teamKey)
-        return awards.filter {
-            return teamPredicate.evaluate(with: $0)
-        }
-    }
-
     public func dateString() -> String? {
         guard let startDate = startDate, let endDate = endDate else {
             return nil
